@@ -19,13 +19,7 @@
 package com.owncloud.android.datamodel;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 
-import com.owncloud.android.files.services.FileDownloader;
-
-
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -361,6 +355,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         return getRemotePath().toLowerCase().compareTo(another.getRemotePath().toLowerCase());
     }
 
+    @Override
     public boolean equals(Object o) {
         if(o instanceof OCFile){
             OCFile that = (OCFile) o;

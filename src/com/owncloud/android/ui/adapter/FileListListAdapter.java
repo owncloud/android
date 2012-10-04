@@ -30,12 +30,10 @@ import com.owncloud.android.R;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.database.DataSetObserver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckedTextView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -48,20 +46,21 @@ import android.widget.TextView;
  * @author Bartek Przybylski
  * 
  */
-public class FileListListAdapter implements ListAdapter {
+public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private Context mContext;
-    private OCFile mFile;
-    private Vector<OCFile> mFiles;
+    private OCFile mFile = null;
+    private Vector<OCFile> mFiles = null;
     private DataStorageManager mStorageManager;
     private Account mAccount;
 
     public FileListListAdapter(OCFile file, DataStorageManager storage_man,
             Context context) {
-        mFile = file;
         mStorageManager = storage_man;
-        mFiles = mStorageManager.getDirectoryContent(mFile);
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
+        swapDirectory(file);
+        /*mFile = file;
+        mFiles = mStorageManager.getDirectoryContent(mFile);*/
     }
 
     @Override
@@ -71,7 +70,6 @@ public class FileListListAdapter implements ListAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        // TODO Auto-generated method stub
         return true;
     }
 
@@ -82,19 +80,20 @@ public class FileListListAdapter implements ListAdapter {
 
     @Override
     public Object getItem(int position) {
-        if (mFiles.size() <= position)
+        if (mFiles == null || mFiles.size() <= position)
             return null;
         return mFiles.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return mFiles != null ? mFiles.get(position).getFileId() : 0;
+        if (mFiles == null || mFiles.size() <= position)
+            return 0;
+        return mFiles.get(position).getFileId();
     }
 
     @Override
     public int getItemViewType(int position) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
@@ -106,7 +105,7 @@ public class FileListListAdapter implements ListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflator.inflate(R.layout.list_layout, null);
         }
-        if (mFiles.size() > position) {
+        if (mFiles != null && mFiles.size() > position) {
             OCFile file = mFiles.get(position);
             TextView fileName = (TextView) view.findViewById(R.id.Filename);
             String name = file.getFileName();
@@ -175,7 +174,7 @@ public class FileListListAdapter implements ListAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return 4;
+        return 1;
     }
 
     @Override
@@ -185,18 +184,21 @@ public class FileListListAdapter implements ListAdapter {
 
     @Override
     public boolean isEmpty() {
-        return mFiles != null ? mFiles.isEmpty() : false;
+        return (mFiles == null || mFiles.isEmpty());
     }
 
-    @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-        // TODO Auto-generated method stub
-
+    /**
+     * Change the adapted directory for a new one
+     * @param directory     New file to adapt. Can be NULL, meaning "no content to adapt".
+     */
+    public void swapDirectory(OCFile directory) {
+        mFile = directory;
+        if (mStorageManager != null) {
+            mFiles = mStorageManager.getDirectoryContent(mFile);
+        } else {
+            mFiles = null;
+        }
+        notifyDataSetChanged();
     }
-
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-        // TODO Auto-generated method stub
-
-    }
+    
 }

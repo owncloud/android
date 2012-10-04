@@ -38,7 +38,6 @@ import android.content.ContentValues;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -279,6 +278,7 @@ public class FileDataStorageManager implements DataStorageManager {
         return mContentProvider;
     }
 
+    @Override
     public Vector<OCFile> getDirectoryContent(OCFile f) {
         if (f != null && f.isDirectory() && f.getFileId() != -1) {
             Vector<OCFile> ret = new Vector<OCFile>();
@@ -409,6 +409,7 @@ public class FileDataStorageManager implements DataStorageManager {
         return file;
     }
     
+    @Override
     public void removeFile(OCFile file, boolean removeLocalCopy) {
         Uri file_uri = Uri.withAppendedPath(ProviderTableMeta.CONTENT_URI_FILE, ""+file.getFileId());
         if (getContentProvider() != null) {
