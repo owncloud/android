@@ -61,6 +61,19 @@ public class DbHandler {
         mDB.delete(TABLE_INSTANT_UPLOAD, null, null);
     }
     
+    /**
+     * 
+     * @param localPath
+     * @param accountName
+     * @return true when one or more pendin files was removed
+     */
+    public boolean removeIUPendingFile(String localPath, String accountName) {
+        return mDB.delete(TABLE_INSTANT_UPLOAD,
+                          "path = ?",
+                          new String[]{ localPath }) != 0;
+        
+    }
+    
     private class OpenerHepler extends SQLiteOpenHelper {
         public OpenerHepler(Context context) {
             super(context, mDatabaseName, null, mDatabaseVersion);

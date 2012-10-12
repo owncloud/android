@@ -18,10 +18,15 @@
 
 package eu.alefzero.webdav;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.commons.httpclient.methods.RequestEntity;
 
@@ -42,23 +47,27 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity {
     //private final File mFile;
     private final FileChannel mChannel;
     private final String mContentType;
-    private final long mSize;
+    private final long mChunkSize;
+    private final File mFile;
     private long mOffset;
-    private OnDatatransferProgressListener mListener;
+    private long mTransferred;
+    Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private ByteBuffer mBuffer = ByteBuffer.allocate(4096);
 
-    public ChunkFromFileChannelRequestEntity(final FileChannel channel, final String contentType, long size) {
+    public ChunkFromFileChannelRequestEntity(final FileChannel channel, final String contentType, long chunkSize, final File file) {
         super();
         if (channel == null) {
             throw new IllegalArgumentException("File may not be null");
         }
-        if (size <= 0) {
-            throw new IllegalArgumentException("Size must be greater than zero");
+        if (chunkSize <= 0) {
+            throw new IllegalArgumentException("Chunk size must be greater than zero");
         }
         mChannel = channel;
         mContentType = contentType;
-        mSize = size;
+        mChunkSize = chunkSize;
+        mFile = file;
         mOffset = 0;
+        mTransferred = 0;
     }
     
     public void setOffset(long offset) {
@@ -67,9 +76,9 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity {
     
     public long getContentLength() {
         try {
-            return Math.min(mSize, mChannel.size() - mChannel.position());
+            return Math.min(mChunkSize, mChannel.size() - mChannel.position());
         } catch (IOException e) {
-            return mSize;
+            return mChunkSize;
         }
     }
 
@@ -81,21 +90,36 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity {
         return true;
     }
     
-    public void setOnDatatransferProgressListener(OnDatatransferProgressListener listener) {
-        mListener = listener;
+    public void addOnDatatransferProgressListener(OnDatatransferProgressListener listener) {
+        mDataTransferListeners.add(listener);
     }
+    
+    public void addOnDatatransferProgressListeners(Collection<OnDatatransferProgressListener> listeners) {
+        mDataTransferListeners.addAll(listeners);
+    }
+    
+    public void removeOnDatatransferProgressListener(OnDatatransferProgressListener listener) {
+        mDataTransferListeners.remove(listener);
+    }
+    
     
     public void writeRequest(final OutputStream out) throws IOException {
         int readCount = 0;
+        Iterator<OnDatatransferProgressListener> it = null;
         
        try {
             mChannel.position(mOffset);
-            while (mChannel.position() < mOffset + mSize && mChannel.position() < mChannel.size()) {
+            long size = mFile.length();
+            if (size == 0) size = -1;
+            while (mChannel.position() < mOffset + mChunkSize && mChannel.position() < mChannel.size()) {
                 readCount = mChannel.read(mBuffer);
                 out.write(mBuffer.array(), 0, readCount);
                 mBuffer.clear();
-                if (mListener != null) 
-                    mListener.transferProgress(readCount);
+                mTransferred += readCount;
+                it = mDataTransferListeners.iterator();
+                while (it.hasNext()) {
+                    it.next().onTransferProgress(readCount, mTransferred, size, mFile.getName());
+                }
             }
             
         } catch (IOException io) {

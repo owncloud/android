@@ -23,8 +23,9 @@ import com.owncloud.android.AccountUtils;
 import com.owncloud.android.DisplayUtils;
 import com.owncloud.android.datamodel.DataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
+import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.ui.activity.TransferServiceGetter;
 
 import com.owncloud.android.R;
 
@@ -52,12 +53,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private Vector<OCFile> mFiles = null;
     private DataStorageManager mStorageManager;
     private Account mAccount;
+    private TransferServiceGetter mTransferServiceGetter;
 
     public FileListListAdapter(OCFile file, DataStorageManager storage_man,
-            Context context) {
+            Context context, TransferServiceGetter transferServiceGetter) {
         mStorageManager = storage_man;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
+        mTransferServiceGetter = transferServiceGetter;
         swapDirectory(file);
         /*mFile = file;
         mFiles = mStorageManager.getDirectoryContent(mFile);*/
@@ -118,10 +121,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 fileIcon.setImageResource(R.drawable.ic_menu_archive);
             }
             ImageView localStateView = (ImageView) view.findViewById(R.id.imageView2);
-            if (FileDownloader.isDownloading(mAccount, file.getRemotePath())) {
+            //if (FileDownloader.isDownloading(mAccount, file.getRemotePath())) {
+            FileDownloaderBinder downloaderBinder = mTransferServiceGetter.getFileDownloaderBinder();
+            FileUploaderBinder uploaderBinder = mTransferServiceGetter.getFileUploaderBinder();
+            if (downloaderBinder != null && downloaderBinder.isDownloading(mAccount, file)) {
                 localStateView.setImageResource(R.drawable.downloading_file_indicator);
                 localStateView.setVisibility(View.VISIBLE);
-            } else if (FileUploader.isUploading(mAccount, file.getRemotePath())) {
+            } else if (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)) {
                 localStateView.setImageResource(R.drawable.uploading_file_indicator);
                 localStateView.setVisibility(View.VISIBLE);
             } else if (file.isDown()) {

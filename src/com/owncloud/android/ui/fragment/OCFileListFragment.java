@@ -20,6 +20,7 @@ package com.owncloud.android.ui.fragment;
 import com.owncloud.android.datamodel.DataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.ui.FragmentListView;
+import com.owncloud.android.ui.activity.TransferServiceGetter;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 
 import android.app.Activity;
@@ -76,12 +77,15 @@ public class OCFileListFragment extends FragmentListView {
     }    
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.i(TAG, "onActivityCreated() start");
         
-        super.onCreate(savedInstanceState);
-        mAdapter = new FileListListAdapter(mContainerActivity.getInitialDirectory(), mContainerActivity.getStorageManager(), getActivity());
+        super.onActivityCreated(savedInstanceState);
+        mAdapter = new FileListListAdapter(mContainerActivity.getInitialDirectory(), mContainerActivity.getStorageManager(), getActivity(), mContainerActivity);
         setListAdapter(mAdapter);
         
         if (savedInstanceState != null) {
@@ -154,7 +158,9 @@ public class OCFileListFragment extends FragmentListView {
      * Calls {@link OCFileListFragment#listDirectory(OCFile)} with a null parameter
      */
     public void listDirectory(){
+        int position = mList.getFirstVisiblePosition();
         listDirectory(null);
+        mList.setSelectionFromTop(position, 0);
     }
     
     /**
@@ -166,27 +172,30 @@ public class OCFileListFragment extends FragmentListView {
      */
     public void listDirectory(OCFile directory) {
         DataStorageManager storageManager = mContainerActivity.getStorageManager();
+        if (storageManager != null) {
 
-        // Check input parameters for null
-        if(directory == null){
-            if(mFile != null){
-                directory = mFile;
-            } else {
-                directory = storageManager.getFileByPath("/");
-                if (directory == null) return; // no files, wait for sync
+            // Check input parameters for null
+            if(directory == null){
+                if(mFile != null){
+                    directory = mFile;
+                } else {
+                    directory = storageManager.getFileByPath("/");
+                    if (directory == null) return; // no files, wait for sync
+                }
             }
-        }
         
         
-        // If that's not a directory -> List its parent
-        if(!directory.isDirectory()){
-            Log.w(TAG, "You see, that is not a directory -> " + directory.toString());
-            directory = storageManager.getFileById(directory.getParentId());
-        }
+            // If that's not a directory -> List its parent
+            if(!directory.isDirectory()){
+                Log.w(TAG, "You see, that is not a directory -> " + directory.toString());
+                directory = storageManager.getFileById(directory.getParentId());
+            }
 
-        mFile = directory;
-        mAdapter.swapDirectory(mFile);
-        mList.setSelectionFromTop(0, 0);
+            mFile = directory;
+            mAdapter.swapDirectory(mFile);
+            mList.setSelectionFromTop(0, 0);
+            mList.invalidate();
+        }
     }
     
     
@@ -196,7 +205,7 @@ public class OCFileListFragment extends FragmentListView {
      * 
      * @author David A. Velasco
      */
-    public interface ContainerActivity {
+    public interface ContainerActivity extends TransferServiceGetter {
 
         /**
          * Callback method invoked when a directory is clicked by the user on the files list
