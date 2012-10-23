@@ -34,6 +34,7 @@ import com.owncloud.android.authenticator.AccountAuthenticator;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
+import com.owncloud.android.files.services.FileObserverService;
 import com.owncloud.android.utils.OwnCloudVersion;
 
 import android.accounts.Account;
@@ -149,7 +150,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                 Notification notification = new Notification(R.drawable.icon, getContext().getString(R.string.sync_fail_ticker), System.currentTimeMillis());
                 notification.flags |= Notification.FLAG_AUTO_CANCEL;
                 // TODO put something smart in the contentIntent below
-                notification.contentIntent = PendingIntent.getActivity(getContext().getApplicationContext(), 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+                notification.contentIntent = PendingIntent.getActivity(getContext().getApplicationContext(), (int)System.currentTimeMillis(), new Intent(), 0);
                 notification.setLatestEventInfo(getContext().getApplicationContext(), 
                                                 getContext().getString(R.string.sync_fail_ticker), 
                                                 String.format(getContext().getString(R.string.sync_fail_content), account.name), 
@@ -211,7 +212,13 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                             getStorageManager().getFileByPath(file.getRemotePath()).keepInSync() &&
                             file.getModificationTimestamp() > getStorageManager().getFileByPath(file.getRemotePath())
                                                                          .getModificationTimestamp()) {
-                        Intent intent = new Intent(this.getContext(), FileDownloader.class);
+                        // first disable observer so we won't get file upload right after download
+                        Log.d(TAG, "Disabling observation of remote file" + file.getRemotePath());
+                        Intent intent = new Intent(getContext(), FileObserverService.class);
+                        intent.putExtra(FileObserverService.KEY_FILE_CMD, FileObserverService.CMD_ADD_DOWNLOADING_FILE);
+                        intent.putExtra(FileObserverService.KEY_CMD_ARG, file.getRemotePath());
+                        getContext().startService(intent);
+                        intent = new Intent(this.getContext(), FileDownloader.class);
                         intent.putExtra(FileDownloader.EXTRA_ACCOUNT, getAccount());
                         intent.putExtra(FileDownloader.EXTRA_FILE, file);
                         file.setKeepInSync(true);

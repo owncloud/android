@@ -26,11 +26,8 @@ import com.owncloud.android.ui.adapter.FileListListAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import com.owncloud.android.R;
 
 /**
  * A Fragment that lists all files and folders in a given path.
@@ -40,6 +37,7 @@ import com.owncloud.android.R;
  */
 public class OCFileListFragment extends FragmentListView {
     private static final String TAG = "FileListFragment";
+    private static final String SAVED_LIST_POSITION = "LIST_POSITION"; 
     
     private OCFileListFragment.ContainerActivity mContainerActivity;
     
@@ -65,22 +63,6 @@ public class OCFileListFragment extends FragmentListView {
      * {@inheritDoc}
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView() start");
-        super.onCreateView(inflater, container, savedInstanceState);
-        getListView().setDivider(getResources().getDrawable(R.drawable.uploader_list_separator));
-        getListView().setDividerHeight(1);
-        
-        Log.i(TAG, "onCreateView() end");
-        return getListView();
-    }    
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.i(TAG, "onActivityCreated() start");
         
@@ -90,20 +72,20 @@ public class OCFileListFragment extends FragmentListView {
         
         if (savedInstanceState != null) {
             Log.i(TAG, "savedInstanceState is not null");
-            int position = savedInstanceState.getInt("LIST_POSITION");
-            getListView().setSelectionFromTop(position, 0);
+            int position = savedInstanceState.getInt(SAVED_LIST_POSITION);
+            setReferencePosition(position);
         }
-        //mAdapter = new FileListListAdapter();
         
         Log.i(TAG, "onActivityCreated() stop");
     }
     
     
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i(TAG, "onSaveInstanceState() start");
         
-        savedInstanceState.putInt("LIST_POSITION", getListView().getFirstVisiblePosition());
+        savedInstanceState.putInt(SAVED_LIST_POSITION, getReferencePosition());
         
         Log.i(TAG, "onSaveInstanceState() stop");
     }
@@ -158,9 +140,7 @@ public class OCFileListFragment extends FragmentListView {
      * Calls {@link OCFileListFragment#listDirectory(OCFile)} with a null parameter
      */
     public void listDirectory(){
-        int position = mList.getFirstVisiblePosition();
         listDirectory(null);
-        mList.setSelectionFromTop(position, 0);
     }
     
     /**
@@ -191,10 +171,11 @@ public class OCFileListFragment extends FragmentListView {
                 directory = storageManager.getFileById(directory.getParentId());
             }
 
+            mAdapter.swapDirectory(directory, storageManager);
+            if (mFile == null || !mFile.equals(directory)) {
+                mList.setSelectionFromTop(0, 0);
+            }
             mFile = directory;
-            mAdapter.swapDirectory(mFile, storageManager);
-            mList.setSelectionFromTop(0, 0);
-            mList.invalidate();
         }
     }
     

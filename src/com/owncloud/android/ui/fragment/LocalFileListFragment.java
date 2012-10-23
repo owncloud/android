@@ -44,6 +44,7 @@ import com.owncloud.android.R;
  */
 public class LocalFileListFragment extends FragmentListView {
     private static final String TAG = "LocalFileListFragment";
+    private static final String SAVED_LIST_POSITION = "LIST_POSITION"; 
     
     /** Reference to the Activity which this fragment is attached to. For callbacks */
     private LocalFileListFragment.ContainerActivity mContainerActivity;
@@ -75,13 +76,10 @@ public class LocalFileListFragment extends FragmentListView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView() start");
-        super.onCreateView(inflater, container, savedInstanceState);
-        getListView().setDivider(getResources().getDrawable(R.drawable.uploader_list_separator));
-        getListView().setDividerHeight(1);
+        View v = super.onCreateView(inflater, container, savedInstanceState);
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        
         Log.i(TAG, "onCreateView() end");
-        return getListView();
+        return v;
     }    
 
 
@@ -98,8 +96,8 @@ public class LocalFileListFragment extends FragmentListView {
         
         if (savedInstanceState != null) {
             Log.i(TAG, "savedInstanceState is not null");
-            int position = savedInstanceState.getInt("LIST_POSITION");
-            getListView().setSelectionFromTop(position, 0);
+            int position = savedInstanceState.getInt(SAVED_LIST_POSITION);
+            setReferencePosition(position);
         }
         
         Log.i(TAG, "onActivityCreated() stop");
@@ -110,7 +108,8 @@ public class LocalFileListFragment extends FragmentListView {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i(TAG, "onSaveInstanceState() start");
         
-        savedInstanceState.putInt("LIST_POSITION", getListView().getFirstVisiblePosition());
+        savedInstanceState.putInt(SAVED_LIST_POSITION, getReferencePosition());
+        
         
         Log.i(TAG, "onSaveInstanceState() stop");
     }
@@ -207,10 +206,12 @@ public class LocalFileListFragment extends FragmentListView {
             directory = directory.getParentFile();
         }
 
-        mDirectory = directory;
         mList.clearChoices();   // by now, only files in the same directory will be kept as selected
-        mAdapter.swapDirectory(mDirectory);
-        mList.setSelectionFromTop(0, 0);
+        mAdapter.swapDirectory(directory);
+        if (mDirectory == null || !mDirectory.equals(directory)) {
+            mList.setSelectionFromTop(0, 0);
+        }
+        mDirectory = directory;
     }
     
 

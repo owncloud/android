@@ -68,6 +68,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
+import com.owncloud.android.files.services.FileObserverService;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.network.OwnCloudClientUtils;
@@ -154,10 +155,10 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
         }
 
         // file observer
-        /*Intent observer_intent = new Intent(this, FileObserverService.class);
+        Intent observer_intent = new Intent(this, FileObserverService.class);
         observer_intent.putExtra(FileObserverService.KEY_FILE_CMD, FileObserverService.CMD_INIT_OBSERVED_LIST);
         startService(observer_intent);
-        */
+        
             
         /// USER INTERFACE
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -187,11 +188,11 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(mDirectories, this);
         setSupportProgressBarIndeterminateVisibility(false);        // always AFTER setContentView(...) ; to workaround bug in its implementation
-            
+        
         Log.d(getClass().toString(), "onCreate() end");
     }
 
-
+    
     /**
      * Launches the account creation activity. To use when no ownCloud account is available
      */
@@ -485,7 +486,7 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
             registerReceiver(mDownloadFinishReceiver, downloadIntentFilter);
         
             // List current directory
-            mFileList.listDirectory(mCurrentDir);   // we should find the way to avoid the need of this
+            mFileList.listDirectory(mCurrentDir);   // TODO we should find the way to avoid the need of this (maybe it's not necessary yet; to check)
             
         } else {
             
@@ -552,7 +553,7 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
             PackageInfo pkg;
             try {
                 pkg = getPackageManager().getPackageInfo(getPackageName(), 0);
-                builder.setMessage("ownCloud android client\n\nversion: " + pkg.versionName );
+                builder.setMessage(String.format(getString(R.string.about_message), pkg.versionName));
                 builder.setIcon(android.R.drawable.ic_menu_info_details);
                 dialog = builder.create();
             } catch (NameNotFoundException e) {
@@ -721,7 +722,7 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
                         mStorageManager.saveFile(newDir);
     
                         // Display the new folder right away
-                        mFileList.listDirectory(mCurrentDir);
+                        mFileList.listDirectory();
                     }
                 });
                 
@@ -802,7 +803,7 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
                     OCFileListFragment fileListFragment = (OCFileListFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.fileList);
                     if (fileListFragment != null) {
-                        fileListFragment.listDirectory(mCurrentDir);  
+                        fileListFragment.listDirectory(mCurrentDir);
                     }
                 }
                 
