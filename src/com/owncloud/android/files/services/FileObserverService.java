@@ -1,3 +1,21 @@
+/* ownCloud Android client application
+ *   Copyright (C) 2012 Bartek Przybylski
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package com.owncloud.android.files.services;
 
 import java.util.ArrayList;
@@ -7,6 +25,8 @@ import com.owncloud.android.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.files.OwnCloudFileObserver;
+import com.owncloud.android.files.OwnCloudFileObserver.FileObserverStatusListener;
+import com.owncloud.android.ui.activity.ConflictsResolveActivity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -20,7 +40,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-public class FileObserverService extends Service {
+public class FileObserverService extends Service implements FileObserverStatusListener {
 
     public final static String KEY_FILE_CMD = "KEY_FILE_CMD";
     public final static String KEY_CMD_ARG = "KEY_CMD_ARG";
@@ -115,6 +135,7 @@ public class FileObserverService extends Service {
             observer.setAccount(account);
             observer.setStorageManager(storage);
             observer.setOCFile(storage.getFileByPath(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PATH))));
+            observer.addObserverStatusListener(this);
             observer.startWatching();
             mObservers.add(observer);
             Log.d(TAG, "Started watching file " + path);
@@ -147,6 +168,7 @@ public class FileObserverService extends Service {
                 new FileDataStorageManager(account, getContentResolver());
         observer.setStorageManager(storage);
         observer.setOCFile(storage.getFileByLocalPath(path));
+        observer.addObserverStatusListener(this);
 
         DownloadCompletedReceiver receiver = new DownloadCompletedReceiver(path, observer);
         registerReceiver(receiver, new IntentFilter(FileDownloader.DOWNLOAD_FINISH_MESSAGE));
@@ -201,7 +223,28 @@ public class FileObserverService extends Service {
             mDownloadReceivers.remove(r);
         }
     }
-    
+
+    @Override
+    public void OnObservedFileStatusUpdate(String localPath, String remotePath, Account account, Status status) {
+        switch (status) {
+            case CONFLICT:
+            {
+                Intent i = new Intent(getApplicationContext(), ConflictsResolveActivity.class);
+                i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("remotepath", remotePath);
+                i.putExtra("localpath", localPath);
+                i.putExtra("account", account);
+                startActivity(i);
+                break;
+            }
+            case SENDING_TO_UPLOADER:
+            case INCORRECT_MASK:
+                break;
+            default:
+                Log.wtf(TAG, "Unhandled status " + status);
+        }
+    }
+
     private class DownloadCompletedReceiver extends BroadcastReceiver {
         String mPath;
         OwnCloudFileObserver mObserver;

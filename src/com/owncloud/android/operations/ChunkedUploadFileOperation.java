@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.util.Random;
 
 import org.apache.commons.httpclient.HttpException;
@@ -39,7 +38,7 @@ import eu.alefzero.webdav.WebdavUtils;
 
 public class ChunkedUploadFileOperation extends UploadFileOperation {
     
-    private static final long CHUNK_SIZE = 102400;
+    private static final long CHUNK_SIZE = 1024000;
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
     private static final String TAG = ChunkedUploadFileOperation.class.getSimpleName();
 
@@ -56,13 +55,11 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
         int status = -1;
 
         FileChannel channel = null;
-        FileLock lock = null;
         RandomAccessFile raf = null;
         try {
             File file = new File(getStoragePath());
-            raf = new RandomAccessFile(file, "rw");
+            raf = new RandomAccessFile(file, "r");
             channel = raf.getChannel();
-            lock = channel.tryLock();
             ChunkFromFileChannelRequestEntity entity = new ChunkFromFileChannelRequestEntity(channel, getMimeType(), CHUNK_SIZE, file);
             entity.addOnDatatransferProgressListeners(getDataTransferListeners());
             long offset = 0;
@@ -81,8 +78,6 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             }
             
         } finally {
-            if (lock != null)
-                lock.release();
             if (channel != null)
                 channel.close();
             if (raf != null)

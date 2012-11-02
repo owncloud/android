@@ -19,6 +19,7 @@
 package com.owncloud.android.operations;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -29,6 +30,7 @@ import javax.net.ssl.SSLException;
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.jackrabbit.webdav.DavException;
 
 import com.owncloud.android.network.CertificateCombinedException;
 
@@ -40,13 +42,18 @@ import com.owncloud.android.network.CertificateCombinedException;
  * 
  * @author David A. Velasco
  */
-public class RemoteOperationResult {
+public class RemoteOperationResult implements Serializable {
+    
+    /** Generated - to refresh every time the class changes */
+    private static final long serialVersionUID = -7805531062432602444L;
+
     
     public enum ResultCode { 
         OK,
         OK_SSL,
         OK_NO_SSL,
         UNHANDLED_HTTP_CODE,
+        UNAUTHORIZED,        
         FILE_NOT_FOUND, 
         INSTANCE_NOT_CONFIGURED, 
         UNKNOWN_ERROR, 
@@ -59,13 +66,17 @@ public class RemoteOperationResult {
         SSL_RECOVERABLE_PEER_UNVERIFIED,
         BAD_OC_VERSION,
         STORAGE_ERROR_MOVING_FROM_TMP,
-        CANCELLED
+        CANCELLED, 
+        INVALID_LOCAL_FILE_NAME, 
+        INVALID_OVERWRITE,
+        CONFLICT
     }
 
     private boolean mSuccess = false;
     private int mHttpCode = -1;
     private Exception mException = null;
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
+    private Object mExtraData = null;
     
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
@@ -81,11 +92,17 @@ public class RemoteOperationResult {
             
         } else if (httpCode > 0) {
             switch (httpCode) {
+                case HttpStatus.SC_UNAUTHORIZED:
+                    mCode = ResultCode.UNAUTHORIZED;
+                    break;
                 case HttpStatus.SC_NOT_FOUND:
                     mCode = ResultCode.FILE_NOT_FOUND;
                     break;
                 case HttpStatus.SC_INTERNAL_SERVER_ERROR:
                     mCode = ResultCode.INSTANCE_NOT_CONFIGURED;
+                    break;
+                case HttpStatus.SC_CONFLICT:
+                    mCode = ResultCode.CONFLICT;
                     break;
                 default:
                     mCode = ResultCode.UNHANDLED_HTTP_CODE;
@@ -157,6 +174,14 @@ public class RemoteOperationResult {
         return mCode == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
     }
     
+    public void setExtraData(Object data) {
+        mExtraData = data;
+    }
+    
+    public Object getExtraData() {
+        return mExtraData;
+    }
+    
     private CertificateCombinedException getCertificateCombinedException(Exception e) {
         CertificateCombinedException result = null;
         if (e instanceof CertificateCombinedException) {
@@ -196,11 +221,17 @@ public class RemoteOperationResult {
             } else if (mException instanceof UnknownHostException) {
                 return "Unknown host exception";
         
-            } else if (mException instanceof SSLException) {
-                if (mCode == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED)
+            } else if (mException instanceof CertificateCombinedException) {
+                if (((CertificateCombinedException) mException).isRecoverable())
                     return "SSL recoverable exception";
                 else
                     return "SSL exception";
+                
+            } else if (mException instanceof SSLException) {
+                return "SSL exception";
+
+            } else if (mException instanceof DavException) {
+                return "Unexpected WebDAV exception";
 
             } else if (mException instanceof HttpException) {
                 return "HTTP violation";
@@ -227,7 +258,7 @@ public class RemoteOperationResult {
         }
         
         return "Operation finished with HTTP status code " + mHttpCode + " (" + (isSuccess()?"success":"fail") + ")";
-
+        
     }
 
 }

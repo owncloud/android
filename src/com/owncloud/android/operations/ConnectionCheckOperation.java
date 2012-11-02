@@ -16,7 +16,7 @@
  *
  */
 
-package com.owncloud.android.authenticator;
+package com.owncloud.android.operations;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -24,8 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.owncloud.android.AccountUtils;
-import com.owncloud.android.operations.RemoteOperation;
-import com.owncloud.android.operations.RemoteOperationResult;
 import com.owncloud.android.utils.OwnCloudVersion;
 
 import eu.alefzero.webdav.WebdavClient;
@@ -39,7 +37,7 @@ public class ConnectionCheckOperation extends RemoteOperation {
     /** Maximum time to wait for a response from the server when the connection is being tested, in MILLISECONDs.  */
     public static final int TRY_CONNECTION_TIMEOUT = 5000;
     
-    private static final String TAG = ConnectionCheckOperation.class.getCanonicalName();
+    private static final String TAG = ConnectionCheckOperation.class.getSimpleName();
     
     private String mUrl;
     private RemoteOperationResult mLatestResult;

@@ -72,7 +72,10 @@ import com.owncloud.android.files.services.FileObserverService;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.network.OwnCloudClientUtils;
+import com.owncloud.android.operations.RemoteOperationResult;
 import com.owncloud.android.syncadapter.FileSyncService;
+import com.owncloud.android.ui.dialog.SslValidatorDialog;
+import com.owncloud.android.ui.dialog.SslValidatorDialog.OnSslValidatorListener;
 import com.owncloud.android.ui.fragment.FileDetailFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 
@@ -87,7 +90,7 @@ import eu.alefzero.webdav.WebdavClient;
  */
 
 public class FileDisplayActivity extends SherlockFragmentActivity implements
-    OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNavigationListener {
+    OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNavigationListener, OnSslValidatorListener {
     
     private ArrayAdapter<String> mDirectories;
     private OCFile mCurrentDir = null;
@@ -100,6 +103,7 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
     private FileDownloaderBinder mDownloaderBinder = null;
     private FileUploaderBinder mUploaderBinder = null;
     private ServiceConnection mDownloadConnection = null, mUploadConnection = null;
+    private RemoteOperationResult mLastSslUntrustedServerResult = null;
     
     private OCFileListFragment mFileList;
     
@@ -110,6 +114,9 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
     private static final int DIALOG_ABOUT_APP = 2;
     public static final int DIALOG_SHORT_WAIT = 3;
     private static final int DIALOG_CHOOSE_UPLOAD_SOURCE = 4;
+    private static final int DIALOG_SSL_VALIDATOR = 5;
+    private static final int DIALOG_CERT_NOT_SAVED = 6;
+
     
     private static final int ACTION_SELECT_CONTENT_FROM_APPS = 1;
     private static final int ACTION_SELECT_MULTIPLE_FILES = 2;
@@ -275,12 +282,7 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
                 break;
             }
             case R.id.startSync: {
-                ContentResolver.cancelSync(null, AccountAuthenticator.AUTH_TOKEN_TYPE);   // cancel the current synchronizations of any ownCloud account
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-                ContentResolver.requestSync(
-                        AccountUtils.getCurrentOwnCloudAccount(this),
-                        AccountAuthenticator.AUTH_TOKEN_TYPE, bundle);
+                startSynchronization();
                 break;
             }
             case R.id.action_upload: {
@@ -307,6 +309,16 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
         }
         return retval;
     }
+
+    private void startSynchronization() {
+        ContentResolver.cancelSync(null, AccountAuthenticator.AUTH_TOKEN_TYPE);   // cancel the current synchronizations of any ownCloud account
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(
+                AccountUtils.getCurrentOwnCloudAccount(this),
+                AccountAuthenticator.AUTH_TOKEN_TYPE, bundle);
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
@@ -521,6 +533,15 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
         Log.d(getClass().toString(), "onPause() end");
     }
 
+    
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog, Bundle args) {
+        if (id == DIALOG_SSL_VALIDATOR && mLastSslUntrustedServerResult != null) {
+            ((SslValidatorDialog)dialog).updateResult(mLastSslUntrustedServerResult);
+        }
+    }
+
+    
     @Override
     protected Dialog onCreateDialog(int id) {
         Dialog dialog = null;
@@ -643,6 +664,23 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
                     }
                 }
             });
+            dialog = builder.create();
+            break;
+        }
+        case DIALOG_SSL_VALIDATOR: {
+            dialog = SslValidatorDialog.newInstance(this, mLastSslUntrustedServerResult, this);
+            break;
+        }
+        case DIALOG_CERT_NOT_SAVED: {
+            builder = new AlertDialog.Builder(this);
+            builder.setMessage(getResources().getString(R.string.ssl_validator_not_saved));
+            builder.setCancelable(false);
+            builder.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    };
+                });
             dialog = builder.create();
             break;
         }
@@ -773,6 +811,7 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {
+
         /**
          * {@link BroadcastReceiver} to enable syncing feedback in UI
          */
@@ -809,6 +848,14 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
                 
                 setSupportProgressBarIndeterminateVisibility(inProgress);
                 
+            }
+            
+            RemoteOperationResult synchResult = (RemoteOperationResult)intent.getSerializableExtra(FileSyncService.SYNC_RESULT);
+            if (synchResult != null) {
+                if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED)) {
+                    mLastSslUntrustedServerResult = synchResult;
+                    showDialog(DIALOG_SSL_VALIDATOR); 
+                }
             }
         }
     }
@@ -1007,6 +1054,18 @@ public class FileDisplayActivity extends SherlockFragmentActivity implements
             i.putExtra(PinCodeActivity.EXTRA_ACTIVITY, "FileDisplayActivity");
             startActivity(i);
         }
+    }
+
+
+    @Override
+    public void onSavedCertificate() {
+        startSynchronization();                
+    }
+
+
+    @Override
+    public void onFailedSavingCertificate() {
+        showDialog(DIALOG_CERT_NOT_SAVED);
     }
 
 
