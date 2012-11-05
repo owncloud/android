@@ -348,22 +348,24 @@ public class FileDetailFragment extends SherlockFragment implements
                 String storagePath = mFile.getStoragePath();
                 String encodedStoragePath = WebdavUtils.encodePath(storagePath);
                 try {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setDataAndType(Uri.parse("file://"+ encodedStoragePath), mFile.getMimetype());
-                    i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    startActivity(i);
+                    String extension = MimeTypeMap.getFileExtensionFromUrl(encodedStoragePath);
+                    String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                    CheckBox cb = (CheckBox) getView().findViewById(R.id.fdOpenTypeCb);
+                    if (cb != null && cb.isChecked()) {
+                        startActivityByMimeTypeDetermination(encodedStoragePath, mimeType);
+                    } else {
+                        startActivityByMimeTypeDetermination(encodedStoragePath, null);
+                    }
                     
                 } catch (Throwable t) {
                     Log.e(TAG, "Fail when trying to open with the mimeType provided from the ownCloud server: " + mFile.getMimetype());
                     boolean toastIt = true; 
                     String mimeType = "";
                     try {
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(storagePath.substring(storagePath.lastIndexOf('.') + 1));
+                        mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                                storagePath.substring(storagePath.lastIndexOf('.') + 1));
                         if (mimeType != null && !mimeType.equals(mFile.getMimetype())) {
-                            i.setDataAndType(Uri.parse("file://"+ encodedStoragePath), mimeType);
-                            i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                            startActivity(i);
+                            startActivityByMimeTypeDetermination(encodedStoragePath, mimeType);
                             toastIt = false;
                         }
                         
@@ -396,6 +398,18 @@ public class FileDetailFragment extends SherlockFragment implements
     }
     
     
+    private void startActivityByMimeTypeDetermination(String encodedStoragePath, String type) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        if (type!=null){
+            i.setDataAndType(Uri.parse("file://"+ encodedStoragePath),type);
+        }else{
+            i.setDataAndType(Uri.parse("file://"+ encodedStoragePath),"*/*");
+        }
+        startActivity(i);
+    }
+
+
     @Override
     public void onConfirmation(String callerTag) {
         if (callerTag.equals(FTAG_CONFIRMATION)) {

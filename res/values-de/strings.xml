@@ -179,4 +179,6 @@
   <string name="ssl_validator_not_saved">Das Zertifikat konnte nicht gespeichert werden</string>
   <string name="text_placeholder">Dies ist ein Platzhalter</string>
   <string name="instant_upload_on_wifi">Fotos nur über WiFi hochladen</string>
+  <string name="fdOpenTypeCbText">App zum öffnen der Datei automatisch auswählen</string>
+ <string name ="fdSend2">App zum öffnen wählen ...</string>
 </resources>
