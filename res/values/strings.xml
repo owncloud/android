@@ -220,4 +220,6 @@
     <string name="conflict_keep_both">Keep both</string>
     <string name="conflict_overwrite">Overwrite</string>
     <string name="conflict_dont_upload">Don\'t upload</string>
+    <string name="fdOpenTypeCbText">Choose App to Open automatically</string>
+    <string name ="fdSend2">Select the App to open ...</string>
 </resources>

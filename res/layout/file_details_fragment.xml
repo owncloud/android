@@ -91,9 +91,9 @@
                         android:layout_below="@+id/fdSizeLabel"
                         android:layout_marginTop="12dp"
                         android:text="@string/filedetails_created"
-                        android:visibility="gone"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-                    
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:visibility="gone" />
+
                     <TextView
                         android:id="@+id/fdModifiedLabel"
                         android:layout_width="wrap_content"
@@ -135,9 +135,9 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/fdSize"
                         android:layout_marginTop="12dp"
-                        android:visibility="gone"
                         android:text="2012/05/18 12:23 PM"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/fdModified"
@@ -148,7 +148,6 @@
                         android:text="2012/05/19 02:56 PM"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                 </RelativeLayout>
-
             </RelativeLayout>
 
             <RelativeLayout
@@ -158,18 +157,36 @@
                 android:layout_below="@+id/fdDetailsContainer"
                 android:gravity="center_horizontal" >
 
-                <CheckBox
-                    android:id="@+id/fdKeepInSync"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/fdCBLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/fdPreviewAndDL"
                     android:layout_centerHorizontal="true"
-                    android:text="@string/fd_keep_in_sync" />
+                    android:layout_marginLeft="12dp"
+                    android:orientation="vertical" >
+
+                    <CheckBox
+                        android:id="@+id/fdKeepInSync"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/fd_keep_in_sync" />
+
+                    <CheckBox
+                        android:id="@+id/fdOpenTypeCb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:checked="true"
+                        android:text="@string/fdOpenTypeCbText" />
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/fdPreview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/fdKeepInSync"
+                    android:layout_below="@+id/fdCBLayout"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/owncloud_logo" />
@@ -198,13 +215,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:text="@string/filedetails_open" />
-
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal">
+                        android:gravity="center_horizontal" >
 
                         <Button
                             android:id="@+id/fdDownloadBtn"
@@ -219,20 +235,18 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:text="@string/common_rename" />
-
                     </LinearLayout>
-<!-- 
+                    <!--
                     <Button
                         android:id="@+id/fdShareBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="@string/common_share" />
- -->
+                    -->
 
                 </LinearLayout>
             </RelativeLayout>
-
         </RelativeLayout>
     </ScrollView>
 
