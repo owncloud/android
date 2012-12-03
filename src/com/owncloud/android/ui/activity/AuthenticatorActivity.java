@@ -54,6 +54,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.owncloud.android.R;
@@ -125,6 +126,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         iv2.setOnClickListener(this);
         tv.setOnFocusChangeListener(this);
         tv2.setOnFocusChangeListener(this);
+
+        Button b = (Button) findViewById(R.id.account_register);
+        if (b != null) {
+            b.setText(String.format(getString(R.string.auth_register), getString(R.string.app_name)));
+        }
     }
 
     @Override
@@ -270,7 +276,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 // NOTHING TO DO ; can't find out what situation that leads to the exception in this code, but user logs signal that it happens
             }
             TextView tv = (TextView) findViewById(R.id.account_username);
-            tv.setError(message);
+            tv.setError(message + "        ");  // the extra spaces are a workaround for an ugly bug: 
+                                                // 1. insert wrong credentials and connect
+                                                // 2. put the focus on the user name field with using hardware controls (don't touch the screen); the error is shown UNDER the field
+                                                // 3. touch the user name field; the software keyboard appears; the error popup is moved OVER the field and SHRINKED in width, losing the last word
+                                                // Seen, at least, in Android 2.x devices
         }
     }
     public void onCancelClick(View view) {
@@ -295,7 +305,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
     
     public void onRegisterClick(View view) {
-        Intent register = new Intent(Intent.ACTION_VIEW, Uri.parse("https://owncloud.com/mobile/new"));
+        Intent register = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_account_register)));
         setResult(RESULT_CANCELED);
         startActivity(register);
     }
