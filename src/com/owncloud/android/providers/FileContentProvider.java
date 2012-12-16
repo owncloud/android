@@ -62,6 +62,8 @@ public class FileContentProvider extends ContentProvider {
                 ProviderTableMeta.FILE_CREATION);
         mProjectionMap.put(ProviderTableMeta.FILE_MODIFIED,
                 ProviderTableMeta.FILE_MODIFIED);
+        mProjectionMap.put(ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA,
+                ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA);
         mProjectionMap.put(ProviderTableMeta.FILE_CONTENT_LENGTH,
                 ProviderTableMeta.FILE_CONTENT_LENGTH);
         mProjectionMap.put(ProviderTableMeta.FILE_CONTENT_TYPE,
@@ -224,7 +226,8 @@ public class FileContentProvider extends ContentProvider {
                     + ProviderTableMeta.FILE_ACCOUNT_OWNER + " TEXT, "
                     + ProviderTableMeta.FILE_LAST_SYNC_DATE + " INTEGER, "
                     + ProviderTableMeta.FILE_KEEP_IN_SYNC + " INTEGER, "
-                    + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " INTEGER );"
+                    + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " INTEGER, "
+                    + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " INTEGER );"
                     );
         }
 
@@ -241,10 +244,40 @@ public class FileContentProvider extends ContentProvider {
             }
             if (oldVersion < 3 && newVersion >= 3) {
                 Log.i("SQL", "Entering in the #2 ADD in onUpgrade");
-                db.execSQL("ALTER TABLE " + ProviderTableMeta.DB_NAME +
-                           " ADD COLUMN " + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA  + " INTEGER " +
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.DB_NAME +
+                               " ADD COLUMN " + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA  + " INTEGER " +
+                               " DEFAULT 0");
+                    
+                    // assume there are not local changes pending to upload
+                    db.execSQL("UPDATE " + ProviderTableMeta.DB_NAME + 
+                            " SET " + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " = " + System.currentTimeMillis() + 
+                            " WHERE " + ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL");
+                 
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+            if (oldVersion < 4 && newVersion >= 4) {
+                Log.i("SQL", "Entering in the #3 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db .execSQL("ALTER TABLE " + ProviderTableMeta.DB_NAME +
+                           " ADD COLUMN " + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA  + " INTEGER " +
                            " DEFAULT 0");
-                upgraded = true;
+                
+                    db.execSQL("UPDATE " + ProviderTableMeta.DB_NAME + 
+                           " SET " + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " = " + ProviderTableMeta.FILE_MODIFIED + 
+                           " WHERE " + ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL");
+                
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
             }
             if (!upgraded)
                 Log.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion + ", newVersion == " + newVersion);
