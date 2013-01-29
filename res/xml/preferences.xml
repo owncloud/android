@@ -17,7 +17,7 @@
     
      <Preference android:key="version_information"
                          android:editable="false"
-                         android:selectable="false"
+                         android:enabled="false"
                          android:defaultValue="unknown"/>    
 	</PreferenceCategory>
     
