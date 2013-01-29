@@ -40,7 +40,7 @@
     <string name="prefs_instant_upload">Enable instant uploads</string>
     <string name="prefs_instant_upload_summary">Instantly upload photos taken by camera</string>
     <string name="prefs_version_title">%1$s Android App</string>
-    <string name="prefs_version_version">version: %1$s</string>
+    <string name="prefs_version_version">Version: %1$s</string>
     
     <string name="auth_host_url">URL</string>
     <string name="auth_username">Username</string>
