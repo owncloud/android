@@ -22,6 +22,8 @@ import java.util.Vector;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -151,6 +153,17 @@ public class Preferences extends SherlockPreferenceActivity implements
         super.onCreateOptionsMenu(menu);
         //MenuInflater inflater = getSherlock().getMenuInflater();
         //inflater.inflate(R.menu.prefs_menu, menu);
+        String text = String.format(getString(R.string.prefs_version_title), "0");
+        String summary = String.format(getString(R.string.prefs_version_version), "0");
+        try {
+            text = String.format(getString(R.string.prefs_version_title), getString(R.string.app_name));
+            summary = String.format(getString(R.string.prefs_version_version), getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+        } catch (NameNotFoundException e) {
+            Log.e(TAG, "Error while retreiving about dialog", e);
+        }
+        Preference customPref = (Preference) findPreference("version_information");
+        customPref.setTitle(text);        
+        customPref.setSummary(summary);
         return true;
     }
 
