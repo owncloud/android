@@ -17,6 +17,7 @@
   <string name="actionbar_sync">Aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
   <string name="actionbar_upload_from_apps">Inhalt von anderen Apps</string>
+  <string name="actionbar_failed_instant_upload">Fehlgeschlagene InstantUploads"</string>    
   <string name="actionbar_upload_files">Dateien</string>
   <string name="actionbar_mkdir">Ordner anlegen</string>
   <string name="actionbar_search">Suche</string>
@@ -203,4 +204,13 @@
   <string name="conflict_keep_both">Beide behalten</string>
   <string name="conflict_overwrite">Überschreiben</string>
   <string name="conflict_dont_upload">Nicht hochladen</string>
+  
+  <string name="actionbar_failed_instant_upload">Fehlgeschlagene Sofortuploads</string>  
+  <string name="failed_upload_headline_text">Fehlgeschlagene Sofortuploads</string>
+  <string name="failed_upload_headline_hint">Auflistung aller fehlgeschlagenen Softuploads</string>
+  <string name="failed_upload_all_cb">Alle auswählen</string>
+  <string name="failed_upload_headline_retryall_btn">Ausgewählte wiederholen</string>
+  <string name="failed_upload_headline_delete_all_btn">Ausgewählte löschen </string>
+  <string name="failed_upload_retry_text">Versuche ausgewählte erneut hochzuladen</string>
+
 </resources>

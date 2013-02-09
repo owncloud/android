@@ -253,5 +253,11 @@
     
     <!-- we need to improve the communication of errors to the user -->
     <string name="error__upload__local_file_not_copied">%1$s could not be copied to %2$s local directory</string>
-    
+    <string name="actionbar_failed_instant_upload">Failed InstantUpload"</string> 
+    <string name="failed_upload_headline_text">Failed instant uploads</string>
+    <string name="failed_upload_headline_hint">Summary of all failed instant uploads</string>
+    <string name="failed_upload_all_cb">select all</string>
+    <string name="failed_upload_headline_retryall_btn">retry all selected</string>
+    <string name="failed_upload_headline_delete_all_btn">delete all  selected from uploadqueue</string>
+    <string name="failed_upload_retry_text">retry to upload the image: </string>
 </resources>
