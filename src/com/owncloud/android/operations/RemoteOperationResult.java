@@ -1,9 +1,10 @@
 /* ownCloud Android client application
  *   Copyright (C) 2012 Bartek Przybylski
+ *   Copyright (C) 2012-2013 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
+ *   the Free Software Foundation, either version 2 of the License, or
  *   (at your option) any later version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -45,7 +46,7 @@ import com.owncloud.android.network.CertificateCombinedException;
 public class RemoteOperationResult implements Serializable {
     
     /** Generated - should be refreshed every time the class changes!! */
-    private static final long serialVersionUID = 5336333154035462033L;
+    private static final long serialVersionUID = -7805531062432602444L;
 
     
     public enum ResultCode { 
@@ -79,7 +80,6 @@ public class RemoteOperationResult implements Serializable {
     private int mHttpCode = -1;
     private Exception mException = null;
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
-    private Object mExtraData = null;
     
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
@@ -175,14 +175,6 @@ public class RemoteOperationResult implements Serializable {
 
     public boolean isSslRecoverableException() {
         return mCode == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
-    }
-    
-    public void setExtraData(Object data) {
-        mExtraData = data;
-    }
-    
-    public Object getExtraData() {
-        return mExtraData;
     }
     
     private CertificateCombinedException getCertificateCombinedException(Exception e) {

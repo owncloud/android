@@ -1,9 +1,10 @@
 /* ownCloud Android client application
  *   Copyright (C) 2012 Bartek Przybylski
+ *   Copyright (C) 2012-2013 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
+ *   the Free Software Foundation, either version 2 of the License, or
  *   (at your option) any later version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -344,6 +345,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
          * @param file A file that could be in the queue of pending uploads
          */
         public boolean isUploading(Account account, OCFile file) {
+            if (account == null || file == null)
+                return false;
             String targetKey = buildRemoteName(account, file);
             synchronized (mPendingUploads) {
                 if (file.isDirectory()) {
@@ -669,6 +672,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      * @param upload Finished upload operation
      */
     private void notifyUploadResult(RemoteOperationResult uploadResult, UploadFileOperation upload) {
+        Log.d(TAG, "NotifyUploadResult with resultCode: " + uploadResult.getCode());
         if (uploadResult.isCancelled()) {
             // / cancelled operation -> silent removal of progress notification
             mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
@@ -734,7 +738,9 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             mNotificationManager.notify(R.string.uploader_upload_failed_ticker, finalNotification);
 
             DbHandler db = new DbHandler(this.getBaseContext());
-            db.updateFileState(mCurrentUpload.getFile().getStoragePath(), DbHandler.UPLOAD_STATUS_UPLOAD_FAILED);
+            if (db.updateFileState(upload.getOriginalStoragePath(), DbHandler.UPLOAD_STATUS_UPLOAD_FAILED) == 0) {
+                db.putFileForLater(upload.getOriginalStoragePath(), upload.getAccount().name);
+            }
             db.close();
 
         }

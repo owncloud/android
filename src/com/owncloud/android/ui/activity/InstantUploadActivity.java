@@ -1,5 +1,5 @@
 /* ownCloud Android client application
- *   Copyright (C) 2013  Matthias Baumann
+ *   Copyright (C) 2012-2013 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package com.owncloud.android.ui.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -43,6 +44,7 @@ import android.widget.Toast;
 import com.owncloud.android.AccountUtils;
 import com.owncloud.android.R;
 import com.owncloud.android.db.DbHandler;
+import com.owncloud.android.files.InstantUploadBroadcastReceiver;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.InstantUploadService;
 
@@ -54,14 +56,25 @@ import com.owncloud.android.files.services.InstantUploadService;
  * The entrypoint for this activity is the 'Failed upload Notification" and a
  * submenue underneath the 'Upload' menuentry
  * 
- * @author andomaex
+ * @author andomaex / Matthias Baumann
  * 
+ *         This program is free software: you can redistribute it and/or modify
+ *         it under the terms of the GNU General Public License as published by
+ *         the Free Software Foundation, either version 3 of the License, or (at
+ *         your option) any later version.
+ * 
+ *         This program is distributed in the hope that it will be useful, but
+ *         WITHOUT ANY WARRANTY; without even the implied warranty of
+ *         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *         General Public License for more de/
  */
 public class InstantUploadActivity extends Activity {
 
     private static final String LOG_TAG = InstantUploadActivity.class.getSimpleName();
     private LinearLayout listView;
     private static final String retry_chexbox_tag = "retry_chexbox_tag";
+    private static int MAX_LOAD_IMAGES = 5;
+    private int lastLoadImageIdx = 0;
 
     private SparseArray<String> fileList = null;
 
@@ -78,7 +91,7 @@ public class InstantUploadActivity extends Activity {
         failed_upload_all_cb.setOnCheckedChangeListener(getCheckAllListener());
         listView = (LinearLayout) findViewById(R.id.failed_upload_scrollviewlayout);
 
-        initListView();
+        loadListView(true);
 
     }
 
@@ -87,35 +100,72 @@ public class InstantUploadActivity extends Activity {
      * Image that was not successfully uploaded
      * 
      * this method is call at Activity creation and on delete one ore more
-     * list-entry an on retry the upload by clickinh the ImageButton or by click
+     * list-entry an on retry the upload by clicking the ImageButton or by click
      * to the 'retry all' button
      * 
      */
-    // TODO add lazy loading, so the list of failed items not loaded completely
-    // at the onCreate call
-    private void initListView() {
+    private void loadListView(boolean reset) {
         DbHandler db = new DbHandler(getApplicationContext());
-
         Cursor c = db.getFailedFiles();
-        fileList = new SparseArray<String>();
-        listView.removeAllViews();
-        int id = 0;
+
+        if (reset) {
+            fileList = new SparseArray<String>();
+            listView.removeAllViews();
+            lastLoadImageIdx = 0;
+        }
         if (c != null) {
             try {
+                c.moveToPosition(lastLoadImageIdx);
+
                 while (c.moveToNext()) {
-                    id++;
+
+                    lastLoadImageIdx++;
                     String imp_path = c.getString(1);
-                    fileList.put(id, imp_path);
-                    LinearLayout rowLayout = getLinearLayout(id);
-                    rowLayout.addView(getFileCheckbox(id));
-                    rowLayout.addView(getImageButton(imp_path, id));
-                    rowLayout.addView(getFileButton(imp_path, id));
+                    fileList.put(lastLoadImageIdx, imp_path);
+                    LinearLayout rowLayout = getLinearLayout(lastLoadImageIdx);
+                    rowLayout.addView(getFileCheckbox(lastLoadImageIdx));
+                    rowLayout.addView(getImageButton(imp_path, lastLoadImageIdx));
+                    rowLayout.addView(getFileButton(imp_path, lastLoadImageIdx));
                     listView.addView(rowLayout);
-                    Log.i(LOG_TAG, imp_path);
+                    Log.d(LOG_TAG, imp_path + " on idx: " + lastLoadImageIdx);
+                    if (lastLoadImageIdx % MAX_LOAD_IMAGES == 0) {
+                        break;
+                    }
+                }
+                if (lastLoadImageIdx > 0) {
+                    addLoadMoreButton(listView);
                 }
             } finally {
                 db.close();
             }
+        }
+    }
+
+    private void addLoadMoreButton(LinearLayout listView) {
+        if (listView != null) {
+            Button loadmoreBtn = null;
+            View oldButton = listView.findViewById(42);
+            if (oldButton != null) {
+                // remove existing button
+                listView.removeView(oldButton);
+                // to add the button at the end
+                loadmoreBtn = (Button) oldButton;
+            } else {
+                // create a new button to add to the scoll view
+                loadmoreBtn = new Button(this);
+                loadmoreBtn.setId(42);
+                loadmoreBtn.setText(getString(R.string.failed_upload_load_more_images));
+                loadmoreBtn.setBackgroundResource(R.color.owncloud_white);
+                loadmoreBtn.setTextSize(12);
+                loadmoreBtn.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loadListView(false);
+                    }
+
+                });
+            }
+            listView.addView(loadmoreBtn);
         }
     }
 
@@ -180,9 +230,9 @@ public class InstantUploadActivity extends Activity {
     }
 
     /**
-     * Button click Listner for the retry button at the headline
+     * Button click Listener for the retry button at the headline
      * 
-     * @return a Listner to perform a retry for all selected images
+     * @return a Listener to perform a retry for all selected images
      */
     private OnClickListener getRetryListner() {
         return new OnClickListener() {
@@ -199,13 +249,8 @@ public class InstantUploadActivity extends Activity {
                         String img_path = fileList.get(checkbox.getId());
                         if (to_retry) {
 
-                            removeCurrentFileFromDatabase(img_path);
                             final String msg = "Image-Path " + checkbox.getId() + " was checked: " + img_path;
                             Log.d(LOG_TAG, msg);
-
-                            Toast toast = Toast.makeText(InstantUploadActivity.this,
-                                    getString(R.string.failed_upload_retry_text) + img_path, Toast.LENGTH_SHORT);
-                            toast.show();
                             startUpload(img_path);
                         }
 
@@ -213,7 +258,7 @@ public class InstantUploadActivity extends Activity {
                 } finally {
                     // refresh the List
                     listView.removeAllViews();
-                    initListView();
+                    loadListView(true);
                 }
 
             }
@@ -251,7 +296,7 @@ public class InstantUploadActivity extends Activity {
                     dbh.close();
                     // refresh the List
                     listView.removeAllViews();
-                    initListView();
+                    loadListView(true);
                 }
 
             }
@@ -331,10 +376,8 @@ public class InstantUploadActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-
-                removeCurrentFileFromDatabase(img_path);
-                initListView();
                 startUpload(img_path);
+                loadListView(true);
             }
 
         };
@@ -346,31 +389,48 @@ public class InstantUploadActivity extends Activity {
      * @param img_path
      */
     private void startUpload(String img_path) {
-        Intent i = new Intent(InstantUploadActivity.this, FileUploader.class);
-        i.putExtra(FileUploader.KEY_ACCOUNT, AccountUtils.getCurrentOwnCloudAccount(InstantUploadActivity.this));
-        i.putExtra(FileUploader.KEY_LOCAL_FILE, img_path);
+        // extract filename
         String filename = img_path.substring(img_path.lastIndexOf('/'), img_path.length());
-        final String msg = "try to upload file with name :" + filename;
-        Log.d(LOG_TAG, msg);
-        Toast toast = Toast.makeText(InstantUploadActivity.this, getString(R.string.failed_upload_retry_text)
-                + filename, Toast.LENGTH_LONG);
-        toast.show();
-        i.putExtra(FileUploader.KEY_REMOTE_FILE, InstantUploadService.INSTANT_UPLOAD_DIR + "/" + filename);
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
-        startService(i);
+        if (canInstantUpload()) {
+            Account account = AccountUtils.getCurrentOwnCloudAccount(InstantUploadActivity.this);
+            // add file again to upload queue
+            DbHandler db = new DbHandler(InstantUploadActivity.this);
+            try {
+                db.updateFileState(img_path, DbHandler.UPLOAD_STATUS_UPLOAD_LATER);
+            } finally {
+                db.close();
+            }
+
+            Intent i = new Intent(InstantUploadActivity.this, FileUploader.class);
+            i.putExtra(FileUploader.KEY_ACCOUNT, account);
+            i.putExtra(FileUploader.KEY_LOCAL_FILE, img_path);
+            i.putExtra(FileUploader.KEY_REMOTE_FILE, InstantUploadService.INSTANT_UPLOAD_DIR + "/" + filename);
+            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+            i.putExtra(com.owncloud.android.files.services.FileUploader.KEY_INSTANT_UPLOAD, true);
+
+            final String msg = "try to upload file with name :" + filename;
+            Log.d(LOG_TAG, msg);
+            Toast toast = Toast.makeText(InstantUploadActivity.this, getString(R.string.failed_upload_retry_text)
+                    + filename, Toast.LENGTH_LONG);
+            toast.show();
+
+            startService(i);
+        } else {
+            Toast toast = Toast.makeText(InstantUploadActivity.this,
+                    getString(R.string.failed_upload_retry_do_nothing_text) + filename, Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
-    private void removeCurrentFileFromDatabase(String img_path) {
-        // first of all delete file from database, new failed uploads will put
-        // again to this database by the FileUpload Service
-        final DbHandler dbh = new DbHandler(getApplicationContext());
-        try {
-            boolean status = dbh.removeIUPendingFile(img_path);
-            Log.d(LOG_TAG, "removing file " + img_path + " from pending upload database was: " + status);
-        } finally {
-            dbh.close();
-        }
+    private boolean canInstantUpload() {
 
+        if (!InstantUploadBroadcastReceiver.isOnline(this)
+                || (InstantUploadBroadcastReceiver.instantUploadViaWiFiOnly(this) && !InstantUploadBroadcastReceiver
+                        .isConnectedViaWiFi(this))) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

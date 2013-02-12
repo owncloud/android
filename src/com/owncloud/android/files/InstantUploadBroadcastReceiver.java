@@ -1,9 +1,10 @@
 /* ownCloud Android client application
  *   Copyright (C) 2012  Bartek Przybylski
+ *   Copyright (C) 2012-2013 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
+ *   the Free Software Foundation, either version 2 of the License, or
  *   (at your option) any later version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -100,7 +101,6 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         // same always temporally the picture to upload
         DbHandler db = new DbHandler(context);
         db.putFileForLater(file_path, account.name);
-        // db.clearFiles();
         db.close();
 
         if (!isOnline(context) || (instantUploadViaWiFiOnly(context) && !isConnectedViaWiFi(context))) {
@@ -180,23 +180,23 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
 
     }
 
-    private boolean isOnline(Context context) {
+    public static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    private boolean isConnectedViaWiFi(Context context) {
+    public static boolean isConnectedViaWiFi(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm != null && cm.getActiveNetworkInfo() != null
                 && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI
                 && cm.getActiveNetworkInfo().getState() == State.CONNECTED;
     }
 
-    private boolean instantUploadEnabled(Context context) {
+    public static boolean instantUploadEnabled(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("instant_uploading", false);
     }
 
-    private boolean instantUploadViaWiFiOnly(Context context) {
+    public static boolean instantUploadViaWiFiOnly(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("instant_upload_on_wifi", false);
     }
 }

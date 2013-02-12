@@ -1,9 +1,10 @@
 /* ownCloud Android client application
  *   Copyright (C) 2011  Bartek Przybylski
+ *   Copyright (C) 2012-2013 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
+ *   the Free Software Foundation, either version 2 of the License, or
  *   (at your option) any later version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -155,10 +156,6 @@ public class FileDetailFragment extends SherlockFragment implements
         mAccount = ocAccount;
         mStorageManager = null; // we need a context to init this; the container activity is not available yet at this moment 
         mLayout = R.layout.file_details_empty;
-        
-        if(fileToDetail != null && ocAccount != null) {
-            mLayout = R.layout.file_details_fragment;
-        }
     }
     
     
@@ -177,6 +174,10 @@ public class FileDetailFragment extends SherlockFragment implements
         if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(FileDetailFragment.EXTRA_FILE);
             mAccount = savedInstanceState.getParcelable(FileDetailFragment.EXTRA_ACCOUNT);
+        }
+        
+        if(mFile != null && mAccount != null) {
+            mLayout = R.layout.file_details_fragment;
         }
         
         View view = null;
@@ -461,7 +462,7 @@ public class FileDetailFragment extends SherlockFragment implements
      * @return  True when the fragment was created with the empty layout.
      */
     public boolean isEmpty() {
-        return mLayout == R.layout.file_details_empty;
+        return (mLayout == R.layout.file_details_empty || mFile == null || mAccount == null);
     }
 
     
@@ -507,8 +508,7 @@ public class FileDetailFragment extends SherlockFragment implements
             
             // set file details
             setFilename(mFile.getFileName());
-            setFiletype(DisplayUtils.convertMIMEtoPrettyPrint(mFile
-                    .getMimetype()));
+            setFiletype(mFile.getMimetype());
             setFilesize(mFile.getFileLength());
             if(ocVersionSupportsTimeCreated()){
                 setTimeCreated(mFile.getCreationTimestamp());
@@ -560,8 +560,14 @@ public class FileDetailFragment extends SherlockFragment implements
      */
     private void setFiletype(String mimetype) {
         TextView tv = (TextView) getView().findViewById(R.id.fdType);
-        if (tv != null)
-            tv.setText(mimetype);
+        if (tv != null) {
+            String printableMimetype = DisplayUtils.convertMIMEtoPrettyPrint(mimetype);;        
+            tv.setText(printableMimetype);
+        }
+        ImageView iv = (ImageView) getView().findViewById(R.id.fdIcon);
+        if (iv != null) {
+            iv.setImageResource(DisplayUtils.getResourceId(mimetype));
+        }
     }
 
     /**
@@ -736,14 +742,14 @@ public class FileDetailFragment extends SherlockFragment implements
                 if (mFile.getRemotePath().equals(uploadRemotePath) ||
                     renamedInUpload) {
                     if (uploadWasFine) {
-                        mFile = mStorageManager.getFileByPath(mFile.getRemotePath());
+                        mFile = mStorageManager.getFileByPath(uploadRemotePath);
                     }
                     if (renamedInUpload) {
                         String newName = (new File(uploadRemotePath)).getName();
                         Toast msg = Toast.makeText(getActivity().getApplicationContext(), String.format(getString(R.string.filedetails_renamed_in_upload_msg), newName), Toast.LENGTH_LONG);
                         msg.show();
-                        getSherlockActivity().removeStickyBroadcast(intent);    // not the best place to do this; a small refactorization of BroadcastReceivers should be done
                     }
+                    getSherlockActivity().removeStickyBroadcast(intent);    // not the best place to do this; a small refactorization of BroadcastReceivers should be done
                     updateFileDetails(false);    // it updates the buttons; must be called although !uploadWasFine; interrupted uploads still leave an incomplete file in the server
                 }
             }

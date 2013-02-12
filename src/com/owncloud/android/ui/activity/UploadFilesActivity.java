@@ -1,9 +1,9 @@
 /* ownCloud Android client application
- *   Copyright (C) 2011  Bartek Przybylski
+ *   Copyright (C) 2012-2013 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
+ *   the Free Software Foundation, either version 2 of the License, or
  *   (at your option) any later version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -140,7 +140,7 @@ public class UploadFilesActivity extends SherlockFragmentActivity implements
                 break;
             }
             default:
-                retval = onOptionsItemSelected(item);
+                retval = super.onOptionsItemSelected(item);
         }
         return retval;
     }
@@ -314,7 +314,7 @@ public class UploadFilesActivity extends SherlockFragmentActivity implements
         protected Boolean doInBackground(Void... params) {
             String[] checkedFilePaths = mFileListFragment.getCheckedFilePaths();
             long total = 0;
-            for (int i=0; i < checkedFilePaths.length ; i++) {
+            for (int i=0; checkedFilePaths != null && i < checkedFilePaths.length ; i++) {
                 String localPath = checkedFilePaths[i];
                 File localFile = new File(localPath);
                 total += localFile.length();

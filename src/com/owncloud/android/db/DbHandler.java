@@ -3,7 +3,7 @@
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
+ *   the Free Software Foundation, either version 2 of the License, or
  *   (at your option) any later version.
  *
  *   This program is distributed in the hope that it will be useful,
@@ -55,7 +55,9 @@ public class DbHandler {
         cv.put("path", filepath);
         cv.put("account", account);
         cv.put("attempt", UPLOAD_STATUS_UPLOAD_LATER);
-        return mDB.insert(TABLE_INSTANT_UPLOAD, null, cv) != -1;
+        long result = mDB.insert(TABLE_INSTANT_UPLOAD, null, cv);
+        Log.d(TABLE_INSTANT_UPLOAD, "putFileForLater returns with: " + result + " for file: " + filepath);
+        return result != -1;
     }
 
     public int updateFileState(String filepath, Integer status) {
@@ -84,9 +86,9 @@ public class DbHandler {
      * @return true when one or more pending files was removed
      */
     public boolean removeIUPendingFile(String localPath) {
-        return mDB.delete(TABLE_INSTANT_UPLOAD,
-							"path = ?",
-							new String[] { localPath }) != 0;
+        long result = mDB.delete(TABLE_INSTANT_UPLOAD, "path = ?", new String[] { localPath });
+        Log.d(TABLE_INSTANT_UPLOAD, "delete returns with: " + result + " for file: " + localPath);
+        return result != 0;
 
     }
 
