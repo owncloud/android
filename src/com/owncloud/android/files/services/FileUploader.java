@@ -251,6 +251,11 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             }
         }
 
+        if (files == null) {
+            Log.e(TAG, "Null array for local paths provided in upload intent");
+            return Service.START_NOT_STICKY;
+        }
+
         OwnCloudVersion ocv = new OwnCloudVersion(AccountManager.get(this).getUserData(account,
                 AccountAuthenticator.KEY_OC_VERSION));
         boolean chunked = FileUploader.chunkedUploadIsSupported(ocv);

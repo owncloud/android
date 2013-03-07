@@ -225,9 +225,8 @@ public class OwnCloudClientUtils {
                                                                                             CertificateException, IOException {
         KeyStore knownServers = getKnownServersStore(context);
         knownServers.setCertificateEntry(Integer.toString(cert.hashCode()), cert);
-        FileOutputStream fos = null;
+        final FileOutputStream fos = context.openFileOutput(LOCAL_TRUSTSTORE_FILENAME, Context.MODE_PRIVATE);
         try {
-            fos = context.openFileOutput(LOCAL_TRUSTSTORE_FILENAME, Context.MODE_PRIVATE);
             knownServers.store(fos, LOCAL_TRUSTSTORE_PASSWORD.toCharArray());
         } finally {
             fos.close();

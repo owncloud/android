@@ -215,7 +215,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
             if (!verifiedHostname) {
                 SSLPeerUnverifiedException pue = new SSLPeerUnverifiedException("Names in the server certificate do not match to " + host + " in the URL");
                 if (failInHandshake == null) {
-                    failInHandshake = new CertificateCombinedException((X509Certificate) newSession.getPeerCertificates()[0]);
+                    failInHandshake = new CertificateCombinedException(newSession == null ? null : (X509Certificate) newSession.getPeerCertificates()[0]);
                     failInHandshake.setHostInUrl(host);
                 }
                 failInHandshake.setSslPeerUnverifiedException(pue);
