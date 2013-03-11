@@ -518,6 +518,7 @@ public class FileDataStorageManager implements DataStorageManager {
                                                     new String[] { mAccount.name, dir.getRemotePath() + "%" }, null);
                 } catch (RemoteException e) {
                     Log.e(TAG, e.getMessage());
+                    return;
                 }
             } else {
                 c = getContentResolver().query(ProviderTableMeta.CONTENT_URI, 

@@ -281,11 +281,11 @@ public class UploadFileOperation extends RemoteOperation {
             if (temporalFile != null && !originalFile.equals(temporalFile)) {
                 temporalFile.delete();
             }
-            if (result.isSuccess()) {
+            if (result != null && result.isSuccess()) {
                 Log.i(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath + ": " + result.getLogMessage());
                     
             } else {
-                if (result.getException() != null) {
+                if (result != null && result.getException() != null) {
                     String complement = "";
                     if (!nameCheckPassed) {
                         complement = " (while checking file existence in server)";
@@ -294,7 +294,8 @@ public class UploadFileOperation extends RemoteOperation {
                     }
                     Log.e(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath + ": " + result.getLogMessage() + complement, result.getException());
                 } else {
-                    Log.e(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath + ": " + result.getLogMessage());
+                    final String message = result == null ? "" : result.getLogMessage();
+                    Log.e(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath + ": " + message);
                 }
             }
         }
