@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="auth_username">प�?रयोक�?ता का नाम</string>
-  <string name="auth_password">पासवर�?ड</string>
-  <string name="setup_hint_username">प�?रयोक�?ता का नाम</string>
-  <string name="setup_hint_password">पासवर�?ड</string>
-</resources>
