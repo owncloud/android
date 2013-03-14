@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="app_name">ownCloud</string>
+  <string name="main_password">Парола:</string>
+  <string name="main_login">Потребител:</string>
+  <string name="main_button_login">Вход</string>
+  <string name="main_welcome">Добре дошли</string>
+  <string name="main_files">Файлове</string>
+  <string name="main_music">Музика</string>
+  <string name="main_contacts">Контакти</string>
+  <string name="main_calendar">Календар</string>
+  <string name="main_bookmarks">Предпочитани</string>
+  <string name="main_settings">�?а�?тройки</string>
+  <string name="actionbar_upload">Качване</string>
+  <string name="actionbar_upload_files">Файлове</string>
+  <string name="actionbar_settings">�?а�?тройки</string>
+  <string name="auth_host_url">Уеб адре�?</string>
+  <string name="auth_password">Парола</string>
+  <string name="sync_string_files">Файлове</string>
+  <string name="setup_hint_password">Парола</string>
+  <string name="uploader_btn_upload_text">Качване</string>
+  <string name="uploader_wrn_no_account_quit_btn_text">Изход</string>
+  <string name="filedetails_download">Изтегл�?не</string>
+  <string name="common_error">Грешка</string>
+  <string name="sync_string_contacts">Контакти</string>
+  <string name="common_share">Сподел�?не</string>
+  <string name="common_rename">Преименуване</string>
+  <string name="common_remove">Премахване</string>
+</resources>

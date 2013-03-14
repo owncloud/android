@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="main_files">Faili</string>
+  <string name="main_music">MÅ«zika</string>
+  <string name="main_calendar">KalendÄ?rs</string>
+  <string name="main_settings">IestatÄ«jumi</string>
+  <string name="actionbar_upload">AugÅ¡uplÄ?det</string>
+  <string name="actionbar_upload_files">Faili</string>
+  <string name="actionbar_settings">IestatÄ«jumi</string>
+  <string name="auth_username">LietotÄ?jvÄ?rds</string>
+  <string name="auth_password">Parole</string>
+  <string name="sync_string_files">Faili</string>
+  <string name="setup_hint_username">LietotÄ?jvÄ?rds</string>
+  <string name="setup_hint_password">Parole</string>
+  <string name="uploader_btn_upload_text">AugÅ¡uplÄ?det</string>
+  <string name="filedetails_download">LejuplÄ?dÄ“t</string>
+  <string name="common_cancel_upload">Atcelt augÅ¡uplÄ?di</string>
+  <string name="common_cancel">Atcelt</string>
+  <string name="common_error">KÄ¼Å«me</string>
+  <string name="common_share">LÄ«dzdalÄ«t</string>
+  <string name="common_rename">PÄ?rdÄ“vÄ“t</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="app_name">ownCloud</string>
+  <string name="main_password">Lozinka:</string>
+  <string name="main_login">KorisniÄ?ko ime:</string>
+  <string name="main_button_login">Prijava</string>
+  <string name="main_files">Datoteke</string>
+  <string name="main_music">Muzika</string>
+  <string name="main_contacts">Kontakti</string>
+  <string name="main_calendar">Kalendar</string>
+  <string name="main_bookmarks">ZabiljeÅ¡ke</string>
+  <string name="main_settings">Postavke</string>
+  <string name="actionbar_sync">OsvjeÅ¾i</string>
+  <string name="actionbar_upload">UÄ?itaj</string>
+  <string name="actionbar_upload_files">Datoteke</string>
+  <string name="actionbar_mkdir">Kreiraj direktorij</string>
+  <string name="actionbar_search">pretraÅ¾i</string>
+  <string name="actionbar_settings">Postavke</string>
+  <string name="prefs_category_general">OpÄ‡enito</string>
+  <string name="prefs_add_session">Dodaj novo pretraÅ¾ivanje</string>
+  <string name="prefs_select_oc_account">Izaberi raÄ?un</string>
+  <string name="prefs_accounts">KorisniÄ‡ki raÄ?uni</string>
+  <string name="auth_host_url">ownCloud URL</string>
+  <string name="auth_username">KorisniÄ?ko ime</string>
+  <string name="auth_password">Lozinka</string>
+  <string name="sync_string_files">Datoteke</string>
+  <string name="setup_hint_username">KorisniÄ?ko ime</string>
+  <string name="setup_hint_password">Lozinka</string>
+  <string name="setup_hint_address">Web adresa</string>
+  <string name="setup_hint_show_password">PrikaÅ¾i lozinku?</string>
+  <string name="setup_btn_connect">PoveÅ¾i</string>
+  <string name="uploader_btn_upload_text">UÄ?itaj</string>
+  <string name="uploader_wrn_no_account_quit_btn_text">Izlaz</string>
+  <string name="filedetails_download">Preuzimanje</string>
+  <string name="filedetails_sync_file">OsvjeÅ¾i</string>
+  <string name="filedetails_redownload">OsvjeÅ¾i</string>
+  <string name="common_yes">Da</string>
+  <string name="common_cancel_upload">Prekini upload</string>
+  <string name="common_cancel">Odustani</string>
+  <string name="common_error">GreÅ¡ka</string>
+  <string name="sync_string_contacts">Kontakti</string>
+  <string name="auth_trying_to_login">Trying to loginâ€¦</string>
+  <string name="common_share">Podijeli</string>
+  <string name="common_rename">Promjeni ime</string>
+  <string name="common_remove">Makni</string>
+</resources>

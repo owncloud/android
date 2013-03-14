@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ownCloud Android client application
+
+  Copyright (C) 2012  Bartek Przybylski
+  Copyright (C) 2012-2013 ownCloud Inc.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+	<style name="Animations" />
+
+	<!-- Default ownCloud app style -->
+	<style name="Theme.ownCloud" parent="style/Theme.Sherlock.Light.DarkActionBar">
+    	<item name="android:actionBarStyle">@style/Theme.ownCloud.Widget.ActionBar</item>
+    	<item name="actionBarStyle">@style/Theme.ownCloud.Widget.ActionBar</item>
+	</style>
+	
+	<style name="Theme.ownCloud.noActionBar" parent="style/Theme.Sherlock.Light.NoActionBar">
+      <item name="android:actionBarStyle">@style/Theme.ownCloud.Widget.ActionBar</item>
+      <item name="actionBarStyle">@style/Theme.ownCloud.Widget.ActionBar</item>
+  </style>
+	
+
+	<style name="Theme.ownCloud.Widget.ActionBar" parent="style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+    	<item name="android:background">@drawable/main_header_bg</item>
+    	<item name="background">@drawable/main_header_bg</item>
+    	<item name="android:textColor">#ffffff</item>
+    	<item name="android:shadowColor">#222222</item>
+    	<item name="android:shadowRadius">1</item>
+    	<item name="android:shadowDy">1</item>
+    	<item name="android:backgroundSplit">@drawable/split_action_bg</item>
+	</style>
+	
+	<!-- PopDownMenu -->
+	<style name="Animations.PopDownMenu" />
+	
+	<style name="Animations.PopDownMenu.Center">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_top</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>
+	</style>
+	
+	<style name="Animations.PopDownMenu.Left">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+	</style>
+	
+	<style name="Animations.PopDownMenu.Right">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+	</style>
+	
+	<style name="Animations.PopDownMenu.Reflect">
+		<item name="@android:windowEnterAnimation">@anim/pump_top</item>
+		<item name="@android:windowExitAnimation">@anim/disappear</item>
+	</style>
+	
+	<!-- PopUpMenu -->
+	<style name="Animations.PopUpMenu" />
+	
+	<style name="Animations.PopUpMenu.Center">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
+	</style>
+	
+	<style name="Animations.PopUpMenu.Left">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+	</style>
+	
+	<style name="Animations.PopUpMenu.Right">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+	</style>
+	
+	<style name="Animations.PopUpMenu.Reflect">
+		<item name="@android:windowEnterAnimation">@anim/pump_bottom</item>
+		<item name="@android:windowExitAnimation">@anim/disappear</item>
+	</style>
+	
+	<style name="PassCodeStyle">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+  		<item name="android:gravity">center</item>
+  		<item name="android:layout_margin">10dp</item>
+  		<item name="android:inputType">numberDecimal</item>
+  		<item name="android:numeric">decimal</item>
+		<item name="android:digits">1234567890</item>
+		<item name="android:maxLength">1</item>
+		<item name="android:password">true</item>
+		<item name="android:singleLine">true</item>
+  		    
+    </style>
+		
+	<color name="setup_text_hint">#777777</color>
+	<color name="setup_text_typed">#000000</color>
+</resources>
