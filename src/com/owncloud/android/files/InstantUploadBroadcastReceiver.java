@@ -44,7 +44,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
     public static String INSTANT_UPLOAD_DIR = "/InstantUpload/";
     private static String TAG = "PhotoTakenBroadcastReceiver";
     private static final String[] CONTENT_PROJECTION = { Media.DATA, Media.DISPLAY_NAME, Media.MIME_TYPE, Media.SIZE };
-    private static String NEW_PHOTO_ACTION = "com.android.camera.NEW_PICTURE";
+    private static String NEW_PHOTO_ACTION = "android.hardware.action.NEW_PICTURE";
 
     @Override
     public void onReceive(Context context, Intent intent) {
