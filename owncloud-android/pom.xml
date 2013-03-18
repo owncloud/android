@@ -38,13 +38,13 @@
 			bottom -->
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
-			<artifactId>actionbarsherlock</artifactId>
+			<artifactId>library</artifactId>
 			<version>4.2.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
-			<artifactId>actionbarsherlock</artifactId>
+			<artifactId>library</artifactId>
 			<version>4.2.0</version>
 			<type>apklib</type>
 		</dependency>
