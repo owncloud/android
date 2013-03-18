@@ -10,7 +10,7 @@
 	<version>1.3.21-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
-	<name>owncloud-android-project</name>
+	<name>owncloud-project</name>
 	<url>http://maven.apache.org</url>
 	
 	<properties>
@@ -22,7 +22,9 @@
 	
 	<modules>
 		<module>owncloud-android</module>
-		<module>owncloud-android-tests</module>
+	    <module>owncloud-android-tests</module>
+	    <module>third_party/actionbarsherlock/library</module>
+		
 	</modules>
 	
 	<repositories>
