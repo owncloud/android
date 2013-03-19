@@ -1,0 +1,1 @@
+This is just a dummy to create the maven structure. Android needs to have a test project to run directly on the mobile
