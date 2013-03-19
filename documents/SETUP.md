@@ -1,5 +1,4 @@
-
- 1. Requirements
+1.Requirements
  
  - Eclipse
 
@@ -12,16 +11,16 @@
    - EGit - Git Team Provider (Optional)
 
 
- 2. Get a clone from owncloud
+2.Get a clone from owncloud
 
    - Window -> Show View -> Other -> Git -> Git Repositories
 
-   - clone new Repository (https://github.com/owncloud/android.git)
+   - Clone new Repository (https://github.com/owncloud/android.git)
 
-   - right click on project -> import Projects -> import existing projects -> finish
+   - Right click on project -> import Projects -> import existing projects -> finish
 
 
- 3. Run the app on an emulator
+3.Run the app on an emulator
 
    - start the emulator
 
@@ -30,10 +29,9 @@
    - insert goals : clean install android:deploy -> Run
 
 
- 4. Include the owncloud templates for codestyle nder owncloud-android-project/documents/SETUP  for programming
+4.Include the owncloud templates for codestyle nder owncloud-android-project/documents/SETUP for programming
 
-
-	 HAVE FUN!
+HAVE FUN!
 
 
 
