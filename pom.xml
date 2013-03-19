@@ -23,7 +23,7 @@
 	<modules>
 		<module>owncloud-android</module>
 	    <module>owncloud-android-tests</module>
-	    <module>third_party/actionbarsherlock/library</module>
+	    <module>actionbarsherlock</module>
 		
 	</modules>
 	

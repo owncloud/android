@@ -21,7 +21,6 @@
 
 	<modules>
 		<module>library</module>
-		<module>samples</module>
 	</modules>
 
 	<scm>
