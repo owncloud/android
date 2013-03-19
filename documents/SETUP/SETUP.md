@@ -1,18 +1,37 @@
-  
-  If you want to start development of ownCloud android client you have two way to do so:
 
-  1. Building with console:
+ 1. Requirements
+ 
+ - Eclipse
 
-  -  Use setup_env.sh or setup_env.bat
-  -  NOTE: You must have git, ant/bin, android/tools in your enviroment path
-  
-  2. Building with eclipse:
+ - For the owncloud setup are the following plugins from eclispe market required :
 
-  -  Run ant clean debug
-  -  Open Eclipse and import *actionbarsherlock/library* project to your workspace
-  -  NOTE: You must have 'tools' and 'platforms-tools' in your path in order to run setup_env.sh 
+   - Android Development Tools for Eclipse
 
-	 After those actions you should be good to go.
+   - Maven Integration for Eclipse
+
+   - EGit - Git Team Provider (Optional)
+
+
+ 2. Get a clone from owncloud
+
+   - Window -> Show View -> Other -> Git -> Git Repositories
+
+   - clone new Repository (https://github.com/owncloud/android.git)
+
+   - right click on project -> import Projects -> import existing projects -> finish
+
+
+ 3. Run the app on an emulator
+
+   - start the emulator
+
+   - right click on project owncloud-android -> Run as -> Maven Build 
+
+   - insert goals : clean install android:deploy -> Run
+
+
+ 4. Include the owncloud templates for codestyle nder owncloud-android-project/documents/SETUP  for programming
+
 
 	 HAVE FUN!
 
