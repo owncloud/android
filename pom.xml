@@ -24,7 +24,7 @@
 	<modules>
 		<module>owncloud-android</module>
 	    <module>owncloud-android-tests</module>
-	    <module>actionbarsherlock</module>
+	    <module>library</module>
 	</modules>
 	
 	<repositories>
