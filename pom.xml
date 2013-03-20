@@ -7,13 +7,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.owncloud</groupId>
 	<artifactId>android-project</artifactId>
-	<version>1.3.21-SNAPSHOT</version>
+	<version>${project.version}</version>
 	<packaging>pom</packaging>
 	
 	<name>owncloud-project</name>
 	<url>http://maven.apache.org</url>
 	
 	<properties>
+	    <project.version>1.3.21</project.version>
         <java-version>1.6</java-version>
         <google.android-version>4.1.1.4</google.android-version>
         <google.android.support-version>r7</google.android.support-version>
@@ -24,7 +25,6 @@
 		<module>owncloud-android</module>
 	    <module>owncloud-android-tests</module>
 	    <module>actionbarsherlock</module>
-		
 	</modules>
 	
 	<repositories>
