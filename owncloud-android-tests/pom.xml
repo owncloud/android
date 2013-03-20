@@ -46,7 +46,7 @@
             <scope>provided</scope>
             <type>jar</type>
         </dependency>
-      <dependency>
+      <!--  <dependency>
             <groupId>com.actionbarsherlock</groupId>
             <artifactId>library</artifactId>
             <version>${actionbarsherlock-version}</version>
@@ -57,7 +57,7 @@
         		</exclusion>
       		</exclusions>
       		<scope>provided</scope>
-       </dependency> 
+       </dependency> -->
     </dependencies>
  
     <build>

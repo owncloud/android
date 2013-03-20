@@ -8,7 +8,6 @@
          this package needs to link against the android.test library,
          which is needed when building test cases. -->
     <application>
-       <!--  <uses-library android:name="com.actionbarsherlock.library" /> -->
         <uses-library android:name="android.test.runner" />
     </application>
     <!--
