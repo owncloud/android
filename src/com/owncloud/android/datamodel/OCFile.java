@@ -280,9 +280,25 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * @return the Mimetype as a String
      */
     public String getMimetype() {
+        checkIfFileIsAPK();
         return mMimeType;
     }
 
+    /**
+     * Bugfixing: https://github.com/owncloud/android/issues/86
+     * 
+     * mimetype apk will be recognized as zip after uploaded on the server
+     * 
+     */
+    private void checkIfFileIsAPK() {
+        if (mMimeType.equals("application/zip") && mRemotePath != null && mRemotePath.length() != 0 ) {
+            String [] clearifyPackage = mRemotePath.split("\\.");
+            if (clearifyPackage[clearifyPackage.length-1].equals("apk")) {
+                mMimeType = "application/vnd.android.package-archive";
+            }
+        }
+    }
+    
     /**
      * Adds a file to this directory. If this file is not a directory, an
      * exception gets thrown.
