@@ -83,7 +83,7 @@
   <string name="common_exit">%1$s verlasse</string>
   <string name="common_error">Fehler</string>
   <string name="about_title">Über</string>
-  <string name="new_password">Neues Password</string>
+  <string name="new_password">Neues Passwort</string>
   <string name="delete_account">Account löschen</string>
   <string name="create_account">Account erstellen</string>
   <string name="upload_chooser_title">Dateien hochladen von...</string>
