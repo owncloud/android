@@ -53,6 +53,8 @@ public class DisplayUtils {
         // music
         mimeType2HUmanReadable.put("audio/mpeg", "MP3 music file");
         mimeType2HUmanReadable.put("application/ogg", "OGG music file");
+        // package
+        mimeType2HUmanReadable.put("application/vnd.android.package-archive", "APK file");
 
     }
 
@@ -69,7 +71,7 @@ public class DisplayUtils {
                                                         "vnd.oasis.opendocument.text"
                                                         };
     private static Set<String> SUBTYPES_DOCUMENT_SET = new HashSet<String>(Arrays.asList(SUBTYPES_DOCUMENT));
-    private static final String[] SUBTYPES_COMPRESSED = {"x-tar", "x-gzip", "zip"};
+    private static final String[] SUBTYPES_COMPRESSED = {"x-tar", "x-gzip", "zip" , "vnd.android.package-archive"};
     private static final Set<String> SUBTYPES_COMPRESSED_SET = new HashSet<String>(Arrays.asList(SUBTYPES_COMPRESSED));
     
     /**
