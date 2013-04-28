@@ -25,13 +25,14 @@
     android:gravity="center|fill"
     android:orientation="vertical" >
 
+    
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="16dip"
         android:layout_marginRight="16dip"
-        android:layout_weight="1" >
+        android:layout_weight="0.64" >
 
         <LinearLayout
             android:id="@+id/LinearLayout1"
@@ -62,6 +63,7 @@
                     android:ems="10"
                     android:hint="@string/auth_host_url"
                     android:inputType="textNoSuggestions" >
+
                     <requestFocus />
                 </EditText>
 
@@ -69,10 +71,9 @@
                     android:id="@+id/refreshButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_refresh_black"
                     android:layout_gravity="right|center_vertical"
+                    android:src="@drawable/ic_action_refresh_black"
                     android:visibility="invisible" />
-
             </FrameLayout>
 
             <LinearLayout
@@ -95,7 +96,6 @@
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:visibility="invisible" />
-
             </LinearLayout>
 
             <TextView
@@ -127,7 +127,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/auth_password"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword" />
 
                 <ImageView
                     android:id="@+id/viewPassword"
@@ -136,16 +136,13 @@
                     android:layout_gravity="right|center_vertical"
                     android:src="@android:drawable/ic_menu_view"
                     android:visibility="invisible" />
-
             </FrameLayout>
-
-            </LinearLayout>
-
+        </LinearLayout>
     </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <LinearLayout
             android:id="@+id/buttons_layout"
@@ -153,39 +150,33 @@
             android:layout_height="wrap_content"
             android:weightSum="1" >
 
-            <Button
-                android:id="@+id/buttonCancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:onClick="onCancelClick"
-                android:text="@string/common_cancel" />
-
-            <Button
+             <Button
                 android:id="@+id/buttonOK"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:layout_marginLeft="16dip"
+		        android:layout_marginRight="16dip"
+		        android:layout_weight="1" 
                 android:enabled="false"
                 android:onClick="onOkClick"
                 android:text="@string/setup_btn_connect"
                 android:textColor="@android:color/black" />
-
         </LinearLayout>
-        
-		<Button
-			android:id="@+id/account_register"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_below="@id/buttons_layout"
-			android:layout_centerHorizontal="true"
-			android:onClick="onRegisterClick"
-			android:paddingTop="10dp"
-			android:paddingBottom="10dp"
-			android:textColor="#0000FF"
-			android:background="@android:color/transparent" />
-			<!-- android:text="@string/app_name @string/auth_register" /-->
-        
+
+        <Button
+            android:id="@+id/account_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttons_layout"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:onClick="onRegisterClick"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="#0000FF" />
+        <!-- android:text="@string/app_name @string/auth_register" / -->
+
     </RelativeLayout>
 
 </LinearLayout>
