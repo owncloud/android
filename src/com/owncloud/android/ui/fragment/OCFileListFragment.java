@@ -28,7 +28,6 @@ import com.owncloud.android.datamodel.DataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.network.OwnCloudClientUtils;
 import com.owncloud.android.operations.OnRemoteOperationListener;
 import com.owncloud.android.operations.RemoteOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
@@ -42,7 +41,6 @@ import com.owncloud.android.ui.dialog.EditNameDialog;
 import com.owncloud.android.ui.dialog.EditNameDialog.EditNameDialogListener;
 import com.owncloud.android.ui.fragment.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 
-import eu.alefzero.webdav.WebdavClient;
 import eu.alefzero.webdav.WebdavUtils;
 
 import android.accounts.Account;
@@ -52,7 +50,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -144,7 +141,7 @@ public class OCFileListFragment extends FragmentListView implements EditNameDial
                 mContainerActivity.onDirectoryClick(file);
             
             } else {    /// Click on a file
-                mContainerActivity.onFileClick(file);
+                mContainerActivity.onFileClick(file, false);
             }
             
         } else {
@@ -173,6 +170,7 @@ public class OCFileListFragment extends FragmentListView implements EditNameDial
             toHide.add(R.id.action_download_file);
             toHide.add(R.id.action_cancel_download);
             toHide.add(R.id.action_cancel_upload);
+            toHide.add(R.id.action_sync_file);
             toHide.add(R.id.action_see_details);
             if (    mContainerActivity.getFileDownloaderBinder().isDownloading(AccountUtils.getCurrentOwnCloudAccount(getActivity()), targetFile) ||
                     mContainerActivity.getFileUploaderBinder().isUploading(AccountUtils.getCurrentOwnCloudAccount(getActivity()), targetFile)           ) {
@@ -186,12 +184,11 @@ public class OCFileListFragment extends FragmentListView implements EditNameDial
             if (targetFile.isDown()) {
                 toHide.add(R.id.action_cancel_download);
                 toHide.add(R.id.action_cancel_upload);
-                item = menu.findItem(R.id.action_download_file);
-                if (item != null) {
-                    item.setTitle(R.string.filedetails_sync_file);
-                }
+                toHide.add(R.id.action_download_file);
+                
             } else {
                 toHide.add(R.id.action_open_file_with);
+                toHide.add(R.id.action_sync_file);
             }
             if ( mContainerActivity.getFileDownloaderBinder().isDownloading(AccountUtils.getCurrentOwnCloudAccount(getActivity()), targetFile)) {
                 toHide.add(R.id.action_download_file);
@@ -314,11 +311,11 @@ public class OCFileListFragment extends FragmentListView implements EditNameDial
                 }
                 return true;
             }
-            case R.id.action_download_file: {
+            case R.id.action_download_file: 
+            case R.id.action_sync_file: {
                 Account account = AccountUtils.getCurrentOwnCloudAccount(getSherlockActivity());
                 RemoteOperation operation = new SynchronizeFileOperation(mTargetFile, null, mContainerActivity.getStorageManager(), account, true, false, getSherlockActivity());
-                WebdavClient wc = OwnCloudClientUtils.createOwnCloudClient(account, getSherlockActivity().getApplicationContext());
-                operation.execute(wc, mContainerActivity, mHandler);
+                operation.execute(account, getSherlockActivity(), mContainerActivity, mHandler, getSherlockActivity());
                 getSherlockActivity().showDialog(FileDisplayActivity.DIALOG_SHORT_WAIT);
                 return true;
             }
@@ -439,7 +436,7 @@ public class OCFileListFragment extends FragmentListView implements EditNameDial
          *  
          * @param file
          */
-        public void onFileClick(OCFile file);
+        public void onFileClick(OCFile file, boolean realClick);
 
         /**
          * Getter for the current DataStorageManager in the container activity
@@ -484,8 +481,7 @@ public class OCFileListFragment extends FragmentListView implements EditNameDial
                                                                 AccountUtils.getCurrentOwnCloudAccount(getActivity()), 
                                                                 newFilename, 
                                                                 mContainerActivity.getStorageManager());
-            WebdavClient wc = OwnCloudClientUtils.createOwnCloudClient(AccountUtils.getCurrentOwnCloudAccount(getSherlockActivity()), getSherlockActivity().getApplicationContext());
-            operation.execute(wc, mContainerActivity, mHandler);
+            operation.execute(AccountUtils.getCurrentOwnCloudAccount(getSherlockActivity()), getSherlockActivity(), mContainerActivity, mHandler, getSherlockActivity());
             getActivity().showDialog(FileDisplayActivity.DIALOG_SHORT_WAIT);
         }
     }
@@ -498,8 +494,7 @@ public class OCFileListFragment extends FragmentListView implements EditNameDial
                 RemoteOperation operation = new RemoveFileOperation( mTargetFile, 
                                                                     true, 
                                                                     mContainerActivity.getStorageManager());
-                WebdavClient wc = OwnCloudClientUtils.createOwnCloudClient(AccountUtils.getCurrentOwnCloudAccount(getSherlockActivity()), getSherlockActivity().getApplicationContext());
-                operation.execute(wc, mContainerActivity, mHandler);
+                operation.execute(AccountUtils.getCurrentOwnCloudAccount(getSherlockActivity()), getSherlockActivity(), mContainerActivity, mHandler, getSherlockActivity());
                 
                 getActivity().showDialog(FileDisplayActivity.DIALOG_SHORT_WAIT);
             }
