@@ -156,7 +156,10 @@
         <service android:name=".files.services.InstantUploadService" />
         <receiver android:name=".files.InstantUploadBroadcastReceiver">
             <intent-filter>
+                <!-- unofficially for Android 3.2 and below (does not work for HTC devices): -->
                 <action android:name="com.android.camera.NEW_PICTURE" />
+                <!-- officially supported since Android 4.0 (SDK 14, works for HTC devices): --> 
+                <action android:name="android.hardware.action.NEW_PICTURE" />
                 <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
