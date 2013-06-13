@@ -57,6 +57,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     private long mLastSyncDateForProperties;
     private long mLastSyncDateForData;
     private boolean mKeepInSync;
+    private boolean mUploading;
+    private boolean mDownloading;
 
     private String mEtag;
 
@@ -95,6 +97,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mKeepInSync = source.readInt() == 1;
         mLastSyncDateForProperties = source.readLong();
         mLastSyncDateForData = source.readLong();
+        mUploading = source.readInt() == 0;
+        mDownloading = source.readInt() == 0;
     }
 
     @Override
@@ -112,6 +116,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         dest.writeInt(mKeepInSync ? 1 : 0);
         dest.writeLong(mLastSyncDateForProperties);
         dest.writeLong(mLastSyncDateForData);
+        dest.writeInt(mUploading ? 1 : 0);
+        dest.writeInt(mDownloading ? 1 : 0);
     }
     
     /**
@@ -319,6 +325,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mLastSyncDateForData = 0;
         mKeepInSync = false;
         mNeedsUpdating = false;
+        mUploading= false;
+        mDownloading = false;
     }
 
     /**
@@ -408,6 +416,39 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         return mKeepInSync;
     }
     
+    
+    /**
+     * Uploading getter
+     * @return
+     */
+    public boolean isUploading() {
+        return mUploading;
+    }
+
+    /**
+     * Uploading setter
+     * @param uploading
+     */
+    public void setUploading(boolean uploading) {
+        this.mUploading = uploading;
+    }
+
+    /**
+     * Downloaing getter
+     * @return
+     */
+    public boolean isDownloading() {
+        return mDownloading;
+    }
+
+    /**
+     * Downloading setter
+     * @param downloading
+     */
+    public void setDownloading(boolean downloading) {
+        this.mDownloading = downloading;
+    }
+
     @Override
     public int describeContents() {
         return this.hashCode();
@@ -439,8 +480,9 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     @Override
     public String toString() {
-        String asString = "[id=%s, name=%s, mime=%s, downloaded=%s, local=%s, remote=%s, parentId=%s, keepInSinc=%s]";
-        asString = String.format(asString, Long.valueOf(mId), getFileName(), mMimeType, isDown(), mLocalPath, mRemotePath, Long.valueOf(mParentId), Boolean.valueOf(mKeepInSync));
+        String asString = "[id=%s, name=%s, mime=%s, downloaded=%s, local=%s, remote=%s, parentId=%s, keepInSinc=%s, uploading=%s, downloading=%s]";
+        asString = String.format(asString, Long.valueOf(mId), getFileName(), mMimeType, isDown(), mLocalPath, mRemotePath, Long.valueOf(mParentId), 
+                Boolean.valueOf(mKeepInSync), Boolean.valueOf(mUploading), Boolean.valueOf(mDownloading));
         return asString;
     }
 
