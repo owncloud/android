@@ -134,6 +134,8 @@ public class FileDataStorageManager implements DataStorageManager {
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.getLastSyncDateForProperties());
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.getLastSyncDateForData());
         cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.keepInSync() ? 1 : 0);
+        cv.put(ProviderTableMeta.FILE_UPLOADING, file.isUploading() ? 1 : 0);
+        cv.put(ProviderTableMeta.FILE_DOWNLOADING, file.isDownloading() ? 1 : 0);
 
         boolean sameRemotePath = fileExists(file.getRemotePath());
         if (sameRemotePath ||
@@ -216,6 +218,8 @@ public class FileDataStorageManager implements DataStorageManager {
             cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.getLastSyncDateForProperties());
             cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.getLastSyncDateForData());
             cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.keepInSync() ? 1 : 0);
+            cv.put(ProviderTableMeta.FILE_UPLOADING, file.isUploading() ? 1 : 0);
+            cv.put(ProviderTableMeta.FILE_DOWNLOADING, file.isDownloading() ? 1 : 0);
 
             if (fileExists(file.getRemotePath())) {
                 OCFile oldFile = getFileByPath(file.getRemotePath());
@@ -436,6 +440,10 @@ public class FileDataStorageManager implements DataStorageManager {
                     getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA)));
             file.setKeepInSync(c.getInt(
                                 c.getColumnIndex(ProviderTableMeta.FILE_KEEP_IN_SYNC)) == 1 ? true : false);
+            file.setUploading(c.getInt(
+                    c.getColumnIndex(ProviderTableMeta.FILE_UPLOADING)) == 1 ? true : false);
+            file.setDownloading(c.getInt(
+                    c.getColumnIndex(ProviderTableMeta.FILE_DOWNLOADING)) == 1 ? true : false);
         }
         return file;
     }
