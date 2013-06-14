@@ -114,7 +114,7 @@ public class FileDataStorageManager implements DataStorageManager {
     public boolean fileExists(String path) {
         return fileExists(ProviderTableMeta.FILE_PATH, path);
     }
-
+    
     @Override
     public boolean saveFile(OCFile file) {
         boolean overriden = false;
@@ -444,6 +444,7 @@ public class FileDataStorageManager implements DataStorageManager {
                     c.getColumnIndex(ProviderTableMeta.FILE_UPLOADING)) == 1 ? true : false);
             file.setDownloading(c.getInt(
                     c.getColumnIndex(ProviderTableMeta.FILE_DOWNLOADING)) == 1 ? true : false);
+            Log_OC.d(TAG, "createFileInstance Uploading =" + String.valueOf(file.isUploading()) + " Downloading =" + String.valueOf(file.isDownloading()));
         }
         return file;
     }
@@ -591,4 +592,32 @@ public class FileDataStorageManager implements DataStorageManager {
         return ret;
     }
 
+    
+    /**
+     * Update the uploading value of a file
+     */
+    @Override
+    public int updateUploading(String filePath, boolean uploading)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put("path", filePath);
+        cv.put("uploading", uploading);
+        int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, "path=?", new String[] { filePath });
+        Log_OC.d(TAG, "updateUploading, result=" + String.valueOf(result));
+        return result;
+    }
+    
+    /**
+     * Update the downloading value of a file
+     */
+    @Override
+    public int updateDownloading(String filePath, boolean downloading)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put("path", filePath);
+        cv.put("downloading", downloading);
+        int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, "path=?", new String[] { filePath });
+        Log_OC.d(TAG, "updateDownloading, result=" + String.valueOf(result));
+        return result;
+    }
 }

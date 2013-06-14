@@ -283,7 +283,13 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 mPendingUploads.putIfAbsent(uploadKey, newUpload);
                 newUpload.addDatatransferProgressListener(this);
                 newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
+                
+                // Update uploading field of the OCFile on Database
+                storageManager.updateUploading(files[i].getRemotePath(), true);
+                Log_OC.d(TAG, "Upload field is true for file " + files[i].getRemotePath());
+                
                 requestedUploads.add(uploadKey);
+    
             }
 
         } catch (IllegalArgumentException e) {

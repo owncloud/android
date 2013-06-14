@@ -232,8 +232,8 @@ public class FileContentProvider extends ContentProvider {
                     + ProviderTableMeta.FILE_KEEP_IN_SYNC + " INTEGER, "
                     + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " INTEGER, "
                     + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " INTEGER, "
-                    + ProviderTableMeta.FILE_UPLOADING + " INTEGER, "
-                    + ProviderTableMeta.FILE_DOWNLOADING + " INTEGER );"
+                    + ProviderTableMeta.FILE_UPLOADING + " INTEGER DEFAULT 0, "
+                    + ProviderTableMeta.FILE_DOWNLOADING + " INTEGER DEFAULT 0);"
                     );
         }
 
