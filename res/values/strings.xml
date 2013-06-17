@@ -292,12 +292,17 @@
     <string name="actionbar_failed_instant_upload">Failed instant uploads</string>
     <string name="failed_upload_headline_text">Failed instant uploads</string>
     <string name="failed_upload_headline_hint">Summary of all failed instant uploads</string>
-    <string name="failed_upload_all_cb">select all</string>
-    <string name="failed_upload_headline_retryall_btn">retry all selected</string>
-    <string name="failed_upload_headline_delete_all_btn">delete all  selected from uploadqueue</string>
+    <string name="failed_upload_menu_select_all_text">select all</string>
+    <string name="failed_upload_menu_deselect_all_text">deselect all</string>
+    <string name="failed_upload_menu_retry_all_text">retry all selected</string>
+    <string name="failed_upload_menu_delete_all_text">delete all  selected from uploadqueue</string>
     <string name="failed_upload_retry_text">retry to upload the image: </string>
     <string name="failed_upload_load_more_images">Load more Picrures</string>
     <string name="failed_upload_retry_do_nothing_text">do nothing you are not online for instant upload</string>
 	<string name="failed_upload_failure_text">Failure Message: </string>
 	<string name="failed_upload_quota_exceeded_text">Please check your server configuration,maybe your quota is exceeded.</string>
+	<string name="failed_upload_cb_path_tag">cb_path_tag</string>
+	<string name="failed_upload_image_content_description">A preview of the picture which failed to upload</string>
+	<string name="failed_upload_last_mod_text">Photo taken on:</string>
+	<string name="failed_upload_file_size_text">Size:</string>
 </resources>

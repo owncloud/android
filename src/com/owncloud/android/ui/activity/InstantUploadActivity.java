@@ -20,27 +20,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.accounts.Account;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.SparseArray;
-import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.internal.view.menu.MenuWrapper;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.owncloud.android.AccountUtils;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.R;
@@ -60,126 +55,32 @@ import com.owncloud.android.utils.FileStorageUtils;
  * 
  * @author andomaex / Matthias Baumann
  */
-public class InstantUploadActivity extends Activity {
+public class InstantUploadActivity extends SherlockActivity {
 
     private static final String LOG_TAG = InstantUploadActivity.class.getSimpleName();
-    private static final int TEXT_SIZE = 10;
-    private LinearLayout listView;
-    private static final String retry_chexbox_tag = "retry_chexbox_tag";
+    private ListView listView;
     public static final boolean IS_ENABLED = true;
-    private static int MAX_LOAD_IMAGES = 5;
-    private int lastLoadImageIdx = 0;
-    private int LOAD_MORE_BUTTON_ID = 99;
-
-    private SparseArray<String> fileList = null;
-    CheckBox failed_upload_all_cb;
-
-    private static int fID = 0;
-
-    // TODO rework this solution, for newer API we have View.generateId()
-    public int findUnusedId() {
-        while (findViewById(++fID) != null)
-            ;
-        return fID;
-    }
+    private InstantUploadAdapter listAdapter = null;
+    private boolean listItemSelectState = false;
+    private MenuWrapper optionsMenu = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(this.getString(R.string.failed_upload_headline_text));
         setContentView(R.layout.failed_upload_files);
-
-        Button delete_all_btn = (Button) findViewById(R.id.failed_upload_delete_all_btn);
-        delete_all_btn.setOnClickListener(getDeleteListner());
-        Button retry_all_btn = (Button) findViewById(R.id.failed_upload_retry_all_btn);
-        retry_all_btn.setOnClickListener(getRetryListner());
-        this.failed_upload_all_cb = (CheckBox) findViewById(R.id.failed_upload_headline_cb);
-        failed_upload_all_cb.setOnCheckedChangeListener(getCheckAllListener());
-        listView = (LinearLayout) findViewById(R.id.failed_upload_scrollviewlayout);
-
-        loadListView(true);
-
-    }
-
-    /**
-     * init the listview with ImageButtons, checkboxes and filename for every
-     * Image that was not successfully uploaded
-     * 
-     * this method is call at Activity creation and on delete one ore more
-     * list-entry an on retry the upload by clicking the ImageButton or by click
-     * to the 'retry all' button
-     * 
-     */
-    private void loadListView(boolean reset) {
-        DbHandler db = new DbHandler(getApplicationContext());
-        Cursor c = db.getFailedFiles();
-
-        if (reset) {
-            fileList = new SparseArray<String>();
-            listView.removeAllViews();
-            lastLoadImageIdx = 0;
-        }
-        if (c != null) {
-            try {
-                c.moveToPosition(lastLoadImageIdx);
-
-                while (c.moveToNext()) {
-
-                    lastLoadImageIdx++;
-                    String imp_path = c.getString(1);
-                    String message = c.getString(4);
-
-                    LinearLayout rowLayout = getHorizontalLinearLayout();
-                    CheckBox checkbox = getFileCheckbox();
-                    rowLayout.addView(checkbox);
-                    rowLayout.addView(getImageButton(imp_path));
-                    rowLayout.addView(getFileButton(imp_path, message));
-                    listView.addView(rowLayout);
-                    fileList.put(checkbox.getId(), imp_path);
-                    Log_OC.d(LOG_TAG, imp_path + " on idx: " + lastLoadImageIdx);
-                    if (lastLoadImageIdx % MAX_LOAD_IMAGES == 0) {
-                        break;
-                    }
-                }
-                if (lastLoadImageIdx > 0) {
-                    addLoadMoreButton(listView);
-                }
-            } finally {
-                db.close();
-            }
-        }
-    }
-
-    private void addLoadMoreButton(LinearLayout listView) {
+        // add detail data
+        listView = (ListView) findViewById(R.id.failed_upload_files_list_view);
         if (listView != null) {
-            Button loadmoreBtn = null;
-            View oldButton = listView.findViewById(LOAD_MORE_BUTTON_ID);
-            if (oldButton != null) {
-                // remove existing button
-                listView.removeView(oldButton);
-                // to add the button at the end
-                loadmoreBtn = (Button) oldButton;
-            } else {
-                // create a new button to add to the scoll view
-                loadmoreBtn = new Button(this);
-                loadmoreBtn.setId(LOAD_MORE_BUTTON_ID);
-                loadmoreBtn.setText(getString(R.string.failed_upload_load_more_images));
-                loadmoreBtn.setBackgroundResource(R.color.owncloud_white);
-                loadmoreBtn.setTextSize(TEXT_SIZE);
-                loadmoreBtn.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loadListView(false);
-                    }
-
-                });
-            }
-            listView.addView(loadmoreBtn);
+            listAdapter = new InstantUploadAdapter(this);
+            listView.setAdapter(listAdapter);
+            listAdapter.notifyDataSetChanged();
         }
     }
 
     /**
      * provide a list of CheckBox instances, looked up from parent listview this
-     * list ist used to select/deselect all checkboxes at the list
+     * list is used to select/deselect all checkboxes at the list
      * 
      * @return List<CheckBox>
      */
@@ -224,16 +125,18 @@ public class InstantUploadActivity extends Activity {
      * 
      * @return OnCheckedChangeListener to select all checkboxes at the list
      */
-    private OnCheckedChangeListener getCheckAllListener() {
-        return new OnCheckedChangeListener() {
+    private OnMenuItemClickListener getCheckAllListener(final boolean isChecked) {
+        return new OnMenuItemClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public boolean onMenuItemClick(MenuItem item) {
                 List<CheckBox> list = getCheckboxList();
                 for (CheckBox checkbox : list) {
                     ((CheckBox) checkbox).setChecked(isChecked);
                 }
+                listItemSelectState = isChecked;
+                setMenuState();
+                return true;
             }
-
         };
     }
 
@@ -242,12 +145,11 @@ public class InstantUploadActivity extends Activity {
      * 
      * @return a Listener to perform a retry for all selected images
      */
-    private OnClickListener getRetryListner() {
-        return new OnClickListener() {
+    private OnMenuItemClickListener getRetryListner() {
+        return new OnMenuItemClickListener() {
 
             @Override
-            public void onClick(View v) {
-
+            public boolean onMenuItemClick(MenuItem item) {
                 try {
 
                     List<CheckBox> list = getCheckboxList();
@@ -255,24 +157,20 @@ public class InstantUploadActivity extends Activity {
                         boolean to_retry = checkbox.isChecked();
 
                         Log_OC.d(LOG_TAG, "Checkbox for " + checkbox.getId() + " was checked: " + to_retry);
-                        String img_path = fileList.get(checkbox.getId());
-                        if (to_retry) {
 
-                            final String msg = "Image-Path " + checkbox.getId() + " was checked: " + img_path;
-                            Log_OC.d(LOG_TAG, msg);
-                            startUpload(img_path);
-                        }
-
+                        String img_path = (String) checkbox.getTag(R.string.failed_upload_cb_path_tag);
+                        final String msg = "Image-Path " + checkbox.getId() + " was checked: " + img_path;
+                        Log_OC.d(LOG_TAG, msg);
+                        startUpload(img_path);
                     }
+
                 } finally {
-                    // refresh the List
-                    listView.removeAllViews();
-                    loadListView(true);
-                    if (failed_upload_all_cb != null) {
-                        failed_upload_all_cb.setChecked(false);
-                    }
+
+                    listAdapter.notifyDataSetChanged();
+                    setMenuState();
                 }
 
+                return true;
             }
         };
     }
@@ -282,13 +180,12 @@ public class InstantUploadActivity extends Activity {
      * 
      * @return a Listener to perform a delete for all selected images
      */
-    private OnClickListener getDeleteListner() {
+    private OnMenuItemClickListener getDeleteListner() {
 
-        return new OnClickListener() {
+        return new OnMenuItemClickListener() {
 
             @Override
-            public void onClick(View v) {
-
+            public boolean onMenuItemClick(MenuItem item) {
                 final DbHandler dbh = new DbHandler(getApplicationContext());
                 try {
                     List<CheckBox> list = getCheckboxList();
@@ -296,143 +193,118 @@ public class InstantUploadActivity extends Activity {
                         boolean to_be_delete = checkbox.isChecked();
 
                         Log_OC.d(LOG_TAG, "Checkbox for " + checkbox.getId() + " was checked: " + to_be_delete);
-                        String img_path = fileList.get(checkbox.getId());
+                        String img_path = (String) checkbox.getTag(R.string.failed_upload_cb_path_tag);
                         Log_OC.d(LOG_TAG, "Image-Path " + checkbox.getId() + " was checked: " + img_path);
-                        if (to_be_delete) {
+                        if (to_be_delete && img_path != null) {
                             boolean deleted = dbh.removeIUPendingFile(img_path);
                             Log_OC.d(LOG_TAG, "removing " + checkbox.getId() + " was : " + deleted);
-
                         }
 
                     }
                 } finally {
                     dbh.close();
                     // refresh the List
-                    listView.removeAllViews();
-                    loadListView(true);
-                    if (failed_upload_all_cb != null) {
-                        failed_upload_all_cb.setChecked(false);
-                    }
+                    listAdapter.notifyDataSetChanged();
+                    setMenuState();
+
                 }
-
-            }
-        };
-    }
-
-    private LinearLayout getHorizontalLinearLayout() {
-        LinearLayout linearLayout = new LinearLayout(getApplicationContext());
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.MATCH_PARENT));
-        linearLayout.setGravity(Gravity.RIGHT);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        return linearLayout;
-    }
-
-    private LinearLayout getVerticalLinearLayout() {
-        LinearLayout linearLayout = new LinearLayout(getApplicationContext());
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.MATCH_PARENT));
-        linearLayout.setGravity(Gravity.TOP);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        return linearLayout;
-    }
-
-    private View getFileButton(final String img_path, String message) {
-
-        TextView failureTextView = new TextView(this);
-        failureTextView.setText(getString(R.string.failed_upload_failure_text) + message);
-        failureTextView.setBackgroundResource(R.color.owncloud_white);
-        failureTextView.setTextSize(TEXT_SIZE);
-        failureTextView.setOnLongClickListener(getOnLongClickListener(message));
-        failureTextView.setPadding(5, 5, 5, 10);
-        TextView retryButton = new TextView(this);
-        retryButton.setId(findUnusedId());
-        retryButton.setText(img_path);
-        retryButton.setBackgroundResource(R.color.owncloud_white);
-        retryButton.setTextSize(TEXT_SIZE);
-        retryButton.setOnClickListener(getImageButtonOnClickListener(img_path));
-        retryButton.setOnLongClickListener(getOnLongClickListener(message));
-        retryButton.setPadding(5, 5, 5, 10);
-        LinearLayout verticalLayout = getVerticalLinearLayout();
-        verticalLayout.addView(retryButton);
-        verticalLayout.addView(failureTextView);
-
-        return verticalLayout;
-    }
-
-    private OnLongClickListener getOnLongClickListener(final String message) {
-        return new OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View v) {
-                Log_OC.d(LOG_TAG, message);
-                Toast toast = Toast.makeText(InstantUploadActivity.this, getString(R.string.failed_upload_retry_text)
-                        + message, Toast.LENGTH_LONG);
-                toast.show();
                 return true;
             }
-
         };
     }
 
-    private CheckBox getFileCheckbox() {
-        CheckBox retryCB = new CheckBox(this);
-        retryCB.setId(findUnusedId());
-        retryCB.setBackgroundResource(R.color.owncloud_white);
-        retryCB.setTextSize(TEXT_SIZE);
-        retryCB.setTag(retry_chexbox_tag);
-        return retryCB;
-    }
-
-    private ImageButton getImageButton(String img_path) {
-        ImageButton imageButton = new ImageButton(this);
-        imageButton.setId(findUnusedId());
-        imageButton.setClickable(true);
-        imageButton.setOnClickListener(getImageButtonOnClickListener(img_path));
-
-        // scale and add a thumbnail to the imagebutton
-        int base_scale_size = 32;
-        if (img_path != null) {
-            Log_OC.d(LOG_TAG, "add " + img_path + " to Image Button");
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            Bitmap bitmap = BitmapFactory.decodeFile(img_path, options);
-            int width_tpm = options.outWidth, height_tmp = options.outHeight;
-            int scale = 3;
-            while (true) {
-                if (width_tpm / 2 < base_scale_size || height_tmp / 2 < base_scale_size) {
-                    break;
-                }
-                width_tpm /= 2;
-                height_tmp /= 2;
-                scale++;
-            }
-
-            Log_OC.d(LOG_TAG, "scale Imgae with: " + scale);
-            BitmapFactory.Options options2 = new BitmapFactory.Options();
-            options2.inSampleSize = scale;
-            bitmap = BitmapFactory.decodeFile(img_path, options2);
-
-            if (bitmap != null) {
-                Log_OC.d(LOG_TAG, "loaded Bitmap Bytes: " + bitmap.getRowBytes());
-                imageButton.setImageBitmap(bitmap);
-            } else {
-                Log_OC.d(LOG_TAG, "could not load imgage: " + img_path);
+    public static boolean hasFailedItems(Context context) {
+        boolean result = false;
+        if (context != null) {
+            DbHandler db = new DbHandler(context);
+            Cursor c = db.getFailedFiles();
+            if (c != null) {
+                result = c.getCount() > 0;
             }
         }
-        return imageButton;
+
+        return result;
     }
 
-    private OnClickListener getImageButtonOnClickListener(final String img_path) {
-        return new OnClickListener() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSherlock().getMenuInflater();
+        inflater.inflate(R.menu.failed_upload_menu, menu);
+        addListeners(menu);
+        optionsMenu = (MenuWrapper) menu;
+        return true;
+    }
 
-            @Override
-            public void onClick(View v) {
-                startUpload(img_path);
-                loadListView(true);
+    @Override
+    public void onOptionsMenuClosed(android.view.Menu menu) {
+        setMenuState();
+    }
+
+    public void setMenuState() {
+        android.view.Menu menu = null;
+        if (optionsMenu != null) {
+            menu = optionsMenu.unwrap();
+        }
+        if (menu != null) {
+
+            List<CheckBox> list = getCheckboxList();
+            boolean isLeastOneChecked = false;
+            boolean isLeastOne = false;
+            if (list != null) {
+                isLeastOne = list.size() > 0;
+                for (CheckBox checkbox : list) {
+                    if (checkbox.isChecked()) {
+                        isLeastOneChecked = true;
+                        break;
+                    }
+                }
             }
 
-        };
+            android.view.MenuItem select_all = (android.view.MenuItem) menu
+                    .findItem(R.id.failed_upload_menu_select_all);
+            if (select_all != null) {
+                select_all.setVisible(!this.listItemSelectState);
+                select_all.setEnabled(isLeastOne);
+            }
+            android.view.MenuItem deselect_all = (android.view.MenuItem) menu
+                    .findItem(R.id.failed_upload_menu_deselect_all);
+            if (deselect_all != null) {
+                deselect_all.setVisible(this.listItemSelectState);
+                deselect_all.setEnabled(isLeastOne);
+            }
+
+            android.view.MenuItem retryAll = (android.view.MenuItem) menu.findItem(R.id.failed_upload_menu_retry_all);
+            if (retryAll != null) {
+                retryAll.setEnabled(isLeastOneChecked);
+            }
+
+            android.view.MenuItem deleteAll = (android.view.MenuItem) menu.findItem(R.id.failed_upload_menu_delete_all);
+            if (deleteAll != null) {
+                deleteAll.setEnabled(isLeastOneChecked);
+            }
+        }
+    }
+
+    private void addListeners(Menu menu) {
+
+        MenuItem delete_all_btn = (MenuItem) menu.findItem(R.id.failed_upload_menu_delete_all);
+        if (delete_all_btn != null) {
+            delete_all_btn.setOnMenuItemClickListener(getDeleteListner());
+        }
+
+        MenuItem retry_all_btn = (MenuItem) menu.findItem(R.id.failed_upload_menu_retry_all);
+        if (retry_all_btn != null) {
+            retry_all_btn.setOnMenuItemClickListener(getRetryListner());
+        }
+
+        MenuItem select_all = (MenuItem) menu.findItem(R.id.failed_upload_menu_select_all);
+        if (select_all != null) {
+            select_all.setOnMenuItemClickListener(getCheckAllListener(true));
+        }
+        MenuItem deselect_all = (MenuItem) menu.findItem(R.id.failed_upload_menu_deselect_all);
+        if (deselect_all != null) {
+            deselect_all.setOnMenuItemClickListener(getCheckAllListener(false));
+        }
     }
 
     /**
@@ -440,20 +312,21 @@ public class InstantUploadActivity extends Activity {
      * 
      * @param img_path
      */
-    private void startUpload(String img_path) {
+    public void startUpload(String img_path) {
         // extract filename
         String filename = FileStorageUtils.getInstantUploadFilePath(this, getFileName(img_path));
         if (canInstantUpload()) {
-            Account account = AccountUtils.getCurrentOwnCloudAccount(InstantUploadActivity.this);
+            Account account = AccountUtils.getCurrentOwnCloudAccount(this);
             // add file again to upload queue
-            DbHandler db = new DbHandler(InstantUploadActivity.this);
+            DbHandler db = new DbHandler(this);
             try {
                 db.updateFileState(img_path, DbHandler.UPLOAD_STATUS_UPLOAD_LATER, null);
             } finally {
                 db.close();
+                listAdapter.notifyDataSetChanged();
             }
 
-            Intent i = new Intent(InstantUploadActivity.this, FileUploader.class);
+            Intent i = new Intent(this, FileUploader.class);
             i.putExtra(FileUploader.KEY_ACCOUNT, account);
             i.putExtra(FileUploader.KEY_LOCAL_FILE, img_path);
             i.putExtra(FileUploader.KEY_REMOTE_FILE, filename);
@@ -462,26 +335,15 @@ public class InstantUploadActivity extends Activity {
 
             final String msg = "try to upload file with name :" + filename;
             Log_OC.d(LOG_TAG, msg);
-            Toast toast = Toast.makeText(InstantUploadActivity.this, getString(R.string.failed_upload_retry_text)
-                    + filename, Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this, this.getString(R.string.failed_upload_retry_text) + filename,
+                    Toast.LENGTH_LONG);
             toast.show();
 
-            startService(i);
+            this.startService(i);
         } else {
-            Toast toast = Toast.makeText(InstantUploadActivity.this,
-                    getString(R.string.failed_upload_retry_do_nothing_text) + filename, Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this, this.getString(R.string.failed_upload_retry_do_nothing_text) + filename,
+                    Toast.LENGTH_LONG);
             toast.show();
-        }
-    }
-
-    private boolean canInstantUpload() {
-
-        if (!InstantUploadBroadcastReceiver.isOnline(this)
-                || (InstantUploadBroadcastReceiver.instantUploadViaWiFiOnly(this) && !InstantUploadBroadcastReceiver
-                        .isConnectedViaWiFi(this))) {
-            return false;
-        } else {
-            return true;
         }
     }
 
@@ -500,4 +362,14 @@ public class InstantUploadActivity extends Activity {
         }
     }
 
+    private boolean canInstantUpload() {
+
+        if (!InstantUploadBroadcastReceiver.isOnline(this)
+                || (InstantUploadBroadcastReceiver.instantUploadViaWiFiOnly(this) && !InstantUploadBroadcastReceiver
+                        .isConnectedViaWiFi(this))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
