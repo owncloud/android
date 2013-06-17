@@ -597,12 +597,12 @@ public class FileDataStorageManager implements DataStorageManager {
      * Update the uploading value of a file
      */
     @Override
-    public int updateUploading(String filePath, boolean uploading)
+    public int updateUploading(String filePath, String account, boolean uploading)
     {
         ContentValues cv = new ContentValues();
-        cv.put("path", filePath);
-        cv.put("uploading", uploading);
-        int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, "path=?", new String[] { filePath });
+        cv.put(ProviderTableMeta.FILE_UPLOADING, uploading);
+        int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
+                ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, account });
         Log_OC.d(TAG, "updateUploading, result=" + String.valueOf(result));
         return result;
     }
@@ -611,12 +611,12 @@ public class FileDataStorageManager implements DataStorageManager {
      * Update the downloading value of a file
      */
     @Override
-    public int updateDownloading(String filePath, boolean downloading)
+    public int updateDownloading(String filePath, String account, boolean downloading)
     {
         ContentValues cv = new ContentValues();
-        cv.put("path", filePath);
-        cv.put("downloading", downloading);
-        int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, "path=?", new String[] { filePath });
+        cv.put(ProviderTableMeta.FILE_DOWNLOADING, downloading);
+        int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
+                ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, account });
         Log_OC.d(TAG, "updateDownloading, result=" + String.valueOf(result));
         return result;
     }

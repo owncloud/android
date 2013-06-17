@@ -47,7 +47,7 @@ public interface DataStorageManager {
 
     public Vector<OCFile> getDirectoryImages(OCFile mParentFolder);
     
-    public int updateUploading(String filePath, boolean uploading);
+    public int updateUploading(String filePath, String account, boolean uploading);
     
-    public int updateDownloading(String filePath, boolean downloading);
+    public int updateDownloading(String filePath, String account, boolean downloading);
 }

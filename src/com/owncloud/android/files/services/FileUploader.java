@@ -285,8 +285,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
                 
                 // Update uploading field of the OCFile on Database
-                storageManager.updateUploading(files[i].getRemotePath(), true);
-                Log_OC.d(TAG, "Upload field is true for file " + files[i].getRemotePath());
+                storageManager.updateUploading(files[i].getRemotePath(), account.name, true);
+                Log_OC.d(TAG, "Upload field is TRUE for file " + files[i].getRemotePath() + " account= " + account.name);
                 
                 requestedUploads.add(uploadKey);
     
@@ -524,8 +524,12 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             
                 /// perform the upload
                 uploadResult = mCurrentUpload.execute(mUploadClient);
-                if (uploadResult.isSuccess()) {
+                if (uploadResult.isSuccess()) {                   
                     saveUploadedFile();
+                    // Update uploading field of the OCFile on Database
+                    String remotePath = uploadKey.substring(mCurrentUpload.getAccount().name.length());
+                    mStorageManager.updateUploading(remotePath, mCurrentUpload.getAccount().name, false);
+                    Log_OC.d(TAG, "Upload field is FALSE for file " + remotePath + " account= " + mCurrentUpload.getAccount().name);
                 }
                 
             } catch (AccountsException e) {
