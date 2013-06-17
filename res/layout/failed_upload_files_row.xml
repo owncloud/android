@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ownCloud Android client application
+
+  Copyright (C) 2013  Matthias Baumann
+  Copyright (C) 2012-2013 ownCloud Inc.
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/failed_files_list_row"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/owncloud_white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:contentDescription="@string/failed_upload_image_content_description"
+        android:weightSum="1" >
+
+        <CheckBox
+            android:id="@+id/failedImagePreviewCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:checked="false"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/failedImagePreviewImage"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:contentDescription="@string/failed_upload_image_content_description"
+            android:src="@drawable/image_fail"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:orientation="vertical"
+        android:weightSum="1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight=".5"
+            android:paddingTop="5dp"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/failed_upload_last_mod_text"
+                android:textIsSelectable="false"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/last_mod"
+                android:textIsSelectable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right" 
+                android:textSize="12sp" />
+			
+			<TextView
+			    android:id="@+id/editText2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:paddingLeft="5dp"
+			    android:paddingRight="5dp"
+			    android:text="@string/failed_upload_file_size_text"
+			    android:textIsSelectable="false"
+			    android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/file_size"
+                android:textIsSelectable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"               
+                android:gravity="right"               
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight=".5"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/error_message"
+                android:textIsSelectable="true"
+                android:layout_width="fill_parent"
+                android:layout_height="29dp"
+                android:layout_gravity="left"
+                android:gravity="right"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
