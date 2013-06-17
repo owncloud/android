@@ -285,8 +285,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
                 
                 // Update uploading field of the OCFile on Database
-                storageManager.updateUploading(files[i].getRemotePath(), account.name, true);
-                Log_OC.d(TAG, "Upload field is TRUE for file " + files[i].getRemotePath() + " account= " + account.name);
+                storageManager.updateUploading(files[i].getRemotePath(), true);
+                Log_OC.d(TAG, "Upload field is TRUE for file " + files[i].getRemotePath());
                 
                 requestedUploads.add(uploadKey);
     
@@ -365,7 +365,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             if (upload != null) {
                 upload.cancel();
             }
-            mStorageManager.updateUploading(file.getRemotePath(), mCurrentUpload.getAccount().name, false);
+            mStorageManager.updateUploading(file.getRemotePath(), false);
             Log_OC.d(TAG, "Upload field is FALSE for file " + file.getRemotePath() + " account= " + mCurrentUpload.getAccount().name);
         }
         
@@ -534,7 +534,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                     saveUploadedFile();
                     // Update uploading field of the OCFile on Database
                     String remotePath = uploadKey.substring(mCurrentUpload.getAccount().name.length());
-                    mStorageManager.updateUploading(remotePath, mCurrentUpload.getAccount().name, false);
+                    mStorageManager.updateUploading(remotePath, false);
                     Log_OC.d(TAG, "Upload field is FALSE for file " + remotePath + " account= " + mCurrentUpload.getAccount().name);
                 }
                 
@@ -548,7 +548,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 
             } finally {
                 String remotePath = uploadKey.substring(mCurrentUpload.getAccount().name.length());
-                mStorageManager.updateUploading(remotePath, mCurrentUpload.getAccount().name, false);
+                mStorageManager.updateUploading(remotePath, false);
                 Log_OC.d(TAG, "Finally: Upload field is FALSE for file " + remotePath + " account= " + mCurrentUpload.getAccount().name);
                 
                 synchronized (mPendingUploads) {
