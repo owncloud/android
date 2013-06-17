@@ -365,6 +365,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             if (upload != null) {
                 upload.cancel();
             }
+            mStorageManager.updateUploading(file.getRemotePath(), mCurrentUpload.getAccount().name, false);
+            Log_OC.d(TAG, "Upload field is FALSE for file " + file.getRemotePath() + " account= " + mCurrentUpload.getAccount().name);
         }
         
         
@@ -388,20 +390,24 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         public boolean isUploading(Account account, OCFile file) {
             if (account == null || file == null)
                 return false;
-            String targetKey = buildRemoteName(account, file);
-            synchronized (mPendingUploads) {
-                if (file.isDirectory()) {
-                    // this can be slow if there are many uploads :(
-                    Iterator<String> it = mPendingUploads.keySet().iterator();
-                    boolean found = false;
-                    while (it.hasNext() && !found) {
-                        found = it.next().startsWith(targetKey);
-                    }
-                    return found;
-                } else {
-                    return (mPendingUploads.containsKey(targetKey));
-                }
-            }
+            
+            return file.isUploading();
+            
+//            String targetKey = buildRemoteName(account, file);     
+//            
+//            synchronized (mPendingUploads) {
+//                if (file.isDirectory()) {
+//                    // this can be slow if there are many uploads :(
+//                    Iterator<String> it = mPendingUploads.keySet().iterator();
+//                    boolean found = false;
+//                    while (it.hasNext() && !found) {
+//                        found = it.next().startsWith(targetKey);
+//                    }
+//                    return found;
+//                } else {
+//                    return (mPendingUploads.containsKey(targetKey));
+//                }
+//            }
         }
 
 
@@ -541,6 +547,10 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 uploadResult = new RemoteOperationResult(e);
                 
             } finally {
+                String remotePath = uploadKey.substring(mCurrentUpload.getAccount().name.length());
+                mStorageManager.updateUploading(remotePath, mCurrentUpload.getAccount().name, false);
+                Log_OC.d(TAG, "Finally: Upload field is FALSE for file " + remotePath + " account= " + mCurrentUpload.getAccount().name);
+                
                 synchronized (mPendingUploads) {
                     mPendingUploads.remove(uploadKey);
                     Log_OC.i(TAG, "Remove CurrentUploadItem from pending upload Item Map.");
