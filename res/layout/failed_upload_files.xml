@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
@@ -15,22 +15,14 @@
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- -->
+  along with this program.  If not, see <http://www.gnu.org/licenses/>
+  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/failed_files_list_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/owncloud_white"
-    android:orientation="vertical"
-    android:id="@+id/failed_files_list_view">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:orientation="horizontal" >
-
-    </LinearLayout>
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,15 +31,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" 
+			android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/failed_upload_headline_textview"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_weight="0.93"
                 android:hint="@string/failed_upload_headline_hint"
-                android:text="@string/failed_upload_headline_text" />
+                android:text="@string/failed_upload_headline_text"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -61,44 +56,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/failed_upload_all_cb"
-                android:textSize="8sp" />
+                android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/failed_upload_retry_all_btn"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="30dp"
-                android:minWidth="90dp"
-                android:text="@string/failed_upload_headline_retryall_btn"
-                android:textSize="8sp" />
+                android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/failed_upload_delete_all_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="30dp"
-                android:minWidth="90dp"
-                android:text="@string/failed_upload_headline_delete_all_btn"
-                android:textSize="8sp" />
+                <Button
+                    android:id="@+id/failed_upload_retry_all_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:minWidth="90dp"
+                    android:text="@string/failed_upload_headline_retryall_btn"
+                    android:textSize="12sp" />
 
+                <Button
+                    android:id="@+id/failed_upload_delete_all_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:minWidth="90dp"
+                    android:text="@string/failed_upload_headline_delete_all_btn"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
- 
-      <ScrollView
-          android:id="@+id/failedUploadScrollView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:overScrollMode="ifContentScrolls" >
 
-         <LinearLayout
-             android:id="@+id/failed_upload_scrollviewlayout"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="vertical">
+    <ScrollView
+        android:id="@+id/failedUploadScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="ifContentScrolls" >
 
-           
-         </LinearLayout>
-     </ScrollView>
+        <LinearLayout
+            android:id="@+id/failed_upload_scrollviewlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

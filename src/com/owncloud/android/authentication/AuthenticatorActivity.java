@@ -44,10 +44,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -58,11 +60,13 @@ import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
+
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import android.widget.TextView.OnEditorActionListener;
 
 import com.owncloud.android.R;
@@ -77,6 +81,7 @@ import eu.alefzero.webdav.WebdavClient;
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity
 implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeListener, OnEditorActionListener {
+
 
     private static final String TAG = AuthenticatorActivity.class.getSimpleName();
 
@@ -172,11 +177,13 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             b.setText(String.format(getString(R.string.auth_register), getString(R.string.app_name)));
         }
 
+
         /// initialization
         mAccountMgr = AccountManager.get(this);
         mNewCapturedUriFromOAuth2Redirection = null;
         mAction = getIntent().getByteExtra(EXTRA_ACTION, ACTION_CREATE); 
         mAccount = null;
+
         mHostBaseUrl = "";
 
         if (savedInstanceState == null) {
@@ -197,7 +204,9 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
                 if (ocVersion != null) {
                     mDiscoveredVersion = new OwnCloudVersion(ocVersion);
                 }
+
                 mHostBaseUrl = normalizeUrl(mAccountMgr.getUserData(mAccount, AccountAuthenticator.KEY_OC_BASE_URL));
+
                 mHostUrlInput.setText(mHostBaseUrl);
                 String userName = mAccount.name.substring(0, mAccount.name.lastIndexOf('@'));
                 mUsernameInput.setText(userName);
@@ -254,6 +263,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             mHostUrlInput.setEnabled(false);
             mUsernameInput.setEnabled(false);
             mOAuth2Check.setVisibility(View.GONE);
+
             if (!mServerIsValid && mOcServerChkOperation == null) {
                 checkOcServer(); 
             }
@@ -342,7 +352,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
 
     }
 
-
     /**
      * The redirection triggered by the OAuth authentication server as response to the GET AUTHORIZATION request
      * is caught here.
@@ -376,6 +385,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
                 Toast.makeText(this, R.string.auth_expired_basic_auth_toast, Toast.LENGTH_LONG).show();
         }
 
+
         if (mNewCapturedUriFromOAuth2Redirection != null) {
             getOAuth2AccessTokenFromCapturedRedirection();            
         }
@@ -401,17 +411,17 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
                 getString(R.string.oauth2_redirect_uri),       
                 getString(R.string.oauth2_grant_type),
                 queryParameters);
+
         //WebdavClient client = OwnCloudClientUtils.createOwnCloudClient(Uri.parse(getString(R.string.oauth2_url_endpoint_access)), getApplicationContext());
         WebdavClient client = OwnCloudClientUtils.createOwnCloudClient(Uri.parse(mOAuthTokenEndpointText.getText().toString().trim()), getApplicationContext());
         operation.execute(client, this, mHandler);
     }
 
-
-
     /**
      * Handles the change of focus on the text inputs for the server URL and the password
      */
     public void onFocusChange(View view, boolean hasFocus) {
+
         if (view.getId() == R.id.hostUrlInput) {   
             if (!hasFocus) {
                 onUrlInputFocusLost((TextView) view);
@@ -427,7 +437,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             onPasswordFocusChanged((TextView) view, hasFocus);
         }
     }
-
 
     /**
      * Handles changes in focus on the text input for the server URL.
@@ -445,9 +454,9 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             checkOcServer();
         } else {
             mOkButton.setEnabled(mServerIsValid);
+
         }
     }
-
 
     private void checkOcServer() {
         String uri = trimUrlWebdav(mHostUrlInput.getText().toString().trim());
@@ -534,8 +543,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         finish();
     }
 
-
-
     /**
      * Checks the credentials of the user in the root of the ownCloud server
      * before creating a new local account.
@@ -568,7 +575,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             checkBasicAuthorization();
         }
     }
-
 
     /**
      * Tests the credentials entered by the user performing a check of existence on 
@@ -617,7 +623,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         Intent i = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(i);
     }
-
 
     /**
      * Callback method invoked when a RemoteOperation executed by this Activity finishes.
@@ -891,7 +896,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         if (result.isSuccess() && webdav_path != null) {
             /// be gentle with the user
             showDialog(DIALOG_LOGIN_PROGRESS);
-
             /// time to test the retrieved access token on the ownCloud server
             mOAuthAccessToken = ((OAuth2GetAccessToken)operation).getResultTokenMap().get(OAuth2Constants.KEY_ACCESS_TOKEN);
             Log_OC.d(TAG, "Got ACCESS TOKEN: " + mOAuthAccessToken);
@@ -906,7 +910,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             Log_OC.d(TAG, "Access failed: " + result.getLogMessage());
         }
     }
-
 
     /**
      * Processes the result of the access check performed to try the user credentials.
@@ -942,7 +945,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         }
     }
 
-
     /**
      * Sets the proper response to get that the Account Authenticator that started this activity saves 
      * a new authorization token for mAccount.
@@ -974,7 +976,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
     private void createAccount() {
         /// create and save new ownCloud account
         boolean isOAuth = mOAuth2Check.isChecked();
-
         Uri uri = Uri.parse(mHostBaseUrl);
         String username = mUsernameInput.getText().toString().trim();
         if (isOAuth) {
@@ -1016,7 +1017,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         mAccountMgr.setUserData(mAccount, AccountAuthenticator.KEY_OC_BASE_URL,   mHostBaseUrl);
         if (isOAuth)
             mAccountMgr.setUserData(mAccount, AccountAuthenticator.KEY_SUPPORTS_OAUTH2, "TRUE");  // TODO this flag should be unnecessary
-
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
 
@@ -1050,7 +1050,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -1065,6 +1064,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             working_dialog.setIndeterminate(true);
             working_dialog.setCancelable(true);
             working_dialog
+
             .setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
@@ -1076,6 +1076,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
                     }
                 }
             });
+
             dialog = working_dialog;
             break;
         }
@@ -1105,11 +1106,13 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             builder.setMessage(getResources().getString(R.string.ssl_validator_not_saved));
             builder.setCancelable(false);
             builder.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 };
             });
+
             dialog = builder.create();
             break;
         }
@@ -1131,11 +1134,11 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         startActivity(register);
     }
 
-
     /**
      * Updates the content and visibility state of the icon and text associated
      * to the last check on the ownCloud server.
      */
+
     private void showServerStatus() {
         TextView tv = (TextView) findViewById(R.id.server_status_text);
 
@@ -1149,6 +1152,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         }
 
     }
+
 
 
     /**
@@ -1204,7 +1208,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         }
         mPasswordInput.setSelection(selectionStart, selectionEnd);
     }    
-
 
     /**
      * Called when the checkbox for OAuth authorization is clicked.
@@ -1306,5 +1309,4 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
 
         public abstract boolean onDrawableTouch(final MotionEvent event);
     }
-
 }

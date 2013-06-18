@@ -44,6 +44,7 @@ import android.widget.Toast;
 import com.owncloud.android.AccountUtils;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.files.InstantUploadBroadcastReceiver;
 import com.owncloud.android.files.services.FileUploader;
@@ -62,14 +63,25 @@ import com.owncloud.android.utils.FileStorageUtils;
 public class InstantUploadActivity extends Activity {
 
     private static final String LOG_TAG = InstantUploadActivity.class.getSimpleName();
+    private static final int TEXT_SIZE = 10;
     private LinearLayout listView;
     private static final String retry_chexbox_tag = "retry_chexbox_tag";
-    public static final boolean IS_ENABLED = false;
+    public static final boolean IS_ENABLED = true;
     private static int MAX_LOAD_IMAGES = 5;
     private int lastLoadImageIdx = 0;
+    private int LOAD_MORE_BUTTON_ID = 99;
 
     private SparseArray<String> fileList = null;
     CheckBox failed_upload_all_cb;
+
+    private static int fID = 0;
+
+    // TODO rework this solution, for newer API we have View.generateId()
+    public int findUnusedId() {
+        while (findViewById(++fID) != null)
+            ;
+        return fID;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,12 +127,14 @@ public class InstantUploadActivity extends Activity {
                     lastLoadImageIdx++;
                     String imp_path = c.getString(1);
                     String message = c.getString(4);
-                    fileList.put(lastLoadImageIdx, imp_path);
-                    LinearLayout rowLayout = getHorizontalLinearLayout(lastLoadImageIdx);
-                    rowLayout.addView(getFileCheckbox(lastLoadImageIdx));
-                    rowLayout.addView(getImageButton(imp_path, lastLoadImageIdx));
-                    rowLayout.addView(getFileButton(imp_path, message, lastLoadImageIdx));
+
+                    LinearLayout rowLayout = getHorizontalLinearLayout();
+                    CheckBox checkbox = getFileCheckbox();
+                    rowLayout.addView(checkbox);
+                    rowLayout.addView(getImageButton(imp_path));
+                    rowLayout.addView(getFileButton(imp_path, message));
                     listView.addView(rowLayout);
+                    fileList.put(checkbox.getId(), imp_path);
                     Log_OC.d(LOG_TAG, imp_path + " on idx: " + lastLoadImageIdx);
                     if (lastLoadImageIdx % MAX_LOAD_IMAGES == 0) {
                         break;
@@ -138,7 +152,7 @@ public class InstantUploadActivity extends Activity {
     private void addLoadMoreButton(LinearLayout listView) {
         if (listView != null) {
             Button loadmoreBtn = null;
-            View oldButton = listView.findViewById(42);
+            View oldButton = listView.findViewById(LOAD_MORE_BUTTON_ID);
             if (oldButton != null) {
                 // remove existing button
                 listView.removeView(oldButton);
@@ -147,10 +161,10 @@ public class InstantUploadActivity extends Activity {
             } else {
                 // create a new button to add to the scoll view
                 loadmoreBtn = new Button(this);
-                loadmoreBtn.setId(42);
+                loadmoreBtn.setId(LOAD_MORE_BUTTON_ID);
                 loadmoreBtn.setText(getString(R.string.failed_upload_load_more_images));
                 loadmoreBtn.setBackgroundResource(R.color.owncloud_white);
-                loadmoreBtn.setTextSize(12);
+                loadmoreBtn.setTextSize(TEXT_SIZE);
                 loadmoreBtn.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -305,9 +319,8 @@ public class InstantUploadActivity extends Activity {
         };
     }
 
-    private LinearLayout getHorizontalLinearLayout(int id) {
+    private LinearLayout getHorizontalLinearLayout() {
         LinearLayout linearLayout = new LinearLayout(getApplicationContext());
-        linearLayout.setId(id);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.MATCH_PARENT));
         linearLayout.setGravity(Gravity.RIGHT);
@@ -324,19 +337,19 @@ public class InstantUploadActivity extends Activity {
         return linearLayout;
     }
 
-    private View getFileButton(final String img_path, String message, int id) {
+    private View getFileButton(final String img_path, String message) {
 
         TextView failureTextView = new TextView(this);
         failureTextView.setText(getString(R.string.failed_upload_failure_text) + message);
         failureTextView.setBackgroundResource(R.color.owncloud_white);
-        failureTextView.setTextSize(8);
+        failureTextView.setTextSize(TEXT_SIZE);
         failureTextView.setOnLongClickListener(getOnLongClickListener(message));
         failureTextView.setPadding(5, 5, 5, 10);
         TextView retryButton = new TextView(this);
-        retryButton.setId(id);
+        retryButton.setId(findUnusedId());
         retryButton.setText(img_path);
         retryButton.setBackgroundResource(R.color.owncloud_white);
-        retryButton.setTextSize(8);
+        retryButton.setTextSize(TEXT_SIZE);
         retryButton.setOnClickListener(getImageButtonOnClickListener(img_path));
         retryButton.setOnLongClickListener(getOnLongClickListener(message));
         retryButton.setPadding(5, 5, 5, 10);
@@ -362,18 +375,18 @@ public class InstantUploadActivity extends Activity {
         };
     }
 
-    private CheckBox getFileCheckbox(int id) {
+    private CheckBox getFileCheckbox() {
         CheckBox retryCB = new CheckBox(this);
-        retryCB.setId(id);
+        retryCB.setId(findUnusedId());
         retryCB.setBackgroundResource(R.color.owncloud_white);
-        retryCB.setTextSize(8);
+        retryCB.setTextSize(TEXT_SIZE);
         retryCB.setTag(retry_chexbox_tag);
         return retryCB;
     }
 
-    private ImageButton getImageButton(String img_path, int id) {
+    private ImageButton getImageButton(String img_path) {
         ImageButton imageButton = new ImageButton(this);
-        imageButton.setId(id);
+        imageButton.setId(findUnusedId());
         imageButton.setClickable(true);
         imageButton.setOnClickListener(getImageButtonOnClickListener(img_path));
 
@@ -429,7 +442,7 @@ public class InstantUploadActivity extends Activity {
      */
     private void startUpload(String img_path) {
         // extract filename
-        String filename = FileStorageUtils.getInstantUploadFilePath(this, img_path);
+        String filename = FileStorageUtils.getInstantUploadFilePath(this, getFileName(img_path));
         if (canInstantUpload()) {
             Account account = AccountUtils.getCurrentOwnCloudAccount(InstantUploadActivity.this);
             // add file again to upload queue
@@ -469,6 +482,21 @@ public class InstantUploadActivity extends Activity {
             return false;
         } else {
             return true;
+        }
+    }
+
+    // to ensure we will not add the slash twice between filename and
+    // folder-name and to cut of the local filepath
+    private static String getFileName(String filepath) {
+        if (filepath != null && !"".equals(filepath)) {
+            int psi = filepath.lastIndexOf(OCFile.PATH_SEPARATOR);
+            String filename = filepath;
+            if (psi > -1) {
+                filename = filepath.substring(psi + 1, filepath.length());
+            }
+            return filename;
+        } else {
+            return "";
         }
     }
 
