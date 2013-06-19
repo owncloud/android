@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import com.owncloud.android.AccountUtils;
 import com.owncloud.android.Log_OC;
+import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.OwnCloudVersion;
 
 import eu.alefzero.webdav.WebdavClient;
@@ -107,16 +108,16 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
         return retval;
     }
 
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) mContext
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm != null && cm.getActiveNetworkInfo() != null
-                && cm.getActiveNetworkInfo().isConnectedOrConnecting();
-    }
+//    private boolean isOnline() {
+//        ConnectivityManager cm = (ConnectivityManager) mContext
+//                .getSystemService(Context.CONNECTIVITY_SERVICE);
+//        return cm != null && cm.getActiveNetworkInfo() != null
+//                && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+//    }
 
 	@Override
 	protected RemoteOperationResult run(WebdavClient client) {
-        if (!isOnline()) {
+        if (!ConnectivityUtils.isOnline(mContext)) {
         	return new RemoteOperationResult(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
         }
         if (mUrl.startsWith("http://") || mUrl.startsWith("https://")) {
