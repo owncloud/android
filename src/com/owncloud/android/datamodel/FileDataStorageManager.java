@@ -625,4 +625,40 @@ public class FileDataStorageManager implements DataStorageManager {
         Log_OC.d(TAG, "updateDownloading, result=" + String.valueOf(result));
         return result;
     }
+
+    @Override
+    public Vector<OCFile> getUploadingFiles() {
+        Vector<OCFile> ret = new Vector<OCFile>();
+        Cursor c = null;
+
+        if (getContentProvider() != null) {
+            try {
+                c = getContentProvider().query(ProviderTableMeta.CONTENT_URI, null, 
+                        ProviderTableMeta.FILE_UPLOADING + "=?",
+                        new String[] { String.valueOf(1) }, null);
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, e.getMessage());
+                return ret;
+            }
+        } else {
+            c = getContentResolver().query(ProviderTableMeta.CONTENT_URI, null, 
+                    ProviderTableMeta.FILE_UPLOADING + "=?",
+                    new String[] { String.valueOf(1) }, null);
+        }
+
+        if (c.moveToFirst()) {
+            do {
+                OCFile child = createFileInstance(c);
+                ret.add(child);
+            } while (c.moveToNext());
+        }
+
+        c.close();
+
+        Collections.sort(ret);
+
+        return ret;
+    }
+    
+    
 }

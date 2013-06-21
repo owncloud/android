@@ -50,4 +50,6 @@ public interface DataStorageManager {
     public int updateUploading(String filePath, boolean uploading);
     
     public int updateDownloading(String filePath, boolean downloading);
+    
+    public Vector<OCFile> getUploadingFiles();
 }

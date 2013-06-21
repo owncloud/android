@@ -173,9 +173,17 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
                         Log_OC.w(TAG, "Instant upload file " + f.getAbsolutePath() + " dont exist anymore");
                     }
                 } while (c.moveToNext());
+                
             }
             c.close();
             db.close();
+            
+            
+            // Restart Offline Uploads
+            Log_OC.w(TAG, "Restart Offline Uploads");
+            Intent i = new Intent(context, FileUploader.class);
+            i.putExtra(FileUploader.KEY_OFFLINE_UPLOAD, true);
+            context.startService(i);
         }
 
     }
