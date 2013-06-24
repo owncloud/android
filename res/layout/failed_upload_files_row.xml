@@ -116,12 +116,15 @@
             android:weightSum="1" >
 
             <TextView
-                android:id="@+id/error_message"
-                android:textIsSelectable="true"
+                android:id="@+id/failed_upload_message"
                 android:layout_width="fill_parent"
                 android:layout_height="29dp"
                 android:layout_gravity="left"
-                android:gravity="right"
+                android:gravity="left"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="unknown ..."
+                android:textIsSelectable="true"
                 android:textSize="12sp" />
 
         </LinearLayout>

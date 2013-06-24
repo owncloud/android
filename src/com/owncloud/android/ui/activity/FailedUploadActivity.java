@@ -31,8 +31,10 @@ import com.owncloud.android.R;
  * 
  * The entry-point for this activity is the 'Failed upload Notification"
  * 
- * @author andomaex / Matthias Baumann
+ * 
  */
+// TODO remove this fall back activity for the disabled failed instant upload
+// handling
 public class FailedUploadActivity extends Activity {
 
     public static final String MESSAGE = "message";

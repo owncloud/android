@@ -21,17 +21,19 @@ package com.owncloud.android.ui.activity;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.Hashtable;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -44,16 +46,18 @@ import com.owncloud.android.Log_OC;
 import com.owncloud.android.R;
 import com.owncloud.android.db.DbHandler;
 
-public class InstantUploadAdapter extends ArrayAdapter implements ListAdapter {
+public class InstantUploadAdapter extends BaseAdapter implements ListAdapter {
 
     private static final String LOG_TAG = InstantUploadAdapter.class.getSimpleName();
     private ArrayList<FailedImage> mFiles = null;
+    private Hashtable<Integer, View> viewList = null;
     private Cursor failedFilesCursor;
     private InstantUploadActivity iuaContext;
-    private HashSet<Integer> loadedRow;
+    private Context mContext;
 
     public InstantUploadAdapter(Context context) {
-        super(context, R.id.faild_upload_message, R.id.last_mod);
+        // super(context, R.id.faild_upload_message);
+        this.mContext = context;
         this.iuaContext = (InstantUploadActivity) context;
     }
 
@@ -75,19 +79,20 @@ public class InstantUploadAdapter extends ArrayAdapter implements ListAdapter {
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
         refreshListItems();
+        iuaContext.setMenuState();
     }
 
     private void refreshListItems() {
-        Log_OC.d(LOG_TAG, "start refreshListItems");
+        Log_OC.d(LOG_TAG, "start refresh list items");
         DbHandler db = null;
         mFiles = new ArrayList<FailedImage>();
-        loadedRow = new HashSet<Integer>();
+        viewList = new Hashtable<Integer, View>();
+        long id = 0;
         try {
-            db = new DbHandler(getContext());
+            db = new DbHandler(mContext);
             failedFilesCursor = db.getFailedFiles();
             if (failedFilesCursor != null) {
                 while (failedFilesCursor.moveToNext()) {
-                    FailedImage fi = new FailedImage();
 
                     String filePath = failedFilesCursor.getString(1);
                     String errMsg = failedFilesCursor.getString(4);
@@ -98,6 +103,9 @@ public class InstantUploadAdapter extends ArrayAdapter implements ListAdapter {
                     }
                     if (file != null) {
                         if (file.exists()) {
+                            FailedImage fi = new FailedImage();
+                            id++;
+                            fi.id = id;
                             fi.size = file.length();
                             fi.lastModified = file.lastModified();
                             fi.filename = file.getName();
@@ -105,7 +113,7 @@ public class InstantUploadAdapter extends ArrayAdapter implements ListAdapter {
                             fi.errormessage = errMsg;
                             mFiles.add(fi);
                         } else {
-                            db.removeIUPendingFile(fi.filePath);
+                            db.removeIUPendingFile(filePath);
                         }
                     }
 
@@ -120,39 +128,46 @@ public class InstantUploadAdapter extends ArrayAdapter implements ListAdapter {
         }
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        ViewHolder holder;
-        if (view == null) {
-            LayoutInflater inflator = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflator.inflate(R.layout.failed_upload_files_row, null, true);
-            holder = new ViewHolder();
-            view.setTag(holder);
-            holder.fileSizeV = (TextView) view.findViewById(R.id.file_size);
-            holder.checkbox = (CheckBox) view.findViewById(R.id.failedImagePreviewCheckBox);
-            holder.lastModV = (TextView) view.findViewById(R.id.last_mod);
-            holder.imageButton = (ImageView) view.findViewById(R.id.failedImagePreviewImage);
-            holder.errorMessage = (TextView) view.findViewById(R.id.faild_upload_message);
+    public Collection<View> getCachedViews() {
+        if (viewList != null) {
+            return viewList.values();
         } else {
-            holder = (ViewHolder) view.getTag();
+            return new ArrayList();
         }
-        if (!loadedRow.contains(position)) {
-            if (mFiles != null && mFiles.size() > position) {
-                FailedImage file = mFiles.get(position);
-                addImageRow(view, file, holder);
-                loadedRow.add(position);
-            }
-        }
-        return view;
     }
 
-    private void addImageRow(View view, FailedImage failedImagefile, ViewHolder holder) {
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (view != null && holder != null) {
+        Log.d(LOG_TAG, "get View for position: " + position);
+        if (viewList.containsKey(position)) {
+            Log.d(LOG_TAG, "get View from cache for position: " + position);
+            return viewList.get(position);
+        } else {
+            Log.d(LOG_TAG, "create new View for position: " + position);
+            LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflator.inflate(R.layout.failed_upload_files_row, null, true);
+            ViewHolder holder = new ViewHolder();
+            viewList.put(position, convertView);
+            holder.fileSizeV = (TextView) convertView.findViewById(R.id.file_size);
+            holder.checkbox = (CheckBox) convertView.findViewById(R.id.failedImagePreviewCheckBox);
+            holder.lastModV = (TextView) convertView.findViewById(R.id.last_mod);
+            holder.imageButton = (ImageView) convertView.findViewById(R.id.failedImagePreviewImage);
+            holder.errorMessage = (TextView) convertView.findViewById(R.id.failed_upload_message);
+            if (mFiles != null && mFiles.size() > position) {
+                FailedImage file = mFiles.get(position);
+                addImageRow(file, holder);
+            }
+            return convertView;
+        }
+    }
+
+    private void addImageRow(FailedImage failedImagefile, ViewHolder holder) {
+
+        if (holder != null) {
             if (failedImagefile != null) {
                 if (failedImagefile.filePath != null) {
-                    Log_OC.d(LOG_TAG, "add row to for: " + failedImagefile.filePath);
+                    Log_OC.d(LOG_TAG, "add row for: " + failedImagefile.filePath);
                     if (holder.fileSizeV != null) {
                         holder.fileSizeV.setVisibility(View.VISIBLE);
                         holder.fileSizeV.setText(DisplayUtils.bytesToHumanReadable(failedImagefile.size));
@@ -261,13 +276,72 @@ public class InstantUploadAdapter extends ArrayAdapter implements ListAdapter {
         TextView fileSizeV;
         TextView lastModV;
         ImageView imageButton;
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((checkbox == null) ? 0 : checkbox.hashCode());
+            result = prime * result + ((errorMessage == null) ? 0 : errorMessage.hashCode());
+            result = prime * result + ((fileSizeV == null) ? 0 : fileSizeV.hashCode());
+            result = prime * result + ((imageButton == null) ? 0 : imageButton.hashCode());
+            result = prime * result + ((lastModV == null) ? 0 : lastModV.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            ViewHolder other = (ViewHolder) obj;
+            if (checkbox == null) {
+                if (other.checkbox != null)
+                    return false;
+            } else if (!checkbox.equals(other.checkbox))
+                return false;
+            if (errorMessage == null) {
+                if (other.errorMessage != null)
+                    return false;
+            } else if (!errorMessage.equals(other.errorMessage))
+                return false;
+            if (fileSizeV == null) {
+                if (other.fileSizeV != null)
+                    return false;
+            } else if (!fileSizeV.equals(other.fileSizeV))
+                return false;
+            if (imageButton == null) {
+                if (other.imageButton != null)
+                    return false;
+            } else if (!imageButton.equals(other.imageButton))
+                return false;
+            if (lastModV == null) {
+                if (other.lastModV != null)
+                    return false;
+            } else if (!lastModV.equals(other.lastModV))
+                return false;
+            return true;
+        }
     }
 
     class FailedImage {
-        CharSequence errormessage;
+        long id;
         String filePath;
+        String filename;
         long size;
         long lastModified;
-        String filename;
+        CharSequence errormessage;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        if (mFiles == null || mFiles.size() < position) {
+            return 0;
+        } else {
+            return mFiles.get(position).id;
+        }
     }
 }

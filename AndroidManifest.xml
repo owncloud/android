@@ -59,7 +59,8 @@
         </activity>
         <activity android:name=".ui.activity.UploadFilesActivity">
         </activity>
- 		<activity android:name=".ui.activity.InstantUploadActivity">
+ 		<activity android:name=".ui.activity.InstantUploadActivity"
+ 		    android:launchMode="singleTop">
         </activity>
         <activity android:name=".ui.activity.FailedUploadActivity" android:theme="@android:style/Theme.Dialog" android:excludeFromRecents="true"/>
         <activity android:name=".Uploader" >

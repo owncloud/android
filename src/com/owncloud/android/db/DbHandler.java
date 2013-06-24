@@ -17,13 +17,13 @@
  */
 package com.owncloud.android.db;
 
-import com.owncloud.android.Log_OC;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.owncloud.android.Log_OC;
 
 /**
  * Custom database helper for ownCloud
@@ -76,7 +76,7 @@ public class DbHandler {
     }
 
     public Cursor getFailedFiles() {
-        return mDB.query(TABLE_INSTANT_UPLOAD, null, "attempt>" + UPLOAD_STATUS_UPLOAD_LATER, null, null, null, null);
+        return mDB.query(TABLE_INSTANT_UPLOAD, null, "attempt>" + UPLOAD_STATUS_UPLOAD_LATER, null, null, null, "path");
     }
 
     public void clearFiles() {

@@ -78,6 +78,12 @@ public class InstantUploadActivity extends SherlockActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listAdapter.notifyDataSetChanged();
+    }
+
     /**
      * provide a list of CheckBox instances, looked up from parent listview this
      * list is used to select/deselect all checkboxes at the list
@@ -86,18 +92,29 @@ public class InstantUploadActivity extends SherlockActivity {
      */
     private List<CheckBox> getCheckboxList() {
         List<CheckBox> list = new ArrayList<CheckBox>();
+        // first add visible checkboxes to the list
         for (int i = 0; i < listView.getChildCount(); i++) {
-            Log_OC.d(LOG_TAG, "ListView has Childs: " + listView.getChildCount());
             View childView = listView.getChildAt(i);
-            if (childView != null && childView instanceof ViewGroup) {
-                View checkboxView = getChildViews((ViewGroup) childView);
-                if (checkboxView != null && checkboxView instanceof CheckBox) {
-                    Log_OC.d(LOG_TAG, "found Child: " + checkboxView.getId() + " " + checkboxView.getClass());
+            addCheckboxesToList(list, childView);
+        }
+        // add cached checkboxes to the list
+        for (View childView : listAdapter.getCachedViews()) {
+            addCheckboxesToList(list, childView);
+        }
+
+        return list;
+    }
+
+    private void addCheckboxesToList(List<CheckBox> list, View childView) {
+        if (childView != null && childView instanceof ViewGroup) {
+            View checkboxView = getChildViews((ViewGroup) childView);
+            if (checkboxView != null && checkboxView instanceof CheckBox) {
+                Log_OC.d(LOG_TAG, "found Checkbox with id : " + checkboxView.getId());
+                if (!list.contains(checkboxView)) {
                     list.add((CheckBox) checkboxView);
                 }
             }
         }
-        return list;
     }
 
     /**
@@ -134,7 +151,7 @@ public class InstantUploadActivity extends SherlockActivity {
                     ((CheckBox) checkbox).setChecked(isChecked);
                 }
                 listItemSelectState = isChecked;
-                setMenuState();
+
                 return true;
             }
         };
@@ -156,18 +173,18 @@ public class InstantUploadActivity extends SherlockActivity {
                     for (CheckBox checkbox : list) {
                         boolean to_retry = checkbox.isChecked();
 
-                        Log_OC.d(LOG_TAG, "Checkbox for " + checkbox.getId() + " was checked: " + to_retry);
-
                         String img_path = (String) checkbox.getTag(R.string.failed_upload_cb_path_tag);
-                        final String msg = "Image-Path " + checkbox.getId() + " was checked: " + img_path;
-                        Log_OC.d(LOG_TAG, msg);
-                        startUpload(img_path);
+                        if (to_retry && img_path != null) {
+                            final String msg = "Checkbox for Image-Path: " + img_path + " was checked";
+                            Log_OC.d(LOG_TAG, msg);
+                            startUpload(img_path);
+                        }
                     }
 
                 } finally {
 
                     listAdapter.notifyDataSetChanged();
-                    setMenuState();
+
                 }
 
                 return true;
@@ -192,12 +209,11 @@ public class InstantUploadActivity extends SherlockActivity {
                     for (CheckBox checkbox : list) {
                         boolean to_be_delete = checkbox.isChecked();
 
-                        Log_OC.d(LOG_TAG, "Checkbox for " + checkbox.getId() + " was checked: " + to_be_delete);
                         String img_path = (String) checkbox.getTag(R.string.failed_upload_cb_path_tag);
-                        Log_OC.d(LOG_TAG, "Image-Path " + checkbox.getId() + " was checked: " + img_path);
                         if (to_be_delete && img_path != null) {
+                            Log_OC.d(LOG_TAG, "Checkbox for Image-Path " + img_path + " was checked.");
                             boolean deleted = dbh.removeIUPendingFile(img_path);
-                            Log_OC.d(LOG_TAG, "removing " + checkbox.getId() + " was : " + deleted);
+                            Log_OC.d(LOG_TAG, "Removing " + img_path + " from PendingFiles return with: " + deleted);
                         }
 
                     }
@@ -205,7 +221,6 @@ public class InstantUploadActivity extends SherlockActivity {
                     dbh.close();
                     // refresh the List
                     listAdapter.notifyDataSetChanged();
-                    setMenuState();
 
                 }
                 return true;
@@ -224,6 +239,12 @@ public class InstantUploadActivity extends SherlockActivity {
         }
 
         return result;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setMenuState();
     }
 
     @Override
