@@ -92,29 +92,16 @@ public class InstantUploadActivity extends SherlockActivity {
      */
     private List<CheckBox> getCheckboxList() {
         List<CheckBox> list = new ArrayList<CheckBox>();
-        // first add visible checkboxes to the list
-        for (int i = 0; i < listView.getChildCount(); i++) {
-            View childView = listView.getChildAt(i);
-            addCheckboxesToList(list, childView);
-        }
         // add cached checkboxes to the list
         for (View childView : listAdapter.getCachedViews()) {
-            addCheckboxesToList(list, childView);
-        }
-
-        return list;
-    }
-
-    private void addCheckboxesToList(List<CheckBox> list, View childView) {
-        if (childView != null && childView instanceof ViewGroup) {
-            View checkboxView = getChildViews((ViewGroup) childView);
-            if (checkboxView != null && checkboxView instanceof CheckBox) {
-                Log_OC.d(LOG_TAG, "found Checkbox with id : " + checkboxView.getId());
-                if (!list.contains(checkboxView)) {
+            if (childView != null && childView instanceof ViewGroup) {
+                View checkboxView = getChildViews((ViewGroup) childView);
+                if (checkboxView != null && checkboxView instanceof CheckBox) {
                     list.add((CheckBox) checkboxView);
                 }
             }
         }
+        return list;
     }
 
     /**
