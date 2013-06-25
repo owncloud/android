@@ -70,9 +70,9 @@ import android.os.Process;
 import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
 
-import com.owncloud.android.AccountUtils;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.ui.activity.FailedUploadActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;

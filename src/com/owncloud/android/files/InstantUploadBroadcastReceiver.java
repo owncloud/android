@@ -29,7 +29,7 @@ import android.net.NetworkInfo.State;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images.Media;
 
-import com.owncloud.android.AccountUtils;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.utils.FileStorageUtils;

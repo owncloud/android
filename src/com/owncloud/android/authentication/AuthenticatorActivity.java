@@ -18,7 +18,6 @@
 
 package com.owncloud.android.authentication;
 
-import com.owncloud.android.AccountUtils;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.ui.dialog.SslValidatorDialog;
 import com.owncloud.android.ui.dialog.SslValidatorDialog.OnSslValidatorListener;
@@ -110,8 +109,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
 
     public static final byte ACTION_CREATE = 0;
     public static final byte ACTION_UPDATE_TOKEN = 1;
-
-
+    
     private String mHostBaseUrl;
     private OwnCloudVersion mDiscoveredVersion;
 
@@ -451,7 +449,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
 
 
     private void checkOcServer() {
-        String uri = mHostUrlInput.getText().toString().trim();
+        String uri = trimUrlWebdav(mHostUrlInput.getText().toString().trim());
         mServerIsValid = false;
         mServerIsChecked = false;
         mOkButton.setEnabled(false);
@@ -693,15 +691,33 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
                 } else {
                     url = "http://" + url;
                 }
-
             }
+
+            // OC-208: Add suffix remote.php/webdav to normalize (OC-34)            
+            url = trimUrlWebdav(url);
+
             if (url.endsWith("/")) {
                 url = url.substring(0, url.length() - 1);
             }
+
         }
+        Log_OC.d(TAG, "URL Normalize " + url);
         return (url != null ? url : "");
     }
 
+
+    private String trimUrlWebdav(String url){       
+        if(url.toLowerCase().endsWith(AccountUtils.WEBDAV_PATH_4_0)){
+            url = url.substring(0, url.length() - AccountUtils.WEBDAV_PATH_4_0.length());             
+        } else if(url.toLowerCase().endsWith(AccountUtils.WEBDAV_PATH_2_0)){
+            url = url.substring(0, url.length() - AccountUtils.WEBDAV_PATH_2_0.length());             
+        } else if (url.toLowerCase().endsWith(AccountUtils.WEBDAV_PATH_1_2)){
+            url = url.substring(0, url.length() - AccountUtils.WEBDAV_PATH_1_2.length());             
+        } 
+        return (url != null ? url : "");
+    }
+    
+    
     /**
      * Chooses the right icon and text to show to the user for the received operation result.
      * 
@@ -918,7 +934,33 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
 
             finish();
 
-        } else {
+        } else if (result.isServerFail() || result.isException()) {
+            /// if server fail or exception in authorization, the UI is updated as when a server check failed
+            mServerIsChecked = true;
+            mServerIsValid = false;
+            mIsSslConn = false;
+            mOcServerChkOperation = null;
+            mDiscoveredVersion = null;
+            mHostBaseUrl = normalizeUrl(mHostUrlInput.getText().toString());
+
+            // update status icon and text
+            updateServerStatusIconAndText(result);
+            showServerStatus();
+            mAuthStatusIcon = 0;
+            mAuthStatusText = 0;
+            showAuthStatus();
+            
+            // update input controls state
+            showRefreshButton();
+            mOkButton.setEnabled(false);
+
+            // very special case (TODO: move to a common place for all the remote operations) (dangerous here?)
+            if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
+                mLastSslUntrustedServerResult = result;
+                showDialog(DIALOG_SSL_VALIDATOR); 
+            }
+
+        } else {    // authorization fail due to client side - probably wrong credentials
             updateAuthStatusIconAndText(result);
             showAuthStatus();
             Log_OC.d(TAG, "Access failed: " + result.getLogMessage());

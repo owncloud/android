@@ -22,9 +22,9 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.owncloud.android.AccountUtils;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.utils.ConnectivityUtils;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.utils.OwnCloudVersion;
 
 import eu.alefzero.webdav.WebdavClient;
