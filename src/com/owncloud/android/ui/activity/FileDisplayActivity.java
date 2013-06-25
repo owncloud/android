@@ -868,7 +868,7 @@ public class FileDisplayActivity extends FileActivity implements
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String uploadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
+            String uploadedRemotePath = intent.getStringExtra(FileUploader.EXTRA_REMOTE_PATH);
             String accountName = intent.getStringExtra(FileUploader.EXTRA_ACCOUNT_NAME);
             boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
             OCFile currentDir = getCurrentDir();
