@@ -73,18 +73,18 @@ public class ConflictsResolveActivity extends SherlockFragmentActivity implement
                 finish();
                 return;
             case OVERWRITE:
-                i.putExtra(FileUploader.KEY_FORCE_OVERWRITE, true);
+                i.putExtra(FileUploader.EXTRA_FORCE_OVERWRITE, true);
                 break;
             case KEEP_BOTH:
-                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                i.putExtra(FileUploader.EXTRA_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
                 break;
             default:
                 Log_OC.wtf(TAG, "Unhandled conflict decision " + decision);
                 return;
         }
-        i.putExtra(FileUploader.KEY_ACCOUNT, mOCAccount);
-        i.putExtra(FileUploader.KEY_FILE, mFile);
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+        i.putExtra(FileUploader.EXTRA_ACCOUNT, mOCAccount);
+        i.putExtra(FileUploader.EXTRA_FILE, mFile);
+        i.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_SINGLE_FILE);
         
         startService(i);
         finish();

@@ -90,37 +90,38 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
     private static final String MY_PACKAGE = FileUploader.class.getPackage() != null ? FileUploader.class.getPackage().getName() : "com.owncloud.android.files.services";
     
-    /// Intent actions that we are prepared to handle
-    public static final String ACTION_ADD_UPLOAD = MY_PACKAGE + ".action.ADD_UPLOAD";
-    public static final String ACTION_RESUME_UPLOADS = MY_PACKAGE + ".action.RESUME_UPLOADS";
-
+    /// Intent actions that the service is prepared to receive
+    public static final String ACTION_ADD_UPLOAD        = MY_PACKAGE + ".action.ADD_UPLOAD";
+    public static final String ACTION_RESUME_UPLOADS    = MY_PACKAGE + ".action.RESUME_UPLOADS";
     
-    public static final String UPLOAD_FINISH_MESSAGE = "UPLOAD_FINISH";
-    public static final String EXTRA_UPLOAD_RESULT = "RESULT";
-    public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
-    public static final String EXTRA_OLD_REMOTE_PATH = "OLD_REMOTE_PATH";
-    public static final String EXTRA_OLD_FILE_PATH = "OLD_FILE_PATH";
-    public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
+    /// Intent actions that the service starts
+    public static final String ACTION_UPLOAD_FINISHED   = MY_PACKAGE + ".action.UPLOAD_FINISHED";
 
-    public static final String KEY_FILE = "FILE";
-    public static final String KEY_LOCAL_FILE = "LOCAL_FILE";
-    public static final String KEY_REMOTE_FILE = "REMOTE_FILE";
-    public static final String KEY_MIME_TYPE = "MIME_TYPE";
+    /// Keys for Intent extras
+    public static final String EXTRA_ACCOUNT            = MY_PACKAGE + ".extra.ACCOUNT";
+    public static final String EXTRA_FILE               = MY_PACKAGE + ".extra.FILE";
+    public static final String EXTRA_LOCAL_PATH         = MY_PACKAGE + ".extra.LOCAL_PATH";
+    public static final String EXTRA_REMOTE_PATH        = MY_PACKAGE + ".extra.REMOTE_PATH";
+    public static final String EXTRA_MIME_TYPE          = MY_PACKAGE + ".extra.MIME_TYPE";
+    public static final String EXTRA_UPLOAD_TYPE        = MY_PACKAGE + ".extra.UPLOAD_TYPE";
+    public static final String EXTRA_FORCE_OVERWRITE    = MY_PACKAGE + ".extra.FORCE_OVERWRITE";
+    public static final String EXTRA_INSTANT_UPLOAD     = MY_PACKAGE + ".extra.INSTANT_UPLOAD";
+    public static final String EXTRA_LOCAL_BEHAVIOUR    = MY_PACKAGE + ".extra.LOCAL_BEHAVIOUR";
 
-    public static final String KEY_ACCOUNT = "ACCOUNT";
-
-    public static final String KEY_UPLOAD_TYPE = "UPLOAD_TYPE";
-    public static final String KEY_FORCE_OVERWRITE = "KEY_FORCE_OVERWRITE";
-    public static final String KEY_INSTANT_UPLOAD = "INSTANT_UPLOAD";
-    public static final String KEY_LOCAL_BEHAVIOUR = "BEHAVIOUR";
-
+    public static final String EXTRA_UPLOAD_RESULT      = MY_PACKAGE + ".extra.UPLOAD_RESULT";
+    public static final String EXTRA_OLD_REMOTE_PATH    = MY_PACKAGE + ".extra.OLD_REMOTE_PATH";
+    public static final String EXTRA_OLD_LOCAL_PATH     = MY_PACKAGE + ".extra.OLD_LOCAL_PATH";
+    public static final String EXTRA_ACCOUNT_NAME       = MY_PACKAGE + ".extra.ACCOUNT_NAME";
+    
+    /// Values for extras
     public static final int LOCAL_BEHAVIOUR_COPY = 0;
     public static final int LOCAL_BEHAVIOUR_MOVE = 1;
     public static final int LOCAL_BEHAVIOUR_FORGET = 2;
 
-    public static final int UPLOAD_SINGLE_FILE = 0;
-    public static final int UPLOAD_MULTIPLE_FILES = 1;
+    public static final int UPLOAD_TYPE_SINGLE_FILE = 0;
+    public static final int UPLOAD_TYPE_MULTIPLE_FILES = 1;
 
+    
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
     private IBinder mBinder;
@@ -194,6 +195,9 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             
         } else if (action.equals(ACTION_RESUME_UPLOADS)) {
             requestedUploads = processResumeRequest(intent);
+            
+        } else {
+            Log_OC.e(TAG, "Unknown action received as a command");
         }
 
         if (requestedUploads.size() > 0) {
@@ -218,58 +222,58 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         AbstractList<String> requestedUploads = new Vector<String>();
         
         /// check parameters received in the Intent
-        if (!intent.hasExtra(KEY_ACCOUNT) || !intent.hasExtra(KEY_UPLOAD_TYPE)
-                || !(intent.hasExtra(KEY_LOCAL_FILE) || intent.hasExtra(KEY_FILE))) {
+        if (!intent.hasExtra(EXTRA_ACCOUNT) || !intent.hasExtra(EXTRA_UPLOAD_TYPE)
+                || !(intent.hasExtra(EXTRA_LOCAL_PATH) || intent.hasExtra(EXTRA_FILE))) {
             Log_OC.e(TAG, "Not enough information provided in intent");
             return requestedUploads;
         }
-        int uploadType = intent.getIntExtra(KEY_UPLOAD_TYPE, -1);
+        int uploadType = intent.getIntExtra(EXTRA_UPLOAD_TYPE, -1);
         if (uploadType == -1) {
             Log_OC.e(TAG, "Incorrect upload type provided");
             return requestedUploads;
         }
         
-        Account account = intent.getParcelableExtra(KEY_ACCOUNT);
+        Account account = intent.getParcelableExtra(EXTRA_ACCOUNT);
         String[] localPaths = null, remotePaths = null, mimeTypes = null;
         OCFile[] files = null;
 
-        if (uploadType == UPLOAD_SINGLE_FILE) {
+        if (uploadType == UPLOAD_TYPE_SINGLE_FILE) {
 
-            if (intent.hasExtra(KEY_FILE)) {
-                files = new OCFile[] { intent.getParcelableExtra(KEY_FILE) };
+            if (intent.hasExtra(EXTRA_FILE)) {
+                files = new OCFile[] { intent.getParcelableExtra(EXTRA_FILE) };
 
             } else {
-                localPaths = new String[] { intent.getStringExtra(KEY_LOCAL_FILE) };
-                remotePaths = new String[] { intent.getStringExtra(KEY_REMOTE_FILE) };
-                mimeTypes = new String[] { intent.getStringExtra(KEY_MIME_TYPE) };
+                localPaths = new String[] { intent.getStringExtra(EXTRA_LOCAL_PATH) };
+                remotePaths = new String[] { intent.getStringExtra(EXTRA_REMOTE_PATH) };
+                mimeTypes = new String[] { intent.getStringExtra(EXTRA_MIME_TYPE) };
             }
 
-        } else { // mUploadType == UPLOAD_MULTIPLE_FILES
+        } else { // mUploadType == UPLOAD_TYPE_MULTIPLE_FILES
 
-            if (intent.hasExtra(KEY_FILE)) {
-                files = (OCFile[]) intent.getParcelableArrayExtra(KEY_FILE);
+            if (intent.hasExtra(EXTRA_FILE)) {
+                files = (OCFile[]) intent.getParcelableArrayExtra(EXTRA_FILE);
 
             } else {
-                localPaths = intent.getStringArrayExtra(KEY_LOCAL_FILE);
-                remotePaths = intent.getStringArrayExtra(KEY_REMOTE_FILE);
-                mimeTypes = intent.getStringArrayExtra(KEY_MIME_TYPE);
+                localPaths = intent.getStringArrayExtra(EXTRA_LOCAL_PATH);
+                remotePaths = intent.getStringArrayExtra(EXTRA_REMOTE_PATH);
+                mimeTypes = intent.getStringArrayExtra(EXTRA_MIME_TYPE);
             }
         }
         FileDataStorageManager storageManager = new FileDataStorageManager(account, getContentResolver());
 
-        boolean forceOverwrite = intent.getBooleanExtra(KEY_FORCE_OVERWRITE, false);
-        boolean isInstant = intent.getBooleanExtra(KEY_INSTANT_UPLOAD, false);
-        int localAction = intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
+        boolean forceOverwrite = intent.getBooleanExtra(EXTRA_FORCE_OVERWRITE, false);
+        boolean isInstant = intent.getBooleanExtra(EXTRA_INSTANT_UPLOAD, false);
+        int localAction = intent.getIntExtra(EXTRA_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
         boolean fixed = false;
         if (isInstant) {
             fixed = checkAndFixInstantUploadDirectory(storageManager); // MUST be done BEFORE calling obtainNewOCFileToUpload
         }
 
-        if (intent.hasExtra(KEY_FILE) && files == null) {
+        if (intent.hasExtra(EXTRA_FILE) && files == null) {
             Log_OC.e(TAG, "Incorrect array for OCFiles provided in upload intent");
             return requestedUploads;
 
-        } else if (!intent.hasExtra(KEY_FILE)) {
+        } else if (!intent.hasExtra(EXTRA_FILE)) {
             if (localPaths == null) {
                 Log_OC.e(TAG, "Incorrect array for local paths provided in upload intent");
                 return requestedUploads;
@@ -356,8 +360,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             Log_OC.d(TAG, "offlineUpload - Account: " + account.name);
             storageManager= new FileDataStorageManager(account, getContentResolver());
 
-            boolean forceOverwrite = false; //intent.getBooleanExtra(KEY_FORCE_OVERWRITE, false);
-            int localAction = LOCAL_BEHAVIOUR_COPY; //intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
+            boolean forceOverwrite = false; //intent.getBooleanExtra(EXTRA_FORCE_OVERWRITE, false);
+            int localAction = LOCAL_BEHAVIOUR_COPY; //intent.getIntExtra(EXTRA_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
             boolean fixed = false;
 
             // Get Offline files
@@ -952,7 +956,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 Intent detailUploadIntent = null;
                 if (upload.isInstant() && InstantUploadActivity.IS_ENABLED) {
                     detailUploadIntent = new Intent(this, InstantUploadActivity.class);
-                    detailUploadIntent.putExtra(FileUploader.KEY_ACCOUNT, upload.getAccount());
+                    detailUploadIntent.putExtra(FileUploader.EXTRA_ACCOUNT, upload.getAccount());
                 } else {
                     detailUploadIntent = new Intent(this, FailedUploadActivity.class);
                     detailUploadIntent.putExtra(FailedUploadActivity.MESSAGE, content);
@@ -1006,8 +1010,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         if (upload.wasRenamed()) {
             end.putExtra(EXTRA_OLD_REMOTE_PATH, upload.getOldFile().getRemotePath());
         }
-        end.putExtra(EXTRA_OLD_FILE_PATH, upload.getOriginalStoragePath());
-        end.putExtra(ACCOUNT_NAME, upload.getAccount().name);
+        end.putExtra(EXTRA_OLD_LOCAL_PATH, upload.getOriginalStoragePath());
+        end.putExtra(EXTRA_ACCOUNT_NAME, upload.getAccount().name);
         end.putExtra(EXTRA_UPLOAD_RESULT, uploadResult.isSuccess());
         sendStickyBroadcast(end);
     }

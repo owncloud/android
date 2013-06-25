@@ -500,12 +500,12 @@ public class FileDisplayActivity extends FileActivity implements
 
             Intent i = new Intent(this, FileUploader.class);
             i.setAction(FileUploader.ACTION_ADD_UPLOAD);
-            i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
-            i.putExtra(FileUploader.KEY_LOCAL_FILE, filePaths);
-            i.putExtra(FileUploader.KEY_REMOTE_FILE, remotePaths);
-            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_MULTIPLE_FILES);
+            i.putExtra(FileUploader.EXTRA_ACCOUNT, getAccount());
+            i.putExtra(FileUploader.EXTRA_LOCAL_PATH, filePaths);
+            i.putExtra(FileUploader.EXTRA_REMOTE_PATH, remotePaths);
+            i.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_MULTIPLE_FILES);
             if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                i.putExtra(FileUploader.EXTRA_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
             startService(i);
             
         } else {
@@ -545,7 +545,7 @@ public class FileDisplayActivity extends FileActivity implements
 
         Intent i = new Intent(this, FileUploader.class);
         i.setAction(FileUploader.ACTION_ADD_UPLOAD);
-        i.putExtra(FileUploader.KEY_ACCOUNT,
+        i.putExtra(FileUploader.EXTRA_ACCOUNT,
                 getAccount());
         String remotepath = new String();
         for (int j = mDirectories.getCount() - 2; j >= 0; --j) {
@@ -555,11 +555,11 @@ public class FileDisplayActivity extends FileActivity implements
             remotepath += OCFile.PATH_SEPARATOR;
         remotepath += new File(filepath).getName();
 
-        i.putExtra(FileUploader.KEY_LOCAL_FILE, filepath);
-        i.putExtra(FileUploader.KEY_REMOTE_FILE, remotepath);
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+        i.putExtra(FileUploader.EXTRA_LOCAL_PATH, filepath);
+        i.putExtra(FileUploader.EXTRA_REMOTE_PATH, remotepath);
+        i.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_SINGLE_FILE);
         if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-            i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
+            i.putExtra(FileUploader.EXTRA_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
         startService(i);
     }
 
@@ -710,7 +710,7 @@ public class FileDisplayActivity extends FileActivity implements
                                 ACTION_SELECT_CONTENT_FROM_APPS);
                     } else if (item == 2 && InstantUploadActivity.IS_ENABLED) {
                         Intent action = new Intent(FileDisplayActivity.this, InstantUploadActivity.class);
-                        action.putExtra(FileUploader.KEY_ACCOUNT, FileDisplayActivity.this.getAccount());
+                        action.putExtra(FileUploader.EXTRA_ACCOUNT, FileDisplayActivity.this.getAccount());
                         startActivity(action);
                     }
                 }
@@ -869,7 +869,7 @@ public class FileDisplayActivity extends FileActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             String uploadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
-            String accountName = intent.getStringExtra(FileUploader.ACCOUNT_NAME);
+            String accountName = intent.getStringExtra(FileUploader.EXTRA_ACCOUNT_NAME);
             boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
             OCFile currentDir = getCurrentDir();
             boolean isDescendant = (currentDir != null) && (uploadedRemotePath != null) && (uploadedRemotePath.startsWith(currentDir.getRemotePath()));

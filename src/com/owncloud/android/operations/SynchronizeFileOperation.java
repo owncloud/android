@@ -179,12 +179,12 @@ public class SynchronizeFileOperation extends RemoteOperation {
     private void requestForUpload(OCFile file) {
         Intent i = new Intent(mContext, FileUploader.class);
         i.setAction(FileUploader.ACTION_ADD_UPLOAD);
-        i.putExtra(FileUploader.KEY_ACCOUNT, mAccount);
-        i.putExtra(FileUploader.KEY_FILE, file);
-        /*i.putExtra(FileUploader.KEY_REMOTE_FILE, mRemotePath);    // doing this we would lose the value of keepInSync in the road, and maybe it's not updated in the database when the FileUploader service gets it!  
-        i.putExtra(FileUploader.KEY_LOCAL_FILE, localFile.getStoragePath());*/
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
-        i.putExtra(FileUploader.KEY_FORCE_OVERWRITE, true);
+        i.putExtra(FileUploader.EXTRA_ACCOUNT, mAccount);
+        i.putExtra(FileUploader.EXTRA_FILE, file);
+        /*i.putExtra(FileUploader.EXTRA_REMOTE_FILE, mRemotePath);    // doing this we would lose the value of keepInSync in the road, and maybe it's not updated in the database when the FileUploader service gets it!  
+        i.putExtra(FileUploader.EXTRA_LOCAL_PATH, localFile.getStoragePath());*/
+        i.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_SINGLE_FILE);
+        i.putExtra(FileUploader.EXTRA_FORCE_OVERWRITE, true);
         mContext.startService(i);
         mTransferWasRequested = true;
     }

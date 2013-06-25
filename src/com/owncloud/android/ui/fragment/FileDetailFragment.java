@@ -728,7 +728,7 @@ public class FileDetailFragment extends FileFragment implements
     private class UploadFinishReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String accountName = intent.getStringExtra(FileUploader.ACCOUNT_NAME);
+            String accountName = intent.getStringExtra(FileUploader.EXTRA_ACCOUNT_NAME);
 
             if (!isEmpty() && accountName.equals(mAccount.name)) {
                 boolean uploadWasFine = intent.getBooleanExtra(FileUploader.EXTRA_UPLOAD_RESULT, false);

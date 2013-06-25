@@ -59,7 +59,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         // remove successfull uploading, ignore rest for reupload on reconnect
         if (intent.getBooleanExtra(FileUploader.EXTRA_UPLOAD_RESULT, false)) {
             DbHandler db = new DbHandler(context);
-            String localPath = intent.getStringExtra(FileUploader.EXTRA_OLD_FILE_PATH);
+            String localPath = intent.getStringExtra(FileUploader.EXTRA_OLD_LOCAL_PATH);
             if (!db.removeIUPendingFile(localPath)) {
                 Log_OC.w(TAG, "Tried to remove non existing instant upload file " + localPath);
             }
@@ -107,12 +107,12 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
 
         Intent i = new Intent(context, FileUploader.class);
         i.setAction(FileUploader.ACTION_ADD_UPLOAD);
-        i.putExtra(FileUploader.KEY_ACCOUNT, account);
-        i.putExtra(FileUploader.KEY_LOCAL_FILE, file_path);
-        i.putExtra(FileUploader.KEY_REMOTE_FILE, FileStorageUtils.getInstantUploadFilePath(context, file_name));
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
-        i.putExtra(FileUploader.KEY_MIME_TYPE, mime_type);
-        i.putExtra(FileUploader.KEY_INSTANT_UPLOAD, true);
+        i.putExtra(FileUploader.EXTRA_ACCOUNT, account);
+        i.putExtra(FileUploader.EXTRA_LOCAL_PATH, file_path);
+        i.putExtra(FileUploader.EXTRA_REMOTE_PATH, FileStorageUtils.getInstantUploadFilePath(context, file_name));
+        i.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_SINGLE_FILE);
+        i.putExtra(FileUploader.EXTRA_MIME_TYPE, mime_type);
+        i.putExtra(FileUploader.EXTRA_INSTANT_UPLOAD, true);
         context.startService(i);
 
     }
