@@ -66,6 +66,7 @@ public class ConflictsResolveActivity extends SherlockFragmentActivity implement
     @Override
     public void ConflictDecisionMade(Decision decision) {
         Intent i = new Intent(getApplicationContext(), FileUploader.class);
+        i.setAction(FileUploader.ACTION_ADD_UPLOAD);
         
         switch (decision) {
             case CANCEL:

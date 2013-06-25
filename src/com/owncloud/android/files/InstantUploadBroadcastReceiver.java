@@ -106,6 +106,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         context.getApplicationContext().registerReceiver(this, filter);
 
         Intent i = new Intent(context, FileUploader.class);
+        i.setAction(FileUploader.ACTION_ADD_UPLOAD);
         i.putExtra(FileUploader.KEY_ACCOUNT, account);
         i.putExtra(FileUploader.KEY_LOCAL_FILE, file_path);
         i.putExtra(FileUploader.KEY_REMOTE_FILE, FileStorageUtils.getInstantUploadFilePath(context, file_name));
@@ -125,7 +126,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
             // Restart Offline Uploads
             Log_OC.w(TAG, "Restart Offline Uploads");
             Intent i = new Intent(context, FileUploader.class);
-            i.putExtra(FileUploader.KEY_OFFLINE_UPLOAD, true);
+            i.setAction(FileUploader.ACTION_RESUME_UPLOADS);
             context.startService(i);
         }
 

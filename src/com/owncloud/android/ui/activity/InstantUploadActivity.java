@@ -441,6 +441,7 @@ public class InstantUploadActivity extends Activity {
             }
 
             Intent i = new Intent(InstantUploadActivity.this, FileUploader.class);
+            i.setAction(FileUploader.ACTION_ADD_UPLOAD);
             i.putExtra(FileUploader.KEY_ACCOUNT, account);
             i.putExtra(FileUploader.KEY_LOCAL_FILE, img_path);
             i.putExtra(FileUploader.KEY_REMOTE_FILE, filename);

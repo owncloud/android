@@ -499,6 +499,7 @@ public class FileDisplayActivity extends FileActivity implements
             }
 
             Intent i = new Intent(this, FileUploader.class);
+            i.setAction(FileUploader.ACTION_ADD_UPLOAD);
             i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
             i.putExtra(FileUploader.KEY_LOCAL_FILE, filePaths);
             i.putExtra(FileUploader.KEY_REMOTE_FILE, remotePaths);
@@ -543,6 +544,7 @@ public class FileDisplayActivity extends FileActivity implements
         }
 
         Intent i = new Intent(this, FileUploader.class);
+        i.setAction(FileUploader.ACTION_ADD_UPLOAD);
         i.putExtra(FileUploader.KEY_ACCOUNT,
                 getAccount());
         String remotepath = new String();
