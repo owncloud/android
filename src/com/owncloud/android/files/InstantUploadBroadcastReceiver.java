@@ -48,7 +48,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
             handleConnectivityAction(context, intent);
         } else if (intent.getAction().equals(NEW_PHOTO_ACTION)) {
             handleNewPhotoAction(context, intent);
-        } else if (intent.getAction().equals(FileUploader.UPLOAD_FINISH_MESSAGE)) {
+        } else if (intent.getAction().equals(FileUploader.ACTION_UPLOAD_FINISHED)) {
             handleUploadFinished(context, intent);
         } else {
             Log_OC.e(TAG, "Incorrect intent sent: " + intent.getAction());
@@ -102,7 +102,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         // we can unregister from entire listenings but thats suck a bit.
         // On the other hand this might be only for dynamicly registered
         // broadcast receivers, needs investigation.
-        IntentFilter filter = new IntentFilter(FileUploader.UPLOAD_FINISH_MESSAGE);
+        IntentFilter filter = new IntentFilter(FileUploader.ACTION_UPLOAD_FINISHED);
         context.getApplicationContext().registerReceiver(this, filter);
 
         Intent i = new Intent(context, FileUploader.class);

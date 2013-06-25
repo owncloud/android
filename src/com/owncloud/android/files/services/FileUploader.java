@@ -1001,7 +1001,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      * @param uploadResult Result of the upload operation
      */
     private void sendFinalBroadcast(UploadFileOperation upload, RemoteOperationResult uploadResult) {
-        Intent end = new Intent(UPLOAD_FINISH_MESSAGE);
+        Intent end = new Intent(ACTION_UPLOAD_FINISHED);
         end.putExtra(EXTRA_REMOTE_PATH, upload.getRemotePath()); // real remote
         // path, after
         // possible

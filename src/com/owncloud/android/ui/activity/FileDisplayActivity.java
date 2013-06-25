@@ -611,7 +611,7 @@ public class FileDisplayActivity extends FileActivity implements
         registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
         
         // Listen for upload messages
-        IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.UPLOAD_FINISH_MESSAGE);
+        IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.ACTION_UPLOAD_FINISHED);
         mUploadFinishReceiver = new UploadFinishReceiver();
         registerReceiver(mUploadFinishReceiver, uploadIntentFilter);
         
