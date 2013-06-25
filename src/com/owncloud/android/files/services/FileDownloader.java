@@ -37,8 +37,8 @@ import com.owncloud.android.network.OwnCloudClientUtils;
 import com.owncloud.android.operations.DownloadFileOperation;
 import com.owncloud.android.operations.RemoteOperationResult;
 import com.owncloud.android.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.ui.activity.FileDetailActivity;
-import com.owncloud.android.ui.fragment.FileDetailFragment;
+import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
 
@@ -414,10 +414,10 @@ public class FileDownloader extends Service implements OnDatatransferProgressLis
         if (PreviewImageFragment.canBePreviewed(download.getFile())) {
             showDetailsIntent = new Intent(this, PreviewImageActivity.class);
         } else {
-            showDetailsIntent = new Intent(this, FileDetailActivity.class);
+            showDetailsIntent = new Intent(this, FileDisplayActivity.class);
         }
-        showDetailsIntent.putExtra(FileDetailFragment.EXTRA_FILE, download.getFile());
-        showDetailsIntent.putExtra(FileDetailFragment.EXTRA_ACCOUNT, download.getAccount());
+        showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, download.getFile());
+        showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, download.getAccount());
         showDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(), (int)System.currentTimeMillis(), showDetailsIntent, 0);
         
@@ -485,10 +485,11 @@ public class FileDownloader extends Service implements OnDatatransferProgressLis
                     if (PreviewImageFragment.canBePreviewed(download.getFile())) {
                         showDetailsIntent = new Intent(this, PreviewImageActivity.class);
                     } else {
-                        showDetailsIntent = new Intent(this, FileDetailActivity.class);
+                        showDetailsIntent = new Intent(this, FileDisplayActivity.class);
                     }
-                    showDetailsIntent.putExtra(FileDetailFragment.EXTRA_FILE, download.getFile());
-                    showDetailsIntent.putExtra(FileDetailFragment.EXTRA_ACCOUNT, download.getAccount());
+
+                    showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, download.getFile());
+                    showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, download.getAccount());
                     showDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     
                 } else {
