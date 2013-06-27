@@ -73,6 +73,7 @@ import android.widget.RemoteViews;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.ui.activity.FailedUploadActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
@@ -904,8 +905,12 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                     String.format(getString(R.string.uploader_upload_succeeded_content_single), upload.getFileName()),
                     mNotification.contentIntent);
 
-            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotification); 
-            
+            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotification); // NOT
+            // AN
+            DbHandler db = new DbHandler(this.getBaseContext());
+            db.removeIUPendingFile(mCurrentUpload.getFile().getStoragePath());
+            db.close();
+
         } else {
 
             // / fail -> explicit failure notification
@@ -959,6 +964,26 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 finalNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(),
                         (int) System.currentTimeMillis(), detailUploadIntent, PendingIntent.FLAG_UPDATE_CURRENT
                         | PendingIntent.FLAG_ONE_SHOT);
+
+                if (upload.isInstant()) {
+                    DbHandler db = null;
+                    try {
+                        db = new DbHandler(this.getBaseContext());
+                        String message = uploadResult.getLogMessage() + " errorCode: " + uploadResult.getCode();
+                        Log_OC.e(TAG, message + " Http-Code: " + uploadResult.getHttpCode());
+                        if (uploadResult.getCode() == ResultCode.QUOTA_EXCEEDED) {
+                            message = getString(R.string.failed_upload_quota_exceeded_text);
+                        }
+                        if (db.updateFileState(upload.getOriginalStoragePath(), DbHandler.UPLOAD_STATUS_UPLOAD_FAILED,
+                                message) == 0) {
+                            db.putFileForLater(upload.getOriginalStoragePath(), upload.getAccount().name, message);
+                        }
+                    } finally {
+                        if (db != null) {
+                            db.close();
+                        }
+                    }
+                }
 
                 finalNotification.setLatestEventInfo(getApplicationContext(), getString(R.string.uploader_upload_failed_ticker), content, finalNotification.contentIntent);
 

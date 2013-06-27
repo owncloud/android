@@ -40,6 +40,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.OwnCloudSession;
 import com.owncloud.android.R;
+import com.owncloud.android.db.DbHandler;
 
 /**
  * An Activity that allows the user to change the application's settings.
@@ -52,6 +53,7 @@ public class Preferences extends SherlockPreferenceActivity implements OnPrefere
     private static final String TAG = "OwnCloudPreferences";
     private final int mNewSession = 47;
     private final int mEditSession = 48;
+    private DbHandler mDbHandler;
     private Vector<OwnCloudSession> mSessions;
     private ListPreference mTrackingUpdateInterval;
     private CheckBoxPreference mDeviceTracking;
@@ -66,6 +68,7 @@ public class Preferences extends SherlockPreferenceActivity implements OnPrefere
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDbHandler = new DbHandler(getBaseContext());
         mSessions = new Vector<OwnCloudSession>();
         addPreferencesFromResource(R.xml.preferences);
         //populateAccountList();
@@ -202,6 +205,7 @@ public class Preferences extends SherlockPreferenceActivity implements OnPrefere
 
     @Override
     protected void onDestroy() {
+        mDbHandler.close();
         super.onDestroy();
     }
     

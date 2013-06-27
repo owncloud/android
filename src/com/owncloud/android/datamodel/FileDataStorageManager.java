@@ -606,20 +606,8 @@ public class FileDataStorageManager implements DataStorageManager {
     {
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.FILE_UPLOADING, uploading);
-        int result = -1;
-        if (getContentResolver() != null) {
-            getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
-                    ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
-        } else {
-            try {
-                getContentProvider().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
-                        ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
-            } catch (RemoteException e) {
-                Log_OC.e(TAG,
-                        "Fail to update 'uploading' field into database "
-                                + e.getMessage());
-            }
-        }
+        int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
+                ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
         Log_OC.d(TAG, "updateUploading, result=" + String.valueOf(result));
         return result;
     }
@@ -632,20 +620,8 @@ public class FileDataStorageManager implements DataStorageManager {
     {
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.FILE_DOWNLOADING, downloading);
-        int result = -1;
-        if (getContentResolver() != null) {
-            result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
-                    ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
-        } else {
-            try {
-                result = getContentProvider().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
-                        ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
-            } catch (RemoteException e) {
-                Log_OC.e(TAG,
-                        "Fail to update 'downloading' field into database "
-                                + e.getMessage());
-            }
-        }
+        int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
+                ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
         Log_OC.d(TAG, "updateDownloading, result=" + String.valueOf(result));
         return result;
     }

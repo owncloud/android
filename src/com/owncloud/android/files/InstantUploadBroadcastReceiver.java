@@ -31,6 +31,7 @@ import android.provider.MediaStore.Images.Media;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.Log_OC;
+import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.utils.FileStorageUtils;
 
@@ -47,8 +48,22 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
             handleConnectivityAction(context, intent);
         } else if (intent.getAction().equals(NEW_PHOTO_ACTION)) {
             handleNewPhotoAction(context, intent);
+        } else if (intent.getAction().equals(FileUploader.ACTION_UPLOAD_FINISHED)) {
+            handleUploadFinished(context, intent);
         } else {
             Log_OC.e(TAG, "Incorrect intent sent: " + intent.getAction());
+        }
+    }
+
+    private void handleUploadFinished(Context context, Intent intent) {
+        // remove successfull uploading, ignore rest for reupload on reconnect
+        if (intent.getBooleanExtra(FileUploader.EXTRA_UPLOAD_RESULT, false)) {
+            DbHandler db = new DbHandler(context);
+            String localPath = intent.getStringExtra(FileUploader.EXTRA_OLD_LOCAL_PATH);
+            if (!db.removeIUPendingFile(localPath)) {
+                Log_OC.w(TAG, "Tried to remove non existing instant upload file " + localPath);
+            }
+            db.close();
         }
     }
 
