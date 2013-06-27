@@ -108,6 +108,7 @@ public class Preferences extends SherlockPreferenceActivity implements OnPrefere
                }
        }
        
+       /* DISABLED FOR RELEASE UNTIL FIXED 
        pLogging = (CheckBoxPreference) findPreference("log_to_file");
        if (pLogging != null) {
            pLogging.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -142,6 +143,8 @@ public class Preferences extends SherlockPreferenceActivity implements OnPrefere
             }
         });
        }
+       */
+       
       }
     }
 
