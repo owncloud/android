@@ -47,7 +47,9 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.files.InstantUploadBroadcastReceiver;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.InstantUploadUtils;
 
 /**
  * This Activity is used to display a list with images they could not be
@@ -464,9 +466,9 @@ public class InstantUploadActivity extends Activity {
 
     private boolean canInstantUpload() {
 
-        if (!InstantUploadBroadcastReceiver.isOnline(this)
-                || (InstantUploadBroadcastReceiver.instantUploadViaWiFiOnly(this) && !InstantUploadBroadcastReceiver
-                        .isConnectedViaWiFi(this))) {
+        if (!ConnectivityUtils.isOnline(this)
+                || (InstantUploadUtils.instantUploadViaWiFiOnly(this) 
+                        && !ConnectivityUtils.isConnectedViaWiFi(this))) {
             return false;
         } else {
             return true;

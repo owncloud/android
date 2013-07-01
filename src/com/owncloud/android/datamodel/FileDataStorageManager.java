@@ -608,7 +608,6 @@ public class FileDataStorageManager implements DataStorageManager {
         cv.put(ProviderTableMeta.FILE_UPLOADING, uploading);
         int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
                 ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
-        Log_OC.d(TAG, "updateUploading, result=" + String.valueOf(result));
         return result;
     }
     
@@ -622,7 +621,6 @@ public class FileDataStorageManager implements DataStorageManager {
         cv.put(ProviderTableMeta.FILE_DOWNLOADING, downloading);
         int result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
                 ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
-        Log_OC.d(TAG, "updateDownloading, result=" + String.valueOf(result));
         return result;
     }
 

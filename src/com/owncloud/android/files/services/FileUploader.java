@@ -43,6 +43,7 @@ import com.owncloud.android.operations.RemoteOperationResult;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.utils.ConnectivityUtils;
+import com.owncloud.android.utils.InstantUploadUtils;
 import com.owncloud.android.utils.OwnCloudVersion;
 
 import eu.alefzero.webdav.OnDatatransferProgressListener;
@@ -60,6 +61,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -89,11 +92,11 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     private static final String TAG = FileUploader.class.getSimpleName();
 
     private static final String MY_PACKAGE = FileUploader.class.getPackage() != null ? FileUploader.class.getPackage().getName() : "com.owncloud.android.files.services";
-    
+
     /// Intent actions that the service is prepared to receive
     public static final String ACTION_ADD_UPLOAD        = MY_PACKAGE + ".action.ADD_UPLOAD";
     public static final String ACTION_RESUME_UPLOADS    = MY_PACKAGE + ".action.RESUME_UPLOADS";
-    
+
     /// Intent actions that the service starts
     public static final String ACTION_UPLOAD_FINISHED   = MY_PACKAGE + ".action.UPLOAD_FINISHED";
 
@@ -112,7 +115,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     public static final String EXTRA_OLD_REMOTE_PATH    = MY_PACKAGE + ".extra.OLD_REMOTE_PATH";
     public static final String EXTRA_OLD_LOCAL_PATH     = MY_PACKAGE + ".extra.OLD_LOCAL_PATH";
     public static final String EXTRA_ACCOUNT_NAME       = MY_PACKAGE + ".extra.ACCOUNT_NAME";
-    
+
     /// Values for extras
     public static final int LOCAL_BEHAVIOUR_COPY = 0;
     public static final int LOCAL_BEHAVIOUR_MOVE = 1;
@@ -121,7 +124,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     public static final int UPLOAD_TYPE_SINGLE_FILE = 0;
     public static final int UPLOAD_TYPE_MULTIPLE_FILES = 1;
 
-    
+
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
     private IBinder mBinder;
@@ -178,7 +181,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         mBinder = new FileUploaderBinder();
     }
 
-    
+
     /**
      * Processes incoming commands send through {@link Context#startService(Intent)} method.
      * 
@@ -192,10 +195,10 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         String action = intent.getAction();
         if (action.equals(ACTION_ADD_UPLOAD)) { 
             requestedUploads = processNewUploadRequest(intent);
-            
+
         } else if (action.equals(ACTION_RESUME_UPLOADS)) {
             requestedUploads = processResumeRequest(intent);
-            
+
         } else {
             Log_OC.e(TAG, "Unknown action received as a command");
         }
@@ -220,7 +223,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      */
     private AbstractList<String> processNewUploadRequest(Intent intent) {
         AbstractList<String> requestedUploads = new Vector<String>();
-        
+
         /// check parameters received in the Intent
         if (!intent.hasExtra(EXTRA_ACCOUNT) || !intent.hasExtra(EXTRA_UPLOAD_TYPE)
                 || !(intent.hasExtra(EXTRA_LOCAL_PATH) || intent.hasExtra(EXTRA_FILE))) {
@@ -232,7 +235,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             Log_OC.e(TAG, "Incorrect upload type provided");
             return requestedUploads;
         }
-        
+
         Account account = intent.getParcelableExtra(EXTRA_ACCOUNT);
         String[] localPaths = null, remotePaths = null, mimeTypes = null;
         OCFile[] files = null;
@@ -241,7 +244,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
             if (intent.hasExtra(EXTRA_FILE)) {
                 files = new OCFile[] { intent.getParcelableExtra(EXTRA_FILE) };
-
             } else {
                 localPaths = new String[] { intent.getStringExtra(EXTRA_LOCAL_PATH) };
                 remotePaths = new String[] { intent.getStringExtra(EXTRA_REMOTE_PATH) };
@@ -252,7 +254,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
             if (intent.hasExtra(EXTRA_FILE)) {
                 files = (OCFile[]) intent.getParcelableArrayExtra(EXTRA_FILE);
-
             } else {
                 localPaths = intent.getStringArrayExtra(EXTRA_LOCAL_PATH);
                 remotePaths = intent.getStringArrayExtra(EXTRA_REMOTE_PATH);
@@ -267,6 +268,23 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         boolean fixed = false;
         if (isInstant) {
             fixed = checkAndFixInstantUploadDirectory(storageManager); // MUST be done BEFORE calling obtainNewOCFileToUpload
+
+            // same always temporally the picture to upload
+            String file_path="";
+            if (files!=  null)
+            {
+                file_path = files[0].getFileName();
+            }
+            else
+            {
+                file_path = localPaths[0];
+            }
+            
+            DbHandler db = new DbHandler(getApplicationContext());
+            db.putFileForLater(file_path, account.name, null);
+            Log_OC.d(TAG,  "Instant Upload on DB: file--> " + file_path);
+            db.close();
+
         }
 
         if (intent.hasExtra(EXTRA_FILE) && files == null) {
@@ -320,15 +338,26 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 if (fixed && i == 0) {
                     newUpload.setRemoteFolderToBeCreated();
                 }
-                mPendingUploads.putIfAbsent(uploadKey, newUpload);
-                newUpload.addDatatransferProgressListener(this);
-                newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
+
+                // Check connectivity conditions
+                // isOnline and noInstant 
+                // isInstant and conditions for instant uploads are OK
+                if(ConnectivityUtils.isOnline(getApplicationContext()) &&
+                        (!isInstant ||
+                                (!InstantUploadUtils.instantUploadViaWiFiOnly(getApplicationContext()) 
+                                        || (InstantUploadUtils.instantUploadViaWiFiOnly(getApplicationContext()) 
+                                                == ConnectivityUtils.isConnectedViaWiFi(getApplicationContext()) == true)))) {
+
+                    mPendingUploads.putIfAbsent(uploadKey, newUpload);
+                    newUpload.addDatatransferProgressListener(this);
+                    newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
+
+                    requestedUploads.add(uploadKey);
+                }
 
                 // Update uploading field of the OCFile on Database
                 storageManager.updateUploading(files[i].getRemotePath(), true);
-                Log_OC.d(TAG, "Upload field is TRUE for file " + files[i].getRemotePath());
-
-                requestedUploads.add(uploadKey);
+                Log_OC.d(TAG, "Upload field is TRUE for file " + files[i].getRemotePath());                
 
             }
         }
@@ -336,7 +365,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         return requestedUploads;
     }
 
-    
+
     /**
      * Retrieves all the files waiting for upload in the local database and returns the 
      * {link {@link UploadFileOperation}s needed to uploads them.
@@ -353,16 +382,90 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         Vector<OCFile> uploadingFiles;
         OwnCloudVersion ocv;
         boolean chunked;
-        
+        String uploadKey = null;
+        UploadFileOperation newUpload = null;
+
+        boolean forceOverwrite = false; //intent.getBooleanExtra(EXTRA_FORCE_OVERWRITE, false);
+        int localAction = LOCAL_BEHAVIOUR_COPY; //intent.getIntExtra(EXTRA_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
+        boolean fixed = false;
+
         Vector<String> requestedUploads = new Vector<String>();
+
+        ConcurrentMap<String, UploadFileOperation> mInstantUploads = new ConcurrentHashMap<String, UploadFileOperation>();
+
+        // Add Pending InstantUploads
+        Log_OC.d(TAG, "offlineUpload - Adding Pending Instant Uploads: " );
+        
+        // Instant Uploads from DB
+        DbHandler db = new DbHandler(getApplicationContext());
+        Cursor c = db.getAwaitingFiles();
+        if (c.moveToFirst()) {
+            do {
+                String account_name = c.getString(c.getColumnIndex("account"));
+                String file_path = c.getString(c.getColumnIndex("path"));
+                File f = new File(file_path);          
+
+                if (f.exists()) {
+                    String remote_path = FileStorageUtils.getInstantUploadFilePath(getApplicationContext(), f.getName());
+                    Account account = new Account(account_name, AccountAuthenticator.ACCOUNT_TYPE);
+
+                    storageManager= new FileDataStorageManager(account, getContentResolver());
+                    fixed = checkAndFixInstantUploadDirectory(storageManager);     
+
+                    ocv = new OwnCloudVersion(AccountManager.get(this).getUserData(account, AccountAuthenticator.KEY_OC_VERSION));
+                    chunked = FileUploader.chunkedUploadIsSupported(ocv);
+                    uploadKey = null;
+                    newUpload = null;
+
+                    String mimeType = "application/octet-stream";
+
+                    OCFile ocF = obtainNewOCFileToUpload(remote_path, file_path, mimeType, storageManager);
+
+                    uploadKey = buildRemoteName(account, remote_path);
+                    Log_OC.d(TAG, "InstantUpload - File name: " + remote_path + " key = " + uploadKey);
+                    if (chunked) {
+                        newUpload = new ChunkedUploadFileOperation(account, ocF, true, forceOverwrite, localAction);
+                    } else {
+                        newUpload = new UploadFileOperation(account, ocF, true, forceOverwrite, localAction);
+                    }
+                    if (fixed) {
+                        newUpload.setRemoteFolderToBeCreated();
+                    }
+                  
+                    // Insert OCFile on pending
+                    // Check connectivity conditions to includes Instant upload on pending uploads
+                    if (ConnectivityUtils.isOnline(getApplicationContext()) &&
+                            !InstantUploadUtils.instantUploadViaWiFiOnly(getApplicationContext()) 
+                                            || (InstantUploadUtils.instantUploadViaWiFiOnly(getApplicationContext()) 
+                                                    == ConnectivityUtils.isConnectedViaWiFi(getApplicationContext()) == true)) {
+                        
+                        mPendingUploads.putIfAbsent(uploadKey, newUpload);
+                        newUpload.addDatatransferProgressListener(this);
+                        newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
+
+                        // Update uploading field of the OCFile on Database
+                        storageManager.updateUploading(remote_path, true);
+                        Log_OC.d(TAG, "offlineUpload: Upload field is TRUE for file " + remote_path);
+
+                        requestedUploads.add(uploadKey);
+                    }
+                    else {
+                        mInstantUploads.putIfAbsent(uploadKey, newUpload);
+                    }
+
+                } else {
+                    Log_OC.w(TAG, "Instant upload file " + f.getAbsolutePath() + " dont exist anymore");
+                }
+            } while (c.moveToNext());
+            
+        }
+        Log_OC.i(TAG, "offlineUpload - mInstantUploads size:" + mInstantUploads.size());
+        c.close();
+        db.close();
 
         for (Account account:accounts){
             Log_OC.d(TAG, "offlineUpload - Account: " + account.name);
             storageManager= new FileDataStorageManager(account, getContentResolver());
-
-            boolean forceOverwrite = false; //intent.getBooleanExtra(EXTRA_FORCE_OVERWRITE, false);
-            int localAction = LOCAL_BEHAVIOUR_COPY; //intent.getIntExtra(EXTRA_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
-            boolean fixed = false;
 
             // Get Offline files
             uploadingFiles = storageManager.getUploadingFiles();
@@ -370,38 +473,45 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
             ocv = new OwnCloudVersion(AccountManager.get(this).getUserData(account, AccountAuthenticator.KEY_OC_VERSION));
             chunked = FileUploader.chunkedUploadIsSupported(ocv);
-            String uploadKey = null;
-            UploadFileOperation newUpload = null;
+            uploadKey = null;
+            newUpload = null;
 
             // Uploading files (Offline): adding to pending uploads
-            for (int i = 0; i < uploadingFiles.size(); i++) {
+            for (int i = 0; i < uploadingFiles.size(); i++) {        
 
-                Log_OC.d(TAG, "offlineUpload - File name: " + uploadingFiles.get(i).getRemotePath());
                 uploadKey = buildRemoteName(account, uploadingFiles.get(i).getRemotePath());
-                if (chunked) {
-                    newUpload = new ChunkedUploadFileOperation(account, uploadingFiles.get(i), false, forceOverwrite,
-                            localAction);
-                } else {
-                    newUpload = new UploadFileOperation(account, uploadingFiles.get(i), false, forceOverwrite, localAction);
+                Log_OC.d(TAG, "OffLineUpload - key = " + uploadKey);
+                
+                // Check connectivity for uploading
+                if (!InstantUploadUtils.instantUploadViaWiFiOnly(getApplicationContext()) || 
+                        ConnectivityUtils.isConnectedViaWiFi(getApplicationContext()) || !mInstantUploads.containsKey(uploadKey)) {
+
+                    if (chunked) {
+                        newUpload = new ChunkedUploadFileOperation(account, uploadingFiles.get(i), false, forceOverwrite,
+                                localAction);
+                    } else {
+                        newUpload = new UploadFileOperation(account, uploadingFiles.get(i), false, forceOverwrite, localAction);
+                    }
+                    if (fixed && i == 0) {
+                        newUpload.setRemoteFolderToBeCreated();
+                    }
+
+                    mPendingUploads.putIfAbsent(uploadKey, newUpload);
+                    newUpload.addDatatransferProgressListener(this);
+                    newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
+
+                    // Update uploading field of the OCFile on Database
+                    storageManager.updateUploading(uploadingFiles.get(i).getRemotePath(), true);
+                    Log_OC.d(TAG, "offlineUpload: Upload field is TRUE for file " + uploadingFiles.get(i).getRemotePath());
+
+                    requestedUploads.add(uploadKey);
                 }
-                if (fixed && i == 0) {
-                    newUpload.setRemoteFolderToBeCreated();
-                }
-                mPendingUploads.putIfAbsent(uploadKey, newUpload);
-                newUpload.addDatatransferProgressListener(this);
-                newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
 
-                // Update uploading field of the OCFile on Database
-                storageManager.updateUploading(uploadingFiles.get(i).getRemotePath(), true);
-                Log_OC.d(TAG, "offlineUpload: Upload field is TRUE for file " + uploadingFiles.get(i).getRemotePath());
+            }          
 
-                requestedUploads.add(uploadKey);
-
-            }
-
-            Log_OC.i(TAG, "offlineUpload - mPendingUploads size:" + mPendingUploads.size());
+            Log_OC.i(TAG, "offlineUpload - Account: " + account.name + " mPendingUploads size:" + mPendingUploads.size());
         }
-        
+
         return requestedUploads;
 
     }

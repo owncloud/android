@@ -25,15 +25,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo.State;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images.Media;
 
-import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.Log_OC;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.InstantUploadUtils;
 
 public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
 
@@ -68,7 +68,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void handleNewPhotoAction(Context context, Intent intent) {
-        if (!instantUploadEnabled(context)) {
+        if (!InstantUploadUtils.instantUploadEnabled(context)) {
             Log_OC.d(TAG, "Instant upload disabled, abording uploading");
             return;
         }
@@ -120,8 +120,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
     private void handleConnectivityAction(Context context, Intent intent) {
 
         if (!intent.hasExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY)
-                && isOnline(context)
-                && (!instantUploadViaWiFiOnly(context) || (instantUploadViaWiFiOnly(context) == isConnectedViaWiFi(context) == true))) {      
+                && ConnectivityUtils.isOnline(context)) {      
             
             // Restart Offline Uploads
             Log_OC.w(TAG, "Restart Offline Uploads");
@@ -131,24 +130,5 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         }
 
     }
-
-    public static boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
-    public static boolean isConnectedViaWiFi(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm != null && cm.getActiveNetworkInfo() != null
-                && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI
-                && cm.getActiveNetworkInfo().getState() == State.CONNECTED;
-    }
-
-    public static boolean instantUploadEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("instant_uploading", false);
-    }
-
-    public static boolean instantUploadViaWiFiOnly(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("instant_upload_on_wifi", false);
-    }
+    
 }
