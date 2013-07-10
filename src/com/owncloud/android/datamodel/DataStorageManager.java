@@ -52,4 +52,7 @@ public interface DataStorageManager {
     public int updateDownloading(String filePath, boolean downloading);
     
     public Vector<OCFile> getUploadingFiles();
+    
+    public void calculateFolderSize(long id);
+    
 }
