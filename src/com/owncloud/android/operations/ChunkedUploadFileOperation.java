@@ -80,12 +80,12 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             }
             
         } finally {
+            if (mPutMethod != null)
+                mPutMethod.releaseConnection();    // let the connection available for other methods
             if (channel != null)
                 channel.close();
             if (raf != null)
                 raf.close();
-            if (mPutMethod != null)
-                mPutMethod.releaseConnection();    // let the connection available for other methods
         }
         return status;
     }

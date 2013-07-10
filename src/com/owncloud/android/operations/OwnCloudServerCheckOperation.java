@@ -109,7 +109,7 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
 
 	@Override
 	protected RemoteOperationResult run(WebdavClient client) {
-        if (!ConnectivityUtils.isOnline(mContext)) {
+        if (!ConnectivityUtils.isOnlineOrConnecting(mContext)) {
         	return new RemoteOperationResult(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
         }
         if (mUrl.startsWith("http://") || mUrl.startsWith("https://")) {

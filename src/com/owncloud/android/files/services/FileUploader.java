@@ -385,7 +385,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         String uploadKey = null;
         UploadFileOperation newUpload = null;
 
-        boolean forceOverwrite = false; //intent.getBooleanExtra(EXTRA_FORCE_OVERWRITE, false);
+        boolean forceOverwrite = true; //intent.getBooleanExtra(EXTRA_FORCE_OVERWRITE, false);
         int localAction = LOCAL_BEHAVIOUR_COPY; //intent.getIntExtra(EXTRA_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
         boolean fixed = false;
 
@@ -445,7 +445,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
                         // Update uploading field of the OCFile on Database
                         storageManager.updateUploading(remote_path, true);
-                        Log_OC.d(TAG, "offlineUpload: Upload field is TRUE for file " + remote_path);
+                        Log_OC.d(TAG, "Instant -- uploadKey: " + uploadKey + " offlineUpload: Upload field is TRUE for file " + remote_path);
 
                         requestedUploads.add(uploadKey);
                     }
@@ -502,7 +502,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
                     // Update uploading field of the OCFile on Database
                     storageManager.updateUploading(uploadingFiles.get(i).getRemotePath(), true);
-                    Log_OC.d(TAG, "offlineUpload: Upload field is TRUE for file " + uploadingFiles.get(i).getRemotePath());
+                    Log_OC.d(TAG,  "uploadKey: " + uploadKey + " offlineUpload: Upload field is TRUE for file " + uploadingFiles.get(i).getRemotePath());
 
                     requestedUploads.add(uploadKey);
                 }

@@ -16,6 +16,12 @@ public class ConnectivityUtils {
     public static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm != null && cm.getActiveNetworkInfo() != null
+                && cm.getActiveNetworkInfo().isConnected();
+    }
+    
+    public static boolean isOnlineOrConnecting(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm != null && cm.getActiveNetworkInfo() != null
                 && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
