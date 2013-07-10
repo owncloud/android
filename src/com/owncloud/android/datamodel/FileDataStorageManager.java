@@ -691,7 +691,6 @@ public class FileDataStorageManager implements DataStorageManager {
     }
     
     
-=======
     /**
      * Calculate and save the folderSize on DB
      * @param id
