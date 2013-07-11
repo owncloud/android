@@ -384,7 +384,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         String uploadKey = null;
         UploadFileOperation newUpload = null;
 
-        boolean forceOverwrite = true; //intent.getBooleanExtra(EXTRA_FORCE_OVERWRITE, false);
+        boolean forceOverwrite = false; //intent.getBooleanExtra(EXTRA_FORCE_OVERWRITE, false);
         int localAction = LOCAL_BEHAVIOUR_COPY; //intent.getIntExtra(EXTRA_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
         boolean fixed = false;
 
