@@ -93,12 +93,12 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mRemotePath = source.readString();
         mLocalPath = source.readString();
         mMimeType = source.readString();
-        mNeedsUpdating = source.readInt() == 0;
+        mNeedsUpdating = source.readInt() == 1;
         mKeepInSync = source.readInt() == 1;
         mLastSyncDateForProperties = source.readLong();
         mLastSyncDateForData = source.readLong();
-        mUploading = source.readInt() == 0;
-        mDownloading = source.readInt() == 0;
+        mUploading = source.readInt() == 1;
+        mDownloading = source.readInt() == 1;
     }
 
     @Override
