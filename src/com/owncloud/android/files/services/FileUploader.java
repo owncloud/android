@@ -75,6 +75,7 @@ import android.widget.RemoteViews;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.authentication.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.ui.activity.FailedUploadActivity;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -710,8 +711,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
             RemoteOperationResult uploadResult = null;
 
-            String remotePath = uploadKey.substring(mCurrentUpload.getAccount().name.length());
-
             try {
                 /// prepare client object to send requests to the ownCloud server
                 if (mUploadClient == null || !mLastAccount.equals(mCurrentUpload.getAccount())) {
@@ -733,18 +732,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 uploadResult = mCurrentUpload.execute(mUploadClient);
                 if (uploadResult.isSuccess()) {                   
                     saveUploadedFile();
-                    // Update uploading field of the OCFile on Database
-                    mStorageManager.updateUploading(remotePath, false);
-                    Log_OC.d(TAG, "Upload field is FALSE for file " + remotePath + " account= " + mCurrentUpload.getAccount().name);
-                }
-                else
-                {
-                    if (!ConnectivityUtils.isOnline(getApplicationContext()))
-                    {
-                        uploadResult = new RemoteOperationResult(ResultCode.NO_NETWORK_CONNECTION);
-                        Log_OC.d(TAG, "No Connection. File: " + remotePath + " account: " + mCurrentUpload.getAccount().name
-                                + ". The upload will be retried in the future ");
-                    }
                 }
 
             } catch (AccountsException e) {
@@ -766,13 +753,12 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             /// notify result
             notifyUploadResult(uploadResult, mCurrentUpload);
 
-            if (uploadResult.getCode() != ResultCode.NO_NETWORK_CONNECTION  && uploadResult.getCode() != ResultCode.UNKNOWN_ERROR
-                    && uploadResult.getCode() != ResultCode.TIMEOUT) {
+            if (uploadResult.isSuccess() || uploadNeedsUserInputBeforeRetry(uploadResult)) {
                 sendFinalBroadcast(mCurrentUpload, uploadResult);
-            }
+            } 
             else
             {
-                Log_OC.d(TAG, "Upload Offline. File: " + remotePath + " account: " + mCurrentUpload.getAccount().name
+                Log_OC.d(TAG, "Upload Offline. File: " + mCurrentUpload.getRemotePath() + " account: " + mCurrentUpload.getAccount().name
                         + ". The upload will be retried in the future ");               
             }
 
@@ -793,6 +779,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         OCFile file = mCurrentUpload.getFile();
         long syncDate = System.currentTimeMillis();
         file.setLastSyncDateForData(syncDate);
+        file.setUploading(false);
 
         // / new PROPFIND to keep data consistent with server in theory, should
         // return the same we already have
@@ -833,6 +820,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             OCFile oldFile = mCurrentUpload.getOldFile();
             if (oldFile.fileExists()) {
                 oldFile.setStoragePath(null);
+                oldFile.setUploading(false);
                 mStorageManager.saveFile(oldFile);
 
             } // else: it was just an automatic renaming due to a name
@@ -843,6 +831,32 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         mStorageManager.saveFile(file);
     }
 
+    
+    /**
+     * Checks the result of an upload operation an decides if needs that the user
+     * performs any action before it can be successfully retried.
+     * 
+     * @param uploadResult      Result of a finished upload operation.
+     * @return                  'True' when some action from the user is needed before the upload can be retried successfully.
+     */
+    private boolean uploadNeedsUserInputBeforeRetry(RemoteOperationResult uploadResult) {
+        ResultCode code = uploadResult.getCode();
+        return (!uploadResult.isSuccess()) &&
+                    (uploadResult.isClientFail() ||
+                     uploadResult.isSslRecoverableException() ||
+                     code == ResultCode.ACCOUNT_NOT_FOUND ||
+                     code == ResultCode.ACCOUNT_EXCEPTION ||
+                     code == ResultCode.UNAUTHORIZED ||
+                     code == ResultCode.FILE_NOT_FOUND ||
+                     code == ResultCode.INVALID_LOCAL_FILE_NAME ||
+                     code == ResultCode.INVALID_OVERWRITE ||
+                     code == ResultCode.CONFLICT ||
+                     code == ResultCode.OAUTH2_ERROR ||
+                     code == ResultCode.OAUTH2_ERROR_ACCESS_DENIED
+                     );
+    }
+
+    
     private void updateOCFile(OCFile file, WebdavEntry we) {
         file.setCreationTimestamp(we.createTimestamp());
         file.setFileLength(we.contentLength());
@@ -917,7 +931,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      * 
      * @param upload Upload operation starting.
      */
-    @SuppressWarnings("deprecation")
     private void notifyUploadStart(UploadFileOperation upload) {
         // / create status notification with a progress bar
         mLastPercent = 0;
@@ -978,7 +991,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      * @param uploadResult Result of the upload operation.
      * @param upload Finished upload operation
      */
-    @SuppressWarnings({ "deprecation", "unused" })
     private void notifyUploadResult(RemoteOperationResult uploadResult, UploadFileOperation upload) {
         Log_OC.d(TAG, "NotifyUploadResult with resultCode: " + uploadResult.getCode());
 
