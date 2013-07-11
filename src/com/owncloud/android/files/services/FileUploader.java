@@ -75,7 +75,6 @@ import android.widget.RemoteViews;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.authentication.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.ui.activity.FailedUploadActivity;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -98,6 +97,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     public static final String ACTION_RESUME_UPLOADS    = MY_PACKAGE + ".action.RESUME_UPLOADS";
 
     /// Intent actions that the service starts
+    public static final String ACTION_UPLOAD_ADDED      = MY_PACKAGE + ".action.UPLOAD_ADDED";
     public static final String ACTION_UPLOAD_FINISHED   = MY_PACKAGE + ".action.UPLOAD_FINISHED";
 
     /// Keys for Intent extras
@@ -357,6 +357,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
                 // Update uploading field of the OCFile on Database
                 storageManager.updateUploading(files[i].getRemotePath(), true);
+                sendBroadcastNewUploader(newUpload);
                 Log_OC.d(TAG, "Upload field is TRUE for file " + files[i].getRemotePath());                
 
             }
@@ -442,6 +443,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                         mPendingUploads.putIfAbsent(uploadKey, newUpload);
                         newUpload.addDatatransferProgressListener(this);
                         newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
+                        sendBroadcastNewUploader(newUpload);
 
                         // Update uploading field of the OCFile on Database
                         storageManager.updateUploading(remote_path, true);
@@ -499,6 +501,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                     mPendingUploads.putIfAbsent(uploadKey, newUpload);
                     newUpload.addDatatransferProgressListener(this);
                     newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
+                    sendBroadcastNewUploader(newUpload);
 
                     // Update uploading field of the OCFile on Database
                     storageManager.updateUploading(uploadingFiles.get(i).getRemotePath(), true);
@@ -1115,6 +1118,19 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     }
 
     /**
+     * Sends a broadcast when a new upload is added to the queue.
+     * 
+     * @param upload            Added upload operation
+     */
+    private void sendBroadcastNewUploader(UploadFileOperation upload) {
+        Intent added = new Intent(ACTION_UPLOAD_ADDED);
+        added.putExtra(EXTRA_ACCOUNT_NAME, upload.getAccount().name);
+        added.putExtra(EXTRA_REMOTE_PATH, upload.getRemotePath());
+        added.putExtra(EXTRA_LOCAL_PATH, upload.getOriginalStoragePath());
+        sendStickyBroadcast(added);
+    }
+    
+    /**
      * Sends a broadcast in order to the interested activities can update their
      * view
      * 
@@ -1136,5 +1152,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         end.putExtra(EXTRA_UPLOAD_RESULT, uploadResult.isSuccess());
         sendStickyBroadcast(end);
     }
+
 
 }

@@ -622,7 +622,8 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
         registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
 
         // Listen for upload messages
-        IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.ACTION_UPLOAD_FINISHED);
+        IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.ACTION_UPLOAD_ADDED);
+        uploadIntentFilter.addAction(FileUploader.ACTION_UPLOAD_FINISHED);
         mUploadFinishReceiver = new UploadFinishReceiver();
         registerReceiver(mUploadFinishReceiver, uploadIntentFilter);
 
@@ -866,29 +867,40 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
     }
 
 
+    /**
+     * Class waiting for broadcast events from the {@link FileUploader} service.
+     * 
+     * Updates the UI when an upload is started or finished, provided that it is relevant for the
+     * current folder.
+     */
     private class UploadFinishReceiver extends BroadcastReceiver {
-        /**
-         * Once the file upload has finished -> update view
-         *  @author David A. Velasco
-         * {@link BroadcastReceiver} to enable upload feedback in UI
-         */
         @Override
         public void onReceive(Context context, Intent intent) {
+            boolean sameAccount = isSameAccount(context, intent);
             String uploadedRemotePath = intent.getStringExtra(FileUploader.EXTRA_REMOTE_PATH);
-            String accountName = intent.getStringExtra(FileUploader.EXTRA_ACCOUNT_NAME);
-            boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
-            OCFile currentDir = getCurrentDir();
-            boolean isDescendant = (currentDir != null) && (uploadedRemotePath != null) && (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
+            boolean isDescendant = isDescendant(uploadedRemotePath);
+            
             if (sameAccount && isDescendant) {
                 refeshListOfFilesFragment();
             }
+            
+            removeStickyBroadcast(intent);
         }
-
+        
+        private boolean isSameAccount(Context context, Intent intent) {
+            String accountName = intent.getStringExtra(FileUploader.EXTRA_ACCOUNT_NAME);
+            return (accountName != null && getAccount() != null && accountName.equals(getAccount().name));
+        }
+        
+        private boolean isDescendant(String uploadedRemotePath) {
+            OCFile currentDir = getCurrentDir();
+            return (currentDir != null && uploadedRemotePath != null && uploadedRemotePath.startsWith(currentDir.getRemotePath()));
+        }
     }
 
 
     /**
-     * Class waiting for broadcast events from the {@link FielDownloader} service.
+     * Class waiting for broadcast events from the {@link FileDownloader} service.
      * 
      * Updates the UI when a download is started or finished, provided that it is relevant for the
      * current folder.
