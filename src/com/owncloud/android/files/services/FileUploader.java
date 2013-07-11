@@ -62,7 +62,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;

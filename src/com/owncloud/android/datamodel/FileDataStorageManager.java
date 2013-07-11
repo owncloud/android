@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import com.owncloud.android.DisplayUtils;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.db.ProviderMeta;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
@@ -137,8 +136,6 @@ public class FileDataStorageManager implements DataStorageManager {
         cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.keepInSync() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_UPLOADING, file.isUploading() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_DOWNLOADING, file.isDownloading() ? 1 : 0);
-        Log_OC.d(TAG, "file: " + file.getFileName() + " saveFile Up=" + String.valueOf(file.isUploading()) + 
-                " Down=" + String.valueOf(file.isDownloading()));
 
         boolean sameRemotePath = fileExists(file.getRemotePath());
         boolean changesSizeOfAncestors = false;
@@ -237,8 +234,6 @@ public class FileDataStorageManager implements DataStorageManager {
             cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.keepInSync() ? 1 : 0);
             cv.put(ProviderTableMeta.FILE_UPLOADING, file.isUploading() ? 1 : 0);
             cv.put(ProviderTableMeta.FILE_DOWNLOADING, file.isDownloading() ? 1 : 0);
-            Log_OC.d(TAG, "file: " + file.getFileName() + " saveFiles Up=" + String.valueOf(file.isUploading()) + 
-                    " Down=" + String.valueOf(file.isDownloading()));
 
             if (fileExists(file.getRemotePath())) {
                 OCFile oldFile = getFileByPath(file.getRemotePath());
@@ -473,8 +468,6 @@ public class FileDataStorageManager implements DataStorageManager {
                     .getColumnIndex(ProviderTableMeta.FILE_UPLOADING)) == 1 ? true : false);
             file.setDownloading(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.FILE_DOWNLOADING)) == 1 ? true : false);
-            Log_OC.d(TAG, "file: " + file.getFileName() + " createFileInstance Up=" + String.valueOf(file.isUploading()) + 
-                    " Down=" + String.valueOf(file.isDownloading()));
         }
         return file;
     }
@@ -664,16 +657,16 @@ public class FileDataStorageManager implements DataStorageManager {
         if (getContentProvider() != null) {
             try {
                 c = getContentProvider().query(ProviderTableMeta.CONTENT_URI, null, 
-                        ProviderTableMeta.FILE_UPLOADING + "=?",
-                        new String[] { String.valueOf(1) }, null);
+                        ProviderTableMeta.FILE_UPLOADING + "=? AND "+ ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?",
+                        new String[] { String.valueOf(1) , mAccount.name }, null);
             } catch (RemoteException e) {
                 Log_OC.e(TAG, e.getMessage());
                 return ret;
             }
         } else {
             c = getContentResolver().query(ProviderTableMeta.CONTENT_URI, null, 
-                    ProviderTableMeta.FILE_UPLOADING + "=?",
-                    new String[] { String.valueOf(1) }, null);
+                    ProviderTableMeta.FILE_UPLOADING + "=? AND "+ ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?",
+                    new String[] { String.valueOf(1) , mAccount.name }, null);
         }
 
         if (c.moveToFirst()) {
