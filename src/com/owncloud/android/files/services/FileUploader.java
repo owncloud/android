@@ -568,7 +568,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             if (upload != null) {
                 upload.cancel();
             }
-            mStorageManager.updateUploading(file.getRemotePath(), false);
             Log_OC.d(TAG, "Upload field is FALSE for file " + file.getRemotePath() + " account= " + mCurrentUpload.getAccount().name);
         }
 
@@ -733,16 +732,13 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
                 /// perform the upload
                 uploadResult = mCurrentUpload.execute(mUploadClient);
-                if (uploadResult.isSuccess()) {                   
-                    saveUploadedFile();
-                }
 
             } catch (AccountsException e) {
-                Log_OC.e(TAG, "Error while trying to get autorization for " + mLastAccount.name, e);
+                Log_OC.e(TAG, "Error while trying to get authorization for " + mLastAccount.name, e);
                 uploadResult = new RemoteOperationResult(e);
 
             } catch (IOException e) {
-                Log_OC.e(TAG, "Error while trying to get autorization for " + mLastAccount.name, e);
+                Log_OC.e(TAG, "Error while trying to get authorization for " + mLastAccount.name, e);
                 uploadResult = new RemoteOperationResult(e);
 
             } finally {
@@ -753,48 +749,66 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 }
             }
 
-            /// notify result
-            notifyUploadResult(uploadResult, mCurrentUpload);
-
-            if (uploadResult.isSuccess() || uploadNeedsUserInputBeforeRetry(uploadResult)) {
-                sendFinalBroadcast(mCurrentUpload, uploadResult);
-            } 
-            else
-            {
-                Log_OC.d(TAG, "Upload Offline. File: " + mCurrentUpload.getRemotePath() + " account: " + mCurrentUpload.getAccount().name
-                        + ". The upload will be retried in the future ");               
-            }
-
-            /// update of instant uploads specific database - TODO remove this database
-            if (uploadResult.isCancelled() || uploadResult.isSuccess()) {
-                DbHandler db = new DbHandler(this.getBaseContext());
-                db.removeIUPendingFile(mCurrentUpload.getFile().getStoragePath());
-                db.close();
-            } else {
-                if (mCurrentUpload.isInstant()) {
-                    DbHandler db = null;
-                    try {
-                        db = new DbHandler(this.getBaseContext());
-                        String message = uploadResult.getLogMessage() + " errorCode: " + uploadResult.getCode();
-                        if (uploadResult.getCode() == ResultCode.QUOTA_EXCEEDED) {
-                            message = getString(R.string.failed_upload_quota_exceeded_text);
-                        }
-                        if (db.updateFileState(mCurrentUpload.getOriginalStoragePath(), DbHandler.UPLOAD_STATUS_UPLOAD_FAILED,
-                                message) == 0) {
-                            db.putFileForLater(mCurrentUpload.getOriginalStoragePath(), mCurrentUpload.getAccount().name, message);
-                        }
-                    } finally {
-                        if (db != null) {
-                            db.close();
-                        }
-                    }
-                }
-            }
-
+            processUploadResult(uploadResult);
+            
         }
 
     }
 
+    /**
+     * Make all the necessary actions necessary depending of the result of the last upload performed. 
+     *  
+     * @param uploadResult          Result of the last upload performed.
+     */
+    private void processUploadResult(RemoteOperationResult uploadResult) {
+    
+        if (uploadResult.isSuccess()) {
+            saveUploadedFile();
+            
+        } else if (uploadResult.isCancelled()) {
+            OCFile uploadedFile = mCurrentUpload.getOldFile();
+            if (uploadedFile == null) {
+                uploadedFile = mCurrentUpload.getFile();
+            }
+            if (mCurrentUpload.getFile().getLastSyncDateForData() == 0) {
+                mStorageManager.removeFile(uploadedFile, true);
+            } else {
+                mStorageManager.updateUploading(uploadedFile.getRemotePath(), false);
+            }
+        }
+        
+        sendFinalBroadcast(mCurrentUpload, uploadResult);
+        
+        notifyUploadResult(uploadResult, mCurrentUpload);
+        
+        /// update of instant uploads specific database - TODO remove this database
+        if (uploadResult.isCancelled() || uploadResult.isSuccess()) {
+            DbHandler db = new DbHandler(this.getBaseContext());
+            db.removeIUPendingFile(mCurrentUpload.getFile().getStoragePath());
+            db.close();
+        } else {
+            if (mCurrentUpload.isInstant()) {
+                DbHandler db = null;
+                try {
+                    db = new DbHandler(this.getBaseContext());
+                    String message = uploadResult.getLogMessage() + " errorCode: " + uploadResult.getCode();
+                    if (uploadResult.getCode() == ResultCode.QUOTA_EXCEEDED) {
+                        message = getString(R.string.failed_upload_quota_exceeded_text);
+                    }
+                    if (db.updateFileState(mCurrentUpload.getOriginalStoragePath(), DbHandler.UPLOAD_STATUS_UPLOAD_FAILED,
+                            message) == 0) {
+                        db.putFileForLater(mCurrentUpload.getOriginalStoragePath(), mCurrentUpload.getAccount().name, message);
+                    }
+                } finally {
+                    if (db != null) {
+                        db.close();
+                    }
+                }
+            }
+        }
+    }
+
+    
     /**
      * Saves a OC File after a successful upload.
      * 
@@ -928,9 +942,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         if (localPath != null && localPath.length() > 0) {
             File localFile = new File(localPath);
             newFile.setFileLength(localFile.length());
-            newFile.setLastSyncDateForData(localFile.lastModified());
-        } // don't worry about not assigning size, the problems with localPath
-        // are checked when the UploadFileOperation instance is created
+        } // else : don't worry about not assigning size, the problems with localPath
+          //        are checked when the UploadFileOperation instance is created
 
         // MIME type
         if (mimeType == null || mimeType.length() <= 0) {
@@ -1062,58 +1075,65 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             // / fail -> explicit failure notification
             mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
 
-            if (uploadResult.getCode() != ResultCode.NO_NETWORK_CONNECTION && uploadResult.getCode() != ResultCode.UNKNOWN_ERROR &&
-                    uploadResult.getCode() != ResultCode.TIMEOUT){
-                Notification finalNotification = new Notification(R.drawable.icon,
-                        getString(R.string.uploader_upload_failed_ticker), System.currentTimeMillis());
-                finalNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-                if (uploadResult.getCode() == ResultCode.UNAUTHORIZED) {
-                    // let the user update credentials with one click
-                    Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-                    updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, upload.getAccount());
-                    updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_TOKEN);
-                    updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                    updateAccountCredentials.addFlags(Intent.FLAG_FROM_BACKGROUND);
-                    finalNotification.contentIntent = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), updateAccountCredentials, PendingIntent.FLAG_ONE_SHOT);
-                    mUploadClient = null;   // grant that future retries on the same account will get the fresh credentials
-                } else {
-                    // TODO put something smart in the contentIntent below
-                    finalNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(), (int)System.currentTimeMillis(), new Intent(), 0);
+            if (uploadNeedsUserInputBeforeRetry(uploadResult)) {            
+            
+                if (uploadResult.getCode() != ResultCode.NO_NETWORK_CONNECTION && uploadResult.getCode() != ResultCode.UNKNOWN_ERROR &&
+                        uploadResult.getCode() != ResultCode.TIMEOUT){
+                    Notification finalNotification = new Notification(R.drawable.icon,
+                            getString(R.string.uploader_upload_failed_ticker), System.currentTimeMillis());
+                    finalNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+                    if (uploadResult.getCode() == ResultCode.UNAUTHORIZED) {
+                        // let the user update credentials with one click
+                        Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
+                        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, upload.getAccount());
+                        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_TOKEN);
+                        updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                        updateAccountCredentials.addFlags(Intent.FLAG_FROM_BACKGROUND);
+                        finalNotification.contentIntent = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), updateAccountCredentials, PendingIntent.FLAG_ONE_SHOT);
+                        mUploadClient = null;   // grant that future retries on the same account will get the fresh credentials
+                    } else {
+                        // TODO put something smart in the contentIntent below
+                        finalNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(), (int)System.currentTimeMillis(), new Intent(), 0);
+                    }
+    
+                    String content = null;
+                    if (uploadResult.getCode() == ResultCode.LOCAL_STORAGE_FULL
+                            || uploadResult.getCode() == ResultCode.LOCAL_STORAGE_NOT_COPIED) {
+                        // TODO we need a class to provide error messages for the users
+                        // from a RemoteOperationResult and a RemoteOperation
+                        content = String.format(getString(R.string.error__upload__local_file_not_copied), upload.getFileName(),
+                                getString(R.string.app_name));
+                    } else if (uploadResult.getCode() == ResultCode.QUOTA_EXCEEDED) {
+                        content = getString(R.string.failed_upload_quota_exceeded_text);
+    
+                    } else {
+                        content = String
+                                .format(getString(R.string.uploader_upload_failed_content_single), upload.getFileName());
+                    }
+    
+                    // we add only for instant-uploads the InstantUploadActivity and the
+                    // db entry
+                    Intent detailUploadIntent = null;
+                    if (upload.isInstant() && InstantUploadActivity.IS_ENABLED) {
+                        detailUploadIntent = new Intent(this, InstantUploadActivity.class);
+                        detailUploadIntent.putExtra(FileUploader.EXTRA_ACCOUNT, upload.getAccount());
+                    } else {
+                        detailUploadIntent = new Intent(this, FailedUploadActivity.class);
+                        detailUploadIntent.putExtra(FailedUploadActivity.MESSAGE, content);
+                    }
+                    finalNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(),
+                            (int) System.currentTimeMillis(), detailUploadIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                            | PendingIntent.FLAG_ONE_SHOT);
+    
+                    finalNotification.setLatestEventInfo(getApplicationContext(), getString(R.string.uploader_upload_failed_ticker), content, finalNotification.contentIntent);
+    
+                    mNotificationManager.notify(R.string.uploader_upload_failed_ticker, finalNotification);
                 }
-
-                String content = null;
-                if (uploadResult.getCode() == ResultCode.LOCAL_STORAGE_FULL
-                        || uploadResult.getCode() == ResultCode.LOCAL_STORAGE_NOT_COPIED) {
-                    // TODO we need a class to provide error messages for the users
-                    // from a RemoteOperationResult and a RemoteOperation
-                    content = String.format(getString(R.string.error__upload__local_file_not_copied), upload.getFileName(),
-                            getString(R.string.app_name));
-                } else if (uploadResult.getCode() == ResultCode.QUOTA_EXCEEDED) {
-                    content = getString(R.string.failed_upload_quota_exceeded_text);
-
-                } else {
-                    content = String
-                            .format(getString(R.string.uploader_upload_failed_content_single), upload.getFileName());
-                }
-
-                // we add only for instant-uploads the InstantUploadActivity and the
-                // db entry
-                Intent detailUploadIntent = null;
-                if (upload.isInstant() && InstantUploadActivity.IS_ENABLED) {
-                    detailUploadIntent = new Intent(this, InstantUploadActivity.class);
-                    detailUploadIntent.putExtra(FileUploader.EXTRA_ACCOUNT, upload.getAccount());
-                } else {
-                    detailUploadIntent = new Intent(this, FailedUploadActivity.class);
-                    detailUploadIntent.putExtra(FailedUploadActivity.MESSAGE, content);
-                }
-                finalNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(),
-                        (int) System.currentTimeMillis(), detailUploadIntent, PendingIntent.FLAG_UPDATE_CURRENT
-                        | PendingIntent.FLAG_ONE_SHOT);
-
-                finalNotification.setLatestEventInfo(getApplicationContext(), getString(R.string.uploader_upload_failed_ticker), content, finalNotification.contentIntent);
-
-                mNotificationManager.notify(R.string.uploader_upload_failed_ticker, finalNotification);
+                
+            } else {
+                Log_OC.d(TAG, "Upload Offline. File: " + mCurrentUpload.getRemotePath() + " account: " + mCurrentUpload.getAccount().name
+                        + ". The upload will be retried in the future ");               
             }
         }
 
