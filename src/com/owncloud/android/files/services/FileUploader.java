@@ -329,7 +329,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         if (files != null){
             for (int i = 0; i < files.length; i++) {
                 uploadKey = buildRemoteName(account, files[i].getRemotePath());
-                if (chunked) {
+                if (chunked && files[i].getFileLength() > ChunkedUploadFileOperation.CHUNK_SIZE) {
                     newUpload = new ChunkedUploadFileOperation(account, files[i], isInstant, forceOverwrite,
                             localAction);
                 } else {
@@ -424,7 +424,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
                     uploadKey = buildRemoteName(account, remote_path);
                     Log_OC.d(TAG, "InstantUpload - File name: " + remote_path + " key = " + uploadKey);
-                    if (chunked) {
+                    if (chunked && ocF.getFileLength() > ChunkedUploadFileOperation.CHUNK_SIZE) {
                         newUpload = new ChunkedUploadFileOperation(account, ocF, true, forceOverwrite, localAction);
                     } else {
                         newUpload = new UploadFileOperation(account, ocF, true, forceOverwrite, localAction);
@@ -488,7 +488,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 if (!InstantUploadUtils.instantUploadViaWiFiOnly(getApplicationContext()) || 
                         ConnectivityUtils.isConnectedViaWiFi(getApplicationContext()) || !mInstantUploads.containsKey(uploadKey)) {
 
-                    if (chunked) {
+                    if (chunked && uploadingFiles.get(i).getFileLength() > ChunkedUploadFileOperation.CHUNK_SIZE) {
                         newUpload = new ChunkedUploadFileOperation(account, uploadingFiles.get(i), false, forceOverwrite,
                                 localAction);
                     } else {
@@ -565,10 +565,26 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             synchronized (mPendingUploads) {
                 upload = mPendingUploads.remove(buildRemoteName(account, file));
             }
+            OCFile canceledFile = null;
             if (upload != null) {
                 upload.cancel();
+                
+                canceledFile = upload.getOldFile();
+                if (canceledFile == null) {
+                    canceledFile = upload.getFile();
+                }
+            } else {
+                canceledFile = file;
             }
-            Log_OC.d(TAG, "Upload field is FALSE for file " + file.getRemotePath() + " account= " + mCurrentUpload.getAccount().name);
+            if (canceledFile != null && account != null) {
+                FileDataStorageManager fdsm = new FileDataStorageManager(account, getContentResolver()); 
+                if (canceledFile.getLastSyncDateForData() == 0) {
+                    fdsm.removeFile(canceledFile, false);
+                } else {
+                    fdsm.updateUploading(canceledFile.getRemotePath(), false);
+                }
+            }
+            
         }
 
 
@@ -764,17 +780,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     
         if (uploadResult.isSuccess()) {
             saveUploadedFile();
-            
-        } else if (uploadResult.isCancelled()) {
-            OCFile uploadedFile = mCurrentUpload.getOldFile();
-            if (uploadedFile == null) {
-                uploadedFile = mCurrentUpload.getFile();
-            }
-            if (mCurrentUpload.getFile().getLastSyncDateForData() == 0) {
-                mStorageManager.removeFile(uploadedFile, true);
-            } else {
-                mStorageManager.updateUploading(uploadedFile.getRemotePath(), false);
-            }
         }
         
         sendFinalBroadcast(mCurrentUpload, uploadResult);
