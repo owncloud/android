@@ -238,6 +238,12 @@ public class FileDataStorageManager implements DataStorageManager {
             if (fileExists(file.getRemotePath())) {
                 OCFile oldFile = getFileByPath(file.getRemotePath());
                 file.setFileId(oldFile.getFileId());
+               
+                if (file.isDirectory()) {
+                    cv.put(ProviderTableMeta.FILE_CONTENT_LENGTH, oldFile.getFileLength());
+                    file.setFileLength(oldFile.getFileLength());
+                }
+                
                 operations.add(ContentProviderOperation.newUpdate(ProviderTableMeta.CONTENT_URI).
                         withValues(cv).
                         withSelection(  ProviderTableMeta._ID + "=?", 
@@ -248,9 +254,14 @@ public class FileDataStorageManager implements DataStorageManager {
                 OCFile oldFile = getFileById(file.getFileId());
                 if (file.getStoragePath() == null && oldFile.getStoragePath() != null)
                     file.setStoragePath(oldFile.getStoragePath());
-                if (!file.isDirectory());
-                cv.put(ProviderTableMeta.FILE_STORAGE_PATH, file.getStoragePath());
-
+                
+                if (!file.isDirectory())
+                    cv.put(ProviderTableMeta.FILE_STORAGE_PATH, file.getStoragePath());
+                else {
+                    cv.put(ProviderTableMeta.FILE_CONTENT_LENGTH, oldFile.getFileLength());
+                    file.setFileLength(oldFile.getFileLength());
+                }
+                
                 operations.add(ContentProviderOperation.newUpdate(ProviderTableMeta.CONTENT_URI).
                         withValues(cv).
                         withSelection(  ProviderTableMeta._ID + "=?", 
