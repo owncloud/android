@@ -384,15 +384,17 @@ public class UploadFileOperation extends RemoteOperation {
      * Checks if remotePath does not exist in the server and returns it, or adds
      * a suffix to it in order to avoid the server file is overwritten.
      * 
-     * @param string
-     * @return
+     * @param   wc              Client object to access an account in the remote ownCloud server.
+     * @param   remotePath      Path to the file which existence will be checked.
+     * @return                  A valid name for a file not existing in the remote ownCloud server, the same as 'remotePath' or derived from it.
      */
     private String getAvailableRemotePath(WebdavClient wc, String remotePath) throws Exception {
-        boolean check = wc.existsFile(remotePath);
-        if (!check) {
+        ExistenceCheckOperation existenceCheck = new ExistenceCheckOperation(remotePath, mContext, true);
+        RemoteOperationResult resultCheck = existenceCheck.execute(getClient());
+        if (resultCheck.isSuccess()) {
             return remotePath;
         }
-
+        
         int pos = remotePath.lastIndexOf(".");
         String suffix = "";
         String extension = "";
@@ -403,12 +405,15 @@ public class UploadFileOperation extends RemoteOperation {
         int count = 2;
         do {
             suffix = " (" + count + ")";
-            if (pos >= 0)
-                check = wc.existsFile(remotePath + suffix + "." + extension);
-            else
-                check = wc.existsFile(remotePath + suffix);
+            if (pos >= 0) {
+                existenceCheck = new ExistenceCheckOperation(remotePath + suffix + "." + extension, mContext, false);
+                resultCheck = existenceCheck.execute(getClient());
+            } else {
+                existenceCheck = new ExistenceCheckOperation(remotePath + suffix, mContext, false);
+                resultCheck = existenceCheck.execute(getClient());
+            }
             count++;
-        } while (check);
+        } while (resultCheck.isSuccess());
 
         if (pos >= 0) {
             return remotePath + suffix + "." + extension;
