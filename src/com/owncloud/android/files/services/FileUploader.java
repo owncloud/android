@@ -140,6 +140,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     private int mLastPercent;
     private RemoteViews mDefaultNotificationContentView;
 
+    private boolean mForcedClientRefresh;
+
     /**
      * Builds a key for mPendingUploads from the account and file to upload
      * 
@@ -379,6 +381,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         Account[] accounts = AccountUtils.getOwncloudAccounts(getApplicationContext());
         Log_OC.d(TAG, "offlineUpload - Owncloud Accounts number=" + accounts.length);
 
+        mForcedClientRefresh = true;
+        
         FileDataStorageManager storageManager;
         Vector<OCFile> uploadingFiles;
         OwnCloudVersion ocv;
@@ -730,24 +734,25 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             RemoteOperationResult uploadResult = null;
 
             try {
-                /// prepare client object to send requests to the ownCloud server
-                if (mUploadClient == null || !mLastAccount.equals(mCurrentUpload.getAccount())) {
-                    mLastAccount = mCurrentUpload.getAccount();
-                    mStorageManager = new FileDataStorageManager(mLastAccount, getContentResolver());
-                    mUploadClient = OwnCloudClientUtils.createOwnCloudClient(mLastAccount, getApplicationContext());
-                }
-
-                /// create remote folder for instant uploads
-                if (mCurrentUpload.isRemoteFolderToBeCreated()) {
-                    RemoteOperation operation = new CreateFolderOperation(  FileStorageUtils.getInstantUploadFilePath(this, ""), 
-                            mStorageManager.getFileByPath(OCFile.PATH_SEPARATOR).getFileId(), // TODO generalize this : INSTANT_UPLOAD_DIR could not be a child of root
-                            mStorageManager);
-                    operation.execute(mUploadClient);      // ignoring result; fail could just mean that it already exists, but local database is not synchronized; the upload will be tried anyway
-                }
-
-
-                /// perform the upload
-                uploadResult = mCurrentUpload.execute(mUploadClient);
+                    /// prepare client object to send requests to the ownCloud server
+                    if (mUploadClient == null || !mLastAccount.equals(mCurrentUpload.getAccount()) || mForcedClientRefresh) {
+                        mLastAccount = mCurrentUpload.getAccount();
+                        mStorageManager = new FileDataStorageManager(mLastAccount, getContentResolver());
+                        mUploadClient = OwnCloudClientUtils.createOwnCloudClient(mLastAccount, getApplicationContext());
+                        mForcedClientRefresh = false;
+                    }
+    
+                    /// create remote folder for instant uploads
+                    if (mCurrentUpload.isRemoteFolderToBeCreated()) {
+                        RemoteOperation operation = new CreateFolderOperation(  FileStorageUtils.getInstantUploadFilePath(this, ""), 
+                                mStorageManager.getFileByPath(OCFile.PATH_SEPARATOR).getFileId(), // TODO generalize this : INSTANT_UPLOAD_DIR could not be a child of root
+                                mStorageManager);
+                        operation.execute(mUploadClient);      // ignoring result; fail could just mean that it already exists, but local database is not synchronized; the upload will be tried anyway
+                    }
+    
+    
+                    /// perform the upload
+                    uploadResult = mCurrentUpload.execute(mUploadClient);
 
             } catch (AccountsException e) {
                 Log_OC.e(TAG, "Error while trying to get authorization for " + mLastAccount.name, e);

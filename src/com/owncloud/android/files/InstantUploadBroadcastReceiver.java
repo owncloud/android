@@ -31,6 +31,7 @@ import com.owncloud.android.Log_OC;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.network.OwnCloudClientUtils;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.InstantUploadUtils;
@@ -121,6 +122,8 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
 
         if (!intent.hasExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY)
                 && ConnectivityUtils.isOnline(context)) {      
+            
+            OwnCloudClientUtils.resetConnManager();
             
             // Restart Offline Uploads
             Log_OC.w(TAG, "Restart Offline Uploads");

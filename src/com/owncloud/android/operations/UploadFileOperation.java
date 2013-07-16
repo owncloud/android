@@ -393,6 +393,8 @@ public class UploadFileOperation extends RemoteOperation {
         RemoteOperationResult resultCheck = existenceCheck.execute(getClient());
         if (resultCheck.isSuccess()) {
             return remotePath;
+        } else if (resultCheck.isException()) {
+            throw resultCheck.getException();
         }
         
         int pos = remotePath.lastIndexOf(".");
@@ -414,6 +416,10 @@ public class UploadFileOperation extends RemoteOperation {
             }
             count++;
         } while (resultCheck.isSuccess());
+        
+        if (resultCheck.isException()) {
+            throw resultCheck.getException();
+        }
 
         if (pos >= 0) {
             return remotePath + suffix + "." + extension;
