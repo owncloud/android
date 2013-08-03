@@ -173,7 +173,7 @@ public class SynchronizeFolderOperation extends RemoteOperation {
                         File f = new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, file));
                         if (f.exists()) {
                             file.setStoragePath(f.getAbsolutePath());
-                            file.setLastSyncDateForData(f.lastModified());
+                            file.setLastSyncDateForData(f.lastModified());  /// BAD IDEA! SET AS 0, THIS SHOULD GENERATE A CONFLICT WHEN THE FILE IS SYNCHRONIZED!
                         }
                     }
                     

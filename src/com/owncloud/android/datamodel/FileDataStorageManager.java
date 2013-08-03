@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import com.owncloud.android.DisplayUtils;
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.db.ProviderMeta;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
@@ -115,7 +114,7 @@ public class FileDataStorageManager implements DataStorageManager {
     public boolean fileExists(String path) {
         return fileExists(ProviderTableMeta.FILE_PATH, path);
     }
-
+    
     @Override
     public boolean saveFile(OCFile file) {
         boolean overriden = false;
@@ -135,6 +134,8 @@ public class FileDataStorageManager implements DataStorageManager {
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.getLastSyncDateForProperties());
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.getLastSyncDateForData());
         cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.keepInSync() ? 1 : 0);
+        cv.put(ProviderTableMeta.FILE_UPLOADING, file.isUploading() ? 1 : 0);
+        cv.put(ProviderTableMeta.FILE_DOWNLOADING, file.isDownloading() ? 1 : 0);
 
         boolean sameRemotePath = fileExists(file.getRemotePath());
         boolean changesSizeOfAncestors = false;
@@ -231,6 +232,8 @@ public class FileDataStorageManager implements DataStorageManager {
             cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.getLastSyncDateForProperties());
             cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.getLastSyncDateForData());
             cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.keepInSync() ? 1 : 0);
+            cv.put(ProviderTableMeta.FILE_UPLOADING, file.isUploading() ? 1 : 0);
+            cv.put(ProviderTableMeta.FILE_DOWNLOADING, file.isDownloading() ? 1 : 0);
 
             if (fileExists(file.getRemotePath())) {
                 OCFile oldFile = getFileByPath(file.getRemotePath());
@@ -449,14 +452,6 @@ public class FileDataStorageManager implements DataStorageManager {
             if (!file.isDirectory()) {
                 file.setStoragePath(c.getString(c
                         .getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH)));
-                if (file.getStoragePath() == null) {
-                    // try to find existing file and bind it with current account; - with the current update of SynchronizeFolderOperation, this won't be necessary anymore after a full synchronization of the account
-                    File f = new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, file));
-                    if (f.exists()) {
-                        file.setStoragePath(f.getAbsolutePath());
-                        file.setLastSyncDateForData(f.lastModified());
-                    }
-                }
             }
             file.setFileLength(c.getLong(c
                     .getColumnIndex(ProviderTableMeta.FILE_CONTENT_LENGTH)));
@@ -468,10 +463,14 @@ public class FileDataStorageManager implements DataStorageManager {
                     .getColumnIndex(ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)));
             file.setLastSyncDateForProperties(c.getLong(c
                     .getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE)));
-            file.setLastSyncDateForData(c.getLong(c.
-                    getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA)));
-            file.setKeepInSync(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_KEEP_IN_SYNC)) == 1 ? true : false);
+            file.setLastSyncDateForData(c.getLong(c
+                    .getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA)));
+            file.setKeepInSync(c.getInt(c
+                    .getColumnIndex(ProviderTableMeta.FILE_KEEP_IN_SYNC)) == 1 ? true : false);
+            file.setUploading(c.getInt(c
+                    .getColumnIndex(ProviderTableMeta.FILE_UPLOADING)) == 1 ? true : false);
+            file.setDownloading(c.getInt(c
+                    .getColumnIndex(ProviderTableMeta.FILE_DOWNLOADING)) == 1 ? true : false);
         }
         return file;
     }
@@ -627,6 +626,87 @@ public class FileDataStorageManager implements DataStorageManager {
         return ret;
     }
 
+    /**
+     * Update the uploading value of a file
+     */
+    @Override
+    public int updateUploading(String filePath, boolean uploading)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(ProviderTableMeta.FILE_UPLOADING, uploading);
+        int result = -1;
+        if (getContentResolver() != null) {
+            result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
+                    ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
+        } else {
+            try {
+                result = getContentProvider().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
+                        ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, "Fail to update 'uploading' of " + filePath + " in database", e);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Update the downloading value of a file
+     */
+    @Override
+    public int updateDownloading(String filePath, boolean downloading)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(ProviderTableMeta.FILE_DOWNLOADING, downloading);
+        int result = -1;
+        if (getContentResolver() != null) {
+            result = getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
+                    ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
+        } else {
+            try {
+                result = getContentProvider().update(ProviderTableMeta.CONTENT_URI, cv, ProviderTableMeta.FILE_PATH + "=? AND "+
+                        ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?", new String[] { filePath, mAccount.name });
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, "Fail to update 'downloading' of " + filePath + " in database", e);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Vector<OCFile> getUploadingFiles() {
+        Vector<OCFile> ret = new Vector<OCFile>();
+        Cursor c = null;
+
+        if (getContentProvider() != null) {
+            try {
+                c = getContentProvider().query(ProviderTableMeta.CONTENT_URI, null, 
+                        ProviderTableMeta.FILE_UPLOADING + "=? AND "+ ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?",
+                        new String[] { String.valueOf(1) , mAccount.name }, null);
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, e.getMessage());
+                return ret;
+            }
+        } else {
+            c = getContentResolver().query(ProviderTableMeta.CONTENT_URI, null, 
+                    ProviderTableMeta.FILE_UPLOADING + "=? AND "+ ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?",
+                    new String[] { String.valueOf(1) , mAccount.name }, null);
+        }
+
+        if (c.moveToFirst()) {
+            do {
+                OCFile child = createFileInstance(c);
+                ret.add(child);
+            } while (c.moveToNext());
+        }
+
+        c.close();
+
+        Collections.sort(ret);
+
+        return ret;
+    }
+    
+    
     /**
      * Calculate and save the folderSize on DB
      * @param id

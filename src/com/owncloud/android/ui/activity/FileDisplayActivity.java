@@ -519,12 +519,13 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
             }
 
             Intent i = new Intent(this, FileUploader.class);
-            i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
-            i.putExtra(FileUploader.KEY_LOCAL_FILE, filePaths);
-            i.putExtra(FileUploader.KEY_REMOTE_FILE, remotePaths);
-            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_MULTIPLE_FILES);
+            i.setAction(FileUploader.ACTION_ADD_UPLOAD);
+            i.putExtra(FileUploader.EXTRA_ACCOUNT, getAccount());
+            i.putExtra(FileUploader.EXTRA_LOCAL_PATH, filePaths);
+            i.putExtra(FileUploader.EXTRA_REMOTE_PATH, remotePaths);
+            i.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_MULTIPLE_FILES);
             if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                i.putExtra(FileUploader.EXTRA_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
             startService(i);
 
         } else {
@@ -563,7 +564,8 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
         }
 
         Intent i = new Intent(this, FileUploader.class);
-        i.putExtra(FileUploader.KEY_ACCOUNT,
+        i.setAction(FileUploader.ACTION_ADD_UPLOAD);
+        i.putExtra(FileUploader.EXTRA_ACCOUNT,
                 getAccount());
         String remotepath = new String();
         for (int j = mDirectories.getCount() - 2; j >= 0; --j) {
@@ -573,11 +575,11 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
             remotepath += OCFile.PATH_SEPARATOR;
         remotepath += new File(filepath).getName();
 
-        i.putExtra(FileUploader.KEY_LOCAL_FILE, filepath);
-        i.putExtra(FileUploader.KEY_REMOTE_FILE, remotepath);
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+        i.putExtra(FileUploader.EXTRA_LOCAL_PATH, filepath);
+        i.putExtra(FileUploader.EXTRA_REMOTE_PATH, remotepath);
+        i.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_SINGLE_FILE);
         if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-            i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
+            i.putExtra(FileUploader.EXTRA_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
         startService(i);
     }
 
@@ -620,7 +622,8 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
         registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
 
         // Listen for upload messages
-        IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.UPLOAD_FINISH_MESSAGE);
+        IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.ACTION_UPLOAD_ADDED);
+        uploadIntentFilter.addAction(FileUploader.ACTION_UPLOAD_FINISHED);
         mUploadFinishReceiver = new UploadFinishReceiver();
         registerReceiver(mUploadFinishReceiver, uploadIntentFilter);
 
@@ -713,7 +716,7 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
                                 ACTION_SELECT_CONTENT_FROM_APPS);
                     } else if (item == 2 && InstantUploadActivity.IS_ENABLED) {
                         Intent action = new Intent(FileDisplayActivity.this, InstantUploadActivity.class);
-                        action.putExtra(FileUploader.KEY_ACCOUNT, FileDisplayActivity.this.getAccount());
+                        action.putExtra(FileUploader.EXTRA_ACCOUNT, FileDisplayActivity.this.getAccount());
                         startActivity(action);
                     }
                 }
@@ -864,29 +867,40 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
     }
 
 
+    /**
+     * Class waiting for broadcast events from the {@link FileUploader} service.
+     * 
+     * Updates the UI when an upload is started or finished, provided that it is relevant for the
+     * current folder.
+     */
     private class UploadFinishReceiver extends BroadcastReceiver {
-        /**
-         * Once the file upload has finished -> update view
-         *  @author David A. Velasco
-         * {@link BroadcastReceiver} to enable upload feedback in UI
-         */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String uploadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
-            String accountName = intent.getStringExtra(FileUploader.ACCOUNT_NAME);
-            boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
-            OCFile currentDir = getCurrentDir();
-            boolean isDescendant = (currentDir != null) && (uploadedRemotePath != null) && (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
+            boolean sameAccount = isSameAccount(context, intent);
+            String uploadedRemotePath = intent.getStringExtra(FileUploader.EXTRA_REMOTE_PATH);
+            boolean isDescendant = isDescendant(uploadedRemotePath);
+            
             if (sameAccount && isDescendant) {
                 refeshListOfFilesFragment();
             }
+            
+            removeStickyBroadcast(intent);
         }
-
+        
+        private boolean isSameAccount(Context context, Intent intent) {
+            String accountName = intent.getStringExtra(FileUploader.EXTRA_ACCOUNT_NAME);
+            return (accountName != null && getAccount() != null && accountName.equals(getAccount().name));
+        }
+        
+        private boolean isDescendant(String uploadedRemotePath) {
+            OCFile currentDir = getCurrentDir();
+            return (currentDir != null && uploadedRemotePath != null && uploadedRemotePath.startsWith(currentDir.getRemotePath()));
+        }
     }
 
 
     /**
-     * Class waiting for broadcast events from the {@link FielDownloader} service.
+     * Class waiting for broadcast events from the {@link FileDownloader} service.
      * 
      * Updates the UI when a download is started or finished, provided that it is relevant for the
      * current folder.

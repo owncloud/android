@@ -39,7 +39,7 @@ import eu.alefzero.webdav.WebdavUtils;
 
 public class ChunkedUploadFileOperation extends UploadFileOperation {
     
-    private static final long CHUNK_SIZE = 1024000;
+    public static final long CHUNK_SIZE = 1024000;
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
     private static final String TAG = ChunkedUploadFileOperation.class.getSimpleName();
 
@@ -80,12 +80,12 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             }
             
         } finally {
+            if (mPutMethod != null)
+                mPutMethod.releaseConnection();    // let the connection available for other methods
             if (channel != null)
                 channel.close();
             if (raf != null)
                 raf.close();
-            if (mPutMethod != null)
-                mPutMethod.releaseConnection();    // let the connection available for other methods
         }
         return status;
     }

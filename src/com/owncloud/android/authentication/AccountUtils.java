@@ -169,5 +169,17 @@ public class AccountUtils {
             return mFailedAccount;
         }
     }
+    
+    /**
+     * Return Owncloud Accounts
+     * 
+     * @return Account[]
+     */
+    public static Account[] getOwncloudAccounts(Context context) {
+        AccountManager accMan = AccountManager.get(context);
+        Account[] accounts = accMan
+                .getAccountsByType(AccountAuthenticator.ACCOUNT_TYPE);
+        return accounts;
+    }
 
 }

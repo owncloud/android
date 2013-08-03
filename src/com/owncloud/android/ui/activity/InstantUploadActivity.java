@@ -47,7 +47,9 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.files.InstantUploadBroadcastReceiver;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.InstantUploadUtils;
 
 /**
  * This Activity is used to display a list with images they could not be
@@ -441,11 +443,12 @@ public class InstantUploadActivity extends Activity {
             }
 
             Intent i = new Intent(InstantUploadActivity.this, FileUploader.class);
-            i.putExtra(FileUploader.KEY_ACCOUNT, account);
-            i.putExtra(FileUploader.KEY_LOCAL_FILE, img_path);
-            i.putExtra(FileUploader.KEY_REMOTE_FILE, filename);
-            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
-            i.putExtra(com.owncloud.android.files.services.FileUploader.KEY_INSTANT_UPLOAD, true);
+            i.setAction(FileUploader.ACTION_ADD_UPLOAD);
+            i.putExtra(FileUploader.EXTRA_ACCOUNT, account);
+            i.putExtra(FileUploader.EXTRA_LOCAL_PATH, img_path);
+            i.putExtra(FileUploader.EXTRA_REMOTE_PATH, filename);
+            i.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_SINGLE_FILE);
+            i.putExtra(com.owncloud.android.files.services.FileUploader.EXTRA_INSTANT_UPLOAD, true);
 
             final String msg = "try to upload file with name :" + filename;
             Log_OC.d(LOG_TAG, msg);
@@ -463,9 +466,9 @@ public class InstantUploadActivity extends Activity {
 
     private boolean canInstantUpload() {
 
-        if (!InstantUploadBroadcastReceiver.isOnline(this)
-                || (InstantUploadBroadcastReceiver.instantUploadViaWiFiOnly(this) && !InstantUploadBroadcastReceiver
-                        .isConnectedViaWiFi(this))) {
+        if (!ConnectivityUtils.isOnline(this)
+                || (InstantUploadUtils.instantUploadViaWiFiOnly(this) 
+                        && !ConnectivityUtils.isConnectedViaWiFi(this))) {
             return false;
         } else {
             return true;

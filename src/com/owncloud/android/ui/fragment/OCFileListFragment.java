@@ -207,26 +207,25 @@ public class OCFileListFragment extends ExtendedListFragment implements EditName
             toHide.add(R.id.action_download_file);
             toHide.add(R.id.action_open_file_with);
             
-            if (targetFile.isDown()) {
-                toHide.add(R.id.action_cancel_download);
-                toHide.add(R.id.action_cancel_upload);
-                
-            } else {
-                toHide.add(R.id.action_sync_file);
-            }
+            
             if ( mContainerActivity.getFileDownloaderBinder().isDownloading(AccountUtils.getCurrentOwnCloudAccount(getActivity()), targetFile)) {
                 toHide.add(R.id.action_cancel_upload);
+                toHide.add(R.id.action_sync_file);
                 toDisable.add(R.id.action_rename_file);
                 toDisable.add(R.id.action_remove_file);
                     
             } else if ( mContainerActivity.getFileUploaderBinder().isUploading(AccountUtils.getCurrentOwnCloudAccount(getActivity()), targetFile)) {
                 toHide.add(R.id.action_cancel_download);
+                toHide.add(R.id.action_sync_file);
                 toDisable.add(R.id.action_rename_file);
                 toDisable.add(R.id.action_remove_file);
                     
             } else {
                 toHide.add(R.id.action_cancel_download);
                 toHide.add(R.id.action_cancel_upload);
+                if (!targetFile.isDown()) {
+                    toHide.add(R.id.action_sync_file);
+                }
             }
         }
 

@@ -266,5 +266,11 @@ public class OwnCloudClientUtils {
         return mConnManager;
     }
 
-
+    static public void resetConnManager() {
+        if (mConnManager != null) {
+            mConnManager.closeIdleConnections(0);
+        } else {
+            getMultiThreadedConnManager();
+        }
+    }
 }

@@ -411,10 +411,11 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
                 }
            
             Intent intent = new Intent(getApplicationContext(), FileUploader.class);
-            intent.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_MULTIPLE_FILES);
-            intent.putExtra(FileUploader.KEY_LOCAL_FILE, local.toArray(new String[local.size()]));
-            intent.putExtra(FileUploader.KEY_REMOTE_FILE, remote.toArray(new String[remote.size()]));
-            intent.putExtra(FileUploader.KEY_ACCOUNT, mAccount);
+            intent.setAction(FileUploader.ACTION_ADD_UPLOAD);
+            intent.putExtra(FileUploader.EXTRA_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE_MULTIPLE_FILES);
+            intent.putExtra(FileUploader.EXTRA_LOCAL_PATH, local.toArray(new String[local.size()]));
+            intent.putExtra(FileUploader.EXTRA_REMOTE_PATH, remote.toArray(new String[remote.size()]));
+            intent.putExtra(FileUploader.EXTRA_ACCOUNT, mAccount);
             startService(intent);
             finish();
             }

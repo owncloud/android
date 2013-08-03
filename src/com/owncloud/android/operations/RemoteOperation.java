@@ -50,7 +50,7 @@ public abstract class RemoteOperation implements Runnable {
     private Account mAccount = null;
     
     /** Android Application context */
-    private Context mContext = null;
+    protected Context mContext = null;
     
 	/** Object to interact with the remote server */
 	private WebdavClient mClient = null;
