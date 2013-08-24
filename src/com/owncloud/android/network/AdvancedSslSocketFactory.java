@@ -25,6 +25,8 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
@@ -78,6 +80,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
      */
     public Socket createSocket(String host, int port, InetAddress clientHost, int clientPort) throws IOException, UnknownHostException {
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port, clientHost, clientPort);
+        setEnableOptimalSSLProtocol(socket);
         verifyPeerIdentity(host, port, socket);
         return socket;
     }
@@ -111,6 +114,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
         SocketFactory socketfactory = mSslContext.getSocketFactory();
         Log_OC.d(TAG, " ... with connection timeout " + timeout + " and socket timeout " + params.getSoTimeout());
         Socket socket = socketfactory.createSocket();
+        setEnableOptimalSSLProtocol(socket);
         SocketAddress localaddr = new InetSocketAddress(localAddress, localPort);
         SocketAddress remoteaddr = new InetSocketAddress(host, port);
         socket.setSoTimeout(params.getSoTimeout());
@@ -127,6 +131,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
             UnknownHostException {
         Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port);
+        setEnableOptimalSSLProtocol(socket);
         verifyPeerIdentity(host, port, socket);
         return socket; 
     }
@@ -236,5 +241,21 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
             throw io;
         }
     }
-
+    
+    /**
+     * Enable Optimal the SSL protocol the device supports
+     * @param socket
+     */
+    private void setEnableOptimalSSLProtocol(Socket socket) {
+        if (socket instanceof SSLSocket) {
+            SSLSocket sslSocket = (SSLSocket)socket;
+            String[] supportedProtocols = sslSocket.getSupportedProtocols();
+            List<String> supportedProtocolsList = Arrays.asList(supportedProtocols);
+            // SSLv2 Disable
+            if (supportedProtocolsList.contains("SSLv2")) {
+                supportedProtocolsList.remove("SSLv2");
+            }
+            sslSocket.setEnabledProtocols(supportedProtocolsList.toArray(new String[0]));
+        }
+    }
 }
