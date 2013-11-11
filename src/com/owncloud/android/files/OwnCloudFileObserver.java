@@ -29,6 +29,7 @@ import com.owncloud.android.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.ui.activity.ConflictsResolveActivity;
 
 
+
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
@@ -82,7 +83,6 @@ public class OwnCloudFileObserver extends FileObserver {
                                                                     null, 
                                                                     storageManager, 
                                                                     mOCAccount, 
-                                                                    true, 
                                                                     true, 
                                                                     mContext);
         RemoteOperationResult result = sfo.execute(mOCAccount, mContext);

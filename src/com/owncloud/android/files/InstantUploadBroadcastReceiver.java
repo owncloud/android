@@ -20,10 +20,13 @@ package com.owncloud.android.files;
 
 import java.io.File;
 
-import com.owncloud.android.authentication.AccountAuthenticator;
+import com.owncloud.android.Log_OC;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.utils.FileStorageUtils;
+
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;
@@ -37,8 +40,6 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images.Media;
 import android.webkit.MimeTypeMap;
 
-import com.owncloud.android.Log_OC;
-import com.owncloud.android.utils.FileStorageUtils;
 
 public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
 
@@ -60,7 +61,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         } else if (intent.getAction().equals(NEW_PHOTO_ACTION)) {
             handleNewPhotoAction(context, intent);
             Log_OC.d(TAG, "OFFICIAL processed: android.hardware.action.NEW_PICTURE");
-        } else if (intent.getAction().equals(FileUploader.UPLOAD_FINISH_MESSAGE)) {
+        } else if (intent.getAction().equals(FileUploader.getUploadFinishMessage())) {
             handleUploadFinished(context, intent);
         } else {
             Log_OC.e(TAG, "Incorrect intent sent: " + intent.getAction());
@@ -157,7 +158,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
                     String file_path = c.getString(c.getColumnIndex("path"));
                     File f = new File(file_path);
                     if (f.exists()) {
-                        Account account = new Account(account_name, AccountAuthenticator.ACCOUNT_TYPE);
+                        Account account = new Account(account_name, MainApp.getAccountType());
 
                         String mimeType = null;
                         try {

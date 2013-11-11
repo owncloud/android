@@ -26,6 +26,12 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountAuthenticator;
+import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.files.services.FileUploader;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
@@ -54,13 +60,6 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.owncloud.android.authentication.AccountAuthenticator;
-import com.owncloud.android.datamodel.DataStorageManager;
-import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileUploader;
-
-import com.owncloud.android.R;
 
 /**
  * This can be used to upload things to an ownCloud instance.
@@ -77,7 +76,7 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
     private ArrayList<Parcelable> mStreamsToUpload;
     private boolean mCreateDir;
     private String mUploadPath;
-    private DataStorageManager mStorageManager;
+    private FileDataStorageManager mStorageManager;
     private OCFile mFile;
 
     private final static int DIALOG_NO_ACCOUNT = 0;
@@ -95,7 +94,7 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
         mParents.add("");
         if (prepareStreamsToUpload()) {
             mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
-            Account[] accounts = mAccountManager.getAccountsByType(AccountAuthenticator.ACCOUNT_TYPE);
+            Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
             if (accounts.length == 0) {
                 Log_OC.i(TAG, "No ownCloud account is available");
                 showDialog(DIALOG_NO_ACCOUNT);
@@ -137,7 +136,7 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
                         // Settings.ADD_ACCOUNT_SETTINGS
                         // and Settings.EXTRA_AUTHORITIES
                         Intent intent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT);
-                        intent.putExtra("authorities", new String[] { AccountAuthenticator.AUTHORITY });
+                        intent.putExtra("authorities", new String[] { MainApp.getAuthTokenType() });
                         startActivityForResult(intent, REQUEST_CODE_SETUP_ACCOUNT);
                     } else {
                         // since in API7 there is no direct call for
@@ -158,15 +157,15 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
             });
             return builder.create();
         case DIALOG_MULTIPLE_ACCOUNT:
-            CharSequence ac[] = new CharSequence[mAccountManager.getAccountsByType(AccountAuthenticator.ACCOUNT_TYPE).length];
+            CharSequence ac[] = new CharSequence[mAccountManager.getAccountsByType(MainApp.getAccountType()).length];
             for (int i = 0; i < ac.length; ++i) {
-                ac[i] = mAccountManager.getAccountsByType(AccountAuthenticator.ACCOUNT_TYPE)[i].name;
+                ac[i] = mAccountManager.getAccountsByType(MainApp.getAccountType())[i].name;
             }
             builder.setTitle(R.string.common_choose_account);
             builder.setItems(ac, new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mAccount = mAccountManager.getAccountsByType(AccountAuthenticator.ACCOUNT_TYPE)[which];
+                    mAccount = mAccountManager.getAccountsByType(MainApp.getAccountType())[which];
                     mStorageManager = new FileDataStorageManager(mAccount, getContentResolver());
                     populateDirectoryList();
                 }
@@ -230,12 +229,12 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // click on folder in the list
         Log_OC.d(TAG, "on item click");
-        Vector<OCFile> tmpfiles = mStorageManager.getDirectoryContent(mFile);
+        Vector<OCFile> tmpfiles = mStorageManager.getFolderContent(mFile);
         if (tmpfiles.size() <= 0) return;
         // filter on dirtype
         Vector<OCFile> files = new Vector<OCFile>();
         for (OCFile f : tmpfiles)
-            if (f.isDirectory())
+            if (f.isFolder())
                 files.add(f);
         if (files.size() < position) {
             throw new IndexOutOfBoundsException("Incorrect item selected");
@@ -271,7 +270,7 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
             if (resultCode == RESULT_CANCELED) {
                 finish();
             }
-            Account[] accounts = mAccountManager.getAccountsByType(AccountAuthenticator.AUTH_TOKEN_TYPE);
+            Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAuthTokenType());
             if (accounts.length == 0) {
                 showDialog(DIALOG_NO_ACCOUNT);
             } else {
@@ -295,11 +294,11 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
         
         mFile = mStorageManager.getFileByPath(full_path);
         if (mFile != null) {
-            Vector<OCFile> files = mStorageManager.getDirectoryContent(mFile);
+            Vector<OCFile> files = mStorageManager.getFolderContent(mFile);
             List<HashMap<String, Object>> data = new LinkedList<HashMap<String,Object>>();
             for (OCFile f : files) {
                 HashMap<String, Object> h = new HashMap<String, Object>();
-                if (f.isDirectory()) {
+                if (f.isFolder()) {
                     h.put("dirname", f.getFileName());
                     data.add(h);
                 }

@@ -42,10 +42,11 @@ import org.apache.http.HttpStatus;
 import org.apache.http.params.CoreProtocolPNames;
 
 import com.owncloud.android.Log_OC;
-
-import com.owncloud.android.authentication.AccountAuthenticator;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.network.BearerAuthScheme;
 import com.owncloud.android.network.BearerCredentials;
+
+
 
 import android.net.Uri;
 
@@ -72,7 +73,7 @@ public class WebdavClient extends HttpClient {
         getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
         mFollowRedirects = true;
         mSsoSessionCookie = null;
-        mAuthTokenType = AccountAuthenticator.AUTH_TOKEN_TYPE_PASSWORD;
+        mAuthTokenType = MainApp.getAuthTokenTypePass();
     }
 
     public void setBearerCredentials(String accessToken) {
@@ -85,7 +86,7 @@ public class WebdavClient extends HttpClient {
         mCredentials = new BearerCredentials(accessToken);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
-        mAuthTokenType = AccountAuthenticator.AUTH_TOKEN_TYPE_ACCESS_TOKEN;
+        mAuthTokenType = MainApp.getAuthTokenTypeAccessToken();
     }
 
     public void setBasicCredentials(String username, String password) {
@@ -97,7 +98,7 @@ public class WebdavClient extends HttpClient {
         mCredentials = new UsernamePasswordCredentials(username, password);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
-        mAuthTokenType = AccountAuthenticator.AUTH_TOKEN_TYPE_PASSWORD;
+        mAuthTokenType = MainApp.getAuthTokenTypePass();
     }
     
     public void setSsoSessionCookie(String accessToken) {
@@ -105,7 +106,7 @@ public class WebdavClient extends HttpClient {
         getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
         mSsoSessionCookie = accessToken;
         mCredentials = null;
-        mAuthTokenType = AccountAuthenticator.AUTH_TOKEN_TYPE_SAML_WEB_SSO_SESSION_COOKIE;
+        mAuthTokenType = MainApp.getAuthTokenTypeSamlSessionCookie();
     }
     
     
@@ -168,7 +169,7 @@ public class WebdavClient extends HttpClient {
         try {
             method.setFollowRedirects(mFollowRedirects);
         } catch (Exception e) {
-            if (mFollowRedirects) Log_OC.d(TAG, "setFollowRedirects failed for " + method.getName() + " method, custom redirection will be used");
+            //if (mFollowRedirects) Log_OC.d(TAG, "setFollowRedirects failed for " + method.getName() + " method, custom redirection will be used if needed");
             customRedirectionNeeded = mFollowRedirects;
         }
         if (mSsoSessionCookie != null && mSsoSessionCookie.length() > 0) {

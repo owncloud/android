@@ -48,23 +48,24 @@ import com.owncloud.android.Log_OC;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileObserverService;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.operations.OnRemoteOperationListener;
 import com.owncloud.android.operations.RemoteOperation;
 import com.owncloud.android.operations.RemoteOperationResult;
-import com.owncloud.android.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
+import com.owncloud.android.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.ui.activity.ConflictsResolveActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.dialog.EditNameDialog;
 import com.owncloud.android.ui.dialog.EditNameDialog.EditNameDialogListener;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
+
 
 import eu.alefzero.webdav.OnDatatransferProgressListener;
 
@@ -207,7 +208,7 @@ public class FileDetailFragment extends FileFragment implements
     public void onResume() {
         super.onResume();
         mUploadFinishReceiver = new UploadFinishReceiver();
-        IntentFilter filter = new IntentFilter(FileUploader.UPLOAD_FINISH_MESSAGE);
+        IntentFilter filter = new IntentFilter(FileUploader.getUploadFinishMessage());
         getActivity().registerReceiver(mUploadFinishReceiver, filter);
 
     }
@@ -416,7 +417,7 @@ public class FileDetailFragment extends FileFragment implements
     private void renameFile() {
         OCFile file = getFile();
         String fileName = file.getFileName();
-        int extensionStart = file.isDirectory() ? -1 : fileName.lastIndexOf(".");
+        int extensionStart = file.isFolder() ? -1 : fileName.lastIndexOf(".");
         int selectionEnd = (extensionStart >= 0) ? extensionStart : fileName.length();
         EditNameDialog dialog = EditNameDialog.newInstance(getString(R.string.rename_dialog_title), fileName, 0, selectionEnd, this);
         dialog.show(getFragmentManager(), "nameeditdialog");
@@ -447,7 +448,7 @@ public class FileDetailFragment extends FileFragment implements
             }
             
         } else {
-            mLastRemoteOperation = new SynchronizeFileOperation(file, null, mStorageManager, mAccount, true, false, getActivity());
+            mLastRemoteOperation = new SynchronizeFileOperation(file, null, mStorageManager, mAccount, true, getActivity());
             mLastRemoteOperation.execute(mAccount, getSherlockActivity(), this, mHandler, getSherlockActivity());
             
             // update ui 
@@ -836,10 +837,7 @@ public class FileDetailFragment extends FileFragment implements
                 i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
                 startActivity(i);
                 
-            } else {
-                Toast msg = Toast.makeText(getActivity(), R.string.sync_file_fail_msg, Toast.LENGTH_LONG); 
-                msg.show();
-            }
+            } 
             
             if (file.isDown()) {
                 setButtonsForDown();

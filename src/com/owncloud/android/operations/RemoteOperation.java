@@ -21,10 +21,11 @@ import java.io.IOException;
 import org.apache.commons.httpclient.Credentials;
 
 import com.owncloud.android.Log_OC;
-import com.owncloud.android.authentication.AccountAuthenticator;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.network.BearerCredentials;
 import com.owncloud.android.network.OwnCloudClientUtils;
 import com.owncloud.android.operations.RemoteOperationResult.ResultCode;
+
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -136,14 +137,8 @@ public abstract class RemoteOperation implements Runnable {
         mCallerActivity = callerActivity;
         mClient = null;     // the client instance will be created from mAccount and mContext in the runnerThread to create below
         
-        if (listener == null) {
-            throw new IllegalArgumentException("Trying to execute a remote operation asynchronously without a listener to notiy the result");
-        }
         mListener = listener;
         
-        if (listenerHandler == null) {
-            throw new IllegalArgumentException("Trying to execute a remote operation asynchronously without a handler to the listener's thread");
-        }
         mListenerHandler = listenerHandler;
         
         Thread runnerThread = new Thread(this);
@@ -254,9 +249,9 @@ public abstract class RemoteOperation implements Runnable {
                     boolean bearerAuthorization = (cred != null && cred instanceof BearerCredentials);
                     boolean samlBasedSsoAuthorization = (cred == null && ssoSessionCookie != null);
                     if (bearerAuthorization) {
-                        am.invalidateAuthToken(AccountAuthenticator.ACCOUNT_TYPE, ((BearerCredentials)cred).getAccessToken());
+                        am.invalidateAuthToken(MainApp.getAccountType(), ((BearerCredentials)cred).getAccessToken());
                     } else if (samlBasedSsoAuthorization ) {
-                        am.invalidateAuthToken(AccountAuthenticator.ACCOUNT_TYPE, ssoSessionCookie);
+                        am.invalidateAuthToken(MainApp.getAccountType(), ssoSessionCookie);
                     } else {
                         am.clearPassword(mAccount);
                     }

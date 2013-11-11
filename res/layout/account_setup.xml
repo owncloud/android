@@ -29,6 +29,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/login_background_color"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="8dp" >
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:background="@color/login_logo_background_color"
             android:src="@drawable/logo" />
 
         <Button
@@ -172,20 +174,19 @@
             android:layout_gravity="center_horizontal"
             android:enabled="false"
             android:onClick="onOkClick"
-            android:text="@string/setup_btn_connect"
-            />
+            android:text="@string/setup_btn_connect" />
 
         <Button
-            android:id="@+id/account_register"
+            android:id="@+id/welcome_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:textColor="#0000FF" 
             android:onClick="onRegisterClick"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
             android:text="@string/auth_register"
-            />
+            android:textColor="#0000FF"/>
+
     </LinearLayout>
 
 </ScrollView>
