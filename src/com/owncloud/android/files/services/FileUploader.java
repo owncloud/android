@@ -29,26 +29,39 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.http.HttpStatus;
+import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
 
+import com.owncloud.android.Log_OC;
+import com.owncloud.android.MainApp;
+import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticator;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.DbHandler;
+import com.owncloud.android.network.OwnCloudClientUtils;
 import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
+import com.owncloud.android.operations.ExistenceCheckOperation;
 import com.owncloud.android.operations.RemoteOperation;
 import com.owncloud.android.operations.RemoteOperationResult;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.ui.activity.FailedUploadActivity;
+import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.activity.InstantUploadActivity;
+import com.owncloud.android.ui.preview.PreviewImageActivity;
+import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.utils.OwnCloudVersion;
+
 
 import eu.alefzero.webdav.OnDatatransferProgressListener;
 import eu.alefzero.webdav.WebdavEntry;
 import eu.alefzero.webdav.WebdavUtils;
 
-import com.owncloud.android.network.OwnCloudClientUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -68,22 +81,12 @@ import android.os.Process;
 import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
 
-import com.owncloud.android.Log_OC;
-import com.owncloud.android.R;
-import com.owncloud.android.db.DbHandler;
-import com.owncloud.android.ui.activity.FailedUploadActivity;
-import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.activity.FileDisplayActivity;
-import com.owncloud.android.ui.activity.InstantUploadActivity;
-import com.owncloud.android.ui.preview.PreviewImageActivity;
-import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.utils.FileStorageUtils;
 
 import eu.alefzero.webdav.WebdavClient;
 
 public class FileUploader extends Service implements OnDatatransferProgressListener {
 
-    public static final String UPLOAD_FINISH_MESSAGE = "UPLOAD_FINISH";
+    private static final String UPLOAD_FINISH_MESSAGE = "UPLOAD_FINISH";
     public static final String EXTRA_UPLOAD_RESULT = "RESULT";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
     public static final String EXTRA_OLD_REMOTE_PATH = "OLD_REMOTE_PATH";
@@ -126,6 +129,11 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     private int mLastPercent;
     private RemoteViews mDefaultNotificationContentView;
 
+    
+    public static String getUploadFinishMessage() {
+        return FileUploader.class.getName().toString() + UPLOAD_FINISH_MESSAGE;
+    }
+    
     /**
      * Builds a key for mPendingUploads from the account and file to upload
      * 
@@ -223,16 +231,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         boolean forceOverwrite = intent.getBooleanExtra(KEY_FORCE_OVERWRITE, false);
         boolean isInstant = intent.getBooleanExtra(KEY_INSTANT_UPLOAD, false);
         int localAction = intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
-        boolean fixed = false;
-        if (isInstant) {
-            fixed = checkAndFixInstantUploadDirectory(storageManager); // MUST
-                                                                       // be
-                                                                       // done
-                                                                       // BEFORE
-                                                                       // calling
-                                                                       // obtainNewOCFileToUpload
-        }
-
+        
         if (intent.hasExtra(KEY_FILE) && files == null) {
             Log_OC.e(TAG, "Incorrect array for OCFiles provided in upload intent");
             return Service.START_NOT_STICKY;
@@ -277,10 +276,11 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 } else {
                     newUpload = new UploadFileOperation(account, files[i], isInstant, forceOverwrite, localAction);
                 }
-                if (fixed && i == 0) {
+                if (isInstant) {
                     newUpload.setRemoteFolderToBeCreated();
                 }
-                mPendingUploads.putIfAbsent(uploadKey, newUpload);
+                mPendingUploads.putIfAbsent(uploadKey, newUpload); // Grants that the file only upload once time
+
                 newUpload.addDatatransferProgressListener(this);
                 newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
                 requestedUploads.add(uploadKey);
@@ -384,7 +384,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 return false;
             String targetKey = buildRemoteName(account, file);
             synchronized (mPendingUploads) {
-                if (file.isDirectory()) {
+                if (file.isFolder()) {
                     // this can be slow if there are many uploads :(
                     Iterator<String> it = mPendingUploads.keySet().iterator();
                     boolean found = false;
@@ -497,7 +497,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
             notifyUploadStart(mCurrentUpload);
 
-            RemoteOperationResult uploadResult = null;
+            RemoteOperationResult uploadResult = null, grantResult = null;
             
             try {
                 /// prepare client object to send requests to the ownCloud server
@@ -506,20 +506,22 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                     mStorageManager = new FileDataStorageManager(mLastAccount, getContentResolver());
                     mUploadClient = OwnCloudClientUtils.createOwnCloudClient(mLastAccount, getApplicationContext());
                 }
-            
-                /// create remote folder for instant uploads
-                if (mCurrentUpload.isRemoteFolderToBeCreated()) {
-                    RemoteOperation operation = new CreateFolderOperation(  FileStorageUtils.getInstantUploadFilePath(this, ""), 
-                                                                            mStorageManager.getFileByPath(OCFile.PATH_SEPARATOR).getFileId(), // TODO generalize this : INSTANT_UPLOAD_DIR could not be a child of root
-                                                                            mStorageManager);
-                    operation.execute(mUploadClient);      // ignoring result; fail could just mean that it already exists, but local database is not synchronized; the upload will be tried anyway
-                }
-
+                
+                /// check the existence of the parent folder for the file to upload
+                String remoteParentPath = new File(mCurrentUpload.getRemotePath()).getParent();
+                remoteParentPath = remoteParentPath.endsWith(OCFile.PATH_SEPARATOR) ? remoteParentPath : remoteParentPath + OCFile.PATH_SEPARATOR;
+                grantResult = grantFolderExistence(remoteParentPath);
             
                 /// perform the upload
-                uploadResult = mCurrentUpload.execute(mUploadClient);
-                if (uploadResult.isSuccess()) {
-                    saveUploadedFile();
+                if (grantResult.isSuccess()) {
+                    OCFile parent = mStorageManager.getFileByPath(remoteParentPath);
+                    mCurrentUpload.getFile().setParentId(parent.getFileId());
+                    uploadResult = mCurrentUpload.execute(mUploadClient);
+                    if (uploadResult.isSuccess()) {
+                        saveUploadedFile();
+                    }
+                } else {
+                    uploadResult = grantResult;
                 }
                 
             } catch (AccountsException e) {
@@ -535,6 +537,11 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                     mPendingUploads.remove(uploadKey);
                     Log_OC.i(TAG, "Remove CurrentUploadItem from pending upload Item Map.");
                 }
+                if (uploadResult.isException()) {
+                    // enforce the creation of a new client object for next uploads; this grant that a new socket will 
+                    // be created in the future if the current exception is due to an abrupt lose of network connection
+                    mUploadClient = null;
+                }
             }
             
             /// notify result
@@ -545,6 +552,58 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         }
 
     }
+
+    /**
+     * Checks the existence of the folder where the current file will be uploaded both in the remote server 
+     * and in the local database.
+     * 
+     * If the upload is set to enforce the creation of the folder, the method tries to create it both remote
+     * and locally.
+     *  
+     *  @param  pathToGrant     Full remote path whose existence will be granted.
+     *  @return  An {@link OCFile} instance corresponding to the folder where the file will be uploaded.
+     */
+    private RemoteOperationResult grantFolderExistence(String pathToGrant) {
+        RemoteOperation operation = new ExistenceCheckOperation(pathToGrant, this, false);
+        RemoteOperationResult result = operation.execute(mUploadClient);
+        if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND && mCurrentUpload.isRemoteFolderToBeCreated()) {
+            operation = new CreateFolderOperation(  pathToGrant,
+                                                    true,
+                                                    mStorageManager    );
+            result = operation.execute(mUploadClient);
+        }
+        if (result.isSuccess()) {
+            OCFile parentDir = mStorageManager.getFileByPath(pathToGrant);
+            if (parentDir == null) {
+                parentDir = createLocalFolder(pathToGrant);
+            }
+            if (parentDir != null) {
+                result = new RemoteOperationResult(ResultCode.OK);
+            } else {
+                result = new RemoteOperationResult(ResultCode.UNKNOWN_ERROR);
+            }
+        }
+        return result;
+    }
+
+    
+    private OCFile createLocalFolder(String remotePath) {
+        String parentPath = new File(remotePath).getParent();
+        parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : parentPath + OCFile.PATH_SEPARATOR;
+        OCFile parent = mStorageManager.getFileByPath(parentPath);
+        if (parent == null) {
+            parent = createLocalFolder(parentPath);
+        }
+        if (parent != null) {
+            OCFile createdFolder = new OCFile(remotePath);
+            createdFolder.setMimetype("DIR");
+            createdFolder.setParentId(parent.getFileId());
+            mStorageManager.saveFile(createdFolder);
+            return createdFolder;
+        }
+        return null;
+    }
+    
 
     /**
      * Saves a OC File after a successful upload.
@@ -565,8 +624,9 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         PropFindMethod propfind = null;
         RemoteOperationResult result = null;
         try {
-            propfind = new PropFindMethod(mUploadClient.getBaseUri()
-                    + WebdavUtils.encodePath(mCurrentUpload.getRemotePath()));
+            propfind = new PropFindMethod(mUploadClient.getBaseUri() + WebdavUtils.encodePath(mCurrentUpload.getRemotePath()),
+                    DavConstants.PROPFIND_ALL_PROP,
+                    DavConstants.DEPTH_0);
             int status = mUploadClient.executeMethod(propfind);
             boolean isMultiStatus = (status == HttpStatus.SC_MULTI_STATUS);
             if (isMultiStatus) {
@@ -618,28 +678,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         // file.setEtag(mCurrentUpload.getEtag());    // TODO Etag, where available
     }
 
-    private boolean checkAndFixInstantUploadDirectory(FileDataStorageManager storageManager) {
-        String instantUploadDirPath = FileStorageUtils.getInstantUploadFilePath(this, "");
-        OCFile instantUploadDir = storageManager.getFileByPath(instantUploadDirPath);
-        if (instantUploadDir == null) {
-            // first instant upload in the account. never account not
-            // synchronized after the remote InstantUpload folder was created
-            OCFile newDir = new OCFile(instantUploadDirPath);
-            newDir.setMimetype("DIR");
-            OCFile path = storageManager.getFileByPath(OCFile.PATH_SEPARATOR);
-
-            if (path != null) {
-                newDir.setParentId(path.getFileId());
-                storageManager.saveFile(newDir);
-                return true;
-            } else {    // this should not happen anymore
-                return false;
-            }
-
-        }
-        return false;
-    }
-
     private OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType,
             FileDataStorageManager storageManager) {
         OCFile newFile = new OCFile(remotePath);
@@ -669,12 +707,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         }
         newFile.setMimetype(mimeType);
 
-        // parent dir
-        String parentPath = new File(remotePath).getParent();
-        parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : parentPath + OCFile.PATH_SEPARATOR;
-        OCFile parentDir = storageManager.getFileByPath(parentPath);
-        long parentDirId = parentDir.getFileId();
-        newFile.setParentId(parentDirId);
         return newFile;
     }
 
@@ -699,12 +731,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         mNotification.contentView.setImageViewResource(R.id.status_icon, R.drawable.icon);
         
         /// includes a pending intent in the notification showing the details view of the file
-        Intent showDetailsIntent = null;
-        if (PreviewImageFragment.canBePreviewed(upload.getFile())) {
-            showDetailsIntent = new Intent(this, PreviewImageActivity.class);
-        } else {
-            showDetailsIntent = new Intent(this, FileDisplayActivity.class);
-        }
+        Intent showDetailsIntent = new Intent(this, FileDisplayActivity.class);
         showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, upload.getFile());
         showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, upload.getAccount());
         showDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -781,7 +808,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotification); // NOT
                                                                                                      // AN
             DbHandler db = new DbHandler(this.getBaseContext());
-            db.removeIUPendingFile(mCurrentUpload.getFile().getStoragePath());
+            db.removeIUPendingFile(mCurrentUpload.getOriginalStoragePath());
             db.close();
 
         } else {
@@ -796,7 +823,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             boolean needsToUpdateCredentials = (uploadResult.getCode() == ResultCode.UNAUTHORIZED ||
                     //(uploadResult.isTemporalRedirection() && uploadResult.isIdPRedirection() && 
                     (uploadResult.isIdPRedirection() &&
-                            AccountAuthenticator.AUTH_TOKEN_TYPE_SAML_WEB_SSO_SESSION_COOKIE.equals(mUploadClient.getAuthTokenType())));
+                            MainApp.getAuthTokenTypeSamlSessionCookie().equals(mUploadClient.getAuthTokenType())));
             if (needsToUpdateCredentials) {
                 // let the user update credentials with one click
                 Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
@@ -851,10 +878,10 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                         Log_OC.e(TAG, message + " Http-Code: " + uploadResult.getHttpCode());
                         if (uploadResult.getCode() == ResultCode.QUOTA_EXCEEDED) {
                             message = getString(R.string.failed_upload_quota_exceeded_text);
-                        }
-                        if (db.updateFileState(upload.getOriginalStoragePath(), DbHandler.UPLOAD_STATUS_UPLOAD_FAILED,
-                                message) == 0) {
-                            db.putFileForLater(upload.getOriginalStoragePath(), upload.getAccount().name, message);
+                            if (db.updateFileState(upload.getOriginalStoragePath(), DbHandler.UPLOAD_STATUS_UPLOAD_FAILED,
+                                    message) == 0) {
+                                db.putFileForLater(upload.getOriginalStoragePath(), upload.getAccount().name, message);
+                            }
                         }
                     } finally {
                         if (db != null) {
@@ -879,7 +906,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      * @param uploadResult Result of the upload operation
      */
     private void sendFinalBroadcast(UploadFileOperation upload, RemoteOperationResult uploadResult) {
-        Intent end = new Intent(UPLOAD_FINISH_MESSAGE);
+        Intent end = new Intent(getUploadFinishMessage());
         end.putExtra(EXTRA_REMOTE_PATH, upload.getRemotePath()); // real remote
                                                                  // path, after
                                                                  // possible

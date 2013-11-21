@@ -24,12 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpVersion;
+import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -40,14 +42,17 @@ import org.apache.http.HttpStatus;
 import org.apache.http.params.CoreProtocolPNames;
 
 import com.owncloud.android.Log_OC;
-
-import com.owncloud.android.authentication.AccountAuthenticator;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.network.BearerAuthScheme;
 import com.owncloud.android.network.BearerCredentials;
+
+
 
 import android.net.Uri;
 
 public class WebdavClient extends HttpClient {
+    private static final int MAX_REDIRECTIONS_COUNT = 3;
+    
     private Uri mUri;
     private Credentials mCredentials;
     private boolean mFollowRedirects;
@@ -68,7 +73,7 @@ public class WebdavClient extends HttpClient {
         getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
         mFollowRedirects = true;
         mSsoSessionCookie = null;
-        mAuthTokenType = AccountAuthenticator.AUTH_TOKEN_TYPE_PASSWORD;
+        mAuthTokenType = MainApp.getAuthTokenTypePass();
     }
 
     public void setBearerCredentials(String accessToken) {
@@ -81,7 +86,7 @@ public class WebdavClient extends HttpClient {
         mCredentials = new BearerCredentials(accessToken);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
-        mAuthTokenType = AccountAuthenticator.AUTH_TOKEN_TYPE_ACCESS_TOKEN;
+        mAuthTokenType = MainApp.getAuthTokenTypeAccessToken();
     }
 
     public void setBasicCredentials(String username, String password) {
@@ -93,7 +98,7 @@ public class WebdavClient extends HttpClient {
         mCredentials = new UsernamePasswordCredentials(username, password);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
-        mAuthTokenType = AccountAuthenticator.AUTH_TOKEN_TYPE_PASSWORD;
+        mAuthTokenType = MainApp.getAuthTokenTypePass();
     }
     
     public void setSsoSessionCookie(String accessToken) {
@@ -101,7 +106,7 @@ public class WebdavClient extends HttpClient {
         getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
         mSsoSessionCookie = accessToken;
         mCredentials = null;
-        mAuthTokenType = AccountAuthenticator.AUTH_TOKEN_TYPE_SAML_WEB_SSO_SESSION_COOKIE;
+        mAuthTokenType = MainApp.getAuthTokenTypeSamlSessionCookie();
     }
     
     
@@ -160,15 +165,39 @@ public class WebdavClient extends HttpClient {
     
     @Override
     public int executeMethod(HttpMethod method) throws IOException, HttpException {
+        boolean customRedirectionNeeded = false;
         try {
             method.setFollowRedirects(mFollowRedirects);
         } catch (Exception e) {
-            
+            //if (mFollowRedirects) Log_OC.d(TAG, "setFollowRedirects failed for " + method.getName() + " method, custom redirection will be used if needed");
+            customRedirectionNeeded = mFollowRedirects;
         }
         if (mSsoSessionCookie != null && mSsoSessionCookie.length() > 0) {
             method.setRequestHeader("Cookie", mSsoSessionCookie);
         }
-        return super.executeMethod(method);
+        int status = super.executeMethod(method);
+        int redirectionsCount = 0;
+        while (customRedirectionNeeded &&
+                redirectionsCount < MAX_REDIRECTIONS_COUNT &&
+                (   status == HttpStatus.SC_MOVED_PERMANENTLY || 
+                    status == HttpStatus.SC_MOVED_TEMPORARILY ||
+                    status == HttpStatus.SC_TEMPORARY_REDIRECT)
+                ) {
+            
+            Header location = method.getResponseHeader("Location");
+            if (location != null) {
+                Log_OC.d(TAG,  "Location to redirect: " + location.getValue());
+                method.setURI(new URI(location.getValue(), true));
+                status = super.executeMethod(method);
+                redirectionsCount++;
+                
+            } else {
+                Log_OC.d(TAG,  "No location to redirect!");
+                status = HttpStatus.SC_NOT_FOUND;
+            }
+        }
+        
+        return status;
     }
 
 

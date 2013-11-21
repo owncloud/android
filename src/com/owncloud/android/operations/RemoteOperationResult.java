@@ -33,12 +33,13 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.DavException;
 
-import android.accounts.Account;
-import android.accounts.AccountsException;
-
 import com.owncloud.android.Log_OC;
 import com.owncloud.android.authentication.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.network.CertificateCombinedException;
+
+import android.accounts.Account;
+import android.accounts.AccountsException;
+
 
 /**
  * The result of a remote operation required to an ownCloud server.
@@ -52,6 +53,7 @@ public class RemoteOperationResult implements Serializable {
 
     /** Generated - should be refreshed every time the class changes!! */
     private static final long serialVersionUID = -4415103901492836870L;
+    
 
     
     private static final String TAG = "RemoteOperationResult";

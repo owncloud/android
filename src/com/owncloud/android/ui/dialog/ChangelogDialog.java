@@ -17,21 +17,15 @@
 
 package com.owncloud.android.ui.dialog;
 
-import java.io.InputStream;
-import java.util.Scanner;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.owncloud.android.R;
+
 
 /**
  * Dialog to show the contents of res/raw/CHANGELOG.txt

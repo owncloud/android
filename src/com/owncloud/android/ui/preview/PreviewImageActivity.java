@@ -16,8 +16,6 @@
  */
 package com.owncloud.android.ui.preview;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,6 +24,9 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,20 +35,20 @@ import android.view.View.OnTouchListener;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
+import com.owncloud.android.Log_OC;
+import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.DataStorageManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.FileFragment;
 
-import com.owncloud.android.Log_OC;
-import com.owncloud.android.R;
 
 /**
  *  Holds a swiping galley where image files contained in an ownCloud directory are shown
@@ -63,7 +64,9 @@ public class PreviewImageActivity extends FileActivity implements FileFragment.C
     public static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_WAITING_FOR_BINDER = "WAITING_FOR_BINDER";
     
-    private DataStorageManager mStorageManager;
+    private static final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
+    
+    private FileDataStorageManager mStorageManager;
     
     private ViewPager mViewPager; 
     private PreviewImagePagerAdapter mPreviewImagePagerAdapter;    
@@ -78,7 +81,7 @@ public class PreviewImageActivity extends FileActivity implements FileFragment.C
 
     private boolean mFullScreen;
     
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,13 +99,17 @@ public class PreviewImageActivity extends FileActivity implements FileFragment.C
         } else {
             mRequestWaitingForBinder = false;
         }
+        
     }
 
     private void initViewPager() {
-        OCFile parentFolder = mStorageManager.getFileById(getFile().getParentId());
+        // get parent from path
+        String parentPath = getFile().getRemotePath().substring(0, getFile().getRemotePath().lastIndexOf(getFile().getFileName()));
+        OCFile parentFolder = mStorageManager.getFileByPath(parentPath);
+        //OCFile parentFolder = mStorageManager.getFileById(getFile().getParentId());
         if (parentFolder == null) {
             // should not be necessary
-            parentFolder = mStorageManager.getFileByPath(OCFile.PATH_SEPARATOR);
+            parentFolder = mStorageManager.getFileByPath(OCFile.ROOT_PATH);
         }
         mPreviewImagePagerAdapter = new PreviewImagePagerAdapter(getSupportFragmentManager(), parentFolder, getAccount(), mStorageManager);
         mViewPager = (ViewPager) findViewById(R.id.fragmentPager);
@@ -147,7 +154,7 @@ public class PreviewImageActivity extends FileActivity implements FileFragment.C
                     Log_OC.d(TAG, "Simulating reselection of current page after connection of download binder");
                     onPageSelected(mViewPager.getCurrentItem());
                 }
-                    
+
             } else if (component.equals(new ComponentName(PreviewImageActivity.this, FileUploader.class))) {
                 Log_OC.d(TAG, "Upload service connected");
                 mUploaderBinder = (FileUploaderBinder) service;
@@ -212,8 +219,9 @@ public class PreviewImageActivity extends FileActivity implements FileFragment.C
         super.onResume();
         //Log.e(TAG, "ACTIVITY, ONRESUME");
         mDownloadFinishReceiver = new DownloadFinishReceiver();
-        IntentFilter filter = new IntentFilter(FileDownloader.DOWNLOAD_FINISH_MESSAGE);
-        filter.addAction(FileDownloader.DOWNLOAD_ADDED_MESSAGE);
+        
+        IntentFilter filter = new IntentFilter(FileDownloader.getDownloadFinishMessage());
+        filter.addAction(FileDownloader.getDownloadAddedMessage());
         registerReceiver(mDownloadFinishReceiver, filter);
     }
 
@@ -235,26 +243,28 @@ public class PreviewImageActivity extends FileActivity implements FileFragment.C
         finish();
     }
     
-    
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        Dialog dialog = null;
-        switch (id) {
-        case DIALOG_SHORT_WAIT: {
-            ProgressDialog working_dialog = new ProgressDialog(this);
-            working_dialog.setMessage(getResources().getString(
-                    R.string.wait_a_moment));
-            working_dialog.setIndeterminate(true);
-            working_dialog.setCancelable(false);
-            dialog = working_dialog;
-            break;
-        }
-        default:
-            dialog = null;
-        }
-        return dialog;
+    /**
+     * Show loading dialog 
+     */
+    public void showLoadingDialog() {
+        // Construct dialog
+        LoadingDialog loading = new LoadingDialog(getResources().getString(R.string.wait_a_moment));
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        loading.show(ft, DIALOG_WAIT_TAG);
+        
     }
     
+    /**
+     * Dismiss loading dialog
+     */
+    public void dismissLoadingDialog(){
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
+      if (frag != null) {
+          LoadingDialog loading = (LoadingDialog) frag;
+            loading.dismiss();
+        }
+    }
     
     /**
      * {@inheritDoc}
@@ -370,7 +380,7 @@ public class PreviewImageActivity extends FileActivity implements FileFragment.C
                 boolean downloadWasFine = intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false);
                 //boolean isOffscreen =  Math.abs((mViewPager.getCurrentItem() - position)) <= mViewPager.getOffscreenPageLimit();
                 
-                if (position >= 0 && intent.getAction().equals(FileDownloader.DOWNLOAD_FINISH_MESSAGE)) {
+                if (position >= 0 && intent.getAction().equals(FileDownloader.getDownloadFinishMessage())) {
                     if (downloadWasFine) {
                         mPreviewImagePagerAdapter.updateFile(position, file);   
                         
@@ -422,8 +432,12 @@ public class PreviewImageActivity extends FileActivity implements FileFragment.C
             if (!file.isImage()) {
                 throw new IllegalArgumentException("Non-image file passed as argument");
             }
-            mStorageManager = new FileDataStorageManager(getAccount(), getContentResolver());
-            file = mStorageManager.getFileById(file.getFileId()); 
+            mStorageManager = new FileDataStorageManager(getAccount(), getContentResolver());            
+            
+            // Update file according to DB file, if it is possible
+            if (file.getFileId() > FileDataStorageManager.ROOT_PARENT_ID)            
+                file = mStorageManager.getFileById(file.getFileId());
+            
             if (file != null) {
                 /// Refresh the activity according to the Account and OCFile set
                 setFile(file);  // reset after getting it fresh from mStorageManager

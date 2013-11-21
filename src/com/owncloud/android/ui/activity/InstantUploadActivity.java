@@ -19,6 +19,14 @@ package com.owncloud.android.ui.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.owncloud.android.Log_OC;
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.db.DbHandler;
+import com.owncloud.android.files.InstantUploadBroadcastReceiver;
+import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.utils.FileStorageUtils;
+
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
@@ -41,13 +49,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.owncloud.android.Log_OC;
-import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.db.DbHandler;
-import com.owncloud.android.files.InstantUploadBroadcastReceiver;
-import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.utils.FileStorageUtils;
 
 /**
  * This Activity is used to display a list with images they could not be
@@ -76,14 +77,14 @@ public class InstantUploadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.failed_upload_files);
 
-        Button delete_all_btn = (Button) findViewById(R.id.failed_upload_delete_all_btn);
-        delete_all_btn.setOnClickListener(getDeleteListner());
-        Button retry_all_btn = (Button) findViewById(R.id.failed_upload_retry_all_btn);
-        retry_all_btn.setOnClickListener(getRetryListner());
+        Button deleteAllBtn = (Button) findViewById(R.id.failed_upload_delete_all_btn);
+        deleteAllBtn.setOnClickListener(getDeleteListner());
+        Button retryAllBtn = (Button) findViewById(R.id.failed_upload_retry_all_btn);
+        retryAllBtn.setOnClickListener(getRetryListner());
         this.failed_upload_all_cb = (CheckBox) findViewById(R.id.failed_upload_headline_cb);
         failed_upload_all_cb.setOnCheckedChangeListener(getCheckAllListener());
         listView = (LinearLayout) findViewById(R.id.failed_upload_scrollviewlayout);
-
+        
         loadListView(true);
 
     }
@@ -149,7 +150,7 @@ public class InstantUploadActivity extends Activity {
                 loadmoreBtn = new Button(this);
                 loadmoreBtn.setId(42);
                 loadmoreBtn.setText(getString(R.string.failed_upload_load_more_images));
-                loadmoreBtn.setBackgroundResource(R.color.owncloud_white);
+                loadmoreBtn.setBackgroundResource(R.color.background_color);
                 loadmoreBtn.setTextSize(12);
                 loadmoreBtn.setOnClickListener(new OnClickListener() {
                     @Override
@@ -328,14 +329,14 @@ public class InstantUploadActivity extends Activity {
 
         TextView failureTextView = new TextView(this);
         failureTextView.setText(getString(R.string.failed_upload_failure_text) + message);
-        failureTextView.setBackgroundResource(R.color.owncloud_white);
+        failureTextView.setBackgroundResource(R.color.background_color);
         failureTextView.setTextSize(8);
         failureTextView.setOnLongClickListener(getOnLongClickListener(message));
         failureTextView.setPadding(5, 5, 5, 10);
         TextView retryButton = new TextView(this);
         retryButton.setId(id);
         retryButton.setText(img_path);
-        retryButton.setBackgroundResource(R.color.owncloud_white);
+        retryButton.setBackgroundResource(R.color.background_color);
         retryButton.setTextSize(8);
         retryButton.setOnClickListener(getImageButtonOnClickListener(img_path));
         retryButton.setOnLongClickListener(getOnLongClickListener(message));
@@ -365,7 +366,7 @@ public class InstantUploadActivity extends Activity {
     private CheckBox getFileCheckbox(int id) {
         CheckBox retryCB = new CheckBox(this);
         retryCB.setId(id);
-        retryCB.setBackgroundResource(R.color.owncloud_white);
+        retryCB.setBackgroundResource(R.color.background_color);
         retryCB.setTextSize(8);
         retryCB.setTag(retry_chexbox_tag);
         return retryCB;
