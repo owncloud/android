@@ -39,7 +39,7 @@ NOTE: You must have mvn in your environment path
 
 NOTE: You must have the Android SDK 'tools/', and 'platforms-tools/' folders in your environment path variable.
 
-* Complete the setup of project properties and resolve pending dependencies running "setup_env.bat" or "./setup_env.sh" .
+* Complete the setup of project properties and resolve pending dependencies running "setup_env.bat" or "./setup_env.sh" depending on your OS.
 * Open Eclipse and create new "Android Project from Existing Code". Choose android/actionbarsherlock/library as root.
 * Clean project and compile.
 * If any error appear, check the project properties; in the 'Android' section, API Level should be greater or equal than 14.
@@ -57,7 +57,22 @@ NOTE: You must have the Android SDK 'tools/', and 'platforms-tools/' folders in 
 
 NOTE: Even though API level is set to 19, APK also runs on older devices because in AndroidManifest.xml minSdkVersion is set to 8.
 
-### 5. Create pull request:
+### 5. Building with IntelliJ:
+
+* Complete the setup of project properties and resolve pending dependencies running "setup_env.bat" or "./setup_env.sh"  depending on your OS.
+* Open IntelliJ and select `File -> Import Project` 
+* Select the root folder of this repository
+* In the import dialog, select "Import from external model" and then check "Maven"
+* In the project settings, set the SDK to `Android API 19 Platform`
+* Right click the folder `oc_framework/src` and select `Mark Directory as -> Sources Root`
+* After these steps, running `Rebuild project` should succeed without compilation errors. 
+* Click `Run -> Edit configurations`, add an `Android Application` run configuration and set the `owncloud` module in the right pane. 
+* Run the debug configuration.
+* At this point, the android emulator should fire up and IntelliJ should install the owncloud application. HAVE FUN!
+
+NOTE: Even though API level is set to 19, APK also runs on older devices because in AndroidManifest.xml minSdkVersion is set to 8.
+
+### 6. Create pull request:
   
 NOTE: You must sign the [Contributor Agreement][1] before your changes can be accepted!
 
