@@ -1,0 +1,29 @@
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+target/
+
+# Local configuration files (sdk path, etc)
+local.properties
+sample_client/local.properties
+tests/local.properties
+tests/test_cases/local.properties
+
+# Mac .DS_Store files
+.DS_Store
+
+# Proguard README
+proguard-project.txt
+sample_client/proguard-project.txt
+tests/proguard-project.txt
+tests/test_cases/proguard-project.txt
