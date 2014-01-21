@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="custom_rules">
+    <target name="-post-compile">
+        <echo>Copying jar file for binary distribution</echo>
+        <copy file="${out.absolute.dir}/classes.jar" toFile="${out.absolute.dir}/${ant.project.name}.jar" />
+    </target>
+</project>
