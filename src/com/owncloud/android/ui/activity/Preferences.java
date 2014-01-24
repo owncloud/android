@@ -29,6 +29,7 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
@@ -215,6 +216,14 @@ public class Preferences extends SherlockPreferenceActivity {
                } catch (NameNotFoundException e) {
                    Log_OC.e(TAG, "Error while showing about dialog", e);
                }
+               pAboutApp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                   @Override
+                   public boolean onPreferenceClick(Preference preference) {
+                       Intent intent = new Intent(getBaseContext(), ChangelogActivity.class);
+                       startActivity(intent);
+                       return true;
+                   }
+               });
        }
        
        /* DISABLED FOR RELEASE UNTIL FIXED 
