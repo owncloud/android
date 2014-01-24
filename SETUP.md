@@ -34,6 +34,8 @@ NOTE: You must have mvn (version >= 3.1.1) in your environment path. Current And
 * "mvn -pl com.simpligility.android.sdk-deployer:android-19 -am install"
 * "cd ../android/oc_framework"
 * "mvn install"
+* "cd ../oc_framework"
+* "mvn install"
 * "cd .."
 * Now you can create ownCloud APK using "mvn package"
 
