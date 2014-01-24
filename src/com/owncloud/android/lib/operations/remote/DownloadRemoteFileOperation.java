@@ -28,6 +28,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
     
 	private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
-    //private long mModificationTimestamp = 0;
+    private long mModificationTimestamp = 0;
     private GetMethod mGet;
     
     private String mRemotePath;
@@ -131,13 +132,11 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     }
                 }
                 savedFile = true;
-                /*
                 Header modificationTime = mGet.getResponseHeader("Last-Modified");
                 if (modificationTime != null) {
                     Date d = WebdavUtils.parseResponseDate((String) modificationTime.getValue());
                     mModificationTimestamp = (d != null) ? d.getTime() : 0;
                 }
-                */
                 
             } else {
                 client.exhaustResponse(mGet.getResponseBodyAsStream());
@@ -176,4 +175,9 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
     public void cancel() {
         mCancellationRequested.set(true);   // atomic set; there is no need of synchronizing it
     }
+
+	public long getModificationTimestamp() {
+		return mModificationTimestamp;
+	}
+
 }
