@@ -13,6 +13,7 @@ Get this code and compile it. In the repository it is not only the library proje
 There are different ways of adding this library to your code, then it is described one of them
 
 __Step 1.__ Compile the ownCloud Android Library
+
 __Step 2.__ Define a dependency within your project. For that, access to Properties > Android > Library and click on add and select the ownCloud Android library
 
 
