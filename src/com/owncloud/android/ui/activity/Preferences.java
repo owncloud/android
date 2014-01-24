@@ -219,13 +219,8 @@ public class Preferences extends SherlockPreferenceActivity {
                pAboutApp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                    @Override
                    public boolean onPreferenceClick(Preference preference) {
-//                       FragmentManager fm = getSupportFragmentManager();
-//                       ChangelogDialog p = new ChangelogDialog();
-//                       p.show(fm, "play?");
-                       
                        Intent intent = new Intent(getBaseContext(), ChangelogActivity.class);
                        startActivity(intent);
-                       
                        return true;
                    }
                });
