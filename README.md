@@ -22,6 +22,7 @@ __Step 2.__ Define a dependency within your project. For that, access to Propert
 ownCloud Android Library is available under MIT license
 
 Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+
 Copyright (C) 2012 Bartek Przybylski
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
