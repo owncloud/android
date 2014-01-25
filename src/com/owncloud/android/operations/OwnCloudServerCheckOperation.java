@@ -34,12 +34,15 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 
 public class OwnCloudServerCheckOperation extends RemoteOperation {
-    
-    /** Maximum time to wait for a response from the server when the connection is being tested, in MILLISECONDs.  */
+
+    /**
+     * Maximum time to wait for a response from the server when the connection
+     * is being tested, in MILLISECONDs.
+     */
     public static final int TRY_CONNECTION_TIMEOUT = 5000;
-    
+
     private static final String TAG = OwnCloudServerCheckOperation.class.getSimpleName();
-    
+
     private String mUrl;
     private RemoteOperationResult mLatestResult;
     private Context mContext;
@@ -50,7 +53,7 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
         mContext = context;
         mOCVersion = null;
     }
-    
+
     public OwnCloudVersion getDiscoveredVersion() {
         return mOCVersion;
     }
@@ -70,38 +73,38 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
                     mOCVersion = new OwnCloudVersion(json.getString("version"));
                     if (!mOCVersion.isVersionValid()) {
                         mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.BAD_OC_VERSION);
-                        
+
                     } else {
-                        mLatestResult = new RemoteOperationResult(urlSt.startsWith("https://") ? 
-                                                                    RemoteOperationResult.ResultCode.OK_SSL : 
-                                                                    RemoteOperationResult.ResultCode.OK_NO_SSL
-                            );
+                        mLatestResult = new RemoteOperationResult(
+                                urlSt.startsWith("https://") ? RemoteOperationResult.ResultCode.OK_SSL
+                                        : RemoteOperationResult.ResultCode.OK_NO_SSL);
 
                         retval = true;
                     }
                 }
-                
+
             } else {
                 mLatestResult = new RemoteOperationResult(false, status, get.getResponseHeaders());
             }
 
         } catch (JSONException e) {
             mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
-            
+
         } catch (Exception e) {
             mLatestResult = new RemoteOperationResult(e);
-            
+
         } finally {
             if (get != null)
                 get.releaseConnection();
         }
-        
+
         if (mLatestResult.isSuccess()) {
             Log_OC.i(TAG, "Connection check at " + urlSt + ": " + mLatestResult.getLogMessage());
-            
+
         } else if (mLatestResult.getException() != null) {
-            Log_OC.e(TAG, "Connection check at " + urlSt + ": " + mLatestResult.getLogMessage(), mLatestResult.getException());
-            
+            Log_OC.e(TAG, "Connection check at " + urlSt + ": " + mLatestResult.getLogMessage(),
+                    mLatestResult.getException());
+
         } else {
             Log_OC.e(TAG, "Connection check at " + urlSt + ": " + mLatestResult.getLogMessage());
         }
@@ -110,23 +113,21 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
     }
 
     private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) mContext
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm != null && cm.getActiveNetworkInfo() != null
-                && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm != null && cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-	@Override
-	protected RemoteOperationResult run(WebdavClient client) {
+    @Override
+    protected RemoteOperationResult run(WebdavClient client) {
         if (!isOnline()) {
-        	return new RemoteOperationResult(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
+            return new RemoteOperationResult(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
         }
         if (mUrl.startsWith("http://") || mUrl.startsWith("https://")) {
             tryConnection(client, mUrl + AccountUtils.STATUS_PATH);
-            
+
         } else {
             client.setBaseUri(Uri.parse("https://" + mUrl + AccountUtils.STATUS_PATH));
-            boolean httpsSuccess = tryConnection(client, "https://" + mUrl + AccountUtils.STATUS_PATH); 
+            boolean httpsSuccess = tryConnection(client, "https://" + mUrl + AccountUtils.STATUS_PATH);
             if (!httpsSuccess && !mLatestResult.isSslRecoverableException()) {
                 Log_OC.d(TAG, "establishing secure connection failed, trying non secure connection");
                 client.setBaseUri(Uri.parse("http://" + mUrl + AccountUtils.STATUS_PATH));
@@ -134,6 +135,6 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
             }
         }
         return mLatestResult;
-	}
-	
+    }
+
 }

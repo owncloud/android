@@ -39,7 +39,6 @@ import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Log_OC;
 
-
 /**
  * An Activity that allows the user to change the application's settings.
  * 
@@ -47,14 +46,13 @@ import com.owncloud.android.utils.Log_OC;
  * @author David A. Velasco
  */
 public class Preferences extends SherlockPreferenceActivity {
-    
+
     private static final String TAG = "OwnCloudPreferences";
     private DbHandler mDbHandler;
     private CheckBoxPreference pCode;
-    //private CheckBoxPreference pLogging;
-    //private Preference pLoggingHistory;
+    // private CheckBoxPreference pLogging;
+    // private Preference pLoggingHistory;
     private Preference pAboutApp;
-
 
     @SuppressWarnings("deprecation")
     @Override
@@ -62,24 +60,24 @@ public class Preferences extends SherlockPreferenceActivity {
         super.onCreate(savedInstanceState);
         mDbHandler = new DbHandler(getBaseContext());
         addPreferencesFromResource(R.xml.preferences);
-        //populateAccountList();
+        // populateAccountList();
         ActionBar actionBar = getSherlock().getActionBar();
         actionBar.setIcon(DisplayUtils.getSeasonalIconId());
         actionBar.setDisplayHomeAsUpEnabled(true);
-        
+
         Preference p = findPreference("manage_account");
         if (p != null)
-        p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent i = new Intent(getApplicationContext(), AccountSelectActivity.class);
-                startActivity(i);
-                return true;
-            }
-        });
-        
+            p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent i = new Intent(getApplicationContext(), AccountSelectActivity.class);
+                    startActivity(i);
+                    return true;
+                }
+            });
+
         pCode = (CheckBoxPreference) findPreference("set_pincode");
-        if (pCode != null){
+        if (pCode != null) {
             pCode.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -87,25 +85,23 @@ public class Preferences extends SherlockPreferenceActivity {
                     i.putExtra(PinCodeActivity.EXTRA_ACTIVITY, "preferences");
                     i.putExtra(PinCodeActivity.EXTRA_NEW_STATE, newValue.toString());
                     startActivity(i);
-                    
+
                     return true;
                 }
-            });            
-            
+            });
+
         }
-        
-        
 
         PreferenceCategory preferenceCategory = (PreferenceCategory) findPreference("more");
-        
+
         boolean helpEnabled = getResources().getBoolean(R.bool.help_enabled);
-        Preference pHelp =  findPreference("help");
-        if (pHelp != null ){
+        Preference pHelp = findPreference("help");
+        if (pHelp != null) {
             if (helpEnabled) {
                 pHelp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        String helpWeb   =(String) getText(R.string.url_help);
+                        String helpWeb = (String) getText(R.string.url_help);
                         if (helpWeb != null && helpWeb.length() > 0) {
                             Uri uriUrl = Uri.parse(helpWeb);
                             Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
@@ -117,73 +113,78 @@ public class Preferences extends SherlockPreferenceActivity {
             } else {
                 preferenceCategory.removePreference(pHelp);
             }
-            
+
         }
-        
-       
-       boolean recommendEnabled = getResources().getBoolean(R.bool.recommend_enabled);
-       Preference pRecommend =  findPreference("recommend");
-        if (pRecommend != null){
+
+        boolean recommendEnabled = getResources().getBoolean(R.bool.recommend_enabled);
+        Preference pRecommend = findPreference("recommend");
+        if (pRecommend != null) {
             if (recommendEnabled) {
                 pRecommend.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
 
-                        Intent intent = new Intent(Intent.ACTION_SENDTO); 
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
                         intent.setType("text/plain");
-                        //Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(Preferences.this);
+                        // Account currentAccount =
+                        // AccountUtils.getCurrentOwnCloudAccount(Preferences.this);
                         String appName = getString(R.string.app_name);
-                        //String username = currentAccount.name.substring(0, currentAccount.name.lastIndexOf('@')); 
-                        //String recommendSubject = String.format(getString(R.string.recommend_subject), username, appName);
+                        // String username = currentAccount.name.substring(0,
+                        // currentAccount.name.lastIndexOf('@'));
+                        // String recommendSubject =
+                        // String.format(getString(R.string.recommend_subject),
+                        // username, appName);
                         String recommendSubject = String.format(getString(R.string.recommend_subject), appName);
                         intent.putExtra(Intent.EXTRA_SUBJECT, recommendSubject);
-                        //String recommendText = String.format(getString(R.string.recommend_text), getString(R.string.app_name), username);
-                        String recommendText = String.format(getString(R.string.recommend_text), getString(R.string.app_name), getString(R.string.url_app_download));
+                        // String recommendText =
+                        // String.format(getString(R.string.recommend_text),
+                        // getString(R.string.app_name), username);
+                        String recommendText = String.format(getString(R.string.recommend_text),
+                                getString(R.string.app_name), getString(R.string.url_app_download));
                         intent.putExtra(Intent.EXTRA_TEXT, recommendText);
 
-                        intent.setData(Uri.parse(getString(R.string.mail_recommend))); 
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+                        intent.setData(Uri.parse(getString(R.string.mail_recommend)));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
-
-                        return(true);
+                        return (true);
 
                     }
                 });
             } else {
                 preferenceCategory.removePreference(pRecommend);
             }
-            
+
         }
-        
+
         boolean feedbackEnabled = getResources().getBoolean(R.bool.feedback_enabled);
-        Preference pFeedback =  findPreference("feedback");
-        if (pFeedback != null){
+        Preference pFeedback = findPreference("feedback");
+        if (pFeedback != null) {
             if (feedbackEnabled) {
                 pFeedback.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        String feedbackMail   =(String) getText(R.string.mail_feedback);
-                        String feedback   =(String) getText(R.string.prefs_feedback);
-                        Intent intent = new Intent(Intent.ACTION_SENDTO); 
+                        String feedbackMail = (String) getText(R.string.mail_feedback);
+                        String feedback = (String) getText(R.string.prefs_feedback);
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
-                        
-                        intent.setData(Uri.parse(feedbackMail)); 
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+
+                        intent.setData(Uri.parse(feedbackMail));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        
+
                         return true;
                     }
                 });
             } else {
                 preferenceCategory.removePreference(pFeedback);
             }
-            
+
         }
-        
+
         boolean imprintEnabled = getResources().getBoolean(R.bool.imprint_enabled);
-        Preference pImprint =  findPreference("imprint");
+        Preference pImprint = findPreference("imprint");
         if (pImprint != null) {
             if (imprintEnabled) {
                 pImprint.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -195,7 +196,8 @@ public class Preferences extends SherlockPreferenceActivity {
                             Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
                             startActivity(intent);
                         }
-                        //ImprintDialog.newInstance(true).show(preference.get, "IMPRINT_DIALOG");
+                        // ImprintDialog.newInstance(true).show(preference.get,
+                        // "IMPRINT_DIALOG");
                         return true;
                     }
                 });
@@ -203,57 +205,49 @@ public class Preferences extends SherlockPreferenceActivity {
                 preferenceCategory.removePreference(pImprint);
             }
         }
-            
+
         /* About App */
-       pAboutApp = (Preference) findPreference("about_app");
-       if (pAboutApp != null) { 
-               pAboutApp.setTitle(String.format(getString(R.string.about_android), getString(R.string.app_name)));
-               PackageInfo pkg;
-               try {
-                   pkg = getPackageManager().getPackageInfo(getPackageName(), 0);
-                   pAboutApp.setSummary(String.format(getString(R.string.about_version), pkg.versionName));
-               } catch (NameNotFoundException e) {
-                   Log_OC.e(TAG, "Error while showing about dialog", e);
-               }
-       }
-       
-       /* DISABLED FOR RELEASE UNTIL FIXED 
-       pLogging = (CheckBoxPreference) findPreference("log_to_file");
-       if (pLogging != null) {
-           pLogging.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-               @Override
-               public boolean onPreferenceChange(Preference preference, Object newValue) {
-                   
-                   String logpath = Environment.getExternalStorageDirectory()+File.separator+"owncloud"+File.separator+"log";
-                
-                   if(!pLogging.isChecked()) {
-                       Log_OC.d("Debug", "start logging");
-                       Log_OC.v("PATH", logpath);
-                       Log_OC.startLogging(logpath);
-                   }
-                   else {
-                       Log_OC.d("Debug", "stop logging");
-                       Log_OC.stopLogging();
-                   }
-                   return true;
-               }
-           });
-       }
-       
-       pLoggingHistory = (Preference) findPreference("log_history");
-       if (pLoggingHistory != null) {
-           pLoggingHistory.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getApplicationContext(),LogHistoryActivity.class);
-                startActivity(intent);
-                return true;
+        pAboutApp = (Preference) findPreference("about_app");
+        if (pAboutApp != null) {
+            pAboutApp.setTitle(String.format(getString(R.string.about_android), getString(R.string.app_name)));
+            PackageInfo pkg;
+            try {
+                pkg = getPackageManager().getPackageInfo(getPackageName(), 0);
+                pAboutApp.setSummary(String.format(getString(R.string.about_version), pkg.versionName));
+            } catch (NameNotFoundException e) {
+                Log_OC.e(TAG, "Error while showing about dialog", e);
             }
-        });
-       }
-       */
-       
+        }
+
+        /*
+         * DISABLED FOR RELEASE UNTIL FIXED pLogging = (CheckBoxPreference)
+         * findPreference("log_to_file"); if (pLogging != null) {
+         * pLogging.setOnPreferenceChangeListener(new
+         * OnPreferenceChangeListener() {
+         * 
+         * @Override public boolean onPreferenceChange(Preference preference,
+         * Object newValue) {
+         * 
+         * String logpath =
+         * Environment.getExternalStorageDirectory()+File.separator
+         * +"owncloud"+File.separator+"log";
+         * 
+         * if(!pLogging.isChecked()) { Log_OC.d("Debug", "start logging");
+         * Log_OC.v("PATH", logpath); Log_OC.startLogging(logpath); } else {
+         * Log_OC.d("Debug", "stop logging"); Log_OC.stopLogging(); } return
+         * true; } }); }
+         * 
+         * pLoggingHistory = (Preference) findPreference("log_history"); if
+         * (pLoggingHistory != null) {
+         * pLoggingHistory.setOnPreferenceClickListener(new
+         * OnPreferenceClickListener() {
+         * 
+         * @Override public boolean onPreferenceClick(Preference preference) {
+         * Intent intent = new
+         * Intent(getApplicationContext(),LogHistoryActivity.class);
+         * startActivity(intent); return true; } }); }
+         */
+
     }
 
     @Override
@@ -298,5 +292,5 @@ public class Preferences extends SherlockPreferenceActivity {
         mDbHandler.close();
         super.onDestroy();
     }
-    
+
 }

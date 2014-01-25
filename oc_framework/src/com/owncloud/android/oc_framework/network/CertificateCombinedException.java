@@ -1,4 +1,5 @@
 package com.owncloud.android.oc_framework.network;
+
 /* ownCloud Android client application
  *   Copyright (C) 2012-2013 ownCloud Inc.
  *
@@ -16,8 +17,6 @@ package com.owncloud.android.oc_framework.network;
  *
  */
 
-
-
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
@@ -27,19 +26,23 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
 /**
- * Exception joining all the problems that {@link AdvancedX509TrustManager} can find in
- * a certificate chain for a server.
+ * Exception joining all the problems that {@link AdvancedX509TrustManager} can
+ * find in a certificate chain for a server.
  * 
  * This was initially created as an extension of CertificateException, but some
- * implementations of the SSL socket layer in existing devices are REPLACING the CertificateException
- * instances thrown by {@link javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[], String)}
- * with SSLPeerUnverifiedException FORGETTING THE CAUSING EXCEPTION instead of wrapping it. 
+ * implementations of the SSL socket layer in existing devices are REPLACING the
+ * CertificateException instances thrown by
+ * {@link javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[], String)}
+ * with SSLPeerUnverifiedException FORGETTING THE CAUSING EXCEPTION instead of
+ * wrapping it.
  * 
- * Due to this, extending RuntimeException is necessary to get that the CertificateCombinedException 
- * instance reaches {@link AdvancedSslSocketFactory#verifyPeerIdentity}.
+ * Due to this, extending RuntimeException is necessary to get that the
+ * CertificateCombinedException instance reaches
+ * {@link AdvancedSslSocketFactory#verifyPeerIdentity}.
  * 
- * BE CAREFUL. As a RuntimeException extensions, Java compilers do not require to handle it
- * in client methods. Be sure to use it only when you know exactly where it will go.
+ * BE CAREFUL. As a RuntimeException extensions, Java compilers do not require
+ * to handle it in client methods. Be sure to use it only when you know exactly
+ * where it will go.
  * 
  * @author David A. Velasco
  */
@@ -47,7 +50,7 @@ public class CertificateCombinedException extends RuntimeException {
 
     /** Generated - to refresh every time the class changes */
     private static final long serialVersionUID = -8875782030758554999L;
-    
+
     private X509Certificate mServerCert = null;
     private String mHostInUrl;
 
@@ -56,7 +59,7 @@ public class CertificateCombinedException extends RuntimeException {
     private CertPathValidatorException mCertPathValidatorException = null;
     private CertificateException mOtherCertificateException = null;
     private SSLPeerUnverifiedException mSslPeerUnverifiedException = null;
-    
+
     public CertificateCombinedException(X509Certificate x509Certificate) {
         mServerCert = x509Certificate;
     }
@@ -78,7 +81,7 @@ public class CertificateCombinedException extends RuntimeException {
     }
 
     public void setCertificateExpiredException(CertificateExpiredException c) {
-        mCertificateExpiredException  = c;
+        mCertificateExpiredException = c;
     }
 
     public CertificateNotYetValidException getCertificateNotYetValidException() {
@@ -106,7 +109,7 @@ public class CertificateCombinedException extends RuntimeException {
     }
 
     public SSLPeerUnverifiedException getSslPeerUnverifiedException() {
-        return mSslPeerUnverifiedException ; 
+        return mSslPeerUnverifiedException;
     }
 
     public void setSslPeerUnverifiedException(SSLPeerUnverifiedException s) {
@@ -114,18 +117,13 @@ public class CertificateCombinedException extends RuntimeException {
     }
 
     public boolean isException() {
-        return (mCertificateExpiredException != null ||
-                mCertificateNotYetValidException != null ||
-                mCertPathValidatorException != null ||
-                mOtherCertificateException != null ||
-                mSslPeerUnverifiedException != null);
+        return (mCertificateExpiredException != null || mCertificateNotYetValidException != null
+                || mCertPathValidatorException != null || mOtherCertificateException != null || mSslPeerUnverifiedException != null);
     }
 
     public boolean isRecoverable() {
-        return (mCertificateExpiredException != null ||
-                mCertificateNotYetValidException != null ||
-                mCertPathValidatorException != null ||
-                mSslPeerUnverifiedException != null);
+        return (mCertificateExpiredException != null || mCertificateNotYetValidException != null
+                || mCertPathValidatorException != null || mSslPeerUnverifiedException != null);
     }
 
 }

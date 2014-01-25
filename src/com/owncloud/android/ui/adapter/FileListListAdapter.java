@@ -28,7 +28,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 import java.util.Vector;
 
 import com.owncloud.android.R;
@@ -39,7 +38,6 @@ import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.ui.activity.TransferServiceGetter;
 import com.owncloud.android.utils.DisplayUtils;
-
 
 /**
  * This Adapter populates a ListView with all files and folders in an ownCloud
@@ -55,7 +53,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
     private TransferServiceGetter mTransferServiceGetter;
-    
+
     public FileListListAdapter(Context context, TransferServiceGetter transferServiceGetter) {
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
@@ -100,11 +98,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            LayoutInflater inflator = (LayoutInflater) mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflator.inflate(R.layout.list_item, null);
         }
-    
+
         if (mFiles != null && mFiles.size() > position) {
             OCFile file = mFiles.get(position);
             TextView fileName = (TextView) view.findViewById(R.id.Filename);
@@ -128,26 +125,27 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             } else {
                 localStateView.setVisibility(View.INVISIBLE);
             }
-            
+
             TextView fileSizeV = (TextView) view.findViewById(R.id.file_size);
             TextView lastModV = (TextView) view.findViewById(R.id.last_mod);
             ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
-            
+
             if (!file.isFolder()) {
                 fileSizeV.setVisibility(View.VISIBLE);
                 fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
                 lastModV.setVisibility(View.VISIBLE);
                 lastModV.setText(DisplayUtils.unixTimeToHumanReadable(file.getModificationTimestamp()));
-                // this if-else is needed even thoe fav icon is visible by default
+                // this if-else is needed even thoe fav icon is visible by
+                // default
                 // because android reuses views in listview
                 if (!file.keepInSync()) {
                     view.findViewById(R.id.imageView3).setVisibility(View.GONE);
                 } else {
                     view.findViewById(R.id.imageView3).setVisibility(View.VISIBLE);
                 }
-                
-                ListView parentList = (ListView)parent;
-                if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) { 
+
+                ListView parentList = (ListView) parent;
+                if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) {
                     checkBoxV.setVisibility(View.GONE);
                 } else {
                     if (parentList.isItemChecked(position)) {
@@ -157,16 +155,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     }
                     checkBoxV.setVisibility(View.VISIBLE);
                 }
-                
-            } 
-            else {
-                
+
+            } else {
+
                 fileSizeV.setVisibility(View.VISIBLE);
                 fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
                 lastModV.setVisibility(View.VISIBLE);
                 lastModV.setText(DisplayUtils.unixTimeToHumanReadable(file.getModificationTimestamp()));
-               checkBoxV.setVisibility(View.GONE);
-               view.findViewById(R.id.imageView3).setVisibility(View.GONE);
+                checkBoxV.setVisibility(View.GONE);
+                view.findViewById(R.id.imageView3).setVisibility(View.GONE);
             }
         }
 
@@ -190,8 +187,11 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     /**
      * Change the adapted directory for a new one
-     * @param directory                 New file to adapt. Can be NULL, meaning "no content to adapt".
-     * @param updatedStorageManager     Optional updated storage manager; used to replace mStorageManager if is different (and not NULL)
+     * 
+     * @param directory New file to adapt. Can be NULL, meaning
+     *            "no content to adapt".
+     * @param updatedStorageManager Optional updated storage manager; used to
+     *            replace mStorageManager if is different (and not NULL)
      */
     public void swapDirectory(OCFile directory, FileDataStorageManager updatedStorageManager) {
         mFile = directory;
@@ -206,5 +206,5 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         }
         notifyDataSetChanged();
     }
-    
+
 }

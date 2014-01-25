@@ -54,14 +54,12 @@ import com.owncloud.android.utils.Log_OC;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 
+public class AccountSelectActivity extends SherlockListActivity implements AccountManagerCallback<Boolean> {
 
-public class AccountSelectActivity extends SherlockListActivity implements
-        AccountManagerCallback<Boolean> {
+    private static final String TAG = "AccountSelectActivity";
 
-    private static final String  TAG = "AccountSelectActivity";
-    
     private static final String PREVIOUS_ACCOUNT_KEY = "ACCOUNT";
-    
+
     private final Handler mHandler = new Handler();
     private Account mPreviousAccount = null;
 
@@ -74,7 +72,7 @@ public class AccountSelectActivity extends SherlockListActivity implements
         } else {
             mPreviousAccount = AccountUtils.getCurrentOwnCloudAccount(this);
         }
-        
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setIcon(DisplayUtils.getSeasonalIconId());
         actionBar.setDisplayShowTitleEnabled(true);
@@ -86,16 +84,17 @@ public class AccountSelectActivity extends SherlockListActivity implements
         super.onResume();
         populateAccountList();
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
         if (this.isFinishing()) {
             Account current = AccountUtils.getCurrentOwnCloudAccount(this);
-            if ((mPreviousAccount == null && current != null) || 
-                (mPreviousAccount != null && !mPreviousAccount.equals(current))) {
-                /// the account set as default changed since this activity was created 
-            
+            if ((mPreviousAccount == null && current != null)
+                    || (mPreviousAccount != null && !mPreviousAccount.equals(current))) {
+                // / the account set as default changed since this activity was
+                // created
+
                 // restart the main activity
                 Intent i = new Intent(this, FileDisplayActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -115,47 +114,40 @@ public class AccountSelectActivity extends SherlockListActivity implements
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-            ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         getMenuInflater().inflate(R.menu.account_picker_long_click, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        String accountName = ((TextView) v.findViewById(android.R.id.text1))
-                .getText().toString();
+        String accountName = ((TextView) v.findViewById(android.R.id.text1)).getText().toString();
         AccountUtils.setCurrentOwnCloudAccount(this, accountName);
-        finish();   // immediate exit
+        finish(); // immediate exit
     }
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         if (item.getItemId() == R.id.createAccount) {
-            /*Intent intent = new Intent(
-                    android.provider.Settings.ACTION_ADD_ACCOUNT);
-            intent.putExtra("authorities",
-                    new String[] { MainApp.getAuthTokenType() });
-            startActivity(intent);*/
+            /*
+             * Intent intent = new Intent(
+             * android.provider.Settings.ACTION_ADD_ACCOUNT);
+             * intent.putExtra("authorities", new String[] {
+             * MainApp.getAuthTokenType() }); startActivity(intent);
+             */
             AccountManager am = AccountManager.get(getApplicationContext());
-            am.addAccount(MainApp.getAccountType(), 
-                            null,
-                            null, 
-                            null, 
-                            this, 
-                            null,                        
-                            null);
+            am.addAccount(MainApp.getAccountType(), null, null, null, this, null, null);
             return true;
         }
         return false;
     }
 
     /**
-     * Called when the user clicked on an item into the context menu created at 
-     * {@link #onCreateContextMenu(ContextMenu, View, ContextMenuInfo)} for every
-     * ownCloud {@link Account} , containing 'secondary actions' for them.
+     * Called when the user clicked on an item into the context menu created at
+     * {@link #onCreateContextMenu(ContextMenu, View, ContextMenuInfo)} for
+     * every ownCloud {@link Account} , containing 'secondary actions' for them.
      * 
-     * {@inheritDoc}}
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -169,7 +161,7 @@ public class AccountSelectActivity extends SherlockListActivity implements
             Log_OC.wtf(TAG, "getitem(index) from list adapter did not return hashmap, bailing out");
             return false;
         }
-        
+
         String accountName = map.get("NAME");
         AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
@@ -178,9 +170,10 @@ public class AccountSelectActivity extends SherlockListActivity implements
                 if (item.getItemId() == R.id.change_password) {
                     Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
                     updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, a);
-                    updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_TOKEN);
+                    updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION,
+                            AuthenticatorActivity.ACTION_UPDATE_TOKEN);
                     startActivity(updateAccountCredentials);
-                    
+
                 } else if (item.getItemId() == R.id.delete_account) {
                     am.removeAccount(a, this, mHandler);
                 }
@@ -192,32 +185,20 @@ public class AccountSelectActivity extends SherlockListActivity implements
 
     private void populateAccountList() {
         AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-        Account accounts[] = am
-                .getAccountsByType(MainApp.getAccountType());
+        Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
         if (am.getAccountsByType(MainApp.getAccountType()).length == 0) {
             // Show create account screen if there isn't any account
-            am.addAccount(MainApp.getAccountType(), 
-                    null,
-                    null, 
-                    null, 
-                    this, 
-                    null,                        
-                    null);
-        }
-        else {
+            am.addAccount(MainApp.getAccountType(), null, null, null, this, null, null);
+        } else {
             LinkedList<HashMap<String, String>> ll = new LinkedList<HashMap<String, String>>();
             for (Account a : accounts) {
                 HashMap<String, String> h = new HashMap<String, String>();
                 h.put("NAME", a.name);
-                h.put("VER",
-                        "ownCloud version: "
-                                + am.getUserData(a,
-                                        OwnCloudAccount.Constants.KEY_OC_VERSION));
+                h.put("VER", "ownCloud version: " + am.getUserData(a, OwnCloudAccount.Constants.KEY_OC_VERSION));
                 ll.add(h);
             }
 
-            setListAdapter(new AccountCheckedSimpleAdepter(this, ll,
-                    android.R.layout.simple_list_item_single_choice,
+            setListAdapter(new AccountCheckedSimpleAdepter(this, ll, android.R.layout.simple_list_item_single_choice,
                     new String[] { "NAME" }, new int[] { android.R.id.text1 }));
             registerForContextMenu(getListView());
         }
@@ -229,8 +210,7 @@ public class AccountSelectActivity extends SherlockListActivity implements
             Account a = AccountUtils.getCurrentOwnCloudAccount(this);
             String accountName = "";
             if (a == null) {
-                Account[] accounts = AccountManager.get(this)
-                        .getAccountsByType(MainApp.getAccountType());
+                Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
                 if (accounts.length != 0)
                     accountName = accounts[0].name;
                 AccountUtils.setCurrentOwnCloudAccount(this, accountName);
@@ -243,22 +223,18 @@ public class AccountSelectActivity extends SherlockListActivity implements
         private Account mCurrentAccount;
         private List<? extends Map<String, ?>> mPrivateData;
 
-        public AccountCheckedSimpleAdepter(Context context,
-                List<? extends Map<String, ?>> data, int resource,
+        public AccountCheckedSimpleAdepter(Context context, List<? extends Map<String, ?>> data, int resource,
                 String[] from, int[] to) {
             super(context, data, resource, from, to);
-            mCurrentAccount = AccountUtils
-                    .getCurrentOwnCloudAccount(AccountSelectActivity.this);
+            mCurrentAccount = AccountUtils.getCurrentOwnCloudAccount(AccountSelectActivity.this);
             mPrivateData = data;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = super.getView(position, convertView, parent);
-            CheckedTextView ctv = (CheckedTextView) v
-                    .findViewById(android.R.id.text1);
-            if (mPrivateData.get(position).get("NAME")
-                    .equals(mCurrentAccount.name)) {
+            CheckedTextView ctv = (CheckedTextView) v.findViewById(android.R.id.text1);
+            if (mPrivateData.get(position).get("NAME").equals(mCurrentAccount.name)) {
                 ctv.setChecked(true);
             }
             return v;

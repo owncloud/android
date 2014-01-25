@@ -26,7 +26,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 /**
  * This Activity is used to display a detail message for failed uploads
  * 
@@ -46,7 +45,7 @@ public class FailedUploadActivity extends Activity {
         TextView textView = (TextView) findViewById(R.id.faild_upload_message);
         textView.setText(message);
         Button closeBtn = (Button) findViewById(R.id.failed_uploadactivity_close_button);
-        
+
         closeBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

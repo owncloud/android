@@ -15,7 +15,6 @@
  *
  */
 
-
 package com.owncloud.android.workaround.accounts;
 
 import android.accounts.AbstractAccountAuthenticator;
@@ -28,12 +27,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+
 //import android.util.Log;
 
 public class AccountAuthenticatorService extends Service {
 
     private AccountAuthenticator mAuthenticator;
-    //static final public String ACCOUNT_TYPE = "owncloud";
+
+    // static final public String ACCOUNT_TYPE = "owncloud";
 
     @Override
     public void onCreate() {
@@ -45,27 +46,23 @@ public class AccountAuthenticatorService extends Service {
     public IBinder onBind(Intent intent) {
         return mAuthenticator.getIBinder();
     }
-    
-    
+
     public static class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         public static final String KEY_AUTH_TOKEN_TYPE = "authTokenType";
         public static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
         public static final String KEY_LOGIN_OPTIONS = "loginOptions";
-    	
-    	public AccountAuthenticator(Context context) {
+
+        public AccountAuthenticator(Context context) {
             super(context);
         }
 
         @Override
-        public Bundle addAccount(AccountAuthenticatorResponse response,
-                String accountType, String authTokenType,
-                String[] requiredFeatures, Bundle options)
-                throws NetworkErrorException {
-        	//Log.e("WORKAROUND", "Yes, WORKAROUND takes the control here");
+        public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
+                String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+            // Log.e("WORKAROUND", "Yes, WORKAROUND takes the control here");
             final Intent intent = new Intent("com.owncloud.android.workaround.accounts.CREATE");
-            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
-                    response);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
             intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
             intent.putExtra(KEY_REQUIRED_FEATURES, requiredFeatures);
             intent.putExtra(KEY_LOGIN_OPTIONS, options);
@@ -79,26 +76,23 @@ public class AccountAuthenticatorService extends Service {
             final Bundle bundle = new Bundle();
             bundle.putParcelable(AccountManager.KEY_INTENT, intent);
             return bundle;
-            //return getCommonResultBundle();
-        }
-
-        
-		@Override
-        public Bundle confirmCredentials(AccountAuthenticatorResponse response,
-                Account account, Bundle options) throws NetworkErrorException {
-            return getCommonResultBundle();
+            // return getCommonResultBundle();
         }
 
         @Override
-        public Bundle editProperties(AccountAuthenticatorResponse response,
-                String accountType) {
-            return getCommonResultBundle();
-        }
-
-        @Override
-        public Bundle getAuthToken(AccountAuthenticatorResponse response,
-                Account account, String authTokenType, Bundle options)
+        public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options)
                 throws NetworkErrorException {
+            return getCommonResultBundle();
+        }
+
+        @Override
+        public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
+            return getCommonResultBundle();
+        }
+
+        @Override
+        public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType,
+                Bundle options) throws NetworkErrorException {
             return getCommonResultBundle();
         }
 
@@ -108,31 +102,30 @@ public class AccountAuthenticatorService extends Service {
         }
 
         @Override
-        public Bundle hasFeatures(AccountAuthenticatorResponse response,
-                Account account, String[] features) throws NetworkErrorException {
-            return getCommonResultBundle();
-        }
-
-        @Override
-        public Bundle updateCredentials(AccountAuthenticatorResponse response,
-                Account account, String authTokenType, Bundle options)
+        public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features)
                 throws NetworkErrorException {
             return getCommonResultBundle();
         }
 
         @Override
-        public Bundle getAccountRemovalAllowed(
-                AccountAuthenticatorResponse response, Account account)
+        public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType,
+                Bundle options) throws NetworkErrorException {
+            return getCommonResultBundle();
+        }
+
+        @Override
+        public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account)
                 throws NetworkErrorException {
             return super.getAccountRemovalAllowed(response, account);
         }
 
         private Bundle getCommonResultBundle() {
-        	Bundle resultBundle = new Bundle();
+            Bundle resultBundle = new Bundle();
             resultBundle.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
-            resultBundle.putString(AccountManager.KEY_ERROR_MESSAGE, "This is just a workaround, not a real account authenticator");
+            resultBundle.putString(AccountManager.KEY_ERROR_MESSAGE,
+                    "This is just a workaround, not a real account authenticator");
             return resultBundle;
-		}
+        }
 
     }
 }

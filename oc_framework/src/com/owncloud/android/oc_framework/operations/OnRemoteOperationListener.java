@@ -20,6 +20,6 @@ package com.owncloud.android.oc_framework.operations;
 
 public interface OnRemoteOperationListener {
 
-	void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result);
-	
+    void onRemoteOperationFinish(RemoteOperation caller, RemoteOperationResult result);
+
 }

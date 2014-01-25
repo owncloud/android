@@ -37,17 +37,14 @@ import com.owncloud.android.ui.adapter.LogListAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 
-
-
-
 public class LogHistoryActivity extends SherlockPreferenceActivity implements OnPreferenceChangeListener {
     String logpath = FileStorageUtils.getLogPath();
     File logDIR = null;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.log_send_file);
         setTitle("Log History");
         ActionBar actionBar = getSherlock().getActionBar();
@@ -55,17 +52,17 @@ public class LogHistoryActivity extends SherlockPreferenceActivity implements On
         actionBar.setDisplayHomeAsUpEnabled(true);
         ListView listView = (ListView) findViewById(android.R.id.list);
         Button deleteHistoryButton = (Button) findViewById(R.id.deleteLogHistoryButton);
-        
+
         deleteHistoryButton.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 File dir = new File(logpath);
                 if (dir != null) {
                     File[] files = dir.listFiles();
-                    if(files!=null) { 
-                        for(File f: files) {
-                                f.delete();
+                    if (files != null) {
+                        for (File f : files) {
+                            f.delete();
                         }
                     }
                     dir.delete();
@@ -74,37 +71,35 @@ public class LogHistoryActivity extends SherlockPreferenceActivity implements On
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
-            
+
         });
-        
-       
-        if(logpath != null){
-        logDIR = new File(logpath);
+
+        if (logpath != null) {
+            logDIR = new File(logpath);
         }
-        
-        if(logDIR != null && logDIR.isDirectory()) {
+
+        if (logDIR != null && logDIR.isDirectory()) {
             File[] files = logDIR.listFiles();
-          
+
             if (files != null && files.length != 0) {
                 ArrayList<String> logfiles_name = new ArrayList<String>();
                 for (File file : files) {
                     logfiles_name.add(file.getName());
                 }
-                    String[] logFiles2Array = logfiles_name.toArray(new String[logfiles_name.size()]);
-                    LogListAdapter listadapter = new LogListAdapter(this,logFiles2Array);
-                    listView.setAdapter(listadapter);
+                String[] logFiles2Array = logfiles_name.toArray(new String[logfiles_name.size()]);
+                LogListAdapter listadapter = new LogListAdapter(this, logFiles2Array);
+                listView.setAdapter(listadapter);
             }
         }
     }
 
-    
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         super.onMenuItemSelected(featureId, item);
         Intent intent;
 
         switch (item.getItemId()) {
-       
+
         case android.R.id.home:
             intent = new Intent(getBaseContext(), Preferences.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -115,6 +110,7 @@ public class LogHistoryActivity extends SherlockPreferenceActivity implements On
         }
         return true;
     }
+
     @Override
     public boolean onPreferenceChange(Preference arg0, Object arg1) {
         return false;

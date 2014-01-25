@@ -49,7 +49,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 /**
  * This Activity is used to display a list with images they could not be
  * uploaded instantly. The images can be selected for delete or for a try again
@@ -84,7 +83,7 @@ public class InstantUploadActivity extends Activity {
         this.failed_upload_all_cb = (CheckBox) findViewById(R.id.failed_upload_headline_cb);
         failed_upload_all_cb.setOnCheckedChangeListener(getCheckAllListener());
         listView = (LinearLayout) findViewById(R.id.failed_upload_scrollviewlayout);
-        
+
         loadListView(true);
 
     }

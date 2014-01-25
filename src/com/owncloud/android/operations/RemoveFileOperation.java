@@ -25,61 +25,65 @@ import com.owncloud.android.oc_framework.operations.RemoteOperationResult;
 import com.owncloud.android.oc_framework.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.oc_framework.operations.remote.RemoveRemoteFileOperation;
 
-
 /**
- * Remote operation performing the removal of a remote file or folder in the ownCloud server.
+ * Remote operation performing the removal of a remote file or folder in the
+ * ownCloud server.
  * 
  * @author David A. Velasco
  */
 public class RemoveFileOperation extends RemoteOperation {
-    
-    // private static final String TAG = RemoveFileOperation.class.getSimpleName();
-    
+
+    // private static final String TAG =
+    // RemoveFileOperation.class.getSimpleName();
+
     OCFile mFileToRemove;
     boolean mDeleteLocalCopy;
     FileDataStorageManager mDataStorageManager;
-    
-    
+
     /**
      * Constructor
      * 
-     * @param fileToRemove          OCFile instance describing the remote file or folder to remove from the server
-     * @param deleteLocalCopy       When 'true', and a local copy of the file exists, it is also removed.
-     * @param storageManager        Reference to the local database corresponding to the account where the file is contained. 
+     * @param fileToRemove OCFile instance describing the remote file or folder
+     *            to remove from the server
+     * @param deleteLocalCopy When 'true', and a local copy of the file exists,
+     *            it is also removed.
+     * @param storageManager Reference to the local database corresponding to
+     *            the account where the file is contained.
      */
     public RemoveFileOperation(OCFile fileToRemove, boolean deleteLocalCopy, FileDataStorageManager storageManager) {
         mFileToRemove = fileToRemove;
         mDeleteLocalCopy = deleteLocalCopy;
         mDataStorageManager = storageManager;
     }
-    
-    
+
     /**
-     * Getter for the file to remove (or removed, if the operation was successfully performed).
+     * Getter for the file to remove (or removed, if the operation was
+     * successfully performed).
      * 
-     * @return      File to remove or already removed.
+     * @return File to remove or already removed.
      */
     public OCFile getFile() {
         return mFileToRemove;
     }
-    
+
     /**
      * Performs the remove operation
      * 
-     * @param   client      Client object to communicate with the remote ownCloud server.
+     * @param client Client object to communicate with the remote ownCloud
+     *            server.
      */
     @Override
     protected RemoteOperationResult run(WebdavClient client) {
         RemoteOperationResult result = null;
-        
+
         RemoveRemoteFileOperation operation = new RemoveRemoteFileOperation(mFileToRemove.getRemotePath());
         result = operation.execute(client);
-        
+
         if (result.isSuccess() || result.getCode() == ResultCode.FILE_NOT_FOUND) {
             mDataStorageManager.removeFile(mFileToRemove, true, mDeleteLocalCopy);
         }
-        
+
         return result;
     }
-    
+
 }

@@ -40,30 +40,31 @@ import android.content.Context;
 import android.util.Log;
 
 public class NetworkUtils {
-    
+
     final private static String TAG = NetworkUtils.class.getSimpleName();
-    
+
     /** Default timeout for waiting data from the server */
     public static final int DEFAULT_DATA_TIMEOUT = 60000;
-    
+
     /** Default timeout for establishing a connection */
     public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
 
     /** Connection manager for all the WebdavClients */
     private static MultiThreadedHttpConnectionManager mConnManager = null;
-    
+
     private static Protocol mDefaultHttpsProtocol = null;
 
     private static AdvancedSslSocketFactory mAdvancedSslSocketFactory = null;
 
     private static X509HostnameVerifier mHostnameVerifier = null;
-    
-    
+
     /**
      * Registers or unregisters the proper components for advanced SSL handling.
-     * @throws IOException 
+     * 
+     * @throws IOException
      */
-    public static void registerAdvancedSslContext(boolean register, Context context) throws GeneralSecurityException, IOException {
+    public static void registerAdvancedSslContext(boolean register, Context context) throws GeneralSecurityException,
+            IOException {
         Protocol pr = null;
         try {
             pr = Protocol.getProtocol("https");
@@ -76,53 +77,63 @@ public class NetworkUtils {
         boolean isRegistered = (pr != null && pr.getSocketFactory() instanceof AdvancedSslSocketFactory);
         if (register && !isRegistered) {
             Protocol.registerProtocol("https", new Protocol("https", getAdvancedSslSocketFactory(context), 443));
-            
+
         } else if (!register && isRegistered) {
             if (mDefaultHttpsProtocol != null) {
                 Protocol.registerProtocol("https", mDefaultHttpsProtocol);
             }
         }
     }
-    
-    public static AdvancedSslSocketFactory getAdvancedSslSocketFactory(Context context) throws GeneralSecurityException, IOException {
-        if (mAdvancedSslSocketFactory  == null) {
+
+    public static AdvancedSslSocketFactory getAdvancedSslSocketFactory(Context context)
+            throws GeneralSecurityException, IOException {
+        if (mAdvancedSslSocketFactory == null) {
             KeyStore trustStore = getKnownServersStore(context);
             AdvancedX509TrustManager trustMgr = new AdvancedX509TrustManager(trustStore);
             TrustManager[] tms = new TrustManager[] { trustMgr };
-                
+
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tms, null);
-                    
+
             mHostnameVerifier = new BrowserCompatHostnameVerifier();
             mAdvancedSslSocketFactory = new AdvancedSslSocketFactory(sslContext, trustMgr, mHostnameVerifier);
         }
         return mAdvancedSslSocketFactory;
     }
 
-
     private static String LOCAL_TRUSTSTORE_FILENAME = "knownServers.bks";
-    
+
     private static String LOCAL_TRUSTSTORE_PASSWORD = "password";
 
     private static KeyStore mKnownServersStore = null;
-    
+
     /**
-     * Returns the local store of reliable server certificates, explicitly accepted by the user.
+     * Returns the local store of reliable server certificates, explicitly
+     * accepted by the user.
      * 
-     * Returns a KeyStore instance with empty content if the local store was never created.
+     * Returns a KeyStore instance with empty content if the local store was
+     * never created.
      * 
      * Loads the store from the storage environment if needed.
      * 
-     * @param context                       Android context where the operation is being performed.
-     * @return                              KeyStore instance with explicitly-accepted server certificates. 
-     * @throws KeyStoreException            When the KeyStore instance could not be created.
-     * @throws IOException                  When an existing local trust store could not be loaded.
-     * @throws NoSuchAlgorithmException     When the existing local trust store was saved with an unsupported algorithm.
-     * @throws CertificateException         When an exception occurred while loading the certificates from the local trust store.
+     * @param context
+     *            Android context where the operation is being performed.
+     * @return KeyStore instance with explicitly-accepted server certificates.
+     * @throws KeyStoreException
+     *             When the KeyStore instance could not be created.
+     * @throws IOException
+     *             When an existing local trust store could not be loaded.
+     * @throws NoSuchAlgorithmException
+     *             When the existing local trust store was saved with an
+     *             unsupported algorithm.
+     * @throws CertificateException
+     *             When an exception occurred while loading the certificates
+     *             from the local trust store.
      */
-    private static KeyStore getKnownServersStore(Context context) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
+    private static KeyStore getKnownServersStore(Context context) throws KeyStoreException, IOException,
+            NoSuchAlgorithmException, CertificateException {
         if (mKnownServersStore == null) {
-            //mKnownServersStore = KeyStore.getInstance("BKS");
+            // mKnownServersStore = KeyStore.getInstance("BKS");
             mKnownServersStore = KeyStore.getInstance(KeyStore.getDefaultType());
             File localTrustStoreFile = new File(context.getFilesDir(), LOCAL_TRUSTSTORE_FILENAME);
             Log.d(TAG, "Searching known-servers store at " + localTrustStoreFile.getAbsolutePath());
@@ -134,15 +145,20 @@ public class NetworkUtils {
                     in.close();
                 }
             } else {
-                mKnownServersStore.load(null, LOCAL_TRUSTSTORE_PASSWORD.toCharArray()); // necessary to initialize an empty KeyStore instance
+                mKnownServersStore.load(null, LOCAL_TRUSTSTORE_PASSWORD.toCharArray()); // necessary
+                                                                                        // to
+                                                                                        // initialize
+                                                                                        // an
+                                                                                        // empty
+                                                                                        // KeyStore
+                                                                                        // instance
             }
         }
         return mKnownServersStore;
     }
-    
-    
-    public static void addCertToKnownServersStore(Certificate cert, Context context) throws  KeyStoreException, NoSuchAlgorithmException, 
-                                                                                            CertificateException, IOException {
+
+    public static void addCertToKnownServersStore(Certificate cert, Context context) throws KeyStoreException,
+            NoSuchAlgorithmException, CertificateException, IOException {
         KeyStore knownServers = getKnownServersStore(context);
         knownServers.setCertificateEntry(Integer.toString(cert.hashCode()), cert);
         FileOutputStream fos = null;
@@ -153,8 +169,7 @@ public class NetworkUtils {
             fos.close();
         }
     }
-    
-    
+
     static public MultiThreadedHttpConnectionManager getMultiThreadedConnManager() {
         if (mConnManager == null) {
             mConnManager = new MultiThreadedHttpConnectionManager();
@@ -163,6 +178,5 @@ public class NetworkUtils {
         }
         return mConnManager;
     }
-
 
 }

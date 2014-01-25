@@ -30,8 +30,7 @@ public class ContactSyncService extends Service {
     public void onCreate() {
         synchronized (syncAdapterLock) {
             if (mSyncAdapter == null) {
-                mSyncAdapter = new ContactSyncAdapter(getApplicationContext(),
-                        true);
+                mSyncAdapter = new ContactSyncAdapter(getApplicationContext(), true);
             }
         }
     }

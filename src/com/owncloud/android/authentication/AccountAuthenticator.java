@@ -31,19 +31,19 @@ import android.widget.Toast;
 import com.owncloud.android.oc_framework.accounts.AccountTypeUtils;
 import com.owncloud.android.utils.Log_OC;
 
-
 /**
- *  Authenticator for ownCloud accounts.
+ * Authenticator for ownCloud accounts.
  * 
- *  Controller class accessed from the system AccountManager, providing integration of ownCloud accounts with the Android system.
+ * Controller class accessed from the system AccountManager, providing
+ * integration of ownCloud accounts with the Android system.
  * 
- *  TODO - better separation in operations for OAuth-capable and regular ownCloud accounts.
- *  TODO - review completeness 
+ * TODO - better separation in operations for OAuth-capable and regular ownCloud
+ * accounts. TODO - review completeness
  * 
  * @author David A. Velasco
  */
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
-    
+
     /**
      * Is used by android system to assign accounts to authenticators. Should be
      * used by application and all extensions.
@@ -52,11 +52,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public static final String KEY_REQUIRED_FEATURES = "requiredFeatures";
     public static final String KEY_LOGIN_OPTIONS = "loginOptions";
     public static final String KEY_ACCOUNT = "account";
-    
+
     private static final String TAG = AccountAuthenticator.class.getSimpleName();
-    
+
     private Context mContext;
-    
+
     private Handler mHandler;
 
     public AccountAuthenticator(Context context) {
@@ -69,28 +69,24 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle addAccount(AccountAuthenticatorResponse response,
-            String accountType, String authTokenType,
-            String[] requiredFeatures, Bundle options)
-            throws NetworkErrorException {
-        Log_OC.i(TAG, "Adding account with type " + accountType
-                + " and auth token " + authTokenType);
-        
+    public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
+            String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+        Log_OC.i(TAG, "Adding account with type " + accountType + " and auth token " + authTokenType);
+
         final Bundle bundle = new Bundle();
-        
+
         AccountManager accountManager = AccountManager.get(mContext);
         Account[] accounts = accountManager.getAccountsByType(MainApp.getAccountType());
-        
+
         if (mContext.getResources().getBoolean(R.bool.multiaccount_support) || accounts.length < 1) {
             try {
                 validateAccountType(accountType);
             } catch (AuthenticatorException e) {
-                Log_OC.e(TAG, "Failed to validate account type " + accountType + ": "
-                        + e.getMessage());
+                Log_OC.e(TAG, "Failed to validate account type " + accountType + ": " + e.getMessage());
                 e.printStackTrace();
                 return e.getFailureBundle();
             }
-            
+
             final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
             intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
@@ -99,16 +95,17 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
 
             setIntentFlags(intent);
-            
+
             bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        
+
         } else {
 
             // Return an error
             bundle.putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION);
-            final String message = String.format(mContext.getString(R.string.auth_unsupported_multiaccount), mContext.getString(R.string.app_name)); 
+            final String message = String.format(mContext.getString(R.string.auth_unsupported_multiaccount),
+                    mContext.getString(R.string.app_name));
             bundle.putString(AccountManager.KEY_ERROR_MESSAGE, message);
-           
+
             mHandler.post(new Runnable() {
 
                 @Override
@@ -116,9 +113,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                 }
             });
-            
+
         }
-        
+
         return bundle;
     }
 
@@ -126,19 +123,17 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle confirmCredentials(AccountAuthenticatorResponse response,
-            Account account, Bundle options) throws NetworkErrorException {
+    public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options)
+            throws NetworkErrorException {
         try {
             validateAccountType(account.type);
         } catch (AuthenticatorException e) {
-            Log_OC.e(TAG, "Failed to validate account type " + account.type + ": "
-                    + e.getMessage());
+            Log_OC.e(TAG, "Failed to validate account type " + account.type + ": " + e.getMessage());
             e.printStackTrace();
             return e.getFailureBundle();
         }
         Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
-                response);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         intent.putExtra(KEY_ACCOUNT, account);
         intent.putExtra(KEY_LOGIN_OPTIONS, options);
 
@@ -150,8 +145,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle editProperties(AccountAuthenticatorResponse response,
-            String accountType) {
+    public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
         return null;
     }
 
@@ -159,21 +153,19 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle getAuthToken(AccountAuthenticatorResponse response,
-            Account account, String authTokenType, Bundle options)
-            throws NetworkErrorException {
-        /// validate parameters
+    public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType,
+            Bundle options) throws NetworkErrorException {
+        // / validate parameters
         try {
             validateAccountType(account.type);
             validateAuthTokenType(authTokenType);
         } catch (AuthenticatorException e) {
-            Log_OC.e(TAG, "Failed to validate account type " + account.type + ": "
-                    + e.getMessage());
+            Log_OC.e(TAG, "Failed to validate account type " + account.type + ": " + e.getMessage());
             e.printStackTrace();
             return e.getFailureBundle();
         }
-        
-        /// check if required token is stored
+
+        // / check if required token is stored
         final AccountManager am = AccountManager.get(mContext);
         String accessToken;
         if (authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType()))) {
@@ -188,8 +180,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_AUTHTOKEN, accessToken);
             return result;
         }
-        
-        /// if not stored, return Intent to access the AuthenticatorActivity and UPDATE the token for the account
+
+        // / if not stored, return Intent to access the AuthenticatorActivity
+        // and UPDATE the token for the account
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
@@ -197,7 +190,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         intent.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
         intent.putExtra(AuthenticatorActivity.EXTRA_ENFORCED_UPDATE, true);
         intent.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_TOKEN);
-        
 
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
@@ -210,20 +202,18 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle hasFeatures(AccountAuthenticatorResponse response,
-            Account account, String[] features) throws NetworkErrorException {
+    public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features)
+            throws NetworkErrorException {
         final Bundle result = new Bundle();
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
         return result;
     }
 
     @Override
-    public Bundle updateCredentials(AccountAuthenticatorResponse response,
-            Account account, String authTokenType, Bundle options)
-            throws NetworkErrorException {
+    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType,
+            Bundle options) throws NetworkErrorException {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
-                response);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         intent.putExtra(KEY_ACCOUNT, account);
         intent.putExtra(KEY_AUTH_TOKEN_TYPE, authTokenType);
         intent.putExtra(KEY_LOGIN_OPTIONS, options);
@@ -235,8 +225,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle getAccountRemovalAllowed(
-            AccountAuthenticatorResponse response, Account account)
+    public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account)
             throws NetworkErrorException {
         return super.getAccountRemovalAllowed(response, account);
     }
@@ -247,20 +236,18 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         intent.addFlags(Intent.FLAG_FROM_BACKGROUND);
     }
 
-    private void validateAccountType(String type)
-            throws UnsupportedAccountTypeException {
+    private void validateAccountType(String type) throws UnsupportedAccountTypeException {
         if (!type.equals(MainApp.getAccountType())) {
             throw new UnsupportedAccountTypeException();
         }
     }
 
-    private void validateAuthTokenType(String authTokenType)
-            throws UnsupportedAuthTokenTypeException {
-        if (!authTokenType.equals(MainApp.getAuthTokenType()) &&
-            !authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType())) &&
-            !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType())) &&
-            !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeRefreshToken(MainApp.getAccountType())) &&
-            !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()))) {
+    private void validateAuthTokenType(String authTokenType) throws UnsupportedAuthTokenTypeException {
+        if (!authTokenType.equals(MainApp.getAuthTokenType())
+                && !authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType()))
+                && !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()))
+                && !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeRefreshToken(MainApp.getAccountType()))
+                && !authTokenType.equals(AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()))) {
             throw new UnsupportedAuthTokenTypeException();
         }
     }
@@ -272,8 +259,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         public AuthenticatorException(int code, String errorMsg) {
             mFailureBundle = new Bundle();
             mFailureBundle.putInt(AccountManager.KEY_ERROR_CODE, code);
-            mFailureBundle
-                    .putString(AccountManager.KEY_ERROR_MESSAGE, errorMsg);
+            mFailureBundle.putString(AccountManager.KEY_ERROR_MESSAGE, errorMsg);
         }
 
         public Bundle getFailureBundle() {
@@ -281,33 +267,27 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         }
     }
 
-    public static class UnsupportedAccountTypeException extends
-            AuthenticatorException {
+    public static class UnsupportedAccountTypeException extends AuthenticatorException {
         private static final long serialVersionUID = 1L;
 
         public UnsupportedAccountTypeException() {
-            super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
-                    "Unsupported account type");
+            super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION, "Unsupported account type");
         }
     }
 
-    public static class UnsupportedAuthTokenTypeException extends
-            AuthenticatorException {
+    public static class UnsupportedAuthTokenTypeException extends AuthenticatorException {
         private static final long serialVersionUID = 1L;
 
         public UnsupportedAuthTokenTypeException() {
-            super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
-                    "Unsupported auth token type");
+            super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION, "Unsupported auth token type");
         }
     }
 
-    public static class UnsupportedFeaturesException extends
-            AuthenticatorException {
+    public static class UnsupportedFeaturesException extends AuthenticatorException {
         public static final long serialVersionUID = 1L;
 
         public UnsupportedFeaturesException() {
-            super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
-                    "Unsupported features");
+            super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION, "Unsupported features");
         }
     }
 

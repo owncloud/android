@@ -27,19 +27,20 @@ import android.view.KeyEvent;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.owncloud.android.R;
 
-
 public class IndeterminateProgressDialog extends SherlockDialogFragment {
 
-    private static final String ARG_MESSAGE_ID = IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_MESSAGE_ID";
-    private static final String ARG_CANCELABLE = IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_CANCELABLE";
-
+    private static final String ARG_MESSAGE_ID = IndeterminateProgressDialog.class.getCanonicalName()
+            + ".ARG_MESSAGE_ID";
+    private static final String ARG_CANCELABLE = IndeterminateProgressDialog.class.getCanonicalName()
+            + ".ARG_CANCELABLE";
 
     /**
      * Public factory method to get dialog instances.
      * 
-     * @param messageId     Resource id for a message to show in the dialog.
-     * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
-     * @return              New dialog instance, ready to show.
+     * @param messageId Resource id for a message to show in the dialog.
+     * @param cancelable If 'true', the dialog can be cancelled by the user
+     *            input (BACK button, touch outside...)
+     * @return New dialog instance, ready to show.
      */
     public static IndeterminateProgressDialog newInstance(int messageId, boolean cancelable) {
         IndeterminateProgressDialog fragment = new IndeterminateProgressDialog();
@@ -50,31 +51,29 @@ public class IndeterminateProgressDialog extends SherlockDialogFragment {
         return fragment;
     }
 
-    
     /**
      * {@inheritDoc}
      */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        /// create indeterminate progress dialog
+        // / create indeterminate progress dialog
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setIndeterminate(true);
-        
-        /// set message
+
+        // / set message
         int messageId = getArguments().getInt(ARG_MESSAGE_ID, R.string.placeholder_sentence);
         dialog.setMessage(getString(messageId));
-        
-        /// set cancellation behavior
+
+        // / set cancellation behavior
         boolean cancelable = getArguments().getBoolean(ARG_CANCELABLE, false);
         if (!cancelable) {
             dialog.setCancelable(false);
             // disable the back button
             OnKeyListener keyListener = new OnKeyListener() {
                 @Override
-                public boolean onKey(DialogInterface dialog, int keyCode,
-                        KeyEvent event) {
+                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 
-                    if( keyCode == KeyEvent.KEYCODE_BACK){                  
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
                         return true;
                     }
                     return false;
@@ -83,10 +82,8 @@ public class IndeterminateProgressDialog extends SherlockDialogFragment {
             };
             dialog.setOnKeyListener(keyListener);
         }
-        
+
         return dialog;
-    }    
-    
+    }
+
 }
-
-

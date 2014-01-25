@@ -33,7 +33,6 @@ import com.owncloud.android.oc_framework.network.ProgressiveDataTransferer;
 
 import android.util.Log;
 
-
 /**
  * A RequestEntity that represents a PIECE of a file.
  * 
@@ -42,8 +41,8 @@ import android.util.Log;
 public class ChunkFromFileChannelRequestEntity implements RequestEntity, ProgressiveDataTransferer {
 
     private static final String TAG = ChunkFromFileChannelRequestEntity.class.getSimpleName();
-    
-    //private final File mFile;
+
+    // private final File mFile;
     private final FileChannel mChannel;
     private final String mContentType;
     private final long mChunkSize;
@@ -53,7 +52,8 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
     Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private ByteBuffer mBuffer = ByteBuffer.allocate(4096);
 
-    public ChunkFromFileChannelRequestEntity(final FileChannel channel, final String contentType, long chunkSize, final File file) {
+    public ChunkFromFileChannelRequestEntity(final FileChannel channel, final String contentType, long chunkSize,
+            final File file) {
         super();
         if (channel == null) {
             throw new IllegalArgumentException("File may not be null");
@@ -68,11 +68,11 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
         mOffset = 0;
         mTransferred = 0;
     }
-    
+
     public void setOffset(long offset) {
         mOffset = offset;
     }
-    
+
     public long getContentLength() {
         try {
             return Math.min(mChunkSize, mChannel.size() - mChannel.position());
@@ -88,43 +88,44 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
     public boolean isRepeatable() {
         return true;
     }
-    
+
     @Override
     public void addDatatransferProgressListener(OnDatatransferProgressListener listener) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.add(listener);
         }
     }
-    
+
     @Override
     public void addDatatransferProgressListeners(Collection<OnDatatransferProgressListener> listeners) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.addAll(listeners);
         }
     }
-    
+
     @Override
     public void removeDatatransferProgressListener(OnDatatransferProgressListener listener) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.remove(listener);
         }
     }
-    
-    
+
     public void writeRequest(final OutputStream out) throws IOException {
         int readCount = 0;
         Iterator<OnDatatransferProgressListener> it = null;
-        
-       try {
+
+        try {
             mChannel.position(mOffset);
             long size = mFile.length();
-            if (size == 0) size = -1;
+            if (size == 0)
+                size = -1;
             long maxCount = Math.min(mOffset + mChunkSize, mChannel.size());
             while (mChannel.position() < maxCount) {
                 readCount = mChannel.read(mBuffer);
                 out.write(mBuffer.array(), 0, readCount);
                 mBuffer.clear();
-                if (mTransferred < maxCount) {  // condition to avoid accumulate progress for repeated chunks
+                if (mTransferred < maxCount) { // condition to avoid accumulate
+                                               // progress for repeated chunks
                     mTransferred += readCount;
                 }
                 synchronized (mDataTransferListeners) {
@@ -134,11 +135,13 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
                     }
                 }
             }
-            
+
         } catch (IOException io) {
             Log.e(TAG, io.getMessage());
-            throw new RuntimeException("Ugly solution to workaround the default policy of retries when the server falls while uploading ; temporal fix; really", io);   
-            
+            throw new RuntimeException(
+                    "Ugly solution to workaround the default policy of retries when the server falls while uploading ; temporal fix; really",
+                    io);
+
         }
     }
 

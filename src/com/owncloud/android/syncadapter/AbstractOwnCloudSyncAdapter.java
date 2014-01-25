@@ -30,7 +30,6 @@ import com.owncloud.android.oc_framework.accounts.AccountUtils.AccountNotFoundEx
 import com.owncloud.android.oc_framework.network.webdav.OwnCloudClientFactory;
 import com.owncloud.android.oc_framework.network.webdav.WebdavClient;
 
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -40,16 +39,15 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 
 /**
- * Base synchronization adapter for ownCloud designed to be subclassed for different
- * resource types, like FileSync, ConcatsSync, CalendarSync, etc..
+ * Base synchronization adapter for ownCloud designed to be subclassed for
+ * different resource types, like FileSync, ConcatsSync, CalendarSync, etc..
  * 
  * Implements the standard {@link AbstractThreadedSyncAdapter}.
  * 
  * @author sassman
  * @author David A. Velasco
  */
-public abstract class AbstractOwnCloudSyncAdapter extends
-        AbstractThreadedSyncAdapter {
+public abstract class AbstractOwnCloudSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private AccountManager accountManager;
     private Account account;
@@ -100,20 +98,19 @@ public abstract class AbstractOwnCloudSyncAdapter extends
         return mStoreManager;
     }
 
-    protected void initClientForCurrentAccount() throws OperationCanceledException, AuthenticatorException, IOException, AccountNotFoundException {
+    protected void initClientForCurrentAccount() throws OperationCanceledException, AuthenticatorException,
+            IOException, AccountNotFoundException {
         AccountUtils.constructFullURLForAccount(getContext(), account);
         mClient = OwnCloudClientFactory.createOwnCloudClient(account, getContext());
     }
-    
+
     protected WebdavClient getClient() {
         return mClient;
     }
-    
-    
+
     /* method called by ContactSyncAdapter, that is never used */
-    protected HttpResponse fireRawRequest(HttpRequest query)
-            throws ClientProtocolException, OperationCanceledException,
-            AuthenticatorException, IOException {
+    protected HttpResponse fireRawRequest(HttpRequest query) throws ClientProtocolException,
+            OperationCanceledException, AuthenticatorException, IOException {
         return null;
     }
 
