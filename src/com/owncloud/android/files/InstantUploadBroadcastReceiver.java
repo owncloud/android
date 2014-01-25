@@ -141,7 +141,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
 
     private void handleConnectivityAction(Context context, Intent intent) {
         if (!instantUploadEnabled(context)) {
-            Log_OC.d(TAG, "Instant upload disabled, abording uploading");
+            Log_OC.d(TAG, "Instant upload disabled, abort uploading");
             return;
         }
 

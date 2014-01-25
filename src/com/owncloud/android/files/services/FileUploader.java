@@ -53,6 +53,7 @@ import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.DbHandler;
+import com.owncloud.android.files.InstantUploadBroadcastReceiver;
 import com.owncloud.android.oc_framework.accounts.OwnCloudAccount;
 import com.owncloud.android.oc_framework.network.webdav.OnDatatransferProgressListener;
 import com.owncloud.android.oc_framework.network.webdav.OwnCloudClientFactory;
@@ -484,6 +485,10 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                     mService.uploadFile(it.next());
                 }
             }
+            else
+            {
+                Log_OC.w(TAG, "ServiceHandler received invalid message.");
+            }
             mService.stopSelf(msg.arg1);
         }
     }
@@ -508,21 +513,35 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             RemoteOperationResult uploadResult = null, grantResult = null;
 
             try {
-                // / prepare client object to send requests to the ownCloud
+                // prepare client object to send requests to the ownCloud
                 // server
                 if (mUploadClient == null || !mLastAccount.equals(mCurrentUpload.getAccount())) {
                     mLastAccount = mCurrentUpload.getAccount();
                     mStorageManager = new FileDataStorageManager(mLastAccount, getContentResolver());
                     mUploadClient = OwnCloudClientFactory.createOwnCloudClient(mLastAccount, getApplicationContext());
                 }
+                
+                // double check if instantUpload is authorized. this should be checked by the upload issuer
+                if(mCurrentUpload.isInstant())
+                {
+                    if(!InstantUploadBroadcastReceiver.instantUploadEnabled(getApplicationContext()))
+                    {
+                        Log_OC.w(TAG, "FileUploader is doing InstantUpload even though InstantUpload is disabled!");
+                    }
+                    if(InstantUploadBroadcastReceiver.instantUploadViaWiFiOnly(getApplicationContext()) &&
+                            !InstantUploadBroadcastReceiver.isConnectedViaWiFi(getApplicationContext()))
+                    {
+                        Log_OC.w(TAG, "FileUploader is doing InstantUpload via non-Wifi even though instantUploadViaWiFiOnly==true!");
+                    }
+                }
 
-                // / check the existence of the parent folder for the file to
+                // check the existence of the parent folder for the file to
                 // upload
                 String remoteParentPath = new File(mCurrentUpload.getRemotePath()).getParent();
                 remoteParentPath = remoteParentPath.endsWith(OCFile.PATH_SEPARATOR) ? remoteParentPath : remoteParentPath + OCFile.PATH_SEPARATOR;
                 grantResult = grantFolderExistence(remoteParentPath);
 
-                // / perform the upload
+                // perform the upload
                 if (grantResult.isSuccess()) {
                     OCFile parent = mStorageManager.getFileByPath(remoteParentPath);
                     mCurrentUpload.getFile().setParentId(parent.getFileId());
