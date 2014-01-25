@@ -132,7 +132,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         i.putExtra(FileUploader.KEY_ACCOUNT, account);
         i.putExtra(FileUploader.KEY_LOCAL_FILE, file_path);
         i.putExtra(FileUploader.KEY_REMOTE_FILE, FileStorageUtils.getInstantUploadFilePath(context, file_name));
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE.SINGLE_FILE);
         i.putExtra(FileUploader.KEY_MIME_TYPE, mime_type);
         i.putExtra(FileUploader.KEY_INSTANT_UPLOAD, true);
         context.startService(i);
@@ -141,7 +141,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
 
     private void handleConnectivityAction(Context context, Intent intent) {
         if (!instantUploadEnabled(context)) {
-            Log_OC.d(TAG, "Instant upload disabled, abording uploading");
+            Log_OC.d(TAG, "Instant upload disabled, abort uploading");
             return;
         }
 
@@ -175,7 +175,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
                         i.putExtra(FileUploader.KEY_ACCOUNT, account);
                         i.putExtra(FileUploader.KEY_LOCAL_FILE, file_path);
                         i.putExtra(FileUploader.KEY_REMOTE_FILE, FileStorageUtils.getInstantUploadFilePath(context, f.getName()));
-                        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+                        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE.SINGLE_FILE);
                         i.putExtra(FileUploader.KEY_INSTANT_UPLOAD, true);
                         context.startService(i);
 

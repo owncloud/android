@@ -19,8 +19,8 @@
 package com.owncloud.android.ui.activity;
 
 import java.io.File;
-
 import android.accounts.Account;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -37,6 +37,7 @@ import android.content.SyncRequest;
 import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -51,7 +52,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
@@ -500,6 +500,7 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
         return retval;
     }
 
+    @TargetApi(19)
     private void startSynchronization() {
         Log_OC.e(TAG, "Got to start sync");
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
@@ -579,9 +580,9 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
             i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
             i.putExtra(FileUploader.KEY_LOCAL_FILE, filePaths);
             i.putExtra(FileUploader.KEY_REMOTE_FILE, remotePaths);
-            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_MULTIPLE_FILES);
+            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE.MULTIPLE_FILES);
             if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR.MOVE);
             startService(i);
 
         } else {
@@ -632,9 +633,9 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
 
         i.putExtra(FileUploader.KEY_LOCAL_FILE, filepath);
         i.putExtra(FileUploader.KEY_REMOTE_FILE, remotepath);
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE.SINGLE_FILE);
         if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-            i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
+            i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR.MOVE);
         startService(i);
     }
 
