@@ -445,7 +445,7 @@ public class InstantUploadActivity extends Activity {
             i.putExtra(FileUploader.KEY_ACCOUNT, account);
             i.putExtra(FileUploader.KEY_LOCAL_FILE, img_path);
             i.putExtra(FileUploader.KEY_REMOTE_FILE, filename);
-            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE.SINGLE_FILE);
             i.putExtra(com.owncloud.android.files.services.FileUploader.KEY_INSTANT_UPLOAD, true);
 
             final String msg = "try to upload file with name :" + filename;
