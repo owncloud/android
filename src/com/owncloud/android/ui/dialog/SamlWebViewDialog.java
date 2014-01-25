@@ -41,7 +41,6 @@ import com.owncloud.android.authentication.SsoWebViewClient.SsoWebViewClientList
 import com.owncloud.android.oc_framework.network.webdav.WebdavClient;
 import com.owncloud.android.utils.Log_OC;
 
-
 /**
  * Dialog to show the WebView for SAML Authentication
  * 
@@ -51,33 +50,34 @@ import com.owncloud.android.utils.Log_OC;
 public class SamlWebViewDialog extends SherlockDialogFragment {
 
     public final String SAML_DIALOG_TAG = "SamlWebViewDialog";
-    
-    private final static String TAG =  SamlWebViewDialog.class.getSimpleName();
+
+    private final static String TAG = SamlWebViewDialog.class.getSimpleName();
 
     private static final String ARG_INITIAL_URL = "INITIAL_URL";
     private static final String ARG_TARGET_URL = "TARGET_URL";
     private static final String KEY_WEBVIEW_STATE = "WEBVIEW_STATE";
-    
+
     private WebView mSsoWebView;
     private SsoWebViewClient mWebViewClient;
-    
+
     private String mInitialUrl;
     private String mTargetUrl;
-    
+
     private Handler mHandler;
 
     private SsoWebViewClientListener mSsoWebViewClientListener;
 
-    //private View mSsoRootView;
-
+    // private View mSsoRootView;
 
     /**
      * Public factory method to get dialog instances.
      * 
      * @param handler
-     * @param Url           Url to open at WebView
-     * @param targetURL     mHostBaseUrl + AccountUtils.getWebdavPath(mDiscoveredVersion, mCurrentAuthTokenType)
-     * @return              New dialog instance, ready to show.
+     * @param Url Url to open at WebView
+     * @param targetURL mHostBaseUrl +
+     *            AccountUtils.getWebdavPath(mDiscoveredVersion,
+     *            mCurrentAuthTokenType)
+     * @return New dialog instance, ready to show.
      */
     public static SamlWebViewDialog newInstance(String url, String targetUrl) {
         Log_OC.d(TAG, "New instance");
@@ -88,14 +88,12 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-    
-    
+
     public SamlWebViewDialog() {
         super();
         Log_OC.d(TAG, "constructor");
     }
-    
-    
+
     @Override
     public void onAttach(Activity activity) {
         Log_OC.d(TAG, "onAttach");
@@ -104,19 +102,19 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
             mSsoWebViewClientListener = (SsoWebViewClientListener) activity;
             mHandler = new Handler();
             mWebViewClient = new SsoWebViewClient(mHandler, mSsoWebViewClientListener);
-            
-       } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement " + SsoWebViewClientListener.class.getSimpleName());
+
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement "
+                    + SsoWebViewClientListener.class.getSimpleName());
         }
     }
 
-    
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log_OC.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        
+
         CookieSyncManager.createInstance(getActivity());
 
         if (savedInstanceState == null) {
@@ -126,25 +124,23 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
             mInitialUrl = savedInstanceState.getString(ARG_INITIAL_URL);
             mTargetUrl = savedInstanceState.getString(ARG_TARGET_URL);
         }
-        
+
         setStyle(SherlockDialogFragment.STYLE_NO_TITLE, R.style.Theme_ownCloud_Dialog);
     }
-    
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log_OC.d(TAG, "onCreateDialog");
 
         /*
-        // build the dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
-        if (mSsoRootView.getParent() != null) {
-            ((ViewGroup)(mSsoRootView.getParent())).removeView(mSsoRootView);
-        }
-        builder.setView(mSsoRootView);
-        //builder.setView(mSsoWebView);
-        Dialog dialog = builder.create();
-        */
-        
+         * // build the dialog AlertDialog.Builder builder = new
+         * AlertDialog.Builder(getSherlockActivity()); if
+         * (mSsoRootView.getParent() != null) {
+         * ((ViewGroup)(mSsoRootView.getParent())).removeView(mSsoRootView); }
+         * builder.setView(mSsoRootView); //builder.setView(mSsoWebView); Dialog
+         * dialog = builder.create();
+         */
+
         return super.onCreateDialog(savedInstanceState);
     }
 
@@ -152,21 +148,31 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log_OC.d(TAG, "onCreateView");
-        
-        // Inflate layout of the dialog  
-        View rootView = inflater.inflate(R.layout.sso_dialog, container, false);  // null parent view because it will go in the dialog layout
-        mSsoWebView  = (WebView) rootView.findViewById(R.id.sso_webview);
-            
+
+        // Inflate layout of the dialog
+        View rootView = inflater.inflate(R.layout.sso_dialog, container, false); // null
+                                                                                 // parent
+                                                                                 // view
+                                                                                 // because
+                                                                                 // it
+                                                                                 // will
+                                                                                 // go
+                                                                                 // in
+                                                                                 // the
+                                                                                 // dialog
+                                                                                 // layout
+        mSsoWebView = (WebView) rootView.findViewById(R.id.sso_webview);
+
         mWebViewClient.setTargetUrl(mTargetUrl);
         mSsoWebView.setWebViewClient(mWebViewClient);
-        
+
         if (savedInstanceState == null) {
-            Log_OC.d(TAG,  "   initWebView start");
+            Log_OC.d(TAG, "   initWebView start");
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.setAcceptCookie(true);
             cookieManager.removeAllCookie();
             mSsoWebView.loadUrl(mInitialUrl);
-            
+
         } else {
             Log_OC.d(TAG, "   restoreWebView start");
             WebBackForwardList history = mSsoWebView.restoreState(savedInstanceState.getBundle(KEY_WEBVIEW_STATE));
@@ -183,7 +189,7 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
         webSettings.setSavePassword(false);
         webSettings.setUserAgentString(WebdavClient.USER_AGENT);
         webSettings.setSaveFormData(false);
-        
+
         return rootView;
     }
 
@@ -191,11 +197,11 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         Log_OC.d(SAML_DIALOG_TAG, "onSaveInstanceState being CALLED");
         super.onSaveInstanceState(outState);
-        
+
         // save URLs
         outState.putString(ARG_INITIAL_URL, mInitialUrl);
         outState.putString(ARG_TARGET_URL, mTargetUrl);
-        
+
         // Save the state of the WebView
         Bundle webviewState = new Bundle();
         mSsoWebView.saveState(webviewState);
@@ -205,20 +211,21 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
     @Override
     public void onDestroyView() {
         Log_OC.d(TAG, "onDestroyView");
-        
+
         mSsoWebView.setWebViewClient(null);
-        
-        // Work around bug: http://code.google.com/p/android/issues/detail?id=17423
+
+        // Work around bug:
+        // http://code.google.com/p/android/issues/detail?id=17423
         Dialog dialog = getDialog();
         if ((dialog != null)) {
             dialog.setOnDismissListener(null);
-            //dialog.dismiss();
-            //dialog.setDismissMessage(null);
+            // dialog.dismiss();
+            // dialog.setDismissMessage(null);
         }
-        
+
         super.onDestroyView();
     }
-    
+
     @Override
     public void onDestroy() {
         Log_OC.d(TAG, "onDestroy");
@@ -232,19 +239,19 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
         mWebViewClient = null;
         super.onDetach();
     }
-    
+
     @Override
-    public void onCancel (DialogInterface dialog) {
+    public void onCancel(DialogInterface dialog) {
         Log_OC.d(SAML_DIALOG_TAG, "onCancel");
         super.onCancel(dialog);
     }
-    
+
     @Override
-    public void onDismiss (DialogInterface dialog) {
+    public void onDismiss(DialogInterface dialog) {
         Log_OC.d(SAML_DIALOG_TAG, "onDismiss");
         super.onDismiss(dialog);
     }
-    
+
     @Override
     public void onStart() {
         Log_OC.d(SAML_DIALOG_TAG, "onStart");
@@ -268,15 +275,15 @@ public class SamlWebViewDialog extends SherlockDialogFragment {
         Log_OC.d(SAML_DIALOG_TAG, "onPause");
         super.onPause();
     }
-    
+
     @Override
-    public int show (FragmentTransaction transaction, String tag) {
+    public int show(FragmentTransaction transaction, String tag) {
         Log_OC.d(SAML_DIALOG_TAG, "show (transaction)");
         return super.show(transaction, tag);
     }
 
     @Override
-    public void show (FragmentManager manager, String tag) {
+    public void show(FragmentManager manager, String tag) {
         Log_OC.d(SAML_DIALOG_TAG, "show (manager)");
         super.show(manager, tag);
     }

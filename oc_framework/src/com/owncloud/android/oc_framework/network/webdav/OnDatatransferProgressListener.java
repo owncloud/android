@@ -20,5 +20,6 @@ package com.owncloud.android.oc_framework.network.webdav;
 
 public interface OnDatatransferProgressListener {
     public void onTransferProgress(long progressRate);
+
     public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer, String fileName);
 }

@@ -24,7 +24,6 @@ import java.util.Comparator;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DisplayUtils;
 
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,14 +35,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * This Adapter populates a ListView with all files and directories contained
- * in a local directory
+ * This Adapter populates a ListView with all files and directories contained in
+ * a local directory
  * 
  * @author David A. Velasco
  * 
  */
 public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
-    
+
     private Context mContext;
     private File mDirectory;
     private File[] mFiles = null;
@@ -89,17 +88,16 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            LayoutInflater inflator = (LayoutInflater) mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflator.inflate(R.layout.list_item, null);
         }
         if (mFiles != null && mFiles.length > position) {
             File file = mFiles[position];
-            
+
             TextView fileName = (TextView) view.findViewById(R.id.Filename);
             String name = file.getName();
             fileName.setText(name);
-            
+
             ImageView fileIcon = (ImageView) view.findViewById(R.id.imageView1);
             if (!file.isDirectory()) {
                 fileIcon.setImageResource(R.drawable.file);
@@ -115,8 +113,8 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length()));
                 lastModV.setVisibility(View.VISIBLE);
                 lastModV.setText(DisplayUtils.unixTimeToHumanReadable(file.lastModified()));
-                ListView parentList = (ListView)parent;
-                if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) { 
+                ListView parentList = (ListView) parent;
+                if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) {
                     checkBoxV.setVisibility(View.GONE);
                 } else {
                     if (parentList.isItemChecked(position)) {
@@ -132,8 +130,17 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 lastModV.setVisibility(View.GONE);
                 checkBoxV.setVisibility(View.GONE);
             }
-            
-            view.findViewById(R.id.imageView2).setVisibility(View.INVISIBLE);   // not GONE; the alignment changes; ugly way to keep it
+
+            view.findViewById(R.id.imageView2).setVisibility(View.INVISIBLE); // not
+                                                                              // GONE;
+                                                                              // the
+                                                                              // alignment
+                                                                              // changes;
+                                                                              // ugly
+                                                                              // way
+                                                                              // to
+                                                                              // keep
+                                                                              // it
             view.findViewById(R.id.imageView3).setVisibility(View.GONE);
         }
 
@@ -157,7 +164,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
 
     /**
      * Change the adapted directory for a new one
-     * @param directory     New file to adapt. Can be NULL, meaning "no content to adapt".
+     * 
+     * @param directory New file to adapt. Can be NULL, meaning
+     *            "no content to adapt".
      */
     public void swapDirectory(File directory) {
         mDirectory = directory;
@@ -173,11 +182,11 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                     }
                     return compareNames(lhs, rhs);
                 }
-            
+
                 private int compareNames(File lhs, File rhs) {
-                    return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());                
+                    return lhs.getName().toLowerCase().compareTo(rhs.getName().toLowerCase());
                 }
-            
+
             });
         }
         notifyDataSetChanged();

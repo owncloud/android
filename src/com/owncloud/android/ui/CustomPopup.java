@@ -58,8 +58,7 @@ public class CustomPopup {
             }
         });
 
-        mWManager = (WindowManager) anchor.getContext().getSystemService(
-                Context.WINDOW_SERVICE);
+        mWManager = (WindowManager) anchor.getContext().getSystemService(Context.WINDOW_SERVICE);
         onCreate();
     }
 
@@ -71,8 +70,7 @@ public class CustomPopup {
 
     public void preShow() {
         if (root == null) {
-            throw new IllegalStateException(
-                    "setContentView called with a view to display");
+            throw new IllegalStateException("setContentView called with a view to display");
         }
 
         onShow();
@@ -102,8 +100,8 @@ public class CustomPopup {
     }
 
     public void setContentView(int layoutResId) {
-        LayoutInflater inflater = (LayoutInflater) mAnchor.getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mAnchor.getContext().getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
         setContentView(inflater.inflate(layoutResId, null));
     }
 
@@ -128,11 +126,10 @@ public class CustomPopup {
         int[] location = new int[2];
         mAnchor.getLocationOnScreen(location);
 
-        Rect anchorRect = new Rect(location[0], location[1], location[0]
-                + mAnchor.getWidth(), location[1] + mAnchor.getHeight());
+        Rect anchorRect = new Rect(location[0], location[1], location[0] + mAnchor.getWidth(), location[1]
+                + mAnchor.getHeight());
 
-        root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
+        root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         root.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
         int rootW = root.getWidth(), rootH = root.getHeight();

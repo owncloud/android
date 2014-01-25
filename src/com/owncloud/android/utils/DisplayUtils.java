@@ -34,9 +34,9 @@ import com.owncloud.android.R;
  * @author David A. Velasco
  */
 public class DisplayUtils {
-    
-    //private static String TAG = DisplayUtils.class.getSimpleName(); 
-    
+
+    // private static String TAG = DisplayUtils.class.getSimpleName();
+
     private static final String[] sizeSuffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
     private static HashMap<String, String> mimeType2HUmanReadable;
@@ -61,17 +61,14 @@ public class DisplayUtils {
     private static final String TYPE_IMAGE = "image";
     private static final String TYPE_TXT = "text";
     private static final String TYPE_VIDEO = "video";
-    
+
     private static final String SUBTYPE_PDF = "pdf";
-    private static final String[] SUBTYPES_DOCUMENT = { "msword", "mspowerpoint", "msexcel", 
-                                                        "vnd.oasis.opendocument.presentation",
-                                                        "vnd.oasis.opendocument.spreadsheet",
-                                                        "vnd.oasis.opendocument.text"
-                                                        };
+    private static final String[] SUBTYPES_DOCUMENT = { "msword", "mspowerpoint", "msexcel",
+            "vnd.oasis.opendocument.presentation", "vnd.oasis.opendocument.spreadsheet", "vnd.oasis.opendocument.text" };
     private static Set<String> SUBTYPES_DOCUMENT_SET = new HashSet<String>(Arrays.asList(SUBTYPES_DOCUMENT));
-    private static final String[] SUBTYPES_COMPRESSED = {"x-tar", "x-gzip", "zip"};
+    private static final String[] SUBTYPES_COMPRESSED = { "x-tar", "x-gzip", "zip" };
     private static final Set<String> SUBTYPES_COMPRESSED_SET = new HashSet<String>(Arrays.asList(SUBTYPES_COMPRESSED));
-    
+
     /**
      * Converts the file size in bytes to human readable output.
      * 
@@ -98,7 +95,9 @@ public class DisplayUtils {
     public static String HtmlDecode(String s) {
         /*
          * TODO: Perhaps we should use something more proven like:
-         * http://commons.apache.org/lang/api-2.6/org/apache/commons/lang/StringEscapeUtils.html#unescapeHtml%28java.lang.String%29
+         * http://commons
+         * .apache.org/lang/api-2.6/org/apache/commons/lang/StringEscapeUtils
+         * .html#unescapeHtml%28java.lang.String%29
          */
 
         String ret = "";
@@ -128,61 +127,61 @@ public class DisplayUtils {
             return mimetype.split("/")[1].toUpperCase() + " file";
         return "Unknown type";
     }
-    
-    
+
     /**
-     * Returns the resource identifier of an image resource to use as icon associated to a 
-     * known MIME type.
+     * Returns the resource identifier of an image resource to use as icon
+     * associated to a known MIME type.
      * 
-     * @param mimetype      MIME type string.
-     * @return              Resource identifier of an image resource.
+     * @param mimetype MIME type string.
+     * @return Resource identifier of an image resource.
      */
     public static int getResourceId(String mimetype) {
 
         if (mimetype == null || "DIR".equals(mimetype)) {
             return R.drawable.ic_menu_archive;
-            
+
         } else {
-            String [] parts = mimetype.split("/");
+            String[] parts = mimetype.split("/");
             String type = parts[0];
             String subtype = (parts.length > 1) ? parts[1] : "";
-            
-            if(TYPE_TXT.equals(type)) {
+
+            if (TYPE_TXT.equals(type)) {
                 return R.drawable.file_doc;
-    
-            } else if(TYPE_IMAGE.equals(type)) {
+
+            } else if (TYPE_IMAGE.equals(type)) {
                 return R.drawable.file_image;
-                
-            } else if(TYPE_VIDEO.equals(type)) {
+
+            } else if (TYPE_VIDEO.equals(type)) {
                 return R.drawable.file_movie;
-                
-            } else if(TYPE_AUDIO.equals(type)) {  
+
+            } else if (TYPE_AUDIO.equals(type)) {
                 return R.drawable.file_sound;
-                
-            } else if(TYPE_APPLICATION.equals(type)) {
-                
+
+            } else if (TYPE_APPLICATION.equals(type)) {
+
                 if (SUBTYPE_PDF.equals(subtype)) {
                     return R.drawable.file_pdf;
-                    
+
                 } else if (SUBTYPES_DOCUMENT_SET.contains(subtype)) {
                     return R.drawable.file_doc;
 
                 } else if (SUBTYPES_COMPRESSED_SET.contains(subtype)) {
                     return R.drawable.file_zip;
                 }
-    
+
             }
-            // problems: RAR, RTF, 3GP are send as application/octet-stream from the server ; extension in the filename should be explicitly reviewed
+            // problems: RAR, RTF, 3GP are send as application/octet-stream from
+            // the server ; extension in the filename should be explicitly
+            // reviewed
         }
 
         // default icon
         return R.drawable.file;
     }
 
-    
-
     /**
      * Converts Unix time to human readable format
+     * 
      * @param miliseconds that have passed since 01/01/1970
      * @return The human readable time for the users locale
      */
@@ -190,8 +189,7 @@ public class DisplayUtils {
         Date date = new Date(milliseconds);
         return date.toLocaleString();
     }
-    
-    
+
     public static int getSeasonalIconId() {
         if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) >= 354) {
             return R.drawable.winter_holidays_icon;

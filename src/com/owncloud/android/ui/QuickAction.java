@@ -38,7 +38,6 @@ import java.util.ArrayList;
 
 import com.owncloud.android.R;
 
-
 /**
  * Popup window, shows action list as icon and text like the one in Gallery3D
  * app.
@@ -73,8 +72,7 @@ public class QuickAction extends CustomPopup {
 
         actionList = new ArrayList<ActionItem>();
         context = anchor.getContext();
-        inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         root = (ViewGroup) inflater.inflate(R.layout.popup, null);
 
@@ -120,13 +118,12 @@ public class QuickAction extends CustomPopup {
 
         mAnchor.getLocationOnScreen(location);
 
-        Rect anchorRect = new Rect(location[0], location[1], location[0]
-                + mAnchor.getWidth(), location[1] + mAnchor.getHeight());
+        Rect anchorRect = new Rect(location[0], location[1], location[0] + mAnchor.getWidth(), location[1]
+                + mAnchor.getHeight());
 
         createActionList();
 
-        root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
+        root.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         root.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
         int rootHeight = root.getMeasuredHeight();
@@ -168,8 +165,7 @@ public class QuickAction extends CustomPopup {
             }
         }
 
-        showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up),
-                anchorRect.centerX() - xPos);
+        showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up), anchorRect.centerX() - xPos);
 
         setAnimationStyle(screenWidth, anchorRect.centerX(), onTop);
 
@@ -184,14 +180,12 @@ public class QuickAction extends CustomPopup {
      * @param onTop flag to indicate where the popup should be displayed. Set
      *            TRUE if displayed on top of anchor view and vice versa
      */
-    private void setAnimationStyle(int screenWidth, int requestedX,
-            boolean onTop) {
+    private void setAnimationStyle(int screenWidth, int requestedX, boolean onTop) {
         int arrowPos = requestedX - mArrowUp.getMeasuredWidth() / 2;
 
         switch (animStyle) {
         case ANIM_GROW_FROM_LEFT:
-            mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left
-                    : R.style.Animations_PopDownMenu_Left);
+            mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
             break;
 
         case ANIM_GROW_FROM_RIGHT:
@@ -213,8 +207,7 @@ public class QuickAction extends CustomPopup {
             if (arrowPos <= screenWidth / 4) {
                 mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left
                         : R.style.Animations_PopDownMenu_Left);
-            } else if (arrowPos > screenWidth / 4
-                    && arrowPos < 3 * (screenWidth / 4)) {
+            } else if (arrowPos > screenWidth / 4 && arrowPos < 3 * (screenWidth / 4)) {
                 mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center
                         : R.style.Animations_PopDownMenu_Center);
             } else {
@@ -257,10 +250,8 @@ public class QuickAction extends CustomPopup {
      * @param listener {@link View.OnClickListener} action item listener
      * @return action item {@link View}
      */
-    private View getActionItem(String title, Drawable icon,
-            OnClickListener listener) {
-        LinearLayout container = (LinearLayout) inflater.inflate(
-                R.layout.action_item, null);
+    private View getActionItem(String title, Drawable icon, OnClickListener listener) {
+        LinearLayout container = (LinearLayout) inflater.inflate(R.layout.action_item, null);
 
         ImageView img = (ImageView) container.findViewById(R.id.icon);
         TextView text = (TextView) container.findViewById(R.id.title);
@@ -287,17 +278,14 @@ public class QuickAction extends CustomPopup {
      * @param requestedX distance from left screen
      */
     private void showArrow(int whichArrow, int requestedX) {
-        final View showArrow = (whichArrow == R.id.arrow_up) ? mArrowUp
-                : mArrowDown;
-        final View hideArrow = (whichArrow == R.id.arrow_up) ? mArrowDown
-                : mArrowUp;
+        final View showArrow = (whichArrow == R.id.arrow_up) ? mArrowUp : mArrowDown;
+        final View hideArrow = (whichArrow == R.id.arrow_up) ? mArrowDown : mArrowUp;
 
         final int arrowWidth = mArrowUp.getMeasuredWidth();
 
         showArrow.setVisibility(View.VISIBLE);
 
-        ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) showArrow
-                .getLayoutParams();
+        ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) showArrow.getLayoutParams();
 
         param.leftMargin = requestedX - arrowWidth / 2;
 

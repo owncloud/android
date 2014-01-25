@@ -30,23 +30,20 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.DisplayUtils;
 
-
 /**
  * Dialog which will be displayed to user upon keep-in-sync file conflict.
  * 
  * @author Bartek Przybylski
- *
+ * 
  */
 public class ConflictsResolveDialog extends SherlockDialogFragment {
 
-    public static enum Decision { 
-        CANCEL,
-        KEEP_BOTH,
-        OVERWRITE
+    public static enum Decision {
+        CANCEL, KEEP_BOTH, OVERWRITE
     }
-    
+
     OnConflictDecisionMadeListener mListener;
-    
+
     public static ConflictsResolveDialog newInstance(String path, OnConflictDecisionMadeListener listener) {
         ConflictsResolveDialog f = new ConflictsResolveDialog();
         Bundle args = new Bundle();
@@ -55,42 +52,35 @@ public class ConflictsResolveDialog extends SherlockDialogFragment {
         f.mListener = listener;
         return f;
     }
-    
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String remotepath = getArguments().getString("remotepath");
-        return new AlertDialog.Builder(getSherlockActivity())
-                   .setIcon(DisplayUtils.getSeasonalIconId())
-                   .setTitle(R.string.conflict_title)
-                   .setMessage(String.format(getString(R.string.conflict_message), remotepath))
-                   .setPositiveButton(R.string.conflict_overwrite,
-                       new DialogInterface.OnClickListener() {
+        return new AlertDialog.Builder(getSherlockActivity()).setIcon(DisplayUtils.getSeasonalIconId())
+                .setTitle(R.string.conflict_title)
+                .setMessage(String.format(getString(R.string.conflict_message), remotepath))
+                .setPositiveButton(R.string.conflict_overwrite, new DialogInterface.OnClickListener() {
 
-                           @Override
-                           public void onClick(DialogInterface dialog, int which) {
-                               if (mListener != null)
-                                   mListener.conflictDecisionMade(Decision.OVERWRITE);
-                           }
-                       })
-                   .setNeutralButton(R.string.conflict_keep_both,
-                       new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (mListener != null)
-                                    mListener.conflictDecisionMade(Decision.KEEP_BOTH);
-                            }
-                        })
-                   .setNegativeButton(R.string.conflict_dont_upload,
-                       new DialogInterface.OnClickListener() {
-                           @Override
-                           public void onClick(DialogInterface dialog, int which) {
-                               if (mListener != null)
-                                   mListener.conflictDecisionMade(Decision.CANCEL);
-                           }
-                   })
-                   .create();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (mListener != null)
+                            mListener.conflictDecisionMade(Decision.OVERWRITE);
+                    }
+                }).setNeutralButton(R.string.conflict_keep_both, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (mListener != null)
+                            mListener.conflictDecisionMade(Decision.KEEP_BOTH);
+                    }
+                }).setNegativeButton(R.string.conflict_dont_upload, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (mListener != null)
+                            mListener.conflictDecisionMade(Decision.CANCEL);
+                    }
+                }).create();
     }
-    
+
     public void showDialog(SherlockFragmentActivity activity) {
         Fragment prev = activity.getSupportFragmentManager().findFragmentByTag("dialog");
         FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
@@ -110,12 +100,12 @@ public class ConflictsResolveDialog extends SherlockDialogFragment {
             ft.commit();
         }
     }
-    
+
     @Override
     public void onCancel(DialogInterface dialog) {
         mListener.conflictDecisionMade(Decision.CANCEL);
     }
-    
+
     public interface OnConflictDecisionMadeListener {
         public void conflictDecisionMade(Decision decision);
     }

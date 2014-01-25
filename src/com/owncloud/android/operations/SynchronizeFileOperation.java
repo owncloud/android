@@ -44,24 +44,34 @@ import android.content.Intent;
 public class SynchronizeFileOperation extends RemoteOperation {
 
     private String TAG = SynchronizeFileOperation.class.getSimpleName();
-    
+
     private OCFile mLocalFile;
     private OCFile mServerFile;
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
     private boolean mSyncFileContents;
     private Context mContext;
-    
+
     private boolean mTransferWasRequested = false;
-    
-    public SynchronizeFileOperation(
-            OCFile localFile,
-            OCFile serverFile,          // make this null to let the operation checks the server; added to reuse info from SynchronizeFolderOperation 
-            FileDataStorageManager storageManager, 
-            Account account, 
-            boolean syncFileContents,
-            Context context) {
-        
+
+    public SynchronizeFileOperation(OCFile localFile, OCFile serverFile, // make
+                                                                         // this
+                                                                         // null
+                                                                         // to
+                                                                         // let
+                                                                         // the
+                                                                         // operation
+                                                                         // checks
+                                                                         // the
+                                                                         // server;
+                                                                         // added
+                                                                         // to
+                                                                         // reuse
+                                                                         // info
+                                                                         // from
+                                                                         // SynchronizeFolderOperation
+            FileDataStorageManager storageManager, Account account, boolean syncFileContents, Context context) {
+
         mLocalFile = localFile;
         mServerFile = serverFile;
         mStorageManager = storageManager;
@@ -70,66 +80,83 @@ public class SynchronizeFileOperation extends RemoteOperation {
         mContext = context;
     }
 
-
     @Override
     protected RemoteOperationResult run(WebdavClient client) {
 
         RemoteOperationResult result = null;
         mTransferWasRequested = false;
         if (!mLocalFile.isDown()) {
-            /// easy decision
+            // / easy decision
             requestForDownload(mLocalFile);
             result = new RemoteOperationResult(ResultCode.OK);
 
         } else {
-            /// local copy in the device -> need to think a bit more before do anything
+            // / local copy in the device -> need to think a bit more before do
+            // anything
 
             if (mServerFile == null) {
                 String remotePath = mLocalFile.getRemotePath();
                 ReadRemoteFileOperation operation = new ReadRemoteFileOperation(remotePath);
                 result = operation.execute(client);
-                if (result.isSuccess()){
+                if (result.isSuccess()) {
                     mServerFile = FileStorageUtils.fillOCFile(result.getData().get(0));
                     mServerFile.setLastSyncDateForProperties(System.currentTimeMillis());
                 }
             }
 
-            if (result.isSuccess()) {   
+            if (result.isSuccess()) {
 
-                /// check changes in server and local file
+                // / check changes in server and local file
                 boolean serverChanged = false;
-                /* time for eTag is coming, but not yet
-                    if (mServerFile.getEtag() != null) {
-                        serverChanged = (!mServerFile.getEtag().equals(mLocalFile.getEtag()));   // TODO could this be dangerous when the user upgrades the server from non-tagged to tagged?
-                    } else { */
+                /*
+                 * time for eTag is coming, but not yet if
+                 * (mServerFile.getEtag() != null) { serverChanged =
+                 * (!mServerFile.getEtag().equals(mLocalFile.getEtag())); //
+                 * TODO could this be dangerous when the user upgrades the
+                 * server from non-tagged to tagged? } else {
+                 */
                 // server without etags
-                serverChanged = (mServerFile.getModificationTimestamp() != mLocalFile.getModificationTimestampAtLastSyncForData());
-                //}
-                boolean localChanged = (mLocalFile.getLocalModificationTimestamp() > mLocalFile.getLastSyncDateForData());
-                // TODO this will be always true after the app is upgraded to database version 2; will result in unnecessary uploads
+                serverChanged = (mServerFile.getModificationTimestamp() != mLocalFile
+                        .getModificationTimestampAtLastSyncForData());
+                // }
+                boolean localChanged = (mLocalFile.getLocalModificationTimestamp() > mLocalFile
+                        .getLastSyncDateForData());
+                // TODO this will be always true after the app is upgraded to
+                // database version 2; will result in unnecessary uploads
 
-                /// decide action to perform depending upon changes
-                //if (!mLocalFile.getEtag().isEmpty() && localChanged && serverChanged) {
+                // / decide action to perform depending upon changes
+                // if (!mLocalFile.getEtag().isEmpty() && localChanged &&
+                // serverChanged) {
                 if (localChanged && serverChanged) {
                     result = new RemoteOperationResult(ResultCode.SYNC_CONFLICT);
 
                 } else if (localChanged) {
                     if (mSyncFileContents) {
                         requestForUpload(mLocalFile);
-                        // the local update of file properties will be done by the FileUploader service when the upload finishes
+                        // the local update of file properties will be done by
+                        // the FileUploader service when the upload finishes
                     } else {
-                        // NOTHING TO DO HERE: updating the properties of the file in the server without uploading the contents would be stupid; 
-                        // So, an instance of SynchronizeFileOperation created with syncFileContents == false is completely useless when we suspect
-                        // that an upload is necessary (for instance, in FileObserverService).
+                        // NOTHING TO DO HERE: updating the properties of the
+                        // file in the server without uploading the contents
+                        // would be stupid;
+                        // So, an instance of SynchronizeFileOperation created
+                        // with syncFileContents == false is completely useless
+                        // when we suspect
+                        // that an upload is necessary (for instance, in
+                        // FileObserverService).
                     }
                     result = new RemoteOperationResult(ResultCode.OK);
 
                 } else if (serverChanged) {
                     if (mSyncFileContents) {
-                        requestForDownload(mLocalFile); // local, not server; we won't to keep the value of keepInSync!
-                        // the update of local data will be done later by the FileUploader service when the upload finishes
+                        requestForDownload(mLocalFile); // local, not server; we
+                                                        // won't to keep the
+                                                        // value of keepInSync!
+                        // the update of local data will be done later by the
+                        // FileUploader service when the upload finishes
                     } else {
-                        // TODO CHECK: is this really useful in some point in the code?
+                        // TODO CHECK: is this really useful in some point in
+                        // the code?
                         mServerFile.setKeepInSync(mLocalFile.keepInSync());
                         mServerFile.setLastSyncDateForData(mLocalFile.getLastSyncDateForData());
                         mServerFile.setStoragePath(mLocalFile.getStoragePath());
@@ -144,38 +171,43 @@ public class SynchronizeFileOperation extends RemoteOperation {
                     result = new RemoteOperationResult(ResultCode.OK);
                 }
 
-            } 
+            }
 
         }
 
-        Log_OC.i(TAG, "Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() + ": " + result.getLogMessage());
+        Log_OC.i(
+                TAG,
+                "Synchronizing " + mAccount.name + ", file " + mLocalFile.getRemotePath() + ": "
+                        + result.getLogMessage());
 
         return result;
     }
 
-    
     /**
      * Requests for an upload to the FileUploader service
      * 
-     * @param file     OCFile object representing the file to upload
+     * @param file OCFile object representing the file to upload
      */
     private void requestForUpload(OCFile file) {
         Intent i = new Intent(mContext, FileUploader.class);
         i.putExtra(FileUploader.KEY_ACCOUNT, mAccount);
         i.putExtra(FileUploader.KEY_FILE, file);
-        /*i.putExtra(FileUploader.KEY_REMOTE_FILE, mRemotePath);    // doing this we would lose the value of keepInSync in the road, and maybe it's not updated in the database when the FileUploader service gets it!  
-        i.putExtra(FileUploader.KEY_LOCAL_FILE, localFile.getStoragePath());*/
+        /*
+         * i.putExtra(FileUploader.KEY_REMOTE_FILE, mRemotePath); // doing this
+         * we would lose the value of keepInSync in the road, and maybe it's not
+         * updated in the database when the FileUploader service gets it!
+         * i.putExtra(FileUploader.KEY_LOCAL_FILE, localFile.getStoragePath());
+         */
         i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
         i.putExtra(FileUploader.KEY_FORCE_OVERWRITE, true);
         mContext.startService(i);
         mTransferWasRequested = true;
     }
 
-
     /**
      * Requests for a download to the FileDownloader service
      * 
-     * @param file     OCFile object representing the file to download
+     * @param file OCFile object representing the file to download
      */
     private void requestForDownload(OCFile file) {
         Intent i = new Intent(mContext, FileDownloader.class);
@@ -185,11 +217,9 @@ public class SynchronizeFileOperation extends RemoteOperation {
         mTransferWasRequested = true;
     }
 
-
     public boolean transferWasRequested() {
         return mTransferWasRequested;
     }
-
 
     public OCFile getLocalFile() {
         return mLocalFile;

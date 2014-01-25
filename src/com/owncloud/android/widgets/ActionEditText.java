@@ -82,8 +82,7 @@ public class ActionEditText extends EditText {
         canvas.drawRect(mButtonRect, p);
         p.setColor(Color.GRAY);
 
-        canvas.drawText(s, mButtonRect.left + 3, mButtonRect.bottom
-                - (mTextBounds.height() / 2), p);
+        canvas.drawText(s, mButtonRect.left + 3, mButtonRect.bottom - (mTextBounds.height() / 2), p);
 
         invalidate();
     }
@@ -107,8 +106,7 @@ public class ActionEditText extends EditText {
                     Method method;
                     try {
 
-                        method = getContext().getClass().getMethod(
-                                badgeClickCallback, paramtypes);
+                        method = getContext().getClass().getMethod(badgeClickCallback, paramtypes);
                         method.invoke(getContext(), this, s);
 
                     } catch (NoSuchMethodException e) {
@@ -129,18 +127,12 @@ public class ActionEditText extends EditText {
     }
 
     private void getAttrs(AttributeSet attr) {
-        TypedArray a = getContext().obtainStyledAttributes(attr,
-                R.styleable.ActionEditText);
-        optionOneString = a
-                .getString(R.styleable.ActionEditText_optionOneString);
-        optionTwoString = a
-                .getString(R.styleable.ActionEditText_optionTwoString);
-        optionOneColor = a.getColor(R.styleable.ActionEditText_optionOneColor,
-                0x00ff00);
-        optionTwoColor = a.getColor(R.styleable.ActionEditText_optionTwoColor,
-                0xff0000);
-        badgeClickCallback = a
-                .getString(R.styleable.ActionEditText_onBadgeClick);
+        TypedArray a = getContext().obtainStyledAttributes(attr, R.styleable.ActionEditText);
+        optionOneString = a.getString(R.styleable.ActionEditText_optionOneString);
+        optionTwoString = a.getString(R.styleable.ActionEditText_optionTwoString);
+        optionOneColor = a.getColor(R.styleable.ActionEditText_optionOneColor, 0x00ff00);
+        optionTwoColor = a.getColor(R.styleable.ActionEditText_optionTwoColor, 0xff0000);
+        badgeClickCallback = a.getString(R.styleable.ActionEditText_onBadgeClick);
     }
 
 }

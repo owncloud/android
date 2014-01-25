@@ -33,13 +33,11 @@ import javax.net.ssl.X509TrustManager;
 
 import android.util.Log;
 
-
-
 /**
  * @author David A. Velasco
  */
 public class AdvancedX509TrustManager implements X509TrustManager {
-    
+
     private static final String TAG = AdvancedX509TrustManager.class.getSimpleName();
 
     private X509TrustManager mStandardTrustManager = null;
@@ -48,26 +46,33 @@ public class AdvancedX509TrustManager implements X509TrustManager {
     /**
      * Constructor for AdvancedX509TrustManager
      * 
-     * @param  knownServersCertStore    Local certificates store with server certificates explicitly trusted by the user.
-     * @throws CertStoreException       When no default X509TrustManager instance was found in the system.
+     * @param knownServersCertStore
+     *            Local certificates store with server certificates explicitly
+     *            trusted by the user.
+     * @throws CertStoreException
+     *             When no default X509TrustManager instance was found in the
+     *             system.
      */
-    public AdvancedX509TrustManager(KeyStore knownServersKeyStore)
-            throws NoSuchAlgorithmException, KeyStoreException, CertStoreException {
+    public AdvancedX509TrustManager(KeyStore knownServersKeyStore) throws NoSuchAlgorithmException, KeyStoreException,
+            CertStoreException {
         super();
-        TrustManagerFactory factory = TrustManagerFactory
-                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        factory.init((KeyStore)null);
+        TrustManagerFactory factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        factory.init((KeyStore) null);
         mStandardTrustManager = findX509TrustManager(factory);
 
         mKnownServersKeyStore = knownServersKeyStore;
     }
-    
-    
+
     /**
-     * Locates the first X509TrustManager provided by a given TrustManagerFactory
-     * @param factory               TrustManagerFactory to inspect in the search for a X509TrustManager
-     * @return                      The first X509TrustManager found in factory.
-     * @throws CertStoreException   When no X509TrustManager instance was found in factory
+     * Locates the first X509TrustManager provided by a given
+     * TrustManagerFactory
+     * 
+     * @param factory
+     *            TrustManagerFactory to inspect in the search for a
+     *            X509TrustManager
+     * @return The first X509TrustManager found in factory.
+     * @throws CertStoreException
+     *             When no X509TrustManager instance was found in factory
      */
     private X509TrustManager findX509TrustManager(TrustManagerFactory factory) throws CertStoreException {
         TrustManager tms[] = factory.getTrustManagers();
@@ -78,7 +83,6 @@ public class AdvancedX509TrustManager implements X509TrustManager {
         }
         return null;
     }
-    
 
     /**
      * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],
@@ -88,46 +92,47 @@ public class AdvancedX509TrustManager implements X509TrustManager {
         mStandardTrustManager.checkClientTrusted(certificates, authType);
     }
 
-    
     /**
      * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],
      *      String authType)
      */
     public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
         if (!isKnownServer(certificates[0])) {
-        	CertificateCombinedException result = new CertificateCombinedException(certificates[0]);
-        	try {
-        		certificates[0].checkValidity();
-        	} catch (CertificateExpiredException c) {
-        		result.setCertificateExpiredException(c);
-        		
-        	} catch (CertificateNotYetValidException c) {
+            CertificateCombinedException result = new CertificateCombinedException(certificates[0]);
+            try {
+                certificates[0].checkValidity();
+            } catch (CertificateExpiredException c) {
+                result.setCertificateExpiredException(c);
+
+            } catch (CertificateNotYetValidException c) {
                 result.setCertificateNotYetException(c);
-        	}
-        	
-        	try {
-        	    mStandardTrustManager.checkServerTrusted(certificates, authType);
-        	} catch (CertificateException c) {
+            }
+
+            try {
+                mStandardTrustManager.checkServerTrusted(certificates, authType);
+            } catch (CertificateException c) {
                 Throwable cause = c.getCause();
                 Throwable previousCause = null;
-                while (cause != null && cause != previousCause && !(cause instanceof CertPathValidatorException)) {     // getCause() is not funny
+                while (cause != null && cause != previousCause && !(cause instanceof CertPathValidatorException)) { // getCause()
+                                                                                                                    // is
+                                                                                                                    // not
+                                                                                                                    // funny
                     previousCause = cause;
                     cause = cause.getCause();
                 }
                 if (cause != null && cause instanceof CertPathValidatorException) {
-                	result.setCertPathValidatorException((CertPathValidatorException)cause);
+                    result.setCertPathValidatorException((CertPathValidatorException) cause);
                 } else {
-                	result.setOtherCertificateException(c);
+                    result.setOtherCertificateException(c);
                 }
-        	}
-        	
-        	if (result.isException())
-        		throw result;
+            }
+
+            if (result.isException())
+                throw result;
 
         }
     }
-    
-    
+
     /**
      * @see javax.net.ssl.X509TrustManager#getAcceptedIssuers()
      */
@@ -135,7 +140,6 @@ public class AdvancedX509TrustManager implements X509TrustManager {
         return mStandardTrustManager.getAcceptedIssuers();
     }
 
-    
     public boolean isKnownServer(X509Certificate cert) {
         try {
             return (mKnownServersKeyStore.getCertificateAlias(cert) != null);
@@ -144,5 +148,5 @@ public class AdvancedX509TrustManager implements X509TrustManager {
             return false;
         }
     }
-    
+
 }

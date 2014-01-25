@@ -45,11 +45,9 @@ import org.apache.http.conn.ssl.X509HostnameVerifier;
 //import android.os.Build;
 import android.util.Log;
 
-
-
 /**
- * AdvancedSSLProtocolSocketFactory allows to create SSL {@link Socket}s with 
- * a custom SSLContext and an optional Hostname Verifier.
+ * AdvancedSSLProtocolSocketFactory allows to create SSL {@link Socket}s with a
+ * custom SSLContext and an optional Hostname Verifier.
  * 
  * @author David A. Velasco
  */
@@ -57,7 +55,7 @@ import android.util.Log;
 public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
 
     private static final String TAG = AdvancedSslSocketFactory.class.getSimpleName();
-    
+
     private SSLContext mSslContext = null;
     private AdvancedX509TrustManager mTrustManager = null;
     private X509HostnameVerifier mHostnameVerifier = null;
@@ -65,11 +63,12 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
     public SSLContext getSslContext() {
         return mSslContext;
     }
-    
+
     /**
      * Constructor for AdvancedSSLProtocolSocketFactory.
      */
-    public AdvancedSslSocketFactory(SSLContext sslContext, AdvancedX509TrustManager trustManager, X509HostnameVerifier hostnameVerifier) {
+    public AdvancedSslSocketFactory(SSLContext sslContext, AdvancedX509TrustManager trustManager,
+            X509HostnameVerifier hostnameVerifier) {
         if (sslContext == null)
             throw new IllegalArgumentException("AdvancedSslSocketFactory can not be created with a null SSLContext");
         if (trustManager == null)
@@ -82,80 +81,70 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
     /**
      * @see ProtocolSocketFactory#createSocket(java.lang.String,int,java.net.InetAddress,int)
      */
-    public Socket createSocket(String host, int port, InetAddress clientHost, int clientPort) throws IOException, UnknownHostException {
+    public Socket createSocket(String host, int port, InetAddress clientHost, int clientPort) throws IOException,
+            UnknownHostException {
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port, clientHost, clientPort);
         verifyPeerIdentity(host, port, socket);
         return socket;
     }
 
     /*
-    private void logSslInfo() {
-    	if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
-	    	Log.v(TAG, "SUPPORTED SSL PARAMETERS");
-	    	logSslParameters(mSslContext.getSupportedSSLParameters());
-	    	Log.v(TAG, "DEFAULT SSL PARAMETERS");
-	    	logSslParameters(mSslContext.getDefaultSSLParameters());
-	    	Log.i(TAG, "CURRENT PARAMETERS");
-	    	Log.i(TAG, "Protocol: " + mSslContext.getProtocol());
-    	}
-    	Log.i(TAG, "PROVIDER");
-    	logSecurityProvider(mSslContext.getProvider());
-	}
-    
-    private void logSecurityProvider(Provider provider) {
-    	Log.i(TAG, "name: " + provider.getName());
-    	Log.i(TAG, "version: " + provider.getVersion());
-    	Log.i(TAG, "info: " + provider.getInfo());
-    	Enumeration<?> keys = provider.propertyNames();
-    	String key;
-    	while (keys.hasMoreElements()) {
-    		key = (String) keys.nextElement();
-        	Log.i(TAG, "  property " + key + " : " + provider.getProperty(key));
-    	}
-	}
+     * private void logSslInfo() { if (Build.VERSION.SDK_INT >
+     * Build.VERSION_CODES.FROYO) { Log.v(TAG, "SUPPORTED SSL PARAMETERS");
+     * logSslParameters(mSslContext.getSupportedSSLParameters()); Log.v(TAG,
+     * "DEFAULT SSL PARAMETERS");
+     * logSslParameters(mSslContext.getDefaultSSLParameters()); Log.i(TAG,
+     * "CURRENT PARAMETERS"); Log.i(TAG, "Protocol: " +
+     * mSslContext.getProtocol()); } Log.i(TAG, "PROVIDER");
+     * logSecurityProvider(mSslContext.getProvider()); }
+     * 
+     * private void logSecurityProvider(Provider provider) { Log.i(TAG, "name: "
+     * + provider.getName()); Log.i(TAG, "version: " + provider.getVersion());
+     * Log.i(TAG, "info: " + provider.getInfo()); Enumeration<?> keys =
+     * provider.propertyNames(); String key; while (keys.hasMoreElements()) {
+     * key = (String) keys.nextElement(); Log.i(TAG, "  property " + key + " : "
+     * + provider.getProperty(key)); } }
+     * 
+     * private void logSslParameters(SSLParameters params) { Log.v(TAG,
+     * "Cipher suites: "); String [] elements = params.getCipherSuites(); for
+     * (int i=0; i<elements.length ; i++) { Log.v(TAG, "  " + elements[i]); }
+     * Log.v(TAG, "Protocols: "); elements = params.getProtocols(); for (int
+     * i=0; i<elements.length ; i++) { Log.v(TAG, "  " + elements[i]); } }
+     */
 
-	private void logSslParameters(SSLParameters params) {
-    	Log.v(TAG, "Cipher suites: ");
-    	String [] elements = params.getCipherSuites();
-    	for (int i=0; i<elements.length ; i++) {
-    		Log.v(TAG, "  " + elements[i]);
-    	}
-    	Log.v(TAG, "Protocols: ");
-    	elements = params.getProtocols();
-    	for (int i=0; i<elements.length ; i++) {
-    		Log.v(TAG, "  " + elements[i]);
-    	}
-	}
-	*/
-
-	/**
+    /**
      * Attempts to get a new socket connection to the given host within the
      * given time limit.
      * 
-     * @param host the host name/IP
-     * @param port the port on the host
-     * @param clientHost the local host name/IP to bind the socket to
-     * @param clientPort the port on the local machine
-     * @param params {@link HttpConnectionParams Http connection parameters}
+     * @param host
+     *            the host name/IP
+     * @param port
+     *            the port on the host
+     * @param clientHost
+     *            the local host name/IP to bind the socket to
+     * @param clientPort
+     *            the port on the local machine
+     * @param params
+     *            {@link HttpConnectionParams Http connection parameters}
      * 
      * @return Socket a new socket
      * 
-     * @throws IOException if an I/O error occurs while creating the socket
-     * @throws UnknownHostException if the IP address of the host cannot be
-     *             determined
+     * @throws IOException
+     *             if an I/O error occurs while creating the socket
+     * @throws UnknownHostException
+     *             if the IP address of the host cannot be determined
      */
-    public Socket createSocket(final String host, final int port,
-            final InetAddress localAddress, final int localPort,
-            final HttpConnectionParams params) throws IOException,
-            UnknownHostException, ConnectTimeoutException {
-        Log.d(TAG, "Creating SSL Socket with remote " + host + ":" + port + ", local " + localAddress + ":" + localPort + ", params: " + params);
+    public Socket createSocket(final String host, final int port, final InetAddress localAddress, final int localPort,
+            final HttpConnectionParams params) throws IOException, UnknownHostException, ConnectTimeoutException {
+        Log.d(TAG, "Creating SSL Socket with remote " + host + ":" + port + ", local " + localAddress + ":" + localPort
+                + ", params: " + params);
         if (params == null) {
             throw new IllegalArgumentException("Parameters may not be null");
-        } 
+        }
         int timeout = params.getConnectionTimeout();
-        
-        //logSslInfo();
-        
+
+        // logSslInfo();
+
         SocketFactory socketfactory = mSslContext.getSocketFactory();
         Log.d(TAG, " ... with connection timeout " + timeout + " and socket timeout " + params.getSoTimeout());
         Socket socket = socketfactory.createSocket();
@@ -163,60 +152,62 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
         SocketAddress remoteaddr = new InetSocketAddress(host, port);
         socket.setSoTimeout(params.getSoTimeout());
         socket.bind(localaddr);
-        ServerNameIndicator.setServerNameIndication(host, (SSLSocket)socket);
+        ServerNameIndicator.setServerNameIndication(host, (SSLSocket) socket);
         socket.connect(remoteaddr, timeout);
         verifyPeerIdentity(host, port, socket);
         return socket;
     }
 
-	/**
+    /**
      * @see ProtocolSocketFactory#createSocket(java.lang.String,int)
      */
-    public Socket createSocket(String host, int port) throws IOException,
-            UnknownHostException {
-    	Log.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);
+    public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+        Log.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port);
         verifyPeerIdentity(host, port, socket);
-        return socket; 
+        return socket;
     }
 
     public boolean equals(Object obj) {
-        return ((obj != null) && obj.getClass().equals(
-                AdvancedSslSocketFactory.class));
+        return ((obj != null) && obj.getClass().equals(AdvancedSslSocketFactory.class));
     }
 
     public int hashCode() {
         return AdvancedSslSocketFactory.class.hashCode();
     }
 
-
     public X509HostnameVerifier getHostNameVerifier() {
         return mHostnameVerifier;
     }
-    
-    
+
     public void setHostNameVerifier(X509HostnameVerifier hostnameVerifier) {
         mHostnameVerifier = hostnameVerifier;
     }
-    
+
     /**
-     * Verifies the identity of the server. 
+     * Verifies the identity of the server.
      * 
      * The server certificate is verified first.
      * 
-     * Then, the host name is compared with the content of the server certificate using the current host name verifier, if any.
+     * Then, the host name is compared with the content of the server
+     * certificate using the current host name verifier, if any.
+     * 
      * @param socket
      */
     private void verifyPeerIdentity(String host, int port, Socket socket) throws IOException {
         try {
             CertificateCombinedException failInHandshake = null;
-            /// 1. VERIFY THE SERVER CERTIFICATE through the registered TrustManager (that should be an instance of AdvancedX509TrustManager) 
+            // / 1. VERIFY THE SERVER CERTIFICATE through the registered
+            // TrustManager (that should be an instance of
+            // AdvancedX509TrustManager)
             try {
-                SSLSocket sock = (SSLSocket) socket;    // a new SSLSession instance is created as a "side effect" 
+                SSLSocket sock = (SSLSocket) socket; // a new SSLSession
+                                                     // instance is created as a
+                                                     // "side effect"
                 sock.startHandshake();
-                
+
             } catch (RuntimeException e) {
-                
+
                 if (e instanceof CertificateCombinedException) {
                     failInHandshake = (CertificateCombinedException) e;
                 } else {
@@ -227,63 +218,67 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
                         cause = cause.getCause();
                     }
                     if (cause != null && cause instanceof CertificateCombinedException) {
-                        failInHandshake = (CertificateCombinedException)cause;
+                        failInHandshake = (CertificateCombinedException) cause;
                     }
                 }
                 if (failInHandshake == null) {
                     throw e;
                 }
                 failInHandshake.setHostInUrl(host);
-                
+
             }
-            
-            /// 2. VERIFY HOSTNAME
+
+            // / 2. VERIFY HOSTNAME
             SSLSession newSession = null;
             boolean verifiedHostname = true;
             if (mHostnameVerifier != null) {
                 if (failInHandshake != null) {
-                    /// 2.1 : a new SSLSession instance was NOT created in the handshake
+                    // / 2.1 : a new SSLSession instance was NOT created in the
+                    // handshake
                     X509Certificate serverCert = failInHandshake.getServerCertificate();
                     try {
                         mHostnameVerifier.verify(host, serverCert);
                     } catch (SSLException e) {
                         verifiedHostname = false;
                     }
-                
+
                 } else {
-                    /// 2.2 : a new SSLSession instance was created in the handshake
-                    newSession = ((SSLSocket)socket).getSession();
-                    if (!mTrustManager.isKnownServer((X509Certificate)(newSession.getPeerCertificates()[0]))) {
-                        verifiedHostname = mHostnameVerifier.verify(host, newSession); 
+                    // / 2.2 : a new SSLSession instance was created in the
+                    // handshake
+                    newSession = ((SSLSocket) socket).getSession();
+                    if (!mTrustManager.isKnownServer((X509Certificate) (newSession.getPeerCertificates()[0]))) {
+                        verifiedHostname = mHostnameVerifier.verify(host, newSession);
                     }
                 }
             }
 
-            /// 3. Combine the exceptions to throw, if any
+            // / 3. Combine the exceptions to throw, if any
             if (!verifiedHostname) {
-                SSLPeerUnverifiedException pue = new SSLPeerUnverifiedException("Names in the server certificate do not match to " + host + " in the URL");
+                SSLPeerUnverifiedException pue = new SSLPeerUnverifiedException(
+                        "Names in the server certificate do not match to " + host + " in the URL");
                 if (failInHandshake == null) {
-                    failInHandshake = new CertificateCombinedException((X509Certificate) newSession.getPeerCertificates()[0]);
+                    failInHandshake = new CertificateCombinedException(
+                            (X509Certificate) newSession.getPeerCertificates()[0]);
                     failInHandshake.setHostInUrl(host);
                 }
                 failInHandshake.setSslPeerUnverifiedException(pue);
                 pue.initCause(failInHandshake);
                 throw pue;
-                
+
             } else if (failInHandshake != null) {
                 SSLHandshakeException hse = new SSLHandshakeException("Server certificate could not be verified");
                 hse.initCause(failInHandshake);
                 throw hse;
             }
-            
-        } catch (IOException io) {        
+
+        } catch (IOException io) {
             try {
                 socket.close();
             } catch (Exception x) {
-                // NOTHING - irrelevant exception for the caller 
+                // NOTHING - irrelevant exception for the caller
             }
             throw io;
         }
     }
-    
+
 }

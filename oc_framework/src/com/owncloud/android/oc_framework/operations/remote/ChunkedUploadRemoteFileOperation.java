@@ -32,20 +32,18 @@ import com.owncloud.android.oc_framework.network.webdav.ChunkFromFileChannelRequ
 import com.owncloud.android.oc_framework.network.webdav.WebdavClient;
 import com.owncloud.android.oc_framework.network.webdav.WebdavUtils;
 
-
 import android.util.Log;
 
-
 public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation {
-    
+
     public static final long CHUNK_SIZE = 1024000;
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
     public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType) {
-		 super(storagePath, remotePath, mimeType);	
-	}
-    
+        super(storagePath, remotePath, mimeType);
+    }
+
     @Override
     protected int uploadFile(WebdavClient client) throws HttpException, IOException {
         int status = -1;
@@ -57,36 +55,41 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             raf = new RandomAccessFile(file, "r");
             channel = raf.getChannel();
             mEntity = new ChunkFromFileChannelRequestEntity(channel, mMimeType, CHUNK_SIZE, file);
-            //((ProgressiveDataTransferer)mEntity).addDatatransferProgressListeners(getDataTransferListeners());
+            // ((ProgressiveDataTransferer)mEntity).addDatatransferProgressListeners(getDataTransferListeners());
             synchronized (mDataTransferListeners) {
-				((ProgressiveDataTransferer)mEntity).addDatatransferProgressListeners(mDataTransferListeners);
-			}
-            
+                ((ProgressiveDataTransferer) mEntity).addDatatransferProgressListeners(mDataTransferListeners);
+            }
+
             long offset = 0;
-            String uriPrefix = client.getBaseUri() + WebdavUtils.encodePath(mRemotePath) + "-chunking-" + Math.abs((new Random()).nextInt(9000)+1000) + "-" ;
-            long chunkCount = (long) Math.ceil((double)file.length() / CHUNK_SIZE);
-            for (int chunkIndex = 0; chunkIndex < chunkCount ; chunkIndex++, offset += CHUNK_SIZE) {
+            String uriPrefix = client.getBaseUri() + WebdavUtils.encodePath(mRemotePath) + "-chunking-"
+                    + Math.abs((new Random()).nextInt(9000) + 1000) + "-";
+            long chunkCount = (long) Math.ceil((double) file.length() / CHUNK_SIZE);
+            for (int chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++, offset += CHUNK_SIZE) {
                 if (mPutMethod != null) {
-                    mPutMethod.releaseConnection();    // let the connection available for other methods
+                    mPutMethod.releaseConnection(); // let the connection
+                                                    // available for other
+                                                    // methods
                 }
                 mPutMethod = new PutMethod(uriPrefix + chunkCount + "-" + chunkIndex);
                 mPutMethod.addRequestHeader(OC_CHUNKED_HEADER, OC_CHUNKED_HEADER);
-                ((ChunkFromFileChannelRequestEntity)mEntity).setOffset(offset);
+                ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
                 mPutMethod.setRequestEntity(mEntity);
                 status = client.executeMethod(mPutMethod);
                 client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
-                Log.d(TAG, "Upload of " + mStoragePath + " to " + mRemotePath + ", chunk index " + chunkIndex + ", count " + chunkCount + ", HTTP result status " + status);
+                Log.d(TAG, "Upload of " + mStoragePath + " to " + mRemotePath + ", chunk index " + chunkIndex
+                        + ", count " + chunkCount + ", HTTP result status " + status);
                 if (!isSuccess(status))
                     break;
             }
-            
+
         } finally {
             if (channel != null)
                 channel.close();
             if (raf != null)
                 raf.close();
             if (mPutMethod != null)
-                mPutMethod.releaseConnection();    // let the connection available for other methods
+                mPutMethod.releaseConnection(); // let the connection available
+                                                // for other methods
         }
         return status;
     }

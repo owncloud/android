@@ -1,4 +1,5 @@
 package com.owncloud.android.oc_framework.network;
+
 /* ownCloud Android client application
  *   Copyright (C) 2012  ownCloud Inc.
  *
@@ -16,49 +17,45 @@ package com.owncloud.android.oc_framework.network;
  *
  */
 
-
-
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.util.LangUtils;
 
 /**
  * Bearer token {@link Credentials}
- *
+ * 
  * @author David A. Velasco
  */
 public class BearerCredentials implements Credentials {
 
-    
     private String mAccessToken;
-    
-    
+
     /**
      * The constructor with the bearer token
-     *
-     * @param token     The bearer token
+     * 
+     * @param token
+     *            The bearer token
      */
     public BearerCredentials(String token) {
-        /*if (token == null) {
-            throw new IllegalArgumentException("Bearer token may not be null");            
-        }*/
+        /*
+         * if (token == null) { throw new
+         * IllegalArgumentException("Bearer token may not be null"); }
+         */
         mAccessToken = (token == null) ? "" : token;
     }
 
-
     /**
      * Returns the access token
-     *
-     * @return      The access token
+     * 
+     * @return The access token
      */
     public String getAccessToken() {
         return mAccessToken;
     }
 
-
     /**
      * Get this object string.
-     *
-     * @return  The access token
+     * 
+     * @return The access token
      */
     public String toString() {
         return mAccessToken;
@@ -66,7 +63,7 @@ public class BearerCredentials implements Credentials {
 
     /**
      * Does a hash of the access token.
-     *
+     * 
      * @return The hash code of the access token
      */
     public int hashCode() {
@@ -77,14 +74,17 @@ public class BearerCredentials implements Credentials {
 
     /**
      * These credentials are assumed equal if accessToken is the same.
-     *
-     * @param   o   The other object to compare with.
-     *
-     * @return      'True' if the object is equivalent.
+     * 
+     * @param o
+     *            The other object to compare with.
+     * 
+     * @return 'True' if the object is equivalent.
      */
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (this == o) return true;
+        if (o == null)
+            return false;
+        if (this == o)
+            return true;
         if (this.getClass().equals(o.getClass())) {
             BearerCredentials that = (BearerCredentials) o;
             if (LangUtils.equals(mAccessToken, that.mAccessToken)) {
@@ -95,4 +95,3 @@ public class BearerCredentials implements Credentials {
     }
 
 }
-

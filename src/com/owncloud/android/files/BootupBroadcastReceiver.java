@@ -28,7 +28,7 @@ import android.content.Intent;
 public class BootupBroadcastReceiver extends BroadcastReceiver {
 
     private static String TAG = "BootupBroadcastReceiver";
-    
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (!intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
@@ -37,8 +37,7 @@ public class BootupBroadcastReceiver extends BroadcastReceiver {
         }
         Log_OC.d(TAG, "Starting file observer service...");
         Intent i = new Intent(context, FileObserverService.class);
-        i.putExtra(FileObserverService.KEY_FILE_CMD,
-                   FileObserverService.CMD_INIT_OBSERVED_LIST);
+        i.putExtra(FileObserverService.KEY_FILE_CMD, FileObserverService.CMD_INIT_OBSERVED_LIST);
         context.startService(i);
         Log_OC.d(TAG, "DONE");
     }

@@ -27,67 +27,65 @@ import com.owncloud.android.oc_framework.operations.RemoteOperationResult;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.Log_OC;
 
-
 /**
- * Access to remote operation performing the creation of a new folder in the ownCloud server.
- * Save the new folder in Database
+ * Access to remote operation performing the creation of a new folder in the
+ * ownCloud server. Save the new folder in Database
  * 
- * @author David A. Velasco 
+ * @author David A. Velasco
  * @author masensio
  */
-public class CreateFolderOperation extends RemoteOperation implements OnRemoteOperationListener{
-    
+public class CreateFolderOperation extends RemoteOperation implements OnRemoteOperationListener {
+
     private static final String TAG = CreateFolderOperation.class.getSimpleName();
-    
+
     protected String mRemotePath;
     protected boolean mCreateFullPath;
     protected FileDataStorageManager mStorageManager;
-    
+
     /**
      * Constructor
      * 
-     * @param createFullPath        'True' means that all the ancestor folders should be created if don't exist yet.
-     * @param storageManager        Reference to the local database corresponding to the account where the file is contained. 
+     * @param createFullPath 'True' means that all the ancestor folders should
+     *            be created if don't exist yet.
+     * @param storageManager Reference to the local database corresponding to
+     *            the account where the file is contained.
      */
     public CreateFolderOperation(String remotePath, boolean createFullPath, FileDataStorageManager storageManager) {
         mRemotePath = remotePath;
         mCreateFullPath = createFullPath;
         mStorageManager = storageManager;
-        
-    }
 
+    }
 
     @Override
     protected RemoteOperationResult run(WebdavClient client) {
         CreateRemoteFolderOperation operation = new CreateRemoteFolderOperation(mRemotePath, mCreateFullPath);
-        RemoteOperationResult result =  operation.execute(client);
-        
+        RemoteOperationResult result = operation.execute(client);
+
         if (result.isSuccess()) {
             saveFolderInDB();
         } else {
             Log_OC.e(TAG, mRemotePath + "hasn't been created");
         }
-        
+
         return result;
     }
 
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
         if (operation instanceof CreateRemoteFolderOperation) {
-            onCreateRemoteFolderOperationFinish((CreateRemoteFolderOperation)operation, result);
+            onCreateRemoteFolderOperationFinish((CreateRemoteFolderOperation) operation, result);
         }
     }
-    
-    
+
     private void onCreateRemoteFolderOperationFinish(CreateRemoteFolderOperation operation, RemoteOperationResult result) {
-       if (result.isSuccess()) {
-           saveFolderInDB();
-       } else {
-           Log_OC.e(TAG, mRemotePath + "hasn't been created");
-       }
+        if (result.isSuccess()) {
+            saveFolderInDB();
+        } else {
+            Log_OC.e(TAG, mRemotePath + "hasn't been created");
+        }
     }
 
-    
     /**
      * Save new directory in local database
      */
@@ -102,6 +100,5 @@ public class CreateFolderOperation extends RemoteOperation implements OnRemoteOp
         Log_OC.d(TAG, "Create directory " + mRemotePath + " in Database");
 
     }
-
 
 }

@@ -1,4 +1,5 @@
 package com.owncloud.android.oc_framework.network;
+
 /* ownCloud Android client application
  *   Copyright (C) 2012-2013 ownCloud Inc.
  *
@@ -16,17 +17,14 @@ package com.owncloud.android.oc_framework.network;
  *
  */
 
-
-
 import java.util.Collection;
 
 import com.owncloud.android.oc_framework.network.webdav.OnDatatransferProgressListener;
 
-
 public interface ProgressiveDataTransferer {
 
-    public void addDatatransferProgressListener (OnDatatransferProgressListener listener);
-    
+    public void addDatatransferProgressListener(OnDatatransferProgressListener listener);
+
     public void addDatatransferProgressListeners(Collection<OnDatatransferProgressListener> listeners);
 
     public void removeDatatransferProgressListener(OnDatatransferProgressListener listener);

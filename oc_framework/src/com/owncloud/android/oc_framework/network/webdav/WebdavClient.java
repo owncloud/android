@@ -49,16 +49,16 @@ import android.util.Log;
 
 public class WebdavClient extends HttpClient {
     private static final int MAX_REDIRECTIONS_COUNT = 3;
-    
+
     private Uri mUri;
     private Credentials mCredentials;
     private boolean mFollowRedirects;
     private String mSsoSessionCookie;
     final private static String TAG = WebdavClient.class.getSimpleName();
     public static final String USER_AGENT = "Android-ownCloud";
-    
+
     static private byte[] sExhaustBuffer = new byte[1024];
-    
+
     /**
      * Constructor
      */
@@ -73,11 +73,11 @@ public class WebdavClient extends HttpClient {
 
     public void setBearerCredentials(String accessToken) {
         AuthPolicy.registerAuthScheme(BearerAuthScheme.AUTH_POLICY, BearerAuthScheme.class);
-        
+
         List<String> authPrefs = new ArrayList<String>(1);
         authPrefs.add(BearerAuthScheme.AUTH_POLICY);
-        getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);        
-        
+        getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
+
         mCredentials = new BearerCredentials(accessToken);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
@@ -86,63 +86,74 @@ public class WebdavClient extends HttpClient {
     public void setBasicCredentials(String username, String password) {
         List<String> authPrefs = new ArrayList<String>(1);
         authPrefs.add(AuthPolicy.BASIC);
-        getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);        
-        
+        getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
+
         getParams().setAuthenticationPreemptive(true);
         mCredentials = new UsernamePasswordCredentials(username, password);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
     }
-    
+
     public void setSsoSessionCookie(String accessToken) {
         getParams().setAuthenticationPreemptive(false);
         getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
         mSsoSessionCookie = accessToken;
         mCredentials = null;
     }
-    
-    
+
     /**
      * Check if a file exists in the OC server
      * 
      * TODO replace with ExistenceOperation
      * 
-     * @return              'true' if the file exists; 'false' it doesn't exist
-     * @throws  Exception   When the existence could not be determined
+     * @return 'true' if the file exists; 'false' it doesn't exist
+     * @throws Exception
+     *             When the existence could not be determined
      */
     public boolean existsFile(String path) throws IOException, HttpException {
         HeadMethod head = new HeadMethod(mUri.toString() + WebdavUtils.encodePath(path));
         try {
             int status = executeMethod(head);
-            Log.d(TAG, "HEAD to " + path + " finished with HTTP status " + status + ((status != HttpStatus.SC_OK)?"(FAIL)":""));
+            Log.d(TAG, "HEAD to " + path + " finished with HTTP status " + status
+                    + ((status != HttpStatus.SC_OK) ? "(FAIL)" : ""));
             exhaustResponse(head.getResponseBodyAsStream());
             return (status == HttpStatus.SC_OK);
-            
+
         } finally {
-            head.releaseConnection();    // let the connection available for other methods
+            head.releaseConnection(); // let the connection available for other
+                                      // methods
         }
     }
-    
+
     /**
      * Requests the received method with the received timeout (milliseconds).
      * 
-     * Executes the method through the inherited HttpClient.executedMethod(method).
+     * Executes the method through the inherited
+     * HttpClient.executedMethod(method).
      * 
      * Sets the socket and connection timeouts only for the method received.
      * 
-     * The timeouts are both in milliseconds; 0 means 'infinite'; < 0 means 'do not change the default'
+     * The timeouts are both in milliseconds; 0 means 'infinite'; < 0 means 'do
+     * not change the default'
      * 
-     * @param method            HTTP method request.
-     * @param readTimeout       Timeout to set for data reception
-     * @param conntionTimout    Timeout to set for connection establishment
+     * @param method
+     *            HTTP method request.
+     * @param readTimeout
+     *            Timeout to set for data reception
+     * @param conntionTimout
+     *            Timeout to set for connection establishment
      */
-    public int executeMethod(HttpMethodBase method, int readTimeout, int connectionTimeout) throws HttpException, IOException {
+    public int executeMethod(HttpMethodBase method, int readTimeout, int connectionTimeout) throws HttpException,
+            IOException {
         int oldSoTimeout = getParams().getSoTimeout();
         int oldConnectionTimeout = getHttpConnectionManager().getParams().getConnectionTimeout();
         try {
-            if (readTimeout >= 0) { 
-                method.getParams().setSoTimeout(readTimeout);   // this should be enough...
-                getParams().setSoTimeout(readTimeout);          // ... but this looks like necessary for HTTPS
+            if (readTimeout >= 0) {
+                method.getParams().setSoTimeout(readTimeout); // this should be
+                                                              // enough...
+                getParams().setSoTimeout(readTimeout); // ... but this looks
+                                                       // like necessary for
+                                                       // HTTPS
             }
             if (connectionTimeout >= 0) {
                 getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
@@ -153,15 +164,16 @@ public class WebdavClient extends HttpClient {
             getHttpConnectionManager().getParams().setConnectionTimeout(oldConnectionTimeout);
         }
     }
-    
-    
+
     @Override
     public int executeMethod(HttpMethod method) throws IOException, HttpException {
         boolean customRedirectionNeeded = false;
         try {
             method.setFollowRedirects(mFollowRedirects);
         } catch (Exception e) {
-            //if (mFollowRedirects) Log_OC.d(TAG, "setFollowRedirects failed for " + method.getName() + " method, custom redirection will be used if needed");
+            // if (mFollowRedirects) Log_OC.d(TAG,
+            // "setFollowRedirects failed for " + method.getName() +
+            // " method, custom redirection will be used if needed");
             customRedirectionNeeded = mFollowRedirects;
         }
         if (mSsoSessionCookie != null && mSsoSessionCookie.length() > 0) {
@@ -169,41 +181,40 @@ public class WebdavClient extends HttpClient {
         }
         int status = super.executeMethod(method);
         int redirectionsCount = 0;
-        while (customRedirectionNeeded &&
-                redirectionsCount < MAX_REDIRECTIONS_COUNT &&
-                (   status == HttpStatus.SC_MOVED_PERMANENTLY || 
-                    status == HttpStatus.SC_MOVED_TEMPORARILY ||
-                    status == HttpStatus.SC_TEMPORARY_REDIRECT)
-                ) {
-            
+        while (customRedirectionNeeded
+                && redirectionsCount < MAX_REDIRECTIONS_COUNT
+                && (status == HttpStatus.SC_MOVED_PERMANENTLY || status == HttpStatus.SC_MOVED_TEMPORARILY || status == HttpStatus.SC_TEMPORARY_REDIRECT)) {
+
             Header location = method.getResponseHeader("Location");
             if (location != null) {
-                Log.d(TAG,  "Location to redirect: " + location.getValue());
+                Log.d(TAG, "Location to redirect: " + location.getValue());
                 method.setURI(new URI(location.getValue(), true));
                 status = super.executeMethod(method);
                 redirectionsCount++;
-                
+
             } else {
-                Log.d(TAG,  "No location to redirect!");
+                Log.d(TAG, "No location to redirect!");
                 status = HttpStatus.SC_NOT_FOUND;
             }
         }
-        
+
         return status;
     }
 
-
     /**
-     * Exhausts a not interesting HTTP response. Encouraged by HttpClient documentation.
+     * Exhausts a not interesting HTTP response. Encouraged by HttpClient
+     * documentation.
      * 
-     * @param responseBodyAsStream      InputStream with the HTTP response to exhaust.
+     * @param responseBodyAsStream
+     *            InputStream with the HTTP response to exhaust.
      */
     public void exhaustResponse(InputStream responseBodyAsStream) {
         if (responseBodyAsStream != null) {
             try {
-                while (responseBodyAsStream.read(sExhaustBuffer) >= 0);
+                while (responseBodyAsStream.read(sExhaustBuffer) >= 0)
+                    ;
                 responseBodyAsStream.close();
-            
+
             } catch (IOException io) {
                 Log.e(TAG, "Unexpected exception while exhausting not interesting HTTP response; will be IGNORED", io);
             }
@@ -211,15 +222,18 @@ public class WebdavClient extends HttpClient {
     }
 
     /**
-     * Sets the connection and wait-for-data timeouts to be applied by default to the methods performed by this client.
+     * Sets the connection and wait-for-data timeouts to be applied by default
+     * to the methods performed by this client.
      */
     public void setDefaultTimeouts(int defaultDataTimeout, int defaultConnectionTimeout) {
-            getParams().setSoTimeout(defaultDataTimeout);
-            getHttpConnectionManager().getParams().setConnectionTimeout(defaultConnectionTimeout);
+        getParams().setSoTimeout(defaultDataTimeout);
+        getHttpConnectionManager().getParams().setConnectionTimeout(defaultConnectionTimeout);
     }
 
     /**
-     * Sets the base URI for the helper methods that receive paths as parameters, instead of full URLs
+     * Sets the base URI for the helper methods that receive paths as
+     * parameters, instead of full URLs
+     * 
      * @param uri
      */
     public void setBaseUri(Uri uri) {
@@ -233,7 +247,7 @@ public class WebdavClient extends HttpClient {
     public final Credentials getCredentials() {
         return mCredentials;
     }
-    
+
     public final String getSsoSessionCookie() {
         return mSsoSessionCookie;
     }

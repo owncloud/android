@@ -62,7 +62,6 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-
 /**
  * This can be used to upload things to an ownCloud instance.
  * 
@@ -112,7 +111,7 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
             showDialog(DIALOG_NO_STREAM);
         }
     }
-    
+
     @Override
     protected Dialog onCreateDialog(final int id) {
         final AlertDialog.Builder builder = new Builder(this);
@@ -126,7 +125,8 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
         case DIALOG_NO_ACCOUNT:
             builder.setIcon(android.R.drawable.ic_dialog_alert);
             builder.setTitle(R.string.uploader_wrn_no_account_title);
-            builder.setMessage(String.format(getString(R.string.uploader_wrn_no_account_text), getString(R.string.app_name)));
+            builder.setMessage(String.format(getString(R.string.uploader_wrn_no_account_text),
+                    getString(R.string.app_name)));
             builder.setCancelable(false);
             builder.setPositiveButton(R.string.uploader_wrn_no_account_setup_btn_text, new OnClickListener() {
                 @Override
@@ -203,7 +203,7 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
         EditText mDirname;
 
         public a(String path, EditText dirname) {
-            mPath = path; 
+            mPath = path;
             mDirname = dirname;
         }
 
@@ -232,7 +232,8 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
         // click on folder in the list
         Log_OC.d(TAG, "on item click");
         Vector<OCFile> tmpfiles = mStorageManager.getFolderContent(mFile);
-        if (tmpfiles.size() <= 0) return;
+        if (tmpfiles.size() <= 0)
+            return;
         // filter on dirtype
         Vector<OCFile> files = new Vector<OCFile>();
         for (OCFile f : tmpfiles)
@@ -250,7 +251,9 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
         // click on button
         switch (v.getId()) {
         case R.id.uploader_choose_folder:
-            mUploadPath = "";   // first element in mParents is root dir, represented by ""; init mUploadPath with "/" results in a "//" prefix
+            mUploadPath = ""; // first element in mParents is root dir,
+                              // represented by ""; init mUploadPath with "/"
+                              // results in a "//" prefix
             for (String p : mParents)
                 mUploadPath += p + OCFile.PATH_SEPARATOR;
             Log_OC.d(TAG, "Uploading file to dir " + mUploadPath);
@@ -291,13 +294,13 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
         String full_path = "";
         for (String a : mParents)
             full_path += a + "/";
-        
+
         Log_OC.d(TAG, "Populating view with content of : " + full_path);
-        
+
         mFile = mStorageManager.getFileByPath(full_path);
         if (mFile != null) {
             Vector<OCFile> files = mStorageManager.getFolderContent(mFile);
-            List<HashMap<String, Object>> data = new LinkedList<HashMap<String,Object>>();
+            List<HashMap<String, Object>> data = new LinkedList<HashMap<String, Object>>();
             for (OCFile f : files) {
                 HashMap<String, Object> h = new HashMap<String, Object>();
                 if (f.isFolder()) {
@@ -305,11 +308,8 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
                     data.add(h);
                 }
             }
-            SimpleAdapter sa = new SimpleAdapter(this,
-                                                data,
-                                                R.layout.uploader_list_item_layout,
-                                                new String[] {"dirname"},
-                                                new int[] {R.id.textView1});
+            SimpleAdapter sa = new SimpleAdapter(this, data, R.layout.uploader_list_item_layout,
+                    new String[] { "dirname" }, new int[] { R.id.textView1 });
             setListAdapter(sa);
             Button btn = (Button) findViewById(R.id.uploader_choose_folder);
             btn.setOnClickListener(this);
@@ -329,100 +329,103 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
 
     public void uploadFiles() {
         try {
-            //WebdavClient webdav = OwnCloudClientUtils.createOwnCloudClient(mAccount, getApplicationContext());
+            // WebdavClient webdav =
+            // OwnCloudClientUtils.createOwnCloudClient(mAccount,
+            // getApplicationContext());
 
             ArrayList<String> local = new ArrayList<String>();
             ArrayList<String> remote = new ArrayList<String>();
-            
-            /* TODO - mCreateDir can never be true at this moment; we will replace wdc.createDirectory by CreateFolderOperation when that is fixed 
-            WebdavClient wdc = OwnCloudClientUtils.createOwnCloudClient(mAccount, getApplicationContext());
-            // create last directory in path if necessary
-            if (mCreateDir) {
-                wdc.createDirectory(mUploadPath);
-            }
-            */
-            
-            // this checks the mimeType 
+
+            /*
+             * TODO - mCreateDir can never be true at this moment; we will
+             * replace wdc.createDirectory by CreateFolderOperation when that is
+             * fixed WebdavClient wdc =
+             * OwnCloudClientUtils.createOwnCloudClient(mAccount,
+             * getApplicationContext()); // create last directory in path if
+             * necessary if (mCreateDir) { wdc.createDirectory(mUploadPath); }
+             */
+
+            // this checks the mimeType
             for (Parcelable mStream : mStreamsToUpload) {
-                
+
                 Uri uri = (Uri) mStream;
-                if (uri !=null) {
+                if (uri != null) {
                     if (uri.getScheme().equals("content")) {
-                        
-                       String mimeType = getContentResolver().getType(uri);
-                       
-                       if (mimeType.contains("image")) {
-                           String[] CONTENT_PROJECTION = { Images.Media.DATA, Images.Media.DISPLAY_NAME, Images.Media.MIME_TYPE, Images.Media.SIZE};
-                           Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null, null, null);
-                           c.moveToFirst();
-                           int index = c.getColumnIndex(Images.Media.DATA);
-                           String data = c.getString(index);
-                           local.add(data);
-                           remote.add(mUploadPath + c.getString(c.getColumnIndex(Images.Media.DISPLAY_NAME)));
-                       
-                       }
-                       else if (mimeType.contains("video")) {
-                           String[] CONTENT_PROJECTION = { Video.Media.DATA, Video.Media.DISPLAY_NAME, Video.Media.MIME_TYPE, Video.Media.SIZE, Video.Media.DATE_MODIFIED };
-                           Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null, null, null);
-                           c.moveToFirst();
-                           int index = c.getColumnIndex(Video.Media.DATA);
-                           String data = c.getString(index);
-                           local.add(data);
-                           remote.add(mUploadPath + c.getString(c.getColumnIndex(Video.Media.DISPLAY_NAME)));
-                          
-                       }
-                       else if (mimeType.contains("audio")) {
-                           String[] CONTENT_PROJECTION = { Audio.Media.DATA, Audio.Media.DISPLAY_NAME, Audio.Media.MIME_TYPE, Audio.Media.SIZE };
-                           Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null, null, null);
-                           c.moveToFirst();
-                           int index = c.getColumnIndex(Audio.Media.DATA);
-                           String data = c.getString(index);
-                           local.add(data);
-                           remote.add(mUploadPath + c.getString(c.getColumnIndex(Audio.Media.DISPLAY_NAME)));
-                        
-                       }
-                       else {
-                           String filePath = Uri.decode(uri.toString()).replace(uri.getScheme() + "://", "");
-                           // cut everything whats before mnt. It occured to me that sometimes apps send their name into the URI
-                           if (filePath.contains("mnt")) {
-                              String splitedFilePath[] = filePath.split("/mnt");
-                              filePath = splitedFilePath[1];
-                           }
-                           final File file = new File(filePath);
-                           local.add(file.getAbsolutePath());
-                           remote.add(mUploadPath + file.getName());
-                       }
-                        
+
+                        String mimeType = getContentResolver().getType(uri);
+
+                        if (mimeType.contains("image")) {
+                            String[] CONTENT_PROJECTION = { Images.Media.DATA, Images.Media.DISPLAY_NAME,
+                                    Images.Media.MIME_TYPE, Images.Media.SIZE };
+                            Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null, null, null);
+                            c.moveToFirst();
+                            int index = c.getColumnIndex(Images.Media.DATA);
+                            String data = c.getString(index);
+                            local.add(data);
+                            remote.add(mUploadPath + c.getString(c.getColumnIndex(Images.Media.DISPLAY_NAME)));
+
+                        } else if (mimeType.contains("video")) {
+                            String[] CONTENT_PROJECTION = { Video.Media.DATA, Video.Media.DISPLAY_NAME,
+                                    Video.Media.MIME_TYPE, Video.Media.SIZE, Video.Media.DATE_MODIFIED };
+                            Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null, null, null);
+                            c.moveToFirst();
+                            int index = c.getColumnIndex(Video.Media.DATA);
+                            String data = c.getString(index);
+                            local.add(data);
+                            remote.add(mUploadPath + c.getString(c.getColumnIndex(Video.Media.DISPLAY_NAME)));
+
+                        } else if (mimeType.contains("audio")) {
+                            String[] CONTENT_PROJECTION = { Audio.Media.DATA, Audio.Media.DISPLAY_NAME,
+                                    Audio.Media.MIME_TYPE, Audio.Media.SIZE };
+                            Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null, null, null);
+                            c.moveToFirst();
+                            int index = c.getColumnIndex(Audio.Media.DATA);
+                            String data = c.getString(index);
+                            local.add(data);
+                            remote.add(mUploadPath + c.getString(c.getColumnIndex(Audio.Media.DISPLAY_NAME)));
+
+                        } else {
+                            String filePath = Uri.decode(uri.toString()).replace(uri.getScheme() + "://", "");
+                            // cut everything whats before mnt. It occured to me
+                            // that sometimes apps send their name into the URI
+                            if (filePath.contains("mnt")) {
+                                String splitedFilePath[] = filePath.split("/mnt");
+                                filePath = splitedFilePath[1];
+                            }
+                            final File file = new File(filePath);
+                            local.add(file.getAbsolutePath());
+                            remote.add(mUploadPath + file.getName());
+                        }
+
                     } else if (uri.getScheme().equals("file")) {
                         String filePath = Uri.decode(uri.toString()).replace(uri.getScheme() + "://", "");
                         if (filePath.contains("mnt")) {
-                           String splitedFilePath[] = filePath.split("/mnt");
-                           filePath = splitedFilePath[1];
+                            String splitedFilePath[] = filePath.split("/mnt");
+                            filePath = splitedFilePath[1];
                         }
                         final File file = new File(filePath);
                         local.add(file.getAbsolutePath());
                         remote.add(mUploadPath + file.getName());
-                    }
-                    else {
+                    } else {
                         throw new SecurityException();
                     }
-                }
-                else {
+                } else {
                     throw new SecurityException();
                 }
-           
-            Intent intent = new Intent(getApplicationContext(), FileUploader.class);
-            intent.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_MULTIPLE_FILES);
-            intent.putExtra(FileUploader.KEY_LOCAL_FILE, local.toArray(new String[local.size()]));
-            intent.putExtra(FileUploader.KEY_REMOTE_FILE, remote.toArray(new String[remote.size()]));
-            intent.putExtra(FileUploader.KEY_ACCOUNT, mAccount);
-            startService(intent);
-            finish();
+
+                Intent intent = new Intent(getApplicationContext(), FileUploader.class);
+                intent.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_MULTIPLE_FILES);
+                intent.putExtra(FileUploader.KEY_LOCAL_FILE, local.toArray(new String[local.size()]));
+                intent.putExtra(FileUploader.KEY_REMOTE_FILE, remote.toArray(new String[remote.size()]));
+                intent.putExtra(FileUploader.KEY_ACCOUNT, mAccount);
+                startService(intent);
+                finish();
             }
-            
+
         } catch (SecurityException e) {
-            String message = String.format(getString(R.string.uploader_error_forbidden_content), getString(R.string.app_name));
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();            
+            String message = String.format(getString(R.string.uploader_error_forbidden_content),
+                    getString(R.string.app_name));
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
 

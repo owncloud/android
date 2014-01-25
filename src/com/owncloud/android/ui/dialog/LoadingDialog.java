@@ -14,11 +14,11 @@ import android.widget.TextView;
 public class LoadingDialog extends DialogFragment {
 
     private String mMessage;
-    
+
     public LoadingDialog() {
         super();
     }
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +33,12 @@ public class LoadingDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Create a view by inflating desired layout
-        View v = inflater.inflate(R.layout.loading_dialog, container,  false);
-        
+        View v = inflater.inflate(R.layout.loading_dialog, container, false);
+
         // set value
-        TextView tv  = (TextView) v.findViewById(R.id.loadingText);
+        TextView tv = (TextView) v.findViewById(R.id.loadingText);
         tv.setText(mMessage);
-        
+
         return v;
     }
 
@@ -53,6 +53,6 @@ public class LoadingDialog extends DialogFragment {
     public void onDestroyView() {
         if (getDialog() != null && getRetainInstance())
             getDialog().setDismissMessage(null);
-            super.onDestroyView();
+        super.onDestroyView();
     }
 }

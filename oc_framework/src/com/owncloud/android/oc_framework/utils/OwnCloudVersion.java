@@ -19,16 +19,11 @@
 package com.owncloud.android.oc_framework.utils;
 
 public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
-    public static final OwnCloudVersion owncloud_v1 = new OwnCloudVersion(
-            0x010000);
-    public static final OwnCloudVersion owncloud_v2 = new OwnCloudVersion(
-            0x020000);
-    public static final OwnCloudVersion owncloud_v3 = new OwnCloudVersion(
-            0x030000);
-    public static final OwnCloudVersion owncloud_v4 = new OwnCloudVersion(
-            0x040000);
-    public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(
-            0x040500);
+    public static final OwnCloudVersion owncloud_v1 = new OwnCloudVersion(0x010000);
+    public static final OwnCloudVersion owncloud_v2 = new OwnCloudVersion(0x020000);
+    public static final OwnCloudVersion owncloud_v3 = new OwnCloudVersion(0x030000);
+    public static final OwnCloudVersion owncloud_v4 = new OwnCloudVersion(0x040000);
+    public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(0x040500);
 
     // format is in version
     // 0xAABBCC
@@ -49,8 +44,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     }
 
     public String toString() {
-        return ((mVersion >> 16) % 256) + "." + ((mVersion >> 8) % 256) + "."
-                + ((mVersion) % 256);
+        return ((mVersion >> 16) % 256) + "." + ((mVersion >> 8) % 256) + "." + ((mVersion) % 256);
     }
 
     public boolean isVersionValid() {
@@ -59,8 +53,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     @Override
     public int compareTo(OwnCloudVersion another) {
-        return another.mVersion == mVersion ? 0
-                : another.mVersion < mVersion ? 1 : -1;
+        return another.mVersion == mVersion ? 0 : another.mVersion < mVersion ? 1 : -1;
     }
 
     private void parseVersionString(String version) {

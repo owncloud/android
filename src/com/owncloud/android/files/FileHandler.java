@@ -26,5 +26,4 @@ public interface FileHandler {
      */
     public void openFile(OCFile file);
 
-    
 }

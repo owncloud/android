@@ -22,7 +22,6 @@ import java.io.File;
 
 import com.owncloud.android.utils.Log_OC;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.webkit.MimeTypeMap;
@@ -45,7 +44,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public static final String ROOT_PATH = PATH_SEPARATOR;
 
     private static final String TAG = OCFile.class.getSimpleName();
-    
+
     private long mId;
     private long mParentId;
     private long mLength;
@@ -62,11 +61,11 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     private String mEtag;
 
-
     /**
      * Create new {@link OCFile} with given path.
      * 
-     * The path received must be URL-decoded. Path separator must be OCFile.PATH_SEPARATOR, and it must be the first character in 'path'.
+     * The path received must be URL-decoded. Path separator must be
+     * OCFile.PATH_SEPARATOR, and it must be the first character in 'path'.
      * 
      * @param path The remote path of the file.
      */
@@ -118,7 +117,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         dest.writeLong(mLastSyncDateForData);
         dest.writeString(mEtag);
     }
-    
+
     /**
      * Gets the ID of the file
      * 
@@ -168,7 +167,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         }
         return false;
     }
-    
+
     /**
      * The path, where the file is stored locally
      * 
@@ -207,9 +206,10 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Get a UNIX timestamp of the file modification time.
-     *
-     * @return  A UNIX timestamp of the modification time, corresponding to the value returned by the server
-     *          in the last synchronization of the properties of this file. 
+     * 
+     * @return A UNIX timestamp of the modification time, corresponding to the
+     *         value returned by the server in the last synchronization of the
+     *         properties of this file.
      */
     public long getModificationTimestamp() {
         return mModifiedTimestamp;
@@ -218,8 +218,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     /**
      * Set a UNIX timestamp of the time the time the file was modified.
      * 
-     * To update with the value returned by the server in every synchronization of the properties 
-     * of this file.
+     * To update with the value returned by the server in every synchronization
+     * of the properties of this file.
      * 
      * @param modification_timestamp to set
      */
@@ -227,12 +227,12 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mModifiedTimestamp = modification_timestamp;
     }
 
-    
     /**
      * Get a UNIX timestamp of the file modification time.
-     *
-     * @return  A UNIX timestamp of the modification time, corresponding to the value returned by the server
-     *          in the last synchronization of THE CONTENTS of this file. 
+     * 
+     * @return A UNIX timestamp of the modification time, corresponding to the
+     *         value returned by the server in the last synchronization of THE
+     *         CONTENTS of this file.
      */
     public long getModificationTimestampAtLastSyncForData() {
         return mModifiedTimestampAtLastSyncForData;
@@ -241,8 +241,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     /**
      * Set a UNIX timestamp of the time the time the file was modified.
      * 
-     * To update with the value returned by the server in every synchronization of THE CONTENTS 
-     * of this file.
+     * To update with the value returned by the server in every synchronization
+     * of THE CONTENTS of this file.
      * 
      * @param modification_timestamp to set
      */
@@ -250,8 +250,6 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mModifiedTimestampAtLastSyncForData = modificationTimestamp;
     }
 
-    
-    
     /**
      * Returns the filename and "/" for the root directory
      * 
@@ -261,18 +259,19 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         File f = new File(getRemotePath());
         return f.getName().length() == 0 ? ROOT_PATH : f.getName();
     }
-    
+
     /**
      * Sets the name of the file
      * 
-     * Does nothing if the new name is null, empty or includes "/" ; or if the file is the root directory 
+     * Does nothing if the new name is null, empty or includes "/" ; or if the
+     * file is the root directory
      */
     public void setFileName(String name) {
         Log_OC.d(TAG, "OCFile name changin from " + mRemotePath);
         if (name != null && name.length() > 0 && !name.contains(PATH_SEPARATOR) && !mRemotePath.equals(ROOT_PATH)) {
             String parent = (new File(getRemotePath())).getParent();
             parent = (parent.endsWith(PATH_SEPARATOR)) ? parent : parent + PATH_SEPARATOR;
-            mRemotePath =  parent + name;
+            mRemotePath = parent + name;
             if (isFolder()) {
                 mRemotePath += PATH_SEPARATOR;
             }
@@ -303,8 +302,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
             mNeedsUpdating = true;
             return;
         }
-        throw new IllegalStateException(
-                "This is not a directory where you can add stuff to!");
+        throw new IllegalStateException("This is not a directory where you can add stuff to!");
     }
 
     /**
@@ -389,15 +387,15 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public boolean needsUpdatingWhileSaving() {
         return mNeedsUpdating;
     }
-    
+
     public long getLastSyncDateForProperties() {
         return mLastSyncDateForProperties;
     }
-    
+
     public void setLastSyncDateForProperties(long lastSyncDate) {
         mLastSyncDateForProperties = lastSyncDate;
     }
-    
+
     public long getLastSyncDateForData() {
         return mLastSyncDateForData;
     }
@@ -409,11 +407,11 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public void setKeepInSync(boolean keepInSync) {
         mKeepInSync = keepInSync;
     }
-    
+
     public boolean keepInSync() {
         return mKeepInSync;
     }
-    
+
     @Override
     public int describeContents() {
         return this.hashCode();
@@ -433,20 +431,21 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof OCFile){
+        if (o instanceof OCFile) {
             OCFile that = (OCFile) o;
-            if(that != null){
+            if (that != null) {
                 return this.mId == that.mId;
             }
         }
-        
+
         return false;
     }
 
     @Override
     public String toString() {
         String asString = "[id=%s, name=%s, mime=%s, downloaded=%s, local=%s, remote=%s, parentId=%s, keepInSinc=%s etag=%s]";
-        asString = String.format(asString, Long.valueOf(mId), getFileName(), mMimeType, isDown(), mLocalPath, mRemotePath, Long.valueOf(mParentId), Boolean.valueOf(mKeepInSync), mEtag);
+        asString = String.format(asString, Long.valueOf(mId), getFileName(), mMimeType, isDown(), mLocalPath,
+                mRemotePath, Long.valueOf(mParentId), Boolean.valueOf(mKeepInSync), mEtag);
         return asString;
     }
 
@@ -457,7 +456,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public void setEtag(String etag) {
         this.mEtag = etag;
     }
-    
+
     public long getLocalModificationTimestamp() {
         if (mLocalPath != null && mLocalPath.length() > 0) {
             File f = new File(mLocalPath);
@@ -466,22 +465,21 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         return 0;
     }
 
-    /** @return  'True' if the file contains audio */
+    /** @return 'True' if the file contains audio */
     public boolean isAudio() {
         return (mMimeType != null && mMimeType.startsWith("audio/"));
     }
 
-    /** @return  'True' if the file contains video */
+    /** @return 'True' if the file contains video */
     public boolean isVideo() {
         return (mMimeType != null && mMimeType.startsWith("video/"));
     }
 
-    /** @return  'True' if the file contains an image */
+    /** @return 'True' if the file contains an image */
     public boolean isImage() {
-        return ((mMimeType != null && mMimeType.startsWith("image/")) ||
-                 getMimeTypeFromName().startsWith("image/"));
+        return ((mMimeType != null && mMimeType.startsWith("image/")) || getMimeTypeFromName().startsWith("image/"));
     }
-    
+
     public String getMimeTypeFromName() {
         String extension = "";
         int pos = mRemotePath.lastIndexOf('.');

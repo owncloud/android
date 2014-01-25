@@ -35,7 +35,6 @@ import android.util.Log;
 
 import com.owncloud.android.oc_framework.network.ProgressiveDataTransferer;
 
-
 /**
  * A RequestEntity that represents a File.
  * 
@@ -54,7 +53,7 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
             throw new IllegalArgumentException("File may not be null");
         }
     }
-    
+
     @Override
     public long getContentLength() {
         return mFile.length();
@@ -76,36 +75,37 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
             mDataTransferListeners.add(listener);
         }
     }
-    
+
     @Override
     public void addDatatransferProgressListeners(Collection<OnDatatransferProgressListener> listeners) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.addAll(listeners);
         }
     }
-    
+
     @Override
     public void removeDatatransferProgressListener(OnDatatransferProgressListener listener) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.remove(listener);
         }
     }
-    
-    
+
     @Override
     public void writeRequest(final OutputStream out) throws IOException {
-        //byte[] tmp = new byte[4096];
+        // byte[] tmp = new byte[4096];
         ByteBuffer tmp = ByteBuffer.allocate(4096);
         int readResult = 0;
-        
-        // TODO(bprzybylski): each mem allocation can throw OutOfMemoryError we need to handle it
-        //                    globally in some fashionable manner
+
+        // TODO(bprzybylski): each mem allocation can throw OutOfMemoryError we
+        // need to handle it
+        // globally in some fashionable manner
         RandomAccessFile raf = new RandomAccessFile(mFile, "r");
         FileChannel channel = raf.getChannel();
         Iterator<OnDatatransferProgressListener> it = null;
         long transferred = 0;
         long size = mFile.length();
-        if (size == 0) size = -1;
+        if (size == 0)
+            size = -1;
         try {
             while ((readResult = channel.read(tmp)) >= 0) {
                 out.write(tmp.array(), 0, readResult);
@@ -118,11 +118,13 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
                     }
                 }
             }
-            
+
         } catch (IOException io) {
             Log.e("FileRequestException", io.getMessage());
-            throw new RuntimeException("Ugly solution to workaround the default policy of retries when the server falls while uploading ; temporal fix; really", io);   
-            
+            throw new RuntimeException(
+                    "Ugly solution to workaround the default policy of retries when the server falls while uploading ; temporal fix; really",
+                    io);
+
         } finally {
             channel.close();
             raf.close();

@@ -23,8 +23,6 @@ import org.apache.jackrabbit.webdav.property.DavProperty;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
 
-
-
 import android.net.Uri;
 import android.util.Log;
 
@@ -45,9 +43,8 @@ public class WebdavEntry {
             DavProperty prop = propSet.get(DavPropertyName.DISPLAYNAME);
             if (prop != null) {
                 mName = (String) prop.getName().toString();
-                mName = mName.substring(1, mName.length()-1);
-            }
-            else {
+                mName = mName.substring(1, mName.length() - 1);
+            } else {
                 String[] tmp = mPath.split("/");
                 if (tmp.length > 0)
                     mName = tmp[tmp.length - 1];
@@ -58,18 +55,24 @@ public class WebdavEntry {
             prop = propSet.get(DavPropertyName.GETCONTENTTYPE);
             if (prop != null) {
                 mContentType = (String) prop.getValue();
-                // dvelasco: some builds of ownCloud server 4.0.x added a trailing ';' to the MIME type ; if looks fixed, but let's be cautious
+                // dvelasco: some builds of ownCloud server 4.0.x added a
+                // trailing ';' to the MIME type ; if looks fixed, but let's be
+                // cautious
                 if (mContentType.indexOf(";") >= 0) {
                     mContentType = mContentType.substring(0, mContentType.indexOf(";"));
                 }
             }
-            
-            // check if it's a folder in the standard way: see RFC2518 12.2 . RFC4918 14.3 
+
+            // check if it's a folder in the standard way: see RFC2518 12.2 .
+            // RFC4918 14.3
             prop = propSet.get(DavPropertyName.RESOURCETYPE);
-            if (prop!= null) {
+            if (prop != null) {
                 Object value = prop.getValue();
                 if (value != null) {
-                    mContentType = "DIR";   // a specific attribute would be better, but this is enough; unless while we have no reason to distinguish MIME types for folders
+                    mContentType = "DIR"; // a specific attribute would be
+                                          // better, but this is enough; unless
+                                          // while we have no reason to
+                                          // distinguish MIME types for folders
                 }
             }
 
@@ -79,34 +82,31 @@ public class WebdavEntry {
 
             prop = propSet.get(DavPropertyName.GETLASTMODIFIED);
             if (prop != null) {
-                Date d = WebdavUtils
-                        .parseResponseDate((String) prop.getValue());
+                Date d = WebdavUtils.parseResponseDate((String) prop.getValue());
                 mModifiedTimestamp = (d != null) ? d.getTime() : 0;
             }
 
             prop = propSet.get(DavPropertyName.CREATIONDATE);
             if (prop != null) {
-                Date d = WebdavUtils
-                        .parseResponseDate((String) prop.getValue());
+                Date d = WebdavUtils.parseResponseDate((String) prop.getValue());
                 mCreateTimestamp = (d != null) ? d.getTime() : 0;
             }
-            
+
             prop = propSet.get(DavPropertyName.GETETAG);
             if (prop != null) {
                 mEtag = (String) prop.getValue();
-                mEtag = mEtag.substring(1, mEtag.length()-1);
+                mEtag = mEtag.substring(1, mEtag.length() - 1);
             }
 
         } else {
-            Log.e("WebdavEntry",
-                    "General fuckup, no status for webdav response");
+            Log.e("WebdavEntry", "General fuckup, no status for webdav response");
         }
     }
 
     public String path() {
         return mPath;
     }
-    
+
     public String decodedPath() {
         return Uri.decode(mPath);
     }
@@ -138,7 +138,7 @@ public class WebdavEntry {
     public long modifiedTimestamp() {
         return mModifiedTimestamp;
     }
-    
+
     public String etag() {
         return mEtag;
     }

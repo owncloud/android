@@ -38,7 +38,8 @@ import com.owncloud.android.oc_framework.operations.RemoteOperation;
 import com.owncloud.android.oc_framework.operations.RemoteOperationResult;
 
 /**
- * Remote operation performing the upload of a remote file to the ownCloud server.
+ * Remote operation performing the upload of a remote file to the ownCloud
+ * server.
  * 
  * @author David A. Velasco
  * @author masensio
@@ -46,96 +47,97 @@ import com.owncloud.android.oc_framework.operations.RemoteOperationResult;
 
 public class UploadRemoteFileOperation extends RemoteOperation {
 
+    protected String mStoragePath;
+    protected String mRemotePath;
+    protected String mMimeType;
+    protected PutMethod mPutMethod = null;
 
-	protected String mStoragePath;
-	protected String mRemotePath;
-	protected String mMimeType;
-	protected PutMethod mPutMethod = null;
-	
-	private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
-	protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
+    private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
+    protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
 
-	protected RequestEntity mEntity = null;
+    protected RequestEntity mEntity = null;
 
-	public UploadRemoteFileOperation(String storagePath, String remotePath, String mimeType) {
-		mStoragePath = storagePath;
-		mRemotePath = remotePath;
-		mMimeType = mimeType;	
-	}
+    public UploadRemoteFileOperation(String storagePath, String remotePath, String mimeType) {
+        mStoragePath = storagePath;
+        mRemotePath = remotePath;
+        mMimeType = mimeType;
+    }
 
-	@Override
-	protected RemoteOperationResult run(WebdavClient client) {
-		RemoteOperationResult result = null;
+    @Override
+    protected RemoteOperationResult run(WebdavClient client) {
+        RemoteOperationResult result = null;
 
-		try {
-			// / perform the upload
-			synchronized (mCancellationRequested) {
-				if (mCancellationRequested.get()) {
-					throw new OperationCancelledException();
-				} else {
-					mPutMethod = new PutMethod(client.getBaseUri() + WebdavUtils.encodePath(mRemotePath));
-				}
-			}
+        try {
+            // / perform the upload
+            synchronized (mCancellationRequested) {
+                if (mCancellationRequested.get()) {
+                    throw new OperationCancelledException();
+                } else {
+                    mPutMethod = new PutMethod(client.getBaseUri() + WebdavUtils.encodePath(mRemotePath));
+                }
+            }
 
-			int status = uploadFile(client);
+            int status = uploadFile(client);
 
-			result  = new RemoteOperationResult(isSuccess(status), status, (mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
+            result = new RemoteOperationResult(isSuccess(status), status,
+                    (mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
 
-		} catch (Exception e) {
-			// TODO something cleaner with cancellations
-			if (mCancellationRequested.get()) {
-				result = new RemoteOperationResult(new OperationCancelledException());
-			} else {
-				result = new RemoteOperationResult(e);
-			}
-		}
-		return result;
-	}
+        } catch (Exception e) {
+            // TODO something cleaner with cancellations
+            if (mCancellationRequested.get()) {
+                result = new RemoteOperationResult(new OperationCancelledException());
+            } else {
+                result = new RemoteOperationResult(e);
+            }
+        }
+        return result;
+    }
 
-	public boolean isSuccess(int status) {
-		return ((status == HttpStatus.SC_OK || status == HttpStatus.SC_CREATED || status == HttpStatus.SC_NO_CONTENT));
-	}
+    public boolean isSuccess(int status) {
+        return ((status == HttpStatus.SC_OK || status == HttpStatus.SC_CREATED || status == HttpStatus.SC_NO_CONTENT));
+    }
 
-	protected int uploadFile(WebdavClient client) throws HttpException, IOException, OperationCancelledException {
-		int status = -1;
-		try {
-			File f = new File(mStoragePath);
-			mEntity  = new FileRequestEntity(f, mMimeType);
-			synchronized (mDataTransferListeners) {
-				((ProgressiveDataTransferer)mEntity).addDatatransferProgressListeners(mDataTransferListeners);
-			}
-			mPutMethod.setRequestEntity(mEntity);
-			status = client.executeMethod(mPutMethod);
-			client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
+    protected int uploadFile(WebdavClient client) throws HttpException, IOException, OperationCancelledException {
+        int status = -1;
+        try {
+            File f = new File(mStoragePath);
+            mEntity = new FileRequestEntity(f, mMimeType);
+            synchronized (mDataTransferListeners) {
+                ((ProgressiveDataTransferer) mEntity).addDatatransferProgressListeners(mDataTransferListeners);
+            }
+            mPutMethod.setRequestEntity(mEntity);
+            status = client.executeMethod(mPutMethod);
+            client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
 
-		} finally {
-			mPutMethod.releaseConnection(); // let the connection available for other methods
-		}
-		return status;
-	}
-	
+        } finally {
+            mPutMethod.releaseConnection(); // let the connection available for
+                                            // other methods
+        }
+        return status;
+    }
+
     public Set<OnDatatransferProgressListener> getDataTransferListeners() {
         return mDataTransferListeners;
     }
-    
-    public void addDatatransferProgressListener (OnDatatransferProgressListener listener) {
+
+    public void addDatatransferProgressListener(OnDatatransferProgressListener listener) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.add(listener);
         }
         if (mEntity != null) {
-            ((ProgressiveDataTransferer)mEntity).addDatatransferProgressListener(listener);
+            ((ProgressiveDataTransferer) mEntity).addDatatransferProgressListener(listener);
         }
     }
-    
+
     public void removeDatatransferProgressListener(OnDatatransferProgressListener listener) {
         synchronized (mDataTransferListeners) {
             mDataTransferListeners.remove(listener);
         }
         if (mEntity != null) {
-            ((ProgressiveDataTransferer)mEntity).removeDatatransferProgressListener(listener);
+            ((ProgressiveDataTransferer) mEntity).removeDatatransferProgressListener(listener);
         }
     }
-    
+
     public void cancel() {
         synchronized (mCancellationRequested) {
             mCancellationRequested.set(true);

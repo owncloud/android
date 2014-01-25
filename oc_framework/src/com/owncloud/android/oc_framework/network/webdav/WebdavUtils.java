@@ -26,8 +26,7 @@ import java.util.Locale;
 import android.net.Uri;
 
 public class WebdavUtils {
-    public static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat(
-            "dd.MM.yyyy hh:mm");
+    public static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy hh:mm");
     private static final SimpleDateFormat DATETIME_FORMATS[] = {
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
             new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US),
@@ -59,12 +58,13 @@ public class WebdavUtils {
     }
 
     /**
-     * Encodes a path according to URI RFC 2396. 
+     * Encodes a path according to URI RFC 2396.
      * 
      * If the received path doesn't start with "/", the method adds it.
      * 
-     * @param remoteFilePath    Path
-     * @return                  Encoded path according to RFC 2396, always starting with "/"
+     * @param remoteFilePath
+     *            Path
+     * @return Encoded path according to RFC 2396, always starting with "/"
      */
     public static String encodePath(String remoteFilePath) {
         String encodedPath = Uri.encode(remoteFilePath, "/");
@@ -72,5 +72,5 @@ public class WebdavUtils {
             encodedPath = "/" + encodedPath;
         return encodedPath;
     }
-    
+
 }

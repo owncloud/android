@@ -35,9 +35,9 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 
-
 /**
- * Remote operation that checks the version of an ownCloud server and stores it locally
+ * Remote operation that checks the version of an ownCloud server and stores it
+ * locally
  * 
  * @author David A. Velasco
  */
@@ -47,17 +47,15 @@ public class UpdateOCVersionOperation extends RemoteOperation {
 
     private Account mAccount;
     private Context mContext;
-    
-    
+
     public UpdateOCVersionOperation(Account account, Context context) {
         mAccount = account;
         mContext = context;
     }
-    
-    
+
     @Override
     protected RemoteOperationResult run(WebdavClient client) {
-        AccountManager accountMngr = AccountManager.get(mContext); 
+        AccountManager accountMngr = AccountManager.get(mContext);
         String statUrl = accountMngr.getUserData(mAccount, OwnCloudAccount.Constants.KEY_OC_BASE_URL);
         statUrl += AccountUtils.STATUS_PATH;
         RemoteOperationResult result = null;
@@ -68,7 +66,7 @@ public class UpdateOCVersionOperation extends RemoteOperation {
             if (status != HttpStatus.SC_OK) {
                 client.exhaustResponse(get.getResponseBodyAsStream());
                 result = new RemoteOperationResult(false, status, get.getResponseHeaders());
-                
+
             } else {
                 String response = get.getResponseBodyAsString();
                 if (response != null) {
@@ -76,10 +74,11 @@ public class UpdateOCVersionOperation extends RemoteOperation {
                     if (json != null && json.getString("version") != null) {
                         OwnCloudVersion ocver = new OwnCloudVersion(json.getString("version"));
                         if (ocver.isVersionValid()) {
-                            accountMngr.setUserData(mAccount, OwnCloudAccount.Constants.KEY_OC_VERSION, ocver.toString());
+                            accountMngr.setUserData(mAccount, OwnCloudAccount.Constants.KEY_OC_VERSION,
+                                    ocver.toString());
                             Log_OC.d(TAG, "Got new OC version " + ocver.toString());
                             result = new RemoteOperationResult(ResultCode.OK);
-                            
+
                         } else {
                             Log_OC.w(TAG, "Invalid version number received from server: " + json.getString("version"));
                             result = new RemoteOperationResult(RemoteOperationResult.ResultCode.BAD_OC_VERSION);
@@ -90,18 +89,27 @@ public class UpdateOCVersionOperation extends RemoteOperation {
                     result = new RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
                 }
             }
-            Log_OC.i(TAG, "Check for update of ownCloud server version at " + client.getBaseUri() + ": " + result.getLogMessage());
-            
+            Log_OC.i(
+                    TAG,
+                    "Check for update of ownCloud server version at " + client.getBaseUri() + ": "
+                            + result.getLogMessage());
+
         } catch (JSONException e) {
             result = new RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
-            Log_OC.e(TAG, "Check for update of ownCloud server version at " + client.getBaseUri() + ": " + result.getLogMessage(), e);
-                
+            Log_OC.e(
+                    TAG,
+                    "Check for update of ownCloud server version at " + client.getBaseUri() + ": "
+                            + result.getLogMessage(), e);
+
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log_OC.e(TAG, "Check for update of ownCloud server version at " + client.getBaseUri() + ": " + result.getLogMessage(), e);
-            
+            Log_OC.e(
+                    TAG,
+                    "Check for update of ownCloud server version at " + client.getBaseUri() + ": "
+                            + result.getLogMessage(), e);
+
         } finally {
-            if (get != null) 
+            if (get != null)
                 get.releaseConnection();
         }
         return result;
