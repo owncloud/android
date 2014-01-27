@@ -101,6 +101,10 @@ public class RemoteFile implements Parcelable, Serializable {
 	public void setEtag(String etag) {
 		this.mEtag = etag;
 	}
+	
+	public RemoteFile() {
+		resetData();
+	}
 
 	/**
      * Create new {@link RemoteFile} with given path.
@@ -159,7 +163,11 @@ public class RemoteFile implements Parcelable, Serializable {
      * 
      * @param source The source parcel
      */
-    private RemoteFile(Parcel source) {
+    protected RemoteFile(Parcel source) {
+    	readFromParcel(source);
+    }
+    
+    public void readFromParcel (Parcel source) {
         mRemotePath = source.readString();
         mMimeType = source.readString();
         mLength = source.readLong();
