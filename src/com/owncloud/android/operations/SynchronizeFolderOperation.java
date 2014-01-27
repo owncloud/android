@@ -30,23 +30,19 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.http.HttpStatus;
-import org.apache.jackrabbit.webdav.DavConstants;
-import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
-
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.oc_framework.network.webdav.WebdavClient;
-import com.owncloud.android.oc_framework.network.webdav.WebdavEntry;
-import com.owncloud.android.oc_framework.network.webdav.WebdavUtils;
-import com.owncloud.android.oc_framework.operations.RemoteOperation;
-import com.owncloud.android.oc_framework.operations.RemoteOperationResult;
-import com.owncloud.android.oc_framework.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.oc_framework.operations.remote.ReadRemoteFolderOperation;
-import com.owncloud.android.oc_framework.operations.RemoteFile;
+import com.owncloud.android.lib.network.OwnCloudClient;
+import com.owncloud.android.lib.operations.common.RemoteOperation;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.operations.remote.ReadRemoteFileOperation;
+import com.owncloud.android.lib.operations.remote.ReadRemoteFolderOperation;
+import com.owncloud.android.lib.operations.common.RemoteFile;
 import com.owncloud.android.syncadapter.FileSyncService;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.Log_OC;
@@ -159,7 +155,7 @@ public class SynchronizeFolderOperation extends RemoteOperation {
      * {@inheritDoc}
      */
     @Override
-    protected RemoteOperationResult run(WebdavClient client) {
+    protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
         mFailsInFavouritesFound = 0;
         mConflictsFound = 0;
@@ -184,52 +180,31 @@ public class SynchronizeFolderOperation extends RemoteOperation {
     }
 
 
-    private RemoteOperationResult checkForChanges(WebdavClient client) {
+    private RemoteOperationResult checkForChanges(OwnCloudClient client) {
         mRemoteFolderChanged = false;
         RemoteOperationResult result = null;
         String remotePath = null;
-        PropFindMethod query = null;
-        
-        try {
+
             remotePath = mLocalFolder.getRemotePath();
             Log_OC.d(TAG, "Checking changes in " + mAccount.name + remotePath);
 
             // remote request 
-            query = new PropFindMethod(client.getBaseUri() + WebdavUtils.encodePath(remotePath),
-                    DavConstants.PROPFIND_ALL_PROP,
-                    DavConstants.DEPTH_0);
-            int status = client.executeMethod(query);
+            ReadRemoteFileOperation operation = new ReadRemoteFileOperation(remotePath);
+            result = operation.execute(client);
+            if (result.isSuccess()){
+                OCFile remoteFolder = FileStorageUtils.fillOCFile(result.getData().get(0));
+                
+             // check if remote and local folder are different
+              mRemoteFolderChanged = !(remoteFolder.getEtag().equalsIgnoreCase(mLocalFolder.getEtag()));
+              
+              result = new RemoteOperationResult(ResultCode.OK);
 
-            // check and process response
-            if (isMultiStatus(status)) {
-                // parse data from remote folder 
-                WebdavEntry we = new WebdavEntry(query.getResponseBodyAsMultiStatus().getResponses()[0], client.getBaseUri().getPath());
-                OCFile remoteFolder = fillOCFile(we);
-                
-                // check if remote and local folder are different
-                mRemoteFolderChanged = !(remoteFolder.getEtag().equalsIgnoreCase(mLocalFolder.getEtag()));
-                
-                result = new RemoteOperationResult(ResultCode.OK);
-                
+              Log_OC.i(TAG, "Checked " + mAccount.name + remotePath + " : " + (mRemoteFolderChanged ? "changed" : "not changed"));
             } else {
                 // check failed
-                client.exhaustResponse(query.getResponseBodyAsStream());
-                if (status == HttpStatus.SC_NOT_FOUND) {
+                if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
                     removeLocalFolder();
                 }
-                result = new RemoteOperationResult(false, status, query.getResponseHeaders());
-            }
-
-        } catch (Exception e) {
-            result = new RemoteOperationResult(e);
-            
-
-        } finally {
-            if (query != null)
-                query.releaseConnection();  // let the connection available for other methods
-            if (result.isSuccess()) {
-                Log_OC.i(TAG, "Checked " + mAccount.name + remotePath + " : " + (mRemoteFolderChanged ? "changed" : "not changed"));
-            } else {
                 if (result.isException()) {
                     Log_OC.e(TAG, "Checked " + mAccount.name + remotePath  + " : " + result.getLogMessage(), result.getException());
                 } else {
@@ -237,12 +212,11 @@ public class SynchronizeFolderOperation extends RemoteOperation {
                 }
             }
             
-        }
         return result;
     }
 
 
-    private RemoteOperationResult fetchAndSyncRemoteFolder(WebdavClient client) {
+    private RemoteOperationResult fetchAndSyncRemoteFolder(OwnCloudClient client) {
         String remotePath = mLocalFolder.getRemotePath();
         ReadRemoteFolderOperation operation = new ReadRemoteFolderOperation(remotePath);
         RemoteOperationResult result = operation.execute(client);
@@ -282,7 +256,7 @@ public class SynchronizeFolderOperation extends RemoteOperation {
      *                          retrieved.  
      *  @return                 'True' when any change was made in the local data, 'false' otherwise.
      */
-    private void synchronizeData(ArrayList<RemoteFile> folderAndFiles, WebdavClient client) {
+    private void synchronizeData(ArrayList<RemoteFile> folderAndFiles, OwnCloudClient client) {
         // get 'fresh data' from the database
         mLocalFolder = mStorageManager.getFileByPath(mLocalFolder.getRemotePath());
         
@@ -374,7 +348,7 @@ public class SynchronizeFolderOperation extends RemoteOperation {
      * @param filesToSyncContents       Synchronization operations to execute.
      * @param client                    Interface to the remote ownCloud server.
      */
-    private void startContentSynchronizations(List<SynchronizeFileOperation> filesToSyncContents, WebdavClient client) {
+    private void startContentSynchronizations(List<SynchronizeFileOperation> filesToSyncContents, OwnCloudClient client) {
         RemoteOperationResult contentsResult = null;
         for (SynchronizeFileOperation op: filesToSyncContents) {
             contentsResult = op.execute(client);   // returns without waiting for upload or download finishes
@@ -396,23 +370,6 @@ public class SynchronizeFolderOperation extends RemoteOperation {
 
     public boolean isMultiStatus(int status) {
         return (status == HttpStatus.SC_MULTI_STATUS); 
-    }
-
-    
-    /**
-     * Creates and populates a new {@link OCFile} object with the data read from the server.
-     * 
-     * @param we        WebDAV entry read from the server for a WebDAV resource (remote file or folder).
-     * @return          New OCFile instance representing the remote resource described by we.
-     */
-    private OCFile fillOCFile(WebdavEntry we) {
-        OCFile file = new OCFile(we.decodedPath());
-        file.setCreationTimestamp(we.createTimestamp());
-        file.setFileLength(we.contentLength());
-        file.setMimetype(we.contentType());
-        file.setModificationTimestamp(we.modifiedTimestamp());
-        file.setEtag(we.etag());
-        return file;
     }
 
     /**

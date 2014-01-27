@@ -26,15 +26,14 @@ import java.util.Map;
 
 import org.apache.jackrabbit.webdav.DavException;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.oc_framework.operations.RemoteOperationResult;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.UpdateOCVersionOperation;
-import com.owncloud.android.oc_framework.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
 import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Log_OC;
@@ -323,8 +322,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     private void fetchChildren(OCFile parent, List<OCFile> files, boolean parentEtagChanged) {
         int i;
         OCFile newFile = null;
-        String etag = null;
-        boolean syncDown = false;
+        //String etag = null;
+        //boolean syncDown = false;
         for (i=0; i < files.size() && !mCancellation; i++) {
             newFile = files.get(i);
             if (newFile.isFolder()) {

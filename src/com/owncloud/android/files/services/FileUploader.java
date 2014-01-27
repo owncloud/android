@@ -28,31 +28,25 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.http.HttpStatus;
-import org.apache.jackrabbit.webdav.DavConstants;
-import org.apache.jackrabbit.webdav.MultiStatus;
-import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
-
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.DbHandler;
-import com.owncloud.android.operations.ChunkedUploadFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
-import com.owncloud.android.operations.ExistenceCheckOperation;
-import com.owncloud.android.oc_framework.operations.RemoteOperation;
-import com.owncloud.android.oc_framework.operations.RemoteOperationResult;
+import com.owncloud.android.lib.operations.common.RemoteFile;
+import com.owncloud.android.lib.operations.common.RemoteOperation;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.operations.UploadFileOperation;
-import com.owncloud.android.oc_framework.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.oc_framework.utils.OwnCloudVersion;
-import com.owncloud.android.oc_framework.network.webdav.OnDatatransferProgressListener;
-import com.owncloud.android.oc_framework.accounts.OwnCloudAccount;
-import com.owncloud.android.oc_framework.network.webdav.ChunkFromFileChannelRequestEntity;
-import com.owncloud.android.oc_framework.network.webdav.OwnCloudClientFactory;
-import com.owncloud.android.oc_framework.network.webdav.WebdavClient;
-import com.owncloud.android.oc_framework.network.webdav.WebdavEntry;
-import com.owncloud.android.oc_framework.network.webdav.WebdavUtils;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.operations.remote.ExistenceCheckRemoteOperation;
+import com.owncloud.android.lib.operations.remote.ReadRemoteFileOperation;
+import com.owncloud.android.lib.utils.FileUtils;
+import com.owncloud.android.lib.utils.OwnCloudVersion;
+import com.owncloud.android.lib.network.OnDatatransferProgressListener;
+import com.owncloud.android.lib.accounts.OwnCloudAccount;
+import com.owncloud.android.lib.network.OwnCloudClientFactory;
+import com.owncloud.android.lib.network.OwnCloudClient;
 import com.owncloud.android.ui.activity.FailedUploadActivity;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
@@ -115,7 +109,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
     private IBinder mBinder;
-    private WebdavClient mUploadClient = null;
+    private OwnCloudClient mUploadClient = null;
     private Account mLastAccount = null;
     private FileDataStorageManager mStorageManager;
 
@@ -253,7 +247,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 files[i] = obtainNewOCFileToUpload(remotePaths[i], localPaths[i], ((mimeTypes != null) ? mimeTypes[i]
                         : (String) null), storageManager);
                 if (files[i] == null) {
-                    // TODO @andomaex add failure Notiification
+                    // TODO @andomaex add failure Notification
                     return Service.START_NOT_STICKY;
                 }
             }
@@ -267,14 +261,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         try {
             for (int i = 0; i < files.length; i++) {
                 uploadKey = buildRemoteName(account, files[i].getRemotePath());
-                if (chunked
-                        && (new File(files[i].getStoragePath())).length() > ChunkedUploadFileOperation.CHUNK_SIZE)  // added to work around bug in servers 5.x 
-                {
-                    newUpload = new ChunkedUploadFileOperation(account, files[i], isInstant, forceOverwrite,
-                            localAction);
-                } else {
-                    newUpload = new UploadFileOperation(account, files[i], isInstant, forceOverwrite, localAction);
-                }
+                newUpload = new UploadFileOperation(account, files[i], chunked, isInstant, forceOverwrite, localAction, 
+                        getApplicationContext());
                 if (isInstant) {
                     newUpload.setRemoteFolderToBeCreated();
                 }
@@ -430,12 +418,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
 
         @Override
-        public void onTransferProgress(long progressRate) {
-            // old way, should not be in use any more
-        }
-
-
-        @Override
         public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer,
                 String fileName) {
             String key = buildRemoteName(mCurrentUpload.getAccount(), mCurrentUpload.getFile());
@@ -563,7 +545,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      *  @return  An {@link OCFile} instance corresponding to the folder where the file will be uploaded.
      */
     private RemoteOperationResult grantFolderExistence(String pathToGrant) {
-        RemoteOperation operation = new ExistenceCheckOperation(pathToGrant, this, false);
+        RemoteOperation operation = new ExistenceCheckRemoteOperation(pathToGrant, this, false);
         RemoteOperationResult result = operation.execute(mUploadClient);
         if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND && mCurrentUpload.isRemoteFolderToBeCreated()) {
             operation = new CreateFolderOperation( pathToGrant,
@@ -618,40 +600,15 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         long syncDate = System.currentTimeMillis();
         file.setLastSyncDateForData(syncDate);
 
-        // / new PROPFIND to keep data consistent with server in theory, should
-        // return the same we already have
-        PropFindMethod propfind = null;
-        RemoteOperationResult result = null;
-        try {
-            propfind = new PropFindMethod(mUploadClient.getBaseUri() + WebdavUtils.encodePath(mCurrentUpload.getRemotePath()),
-                    DavConstants.PROPFIND_ALL_PROP,
-                    DavConstants.DEPTH_0);
-            int status = mUploadClient.executeMethod(propfind);
-            boolean isMultiStatus = (status == HttpStatus.SC_MULTI_STATUS);
-            if (isMultiStatus) {
-                MultiStatus resp = propfind.getResponseBodyAsMultiStatus();
-                WebdavEntry we = new WebdavEntry(resp.getResponses()[0], mUploadClient.getBaseUri().getPath());
-                updateOCFile(file, we);
-                file.setLastSyncDateForProperties(syncDate);
-
-            } else {
-                mUploadClient.exhaustResponse(propfind.getResponseBodyAsStream());
-            }
-
-            result = new RemoteOperationResult(isMultiStatus, status, propfind.getResponseHeaders());
-            Log_OC.i(TAG, "Update: synchronizing properties for uploaded " + mCurrentUpload.getRemotePath() + ": "
-                    + result.getLogMessage());
-
-        } catch (Exception e) {
-            result = new RemoteOperationResult(e);
-            Log_OC.e(TAG, "Update: synchronizing properties for uploaded " + mCurrentUpload.getRemotePath() + ": "
-                    + result.getLogMessage(), e);
-
-        } finally {
-            if (propfind != null)
-                propfind.releaseConnection();
+        // new PROPFIND to keep data consistent with server 
+        // in theory, should return the same we already have
+        ReadRemoteFileOperation operation = new ReadRemoteFileOperation(mCurrentUpload.getRemotePath());
+        RemoteOperationResult result = operation.execute(mUploadClient);
+        if (result.isSuccess()) {
+            updateOCFile(file, result.getData().get(0));
+            file.setLastSyncDateForProperties(syncDate);
         }
-
+        
         // / maybe this would be better as part of UploadFileOperation... or
         // maybe all this method
         if (mCurrentUpload.wasRenamed()) {
@@ -668,13 +625,13 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         mStorageManager.saveFile(file);
     }
 
-    private void updateOCFile(OCFile file, WebdavEntry we) {
-        file.setCreationTimestamp(we.createTimestamp());
-        file.setFileLength(we.contentLength());
-        file.setMimetype(we.contentType());
-        file.setModificationTimestamp(we.modifiedTimestamp());
-        file.setModificationTimestampAtLastSyncForData(we.modifiedTimestamp());
-        // file.setEtag(mCurrentUpload.getEtag());    // TODO Etag, where available
+    private void updateOCFile(OCFile file, RemoteFile remoteFile) {
+        file.setCreationTimestamp(remoteFile.getCreationTimestamp());
+        file.setFileLength(remoteFile.getLength());
+        file.setMimetype(remoteFile.getMimeType());
+        file.setModificationTimestamp(remoteFile.getModifiedTimestamp());
+        file.setModificationTimestampAtLastSyncForData(remoteFile.getModifiedTimestamp());
+        // file.setEtag(remoteFile.getEtag());    // TODO Etag, where available
     }
 
     private OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType,
@@ -744,24 +701,16 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      * Callback method to update the progress bar in the status notification
      */
     @Override
-    public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer, String fileName) {
+    public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer, String filePath) {
         int percent = (int) (100.0 * ((double) totalTransferredSoFar) / ((double) totalToTransfer));
         if (percent != mLastPercent) {
             mNotification.contentView.setProgressBar(R.id.status_progress, 100, percent, false);
+            String fileName = filePath.substring(filePath.lastIndexOf(FileUtils.PATH_SEPARATOR) + 1);
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
             mNotification.contentView.setTextViewText(R.id.status_text, text);
             mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotification);
         }
         mLastPercent = percent;
-    }
-
-    /**
-     * Callback method to update the progress bar in the status notification
-     * (old version)
-     */
-    @Override
-    public void onTransferProgress(long progressRate) {
-        // NOTHING TO DO HERE ANYMORE
     }
 
     /**
@@ -795,6 +744,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             }
             showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, upload.getFile());
             showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, upload.getAccount());
+            showDetailsIntent.putExtra(FileActivity.EXTRA_FROM_NOTIFICATION, true);
             showDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             mNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(),
                     (int) System.currentTimeMillis(), showDetailsIntent, 0);

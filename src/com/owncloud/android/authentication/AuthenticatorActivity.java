@@ -53,22 +53,23 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.SsoWebViewClient.SsoWebViewClientListener;
-import com.owncloud.android.oc_framework.accounts.AccountTypeUtils;
-import com.owncloud.android.oc_framework.accounts.OwnCloudAccount;
-import com.owncloud.android.oc_framework.network.webdav.OwnCloudClientFactory;
-import com.owncloud.android.oc_framework.network.webdav.WebdavClient;
-import com.owncloud.android.operations.ExistenceCheckOperation;
+import com.owncloud.android.lib.accounts.AccountTypeUtils;
+import com.owncloud.android.lib.accounts.OwnCloudAccount;
+import com.owncloud.android.lib.network.OwnCloudClientFactory;
+import com.owncloud.android.lib.network.OwnCloudClient;
 import com.owncloud.android.operations.OAuth2GetAccessToken;
-import com.owncloud.android.oc_framework.operations.OnRemoteOperationListener;
+import com.owncloud.android.lib.operations.common.OnRemoteOperationListener;
 import com.owncloud.android.operations.OwnCloudServerCheckOperation;
-import com.owncloud.android.oc_framework.operations.RemoteOperation;
-import com.owncloud.android.oc_framework.operations.RemoteOperationResult;
-import com.owncloud.android.oc_framework.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.operations.common.RemoteOperation;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.operations.remote.ExistenceCheckRemoteOperation;
+import com.owncloud.android.lib.operations.remote.GetUserNameRemoteOperation;
 import com.owncloud.android.ui.dialog.SamlWebViewDialog;
 import com.owncloud.android.ui.dialog.SslValidatorDialog;
 import com.owncloud.android.ui.dialog.SslValidatorDialog.OnSslValidatorListener;
 import com.owncloud.android.utils.Log_OC;
-import com.owncloud.android.oc_framework.utils.OwnCloudVersion;
+import com.owncloud.android.lib.utils.OwnCloudVersion;
 
 /**
  * This Activity is used to add an ownCloud account to the App
@@ -102,8 +103,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
     private static final String KEY_AUTH_STATUS_TEXT = "AUTH_STATUS_TEXT";
     private static final String KEY_AUTH_STATUS_ICON = "AUTH_STATUS_ICON";
     private static final String KEY_REFRESH_BUTTON_ENABLED = "KEY_REFRESH_BUTTON_ENABLED";
-    
-    private static final String KEY_OC_USERNAME_EQUALS = "oc_username=";
 
     private static final String AUTH_ON = "on";
     private static final String AUTH_OFF = "off";
@@ -131,7 +130,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
     private final Handler mHandler = new Handler();
     private Thread mOperationThread;
     private OwnCloudServerCheckOperation mOcServerChkOperation;
-    private ExistenceCheckOperation mAuthCheckOperation;
+    private ExistenceCheckRemoteOperation mAuthCheckOperation;
     private RemoteOperationResult mLastSslUntrustedServerResult;
 
     private Uri mNewCapturedUriFromOAuth2Redirection;
@@ -525,8 +524,8 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
                 getString(R.string.oauth2_redirect_uri),       
                 getString(R.string.oauth2_grant_type),
                 queryParameters);
-        //WebdavClient client = OwnCloudClientUtils.createOwnCloudClient(Uri.parse(getString(R.string.oauth2_url_endpoint_access)), getApplicationContext());
-        WebdavClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mOAuthTokenEndpointText.getText().toString().trim()), getApplicationContext(), true);
+        //OwnCloudClient client = OwnCloudClientUtils.createOwnCloudClient(Uri.parse(getString(R.string.oauth2_url_endpoint_access)), getApplicationContext());
+        OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mOAuthTokenEndpointText.getText().toString().trim()), getApplicationContext(), true);
         operation.execute(client, this, mHandler);
     }
 
@@ -590,7 +589,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             mServerStatusIcon = R.drawable.progress_small;
             showServerStatus();
             mOcServerChkOperation = new  OwnCloudServerCheckOperation(uri, this);
-            WebdavClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(uri), this, true);
+            OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(uri), this, true);
             mOperationThread = mOcServerChkOperation.execute(client, this, mHandler);
         } else {
             mServerStatusText = 0;
@@ -716,8 +715,8 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         showDialog(DIALOG_LOGIN_PROGRESS);
 
         /// test credentials accessing the root folder
-        mAuthCheckOperation = new  ExistenceCheckOperation("", this, false);
-        WebdavClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mHostBaseUrl + webdav_path), this, true);
+        mAuthCheckOperation = new  ExistenceCheckRemoteOperation("", this, false);
+        OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mHostBaseUrl + webdav_path), this, true);
         client.setBasicCredentials(username, password);
         mOperationThread = mAuthCheckOperation.execute(client, this, mHandler);
     }
@@ -765,8 +764,8 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         String webdav_path = AccountUtils.getWebdavPath(mDiscoveredVersion, mAuthTokenType);
 
         /// test credentials accessing the root folder
-        mAuthCheckOperation = new  ExistenceCheckOperation("", this, false);
-        WebdavClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mHostBaseUrl + webdav_path), this, false);
+        mAuthCheckOperation = new  ExistenceCheckRemoteOperation("", this, false);
+        OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mHostBaseUrl + webdav_path), this, false);
         mOperationThread = mAuthCheckOperation.execute(client, this, mHandler);
       
     }
@@ -785,17 +784,48 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         } else if (operation instanceof OAuth2GetAccessToken) {
             onGetOAuthAccessTokenFinish((OAuth2GetAccessToken)operation, result);
 
-        } else if (operation instanceof ExistenceCheckOperation)  {
+        } else if (operation instanceof ExistenceCheckRemoteOperation)  {
             if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).equals(mAuthTokenType)) {
                 onSamlBasedFederatedSingleSignOnAuthorizationStart(operation, result);
                 
             } else {
-                onAuthorizationCheckFinish((ExistenceCheckOperation)operation, result);
+                onAuthorizationCheckFinish((ExistenceCheckRemoteOperation)operation, result);
             }
+        } else if (operation instanceof GetUserNameRemoteOperation) {
+            onGetUserNameFinish((GetUserNameRemoteOperation) operation, result);
+             
         }
+        
     }
-    
-    
+
+    private void onGetUserNameFinish(GetUserNameRemoteOperation operation, RemoteOperationResult result) {
+        if (result.isSuccess()) {
+            boolean success = false;
+            String username = operation.getUserName();
+            
+            if ( mAction == ACTION_CREATE) {
+                mUsernameInput.setText(username);
+                success = createAccount();
+            } else {
+                
+                if (!mUsernameInput.getText().toString().equals(username)) {
+                    // fail - not a new account, but an existing one; disallow
+                    result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME); 
+                    updateAuthStatusIconAndText(result);
+                    showAuthStatus();
+                    Log_OC.d(TAG, result.getLogMessage());
+                } else {
+                  updateToken();
+                  success = true;
+                }
+            }
+            
+            if (success)
+                finish();
+        }
+        
+    }
+
     private void onSamlBasedFederatedSingleSignOnAuthorizationStart(RemoteOperation operation, RemoteOperationResult result) {
         try {
             dismissDialog(DIALOG_LOGIN_PROGRESS);
@@ -1084,8 +1114,8 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             /// time to test the retrieved access token on the ownCloud server
             mAuthToken = ((OAuth2GetAccessToken)operation).getResultTokenMap().get(OAuth2Constants.KEY_ACCESS_TOKEN);
             Log_OC.d(TAG, "Got ACCESS TOKEN: " + mAuthToken);
-            mAuthCheckOperation = new ExistenceCheckOperation("", this, false);
-            WebdavClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mHostBaseUrl + webdav_path), this, true);
+            mAuthCheckOperation = new ExistenceCheckRemoteOperation("", this, false);
+            OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mHostBaseUrl + webdav_path), this, true);
             client.setBearerCredentials(mAuthToken);
             mAuthCheckOperation.execute(client, this, mHandler);
 
@@ -1105,7 +1135,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
      * @param operation     Access check performed.
      * @param result        Result of the operation.
      */
-    private void onAuthorizationCheckFinish(ExistenceCheckOperation operation, RemoteOperationResult result) {
+    private void onAuthorizationCheckFinish(ExistenceCheckRemoteOperation operation, RemoteOperationResult result) {
         try {
             dismissDialog(DIALOG_LOGIN_PROGRESS);
         } catch (IllegalArgumentException e) {
@@ -1120,7 +1150,8 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
                 success = createAccount();
 
             } else {
-                success = updateToken();
+                updateToken();
+                success = true;
             }
 
             if (success) {
@@ -1166,7 +1197,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
      * Sets the proper response to get that the Account Authenticator that started this activity saves 
      * a new authorization token for mAccount.
      */
-    private boolean updateToken() {
+    private void updateToken() {
         Bundle response = new Bundle();
         response.putString(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
         response.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccount.type);
@@ -1177,16 +1208,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
             
         } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).equals(mAuthTokenType)) {
-            String username = getUserNameForSamlSso();
-            if (!mUsernameInput.getText().toString().equals(username)) {
-                // fail - not a new account, but an existing one; disallow
-                RemoteOperationResult result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME); 
-                updateAuthStatusIconAndText(result);
-                showAuthStatus();
-                Log_OC.d(TAG, result.getLogMessage());
-                
-                return false;
-            }
             
             response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
             // the next line is necessary; by now, notifications are calling directly to the AuthenticatorActivity to update, without AccountManager intervention
@@ -1198,7 +1219,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         }
         setAccountAuthenticatorResult(response);
         
-        return true;
     }
 
 
@@ -1216,10 +1236,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
 
         Uri uri = Uri.parse(mHostBaseUrl);
         String username = mUsernameInput.getText().toString().trim();
-        if (isSaml) {
-            username = getUserNameForSamlSso();
-            
-        } else if (isOAuth) {
+        if (isOAuth) {
             username = "OAuth_user" + (new java.util.Random(System.currentTimeMillis())).nextLong();
         }            
         String accountName = username + "@" + uri.getHost();
@@ -1277,20 +1294,6 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
     
             return true;
         }
-    }
-
-    
-    private String getUserNameForSamlSso() {
-        if (mAuthToken != null) {
-            String [] cookies = mAuthToken.split(";");
-            for (int i=0; i<cookies.length; i++) {
-                if (cookies[i].startsWith(KEY_OC_USERNAME_EQUALS )) {
-                    String value = Uri.decode(cookies[i].substring(KEY_OC_USERNAME_EQUALS.length()));
-                    return value;
-                }
-            }
-        }
-        return "";
     }
 
 
@@ -1593,16 +1596,11 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         
         if (sessionCookie != null && sessionCookie.length() > 0) {
             mAuthToken = sessionCookie;
-            boolean success = false;
-            if (mAction == ACTION_CREATE) {
-                success = createAccount();
-        
-            } else {
-                success = updateToken();
-            }
-            if (success) {
-                finish();
-            }
+
+            GetUserNameRemoteOperation getUserOperation = new GetUserNameRemoteOperation();            
+            OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(Uri.parse(mHostBaseUrl), getApplicationContext(), true);
+            client.setSsoSessionCookie(mAuthToken);
+            getUserOperation.execute(client, this, mHandler);
         }
 
             
@@ -1652,4 +1650,5 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         }
         return super.onTouchEvent(event);
     }
+    
 }
