@@ -45,7 +45,7 @@ import android.util.Log;
 
 
 /** 
- * Get the data from the server to know shared files/folders
+ * Get the data from the server to know shares
  * 
  * @author masensio
  *
@@ -58,12 +58,12 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 	// OCS Route
 	private static final String SHAREAPI_ROUTE ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
 
-	private ArrayList<ShareRemoteFile> mSharedFiles;  // List of files for result
+	private ArrayList<ShareRemoteFile> mShares;  // List of shares for result
 
 	private String mUrlServer;
 
-	public ArrayList<ShareRemoteFile> getSharedFiles() {
-		return mSharedFiles;
+	public ArrayList<ShareRemoteFile> getShares() {
+		return mShares;
 	}
 	
 	public GetRemoteSharesOperation(String urlServer) {
@@ -91,9 +91,9 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 				// convert String into InputStream
 				InputStream is = new ByteArrayInputStream(response.getBytes());
 				ShareXMLParser xmlParser = new ShareXMLParser();
-				mSharedFiles = xmlParser.parseXMLResponse(is);
-				if (mSharedFiles != null) {
-					Log.d(TAG, "Shared Files: " + mSharedFiles.size());
+				mShares = xmlParser.parseXMLResponse(is);
+				if (mShares != null) {
+					Log.d(TAG, "Shared Files: " + mShares.size());
 					result = new RemoteOperationResult(ResultCode.OK);
 				}
 			}
