@@ -51,9 +51,9 @@ import android.util.Log;
  *
  */
 
-public class GetRemoteSharedFilesOperation extends RemoteOperation {
+public class GetRemoteSharesOperation extends RemoteOperation {
 
-	private static final String TAG = GetRemoteSharedFilesOperation.class.getSimpleName();
+	private static final String TAG = GetRemoteSharesOperation.class.getSimpleName();
 
 	// OCS Route
 	private static final String SHAREAPI_ROUTE ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
@@ -66,7 +66,7 @@ public class GetRemoteSharedFilesOperation extends RemoteOperation {
 		return mSharedFiles;
 	}
 	
-	public GetRemoteSharedFilesOperation(String urlServer) {
+	public GetRemoteSharesOperation(String urlServer) {
 		mUrlServer = urlServer;
 	}
 
