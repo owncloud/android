@@ -38,7 +38,7 @@ import com.owncloud.android.lib.network.OwnCloudClient;
 import com.owncloud.android.lib.operations.common.RemoteOperation;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.operations.common.ShareRemoteFile;
+import com.owncloud.android.lib.operations.common.OCShare;
 import com.owncloud.android.lib.utils.ShareXMLParser;
 
 import android.util.Log;
@@ -58,11 +58,11 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 	// OCS Route
 	private static final String SHAREAPI_ROUTE ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
 
-	private ArrayList<ShareRemoteFile> mShares;  // List of shares for result
+	private ArrayList<OCShare> mShares;  // List of shares for result
 
 	private String mUrlServer;
 
-	public ArrayList<ShareRemoteFile> getShares() {
+	public ArrayList<OCShare> getShares() {
 		return mShares;
 	}
 	
@@ -93,7 +93,7 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 				ShareXMLParser xmlParser = new ShareXMLParser();
 				mShares = xmlParser.parseXMLResponse(is);
 				if (mShares != null) {
-					Log.d(TAG, "Shared Files: " + mShares.size());
+					Log.d(TAG, "Shares: " + mShares.size());
 					result = new RemoteOperationResult(ResultCode.OK);
 				}
 			}

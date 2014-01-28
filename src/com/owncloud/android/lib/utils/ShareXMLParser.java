@@ -35,7 +35,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 import android.util.Xml;
 
-import com.owncloud.android.lib.operations.common.ShareRemoteFile;
+import com.owncloud.android.lib.operations.common.OCShare;
 import com.owncloud.android.lib.operations.common.ShareType;
 
 /**
@@ -111,7 +111,7 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public ArrayList<ShareRemoteFile> parseXMLResponse(InputStream is) throws XmlPullParserException, IOException {
+	public ArrayList<OCShare> parseXMLResponse(InputStream is) throws XmlPullParserException, IOException {
 
 		try {
 			// XMLPullParser
@@ -136,8 +136,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ArrayList<ShareRemoteFile> readOCS (XmlPullParser parser) throws XmlPullParserException, IOException {
-		ArrayList<ShareRemoteFile> shares = new ArrayList<ShareRemoteFile>();
+	private ArrayList<OCShare> readOCS (XmlPullParser parser) throws XmlPullParserException, IOException {
+		ArrayList<OCShare> shares = new ArrayList<OCShare>();
 		parser.require(XmlPullParser.START_TAG,  ns , NODE_OCS);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -194,8 +194,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ArrayList<ShareRemoteFile> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
-		ArrayList<ShareRemoteFile> shares = new ArrayList<ShareRemoteFile>();
+	private ArrayList<OCShare> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
+		ArrayList<OCShare> shares = new ArrayList<OCShare>();
 
 		parser.require(XmlPullParser.START_TAG, ns, NODE_DATA);		
 		Log.d(TAG, "---- NODE DATA ---");
@@ -222,10 +222,10 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ShareRemoteFile readElement(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private OCShare readElement(XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, NODE_ELEMENT);
 		
-		ShareRemoteFile share = new ShareRemoteFile();
+		OCShare share = new OCShare();
 		
 		Log.d(TAG, "---- NODE ELEMENT ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
