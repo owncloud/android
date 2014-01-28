@@ -70,7 +70,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 			}
             
             long offset = 0;
-            String uriPrefix = client.getBaseUri() + WebdavUtils.encodePath(mRemotePath) + "-chunking-" + Math.abs((new Random()).nextInt(9000)+1000) + "-" ;
+            String uriPrefix = client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath) + "-chunking-" + Math.abs((new Random()).nextInt(9000)+1000) + "-" ;
             long chunkCount = (long) Math.ceil((double)file.length() / CHUNK_SIZE);
             for (int chunkIndex = 0; chunkIndex < chunkCount ; chunkIndex++, offset += CHUNK_SIZE) {
                 if (mPutMethod != null) {

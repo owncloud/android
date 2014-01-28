@@ -80,7 +80,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 				if (mCancellationRequested.get()) {
 					throw new OperationCancelledException();
 				} else {
-					mPutMethod = new PutMethod(client.getBaseUri() + WebdavUtils.encodePath(mRemotePath));
+					mPutMethod = new PutMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
 				}
 			}
 

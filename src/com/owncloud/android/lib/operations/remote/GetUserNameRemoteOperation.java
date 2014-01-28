@@ -75,8 +75,8 @@ public class GetUserNameRemoteOperation extends RemoteOperation {
         int status = -1;
         
         // Get Method
-        GetMethod get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
-        Log.d(TAG, "URL ------> " + client.getBaseUri() + OCS_ROUTE);
+        GetMethod get = new GetMethod(client.getWebdavUri() + OCS_ROUTE);
+        Log.d(TAG, "URL ------> " + client.getWebdavUri() + OCS_ROUTE);
         // Add the Header
         get.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
         

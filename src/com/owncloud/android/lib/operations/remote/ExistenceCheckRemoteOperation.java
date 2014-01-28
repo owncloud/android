@@ -75,16 +75,16 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         RemoteOperationResult result = null;
         HeadMethod head = null;
         try {
-            head = new HeadMethod(client.getBaseUri() + WebdavUtils.encodePath(mPath));
+            head = new HeadMethod(client.getWebdavUri() + WebdavUtils.encodePath(mPath));
             int status = client.executeMethod(head, TIMEOUT, TIMEOUT);
             client.exhaustResponse(head.getResponseBodyAsStream());
             boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) || (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
             result = new RemoteOperationResult(success, status, head.getResponseHeaders());
-            Log.d(TAG, "Existence check for " + client.getBaseUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + "finished with HTTP status " + status + (!success?"(FAIL)":""));
+            Log.d(TAG, "Existence check for " + client.getWebdavUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + "finished with HTTP status " + status + (!success?"(FAIL)":""));
             
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log.e(TAG, "Existence check for " + client.getBaseUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + ": " + result.getLogMessage(), result.getException());
+            Log.e(TAG, "Existence check for " + client.getWebdavUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + ": " + result.getLogMessage(), result.getException());
             
         } finally {
             if (head != null)

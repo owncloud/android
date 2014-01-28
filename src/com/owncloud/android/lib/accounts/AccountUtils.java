@@ -92,6 +92,23 @@ public class AccountUtils {
         return baseurl + webdavpath;
     }
     
+    /**
+     * Extracts url server from the account
+     * @param context
+     * @param account
+     * @return url server or null on failure
+     * @throws AccountNotFoundException     When 'account' is unknown for the AccountManager
+     */
+    public static String constructBasicURLForAccount(Context context, Account account) throws AccountNotFoundException {
+        AccountManager ama = AccountManager.get(context);
+        String baseurl = ama.getUserData(account, OwnCloudAccount.Constants.KEY_OC_BASE_URL);
+        
+        if (baseurl == null ) 
+            throw new AccountNotFoundException(account, "Account not found", null);
+        
+        return baseurl;
+    }
+    
     
     public static class AccountNotFoundException extends AccountsException {
         

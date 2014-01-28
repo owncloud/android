@@ -57,6 +57,7 @@ public class OwnCloudClient extends HttpClient {
     private static final int MAX_REDIRECTIONS_COUNT = 3;
     
     private Uri mUri;
+    private Uri mWebdavUri;
     private Credentials mCredentials;
     private boolean mFollowRedirects;
     private String mSsoSessionCookie;
@@ -117,7 +118,7 @@ public class OwnCloudClient extends HttpClient {
      * @throws  Exception   When the existence could not be determined
      */
     public boolean existsFile(String path) throws IOException, HttpException {
-        HeadMethod head = new HeadMethod(mUri.toString() + WebdavUtils.encodePath(path));
+        HeadMethod head = new HeadMethod(mWebdavUri.toString() + WebdavUtils.encodePath(path));
         try {
             int status = executeMethod(head);
             Log.d(TAG, "HEAD to " + path + " finished with HTTP status " + status + ((status != HttpStatus.SC_OK)?"(FAIL)":""));
@@ -224,6 +225,18 @@ public class OwnCloudClient extends HttpClient {
             getHttpConnectionManager().getParams().setConnectionTimeout(defaultConnectionTimeout);
     }
 
+    /**
+     * Sets the Webdav URI for the helper methods that receive paths as parameters, instead of full URLs
+     * @param uri
+     */
+    public void setWebdavUri(Uri uri) {
+        mWebdavUri = uri;
+    }
+
+    public Uri getWebdavUri() {
+        return mWebdavUri;
+    }
+    
     /**
      * Sets the base URI for the helper methods that receive paths as parameters, instead of full URLs
      * @param uri
