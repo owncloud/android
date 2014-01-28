@@ -52,7 +52,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
 	private static final String TAG = ReadRemoteFolderOperation.class.getSimpleName();
 
 	private String mRemotePath;
-	private ArrayList<RemoteFile> mFolderAndFiles;
+	private ArrayList<Object> mFolderAndFiles;
 	
 	/**
      * Constructor
@@ -134,7 +134,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
      *  @return                
      */
     private void readData(MultiStatus dataInServer, OwnCloudClient client) {   	
-        mFolderAndFiles = new ArrayList<RemoteFile>();
+        mFolderAndFiles = new ArrayList<Object>();
         
         // parse data from remote folder 
         WebdavEntry we = new WebdavEntry(dataInServer.getResponses()[0], client.getBaseUri().getPath());

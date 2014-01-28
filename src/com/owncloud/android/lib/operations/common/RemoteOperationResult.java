@@ -106,7 +106,7 @@ public class RemoteOperationResult implements Serializable {
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
     private String mRedirectedLocation;
 
-    private ArrayList<RemoteFile> mFiles;
+    private ArrayList<Object> mFiles;
     
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
@@ -207,11 +207,11 @@ public class RemoteOperationResult implements Serializable {
     }
 
 
-    public void setData(ArrayList<RemoteFile> files){
+    public void setData(ArrayList<Object> files){
     	mFiles = files;
     }
     
-	public ArrayList<RemoteFile> getData(){
+	public ArrayList<Object> getData(){
 		return mFiles;
 	}
     

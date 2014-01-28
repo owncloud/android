@@ -62,9 +62,6 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 
 	private String mUrlServer;
 
-	public ArrayList<OCShare> getShares() {
-		return mShares;
-	}
 	
 	public GetRemoteSharesOperation(String urlServer) {
 		mUrlServer = urlServer;
@@ -95,6 +92,11 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 				if (mShares != null) {
 					Log.d(TAG, "Shares: " + mShares.size());
 					result = new RemoteOperationResult(ResultCode.OK);
+					ArrayList<Object> sharesObjects = new ArrayList<Object>();
+					for (OCShare share: mShares) {
+						sharesObjects.add(share);
+					}
+					result.setData(sharesObjects);
 				}
 			}
 		} catch (HttpException e) {
