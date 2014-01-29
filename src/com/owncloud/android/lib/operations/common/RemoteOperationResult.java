@@ -106,12 +106,12 @@ public class RemoteOperationResult implements Serializable {
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
     private String mRedirectedLocation;
 
-    private ArrayList<RemoteFile> mFiles;
+    private ArrayList<Object> mData;
     
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
         mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL || code == ResultCode.OK_NO_SSL);
-        mFiles = null;
+        mData = null;
     }
 
     private RemoteOperationResult(boolean success, int httpCode) {
@@ -207,12 +207,12 @@ public class RemoteOperationResult implements Serializable {
     }
 
 
-    public void setData(ArrayList<RemoteFile> files){
-    	mFiles = files;
+    public void setData(ArrayList<Object> files){
+    	mData = files;
     }
     
-	public ArrayList<RemoteFile> getData(){
-		return mFiles;
+	public ArrayList<Object> getData(){
+		return mData;
 	}
     
     public boolean isSuccess() {

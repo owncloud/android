@@ -54,6 +54,17 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
         mIsValid = false;
         parseVersionString(version);
     }
+    
+    public OwnCloudVersion(String versionstring, boolean isVersionString) {
+    	mVersion = 0;
+    	mIsValid = false;
+    	if (isVersionString) {
+    		parseVersionString(versionstring);
+    	} else {
+            parseVersion(versionstring);
+    	}
+    		
+    }
 
     public String toString() {
         return ((mVersion >> 16) % 256) + "." + ((mVersion >> 8) % 256) + "."
@@ -70,7 +81,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
                 : another.mVersion < mVersion ? 1 : -1;
     }
 
-    private void parseVersionString(String version) {
+    private void parseVersion(String version) {
         try {
             String[] nums = version.split("\\.");
             if (nums.length > 0) {
@@ -87,6 +98,28 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
             mIsValid = true;
         } catch (Exception e) {
             mIsValid = false;
+        }
+    }
+    
+    private void parseVersionString(String versionstring) {
+    	try {
+    		versionstring = versionstring.replaceAll("[^\\d.]", "");
+    		
+    		String[] nums = versionstring.split("\\.");
+    		if (nums.length > 0) {
+    			mVersion += Integer.parseInt(nums[0]);
+    		}
+    		mVersion = mVersion << 8;
+    		if (nums.length > 1) {
+    			mVersion += Integer.parseInt(nums[1]);
+    		}
+    		mVersion = mVersion << 8;
+    		if (nums.length > 2) {
+    			mVersion += Integer.parseInt(nums[2]);
+    		}
+    		mIsValid = true;
+    	} catch (Exception e) {
+    		mIsValid = false;
         }
     }
 }
