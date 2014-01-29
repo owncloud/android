@@ -52,7 +52,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
 	private static final String TAG = ReadRemoteFolderOperation.class.getSimpleName();
 
 	private String mRemotePath;
-	private ArrayList<RemoteFile> mFolderAndFiles;
+	private ArrayList<Object> mFolderAndFiles;
 	
 	/**
      * Constructor
@@ -75,7 +75,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         
         try {
             // remote request 
-            query = new PropFindMethod(client.getBaseUri() + WebdavUtils.encodePath(mRemotePath),
+            query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
                     DavConstants.PROPFIND_ALL_PROP,
                     DavConstants.DEPTH_1);
             int status = client.executeMethod(query);
@@ -134,17 +134,17 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
      *  @return                
      */
     private void readData(MultiStatus dataInServer, OwnCloudClient client) {   	
-        mFolderAndFiles = new ArrayList<RemoteFile>();
+        mFolderAndFiles = new ArrayList<Object>();
         
         // parse data from remote folder 
-        WebdavEntry we = new WebdavEntry(dataInServer.getResponses()[0], client.getBaseUri().getPath());
+        WebdavEntry we = new WebdavEntry(dataInServer.getResponses()[0], client.getWebdavUri().getPath());
         mFolderAndFiles.add(fillOCFile(we));
         
         // loop to update every child
         RemoteFile remoteFile = null;
         for (int i = 1; i < dataInServer.getResponses().length; ++i) {
             /// new OCFile instance with the data from the server
-            we = new WebdavEntry(dataInServer.getResponses()[i], client.getBaseUri().getPath());                        
+            we = new WebdavEntry(dataInServer.getResponses()[i], client.getWebdavUri().getPath());                        
             remoteFile = fillOCFile(we);
             mFolderAndFiles.add(remoteFile);
         }

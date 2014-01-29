@@ -35,7 +35,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 import android.util.Xml;
 
-import com.owncloud.android.lib.operations.common.ShareRemoteFile;
+import com.owncloud.android.lib.operations.common.OCShare;
 import com.owncloud.android.lib.operations.common.ShareType;
 
 /**
@@ -111,7 +111,7 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public ArrayList<ShareRemoteFile> parseXMLResponse(InputStream is) throws XmlPullParserException, IOException {
+	public ArrayList<OCShare> parseXMLResponse(InputStream is) throws XmlPullParserException, IOException {
 
 		try {
 			// XMLPullParser
@@ -136,8 +136,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ArrayList<ShareRemoteFile> readOCS (XmlPullParser parser) throws XmlPullParserException, IOException {
-		ArrayList<ShareRemoteFile> sharedFiles = new ArrayList<ShareRemoteFile>();
+	private ArrayList<OCShare> readOCS (XmlPullParser parser) throws XmlPullParserException, IOException {
+		ArrayList<OCShare> shares = new ArrayList<OCShare>();
 		parser.require(XmlPullParser.START_TAG,  ns , NODE_OCS);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -148,13 +148,13 @@ public class ShareXMLParser {
 			if (name.equalsIgnoreCase(NODE_META)) {
 				readMeta(parser);
 			} else if (name.equalsIgnoreCase(NODE_DATA)) {
-				sharedFiles = readData(parser);
+				shares = readData(parser);
 			} else {
 				skip(parser);
 			}
 
 		}
-		return sharedFiles;
+		return shares;
 
 
 	}
@@ -194,8 +194,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ArrayList<ShareRemoteFile> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
-		ArrayList<ShareRemoteFile> sharedFiles = new ArrayList<ShareRemoteFile>();
+	private ArrayList<OCShare> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
+		ArrayList<OCShare> shares = new ArrayList<OCShare>();
 
 		parser.require(XmlPullParser.START_TAG, ns, NODE_DATA);		
 		Log.d(TAG, "---- NODE DATA ---");
@@ -205,13 +205,13 @@ public class ShareXMLParser {
 			}
 			String name = parser.getName();
 			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
-				sharedFiles.add(readElement(parser));
+				shares.add(readElement(parser));
 			} else {
 				skip(parser);
 			} 
 		}
 
-		return sharedFiles;
+		return shares;
 
 	}
 
@@ -222,10 +222,10 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ShareRemoteFile readElement(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private OCShare readElement(XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, NODE_ELEMENT);
 		
-		ShareRemoteFile sharedFile = new ShareRemoteFile();
+		OCShare share = new OCShare();
 		
 		Log.d(TAG, "---- NODE ELEMENT ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -236,44 +236,44 @@ public class ShareXMLParser {
 			String name = parser.getName();
 
 			if (name.equalsIgnoreCase(NODE_ID)) {
-				sharedFile.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
+				share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_TYPE)) {
-				sharedFile.setIsDirectory(readNode(parser, NODE_ITEM_TYPE).equalsIgnoreCase(TYPE_FOLDER));
+				share.setIsDirectory(readNode(parser, NODE_ITEM_TYPE).equalsIgnoreCase(TYPE_FOLDER));
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_SOURCE)) {
-				sharedFile.setItemSource(Long.parseLong(readNode(parser, NODE_ITEM_SOURCE)));
+				share.setItemSource(Long.parseLong(readNode(parser, NODE_ITEM_SOURCE)));
 
 			} else if (name.equalsIgnoreCase(NODE_PARENT)) {
 				readNode(parser, NODE_PARENT);
 
 			} else if (name.equalsIgnoreCase(NODE_SHARE_TYPE)) {
 				int value = Integer.parseInt(readNode(parser, NODE_SHARE_TYPE));
-				sharedFile.setShareType(ShareType.fromValue(value));
+				share.setShareType(ShareType.fromValue(value));
 
 			} else if (name.equalsIgnoreCase(NODE_SHARE_WITH)) {
-				sharedFile.setShareWith(readNode(parser, NODE_SHARE_WITH));
+				share.setShareWith(readNode(parser, NODE_SHARE_WITH));
 
 			} else if (name.equalsIgnoreCase(NODE_FILE_SOURCE)) {
-				sharedFile.setFileSource(Long.parseLong(readNode(parser, NODE_FILE_SOURCE)));
+				share.setFileSource(Long.parseLong(readNode(parser, NODE_FILE_SOURCE)));
 
 			} else if (name.equalsIgnoreCase(NODE_PATH)) {
-				sharedFile.setPath(readNode(parser, NODE_PATH));
+				share.setPath(readNode(parser, NODE_PATH));
 
 			} else if (name.equalsIgnoreCase(NODE_PERMISSIONS)) {
-				sharedFile.setPermissions(Integer.parseInt(readNode(parser, NODE_PERMISSIONS)));
+				share.setPermissions(Integer.parseInt(readNode(parser, NODE_PERMISSIONS)));
 
 			} else if (name.equalsIgnoreCase(NODE_STIME)) {
-				sharedFile.setSharedDate(Long.parseLong(readNode(parser, NODE_STIME)));
+				share.setSharedDate(Long.parseLong(readNode(parser, NODE_STIME)));
 
 			} else if (name.equalsIgnoreCase(NODE_EXPIRATION)) {
 				String value = readNode(parser, NODE_EXPIRATION);
 				if (!value.isEmpty()) {
-					sharedFile.setExpirationDate(Long.parseLong(readNode(parser, NODE_EXPIRATION))); // check if expiration is in long format or date format
+					share.setExpirationDate(Long.parseLong(readNode(parser, NODE_EXPIRATION))); // check if expiration is in long format or date format
 				}
 
 			} else if (name.equalsIgnoreCase(NODE_TOKEN)) {
-				sharedFile.setToken(readNode(parser, NODE_TOKEN));
+				share.setToken(readNode(parser, NODE_TOKEN));
 
 			} else if (name.equalsIgnoreCase(NODE_STORAGE)) {
 				readNode(parser, NODE_STORAGE);
@@ -281,14 +281,14 @@ public class ShareXMLParser {
 				readNode(parser, NODE_MAIL_SEND);
 
 			} else if (name.equalsIgnoreCase(NODE_SHARE_WITH_DISPLAY_NAME)) {
-				sharedFile.setSharedWithDisplayName(readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME));
+				share.setSharedWithDisplayName(readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME));
 
 			} else {
 				skip(parser);
 			} 
 		}		
 
-		return sharedFile;
+		return share;
 	}
 
 	/**

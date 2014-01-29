@@ -38,36 +38,30 @@ import com.owncloud.android.lib.network.OwnCloudClient;
 import com.owncloud.android.lib.operations.common.RemoteOperation;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.operations.common.ShareRemoteFile;
+import com.owncloud.android.lib.operations.common.OCShare;
 import com.owncloud.android.lib.utils.ShareXMLParser;
 
 import android.util.Log;
 
 
 /** 
- * Get the data from the server to know shared files/folders
+ * Get the data from the server to know shares
  * 
  * @author masensio
  *
  */
 
-public class GetRemoteSharedFilesOperation extends RemoteOperation {
+public class GetRemoteSharesOperation extends RemoteOperation {
 
-	private static final String TAG = GetRemoteSharedFilesOperation.class.getSimpleName();
+	private static final String TAG = GetRemoteSharesOperation.class.getSimpleName();
 
 	// OCS Route
 	private static final String SHAREAPI_ROUTE ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
 
-	private ArrayList<ShareRemoteFile> mSharedFiles;  // List of files for result
+	private ArrayList<OCShare> mShares;  // List of shares for result
 
-	private String mUrlServer;
-
-	public ArrayList<ShareRemoteFile> getSharedFiles() {
-		return mSharedFiles;
-	}
 	
-	public GetRemoteSharedFilesOperation(String urlServer) {
-		mUrlServer = urlServer;
+	public GetRemoteSharesOperation() {
 	}
 
 	@Override
@@ -76,8 +70,8 @@ public class GetRemoteSharedFilesOperation extends RemoteOperation {
 		int status = -1;
 
 		// Get Method        
-		GetMethod get = new GetMethod(mUrlServer + SHAREAPI_ROUTE);
-		Log.d(TAG, "URL ------> " + mUrlServer + SHAREAPI_ROUTE);
+		GetMethod get = new GetMethod(client.getBaseUri() + SHAREAPI_ROUTE);
+		Log.d(TAG, "URL ------> " + client.getBaseUri() + SHAREAPI_ROUTE);
 
 		// Get the response
 		try{
@@ -91,10 +85,15 @@ public class GetRemoteSharedFilesOperation extends RemoteOperation {
 				// convert String into InputStream
 				InputStream is = new ByteArrayInputStream(response.getBytes());
 				ShareXMLParser xmlParser = new ShareXMLParser();
-				mSharedFiles = xmlParser.parseXMLResponse(is);
-				if (mSharedFiles != null) {
-					Log.d(TAG, "Shared Files: " + mSharedFiles.size());
+				mShares = xmlParser.parseXMLResponse(is);
+				if (mShares != null) {
+					Log.d(TAG, "Shares: " + mShares.size());
 					result = new RemoteOperationResult(ResultCode.OK);
+					ArrayList<Object> sharesObjects = new ArrayList<Object>();
+					for (OCShare share: mShares) {
+						sharesObjects.add(share);
+					}
+					result.setData(sharesObjects);
 				}
 			}
 		} catch (HttpException e) {

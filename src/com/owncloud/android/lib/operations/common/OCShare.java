@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.operations.common;
 
-import com.owncloud.android.lib.network.webdav.WebdavEntry;
 import com.owncloud.android.lib.utils.FileUtils;
 
 import android.os.Parcel;
@@ -33,20 +32,16 @@ import android.util.Log;
 
 
 /**
- * Contains the data of a Share Remote File from the Share API
+ * Contains the data of a Share from the Share API
  * 
  * @author masensio
  *
  */
-public class ShareRemoteFile extends RemoteFile {
-
-	/**
-	 * Generated - should be refreshed every time the class changes!!
-	 */
-	private static final long serialVersionUID = -5916376011588784325L;
+public class OCShare implements Parcelable{
 	
-    private static final String TAG = ShareRemoteFile.class.getSimpleName();
+    private static final String TAG = OCShare.class.getSimpleName();
     
+    private long mId;
     private long mFileSource;
     private long mItemSource;
     private ShareType mShareType;
@@ -61,13 +56,12 @@ public class ShareRemoteFile extends RemoteFile {
     private long mUserId;
     private long mIdRemoteShared;
     
-    public ShareRemoteFile() {
+    public OCShare() {
     	super();
     	resetData();
     }
     
-	public ShareRemoteFile(String path) {
-		super(path);
+	public OCShare(String path) {
 		resetData();
         if (path == null || path.length() <= 0 || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
             Log.e(TAG, "Trying to create a OCShare with a non valid path");
@@ -76,15 +70,11 @@ public class ShareRemoteFile extends RemoteFile {
         mPath = path;
 	}
 
-	public ShareRemoteFile(WebdavEntry we) {
-		super(we);
-		// TODO Auto-generated constructor stub
-	}
-
 	/**
      * Used internally. Reset all file properties
      */
     private void resetData() {
+    	mId = -1;
         mFileSource = 0;
         mItemSource = 0;
         mShareType = ShareType.NO_SHARED; 
@@ -101,6 +91,15 @@ public class ShareRemoteFile extends RemoteFile {
     }	
     
     /// Getters and Setters
+    
+    public long getId() {
+        return mId;
+    }
+    
+    public void setId(long id){
+        mId = id;
+    }
+    
     public long getFileSource() {
         return mFileSource;
     }
@@ -208,15 +207,15 @@ public class ShareRemoteFile extends RemoteFile {
     /** 
      * Parcelable Methods
      */
-    public static final Parcelable.Creator<ShareRemoteFile> CREATOR = new Parcelable.Creator<ShareRemoteFile>() {
+    public static final Parcelable.Creator<OCShare> CREATOR = new Parcelable.Creator<OCShare>() {
         @Override
-        public ShareRemoteFile createFromParcel(Parcel source) {
-            return new ShareRemoteFile(source);
+        public OCShare createFromParcel(Parcel source) {
+            return new OCShare(source);
         }
 
         @Override
-        public ShareRemoteFile[] newArray(int size) {
-            return new ShareRemoteFile[size];
+        public OCShare[] newArray(int size) {
+            return new OCShare[size];
         }
     };
     
@@ -225,12 +224,12 @@ public class ShareRemoteFile extends RemoteFile {
      * 
      * @param source The source parcel
      */    
-    protected ShareRemoteFile(Parcel source) {
-    	super(source);
+    protected OCShare(Parcel source) {
+    	readFromParcel(source);
     }
     
     public void readFromParcel(Parcel source) {
-    	super.readFromParcel(source);
+        mId = source.readLong();
     	
         mFileSource = source.readLong();
         mItemSource = source.readLong();
@@ -252,10 +251,15 @@ public class ShareRemoteFile extends RemoteFile {
     }
 
 
+	@Override
+	public int describeContents() {
+		return this.hashCode();
+	}
+	
+	
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-    	super.writeToParcel(dest, flags);
-    	
+    	dest.writeLong(mId);
         dest.writeLong(mFileSource);
         dest.writeLong(mItemSource);
         dest.writeString((mShareType == null) ? "" : mShareType.name());
@@ -270,4 +274,5 @@ public class ShareRemoteFile extends RemoteFile {
         dest.writeLong(mUserId);
         dest.writeLong(mIdRemoteShared);
     }
+
 }

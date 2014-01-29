@@ -70,11 +70,14 @@ public class OwnCloudClientFactory {
     public static OwnCloudClient createOwnCloudClient (Account account, Context appContext) throws OperationCanceledException, AuthenticatorException, IOException, AccountNotFoundException {
         //Log_OC.d(TAG, "Creating OwnCloudClient associated to " + account.name);
        
-        Uri uri = Uri.parse(AccountUtils.constructFullURLForAccount(appContext, account));
+        Uri webdavUri = Uri.parse(AccountUtils.constructFullURLForAccount(appContext, account));
+        Uri uri = Uri.parse(AccountUtils.constructBasicURLForAccount(appContext, account));
         AccountManager am = AccountManager.get(appContext);
         boolean isOauth2 = am.getUserData(account, OwnCloudAccount.Constants.KEY_SUPPORTS_OAUTH2) != null;   // TODO avoid calling to getUserData here
         boolean isSamlSso = am.getUserData(account, OwnCloudAccount.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        OwnCloudClient client = createOwnCloudClient(uri, appContext, !isSamlSso);
+        OwnCloudClient client = createOwnCloudClient(webdavUri, appContext, !isSamlSso);
+        client.setBaseUri(uri);
+        
         if (isOauth2) {    
             String accessToken = am.blockingGetAuthToken(account, AccountTypeUtils.getAuthTokenTypeAccessToken(account.type), false);
             client.setBearerCredentials(accessToken);   // TODO not assume that the access token is a bearer token
@@ -95,11 +98,13 @@ public class OwnCloudClientFactory {
     
     
     public static OwnCloudClient createOwnCloudClient (Account account, Context appContext, Activity currentActivity) throws OperationCanceledException, AuthenticatorException, IOException, AccountNotFoundException {
-        Uri uri = Uri.parse(AccountUtils.constructFullURLForAccount(appContext, account));
+        Uri webdavUri = Uri.parse(AccountUtils.constructFullURLForAccount(appContext, account));
+        Uri uri = Uri.parse(AccountUtils.constructBasicURLForAccount(appContext, account));
         AccountManager am = AccountManager.get(appContext);
         boolean isOauth2 = am.getUserData(account, OwnCloudAccount.Constants.KEY_SUPPORTS_OAUTH2) != null;   // TODO avoid calling to getUserData here
         boolean isSamlSso = am.getUserData(account, OwnCloudAccount.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        OwnCloudClient client = createOwnCloudClient(uri, appContext, !isSamlSso);
+        OwnCloudClient client = createOwnCloudClient(webdavUri, appContext, !isSamlSso);
+        client.setBaseUri(uri);
         
         if (isOauth2) {    // TODO avoid a call to getUserData here
             AccountManagerFuture<Bundle> future =  am.getAuthToken(account,  AccountTypeUtils.getAuthTokenTypeAccessToken(account.type), null, currentActivity, null, null);
@@ -148,7 +153,7 @@ public class OwnCloudClientFactory {
         OwnCloudClient client = new OwnCloudClient(NetworkUtils.getMultiThreadedConnManager());
         
         client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
-        client.setBaseUri(uri);
+        client.setWebdavUri(uri);
         client.setFollowRedirects(followRedirects);
         
         return client;

@@ -158,11 +158,11 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
             tryConnection(client, mUrl + AccountUtils.STATUS_PATH);
             
         } else {
-            client.setBaseUri(Uri.parse("https://" + mUrl + AccountUtils.STATUS_PATH));
+            client.setWebdavUri(Uri.parse("https://" + mUrl + AccountUtils.STATUS_PATH));
             boolean httpsSuccess = tryConnection(client, "https://" + mUrl + AccountUtils.STATUS_PATH); 
             if (!httpsSuccess && !mLatestResult.isSslRecoverableException()) {
                 Log.d(TAG, "establishing secure connection failed, trying non secure connection");
-                client.setBaseUri(Uri.parse("http://" + mUrl + AccountUtils.STATUS_PATH));
+                client.setWebdavUri(Uri.parse("http://" + mUrl + AccountUtils.STATUS_PATH));
                 tryConnection(client, "http://" + mUrl + AccountUtils.STATUS_PATH);
             }
         }

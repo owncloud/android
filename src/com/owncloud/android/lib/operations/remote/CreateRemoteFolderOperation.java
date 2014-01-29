@@ -80,7 +80,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
         boolean noInvalidChars = FileUtils.isValidPath(mRemotePath);
         if (noInvalidChars) {
         	try {
-        		mkcol = new MkColMethod(client.getBaseUri() + WebdavUtils.encodePath(mRemotePath));
+        		mkcol = new MkColMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
         		int status =  client.executeMethod(mkcol, READ_TIMEOUT, CONNECTION_TIMEOUT);
         		if (!mkcol.succeeded() && mkcol.getStatusCode() == HttpStatus.SC_CONFLICT && mCreateFullPath) {
         			result = createParentFolder(FileUtils.getParentPath(mRemotePath), client);

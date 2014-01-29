@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -212,7 +213,10 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 	private void onSuccessfulRefresh(ReadRemoteFolderOperation operation, RemoteOperationResult result) {
 		mFilesAdapter.clear();
-		List<RemoteFile> files = result.getData();
+		List<RemoteFile> files = new ArrayList<RemoteFile>();
+        for(Object obj: result.getData()) {
+            files.add((RemoteFile) obj);
+        }
 		if (files != null) {
 			Iterator<RemoteFile> it = files.iterator();
 			while (it.hasNext()) {
