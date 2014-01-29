@@ -60,11 +60,8 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 
 	private ArrayList<OCShare> mShares;  // List of shares for result
 
-	private String mUrlServer;
-
 	
-	public GetRemoteSharesOperation(String urlServer) {
-		mUrlServer = urlServer;
+	public GetRemoteSharesOperation() {
 	}
 
 	@Override
@@ -73,8 +70,8 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 		int status = -1;
 
 		// Get Method        
-		GetMethod get = new GetMethod(mUrlServer + SHAREAPI_ROUTE);
-		Log.d(TAG, "URL ------> " + mUrlServer + SHAREAPI_ROUTE);
+		GetMethod get = new GetMethod(client.getBaseUri() + SHAREAPI_ROUTE);
+		Log.d(TAG, "URL ------> " + client.getBaseUri() + SHAREAPI_ROUTE);
 
 		// Get the response
 		try{
