@@ -171,7 +171,7 @@ public class OwnCloudClient extends HttpClient {
             customRedirectionNeeded = mFollowRedirects;
         }
         if (mSsoSessionCookie != null && mSsoSessionCookie.length() > 0) {
-            method.setRequestHeader("Cookie", mSsoSessionCookie);
+            method.addRequestHeader("Cookie", mSsoSessionCookie);
         }
         int status = super.executeMethod(method);
         int redirectionsCount = 0;

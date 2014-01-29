@@ -73,21 +73,18 @@ public class GetUserNameRemoteOperation extends RemoteOperation {
 	protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
         int status = -1;
-        
-        // Get Method
-        GetMethod get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
-        Log.d(TAG, "URL ------> " + client.getBaseUri() + OCS_ROUTE);
-        // Add the Header
-        get.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
+        GetMethod get = null;
         
         //Get the user
         try {
+            get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
+            Log.e(TAG, "Getting OC user information from " + client.getBaseUri() + OCS_ROUTE);
+            // Add the Header
+            get.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
 			status = client.executeMethod(get);
 			if(isSuccess(status)) {
-				 Log.d(TAG, "Obtain RESPONSE");
 				 String response = get.getResponseBodyAsString();
-				 
-				 Log.d(TAG, "GET RESPONSE.................... " + response);
+				 Log.d(TAG, "Successful response: " + response);
 
 				 // Parse the response
 				 JSONObject respJSON = new JSONObject(response);
@@ -98,21 +95,25 @@ public class GetUserNameRemoteOperation extends RemoteOperation {
 				 String email = respData.getString(NODE_EMAIL);
 				 
 				 // Result
-				 result = new RemoteOperationResult(isSuccess(status), status, (get != null ? get.getResponseHeaders() : null));
+				 result = new RemoteOperationResult(true, status, get.getResponseHeaders());
 				 mUserName =  displayName;
 				 
-				 Log.d(TAG, "Response: " + id + " - " + displayName + " - " + email);
+				 Log.d(TAG, "*** Parsed user information: " + id + " - " + displayName + " - " + email);
 				 
+			} else {
+				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
+				String response = get.getResponseBodyAsString();
+				Log.e(TAG, "Failed response while getting user information ");
+				if (response != null) {
+					Log.e(TAG, "*** status code: " + status + " ; response message: " + response);
+				} else {
+					Log.e(TAG, "*** status code: " + status);
+				}
 			}
-		} catch (HttpException e) {
+		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			e.printStackTrace();
-		} catch (IOException e) {
-			result = new RemoteOperationResult(e);
-			e.printStackTrace();
-		} catch (JSONException e) {
-			result = new RemoteOperationResult(e);
-			e.printStackTrace();
+			Log.e(TAG, "Exception while getting OC user information", e);
+			
 		} finally {
 			get.releaseConnection();
 		}
