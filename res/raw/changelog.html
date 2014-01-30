@@ -16,15 +16,30 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
+	<head>
+	<style type="text/css">
+		div.changes-title { font-size: 200%; font-weight: bold; margin-bottom:0.5em; }
+		div.recent-change { margin-bottom:0.5em; }
+		div.recent-change div.change-version { font-size: 120%; font-weight: bold; }
+		div.recent-change div.change-item {  display: list-item;  margin-left: 1.3em; list-style-type: circle;  }
+	</style>
+	</head>
 	<body>
-	<p>
-		Your device runs Android 4.1.x. 
-	</p>
-	<p>
-		To prevent losing your ownCloud account credentials on every reboot, please, install this free helper app to work around the bug in Jelly Bean:
-	</p>
-	<p style="text-align:center">
-		<a href="http://play.google.com/store/apps/details?id=com.owncloud.android.workaround.accounts">ownCloud Jelly Bean Workaround</a> 
-	</p>
+	<div class="changes-title">Changelog</div>
+	<div class="recent-change">
+		<div class="change-version">1.5.2</div>
+		<div class="change-item">Support for Server Name Indication (Android 2.3 or later required)</div>
+	</div>
+	<div class="recent-change">
+		<div class="change-version">1.5.0</div>
+		<div class="change-item">Support for Android KitKat</div>
+		<div class="change-item">NEW SYNC POLICY: full synchronization is not triggered when accounts are created or swapped</div>
+		<div class="change-item">log-in view is shown automatically when last account is removed</div>
+	</div>
+	<div class="recent-change">
+		<div class="change-version">1.4.6</div>
+		<div class="change-item">FIXED bug instant upload of new pictures on SAMSUNG devices with Android 4.0 or greater</div>
+	</div>
+
 	</body>
 </html>
