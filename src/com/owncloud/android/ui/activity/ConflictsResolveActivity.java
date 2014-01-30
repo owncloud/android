@@ -18,6 +18,9 @@
 
 package com.owncloud.android.ui.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -28,79 +31,85 @@ import com.owncloud.android.ui.dialog.ConflictsResolveDialog.OnConflictDecisionM
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Log_OC;
 
-import android.content.Intent;
-import android.os.Bundle;
-
 /**
- * Wrapper activity which will be launched if keep-in-sync file will be modified by external
- * application. 
+ * Wrapper activity which will be launched if keep-in-sync file will be modified
+ * by external application.
  * 
  * @author Bartek Przybylski
  * @author David A. Velasco
  */
 public class ConflictsResolveActivity extends FileActivity implements OnConflictDecisionMadeListener {
 
-    private String TAG = ConflictsResolveActivity.class.getSimpleName();
-    
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(DisplayUtils.getSeasonalIconId());
-    }
+	private String TAG = ConflictsResolveActivity.class.getSimpleName();
 
-    @Override
-    public void conflictDecisionMade(Decision decision) {
-        Intent i = new Intent(getApplicationContext(), FileUploader.class);
-        
-        switch (decision) {
-            case CANCEL:
-                finish();
-                return;
-            case OVERWRITE:
-                i.putExtra(FileUploader.KEY_FORCE_OVERWRITE, true);
-                break;
-            case KEEP_BOTH:
-                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
-                break;
-            default:
-                Log_OC.wtf(TAG, "Unhandled conflict decision " + decision);
-                return;
-        }
-        i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
-        i.putExtra(FileUploader.KEY_FILE, getFile());
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
-        
-        startService(i);
-        finish();
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setIcon(DisplayUtils.getSeasonalIconId());
+	}
 
-    @Override
-    protected void onAccountSet(boolean stateWasRecovered) {
-        if (getAccount() != null) {
-            OCFile file = getFile();
-            if (getFile() == null) {
-                Log_OC.e(TAG, "No conflictive file received");
-                finish();
-            } else {
-                /// Check whether the 'main' OCFile handled by the Activity is contained in the current Account
-                FileDataStorageManager storageManager = new FileDataStorageManager(getAccount(), getContentResolver());
-                file = storageManager.getFileByPath(file.getRemotePath());   // file = null if not in the current Account
-                if (file != null) {
-                    setFile(file);
-                    ConflictsResolveDialog d = ConflictsResolveDialog.newInstance(file.getRemotePath(), this);
-                    d.showDialog(this);
-                    
-                } else {
-                    // account was changed to a different one - just finish
-                    finish();
-                }
-            }
-            
-        } else {
-            Log_OC.wtf(TAG, "onAccountChanged was called with NULL account associated!");
-            finish();
-        }
-        
-    }
+	@Override
+	public void conflictDecisionMade(Decision decision) {
+		Intent i = new Intent(getApplicationContext(), FileUploader.class);
+
+		switch (decision) {
+		case CANCEL:
+			finish();
+			return;
+		case OVERWRITE:
+			i.putExtra(FileUploader.KEY_FORCE_OVERWRITE, true);
+			break;
+		case KEEP_BOTH:
+			i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LocalBehaviour.MOVE);
+			break;
+		default:
+			Log_OC.wtf(TAG, "Unhandled conflict decision " + decision);
+			return;
+		}
+		i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
+		i.putExtra(FileUploader.KEY_FILE, getFile());
+		i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UploadType.SINGLE_FILE);
+
+		startService(i);
+		finish();
+	}
+
+	@Override
+	protected void onAccountSet(boolean stateWasRecovered) {
+		if (getAccount() != null) {
+			OCFile file = getFile();
+			if (getFile() == null) {
+				Log_OC.e(TAG, "No conflictive file received");
+				finish();
+			} else {
+				// / Check whether the 'main' OCFile handled by the Activity is
+				// contained in the current Account
+				FileDataStorageManager storageManager = new FileDataStorageManager(getAccount(), getContentResolver());
+				file = storageManager.getFileByPath(file.getRemotePath()); // file
+				                                                           // =
+				                                                           // null
+				                                                           // if
+				                                                           // not
+				                                                           // in
+				                                                           // the
+				                                                           // current
+				                                                           // Account
+				if (file != null) {
+					setFile(file);
+					ConflictsResolveDialog d = ConflictsResolveDialog.newInstance(file.getRemotePath(), this);
+					d.showDialog(this);
+
+				} else {
+					// account was changed to a different one - just finish
+					finish();
+				}
+			}
+
+		} else {
+			Log_OC.wtf(TAG, "onAccountChanged was called with NULL account associated!");
+			finish();
+		}
+
+	}
 }
