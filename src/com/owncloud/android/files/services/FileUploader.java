@@ -109,11 +109,11 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     public static final String KEY_INSTANT_UPLOAD = "INSTANT_UPLOAD";
     public static final String KEY_LOCAL_BEHAVIOUR = "BEHAVIOUR";
 
-    public enum LOCAL_BEHAVIOUR {
+    public enum LocalBehaviour {
         COPY, MOVE, FORGET;
     }
 
-    public enum UPLOAD_TYPE {
+    public enum UploadType {
         SINGLE_FILE, MULTIPLE_FILES;
     }
 
@@ -194,7 +194,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             Log_OC.e(TAG, "Not enough information provided in intent");
             return Service.START_NOT_STICKY;
         }
-        UPLOAD_TYPE uploadType = (UPLOAD_TYPE)intent.getSerializableExtra(KEY_UPLOAD_TYPE);
+        UploadType uploadType = (UploadType)intent.getSerializableExtra(KEY_UPLOAD_TYPE);
         if (uploadType == null) {
             Log_OC.e(TAG, "Incorrect upload type provided");
             return Service.START_NOT_STICKY;
@@ -203,7 +203,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
         String[] localPaths = null, remotePaths = null, mimeTypes = null;
         OCFile[] files = null;
-        if (uploadType == UPLOAD_TYPE.SINGLE_FILE) {
+        if (uploadType == UploadType.SINGLE_FILE) {
 
             if (intent.hasExtra(KEY_FILE)) {
                 files = new OCFile[] { intent.getParcelableExtra(KEY_FILE) };
@@ -235,9 +235,9 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
         boolean forceOverwrite = intent.getBooleanExtra(KEY_FORCE_OVERWRITE, false);
         boolean isInstant = intent.getBooleanExtra(KEY_INSTANT_UPLOAD, false);
-        LOCAL_BEHAVIOUR localAction = (LOCAL_BEHAVIOUR)intent.getSerializableExtra(KEY_LOCAL_BEHAVIOUR);
+        LocalBehaviour localAction = (LocalBehaviour)intent.getSerializableExtra(KEY_LOCAL_BEHAVIOUR);
         if(localAction == null)
-            localAction = LOCAL_BEHAVIOUR.COPY;
+            localAction = LocalBehaviour.COPY;
 
         if (intent.hasExtra(KEY_FILE) && files == null) {
             Log_OC.e(TAG, "Incorrect array for OCFiles provided in upload intent");

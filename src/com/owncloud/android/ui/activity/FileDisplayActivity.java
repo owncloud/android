@@ -580,9 +580,9 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
             i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
             i.putExtra(FileUploader.KEY_LOCAL_FILE, filePaths);
             i.putExtra(FileUploader.KEY_REMOTE_FILE, remotePaths);
-            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE.MULTIPLE_FILES);
+            i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UploadType.MULTIPLE_FILES);
             if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR.MOVE);
+                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LocalBehaviour.MOVE);
             startService(i);
 
         } else {
@@ -633,9 +633,9 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
 
         i.putExtra(FileUploader.KEY_LOCAL_FILE, filepath);
         i.putExtra(FileUploader.KEY_REMOTE_FILE, remotepath);
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE.SINGLE_FILE);
+        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UploadType.SINGLE_FILE);
         if (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
-            i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR.MOVE);
+            i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LocalBehaviour.MOVE);
         startService(i);
     }
 

@@ -61,7 +61,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 i.putExtra(FileUploader.KEY_FORCE_OVERWRITE, true);
                 break;
             case KEEP_BOTH:
-                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR.MOVE);
+                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LocalBehaviour.MOVE);
                 break;
             default:
                 Log_OC.wtf(TAG, "Unhandled conflict decision " + decision);
@@ -69,7 +69,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
         }
         i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
         i.putExtra(FileUploader.KEY_FILE, getFile());
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_TYPE.SINGLE_FILE);
+        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UploadType.SINGLE_FILE);
         
         startService(i);
         finish();
