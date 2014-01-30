@@ -1,0 +1,146 @@
+/* ownCloud Android Library is available under MIT license
+ *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   
+ *   Permission is hereby granted, free of charge, to any person obtaining a copy
+ *   of this software and associated documentation files (the "Software"), to deal
+ *   in the Software without restriction, including without limitation the rights
+ *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *   copies of the Software, and to permit persons to whom the Software is
+ *   furnished to do so, subject to the following conditions:
+ *   
+ *   The above copyright notice and this permission notice shall be included in
+ *   all copies or substantial portions of the Software.
+ *   
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *   THE SOFTWARE.
+ *
+ */
+
+package com.owncloud.android.lib.operations.remote;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.http.HttpStatus;
+
+import android.util.Log;
+
+import com.owncloud.android.lib.network.OwnCloudClient;
+import com.owncloud.android.lib.operations.common.OCShare;
+import com.owncloud.android.lib.operations.common.RemoteOperation;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.operations.common.ShareType;
+import com.owncloud.android.lib.utils.ShareUtils;
+import com.owncloud.android.lib.utils.ShareXMLParser;
+
+/**
+ * Creates a new share.  This allows sharing with a user or group or as a link.
+ * 
+ * @author masensio
+ *
+ */
+public class CreateShareRemoteOperation extends RemoteOperation {
+
+	private static final String TAG = CreateShareRemoteOperation.class.getSimpleName();
+
+	private static final String PARAM_PATH = "path";
+	private static final String PARAM_SHARE_TYPE = "shareType";
+	private static final String PARAM_SHARE_WITH = "shareWith";
+	private static final String PARAM_PUBLIC_UPLOAD = "publicUpload";
+	private static final String PARAM_PASSWORD = "password";
+	private static final String PARAM_PERMISSIONS = "permissions";
+
+	private OCShare mShare;
+	private String mPath;
+	private ShareType mShareType;
+	private String mShareWith;
+	private boolean mPublicUpload;
+	private String mPassword;
+	private int mPermissions;
+
+	/**
+	 * Constructor
+	 * @param path			Full path of the file/folder being shared. Mandatory argument
+	 * @param shareType		‘0’ = user, ‘1’ = group, ‘3’ = Public link. Mandatory argument
+	 * @param shareWith		User/group ID with who the file should be shared.  This is mandatory for shareType of 0 or 1
+	 * @param publicUpload	If ‘false’ (default) public cannot upload to a public shared folder. 
+	 * 						If ‘true’ public can upload to a shared folder. Only available for public link shares
+	 * @param password		Password to protect a public link share. Only available for public link shares
+	 * @param permissions	1 - Read only – Default for “public” shares
+	 * 						2 - Update
+	 * 						4 - Create
+	 * 						8 - Delete
+	 * 						16- Re-share
+	 * 						31- All above – Default for “private” shares
+	 * 						For user or group shares.
+	 * 						To obtain combinations, add the desired values together.  
+	 * 						For instance, for “Re-Share”, “delete”, “read”, “update”, add 16+8+2+1 = 27.
+	 */
+	public CreateShareRemoteOperation(String path, ShareType shareType, String shareWith, boolean publicUpload, 
+			String password, int permissions) {
+
+		mPath = path;
+		mShareType = shareType;
+		mShareWith = shareWith;
+		mPublicUpload = publicUpload;
+		mPassword = password;
+		mPermissions = permissions;
+	}
+
+	@Override
+	protected RemoteOperationResult run(OwnCloudClient client) {
+		RemoteOperationResult result = null;
+		int status = -1;
+
+		// Post Method
+		PostMethod post = new PostMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
+		Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
+
+		post.addParameter(PARAM_PATH, mPath);
+		post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
+		post.addParameter(PARAM_SHARE_WITH, mShareWith);
+		post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
+		post.addParameter(PARAM_PASSWORD, mPassword);
+		post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
+
+		try {
+			status = client.executeMethod(post);
+
+			if(isSuccess(status)) {
+				String response = post.getResponseBodyAsString();
+				Log.d(TAG, "Successful response: " + response);
+
+				result = new RemoteOperationResult(ResultCode.OK);
+				
+				// TODO
+				// Parse xml response --> obtain the response in ShareFiles ArrayList
+				// convert String into InputStream
+				InputStream is = new ByteArrayInputStream(response.getBytes());
+				ShareXMLParser xmlParser = new ShareXMLParser();
+
+			}
+		} catch (Exception e) {
+			result = new RemoteOperationResult(e);
+			Log.e(TAG, "Exception while Creating New Share", e);
+		} finally {
+			post.releaseConnection();
+		}
+
+
+
+		return result;
+	}
+
+	private boolean isSuccess(int status) {
+		return (status == HttpStatus.SC_OK);
+	}
+
+}
