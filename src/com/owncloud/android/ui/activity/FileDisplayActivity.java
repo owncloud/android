@@ -68,10 +68,14 @@ import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.operations.CreateFolderOperation;
+
+import com.owncloud.android.operations.GetSharesOperation;
+
 import com.owncloud.android.lib.operations.common.OnRemoteOperationListener;
 import com.owncloud.android.lib.operations.common.RemoteOperation;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
+
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
@@ -121,6 +125,7 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
 
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
+    private static final String KEY_REFRESH_SHARES_IN_PROGRESS = "SHARES_IN_PROGRESS";
 
     public static final int DIALOG_SHORT_WAIT = 0;
     private static final int DIALOG_CHOOSE_UPLOAD_SOURCE = 1;
@@ -143,6 +148,7 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
     private Handler mHandler;
     
     private boolean mSyncInProgress = false;
+    private boolean mRefreshSharesInProgress = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,10 +181,12 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
         if(savedInstanceState != null) {
             mWaitingToPreview = (OCFile) savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
+            mRefreshSharesInProgress = savedInstanceState.getBoolean(KEY_REFRESH_SHARES_IN_PROGRESS);
            
         } else {
             mWaitingToPreview = null;
             mSyncInProgress = false;
+            mRefreshSharesInProgress = false;
         }        
 
         /// USER INTERFACE
@@ -223,7 +231,7 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
     protected void onAccountSet(boolean stateWasRecovered) {
         if (getAccount() != null) {
             mStorageManager = new FileDataStorageManager(getAccount(), getContentResolver());
-
+                
             /// Check whether the 'main' OCFile handled by the Activity is contained in the current Account
             OCFile file = getFile();
             // get parent from path
@@ -245,6 +253,7 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
             }
             setFile(file);
             setNavigationListWithFolder(file);
+            
             if (!stateWasRecovered) {
                 Log_OC.e(TAG, "Initializing Fragments in onAccountChanged..");
                 initFragmentsWithFile();
@@ -667,6 +676,7 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
         super.onSaveInstanceState(outState);
         outState.putParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW, mWaitingToPreview);
         outState.putBoolean(FileDisplayActivity.KEY_SYNC_IN_PROGRESS, mSyncInProgress);
+        outState.putBoolean(FileDisplayActivity.KEY_REFRESH_SHARES_IN_PROGRESS, mRefreshSharesInProgress);
 
         Log_OC.d(TAG, "onSaveInstanceState() end");
     }
@@ -913,9 +923,8 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
             RemoteOperationResult synchResult = (RemoteOperationResult)intent.getSerializableExtra(FileSyncService.SYNC_RESULT);
 
             if (getAccount() != null && accountName.equals(getAccount().name)
-                    && mStorageManager != null
-                    ) {  
-
+                    && mStorageManager != null) {
+                
                 String synchFolderRemotePath = intent.getStringExtra(FileSyncService.SYNC_FOLDER_REMOTE_PATH); 
 
                 OCFile currentFile = (getFile() == null) ? null : mStorageManager.getFileByPath(getFile().getRemotePath());
@@ -945,7 +954,16 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
                     setFile(currentFile);
                 }
                 
-                setSupportProgressBarIndeterminateVisibility(inProgress);
+                if (!mRefreshSharesInProgress) {
+                    /// get the shared files
+                    if (isSharedSupported()) {
+                        startGetShares();
+                    }
+                    setSupportProgressBarIndeterminateVisibility(inProgress);
+                } else {
+                    setSupportProgressBarIndeterminateVisibility(true);
+                }
+                
                 removeStickyBroadcast(intent);
                 mSyncInProgress = inProgress;
 
@@ -1278,9 +1296,27 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
         } else if (operation instanceof CreateFolderOperation) {
             onCreateFolderOperationFinish((CreateFolderOperation)operation, result);
             
-        } 
+        } else if (operation instanceof GetSharesOperation) {
+            onGetSharesOperationFinish((GetSharesOperation) operation, result);
+        }
     }
 
+
+    /** Updates the data about shared files
+     * 
+     * @param operation     Get Shared Files
+     * @param result        Result of the operation
+     */
+    private void onGetSharesOperationFinish(GetSharesOperation operation, RemoteOperationResult result) {
+        // Refresh the filelist with the information
+        refeshListOfFilesFragment();  
+        
+        mRefreshSharesInProgress = false;
+        
+        if (!mSyncInProgress) {
+            setSupportProgressBarIndeterminateVisibility(false);
+        }
+    }
 
     /**
      * Updates the view associated to the activity after the finish of an operation trying to remove a 
@@ -1490,6 +1526,16 @@ OCFileListFragment.ContainerActivity, FileDetailFragment.ContainerActivity, OnNa
         setSupportProgressBarIndeterminateVisibility(true);
     }
 
+    
+    private void startGetShares() {
+        // Get shared files/folders
+        RemoteOperation getShares = new GetSharesOperation(mStorageManager);
+        getShares.execute(getAccount(), this, this, mHandler, this);
+        
+        mRefreshSharesInProgress = true;
+        setSupportProgressBarIndeterminateVisibility(true);
+        
+    }
     
 //    public void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
 //        int childCount = viewGroup.getChildCount();

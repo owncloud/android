@@ -192,7 +192,7 @@ public class SynchronizeFolderOperation extends RemoteOperation {
             ReadRemoteFileOperation operation = new ReadRemoteFileOperation(remotePath);
             result = operation.execute(client);
             if (result.isSuccess()){
-                OCFile remoteFolder = FileStorageUtils.fillOCFile((RemoteFile)result.getData().get(0));
+                OCFile remoteFolder = FileStorageUtils.fillOCFile((RemoteFile) result.getData().get(0));
                 
              // check if remote and local folder are different
               mRemoteFolderChanged = !(remoteFolder.getEtag().equalsIgnoreCase(mLocalFolder.getEtag()));
