@@ -26,6 +26,7 @@ package com.owncloud.android.lib.operations.remote;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.HttpStatus;
@@ -58,7 +59,8 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 	private static final String PARAM_PASSWORD = "password";
 	private static final String PARAM_PERMISSIONS = "permissions";
 
-	private OCShare mShare;
+	private ArrayList<OCShare> mShares;  // List of shares for result, one share in this case
+	
 	private String mPath;
 	private ShareType mShareType;
 	private String mShareWith;
@@ -125,6 +127,16 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 				// convert String into InputStream
 				InputStream is = new ByteArrayInputStream(response.getBytes());
 				ShareXMLParser xmlParser = new ShareXMLParser();
+				mShares = xmlParser.parseXMLResponse(is);
+				if (mShares != null) {
+					Log.d(TAG, "Shares: " + mShares.size());
+					result = new RemoteOperationResult(ResultCode.OK);
+					ArrayList<Object> sharesObjects = new ArrayList<Object>();
+					for (OCShare share: mShares) {
+						sharesObjects.add(share);
+					}
+					result.setData(sharesObjects);
+				}
 
 			}
 		} catch (Exception e) {
@@ -133,9 +145,6 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 		} finally {
 			post.releaseConnection();
 		}
-
-
-
 		return result;
 	}
 

@@ -55,6 +55,7 @@ public class OCShare implements Parcelable{
     private boolean mIsDirectory;
     private long mUserId;
     private long mIdRemoteShared;
+    private String mShareLink;
     
     public OCShare() {
     	super();
@@ -87,7 +88,8 @@ public class OCShare implements Parcelable{
         mSharedWithDisplayName = null;
         mIsDirectory = false;
         mUserId = -1;
-        mIdRemoteShared = -1;        
+        mIdRemoteShared = -1;
+        mShareLink = null;
     }	
     
     /// Getters and Setters
@@ -203,7 +205,15 @@ public class OCShare implements Parcelable{
     public void setIdRemoteShared(long idRemoteShared) {
         this.mIdRemoteShared = idRemoteShared;
     }
-
+    
+    public String getShareLink() {
+    	return this.mShareLink;
+    }
+    
+    public void setShareLink(String shareLink) {
+    	this.mShareLink = shareLink;
+    }
+    
     /** 
      * Parcelable Methods
      */
@@ -248,6 +258,7 @@ public class OCShare implements Parcelable{
         mIsDirectory = source.readInt() == 0;
         mUserId = source.readLong();
         mIdRemoteShared = source.readLong();
+        mShareLink = source.readString();
     }
 
 
@@ -273,6 +284,7 @@ public class OCShare implements Parcelable{
         dest.writeInt(mIsDirectory ? 1 : 0);
         dest.writeLong(mUserId);
         dest.writeLong(mIdRemoteShared);
+        dest.writeString(mShareLink);
     }
 
 }
