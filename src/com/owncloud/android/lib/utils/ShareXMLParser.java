@@ -199,6 +199,7 @@ public class ShareXMLParser {
 	 */
 	private ArrayList<OCShare> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
 		ArrayList<OCShare> shares = new ArrayList<OCShare>();
+		OCShare share = null;
 
 		parser.require(XmlPullParser.START_TAG, ns, NODE_DATA);		
 		Log.d(TAG, "---- NODE DATA ---");
@@ -209,50 +210,34 @@ public class ShareXMLParser {
 			String name = parser.getName();
 			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
 				shares.add(readElement(parser));
-			}  else {
-				//skip(parser);
-				OCShare share = tryReadCreateXMLResponse(parser);
-				if (share.getIdRemoteShared() > -1) {
-					shares.add(share);
-				}
+			}  else {	// Parse Create XML Response
+				share = new OCShare();
+				
+				if (name.equalsIgnoreCase(NODE_ID)) {
+					share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
+				
+				} else if (name.equalsIgnoreCase(NODE_URL)) {
+					share.setShareLink(readNode(parser, NODE_URL));
+
+				}  else if (name.equalsIgnoreCase(NODE_TOKEN)) {
+					share.setToken(readNode(parser, NODE_TOKEN));
+					
+				} else {
+					skip(parser);
+				} 
+				
 			} 
 		}
+		
+		if (share != null) {
+			shares.add(share);
+		}
+			
 
 		return shares;
 
 	}
 
-	/** 
-	 * Parse Create XML Response
-	 * @param parser
-	 * @return
-	 */
-	private OCShare tryReadCreateXMLResponse(XmlPullParser parser) throws XmlPullParserException, IOException {
-		OCShare share = new OCShare();
-	
-		Log.d(TAG, "---- Create Share Response ---");
-		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
-	            continue;
-	        }
-			
-			String name = parser.getName();
-
-			if (name.equalsIgnoreCase(NODE_ID)) {
-				share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
-			
-			} else if (name.equalsIgnoreCase(NODE_URL)) {
-				share.setShareLink(readNode(parser, NODE_URL));
-
-			}  else if (name.equalsIgnoreCase(NODE_TOKEN)) {
-				share.setToken(readNode(parser, NODE_TOKEN));
-			} else {
-				skip(parser);
-			} 
-		}
-		
-		return share;
-	}
 
 	/** 
 	 * Parse Element node
