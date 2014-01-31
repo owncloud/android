@@ -210,21 +210,21 @@ public class ShareXMLParser {
 			String name = parser.getName();
 			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
 				shares.add(readElement(parser));
-			}  else {	// Parse Create XML Response
+			}  else if (name.equalsIgnoreCase(NODE_ID)) {// Parse Create XML Response
 				share = new OCShare();
-				
-				if (name.equalsIgnoreCase(NODE_ID)) {
-					share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
-				
-				} else if (name.equalsIgnoreCase(NODE_URL)) {
-					share.setShareLink(readNode(parser, NODE_URL));
+				String value = readNode(parser, NODE_ID);
+				share.setIdRemoteShared(Integer.parseInt(value));
 
-				}  else if (name.equalsIgnoreCase(NODE_TOKEN)) {
-					share.setToken(readNode(parser, NODE_TOKEN));
-					
-				} else {
-					skip(parser);
-				} 
+			} else if (name.equalsIgnoreCase(NODE_URL)) {
+				share.setShareType(ShareType.PUBLIC_LINK);
+				String value = readNode(parser, NODE_URL);
+				share.setShareLink(value);
+
+			}  else if (name.equalsIgnoreCase(NODE_TOKEN)) {
+				share.setToken(readNode(parser, NODE_TOKEN));
+
+			} else {
+				skip(parser);
 				
 			} 
 		}
