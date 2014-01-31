@@ -28,6 +28,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.HttpStatus;
 
@@ -38,63 +40,45 @@ import com.owncloud.android.lib.operations.common.OCShare;
 import com.owncloud.android.lib.operations.common.RemoteOperation;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.operations.common.ShareType;
 import com.owncloud.android.lib.utils.ShareUtils;
 import com.owncloud.android.lib.utils.ShareXMLParser;
 
 /**
- * Creates a new share.  This allows sharing with a user or group or as a link.
+ * Provide a list shares for a specific file.  
+ * The input is the full path of the desired file.  
+ * The output is a list of everyone who has the file shared with them.
  * 
  * @author masensio
  *
  */
-public class CreateShareRemoteOperation extends RemoteOperation {
 
-	private static final String TAG = CreateShareRemoteOperation.class.getSimpleName();
+public class GetSharesForFileRemoteOperation extends RemoteOperation {
 
+	private static final String TAG = GetSharesForFileRemoteOperation.class.getSimpleName();
+	
 	private static final String PARAM_PATH = "path";
-	private static final String PARAM_SHARE_TYPE = "shareType";
-	private static final String PARAM_SHARE_WITH = "shareWith";
-	private static final String PARAM_PUBLIC_UPLOAD = "publicUpload";
-	private static final String PARAM_PASSWORD = "password";
-	private static final String PARAM_PERMISSIONS = "permissions";
+	private static final String PARAM_RESHARES = "reshares";
+	private static final String PARAM_SUBFILES = "subfiles";
 
 	private ArrayList<OCShare> mShares;  // List of shares for result, one share in this case
 	
 	private String mPath;
-	private ShareType mShareType;
-	private String mShareWith;
-	private boolean mPublicUpload;
-	private String mPassword;
-	private int mPermissions;
-
+	private boolean mReshares;
+	private boolean mSubfiles;
+	
 	/**
 	 * Constructor
-	 * @param path			Full path of the file/folder being shared. Mandatory argument
-	 * @param shareType		‘0’ = user, ‘1’ = group, ‘3’ = Public link. Mandatory argument
-	 * @param shareWith		User/group ID with who the file should be shared.  This is mandatory for shareType of 0 or 1
-	 * @param publicUpload	If ‘false’ (default) public cannot upload to a public shared folder. 
-	 * 						If ‘true’ public can upload to a shared folder. Only available for public link shares
-	 * @param password		Password to protect a public link share. Only available for public link shares
-	 * @param permissions	1 - Read only – Default for “public” shares
-	 * 						2 - Update
-	 * 						4 - Create
-	 * 						8 - Delete
-	 * 						16- Re-share
-	 * 						31- All above – Default for “private” shares
-	 * 						For user or group shares.
-	 * 						To obtain combinations, add the desired values together.  
-	 * 						For instance, for “Re-Share”, “delete”, “read”, “update”, add 16+8+2+1 = 27.
+	 * 
+	 * @param path		Path to file or folder
+	 * @param reshares	If set to ‘false’ (default), only shares from the current user are returned
+	 * 					If set to ‘true’, all shares from the given file are returned
+	 * @param subfiles	If set to ‘false’ (default), lists only the folder being shared
+	 * 					If set to ‘true’, all shared files within the folder are returned.
 	 */
-	public CreateShareRemoteOperation(String path, ShareType shareType, String shareWith, boolean publicUpload, 
-			String password, int permissions) {
-
+	public GetSharesForFileRemoteOperation(String path, boolean reshares, boolean subfiles) {
 		mPath = path;
-		mShareType = shareType;
-		mShareWith = shareWith;
-		mPublicUpload = publicUpload;
-		mPassword = password;
-		mPermissions = permissions;
+		mReshares = reshares;
+		mSubfiles = subfiles;
 	}
 
 	@Override
@@ -102,24 +86,28 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 		RemoteOperationResult result = null;
 		int status = -1;
 
-		PostMethod post = null;
+		GetMethod get = null;
 
 		try {
-			// Post Method
-			post = new PostMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
+			// Get Method
+			get = new GetMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
 			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
 
-			post.addParameter(PARAM_PATH, mPath);
-			post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
-			post.addParameter(PARAM_SHARE_WITH, mShareWith);
-			post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
-			post.addParameter(PARAM_PASSWORD, mPassword);
-			post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
+			// Add Parameters to Get Method
+			get.setQueryString(new NameValuePair[] { 
+				    new NameValuePair(PARAM_PATH, mPath) 
+				}); 
+			get.setQueryString(new NameValuePair[] { 
+				    new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)) 
+				}); 
+			get.setQueryString(new NameValuePair[] { 
+				    new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles)) 
+				}); 
 
-			status = client.executeMethod(post);
+			status = client.executeMethod(get);
 
 			if(isSuccess(status)) {
-				String response = post.getResponseBodyAsString();
+				String response = get.getResponseBodyAsString();
 				Log.d(TAG, "Successful response: " + response);
 
 				result = new RemoteOperationResult(ResultCode.OK);
@@ -140,7 +128,7 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 				}
 
 			} else {
-				result = new RemoteOperationResult(false, status, post.getResponseHeaders());
+				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
 			}
 			
 		} catch (Exception e) {
@@ -148,8 +136,8 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 			Log.e(TAG, "Exception while Creating New Share", e);
 			
 		} finally {
-			if (post != null) {
-				post.releaseConnection();
+			if (get != null) {
+				get.releaseConnection();
 			}
 		}
 		return result;
