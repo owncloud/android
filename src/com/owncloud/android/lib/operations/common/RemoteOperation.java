@@ -91,7 +91,7 @@ public abstract class RemoteOperation implements Runnable {
      * @param context   Android context for the component calling the method.
      * @return          Result of the operation.
      */
-    public final RemoteOperationResult execute(Account account, Context context) {
+    public RemoteOperationResult execute(Account account, Context context) {
         if (account == null)
             throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Account");
         if (context == null)
@@ -116,7 +116,7 @@ public abstract class RemoteOperation implements Runnable {
 	 * @param client	Client object to reach an ownCloud server during the execution of the operation.
 	 * @return			Result of the operation.
 	 */
-	public final RemoteOperationResult execute(OwnCloudClient client) {
+	public RemoteOperationResult execute(OwnCloudClient client) {
 		if (client == null)
 			throw new IllegalArgumentException("Trying to execute a remote operation with a NULL OwnCloudClient");
 		mClient = client;
@@ -135,7 +135,7 @@ public abstract class RemoteOperation implements Runnable {
      * @param listenerHandler   Handler associated to the thread where the methods of the listener objects must be called.
      * @return                  Thread were the remote operation is executed.
      */
-    public final Thread execute(Account account, Context context, OnRemoteOperationListener listener, Handler listenerHandler, Activity callerActivity) {
+    public Thread execute(Account account, Context context, OnRemoteOperationListener listener, Handler listenerHandler, Activity callerActivity) {
         if (account == null)
             throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Account");
         if (context == null)
@@ -163,7 +163,7 @@ public abstract class RemoteOperation implements Runnable {
 	 * @param listenerHandler	Handler associated to the thread where the methods of the listener objects must be called.
 	 * @return					Thread were the remote operation is executed.
 	 */
-	public final Thread execute(OwnCloudClient client, OnRemoteOperationListener listener, Handler listenerHandler) {
+	public Thread execute(OwnCloudClient client, OnRemoteOperationListener listener, Handler listenerHandler) {
 		if (client == null) {
 			throw new IllegalArgumentException("Trying to execute a remote operation with a NULL OwnCloudClient");
 		}
@@ -183,29 +183,6 @@ public abstract class RemoteOperation implements Runnable {
 		runnerThread.start();
 		return runnerThread;
 	}
-	
-    /**
-     * Synchronously retries the remote operation using the same OwnCloudClient in the last call to {@link RemoteOperation#execute(OwnCloudClient)}
-     * 
-     * @param listener          Listener to be notified about the execution of the operation.
-     * @param listenerHandler   Handler associated to the thread where the methods of the listener objects must be called.
-     * @return                  Thread were the remote operation is executed.
-     */
-    public final RemoteOperationResult retry() {
-        return execute(mClient);
-    }
-    
-    /**
-     * Asynchronously retries the remote operation using the same OwnCloudClient in the last call to {@link RemoteOperation#execute(OwnCloudClient, OnRemoteOperationListener, Handler)}
-     * 
-     * @param listener          Listener to be notified about the execution of the operation.
-     * @param listenerHandler   Handler associated to the thread where the methods of the listener objects must be called.
-     * @return                  Thread were the remote operation is executed.
-     */
-    public final Thread retry(OnRemoteOperationListener listener, Handler listenerHandler) {
-        return execute(mClient, listener, listenerHandler);
-    }
-	
 	
 	/**
 	 * Asynchronous execution of the operation 

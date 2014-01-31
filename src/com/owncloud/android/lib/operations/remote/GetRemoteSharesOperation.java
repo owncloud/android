@@ -25,14 +25,11 @@
 package com.owncloud.android.lib.operations.remote;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
-import org.xmlpull.v1.XmlPullParserException;
 
 import com.owncloud.android.lib.network.OwnCloudClient;
 import com.owncloud.android.lib.operations.common.RemoteOperation;
@@ -68,11 +65,12 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 		int status = -1;
 
 		// Get Method        
-		GetMethod get = new GetMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
-		Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
+		GetMethod get = null;
 
 		// Get the response
 		try{
+			get = new GetMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
+			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
 			status = client.executeMethod(get);
 			if(isSuccess(status)) {
 				Log.d(TAG, "Obtain RESPONSE");
@@ -93,18 +91,18 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 					}
 					result.setData(sharesObjects);
 				}
+			} else {
+				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
 			}
-		} catch (HttpException e) {
+			
+		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			e.printStackTrace();
-		} catch (IOException e) {
-			result = new RemoteOperationResult(e);
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			result = new RemoteOperationResult(e);
-			e.printStackTrace();
+			Log.e(TAG, "Exception while getting remote shares ", e);
+			
 		} finally {
-			get.releaseConnection();
+			if (get != null) {
+				get.releaseConnection();
+			}
 		}
 		return result;
 	}
