@@ -102,18 +102,20 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 		RemoteOperationResult result = null;
 		int status = -1;
 
-		// Post Method
-		PostMethod post = new PostMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
-		Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
-
-		post.addParameter(PARAM_PATH, mPath);
-		post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
-		post.addParameter(PARAM_SHARE_WITH, mShareWith);
-		post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
-		post.addParameter(PARAM_PASSWORD, mPassword);
-		post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
+		PostMethod post = null;
 
 		try {
+			// Post Method
+			post = new PostMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
+			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
+
+			post.addParameter(PARAM_PATH, mPath);
+			post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
+			post.addParameter(PARAM_SHARE_WITH, mShareWith);
+			post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
+			post.addParameter(PARAM_PASSWORD, mPassword);
+			post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
+
 			status = client.executeMethod(post);
 
 			if(isSuccess(status)) {
@@ -138,12 +140,18 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 					result.setData(sharesObjects);
 				}
 
+			} else {
+				result = new RemoteOperationResult(false, status, post.getResponseHeaders());
 			}
+			
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
 			Log.e(TAG, "Exception while Creating New Share", e);
+			
 		} finally {
-			post.releaseConnection();
+			if (post != null) {
+				post.releaseConnection();
+			}
 		}
 		return result;
 	}
