@@ -28,38 +28,9 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.owncloud.android.R;
-import com.owncloud.android.authentication.AuthenticatorActivity;
-import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.db.DbHandler;
-import com.owncloud.android.operations.CreateFolderOperation;
-import com.owncloud.android.lib.operations.common.RemoteFile;
-import com.owncloud.android.lib.operations.common.RemoteOperation;
-import com.owncloud.android.lib.operations.common.RemoteOperationResult;
-import com.owncloud.android.operations.UploadFileOperation;
-import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.operations.remote.ExistenceCheckRemoteOperation;
-import com.owncloud.android.lib.operations.remote.ReadRemoteFileOperation;
-import com.owncloud.android.lib.utils.FileUtils;
-import com.owncloud.android.lib.utils.OwnCloudVersion;
-import com.owncloud.android.lib.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.accounts.OwnCloudAccount;
-import com.owncloud.android.lib.network.OwnCloudClientFactory;
-import com.owncloud.android.lib.network.OwnCloudClient;
-import com.owncloud.android.ui.activity.FailedUploadActivity;
-import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.activity.FileDisplayActivity;
-import com.owncloud.android.ui.activity.InstantUploadActivity;
-import com.owncloud.android.ui.preview.PreviewImageActivity;
-import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.utils.DisplayUtils;
-import com.owncloud.android.utils.Log_OC;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -71,10 +42,36 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.support.v4.app.NotificationCompat;
 import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
 
-
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AuthenticatorActivity;
+import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.DbHandler;
+import com.owncloud.android.lib.accounts.OwnCloudAccount;
+import com.owncloud.android.lib.network.OnDatatransferProgressListener;
+import com.owncloud.android.lib.network.OwnCloudClient;
+import com.owncloud.android.lib.network.OwnCloudClientFactory;
+import com.owncloud.android.lib.operations.common.RemoteFile;
+import com.owncloud.android.lib.operations.common.RemoteOperation;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult;
+import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.operations.remote.ExistenceCheckRemoteOperation;
+import com.owncloud.android.lib.operations.remote.ReadRemoteFileOperation;
+import com.owncloud.android.lib.utils.FileUtils;
+import com.owncloud.android.lib.utils.OwnCloudVersion;
+import com.owncloud.android.operations.CreateFolderOperation;
+import com.owncloud.android.operations.UploadFileOperation;
+import com.owncloud.android.ui.activity.FailedUploadActivity;
+import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.activity.InstantUploadActivity;
+import com.owncloud.android.ui.preview.PreviewImageActivity;
+import com.owncloud.android.ui.preview.PreviewImageFragment;
+import com.owncloud.android.utils.Log_OC;
 
 public class FileUploader extends Service implements OnDatatransferProgressListener {
 
@@ -113,24 +110,23 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     private Account mLastAccount = null;
     private FileDataStorageManager mStorageManager;
 
-    private ConcurrentMap<String, UploadFileOperation> mPendingUploads = new ConcurrentHashMap<String, UploadFileOperation>();
+    private final ConcurrentMap<String, UploadFileOperation> mPendingUploads = new ConcurrentHashMap<String, UploadFileOperation>();
     private UploadFileOperation mCurrentUpload = null;
 
     private NotificationManager mNotificationManager;
-    private Notification mNotification;
+    private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
     private RemoteViews mDefaultNotificationContentView;
 
-    
     public static String getUploadFinishMessage() {
         return FileUploader.class.getName().toString() + UPLOAD_FINISH_MESSAGE;
     }
-    
+
     /**
      * Builds a key for mPendingUploads from the account and file to upload
      * 
-     * @param account   Account where the file to upload is stored
-     * @param file      File to upload
+     * @param account Account where the file to upload is stored
+     * @param file File to upload
      */
     private String buildRemoteName(Account account, OCFile file) {
         return account.name + file.getRemotePath();
@@ -223,7 +219,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         boolean forceOverwrite = intent.getBooleanExtra(KEY_FORCE_OVERWRITE, false);
         boolean isInstant = intent.getBooleanExtra(KEY_INSTANT_UPLOAD, false);
         int localAction = intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_COPY);
-        
+
         if (intent.hasExtra(KEY_FILE) && files == null) {
             Log_OC.e(TAG, "Incorrect array for OCFiles provided in upload intent");
             return Service.START_NOT_STICKY;
@@ -253,7 +249,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             }
         }
 
-        OwnCloudVersion ocv = new OwnCloudVersion(AccountManager.get(this).getUserData(account, OwnCloudAccount.Constants.KEY_OC_VERSION));
+        OwnCloudVersion ocv = new OwnCloudVersion(AccountManager.get(this).getUserData(account,
+                OwnCloudAccount.Constants.KEY_OC_VERSION));
         boolean chunked = FileUploader.chunkedUploadIsSupported(ocv);
         AbstractList<String> requestedUploads = new Vector<String>();
         String uploadKey = null;
@@ -261,15 +258,19 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         try {
             for (int i = 0; i < files.length; i++) {
                 uploadKey = buildRemoteName(account, files[i].getRemotePath());
-                newUpload = new UploadFileOperation(account, files[i], chunked, isInstant, forceOverwrite, localAction, 
+                newUpload = new UploadFileOperation(account, files[i], chunked, isInstant, forceOverwrite, localAction,
                         getApplicationContext());
                 if (isInstant) {
                     newUpload.setRemoteFolderToBeCreated();
                 }
-                mPendingUploads.putIfAbsent(uploadKey, newUpload); // Grants that the file only upload once time
+                mPendingUploads.putIfAbsent(uploadKey, newUpload); // Grants
+                                                                   // that the
+                                                                   // file only
+                                                                   // upload
+                                                                   // once time
 
                 newUpload.addDatatransferProgressListener(this);
-                newUpload.addDatatransferProgressListener((FileUploaderBinder)mBinder);
+                newUpload.addDatatransferProgressListener((FileUploaderBinder) mBinder);
                 requestedUploads.add(uploadKey);
             }
 
@@ -308,16 +309,15 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     public IBinder onBind(Intent arg0) {
         return mBinder;
     }
-    
+
     /**
      * Called when ALL the bound clients were onbound.
      */
     @Override
     public boolean onUnbind(Intent intent) {
-        ((FileUploaderBinder)mBinder).clearListeners();
-        return false;   // not accepting rebinding (default behaviour)
+        ((FileUploaderBinder) mBinder).clearListeners();
+        return false; // not accepting rebinding (default behaviour)
     }
-    
 
     /**
      * Binder to let client components to perform operations on the queue of
@@ -326,12 +326,13 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      * It provides by itself the available operations.
      */
     public class FileUploaderBinder extends Binder implements OnDatatransferProgressListener {
-        
-        /** 
-         * Map of listeners that will be reported about progress of uploads from a {@link FileUploaderBinder} instance 
+
+        /**
+         * Map of listeners that will be reported about progress of uploads from
+         * a {@link FileUploaderBinder} instance
          */
-        private Map<String, OnDatatransferProgressListener> mBoundListeners = new HashMap<String, OnDatatransferProgressListener>();
-        
+        private final Map<String, OnDatatransferProgressListener> mBoundListeners = new HashMap<String, OnDatatransferProgressListener>();
+
         /**
          * Cancels a pending or current upload of a remote file.
          * 
@@ -347,21 +348,17 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 upload.cancel();
             }
         }
-        
-        
-        
+
         public void clearListeners() {
             mBoundListeners.clear();
         }
 
-
-        
-        
         /**
          * Returns True when the file described by 'file' is being uploaded to
          * the ownCloud account 'account' or waiting for it
          * 
-         * If 'file' is a directory, returns 'true' if some of its descendant files is uploading or waiting to upload. 
+         * If 'file' is a directory, returns 'true' if some of its descendant
+         * files is uploading or waiting to upload.
          * 
          * @param account Owncloud account where the remote file will be stored.
          * @param file A file that could be in the queue of pending uploads
@@ -385,37 +382,39 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             }
         }
 
-
         /**
-         * Adds a listener interested in the progress of the upload for a concrete file.
+         * Adds a listener interested in the progress of the upload for a
+         * concrete file.
          * 
-         * @param listener      Object to notify about progress of transfer.    
-         * @param account       ownCloud account holding the file of interest.
-         * @param file          {@link OCfile} of interest for listener. 
+         * @param listener Object to notify about progress of transfer.
+         * @param account ownCloud account holding the file of interest.
+         * @param file {@link OCfile} of interest for listener.
          */
-        public void addDatatransferProgressListener (OnDatatransferProgressListener listener, Account account, OCFile file) {
-            if (account == null || file == null || listener == null) return;
+        public void addDatatransferProgressListener(OnDatatransferProgressListener listener, Account account,
+                OCFile file) {
+            if (account == null || file == null || listener == null)
+                return;
             String targetKey = buildRemoteName(account, file);
             mBoundListeners.put(targetKey, listener);
         }
-        
-        
-        
+
         /**
-         * Removes a listener interested in the progress of the upload for a concrete file.
+         * Removes a listener interested in the progress of the upload for a
+         * concrete file.
          * 
-         * @param listener      Object to notify about progress of transfer.    
-         * @param account       ownCloud account holding the file of interest.
-         * @param file          {@link OCfile} of interest for listener. 
+         * @param listener Object to notify about progress of transfer.
+         * @param account ownCloud account holding the file of interest.
+         * @param file {@link OCfile} of interest for listener.
          */
-        public void removeDatatransferProgressListener (OnDatatransferProgressListener listener, Account account, OCFile file) {
-            if (account == null || file == null || listener == null) return;
+        public void removeDatatransferProgressListener(OnDatatransferProgressListener listener, Account account,
+                OCFile file) {
+            if (account == null || file == null || listener == null)
+                return;
             String targetKey = buildRemoteName(account, file);
             if (mBoundListeners.get(targetKey) == listener) {
                 mBoundListeners.remove(targetKey);
             }
         }
-
 
         @Override
         public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer,
@@ -426,7 +425,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 boundListener.onTransferProgress(progressRate, totalTransferredSoFar, totalToTransfer, fileName);
             }
         }
-        
+
     }
 
     /**
@@ -479,21 +478,24 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             notifyUploadStart(mCurrentUpload);
 
             RemoteOperationResult uploadResult = null, grantResult = null;
-            
+
             try {
-                /// prepare client object to send requests to the ownCloud server
+                // / prepare client object to send requests to the ownCloud
+                // server
                 if (mUploadClient == null || !mLastAccount.equals(mCurrentUpload.getAccount())) {
                     mLastAccount = mCurrentUpload.getAccount();
                     mStorageManager = new FileDataStorageManager(mLastAccount, getContentResolver());
                     mUploadClient = OwnCloudClientFactory.createOwnCloudClient(mLastAccount, getApplicationContext());
                 }
-                
-                /// check the existence of the parent folder for the file to upload
+
+                // / check the existence of the parent folder for the file to
+                // upload
                 String remoteParentPath = new File(mCurrentUpload.getRemotePath()).getParent();
-                remoteParentPath = remoteParentPath.endsWith(OCFile.PATH_SEPARATOR) ? remoteParentPath : remoteParentPath + OCFile.PATH_SEPARATOR;
+                remoteParentPath = remoteParentPath.endsWith(OCFile.PATH_SEPARATOR) ? remoteParentPath
+                        : remoteParentPath + OCFile.PATH_SEPARATOR;
                 grantResult = grantFolderExistence(remoteParentPath);
-            
-                /// perform the upload
+
+                // / perform the upload
                 if (grantResult.isSuccess()) {
                     OCFile parent = mStorageManager.getFileByPath(remoteParentPath);
                     mCurrentUpload.getFile().setParentId(parent.getFileId());
@@ -504,29 +506,31 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 } else {
                     uploadResult = grantResult;
                 }
-                
+
             } catch (AccountsException e) {
                 Log_OC.e(TAG, "Error while trying to get autorization for " + mLastAccount.name, e);
                 uploadResult = new RemoteOperationResult(e);
-                
+
             } catch (IOException e) {
                 Log_OC.e(TAG, "Error while trying to get autorization for " + mLastAccount.name, e);
                 uploadResult = new RemoteOperationResult(e);
-                
+
             } finally {
                 synchronized (mPendingUploads) {
                     mPendingUploads.remove(uploadKey);
                     Log_OC.i(TAG, "Remove CurrentUploadItem from pending upload Item Map.");
                 }
                 if (uploadResult.isException()) {
-                    // enforce the creation of a new client object for next uploads; this grant that a new socket will 
-                    // be created in the future if the current exception is due to an abrupt lose of network connection
+                    // enforce the creation of a new client object for next
+                    // uploads; this grant that a new socket will
+                    // be created in the future if the current exception is due
+                    // to an abrupt lose of network connection
                     mUploadClient = null;
                 }
             }
-            
-            /// notify result
-            
+
+            // / notify result
+
             notifyUploadResult(uploadResult, mCurrentUpload);
             sendFinalBroadcast(mCurrentUpload, uploadResult);
 
@@ -535,22 +539,22 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
     }
 
     /**
-     * Checks the existence of the folder where the current file will be uploaded both in the remote server 
-     * and in the local database.
+     * Checks the existence of the folder where the current file will be
+     * uploaded both in the remote server and in the local database.
      * 
-     * If the upload is set to enforce the creation of the folder, the method tries to create it both remote
-     * and locally.
-     *  
-     *  @param  pathToGrant     Full remote path whose existence will be granted.
-     *  @return  An {@link OCFile} instance corresponding to the folder where the file will be uploaded.
+     * If the upload is set to enforce the creation of the folder, the method
+     * tries to create it both remote and locally.
+     * 
+     * @param pathToGrant Full remote path whose existence will be granted.
+     * @return An {@link OCFile} instance corresponding to the folder where the
+     *         file will be uploaded.
      */
     private RemoteOperationResult grantFolderExistence(String pathToGrant) {
         RemoteOperation operation = new ExistenceCheckRemoteOperation(pathToGrant, this, false);
         RemoteOperationResult result = operation.execute(mUploadClient);
-        if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND && mCurrentUpload.isRemoteFolderToBeCreated()) {
-            operation = new CreateFolderOperation( pathToGrant,
-                    true,
-                    mStorageManager    );
+        if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND
+                && mCurrentUpload.isRemoteFolderToBeCreated()) {
+            operation = new CreateFolderOperation(pathToGrant, true, mStorageManager);
             result = operation.execute(mUploadClient);
         }
         if (result.isSuccess()) {
@@ -567,7 +571,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         return result;
     }
 
-    
     private OCFile createLocalFolder(String remotePath) {
         String parentPath = new File(remotePath).getParent();
         parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : parentPath + OCFile.PATH_SEPARATOR;
@@ -584,7 +587,6 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         }
         return null;
     }
-    
 
     /**
      * Saves a OC File after a successful upload.
@@ -600,7 +602,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         long syncDate = System.currentTimeMillis();
         file.setLastSyncDateForData(syncDate);
 
-        // new PROPFIND to keep data consistent with server 
+        // new PROPFIND to keep data consistent with server
         // in theory, should return the same we already have
         ReadRemoteFileOperation operation = new ReadRemoteFileOperation(mCurrentUpload.getRemotePath());
         RemoteOperationResult result = operation.execute(mUploadClient);
@@ -608,7 +610,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
             updateOCFile(file, result.getData().get(0));
             file.setLastSyncDateForProperties(syncDate);
         }
-        
+
         // / maybe this would be better as part of UploadFileOperation... or
         // maybe all this method
         if (mCurrentUpload.wasRenamed()) {
@@ -631,7 +633,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         file.setMimetype(remoteFile.getMimeType());
         file.setModificationTimestamp(remoteFile.getModifiedTimestamp());
         file.setModificationTimestampAtLastSyncForData(remoteFile.getModifiedTimestamp());
-        // file.setEtag(remoteFile.getEtag());    // TODO Etag, where available
+        // file.setEtag(remoteFile.getEtag()); // TODO Etag, where available
     }
 
     private OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType,
@@ -671,30 +673,29 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      * 
      * @param upload Upload operation starting.
      */
-    @SuppressWarnings("deprecation")
     private void notifyUploadStart(UploadFileOperation upload) {
         // / create status notification with a progress bar
         mLastPercent = 0;
-        mNotification = new Notification(DisplayUtils.getSeasonalIconId(), getString(R.string.uploader_upload_in_progress_ticker),
-                System.currentTimeMillis());
-        mNotification.flags |= Notification.FLAG_ONGOING_EVENT;
-        mDefaultNotificationContentView = mNotification.contentView;
-        mNotification.contentView = new RemoteViews(getApplicationContext().getPackageName(),
-                R.layout.progressbar_layout);
-        mNotification.contentView.setProgressBar(R.id.status_progress, 100, 0, false);
-        mNotification.contentView.setTextViewText(R.id.status_text,
-                String.format(getString(R.string.uploader_upload_in_progress_content), 0, upload.getFileName()));
-        mNotification.contentView.setImageViewResource(R.id.status_icon, DisplayUtils.getSeasonalIconId());
-        
-        /// includes a pending intent in the notification showing the details view of the file
+        mNotificationBuilder = new NotificationCompat.Builder(this);
+        mNotificationBuilder
+                .setOngoing(true)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setTicker(getString(R.string.uploader_upload_in_progress_ticker))
+                .setContentTitle(getString(R.string.uploader_upload_in_progress_ticker))
+                .setProgress(100, 0, false)
+                .setContentText(
+                        String.format(getString(R.string.uploader_upload_in_progress_content), 0, upload.getFileName()));
+
+        // / includes a pending intent in the notification showing the details
+        // view of the file
         Intent showDetailsIntent = new Intent(this, FileDisplayActivity.class);
         showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, upload.getFile());
         showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, upload.getAccount());
         showDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        mNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(),
-                (int) System.currentTimeMillis(), showDetailsIntent, 0);
+        mNotificationBuilder.setContentIntent(PendingIntent.getActivity(getApplicationContext(),
+                (int) System.currentTimeMillis(), showDetailsIntent, 0));
 
-        mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotification);
+        mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
     }
 
     /**
@@ -702,13 +703,13 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
      */
     @Override
     public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer, String filePath) {
-        int percent = (int) (100.0 * ((double) totalTransferredSoFar) / ((double) totalToTransfer));
+        int percent = (int) (100.0 * (totalTransferredSoFar) / (totalToTransfer));
         if (percent != mLastPercent) {
-            mNotification.contentView.setProgressBar(R.id.status_progress, 100, percent, false);
+            mNotificationBuilder.setProgress(100, percent, false);
             String fileName = filePath.substring(filePath.lastIndexOf(FileUtils.PATH_SEPARATOR) + 1);
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
-            mNotification.contentView.setTextViewText(R.id.status_text, text);
-            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotification);
+            mNotificationBuilder.setContentText(text);
+            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
     }
@@ -728,34 +729,32 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         } else if (uploadResult.isSuccess()) {
             // / success -> silent update of progress notification to success
             // message
-            mNotification.flags ^= Notification.FLAG_ONGOING_EVENT; // remove
-                                                                    // the
-                                                                    // ongoing
-                                                                    // flag
-            mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-            mNotification.contentView = mDefaultNotificationContentView;
-            
-            /// includes a pending intent in the notification showing the details view of the file
+            mNotificationBuilder.setOngoing(false).setAutoCancel(true);
+            // / includes a pending intent in the notification showing the
+            // details view of the file
             Intent showDetailsIntent = null;
             if (PreviewImageFragment.canBePreviewed(upload.getFile())) {
-                showDetailsIntent = new Intent(this, PreviewImageActivity.class); 
+                showDetailsIntent = new Intent(this, PreviewImageActivity.class);
             } else {
-                showDetailsIntent = new Intent(this, FileDisplayActivity.class); 
+                showDetailsIntent = new Intent(this, FileDisplayActivity.class);
             }
             showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, upload.getFile());
             showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, upload.getAccount());
             showDetailsIntent.putExtra(FileActivity.EXTRA_FROM_NOTIFICATION, true);
             showDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            mNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(),
+
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(),
                     (int) System.currentTimeMillis(), showDetailsIntent, 0);
+            mNotificationBuilder
+                    .setContentIntent(contentIntent)
+                    .setTicker(getString(R.string.uploader_upload_succeeded_ticker))
+                    .setContentTitle(getString(R.string.uploader_upload_succeeded_ticker))
+                    .setContentText(
+                            String.format(getString(R.string.uploader_upload_succeeded_content_single),
+                                    upload.getFileName()));
 
-            mNotification.setLatestEventInfo(getApplicationContext(),
-                    getString(R.string.uploader_upload_succeeded_ticker),
-                    String.format(getString(R.string.uploader_upload_succeeded_content_single), upload.getFileName()),
-                    mNotification.contentIntent);
-
-            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotification); // NOT
-                                                                                                     // AN
+            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build()); // NOT
+            // AN
             DbHandler db = new DbHandler(this.getBaseContext());
             db.removeIUPendingFile(mCurrentUpload.getOriginalStoragePath());
             db.close();
@@ -764,49 +763,58 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
             // / fail -> explicit failure notification
             mNotificationManager.cancel(R.string.uploader_upload_in_progress_ticker);
-            Notification finalNotification = new Notification(DisplayUtils.getSeasonalIconId(),
-                    getString(R.string.uploader_upload_failed_ticker), System.currentTimeMillis());
-            finalNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+            NotificationCompat.Builder errorBuilder = new NotificationCompat.Builder(this);
+            errorBuilder.setSmallIcon(R.drawable.notification_icon)
+                    .setTicker(getString(R.string.uploader_upload_failed_ticker))
+                    .setContentTitle(getString(R.string.uploader_upload_failed_ticker)).setAutoCancel(true);
             String content = null;
-            
+
             boolean needsToUpdateCredentials = (uploadResult.getCode() == ResultCode.UNAUTHORIZED ||
-                    //(uploadResult.isTemporalRedirection() && uploadResult.isIdPRedirection() && 
-                    (uploadResult.isIdPRedirection() &&
-                            mUploadClient.getCredentials() == null));
-                            //MainApp.getAuthTokenTypeSamlSessionCookie().equals(mUploadClient.getAuthTokenType())));
+            // (uploadResult.isTemporalRedirection() &&
+            // uploadResult.isIdPRedirection() &&
+            (uploadResult.isIdPRedirection() && mUploadClient.getCredentials() == null));
+            // MainApp.getAuthTokenTypeSamlSessionCookie().equals(mUploadClient.getAuthTokenType())));
             if (needsToUpdateCredentials) {
                 // let the user update credentials with one click
                 Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
                 updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, upload.getAccount());
                 updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ENFORCED_UPDATE, true);
-                updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_TOKEN);
+                updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION,
+                        AuthenticatorActivity.ACTION_UPDATE_TOKEN);
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 updateAccountCredentials.addFlags(Intent.FLAG_FROM_BACKGROUND);
-                finalNotification.contentIntent = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), updateAccountCredentials, PendingIntent.FLAG_ONE_SHOT);
-                content =  String.format(getString(R.string.uploader_upload_failed_content_single), upload.getFileName());
-                finalNotification.setLatestEventInfo(getApplicationContext(),
-                        getString(R.string.uploader_upload_failed_ticker), content, finalNotification.contentIntent);
-                mUploadClient = null;   // grant that future retries on the same account will get the fresh credentials
+                errorBuilder.setContentIntent(PendingIntent.getActivity(this, (int) System.currentTimeMillis(),
+                        updateAccountCredentials, PendingIntent.FLAG_ONE_SHOT));
+                content = String
+                        .format(getString(R.string.uploader_upload_failed_content_single), upload.getFileName());
+
+                mUploadClient = null; // grant that future retries on the same
+                                      // account will get the fresh credentials
             } else {
                 // TODO put something smart in the contentIntent below
-            //    finalNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(), (int)System.currentTimeMillis(), new Intent(), 0);
-            //}
-            
+                // finalNotification.contentIntent =
+                // PendingIntent.getActivity(getApplicationContext(),
+                // (int)System.currentTimeMillis(), new Intent(), 0);
+                // }
+
                 if (uploadResult.getCode() == ResultCode.LOCAL_STORAGE_FULL
                         || uploadResult.getCode() == ResultCode.LOCAL_STORAGE_NOT_COPIED) {
-                    // TODO we need a class to provide error messages for the users
+                    // TODO we need a class to provide error messages for the
+                    // users
                     // from a RemoteOperationResult and a RemoteOperation
-                    content = String.format(getString(R.string.error__upload__local_file_not_copied), upload.getFileName(),
-                            getString(R.string.app_name));
+                    content = String.format(getString(R.string.error__upload__local_file_not_copied),
+                            upload.getFileName(), getString(R.string.app_name));
                 } else if (uploadResult.getCode() == ResultCode.QUOTA_EXCEEDED) {
                     content = getString(R.string.failed_upload_quota_exceeded_text);
                 } else {
-                    content = String
-                            .format(getString(R.string.uploader_upload_failed_content_single), upload.getFileName());
+                    content = String.format(getString(R.string.uploader_upload_failed_content_single),
+                            upload.getFileName());
                 }
 
-                // we add only for instant-uploads the InstantUploadActivity and the
+                // we add only for instant-uploads the InstantUploadActivity and
+                // the
                 // db entry
                 Intent detailUploadIntent = null;
                 if (upload.isInstant() && InstantUploadActivity.IS_ENABLED) {
@@ -816,9 +824,10 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                     detailUploadIntent = new Intent(this, FailedUploadActivity.class);
                     detailUploadIntent.putExtra(FailedUploadActivity.MESSAGE, content);
                 }
-                finalNotification.contentIntent = PendingIntent.getActivity(getApplicationContext(),
-                        (int) System.currentTimeMillis(), detailUploadIntent, PendingIntent.FLAG_UPDATE_CURRENT
-                        | PendingIntent.FLAG_ONE_SHOT);
+                errorBuilder.setContentIntent(
+                        PendingIntent.getActivity(getApplicationContext(), (int) System.currentTimeMillis(),
+                                detailUploadIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT))
+                        .setContentText(content);
 
                 if (upload.isInstant()) {
                     DbHandler db = null;
@@ -828,8 +837,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                         Log_OC.e(TAG, message + " Http-Code: " + uploadResult.getHttpCode());
                         if (uploadResult.getCode() == ResultCode.QUOTA_EXCEEDED) {
                             message = getString(R.string.failed_upload_quota_exceeded_text);
-                            if (db.updateFileState(upload.getOriginalStoragePath(), DbHandler.UPLOAD_STATUS_UPLOAD_FAILED,
-                                    message) == 0) {
+                            if (db.updateFileState(upload.getOriginalStoragePath(),
+                                    DbHandler.UPLOAD_STATUS_UPLOAD_FAILED, message) == 0) {
                                 db.putFileForLater(upload.getOriginalStoragePath(), upload.getAccount().name, message);
                             }
                         }
@@ -840,10 +849,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                     }
                 }
             }
-            finalNotification.setLatestEventInfo(getApplicationContext(),
-                    getString(R.string.uploader_upload_failed_ticker), content, finalNotification.contentIntent);
-            
-            mNotificationManager.notify(R.string.uploader_upload_failed_ticker, finalNotification);
+
+            mNotificationManager.notify(R.string.uploader_upload_failed_ticker, errorBuilder.build());
         }
 
     }
