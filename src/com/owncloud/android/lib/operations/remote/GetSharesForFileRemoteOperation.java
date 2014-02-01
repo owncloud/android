@@ -30,7 +30,6 @@ import java.util.ArrayList;
 
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.HttpStatus;
 
 import android.util.Log;
