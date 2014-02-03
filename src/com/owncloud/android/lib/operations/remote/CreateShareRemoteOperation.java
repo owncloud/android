@@ -129,14 +129,18 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 				InputStream is = new ByteArrayInputStream(response.getBytes());
 				ShareXMLParser xmlParser = new ShareXMLParser();
 				mShares = xmlParser.parseXMLResponse(is);
-				if (mShares != null) {
-					Log.d(TAG, "Shares: " + mShares.size());
-					result = new RemoteOperationResult(ResultCode.OK);
-					ArrayList<Object> sharesObjects = new ArrayList<Object>();
-					for (OCShare share: mShares) {
-						sharesObjects.add(share);
+				if (xmlParser.isSuccess()) {
+					if (mShares != null) {
+						Log.d(TAG, "Shares: " + mShares.size());
+						result = new RemoteOperationResult(ResultCode.OK);
+						ArrayList<Object> sharesObjects = new ArrayList<Object>();
+						for (OCShare share: mShares) {
+							sharesObjects.add(share);
+						}
+						result.setData(sharesObjects);
 					}
-					result.setData(sharesObjects);
+				} else if (xmlParser.isFilNotFound()){
+					result = new RemoteOperationResult(ResultCode.FILE_NOT_FOUND);
 				}
 
 			} else {

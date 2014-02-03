@@ -80,7 +80,10 @@ public class ShareXMLParser {
 	private static final String NODE_URL = "url";
 
 	private static final String TYPE_FOLDER = "folder";
-
+	
+	private static final int SUCCESS = 100;
+	private static final int FAILURE = 403;
+	private static final int FILE_NOT_FOUND = 404;
 
 	private String mStatus;
 	private int mStatusCode;
@@ -101,12 +104,21 @@ public class ShareXMLParser {
 	public void setStatusCode(int statusCode) {
 		this.mStatusCode = statusCode;
 	}
-
 	// Constructor
 	public ShareXMLParser() {
-
+		mStatusCode = 100;
 	}
 
+	public boolean isSuccess() {
+		return mStatusCode == SUCCESS;
+	}
+	public boolean isFailure() {
+		return mStatusCode == FAILURE;
+	}
+	public boolean isFilNotFound() {
+		return mStatusCode == FILE_NOT_FOUND;
+	}
+	
 	/**
 	 * Parse is as response of Share API
 	 * @param is
