@@ -1,17 +1,24 @@
-/* ownCloud Android client application
- *   Copyright (C) 2012-2013 ownCloud Inc.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/* ownCloud Android Library is available under MIT license
+ *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   
+ *   Permission is hereby granted, free of charge, to any person obtaining a copy
+ *   of this software and associated documentation files (the "Software"), to deal
+ *   in the Software without restriction, including without limitation the rights
+ *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *   copies of the Software, and to permit persons to whom the Software is
+ *   furnished to do so, subject to the following conditions:
+ *   
+ *   The above copyright notice and this permission notice shall be included in
+ *   all copies or substantial portions of the Software.
+ *   
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *   THE SOFTWARE.
  *
  */
 
@@ -26,6 +33,7 @@ import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.lib.operations.remote.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.operations.remote.CreateRemoteFolderOperation;
 import com.owncloud.android.lib.operations.remote.DownloadRemoteFileOperation;
+import com.owncloud.android.lib.operations.remote.GetRemoteSharesOperation;
 import com.owncloud.android.lib.operations.remote.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.operations.remote.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.operations.remote.RenameRemoteFileOperation;
@@ -46,11 +54,12 @@ import android.view.Menu;
 
 public class TestActivity extends Activity {
 	
-	// This account must exists on the simulator / device
-	private static final String mServerUri = "https://beta.owncloud.com/owncloud/remote.php/webdav";
-	private static final String mUser = "testandroid";
-	private static final String mPass = "testandroid";
-	private static final boolean mChunked = true;
+	// This account must exists on the server side
+	private String mServerUri;
+	private String mWebdavPath;
+	private String mUser;
+	private String mPass;
+	private boolean mChunked;
 	
 	//private Account mAccount = null;
 	private OwnCloudClient mClient;
@@ -59,9 +68,18 @@ public class TestActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test);
-    	Uri uri = Uri.parse(mServerUri);
+		
+		mServerUri = getString(R.string.server_base_url);
+		mWebdavPath = getString(R.string.webdav_path);
+		mUser = getString(R.string.username);
+		mPass = getString(R.string.password);
+		mChunked = getResources().getBoolean(R.bool.chunked);
+    	
+	    Uri uri = Uri.parse(mServerUri + mWebdavPath);
     	mClient = OwnCloudClientFactory.createOwnCloudClient(uri ,getApplicationContext(), true);
     	mClient.setBasicCredentials(mUser, mPass);
+    	mClient.setBaseUri(Uri.parse(mServerUri));
+    	
 	}
 
 	@Override
@@ -168,6 +186,14 @@ public class TestActivity extends Activity {
         }
 		
 		RemoteOperationResult result = uploadOperation.execute(mClient);
+		
+		return result;
+	}
+	
+	public RemoteOperationResult getShares(){
+		
+		GetRemoteSharesOperation getOperation = new GetRemoteSharesOperation();
+		RemoteOperationResult result = getOperation.execute(mClient);
 		
 		return result;
 	}
