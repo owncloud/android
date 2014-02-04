@@ -127,4 +127,6 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 		RemoteOperationResult result = mActivity.downloadFile(remoteFile, temporalFolder);
 		assertFalse(result.isSuccess());
 	}
+	
+	
 }
