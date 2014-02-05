@@ -115,7 +115,7 @@ public class ShareXMLParser {
 	public boolean isFailure() {
 		return mStatusCode == FAILURE;
 	}
-	public boolean isFilNotFound() {
+	public boolean isFileNotFound() {
 		return mStatusCode == FILE_NOT_FOUND;
 	}
 	
