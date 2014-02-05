@@ -94,13 +94,9 @@ public class GetSharesForFileRemoteOperation extends RemoteOperation {
 
 			// Add Parameters to Get Method
 			get.setQueryString(new NameValuePair[] { 
-				    new NameValuePair(PARAM_PATH, mPath) 
-				}); 
-			get.setQueryString(new NameValuePair[] { 
-				    new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)) 
-				}); 
-			get.setQueryString(new NameValuePair[] { 
-				    new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles)) 
+				    new NameValuePair(PARAM_PATH, mPath),
+				    new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)),
+				    new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
 				}); 
 
 			status = client.executeMethod(get);
