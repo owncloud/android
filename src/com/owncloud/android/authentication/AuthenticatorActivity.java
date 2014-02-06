@@ -36,6 +36,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,13 +59,15 @@ import com.owncloud.android.lib.accounts.OwnCloudAccount;
 import com.owncloud.android.lib.network.OwnCloudClientFactory;
 import com.owncloud.android.lib.network.OwnCloudClient;
 import com.owncloud.android.operations.OAuth2GetAccessToken;
+
 import com.owncloud.android.lib.operations.common.OnRemoteOperationListener;
-import com.owncloud.android.operations.OwnCloudServerCheckOperation;
+import com.owncloud.android.lib.operations.remote.OwnCloudServerCheckOperation;
 import com.owncloud.android.lib.operations.common.RemoteOperation;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.operations.remote.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.operations.remote.GetUserNameRemoteOperation;
+
 import com.owncloud.android.ui.dialog.SamlWebViewDialog;
 import com.owncloud.android.ui.dialog.SslValidatorDialog;
 import com.owncloud.android.ui.dialog.SslValidatorDialog.OnSslValidatorListener;
@@ -103,6 +106,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
     private static final String KEY_AUTH_STATUS_TEXT = "AUTH_STATUS_TEXT";
     private static final String KEY_AUTH_STATUS_ICON = "AUTH_STATUS_ICON";
     private static final String KEY_REFRESH_BUTTON_ENABLED = "KEY_REFRESH_BUTTON_ENABLED";
+    private static final String KEY_IS_SHARED_SUPPORTED = "KEY_IS_SHARE_SUPPORTED";
 
     private static final String AUTH_ON = "on";
     private static final String AUTH_OFF = "off";
@@ -120,6 +124,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
     
     private String mHostBaseUrl;
     private OwnCloudVersion mDiscoveredVersion;
+    private boolean mIsSharedSupported;
 
     private String mAuthMessageText;
     private int mAuthMessageVisibility, mServerStatusText, mServerStatusIcon;
@@ -230,6 +235,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             mServerIsChecked = false;
             mIsSslConn = false;
             mAuthStatusText = mAuthStatusIcon = 0;
+            mIsSharedSupported = false;
 
             /// retrieve extras from intent
             mAccount = getIntent().getExtras().getParcelable(EXTRA_ACCOUNT);
@@ -242,6 +248,8 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
                 mHostUrlInput.setText(mHostBaseUrl);
                 String userName = mAccount.name.substring(0, mAccount.name.lastIndexOf('@'));
                 mUsernameInput.setText(userName);
+                mIsSharedSupported = Boolean.getBoolean(mAccountMgr.getUserData(mAccount, OwnCloudAccount.Constants.KEY_SUPPORTS_SHARE_API));
+                
             }
             initAuthorizationMethod();  // checks intent and setup.xml to determine mCurrentAuthorizationMethod
             mJustCreated = true;
@@ -268,6 +276,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             
             /// server data
             String ocVersion = savedInstanceState.getString(KEY_OC_VERSION);
+            mIsSharedSupported = savedInstanceState.getBoolean(KEY_IS_SHARED_SUPPORTED, false);
             if (ocVersion != null) {
                 mDiscoveredVersion = new OwnCloudVersion(ocVersion);
             }
@@ -447,6 +456,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             outState.putString(KEY_OC_VERSION, mDiscoveredVersion.toString());
         }
         outState.putString(KEY_HOST_URL_TEXT, mHostBaseUrl);
+        outState.putBoolean(KEY_IS_SHARED_SUPPORTED, mIsSharedSupported);
 
         /// account data, if updating
         if (mAccount != null) {
@@ -581,6 +591,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
         
         mServerIsValid = false;
         mServerIsChecked = false;
+        mIsSharedSupported = false;
         mOkButton.setEnabled(false);
         mDiscoveredVersion = null;
         hideRefreshButton();
@@ -822,6 +833,10 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             
             if (success)
                 finish();
+        } else {
+            updateAuthStatusIconAndText(result);
+            showAuthStatus();
+            Log_OC.e(TAG, "Access to user name failed: " + result.getLogMessage());
         }
         
     }
@@ -890,6 +905,9 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
 
             /// allow or not the user try to access the server
             mOkButton.setEnabled(mServerIsValid);
+            
+            /// retrieve if is supported the Share API
+            mIsSharedSupported = operation.isSharedSupported();
 
         }   // else nothing ; only the last check operation is considered; 
         // multiple can be triggered if the user amends a URL before a previous check can be triggered
@@ -1283,6 +1301,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
             /// add user data to the new account; TODO probably can be done in the last parameter addAccountExplicitly, or in KEY_USERDATA
             mAccountMgr.setUserData(mAccount, OwnCloudAccount.Constants.KEY_OC_VERSION,    mDiscoveredVersion.toString());
             mAccountMgr.setUserData(mAccount, OwnCloudAccount.Constants.KEY_OC_BASE_URL,   mHostBaseUrl);
+            mAccountMgr.setUserData(mAccount, OwnCloudAccount.Constants.KEY_SUPPORTS_SHARE_API, Boolean.toString(mIsSharedSupported));
             if (isSaml) {
                 mAccountMgr.setUserData(mAccount, OwnCloudAccount.Constants.KEY_SUPPORTS_SAML_WEB_SSO, "TRUE"); 
             } else if (isOAuth) {
@@ -1591,7 +1610,7 @@ implements  OnRemoteOperationListener, OnSslValidatorListener, OnFocusChangeList
     }
 
 
-    public void onSamlDialogSuccess(String sessionCookie){
+    public void onSamlDialogSuccess(String sessionCookie) {
         mAuthToken = sessionCookie;
         
         if (sessionCookie != null && sessionCookie.length() > 0) {
