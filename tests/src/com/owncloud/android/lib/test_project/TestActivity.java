@@ -40,6 +40,7 @@ import com.owncloud.android.lib.operations.remote.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.operations.remote.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.operations.remote.RenameRemoteFileOperation;
 import com.owncloud.android.lib.operations.remote.UploadRemoteFileOperation;
+import com.owncloud.android.lib.operations.remote.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.test_project.R;
 
 import android.net.Uri;
@@ -231,5 +232,20 @@ public class TestActivity extends Activity {
 		RemoteOperationResult result = createOperation.execute(mClient);
 		
 		return result;
+	}
+	
+	
+	/**
+	 * Access to the library method to Remove Share
+	 * 
+	 * @param idShare	Share ID
+	 */
+	
+	public RemoteOperationResult removeShare(int idShare) {
+		RemoveRemoteShareOperation removeOperation = new RemoveRemoteShareOperation(idShare);
+		RemoteOperationResult result = removeOperation.execute(mClient);
+		
+		return result;
+		
 	}
 }
