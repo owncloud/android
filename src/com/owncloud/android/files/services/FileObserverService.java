@@ -144,8 +144,10 @@ public class FileObserverService extends Service {
         Account[] accounts = acm.getAccounts();
         do {
             Account account = null;
+            final String accountName = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER));
+            final String accountType = MainApp.getAccountType();
             for (Account a : accounts)
-                if (a.name.equals(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)))) {
+                if (accountName.equals(a.name) && accountType.equals(a.type)) {
                     account = a;
                     break;
                 }
