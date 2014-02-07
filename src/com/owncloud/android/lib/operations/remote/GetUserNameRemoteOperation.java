@@ -80,10 +80,10 @@ public class GetUserNameRemoteOperation extends RemoteOperation {
         
         //Get the user
         try {
-            //GetMethod get = new GetMethod(client.getWebdavUri() + OCS_ROUTE);
-            get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
-            Log.e(TAG, "Getting OC user information from " + client.getBaseUri() + OCS_ROUTE);
-            Log.e(TAG, "Getting OC user information from " + client.getWebdavUri() + OCS_ROUTE);
+            get = new GetMethod(client.getWebdavUri() + OCS_ROUTE);
+            //get = new GetMethod(client.getBaseUri() + OCS_ROUTE);	// need to fix the semantics of getBaseUri and getWebdavUri
+            //Log.e(TAG, "Getting OC user information from " + client.getBaseUri() + OCS_ROUTE);
+            //Log.e(TAG, "Getting OC user information from " + client.getWebdavUri() + OCS_ROUTE);
             // Add the Header
             get.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
 			status = client.executeMethod(get);
