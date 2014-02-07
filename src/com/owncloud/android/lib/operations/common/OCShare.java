@@ -24,6 +24,8 @@
 
 package com.owncloud.android.lib.operations.common;
 
+import java.io.Serializable;
+
 import com.owncloud.android.lib.utils.FileUtils;
 
 import android.os.Parcel;
@@ -37,9 +39,12 @@ import android.util.Log;
  * @author masensio
  *
  */
-public class OCShare implements Parcelable{
+public class OCShare implements Parcelable, Serializable {
 	
-    private static final String TAG = OCShare.class.getSimpleName();
+	/** Generated - should be refreshed every time the class changes!! */
+	private static final long serialVersionUID = 4124975224281327921L;
+
+	private static final String TAG = OCShare.class.getSimpleName();
     
     private long mId;
     private long mFileSource;
@@ -52,7 +57,7 @@ public class OCShare implements Parcelable{
     private long mExpirationDate;
     private String mToken;
     private String mSharedWithDisplayName;
-    private boolean mIsDirectory;
+    private boolean mIsFolder;
     private long mUserId;
     private long mIdRemoteShared;
     private String mShareLink;
@@ -86,7 +91,7 @@ public class OCShare implements Parcelable{
         mExpirationDate = 0;
         mToken = null;
         mSharedWithDisplayName = null;
-        mIsDirectory = false;
+        mIsFolder = false;
         mUserId = -1;
         mIdRemoteShared = -1;
         mShareLink = null;
@@ -182,12 +187,12 @@ public class OCShare implements Parcelable{
         this.mSharedWithDisplayName = sharedWithDisplayName;
     }
 
-    public boolean isDirectory() {
-        return mIsDirectory;
+    public boolean isFolder() {
+        return mIsFolder;
     }
 
-    public void setIsDirectory(boolean isDirectory) {
-        this.mIsDirectory = isDirectory;
+    public void setIsFolder(boolean isFolder) {
+        this.mIsFolder = isFolder;
     }
 
     public long getUserId() {
@@ -255,7 +260,7 @@ public class OCShare implements Parcelable{
         mExpirationDate = source.readLong();
         mToken = source.readString();
         mSharedWithDisplayName = source.readString();
-        mIsDirectory = source.readInt() == 0;
+        mIsFolder = source.readInt() == 0;
         mUserId = source.readLong();
         mIdRemoteShared = source.readLong();
         mShareLink = source.readString();
@@ -281,7 +286,7 @@ public class OCShare implements Parcelable{
         dest.writeLong(mExpirationDate);
         dest.writeString(mToken);
         dest.writeString(mSharedWithDisplayName);
-        dest.writeInt(mIsDirectory ? 1 : 0);
+        dest.writeInt(mIsFolder ? 1 : 0);
         dest.writeLong(mUserId);
         dest.writeLong(mIdRemoteShared);
         dest.writeString(mShareLink);
