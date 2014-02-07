@@ -39,14 +39,13 @@ import com.owncloud.android.lib.operations.common.OCShare;
 import com.owncloud.android.lib.operations.common.ShareType;
 
 /**
- * Parser for Share API Response
+ * Parser for Share API Response: GetSharesForFile Operation
  * @author masensio
  *
  */
+public class GetSharesForFileXMLParser {
 
-public class ShareXMLParser {
-
-	private static final String TAG = ShareXMLParser.class.getSimpleName();
+	private static final String TAG = GetSharesForFileXMLParser.class.getSimpleName();
 
 	// No namespaces
 	private static final String ns = null;
@@ -77,13 +76,9 @@ public class ShareXMLParser {
 	private static final String NODE_MAIL_SEND = "mail_send";
 	private static final String NODE_SHARE_WITH_DISPLAY_NAME = "share_with_display_name";
 	
-	private static final String NODE_URL = "url";
 
 	private static final String TYPE_FOLDER = "folder";
-	
-	private static final int SUCCESS = 100;
-	private static final int FAILURE = 403;
-	private static final int FILE_NOT_FOUND = 404;
+
 
 	private String mStatus;
 	private int mStatusCode;
@@ -104,21 +99,12 @@ public class ShareXMLParser {
 	public void setStatusCode(int statusCode) {
 		this.mStatusCode = statusCode;
 	}
+
 	// Constructor
-	public ShareXMLParser() {
-		mStatusCode = 100;
+	public GetSharesForFileXMLParser() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public boolean isSuccess() {
-		return mStatusCode == SUCCESS;
-	}
-	public boolean isFailure() {
-		return mStatusCode == FAILURE;
-	}
-	public boolean isFileNotFound() {
-		return mStatusCode == FILE_NOT_FOUND;
-	}
-	
 	/**
 	 * Parse is as response of Share API
 	 * @param is
@@ -171,7 +157,6 @@ public class ShareXMLParser {
 		}
 		return shares;
 
-
 	}
 
 	/**
@@ -211,7 +196,6 @@ public class ShareXMLParser {
 	 */
 	private ArrayList<OCShare> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
 		ArrayList<OCShare> shares = new ArrayList<OCShare>();
-		OCShare share = null;
 
 		parser.require(XmlPullParser.START_TAG, ns, NODE_DATA);		
 		Log.d(TAG, "---- NODE DATA ---");
@@ -222,30 +206,12 @@ public class ShareXMLParser {
 			String name = parser.getName();
 			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
 				shares.add(readElement(parser));
-			}  else if (name.equalsIgnoreCase(NODE_ID)) {// Parse Create XML Response
-				share = new OCShare();
-				String value = readNode(parser, NODE_ID);
-				share.setIdRemoteShared(Integer.parseInt(value));
-
-			} else if (name.equalsIgnoreCase(NODE_URL)) {
-				share.setShareType(ShareType.PUBLIC_LINK);
-				String value = readNode(parser, NODE_URL);
-				share.setShareLink(value);
-
-			}  else if (name.equalsIgnoreCase(NODE_TOKEN)) {
-				share.setToken(readNode(parser, NODE_TOKEN));
-
 			} else {
 				skip(parser);
 				
 			} 
 		}
 		
-		if (share != null) {
-			shares.add(share);
-		}
-			
-
 		return shares;
 
 	}
@@ -266,17 +232,19 @@ public class ShareXMLParser {
 		Log.d(TAG, "---- NODE ELEMENT ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
-	            continue;
-	        }
+				continue;
+			}
 			
 			String name = parser.getName();
-
-			if (name.equalsIgnoreCase(NODE_ID)) {
+			
+			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
+				share = readElement(parser);
+				
+			} else if (name.equalsIgnoreCase(NODE_ID)) {
 				share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_TYPE)) {
 				share.setIsFolder(readNode(parser, NODE_ITEM_TYPE).equalsIgnoreCase(TYPE_FOLDER));
-				fixPathForFolder(share);
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_SOURCE)) {
 				share.setItemSource(Long.parseLong(readNode(parser, NODE_ITEM_SOURCE)));
@@ -296,7 +264,6 @@ public class ShareXMLParser {
 
 			} else if (name.equalsIgnoreCase(NODE_PATH)) {
 				share.setPath(readNode(parser, NODE_PATH));
-				fixPathForFolder(share);
 
 			} else if (name.equalsIgnoreCase(NODE_PERMISSIONS)) {
 				share.setPermissions(Integer.parseInt(readNode(parser, NODE_PERMISSIONS)));
@@ -327,12 +294,6 @@ public class ShareXMLParser {
 		}		
 
 		return share;
-	}
-
-	private void fixPathForFolder(OCShare share) {
-		if (share.isFolder() && share.getPath() != null && share.getPath().length() > 0 && !share.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {
-			share.setPath(share.getPath() + FileUtils.PATH_SEPARATOR);
-		}
 	}
 
 	/**

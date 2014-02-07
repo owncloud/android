@@ -28,35 +28,56 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 
+import android.util.Log;
+
 import com.owncloud.android.lib.network.OwnCloudClient;
+import com.owncloud.android.lib.operations.common.OCShare;
 import com.owncloud.android.lib.operations.common.RemoteOperation;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.operations.common.OCShare;
 import com.owncloud.android.lib.utils.ShareUtils;
 import com.owncloud.android.lib.utils.ShareXMLParser;
 
-import android.util.Log;
-
-
-/** 
- * Get the data from the server to know shares
+/**
+ * Provide a list shares for a specific file.  
+ * The input is the full path of the desired file.  
+ * The output is a list of everyone who has the file shared with them.
  * 
  * @author masensio
  *
  */
 
-public class GetRemoteSharesOperation extends RemoteOperation {
+public class GetSharesForFileRemoteOperation extends RemoteOperation {
 
-	private static final String TAG = GetRemoteSharesOperation.class.getSimpleName();
-
-	private ArrayList<OCShare> mShares;  // List of shares for result
-
+	private static final String TAG = GetSharesForFileRemoteOperation.class.getSimpleName();
 	
-	public GetRemoteSharesOperation() {
+	private static final String PARAM_PATH = "path";
+	private static final String PARAM_RESHARES = "reshares";
+	private static final String PARAM_SUBFILES = "subfiles";
+
+	private ArrayList<OCShare> mShares;  // List of shares for result, one share in this case
+	
+	private String mPath;
+	private boolean mReshares;
+	private boolean mSubfiles;
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param path		Path to file or folder
+	 * @param reshares	If set to ‘false’ (default), only shares from the current user are returned
+	 * 					If set to ‘true’, all shares from the given file are returned
+	 * @param subfiles	If set to ‘false’ (default), lists only the folder being shared
+	 * 					If set to ‘true’, all shared files within the folder are returned.
+	 */
+	public GetSharesForFileRemoteOperation(String path, boolean reshares, boolean subfiles) {
+		mPath = path;
+		mReshares = reshares;
+		mSubfiles = subfiles;
 	}
 
 	@Override
@@ -64,19 +85,28 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 		RemoteOperationResult result = null;
 		int status = -1;
 
-		// Get Method        
 		GetMethod get = null;
 
-		// Get the response
-		try{
+		try {
+			// Get Method
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
 			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
-			status = client.executeMethod(get);
-			if(isSuccess(status)) {
-				Log.d(TAG, "Obtain RESPONSE");
-				String response = get.getResponseBodyAsString();
-				Log.d(TAG, response);
 
+			// Add Parameters to Get Method
+			get.setQueryString(new NameValuePair[] { 
+				    new NameValuePair(PARAM_PATH, mPath),
+				    new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)),
+				    new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
+				}); 
+
+			status = client.executeMethod(get);
+
+			if(isSuccess(status)) {
+				String response = get.getResponseBodyAsString();
+				Log.d(TAG, "Successful response: " + response);
+
+				result = new RemoteOperationResult(ResultCode.OK);
+				
 				// Parse xml response --> obtain the response in ShareFiles ArrayList
 				// convert String into InputStream
 				InputStream is = new ByteArrayInputStream(response.getBytes());
@@ -91,13 +121,14 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 					}
 					result.setData(sharesObjects);
 				}
+
 			} else {
 				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
 			}
 			
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			Log.e(TAG, "Exception while getting remote shares ", e);
+			Log.e(TAG, "Exception while Creating New Share", e);
 			
 		} finally {
 			if (get != null) {
@@ -110,6 +141,5 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 	private boolean isSuccess(int status) {
 		return (status == HttpStatus.SC_OK);
 	}
-
 
 }
