@@ -289,7 +289,12 @@ public class PreviewMediaFragment extends FileFragment implements
         toHide.add(R.id.action_download_file);
         toHide.add(R.id.action_sync_file);
         toHide.add(R.id.action_rename_file);    // by now
-
+        
+        // Options shareLink
+        if (!getFile().isShareByLink()) {
+            toHide.add(R.id.action_unshare_file);
+        }
+        
         for (int i : toHide) {
             item = menu.findItem(i);
             if (item != null) {
@@ -300,6 +305,22 @@ public class PreviewMediaFragment extends FileFragment implements
         
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        
+        // Options shareLink
+        if (!getFile().isShareByLink()) {
+            MenuItem item = menu.findItem(R.id.action_unshare_file);
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+    }
+    
     
     /**
      * {@inheritDoc}
@@ -307,6 +328,14 @@ public class PreviewMediaFragment extends FileFragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_share_file: {
+                shareFileWithLink();
+                return true;
+            }
+            case R.id.action_unshare_file: {
+                unshareFileWithLink();
+                return true;
+            }
             case R.id.action_open_file_with: {
                 openFile();
                 return true;
@@ -324,8 +353,23 @@ public class PreviewMediaFragment extends FileFragment implements
                 return false;
         }
     }
-
     
+
+
+    private void unshareFileWithLink() {
+        stopPreview(false);
+        FileActivity activity = (FileActivity)((FileFragment.ContainerActivity)getActivity());
+        activity.getFileOperationsHelper().unshareFileWithLink(getFile(), activity);
+    }
+    
+    private void shareFileWithLink() {
+        stopPreview(false);
+        FileActivity activity = (FileActivity)((FileFragment.ContainerActivity)getActivity());
+        activity.getFileOperationsHelper().shareFileWithLink(getFile(), activity);
+        
+    }
+
+
     private void seeDetails() {
         stopPreview(false);
         ((FileFragment.ContainerActivity)getActivity()).showDetails(getFile());        

@@ -57,6 +57,7 @@ import com.owncloud.android.lib.operations.common.OnRemoteOperationListener;
 import com.owncloud.android.lib.operations.common.RemoteOperation;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult;
 import com.owncloud.android.operations.RemoveFileOperation;
+import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.fragment.ConfirmationDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.Log_OC;
@@ -229,6 +230,11 @@ public class PreviewImageFragment extends FileFragment implements   OnRemoteOper
         toHide.add(R.id.action_cancel_upload);
         toHide.add(R.id.action_download_file);
         toHide.add(R.id.action_rename_file);    // by now
+        
+        // Options shareLink
+        if (!getFile().isShareByLink()) {
+            toHide.add(R.id.action_unshare_file);
+        }
 
         for (int i : toHide) {
             item = menu.findItem(i);
@@ -240,6 +246,32 @@ public class PreviewImageFragment extends FileFragment implements   OnRemoteOper
         
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        
+        // Trick to update the file
+        OCFile file = ((PreviewImageActivity) getActivity()).getStorageManager().getFileByPath(getFile().getRemotePath()); 
+        if (file!= null) {
+            setFile(file);
+        }
+        
+        MenuItem item = menu.findItem(R.id.action_unshare_file);
+        // Options shareLink
+        if (!getFile().isShareByLink()) {            
+            item.setVisible(false);
+            item.setEnabled(false);
+        } else {
+            item.setVisible(true);
+            item.setEnabled(true);
+        }
+            
+    }
+
+    
     
     /**
      * {@inheritDoc}
@@ -247,6 +279,16 @@ public class PreviewImageFragment extends FileFragment implements   OnRemoteOper
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_share_file: {
+                FileActivity act = (FileActivity)getSherlockActivity();
+                act.getFileOperationsHelper().shareFileWithLink(getFile(), act);
+                return true;
+            }
+            case R.id.action_unshare_file: {
+                FileActivity act = (FileActivity)getSherlockActivity();
+                act.getFileOperationsHelper().unshareFileWithLink(getFile(), act);
+                return true;
+            }
             case R.id.action_open_file_with: {
                 openFile();
                 return true;
@@ -266,6 +308,7 @@ public class PreviewImageFragment extends FileFragment implements   OnRemoteOper
     }
 
     
+
     private void seeDetails() {
         ((FileFragment.ContainerActivity)getActivity()).showDetails(getFile());        
     }
