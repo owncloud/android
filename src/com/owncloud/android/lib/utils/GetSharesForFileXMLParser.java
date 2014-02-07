@@ -244,7 +244,7 @@ public class GetSharesForFileXMLParser {
 				share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_TYPE)) {
-				share.setIsDirectory(readNode(parser, NODE_ITEM_TYPE).equalsIgnoreCase(TYPE_FOLDER));
+				share.setIsFolder(readNode(parser, NODE_ITEM_TYPE).equalsIgnoreCase(TYPE_FOLDER));
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_SOURCE)) {
 				share.setItemSource(Long.parseLong(readNode(parser, NODE_ITEM_SOURCE)));

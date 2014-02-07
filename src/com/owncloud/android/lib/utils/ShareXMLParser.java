@@ -275,7 +275,8 @@ public class ShareXMLParser {
 				share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_TYPE)) {
-				share.setIsDirectory(readNode(parser, NODE_ITEM_TYPE).equalsIgnoreCase(TYPE_FOLDER));
+				share.setIsFolder(readNode(parser, NODE_ITEM_TYPE).equalsIgnoreCase(TYPE_FOLDER));
+				fixPathForFolder(share);
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_SOURCE)) {
 				share.setItemSource(Long.parseLong(readNode(parser, NODE_ITEM_SOURCE)));
@@ -295,6 +296,7 @@ public class ShareXMLParser {
 
 			} else if (name.equalsIgnoreCase(NODE_PATH)) {
 				share.setPath(readNode(parser, NODE_PATH));
+				fixPathForFolder(share);
 
 			} else if (name.equalsIgnoreCase(NODE_PERMISSIONS)) {
 				share.setPermissions(Integer.parseInt(readNode(parser, NODE_PERMISSIONS)));
@@ -325,6 +327,12 @@ public class ShareXMLParser {
 		}		
 
 		return share;
+	}
+
+	private void fixPathForFolder(OCShare share) {
+		if (share.isFolder() && share.getPath() != null && share.getPath().length() > 0 && !share.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {
+			share.setPath(share.getPath() + FileUtils.PATH_SEPARATOR);
+		}
 	}
 
 	/**
