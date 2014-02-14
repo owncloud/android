@@ -1,17 +1,24 @@
-/* ownCloud Android client application
- *   Copyright (C) 2012-2013 ownCloud Inc.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/* ownCloud Android Library is available under MIT license
+ *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   
+ *   Permission is hereby granted, free of charge, to any person obtaining a copy
+ *   of this software and associated documentation files (the "Software"), to deal
+ *   in the Software without restriction, including without limitation the rights
+ *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *   copies of the Software, and to permit persons to whom the Software is
+ *   furnished to do so, subject to the following conditions:
+ *   
+ *   The above copyright notice and this permission notice shall be included in
+ *   all copies or substantial portions of the Software.
+ *   
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *   THE SOFTWARE.
  *
  */
 
@@ -23,13 +30,17 @@ import com.owncloud.android.lib.network.OwnCloudClientFactory;
 import com.owncloud.android.lib.network.OwnCloudClient;
 import com.owncloud.android.lib.operations.common.RemoteFile;
 import com.owncloud.android.lib.operations.common.RemoteOperationResult;
+import com.owncloud.android.lib.operations.common.ShareType;
 import com.owncloud.android.lib.operations.remote.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.operations.remote.CreateRemoteFolderOperation;
+import com.owncloud.android.lib.operations.remote.CreateShareRemoteOperation;
 import com.owncloud.android.lib.operations.remote.DownloadRemoteFileOperation;
+import com.owncloud.android.lib.operations.remote.GetRemoteSharesOperation;
 import com.owncloud.android.lib.operations.remote.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.operations.remote.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.operations.remote.RenameRemoteFileOperation;
 import com.owncloud.android.lib.operations.remote.UploadRemoteFileOperation;
+import com.owncloud.android.lib.operations.remote.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.test_project.R;
 
 import android.net.Uri;
@@ -46,11 +57,12 @@ import android.view.Menu;
 
 public class TestActivity extends Activity {
 	
-	// This account must exists on the simulator / device
-	private static final String mServerUri = "https://beta.owncloud.com/owncloud/remote.php/webdav";
-	private static final String mUser = "testandroid";
-	private static final String mPass = "testandroid";
-	private static final boolean mChunked = true;
+	// This account must exists on the server side
+	private String mServerUri;
+	private String mWebdavPath;
+	private String mUser;
+	private String mPass;
+	private boolean mChunked;
 	
 	//private Account mAccount = null;
 	private OwnCloudClient mClient;
@@ -59,9 +71,18 @@ public class TestActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test);
-    	Uri uri = Uri.parse(mServerUri);
+		
+		mServerUri = getString(R.string.server_base_url);
+		mWebdavPath = getString(R.string.webdav_path);
+		mUser = getString(R.string.username);
+		mPass = getString(R.string.password);
+		mChunked = getResources().getBoolean(R.bool.chunked);
+    	
+	    Uri uri = Uri.parse(mServerUri + mWebdavPath);
     	mClient = OwnCloudClientFactory.createOwnCloudClient(uri ,getApplicationContext(), true);
     	mClient.setBasicCredentials(mUser, mPass);
+    	mClient.setBaseUri(Uri.parse(mServerUri));
+    	
 	}
 
 	@Override
@@ -170,5 +191,61 @@ public class TestActivity extends Activity {
 		RemoteOperationResult result = uploadOperation.execute(mClient);
 		
 		return result;
+	}
+	
+	
+	/** Access to the library method to Get Shares 
+	 * 
+	 * @return
+	 */
+	public RemoteOperationResult getShares(){
+		
+		GetRemoteSharesOperation getOperation = new GetRemoteSharesOperation();
+		RemoteOperationResult result = getOperation.execute(mClient);
+		
+		return result;
+	}
+	
+	/** Access to the library method to Create Share
+	 * @param path			Full path of the file/folder being shared. Mandatory argument
+	 * @param shareType		‘0’ = user, ‘1’ = group, ‘3’ = Public link. Mandatory argument
+	 * @param shareWith		User/group ID with who the file should be shared.  This is mandatory for shareType of 0 or 1
+	 * @param publicUpload	If ‘false’ (default) public cannot upload to a public shared folder. 
+	 * 						If ‘true’ public can upload to a shared folder. Only available for public link shares
+	 * @param password		Password to protect a public link share. Only available for public link shares
+	 * @param permissions	1 - Read only – Default for “public” shares
+	 * 						2 - Update
+	 * 						4 - Create
+	 * 						8 - Delete
+	 * 						16- Re-share
+	 * 						31- All above – Default for “private” shares
+	 * 						For user or group shares.
+	 * 						To obtain combinations, add the desired values together.  
+	 * 						For instance, for “Re-Share”, “delete”, “read”, “update”, add 16+8+2+1 = 27.
+	 * 
+	 * @return
+	 */
+	public RemoteOperationResult createShare(String path, ShareType shareType, String shareWith, boolean publicUpload, 
+			String password, int permissions){
+		
+		CreateShareRemoteOperation createOperation = new CreateShareRemoteOperation(path, shareType, shareWith, publicUpload, password, permissions);
+		RemoteOperationResult result = createOperation.execute(mClient);
+		
+		return result;
+	}
+	
+	
+	/**
+	 * Access to the library method to Remove Share
+	 * 
+	 * @param idShare	Share ID
+	 */
+	
+	public RemoteOperationResult removeShare(int idShare) {
+		RemoveRemoteShareOperation removeOperation = new RemoveRemoteShareOperation(idShare);
+		RemoteOperationResult result = removeOperation.execute(mClient);
+		
+		return result;
+		
 	}
 }

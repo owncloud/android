@@ -143,7 +143,7 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 						result.setData(sharesObjects);
 					}
 				} else if (xmlParser.isFileNotFound()){
-					result = new RemoteOperationResult(ResultCode.FILE_NOT_FOUND);
+					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
 					
 				} else {
 					result = new RemoteOperationResult(false, status, post.getResponseHeaders());	
