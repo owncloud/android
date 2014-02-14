@@ -48,9 +48,9 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
  *
  */
 
-public class GetSharesForFileRemoteOperation extends RemoteOperation {
+public class GetRemoteSharesForFileOperation extends RemoteOperation {
 
-	private static final String TAG = GetSharesForFileRemoteOperation.class.getSimpleName();
+	private static final String TAG = GetRemoteSharesForFileOperation.class.getSimpleName();
 	
 	private static final String PARAM_PATH = "path";
 	private static final String PARAM_RESHARES = "reshares";
@@ -71,7 +71,7 @@ public class GetSharesForFileRemoteOperation extends RemoteOperation {
 	 * @param subfiles	If set to ‘false’ (default), lists only the folder being shared
 	 * 					If set to ‘true’, all shared files within the folder are returned.
 	 */
-	public GetSharesForFileRemoteOperation(String path, boolean reshares, boolean subfiles) {
+	public GetRemoteSharesForFileOperation(String path, boolean reshares, boolean subfiles) {
 		mPath = path;
 		mReshares = reshares;
 		mSubfiles = subfiles;

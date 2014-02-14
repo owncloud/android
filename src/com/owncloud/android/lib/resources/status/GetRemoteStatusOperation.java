@@ -48,12 +48,12 @@ import android.util.Log;
  *
  */
 
-public class OwnCloudServerCheckOperation extends RemoteOperation {
+public class GetRemoteStatusOperation extends RemoteOperation {
     
     /** Maximum time to wait for a response from the server when the connection is being tested, in MILLISECONDs.  */
     public static final int TRY_CONNECTION_TIMEOUT = 5000;
     
-    private static final String TAG = OwnCloudServerCheckOperation.class.getSimpleName();
+    private static final String TAG = GetRemoteStatusOperation.class.getSimpleName();
     
     private static final String OCVERSION_SHARED_SUPPORTED = "5.0.13";
     
@@ -67,7 +67,7 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
     private OwnCloudVersion mOCVersion;
     private OwnCloudVersion mOCVersionString;
 
-    public OwnCloudServerCheckOperation(String url, Context context) {
+    public GetRemoteStatusOperation(String url, Context context) {
         mUrl = url;
         mContext = context;
         mOCVersion = null;

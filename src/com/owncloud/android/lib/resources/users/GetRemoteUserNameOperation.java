@@ -44,9 +44,9 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
  * 		email
  */
 
-public class GetUserNameRemoteOperation extends RemoteOperation {
+public class GetRemoteUserNameOperation extends RemoteOperation {
 	
-	private static final String TAG = GetUserNameRemoteOperation.class.getSimpleName();
+	private static final String TAG = GetRemoteUserNameOperation.class.getSimpleName();
 
 	// HEADER
 	private static final String HEADER_OCS_API = "OCS-APIREQUEST";
@@ -69,7 +69,7 @@ public class GetUserNameRemoteOperation extends RemoteOperation {
 	}
 
 	
-	public GetUserNameRemoteOperation() {
+	public GetRemoteUserNameOperation() {
 	}
 
 	@Override

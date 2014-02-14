@@ -44,9 +44,9 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
  * @author masensio
  *
  */
-public class CreateShareRemoteOperation extends RemoteOperation {
+public class CreateRemoteShareOperation extends RemoteOperation {
 
-	private static final String TAG = CreateShareRemoteOperation.class.getSimpleName();
+	private static final String TAG = CreateRemoteShareOperation.class.getSimpleName();
 
 	private static final String PARAM_PATH = "path";
 	private static final String PARAM_SHARE_TYPE = "shareType";
@@ -82,7 +82,7 @@ public class CreateShareRemoteOperation extends RemoteOperation {
 	 * 						To obtain combinations, add the desired values together.  
 	 * 						For instance, for “Re-Share”, “delete”, “read”, “update”, add 16+8+2+1 = 27.
 	 */
-	public CreateShareRemoteOperation(String path, ShareType shareType, String shareWith, boolean publicUpload, 
+	public CreateRemoteShareOperation(String path, ShareType shareType, String shareWith, boolean publicUpload, 
 			String password, int permissions) {
 
 		mPath = path;
