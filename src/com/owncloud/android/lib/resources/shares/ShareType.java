@@ -22,48 +22,57 @@
  *
  */
 
-package com.owncloud.android.lib.test_project.test;
-
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.test_project.TestActivity;
-
-import android.test.ActivityInstrumentationTestCase2;
+package com.owncloud.android.lib.resources.shares;
 
 /**
- * Class to test Read Folder Operation
+ * Enum for Share Type, with values:
+ * -1 - No shared
+ *  0 - Shared by user
+ *  1 - Shared by group
+ *  3 - Shared by public link
+ *  4 - Shared by e-mail
+ *  5 - Shared by contact
+ *  
  * @author masensio
  *
  */
 
-public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivity> {
-	
-
-	/* Folder data to read. This folder must exist on the account */
-	private final String mRemoteFolderPath = "/folderToRead";
-	
-	
-	private TestActivity mActivity;
-	
-	public ReadFolderTest() {
-	    super(TestActivity.class);
-	}
-	
-	@Override
-	  protected void setUp() throws Exception {
-	    super.setUp();
-	    setActivityInitialTouchMode(false);
-	    mActivity = getActivity();
-	}
-
-	/**
-	 * Test Read Folder
-	 */
-	public void testReadFolder() {
-
-		RemoteOperationResult result = mActivity.readFile(mRemoteFolderPath);
-		assertTrue(result.getData().size() > 1);
-		assertTrue(result.getData().size() == 4);
-		assertTrue(result.isSuccess());
-	}
-	
-}
+public enum ShareType {
+    NO_SHARED (-1),
+    USER (0),
+    GROUP (1),
+    PUBLIC_LINK (3),
+    EMAIL (4),
+    CONTACT (5);
+    
+    private int value;
+    
+    private ShareType(int value)
+    {
+        this.value = value;
+    }
+    
+    public int getValue() {
+        return value;
+    }
+    
+    public static ShareType fromValue(int value)
+    {
+        switch (value)
+        {
+        case -1:
+            return NO_SHARED;
+        case 0:
+            return USER;
+        case 1:
+            return GROUP;
+        case 3:
+            return PUBLIC_LINK;
+        case 4:
+            return EMAIL;
+        case 5:
+            return CONTACT;
+        }
+        return null;
+    }
+};

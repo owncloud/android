@@ -1,5 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,48 +23,28 @@
  *
  */
 
-package com.owncloud.android.lib.test_project.test;
-
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.test_project.TestActivity;
-
-import android.test.ActivityInstrumentationTestCase2;
+package com.owncloud.android.lib.common.accounts;
 
 /**
- * Class to test Read Folder Operation
  * @author masensio
- *
+ * @author David A. Velasco
  */
+public class AccountTypeUtils {
 
-public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivity> {
-	
-
-	/* Folder data to read. This folder must exist on the account */
-	private final String mRemoteFolderPath = "/folderToRead";
-	
-	
-	private TestActivity mActivity;
-	
-	public ReadFolderTest() {
-	    super(TestActivity.class);
-	}
-	
-	@Override
-	  protected void setUp() throws Exception {
-	    super.setUp();
-	    setActivityInitialTouchMode(false);
-	    mActivity = getActivity();
-	}
-
-	/**
-	 * Test Read Folder
-	 */
-	public void testReadFolder() {
-
-		RemoteOperationResult result = mActivity.readFile(mRemoteFolderPath);
-		assertTrue(result.getData().size() > 1);
-		assertTrue(result.getData().size() == 4);
-		assertTrue(result.isSuccess());
-	}
-	
+    public static String getAuthTokenTypePass(String accountType) {
+        return accountType + ".password";
+    }
+    
+    public static String getAuthTokenTypeAccessToken(String accountType) {
+        return accountType  + ".oauth2.access_token";
+    }
+    
+    public static String getAuthTokenTypeRefreshToken(String accountType) {
+        return accountType  + ".oauth2.refresh_token";
+    }
+    
+    public static String getAuthTokenTypeSamlSessionCookie(String accountType) {
+        return accountType  +  ".saml.web_sso.session_cookie";
+    }
+    
 }

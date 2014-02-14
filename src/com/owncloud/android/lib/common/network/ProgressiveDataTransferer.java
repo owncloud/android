@@ -22,48 +22,18 @@
  *
  */
 
-package com.owncloud.android.lib.test_project.test;
+package com.owncloud.android.lib.common.network;
 
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.test_project.TestActivity;
+import java.util.Collection;
 
-import android.test.ActivityInstrumentationTestCase2;
 
-/**
- * Class to test Read Folder Operation
- * @author masensio
- *
- */
 
-public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivity> {
-	
+public interface ProgressiveDataTransferer {
 
-	/* Folder data to read. This folder must exist on the account */
-	private final String mRemoteFolderPath = "/folderToRead";
-	
-	
-	private TestActivity mActivity;
-	
-	public ReadFolderTest() {
-	    super(TestActivity.class);
-	}
-	
-	@Override
-	  protected void setUp() throws Exception {
-	    super.setUp();
-	    setActivityInitialTouchMode(false);
-	    mActivity = getActivity();
-	}
+    public void addDatatransferProgressListener (OnDatatransferProgressListener listener);
+    
+    public void addDatatransferProgressListeners(Collection<OnDatatransferProgressListener> listeners);
 
-	/**
-	 * Test Read Folder
-	 */
-	public void testReadFolder() {
+    public void removeDatatransferProgressListener(OnDatatransferProgressListener listener);
 
-		RemoteOperationResult result = mActivity.readFile(mRemoteFolderPath);
-		assertTrue(result.getData().size() > 1);
-		assertTrue(result.getData().size() == 4);
-		assertTrue(result.isSuccess());
-	}
-	
 }

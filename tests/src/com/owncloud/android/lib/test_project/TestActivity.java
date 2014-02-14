@@ -19,17 +19,17 @@ package com.owncloud.android.lib.test_project;
 
 import java.io.File;
 
-import com.owncloud.android.lib.network.OwnCloudClientFactory;
-import com.owncloud.android.lib.network.OwnCloudClient;
-import com.owncloud.android.lib.operations.common.RemoteFile;
-import com.owncloud.android.lib.operations.common.RemoteOperationResult;
-import com.owncloud.android.lib.operations.remote.ChunkedUploadRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.CreateRemoteFolderOperation;
-import com.owncloud.android.lib.operations.remote.DownloadRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.ReadRemoteFolderOperation;
-import com.owncloud.android.lib.operations.remote.RemoveRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.RenameRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.UploadRemoteFileOperation;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
+import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
+import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 import com.owncloud.android.lib.test_project.R;
 
 import android.net.Uri;

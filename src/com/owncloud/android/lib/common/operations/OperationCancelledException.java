@@ -1,5 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,48 +23,13 @@
  *
  */
 
-package com.owncloud.android.lib.test_project.test;
+package com.owncloud.android.lib.common.operations;
 
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.test_project.TestActivity;
+public class OperationCancelledException extends Exception {
 
-import android.test.ActivityInstrumentationTestCase2;
+    /**
+     * Generated serial version - to avoid Java warning
+     */
+    private static final long serialVersionUID = -6350981497740424983L;
 
-/**
- * Class to test Read Folder Operation
- * @author masensio
- *
- */
-
-public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivity> {
-	
-
-	/* Folder data to read. This folder must exist on the account */
-	private final String mRemoteFolderPath = "/folderToRead";
-	
-	
-	private TestActivity mActivity;
-	
-	public ReadFolderTest() {
-	    super(TestActivity.class);
-	}
-	
-	@Override
-	  protected void setUp() throws Exception {
-	    super.setUp();
-	    setActivityInitialTouchMode(false);
-	    mActivity = getActivity();
-	}
-
-	/**
-	 * Test Read Folder
-	 */
-	public void testReadFolder() {
-
-		RemoteOperationResult result = mActivity.readFile(mRemoteFolderPath);
-		assertTrue(result.getData().size() > 1);
-		assertTrue(result.getData().size() == 4);
-		assertTrue(result.isSuccess());
-	}
-	
 }

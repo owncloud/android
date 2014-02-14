@@ -22,48 +22,18 @@
  *
  */
 
-package com.owncloud.android.lib.test_project.test;
-
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.test_project.TestActivity;
-
-import android.test.ActivityInstrumentationTestCase2;
+package com.owncloud.android.lib.resources.shares;
 
 /**
- * Class to test Read Folder Operation
+ * Contains Constants for Share Operation
+ * 
  * @author masensio
  *
  */
 
-public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivity> {
-	
+public class ShareUtils {
 
-	/* Folder data to read. This folder must exist on the account */
-	private final String mRemoteFolderPath = "/folderToRead";
-	
-	
-	private TestActivity mActivity;
-	
-	public ReadFolderTest() {
-	    super(TestActivity.class);
-	}
-	
-	@Override
-	  protected void setUp() throws Exception {
-	    super.setUp();
-	    setActivityInitialTouchMode(false);
-	    mActivity = getActivity();
-	}
+	// OCS Route
+	public static final String SHAREAPI_ROUTE ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
 
-	/**
-	 * Test Read Folder
-	 */
-	public void testReadFolder() {
-
-		RemoteOperationResult result = mActivity.readFile(mRemoteFolderPath);
-		assertTrue(result.getData().size() > 1);
-		assertTrue(result.getData().size() == 4);
-		assertTrue(result.isSuccess());
-	}
-	
 }

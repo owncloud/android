@@ -23,7 +23,7 @@
  */
 package com.owncloud.android.lib.test_project.test;
 
-import com.owncloud.android.lib.operations.common.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
