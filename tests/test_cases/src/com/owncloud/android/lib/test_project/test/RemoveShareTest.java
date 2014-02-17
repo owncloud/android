@@ -24,23 +24,20 @@
 
 package com.owncloud.android.lib.test_project.test;
 
+import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
-/** 
- * Class to test Get Shares Operation
- * 
- * @author masensio
- *
- */
-
-public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity> {
-
-	private TestActivity mActivity;
+public class RemoveShareTest extends ActivityInstrumentationTestCase2<TestActivity> {
 	
-	public GetSharesTest() {
+	private static final String TAG = RemoveShareTest.class.getSimpleName();
+	
+	private TestActivity mActivity;
+
+	public RemoveShareTest() {
 		super(TestActivity.class);
 		
 	}
@@ -53,10 +50,25 @@ public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity
 	}
 	
 	/**
-	 * Test Get Shares: the server must support SHARE API
+	 * Test Remove Share: the server must support SHARE API
 	 */
-	public void testGetShares() {
+	public void testRemoveShare() {
+		// Get the shares
 		RemoteOperationResult result = mActivity.getShares();
-		assertTrue(result.isSuccess());
+		if (result.isSuccess()) {
+			int size = result.getData().size();
+
+			if (size > 0) {
+				OCShare share = ((OCShare) result.getData().get(size -1));
+				long id = share.getIdRemoteShared();
+				Log.d(TAG, "File to unshare: " + share.getPath() );
+				result = mActivity.removeShare((int) id);	// Unshare
+				assertTrue(result.isSuccess());
+			} else {
+				assertTrue(true);
+			}
+		} else {
+			assertTrue(true);
+		}
 	}
 }

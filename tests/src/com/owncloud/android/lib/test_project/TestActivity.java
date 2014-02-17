@@ -37,7 +37,10 @@ import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesOperation;
+import com.owncloud.android.lib.operations.remote.RemoveRemoteShareOperation;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.R;
 
 import android.net.Uri;
@@ -190,11 +193,59 @@ public class TestActivity extends Activity {
 		return result;
 	}
 	
+	
+	/** Access to the library method to Get Shares 
+	 * 
+	 * @return
+	 */
 	public RemoteOperationResult getShares(){
 		
 		GetRemoteSharesOperation getOperation = new GetRemoteSharesOperation();
 		RemoteOperationResult result = getOperation.execute(mClient);
 		
 		return result;
+	}
+	
+	/** Access to the library method to Create Share
+	 * @param path			Full path of the file/folder being shared. Mandatory argument
+	 * @param shareType		‘0’ = user, ‘1’ = group, ‘3’ = Public link. Mandatory argument
+	 * @param shareWith		User/group ID with who the file should be shared.  This is mandatory for shareType of 0 or 1
+	 * @param publicUpload	If ‘false’ (default) public cannot upload to a public shared folder. 
+	 * 						If ‘true’ public can upload to a shared folder. Only available for public link shares
+	 * @param password		Password to protect a public link share. Only available for public link shares
+	 * @param permissions	1 - Read only – Default for “public” shares
+	 * 						2 - Update
+	 * 						4 - Create
+	 * 						8 - Delete
+	 * 						16- Re-share
+	 * 						31- All above – Default for “private” shares
+	 * 						For user or group shares.
+	 * 						To obtain combinations, add the desired values together.  
+	 * 						For instance, for “Re-Share”, “delete”, “read”, “update”, add 16+8+2+1 = 27.
+	 * 
+	 * @return
+	 */
+	public RemoteOperationResult createShare(String path, ShareType shareType, String shareWith, boolean publicUpload, 
+			String password, int permissions){
+		
+		CreateRemoteShareOperation createOperation = new CreateRemoteShareOperation(path, shareType, shareWith, publicUpload, password, permissions);
+		RemoteOperationResult result = createOperation.execute(mClient);
+		
+		return result;
+	}
+	
+	
+	/**
+	 * Access to the library method to Remove Share
+	 * 
+	 * @param idShare	Share ID
+	 */
+	
+	public RemoteOperationResult removeShare(int idShare) {
+		RemoveRemoteShareOperation removeOperation = new RemoveRemoteShareOperation(idShare);
+		RemoteOperationResult result = removeOperation.execute(mClient);
+		
+		return result;
+		
 	}
 }

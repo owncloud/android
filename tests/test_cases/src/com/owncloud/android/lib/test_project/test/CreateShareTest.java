@@ -25,22 +25,19 @@
 package com.owncloud.android.lib.test_project.test;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-/** 
- * Class to test Get Shares Operation
- * 
- * @author masensio
- *
- */
+public class CreateShareTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
-public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity> {
-
-	private TestActivity mActivity;
+	/* File to share.*/
+	private final String mFileToShare = "/fileToShare.png";
 	
-	public GetSharesTest() {
+	private TestActivity mActivity;
+
+	public CreateShareTest() {
 		super(TestActivity.class);
 		
 	}
@@ -53,10 +50,10 @@ public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity
 	}
 	
 	/**
-	 * Test Get Shares: the server must support SHARE API
+	 * Test Create Share: the server must support SHARE API
 	 */
-	public void testGetShares() {
-		RemoteOperationResult result = mActivity.getShares();
+	public void testCreateShare() {
+		RemoteOperationResult result = mActivity.createShare(mFileToShare, ShareType.PUBLIC_LINK, "", false, "", 1);
 		assertTrue(result.isSuccess());
 	}
 }
