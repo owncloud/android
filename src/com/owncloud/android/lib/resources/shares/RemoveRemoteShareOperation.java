@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.operations.remote;
+package com.owncloud.android.lib.resources.shares;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -36,8 +36,6 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.shares.ShareUtils;
-import com.owncloud.android.lib.resources.shares.ShareXMLParser;
 
 /**
  * Remove a share
