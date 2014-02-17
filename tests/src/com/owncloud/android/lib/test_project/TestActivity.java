@@ -39,7 +39,7 @@ import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesOperation;
-import com.owncloud.android.lib.operations.remote.RemoveRemoteShareOperation;
+import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.R;
 
