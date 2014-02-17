@@ -54,7 +54,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 public class UploadRemoteFileOperation extends RemoteOperation {
 
 
-	protected String mStoragePath;
+	protected String mLocalPath;
 	protected String mRemotePath;
 	protected String mMimeType;
 	protected PutMethod mPutMethod = null;
@@ -64,8 +64,8 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
 	protected RequestEntity mEntity = null;
 
-	public UploadRemoteFileOperation(String storagePath, String remotePath, String mimeType) {
-		mStoragePath = storagePath;
+	public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType) {
+		mLocalPath = localPath;
 		mRemotePath = remotePath;
 		mMimeType = mimeType;	
 	}
@@ -106,7 +106,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	protected int uploadFile(OwnCloudClient client) throws HttpException, IOException, OperationCancelledException {
 		int status = -1;
 		try {
-			File f = new File(mStoragePath);
+			File f = new File(mLocalPath);
 			mEntity  = new FileRequestEntity(f, mMimeType);
 			synchronized (mDataTransferListeners) {
 				((ProgressiveDataTransferer)mEntity).addDatatransferProgressListeners(mDataTransferListeners);

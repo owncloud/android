@@ -50,16 +50,16 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 
 	private static final String TAG = RemoveRemoteShareOperation.class.getSimpleName();
 	
-	private int mIdShare;
+	private int mRemoteShareId;
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param idShare	Share ID
+	 * @param remoteShareId		Share ID
 	 */
 	
-	public RemoveRemoteShareOperation(int idShare) {
-		mIdShare = idShare;
+	public RemoveRemoteShareOperation(int remoteShareId) {
+		mRemoteShareId = remoteShareId;
 		
 	}
 
@@ -71,9 +71,9 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 		DeleteMethod delete = null;
 
 		try {
-			String id = "/" + String.valueOf(mIdShare);
-			delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE + id);
-			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE + id);
+			String id = "/" + String.valueOf(mRemoteShareId);
+			delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
+			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
 
 			status = client.executeMethod(delete);
 

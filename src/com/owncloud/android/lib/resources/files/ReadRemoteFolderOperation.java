@@ -126,24 +126,24 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
      *  Read the data retrieved from the server about the contents of the target folder 
      *  
      * 
-     *  @param dataInServer     Full response got from the server with the data of the target 
+     *  @param remoteData     	Full response got from the server with the data of the target 
      *                          folder and its direct children.
      *  @param client           Client instance to the remote server where the data were 
      *                          retrieved.  
      *  @return                
      */
-    private void readData(MultiStatus dataInServer, OwnCloudClient client) {   	
+    private void readData(MultiStatus remoteData, OwnCloudClient client) {   	
         mFolderAndFiles = new ArrayList<Object>();
         
         // parse data from remote folder 
-        WebdavEntry we = new WebdavEntry(dataInServer.getResponses()[0], client.getWebdavUri().getPath());
+        WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0], client.getWebdavUri().getPath());
         mFolderAndFiles.add(fillOCFile(we));
         
         // loop to update every child
         RemoteFile remoteFile = null;
-        for (int i = 1; i < dataInServer.getResponses().length; ++i) {
+        for (int i = 1; i < remoteData.getResponses().length; ++i) {
             /// new OCFile instance with the data from the server
-            we = new WebdavEntry(dataInServer.getResponses()[i], client.getWebdavUri().getPath());                        
+            we = new WebdavEntry(remoteData.getResponses()[i], client.getWebdavUri().getPath());                        
             remoteFile = fillOCFile(we);
             mFolderAndFiles.add(remoteFile);
         }

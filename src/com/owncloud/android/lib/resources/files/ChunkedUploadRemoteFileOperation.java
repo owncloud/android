@@ -60,7 +60,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
         FileChannel channel = null;
         RandomAccessFile raf = null;
         try {
-            File file = new File(mStoragePath);
+            File file = new File(mLocalPath);
             raf = new RandomAccessFile(file, "r");
             channel = raf.getChannel();
             mEntity = new ChunkFromFileChannelRequestEntity(channel, mMimeType, CHUNK_SIZE, file);
@@ -82,7 +82,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 mPutMethod.setRequestEntity(mEntity);
                 status = client.executeMethod(mPutMethod);
                 client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
-                Log.d(TAG, "Upload of " + mStoragePath + " to " + mRemotePath + ", chunk index " + chunkIndex + ", count " + chunkCount + ", HTTP result status " + status);
+                Log.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ", chunk index " + chunkIndex + ", count " + chunkCount + ", HTTP result status " + status);
                 if (!isSuccess(status))
                     break;
             }

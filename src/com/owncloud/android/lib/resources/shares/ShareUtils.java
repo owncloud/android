@@ -34,6 +34,6 @@ package com.owncloud.android.lib.resources.shares;
 public class ShareUtils {
 
 	// OCS Route
-	public static final String SHAREAPI_ROUTE ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
+	public static final String SHARING_API_PATH ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
 
 }

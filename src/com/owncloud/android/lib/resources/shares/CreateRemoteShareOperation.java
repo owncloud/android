@@ -57,7 +57,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
 	private ArrayList<OCShare> mShares;  // List of shares for result, one share in this case
 	
-	private String mPath;
+	private String mRemoteFilePath;
 	private ShareType mShareType;
 	private String mShareWith;
 	private boolean mPublicUpload;
@@ -66,26 +66,26 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
 	/**
 	 * Constructor
-	 * @param path			Full path of the file/folder being shared. Mandatory argument
-	 * @param shareType		‘0’ = user, ‘1’ = group, ‘3’ = Public link. Mandatory argument
-	 * @param shareWith		User/group ID with who the file should be shared.  This is mandatory for shareType of 0 or 1
-	 * @param publicUpload	If ‘false’ (default) public cannot upload to a public shared folder. 
-	 * 						If ‘true’ public can upload to a shared folder. Only available for public link shares
-	 * @param password		Password to protect a public link share. Only available for public link shares
-	 * @param permissions	1 - Read only – Default for “public” shares
-	 * 						2 - Update
-	 * 						4 - Create
-	 * 						8 - Delete
-	 * 						16- Re-share
-	 * 						31- All above – Default for “private” shares
-	 * 						For user or group shares.
-	 * 						To obtain combinations, add the desired values together.  
-	 * 						For instance, for “Re-Share”, “delete”, “read”, “update”, add 16+8+2+1 = 27.
+	 * @param remoteFilePath	Full path of the file/folder being shared. Mandatory argument
+	 * @param shareType			‘0’ = user, ‘1’ = group, ‘3’ = Public link. Mandatory argument
+	 * @param shareWith			User/group ID with who the file should be shared.  This is mandatory for shareType of 0 or 1
+	 * @param publicUpload		If ‘false’ (default) public cannot upload to a public shared folder. 
+	 * 							If ‘true’ public can upload to a shared folder. Only available for public link shares
+	 * @param password			Password to protect a public link share. Only available for public link shares
+	 * @param permissions		1 - Read only – Default for “public” shares
+	 * 							2 - Update
+	 * 							4 - Create
+	 * 							8 - Delete
+	 * 							16- Re-share
+	 * 							31- All above – Default for “private” shares
+	 * 							For user or group shares.
+	 * 							To obtain combinations, add the desired values together.  
+	 * 							For instance, for “Re-Share”, “delete”, “read”, “update”, add 16+8+2+1 = 27.
 	 */
-	public CreateRemoteShareOperation(String path, ShareType shareType, String shareWith, boolean publicUpload, 
+	public CreateRemoteShareOperation(String remoteFilePath, ShareType shareType, String shareWith, boolean publicUpload, 
 			String password, int permissions) {
 
-		mPath = path;
+		mRemoteFilePath = remoteFilePath;
 		mShareType = shareType;
 		mShareWith = shareWith;
 		mPublicUpload = publicUpload;
@@ -102,11 +102,11 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
 		try {
 			// Post Method
-			post = new PostMethod(client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
-			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHAREAPI_ROUTE);
+			post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
 			post.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
-			post.addParameter(PARAM_PATH, mPath);
+			post.addParameter(PARAM_PATH, mRemoteFilePath);
 			post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
 			post.addParameter(PARAM_SHARE_WITH, mShareWith);
 			post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));

@@ -65,11 +65,11 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
     private GetMethod mGet;
     
     private String mRemotePath;
-    private String mDownloadFolderPath;
+    private String mLocalFolderPath;
 	
-	public DownloadRemoteFileOperation(String remotePath, String downloadFolderPath) {
+	public DownloadRemoteFileOperation(String remotePath, String localFolderPath) {
 		mRemotePath = remotePath;
-		mDownloadFolderPath = downloadFolderPath;
+		mLocalFolderPath = localFolderPath;
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
     }
     
     private String getTmpPath() {
-        return mDownloadFolderPath + mRemotePath;
+        return mLocalFolderPath + mRemotePath;
     }
     
     public void addDatatransferProgressListener (OnDatatransferProgressListener listener) {
