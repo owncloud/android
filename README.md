@@ -12,7 +12,8 @@ Get this code and compile it. In the repository it is not only the library proje
 #### 2.2. Add library to your project
 There are different ways of adding this library to your code, then it is described one of them
 
-__Step 1.__ Compile the ownCloud Android Library__Step 2.__ Define a dependency within your project. For that, access to Properties > Android > Library and click on add and select the ownCloud Android library
+__Step 1.__ Compile the ownCloud Android Library
+__Step 2.__ Define a dependency within your project. For that, access to Properties > Android > Library and click on add and select the ownCloud Android library
 
 ###  Branching strategy
 
@@ -42,7 +43,7 @@ Source: http://nvie.com/posts/a-successful-git-branching-model
 
 ownCloud Android Library is available under MIT license. See the file LICENSE.md with the full license text. 
 
-#### Third part libraries
+#### Third party libraries
 
 ownCloud Android Library uses Apache JackRabbit, version 2.2.5. Copyright (C) 2004-2010 The Apache Software Foundation. Licensed under Apache License, Version 2.0.
 
