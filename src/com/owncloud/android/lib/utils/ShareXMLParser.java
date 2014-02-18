@@ -271,7 +271,10 @@ public class ShareXMLParser {
 			
 			String name = parser.getName();
 
-			if (name.equalsIgnoreCase(NODE_ID)) {
+			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
+				share = readElement(parser);
+
+			} else if (name.equalsIgnoreCase(NODE_ID)) {
 				share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_TYPE)) {
