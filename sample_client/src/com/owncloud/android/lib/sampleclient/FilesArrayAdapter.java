@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   Copyright (C) 2014 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.owncloud.android.lib.operations.common.RemoteFile;
+import com.owncloud.android.lib.resources.files.RemoteFile;
 
 public class FilesArrayAdapter extends ArrayAdapter<RemoteFile> {
 	

@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   Copyright (C) 2014 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,21 +26,21 @@ package com.owncloud.android.lib.test_project;
 
 import java.io.File;
 
-import com.owncloud.android.lib.network.OwnCloudClientFactory;
-import com.owncloud.android.lib.network.OwnCloudClient;
-import com.owncloud.android.lib.operations.common.RemoteFile;
-import com.owncloud.android.lib.operations.common.RemoteOperationResult;
-import com.owncloud.android.lib.operations.common.ShareType;
-import com.owncloud.android.lib.operations.remote.ChunkedUploadRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.CreateRemoteFolderOperation;
-import com.owncloud.android.lib.operations.remote.CreateShareRemoteOperation;
-import com.owncloud.android.lib.operations.remote.DownloadRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.GetRemoteSharesOperation;
-import com.owncloud.android.lib.operations.remote.ReadRemoteFolderOperation;
-import com.owncloud.android.lib.operations.remote.RemoveRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.RenameRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.UploadRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.RemoveRemoteShareOperation;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
+import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
+import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
+import com.owncloud.android.lib.resources.shares.GetRemoteSharesOperation;
+import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.R;
 
 import android.net.Uri;
@@ -228,7 +228,7 @@ public class TestActivity extends Activity {
 	public RemoteOperationResult createShare(String path, ShareType shareType, String shareWith, boolean publicUpload, 
 			String password, int permissions){
 		
-		CreateShareRemoteOperation createOperation = new CreateShareRemoteOperation(path, shareType, shareWith, publicUpload, password, permissions);
+		CreateRemoteShareOperation createOperation = new CreateRemoteShareOperation(path, shareType, shareWith, publicUpload, password, permissions);
 		RemoteOperationResult result = createOperation.execute(mClient);
 		
 		return result;

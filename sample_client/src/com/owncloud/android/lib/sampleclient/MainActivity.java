@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   Copyright (C) 2014 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -32,19 +32,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.owncloud.android.lib.accounts.AccountUtils;
-import com.owncloud.android.lib.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.network.OwnCloudClientFactory;
-import com.owncloud.android.lib.network.OwnCloudClient;
-import com.owncloud.android.lib.operations.common.OnRemoteOperationListener;
-import com.owncloud.android.lib.operations.common.RemoteFile;
-import com.owncloud.android.lib.operations.common.RemoteOperation;
-import com.owncloud.android.lib.operations.common.RemoteOperationResult;
-import com.owncloud.android.lib.operations.remote.DownloadRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.ReadRemoteFolderOperation;
-import com.owncloud.android.lib.operations.remote.RemoveRemoteFileOperation;
-import com.owncloud.android.lib.operations.remote.UploadRemoteFileOperation;
-import com.owncloud.android.lib.utils.FileUtils;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
+import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
+import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.FileUtils;
 
 import android.app.Activity;
 import android.content.res.AssetManager;

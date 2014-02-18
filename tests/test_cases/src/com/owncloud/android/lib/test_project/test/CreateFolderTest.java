@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2014 ownCloud (http://www.owncloud.org/)
+ *   Copyright (C) 2014 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,8 @@ package com.owncloud.android.lib.test_project.test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.owncloud.android.lib.operations.common.RemoteOperationResult;
-import com.owncloud.android.lib.operations.common.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
