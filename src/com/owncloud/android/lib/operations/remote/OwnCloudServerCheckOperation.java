@@ -55,8 +55,6 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
     
     private static final String TAG = OwnCloudServerCheckOperation.class.getSimpleName();
     
-    private static final String OCVERSION_SHARED_SUPPORTED = "5.0.13";
-    
     private static final String NODE_INSTALLED = "installed";
     private static final String NODE_VERSION = "version";
     private static final String NODE_VERSIONSTRING = "versionstring";
@@ -65,26 +63,15 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
     private RemoteOperationResult mLatestResult;
     private Context mContext;
     private OwnCloudVersion mOCVersion;
-    private OwnCloudVersion mOCVersionString;
 
     public OwnCloudServerCheckOperation(String url, Context context) {
         mUrl = url;
         mContext = context;
         mOCVersion = null;
-        mOCVersionString = null;
     }
     
     public OwnCloudVersion getDiscoveredVersion() {
         return mOCVersion;
-    }
-    public boolean isSharedSupported() {
-        OwnCloudVersion shareServer = new OwnCloudVersion(OCVERSION_SHARED_SUPPORTED);
-        if (mOCVersionString != null) {
-        	return mOCVersionString.compareTo(shareServer) >= 0;
-        } 
-
-        return false;
-
     }
 
     private boolean tryConnection(OwnCloudClient wc, String urlSt) {
@@ -99,8 +86,9 @@ public class OwnCloudServerCheckOperation extends RemoteOperation {
                 if (!json.getBoolean(NODE_INSTALLED)) {
                     mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
                 } else {
-                    mOCVersion = new OwnCloudVersion(json.getString(NODE_VERSION));
-                    mOCVersionString = new OwnCloudVersion(json.getString(NODE_VERSIONSTRING), true);
+                    String version = json.getString(NODE_VERSION);
+                    String versionString = json.getString(NODE_VERSIONSTRING);
+                    mOCVersion = new OwnCloudVersion(version, versionString);
                     if (!mOCVersion.isVersionValid()) {
                         mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.BAD_OC_VERSION);
                         

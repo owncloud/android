@@ -80,10 +80,11 @@ public class AccountUtils {
     public static String constructFullURLForAccount(Context context, Account account) throws AccountNotFoundException {
         AccountManager ama = AccountManager.get(context);
         String baseurl = ama.getUserData(account, OwnCloudAccount.Constants.KEY_OC_BASE_URL);
-        String strver  = ama.getUserData(account, OwnCloudAccount.Constants.KEY_OC_VERSION);
+        String version  = ama.getUserData(account, OwnCloudAccount.Constants.KEY_OC_VERSION);
+        String versionString  = ama.getUserData(account, OwnCloudAccount.Constants.KEY_OC_VERSION_STRING);
         boolean supportsOAuth = (ama.getUserData(account, OwnCloudAccount.Constants.KEY_SUPPORTS_OAUTH2) != null);
         boolean supportsSamlSso = (ama.getUserData(account, OwnCloudAccount.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null);
-        OwnCloudVersion ver = new OwnCloudVersion(strver);
+        OwnCloudVersion ver = new OwnCloudVersion(version, versionString);
         String webdavpath = getWebdavPath(ver, supportsOAuth, supportsSamlSso);
 
         if (baseurl == null || webdavpath == null) 

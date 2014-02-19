@@ -36,39 +36,47 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
             0x040000);
     public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(
             0x040500);
-
+    
+    public static final int MINIMUM_VERSION_STRING_FOR_SHARING_API = 0x05000D;
+    
     // format is in version
     // 0xAABBCC
     // for version AA.BB.CC
-    // ie version 2.0.3 will be stored as 0x030003
+    // ie version 2.0.3 will be stored as 0x020003
     private int mVersion;
     private boolean mIsValid;
+    // not parsed, saved same value offered by the server
+    private String mVersionString;
 
-    public OwnCloudVersion(int version) {
+    protected OwnCloudVersion(int version) {
         mVersion = version;
         mIsValid = true;
+        mVersionString = "";
     }
 
-    public OwnCloudVersion(String version) {
+    public OwnCloudVersion(String version, String versionString) {
         mVersion = 0;
         mIsValid = false;
         parseVersionString(version);
+        if (versionString != null && versionString.length() > 0) {
+        	mVersionString = versionString;
+        	
+        } else if (mIsValid) {
+        	mVersionString = version;
+        }
     }
     
-    public OwnCloudVersion(String versionstring, boolean isVersionString) {
-    	mVersion = 0;
-    	mIsValid = false;
-    	if (isVersionString) {
-    		parseVersionString(versionstring);
-    	} else {
-            parseVersion(versionstring);
-    	}
-    		
-    }
-
     public String toString() {
         return ((mVersion >> 16) % 256) + "." + ((mVersion >> 8) % 256) + "."
                 + ((mVersion) % 256);
+    }
+    
+    public String getVersion() {
+    	return toString();
+    }
+    
+    public String getVersionString() {
+    	return mVersionString;
     }
 
     public boolean isVersionValid() {
@@ -81,45 +89,48 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
                 : another.mVersion < mVersion ? 1 : -1;
     }
 
-    private void parseVersion(String version) {
-        try {
-            String[] nums = version.split("\\.");
-            if (nums.length > 0) {
-                mVersion += Integer.parseInt(nums[0]);
-            }
-            mVersion = mVersion << 8;
-            if (nums.length > 1) {
-                mVersion += Integer.parseInt(nums[1]);
-            }
-            mVersion = mVersion << 8;
-            if (nums.length > 2) {
-                mVersion += Integer.parseInt(nums[2]);
-            }
-            mIsValid = true;
-        } catch (Exception e) {
-            mIsValid = false;
-        }
-    }
-    
-    private void parseVersionString(String versionstring) {
+    private void parseVersionString(String versionString) {
     	try {
-    		versionstring = versionstring.replaceAll("[^\\d.]", "");
-    		
-    		String[] nums = versionstring.split("\\.");
-    		if (nums.length > 0) {
-    			mVersion += Integer.parseInt(nums[0]);
-    		}
-    		mVersion = mVersion << 8;
-    		if (nums.length > 1) {
-    			mVersion += Integer.parseInt(nums[1]);
-    		}
-    		mVersion = mVersion << 8;
-    		if (nums.length > 2) {
-    			mVersion += Integer.parseInt(nums[2]);
-    		}
+    		mVersion = getParsedVersionString(versionString);
     		mIsValid = true;
+    		
     	} catch (Exception e) {
     		mIsValid = false;
         }
     }
+    
+    private int getParsedVersionString(String versionString) throws NumberFormatException {
+		int version = 0;
+		
+    	// get only numeric part 
+		versionString = versionString.replaceAll("[^\\d.]", "");
+		
+		String[] nums = versionString.split("\\.");
+		if (nums.length > 0) {
+			version += Integer.parseInt(nums[0]);
+		}
+		version = version << 8;
+		if (nums.length > 1) {
+			version += Integer.parseInt(nums[1]);
+		}
+		version = version << 8;
+		if (nums.length > 2) {
+			version += Integer.parseInt(nums[2]);
+		}
+		return version; 
+    }
+    
+    
+    public boolean isSharedSupported() {
+    	int versionString = 0;
+    	try {
+    		versionString = getParsedVersionString(mVersionString);
+    		
+    	} catch (Exception e) {
+    		// nothing to do here
+    	}
+    	return (versionString >= MINIMUM_VERSION_STRING_FOR_SHARING_API);
+    }
+    
+    
 }

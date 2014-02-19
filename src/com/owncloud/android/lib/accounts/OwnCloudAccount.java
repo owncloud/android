@@ -53,6 +53,10 @@ public class OwnCloudAccount extends Account {
 	     */
 	    public static final String KEY_OC_VERSION = "oc_version";
 	    /**
+	     * Version string as shown in the status.php resource in the server side
+	     */
+		public static final String KEY_OC_VERSION_STRING = "oc_version_string";
+	    /**
 	     * Base url should point to owncloud installation without trailing / ie:
 	     * http://server/path or https://owncloud.server
 	     */
@@ -65,10 +69,7 @@ public class OwnCloudAccount extends Account {
 	     * Flag signaling if the ownCloud server can be accessed with session cookies from SAML-based web single-sign-on.
 	     */
 	    public static final String KEY_SUPPORTS_SAML_WEB_SSO = "oc_supports_saml_web_sso";
-	    /**
-	    * Flag signaling if the ownCloud server supports Share API"
-	    */
-	    public static final String KEY_SUPPORTS_SHARE_API = "oc_supports_share_api";
+	    
 	}
 	
 	private String mAuthTokenType;
