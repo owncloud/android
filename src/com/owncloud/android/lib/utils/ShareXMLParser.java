@@ -243,6 +243,7 @@ public class ShareXMLParser {
 		}
 		
 		if (share != null) {
+			// this is the response of a request for creation; don't pass to isValidShare()
 			shares.add(share);
 		}
 
@@ -337,7 +338,9 @@ public class ShareXMLParser {
 	}
 
 	private boolean isValidShare(OCShare share) {
-		return (share.getIdRemoteShared() > -1);
+		return ((share.getIdRemoteShared() > -1) &&
+				(share.getShareType() == ShareType.PUBLIC_LINK)	// at this moment we only care about public shares
+				);
 	}
 
 	private void fixPathForFolder(OCShare share) {
