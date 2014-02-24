@@ -220,7 +220,8 @@ public class ShareXMLParser {
 			}
 			String name = parser.getName();
 			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
-				shares.add(readElement(parser));
+				readElement(parser, shares);
+				
 			}  else if (name.equalsIgnoreCase(NODE_ID)) {// Parse Create XML Response
 				share = new OCShare();
 				String value = readNode(parser, NODE_ID);
@@ -241,9 +242,9 @@ public class ShareXMLParser {
 		}
 		
 		if (share != null) {
+			// this is the response of a request for creation; don't pass to isValidShare()
 			shares.add(share);
 		}
-			
 
 		return shares;
 
@@ -257,7 +258,7 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private OCShare readElement(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private void readElement(XmlPullParser parser, ArrayList<OCShare> shares) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, NODE_ELEMENT);
 		
 		OCShare share = new OCShare();
@@ -270,7 +271,12 @@ public class ShareXMLParser {
 			
 			String name = parser.getName();
 
-			if (name.equalsIgnoreCase(NODE_ID)) {
+			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
+				// patch to work around servers responding with extra <element> surrounding all the shares on the same file before
+				// https://github.com/owncloud/core/issues/6992 was fixed
+				readElement(parser, shares);
+
+			} else if (name.equalsIgnoreCase(NODE_ID)) {
 				share.setIdRemoteShared(Integer.parseInt(readNode(parser, NODE_ID)));
 
 			} else if (name.equalsIgnoreCase(NODE_ITEM_TYPE)) {
@@ -325,7 +331,15 @@ public class ShareXMLParser {
 			} 
 		}		
 
-		return share;
+		if (isValidShare(share)) {
+			shares.add(share);
+		}
+	}
+
+	private boolean isValidShare(OCShare share) {
+		return ((share.getIdRemoteShared() > -1) &&
+				(share.getShareType() == ShareType.PUBLIC_LINK)	// at this moment we only care about public shares
+				);
 	}
 
 	private void fixPathForFolder(OCShare share) {
