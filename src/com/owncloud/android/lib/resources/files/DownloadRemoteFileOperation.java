@@ -131,11 +131,15 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                         }
                     }
                 }
-                savedFile = true;
-                Header modificationTime = mGet.getResponseHeader("Last-Modified");
-                if (modificationTime != null) {
-                    Date d = WebdavUtils.parseResponseDate((String) modificationTime.getValue());
-                    mModificationTimestamp = (d != null) ? d.getTime() : 0;
+                if (transferred == totalToTransfer) {  // Check if the file is completed
+                	savedFile = true;
+                	Header modificationTime = mGet.getResponseHeader("Last-Modified");
+                	if (modificationTime != null) {
+                		Date d = WebdavUtils.parseResponseDate((String) modificationTime.getValue());
+                		mModificationTimestamp = (d != null) ? d.getTime() : 0;
+                	}
+                } else {
+                	client.exhaustResponse(mGet.getResponseBodyAsStream());
                 }
                 
             } else {
