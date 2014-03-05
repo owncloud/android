@@ -172,5 +172,12 @@ public class NetworkUtils {
         return mConnManager;
     }
 
+    public static boolean isCertInKnownServersStore(Certificate cert, Context context) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+    	
+    	KeyStore knownServers = getKnownServersStore(context);
+    	Log.d(TAG, "Certificate - HashCode: " + cert.hashCode() + " "
+    			+ Boolean.toString(knownServers.isCertificateEntry(Integer.toString(cert.hashCode()))));
+    	return knownServers.isCertificateEntry(Integer.toString(cert.hashCode()));
+    }
 
 }
