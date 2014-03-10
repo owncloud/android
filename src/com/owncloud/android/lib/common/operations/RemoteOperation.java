@@ -55,6 +55,12 @@ public abstract class RemoteOperation implements Runnable {
 	
     private static final String TAG = RemoteOperation.class.getSimpleName();
 
+    /** OCS API header name */
+    public static final String OCS_API_HEADER = "OCS-APIREQUEST";
+
+    /** OCS API header value */
+    public static final String OCS_API_HEADER_VALUE = "true";
+
     /** ownCloud account in the remote ownCloud server to operate */
     private Account mAccount = null;
     

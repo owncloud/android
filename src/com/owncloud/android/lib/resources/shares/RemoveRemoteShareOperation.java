@@ -48,10 +48,6 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 
 	private static final String TAG = RemoveRemoteShareOperation.class.getSimpleName();
 	
-	// OCS API header
-	private static final String HEADER_OCS_API = "OCS-APIREQUEST";
-	private static final String HEADER_OCS_API_VALUE = "true";
-
 	private int mRemoteShareId;
 	
 	/**
@@ -77,7 +73,7 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 			delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
 			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
 
-            delete.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
+			delete.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
             
 			status = client.executeMethod(delete);
 
