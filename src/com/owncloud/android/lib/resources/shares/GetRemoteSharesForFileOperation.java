@@ -52,6 +52,10 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 
 	private static final String TAG = GetRemoteSharesForFileOperation.class.getSimpleName();
 	
+	// OCS API header
+	private static final String HEADER_OCS_API = "OCS-APIREQUEST";
+	private static final String HEADER_OCS_API_VALUE = "true";
+
 	private static final String PARAM_PATH = "path";
 	private static final String PARAM_RESHARES = "reshares";
 	private static final String PARAM_SUBFILES = "subfiles";
@@ -96,6 +100,8 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 				    new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
 				}); 
 
+            get.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
+            
 			status = client.executeMethod(get);
 
 			if(isSuccess(status)) {

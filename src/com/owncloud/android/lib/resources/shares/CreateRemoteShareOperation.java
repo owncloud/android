@@ -48,6 +48,10 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
 	private static final String TAG = CreateRemoteShareOperation.class.getSimpleName();
 
+	// OCS API header
+	private static final String HEADER_OCS_API = "OCS-APIREQUEST";
+	private static final String HEADER_OCS_API_VALUE = "true";
+
 	private static final String PARAM_PATH = "path";
 	private static final String PARAM_SHARE_TYPE = "shareType";
 	private static final String PARAM_SHARE_WITH = "shareWith";
@@ -115,6 +119,8 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 			}
 			post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
 
+            post.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
+            
 			status = client.executeMethod(post);
 
 			if(isSuccess(status)) {

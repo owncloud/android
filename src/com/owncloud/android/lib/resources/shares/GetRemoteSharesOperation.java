@@ -50,6 +50,10 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 
 	private static final String TAG = GetRemoteSharesOperation.class.getSimpleName();
 
+	// OCS API header
+	private static final String HEADER_OCS_API = "OCS-APIREQUEST";
+	private static final String HEADER_OCS_API_VALUE = "true";
+
 	private ArrayList<OCShare> mShares;  // List of shares for result
 
 	
@@ -68,6 +72,7 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 		try{
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+            get.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
 			status = client.executeMethod(get);
 			if(isSuccess(status)) {
 				Log.d(TAG, "Obtain RESPONSE");

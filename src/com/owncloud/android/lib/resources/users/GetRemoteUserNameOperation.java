@@ -48,7 +48,7 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
 	
 	private static final String TAG = GetRemoteUserNameOperation.class.getSimpleName();
 
-	// HEADER
+	// OCS API header
 	private static final String HEADER_OCS_API = "OCS-APIREQUEST";
 	private static final String HEADER_OCS_API_VALUE = "true";
 
