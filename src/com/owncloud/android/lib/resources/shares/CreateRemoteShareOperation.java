@@ -115,6 +115,8 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 			}
 			post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
 
+			post.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            
 			status = client.executeMethod(post);
 
 			if(isSuccess(status)) {

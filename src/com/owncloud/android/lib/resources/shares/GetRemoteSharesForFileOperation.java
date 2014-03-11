@@ -96,6 +96,8 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 				    new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
 				}); 
 
+			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            
 			status = client.executeMethod(get);
 
 			if(isSuccess(status)) {
