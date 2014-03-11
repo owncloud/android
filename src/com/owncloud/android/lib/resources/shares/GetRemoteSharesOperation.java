@@ -68,6 +68,7 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 		try{
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 			status = client.executeMethod(get);
 			if(isSuccess(status)) {
 				Log.d(TAG, "Obtain RESPONSE");

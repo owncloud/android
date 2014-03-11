@@ -48,10 +48,6 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
 	
 	private static final String TAG = GetRemoteUserNameOperation.class.getSimpleName();
 
-	// HEADER
-	private static final String HEADER_OCS_API = "OCS-APIREQUEST";
-	private static final String HEADER_OCS_API_VALUE = "true";
-
 	// OCS Route
 	private static final String OCS_ROUTE ="/index.php/ocs/cloud/user?format=json"; 
 
@@ -74,18 +70,14 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
 
 	@Override
 	protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        int status = -1;
-        GetMethod get = null;
-        
-        //Get the user
-        try {
-            get = new GetMethod(client.getWebdavUri() + OCS_ROUTE);
-            //get = new GetMethod(client.getBaseUri() + OCS_ROUTE);	// need to fix the semantics of getBaseUri and getWebdavUri
-            //Log.e(TAG, "Getting OC user information from " + client.getBaseUri() + OCS_ROUTE);
-            //Log.e(TAG, "Getting OC user information from " + client.getWebdavUri() + OCS_ROUTE);
-            // Add the Header
-            get.addRequestHeader(HEADER_OCS_API, HEADER_OCS_API_VALUE);
+		RemoteOperationResult result = null;
+		int status = -1;
+		GetMethod get = null;
+
+		//Get the user
+		try {
+			get = new GetMethod(client.getWebdavUri() + OCS_ROUTE);
+			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 			status = client.executeMethod(get);
 			if(isSuccess(status)) {
 				 String response = get.getResponseBodyAsString();
