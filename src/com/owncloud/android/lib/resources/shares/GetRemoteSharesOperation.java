@@ -67,13 +67,10 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 		// Get the response
 		try{
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
-			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 			status = client.executeMethod(get);
 			if(isSuccess(status)) {
-				Log.d(TAG, "Obtain RESPONSE");
 				String response = get.getResponseBodyAsString();
-				Log.d(TAG, response);
 
 				// Parse xml response --> obtain the response in ShareFiles ArrayList
 				// convert String into InputStream
@@ -81,7 +78,7 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 				ShareXMLParser xmlParser = new ShareXMLParser();
 				mShares = xmlParser.parseXMLResponse(is);
 				if (mShares != null) {
-					Log.d(TAG, "Shares: " + mShares.size());
+					Log.d(TAG, "Got " + mShares.size() + " shares");
 					result = new RemoteOperationResult(ResultCode.OK);
 					ArrayList<Object> sharesObjects = new ArrayList<Object>();
 					for (OCShare share: mShares) {

@@ -103,7 +103,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 		try {
 			// Post Method
 			post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
-			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+			//Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
 			post.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
 			post.addParameter(PARAM_PATH, mRemoteFilePath);
@@ -121,7 +121,6 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
 			if(isSuccess(status)) {
 				String response = post.getResponseBodyAsString();
-				Log.d(TAG, "Successful response: " + response);
 
 				result = new RemoteOperationResult(ResultCode.OK);
 				
@@ -132,7 +131,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 				mShares = xmlParser.parseXMLResponse(is);
 				if (xmlParser.isSuccess()) {
 					if (mShares != null) {
-						Log.d(TAG, "Shares: " + mShares.size());
+						Log.d(TAG, "Created " + mShares.size() + " share(s)");
 						result = new RemoteOperationResult(ResultCode.OK);
 						ArrayList<Object> sharesObjects = new ArrayList<Object>();
 						for (OCShare share: mShares) {
