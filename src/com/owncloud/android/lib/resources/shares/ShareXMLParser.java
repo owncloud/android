@@ -311,7 +311,7 @@ public class ShareXMLParser {
 
 			} else if (name.equalsIgnoreCase(NODE_EXPIRATION)) {
 				String value = readNode(parser, NODE_EXPIRATION);
-				if (!value.isEmpty()) {
+				if (!(value.length() == 0)) {
 					share.setExpirationDate(Long.parseLong(readNode(parser, NODE_EXPIRATION))); // check if expiration is in long format or date format
 				}
 
