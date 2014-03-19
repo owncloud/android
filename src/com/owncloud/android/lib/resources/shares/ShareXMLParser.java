@@ -26,7 +26,10 @@ package com.owncloud.android.lib.resources.shares;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -79,6 +82,8 @@ public class ShareXMLParser {
 	private static final String NODE_URL = "url";
 
 	private static final String TYPE_FOLDER = "folder";
+	
+	private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 	
 	private static final int SUCCESS = 100;
 	private static final int FAILURE = 403;
@@ -312,7 +317,7 @@ public class ShareXMLParser {
 			} else if (name.equalsIgnoreCase(NODE_EXPIRATION)) {
 				String value = readNode(parser, NODE_EXPIRATION);
 				if (!(value.length() == 0)) {
-					share.setExpirationDate(Long.parseLong(readNode(parser, NODE_EXPIRATION))); // check if expiration is in long format or date format
+					share.setExpirationDate(convertToDate(value).getTime()); //Long.parseLong(readNode(parser, NODE_EXPIRATION))); // check if expiration is in long format or date format
 				}
 
 			} else if (name.equalsIgnoreCase(NODE_TOKEN)) {
@@ -401,5 +406,21 @@ public class ShareXMLParser {
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * Convert String to Date
+	 * @param dateString
+	 * @return
+	 */
+	private Date convertToDate(String dateString){
+	    SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+	    Date convertedDate = new Date();
+	    try {
+	        convertedDate = dateFormat.parse(dateString);
+	    } catch (ParseException e) {
+	        e.printStackTrace();
+	    }
+	    return convertedDate;
 	}
 }
