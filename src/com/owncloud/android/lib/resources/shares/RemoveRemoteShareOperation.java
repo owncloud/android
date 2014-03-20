@@ -71,7 +71,6 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 		try {
 			String id = "/" + String.valueOf(mRemoteShareId);
 			delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
-			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
 
 			delete.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
             
@@ -79,7 +78,6 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 
 			if(isSuccess(status)) {
 				String response = delete.getResponseBodyAsString();
-				Log.d(TAG, "Successful response: " + response);
 
 				result = new RemoteOperationResult(ResultCode.OK);
 				
@@ -96,7 +94,7 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 					result = new RemoteOperationResult(false, status, delete.getResponseHeaders());	
 				}
 				
-				Log.i(TAG, "Unshare " + id + ": " + result.getLogMessage());
+				Log.d(TAG, "Unshare " + id + ": " + result.getLogMessage());
 			} else {
 				result = new RemoteOperationResult(false, status, delete.getResponseHeaders());
 			}
