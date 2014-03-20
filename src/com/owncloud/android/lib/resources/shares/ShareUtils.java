@@ -35,8 +35,5 @@ public class ShareUtils {
 
 	// OCS Route
 	public static final String SHARING_API_PATH ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
-	
-    // String to build the link with the token of a share: server address + "/public.php?service=files&t=" + token
-    public static final String SHARING_LINK_TOKEN = "/public.php?service=files&t=";
 
 }

@@ -101,75 +101,55 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 		PostMethod post = null;
 
 		try {
+			// Post Method
+			post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
-			// Check if the share link already exists
-			GetRemoteSharesForFileOperation operation = new GetRemoteSharesForFileOperation(mRemoteFilePath, false, false);
-			result = ((GetRemoteSharesForFileOperation)operation).execute(client);
+			post.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
+			post.addParameter(PARAM_PATH, mRemoteFilePath);
+			post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
+			post.addParameter(PARAM_SHARE_WITH, mShareWith);
+			post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
+			if (mPassword != null && mPassword.length() > 0) {
+				post.addParameter(PARAM_PASSWORD, mPassword);
+			}
+			post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
 
-			if (result.isSuccess()) { 
-				if (result.getData().size() > 0) {
-					OCShare share = (OCShare) result.getData().get(0);
-					// Update the link, build it with the token: server address + "/public.php?service=files&t=" + token
-					share.setShareLink(client.getBaseUri() + ShareUtils.SHARING_LINK_TOKEN + share.getToken());
-					Log.d(TAG, "Build Share link= " + share.getShareLink());
-					
-					result = new RemoteOperationResult(ResultCode.OK);
-					ArrayList<Object> sharesObjects = new ArrayList<Object>();
-					sharesObjects.add(share);
-					result.setData(sharesObjects);
-				}
-			} else {
-				// Post Method
-				post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
-				Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+			post.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            
+			status = client.executeMethod(post);
 
-				post.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
-				post.addParameter(PARAM_PATH, mRemoteFilePath);
-				post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
-				post.addParameter(PARAM_SHARE_WITH, mShareWith);
-				post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
-				if (mPassword != null && mPassword.length() > 0) {
-					post.addParameter(PARAM_PASSWORD, mPassword);
-				}
-				post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
+			if(isSuccess(status)) {
+				String response = post.getResponseBodyAsString();
+				Log.d(TAG, "Successful response: " + response);
 
-				post.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
-
-				status = client.executeMethod(post);
-
-				if(isSuccess(status)) {
-					String response = post.getResponseBodyAsString();
-					Log.d(TAG, "Successful response: " + response);
-
-					result = new RemoteOperationResult(ResultCode.OK);
-
-					// Parse xml response --> obtain the response in ShareFiles ArrayList
-					// convert String into InputStream
-					InputStream is = new ByteArrayInputStream(response.getBytes());
-					ShareXMLParser xmlParser = new ShareXMLParser();
-					mShares = xmlParser.parseXMLResponse(is);
-					if (xmlParser.isSuccess()) {
-						if (mShares != null) {
-							Log.d(TAG, "Shares: " + mShares.size());
-							result = new RemoteOperationResult(ResultCode.OK);
-							ArrayList<Object> sharesObjects = new ArrayList<Object>();
-							for (OCShare share: mShares) {
-								sharesObjects.add(share);
-							}
-							result.setData(sharesObjects);
+				result = new RemoteOperationResult(ResultCode.OK);
+				
+				// Parse xml response --> obtain the response in ShareFiles ArrayList
+				// convert String into InputStream
+				InputStream is = new ByteArrayInputStream(response.getBytes());
+				ShareXMLParser xmlParser = new ShareXMLParser();
+				mShares = xmlParser.parseXMLResponse(is);
+				if (xmlParser.isSuccess()) {
+					if (mShares != null) {
+						Log.d(TAG, "Shares: " + mShares.size());
+						result = new RemoteOperationResult(ResultCode.OK);
+						ArrayList<Object> sharesObjects = new ArrayList<Object>();
+						for (OCShare share: mShares) {
+							sharesObjects.add(share);
 						}
-					} else if (xmlParser.isFileNotFound()){
-						result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
-
-					} else {
-						result = new RemoteOperationResult(false, status, post.getResponseHeaders());	
+						result.setData(sharesObjects);
 					}
-
+				} else if (xmlParser.isFileNotFound()){
+					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
+					
 				} else {
-					result = new RemoteOperationResult(false, status, post.getResponseHeaders());
+					result = new RemoteOperationResult(false, status, post.getResponseHeaders());	
 				}
-	        }
-	        
+
+			} else {
+				result = new RemoteOperationResult(false, status, post.getResponseHeaders());
+			}
 			
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
