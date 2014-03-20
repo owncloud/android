@@ -42,7 +42,8 @@ public class WebdavUtils {
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US),
             new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US),
             new SimpleDateFormat("EEEEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US),
-            new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US) };
+            new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US) ,
+    		new SimpleDateFormat("yyyy-MM-dd hh:mm:ss") };
 
     public static String prepareXmlForPropFind() {
         String ret = "<?xml version=\"1.0\" ?><D:propfind xmlns:D=\"DAV:\"><D:allprop/></D:propfind>";
