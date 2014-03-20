@@ -59,10 +59,10 @@ import android.util.Log;
  */
 public class RemoteOperationResult implements Serializable {
 	
-	/** Generated - should be refreshed every time the class changes!! */
-	private static final long serialVersionUID = -8257349554488668693L;
-    
-    private static final String TAG = "RemoteOperationResult";
+	/** Generated - should be refreshed every time the class changes!! */;
+	private static final long serialVersionUID = 6160608497101537164L;
+	
+	private static final String TAG = "RemoteOperationResult";
     
     public enum ResultCode { 
         OK,
@@ -105,6 +105,7 @@ public class RemoteOperationResult implements Serializable {
     private Exception mException = null;
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
     private String mRedirectedLocation;
+    private String mAuthenticate;
 
     private ArrayList<Object> mData;
     
@@ -154,6 +155,10 @@ public class RemoteOperationResult implements Serializable {
                 if ("Location".equals(current.getName())) {
                     mRedirectedLocation = current.getValue();
                     break;
+                }
+                if ("WWW-Authenticate".equals(current.getName())) {
+                	mAuthenticate = current.getValue();
+                	break;
                 }
             }
         }
@@ -358,6 +363,11 @@ public class RemoteOperationResult implements Serializable {
         return (mRedirectedLocation != null &&
                 (mRedirectedLocation.toUpperCase().contains("SAML") || 
                 mRedirectedLocation.toLowerCase().contains("wayf")));
+    }
+    
+    public boolean isBasicAuthentication() {
+    	return (mAuthenticate != null &&
+    			(mAuthenticate.toUpperCase().startsWith("BASIC")));
     }
 
 }
