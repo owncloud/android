@@ -116,6 +116,10 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 					result = new RemoteOperationResult(ResultCode.OK);
 					ArrayList<Object> sharesObjects = new ArrayList<Object>();
 					for (OCShare share: mShares) {
+						// Build the link 
+						if (share.getToken().length() > 0) {
+							share.setShareLink(client.getBaseUri() + ShareUtils.SHARING_LINK_TOKEN + share.getToken());
+						}
 						sharesObjects.add(share);
 					}
 					result.setData(sharesObjects);

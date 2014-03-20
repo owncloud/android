@@ -35,6 +35,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 import android.util.Xml;
 
+import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.resources.files.FileUtils;
 
 /**
@@ -311,8 +312,8 @@ public class ShareXMLParser {
 
 			} else if (name.equalsIgnoreCase(NODE_EXPIRATION)) {
 				String value = readNode(parser, NODE_EXPIRATION);
-				if (!value.isEmpty()) {
-					share.setExpirationDate(Long.parseLong(readNode(parser, NODE_EXPIRATION))); // check if expiration is in long format or date format
+				if (!(value.length() == 0)) {
+					share.setExpirationDate(WebdavUtils.parseResponseDate(value).getTime()); 
 				}
 
 			} else if (name.equalsIgnoreCase(NODE_TOKEN)) {
@@ -402,4 +403,5 @@ public class ShareXMLParser {
 			}
 		}
 	}
+
 }
