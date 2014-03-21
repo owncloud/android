@@ -108,7 +108,7 @@ public class RemoteOperationResult implements Serializable {
     private String mAuthenticate;
 
     private ArrayList<Object> mData;
-    
+
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
         mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL || code == ResultCode.OK_NO_SSL);
@@ -365,9 +365,8 @@ public class RemoteOperationResult implements Serializable {
                 mRedirectedLocation.toLowerCase().contains("wayf")));
     }
     
-    public boolean isBasicAuthentication() {
-    	return (mAuthenticate != null &&
-    			(mAuthenticate.toUpperCase().startsWith("BASIC")));
+    public String getAuthenticateHeader() {
+    	return mAuthenticate;
     }
 
 }
