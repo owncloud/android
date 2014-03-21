@@ -87,7 +87,6 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 		try {
 			// Get Method
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
-			Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
 			// Add Parameters to Get Method
 			get.setQueryString(new NameValuePair[] { 
@@ -102,7 +101,6 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 
 			if(isSuccess(status)) {
 				String response = get.getResponseBodyAsString();
-				Log.d(TAG, "Successful response: " + response);
 
 				result = new RemoteOperationResult(ResultCode.OK);
 				
@@ -112,10 +110,14 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 				ShareXMLParser xmlParser = new ShareXMLParser();
 				mShares = xmlParser.parseXMLResponse(is);
 				if (mShares != null) {
-					Log.d(TAG, "Shares: " + mShares.size());
+					Log.d(TAG, "Got " + mShares.size() + " shares");
 					result = new RemoteOperationResult(ResultCode.OK);
 					ArrayList<Object> sharesObjects = new ArrayList<Object>();
 					for (OCShare share: mShares) {
+						// Build the link 
+						if (share.getToken().length() > 0) {
+							share.setShareLink(client.getBaseUri() + ShareUtils.SHARING_LINK_TOKEN + share.getToken());
+						}
 						sharesObjects.add(share);
 					}
 					result.setData(sharesObjects);
@@ -127,7 +129,7 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 			
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			Log.e(TAG, "Exception while Creating New Share", e);
+			Log.e(TAG, "Exception while getting shares", e);
 			
 		} finally {
 			if (get != null) {

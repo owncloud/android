@@ -35,6 +35,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 import android.util.Xml;
 
+import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.resources.files.FileUtils;
 
 /**
@@ -181,7 +182,7 @@ public class ShareXMLParser {
 	 */
 	private void readMeta(XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, NODE_META);
-		Log.d(TAG, "---- NODE META ---");
+		//Log.d(TAG, "---- NODE META ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -213,7 +214,7 @@ public class ShareXMLParser {
 		OCShare share = null;
 
 		parser.require(XmlPullParser.START_TAG, ns, NODE_DATA);		
-		Log.d(TAG, "---- NODE DATA ---");
+		//Log.d(TAG, "---- NODE DATA ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -263,7 +264,7 @@ public class ShareXMLParser {
 		
 		OCShare share = new OCShare();
 		
-		Log.d(TAG, "---- NODE ELEMENT ---");
+		//Log.d(TAG, "---- NODE ELEMENT ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -311,8 +312,8 @@ public class ShareXMLParser {
 
 			} else if (name.equalsIgnoreCase(NODE_EXPIRATION)) {
 				String value = readNode(parser, NODE_EXPIRATION);
-				if (!value.isEmpty()) {
-					share.setExpirationDate(Long.parseLong(readNode(parser, NODE_EXPIRATION))); // check if expiration is in long format or date format
+				if (!(value.length() == 0)) {
+					share.setExpirationDate(WebdavUtils.parseResponseDate(value).getTime()); 
 				}
 
 			} else if (name.equalsIgnoreCase(NODE_TOKEN)) {
@@ -359,7 +360,7 @@ public class ShareXMLParser {
 	private String readNode (XmlPullParser parser, String node) throws XmlPullParserException, IOException{
 		parser.require(XmlPullParser.START_TAG, ns, node);
 		String value = readText(parser);
-		Log.d(TAG, "node= " + node + ", value= " + value);
+		//Log.d(TAG, "node= " + node + ", value= " + value);
 		parser.require(XmlPullParser.END_TAG, ns, node);
 		return value;
 	}
@@ -402,4 +403,5 @@ public class ShareXMLParser {
 			}
 		}
 	}
+
 }
