@@ -60,7 +60,7 @@ import android.util.Log;
 public class RemoteOperationResult implements Serializable {
 	
 	/** Generated - should be refreshed every time the class changes!! */;
-	private static final long serialVersionUID = 6160608497101537164L;
+	private static final long serialVersionUID = -9003837206000993465L;
 	
 	private static final String TAG = "RemoteOperationResult";
     
