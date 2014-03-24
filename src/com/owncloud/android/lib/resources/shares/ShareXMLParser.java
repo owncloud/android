@@ -32,7 +32,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import android.util.Log;
+//import android.util.Log;
 import android.util.Xml;
 
 import com.owncloud.android.lib.common.network.WebdavUtils;
@@ -46,7 +46,7 @@ import com.owncloud.android.lib.resources.files.FileUtils;
 
 public class ShareXMLParser {
 
-	private static final String TAG = ShareXMLParser.class.getSimpleName();
+	//private static final String TAG = ShareXMLParser.class.getSimpleName();
 
 	// No namespaces
 	private static final String ns = null;
