@@ -25,8 +25,6 @@
 
 package com.owncloud.android.lib.resources.status;
 
-import android.util.Log;
-
 public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public static final OwnCloudVersion owncloud_v1 = new OwnCloudVersion(
             0x010000);
@@ -61,39 +59,15 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     	 mVersion = 0;
          mIsValid = false;
          mCountDots = version.length() - version.replace(".", "").length();
-         Log.d("OwnCloudVersion", "VERSION "+ version + " Asign dots = " + String.valueOf(mCountDots));
          parseVersion(version);
 
     }
-
-//    public OwnCloudVersion(String version, String versionString) {
-//        mVersion = 0;
-//        mIsValid = false;
-//        //mCountDots = version.length() - version.replace(".", "").length();
-//        mCountDots = 2;
-//        Log.d("OwnCloudVersion", "VERSION "+ version + " Asign dots = " + String.valueOf(mCountDots));
-//        parseVersion(version);
-//        if (versionString != null && versionString.length() > 0) {
-//        	mVersionString = versionString;
-//        	
-//        } else if (mIsValid) {
-//        	mVersionString = version;
-//        }
-//    }
     
     public String toString() {
     	String versionToString = String.valueOf((mVersion >> (8*mCountDots)) % 256);
-    	Log.d("OwnCloudVersion", " versionToString " + versionToString);
     	for (int i = mCountDots - 1; i >= 0; i-- ) {
-        	Log.d("OwnCloudVersion", "i = "+ i + " versionToString " + versionToString);
     		versionToString = versionToString + "." + String.valueOf((mVersion >> (8*i)) % 256);
     	}
-    	//versionToString = versionToString + "." + String.valueOf((mVersion) % 256);
-    	
-    	Log.d("OwnCloudVersion", "dots = " + String.valueOf(mCountDots));
-    	Log.d("OwnCloudVersion", " versionToString " + versionToString);
-        Log.d("OwncloudVersion", ((mVersion >> 24) % 256) + "." + ((mVersion >> 16) % 256) + "." + ((mVersion >> 8) % 256) + "."
-                + ((mVersion) % 256));
         return versionToString;
     }
     
@@ -138,25 +112,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 				versionValue = versionValue << 8;
 			}
 		}
-    	Log.d("OwnCloudVersion", " ---- version " + String.valueOf(versionValue));
     	
-//    	versionValue = 0;
-//		if (nums.length > 0) {
-//			versionValue += Integer.parseInt(nums[0]);
-//		}
-//		versionValue = versionValue << 8;
-//		if (nums.length > 1) {
-//			versionValue += Integer.parseInt(nums[1]);
-//		}
-//		versionValue = versionValue << 8;
-//		if (nums.length > 2) {
-//			versionValue += Integer.parseInt(nums[2]);
-//		}
-//		versionValue = versionValue << 8;
-//		if (nums.length > 3) {
-//			versionValue += Integer.parseInt(nums[3]);
-//		}
-//		Log.d("OwnCloudVersion", " -----version " + String.valueOf(versionValue));
 		return versionValue; 
     }
     
