@@ -87,7 +87,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                 } else {
                     String version = json.getString(NODE_VERSION);
                     String versionString = json.getString(NODE_VERSIONSTRING);
-                    mOCVersion = new OwnCloudVersion(version, versionString);
+                    mOCVersion = new OwnCloudVersion(version);
                     if (!mOCVersion.isVersionValid()) {
                         mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.BAD_OC_VERSION);
                         

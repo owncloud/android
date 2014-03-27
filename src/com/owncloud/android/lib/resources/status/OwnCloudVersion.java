@@ -25,6 +25,8 @@
 
 package com.owncloud.android.lib.resources.status;
 
+import android.util.Log;
+
 public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public static final OwnCloudVersion owncloud_v1 = new OwnCloudVersion(
             0x010000);
@@ -37,7 +39,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(
             0x040500);
     
-    public static final int MINIMUM_VERSION_STRING_FOR_SHARING_API = 0x05000D;
+    public static final int MINIMUM_VERSION_FOR_SHARING_API = 0x05001B; // 5.0.27
     
     // format is in version
     // 0xAABBCC
@@ -47,28 +49,52 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     private boolean mIsValid;
     // not parsed, saved same value offered by the server
     private String mVersionString;
+    private int mCountDots;
 
     protected OwnCloudVersion(int version) {
         mVersion = version;
         mIsValid = true;
         mVersionString = "";
     }
+    
+    public OwnCloudVersion(String version){
+    	 mVersion = 0;
+         mIsValid = false;
+         mCountDots = version.length() - version.replace(".", "").length();
+         Log.d("OwnCloudVersion", "VERSION "+ version + " Asign dots = " + String.valueOf(mCountDots));
+         parseVersion(version);
 
-    public OwnCloudVersion(String version, String versionString) {
-        mVersion = 0;
-        mIsValid = false;
-        parseVersionString(version);
-        if (versionString != null && versionString.length() > 0) {
-        	mVersionString = versionString;
-        	
-        } else if (mIsValid) {
-        	mVersionString = version;
-        }
     }
+
+//    public OwnCloudVersion(String version, String versionString) {
+//        mVersion = 0;
+//        mIsValid = false;
+//        //mCountDots = version.length() - version.replace(".", "").length();
+//        mCountDots = 2;
+//        Log.d("OwnCloudVersion", "VERSION "+ version + " Asign dots = " + String.valueOf(mCountDots));
+//        parseVersion(version);
+//        if (versionString != null && versionString.length() > 0) {
+//        	mVersionString = versionString;
+//        	
+//        } else if (mIsValid) {
+//        	mVersionString = version;
+//        }
+//    }
     
     public String toString() {
-        return ((mVersion >> 16) % 256) + "." + ((mVersion >> 8) % 256) + "."
-                + ((mVersion) % 256);
+    	String versionToString = String.valueOf((mVersion >> (8*mCountDots)) % 256);
+    	Log.d("OwnCloudVersion", " versionToString " + versionToString);
+    	for (int i = mCountDots - 1; i >= 0; i-- ) {
+        	Log.d("OwnCloudVersion", "i = "+ i + " versionToString " + versionToString);
+    		versionToString = versionToString + "." + String.valueOf((mVersion >> (8*i)) % 256);
+    	}
+    	//versionToString = versionToString + "." + String.valueOf((mVersion) % 256);
+    	
+    	Log.d("OwnCloudVersion", "dots = " + String.valueOf(mCountDots));
+    	Log.d("OwnCloudVersion", " versionToString " + versionToString);
+        Log.d("OwncloudVersion", ((mVersion >> 24) % 256) + "." + ((mVersion >> 16) % 256) + "." + ((mVersion >> 8) % 256) + "."
+                + ((mVersion) % 256));
+        return versionToString;
     }
     
     public String getVersion() {
@@ -89,9 +115,9 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
                 : another.mVersion < mVersion ? 1 : -1;
     }
 
-    private void parseVersionString(String versionString) {
+    private void parseVersion(String version) {
     	try {
-    		mVersion = getParsedVersionString(versionString);
+    		mVersion = getParsedVersion(version);
     		mIsValid = true;
     		
     	} catch (Exception e) {
@@ -99,37 +125,51 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
         }
     }
     
-    private int getParsedVersionString(String versionString) throws NumberFormatException {
-		int version = 0;
+    private int getParsedVersion(String version) throws NumberFormatException {
+		int versionValue = 0;
 		
     	// get only numeric part 
-		versionString = versionString.replaceAll("[^\\d.]", "");
+		version = version.replaceAll("[^\\d.]", "");
 		
-		String[] nums = versionString.split("\\.");
-		if (nums.length > 0) {
-			version += Integer.parseInt(nums[0]);
+		String[] nums = version.split("\\.");
+		for (int i = 0; i < nums.length; i++) {
+			versionValue += Integer.parseInt(nums[i]);
+			if (i< nums.length -1) {
+				versionValue = versionValue << 8;
+			}
 		}
-		version = version << 8;
-		if (nums.length > 1) {
-			version += Integer.parseInt(nums[1]);
-		}
-		version = version << 8;
-		if (nums.length > 2) {
-			version += Integer.parseInt(nums[2]);
-		}
-		return version; 
+    	Log.d("OwnCloudVersion", " ---- version " + String.valueOf(versionValue));
+    	
+//    	versionValue = 0;
+//		if (nums.length > 0) {
+//			versionValue += Integer.parseInt(nums[0]);
+//		}
+//		versionValue = versionValue << 8;
+//		if (nums.length > 1) {
+//			versionValue += Integer.parseInt(nums[1]);
+//		}
+//		versionValue = versionValue << 8;
+//		if (nums.length > 2) {
+//			versionValue += Integer.parseInt(nums[2]);
+//		}
+//		versionValue = versionValue << 8;
+//		if (nums.length > 3) {
+//			versionValue += Integer.parseInt(nums[3]);
+//		}
+//		Log.d("OwnCloudVersion", " -----version " + String.valueOf(versionValue));
+		return versionValue; 
     }
     
     
     public boolean isSharedSupported() {
-    	int versionString = 0;
-    	try {
-    		versionString = getParsedVersionString(mVersionString);
-    		
-    	} catch (Exception e) {
-    		// nothing to do here
-    	}
-    	return (versionString >= MINIMUM_VERSION_STRING_FOR_SHARING_API);
+//    	int version = 0;
+//    	try {
+//    		version = getParsedVersion(mVersion);
+//    		
+//    	} catch (Exception e) {
+//    		// nothing to do here
+//    	}
+    	return (mVersion >= MINIMUM_VERSION_FOR_SHARING_API);
     }
     
     
