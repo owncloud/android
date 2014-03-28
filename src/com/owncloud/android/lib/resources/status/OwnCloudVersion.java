@@ -44,6 +44,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     // for version AA.BB.CC
     // ie version 2.0.3 will be stored as 0x020003
     private int mVersion;
+    private int mShortVersion; // version with 2 dots or less, for comparing with _MINIMUM_VERSION_FOR_SHARING_API
     private boolean mIsValid;
     // not parsed, saved same value offered by the server
     private String mVersionString;
@@ -51,12 +52,14 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     protected OwnCloudVersion(int version) {
         mVersion = version;
+        mShortVersion= version;
         mIsValid = true;
         mVersionString = "";
     }
     
     public OwnCloudVersion(String version){
     	 mVersion = 0;
+    	 mShortVersion = 0;
          mIsValid = false;
          mCountDots = version.length() - version.replace(".", "").length();
          parseVersion(version);
@@ -100,32 +103,29 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     }
     
     private int getParsedVersion(String version) throws NumberFormatException {
-		int versionValue = 0;
-		
+    	int versionValue = 0;
+
     	// get only numeric part 
-		version = version.replaceAll("[^\\d.]", "");
-		
-		String[] nums = version.split("\\.");
-		for (int i = 0; i < nums.length; i++) {
-			versionValue += Integer.parseInt(nums[i]);
-			if (i< nums.length -1) {
-				versionValue = versionValue << 8;
-			}
-		}
-    	
-		return versionValue; 
+    	version = version.replaceAll("[^\\d.]", "");
+
+    	String[] nums = version.split("\\.");
+    	for (int i = 0; i < nums.length; i++) {
+    		versionValue += Integer.parseInt(nums[i]);
+    		if ( i<=2 ) {
+    			mShortVersion = versionValue;
+    		}
+
+    		if (i < nums.length -1) {
+    			versionValue = versionValue << 8;
+    		}
+    	}
+
+    	return versionValue; 
     }
     
     
     public boolean isSharedSupported() {
-//    	int version = 0;
-//    	try {
-//    		version = getParsedVersion(mVersion);
-//    		
-//    	} catch (Exception e) {
-//    		// nothing to do here
-//    	}
-    	return (mVersion >= MINIMUM_VERSION_FOR_SHARING_API);
+    	return (mShortVersion >= MINIMUM_VERSION_FOR_SHARING_API);
     }
     
     
