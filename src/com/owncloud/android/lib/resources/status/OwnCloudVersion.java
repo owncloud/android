@@ -27,48 +27,49 @@ package com.owncloud.android.lib.resources.status;
 
 public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public static final OwnCloudVersion owncloud_v1 = new OwnCloudVersion(
-            0x010000);
+            0x01000000);
     public static final OwnCloudVersion owncloud_v2 = new OwnCloudVersion(
-            0x020000);
+            0x02000000);
     public static final OwnCloudVersion owncloud_v3 = new OwnCloudVersion(
-            0x030000);
+            0x03000000);
     public static final OwnCloudVersion owncloud_v4 = new OwnCloudVersion(
-            0x040000);
+            0x04000000);
     public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(
-            0x040500);
+            0x04050000);
     
     public static final int MINIMUM_VERSION_FOR_SHARING_API = 0x05001B; // 5.0.27
     
+    private static final int MAX_DOTS = 3;
+    
     // format is in version
-    // 0xAABBCC
-    // for version AA.BB.CC
-    // ie version 2.0.3 will be stored as 0x020003
+    // 0xAABBCCDD
+    // for version AA.BB.CC.DD
+    // ie version 2.0.3 will be stored as 0x02000300
     private int mVersion;
-    private int mShortVersion; // version with 2 dots or less, for comparing with _MINIMUM_VERSION_FOR_SHARING_API
     private boolean mIsValid;
-    // not parsed, saved same value offered by the server
-    private String mVersionString;
-    private int mCountDots;
 
     protected OwnCloudVersion(int version) {
         mVersion = version;
-        mShortVersion= version;
         mIsValid = true;
-        mVersionString = "";
     }
     
     public OwnCloudVersion(String version){
     	 mVersion = 0;
-    	 mShortVersion = 0;
          mIsValid = false;
-         mCountDots = version.length() - version.replace(".", "").length();
+         int countDots = version.length() - version.replace(".", "").length();
+
+         // Complete the version. Version must have 3 dots
+         for (int i = countDots; i < MAX_DOTS; i++) {
+        	 version = version + ".0";
+         }
+         
          parseVersion(version);
 
     }
     
     public String toString() {
-    	String versionToString = String.valueOf((mVersion >> (8*mCountDots)) % 256);
-    	for (int i = mCountDots - 1; i >= 0; i-- ) {
+    	String versionToString = String.valueOf((mVersion >> (8*MAX_DOTS)) % 256);
+    	for (int i = MAX_DOTS - 1; i >= 0; i-- ) {
     		versionToString = versionToString + "." + String.valueOf((mVersion >> (8*i)) % 256);
     	}
         return versionToString;
@@ -78,10 +79,6 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     	return toString();
     }
     
-    public String getVersionString() {
-    	return mVersionString;
-    }
-
     public boolean isVersionValid() {
         return mIsValid;
     }
@@ -109,13 +106,9 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     	version = version.replaceAll("[^\\d.]", "");
 
     	String[] nums = version.split("\\.");
-    	for (int i = 0; i < nums.length; i++) {
+    	for (int i = 0; i < nums.length && i <= MAX_DOTS; i++) {
     		versionValue += Integer.parseInt(nums[i]);
-    		if ( i<=2 ) {
-    			mShortVersion = versionValue;
-    		}
-
-    		if (i < nums.length -1) {
+    		if (i < nums.length - 1) {
     			versionValue = versionValue << 8;
     		}
     	}
@@ -125,7 +118,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     
     
     public boolean isSharedSupported() {
-    	return (mShortVersion >= MINIMUM_VERSION_FOR_SHARING_API);
+    	return (mVersion >= MINIMUM_VERSION_FOR_SHARING_API);
     }
     
     
