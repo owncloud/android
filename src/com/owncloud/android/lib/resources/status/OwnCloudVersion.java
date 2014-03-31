@@ -37,7 +37,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(
             0x04050000);
     
-    public static final int MINIMUM_VERSION_FOR_SHARING_API = 0x05001B; // 5.0.27
+    public static final int MINIMUM_VERSION_FOR_SHARING_API = 0x05001B00; // 5.0.27
     
     private static final int MAX_DOTS = 3;
     
