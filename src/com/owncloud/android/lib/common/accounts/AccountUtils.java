@@ -81,10 +81,9 @@ public class AccountUtils {
         AccountManager ama = AccountManager.get(context);
         String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
         String version  = ama.getUserData(account, Constants.KEY_OC_VERSION);
-        String versionString  = ama.getUserData(account, Constants.KEY_OC_VERSION_STRING);
         boolean supportsOAuth = (ama.getUserData(account, Constants.KEY_SUPPORTS_OAUTH2) != null);
         boolean supportsSamlSso = (ama.getUserData(account, Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null);
-        OwnCloudVersion ver = new OwnCloudVersion(version, versionString);
+        OwnCloudVersion ver = new OwnCloudVersion(version);
         String webdavpath = getWebdavPath(ver, supportsOAuth, supportsSamlSso);
 
         if (baseurl == null || webdavpath == null) 
@@ -149,10 +148,6 @@ public class AccountUtils {
 	     * http://server/path or https://owncloud.server
 	     */
 	    public static final String KEY_OC_BASE_URL = "oc_base_url";
-	    /**
-	     * Version string as shown in the status.php resource in the server side
-	     */
-		public static final String KEY_OC_VERSION_STRING = "oc_version_string";
 	    /**
 	     * Flag signaling if the ownCloud server can be accessed with OAuth2 access tokens.
 	     */

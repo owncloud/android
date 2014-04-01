@@ -58,7 +58,6 @@ public class GetRemoteStatusOperation extends RemoteOperation {
     
     private static final String NODE_INSTALLED = "installed";
     private static final String NODE_VERSION = "version";
-    private static final String NODE_VERSIONSTRING = "versionstring";
     
     private String mUrl;
     private RemoteOperationResult mLatestResult;
@@ -82,8 +81,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                     mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
                 } else {
                     String version = json.getString(NODE_VERSION);
-                    String versionString = json.getString(NODE_VERSIONSTRING);
-                    OwnCloudVersion ocVersion = new OwnCloudVersion(version, versionString);
+					OwnCloudVersion ocVersion = new OwnCloudVersion(version);
                     if (!ocVersion.isVersionValid()) {
                         mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.BAD_OC_VERSION);
                         
