@@ -24,6 +24,8 @@
 
 package com.owncloud.android.lib.resources.status;
 
+import java.util.ArrayList;
+
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.JSONException;
@@ -61,18 +63,12 @@ public class GetRemoteStatusOperation extends RemoteOperation {
     private String mUrl;
     private RemoteOperationResult mLatestResult;
     private Context mContext;
-    private OwnCloudVersion mOCVersion;
 
     public GetRemoteStatusOperation(String url, Context context) {
         mUrl = url;
         mContext = context;
-        mOCVersion = null;
     }
     
-    public OwnCloudVersion getDiscoveredVersion() {
-        return mOCVersion;
-    }
-
     private boolean tryConnection(OwnCloudClient wc, String urlSt) {
         boolean retval = false;
         GetMethod get = null;
@@ -87,8 +83,8 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                 } else {
                     String version = json.getString(NODE_VERSION);
                     String versionString = json.getString(NODE_VERSIONSTRING);
-                    mOCVersion = new OwnCloudVersion(version, versionString);
-                    if (!mOCVersion.isVersionValid()) {
+                    OwnCloudVersion ocVersion = new OwnCloudVersion(version, versionString);
+                    if (!ocVersion.isVersionValid()) {
                         mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.BAD_OC_VERSION);
                         
                     } else {
@@ -97,6 +93,9 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                                                                     RemoteOperationResult.ResultCode.OK_NO_SSL
                             );
 
+                        ArrayList<Object> data = new ArrayList<Object>();
+                        data.add(ocVersion);
+                        mLatestResult.setData(data);
                         retval = true;
                     }
                 }
