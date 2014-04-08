@@ -24,6 +24,8 @@
 
 package com.owncloud.android.lib.resources.users;
 
+import java.util.ArrayList;
+
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
@@ -93,6 +95,10 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
 				 
 				 // Result
 				 result = new RemoteOperationResult(true, status, get.getResponseHeaders());
+				 // Username in result.data
+                 ArrayList<Object> data = new ArrayList<Object>();
+                 data.add(displayName);
+                 result.setData(data);
 				 mUserName =  displayName;
 				 
 				 Log.d(TAG, "*** Parsed user information: " + id + " - " + displayName + " - " + email);
