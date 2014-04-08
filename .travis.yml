@@ -8,6 +8,7 @@ before_install:
     - curl -3L https://raw.github.com/embarkmobile/android-sdk-installer/version-1/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS
     - source ~/.android-sdk-installer/env
     - rm pom.xml
+    - android update project -p .
 
 script:
   - ant clean
