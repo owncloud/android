@@ -21,7 +21,7 @@
 				<isset property="env.OCTEST_USERNAME" />
 			</condition>
 			<then>
-				<echo>Setting username ${env.OC_TEST_USERNAME}</echo>
+				<echo>Setting username ${env.OCTEST_USERNAME}</echo>
 				<replaceregexp
 					file="res/values/setup.xml"
 					match='("username"&gt;)\s*(&lt;)'
