@@ -2,6 +2,7 @@ language: java
 jdk: oraclejdk7
 before_install:
   # Install base Android SDK
+	- echo $ENCRYPT_TEST
     - sudo apt-get update -qq
     - sudo apt-get install -qq libstdc++6:i386 lib32z1
     - export COMPONENTS=build-tools-18.1.0,android-19,sysimg-19
@@ -14,3 +15,6 @@ script:
   - ant clean
   - ant debug
 
+env:
+  global:
+    secure: RIaWeu3vSn8QPaq388W6bPkralsv5F3tixk0h56mGlEQBtiLfkLmkXGCMBUehpOPIE1nXVzKyAcpa99EMltPJoo9gzK/4t0XMqFEGBUJsttnQYM4Js4wapJ4iaoAaY1wvFHEweAz2XpwHS3Wf4W9bHYDcXBeELxFxSYXQZgPj6Y=
