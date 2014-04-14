@@ -25,10 +25,15 @@
 package com.owncloud.android.lib.test_project;
 
 import java.io.File;
+import java.security.GeneralSecurityException;
+
+import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
@@ -47,6 +52,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 
 /**
@@ -57,6 +63,7 @@ import android.view.Menu;
 
 public class TestActivity extends Activity {
 	
+	private static final String TAG = null;
 	// This account must exists on the server side
 	private String mServerUri;
 	private String mWebdavPath;
@@ -78,10 +85,28 @@ public class TestActivity extends Activity {
 		mPass = getString(R.string.password);
 		mChunked = getResources().getBoolean(R.bool.chunked);
     	
-	    Uri uri = Uri.parse(mServerUri + mWebdavPath);
-    	mClient = OwnCloudClientFactory.createOwnCloudClient(uri ,getApplicationContext(), true);
-    	mClient.setBasicCredentials(mUser, mPass);
-    	mClient.setBaseUri(Uri.parse(mServerUri));
+		Protocol pr = Protocol.getProtocol("https");
+		if (pr == null || !(pr.getSocketFactory() instanceof SelfSignedConfidentSslSocketFactory)) {
+			try {
+				ProtocolSocketFactory psf = new SelfSignedConfidentSslSocketFactory();
+				Protocol.registerProtocol(
+						"https",
+						new Protocol("https", psf, 443));
+				
+			} catch (GeneralSecurityException e) {
+				Log.e(TAG, "Self-signed confident SSL context could not be loaded");
+			}
+		}
+		
+		Uri uri = Uri.parse(mServerUri + mWebdavPath);
+		mClient = new OwnCloudClient(NetworkUtils.getMultiThreadedConnManager());
+		mClient.setDefaultTimeouts(
+				OwnCloudClientFactory.DEFAULT_DATA_TIMEOUT, 
+				OwnCloudClientFactory.DEFAULT_CONNECTION_TIMEOUT);
+		mClient.setWebdavUri(uri);
+		mClient.setFollowRedirects(true);
+		mClient.setBasicCredentials(mUser, mPass);
+		mClient.setBaseUri(Uri.parse(mServerUri));
     	
 	}
 
