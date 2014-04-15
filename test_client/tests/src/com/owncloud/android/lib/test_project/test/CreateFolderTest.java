@@ -24,7 +24,10 @@
 package com.owncloud.android.lib.test_project.test;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -35,18 +38,26 @@ import android.test.ActivityInstrumentationTestCase2;
 /**
  * Class to test Create Folder Operation
  * @author masensio
+ * @author David A. Velasco
  *
  */
 public class CreateFolderTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
+	
+	private static final String LOG_TAG = CreateFolderTest.class.getCanonicalName();
+
+	private static final String FOLDER_PATH_BASE = "/testCreateFolder";
+
 	private TestActivity mActivity;
 	private String mCurrentDate;
+	private List<String> mCreatedFolderPaths;
 	
 	public CreateFolderTest() {
 	    super(TestActivity.class);
 	   
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 		mCurrentDate = sdf.format(new Date());
+		mCreatedFolderPaths = new ArrayList<String>();
 	}
 	
 	@Override
@@ -54,24 +65,22 @@ public class CreateFolderTest extends ActivityInstrumentationTestCase2<TestActiv
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
+	    mCreatedFolderPaths.clear();
 	}
 	
 	/**
 	 * Test Create Folder
 	 */
 	public void testCreateFolder() {
-
-		String remotePath = "/testCreateFolder" + mCurrentDate;
-		boolean createFullPath = true;
-		
-		RemoteOperationResult result =  mActivity.createFolder(remotePath, createFullPath);
+		String remotePath = FOLDER_PATH_BASE + mCurrentDate;
+		mCreatedFolderPaths.add(remotePath);
+		RemoteOperationResult result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.isSuccess() || result.getCode() == ResultCode.TIMEOUT);
 		
 		// Create Subfolder
-		remotePath = "/testCreateFolder" + mCurrentDate + "/" + "testCreateFolder" + mCurrentDate;
-		createFullPath = true;
-		
-		result =  mActivity.createFolder(remotePath, createFullPath);
+		remotePath = FOLDER_PATH_BASE + mCurrentDate + FOLDER_PATH_BASE + mCurrentDate;
+		mCreatedFolderPaths.add(remotePath);
+		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.isSuccess() || result.getCode() == ResultCode.TIMEOUT);
 	}
 	
@@ -80,40 +89,60 @@ public class CreateFolderTest extends ActivityInstrumentationTestCase2<TestActiv
 	 * Test to Create Folder with special characters: /  \  < >  :  "  |  ?  *
 	 */
 	public void testCreateFolderSpecialCharacters() {		
-		boolean createFullPath = true;
 		
-		String remotePath = "/testSpecialCharacters_\\" + mCurrentDate;
-		RemoteOperationResult result =  mActivity.createFolder(remotePath, createFullPath);
+		String remotePath = FOLDER_PATH_BASE + "_\\" + mCurrentDate;
+		mCreatedFolderPaths.add(remotePath);
+		RemoteOperationResult result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		remotePath = "/testSpecialCharacters_<" + mCurrentDate;		
-		result =  mActivity.createFolder(remotePath, createFullPath);
+		remotePath = FOLDER_PATH_BASE + "_<" + mCurrentDate;		
+		mCreatedFolderPaths.add(remotePath);
+		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		remotePath = "/testSpecialCharacters_>" + mCurrentDate;		
-		result =  mActivity.createFolder(remotePath, createFullPath);
+		remotePath = FOLDER_PATH_BASE + "_>" + mCurrentDate;		
+		mCreatedFolderPaths.add(remotePath);
+		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		remotePath = "/testSpecialCharacters_:" + mCurrentDate;		
-		result =  mActivity.createFolder(remotePath, createFullPath);
+		remotePath = FOLDER_PATH_BASE + "_:" + mCurrentDate;		
+		mCreatedFolderPaths.add(remotePath);
+		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		remotePath = "/testSpecialCharacters_\"" + mCurrentDate;		
-		result =  mActivity.createFolder(remotePath, createFullPath);
+		remotePath = FOLDER_PATH_BASE + "_\"" + mCurrentDate;		
+		mCreatedFolderPaths.add(remotePath);
+		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		remotePath = "/testSpecialCharacters_|" + mCurrentDate;		
-		result =  mActivity.createFolder(remotePath, createFullPath);
+		remotePath = FOLDER_PATH_BASE + "_|" + mCurrentDate;		
+		mCreatedFolderPaths.add(remotePath);
+		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		remotePath = "/testSpecialCharacters_?" + mCurrentDate;		
-		result =  mActivity.createFolder(remotePath, createFullPath);
+		remotePath = FOLDER_PATH_BASE + "_?" + mCurrentDate;		
+		mCreatedFolderPaths.add(remotePath);
+		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		remotePath = "/testSpecialCharacters_*" + mCurrentDate;		
-		result =  mActivity.createFolder(remotePath, createFullPath);
+		remotePath = FOLDER_PATH_BASE + "_*" + mCurrentDate;		
+		mCreatedFolderPaths.add(remotePath);
+		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 	}
 
 
+	@Override
+	protected void tearDown() throws Exception {
+		Iterator<String> it = mCreatedFolderPaths.iterator();
+		RemoteOperationResult removeResult = null;
+		while (it.hasNext()) {
+			removeResult = mActivity.removeFile(it.next());
+			if (!removeResult.isSuccess()) {
+				Utils.logAndThrow(LOG_TAG, removeResult);
+			}
+		}
+		super.tearDown();
+	}
+	
 }
