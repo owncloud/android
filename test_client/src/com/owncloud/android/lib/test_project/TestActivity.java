@@ -77,6 +77,8 @@ public class TestActivity extends Activity {
 	private static final int BUFFER_SIZE = 1024;
 	
 	public static final String ASSETS__TEXT_FILE_NAME = "textFile.txt";
+	public static final String ASSETS__IMAGE_FILE_NAME = "imageFile.png";
+	public static final String ASSETS__VIDEO_FILE_NAME = "videoFile.MP4";
 	
 	//private Account mAccount = null;
 	private OwnCloudClient mClient;

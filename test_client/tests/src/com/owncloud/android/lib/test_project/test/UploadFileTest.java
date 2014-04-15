@@ -25,48 +25,45 @@
 package com.owncloud.android.lib.test_project.test;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import android.content.res.AssetManager;
-import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 /**
  * Class to test Update File Operation
  * @author masensio
+ * @author David A. Velasco
  *
  */
 
 public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
-	/* Files to upload. These files must exists on the device */	
-	private final String mFileToUpload = "fileToUpload.png";
-	private final String mMimeType = "image/png";
+	private static final String LOG_TAG = UploadFileTest.class.getCanonicalName();
 	
-	private final String mFileToUploadWithChunks = "fileToUploadChunks.MP4";
-	private final String mMimeTypeWithChunks = "video/mp4";
+	private static final String UPLOAD_PATH = 
+			FileUtils.PATH_SEPARATOR + TestActivity.ASSETS__IMAGE_FILE_NAME;
 	
-	private final String mFileNotFound = "fileNotFound.png";
+	private static final String CHUNKED_UPLOAD_PATH = 
+			FileUtils.PATH_SEPARATOR + TestActivity.ASSETS__VIDEO_FILE_NAME;
 	
-	private final String mStoragePath = "/owncloud/tmp/uploadTest";
-	private String mPath;
-	
-	private String mCurrentDate;
-	
+	private static final String FILE_NOT_FOUND_PATH = 
+			FileUtils.PATH_SEPARATOR + "fileNotFound.png";
+
+
 	private TestActivity mActivity;
+	private File mFileToUpload, mFileToUploadWithChunks;
+	private List<String> mUploadedFilesPaths;
+	
 	
 	public UploadFileTest() {
 	    super(TestActivity.class);
-	   
+		mUploadedFilesPaths = new ArrayList<String>();
 	}
 	
 	@Override
@@ -74,68 +71,24 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
+	    mUploadedFilesPaths.clear();
 	    
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-	    mCurrentDate = sdf.format(new Date());
-	    
-	    File sdCard = Environment.getExternalStorageDirectory();
-        mPath =  sdCard.getAbsolutePath() + "/" + mStoragePath + mCurrentDate;
-        
-		//mActivity.createFolder(mPath, true);
-        
-	    copyAssets();
+		mFileToUpload = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
+		mFileToUploadWithChunks = mActivity.extractAsset(TestActivity.ASSETS__VIDEO_FILE_NAME);
 	}
 
-	/**
-	 * Copy Files to ulpload to SdCard
-	 */
-	private void copyAssets() {
-		AssetManager assetManager = getActivity().getAssets();
-		String[] files = { mFileToUpload, mFileToUploadWithChunks }; 
-	    
-	    // Folder with contents
-        File folder = new File(mPath);
-        folder.mkdirs();
-        
-        
-	    for(String filename : files) {
-	        InputStream in = null;
-	        OutputStream out = null;
-	        try {
-	          in = assetManager.open(filename);
-	          File outFile = new File(folder, filename);
-	          out = new FileOutputStream(outFile);
-	          copyFile(in, out);
-	          in.close();
-	          in = null;
-	          out.flush();
-	          out.close();
-	          out = null;
-	        } catch(IOException e) {
-	            Log.e("tag", "Failed to copy asset file: " + filename, e);
-	        }       
-	    }
-	}
-	
-	private void copyFile(InputStream in, OutputStream out) throws IOException {
-	    byte[] buffer = new byte[1024];
-	    int read;
-	    while((read = in.read(buffer)) != -1){
-	      out.write(buffer, 0, read);
-	    }
-	}
-	
 	
 	/**
 	 * Test Upload File without chunks
 	 */
 	public void testUploadFile() {
-
-		String storagePath = mPath + "/" + mFileToUpload;
-		//String remotePath = "/uploadTest" + mCurrentDate + "/" + mFileToUpload;
-		String remotePath = "/" + mFileToUpload;
 		
-		RemoteOperationResult result = mActivity.uploadFile(storagePath, remotePath, mMimeType);
+		RemoteOperationResult result = mActivity.uploadFile(
+				mFileToUpload.getAbsolutePath(), 
+				UPLOAD_PATH, 
+				"image/png"
+				);
+	    mUploadedFilesPaths.add(UPLOAD_PATH);
 		assertTrue(result.isSuccess());
 	}
 	
@@ -143,12 +96,13 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 * Test Upload File with chunks
 	 */
 	public void testUploadFileWithChunks() {
-
-		String storagePath = mPath + "/" + mFileToUploadWithChunks;
-		//String remotePath = "/uploadTest" + mCurrentDate + "/" +mFileToUploadWithChunks;
-		String remotePath = "/" + mFileToUploadWithChunks;
 		
-		RemoteOperationResult result = mActivity.uploadFile(storagePath, remotePath, mMimeTypeWithChunks);
+		RemoteOperationResult result = mActivity.uploadFile(
+				mFileToUploadWithChunks.getAbsolutePath(),
+				CHUNKED_UPLOAD_PATH, 
+				"video/mp4"
+				);
+	    mUploadedFilesPaths.add(CHUNKED_UPLOAD_PATH);
 		assertTrue(result.isSuccess());
 	}
 	
@@ -157,12 +111,26 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testUploadFileNotFound() {
 
-		String storagePath = mPath + "/" + mFileNotFound;
-		//String remotePath = "/uploadTest" + mCurrentDate + "/" + mFileToUpload;
-		String remotePath = "/" + mFileNotFound;
-		
-		RemoteOperationResult result = mActivity.uploadFile(storagePath, remotePath, mMimeType);
+		RemoteOperationResult result = mActivity.uploadFile(
+				FILE_NOT_FOUND_PATH, 
+				FILE_NOT_FOUND_PATH, 
+				"image/png"
+				);
 		assertFalse(result.isSuccess());
+	}
+	
+
+	@Override
+	protected void tearDown() throws Exception {
+		Iterator<String> it = mUploadedFilesPaths.iterator();
+		RemoteOperationResult removeResult = null;
+		while (it.hasNext()) {
+			removeResult = mActivity.removeFile(it.next());
+			if (!removeResult.isSuccess()) {
+				Utils.logAndThrow(LOG_TAG, removeResult);
+			}
+		}
+		super.tearDown();
 	}
 	
 }
