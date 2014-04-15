@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 
 import org.apache.commons.httpclient.protocol.Protocol;
@@ -56,7 +55,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
-import android.content.res.AssetManager;
 import android.util.Log;
 import android.view.Menu;
 
@@ -77,6 +75,8 @@ public class TestActivity extends Activity {
 	
 	private static final String WEBDAV_PATH = "/remote.php/webdav";
 	private static final int BUFFER_SIZE = 1024;
+	
+	public static final String ASSETS__TEXT_FILE_NAME = "textFile.txt";
 	
 	//private Account mAccount = null;
 	private OwnCloudClient mClient;

@@ -30,7 +30,6 @@ import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 /**
  * Class to test Read File Operation
@@ -42,9 +41,9 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	
 	private static final String LOG_TAG = ReadFileTest.class.getCanonicalName();
 	
-	private static final String TEXT_FILE_NAME = "textFile.txt";
-
 	private TestActivity mActivity;
+	
+	private String mFilePath; 
 	
 	public ReadFileTest() {
 		super(TestActivity.class);
@@ -56,14 +55,15 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 
 		setActivityInitialTouchMode(false);
 		mActivity = getActivity();
-
-		File textFile = mActivity.extractAsset(TEXT_FILE_NAME);
+		mFilePath = FileUtils.PATH_SEPARATOR + TestActivity.ASSETS__TEXT_FILE_NAME;
+		
+		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
 		RemoteOperationResult uploadResult = mActivity.uploadFile(
 				textFile.getAbsolutePath(), 
-				FileUtils.PATH_SEPARATOR + TEXT_FILE_NAME, 
+				mFilePath, 
 				"txt/plain");
 		if (!uploadResult.isSuccess()) {
-			logAndThrow(uploadResult);
+			Utils.logAndThrow(LOG_TAG, uploadResult);
 		}
 	}
 	
@@ -71,25 +71,20 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	 * Test Read File
 	 */
 	public void testReadFile() {
-		RemoteOperationResult result = mActivity.readFile(TEXT_FILE_NAME);
-		assertTrue(result.getData().size() ==  1);
+		RemoteOperationResult result = mActivity.readFile(mFilePath);
+		assertTrue(result.getData() != null && result.getData().size() ==  1);
 		assertTrue(result.isSuccess());
 		// TODO check more properties of the result
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
-		RemoteOperationResult removeResult = mActivity.removeFile(TEXT_FILE_NAME);
+		RemoteOperationResult removeResult = mActivity.removeFile(mFilePath);
 		if (!removeResult.isSuccess()) {
-			logAndThrow(removeResult);
+			Utils.logAndThrow(LOG_TAG, removeResult);
 		}
 		
 		super.tearDown();
-	}
-
-	private void logAndThrow(RemoteOperationResult result) throws Exception {
-		Log.e(LOG_TAG, result.getLogMessage(), result.getException());
-		throw new Exception(result.getLogMessage(), result.getException());
 	}
 
 }
