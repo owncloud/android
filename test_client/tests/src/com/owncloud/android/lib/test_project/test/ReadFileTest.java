@@ -23,45 +23,73 @@
  */
 package com.owncloud.android.lib.test_project.test;
 
+import java.io.File;
+
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 /**
  * Class to test Read File Operation
  * @author masensio
- *
+ * @author David A. Velasco
  */
 
 public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity> {
 	
-	/* File data to read. This file must exist on the account */
-    private final String mRemoteFolderPath = "/fileToRead.txt";
-    
-    
-    private TestActivity mActivity;
-    
-    public ReadFileTest() {
-        super(TestActivity.class);
-    }
-    
-    @Override
-      protected void setUp() throws Exception {
-        super.setUp();
-        setActivityInitialTouchMode(false);
-        mActivity = getActivity();
-    }
+	private static final String LOG_TAG = ReadFileTest.class.getCanonicalName();
+	
+	private static final String TEXT_FILE_NAME = "textFile.txt";
 
-    /**
-     * Test Read File
-     */
-    public void testReadFile() {
+	private TestActivity mActivity;
+	
+	public ReadFileTest() {
+		super(TestActivity.class);
+	}
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
 
-            RemoteOperationResult result = mActivity.readFile(mRemoteFolderPath);
-            assertTrue(result.getData().size() ==  1);
-            assertTrue(result.isSuccess());
-    }
-    
+		setActivityInitialTouchMode(false);
+		mActivity = getActivity();
+
+		File textFile = mActivity.extractAsset(TEXT_FILE_NAME);
+		RemoteOperationResult uploadResult = mActivity.uploadFile(
+				textFile.getAbsolutePath(), 
+				FileUtils.PATH_SEPARATOR + TEXT_FILE_NAME, 
+				"txt/plain");
+		if (!uploadResult.isSuccess()) {
+			logAndThrow(uploadResult);
+		}
+	}
+	
+	/**
+	 * Test Read File
+	 */
+	public void testReadFile() {
+		RemoteOperationResult result = mActivity.readFile(TEXT_FILE_NAME);
+		assertTrue(result.getData().size() ==  1);
+		assertTrue(result.isSuccess());
+		// TODO check more properties of the result
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		RemoteOperationResult removeResult = mActivity.removeFile(TEXT_FILE_NAME);
+		if (!removeResult.isSuccess()) {
+			logAndThrow(removeResult);
+		}
+		
+		super.tearDown();
+	}
+
+	private void logAndThrow(RemoteOperationResult result) throws Exception {
+		Log.e(LOG_TAG, result.getLogMessage(), result.getException());
+		throw new Exception(result.getLogMessage(), result.getException());
+	}
 
 }

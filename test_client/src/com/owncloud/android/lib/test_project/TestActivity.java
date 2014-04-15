@@ -25,6 +25,10 @@
 package com.owncloud.android.lib.test_project;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 
 import org.apache.commons.httpclient.protocol.Protocol;
@@ -52,6 +56,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.util.Log;
 import android.view.Menu;
 
@@ -66,10 +71,12 @@ public class TestActivity extends Activity {
 	private static final String TAG = null;
 	// This account must exists on the server side
 	private String mServerUri;
-	private String mWebdavPath;
 	private String mUser;
 	private String mPass;
 	private boolean mChunked;
+	
+	private static final String WEBDAV_PATH = "/remote.php/webdav";
+	private static final int BUFFER_SIZE = 1024;
 	
 	//private Account mAccount = null;
 	private OwnCloudClient mClient;
@@ -80,7 +87,6 @@ public class TestActivity extends Activity {
 		setContentView(R.layout.activity_test);
 		
 		mServerUri = getString(R.string.server_base_url);
-		mWebdavPath = getString(R.string.webdav_path);
 		mUser = getString(R.string.username);
 		mPass = getString(R.string.password);
 		mChunked = getResources().getBoolean(R.bool.chunked);
@@ -98,7 +104,7 @@ public class TestActivity extends Activity {
 			}
 		}
 		
-		Uri uri = Uri.parse(mServerUri + mWebdavPath);
+		Uri uri = Uri.parse(mServerUri + WEBDAV_PATH);
 		mClient = new OwnCloudClient(NetworkUtils.getMultiThreadedConnManager());
 		mClient.setDefaultTimeouts(
 				OwnCloudClientFactory.DEFAULT_DATA_TIMEOUT, 
@@ -107,6 +113,8 @@ public class TestActivity extends Activity {
 		mClient.setFollowRedirects(true);
 		mClient.setBasicCredentials(mUser, mPass);
 		mClient.setBaseUri(Uri.parse(mServerUri));
+		
+		Log.v(TAG, "onCreate finished, ownCloud client ready");
     	
 	}
 
@@ -273,4 +281,33 @@ public class TestActivity extends Activity {
 		return result;
 		
 	}
+	
+	
+	/**
+	 * Extracts file from AssetManager to cache folder.
+	 * 
+	 * @param	fileName	Name of the asset file to extract.
+	 * @return				File instance of the extracted file.
+	 */
+	public File extractAsset(String fileName) throws IOException {
+		File extractedFile = new File(getCacheDir() + File.separator + fileName);
+		if (!extractedFile.exists()) {
+			InputStream in = null;
+			FileOutputStream out = null;
+			in = getAssets().open(fileName);
+			out = new FileOutputStream(extractedFile);
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int readCount;
+			while((readCount = in.read(buffer)) != -1){
+				out.write(buffer, 0, readCount);
+			}
+			out.flush();
+			out.close();
+			in.close();
+		}
+		return extractedFile;
+	}
+	
+
+
 }
