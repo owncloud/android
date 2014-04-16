@@ -11,6 +11,7 @@ before_install:
 - rm pom.xml
 - android update project -p .
 before_script:
+- chmod +x ./wait_for_emulator.sh
 - ./wait_for_emulator.sh
 script:
 - ant clean
