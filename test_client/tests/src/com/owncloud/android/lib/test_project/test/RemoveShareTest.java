@@ -24,18 +24,24 @@
 
 package com.owncloud.android.lib.test_project.test;
 
+import java.io.File;
+
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 public class RemoveShareTest extends ActivityInstrumentationTestCase2<TestActivity> {
 	
-	private static final String TAG = RemoveShareTest.class.getSimpleName();
+	private static final String LOG_TAG = RemoveShareTest.class.getCanonicalName();
 	
+	private static final String FILE_TO_UNSHARE = "/fileToUnshare.txt";
+
 	private TestActivity mActivity;
+
+	private long mShareId;
 
 	public RemoveShareTest() {
 		super(TestActivity.class);
@@ -47,28 +53,42 @@ public class RemoveShareTest extends ActivityInstrumentationTestCase2<TestActivi
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
+	    
+		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
+		RemoteOperationResult result = mActivity.uploadFile(
+				textFile.getAbsolutePath(), 
+				FILE_TO_UNSHARE, 
+				"txt/plain");
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
+		result = mActivity.createShare(FILE_TO_UNSHARE, ShareType.PUBLIC_LINK, "", false, "", 1);
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		} else {
+			OCShare created = (OCShare) result.getData().get(0);
+			mShareId = created.getIdRemoteShared();
+		}
+		
 	}
 	
 	/**
 	 * Test Remove Share: the server must support SHARE API
 	 */
 	public void testRemoveShare() {
-		// Get the shares
-		RemoteOperationResult result = mActivity.getShares();
-		if (result.isSuccess()) {
-			int size = result.getData().size();
-
-			if (size > 0) {
-				OCShare share = ((OCShare) result.getData().get(size -1));
-				long id = share.getIdRemoteShared();
-				Log.d(TAG, "File to unshare: " + share.getPath() );
-				result = mActivity.removeShare((int) id);	// Unshare
-				assertTrue(result.isSuccess());
-			} else {
-				assertTrue(true);
-			}
-		} else {
-			assertTrue(true);
-		}
+		RemoteOperationResult result = mActivity.removeShare((int) mShareId);
+		assertTrue(result.isSuccess());
 	}
+	
+	
+	@Override
+	protected void tearDown() throws Exception {
+		RemoteOperationResult removeResult = mActivity.removeFile(FILE_TO_UNSHARE);
+		if (!removeResult.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, removeResult);
+		}
+		super.tearDown();
+	}
+	
 }
