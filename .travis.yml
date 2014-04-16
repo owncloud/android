@@ -1,22 +1,27 @@
 language: java
 jdk: oraclejdk7
 before_install:
-  # Install base Android SDK
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libstdc++6:i386 lib32z1
-  - export COMPONENTS=build-tools-18.1.0,android-19,sysimg-19
-  - curl -3L https://raw.github.com/embarkmobile/android-sdk-installer/version-1/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS
-  - source ~/.android-sdk-installer/env
-  - rm pom.xml
-  - android update project -p .
-
+- sudo apt-get update -qq
+- sudo apt-get install -qq libstdc++6:i386 lib32z1
+- export COMPONENTS=build-tools-18.1.0,android-19,sysimg-19
+- curl -3L https://raw.github.com/embarkmobile/android-sdk-installer/version-1/android-sdk-installer
+  | bash /dev/stdin --install=$COMPONENTS
+- source ~/.android-sdk-installer/env
+- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+- emulator -avd test -ni-skin -no-audio -no-window &
+- rm pom.xml
+- android update project -p .
+before_script:
+- ./wait_for_emulator
 script:
-  - ant clean
-  - ant debug
-  - cd test_client
-  - ant clean
-  - ant debug
-
+- ant clean
+- ant debug
+- cd test_client/tests
+- ant clean debug install test
 env:
   global:
-    secure: M3Zu6Jke2e4snRcnQdEJe7pElA29SH1sRktEFpXZ96YU8i+eeRFd3+m9UImtIrwyOK6Esj8uZlEH1TtRd6sa/W4W87vO+GtUEt4SpCbTbd/pF2HNWno0rfueP+6+CgBvyeVDLYa7JH8fQeQscnDZNSQ73PwEm8/T2v0mDYJGow4=
+  - secure: f4Kms/mzkYRG4Kp8k6hsvG3Y0ztbJnA2J79OBw3VdqJOKVTzwsxMd1Yh325YDYO7I4HeHxGXy0H4p3rAPzIWr/nrOJ4wmcDwQYDQtVjF7S1ARWsX51FrCEV6A9ec2LAqNCQ8ZC0SoGb+HsmpFCE3uKAxRQt+B5MzOZvKNcvYpMA=
+  - secure: aF4U20Xlu/rfrbxCmoJAiGh1doYTAZ10UEDmajuinT+ZGSJLivuqD7DDY/00sI6IXWg+J1vL+7jJm4JSYusHPg38UHZ4q92k6RmZycW2ATUzZnGT54O5FRnY67MfVwgVpIMK9UOL/6NEciBHEjlIOL0wbKQiJB++1YtBZOQLGL4=
+  - secure: N+ECSwNg8v2GsAFJ2y/tCiffauHDpN76zuFI2pDqf0fjmCtJZHu4BH5ArXBHjyHKmgn20a/8eZXcwJaH1HsJ80bo7vDJ2miShjGIQ90hPcdmUiB2XVJcew4f04CtvMDH5o7DRt4ykWArlbPL2rhVag0jotlSidolHBwRFnbDhDY=
+  matrix:
+  - COMPONENTS=build-tools-18.1.0,android-19,sysimg-19 ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
