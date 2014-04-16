@@ -24,6 +24,8 @@
 
 package com.owncloud.android.lib.test_project.test;
 
+import java.io.File;
+
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.TestActivity;
@@ -32,9 +34,11 @@ import android.test.ActivityInstrumentationTestCase2;
 
 public class CreateShareTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
-	/* File to share.*/
-	private final String mFileToShare = "/fileToShare.png";
+	private static final String LOG_TAG = CreateShareTest.class.getCanonicalName();
 	
+	/* File to share.*/
+	private static final String FILE_TO_SHARE = "/fileToShare.txt";
+
 	private TestActivity mActivity;
 
 	public CreateShareTest() {
@@ -43,17 +47,44 @@ public class CreateShareTest extends ActivityInstrumentationTestCase2<TestActivi
 	}
 
 	@Override
-	  protected void setUp() throws Exception {
+	protected void setUp() throws Exception {
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
+	    
+		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
+		RemoteOperationResult result = mActivity.uploadFile(
+				textFile.getAbsolutePath(), 
+				FILE_TO_SHARE, 
+				"txt/plain");
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
 	}
 	
 	/**
 	 * Test Create Share: the server must support SHARE API
 	 */
-	public void testCreateShare() {
-		RemoteOperationResult result = mActivity.createShare(mFileToShare, ShareType.PUBLIC_LINK, "", false, "", 1);
+	public void testCreatePublicShare() {
+		RemoteOperationResult result = mActivity.createShare(
+				FILE_TO_SHARE, 
+				ShareType.PUBLIC_LINK, 
+				"", 
+				false, 
+				"", 
+				1);
 		assertTrue(result.isSuccess());
 	}
+	
+	
+	@Override
+	protected void tearDown() throws Exception {
+		RemoteOperationResult removeResult = mActivity.removeFile(FILE_TO_SHARE);
+		if (!removeResult.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, removeResult);
+		}
+		super.tearDown();
+	}
+	
+	
 }
