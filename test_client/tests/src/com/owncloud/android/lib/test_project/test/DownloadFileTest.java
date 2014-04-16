@@ -24,41 +24,45 @@
 
 package com.owncloud.android.lib.test_project.test;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 /**
  * Class to test Download File Operation
  * @author masensio
- *
+ * @author David A. Velasco
  */
 
 public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
 	
+	private static final String LOG_TAG = DownloadFileTest.class.getCanonicalName();
+	
 	/* Files to download. These files must exist on the account */
-	private final String mRemoteFilePng = "/fileToDownload.png";
-	private final String mRemoteFileChunks = "/fileToDownload.mp4";
-	private final String mRemoteFileSpecialChars = "/@file@download.png";
-	private final String mRemoteFileSpecialCharsChunks = "/@file@download.mp4";
-	private final String mRemoteFileNotFound = "/fileNotFound.png"; /* This file mustn't exist on the account */
+	private static final String IMAGE_PATH = "/fileToDownload.png";
+	private static final String IMAGE_PATH_WITH_SPECIAL_CHARS = "/@file@download.png";
+	private static final String IMAGE_NOT_FOUND = "/fileNotFound.png";
+	private static final String [] FILE_PATHS = { IMAGE_PATH, IMAGE_PATH_WITH_SPECIAL_CHARS }; 
 	
-	private String mCurrentDate;
+	private static boolean mGlobalSetupDone = false;
 	
-	
+	private List<String> mDownloadedFilesPaths;
 	private TestActivity mActivity;
+
 	
 	public DownloadFileTest() {
 	    super(TestActivity.class);
-	    
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		mCurrentDate = sdf.format(new Date());
+		mDownloadedFilesPaths = new ArrayList<String>();
 	}
 	
 	@Override
@@ -66,66 +70,87 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
+	    mDownloadedFilesPaths.clear();
+	    
+	    if (!mGlobalSetupDone) {
+	    	
+	    	RemoteOperationResult result = null;
+			File imageFile = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
+
+			for (int i=0; i<FILE_PATHS.length && (result == null || result.isSuccess()); i++) {
+				result = mActivity.uploadFile(
+						imageFile.getAbsolutePath(), 
+						FILE_PATHS[i], 
+						"image/png");
+			}
+			if (!result.isSuccess()) {
+				Utils.logAndThrow(LOG_TAG, result);
+			}
+			
+			result = mActivity.removeFile(IMAGE_NOT_FOUND);
+			if (!result.isSuccess() && result.getCode() != ResultCode.FILE_NOT_FOUND) {
+				Utils.logAndThrow(LOG_TAG, result);
+			}
+			
+			Log.v(LOG_TAG, "Global set up done");
+		    mGlobalSetupDone = true;
+	    }
+	    
 	}
 
 	/**
 	 * Test Download a File
 	 */
 	public void testDownloadFile() {
-		String temporalFolder = "/download" + mCurrentDate;
-		
-		RemoteFile remoteFile= new RemoteFile(mRemoteFilePng);
-
-		RemoteOperationResult result = mActivity.downloadFile(remoteFile, temporalFolder);
+		RemoteOperationResult result = mActivity.downloadFile(
+				new RemoteFile(IMAGE_PATH), 
+				mActivity.getFilesDir().getAbsolutePath()
+				);
+		mDownloadedFilesPaths.add(IMAGE_PATH);
 		assertTrue(result.isSuccess());
-	}
-	
-	/**
-	 * Test Download a File with chunks
-	 */
-	public void testDownloadFileChunks() {
-		String temporalFolder = "/download" + mCurrentDate;
-		
-		RemoteFile remoteFile= new RemoteFile(mRemoteFileChunks);
-
-		RemoteOperationResult result = mActivity.downloadFile(remoteFile, temporalFolder);
-		assertTrue(result.isSuccess());
+		// TODO some checks involving the local file
 	}
 	
 	/**
 	 * Test Download a File with special chars
 	 */
 	public void testDownloadFileSpecialChars() {
-		String temporalFolder = "/download" + mCurrentDate;
-		
-		RemoteFile remoteFile= new RemoteFile(mRemoteFileSpecialChars);
-
-		RemoteOperationResult result = mActivity.downloadFile(remoteFile, temporalFolder);
+		RemoteOperationResult result = mActivity.downloadFile(
+				new RemoteFile(IMAGE_PATH_WITH_SPECIAL_CHARS),
+				mActivity.getFilesDir().getAbsolutePath()
+				);
+		mDownloadedFilesPaths.add(IMAGE_PATH_WITH_SPECIAL_CHARS);
 		assertTrue(result.isSuccess());
-	}
-	
-	/**
-	 * Test Download a File with special chars and chunks
-	 */
-	public void testDownloadFileSpecialCharsChunks() {
-		String temporalFolder = "/download" + mCurrentDate;
-		
-		RemoteFile remoteFile= new RemoteFile(mRemoteFileSpecialCharsChunks);
-
-		RemoteOperationResult result = mActivity.downloadFile(remoteFile, temporalFolder);
-		assertTrue(result.isSuccess());
+		// TODO some checks involving the local file
 	}
 	
 	/**
 	 * Test Download a Not Found File 
 	 */
 	public void testDownloadFileNotFound() {
-		String temporalFolder = "/download" + mCurrentDate;
-
-		RemoteFile remoteFile = new RemoteFile(mRemoteFileNotFound);
-
-		RemoteOperationResult result = mActivity.downloadFile(remoteFile, temporalFolder);
+		RemoteOperationResult result = mActivity.downloadFile(
+				new RemoteFile(IMAGE_NOT_FOUND), 
+				mActivity.getFilesDir().getAbsolutePath()
+				);
 		assertFalse(result.isSuccess());
+	}
+	
+	
+	@Override
+	protected void tearDown() throws Exception {
+		Iterator<String> it = mDownloadedFilesPaths.iterator();
+		RemoteOperationResult removeResult = null;
+		while (it.hasNext()) {
+			removeResult = mActivity.removeFile(it.next());
+			if (!removeResult.isSuccess()) {
+				Utils.logAndThrow(LOG_TAG, removeResult);
+			}
+		}
+		File[] files = mActivity.getFilesDir().listFiles();
+		for (File file : files) {
+			file.delete();
+		}
+		super.tearDown();
 	}
 	
 	
