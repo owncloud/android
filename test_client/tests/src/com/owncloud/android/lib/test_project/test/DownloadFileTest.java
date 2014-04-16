@@ -25,9 +25,6 @@
 package com.owncloud.android.lib.test_project.test;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -56,13 +53,12 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	
 	private static boolean mGlobalSetupDone = false;
 	
-	private List<String> mDownloadedFilesPaths;
+	private String mDownloadedFilePath;
 	private TestActivity mActivity;
 
 	
 	public DownloadFileTest() {
 	    super(TestActivity.class);
-		mDownloadedFilesPaths = new ArrayList<String>();
 	}
 	
 	@Override
@@ -70,7 +66,7 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
-	    mDownloadedFilesPaths.clear();
+	    mDownloadedFilePath = null;
 	    
 	    if (!mGlobalSetupDone) {
 	    	
@@ -106,7 +102,7 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 				new RemoteFile(IMAGE_PATH), 
 				mActivity.getFilesDir().getAbsolutePath()
 				);
-		mDownloadedFilesPaths.add(IMAGE_PATH);
+		mDownloadedFilePath = IMAGE_PATH;
 		assertTrue(result.isSuccess());
 		// TODO some checks involving the local file
 	}
@@ -119,7 +115,7 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 				new RemoteFile(IMAGE_PATH_WITH_SPECIAL_CHARS),
 				mActivity.getFilesDir().getAbsolutePath()
 				);
-		mDownloadedFilesPaths.add(IMAGE_PATH_WITH_SPECIAL_CHARS);
+		mDownloadedFilePath = IMAGE_PATH_WITH_SPECIAL_CHARS;
 		assertTrue(result.isSuccess());
 		// TODO some checks involving the local file
 	}
@@ -138,10 +134,8 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	
 	@Override
 	protected void tearDown() throws Exception {
-		Iterator<String> it = mDownloadedFilesPaths.iterator();
-		RemoteOperationResult removeResult = null;
-		while (it.hasNext()) {
-			removeResult = mActivity.removeFile(it.next());
+		if (mDownloadedFilePath != null) {
+			RemoteOperationResult removeResult = mActivity.removeFile(mDownloadedFilePath);
 			if (!removeResult.isSuccess()) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}

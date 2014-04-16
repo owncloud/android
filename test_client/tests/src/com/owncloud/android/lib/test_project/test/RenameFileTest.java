@@ -24,11 +24,15 @@
 
 package com.owncloud.android.lib.test_project.test;
 
+import java.io.File;
+
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 /**
  * Class to test Rename File Operation
@@ -38,20 +42,24 @@ import android.test.ActivityInstrumentationTestCase2;
 
 public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
+	private static final String LOG_TAG = RenameFileTest.class.getCanonicalName();
+	
 	/* Folder data to rename. This folder must exist on the account */
-	private final String mOldFolderName = "folderToRename";
-	private final String mOldFolderPath = "/folderToRename";
-	private final String mNewFolderName = "renamedFolder"; 
-	private final String mNewFolderPath = "/renamedFolder";
-	
+	private static final String OLD_FOLDER_NAME = "folderToRename";
+	private static final String OLD_FOLDER_PATH = FileUtils.PATH_SEPARATOR + OLD_FOLDER_NAME;
+	private static final String NEW_FOLDER_NAME = "renamedFolder";
+	private static final String NEW_FOLDER_PATH = FileUtils.PATH_SEPARATOR + NEW_FOLDER_NAME;
+
 	/* File data to rename. This file must exist on the account */
-	private final String mOldFileName = "fileToRename.png";
-	private final String mOldFilePath = "/fileToRename.png";
-	private final String mNewFileName = "renamedFile";
-	private final String mFileExtension = ".png";
-	private final String mNewFilePath ="/renamedFile.png";
+	private static final String OLD_FILE_NAME = "fileToRename.png";
+	private static final String OLD_FILE_PATH = FileUtils.PATH_SEPARATOR + OLD_FILE_NAME;
+	private static final String NEW_FILE_NAME = "renamedFile.png";
+	private static final String NEW_FILE_PATH = FileUtils.PATH_SEPARATOR + NEW_FILE_NAME;
 	
 	
+	private static boolean mGlobalSetupDone = false;
+	
+	private String mToCleanUpInServer;
 	private TestActivity mActivity;
 	
 	public RenameFileTest() {
@@ -64,6 +72,29 @@ public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
+
+	    if (!mGlobalSetupDone) {
+	    	
+			Log.v(LOG_TAG, "Starting global set up");
+			RemoteOperationResult result = mActivity.createFolder(OLD_FOLDER_NAME, true);
+			if (!result.isSuccess()) {
+				Utils.logAndThrow(LOG_TAG, result);
+			}
+			
+			File imageFile = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
+			result = mActivity.uploadFile(
+					imageFile.getAbsolutePath(), 
+					OLD_FILE_PATH, 
+					"image/png");
+			if (!result.isSuccess()) {
+				Utils.logAndThrow(LOG_TAG, result);
+			}
+			
+			Log.v(LOG_TAG, "Global set up done");
+		    mGlobalSetupDone = true;
+	    }
+	    
+		mToCleanUpInServer = null;
 	}
 	
 	/**
@@ -71,9 +102,14 @@ public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testRenameFolder() {
 
-		RemoteOperationResult result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName, true);
+		mToCleanUpInServer = OLD_FOLDER_PATH;
+		RemoteOperationResult result = mActivity.renameFile(
+				OLD_FOLDER_NAME, 
+				OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME,
+				true);
 		assertTrue(result.isSuccess());
+		mToCleanUpInServer = NEW_FOLDER_PATH;
 	}
 	
 	/**
@@ -81,36 +117,36 @@ public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testRenameFolderForbiddenChars() {
 		
-		RemoteOperationResult result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName + "\\", true);
+		RemoteOperationResult result = mActivity.renameFile(OLD_FOLDER_NAME, OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME + "\\", true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName + "<", true);
+		result = mActivity.renameFile(OLD_FOLDER_NAME, OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME + "<", true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName + ">", true);
+		result = mActivity.renameFile(OLD_FOLDER_NAME, OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME + ">", true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName + ":", true);
+		result = mActivity.renameFile(OLD_FOLDER_NAME, OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME + ":", true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName + "\"", true);
+		result = mActivity.renameFile(OLD_FOLDER_NAME, OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME + "\"", true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName + "|", true);
+		result = mActivity.renameFile(OLD_FOLDER_NAME, OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME + "|", true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName + "?", true);
+		result = mActivity.renameFile(OLD_FOLDER_NAME, OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME + "?", true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFolderName, mOldFolderPath, 
-				mNewFolderName + "*", true);
+		result = mActivity.renameFile(OLD_FOLDER_NAME, OLD_FOLDER_PATH, 
+				NEW_FOLDER_NAME + "*", true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 	}
 	
@@ -118,9 +154,14 @@ public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 * Test Rename File
 	 */
 	public void testRenameFile() {
-		RemoteOperationResult result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + mFileExtension, false);
+		mToCleanUpInServer = OLD_FILE_PATH;
+		RemoteOperationResult result = mActivity.renameFile(
+				OLD_FILE_NAME, 
+				OLD_FILE_PATH, 
+				NEW_FILE_NAME, 
+				false);
 		assertTrue(result.isSuccess());
+		mToCleanUpInServer = NEW_FILE_PATH;
 	}
 	
 	
@@ -128,50 +169,73 @@ public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 * Test Rename Folder with forbidden characters: \  < >  :  "  |  ?  *
 	 */
 	public void testRenameFileForbiddenChars() {		
-		RemoteOperationResult result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + "\\" + mFileExtension, false);
+		RemoteOperationResult result = mActivity.renameFile(
+				OLD_FILE_NAME, 
+				OLD_FILE_PATH, 
+				"\\" + NEW_FILE_NAME,
+				false);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + "<" + mFileExtension, false);
+		result = mActivity.renameFile(
+				OLD_FILE_NAME, 
+				OLD_FILE_PATH, 
+				"<" + NEW_FILE_NAME, 
+				false);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + ">" + mFileExtension, false);
+		result = mActivity.renameFile(
+				OLD_FILE_NAME, 
+				OLD_FILE_PATH, 
+				">" + NEW_FILE_NAME,
+				false);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + ":" + mFileExtension, false);
+		result = mActivity.renameFile(
+				OLD_FILE_NAME, 
+				OLD_FILE_PATH, 
+				":" + NEW_FILE_NAME,
+				false);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + "\"" + mFileExtension, false);
+		result = mActivity.renameFile(
+				OLD_FILE_NAME,
+				OLD_FILE_PATH, 
+				"\"" + NEW_FILE_NAME,
+				false);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + "|" + mFileExtension, false);
+		result = mActivity.renameFile(
+				OLD_FILE_NAME,
+				OLD_FILE_PATH, 
+				"|" + NEW_FILE_NAME,
+				false);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + "?" + mFileExtension, false);
+		result = mActivity.renameFile(
+				OLD_FILE_NAME,
+				OLD_FILE_PATH, 
+				"?" + NEW_FILE_NAME,
+				false);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
-		result = mActivity.renameFile(mOldFileName, mOldFilePath, 
-				mNewFileName + "*" + mFileExtension, false);
+		result = mActivity.renameFile(
+				OLD_FILE_NAME,
+				OLD_FILE_PATH, 
+				"*" + NEW_FILE_NAME, false);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
 	}
 	
 	
-	/**
-	 * Restore initial conditions
-	 */
-	public void testRestoreInitialConditions() {
-		RemoteOperationResult result = mActivity.renameFile(mNewFolderName, mNewFolderPath, mOldFolderName, true);
-		assertTrue(result.isSuccess());
-		
-		result = mActivity.renameFile(mNewFileName + mFileExtension, mNewFilePath, mOldFileName, false);
-		assertTrue(result.isSuccess());
+	@Override
+	protected void tearDown() throws Exception {
+		if (mToCleanUpInServer != null) {
+			RemoteOperationResult removeResult = mActivity.removeFile(mToCleanUpInServer);
+			if (!removeResult.isSuccess()) {
+				Utils.logAndThrow(LOG_TAG, removeResult);
+			}
+		}
+		super.tearDown();
 	}
 	
 }

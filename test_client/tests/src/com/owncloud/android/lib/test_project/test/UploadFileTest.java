@@ -25,9 +25,6 @@
 package com.owncloud.android.lib.test_project.test;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -54,12 +51,11 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 
 	private TestActivity mActivity;
 	private File mFileToUpload, mFileToUploadWithChunks;
-	private List<String> mUploadedFilesPaths;
+	private String mUploadedFilePath;
 	
 	
 	public UploadFileTest() {
 	    super(TestActivity.class);
-		mUploadedFilesPaths = new ArrayList<String>();
 	}
 	
 	@Override
@@ -67,7 +63,7 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
-	    mUploadedFilesPaths.clear();
+	    mUploadedFilePath = null;
 	    
 		mFileToUpload = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
 		mFileToUploadWithChunks = mActivity.extractAsset(TestActivity.ASSETS__VIDEO_FILE_NAME);
@@ -84,7 +80,7 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 				UPLOAD_PATH, 
 				"image/png"
 				);
-	    mUploadedFilesPaths.add(UPLOAD_PATH);
+	    mUploadedFilePath = UPLOAD_PATH;
 		assertTrue(result.isSuccess());
 	}
 	
@@ -98,7 +94,7 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 				CHUNKED_UPLOAD_PATH, 
 				"video/mp4"
 				);
-	    mUploadedFilesPaths.add(CHUNKED_UPLOAD_PATH);
+	    mUploadedFilePath = CHUNKED_UPLOAD_PATH;
 		assertTrue(result.isSuccess());
 	}
 	
@@ -112,16 +108,15 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 				FILE_NOT_FOUND_PATH, 
 				"image/png"
 				);
+		mUploadedFilePath = FILE_NOT_FOUND_PATH;
 		assertFalse(result.isSuccess());
 	}
 	
 
 	@Override
 	protected void tearDown() throws Exception {
-		Iterator<String> it = mUploadedFilesPaths.iterator();
-		RemoteOperationResult removeResult = null;
-		while (it.hasNext()) {
-			removeResult = mActivity.removeFile(it.next());
+		if (mUploadedFilePath != null) {
+			RemoteOperationResult removeResult = mActivity.removeFile(mUploadedFilePath);
 			if (!removeResult.isSuccess()) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}

@@ -91,42 +91,34 @@ public class CreateFolderTest extends ActivityInstrumentationTestCase2<TestActiv
 	public void testCreateFolderSpecialCharacters() {		
 		
 		String remotePath = FOLDER_PATH_BASE + "_\\" + mCurrentDate;
-		mCreatedFolderPaths.add(remotePath);
 		RemoteOperationResult result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
 		remotePath = FOLDER_PATH_BASE + "_<" + mCurrentDate;		
-		mCreatedFolderPaths.add(remotePath);
 		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
 		remotePath = FOLDER_PATH_BASE + "_>" + mCurrentDate;		
-		mCreatedFolderPaths.add(remotePath);
 		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
 		remotePath = FOLDER_PATH_BASE + "_:" + mCurrentDate;		
-		mCreatedFolderPaths.add(remotePath);
 		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
 		remotePath = FOLDER_PATH_BASE + "_\"" + mCurrentDate;		
-		mCreatedFolderPaths.add(remotePath);
 		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
 		remotePath = FOLDER_PATH_BASE + "_|" + mCurrentDate;		
-		mCreatedFolderPaths.add(remotePath);
 		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
 		remotePath = FOLDER_PATH_BASE + "_?" + mCurrentDate;		
-		mCreatedFolderPaths.add(remotePath);
 		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 		
 		remotePath = FOLDER_PATH_BASE + "_*" + mCurrentDate;		
-		mCreatedFolderPaths.add(remotePath);
 		result =  mActivity.createFolder(remotePath, true);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 	}
