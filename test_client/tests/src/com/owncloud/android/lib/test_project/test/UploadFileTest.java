@@ -32,7 +32,6 @@ import java.util.List;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 /**
@@ -46,14 +45,11 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 
 	private static final String LOG_TAG = UploadFileTest.class.getCanonicalName();
 	
-	private static final String UPLOAD_PATH = 
-			FileUtils.PATH_SEPARATOR + TestActivity.ASSETS__IMAGE_FILE_NAME;
+	private static final String UPLOAD_PATH = "/uploadedImage.png"; 
 	
-	private static final String CHUNKED_UPLOAD_PATH = 
-			FileUtils.PATH_SEPARATOR + TestActivity.ASSETS__VIDEO_FILE_NAME;
+	private static final String CHUNKED_UPLOAD_PATH = "/uploadedVideo.MP4"; 
 	
-	private static final String FILE_NOT_FOUND_PATH = 
-			FileUtils.PATH_SEPARATOR + "fileNotFound.png";
+	private static final String FILE_NOT_FOUND_PATH = "/notFoundShouldNotBeHere.png"; 
 
 
 	private TestActivity mActivity;

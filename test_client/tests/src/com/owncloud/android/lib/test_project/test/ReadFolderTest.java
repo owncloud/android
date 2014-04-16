@@ -27,7 +27,6 @@ package com.owncloud.android.lib.test_project.test;
 import java.io.File;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -43,9 +42,11 @@ public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivit
 	private static final String LOG_TAG = ReadFolderTest.class.getCanonicalName();
 
 	private static final String FOLDER_PATH = "/folderToRead";
-	private static final String FILE1_NAME = "file1.txt";
-	private static final String FILE2_NAME = "file2.txt";
-	private static final String FILE3_NAME = "file3.txt";
+	private static final String [] FILE_PATHS = {
+			FOLDER_PATH + "/file1.txt",
+			FOLDER_PATH + "/file2.txt",
+			FOLDER_PATH + "/file3.txt",
+	};
 
 	
 	private TestActivity mActivity;
@@ -63,16 +64,10 @@ public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivit
 		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
 		RemoteOperationResult result = mActivity.createFolder(FOLDER_PATH, true);
 		if (result.isSuccess()) {
-			String [] filePaths = {
-					FOLDER_PATH + FileUtils.PATH_SEPARATOR + FILE1_NAME,
-					FOLDER_PATH + FileUtils.PATH_SEPARATOR + FILE2_NAME,
-					FOLDER_PATH + FileUtils.PATH_SEPARATOR + FILE3_NAME
-			};
-
-			for (int i=0; i<filePaths.length && result.isSuccess(); i++) {
+			for (int i=0; i<FILE_PATHS.length && result.isSuccess(); i++) {
 				result = mActivity.uploadFile(
 						textFile.getAbsolutePath(), 
-						filePaths[i], 
+						FILE_PATHS[i], 
 						"txt/plain");
 			}
 		}

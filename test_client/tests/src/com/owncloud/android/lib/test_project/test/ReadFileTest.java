@@ -26,7 +26,6 @@ package com.owncloud.android.lib.test_project.test;
 import java.io.File;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -43,7 +42,7 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	
 	private TestActivity mActivity;
 	
-	private String mFilePath; 
+	private String FILE_PATH = "/fileToRead.txt";
 	
 	public ReadFileTest() {
 		super(TestActivity.class);
@@ -55,12 +54,11 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 
 		setActivityInitialTouchMode(false);
 		mActivity = getActivity();
-		mFilePath = FileUtils.PATH_SEPARATOR + TestActivity.ASSETS__TEXT_FILE_NAME;
 		
 		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
 		RemoteOperationResult uploadResult = mActivity.uploadFile(
 				textFile.getAbsolutePath(), 
-				mFilePath, 
+				FILE_PATH, 
 				"txt/plain");
 		if (!uploadResult.isSuccess()) {
 			Utils.logAndThrow(LOG_TAG, uploadResult);
@@ -71,7 +69,7 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	 * Test Read File
 	 */
 	public void testReadFile() {
-		RemoteOperationResult result = mActivity.readFile(mFilePath);
+		RemoteOperationResult result = mActivity.readFile(FILE_PATH);
 		assertTrue(result.getData() != null && result.getData().size() ==  1);
 		assertTrue(result.isSuccess());
 		// TODO check more properties of the result
@@ -79,7 +77,7 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	
 	@Override
 	protected void tearDown() throws Exception {
-		RemoteOperationResult removeResult = mActivity.removeFile(mFilePath);
+		RemoteOperationResult removeResult = mActivity.removeFile(FILE_PATH);
 		if (!removeResult.isSuccess()) {
 			Utils.logAndThrow(LOG_TAG, removeResult);
 		}
