@@ -24,7 +24,10 @@
 
 package com.owncloud.android.lib.test_project.test;
 
+import java.io.File;
+
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -38,6 +41,10 @@ import android.test.ActivityInstrumentationTestCase2;
 
 public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
+	private static final String LOG_TAG = GetSharesTest.class.getCanonicalName();
+
+	private static final String SHARED_FILE = "/sharedFileToGet.txt";
+	
 	private TestActivity mActivity;
 	
 	public GetSharesTest() {
@@ -50,6 +57,21 @@ public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
+
+		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
+		RemoteOperationResult result = mActivity.uploadFile(
+				textFile.getAbsolutePath(), 
+				SHARED_FILE, 
+				"txt/plain");
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
+		result = mActivity.createShare(SHARED_FILE, ShareType.PUBLIC_LINK, "", false, "", 1);
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
 	}
 	
 	/**
@@ -58,5 +80,18 @@ public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity
 	public void testGetShares() {
 		RemoteOperationResult result = mActivity.getShares();
 		assertTrue(result.isSuccess());
+		assertTrue(result.getData() != null && result.getData().size() == 1);
 	}
+	
+
+	@Override
+	protected void tearDown() throws Exception {
+		RemoteOperationResult removeResult = mActivity.removeFile(SHARED_FILE);
+		if (!removeResult.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, removeResult);
+		}
+		super.tearDown();
+	}
+	
+	
 }
