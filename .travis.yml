@@ -7,7 +7,7 @@ before_install:
   | bash /dev/stdin --install=$COMPONENTS
 - source ~/.android-sdk-installer/env
 - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-- emulator -avd test -ni-skin -no-audio -no-window &
+- emulator -avd test -no-skin -no-audio -no-window &
 - rm pom.xml
 - android update project -p .
 before_script:
