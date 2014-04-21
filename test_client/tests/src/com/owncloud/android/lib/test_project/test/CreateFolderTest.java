@@ -126,7 +126,7 @@ public class CreateFolderTest extends ActivityInstrumentationTestCase2<TestActiv
 
 	@Override
 	protected void tearDown() throws Exception {
-		Iterator<String> it = mCreatedFolderPaths.iterator();
+		/*Iterator<String> it = mCreatedFolderPaths.iterator();
 		RemoteOperationResult removeResult = null;
 		while (it.hasNext()) {
 			removeResult = mActivity.removeFile(it.next());
@@ -134,6 +134,7 @@ public class CreateFolderTest extends ActivityInstrumentationTestCase2<TestActiv
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}
 		}
+		*/
 		super.tearDown();
 	}
 	
