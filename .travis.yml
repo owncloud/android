@@ -6,7 +6,7 @@ before_install:
 - curl -3L https://raw.github.com/embarkmobile/android-sdk-installer/version-1/android-sdk-installer
   | bash /dev/stdin --install=$COMPONENTS
 - source ~/.android-sdk-installer/env
-- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
+- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
 - emulator -avd test -no-skin -no-audio -no-window &
 - rm pom.xml
 - android update project -p .
@@ -17,7 +17,7 @@ script:
 - ant clean
 - ant debug
 - cd test_client/tests
-- ant clean debug install test
+- ant acceptance-test
 env:
   global:
   - secure: f4Kms/mzkYRG4Kp8k6hsvG3Y0ztbJnA2J79OBw3VdqJOKVTzwsxMd1Yh325YDYO7I4HeHxGXy0H4p3rAPzIWr/nrOJ4wmcDwQYDQtVjF7S1ARWsX51FrCEV6A9ec2LAqNCQ8ZC0SoGb+HsmpFCE3uKAxRQt+B5MzOZvKNcvYpMA=
