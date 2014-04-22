@@ -6,7 +6,7 @@ before_install:
 - curl -3L https://raw.github.com/embarkmobile/android-sdk-installer/version-1/android-sdk-installer
   | bash /dev/stdin --install=$COMPONENTS
 - source ~/.android-sdk-installer/env
-- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
 - emulator -avd test -no-skin -no-audio -no-window &
 - rm pom.xml
 - android update project -p .
