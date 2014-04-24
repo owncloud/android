@@ -1,0 +1,27 @@
+language: java
+jdk: oraclejdk7
+before_install:
+- sudo apt-get update -qq
+- sudo apt-get install -qq libstdc++6:i386 lib32z1
+- curl -3L https://raw.github.com/embarkmobile/android-sdk-installer/version-1/android-sdk-installer
+  | bash /dev/stdin --install=$COMPONENTS
+- source ~/.android-sdk-installer/env
+- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
+- emulator -avd test -no-skin -no-audio -no-window &
+- rm pom.xml
+- android update project -p .
+before_script:
+- chmod +x ./wait_for_emulator.sh
+- ./wait_for_emulator.sh
+script:
+- ant clean
+- ant debug
+- cd test_client/tests
+- ant acceptance-test
+env:
+  global:
+  - secure: f4Kms/mzkYRG4Kp8k6hsvG3Y0ztbJnA2J79OBw3VdqJOKVTzwsxMd1Yh325YDYO7I4HeHxGXy0H4p3rAPzIWr/nrOJ4wmcDwQYDQtVjF7S1ARWsX51FrCEV6A9ec2LAqNCQ8ZC0SoGb+HsmpFCE3uKAxRQt+B5MzOZvKNcvYpMA=
+  - secure: aF4U20Xlu/rfrbxCmoJAiGh1doYTAZ10UEDmajuinT+ZGSJLivuqD7DDY/00sI6IXWg+J1vL+7jJm4JSYusHPg38UHZ4q92k6RmZycW2ATUzZnGT54O5FRnY67MfVwgVpIMK9UOL/6NEciBHEjlIOL0wbKQiJB++1YtBZOQLGL4=
+  - secure: N+ECSwNg8v2GsAFJ2y/tCiffauHDpN76zuFI2pDqf0fjmCtJZHu4BH5ArXBHjyHKmgn20a/8eZXcwJaH1HsJ80bo7vDJ2miShjGIQ90hPcdmUiB2XVJcew4f04CtvMDH5o7DRt4ykWArlbPL2rhVag0jotlSidolHBwRFnbDhDY=
+  matrix:
+  - COMPONENTS=build-tools-19.0.3,android-19,sysimg-19 ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
