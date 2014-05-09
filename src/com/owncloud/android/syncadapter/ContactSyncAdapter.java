@@ -24,9 +24,8 @@ import java.io.IOException;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
 
-import com.owncloud.android.authentication.AccountAuthenticator;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.oc_framework.accounts.OwnCloudAccount;
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 
 
 import android.accounts.Account;
@@ -93,7 +92,7 @@ public class ContactSyncAdapter extends AbstractOwnCloudSyncAdapter {
         AccountManager am = getAccountManager();
         @SuppressWarnings("deprecation")
         String uri = am.getUserData(getAccount(),
-                OwnCloudAccount.Constants.KEY_OC_URL).replace(
+                Constants.KEY_OC_URL).replace(
                 AccountUtils.WEBDAV_PATH_2_0, AccountUtils.CARDDAV_PATH_2_0);
         uri += "/addressbooks/"
                 + getAccount().name.substring(0,

@@ -10,6 +10,7 @@
   <string name="actionbar_mkdir">Δημιουργία καταλόγου</string>
   <string name="actionbar_settings">Ρυθμίσεις</string>
   <string name="actionbar_see_details">Λεπτομέρειες</string>
+  <string name="actionbar_send_file">Αποστολή</string>
   <string name="prefs_category_general">Γενικά</string>
   <string name="prefs_category_more">Περισσότερα</string>
   <string name="prefs_accounts">Λογαριασμοί</string>
@@ -30,9 +31,10 @@
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θέλω να σας προσκαλέσω να χρησιμοποιήσετε το %1$s στο κινητό σας!\nΚατεβάστε το εδώ: %2$s</string>
   <string name="auth_check_server">Έλεγχος Διακομιστή</string>
-  <string name="auth_host_url">Διεύθυνση εξυπηρέτη</string>
+  <string name="auth_host_url">Διεύθυνση εξυπηρέτη https://…</string>
   <string name="auth_username">Όνομα χρήστη</string>
   <string name="auth_password">Συνθηματικό</string>
+  <string name="auth_register">Νέος στο %1$s;</string>
   <string name="sync_string_files">Αρχεία</string>
   <string name="setup_btn_connect">Σύνδεση</string>
   <string name="uploader_btn_upload_text">Μεταφόρτωση</string>
@@ -54,6 +56,8 @@
   <string name="filedetails_download">Λήψη</string>
   <string name="filedetails_sync_file">Ανανέωση αρχείου</string>
   <string name="filedetails_renamed_in_upload_msg">Το αρχείο μετονομάστηκε σε %1$s κατά την μεταφόρτωση</string>
+  <string name="action_share_file">Διαμοιρασμός συνδέσμου</string>
+  <string name="action_unshare_file">Ακύρωση διαμοιρασμού συνδέσμου</string>
   <string name="common_yes">Ναι</string>
   <string name="common_no">Όχι</string>
   <string name="common_ok">ΟΚ</string>
@@ -93,7 +97,6 @@
   <string name="sync_fail_in_favourites_content">Τα περιεχόμενα των %1$d αρχείων δεν μπόρεσαν να συγχρονιστούν (%2$d διενέξεις)</string>
   <string name="sync_foreign_files_forgotten_ticker">Ορισμένα τοπικά αρχεία ξεχάστηκαν</string>
   <string name="sync_foreign_files_forgotten_content">%1$d αρχεια απο τον %2$s χωρο αποθηκευσης δεν μπορουν να αντιγραφθουν σε</string>
-  <string name="sync_foreign_files_forgotten_explanation">Από την έκδοση 1.3.16 και μετά, αρχεία που μεταφορτώνονται από αυτήν τη συσκευή αντιγράφονται στον τοπικό φάκελο %1$s για να αποτραπεί η απώλεια δεδομένων όταν ένα αρχείο είναι συγχρονισμένο με πολλαπλούς λογαριασμούς.\nΛόγω αυτής της αλλαγής, όλα τα αρχεία που μεταφορτώθηκαν με προηγούμενες εκδόσεις αυτής της εφαρμογής αντιγράφηκαν στο φάκελο %2$s. Ωστόσο, ένα σφάλμα εμπόδισε την ολοκλήρωση αυτής της επιχείρησης κατά το συγχρονισμό του λογαριασμού. Μπορείτε είτε να αφήσετε τα αρχεία όπως είναι και να καταργήσετε τη σύνδεση με%3$s ή να μετακινήσετε τα αρχεία στον κατάλογο %1$s και να διατηρήσετε τη σύνδεση με %4$s.\n\nΑπαριθμημένα πιο κάτω είναι το(α) τοπικό(ά) αρχείο(α) και το(α) απομακρυσμένο(α) αρχείο(α) στο %5$s με το(α) οποίο(α) συνδέονταν.</string>
   <string name="sync_current_folder_was_removed">Ο φάκελος %1$s δεν υπάρχει πια</string>
   <string name="foreign_files_move">Μετακινηση ολων</string>
   <string name="foreign_files_success">Ολα τα αρχεια μετακινηθηκαν</string>
@@ -110,6 +113,10 @@
   <string name="pincode_wrong">Εσφαλμένο PIN της εφαρμογής</string>
   <string name="pincode_removed">Αφαιρέθηκε το PIN της εφαρμογής</string>
   <string name="pincode_stored">Το PIN της εφαρμογής αποθηκεύτηκε</string>
+  <string name="media_notif_ticker">%1$s αναπαραγωγή μουσικής</string>
+  <string name="media_state_playing">%1$s (αναπαραγωγή)</string>
+  <string name="media_state_loading">%1$s (φόρτωση)</string>
+  <string name="media_event_done">%1$s αναπαραγωγή τελείωσε</string>
   <string name="media_err_nothing_to_play">Δεν βρέθηκε αρχείο πολυμέσων</string>
   <string name="media_err_no_account">Δεν δόθηκε λογαριασμός</string>
   <string name="media_err_not_in_owncloud">Το αρχείο δεν βρίσκεται σε έγκυρο λογαριασμό</string>
@@ -119,7 +126,12 @@
   <string name="media_err_timeout">Λήξη χρόνου κατά την προσπάθεια αναπαραγωγής</string>
   <string name="media_err_invalid_progressive_playback">Το αρχείο πολυμέσων δεν μπορεί να μεταδοθεί</string>
   <string name="media_err_unknown">Το αρχείο πολυμέσων δεν μπορεί να αναπαραχθεί με την παρεχόμενη εφαρμογή αναπαραγωγής πολυμέσων</string>
+  <string name="media_err_security_ex">Σφάλμα ασφαλείας κατά την προσπάθεια αναπαραγωγής του %1$s</string>
+  <string name="media_err_io_ex">Σφάλμα εισόδου κατά την προσπάθεια αναπαραγωγής του %1$s</string>
+  <string name="media_err_unexpected">Απροσδόκτο σφάλμα κατά την προσπάθεια αναπαραγωγής του %1$s</string>
+  <string name="media_rewind_description">Κουμπί επαναφοράς</string>
   <string name="media_play_pause_description">Κουμπί αναπαραγωγής ή παύσης</string>
+  <string name="media_forward_description">Κουμπί προώθησης</string>
   <string name="auth_trying_to_login">Προσπάθεια σύνδεσης...</string>
   <string name="auth_no_net_conn_title">Δεν υπάρχει σύνδεση στο δίκτυο</string>
   <string name="auth_nossl_plain_ok_title">Μη διαθέσιμη ασφαλής σύνδεση.</string>
@@ -148,6 +160,7 @@
   <string name="auth_connecting_auth_server">Σύνδεση με το διακομιστή πιστοποίησης σε εξέλιξη...</string>
   <string name="auth_unsupported_auth_method">Ο διακομιστής δεν υποστηρίζει αυτή τη μέθοδο πιστοποίησης</string>
   <string name="auth_unsupported_multiaccount">Ο %1$s  δεν υποστηρίζει πολλαπλούς λογαριασμούς</string>
+  <string name="auth_fail_get_user_name">Ο διακομιστής σας δεν επέστρεψε το σωστό id του χρήστη, παρακαλώ επικοινωνήστε με τον διαχειριστή σας</string>
   <string name="fd_keep_in_sync">Διατήρηση αρχείου ενημερωμένo</string>
   <string name="common_rename">Μετονομασία</string>
   <string name="common_remove">Αφαίρεση</string>
@@ -169,6 +182,7 @@
   <string name="wait_a_moment">Παρακαλούμε περιμένετε</string>
   <string name="filedisplay_unexpected_bad_get_content">Απροσδόκητο σφάλμα, δοκιμάστε με άλλη εφαρμογή</string>
   <string name="filedisplay_no_file_selected">Δεν επιλέχθηκαν αρχεία </string>
+  <string name="activity_chooser_title">Αποστολή συνδέσμου σε ...</string>
   <string name="oauth_check_onoff">Σύνδεση με oAuth2</string>
   <string name="oauth_login_connection">Σύνδεση με το διακομιστή oAuth2 σε εξέλιξη...</string>
   <string name="ssl_validator_header">Η ταυτότητα της σελίδας δεν μπορεί να εγκριθεί</string>
@@ -193,6 +207,8 @@
   <string name="ssl_validator_label_validity_to">Μέχρι</string>
   <string name="ssl_validator_label_signature">Υπογραφή:</string>
   <string name="ssl_validator_label_signature_algorithm">Αλγόριθμος:</string>
+  <string name="ssl_validator_null_cert">Δεν μπορεί να εμφανιστεί το πιστοποιητικό.</string>
+  <string name="ssl_validator_no_info_about_error">- Καμία πληροφορία σχετικά με το σφάλμα</string>
   <string name="placeholder_sentence">Αυτό είναι ένα σημείο κράτησης θέσης</string>
   <string name="placeholder_filename">placeholder.txt</string>
   <string name="placeholder_filetype">Εικόνα PNG</string>
@@ -209,6 +225,9 @@
   <string name="preview_image_description">Προεπισκόπηση εικόνας</string>
   <string name="preview_image_error_unknown_format">Αυτή η εικόνε δεν μπόρεσε να προβληθεί</string>
   <string name="error__upload__local_file_not_copied">%1$s δεν μπορεσε να αντιγραφθεί στον %2$s τοπικο καταλόγο </string>
+  <string name="actionbar_failed_instant_upload">Αποτυχημένη στιγμιαία φόρτωση</string>
+  <string name="failed_upload_headline_text">Αποτυχημένες στιγμιαίες φορτώσεις</string>
+  <string name="failed_upload_headline_hint">Σύνοψη όλων των αποτυχημένων φορτώσεων</string>
   <string name="failed_upload_all_cb">επιλογή όλων</string>
   <string name="failed_upload_headline_retryall_btn">επανάληψη για όλα τα επιλεγμένα</string>
   <string name="failed_upload_headline_delete_all_btn">διαγραφή όλων των επιλεγμένων από τη λίστα προς μεταφόρτωση</string>
@@ -216,4 +235,12 @@
   <string name="failed_upload_load_more_images">Φόρτωση περισσότερων εικόνων</string>
   <string name="failed_upload_failure_text">Μήνυμα Αποτυχίας:</string>
   <string name="failed_upload_quota_exceeded_text">Παρακαλώ ελέγξτε τις ρυθμίσεις του διακομιστή σας, ίσως έχετε υπερβεί τη διαθέσιμη μερίδα σας.</string>
+  <string name="share_link_no_support_share_api">Λυπάμαι, ο διαμοιρασμός δεν είναι ενεργοποιημένος στο διακομιστή σας. Παρακαλώ επικοινωνήστε με το διαχειριστή σας.</string>
+  <string name="share_link_file_no_exist">Αδυναμία διαμοιρασμού αυτού του αρχείου ή φακέλου. Παρακαλώ βεβαιωθείτε ότι υπάρχει</string>
+  <string name="share_link_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια διαμοιρασμού αυτού του αρχείου ή φακέλου</string>
+  <string name="unshare_link_file_no_exist">Ήταν αδύνατη η ακύρωση διαμοιρασμού αυτού του αρχείου ή φακέλου. Δεν υπάρχει.</string>
+  <string name="unshare_link_file_error">Ένα σφάλμα προέκυψε κατά τη διάρκεια ακύρωσης διαμοιρασμού αυτού του αρχείου ή φακέλου</string>
+  <string name="activity_chooser_send_file_title">Αποστολή</string>
+  <string name="copy_link">Αντιγραφή συνδέσμου</string>
+  <string name="clipboard_text_copied">Αντιγραφθηκε στο clipboard</string>
 </resources>

@@ -4,12 +4,12 @@
   <string name="actionbar_upload_files">ھۆججەتلەر</string>
   <string name="actionbar_mkdir">مۇندەرىجە قۇر</string>
   <string name="actionbar_settings">تەڭشەكلەر</string>
+  <string name="actionbar_send_file">يوللا</string>
   <string name="prefs_category_general">ئادەتتىكى</string>
   <string name="prefs_category_more">تېخىمۇ كۆپ</string>
   <string name="prefs_accounts">ھېساباتلار</string>
   <string name="prefs_help">ياردەم</string>
   <string name="prefs_feedback">قايتۇرما ئىنكاس</string>
-  <string name="auth_host_url">مۇلازىمېتىر ئادرىسى</string>
   <string name="auth_username">ئىشلەتكۈچى ئاتى</string>
   <string name="auth_password">ئىم</string>
   <string name="sync_string_files">ھۆججەتلەر</string>
@@ -37,4 +37,5 @@
   <string name="common_choose_account">ھېسابات تاللاڭ</string>
   <string name="common_rename">ئات ئۆزگەرت</string>
   <string name="common_remove">چىقىرىۋەت</string>
+  <string name="activity_chooser_send_file_title">يوللا</string>
 </resources>

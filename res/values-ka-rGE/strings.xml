@@ -5,6 +5,7 @@
   <string name="actionbar_upload_files">ფაილები</string>
   <string name="actionbar_mkdir">დირექტორიის შექმნა</string>
   <string name="actionbar_settings">პარამეტრები</string>
+  <string name="actionbar_send_file">გაგზავნა</string>
   <string name="prefs_category_general">ზოგადი</string>
   <string name="prefs_category_more">უფრო მეტი</string>
   <string name="prefs_accounts">ანგარიში</string>
@@ -16,7 +17,6 @@
   <string name="prefs_help">დახმარება</string>
   <string name="prefs_feedback">უკუკავშირი</string>
   <string name="prefs_imprint">ბეჭედი</string>
-  <string name="auth_host_url">სერვერის მისამართი</string>
   <string name="auth_username">მომხმარებლის სახელი</string>
   <string name="auth_password">პაროლი</string>
   <string name="sync_string_files">ფაილები</string>
@@ -152,4 +152,6 @@
   <string name="conflict_overwrite">გადააწერე</string>
   <string name="conflict_dont_upload">არ ატვირთო</string>
   <string name="error__upload__local_file_not_copied">%1$s–ის კოპირება ვერ მოხერხდა %2$s  ლოკალურ დირექტორიაში</string>
+  <string name="activity_chooser_send_file_title">გაგზავნა</string>
+  <string name="clipboard_text_copied">კოპირებულია კლიპბორდში</string>
 </resources>
