@@ -38,6 +38,7 @@ import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.UploadFileOperation;
+import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
@@ -253,8 +254,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
 
         AccountManager aMgr = AccountManager.get(this);
         String version = aMgr.getUserData(account, Constants.KEY_OC_VERSION);
-        String versionString = aMgr.getUserData(account, Constants.KEY_OC_VERSION_STRING);
-        OwnCloudVersion ocv = new OwnCloudVersion(version, versionString);
+        OwnCloudVersion ocv = new OwnCloudVersion(version);
         
         boolean chunked = FileUploader.chunkedUploadIsSupported(ocv);
         AbstractList<String> requestedUploads = new Vector<String>();
@@ -550,10 +550,8 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
         RemoteOperation operation = new ExistenceCheckRemoteOperation(pathToGrant, this, false);
         RemoteOperationResult result = operation.execute(mUploadClient);
         if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND && mCurrentUpload.isRemoteFolderToBeCreated()) {
-            operation = new CreateFolderOperation( pathToGrant,
-                    true,
-                    mStorageManager    );
-            result = operation.execute(mUploadClient);
+            SyncOperation syncOp = new CreateFolderOperation( pathToGrant, true);
+            result = syncOp.execute(mUploadClient, mStorageManager);
         }
         if (result.isSuccess()) {
             OCFile parentDir = mStorageManager.getFileByPath(pathToGrant);
@@ -786,8 +784,7 @@ public class FileUploader extends Service implements OnDatatransferProgressListe
                 // let the user update credentials with one click
                 Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
                 updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, upload.getAccount());
-                updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ENFORCED_UPDATE, true);
-                updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_TOKEN);
+                updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION, AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 updateAccountCredentials.addFlags(Intent.FLAG_FROM_BACKGROUND);

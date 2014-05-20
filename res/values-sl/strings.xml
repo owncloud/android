@@ -7,7 +7,7 @@
   <string name="actionbar_upload_from_apps">Vsebina iz drugih programov</string>
   <string name="actionbar_upload_files">Datoteke</string>
   <string name="actionbar_open_with">Odpri z</string>
-  <string name="actionbar_mkdir">Ustvari mapo</string>
+  <string name="actionbar_mkdir">Nova mapa</string>
   <string name="actionbar_settings">Nastavitve</string>
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Pošlji</string>
@@ -17,8 +17,10 @@
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
   <string name="prefs_pincode">Koda PIN programa</string>
   <string name="prefs_pincode_summary">Zaščitite odjemalec</string>
-  <string name="prefs_instant_upload">Omogoči takojšnje pošiljanje</string>
-  <string name="prefs_instant_upload_summary">Takojšnje pošiljanje posnetih fotografij</string>
+  <string name="prefs_instant_upload">Takojšnje pošiljanje slik</string>
+  <string name="prefs_instant_upload_summary">Takojšnje pošiljanje slik, zajetih s fotoaparatom, na strežnik</string>
+  <string name="prefs_instant_video_upload">Takojšnje pošiljanje posnetkov</string>
+  <string name="prefs_instant_video_upload_summary">Takojšnje pošiljanje posnetkov, zajetih s fotoaparatom, na strežnik</string>
   <string name="prefs_log_title">Omogoči zapisovanje dnevnika</string>
   <string name="prefs_log_summary">Uporablja se za beleženje težav in napak</string>
   <string name="prefs_log_title_history">Zgodovina beleženja dnevnika</string>
@@ -29,7 +31,7 @@
   <string name="prefs_feedback">Odziv</string>
   <string name="prefs_imprint">Natis</string>
   <string name="recommend_subject">Preizkusi %1$s na pametnem telefonu!</string>
-  <string name="recommend_text">Želim ti predstaviti program %1$s za pametni telefon!\nPrejmeš ga lahko na: %2$s</string>
+  <string name="recommend_text">\"Želim ti predstaviti program %1$s za pametni telefon.\nPrejmeš ga lahko na: %2$s\"\n\t</string>
   <string name="auth_check_server">Preveri strežnik</string>
   <string name="auth_host_url">Naslov strežnika https://…</string>
   <string name="auth_username">Uporabniško ime</string>
@@ -38,7 +40,7 @@
   <string name="sync_string_files">Datoteke</string>
   <string name="setup_btn_connect">Poveži</string>
   <string name="uploader_btn_upload_text">Pošlji</string>
-  <string name="uploader_top_message">Izbor mape pošiljanja:</string>
+  <string name="uploader_top_message">Izbor mape za pošiljanje:</string>
   <string name="uploader_wrn_no_account_title">Uporabniškega računa ni mogoče najti</string>
   <string name="uploader_wrn_no_account_text">Na napravi ni računov %1$s. Nastaviti je treba vsaj en račun.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Nastavi</string>
@@ -97,6 +99,7 @@
   <string name="sync_fail_in_favourites_content">Vsebine %1$d datotek ni bilo mogoče uskladiti (zaznanih je %2$d sporov)</string>
   <string name="sync_foreign_files_forgotten_ticker">Nekatere krajevne datoteke so spregledane</string>
   <string name="sync_foreign_files_forgotten_content">Skupno %1$d datotek iz mape %2$s ni mogoče kopirati v</string>
+  <string name="sync_foreign_files_forgotten_explanation">Od različice 1.3.16 so datoteke, poslane iz te naprave, varnostno kopirane v krajevno mapo %1$s. S tem je preprečena izguba podatkov, ko je ena datoteka usklajena z več računi.\n\nZaradi te spremembe so vse datoteke, ki so bile kopirane v prejšnjih različicah, kopirane v mapo %2$s. Zaradi napake ni mogoče končati usklajevanja. Datoteke lahko ali pustite kjer so in odstranite povezavo na %3$s ali pa premaknete datoteke v mapo %1$s in ohranite povezavo do %4$s.\n\nSpodaj so izpisane krajevne datoteke in oddaljene povezane datoteke v mapi %5$s.</string>
   <string name="sync_current_folder_was_removed">Mapa %1$s ne obstaja več</string>
   <string name="foreign_files_move">Premakni vse</string>
   <string name="foreign_files_success">Vse datoteke so uspešno premaknjene na novo mesto</string>
@@ -132,6 +135,7 @@
   <string name="media_rewind_description">Vrni nazaj</string>
   <string name="media_play_pause_description">Gumb za predvajanje in premor</string>
   <string name="media_forward_description">Gumb za hitro predvajanje naprej</string>
+  <string name="auth_getting_authorization">Pridobivanje overitve ...</string>
   <string name="auth_trying_to_login">Poskus prijave …</string>
   <string name="auth_no_net_conn_title">Ni omrežne povezave</string>
   <string name="auth_nossl_plain_ok_title">Varna povezava ni na voljo.</string>
@@ -160,7 +164,8 @@
   <string name="auth_connecting_auth_server">Poteka povezovanje z overitvenim strežnikom ...</string>
   <string name="auth_unsupported_auth_method">Strežnik ne podpira tega načina overitve</string>
   <string name="auth_unsupported_multiaccount">%1$s ne omogoča podpore več računom</string>
-  <string name="auth_fail_get_user_name">Strežnik je javlja pravilnega ID uporabnika. Stopite v stik s skrbnikom sistema.</string>
+  <string name="auth_fail_get_user_name">Strežnik ne vrača ustreznega ID uporabnika. Stopite v stik s skrbnikom sistema.\n\t</string>
+  <string name="auth_can_not_auth_against_server">S tem strežnikom overitev ni mogoča</string>
   <string name="fd_keep_in_sync">Datoteka naj bo posodobljena</string>
   <string name="common_rename">Preimenuj</string>
   <string name="common_remove">Odstrani</string>
@@ -216,6 +221,7 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="instant_upload_on_wifi">Pošiljaj slike le preko povezav Wi-Fi</string>
+  <string name="instant_video_upload_on_wifi">Pošlji posnetke le preko povezave Wi-Fi</string>
   <string name="instant_upload_path">/TakojšnjePošiljanje</string>
   <string name="conflict_title">Posodobi podatke spora</string>
   <string name="conflict_message">Oddaljena datoteka %s ni usklajena s krajevno. Z nadaljevanem bo datoteka na strežniku zamenjana s krajevno.</string>
@@ -224,7 +230,7 @@
   <string name="conflict_dont_upload">Ne pošlji</string>
   <string name="preview_image_description">Predogled slike</string>
   <string name="preview_image_error_unknown_format">Te slike ni mogoče prikazati</string>
-  <string name="error__upload__local_file_not_copied">Datoteke %1$s ni mogoče kopirati v krajevno mapo %2$s.</string>
+  <string name="error__upload__local_file_not_copied">Datoteke %1$s ni mogoče kopirati v krajevno mapo %2$s</string>
   <string name="actionbar_failed_instant_upload">Spodletelo takojšnje pošiljanje</string>
   <string name="failed_upload_headline_text">Spodletela takojšnja pošiljanja</string>
   <string name="failed_upload_headline_hint">Povzetek vseh spodletelih takojšnjih pošiljanj</string>
@@ -236,7 +242,7 @@
   <string name="failed_upload_retry_do_nothing_text">ne pošlji takoj, saj je povezava v omrežje ni dejavna</string>
   <string name="failed_upload_failure_text">Sporočilo o napaki:</string>
   <string name="failed_upload_quota_exceeded_text">Preverite nastavitve strežnika. Morda je presežena vrednost količinske omejitve.</string>
-  <string name="share_link_no_support_share_api">Souporaba je na strežniku onemogočena. Možnost lahko spreminjajo le uporabniki s skrbniškimi dovoljenji.</string>
+  <string name="share_link_no_support_share_api">Souporaba je na strežniku onemogočena. Možnost lahko spreminjajo le\n\t\tuporabniki s skrbniškimi dovoljenji.</string>
   <string name="share_link_file_no_exist">Ni mogoče omogočiti souporabe te datoteke ali mape. Prepričajte se, da obstaja ...</string>
   <string name="share_link_file_error">Prišlo je do napake med poskusom omogočanja souporabe te datoteke ali mape</string>
   <string name="unshare_link_file_no_exist">Ni mogoče prekiniti souporabe te datoteke ali mape, ker ne obstaja.</string>
@@ -244,4 +250,5 @@
   <string name="activity_chooser_send_file_title">Pošlji</string>
   <string name="copy_link">Kopiraj povezavo</string>
   <string name="clipboard_text_copied">Kopirano v odložišče</string>
+  <string name="error_cant_bind_to_operations_service">Kritična napaka: ni mogoče izvesti opravila.</string>
 </resources>

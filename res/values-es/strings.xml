@@ -7,7 +7,7 @@
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
   <string name="actionbar_upload_files">Archivos</string>
   <string name="actionbar_open_with">Abrir con</string>
-  <string name="actionbar_mkdir">Crear directorio</string>
+  <string name="actionbar_mkdir">Nueva carpeta</string>
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
@@ -17,8 +17,10 @@
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_pincode">PIN de aplicación </string>
   <string name="prefs_pincode_summary">Proteja su cliente</string>
-  <string name="prefs_instant_upload">Activar la subida instantánea</string>
-  <string name="prefs_instant_upload_summary">Subir instantáneamente las fotos tomadas por la cámara</string>
+  <string name="prefs_instant_upload">Subida instantánea de imágenes</string>
+  <string name="prefs_instant_upload_summary">Sube instantáneamente las fotos tomadas con la cámara</string>
+  <string name="prefs_instant_video_upload">Subidas instantáneas de video</string>
+  <string name="prefs_instant_video_upload_summary">Sube instantáneamente los vídeos grabados con la cámara</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historia del Registro</string>
@@ -28,8 +30,8 @@
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Mensajes de retroalimentación</string>
   <string name="prefs_imprint">Imprint</string>
-  <string name="recommend_subject">Prueba  %1$s en tu smarthphone!</string>
-  <string name="recommend_text">Quiero invitarte a usar %1$s en tu smarthphone!⏎\nDescargalo aquí: %2$s</string>
+  <string name="recommend_subject">¡Prueba %1$s en tu teléfono inteligente!</string>
+  <string name="recommend_text">\"¡Quiero invitarlo a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s\"\n\t</string>
   <string name="auth_check_server">Compruebe el servidor.</string>
   <string name="auth_host_url">Dirección del servidor https://…</string>
   <string name="auth_username">Nombre de usuario</string>
@@ -38,7 +40,7 @@
   <string name="sync_string_files">Archivos</string>
   <string name="setup_btn_connect">Conectar</string>
   <string name="uploader_btn_upload_text">Subir</string>
-  <string name="uploader_top_message">Escoja el directorio de carga:</string>
+  <string name="uploader_top_message">Escoger carpeta de carga:</string>
   <string name="uploader_wrn_no_account_title">No se encontró la cuenta</string>
   <string name="uploader_wrn_no_account_text">No hay cuentas de %1$s en tu dispositivo. Por favor configura una cuenta primero.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Configuración</string>
@@ -73,7 +75,7 @@
   <string name="delete_account">Eliminar cuenta</string>
   <string name="create_account">Crear cuenta</string>
   <string name="upload_chooser_title">Subir desde...</string>
-  <string name="uploader_info_dirname">Nombre de directorio</string>
+  <string name="uploader_info_dirname">Nombre de la carpeta</string>
   <string name="uploader_upload_in_progress_ticker">Subiendo...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Subiendo %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Subido con éxito</string>
@@ -94,14 +96,14 @@
   <string name="sync_conflicts_in_favourites_ticker">Se encontraron conflictos</string>
   <string name="sync_conflicts_in_favourites_content">Falló la sincronización de contenidos de %1$d ficheros</string>
   <string name="sync_fail_in_favourites_ticker">Fallos en la sincronización de contenidos</string>
-  <string name="sync_fail_in_favourites_content">Los contenidos de %1$d ficheros no fueron sincronizados (%2$d conflictos)</string>
+  <string name="sync_fail_in_favourites_content">Los contenidos de %1$d ficheros no se han sincronizado (%2$d conflictos)</string>
   <string name="sync_foreign_files_forgotten_ticker">Algunos archivos locales se han perdido</string>
-  <string name="sync_foreign_files_forgotten_content">%1$d archivos de %2$s no han podido ser copiados</string>
-  <string name="sync_foreign_files_forgotten_explanation">Como en la versión 1.3.16, los archivos subidos de este dispositivo son copiados a una carpeta local %1$s para evitar la perdida de datos cuando un unico archivo es sincronizado desde multiples cuentas\n\nDebido a este cambio, todos los archivos subidos en versiones previas de esta aplicación han sido copiados a la carpeta %2$s. No obtante, un error evito el completado de esta operación durante la sincronización de cuenta. Debería dejar el o los archivos así y eliminar el enlace a %3$s o mover el o los archivos al %1$s directorio y conservar el enlace a %4$s.\n\n Abajo tiene listado los enlaces a los archivos locales y archivos remotos en %5$s .</string>
+  <string name="sync_foreign_files_forgotten_content">%1$d archivos en la carpeta %2$s no pudieron ser copiados a</string>
+  <string name="sync_foreign_files_forgotten_explanation">Como en la versión 1.3.16, los archivos subidos desde este dispositivo son copiados en la carpeta local %1$s para prevenir la pérdida de datos cuando un único archivo es sincronizado con múltiples cuentas.\n\nDebido a este cambio, todos los ficheros subidos en versiones previas de esta App fueron copiados en la carpeta %2$s. Si embargo, un error evitó la finalización de esta operación durante la sincronización de las cuentas. Debería dejar el/los archivo(s) como está y eliminar el link a %3$s o mover el/los archivo(s) en la carpeta %1$s y mantener el link a %4$s.\n\nListados abajo están los enlaces a el/los archivo(s) local y el/los archivo(s) remoto en %5$s.</string>
   <string name="sync_current_folder_was_removed">La carpeta local %1$s no existe.</string>
   <string name="foreign_files_move">Mover todo</string>
   <string name="foreign_files_success">Todos los archivos fueron movidos</string>
-  <string name="foreign_files_fail">Algunos archivos no han podido ser movidos</string>
+  <string name="foreign_files_fail">No se han podido mover algunos archivos</string>
   <string name="foreign_files_local_text">Local: %1$s</string>
   <string name="foreign_files_remote_text">Remoto: %1$s</string>
   <string name="upload_query_move_foreign_files">No hay suficiente espacio para copiar los archivos seleccionados en la carpeta %1$s. ¿Quiere moverlos en lugar de copiarlos?</string>
@@ -133,6 +135,7 @@
   <string name="media_rewind_description">Botón Rebobinado</string>
   <string name="media_play_pause_description">Botón de reproducción o pausa </string>
   <string name="media_forward_description">Botón avance rápido</string>
+  <string name="auth_getting_authorization">Consiguiendo autorización...</string>
   <string name="auth_trying_to_login">Intentado iniciar sesión...</string>
   <string name="auth_no_net_conn_title">Sin conexión de red</string>
   <string name="auth_nossl_plain_ok_title">Conexión segura no disponible.</string>
@@ -157,16 +160,17 @@
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor, introduzca la URL del servidor de nuevo</string>
   <string name="auth_expired_oauth_token_toast">Su autorización ha expirado. Por favor, autorice de nuevo</string>
   <string name="auth_expired_basic_auth_toast">Por favor, introduzca la contraseña actual.</string>
-  <string name="auth_expired_saml_sso_token_toast">Su sesión ha expirado. Favor de conectarse de nuevo</string>
+  <string name="auth_expired_saml_sso_token_toast">Tu sesión ha expirado. Por favor, intenta conectarte de nuevo</string>
   <string name="auth_connecting_auth_server">Conectando al servidor de autenticación...</string>
   <string name="auth_unsupported_auth_method">El servidor no soporta este método de autenticación</string>
   <string name="auth_unsupported_multiaccount">%1$s no soporta cuentas múltiples</string>
-  <string name="auth_fail_get_user_name">Su servidor no está retornando una identificación de usuario correcta. Contacte a su administrador.</string>
+  <string name="auth_fail_get_user_name">Su servidor no está retornando una identificación de usuario correcta; contacte a un administrador\n\t</string>
+  <string name="auth_can_not_auth_against_server">No puede autenticarse en este servidor.</string>
   <string name="fd_keep_in_sync">Mantener el archivo actualizado</string>
   <string name="common_rename">Renombrar</string>
   <string name="common_remove">Borrar</string>
   <string name="confirmation_remove_alert">¿Está seguro que desea borrar %1$s ?</string>
-  <string name="confirmation_remove_folder_alert">¿Desea elimiar %1$s y sus descendientes?</string>
+  <string name="confirmation_remove_folder_alert">¿Desea eliminar %1$s y sus descendientes?</string>
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_folder_local">Sólo ficheros locales</string>
   <string name="confirmation_remove_remote">Eliminar del servidor</string>
@@ -176,9 +180,9 @@
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
   <string name="rename_local_fail_msg">No se pudo cambiar el nombre de la copia local, trata con un nombre differente</string>
   <string name="rename_server_fail_msg">No se pudo cambiar el nombre</string>
-  <string name="sync_file_fail_msg">No pudo comprobarse el fichero remoto</string>
+  <string name="sync_file_fail_msg">No se ha podido comprobar el fichero remoto</string>
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
-  <string name="create_dir_fail_msg">El directorio no pudo ser creado</string>
+  <string name="create_dir_fail_msg">No se pudo crear la carpeta</string>
   <string name="filename_forbidden_characters">Carácteres ilegales: / \\ &lt; &gt; : \" | ? *</string>
   <string name="wait_a_moment">Espere un momento</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, prueba otra app para seleccionar el archivo</string>
@@ -200,7 +204,7 @@
   <string name="ssl_validator_label_CN">Nombre común:</string>
   <string name="ssl_validator_label_O">Organización:</string>
   <string name="ssl_validator_label_OU">Unidad organizativa</string>
-  <string name="ssl_validator_label_C">Pais:</string>
+  <string name="ssl_validator_label_C">País:</string>
   <string name="ssl_validator_label_ST">Estado:</string>
   <string name="ssl_validator_label_L">Ubicación:</string>
   <string name="ssl_validator_label_validity">Validez:</string>
@@ -208,7 +212,7 @@
   <string name="ssl_validator_label_validity_to">A:</string>
   <string name="ssl_validator_label_signature">Firma:</string>
   <string name="ssl_validator_label_signature_algorithm">Algoritmo:</string>
-  <string name="ssl_validator_null_cert">El certifiicado no pudo ser mostrado.</string>
+  <string name="ssl_validator_null_cert">No se ha podido mostrar el certificado</string>
   <string name="ssl_validator_no_info_about_error">- No hay información acerca del error</string>
   <string name="placeholder_sentence">Esto es un marcador de posición</string>
   <string name="placeholder_filename">marcadordeposición.txt</string>
@@ -217,6 +221,7 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="instant_upload_on_wifi">Subir imágenes sólo cuando hay WiFi</string>
+  <string name="instant_video_upload_on_wifi">Subir vídeos sólo por WiFi</string>
   <string name="instant_upload_path">/SubidasInstantáneas</string>
   <string name="conflict_title">Conflicto en la actualización</string>
   <string name="conflict_message">El archivo remoto %s no está sincronizado con el archivo local. Si continúa, se reemplazará el contenido del archivo en el servidor.</string>
@@ -225,7 +230,7 @@
   <string name="conflict_dont_upload">No subir</string>
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
-  <string name="error__upload__local_file_not_copied">%1$s no puede ser copiado al %2$s directorio local </string>
+  <string name="error__upload__local_file_not_copied">%1$s no pudo ser copiado a la carpeta local %2$s</string>
   <string name="actionbar_failed_instant_upload">Carga instantánea fallida</string>
   <string name="failed_upload_headline_text">Cargas instantáneas fallidas</string>
   <string name="failed_upload_headline_hint">Resumen de todas las cargas instantáneas fallidas</string>
@@ -237,7 +242,7 @@
   <string name="failed_upload_retry_do_nothing_text">No hacer nada no está conectado para subida instantánea</string>
   <string name="failed_upload_failure_text">Mensaje de error:</string>
   <string name="failed_upload_quota_exceeded_text">Por favor revise su configuración de servidor, posiblemente su cuota se haya excedido.</string>
-  <string name="share_link_no_support_share_api">Compartir archivos no está activado en su servidor. Sírvase contactar a su administrador de sistema.</string>
+  <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su\n\t\tadministrador.</string>
   <string name="share_link_file_no_exist">No es posible compartir este archivo o carpeta. Asegúrese de que existe.</string>
   <string name="share_link_file_error">Ocurrió un error al tratar de compartir este archivo o carpeta</string>
   <string name="unshare_link_file_no_exist">No se puede dejar de compartir este archivo o carpeta. No existe.</string>
@@ -245,4 +250,5 @@
   <string name="activity_chooser_send_file_title">Enviar</string>
   <string name="copy_link">Copiar enlace</string>
   <string name="clipboard_text_copied">Copiado al portapapeles</string>
+  <string name="error_cant_bind_to_operations_service">Error crítico: no se pueden hacer operaciones</string>
 </resources>

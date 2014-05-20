@@ -2,7 +2,6 @@
 <resources>
   <string name="actionbar_upload">Pošalji</string>
   <string name="actionbar_upload_files">Fajlovi</string>
-  <string name="actionbar_mkdir">Novi folder</string>
   <string name="actionbar_settings">Podešavanja</string>
   <string name="actionbar_see_details">Detaljnije</string>
   <string name="actionbar_send_file">Pošalji</string>
@@ -21,6 +20,7 @@
   <string name="filedetails_download">Preuzmi</string>
   <string name="common_yes">Da</string>
   <string name="common_no">Ne</string>
+  <string name="common_ok">Ok</string>
   <string name="common_cancel">Otkaži</string>
   <string name="common_error">Greška</string>
   <string name="change_password">Izmeni lozinku</string>
