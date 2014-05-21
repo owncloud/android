@@ -153,13 +153,13 @@ public class RemoteOperationResult implements Serializable {
             Header current;
             for (int i=0; i<headers.length; i++) {
                 current = headers[i];
-                if ("Location".equals(current.getName())) {
+                if ("location".equals(current.getName().toLowerCase())) {
                     mRedirectedLocation = current.getValue();
-                    break;
+                    continue;
                 }
-                if ("WWW-Authenticate".equals(current.getName())) {
+                if ("www-authenticate".equals(current.getName().toLowerCase())) {
                 	mAuthenticate = current.getValue();
-                	break;
+                	continue;
                 }
             }
         }
