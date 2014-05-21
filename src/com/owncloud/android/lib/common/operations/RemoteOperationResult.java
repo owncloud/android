@@ -97,7 +97,8 @@ public class RemoteOperationResult implements Serializable {
         ACCOUNT_NOT_NEW, 
         ACCOUNT_NOT_THE_SAME,
         INVALID_CHARACTER_IN_NAME,
-        SHARE_NOT_FOUND
+        SHARE_NOT_FOUND,
+        LOCAL_STORAGE_NOT_REMOVED
     }
 
     private boolean mSuccess = false;
