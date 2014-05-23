@@ -102,6 +102,7 @@ public class OwnCloudClient extends HttpClient {
         mCredentials = new UsernamePasswordCredentials(username, password);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
+        getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
     }
     
     public void setSsoSessionCookie(String accessToken) {
