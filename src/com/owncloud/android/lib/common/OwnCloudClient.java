@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -57,28 +58,43 @@ import android.net.Uri;
 import android.util.Log;
 
 public class OwnCloudClient extends HttpClient {
+	
+    private static final String TAG = OwnCloudClient.class.getSimpleName();
+    public static final String USER_AGENT = "Android-ownCloud";
     private static final int MAX_REDIRECTIONS_COUNT = 3;
+    private static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
+    private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
+    
+    private static byte[] sExhaustBuffer = new byte[1024];
+    private static int sIntanceCounter = 0;
+    
+    private boolean mFollowRedirects = true;
+    private Credentials mCredentials = null;
+    private String mSsoSessionCookie = null;
+    private int mInstanceNumber = 0;
     
     private Uri mUri;
     private Uri mWebdavUri;
-    private Credentials mCredentials;
-    private boolean mFollowRedirects;
-    private String mSsoSessionCookie;
-    final private static String TAG = OwnCloudClient.class.getSimpleName();
-    public static final String USER_AGENT = "Android-ownCloud";
-    
-    static private byte[] sExhaustBuffer = new byte[1024];
     
     /**
      * Constructor
      */
     public OwnCloudClient(HttpConnectionManager connectionMgr) {
         super(connectionMgr);
-        Log.d(TAG, "Creating OwnCloudClient");
+        
+        mInstanceNumber = sIntanceCounter++;
+        Log.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
+        
         getParams().setParameter(HttpMethodParams.USER_AGENT, USER_AGENT);
-        getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-        mFollowRedirects = true;
-        mSsoSessionCookie = null;
+        getParams().setParameter(
+        		CoreProtocolPNames.PROTOCOL_VERSION, 
+        		HttpVersion.HTTP_1_1);
+        
+        getParams().setCookiePolicy(
+        		CookiePolicy.BROWSER_COMPATIBILITY);	// to keep sessions
+        getParams().setParameter(
+        		PARAM_SINGLE_COOKIE_HEADER, 			// to avoid problems with some web servers
+        		PARAM_SINGLE_COOKIE_HEADER_VALUE);
     }
 
     public void setBearerCredentials(String accessToken) {
@@ -88,6 +104,7 @@ public class OwnCloudClient extends HttpClient {
         authPrefs.add(BearerAuthScheme.AUTH_POLICY);
         getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);        
         
+        getParams().setAuthenticationPreemptive(true);
         mCredentials = new BearerCredentials(accessToken);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
@@ -102,14 +119,38 @@ public class OwnCloudClient extends HttpClient {
         mCredentials = new UsernamePasswordCredentials(username, password);
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
-        getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
     }
     
     public void setSsoSessionCookie(String accessToken) {
+        Log.d(TAG + " #" + mInstanceNumber, "Setting session cookie: " + accessToken);
+        Log.e(TAG + " #" + mInstanceNumber, "BASE URL: " + mUri);
+        Log.e(TAG + " #" + mInstanceNumber, "WebDAV URL: " + mWebdavUri);
+        
         getParams().setAuthenticationPreemptive(false);
-        getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+        
         mSsoSessionCookie = accessToken;
         mCredentials = null;
+
+        Uri serverUri = (mUri != null)? mUri : mWebdavUri;
+        	// TODO refactoring the mess of URIs
+        
+        String[] cookies = mSsoSessionCookie.split(";");
+        if (cookies.length > 0) {
+        	//Cookie[] cookies = new Cookie[cookiesStr.length];
+            for (int i=0; i<cookies.length; i++) {
+            	Cookie cookie = new Cookie();
+            	int equalPos = cookies[i].indexOf('=');
+            	cookie.setName(cookies[i].substring(0, equalPos));
+            	//Log.d(TAG, "Set name for cookie: " + cookies[i].substring(0, equalPos));
+    	        cookie.setValue(cookies[i].substring(equalPos + 1));
+            	//Log.d(TAG, "Set value for cookie: " + cookies[i].substring(equalPos + 1));
+    	        cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
+            	//Log.d(TAG, "Set domain for cookie: " + serverUri.getHost());
+    	        cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
+            	Log.d(TAG, "Set path for cookie: " + serverUri.getPath());
+    	        getState().addCookie(cookie);
+            }
+        }
     }
     
     
@@ -125,7 +166,8 @@ public class OwnCloudClient extends HttpClient {
         HeadMethod head = new HeadMethod(mWebdavUri.toString() + WebdavUtils.encodePath(path));
         try {
             int status = executeMethod(head);
-            Log.d(TAG, "HEAD to " + path + " finished with HTTP status " + status + ((status != HttpStatus.SC_OK)?"(FAIL)":""));
+            Log.d(TAG, "HEAD to " + path + " finished with HTTP status " + status +
+            		((status != HttpStatus.SC_OK)?"(FAIL)":""));
             exhaustResponse(head.getResponseBodyAsStream());
             return (status == HttpStatus.SC_OK);
             
@@ -141,19 +183,21 @@ public class OwnCloudClient extends HttpClient {
      * 
      * Sets the socket and connection timeouts only for the method received.
      * 
-     * The timeouts are both in milliseconds; 0 means 'infinite'; < 0 means 'do not change the default'
+     * The timeouts are both in milliseconds; 0 means 'infinite'; 
+     * < 0 means 'do not change the default'
      * 
      * @param method            HTTP method request.
      * @param readTimeout       Timeout to set for data reception
      * @param conntionTimout    Timeout to set for connection establishment
      */
-    public int executeMethod(HttpMethodBase method, int readTimeout, int connectionTimeout) throws HttpException, IOException {
+    public int executeMethod(HttpMethodBase method, int readTimeout, int connectionTimeout) 
+    		throws HttpException, IOException {
         int oldSoTimeout = getParams().getSoTimeout();
         int oldConnectionTimeout = getHttpConnectionManager().getParams().getConnectionTimeout();
         try {
             if (readTimeout >= 0) { 
                 method.getParams().setSoTimeout(readTimeout);   // this should be enough...
-                getParams().setSoTimeout(readTimeout);          // ... but this looks like necessary for HTTPS
+                getParams().setSoTimeout(readTimeout);          // ... but HTTPS needs this
             }
             if (connectionTimeout >= 0) {
                 getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
@@ -168,43 +212,71 @@ public class OwnCloudClient extends HttpClient {
     
     @Override
     public int executeMethod(HttpMethod method) throws IOException, HttpException {
-        boolean customRedirectionNeeded = false;
-        try {
-            method.setFollowRedirects(mFollowRedirects);
-        } catch (Exception e) {
-            //if (mFollowRedirects) Log_OC.d(TAG, "setFollowRedirects failed for " + method.getName() + " method, custom redirection will be used if needed");
-            customRedirectionNeeded = mFollowRedirects;
+        try {	// just to log 
+	        boolean customRedirectionNeeded = false;
+	        try {
+	            method.setFollowRedirects(mFollowRedirects);
+	        } catch (Exception e) {
+	        	/*
+	            if (mFollowRedirects) 
+	        		Log_OC.d(TAG, "setFollowRedirects failed for " + method.getName() 
+	        			+ " method, custom redirection will be used if needed");
+        		*/
+	            customRedirectionNeeded = mFollowRedirects;
+	        }
+        
+	        Log.d(TAG + " #" + mInstanceNumber, "REQUEST " + 
+	        		method.getName() + " " + method.getPath());
+        
+	        logCookiesAtRequest(method.getRequestHeaders(), "before");
+	        logCookiesAtState("before");
+	        
+	        int status = super.executeMethod(method);
+        
+	        if (customRedirectionNeeded) {
+	        	status = patchRedirection(status, method);
+	        }
+
+	        logCookiesAtRequest(method.getRequestHeaders(), "after");
+	        logCookiesAtState("after");
+	        logSetCookiesAtResponse(method.getResponseHeaders());
+	        
+	        return status;
+	        
+        } catch (IOException e) {
+        	Log.d(TAG + " #" + mInstanceNumber, "Exception occured", e);
+        	throw e;
         }
-        if (mSsoSessionCookie != null && mSsoSessionCookie.length() > 0) {
-            method.addRequestHeader("Cookie", mSsoSessionCookie);
-        }
-        int status = super.executeMethod(method);
+    }
+
+	private int patchRedirection(int status, HttpMethod method) throws HttpException, IOException {
         int redirectionsCount = 0;
-        while (customRedirectionNeeded &&
-                redirectionsCount < MAX_REDIRECTIONS_COUNT &&
+        while (redirectionsCount < MAX_REDIRECTIONS_COUNT &&
                 (   status == HttpStatus.SC_MOVED_PERMANENTLY || 
                     status == HttpStatus.SC_MOVED_TEMPORARILY ||
                     status == HttpStatus.SC_TEMPORARY_REDIRECT)
                 ) {
             
             Header location = method.getResponseHeader("Location");
+            if (location == null) {
+            	location = method.getResponseHeader("location");
+            }
             if (location != null) {
-                Log.d(TAG,  "Location to redirect: " + location.getValue());
+                Log.d(TAG + " #" + mInstanceNumber,  
+                		"Location to redirect: " + location.getValue());
                 method.setURI(new URI(location.getValue(), true));
                 status = super.executeMethod(method);
                 redirectionsCount++;
                 
             } else {
-                Log.d(TAG,  "No location to redirect!");
+                Log.d(TAG + " #" + mInstanceNumber,  "No location to redirect!");
                 status = HttpStatus.SC_NOT_FOUND;
             }
         }
-        
         return status;
-    }
+	}
 
-
-    /**
+	/**
      * Exhausts a not interesting HTTP response. Encouraged by HttpClient documentation.
      * 
      * @param responseBodyAsStream      InputStream with the HTTP response to exhaust.
@@ -216,13 +288,15 @@ public class OwnCloudClient extends HttpClient {
                 responseBodyAsStream.close();
             
             } catch (IOException io) {
-                Log.e(TAG, "Unexpected exception while exhausting not interesting HTTP response; will be IGNORED", io);
+                Log.e(TAG, "Unexpected exception while exhausting not interesting HTTP response;" +
+                		" will be IGNORED", io);
             }
         }
     }
 
     /**
-     * Sets the connection and wait-for-data timeouts to be applied by default to the methods performed by this client.
+     * Sets the connection and wait-for-data timeouts to be applied by default to the methods 
+     * performed by this client.
      */
     public void setDefaultTimeouts(int defaultDataTimeout, int defaultConnectionTimeout) {
             getParams().setSoTimeout(defaultDataTimeout);
@@ -230,7 +304,8 @@ public class OwnCloudClient extends HttpClient {
     }
 
     /**
-     * Sets the Webdav URI for the helper methods that receive paths as parameters, instead of full URLs
+     * Sets the Webdav URI for the helper methods that receive paths as parameters, 
+     * instead of full URLs
      * @param uri
      */
     public void setWebdavUri(Uri uri) {
@@ -242,7 +317,9 @@ public class OwnCloudClient extends HttpClient {
     }
     
     /**
-     * Sets the base URI for the helper methods that receive paths as parameters, instead of full URLs
+     * Sets the base URI for the helper methods that receive paths as parameters, 
+     * instead of full URLs
+     * 
      * @param uri
      */
     public void setBaseUri(Uri uri) {
@@ -264,5 +341,52 @@ public class OwnCloudClient extends HttpClient {
     public void setFollowRedirects(boolean followRedirects) {
         mFollowRedirects = followRedirects;
     }
+
+    
+	private void logCookiesAtRequest(Header[] headers, String when) {
+        int counter = 0;
+        for (int i=0; i<headers.length; i++) {
+        	if (headers[i].getName().toLowerCase().equals("cookie")) {
+        		Log.d(TAG + " #" + mInstanceNumber, 
+        				"Cookies at request (" + when + ") (" + counter++ + "): " + 
+        						headers[i].getValue());
+        	}
+        }
+        if (counter == 0) {
+    		Log.d(TAG + " #" + mInstanceNumber, "No cookie at request before");
+        }
+	}
+
+    private void logCookiesAtState(String string) {
+        Cookie[] cookies = getState().getCookies();
+        if (cookies.length == 0) {
+    		Log.d(TAG + " #" + mInstanceNumber, "No cookie at STATE before");
+        } else {
+    		Log.d(TAG + " #" + mInstanceNumber, "Cookies at STATE (before)");
+	        for (int i=0; i<cookies.length; i++) {
+	    		Log.d(TAG + " #" + mInstanceNumber, "    (" + i + "):" +
+	    				"\n        name: " + cookies[i].getName() +
+	    				"\n        value: " + cookies[i].getValue() +
+	    				"\n        domain: " + cookies[i].getDomain() +
+	    				"\n        path: " + cookies[i].getPath()
+	    				);
+	        }
+        }
+	}
+
+	private void logSetCookiesAtResponse(Header[] headers) {
+        int counter = 0;
+        for (int i=0; i<headers.length; i++) {
+        	if (headers[i].getName().toLowerCase().equals("set-cookie")) {
+        		Log.d(TAG + " #" + mInstanceNumber, 
+        				"Set-Cookie (" + counter++ + "): " + headers[i].getValue());
+        	}
+        }
+        if (counter == 0) {
+    		Log.d(TAG + " #" + mInstanceNumber, "No set-cookie");
+        }
+        
+	}
+
 
 }
