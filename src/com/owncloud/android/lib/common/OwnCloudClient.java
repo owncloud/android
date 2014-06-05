@@ -126,30 +126,36 @@ public class OwnCloudClient extends HttpClient {
         Log.e(TAG + " #" + mInstanceNumber, "BASE URL: " + mUri);
         Log.e(TAG + " #" + mInstanceNumber, "WebDAV URL: " + mWebdavUri);
         
-        getParams().setAuthenticationPreemptive(false);
+        if (accessToken != null && accessToken.length() > 0) {
         
-        mSsoSessionCookie = accessToken;
-        mCredentials = null;
-
-        Uri serverUri = (mUri != null)? mUri : mWebdavUri;
-        	// TODO refactoring the mess of URIs
-        
-        String[] cookies = mSsoSessionCookie.split(";");
-        if (cookies.length > 0) {
-        	//Cookie[] cookies = new Cookie[cookiesStr.length];
-            for (int i=0; i<cookies.length; i++) {
-            	Cookie cookie = new Cookie();
-            	int equalPos = cookies[i].indexOf('=');
-            	cookie.setName(cookies[i].substring(0, equalPos));
-            	//Log.d(TAG, "Set name for cookie: " + cookies[i].substring(0, equalPos));
-    	        cookie.setValue(cookies[i].substring(equalPos + 1));
-            	//Log.d(TAG, "Set value for cookie: " + cookies[i].substring(equalPos + 1));
-    	        cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
-            	//Log.d(TAG, "Set domain for cookie: " + serverUri.getHost());
-    	        cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
-            	Log.d(TAG, "Set path for cookie: " + serverUri.getPath());
-    	        getState().addCookie(cookie);
-            }
+	        getParams().setAuthenticationPreemptive(false);
+	        
+	        mSsoSessionCookie = accessToken;
+	        mCredentials = null;
+	
+	        Uri serverUri = (mUri != null)? mUri : mWebdavUri;
+	        	// TODO refactoring the mess of URIs
+	        
+	        String[] cookies = mSsoSessionCookie.split(";");
+	        if (cookies.length > 0) {
+	        	//Cookie[] cookies = new Cookie[cookiesStr.length];
+	            for (int i=0; i<cookies.length; i++) {
+	            	Cookie cookie = new Cookie();
+	            	int equalPos = cookies[i].indexOf('=');
+	            	cookie.setName(cookies[i].substring(0, equalPos));
+	            	//Log.d(TAG, "Set name for cookie: " + cookies[i].substring(0, equalPos));
+	    	        cookie.setValue(cookies[i].substring(equalPos + 1));
+	            	//Log.d(TAG, "Set value for cookie: " + cookies[i].substring(equalPos + 1));
+	    	        cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
+	            	//Log.d(TAG, "Set domain for cookie: " + serverUri.getHost());
+	    	        cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
+	            	Log.d(TAG, "Set path for cookie: " + serverUri.getPath());
+	    	        getState().addCookie(cookie);
+	            }
+	        }
+	        
+        } else {
+        	Log.e(TAG, "Setting access token " + accessToken);
         }
     }
     

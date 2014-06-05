@@ -30,6 +30,7 @@ import org.apache.commons.httpclient.Credentials;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.OwnCloudClientMap;
 import com.owncloud.android.lib.common.network.BearerCredentials;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 
@@ -105,7 +106,7 @@ public abstract class RemoteOperation implements Runnable {
         mAccount = account;
         mContext = context.getApplicationContext();
         try {
-            mClient = OwnCloudClientFactory.createOwnCloudClient(mAccount, mContext);
+            mClient = OwnCloudClientMap.getClientFor(mAccount, mContext);
         } catch (Exception e) {
             Log.e(TAG, "Error while trying to access to " + mAccount.name, e);
             return new RemoteOperationResult(e);
@@ -135,12 +136,17 @@ public abstract class RemoteOperation implements Runnable {
      * 
      * This method should be used whenever an ownCloud account is available, instead of {@link #execute(OwnCloudClient)}. 
      * 
+     * @deprecated 	This method will be removed in version 1.0.
+     *  			Use {@link #execute(Account, Context, OnRemoteOperationListener, Handler)}
+     *  		 	instead.   
+     * 
      * @param account           ownCloud account in remote ownCloud server to reach during the execution of the operation.
      * @param context           Android context for the component calling the method.
      * @param listener          Listener to be notified about the execution of the operation.
      * @param listenerHandler   Handler associated to the thread where the methods of the listener objects must be called.
      * @return                  Thread were the remote operation is executed.
      */
+	@Deprecated
     public Thread execute(Account account, Context context, OnRemoteOperationListener listener, Handler listenerHandler, Activity callerActivity) {
         if (account == null)
             throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Account");
@@ -149,6 +155,42 @@ public abstract class RemoteOperation implements Runnable {
         mAccount = account;
         mContext = context.getApplicationContext();
         mCallerActivity = callerActivity;
+        mClient = null;     // the client instance will be created from mAccount and mContext in the runnerThread to create below
+        
+        mListener = listener;
+        
+        mListenerHandler = listenerHandler;
+        
+        Thread runnerThread = new Thread(this);
+        runnerThread.start();
+        return runnerThread;
+    }
+
+    
+    /**
+     * Asynchronously executes the remote operation
+     * 
+     * This method should be used whenever an ownCloud account is available, 
+     * instead of {@link #execute(OwnCloudClient, OnRemoteOperationListener, Handler))}.
+     * 
+     * @param account           ownCloud account in remote ownCloud server to reach during the 
+     * 							execution of the operation.
+     * @param context           Android context for the component calling the method.
+     * @param listener          Listener to be notified about the execution of the operation.
+     * @param listenerHandler   Handler associated to the thread where the methods of the listener 
+     * 							objects must be called.
+     * @return                  Thread were the remote operation is executed.
+     */
+    public Thread execute(Account account, Context context, OnRemoteOperationListener listener, 
+    		Handler listenerHandler) {
+    	
+        if (account == null)
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Account");
+        if (context == null)
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Context");
+        mAccount = account;
+        mContext = context.getApplicationContext();
+        mCallerActivity = null;
         mClient = null;     // the client instance will be created from mAccount and mContext in the runnerThread to create below
         
         mListener = listener;
@@ -205,10 +247,13 @@ public abstract class RemoteOperation implements Runnable {
             try{
                 if (mClient == null) {
                     if (mAccount != null && mContext != null) {
+                    	/** DEPRECATED BLOCK - will be removed at version 1.0 */
                         if (mCallerActivity != null) {
-                            mClient = OwnCloudClientFactory.createOwnCloudClient(mAccount, mContext, mCallerActivity);
+                            mClient = OwnCloudClientFactory.createOwnCloudClient(
+                            		mAccount, mContext, mCallerActivity);
                         } else {
-                            mClient = OwnCloudClientFactory.createOwnCloudClient(mAccount, mContext);
+                        /** EOF DEPRECATED */
+                            mClient = OwnCloudClientMap.getClientFor(mAccount, mContext);
                         }
                     } else {
                         throw new IllegalStateException("Trying to run a remote operation asynchronously with no client instance or account");
@@ -228,6 +273,8 @@ public abstract class RemoteOperation implements Runnable {
                 result = run(mClient);
         
             repeat = false;
+        	/** DEPRECATED BLOCK - will be removed at version 1.0 ; don't trust in this code 
+        	 * 						to trigger authentication update */
             if (mCallerActivity != null && mAccount != null && mContext != null && !result.isSuccess() &&
 //                    (result.getCode() == ResultCode.UNAUTHORIZED || (result.isTemporalRedirection() && result.isIdPRedirection()))) {
                     (result.getCode() == ResultCode.UNAUTHORIZED || result.isIdPRedirection())) {
@@ -251,6 +298,7 @@ public abstract class RemoteOperation implements Runnable {
                     result = null;
                 }
             }
+            /** EOF DEPRECATED BLOCK **/
         } while (repeat);
         
         final RemoteOperationResult resultToSend = result;
