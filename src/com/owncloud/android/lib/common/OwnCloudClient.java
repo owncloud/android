@@ -159,6 +159,12 @@ public class OwnCloudClient extends HttpClient {
         }
     }
     
+    public void clearCredentials() {
+        mCredentials = new UsernamePasswordCredentials("", "");
+        getState().clearCredentials();
+        getState().clearCookies();
+        mSsoSessionCookie = null;
+    }
     
     /**
      * Check if a file exists in the OC server
