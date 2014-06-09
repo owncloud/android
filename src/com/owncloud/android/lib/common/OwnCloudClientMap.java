@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentMap;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
@@ -35,6 +36,7 @@ import android.content.Context;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 
 /**
  * Map for {@link OwnCloudClient} instances associated to ownCloud {@link Account}s
@@ -43,9 +45,12 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundExce
  * 
  * TODO consider converting into a non static object saved in the application context 
  * @author David A. Velasco
+ * @author masensio
  */
+
 public class OwnCloudClientMap {
     
+	
     private static ConcurrentMap<String, OwnCloudClient> mClients = 
             new java.util.concurrent.ConcurrentHashMap<String, OwnCloudClient>();
     
@@ -73,4 +78,14 @@ public class OwnCloudClientMap {
         mClients.clear();
     }
     
+    public static synchronized void saveClient(Account account, Context context) {
+    	
+    	// Account Manager
+    	AccountManager ac = AccountManager.get(context);
+    	
+    	OwnCloudClient client = mClients.get(account);
+    	
+    	String cookies = client.getState().getCookies().toString();
+    	ac.setUserData(account, Constants.KEY_COOKIES, cookies); 
+    }
 }

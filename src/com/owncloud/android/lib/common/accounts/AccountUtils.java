@@ -160,5 +160,9 @@ public class AccountUtils {
 	    * Flag signaling if the ownCloud server supports Share API"
 	    */
 	    public static final String KEY_SUPPORTS_SHARE_API = "oc_supports_share_api";
+	    /**
+	     * OC accout cookies
+	     */
+	    public static final String KEY_COOKIES = "oc_account_cookies";
 	}
 }
