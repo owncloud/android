@@ -27,6 +27,8 @@ package com.owncloud.android.lib.common;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.httpclient.Cookie;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -83,9 +85,14 @@ public class OwnCloudClientMap {
     	// Account Manager
     	AccountManager ac = AccountManager.get(context);
     	
-    	OwnCloudClient client = mClients.get(account);
+    	OwnCloudClient client = mClients.get(account.name);
     	
-    	String cookies = client.getState().getCookies().toString();
-    	ac.setUserData(account, Constants.KEY_COOKIES, cookies); 
+    	Cookie[] cookies =client.getState().getCookies(); 
+    	String cookiesString ="";
+    	for (Cookie cookie: cookies) {
+    		cookiesString = cookiesString + cookie.toString();
+    	}
+    	ac.setUserData(account, Constants.KEY_COOKIES, cookiesString); 
+    	//Log.d("OwnCloudClientMap", "Saving Cookies: "+ cookiesString );
     }
 }
