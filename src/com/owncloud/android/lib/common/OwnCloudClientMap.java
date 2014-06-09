@@ -53,7 +53,7 @@ public class OwnCloudClientMap {
             throws OperationCanceledException, AuthenticatorException, 
             AccountNotFoundException, IOException {
         
-        OwnCloudClient client = mClients.get(account);
+        OwnCloudClient client = mClients.get(account.name);
         if (client == null) {
             client = OwnCloudClientFactory.createOwnCloudClient(
                             account, 
