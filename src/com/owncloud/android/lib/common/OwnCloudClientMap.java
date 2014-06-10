@@ -53,6 +53,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 
 public class OwnCloudClientMap {
     
+	private static final String TAG = OwnCloudClientMap.class.getSimpleName();
 	
     private static ConcurrentMap<String, OwnCloudClient> mClients = 
             new java.util.concurrent.ConcurrentHashMap<String, OwnCloudClient>();
@@ -81,7 +82,7 @@ public class OwnCloudClientMap {
         mClients.clear();
     }
     
-    public static synchronized void saveClient(Account account, Context context) {
+    private static synchronized void saveClient(Account account, Context context) {
     	
     	// Account Manager
     	AccountManager ac = AccountManager.get(context.getApplicationContext());
@@ -93,21 +94,34 @@ public class OwnCloudClientMap {
     		String cookiesString ="";
     		for (Cookie cookie: cookies) {
     			cookiesString = cookiesString + cookie.toString() + ";";
+    			
+    			logCookie(cookie);
     		}
     		ac.setUserData(account, Constants.KEY_COOKIES, cookiesString); 
-    		Log.d("OwnCloudClientMap", "Saving Cookies: "+ cookiesString );
+    		Log.d(TAG, "Saving Cookies: "+ cookiesString );
     	}
     }
     
     public static synchronized void saveAllClients(Context context, String accountType) {
-    	
     	// Get all accounts
-    	Account [] accounts = AccountManager.get(context.getApplicationContext()).getAccountsByType(accountType);
-    	
+    	Account [] accounts = AccountManager.get(context.getApplicationContext())
+    			.getAccountsByType(accountType);
     	// Save cookies for all accounts
     	for(Account account: accounts){
     		saveClient(account, context.getApplicationContext());
     	}
     	
+    }
+    
+    private static void logCookie(Cookie cookie) {
+    	Log.d(TAG, "Cookie name: "+ cookie.getName() );
+    	Log.d(TAG, "       value: "+ cookie.getValue() );
+    	Log.d(TAG, "       domain: "+ cookie.getDomain());
+    	Log.d(TAG, "       path: "+ cookie.getPath() );
+    	Log.d(TAG, "       version: "+ cookie.getVersion() );
+    	Log.d(TAG, "       expiryDate: " + 
+    			(cookie.getExpiryDate() != null ? cookie.getExpiryDate().toString() : "--"));
+    	Log.d(TAG, "       comment: "+ cookie.getComment() );
+    	Log.d(TAG, "       secure: "+ cookie.getSecure() );
     }
 }
