@@ -100,7 +100,7 @@ public class OwnCloudClientMap {
         mClients.clear();
     }
     
-    private static synchronized void saveClient(Account account, Context context) {
+    public static synchronized void saveClient(Account account, Context context) {
     	
     	// Account Manager
     	AccountManager ac = AccountManager.get(context.getApplicationContext());
