@@ -35,6 +35,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.util.Log;
+import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
@@ -58,6 +59,9 @@ public class OwnCloudClientMap {
     private static ConcurrentMap<String, OwnCloudClient> mClients = 
             new java.util.concurrent.ConcurrentHashMap<String, OwnCloudClient>();
     
+    private static ConcurrentMap<String, OwnCloudClient> mAnonymousClient = 
+            new java.util.concurrent.ConcurrentHashMap<String, OwnCloudClient>();
+    
     public static synchronized OwnCloudClient getClientFor(Account account, Context context) 
             throws OperationCanceledException, AuthenticatorException, 
             AccountNotFoundException, IOException {
@@ -72,6 +76,20 @@ public class OwnCloudClientMap {
         return client;
     }
 
+    
+    public static synchronized OwnCloudClient getAnonymousClientFor(
+    		Uri baseUri, Context context, boolean followRedirects) {
+    	OwnCloudClient client = mAnonymousClient.get(baseUri.toString());
+    	if (client == null) {
+    		client = OwnCloudClientFactory.createOwnCloudClient(
+    				baseUri, 
+    				context.getApplicationContext(), 
+    				followRedirects);
+    		mAnonymousClient.putIfAbsent(baseUri.toString(), client);
+    	}
+    	return client;
+    }
+    
     
     public static synchronized OwnCloudClient removeClientFor(Account account) {
     	return mClients.remove(account.name);
