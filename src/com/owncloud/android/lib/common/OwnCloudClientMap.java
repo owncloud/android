@@ -105,7 +105,7 @@ public class OwnCloudClientMap {
     	// Account Manager
     	AccountManager ac = AccountManager.get(context.getApplicationContext());
     	
-    	if (account!= null) {
+    	if (account.name != null) {
     		OwnCloudClient client = mClients.get(account.name);
 
     		Cookie[] cookies =client.getState().getCookies(); 
