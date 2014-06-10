@@ -34,6 +34,7 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
+import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
@@ -83,16 +84,30 @@ public class OwnCloudClientMap {
     public static synchronized void saveClient(Account account, Context context) {
     	
     	// Account Manager
-    	AccountManager ac = AccountManager.get(context);
+    	AccountManager ac = AccountManager.get(context.getApplicationContext());
     	
-    	OwnCloudClient client = mClients.get(account.name);
-    	
-    	Cookie[] cookies =client.getState().getCookies(); 
-    	String cookiesString ="";
-    	for (Cookie cookie: cookies) {
-    		cookiesString = cookiesString + cookie.toString();
+    	if (account!= null) {
+    		OwnCloudClient client = mClients.get(account.name);
+
+    		Cookie[] cookies =client.getState().getCookies(); 
+    		String cookiesString ="";
+    		for (Cookie cookie: cookies) {
+    			cookiesString = cookiesString + cookie.toString() + ";";
+    		}
+    		ac.setUserData(account, Constants.KEY_COOKIES, cookiesString); 
+    		Log.d("OwnCloudClientMap", "Saving Cookies: "+ cookiesString );
     	}
-    	ac.setUserData(account, Constants.KEY_COOKIES, cookiesString); 
-    	//Log.d("OwnCloudClientMap", "Saving Cookies: "+ cookiesString );
+    }
+    
+    public static synchronized void saveAllClients(Context context, String accountType) {
+    	
+    	// Get all accounts
+    	Account [] accounts = AccountManager.get(context.getApplicationContext()).getAccountsByType(accountType);
+    	
+    	// Save cookies for all accounts
+    	for(Account account: accounts){
+    		saveClient(account, context.getApplicationContext());
+    	}
+    	
     }
 }
