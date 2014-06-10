@@ -124,6 +124,7 @@ public class OwnCloudClientMap {
     	// Get all accounts
     	Account [] accounts = AccountManager.get(context.getApplicationContext())
     			.getAccountsByType(accountType);
+    	
     	// Save cookies for all accounts
     	for(Account account: accounts){
     		saveClient(account, context.getApplicationContext());
@@ -142,4 +143,5 @@ public class OwnCloudClientMap {
     	Log.d(TAG, "       comment: "+ cookie.getComment() );
     	Log.d(TAG, "       secure: "+ cookie.getSecure() );
     }
+    
 }

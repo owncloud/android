@@ -27,9 +27,12 @@ package com.owncloud.android.lib.common;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
+import org.apache.commons.httpclient.Cookie;
+
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 
 import android.accounts.Account;
@@ -85,13 +88,16 @@ public class OwnCloudClientFactory {
         } else if (isSamlSso) {    // TODO avoid a call to getUserData here
             String accessToken = am.blockingGetAuthToken(account, AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type), false);
             client.setSsoSessionCookie(accessToken);
-            
+
         } else {
             String username = account.name.substring(0, account.name.lastIndexOf('@'));
             //String password = am.getPassword(account);
             String password = am.blockingGetAuthToken(account, AccountTypeUtils.getAuthTokenTypePass(account.type), false);
             client.setBasicCredentials(username, password);
         }
+        
+        // Restore cookies
+        restoreCookies(am, account, client);
         
         return client;
     }
@@ -130,6 +136,9 @@ public class OwnCloudClientFactory {
             client.setBasicCredentials(username, password);
         }
         
+        // Restore cookies
+        restoreCookies(am, account, client);
+        
         return client;
     }
     
@@ -159,5 +168,34 @@ public class OwnCloudClientFactory {
         return client;
     }
     
-    
+    /**
+     * Restore the client cookies
+     * @param am
+     * @param account
+     * @param client
+     */
+    private static void restoreCookies(AccountManager am, Account account, OwnCloudClient client) {
+
+    	Log.d(TAG, "Restoring cookies for " + account.name);
+    	
+    	Uri serverUri = (client.getBaseUri() != null)? client.getBaseUri() : client.getWebdavUri();
+
+    	String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
+    	if (cookiesString !=null) {
+    		String[] cookies = cookiesString.split(";");
+    		if (cookies.length > 0) {
+    			for (int i=0; i< cookies.length; i++) {
+    				Cookie cookie = new Cookie();
+    				int equalPos = cookies[i].indexOf('=');
+    				cookie.setName(cookies[i].substring(0, equalPos));
+    				cookie.setValue(cookies[i].substring(equalPos + 1));
+    				cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
+    				cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
+
+    				client.getState().addCookie(cookie);
+    			}
+    		}
+    	}
+    	
+    }
 }
