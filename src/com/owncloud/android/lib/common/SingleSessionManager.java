@@ -166,16 +166,11 @@ public class SingleSessionManager implements OwnCloudClientManager {
 	    		OwnCloudClient client = clientsPerAccount.get(credentials);
 	    		
 	    		if (client != null) {
-
-		    		Cookie[] cookies = client.getState().getCookies(); 
-		    		String cookiesString ="";
-		    		for (Cookie cookie: cookies) {
-		    			cookiesString = cookiesString + cookie.toString() + ";";
-		    			
-		    			logCookie(cookie);
-		    		}
-		    		ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString); 
-		    		Log.d(TAG, "Saving Cookies: "+ cookiesString );
+	    			String cookiesString = client.getCookiesString();
+	    			if (cookiesString != "") {
+	    				ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString); 
+	    				Log.d(TAG, "Saving Cookies: "+ cookiesString );
+	    			}
 	    		}
     		}
     	}
@@ -196,18 +191,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		saveClient(account, context.getApplicationContext());
     	}
     	
-    }
-    
-    private void logCookie(Cookie cookie) {
-    	Log.d(TAG, "Cookie name: "+ cookie.getName() );
-    	Log.d(TAG, "       value: "+ cookie.getValue() );
-    	Log.d(TAG, "       domain: "+ cookie.getDomain());
-    	Log.d(TAG, "       path: "+ cookie.getPath() );
-    	Log.d(TAG, "       version: "+ cookie.getVersion() );
-    	Log.d(TAG, "       expiryDate: " + 
-    			(cookie.getExpiryDate() != null ? cookie.getExpiryDate().toString() : "--"));
-    	Log.d(TAG, "       comment: "+ cookie.getComment() );
-    	Log.d(TAG, "       secure: "+ cookie.getSecure() );
     }
 
 

@@ -415,6 +415,31 @@ public class OwnCloudClient extends HttpClient {
         }
         
 	}
+	
+	public String getCookiesString(){
+		Cookie[] cookies = getState().getCookies(); 
+		String cookiesString ="";
+		for (Cookie cookie: cookies) {
+			cookiesString = cookiesString + cookie.toString() + ";";
+			
+			logCookie(cookie);
+		}
+		
+		return cookiesString;
+		
+	}
+	
+	private void logCookie(Cookie cookie) {
+    	Log.d(TAG, "Cookie name: "+ cookie.getName() );
+    	Log.d(TAG, "       value: "+ cookie.getValue() );
+    	Log.d(TAG, "       domain: "+ cookie.getDomain());
+    	Log.d(TAG, "       path: "+ cookie.getPath() );
+    	Log.d(TAG, "       version: "+ cookie.getVersion() );
+    	Log.d(TAG, "       expiryDate: " + 
+    			(cookie.getExpiryDate() != null ? cookie.getExpiryDate().toString() : "--"));
+    	Log.d(TAG, "       comment: "+ cookie.getComment() );
+    	Log.d(TAG, "       secure: "+ cookie.getSecure() );
+    }
 
 
 }
