@@ -34,6 +34,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
@@ -55,19 +56,73 @@ public class SingleSessionManager implements OwnCloudClientManager {
     
 	//private static final String TAG = SingleSessionManager.class.getSimpleName();
 
+	private static final String TAG = SingleSessionManager.class.getSimpleName();
+
 	private static OwnCloudClientManager mInstance = null;
 	
     private Map<String, Map<OwnCloudCredentials, OwnCloudClient>> mClientsPerServer = 
             new HashMap<String, Map<OwnCloudCredentials, OwnCloudClient>>();
     
+    private Map<String, OwnCloudClient> mClientsWithKnownUsername = 
+    		new HashMap<String, OwnCloudClient>();
     
-    public static OwnCloudClientManager getInstance() {
-    	if (mInstance == null) {
-    		mInstance = new SingleSessionManager();
+    private Map<String, OwnCloudClient> mClientsWithUnknownUsername = 
+    		new HashMap<String, OwnCloudClient>();
+    
+    
+    @Override
+    public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
+		Log.d(TAG, "getClientFor(OwnCloudAccount ... : ");
+    	if (account == null) {
+    		throw new IllegalArgumentException("Cannot get an OwnCloudClient for a null account");
     	}
-    	return mInstance ;
-    }
 
+    	OwnCloudClient client = null;
+    	String accountName = account.getName();
+    	String sessionName = AccountUtils.buildAccountName(
+    			account.getBaseUri(), 
+    			account.getCredentials().getAuthToken());
+    	
+    	if (accountName != null) {
+    		client = mClientsWithKnownUsername.get(accountName);
+    	}
+    	if (client == null) {
+    		if (accountName != null) {
+    			client = mClientsWithUnknownUsername.remove(sessionName);
+    			if (client != null) {
+    	    		Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
+    				mClientsWithKnownUsername.put(accountName, client);
+    	    		Log.d(TAG, "    moved client to {" + accountName + ", " + client.hashCode() + "}");
+    			}
+    		} else {
+        		client = mClientsWithUnknownUsername.get(sessionName);
+    		}
+    	} else {
+    		Log.d(TAG, "    reusing client {" + accountName + ", " + client.hashCode() + "}");
+    	}
+    	
+    	if (client == null) {
+    		// no client to reuse - create a new one
+    		client = OwnCloudClientFactory.createOwnCloudClient(
+    				account.getBaseUri(), 
+    				context.getApplicationContext(), 
+    				true);
+    		client.setCredentials(account.getCredentials());
+    		if (accountName != null) {
+    			mClientsWithKnownUsername.put(accountName, client);
+    			Log.d(TAG, "    new client {" + accountName + ", " + client.hashCode() + "}");
+
+    		} else {
+    			mClientsWithUnknownUsername.put(sessionName, client);
+    			Log.d(TAG, "    new client {" + sessionName + ", " + client.hashCode() + "}");
+    		}
+    	} else {
+    		Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
+    	}
+    	
+    	return client;
+    }
+    
     
 	@Override
 	public synchronized OwnCloudClient getClientFor(Account savedAccount, Context context)

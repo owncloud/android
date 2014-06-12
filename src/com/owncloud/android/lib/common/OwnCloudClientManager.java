@@ -58,5 +58,7 @@ public interface OwnCloudClientManager {
     public OwnCloudClient removeClientFor(Account account, Context context) 
     		throws AccountNotFoundException, AuthenticatorException, 
     		IOException, OperationCanceledException;
+
+	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context);
     
 }

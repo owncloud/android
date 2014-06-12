@@ -42,6 +42,12 @@ public class OwnCloudCredentialsFactory {
 		public boolean authTokenExpires() {
 			return false;
 		}
+
+		@Override
+		public String getUsername() {
+			// no user name
+			return null;
+		}
 	}
 
 }

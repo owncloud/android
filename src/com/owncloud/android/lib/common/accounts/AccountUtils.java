@@ -37,7 +37,9 @@ import android.accounts.AccountsException;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
+
 import android.util.Log;
+import android.net.Uri;
 
 public class AccountUtils {
     public static final String WEBDAV_PATH_1_2 = "/webdav/owncloud.php";
@@ -186,6 +188,15 @@ public class AccountUtils {
         return credentials;
         
 	}
+
+	
+    public static String buildAccountName(Uri serverBaseUrl, String username) {
+        String accountName = username + "@" + serverBaseUrl.getHost();
+        if (serverBaseUrl.getPort() >= 0) {
+            accountName += ":" + serverBaseUrl.getPort();
+        }
+        return accountName;
+    }
     
 
 	public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {

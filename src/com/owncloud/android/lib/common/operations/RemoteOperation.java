@@ -28,6 +28,7 @@ import java.io.IOException;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -105,7 +106,8 @@ public abstract class RemoteOperation implements Runnable {
         mAccount = account;
         mContext = context.getApplicationContext();
         try {
-            mClient = SingleSessionManager.getInstance().getClientFor(mAccount, mContext);
+            mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+            		getClientFor(mAccount, mContext);
         } catch (Exception e) {
             Log.e(TAG, "Error while trying to access to " + mAccount.name, e);
             return new RemoteOperationResult(e);
@@ -252,7 +254,7 @@ public abstract class RemoteOperation implements Runnable {
                             		mAccount, mContext, mCallerActivity);
                         } else {
                         /** EOF DEPRECATED */
-                            mClient = SingleSessionManager.getInstance().
+                            mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
                             		getClientFor(mAccount, mContext);
                         }
                         // Save Client Cookies
