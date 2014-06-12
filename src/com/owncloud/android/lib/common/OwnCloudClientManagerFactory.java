@@ -16,10 +16,10 @@ public class OwnCloudClientManagerFactory {
 	public static OwnCloudClientManager newOwnCloudClientManager(Policy policy) {
 		switch (policy) {
 			case ALWAYS_NEW_CLIENT:
-				return new SingleSessionManager();
+				return new SimpleFactoryManager();
 				
 			case SINGLE_SESSION_PER_ACCOUNT:
-				return new SimpleFactoryManager();
+				return new SingleSessionManager();
 				
 			default:
 				throw new IllegalArgumentException("Unknown policy");
