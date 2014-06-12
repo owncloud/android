@@ -8,6 +8,8 @@ public class OwnCloudClientManagerFactory {
 	}
 	
 	public final static Policy DEFAULT_POLICY = Policy.ALWAYS_NEW_CLIENT;
+	
+	private static OwnCloudClientManager mDefaultSingleton;
 
 	public static OwnCloudClientManager newDefaultOwnCloudClientManager() {
 		return newOwnCloudClientManager(DEFAULT_POLICY);
@@ -26,5 +28,11 @@ public class OwnCloudClientManagerFactory {
 		}
 	}
 	
-	
+    public static OwnCloudClientManager getDefaultSingleton() {
+    	if (mDefaultSingleton == null) {
+    		mDefaultSingleton = newDefaultOwnCloudClientManager();
+    	}
+    	return mDefaultSingleton;
+    }
+
 }

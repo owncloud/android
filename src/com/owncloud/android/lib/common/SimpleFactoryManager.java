@@ -7,19 +7,23 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 
 public class SimpleFactoryManager implements OwnCloudClientManager {
-
     
+	private static final String TAG = OwnCloudClientManager.class.getSimpleName();
+
 	@Override
 	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
+		Log.d(TAG, "getClientFor(OwnCloudAccount ... : ");
 		OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
 				account.getBaseUri(), 
 				context.getApplicationContext(),
 				true);
 
+		Log.d(TAG, "    new client " + client.hashCode());
 		client.setCredentials(account.getCredentials());
 		return client;
 	}
@@ -29,15 +33,20 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 	public OwnCloudClient getClientFor(Account savedAccount, Context context)
 			throws OperationCanceledException, AuthenticatorException, AccountNotFoundException,
 			IOException {
-		
-		return OwnCloudClientFactory.createOwnCloudClient(
+		Log.d(TAG, "getClientFor(Account ... : ");
+
+		OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
 				savedAccount, 
 				context.getApplicationContext());
+		
+		Log.d(TAG, "    new client " + client.hashCode());
+		return client;
 	}
 
 	@Override
 	public OwnCloudClient getClientFor(Uri serverBaseUri, OwnCloudCredentials credentials,
 			Context context) {
+		Log.d(TAG, "getClientFor(Uri ... : ");
 		
 		OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
 				serverBaseUri, 
@@ -45,6 +54,7 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 				true);
 
 		client.setCredentials(credentials);
+		Log.d(TAG, "    new client " + client.hashCode());
 		return client;
 	}
 

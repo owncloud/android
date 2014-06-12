@@ -71,16 +71,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		new HashMap<String, OwnCloudClient>();
     
     
-    public static OwnCloudClientManager getInstance() {
-    	if (mInstance == null) {
-    		mInstance = new SingleSessionManager();
-    	}
-    	return mInstance;
-    }
-
-
     @Override
     public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
+		Log.d(TAG, "getClientFor(OwnCloudAccount ... : ");
     	if (account == null) {
     		throw new IllegalArgumentException("Cannot get an OwnCloudClient for a null account");
     	}
@@ -92,17 +85,21 @@ public class SingleSessionManager implements OwnCloudClientManager {
     			account.getCredentials().getAuthToken());
     	
     	if (accountName != null) {
-    		client = mClientsWithKnownUsername.get(account.getName());
+    		client = mClientsWithKnownUsername.get(accountName);
     	}
     	if (client == null) {
     		if (accountName != null) {
     			client = mClientsWithUnknownUsername.remove(sessionName);
     			if (client != null) {
+    	    		Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
     				mClientsWithKnownUsername.put(accountName, client);
+    	    		Log.d(TAG, "    moved client to {" + accountName + ", " + client.hashCode() + "}");
     			}
     		} else {
         		client = mClientsWithUnknownUsername.get(sessionName);
     		}
+    	} else {
+    		Log.d(TAG, "    reusing client {" + accountName + ", " + client.hashCode() + "}");
     	}
     	
     	if (client == null) {
@@ -114,9 +111,14 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		client.setCredentials(account.getCredentials());
     		if (accountName != null) {
     			mClientsWithKnownUsername.put(accountName, client);
+    			Log.d(TAG, "    new client {" + accountName + ", " + client.hashCode() + "}");
+
     		} else {
     			mClientsWithUnknownUsername.put(sessionName, client);
+    			Log.d(TAG, "    new client {" + sessionName + ", " + client.hashCode() + "}");
     		}
+    	} else {
+    		Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
     	}
     	
     	return client;
