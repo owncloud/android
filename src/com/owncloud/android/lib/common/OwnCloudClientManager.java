@@ -51,10 +51,6 @@ public interface OwnCloudClientManager {
     public OwnCloudClient getClientFor(
     		Uri serverBaseUri, OwnCloudCredentials credentials, Context context);
 
-    public void saveClient(Account savedAccount, Context context)
-			throws AccountNotFoundException, AuthenticatorException, 
-			IOException, OperationCanceledException;
-    
     public void saveAllClients(Context context, String accountType)
 			throws AccountNotFoundException, AuthenticatorException, 
 			IOException, OperationCanceledException;

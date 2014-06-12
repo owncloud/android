@@ -26,7 +26,7 @@
 package com.owncloud.android.lib.common.accounts;
 
 import java.io.IOException;
-
+import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -37,6 +37,7 @@ import android.accounts.AccountsException;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
+import android.util.Log;
 
 public class AccountUtils {
     public static final String WEBDAV_PATH_1_2 = "/webdav/owncloud.php";
@@ -186,7 +187,24 @@ public class AccountUtils {
         
 	}
     
-    
+
+	public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
+
+		// Account Manager
+		AccountManager ac = AccountManager.get(context.getApplicationContext());
+
+		if (client != null) {
+			String cookiesString = client.getCookiesString();
+			if (cookiesString != "") {
+				ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString); 
+				Log.d("AccountUtils", "Saving Cookies: "+ cookiesString );
+			}
+		}
+
+	}
+	
+	
+	
     public static class AccountNotFoundException extends AccountsException {
         
 		/** Generated - should be refreshed every time the class changes!! */

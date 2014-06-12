@@ -37,11 +37,6 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 	}
 
 	@Override
-	public void saveClient(Account savedAccount, Context context) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void saveAllClients(Context context, String accountType) {
 		// TODO Auto-generated method stub
 

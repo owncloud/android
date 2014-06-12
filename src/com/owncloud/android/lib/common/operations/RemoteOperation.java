@@ -30,6 +30,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.SingleSessionManager;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 
 
@@ -254,6 +255,8 @@ public abstract class RemoteOperation implements Runnable {
                             mClient = SingleSessionManager.getInstance().
                             		getClientFor(mAccount, mContext);
                         }
+                        // Save Client Cookies
+                        AccountUtils.saveClient(mClient, mAccount, mContext);
                     } else {
                         throw new IllegalStateException("Trying to run a remote operation asynchronously with no client instance or account");
                     }
