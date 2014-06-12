@@ -26,12 +26,10 @@ package com.owncloud.android.lib.common.operations;
 
 import java.io.IOException;
 
-import org.apache.commons.httpclient.Credentials;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
-import com.owncloud.android.lib.common.OwnCloudClientMap;
-import com.owncloud.android.lib.common.network.BearerCredentials;
+import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 
 
@@ -106,7 +104,7 @@ public abstract class RemoteOperation implements Runnable {
         mAccount = account;
         mContext = context.getApplicationContext();
         try {
-            mClient = OwnCloudClientMap.getClientFor(mAccount, mContext);
+            mClient = SingleSessionManager.getInstance().getClientFor(mAccount, mContext);
         } catch (Exception e) {
             Log.e(TAG, "Error while trying to access to " + mAccount.name, e);
             return new RemoteOperationResult(e);
@@ -253,7 +251,8 @@ public abstract class RemoteOperation implements Runnable {
                             		mAccount, mContext, mCallerActivity);
                         } else {
                         /** EOF DEPRECATED */
-                            mClient = OwnCloudClientMap.getClientFor(mAccount, mContext);
+                            mClient = SingleSessionManager.getInstance().
+                            		getClientFor(mAccount, mContext);
                         }
                     } else {
                         throw new IllegalStateException("Trying to run a remote operation asynchronously with no client instance or account");
@@ -279,17 +278,15 @@ public abstract class RemoteOperation implements Runnable {
 //                    (result.getCode() == ResultCode.UNAUTHORIZED || (result.isTemporalRedirection() && result.isIdPRedirection()))) {
                     (result.getCode() == ResultCode.UNAUTHORIZED || result.isIdPRedirection())) {
                 /// possible fail due to lack of authorization in an operation performed in foreground
-                Credentials cred = mClient.getCredentials();
-                String ssoSessionCookie = mClient.getSsoSessionCookie();
-                if (cred != null || ssoSessionCookie != null) {
+                OwnCloudCredentials cred = mClient.getCredentials();
+                if (cred != null) {
                     /// confirmed : unauthorized operation
                     AccountManager am = AccountManager.get(mContext);
-                    boolean bearerAuthorization = (cred != null && cred instanceof BearerCredentials);
-                    boolean samlBasedSsoAuthorization = (cred == null && ssoSessionCookie != null);
-                    if (bearerAuthorization) {
-                        am.invalidateAuthToken(mAccount.type, ((BearerCredentials)cred).getAccessToken());
-                    } else if (samlBasedSsoAuthorization ) {
-                        am.invalidateAuthToken(mAccount.type, ssoSessionCookie);
+                    if (cred.authTokenExpires()) {
+                        am.invalidateAuthToken(
+                                mAccount.type, 
+                                cred.getAuthToken()
+                        );
                     } else {
                         am.clearPassword(mAccount);
                     }

@@ -25,11 +25,17 @@
 
 package com.owncloud.android.lib.common.accounts;
 
+import java.io.IOException;
+
+import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.content.Context;
 
 public class AccountUtils {
@@ -94,13 +100,32 @@ public class AccountUtils {
     
     /**
      * Extracts url server from the account
+     * 
+     * @deprecated 	This method will be removed in version 1.0.
+     *  			Use {@link #getBaseUrlForAccount(Context, Account)}
+     *  		 	instead.   
+     * 
      * @param context
      * @param account
      * @return url server or null on failure
      * @throws AccountNotFoundException     When 'account' is unknown for the AccountManager
      */
-    public static String constructBasicURLForAccount(Context context, Account account) throws AccountNotFoundException {
-        AccountManager ama = AccountManager.get(context);
+    @Deprecated
+    public static String constructBasicURLForAccount(Context context, Account account) 
+    		throws AccountNotFoundException {
+    	return getBaseUrlForAccount(context, account);
+    }
+
+    /**
+     * Extracts url server from the account
+     * @param context
+     * @param account
+     * @return url server or null on failure
+     * @throws AccountNotFoundException     When 'account' is unknown for the AccountManager
+     */
+    public static String getBaseUrlForAccount(Context context, Account account) 
+    		throws AccountNotFoundException {
+        AccountManager ama = AccountManager.get(context.getApplicationContext());
         String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
         
         if (baseurl == null ) 
@@ -108,6 +133,58 @@ public class AccountUtils {
         
         return baseurl;
     }
+    
+
+    /**
+     * 
+     * @return
+     * @throws IOException 
+     * @throws AuthenticatorException 
+     * @throws OperationCanceledException 
+     */
+	public static OwnCloudCredentials getCredentialsForAccount(Context context, Account account) 
+			throws OperationCanceledException, AuthenticatorException, IOException {
+		
+		OwnCloudCredentials credentials = null;
+        AccountManager am = AccountManager.get(context);
+        
+        boolean isOauth2 = am.getUserData(
+        		account, 
+        		AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
+        
+        boolean isSamlSso = am.getUserData(
+        		account, 
+        		AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
+        
+        if (isOauth2) {    
+            String accessToken = am.blockingGetAuthToken(
+            		account, 
+            		AccountTypeUtils.getAuthTokenTypeAccessToken(account.type), 
+            		false);
+            
+            credentials = OwnCloudCredentialsFactory.newBearerCredentials(accessToken);
+        
+        } else if (isSamlSso) {
+            String accessToken = am.blockingGetAuthToken(
+            		account, 
+            		AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type), 
+            		false);
+            
+            credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(accessToken);
+
+        } else {
+            String username = account.name.substring(0, account.name.lastIndexOf('@'));
+            String password = am.blockingGetAuthToken(
+            		account, 
+            		AccountTypeUtils.getAuthTokenTypePass(account.type), 
+            		false);
+            
+            credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password);
+        }
+        
+        return credentials;
+        
+	}
     
     
     public static class AccountNotFoundException extends AccountsException {
@@ -165,4 +242,5 @@ public class AccountUtils {
 	     */
 	    public static final String KEY_COOKIES = "oc_account_cookies";
 	}
+
 }

@@ -36,6 +36,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -80,7 +81,12 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         
     	Uri serverUri = Uri.parse(getString(R.string.server_base_url) + AccountUtils.WEBDAV_PATH_4_0);
     	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
-    	mClient.setBasicCredentials(getString(R.string.username), getString(R.string.password));
+    	mClient.setCredentials(
+    			OwnCloudCredentialsFactory.newBasicCredentials(
+    					getString(R.string.username), 
+    					getString(R.string.password)
+				)
+		);
     	
     	mFilesAdapter = new FilesArrayAdapter(this, R.layout.file_in_list);
     	((ListView)findViewById(R.id.list_view)).setAdapter(mFilesAdapter);

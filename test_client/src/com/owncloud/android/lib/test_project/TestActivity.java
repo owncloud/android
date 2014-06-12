@@ -35,6 +35,7 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -113,7 +114,12 @@ public class TestActivity extends Activity {
 				OwnCloudClientFactory.DEFAULT_CONNECTION_TIMEOUT);
 		mClient.setWebdavUri(uri);
 		mClient.setFollowRedirects(true);
-		mClient.setBasicCredentials(mUser, mPass);
+		mClient.setCredentials(
+				OwnCloudCredentialsFactory.newBasicCredentials(
+						mUser, 
+						mPass
+				)
+		);
 		mClient.setBaseUri(Uri.parse(mServerUri));
 		
 		Log.v(TAG, "onCreate finished, ownCloud client ready");

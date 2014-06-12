@@ -27,11 +27,8 @@ package com.owncloud.android.lib.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -40,17 +37,12 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthPolicy;
-import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.HttpStatus;
 import org.apache.http.params.CoreProtocolPNames;
 
-import com.owncloud.android.lib.common.network.BearerAuthScheme;
-import com.owncloud.android.lib.common.network.BearerCredentials;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 
 
@@ -66,11 +58,12 @@ public class OwnCloudClient extends HttpClient {
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
     
     private static byte[] sExhaustBuffer = new byte[1024];
-    private static int sIntanceCounter = 0;
     
+    private static int sIntanceCounter = 0;
     private boolean mFollowRedirects = true;
-    private Credentials mCredentials = null;
-    private String mSsoSessionCookie = null;
+    //private Credentials mCredentials = null;
+    private OwnCloudCredentials mCredentials = null;
+    //private String mSsoSessionCookie = null;
     private int mInstanceNumber = 0;
     
     private Uri mUri;
@@ -97,6 +90,17 @@ public class OwnCloudClient extends HttpClient {
         		PARAM_SINGLE_COOKIE_HEADER_VALUE);
     }
 
+    
+    public void setCredentials(OwnCloudCredentials credentials) {
+    	if (credentials != null) {
+        	mCredentials = credentials;
+    		mCredentials.applyTo(this);
+    	} else {
+    		clearCredentials();
+    	}
+    }
+    
+    /*
     public void setBearerCredentials(String accessToken) {
         AuthPolicy.registerAuthScheme(BearerAuthScheme.AUTH_POLICY, BearerAuthScheme.class);
         
@@ -109,7 +113,9 @@ public class OwnCloudClient extends HttpClient {
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
     }
+    */
 
+    /*
     public void setBasicCredentials(String username, String password) {
         List<String> authPrefs = new ArrayList<String>(1);
         authPrefs.add(AuthPolicy.BASIC);
@@ -120,7 +126,9 @@ public class OwnCloudClient extends HttpClient {
         getState().setCredentials(AuthScope.ANY, mCredentials);
         mSsoSessionCookie = null;
     }
+    */
     
+    /*
     public void setSsoSessionCookie(String accessToken) {
         Log.d(TAG + " #" + mInstanceNumber, "Setting session cookie: " + accessToken);
         Log.e(TAG + " #" + mInstanceNumber, "BASE URL: " + mUri);
@@ -158,12 +166,12 @@ public class OwnCloudClient extends HttpClient {
         	Log.e(TAG, "Setting access token " + accessToken);
         }
     }
+    */
     
     public void clearCredentials() {
-        mCredentials = new UsernamePasswordCredentials("", "");
+        mCredentials = null;
         getState().clearCredentials();
         getState().clearCookies();
-        mSsoSessionCookie = null;
     }
     
     /**
@@ -342,13 +350,21 @@ public class OwnCloudClient extends HttpClient {
         return mUri;
     }
 
+    /*
     public final Credentials getCredentials() {
         return mCredentials;
     }
+    */
     
+    public final OwnCloudCredentials getCredentials() {
+        return mCredentials;
+    }
+    
+    /*
     public final String getSsoSessionCookie() {
         return mSsoSessionCookie;
     }
+    */
 
     public void setFollowRedirects(boolean followRedirects) {
         mFollowRedirects = followRedirects;
