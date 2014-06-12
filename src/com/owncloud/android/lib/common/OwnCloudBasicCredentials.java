@@ -31,6 +31,11 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 	}
 
 	@Override
+	public String getUsername() {
+		return mUsername;
+	}
+
+	@Override
 	public String getAuthToken() {
 		return mPassword;
 	}

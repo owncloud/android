@@ -33,6 +33,12 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 	}
 
 	@Override
+	public String getUsername() {
+		// its unknown
+		return null;
+	}
+	
+	@Override
 	public String getAuthToken() {
 		return mAccessToken;
 	}
@@ -41,5 +47,5 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 	public boolean authTokenExpires() {
 		return true;
 	}
-	
+
 }

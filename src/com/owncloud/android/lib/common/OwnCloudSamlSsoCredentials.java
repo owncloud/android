@@ -40,6 +40,12 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 	}
 
 	@Override
+	public String getUsername() {
+		// its unknown
+		return null;
+	}
+	
+	@Override
 	public String getAuthToken() {
 		return mSessionCookie;
 	}

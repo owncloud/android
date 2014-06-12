@@ -14,6 +14,18 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 
     
 	@Override
+	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
+		OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
+				account.getBaseUri(), 
+				context.getApplicationContext(),
+				true);
+
+		client.setCredentials(account.getCredentials());
+		return client;
+	}
+
+	
+	@Override
 	public OwnCloudClient getClientFor(Account savedAccount, Context context)
 			throws OperationCanceledException, AuthenticatorException, AccountNotFoundException,
 			IOException {

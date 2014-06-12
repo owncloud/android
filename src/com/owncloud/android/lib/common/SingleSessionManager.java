@@ -64,14 +64,64 @@ public class SingleSessionManager implements OwnCloudClientManager {
     private Map<String, Map<OwnCloudCredentials, OwnCloudClient>> mClientsPerServer = 
             new HashMap<String, Map<OwnCloudCredentials, OwnCloudClient>>();
     
+    private Map<String, OwnCloudClient> mClientsWithKnownUsername = 
+    		new HashMap<String, OwnCloudClient>();
+    
+    private Map<String, OwnCloudClient> mClientsWithUnknownUsername = 
+    		new HashMap<String, OwnCloudClient>();
+    
     
     public static OwnCloudClientManager getInstance() {
     	if (mInstance == null) {
     		mInstance = new SingleSessionManager();
     	}
-    	return mInstance ;
+    	return mInstance;
     }
 
+
+    @Override
+    public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
+    	if (account == null) {
+    		throw new IllegalArgumentException("Cannot get an OwnCloudClient for a null account");
+    	}
+
+    	OwnCloudClient client = null;
+    	String accountName = account.getName();
+    	String sessionName = AccountUtils.buildAccountName(
+    			account.getBaseUri(), 
+    			account.getCredentials().getAuthToken());
+    	
+    	if (accountName != null) {
+    		client = mClientsWithKnownUsername.get(account.getName());
+    	}
+    	if (client == null) {
+    		if (accountName != null) {
+    			client = mClientsWithUnknownUsername.remove(sessionName);
+    			if (client != null) {
+    				mClientsWithKnownUsername.put(accountName, client);
+    			}
+    		} else {
+        		client = mClientsWithUnknownUsername.get(sessionName);
+    		}
+    	}
+    	
+    	if (client == null) {
+    		// no client to reuse - create a new one
+    		client = OwnCloudClientFactory.createOwnCloudClient(
+    				account.getBaseUri(), 
+    				context.getApplicationContext(), 
+    				true);
+    		client.setCredentials(account.getCredentials());
+    		if (accountName != null) {
+    			mClientsWithKnownUsername.put(accountName, client);
+    		} else {
+    			mClientsWithUnknownUsername.put(sessionName, client);
+    		}
+    	}
+    	
+    	return client;
+    }
+    
     
 	@Override
 	public synchronized OwnCloudClient getClientFor(Account savedAccount, Context context)
