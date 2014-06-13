@@ -46,16 +46,12 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundExce
  * 
  * TODO check multithreading safety
  * 
- * TODO better mapping?
- * 
  * @author David A. Velasco
  * @author masensio
  */
 
 public class SingleSessionManager implements OwnCloudClientManager {
     
-	//private static final String TAG = SingleSessionManager.class.getSimpleName();
-
 	private static final String TAG = SingleSessionManager.class.getSimpleName();
 
     private Map<String, Map<OwnCloudCredentials, OwnCloudClient>> mClientsPerServer = 
@@ -130,96 +126,41 @@ public class SingleSessionManager implements OwnCloudClientManager {
     	return client;
     }
     
-    /*
-	@Override
-	public synchronized OwnCloudClient getClientFor(Account savedAccount, Context context)
-			throws OperationCanceledException, AuthenticatorException, AccountNotFoundException,
-			IOException {
-		
-        Uri serverBaseUri = 
-        		Uri.parse(AccountUtils.getBaseUrlForAccount(context, savedAccount));
-        
-        OwnCloudCredentials credentials = 
-        		AccountUtils.getCredentialsForAccount(context, savedAccount);
-        
-        OwnCloudClient client = getClientFor(serverBaseUri, credentials, context);
-        
-        // Restore Cookies ??
-        AccountUtils.restoreCookies(savedAccount, client, context);
-        
-        return client;
-		
-    }
-    */
-
-    /*
-	@Override
-	public synchronized OwnCloudClient getClientFor(
-			Uri serverBaseUri, OwnCloudCredentials credentials, Context context) {
-		
-		Map<OwnCloudCredentials, OwnCloudClient> clientsPerAccount = 
-				mClientsPerServer.get(serverBaseUri.toString());
-		
-		if (clientsPerAccount == null) {
-			clientsPerAccount = new HashMap<OwnCloudCredentials, OwnCloudClient>();
-			mClientsPerServer.put(
-					serverBaseUri.toString(), 
-					clientsPerAccount);
-		}
-		
-		if (credentials == null) {
-			credentials = OwnCloudCredentialsFactory.getAnonymousCredentials(); 
-		}
-		
-		/// TODO - CRITERIA FOR MATCH OF KEYS!!!
-		OwnCloudClient client = clientsPerAccount.get(credentials);
-    	if (client == null) {
-    		client = OwnCloudClientFactory.createOwnCloudClient(
-    				serverBaseUri, 
-    				context.getApplicationContext(), 
-    				true);
-    		
-    		// Restore Cookies
-    		String accountName = AccountUtils.buildAccountName(serverBaseUri, credentials.getUsername());
-    		AccountUtils.restoreCookies(accountName, client, context);
-    		
-    		client.setCredentials(credentials);
-    		clientsPerAccount.put(credentials, client);
-    		
-    	}
-				
-    	return client;
-    }
-    */
     
-	private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
-		OwnCloudCredentials recentCredentials = account.getCredentials();
-		if (!recentCredentials.getAuthToken().equals(
-				reusedClient.getCredentials().getAuthToken())) {
-			reusedClient.setCredentials(recentCredentials);
-		}
+	@Override
+	public OwnCloudClient removeClientFor(OwnCloudAccount account) {
+		
+    	if (account == null) {
+    		return null;
+    	}
+
+    	OwnCloudClient client = null;
+    	String accountName = account.getName();
+    	if (accountName != null) {
+    		client = mClientsWithKnownUsername.remove(accountName);
+        	if (client != null) {
+        		Log.d(TAG, "Removed client {" + accountName + ", " + client.hashCode() + "}");
+        		return client;
+        	} else {
+        		Log.d(TAG, "No client tracked for  {" + accountName + "}");
+        	}
+    	}
+    	
+    	String sessionName = AccountUtils.buildAccountName(
+    			account.getBaseUri(), 
+    			account.getCredentials().getAuthToken());
+    	client = mClientsWithUnknownUsername.remove(sessionName);
+    	if (client != null) {
+			Log.d(TAG, "Removed client {" + sessionName + ", " + client.hashCode() + "}");
+			return  client;
+    	}
+		Log.d(TAG, "No client tracked for  {" + sessionName + "}");
+    		
+		Log.d(TAG, "No client removed");
+		return null;
 		
 	}
 
-	@Override
-    public synchronized OwnCloudClient removeClientFor(Account savedAccount, Context context) 
-    		throws AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {
-		
-        Uri serverBaseUri = 
-        		Uri.parse(AccountUtils.getBaseUrlForAccount(context, savedAccount));
-        
-        Map<OwnCloudCredentials, OwnCloudClient> clientsPerAccount = 
-        		mClientsPerServer.get(serverBaseUri.toString());
-        
-        if (clientsPerAccount != null) {
-            OwnCloudCredentials credentials = 
-            		AccountUtils.getCredentialsForAccount(context, savedAccount);
-            
-        	return clientsPerAccount.remove(credentials);
-        }
-		return null;
-    }
-    
     
     @Override
     public synchronized void saveAllClients(Context context, String accountType) 
@@ -253,5 +194,14 @@ public class SingleSessionManager implements OwnCloudClientManager {
     	
     }
 
+    
+	private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
+		OwnCloudCredentials recentCredentials = account.getCredentials();
+		if (!recentCredentials.getAuthToken().equals(
+				reusedClient.getCredentials().getAuthToken())) {
+			reusedClient.setCredentials(recentCredentials);
+		}
+		
+	}
 
 }
