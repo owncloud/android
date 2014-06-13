@@ -43,6 +43,7 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.HttpStatus;
 import org.apache.http.params.CoreProtocolPNames;
 
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 
 
@@ -66,14 +67,19 @@ public class OwnCloudClient extends HttpClient {
     //private String mSsoSessionCookie = null;
     private int mInstanceNumber = 0;
     
-    private Uri mUri;
-    private Uri mWebdavUri;
+    private Uri mBaseUri;
+    //private Uri mWebdavUri;
     
     /**
      * Constructor
      */
-    public OwnCloudClient(HttpConnectionManager connectionMgr) {
+    public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr) {
         super(connectionMgr);
+        
+        if (baseUri == null) {
+        	throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
+        }
+        mBaseUri = baseUri;
         
         mInstanceNumber = sIntanceCounter++;
         Log.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
@@ -131,7 +137,7 @@ public class OwnCloudClient extends HttpClient {
     /*
     public void setSsoSessionCookie(String accessToken) {
         Log.d(TAG + " #" + mInstanceNumber, "Setting session cookie: " + accessToken);
-        Log.e(TAG + " #" + mInstanceNumber, "BASE URL: " + mUri);
+        Log.e(TAG + " #" + mInstanceNumber, "BASE URL: " + mBaseUri);
         Log.e(TAG + " #" + mInstanceNumber, "WebDAV URL: " + mWebdavUri);
         
         if (accessToken != null && accessToken.length() > 0) {
@@ -141,7 +147,7 @@ public class OwnCloudClient extends HttpClient {
 	        mSsoSessionCookie = accessToken;
 	        mCredentials = null;
 	
-	        Uri serverUri = (mUri != null)? mUri : mWebdavUri;
+	        Uri serverUri = (mBaseUri != null)? mBaseUri : mWebdavUri;
 	        	// TODO refactoring the mess of URIs
 	        
 	        String[] cookies = mSsoSessionCookie.split(";");
@@ -183,7 +189,7 @@ public class OwnCloudClient extends HttpClient {
      * @throws  Exception   When the existence could not be determined
      */
     public boolean existsFile(String path) throws IOException, HttpException {
-        HeadMethod head = new HeadMethod(mWebdavUri.toString() + WebdavUtils.encodePath(path));
+        HeadMethod head = new HeadMethod(getWebdavUri() + WebdavUtils.encodePath(path));
         try {
             int status = executeMethod(head);
             Log.d(TAG, "HEAD to " + path + " finished with HTTP status " + status +
@@ -323,31 +329,27 @@ public class OwnCloudClient extends HttpClient {
             getHttpConnectionManager().getParams().setConnectionTimeout(defaultConnectionTimeout);
     }
 
-    /**
-     * Sets the Webdav URI for the helper methods that receive paths as parameters, 
-     * instead of full URLs
-     * @param uri
-     */
-    public void setWebdavUri(Uri uri) {
-        mWebdavUri = uri;
-    }
-
     public Uri getWebdavUri() {
-        return mWebdavUri;
+    	if (mCredentials instanceof OwnCloudBearerCredentials) {
+    		return Uri.parse(mBaseUri + AccountUtils.ODAV_PATH);
+    	} else {
+    		return Uri.parse(mBaseUri + AccountUtils.WEBDAV_PATH_4_0);
+    	}
     }
     
     /**
-     * Sets the base URI for the helper methods that receive paths as parameters, 
-     * instead of full URLs
+     * Sets the root URI to the ownCloud server.   
+     *
+     * Use with care. 
      * 
      * @param uri
      */
     public void setBaseUri(Uri uri) {
-        mUri = uri;
+        mBaseUri = uri;
     }
 
     public Uri getBaseUri() {
-        return mUri;
+        return mBaseUri;
     }
 
     /*

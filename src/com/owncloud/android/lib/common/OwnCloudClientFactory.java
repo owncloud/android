@@ -72,14 +72,11 @@ public class OwnCloudClientFactory {
      */
     public static OwnCloudClient createOwnCloudClient (Account account, Context appContext) throws OperationCanceledException, AuthenticatorException, IOException, AccountNotFoundException {
         //Log_OC.d(TAG, "Creating OwnCloudClient associated to " + account.name);
-       
-        Uri webdavUri = Uri.parse(AccountUtils.constructFullURLForAccount(appContext, account));
-        Uri uri = Uri.parse(AccountUtils.getBaseUrlForAccount(appContext, account));
+        Uri baseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(appContext, account));
         AccountManager am = AccountManager.get(appContext);
         boolean isOauth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;   // TODO avoid calling to getUserData here
         boolean isSamlSso = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        OwnCloudClient client = createOwnCloudClient(webdavUri, appContext, !isSamlSso);
-        client.setBaseUri(uri);
+        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
         
         if (isOauth2) {    
             String accessToken = am.blockingGetAuthToken(
@@ -123,13 +120,11 @@ public class OwnCloudClientFactory {
     
     
     public static OwnCloudClient createOwnCloudClient (Account account, Context appContext, Activity currentActivity) throws OperationCanceledException, AuthenticatorException, IOException, AccountNotFoundException {
-        Uri webdavUri = Uri.parse(AccountUtils.constructFullURLForAccount(appContext, account));
-        Uri uri = Uri.parse(AccountUtils.getBaseUrlForAccount(appContext, account));
+        Uri baseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(appContext, account));
         AccountManager am = AccountManager.get(appContext);
         boolean isOauth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;   // TODO avoid calling to getUserData here
         boolean isSamlSso = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        OwnCloudClient client = createOwnCloudClient(webdavUri, appContext, !isSamlSso);
-        client.setBaseUri(uri);
+        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
         
         if (isOauth2) {    // TODO avoid a call to getUserData here
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
@@ -192,7 +187,7 @@ public class OwnCloudClientFactory {
     /**
      * Creates a OwnCloudClient to access a URL and sets the desired parameters for ownCloud client connections.
      * 
-     * @param uri       URL to the ownCloud server
+     * @param uri       URL to the ownCloud server; BASE ENTRY POINT, not WebDavPATH
      * @param context   Android context where the OwnCloudClient is being created.
      * @return          A OwnCloudClient object ready to be used
      */
@@ -206,10 +201,8 @@ public class OwnCloudClientFactory {
             Log.e(TAG, "The local server truststore could not be read. Default SSL management in the system will be used for HTTPS connections", e);
         }
         
-        OwnCloudClient client = new OwnCloudClient(NetworkUtils.getMultiThreadedConnManager());
-        
+        OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager());
         client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
-        client.setWebdavUri(uri);
         client.setFollowRedirects(followRedirects);
         
         return client;

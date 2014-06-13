@@ -45,7 +45,7 @@ public class AccountUtils {
     public static final String WEBDAV_PATH_1_2 = "/webdav/owncloud.php";
     public static final String WEBDAV_PATH_2_0 = "/files/webdav.php";
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
-    private static final String ODAV_PATH = "/remote.php/odav";
+    public static final String ODAV_PATH = "/remote.php/odav";
     private static final String SAML_SSO_PATH = "/remote.php/webdav";
     public static final String CARDDAV_PATH_2_0 = "/apps/contacts/carddav.php";
     public static final String CARDDAV_PATH_4_0 = "/remote/carddav.php";
@@ -81,11 +81,15 @@ public class AccountUtils {
     
     /**
      * Constructs full url to host and webdav resource basing on host version
+     * 
+     * @deprecated 		To be removed in release 1.0. 
+     * 
      * @param context
      * @param account
      * @return url or null on failure
      * @throws AccountNotFoundException     When 'account' is unknown for the AccountManager
      */
+    @Deprecated
     public static String constructFullURLForAccount(Context context, Account account) throws AccountNotFoundException {
         AccountManager ama = AccountManager.get(context);
         String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
