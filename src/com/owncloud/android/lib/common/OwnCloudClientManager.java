@@ -30,7 +30,6 @@ import android.accounts.Account;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
-import android.net.Uri;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 
@@ -44,13 +43,17 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundExce
 
 public interface OwnCloudClientManager {
 
+	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context);
+    
+	/*
     public OwnCloudClient getClientFor(Account savedAccount, Context context)
     		throws AccountNotFoundException, AuthenticatorException, 
     		IOException, OperationCanceledException;
     
     public OwnCloudClient getClientFor(
     		Uri serverBaseUri, OwnCloudCredentials credentials, Context context);
-    
+ 		*/
+
     public void saveAllClients(Context context, String accountType)
 			throws AccountNotFoundException, AuthenticatorException, 
 			IOException, OperationCanceledException;
@@ -59,6 +62,4 @@ public interface OwnCloudClientManager {
     		throws AccountNotFoundException, AuthenticatorException, 
     		IOException, OperationCanceledException;
 
-	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context);
-    
 }

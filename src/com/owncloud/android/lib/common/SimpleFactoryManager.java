@@ -1,6 +1,5 @@
 package com.owncloud.android.lib.common;
 
-import java.io.IOException;
 
 import android.accounts.Account;
 import android.accounts.AuthenticatorException;
@@ -13,7 +12,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundExce
 
 public class SimpleFactoryManager implements OwnCloudClientManager {
     
-	private static final String TAG = OwnCloudClientManager.class.getSimpleName();
+	private static final String TAG = SimpleFactoryManager.class.getSimpleName();
 
 	@Override
 	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
@@ -28,7 +27,7 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 		return client;
 	}
 
-	
+	/*
 	@Override
 	public OwnCloudClient getClientFor(Account savedAccount, Context context)
 			throws OperationCanceledException, AuthenticatorException, AccountNotFoundException,
@@ -57,7 +56,8 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 		Log.d(TAG, "    new client " + client.hashCode());
 		return client;
 	}
-
+	*/
+	
 	@Override
 	public void saveAllClients(Context context, String accountType) {
 		// TODO Auto-generated method stub
@@ -66,7 +66,6 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 
 	@Override
 	public OwnCloudClient removeClientFor(Account account, Context context) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -58,8 +58,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
 	private static final String TAG = SingleSessionManager.class.getSimpleName();
 
-	private static OwnCloudClientManager mInstance = null;
-	
     private Map<String, Map<OwnCloudCredentials, OwnCloudClient>> mClientsPerServer = 
             new HashMap<String, Map<OwnCloudCredentials, OwnCloudClient>>();
     
@@ -86,6 +84,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
     	if (accountName != null) {
     		client = mClientsWithKnownUsername.get(accountName);
     	}
+    	boolean reusingKnown = false;	// just for logs
     	if (client == null) {
     		if (accountName != null) {
     			client = mClientsWithUnknownUsername.remove(sessionName);
@@ -99,6 +98,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		}
     	} else {
     		Log.d(TAG, "    reusing client {" + accountName + ", " + client.hashCode() + "}");
+    		reusingKnown = true;
     	}
     	
     	if (client == null) {
@@ -121,13 +121,15 @@ public class SingleSessionManager implements OwnCloudClientManager {
     			Log.d(TAG, "    new client {" + sessionName + ", " + client.hashCode() + "}");
     		}
     	} else {
-    		Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
+    		if (!reusingKnown) {
+    			Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
+    		}
     	}
     	
     	return client;
     }
     
-    
+    /*
 	@Override
 	public synchronized OwnCloudClient getClientFor(Account savedAccount, Context context)
 			throws OperationCanceledException, AuthenticatorException, AccountNotFoundException,
@@ -147,8 +149,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
         return client;
 		
     }
+    */
 
-    
+    /*
 	@Override
 	public synchronized OwnCloudClient getClientFor(
 			Uri serverBaseUri, OwnCloudCredentials credentials, Context context) {
@@ -186,7 +189,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
 				
     	return client;
     }
-    
+    */
     
 	@Override
     public synchronized OwnCloudClient removeClientFor(Account savedAccount, Context context) 

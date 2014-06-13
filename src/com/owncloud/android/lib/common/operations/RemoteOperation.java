@@ -26,6 +26,7 @@ package com.owncloud.android.lib.common.operations;
 
 import java.io.IOException;
 
+import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
@@ -105,8 +106,9 @@ public abstract class RemoteOperation implements Runnable {
         mAccount = account;
         mContext = context.getApplicationContext();
         try {
+        	OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
             mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-            		getClientFor(mAccount, mContext);
+            		getClientFor(ocAccount, mContext);
         } catch (Exception e) {
             Log.e(TAG, "Error while trying to access to " + mAccount.name, e);
             return new RemoteOperationResult(e);
@@ -253,8 +255,9 @@ public abstract class RemoteOperation implements Runnable {
                             		mAccount, mContext, mCallerActivity);
                         } else {
                         /** EOF DEPRECATED */
+                        	OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
                             mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                            		getClientFor(mAccount, mContext);
+                            		getClientFor(ocAccount, mContext);
                         }
                         
                     } else {

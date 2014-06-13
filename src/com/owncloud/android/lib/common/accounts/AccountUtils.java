@@ -200,6 +200,9 @@ public class AccountUtils {
 
 	
     public static String buildAccountName(Uri serverBaseUrl, String username) {
+    	if (serverBaseUrl.getScheme() == null) {
+    		serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString()); 
+    	}
         String accountName = username + "@" + serverBaseUrl.getHost();
         if (serverBaseUrl.getPort() >= 0) {
             accountName += ":" + serverBaseUrl.getPort();

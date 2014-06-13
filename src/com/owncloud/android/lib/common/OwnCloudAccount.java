@@ -68,7 +68,7 @@ public class OwnCloudAccount {
         mBaseUri = baseUri;
         mCredentials = credentials != null ? 
         		credentials : OwnCloudCredentialsFactory.getAnonymousCredentials();
-        String username = credentials.getUsername();
+        String username = mCredentials.getUsername();
         if (username != null) {
         	mSavedAccountName = AccountUtils.buildAccountName(mBaseUri, username);
         }
