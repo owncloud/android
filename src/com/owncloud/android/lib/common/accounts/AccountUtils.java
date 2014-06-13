@@ -26,6 +26,9 @@
 package com.owncloud.android.lib.common.accounts;
 
 import java.io.IOException;
+
+import org.apache.commons.httpclient.Cookie;
+
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
@@ -37,11 +40,13 @@ import android.accounts.AccountsException;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
-
-import android.util.Log;
 import android.net.Uri;
+import android.util.Log;
 
 public class AccountUtils {
+	
+	private static final String TAG = AccountUtils.class.getSimpleName();
+	
     public static final String WEBDAV_PATH_1_2 = "/webdav/owncloud.php";
     public static final String WEBDAV_PATH_2_0 = "/files/webdav.php";
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
@@ -212,13 +217,73 @@ public class AccountUtils {
 			String cookiesString = client.getCookiesString();
 			if (cookiesString != "") {
 				ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString); 
-				Log.d("AccountUtils", "Saving Cookies: "+ cookiesString );
+				Log.d(TAG, "Saving Cookies: "+ cookiesString );
 			}
 		}
 
 	}
 	
 	
+  /**
+  * Restore the client cookies
+  * @param account
+  * @param client 
+  * @param context
+  */
+	public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
+
+		Log.d(TAG, "Restoring cookies for " + account.name);
+
+		// Account Manager
+		AccountManager am = AccountManager.get(context.getApplicationContext());
+
+		Uri serverUri = (client.getBaseUri() != null)? client.getBaseUri() : client.getWebdavUri();
+
+		String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
+		if (cookiesString !=null) {
+			String[] cookies = cookiesString.split(";");
+			if (cookies.length > 0) {
+				for (int i=0; i< cookies.length; i++) {
+					Cookie cookie = new Cookie();
+					int equalPos = cookies[i].indexOf('=');
+					cookie.setName(cookies[i].substring(0, equalPos));
+					cookie.setValue(cookies[i].substring(equalPos + 1));
+					cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
+					cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
+
+					client.getState().addCookie(cookie);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Restore the client cookies from accountName
+	 * @param accountName
+	 * @param client
+	 * @param context
+	 */
+	public static void restoreCookies(String accountName, OwnCloudClient client, Context context) {
+		Log.d(TAG, "Restoring cookies for " + accountName);
+
+		// Account Manager
+		AccountManager am = AccountManager.get(context.getApplicationContext());
+		
+		// Get account
+		Account account = null;
+		Account accounts[] = am.getAccounts();
+		for (Account a : accounts) {
+			if (a.name.equals(accountName)) {
+				account = a;
+				break;
+			}
+		}
+		
+		// Restoring cookies
+		if (account != null) {
+			restoreCookies(account, client, context);
+		}
+	}
 	
     public static class AccountNotFoundException extends AccountsException {
         

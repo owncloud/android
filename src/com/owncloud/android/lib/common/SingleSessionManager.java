@@ -107,6 +107,10 @@ public class SingleSessionManager implements OwnCloudClientManager {
     				account.getBaseUri(), 
     				context.getApplicationContext(), 
     				true);
+    		
+    		// Restore Cookies ??
+    		AccountUtils.restoreCookies(accountName, client, context);		
+    		
     		client.setCredentials(account.getCredentials());
     		if (accountName != null) {
     			mClientsWithKnownUsername.put(accountName, client);
@@ -135,7 +139,12 @@ public class SingleSessionManager implements OwnCloudClientManager {
         OwnCloudCredentials credentials = 
         		AccountUtils.getCredentialsForAccount(context, savedAccount);
         
-        return getClientFor(serverBaseUri, credentials, context);
+        OwnCloudClient client = getClientFor(serverBaseUri, credentials, context);
+        
+        // Restore Cookies ??
+        AccountUtils.restoreCookies(savedAccount, client, context);
+        
+        return client;
 		
     }
 
@@ -166,8 +175,13 @@ public class SingleSessionManager implements OwnCloudClientManager {
     				context.getApplicationContext(), 
     				true);
     		
+    		// Restore Cookies
+    		String accountName = AccountUtils.buildAccountName(serverBaseUri, credentials.getUsername());
+    		AccountUtils.restoreCookies(accountName, client, context);
+    		
     		client.setCredentials(credentials);
     		clientsPerAccount.put(credentials, client);
+    		
     	}
 				
     	return client;
