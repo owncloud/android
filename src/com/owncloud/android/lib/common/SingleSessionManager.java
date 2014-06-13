@@ -99,6 +99,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
     	} else {
     		Log.d(TAG, "    reusing client {" + accountName + ", " + client.hashCode() + "}");
     		reusingKnown = true;
+    		keepCredentialsUpdated(account, client);
     	}
     	
     	if (client == null) {
@@ -191,6 +192,15 @@ public class SingleSessionManager implements OwnCloudClientManager {
     }
     */
     
+	private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
+		OwnCloudCredentials recentCredentials = account.getCredentials();
+		if (!recentCredentials.getAuthToken().equals(
+				reusedClient.getCredentials().getAuthToken())) {
+			reusedClient.setCredentials(recentCredentials);
+		}
+		
+	}
+
 	@Override
     public synchronized OwnCloudClient removeClientFor(Account savedAccount, Context context) 
     		throws AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {

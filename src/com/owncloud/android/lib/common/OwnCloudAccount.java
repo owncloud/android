@@ -57,6 +57,9 @@ public class OwnCloudAccount {
     	mSavedAccountName = savedAccount.name;
         mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, savedAccount));
         mCredentials = AccountUtils.getCredentialsForAccount(context, savedAccount);
+        if (mCredentials == null) {
+        	mCredentials = OwnCloudCredentialsFactory.getAnonymousCredentials();
+        }
     }
     
     

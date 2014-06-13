@@ -7,12 +7,12 @@ public class OwnCloudClientManagerFactory {
 		SINGLE_SESSION_PER_ACCOUNT
 	}
 	
-	public final static Policy DEFAULT_POLICY = Policy.ALWAYS_NEW_CLIENT;
+	public static Policy sDefaultPolicy = Policy.ALWAYS_NEW_CLIENT;
 	
-	private static OwnCloudClientManager mDefaultSingleton;
+	private static OwnCloudClientManager sDefaultSingleton;
 
 	public static OwnCloudClientManager newDefaultOwnCloudClientManager() {
-		return newOwnCloudClientManager(DEFAULT_POLICY);
+		return newOwnCloudClientManager(sDefaultPolicy);
 	}
 	
 	public static OwnCloudClientManager newOwnCloudClientManager(Policy policy) {
@@ -29,10 +29,32 @@ public class OwnCloudClientManagerFactory {
 	}
 	
     public static OwnCloudClientManager getDefaultSingleton() {
-    	if (mDefaultSingleton == null) {
-    		mDefaultSingleton = newDefaultOwnCloudClientManager();
+    	if (sDefaultSingleton == null) {
+    		sDefaultSingleton = newDefaultOwnCloudClientManager();
     	}
-    	return mDefaultSingleton;
+    	return sDefaultSingleton;
     }
+    
+    public static void setDefaultPolicy(Policy policy) {
+    	if (defaultSingletonMustBeUpdated(policy)) {
+    		sDefaultSingleton = null;
+    	}
+    	sDefaultPolicy = policy;
+    }
+
+	private static boolean defaultSingletonMustBeUpdated(Policy policy) {
+		if (sDefaultSingleton == null) {
+			return false;
+		}
+		if (policy == Policy.ALWAYS_NEW_CLIENT && 
+				!(sDefaultSingleton instanceof SimpleFactoryManager)) {
+			return true;
+		}
+		if (policy == Policy.SINGLE_SESSION_PER_ACCOUNT && 
+				!(sDefaultSingleton instanceof SingleSessionManager)) {
+			return true;
+		}
+		return false;
+	}
 
 }
