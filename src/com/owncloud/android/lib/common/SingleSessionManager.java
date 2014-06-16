@@ -26,14 +26,13 @@ package com.owncloud.android.lib.common;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -54,9 +53,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
     
 	private static final String TAG = SingleSessionManager.class.getSimpleName();
 
-    private Map<String, Map<OwnCloudCredentials, OwnCloudClient>> mClientsPerServer = 
-            new HashMap<String, Map<OwnCloudCredentials, OwnCloudClient>>();
-    
     private Map<String, OwnCloudClient> mClientsWithKnownUsername = 
     		new HashMap<String, OwnCloudClient>();
     
@@ -167,31 +163,17 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		throws AccountNotFoundException, AuthenticatorException, IOException,
     		OperationCanceledException {
 
-    	// Get all accounts
-    	Account [] accounts = AccountManager.get(context.getApplicationContext())
-    			.getAccountsByType(accountType);
-
-    	// Save cookies for all accounts
-    	for(Account account: accounts){
-
-    		Uri serverBaseUri = 
-    				Uri.parse(AccountUtils.getBaseUrlForAccount(context, account));
-
-    		Map<OwnCloudCredentials, OwnCloudClient> clientsPerAccount = 
-    				mClientsPerServer.get(serverBaseUri.toString());
-
-    		if (clientsPerAccount != null) {
-    			OwnCloudCredentials credentials = 
-    					AccountUtils.getCredentialsForAccount(context, account);
-
-    			/// TODO - CRITERIA FOR MATCH OF KEYS!!!
-    			OwnCloudClient client = clientsPerAccount.get(credentials);
-    			if (client != null) {
-    				AccountUtils.saveClient(client, account, context.getApplicationContext());
-    			}
-    		}
+    	Iterator<String> accountNames = mClientsWithKnownUsername.keySet().iterator();
+    	String accountName = null;
+    	Account account = null;
+    	while (accountNames.hasNext()) {
+    		accountName = accountNames.next();
+    		account = new Account(accountName, accountType);
+    		AccountUtils.saveClient(
+    				mClientsWithKnownUsername.get(accountName),
+    				account, 
+    				context);
     	}
-    	
     }
 
     
