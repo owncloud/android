@@ -10,13 +10,13 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 	private String mSessionCookie;
 
 	public OwnCloudSamlSsoCredentials(String sessionCookie) {
-		mSessionCookie = sessionCookie != null ? mSessionCookie : "";
+		mSessionCookie = sessionCookie != null ? sessionCookie : "";
 	}
 
 	@Override
 	public void applyTo(OwnCloudClient client) {
         client.getParams().setAuthenticationPreemptive(false);
-        client.getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+        client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
         client.setFollowRedirects(false);
         
     	Uri serverUri = client.getBaseUri();
