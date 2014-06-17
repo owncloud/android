@@ -7,7 +7,7 @@ public class OwnCloudClientManagerFactory {
 		SINGLE_SESSION_PER_ACCOUNT
 	}
 	
-	public static Policy sDefaultPolicy = Policy.ALWAYS_NEW_CLIENT;
+	private static Policy sDefaultPolicy = Policy.ALWAYS_NEW_CLIENT;
 	
 	private static OwnCloudClientManager sDefaultSingleton;
 
@@ -35,13 +35,20 @@ public class OwnCloudClientManagerFactory {
     	return sDefaultSingleton;
     }
     
+    public static Policy getDefaultPolicy() {
+    	return sDefaultPolicy;
+    }
+
     public static void setDefaultPolicy(Policy policy) {
+    	if (policy == null) {
+    		throw new IllegalArgumentException("Default policy cannot be NULL");
+    	}
     	if (defaultSingletonMustBeUpdated(policy)) {
     		sDefaultSingleton = null;
     	}
     	sDefaultPolicy = policy;
     }
-
+    
 	private static boolean defaultSingletonMustBeUpdated(Policy policy) {
 		if (sDefaultSingleton == null) {
 			return false;
