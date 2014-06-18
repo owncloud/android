@@ -43,6 +43,7 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.HttpStatus;
 import org.apache.http.params.CoreProtocolPNames;
 
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 
@@ -62,13 +63,10 @@ public class OwnCloudClient extends HttpClient {
     
     private static int sIntanceCounter = 0;
     private boolean mFollowRedirects = true;
-    //private Credentials mCredentials = null;
     private OwnCloudCredentials mCredentials = null;
-    //private String mSsoSessionCookie = null;
     private int mInstanceNumber = 0;
     
     private Uri mBaseUri;
-    //private Uri mWebdavUri;
     
     /**
      * Constructor
@@ -94,100 +92,36 @@ public class OwnCloudClient extends HttpClient {
         getParams().setParameter(
         		PARAM_SINGLE_COOKIE_HEADER, 			// to avoid problems with some web servers
         		PARAM_SINGLE_COOKIE_HEADER_VALUE);
+        
+        clearCredentials();
     }
 
     
     public void setCredentials(OwnCloudCredentials credentials) {
     	if (credentials != null) {
-        	mCredentials = credentials;
+    		mCredentials = credentials;
     		mCredentials.applyTo(this);
     	} else {
     		clearCredentials();
     	}
     }
     
-    /*
-    public void setBearerCredentials(String accessToken) {
-        AuthPolicy.registerAuthScheme(BearerAuthScheme.AUTH_POLICY, BearerAuthScheme.class);
-        
-        List<String> authPrefs = new ArrayList<String>(1);
-        authPrefs.add(BearerAuthScheme.AUTH_POLICY);
-        getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);        
-        
-        getParams().setAuthenticationPreemptive(true);
-        mCredentials = new BearerCredentials(accessToken);
-        getState().setCredentials(AuthScope.ANY, mCredentials);
-        mSsoSessionCookie = null;
-    }
-    */
-
-    /*
-    public void setBasicCredentials(String username, String password) {
-        List<String> authPrefs = new ArrayList<String>(1);
-        authPrefs.add(AuthPolicy.BASIC);
-        getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);        
-        
-        getParams().setAuthenticationPreemptive(true);
-        mCredentials = new UsernamePasswordCredentials(username, password);
-        getState().setCredentials(AuthScope.ANY, mCredentials);
-        mSsoSessionCookie = null;
-    }
-    */
-    
-    /*
-    public void setSsoSessionCookie(String accessToken) {
-        Log.d(TAG + " #" + mInstanceNumber, "Setting session cookie: " + accessToken);
-        Log.e(TAG + " #" + mInstanceNumber, "BASE URL: " + mBaseUri);
-        Log.e(TAG + " #" + mInstanceNumber, "WebDAV URL: " + mWebdavUri);
-        
-        if (accessToken != null && accessToken.length() > 0) {
-        
-	        getParams().setAuthenticationPreemptive(false);
-	        
-	        mSsoSessionCookie = accessToken;
-	        mCredentials = null;
-	
-	        Uri serverUri = (mBaseUri != null)? mBaseUri : mWebdavUri;
-	        	// TODO refactoring the mess of URIs
-	        
-	        String[] cookies = mSsoSessionCookie.split(";");
-	        if (cookies.length > 0) {
-	        	//Cookie[] cookies = new Cookie[cookiesStr.length];
-	            for (int i=0; i<cookies.length; i++) {
-	            	Cookie cookie = new Cookie();
-	            	int equalPos = cookies[i].indexOf('=');
-	            	cookie.setName(cookies[i].substring(0, equalPos));
-	            	//Log.d(TAG, "Set name for cookie: " + cookies[i].substring(0, equalPos));
-	    	        cookie.setValue(cookies[i].substring(equalPos + 1));
-	            	//Log.d(TAG, "Set value for cookie: " + cookies[i].substring(equalPos + 1));
-	    	        cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
-	            	//Log.d(TAG, "Set domain for cookie: " + serverUri.getHost());
-	    	        cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
-	            	Log.d(TAG, "Set path for cookie: " + serverUri.getPath());
-	    	        getState().addCookie(cookie);
-	            }
-	        }
-	        
-        } else {
-        	Log.e(TAG, "Setting access token " + accessToken);
-        }
-    }
-    */
-    
     public void clearCredentials() {
-        mCredentials = null;
-        getState().clearCredentials();
-        getState().clearCookies();
-    }
+		if (!(mCredentials instanceof OwnCloudAnonymousCredentials)) {
+			mCredentials = OwnCloudCredentialsFactory.getAnonymousCredentials();
+		}
+		mCredentials.applyTo(this);
+	}
     
     /**
      * Check if a file exists in the OC server
      * 
-     * TODO replace with ExistenceOperation
+     * @deprecated	Use ExistenceCheckOperation instead
      * 
-     * @return              'true' if the file exists; 'false' it doesn't exist
-     * @throws  Exception   When the existence could not be determined
+     * @return              	'true' if the file exists; 'false' it doesn't exist
+     * @throws  	Exception   When the existence could not be determined
      */
+    @Deprecated
     public boolean existsFile(String path) throws IOException, HttpException {
         HeadMethod head = new HeadMethod(getWebdavUri() + WebdavUtils.encodePath(path));
         try {
@@ -352,22 +286,10 @@ public class OwnCloudClient extends HttpClient {
         return mBaseUri;
     }
 
-    /*
-    public final Credentials getCredentials() {
-        return mCredentials;
-    }
-    */
-    
     public final OwnCloudCredentials getCredentials() {
         return mCredentials;
     }
     
-    /*
-    public final String getSsoSessionCookie() {
-        return mSsoSessionCookie;
-    }
-    */
-
     public void setFollowRedirects(boolean followRedirects) {
         mFollowRedirects = followRedirects;
     }

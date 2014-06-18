@@ -20,10 +20,6 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
         client.setFollowRedirects(false);
         
     	Uri serverUri = client.getBaseUri();
-    	if (serverUri == null) {
-    		// TODO fix the mess of Uris in OwnCloudClient
-    		serverUri = client.getWebdavUri();
-    	}
         
         String[] cookies = mSessionCookie.split(";");
         if (cookies.length > 0) {

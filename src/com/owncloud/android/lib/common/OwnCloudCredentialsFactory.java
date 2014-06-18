@@ -30,7 +30,8 @@ public class OwnCloudCredentialsFactory {
 		
 		@Override
 		public void applyTo(OwnCloudClient client) {
-			client.clearCredentials();
+			client.getState().clearCredentials();
+			client.getState().clearCookies();
 		}
 
 		@Override
