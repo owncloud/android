@@ -164,6 +164,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         file.setModifiedTimestamp(we.modifiedTimestamp());
         file.setEtag(we.etag());
         file.setPermissions(we.permissions());
+        file.setRemoteId(we.remoteId());
         return file;
     }
 }
