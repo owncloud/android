@@ -30,18 +30,20 @@ import org.apache.jackrabbit.webdav.MultiStatusResponse;
 import org.apache.jackrabbit.webdav.property.DavProperty;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
-
-
-
+import org.apache.jackrabbit.webdav.xml.Namespace;
 
 import android.net.Uri;
 import android.util.Log;
 
 public class WebdavEntry {
-    private String mName, mPath, mUri, mContentType, mEtag;
-    private long mContentLength, mCreateTimestamp, mModifiedTimestamp;
+	private static final String NAMESPACE_OC = "http://owncloud.org/ns";
+	private static final String DAVPROPERTY_NAME_PERMISSIONS = "permissions";
+	private static final String DAVPROPERTY_NAME_REMOTE_ID = "id";
 
-    public WebdavEntry(MultiStatusResponse ms, String splitElement) {
+	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
+	private long mContentLength, mCreateTimestamp, mModifiedTimestamp;
+
+	public WebdavEntry(MultiStatusResponse ms, String splitElement) {
         resetData();
         if (ms.getStatus().length != 0) {
             mUri = ms.getHref();
@@ -106,6 +108,18 @@ public class WebdavEntry {
                 mEtag = mEtag.substring(1, mEtag.length()-1);
             }
 
+            // OC permissions property <oc:permissions>
+            prop = propSet.get(DAVPROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC));
+            if (prop != null) {
+                mPermissions = prop.getValue().toString();
+            }
+
+            // OC remote id property <oc:id>
+            prop = propSet.get(DAVPROPERTY_NAME_REMOTE_ID, Namespace.getNamespace(NAMESPACE_OC));
+            if (prop != null) {
+                mRemoteId = prop.getValue().toString();
+            }
+
         } else {
             Log.e("WebdavEntry",
                     "General fuckup, no status for webdav response");
@@ -152,8 +166,16 @@ public class WebdavEntry {
         return mEtag;
     }
 
+    public String permissions() {
+        return mPermissions;
+    }
+
+    public String remoteId() {
+        return mRemoteId;
+    }
+
     private void resetData() {
-        mName = mUri = mContentType = null;
+        mName = mUri = mContentType = mPermissions = null; mRemoteId = null;
         mContentLength = mCreateTimestamp = mModifiedTimestamp = 0;
     }
 }
