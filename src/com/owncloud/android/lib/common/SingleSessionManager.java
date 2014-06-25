@@ -33,6 +33,7 @@ import android.accounts.Account;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -81,9 +82,11 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		if (accountName != null) {
     			client = mClientsWithUnknownUsername.remove(sessionName);
     			if (client != null) {
-    	    		Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
+    	    		Log.d(TAG, "    reusing client {" + sessionName + ", " + 
+    	    				client.hashCode() + "}");
     				mClientsWithKnownUsername.put(accountName, client);
-    	    		Log.d(TAG, "    moved client to {" + accountName + ", " + client.hashCode() + "}");
+    	    		Log.d(TAG, "    moved client to {" + accountName + ", " + 
+    	    				client.hashCode() + "}");
     			}
     		} else {
         		client = mClientsWithUnknownUsername.get(sessionName);
@@ -91,7 +94,6 @@ public class SingleSessionManager implements OwnCloudClientManager {
     	} else {
     		Log.d(TAG, "    reusing client {" + accountName + ", " + client.hashCode() + "}");
     		reusingKnown = true;
-    		keepCredentialsUpdated(account, client);
     	}
     	
     	if (client == null) {
@@ -117,6 +119,8 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		if (!reusingKnown) {
     			Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
     		}
+    		keepCredentialsUpdated(account, client);
+    		keepUriUpdated(account, client);
     	}
     	
     	return client;
@@ -185,5 +189,16 @@ public class SingleSessionManager implements OwnCloudClientManager {
 		}
 		
 	}
+
+	// this method is just a patch; we need to distinguish accounts in the same host but
+	// different paths; but that requires updating the accountNames for apps upgrading 
+	private void keepUriUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
+		Uri recentUri = account.getBaseUri();
+		if (!recentUri.equals(reusedClient.getBaseUri())) {
+			reusedClient.setBaseUri(recentUri);
+		}
+		
+	}
+
 
 }
