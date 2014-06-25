@@ -303,6 +303,9 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		assertTrue("WebDAV URI does not point to the right entry point for OAuth2 " +
 				"authenticated servers",
 				webdavUri.getPath().endsWith(AccountUtils.ODAV_PATH));
+		assertTrue("WebDAV URI is not a subpath of base URI", 
+				webdavUri.getAuthority().equals(mServerUri.getAuthority()) &&
+				webdavUri.getPath().startsWith(mServerUri.getPath()));
 		
 		client.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(
 				mUsername, mPassword));
@@ -331,21 +334,24 @@ public class OwnCloudClientTest extends AndroidTestCase {
 	
     
 	public void testGetSetBaseUri() {
-		// TODO implement test body
-	    /**
-	     * Sets the root URI to the ownCloud server.   
-	     *
-	     * Use with care. 
-	     * 
-	     * @param uri
-	     *-/
-	    public void setBaseUri(Uri uri) {
-	        mBaseUri = uri;
-	    }
-		public Uri getBaseUri() {
-	        return mBaseUri;
-	    }
-	    */
+		OwnCloudClient client = 
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
+		assertEquals("Returned base URI different that URI passed to constructor", 
+				mServerUri, client.getBaseUri());
+		
+		Uri otherUri = Uri.parse("https://whatever.com/basePath/here");
+		client.setBaseUri(otherUri);
+		assertEquals("Returned base URI different that URI passed to constructor", 
+				otherUri, client.getBaseUri());
+		
+		try {
+			client.setBaseUri(null);
+			throw new AssertionFailedError("Accepted NULL parameter");
+			
+		} catch(Exception e) {
+			assertTrue("Unexpected exception passing NULL base URI", 
+					(e instanceof IllegalArgumentException));
+		}
 	}
 
 	
@@ -368,8 +374,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 
 
 	public void testSetFollowRedirects() {
-		// TODO implement test body
-		// to implement this we need a redirected server
+		// TODO - to implement this test we need a redirected server
 	}
 
     

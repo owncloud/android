@@ -284,6 +284,9 @@ public class OwnCloudClient extends HttpClient {
      * @param uri
      */
     public void setBaseUri(Uri uri) {
+        if (uri == null) {
+        	throw new IllegalArgumentException("URI cannot be NULL");
+        }
         mBaseUri = uri;
     }
 
