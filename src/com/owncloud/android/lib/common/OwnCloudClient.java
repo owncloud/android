@@ -174,6 +174,7 @@ public class OwnCloudClient extends HttpClient {
     public int executeMethod(HttpMethod method) throws IOException, HttpException {
         try {	// just to log 
 	        boolean customRedirectionNeeded = false;
+	        
 	        try {
 	            method.setFollowRedirects(mFollowRedirects);
 	        } catch (Exception e) {
@@ -259,8 +260,12 @@ public class OwnCloudClient extends HttpClient {
      * performed by this client.
      */
     public void setDefaultTimeouts(int defaultDataTimeout, int defaultConnectionTimeout) {
-            getParams().setSoTimeout(defaultDataTimeout);
-            getHttpConnectionManager().getParams().setConnectionTimeout(defaultConnectionTimeout);
+    	if (defaultDataTimeout >= 0) { 
+    		getParams().setSoTimeout(defaultDataTimeout);
+    	}
+    	if (defaultConnectionTimeout >= 0) {
+    		getHttpConnectionManager().getParams().setConnectionTimeout(defaultConnectionTimeout);
+    	}
     }
 
     public Uri getWebdavUri() {
@@ -351,6 +356,14 @@ public class OwnCloudClient extends HttpClient {
 		
 		return cookiesString;
 		
+	}
+
+	public int getConnectionTimeout() {
+        return getHttpConnectionManager().getParams().getConnectionTimeout();
+	}
+	
+	public int getDataTimeout() {
+		return getParams().getSoTimeout();
 	}
 	
 	private void logCookie(Cookie cookie) {
