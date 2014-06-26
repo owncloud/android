@@ -23,14 +23,17 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
         
         String[] cookies = mSessionCookie.split(";");
         if (cookies.length > 0) {
+        	Cookie cookie = null;
             for (int i=0; i<cookies.length; i++) {
-            	Cookie cookie = new Cookie();
             	int equalPos = cookies[i].indexOf('=');
-            	cookie.setName(cookies[i].substring(0, equalPos));
-    	        cookie.setValue(cookies[i].substring(equalPos + 1));
-    	        cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
-    	        cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
-    	        client.getState().addCookie(cookie);
+            	if (equalPos >= 0) {
+                	cookie = new Cookie();
+	            	cookie.setName(cookies[i].substring(0, equalPos));
+	    	        cookie.setValue(cookies[i].substring(equalPos + 1));
+	    	        cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
+	    	        cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
+	    	        client.getState().addCookie(cookie);
+            	}
             }
         }
 	}
