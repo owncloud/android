@@ -25,4 +25,4 @@ env:
   - secure: aF4U20Xlu/rfrbxCmoJAiGh1doYTAZ10UEDmajuinT+ZGSJLivuqD7DDY/00sI6IXWg+J1vL+7jJm4JSYusHPg38UHZ4q92k6RmZycW2ATUzZnGT54O5FRnY67MfVwgVpIMK9UOL/6NEciBHEjlIOL0wbKQiJB++1YtBZOQLGL4=
   - secure: N+ECSwNg8v2GsAFJ2y/tCiffauHDpN76zuFI2pDqf0fjmCtJZHu4BH5ArXBHjyHKmgn20a/8eZXcwJaH1HsJ80bo7vDJ2miShjGIQ90hPcdmUiB2XVJcew4f04CtvMDH5o7DRt4ykWArlbPL2rhVag0jotlSidolHBwRFnbDhDY=
   matrix:
-  - COMPONENTS=build-tools-20.0.0,android-19,sysimg-19 ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
+  - COMPONENTS=build-tools-20.0.0,android-19,sys-img-armeabi-v7a-android-19 ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
