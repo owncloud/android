@@ -2,9 +2,10 @@ language: java
 jdk: oraclejdk7
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install -qq libstdc++6:i386 lib32z1
-- curl -3L https://raw.github.com/embarkmobile/android-sdk-installer/version-1/android-sdk-installer
-  | bash /dev/stdin --install=$COMPONENTS
+- sudo apt-get install -qq libstdc++6:i386 lib32z1 expect
+- export LICENSES="android-sdk-license-5be876d5|android-sdk-license-598b93a6"
+- curl -3L https://raw.github.com/embarkmobile/android-sdk-installer/version-2/android-sdk-installer
+  | bash /dev/stdin --install=$COMPONENTS --accept=$LICENSES
 - source ~/.android-sdk-installer/env
 - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
 - emulator -avd test -no-skin -no-audio -no-window &
@@ -24,4 +25,4 @@ env:
   - secure: aF4U20Xlu/rfrbxCmoJAiGh1doYTAZ10UEDmajuinT+ZGSJLivuqD7DDY/00sI6IXWg+J1vL+7jJm4JSYusHPg38UHZ4q92k6RmZycW2ATUzZnGT54O5FRnY67MfVwgVpIMK9UOL/6NEciBHEjlIOL0wbKQiJB++1YtBZOQLGL4=
   - secure: N+ECSwNg8v2GsAFJ2y/tCiffauHDpN76zuFI2pDqf0fjmCtJZHu4BH5ArXBHjyHKmgn20a/8eZXcwJaH1HsJ80bo7vDJ2miShjGIQ90hPcdmUiB2XVJcew4f04CtvMDH5o7DRt4ykWArlbPL2rhVag0jotlSidolHBwRFnbDhDY=
   matrix:
-  - COMPONENTS=build-tools-19.0.3,android-19,sysimg-19 ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
+  - COMPONENTS=build-tools-20.0.0,android-19,sys-img-armeabi-v7a-android-19 ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
