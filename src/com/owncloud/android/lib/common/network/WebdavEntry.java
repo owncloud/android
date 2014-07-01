@@ -37,8 +37,8 @@ import android.util.Log;
 
 public class WebdavEntry {
 	private static final String NAMESPACE_OC = "http://owncloud.org/ns";
-	private static final String DAVPROPERTY_NAME_PERMISSIONS = "permissions";
-	private static final String DAVPROPERTY_NAME_REMOTE_ID = "id";
+	private static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
+	private static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
 
 	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
 	private long mContentLength, mCreateTimestamp, mModifiedTimestamp;
@@ -109,13 +109,17 @@ public class WebdavEntry {
             }
 
             // OC permissions property <oc:permissions>
-            prop = propSet.get(DAVPROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC));
+            prop = propSet.get(
+            		EXTENDED_PROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC)
+    		);
             if (prop != null) {
                 mPermissions = prop.getValue().toString();
             }
 
             // OC remote id property <oc:id>
-            prop = propSet.get(DAVPROPERTY_NAME_REMOTE_ID, Namespace.getNamespace(NAMESPACE_OC));
+            prop = propSet.get(
+            		EXTENDED_PROPERTY_NAME_REMOTE_ID, Namespace.getNamespace(NAMESPACE_OC)
+    		);
             if (prop != null) {
                 mRemoteId = prop.getValue().toString();
             }
