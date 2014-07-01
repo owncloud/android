@@ -58,7 +58,7 @@ public class WebdavUtils {
         Date returnDate = null;
         for (int i = 0; i < DATETIME_FORMATS.length; ++i) {
             try {
-                returnDate = new SimpleDateFormat (DATETIME_FORMATS[i]).parse(date);
+                returnDate = new SimpleDateFormat (DATETIME_FORMATS[i], Locale.US).parse(date);
                 return returnDate;
             } catch (ParseException e) {
             }
