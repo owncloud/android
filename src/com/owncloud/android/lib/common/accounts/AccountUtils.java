@@ -29,11 +29,6 @@ import java.io.IOException;
 
 import org.apache.commons.httpclient.Cookie;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudCredentials;
-import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
@@ -42,6 +37,11 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class AccountUtils {
 	
@@ -220,7 +220,7 @@ public class AccountUtils {
 			String cookiesString = client.getCookiesString();
 			if (cookiesString != "") {
 				ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString); 
-				Log.d(TAG, "Saving Cookies: "+ cookiesString );
+				// Log.d(TAG, "Saving Cookies: "+ cookiesString );
 			}
 		}
 
