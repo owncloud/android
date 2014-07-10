@@ -47,15 +47,6 @@ public class WebdavUtils {
 		new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
 	};
 
-    public static String prepareXmlForPropFind() {
-        String ret = "<?xml version=\"1.0\" ?><D:propfind xmlns:D=\"DAV:\"><D:allprop/></D:propfind>";
-        return ret;
-    }
-
-    public static String prepareXmlForPatch() {
-        return "<?xml version=\"1.0\" ?><D:propertyupdate xmlns:D=\"DAV:\"></D:propertyupdate>";
-    }
-
     public static Date parseResponseDate(String date) {
         Date returnDate = null;
         SimpleDateFormat format = null;
