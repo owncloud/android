@@ -41,12 +41,12 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.DavException;
 import org.json.JSONException;
 
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.network.CertificateCombinedException;
-
 import android.accounts.Account;
 import android.accounts.AccountsException;
 import android.util.Log;
+
+import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
 
 
 /**
@@ -98,7 +98,8 @@ public class RemoteOperationResult implements Serializable {
         ACCOUNT_NOT_THE_SAME,
         INVALID_CHARACTER_IN_NAME,
         SHARE_NOT_FOUND,
-        LOCAL_STORAGE_NOT_REMOVED
+		LOCAL_STORAGE_NOT_REMOVED,
+		FORBIDDEN
     }
 
     private boolean mSuccess = false;
@@ -140,6 +141,9 @@ public class RemoteOperationResult implements Serializable {
             case HttpStatus.SC_INSUFFICIENT_STORAGE:
                 mCode = ResultCode.QUOTA_EXCEEDED;
                 break;
+			case HttpStatus.SC_FORBIDDEN:
+				mCode = ResultCode.FORBIDDEN;
+				break;
             default:
                 mCode = ResultCode.UNHANDLED_HTTP_CODE;
                 Log.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " + httpCode);
