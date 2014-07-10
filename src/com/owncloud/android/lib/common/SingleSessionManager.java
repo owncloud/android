@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.httpclient.cookie.CookiePolicy;
+
 import android.accounts.Account;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
@@ -102,6 +104,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
     				account.getBaseUri(), 
     				context.getApplicationContext(), 
     				true);	// TODO remove dependency on OwnCloudClientFactory
+            client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
+            	// enable cookie tracking
+            
     		
     		// Restore Cookies ??
     		AccountUtils.restoreCookies(accountName, client, context);		

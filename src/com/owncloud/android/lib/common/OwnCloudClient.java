@@ -87,7 +87,7 @@ public class OwnCloudClient extends HttpClient {
         		HttpVersion.HTTP_1_1);
         
         getParams().setCookiePolicy(
-        		CookiePolicy.BROWSER_COMPATIBILITY);	// to keep sessions
+        		CookiePolicy.IGNORE_COOKIES);
         getParams().setParameter(
         		PARAM_SINGLE_COOKIE_HEADER, 			// to avoid problems with some web servers
         		PARAM_SINGLE_COOKIE_HEADER_VALUE);
