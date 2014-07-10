@@ -99,7 +99,8 @@ public class RemoteOperationResult implements Serializable {
         INVALID_CHARACTER_IN_NAME,
         SHARE_NOT_FOUND,
 		LOCAL_STORAGE_NOT_REMOVED,
-		FORBIDDEN
+		FORBIDDEN,
+		SHARE_FORBIDDEN
     }
 
     private boolean mSuccess = false;
