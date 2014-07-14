@@ -80,7 +80,11 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             int status = client.executeMethod(query);
 
             // check and process response
-            if (isMultiStatus(status)) {
+            boolean isSuccess = (
+                    status == HttpStatus.SC_MULTI_STATUS ||
+                    status == HttpStatus.SC_OK
+		            );
+            if (isSuccess) {
             	// get data from remote folder 
             	MultiStatus dataInServer = query.getResponseBodyAsMultiStatus();
             	readData(dataInServer, client);

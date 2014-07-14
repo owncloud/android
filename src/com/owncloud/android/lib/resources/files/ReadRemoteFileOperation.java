@@ -82,8 +82,11 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     		int status;
     		status = client.executeMethod(propfind, SYNC_READ_TIMEOUT, SYNC_CONNECTION_TIMEOUT);
 
-    		boolean isMultiStatus = status == HttpStatus.SC_MULTI_STATUS;
-    		if (isMultiStatus) {
+    		boolean isSuccess = (
+    				status == HttpStatus.SC_MULTI_STATUS ||
+    				status == HttpStatus.SC_OK
+			);
+    		if (isSuccess) {
     			// Parse response
     			MultiStatus resp = propfind.getResponseBodyAsMultiStatus();
 				WebdavEntry we = new WebdavEntry(resp.getResponses()[0], client.getWebdavUri().getPath());
