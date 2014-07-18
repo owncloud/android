@@ -19,8 +19,12 @@
 package com.owncloud.android.ui.activity;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -62,12 +66,16 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.files.services.FileObserverService;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.operations.CreateFolderOperation;
 
+import com.owncloud.android.lib.common.OwnCloudAccount;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -78,6 +86,7 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.UnshareLinkOperation;
+import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
@@ -155,11 +164,12 @@ FileFragment.ContainerActivity, OnNavigationListener, OnSslUntrustedCertListener
             requestPinCode();
         }
 
-        /// file observer
-        Intent observer_intent = new Intent(this, FileObserverService.class);
-        observer_intent.putExtra(FileObserverService.KEY_FILE_CMD, FileObserverService.CMD_INIT_OBSERVED_LIST);
-        startService(observer_intent);
-
+        /// grant that FileObserverService is watching favourite files
+        if (savedInstanceState == null) {
+            Intent initObserversIntent = FileObserverService.makeInitIntent(this);
+            startService(initObserversIntent);
+        }
+        
         /// Load of saved instance state
         if(savedInstanceState != null) {
             mWaitingToPreview = (OCFile) savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
@@ -918,10 +928,55 @@ FileFragment.ContainerActivity, OnNavigationListener, OnSslUntrustedCertListener
                         
                         mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) && !SynchronizeFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED.equals(event));
                                 
+                        if (SynchronizeFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
+                                    equals(event) &&
+                                /// TODO refactor and make common
+                                synchResult != null && !synchResult.isSuccess() &&  
+                                (synchResult.getCode() == ResultCode.UNAUTHORIZED   || 
+                                    synchResult.isIdPRedirection()                  ||
+                                    (synchResult.isException() && synchResult.getException() 
+                                            instanceof AuthenticatorException))) {
+
+                            OwnCloudClient client = null;
+                            try {
+                                OwnCloudAccount ocAccount = 
+                                        new OwnCloudAccount(getAccount(), context);
+                                client = (OwnCloudClientManagerFactory.getDefaultSingleton().
+                                        removeClientFor(ocAccount));
+                                // TODO get rid of these exceptions
+                            } catch (AccountNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (AuthenticatorException e) {
+                                e.printStackTrace();
+                            } catch (OperationCanceledException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            
+                            if (client != null) {
+                                OwnCloudCredentials cred = client.getCredentials();
+                                if (cred != null) {
+                                    AccountManager am = AccountManager.get(context);
+                                    if (cred.authTokenExpires()) {
+                                        am.invalidateAuthToken(
+                                                getAccount().type, 
+                                                cred.getAuthToken()
+                                        );
+                                    } else {
+                                        am.clearPassword(getAccount());
+                                    }
+                                }
+                            }
+                            
+                            requestCredentialsUpdate();
+                            
                         }
-                        removeStickyBroadcast(intent);
-                        Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
-                        setSupportProgressBarIndeterminateVisibility(mSyncInProgress /*|| mRefreshSharesInProgress*/);
+                    }
+                    removeStickyBroadcast(intent);
+                    Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
+                    setSupportProgressBarIndeterminateVisibility(mSyncInProgress /*|| mRefreshSharesInProgress*/);
+                        
                 }
                 
                 if (synchResult != null) {
@@ -949,53 +1004,58 @@ FileFragment.ContainerActivity, OnNavigationListener, OnSslUntrustedCertListener
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            String uploadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
-            String accountName = intent.getStringExtra(FileUploader.ACCOUNT_NAME);
-            boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
-            OCFile currentDir = getCurrentDir();
-            boolean isDescendant = (currentDir != null) && (uploadedRemotePath != null) && 
-                    (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
-            
-            if (sameAccount && isDescendant) {
-                refreshListOfFilesFragment();
-            }
-            
-            boolean uploadWasFine = intent.getBooleanExtra(FileUploader.EXTRA_UPLOAD_RESULT, false);
-            boolean renamedInUpload = getFile().getRemotePath().
-                    equals(intent.getStringExtra(FileUploader.EXTRA_OLD_REMOTE_PATH));
-            boolean sameFile = getFile().getRemotePath().equals(uploadedRemotePath) || 
-                    renamedInUpload;
-            FileFragment details = getSecondFragment();
-            boolean detailFragmentIsShown = (details != null && 
-                    details instanceof FileDetailFragment);
-            
-            if (sameAccount && sameFile && detailFragmentIsShown) {
-                if (uploadWasFine) {
-                    setFile(getStorageManager().getFileByPath(uploadedRemotePath));
-                }
-                if (renamedInUpload) {
-                    String newName = (new File(uploadedRemotePath)).getName();
-                    Toast msg = Toast.makeText(
-                            context, 
-                            String.format(
-                                    getString(R.string.filedetails_renamed_in_upload_msg), 
-                                    newName), 
-                            Toast.LENGTH_LONG);
-                    msg.show();
-                }
-                if (uploadWasFine || getFile().fileExists()) {
-                    ((FileDetailFragment)details).updateFileDetails(false, true);
-                } else {
-                    cleanSecondFragment();
+            try {
+                String uploadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
+                String accountName = intent.getStringExtra(FileUploader.ACCOUNT_NAME);
+                boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
+                OCFile currentDir = getCurrentDir();
+                boolean isDescendant = (currentDir != null) && (uploadedRemotePath != null) && 
+                        (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
+                
+                if (sameAccount && isDescendant) {
+                    refreshListOfFilesFragment();
                 }
                 
-                // Force the preview if the file is an image
-                if (uploadWasFine && PreviewImageFragment.canBePreviewed(getFile())) {
-                    startImagePreview(getFile());
-                } // TODO what about other kind of previews?
+                boolean uploadWasFine = intent.getBooleanExtra(FileUploader.EXTRA_UPLOAD_RESULT, false);
+                boolean renamedInUpload = getFile().getRemotePath().
+                        equals(intent.getStringExtra(FileUploader.EXTRA_OLD_REMOTE_PATH));
+                boolean sameFile = getFile().getRemotePath().equals(uploadedRemotePath) || 
+                        renamedInUpload;
+                FileFragment details = getSecondFragment();
+                boolean detailFragmentIsShown = (details != null && 
+                        details instanceof FileDetailFragment);
+                
+                if (sameAccount && sameFile && detailFragmentIsShown) {
+                    if (uploadWasFine) {
+                        setFile(getStorageManager().getFileByPath(uploadedRemotePath));
+                    }
+                    if (renamedInUpload) {
+                        String newName = (new File(uploadedRemotePath)).getName();
+                        Toast msg = Toast.makeText(
+                                context, 
+                                String.format(
+                                        getString(R.string.filedetails_renamed_in_upload_msg), 
+                                        newName), 
+                                Toast.LENGTH_LONG);
+                        msg.show();
+                    }
+                    if (uploadWasFine || getFile().fileExists()) {
+                        ((FileDetailFragment)details).updateFileDetails(false, true);
+                    } else {
+                        cleanSecondFragment();
+                    }
+                    
+                    // Force the preview if the file is an image
+                    if (uploadWasFine && PreviewImageFragment.canBePreviewed(getFile())) {
+                        startImagePreview(getFile());
+                    } // TODO what about other kind of previews?
+                }
+                
+            } finally {
+                if (intent != null) {
+                    removeStickyBroadcast(intent);
+                }
             }
-        
-            removeStickyBroadcast(intent);
             
         }
         
@@ -1011,23 +1071,28 @@ FileFragment.ContainerActivity, OnNavigationListener, OnSslUntrustedCertListener
     private class DownloadFinishReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean sameAccount = isSameAccount(context, intent);
-            String downloadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
-            boolean isDescendant = isDescendant(downloadedRemotePath);
-
-            if (sameAccount && isDescendant) {
-                refreshListOfFilesFragment();
-                refreshSecondFragment(intent.getAction(), downloadedRemotePath, intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false));
-            }
-
-            if (mWaitingToSend != null) {
-                mWaitingToSend = getStorageManager().getFileByPath(mWaitingToSend.getRemotePath()); // Update the file to send
-                if (mWaitingToSend.isDown()) { 
-                    sendDownloadedFile();
+            try {
+                boolean sameAccount = isSameAccount(context, intent);
+                String downloadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
+                boolean isDescendant = isDescendant(downloadedRemotePath);
+    
+                if (sameAccount && isDescendant) {
+                    refreshListOfFilesFragment();
+                    refreshSecondFragment(intent.getAction(), downloadedRemotePath, intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false));
+                }
+    
+                if (mWaitingToSend != null) {
+                    mWaitingToSend = getStorageManager().getFileByPath(mWaitingToSend.getRemotePath()); // Update the file to send
+                    if (mWaitingToSend.isDown()) { 
+                        sendDownloadedFile();
+                    }
+                }
+            
+            } finally {
+                if (intent != null) {
+                    removeStickyBroadcast(intent);
                 }
             }
-            
-            removeStickyBroadcast(intent);
         }
 
         private boolean isDescendant(String downloadedRemotePath) {
@@ -1477,7 +1542,7 @@ FileFragment.ContainerActivity, OnNavigationListener, OnSslUntrustedCertListener
                                                                         getAccount(), 
                                                                         getApplicationContext()
                                                                       );
-        synchFolderOp.execute(getAccount(), this, null, null, this);
+        synchFolderOp.execute(getAccount(), this, null, null);
         
         setSupportProgressBarIndeterminateVisibility(true);
     }

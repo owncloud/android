@@ -82,6 +82,7 @@
   <string name="uploader_upload_succeeded_content_single">%1$s foi carregado com sucesso</string>
   <string name="uploader_upload_failed_ticker">Carregamento falhou</string>
   <string name="uploader_upload_failed_content_single">O envio do ficheiro %1$s não foi concluído.</string>
+  <string name="uploader_upload_failed_credentials_error">Falha no carregamento, é necessário fazer novo login</string>
   <string name="downloader_download_in_progress_ticker">A descarregar...</string>
   <string name="downloader_download_in_progress_content">%1$d%% A decarregar %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descarga com sucesso</string>
@@ -89,6 +90,7 @@
   <string name="downloader_download_failed_ticker">Descarga falhou</string>
   <string name="downloader_download_failed_content">O descarregamento %1$s não foi possível descarregar</string>
   <string name="downloader_not_downloaded_yet">Não transferido</string>
+  <string name="downloader_download_failed_credentials_error">Falha no download, é necessário fazer login </string>
   <string name="common_choose_account">Escolha a conta</string>
   <string name="sync_fail_ticker">Falhou a sincronização</string>
   <string name="sync_fail_content">Não foi possível sincronizar %1$s</string>
@@ -106,7 +108,7 @@
   <string name="foreign_files_fail">Não foi possível mover alguns ficheiros</string>
   <string name="foreign_files_local_text">Local: %1$s</string>
   <string name="foreign_files_remote_text">Remoto: %1$s</string>
-  <string name="upload_query_move_foreign_files">Não existe espaço suficiente para copiar os ficheiros seleccionados para a pasta %1$s . Deseja move-los?</string>
+  <string name="upload_query_move_foreign_files">Não existe espaço disponível para copiar o ficheiro seleccionado para a pasta %1$s . Em vez disso deseja mover o ficheiro?</string>
   <string name="pincode_enter_pin_code">Por favor escreva o PIN da Aplicação</string>
   <string name="pincode_configure_your_pin">Escreva o PIN da Aplicação</string>
   <string name="pincode_configure_your_pin_explanation">O PIN vai ser pedido todas as vezes que iniciar a aplicação.</string>
@@ -239,7 +241,7 @@
   <string name="failed_upload_headline_retryall_btn">Tentar todos os seleccionados</string>
   <string name="failed_upload_headline_delete_all_btn">Eliminar todos os seleccionados da lista de envio</string>
   <string name="failed_upload_retry_text">Tentar envio da imagem:</string>
-  <string name="failed_upload_load_more_images">Carregar mais imagens</string>
+  <string name="failed_upload_load_more_images">Carregar mais Fotos</string>
   <string name="failed_upload_retry_do_nothing_text">não fazer nada, nao está online para o Upload-Instantâneo</string>
   <string name="failed_upload_failure_text">Mensagem de erro:</string>
   <string name="failed_upload_quota_exceeded_text">Por favor verifique a configuração do servidor, talvez tenha excedido a sua quota</string>
@@ -252,4 +254,8 @@
   <string name="copy_link">Copiar ligação</string>
   <string name="clipboard_text_copied">Copiado para a área de transferência</string>
   <string name="error_cant_bind_to_operations_service">Erro crítico: não é possível executar as operações</string>
+  <string name="network_error_socket_exception">Ocorreu um erro durante a ligação ao servidos.</string>
+  <string name="network_error_socket_timeout_exception">Ocorreu um erro durante a ligação ao servidor, não foi possível realizar a operação.</string>
+  <string name="network_error_connect_timeout_exception">Ocorreu um erro durante a ligação ao servidor, não foi possível realizar a operação.</string>
+  <string name="network_host_not_available">A operação não foi concluída, o servidor está inacessível.</string>
 </resources>

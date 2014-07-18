@@ -106,6 +106,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log_OC.e(TAG, "onActivityCreated() start");
+        
         mAdapter = new FileListListAdapter(getSherlockActivity(), mContainerActivity); 
                 
         if (savedInstanceState != null) {
@@ -432,5 +433,22 @@ public class OCFileListFragment extends ExtendedListFragment {
             mFile = directory;
         }
     }
+
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+        
+        if (mFile != null) {
+            // Refresh mFile
+            mFile = mContainerActivity.getStorageManager().getFileById(mFile.getFileId());
+
+            listDirectory(mFile);
+            
+            ((FileDisplayActivity)mContainerActivity).startSyncFolderOperation(mFile);
+        }
+    }
+    
+    
     
 }

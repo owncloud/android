@@ -15,7 +15,7 @@
  *
  */
 
-package com.owncloud.android.utils;
+package com.owncloud.android.notifications;
 
 import com.owncloud.android.R;
 
@@ -127,5 +127,6 @@ public class NotificationBuilderWithProgressBar extends NotificationCompat.Build
         }
         return result;
     }
+    
     
 }

@@ -82,6 +82,7 @@
   <string name="uploader_upload_succeeded_content_single">%1$s foi enviado correctamente</string>
   <string name="uploader_upload_failed_ticker">Produciuse un fallou no envío</string>
   <string name="uploader_upload_failed_content_single">Non foi posíbel completar o envío de %1$s</string>
+  <string name="uploader_upload_failed_credentials_error">Fallou o envío, necesita volver acceder</string>
   <string name="downloader_download_in_progress_ticker">Descargando…</string>
   <string name="downloader_download_in_progress_content">%1$d%% descargando %2$s</string>
   <string name="downloader_download_succeeded_ticker">Completouse a descarga</string>
@@ -89,8 +90,10 @@
   <string name="downloader_download_failed_ticker">Produciuse un fallo na descarga</string>
   <string name="downloader_download_failed_content">Non foi posíbel completar a descarga de %1$s</string>
   <string name="downloader_not_downloaded_yet">Non descargado aínda</string>
+  <string name="downloader_download_failed_credentials_error">Fallou a descarga, necesita volver acceder</string>
   <string name="common_choose_account">Escoller unha conta</string>
   <string name="sync_fail_ticker">Produciuse un fallo na sincronización</string>
+  <string name="sync_fail_ticker_unauthorized">Fallou a sincronización, necesita volver acceder</string>
   <string name="sync_fail_content">Non foi posíbel completar a sincronización de %1$s</string>
   <string name="sync_fail_content_unauthorized">Contrasinal incorrecto para %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Atopáronse conflictos</string>
@@ -165,12 +168,12 @@
   <string name="auth_unsupported_auth_method">O servidor non admite este método de autenticación</string>
   <string name="auth_unsupported_multiaccount">%1$s non admite contas múltipes</string>
   <string name="auth_fail_get_user_name">O seu servidor non devolveu un ID de usuario correcto, contacte cun administrador\n\t</string>
-  <string name="auth_can_not_auth_against_server">Non é posíbel autenticalo neste servidor</string>
+  <string name="auth_can_not_auth_against_server">Non pode autenticarse neste servidor</string>
   <string name="fd_keep_in_sync">Manter actualizado o ficheiro</string>
   <string name="common_rename">Renomear</string>
   <string name="common_remove">Retirar</string>
-  <string name="confirmation_remove_alert">Confirma que quere retirar %1$s ?</string>
-  <string name="confirmation_remove_folder_alert">Confirma que quere retirar %1$s e o seu contido ?</string>
+  <string name="confirmation_remove_alert">Confirma que quere retirar %1$s?</string>
+  <string name="confirmation_remove_folder_alert">Confirma que quere retirar %1$s e o seu contido?</string>
   <string name="confirmation_remove_local">Só local</string>
   <string name="confirmation_remove_folder_local">Só contidos locais</string>
   <string name="confirmation_remove_remote">Retirar do servidor</string>
@@ -216,7 +219,7 @@
   <string name="ssl_validator_null_cert">Non é posíbel amosar o certificado.</string>
   <string name="ssl_validator_no_info_about_error">- Non hai información sobre este erro</string>
   <string name="placeholder_sentence">Isto é un marcador de posición</string>
-  <string name="placeholder_filename">marcador_de_posición.txt</string>
+  <string name="placeholder_filename">placeholder.txt</string>
   <string name="placeholder_filetype">Imaxe PNG</string>
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
@@ -252,4 +255,8 @@
   <string name="copy_link">Copiar a ligazón</string>
   <string name="clipboard_text_copied">Copiado no portapapeis.</string>
   <string name="error_cant_bind_to_operations_service">Produciuse un erro crítico: non é posíbel realizar as operacións</string>
+  <string name="network_error_socket_exception">Produciuse un erro mentres conectaba co servidor.</string>
+  <string name="network_error_socket_timeout_exception">Produciuse un erro mentres agardaba polo servidor, a operación non se puido levar a fin</string>
+  <string name="network_error_connect_timeout_exception">Produciuse un erro mentres agardaba polo servidor, a operación non se puido levar a fin</string>
+  <string name="network_host_not_available">A operación non se completou, o servidor non está dispoñíbel</string>
 </resources>

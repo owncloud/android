@@ -54,7 +54,7 @@
   <string name="filedetails_size">Boyut:</string>
   <string name="filedetails_type">Tür:</string>
   <string name="filedetails_created">Oluşturulma:</string>
-  <string name="filedetails_modified">Değiştirme:</string>
+  <string name="filedetails_modified">Değiştirilme:</string>
   <string name="filedetails_download">İndir</string>
   <string name="filedetails_sync_file">Dosyayı yenile</string>
   <string name="filedetails_renamed_in_upload_msg">Dosya adı, yükleme sırasında %1$s olarak değiştirildi</string>
@@ -82,6 +82,7 @@
   <string name="uploader_upload_succeeded_content_single">%1$s başarıyla yüklendi</string>
   <string name="uploader_upload_failed_ticker">Yükleme başarısız</string>
   <string name="uploader_upload_failed_content_single">%1$s yüklenmesi tamamlanamadı</string>
+  <string name="uploader_upload_failed_credentials_error">Yükleme başarısız, yeniden oturum açmalısınız</string>
   <string name="downloader_download_in_progress_ticker">İndiriliyor...</string>
   <string name="downloader_download_in_progress_content">%%%1$d İndirilen: %2$s</string>
   <string name="downloader_download_succeeded_ticker">İndirme başarılı</string>
@@ -89,8 +90,10 @@
   <string name="downloader_download_failed_ticker">İndirme başarısız</string>
   <string name="downloader_download_failed_content">%1$s indirmesi tamamlanamadı</string>
   <string name="downloader_not_downloaded_yet">Henüz indirilemedi</string>
+  <string name="downloader_download_failed_credentials_error">İndirme başarısız, yeniden oturum açmalısınız</string>
   <string name="common_choose_account">Hesap seçin</string>
   <string name="sync_fail_ticker">Eşitleme başarısız</string>
+  <string name="sync_fail_ticker_unauthorized">Eşitleme başarısız, yeniden oturum açmalısınız</string>
   <string name="sync_fail_content">%1$s eşitlemesi tamamlanamadı</string>
   <string name="sync_fail_content_unauthorized">%1$s için geçersiz parola</string>
   <string name="sync_conflicts_in_favourites_ticker">Çakışma bulundu</string>
@@ -106,7 +109,7 @@
   <string name="foreign_files_fail">Bazı dosyalar taşınamadı</string>
   <string name="foreign_files_local_text">Yerel: %1$s</string>
   <string name="foreign_files_remote_text">Uzak: %1$s</string>
-  <string name="upload_query_move_foreign_files">Seçilen dosyaları %1$s klasörüne kopyalamak için yeterli alan yok. Bunun yerine dosyayı taşımak ister misiniz?</string>
+  <string name="upload_query_move_foreign_files">Seçilen dosyaları %1$s dizinine kopyalamak için yeterli alan yok. Bunun yerine dosyayı içine taşımak ister misiniz?</string>
   <string name="pincode_enter_pin_code">Lütfen uygulama PIN\'inizi girin</string>
   <string name="pincode_configure_your_pin">Uygulama PIN\'inizi girin</string>
   <string name="pincode_configure_your_pin_explanation">PIN uygulama yeniden başladığında tekrar sorulacak</string>
@@ -170,7 +173,7 @@
   <string name="common_rename">Yeniden adlandır</string>
   <string name="common_remove">Kaldır</string>
   <string name="confirmation_remove_alert">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
-  <string name="confirmation_remove_folder_alert">Gerçekten %1s ve içeriğini silmek istediğinizden emin misiniz?</string>
+  <string name="confirmation_remove_folder_alert">Gerçekten %1$s ve içeriğini kaldırmak istediğinizden emin misiniz?</string>
   <string name="confirmation_remove_local">Sadece yerel</string>
   <string name="confirmation_remove_folder_local">Sadece yerel içerik</string>
   <string name="confirmation_remove_remote">Sunucudan kaldır</string>
@@ -230,7 +233,7 @@
   <string name="conflict_overwrite">Üzerine yaz</string>
   <string name="conflict_dont_upload">Yükleme</string>
   <string name="preview_image_description">Resim önizleme</string>
-  <string name="preview_image_error_unknown_format">Bu resim gösterilemez</string>
+  <string name="preview_image_error_unknown_format">Bu resim gösterilemiyor</string>
   <string name="error__upload__local_file_not_copied">%1$s, %2$s yerel klasörüne kopyalanamadı</string>
   <string name="actionbar_failed_instant_upload">AnındaYükleme başarısız</string>
   <string name="failed_upload_headline_text">Anında yüklemeler başarısız</string>
@@ -252,4 +255,8 @@
   <string name="copy_link">Bağlantıyı kopyala</string>
   <string name="clipboard_text_copied">Panoya kopyalandı</string>
   <string name="error_cant_bind_to_operations_service">Ciddi hata: işlem gerçekleştirilemiyor</string>
+  <string name="network_error_socket_exception">Sunucuya bağlanılırken bir hata oluştu.</string>
+  <string name="network_error_socket_timeout_exception">Sunucu beklenirken bir hata oluştu, işlem yapılamadı</string>
+  <string name="network_error_connect_timeout_exception">Sunucu beklenirken bir hata oluştu, işlem yapılamadı</string>
+  <string name="network_host_not_available">İşlem tamamlanamadı, sunucu kullanılamıyor</string>
 </resources>

@@ -78,7 +78,6 @@
   <string name="foreign_files_fail">Деякі файли не можуть бути переміщені</string>
   <string name="foreign_files_local_text">Локально: %1$s</string>
   <string name="foreign_files_remote_text">Віддалено: %1$s</string>
-  <string name="upload_query_move_foreign_files">Недостатньо місця для копіювання обраних файлів у теку %1$s. Чи бажаєте ви перемістити їх замість копіювання?</string>
   <string name="pincode_enter_pin_code">Будь ласка, введіть свій програмний PIN</string>
   <string name="pincode_configure_your_pin">Введіть програмний PIN</string>
   <string name="pincode_configure_your_pin_explanation">PIN необхідно буде вводити щоразу при запуску цієї програми</string>
@@ -106,8 +105,6 @@
   <string name="fd_keep_in_sync">Оновлювати файл</string>
   <string name="common_rename">Перейменувати</string>
   <string name="common_remove">Видалити</string>
-  <string name="confirmation_remove_alert">Ви дійсно бажаєте видалити %1$s ?</string>
-  <string name="confirmation_remove_folder_alert">Ви дійсно бажаєте видалити %1$s і його зміст ?</string>
   <string name="confirmation_remove_local">Лише локально</string>
   <string name="confirmation_remove_folder_local">Лише локальний зміст</string>
   <string name="confirmation_remove_remote">Видалити із серверу</string>

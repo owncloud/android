@@ -82,6 +82,7 @@
   <string name="uploader_upload_succeeded_content_single">%1$s ble lastet opp</string>
   <string name="uploader_upload_failed_ticker">Opplasting feilet</string>
   <string name="uploader_upload_failed_content_single">Opplasting av %1$s kunne ikke fullføres</string>
+  <string name="uploader_upload_failed_credentials_error">Opplasting feilet. Du må logge inn på nytt</string>
   <string name="downloader_download_in_progress_ticker">Laster ned...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Laster ned %2$s</string>
   <string name="downloader_download_succeeded_ticker">Nedlasting fullført</string>
@@ -89,8 +90,10 @@
   <string name="downloader_download_failed_ticker">Nedlasting feilet</string>
   <string name="downloader_download_failed_content">Nedlasting av %1$s kunne ikke fullføres</string>
   <string name="downloader_not_downloaded_yet">Ikke lastet ned enda</string>
+  <string name="downloader_download_failed_credentials_error">Nedlasting feilet. Du må logge inn på nytt</string>
   <string name="common_choose_account">Velg konto</string>
   <string name="sync_fail_ticker">Synkronisering feilet</string>
+  <string name="sync_fail_ticker_unauthorized">Synkronisering feilet, du må logge inn på nytt</string>
   <string name="sync_fail_content">Synkronisering av %1$s kunne ikke fullføres</string>
   <string name="sync_fail_content_unauthorized">Ugyldig passord for %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Konflikter funnet</string>
@@ -106,7 +109,7 @@
   <string name="foreign_files_fail">Noen filer kunne ikke fjernes</string>
   <string name="foreign_files_local_text">Lokal: %1$s</string>
   <string name="foreign_files_remote_text">Ekstern: %1$s</string>
-  <string name="upload_query_move_foreign_files">Det er ikke nok plass til å kopiere de valgte filene til %1$s mappe. Vil du flytte dem i stedet?</string>
+  <string name="upload_query_move_foreign_files">Det er ikke nok plass til å kopiere de valgte filene inn i mappen %1$s. Vil du flytte dem i stedet? </string>
   <string name="pincode_enter_pin_code">Vennligst tast inn din App-PIN</string>
   <string name="pincode_configure_your_pin">Skriv inn din PIN kode</string>
   <string name="pincode_configure_your_pin_explanation">PIN koden vil bli ettersourt hver gang appen starter</string>
@@ -165,12 +168,12 @@
   <string name="auth_unsupported_auth_method">Serveren støtter ikke denne autorisasjonsmetoden</string>
   <string name="auth_unsupported_multiaccount">%1$s støtter ikke flere kontoer</string>
   <string name="auth_fail_get_user_name">Tjeneren din svarer ikke med korrekt bruker-ID, vennligst ta kontakt med en administrator\n\t</string>
-  <string name="auth_can_not_auth_against_server">Kan ikke autentisere mot denne tjeneren</string>
+  <string name="auth_can_not_auth_against_server">Kan ikke autentisere mot denne serveren</string>
   <string name="fd_keep_in_sync">Hold filen oppdatert</string>
   <string name="common_rename">Endre navn</string>
   <string name="common_remove">Fjern</string>
-  <string name="confirmation_remove_alert">Er du sikker på at du vil fjerne %1$s ?</string>
-  <string name="confirmation_remove_folder_alert">Vil du virkelig fjerne %1$s og dens innhold?</string>
+  <string name="confirmation_remove_alert">Vil du virkelig fjerne %1$s?</string>
+  <string name="confirmation_remove_folder_alert">Vil du virkelig fjerne %1$s inkludert innholdet?</string>
   <string name="confirmation_remove_local">Kun lokalt</string>
   <string name="confirmation_remove_folder_local">Kun lokalt innhold</string>
   <string name="confirmation_remove_remote">Fjern fra server</string>
@@ -184,6 +187,7 @@
   <string name="sync_file_nothing_to_do_msg">filinnhold er allerede synkronisert</string>
   <string name="create_dir_fail_msg">Mappe kunne ikke opprettes</string>
   <string name="filename_forbidden_characters">Forbudte tegn: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_empty">Filnavn kan ikke være tomt</string>
   <string name="wait_a_moment">Vent et øyeblikk</string>
   <string name="filedisplay_unexpected_bad_get_content">Uforventet problem; vennligst velg filen fra en annen applikasjon</string>
   <string name="filedisplay_no_file_selected">Ingen fil ble valgt</string>
@@ -250,5 +254,9 @@
   <string name="activity_chooser_send_file_title">Send</string>
   <string name="copy_link">Kopier lenke</string>
   <string name="clipboard_text_copied">Kopiert til utklippstavlen</string>
-  <string name="error_cant_bind_to_operations_service">Kritisk feil: kan ikke utføre handlinger</string>
+  <string name="error_cant_bind_to_operations_service">Kritisk feil: kan ikke utføre operasjonene</string>
+  <string name="network_error_socket_exception">En feil oppstod ved oppretting av forbindelse til serveren.</string>
+  <string name="network_error_socket_timeout_exception">En feil oppstod ved venting på svar fra serveren. Operasjonen kunne ikke utføres</string>
+  <string name="network_error_connect_timeout_exception">En feil oppstod ved venting på svar fra serveren. Operasjonen kunne ikke utføres</string>
+  <string name="network_host_not_available">Operasjonen kunne ikke fullføres. Server utilgjengelig</string>
 </resources>

@@ -17,6 +17,8 @@
   <string name="prefs_manage_accounts">Tilien hallinta</string>
   <string name="prefs_pincode">Sovelluksen PIN-koodi</string>
   <string name="prefs_pincode_summary">Suojaa Asiakasohjelmasi</string>
+  <string name="prefs_instant_video_upload">Välittömät videolähetykset</string>
+  <string name="prefs_instant_video_upload_summary">Lähetä kameralla kuvatut videot välittömästi</string>
   <string name="prefs_log_title">Käytä lokitusta</string>
   <string name="prefs_log_summary_history">Tämä näyttää tallennetut lokit</string>
   <string name="prefs_log_delete_history_button">Poista historia</string>
@@ -33,6 +35,7 @@
   <string name="sync_string_files">Tiedostot</string>
   <string name="setup_btn_connect">Yhdistä</string>
   <string name="uploader_btn_upload_text">Lähetä</string>
+  <string name="uploader_top_message">Valitse lähetyskansio:</string>
   <string name="uploader_wrn_no_account_title">Tiliä ei löytynyt</string>
   <string name="uploader_wrn_no_account_text">Laitteelle ei ole asetettu %1$s-tiliä. Luo tili ensin.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Asetukset</string>
@@ -73,6 +76,7 @@
   <string name="uploader_upload_succeeded_content_single">%1$s lähetettiin onnistuneesti</string>
   <string name="uploader_upload_failed_ticker">Lähetys epäonnistui</string>
   <string name="uploader_upload_failed_content_single">%1$s :n lähetys palvelimelle jäi kesken</string>
+  <string name="uploader_upload_failed_credentials_error">Lähetys epäonnistui, kirjaudu uudelleen</string>
   <string name="downloader_download_in_progress_ticker">Ladataan...</string>
   <string name="downloader_download_in_progress_content">%1$d%% ladataan palvelimelta %2$s</string>
   <string name="downloader_download_succeeded_ticker">Lataus tänne onnistui</string>
@@ -80,8 +84,10 @@
   <string name="downloader_download_failed_ticker">Lataus epäonnistui</string>
   <string name="downloader_download_failed_content">%1$s :n latausta ei pystytty suorittamaan loppuun asti</string>
   <string name="downloader_not_downloaded_yet">Ei vielä ladattu</string>
+  <string name="downloader_download_failed_credentials_error">Lataus epäonnistui, kirjaudu uudelleen</string>
   <string name="common_choose_account">Valitse tili</string>
   <string name="sync_fail_ticker">Synkronointi epäonnistui</string>
+  <string name="sync_fail_ticker_unauthorized">Synkronointi epäonnistui, kirjaudu uudelleen</string>
   <string name="sync_fail_content">Kohteen %1$s synkronointia ei voitu suorittaa loppuun</string>
   <string name="sync_fail_content_unauthorized">Virheellinen salasana tilille %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Ristiriitoja löytynyt</string>
@@ -128,6 +134,7 @@
   <string name="auth_timeout_title">Palvelimen vastaus viipyy liian kauan</string>
   <string name="auth_incorrect_address_title">Väärin annettu osoite</string>
   <string name="auth_ssl_general_error_title">SSL:n alustus epäonnistui</string>
+  <string name="auth_ssl_unverified_server_title">SSL-palvelimen identiteettiä ei voitu varmistaa</string>
   <string name="auth_bad_oc_version_title">Tuntematon palvelimen versio</string>
   <string name="auth_wrong_connection_title">Yhteyden muodostus epäonnistui</string>
   <string name="auth_secure_connection">Salattu yhteys muodostettu</string>
@@ -141,12 +148,12 @@
   <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
   <string name="auth_unsupported_auth_method">Palvelin ei tue tätä tunnistautumistapaa</string>
   <string name="auth_unsupported_multiaccount">%1$s ei tue useita tilejä</string>
-  <string name="auth_can_not_auth_against_server">Tunnistautuminen palvelimeen ei onnistunut</string>
+  <string name="auth_can_not_auth_against_server">Tunnistautuminen palvelinta vastaan ei onnistu</string>
   <string name="fd_keep_in_sync">Pidä tiedosto ajan tasalla</string>
   <string name="common_rename">Nimeä uudelleen</string>
   <string name="common_remove">Poista</string>
-  <string name="confirmation_remove_alert">Haluatko poistaa kohteen %1$s?</string>
-  <string name="confirmation_remove_folder_alert">Haluatko poistaa kohteen %1$s ja sen sisällön?</string>
+  <string name="confirmation_remove_alert">Haluatko varmasti poistaa kohteen %1$s?</string>
+  <string name="confirmation_remove_folder_alert">Haluatko varmasti poistaa kohteen %1$s ja sen sisällön?</string>
   <string name="confirmation_remove_local">Vain paikallinen</string>
   <string name="confirmation_remove_folder_local">Vain paikallinen sisältö</string>
   <string name="confirmation_remove_remote">Poista palvelimelta</string>
@@ -158,6 +165,7 @@
   <string name="rename_server_fail_msg">Nimen muutos epäonnistui</string>
   <string name="sync_file_fail_msg">Etäpään tiedostoa ei voitu tarkistaa</string>
   <string name="sync_file_nothing_to_do_msg">Tiedoston sisältö on jo synkronoitu</string>
+  <string name="create_dir_fail_msg">Kansion luominen epäonnistui</string>
   <string name="filename_forbidden_characters">Kielletyt merkit: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_empty">Tiedoston nimi ei voi olla tyhjä</string>
   <string name="wait_a_moment">Odota hetki</string>
@@ -201,15 +209,18 @@
   <string name="conflict_overwrite">Korvaa</string>
   <string name="conflict_dont_upload">Älä lähetä</string>
   <string name="preview_image_description">Kuvan esikatselu</string>
-  <string name="preview_image_error_unknown_format">Kuvaa ei voi näyttää</string>
+  <string name="preview_image_error_unknown_format">Tätä kuvaa ei voi näyttää</string>
   <string name="failed_upload_all_cb">valitse kaikki</string>
   <string name="failed_upload_headline_retryall_btn">yritä uudelleen kaikkia valittuja</string>
   <string name="failed_upload_load_more_images">Lataa lisää kuvia</string>
   <string name="failed_upload_failure_text">Virheviesti:</string>
+  <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys\n\t\tylläpitäjään.</string>
   <string name="share_link_file_no_exist">Valitettavasti tämän tiedoston tai kansion jakaminen ei onnistu. Varmista että se on olemassa</string>
   <string name="share_link_file_error">Virhe tiedoston tai kansion jakamista yrittäessä</string>
   <string name="activity_chooser_send_file_title">Lähetä</string>
   <string name="copy_link">Kopioi linkki</string>
   <string name="clipboard_text_copied">Kopioitu leikepöydälle</string>
   <string name="error_cant_bind_to_operations_service">Kriittinen virhe: toimintoja ei voi suorittaa</string>
+  <string name="network_error_socket_exception">Virhe palvelimeen yhdistäessä</string>
+  <string name="network_host_not_available">Toimintoa ei voi suorittaa loppuun, palvelin ei ole käytettävissä</string>
 </resources>

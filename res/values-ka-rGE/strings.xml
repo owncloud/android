@@ -76,7 +76,6 @@
   <string name="foreign_files_fail">რამოდენიმე ფაილის გადატანა ვერ მოხერხდა</string>
   <string name="foreign_files_local_text">ლოკალური: %1$s</string>
   <string name="foreign_files_remote_text">დაშორებული: %1$s</string>
-  <string name="upload_query_move_foreign_files">ადგილი არ არის მონიშნული ფაილების დასაკოპირებლად %1$s ფოლდერში. გინდათ თქვენ გადაიტანოთ ისინი ამის მაგივრად?</string>
   <string name="pincode_enter_pin_code">გთხოვთ, ჩასვათ თქვენი აპლიკაციის PIN–ი</string>
   <string name="pincode_configure_your_pin">შეიყვანეთ თქვენი აპლიკაციის PIN–ი</string>
   <string name="pincode_configure_your_pin_explanation">PIN–ი მოთხოვნილი იქნება აპლიკაციის ყოველ ჩართვაზე</string>
@@ -102,8 +101,6 @@
   <string name="fd_keep_in_sync">არ განაახლო ფაილი</string>
   <string name="common_rename">გადარქმევა</string>
   <string name="common_remove">წაშლა</string>
-  <string name="confirmation_remove_alert">ნამდვილად გინდათ წაშალოთ %1$s ?</string>
-  <string name="confirmation_remove_folder_alert">თქვენ აუცილებლად გინდათ %1$s–ის წაშლა თავისი კონტენტით?</string>
   <string name="confirmation_remove_local">მხოლოდ ლოკალური</string>
   <string name="confirmation_remove_folder_local">მხოლოდ ლოკალური კონტენტი</string>
   <string name="confirmation_remove_remote">სერვერიდან წაშლა</string>
