@@ -59,37 +59,39 @@ public class GetRemoteStatusOperation extends RemoteOperation {
     private static final String NODE_INSTALLED = "installed";
     private static final String NODE_VERSION = "version";
     
-    private String mUrl;
     private RemoteOperationResult mLatestResult;
     private Context mContext;
 
-    public GetRemoteStatusOperation(String url, Context context) {
-        mUrl = url;
+    public GetRemoteStatusOperation(Context context) {
         mContext = context;
     }
     
-    private boolean tryConnection(OwnCloudClient wc, String urlSt) {
+    private boolean tryConnection(OwnCloudClient client) {
         boolean retval = false;
         GetMethod get = null;
+        String baseUrlSt = client.getBaseUri().toString();
         try {
-            get = new GetMethod(urlSt);
-            int status = wc.executeMethod(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
+            get = new GetMethod(baseUrlSt + AccountUtils.STATUS_PATH);
+            int status = client.executeMethod(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
             String response = get.getResponseBodyAsString();
             if (status == HttpStatus.SC_OK) {
                 JSONObject json = new JSONObject(response);
                 if (!json.getBoolean(NODE_INSTALLED)) {
-                    mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
+                    mLatestResult = new RemoteOperationResult(
+                    		RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
                 } else {
                     String version = json.getString(NODE_VERSION);
 					OwnCloudVersion ocVersion = new OwnCloudVersion(version);
                     if (!ocVersion.isVersionValid()) {
-                        mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.BAD_OC_VERSION);
+                        mLatestResult = new RemoteOperationResult(
+                        		RemoteOperationResult.ResultCode.BAD_OC_VERSION);
                         
                     } else {
-                        mLatestResult = new RemoteOperationResult(urlSt.startsWith("https://") ? 
-                                                                    RemoteOperationResult.ResultCode.OK_SSL : 
-                                                                    RemoteOperationResult.ResultCode.OK_NO_SSL
-                            );
+                        mLatestResult = new RemoteOperationResult(
+                        		baseUrlSt.startsWith("https://") ?
+                        				RemoteOperationResult.ResultCode.OK_SSL :
+                    					RemoteOperationResult.ResultCode.OK_NO_SSL
+                        );
 
                         ArrayList<Object> data = new ArrayList<Object>();
                         data.add(ocVersion);
@@ -103,7 +105,8 @@ public class GetRemoteStatusOperation extends RemoteOperation {
             }
 
         } catch (JSONException e) {
-            mLatestResult = new RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
+            mLatestResult = new RemoteOperationResult(
+            		RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
             
         } catch (Exception e) {
             mLatestResult = new RemoteOperationResult(e);
@@ -114,13 +117,13 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         }
         
         if (mLatestResult.isSuccess()) {
-            Log.i(TAG, "Connection check at " + urlSt + ": " + mLatestResult.getLogMessage());
+            Log.i(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
             
         } else if (mLatestResult.getException() != null) {
-            Log.e(TAG, "Connection check at " + urlSt + ": " + mLatestResult.getLogMessage(), mLatestResult.getException());
+            Log.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage(), mLatestResult.getException());
             
         } else {
-            Log.e(TAG, "Connection check at " + urlSt + ": " + mLatestResult.getLogMessage());
+            Log.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
         }
 
         return retval;
@@ -138,16 +141,17 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         if (!isOnline()) {
         	return new RemoteOperationResult(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
         }
-        if (mUrl.startsWith("http://") || mUrl.startsWith("https://")) {
-            tryConnection(client, mUrl + AccountUtils.STATUS_PATH);
+        String baseUriStr = client.getBaseUri().toString();
+        if (baseUriStr.startsWith("http://") || baseUriStr.startsWith("https://")) {
+            tryConnection(client);
             
         } else {
-            client.setWebdavUri(Uri.parse("https://" + mUrl + AccountUtils.STATUS_PATH));
-            boolean httpsSuccess = tryConnection(client, "https://" + mUrl + AccountUtils.STATUS_PATH); 
+            client.setBaseUri(Uri.parse("https://" + baseUriStr));
+            boolean httpsSuccess = tryConnection(client); 
             if (!httpsSuccess && !mLatestResult.isSslRecoverableException()) {
                 Log.d(TAG, "establishing secure connection failed, trying non secure connection");
-                client.setWebdavUri(Uri.parse("http://" + mUrl + AccountUtils.STATUS_PATH));
-                tryConnection(client, "http://" + mUrl + AccountUtils.STATUS_PATH);
+                client.setBaseUri(Uri.parse("http://" + baseUriStr));
+                tryConnection(client);
             }
         }
         return mLatestResult;

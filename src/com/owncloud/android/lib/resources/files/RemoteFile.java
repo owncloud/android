@@ -48,7 +48,9 @@ public class RemoteFile implements Parcelable, Serializable {
 	private long mCreationTimestamp;
 	private long mModifiedTimestamp;
 	private String mEtag;
-	
+	private String mPermissions;
+	private String mRemoteId;
+
 	/** 
 	 * Getters and Setters
 	 */
@@ -101,6 +103,22 @@ public class RemoteFile implements Parcelable, Serializable {
 		this.mEtag = etag;
 	}
 	
+	public String getPermissions() {
+		return mPermissions;
+	}
+
+	public void setPermissions(String permissions) {
+		this.mPermissions = permissions;
+	}
+
+	public String getRemoteId() {
+		return mRemoteId;
+	}
+
+	public void setRemoteId(String remoteId) {
+		this.mRemoteId = remoteId;
+	}
+
 	public RemoteFile() {
 		resetData();
 	}
@@ -127,6 +145,8 @@ public class RemoteFile implements Parcelable, Serializable {
         this.setMimeType(we.contentType());
         this.setModifiedTimestamp(we.modifiedTimestamp());
         this.setEtag(we.etag());
+        this.setPermissions(we.permissions());
+        this.setRemoteId(we.remoteId());
 	}
 
 	/**
@@ -139,6 +159,8 @@ public class RemoteFile implements Parcelable, Serializable {
         mCreationTimestamp = 0;
         mModifiedTimestamp = 0;
         mEtag = null;
+        mPermissions = null;
+        mRemoteId = null;
     }
 
     /** 
@@ -173,6 +195,8 @@ public class RemoteFile implements Parcelable, Serializable {
         mCreationTimestamp = source.readLong();
         mModifiedTimestamp = source.readLong();
         mEtag = source.readString();
+        mPermissions= source.readString();
+        mRemoteId = source.readString();
     }
     
 	@Override
@@ -187,7 +211,9 @@ public class RemoteFile implements Parcelable, Serializable {
 		dest.writeLong(mLength);
 		dest.writeLong(mCreationTimestamp);
 		dest.writeLong(mModifiedTimestamp);
-		dest.writeString(mEtag);		
+		dest.writeString(mEtag);
+		dest.writeString(mPermissions);
+		dest.writeString(mRemoteId);
 	}
     
     

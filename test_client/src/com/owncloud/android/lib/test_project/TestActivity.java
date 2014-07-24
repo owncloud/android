@@ -35,6 +35,7 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -73,7 +74,6 @@ public class TestActivity extends Activity {
 	private String mPass;
 	private boolean mChunked;
 	
-	private static final String WEBDAV_PATH = "/remote.php/webdav";
 	private static final int BUFFER_SIZE = 1024;
 	
 	public static final String ASSETS__TEXT_FILE_NAME = "textFile.txt";
@@ -106,14 +106,17 @@ public class TestActivity extends Activity {
 			}
 		}
 		
-		Uri uri = Uri.parse(mServerUri + WEBDAV_PATH);
-		mClient = new OwnCloudClient(NetworkUtils.getMultiThreadedConnManager());
+		mClient = new OwnCloudClient(Uri.parse(mServerUri), NetworkUtils.getMultiThreadedConnManager());
 		mClient.setDefaultTimeouts(
 				OwnCloudClientFactory.DEFAULT_DATA_TIMEOUT, 
 				OwnCloudClientFactory.DEFAULT_CONNECTION_TIMEOUT);
-		mClient.setWebdavUri(uri);
 		mClient.setFollowRedirects(true);
-		mClient.setBasicCredentials(mUser, mPass);
+		mClient.setCredentials(
+				OwnCloudCredentialsFactory.newBasicCredentials(
+						mUser, 
+						mPass
+				)
+		);
 		mClient.setBaseUri(Uri.parse(mServerUri));
 		
 		Log.v(TAG, "onCreate finished, ownCloud client ready");
