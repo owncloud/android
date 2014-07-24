@@ -43,13 +43,12 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.HttpStatus;
 import org.apache.http.params.CoreProtocolPNames;
 
+import android.net.Uri;
+import android.util.Log;
+
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
-
-
-import android.net.Uri;
-import android.util.Log;
 
 public class OwnCloudClient extends HttpClient {
 	
@@ -88,7 +87,7 @@ public class OwnCloudClient extends HttpClient {
         		HttpVersion.HTTP_1_1);
         
         getParams().setCookiePolicy(
-        		CookiePolicy.BROWSER_COMPATIBILITY);	// to keep sessions
+        		CookiePolicy.IGNORE_COOKIES);
         getParams().setParameter(
         		PARAM_SINGLE_COOKIE_HEADER, 			// to avoid problems with some web servers
         		PARAM_SINGLE_COOKIE_HEADER_VALUE);
@@ -189,8 +188,8 @@ public class OwnCloudClient extends HttpClient {
 	        Log.d(TAG + " #" + mInstanceNumber, "REQUEST " + 
 	        		method.getName() + " " + method.getPath());
         
-	        logCookiesAtRequest(method.getRequestHeaders(), "before");
-	        logCookiesAtState("before");
+//	        logCookiesAtRequest(method.getRequestHeaders(), "before");
+//	        logCookiesAtState("before");
 	        
 	        int status = super.executeMethod(method);
         
@@ -198,9 +197,9 @@ public class OwnCloudClient extends HttpClient {
 	        	status = patchRedirection(status, method);
 	        }
 
-	        logCookiesAtRequest(method.getRequestHeaders(), "after");
-	        logCookiesAtState("after");
-	        logSetCookiesAtResponse(method.getResponseHeaders());
+//	        logCookiesAtRequest(method.getRequestHeaders(), "after");
+//	        logCookiesAtState("after");
+//	        logSetCookiesAtResponse(method.getResponseHeaders());
 	        
 	        return status;
 	        
@@ -348,17 +347,17 @@ public class OwnCloudClient extends HttpClient {
         
 	}
 	
-	public String getCookiesString(){
-		Cookie[] cookies = getState().getCookies(); 
-		String cookiesString ="";
-		for (Cookie cookie: cookies) {
+	public String getCookiesString() {
+		Cookie[] cookies = getState().getCookies();
+		String cookiesString = "";
+		for (Cookie cookie : cookies) {
 			cookiesString = cookiesString + cookie.toString() + ";";
-			
-			logCookie(cookie);
+
+			// logCookie(cookie);
 		}
-		
+
 		return cookiesString;
-		
+
 	}
 
 	public int getConnectionTimeout() {
