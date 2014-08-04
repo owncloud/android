@@ -116,13 +116,12 @@ public class GetRemoteStatusOperation extends RemoteOperation {
 						if (isRedirectToNonSecureConnection) {
 							mLatestResult = new RemoteOperationResult(
 											RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
-						} else {
-							retval = true;
 						}
 
 						ArrayList<Object> data = new ArrayList<Object>();
 						data.add(ocVersion);
 						mLatestResult.setData(data);
+						retval = true;
                     }
                 }
                 
@@ -174,7 +173,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         } else {
             client.setBaseUri(Uri.parse("https://" + baseUriStr));
             boolean httpsSuccess = tryConnection(client); 
-			if (!httpsSuccess && !mLatestResult.isSslRecoverableException() && mLatestResult.isNonSecureRedirection()) {
+			if (!httpsSuccess && !mLatestResult.isSslRecoverableException()) {
                 Log.d(TAG, "establishing secure connection failed, trying non secure connection");
                 client.setBaseUri(Uri.parse("http://" + baseUriStr));
                 tryConnection(client);
