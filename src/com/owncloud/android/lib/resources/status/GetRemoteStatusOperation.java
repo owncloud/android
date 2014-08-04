@@ -31,15 +31,16 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.util.Log;
+
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 
 /**
  * Checks if the server is valid and if the server supports the Share API
@@ -93,10 +94,35 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                     					RemoteOperationResult.ResultCode.OK_NO_SSL
                         );
 
-                        ArrayList<Object> data = new ArrayList<Object>();
-                        data.add(ocVersion);
-                        mLatestResult.setData(data);
-                        retval = true;
+						RemoteOperation operation = new ExistenceCheckRemoteOperation("", mContext, false);
+						client.setFollowRedirects(false);
+						boolean isRedirectToNonSecureConnection = false;
+
+						// checks if there are any reconnection to a non secure
+						// connection
+						RemoteOperationResult result = operation.execute(client);
+						String redirectedLocation = result.getRedirectedLocation();
+						while (baseUrlSt.startsWith("https://") && redirectedLocation != null
+										&& redirectedLocation.length() > 0
+										&& result.isNonSecureRedirection()) {
+							client.setBaseUri(Uri.parse(result.getRedirectedLocation()));
+							result = operation.execute(client);
+							redirectedLocation = result.getRedirectedLocation();
+
+							isRedirectToNonSecureConnection = true;
+							break;
+						}
+
+						if (isRedirectToNonSecureConnection) {
+							mLatestResult = new RemoteOperationResult(
+											RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
+						} else {
+							retval = true;
+						}
+
+						ArrayList<Object> data = new ArrayList<Object>();
+						data.add(ocVersion);
+						mLatestResult.setData(data);
                     }
                 }
                 
@@ -148,7 +174,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         } else {
             client.setBaseUri(Uri.parse("https://" + baseUriStr));
             boolean httpsSuccess = tryConnection(client); 
-            if (!httpsSuccess && !mLatestResult.isSslRecoverableException()) {
+			if (!httpsSuccess && !mLatestResult.isSslRecoverableException() && mLatestResult.isNonSecureRedirection()) {
                 Log.d(TAG, "establishing secure connection failed, trying non secure connection");
                 client.setBaseUri(Uri.parse("http://" + baseUriStr));
                 tryConnection(client);

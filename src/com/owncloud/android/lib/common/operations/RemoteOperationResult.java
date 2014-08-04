@@ -100,7 +100,8 @@ public class RemoteOperationResult implements Serializable {
         SHARE_NOT_FOUND,
 		LOCAL_STORAGE_NOT_REMOVED,
 		FORBIDDEN,
-		SHARE_FORBIDDEN
+		SHARE_FORBIDDEN,
+		OK_REDIRECT_TO_NON_SECURE_CONNECTION
     }
 
     private boolean mSuccess = false;
@@ -114,7 +115,7 @@ public class RemoteOperationResult implements Serializable {
 
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
-        mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL || code == ResultCode.OK_NO_SSL);
+		mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL || code == ResultCode.OK_NO_SSL || code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
         mData = null;
     }
 
@@ -250,6 +251,10 @@ public class RemoteOperationResult implements Serializable {
         return mCode == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
     }
 
+	public boolean isRedirectToNonSecureConnection() {
+		return mCode == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION;
+	}
+
     private CertificateCombinedException getCertificateCombinedException(Exception e) {
         CertificateCombinedException result = null;
         if (e instanceof CertificateCombinedException) {
@@ -371,6 +376,15 @@ public class RemoteOperationResult implements Serializable {
                 mRedirectedLocation.toLowerCase().contains("wayf")));
     }
     
+	/**
+	 * Checks if is a non https connection
+	 * 
+	 * @return boolean true/false
+	 */
+	public boolean isNonSecureRedirection() {
+		return (mRedirectedLocation != null && !(mRedirectedLocation.toLowerCase().startsWith("https://")));
+	}
+
     public String getAuthenticateHeader() {
     	return mAuthenticate;
     }
