@@ -40,7 +40,6 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 
 /**
  * Checks if the server is valid and if the server supports the Share API
@@ -52,7 +51,10 @@ import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 
 public class GetRemoteStatusOperation extends RemoteOperation {
     
-    /** Maximum time to wait for a response from the server when the connection is being tested, in MILLISECONDs.  */
+    /** 
+     * Maximum time to wait for a response from the server when the connection is being tested, 
+     * in MILLISECONDs.
+     */
     public static final int TRY_CONNECTION_TIMEOUT = 5000;
     
     private static final String TAG = GetRemoteStatusOperation.class.getSimpleName();
@@ -73,7 +75,36 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         String baseUrlSt = client.getBaseUri().toString();
         try {
             get = new GetMethod(baseUrlSt + AccountUtils.STATUS_PATH);
+            
+            client.setFollowRedirects(false);
+            boolean isRedirectToNonSecureConnection = false;
             int status = client.executeMethod(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
+            mLatestResult = new RemoteOperationResult(
+            		(status == HttpStatus.SC_OK),
+            		status,
+            		get.getResponseHeaders()
+    		);
+
+            if (baseUrlSt.startsWith("https://")) {
+            	String redirectedLocation = mLatestResult.getRedirectedLocation();
+            	while (redirectedLocation != null && redirectedLocation.length() > 0
+								&& !mLatestResult.isSuccess()) {
+            		
+            		isRedirectToNonSecureConnection = redirectedLocation.startsWith("http://");
+            		get.releaseConnection();
+            		get = new GetMethod(redirectedLocation);
+            		status = client.executeMethod(
+            				get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT
+    				);
+            		mLatestResult = new RemoteOperationResult(
+            				(status == HttpStatus.SC_OK), 
+            				status, 
+            				get.getResponseHeaders()
+    				); 
+            		redirectedLocation = mLatestResult.getRedirectedLocation();
+            	}
+            }
+
             String response = get.getResponseBodyAsString();
             if (status == HttpStatus.SC_OK) {
                 JSONObject json = new JSONObject(response);
@@ -88,35 +119,19 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                         		RemoteOperationResult.ResultCode.BAD_OC_VERSION);
                         
                     } else {
-                        mLatestResult = new RemoteOperationResult(
-                        		baseUrlSt.startsWith("https://") ?
-                        				RemoteOperationResult.ResultCode.OK_SSL :
-                    					RemoteOperationResult.ResultCode.OK_NO_SSL
-                        );
-
-						RemoteOperation operation = new ExistenceCheckRemoteOperation("", mContext, false);
-						client.setFollowRedirects(false);
-						boolean isRedirectToNonSecureConnection = false;
-
-						// checks if there are any reconnection to a non secure
-						// connection
-						RemoteOperationResult result = operation.execute(client);
-						String redirectedLocation = result.getRedirectedLocation();
-						while (baseUrlSt.startsWith("https://") && redirectedLocation != null
-										&& redirectedLocation.length() > 0
-										&& result.isNonSecureRedirection()) {
-							client.setBaseUri(Uri.parse(result.getRedirectedLocation()));
-							result = operation.execute(client);
-							redirectedLocation = result.getRedirectedLocation();
-
-							isRedirectToNonSecureConnection = true;
-							break;
-						}
-
-						if (isRedirectToNonSecureConnection) {
-							mLatestResult = new RemoteOperationResult(
-											RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
-						}
+                    	// success
+                    	if (isRedirectToNonSecureConnection) {
+                    		mLatestResult = new RemoteOperationResult(
+                    				RemoteOperationResult.ResultCode.
+                    					OK_REDIRECT_TO_NON_SECURE_CONNECTION
+        					);
+                    	} else {
+                    		mLatestResult = new RemoteOperationResult(
+                    				baseUrlSt.startsWith("https://") ?
+                    						RemoteOperationResult.ResultCode.OK_SSL :
+                							RemoteOperationResult.ResultCode.OK_NO_SSL
+							);
+                		}
 
 						ArrayList<Object> data = new ArrayList<Object>();
 						data.add(ocVersion);
@@ -145,7 +160,8 @@ public class GetRemoteStatusOperation extends RemoteOperation {
             Log.i(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
             
         } else if (mLatestResult.getException() != null) {
-            Log.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage(), mLatestResult.getException());
+            Log.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage(), 
+            		mLatestResult.getException());
             
         } else {
             Log.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
