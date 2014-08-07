@@ -21,6 +21,11 @@ import java.util.Vector;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,10 +111,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflator.inflate(R.layout.list_item, null);
         }
-    
+         
         if (mFiles != null && mFiles.size() > position) {
             OCFile file = mFiles.get(position);
-            TextView fileName = (TextView) view.findViewById(R.id.Filename);
+            TextView fileName = (TextView) view.findViewById(R.id.Filename);           
             String name = file.getFileName();
 
             fileName.setText(name);
@@ -164,7 +169,16 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     checkBoxV.setVisibility(View.VISIBLE);
                 }
 
-                fileIcon.setImageResource(DisplayUtils.getResourceId(file.getMimetype(), file.getFileName()));
+                // generate Thumbnail if file is available local and image
+                if (file.isDown() && file.isImage()){
+                    // Converts dp to pixel
+                    Resources r = mContext.getResources();
+                    int px = (int) Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, r.getDisplayMetrics()));
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getStoragePath());
+                    fileIcon.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, px, px));
+                } else {
+                    fileIcon.setImageResource(DisplayUtils.getResourceId(file.getMimetype(), file.getFileName()));  
+                }
 
                 if (checkIfFileIsSharedWithMe(file)) {
                     sharedWithMeIconV.setVisibility(View.VISIBLE);
