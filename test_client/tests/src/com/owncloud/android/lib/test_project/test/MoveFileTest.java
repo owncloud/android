@@ -95,27 +95,27 @@ public class MoveFileTest extends AndroidTestCase {
 	  protected void setUp() throws Exception {
 	    super.setUp();
 	    
+		mServerUri = getContext().getString(R.string.server_base_url);
+		mUser = getContext().getString(R.string.username);
+		mPass = getContext().getString(R.string.password);
+		
+		mClient = new OwnCloudClient(
+				Uri.parse(mServerUri), 
+				NetworkUtils.getMultiThreadedConnManager()
+		);
+		mClient.setDefaultTimeouts(
+				OwnCloudClientFactory.DEFAULT_DATA_TIMEOUT, 
+				OwnCloudClientFactory.DEFAULT_CONNECTION_TIMEOUT);
+		mClient.setFollowRedirects(true);
+		mClient.setCredentials(
+				OwnCloudCredentialsFactory.newBasicCredentials(
+						mUser, 
+						mPass
+				)
+		);
+    
 	    if (!mGlobalSetupDone) {
 	    	
-			mServerUri = getContext().getString(R.string.server_base_url);
-			mUser = getContext().getString(R.string.username);
-			mPass = getContext().getString(R.string.password);
-			
-			mClient = new OwnCloudClient(
-					Uri.parse(mServerUri), 
-					NetworkUtils.getMultiThreadedConnManager()
-			);
-			mClient.setDefaultTimeouts(
-					OwnCloudClientFactory.DEFAULT_DATA_TIMEOUT, 
-					OwnCloudClientFactory.DEFAULT_CONNECTION_TIMEOUT);
-			mClient.setFollowRedirects(true);
-			mClient.setCredentials(
-					OwnCloudCredentialsFactory.newBasicCredentials(
-							mUser, 
-							mPass
-					)
-			);
-	    
 		    Log.v(LOG_TAG, "Starting global set up");
 		    RemoteOperationResult result = 
 		    		TestActivity.createFolder(SRC_FOLDER_PATH, true, mClient);
