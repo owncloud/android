@@ -101,7 +101,9 @@ public class RemoteOperationResult implements Serializable {
 		LOCAL_STORAGE_NOT_REMOVED,
 		FORBIDDEN,
 		SHARE_FORBIDDEN,
-		OK_REDIRECT_TO_NON_SECURE_CONNECTION
+		OK_REDIRECT_TO_NON_SECURE_CONNECTION, 
+		INVALID_MOVE_INTO_DESCENDANT, 
+		PARTIAL_MOVE_DONE
     }
 
     private boolean mSuccess = false;
