@@ -47,7 +47,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
 
 	private static final String TAG = RenameRemoteFileOperation.class.getSimpleName();
 
-	private static final int RENAME_READ_TIMEOUT = 10000;
+	private static final int RENAME_READ_TIMEOUT = 600000;
 	private static final int RENAME_CONNECTION_TIMEOUT = 5000;
 
     private String mOldName;

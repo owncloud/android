@@ -53,8 +53,8 @@ public class MoveRemoteFileOperation extends RemoteOperation {
 
 	private static final String TAG = MoveRemoteFileOperation.class.getSimpleName();
 
-	private static final int RENAME_READ_TIMEOUT = 10000;
-	private static final int RENAME_CONNECTION_TIMEOUT = 5000;
+	private static final int MOVE_READ_TIMEOUT = 600000;
+	private static final int MOVE_CONNECTION_TIMEOUT = 5000;
 
     private String mSrcRemotePath;
     private String mTargetRemotePath;
@@ -113,7 +113,7 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             		client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
             		mOverwrite
     		);
-            int status = client.executeMethod(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
+            int status = client.executeMethod(move, MOVE_READ_TIMEOUT, MOVE_CONNECTION_TIMEOUT);
             
             /// process response
         	if (status == HttpStatus.SC_MULTI_STATUS) {
