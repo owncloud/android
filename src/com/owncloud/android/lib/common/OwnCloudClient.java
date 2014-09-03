@@ -225,6 +225,26 @@ public class OwnCloudClient extends HttpClient {
                 Log.d(TAG + " #" + mInstanceNumber,  
                 		"Location to redirect: " + location.getValue());
                 method.setURI(new URI(location.getValue(), true));
+                Header destination = method.getRequestHeader("Destination");
+                if (destination == null) {
+                	destination = method.getRequestHeader("destination");
+                }
+                if (destination != null) {
+                	String locationStr = location.getValue();
+                	int suffixIndex = locationStr.lastIndexOf(
+                	    	(mCredentials instanceof OwnCloudBearerCredentials) ? 
+                	    			AccountUtils.ODAV_PATH :
+        	    					AccountUtils.WEBDAV_PATH_4_0
+                			);
+                	String redirectionBase = locationStr.substring(0, suffixIndex);
+                	
+                	String destinationStr = destination.getValue();
+                	String destinationPath = destinationStr.substring(mBaseUri.toString().length());
+                	String redirectedDestination = redirectionBase + destinationPath;
+                	
+                	destination.setValue(redirectedDestination);
+                    method.setRequestHeader(destination);
+                }
                 status = super.executeMethod(method);
                 redirectionsCount++;
                 
