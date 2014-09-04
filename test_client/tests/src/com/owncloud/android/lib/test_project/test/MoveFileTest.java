@@ -29,6 +29,7 @@ import java.security.GeneralSecurityException;
 
 import junit.framework.AssertionFailedError;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
@@ -76,19 +77,21 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 	/// Paths to files and folders in fixture
 	
 	private static final String SRC_BASE_FOLDER = "/src/";
-	private static final String SRC_BASE_FOLDER_NON_CREATED = "/src_non_created/";
 	private static final String TARGET_BASE_FOLDER = "/target/";
+	private static final String NO_FILE = "nofile.txt";
 	private static final String FILE1 = "file1.txt";
 	private static final String FILE2 = "file2.txt";
 	private static final String FILE3 = "file3.txt";
 	private static final String FILE4 = "file4.txt";
 	private static final String FILE5 = "file5.txt";
+	private static final String FILE6 = "file6.txt";
+	private static final String FILE7 = "file7.txt";
 	private static final String EMPTY = "empty/";
+	private static final String NO_FOLDER = "nofolder/";
 	private static final String FOLDER1 = "folder1/";
 	private static final String FOLDER2 = "folder2/";
 	private static final String FOLDER3 = "folder3/";
 	private static final String FOLDER4 = "folder4/";
-	private static final String FOLDER5 = "folder5/";
 
 	private static final String SRC_PATH_TO_FILE_1 = SRC_BASE_FOLDER + FILE1;
 	private static final String TARGET_PATH_TO_FILE_1 = TARGET_BASE_FOLDER + FILE1;
@@ -102,7 +105,13 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
 	private static final String SRC_PATH_TO_FILE_4 = SRC_BASE_FOLDER + FILE4;
 	
-	private static final String SRC_PATH_TO_FILE_NON_EXISTS = SRC_BASE_FOLDER + FILE5;
+	private static final String SRC_PATH_TO_FILE_5 = SRC_BASE_FOLDER + FILE5;
+
+	private static final String SRC_PATH_TO_FILE_6 = SRC_BASE_FOLDER + FILE6;
+	
+	private static final String SRC_PATH_TO_FILE_7 = SRC_BASE_FOLDER + FILE7;
+	
+	private static final String SRC_PATH_TO_NON_EXISTENT_FILE = SRC_BASE_FOLDER + NO_FILE;
 
 	private static final String SRC_PATH_TO_EMPTY_FOLDER = SRC_BASE_FOLDER + EMPTY;
 	private static final String TARGET_PATH_TO_EMPTY_FOLDER = TARGET_BASE_FOLDER + EMPTY;
@@ -117,17 +126,22 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
 	private static final String SRC_PATH_TO_FULL_FOLDER_3 = SRC_BASE_FOLDER + FOLDER3;
 	private static final String SRC_PATH_TO_FULL_FOLDER_4 = SRC_BASE_FOLDER + FOLDER4;
-	private static final String SRC_PATH_TO_FULL_FOLDER_5 = SRC_BASE_FOLDER + FOLDER5;
 
 	private static final String SRC_PATH_TO_FULL_FOLDER_3_RENAMED = 
 			SRC_BASE_FOLDER + "renamed_" + FOLDER3;
 
-	private static final String SRC_PATH_TO_FULL_FOLDER_4_RENAMED_INVALID_CHARS =
-					SRC_BASE_FOLDER + "renamed:??_" + FOLDER4;
+	private static final String TARGET_PATH_RENAMED_WITH_INVALID_CHARS =
+					SRC_BASE_FOLDER + "renamed:??_" + FILE6;
 
-	private static final String SRC_PATH_TO_FULL_FOLDER_5_INSIDE_FOLDER_4 = SRC_BASE_FOLDER 
-					+ FOLDER4 + FOLDER5;
+	private static final String TARGET_PATH_TO_ALREADY_EXISTENT_EMPTY_FOLDER_4 = TARGET_BASE_FOLDER 
+			+ FOLDER4;
+	
+	private static final String TARGET_PATH_TO_NON_EXISTENT_FILE = TARGET_BASE_FOLDER + NO_FILE;
 
+	private static final String TARGET_PATH_TO_FILE_5_INTO_NON_EXISTENT_FOLDER = 
+			TARGET_BASE_FOLDER + NO_FOLDER + FILE5;
+
+	private static final String TARGET_PATH_TO_ALREADY_EXISTENT_FILE_7 = TARGET_BASE_FOLDER + FILE7;
 	
 	private static final String[] FOLDERS_IN_FIXTURE = {
 		SRC_PATH_TO_EMPTY_FOLDER,
@@ -150,10 +164,14 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		SRC_PATH_TO_FULL_FOLDER_3 + FOLDER2 + FOLDER1,
 		SRC_PATH_TO_FULL_FOLDER_3 + FOLDER2 + FOLDER2,
 		
-		SRC_PATH_TO_FULL_FOLDER_5,
-		SRC_PATH_TO_FULL_FOLDER_5_INSIDE_FOLDER_4,
+		SRC_PATH_TO_FULL_FOLDER_4,
+		SRC_PATH_TO_FULL_FOLDER_4 + FOLDER1,
+		SRC_PATH_TO_FULL_FOLDER_4 + FOLDER2,
+		SRC_PATH_TO_FULL_FOLDER_4 + FOLDER2 + FOLDER1,
+		SRC_PATH_TO_FULL_FOLDER_4 + FOLDER2 + FOLDER2,
 
 		TARGET_BASE_FOLDER,
+		TARGET_PATH_TO_ALREADY_EXISTENT_EMPTY_FOLDER_4
 	};
 	
 	private static final String[] FILES_IN_FIXTURE = {
@@ -161,6 +179,7 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		SRC_PATH_TO_FILE_2,
 		SRC_PATH_TO_FILE_3,
 		SRC_PATH_TO_FILE_4,
+		SRC_PATH_TO_FILE_5,
 		
 		SRC_PATH_TO_FULL_FOLDER_1 + FILE1,
 		SRC_PATH_TO_FULL_FOLDER_1 + FOLDER2 + FILE1,
@@ -176,6 +195,13 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		SRC_PATH_TO_FULL_FOLDER_3 + FOLDER2 + FILE1,
 		SRC_PATH_TO_FULL_FOLDER_3 + FOLDER2 + FILE2,
 		SRC_PATH_TO_FULL_FOLDER_3 + FOLDER2 + FOLDER2 + FILE2,
+		
+		SRC_PATH_TO_FULL_FOLDER_4 + FILE1,
+		SRC_PATH_TO_FULL_FOLDER_4 + FOLDER2 + FILE1,
+		SRC_PATH_TO_FULL_FOLDER_4 + FOLDER2 + FILE2,
+		SRC_PATH_TO_FULL_FOLDER_4 + FOLDER2 + FOLDER2 + FILE2, 
+		
+		TARGET_PATH_TO_ALREADY_EXISTENT_FILE_7
 	};
 
 	
@@ -321,40 +347,40 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		result = moveOperation.execute(mClient);
 		assertTrue(result.isSuccess());
 		
-		// move to the same name folder but overwrite it
+		// move overwriting
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_FULL_FOLDER_5,
-						SRC_PATH_TO_FULL_FOLDER_5_INSIDE_FOLDER_4,
+						SRC_PATH_TO_FULL_FOLDER_4,
+						TARGET_PATH_TO_ALREADY_EXISTENT_EMPTY_FOLDER_4,
 						true
 		);
 		result = moveOperation.execute(mClient);
 		assertTrue(result.isSuccess());
 
 
-		// Failed cases
+		/// Failed cases
 		
 		// file to move does not exist
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_FILE_NON_EXISTS,
-						SRC_PATH_TO_FULL_FOLDER_4,
+						SRC_PATH_TO_NON_EXISTENT_FILE,
+						TARGET_PATH_TO_NON_EXISTENT_FILE,
 						false
 		);
 		result = moveOperation.execute(mClient);
-		assertTrue(result.getCode() == ResultCode.INVALID_OVERWRITE);
+		assertTrue(result.getCode() == ResultCode.FILE_NOT_FOUND);
 
 		// folder to move into does no exist
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_BASE_FOLDER_NON_CREATED,
-						SRC_PATH_TO_FILE_4,
+						SRC_PATH_TO_FILE_5,
+						TARGET_PATH_TO_FILE_5_INTO_NON_EXISTENT_FOLDER,
 						false
 		);
 		result = moveOperation.execute(mClient);
-		assertTrue(result.getCode() == ResultCode.INVALID_OVERWRITE);
+		assertTrue(result.getHttpCode() == HttpStatus.SC_CONFLICT);
 
 		// target location (renaming) has invalid characters
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_FULL_FOLDER_4,
-						SRC_PATH_TO_FULL_FOLDER_4_RENAMED_INVALID_CHARS,
+						SRC_PATH_TO_FILE_6,
+						TARGET_PATH_RENAMED_WITH_INVALID_CHARS,
 						false
 		);
 		result = moveOperation.execute(mClient);
@@ -362,8 +388,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
 		// name collision
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_FULL_FOLDER_5,
-						SRC_PATH_TO_FULL_FOLDER_5_INSIDE_FOLDER_4,
+						SRC_PATH_TO_FILE_7,
+						TARGET_PATH_TO_ALREADY_EXISTENT_FILE_7,
 						false
 		);
 		result = moveOperation.execute(mClient);
@@ -372,7 +398,7 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		// move a folder into a descendant
 		moveOperation = new MoveRemoteFileOperation(
 						SRC_BASE_FOLDER,
-						SRC_PATH_TO_FULL_FOLDER_4,
+						SRC_PATH_TO_EMPTY_FOLDER,
 						false
 		);
 		result = moveOperation.execute(mClient);
@@ -392,7 +418,7 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		for (String path : mPathsToCleanUp) {
 			RemoteOperationResult removeResult = 
 					TestActivity.removeFile(path, mClient);
-			if (!removeResult.isSuccess()) {
+			if (!removeResult.isSuccess() && removeResult.getCode() != ResultCode.TIMEOUT ) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}
 		}
