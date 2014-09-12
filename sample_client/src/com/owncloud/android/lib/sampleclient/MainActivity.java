@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -79,7 +78,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         
         mHandler = new Handler();
         
-    	Uri serverUri = Uri.parse(getString(R.string.server_base_url) + AccountUtils.WEBDAV_PATH_4_0);
+    	Uri serverUri = Uri.parse(getString(R.string.server_base_url));
     	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
     	mClient.setCredentials(
     			OwnCloudCredentialsFactory.newBasicCredentials(
