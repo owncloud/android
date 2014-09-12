@@ -25,6 +25,7 @@ public class Log_OC {
     private static String[] mLogFileNames = {"currentLog.txt", "olderLog.txt"};
 
     private static boolean isMaxFileSizeReached = false;
+    private static boolean isEnabled = false;
 
     public static void setLogDataFolder(String logFolder){
     	mOwncloudDataFolderLog = logFolder;
@@ -78,9 +79,9 @@ public class Log_OC {
     					mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
         mFolder = new File(logPath);
         mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
-        
+
         boolean isFileCreated = false;
-        
+
         if (!mFolder.exists()) {
             mFolder.mkdirs();
             isFileCreated = true;
@@ -89,35 +90,20 @@ public class Log_OC {
 
         try { 
 
-            if (isMaxFileSizeReached) {
-
-                // Move current log file info to another file (old logs)
-                File olderFile = new File(mFolder + File.separator + mLogFileNames[1]);
-                if (mLogFile.exists()) {
-                    mLogFile.renameTo(olderFile);
-                }
-
-                // Construct a new file for current log info
-                mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
-                isMaxFileSizeReached = false;
-            }
-
             // Create the current log file if does not exist
             mLogFile.createNewFile();
             mBuf = new BufferedWriter(new FileWriter(mLogFile, true));
+            isEnabled = true;
+
             if (isFileCreated) {
                 appendPhoneInfo();
             }
 
-            // Check if current log file size is bigger than the max file size defined
-            if (mLogFile.length() > MAX_FILE_SIZE) {
-                isMaxFileSizeReached = true;
-            }
         } catch (IOException e) {
             e.printStackTrace(); 
         } 
     }
-    
+
     /**
      * Delete history logging
      */
@@ -150,28 +136,44 @@ public class Log_OC {
      */
     private static void appendLog(String text) { 
 
-        startLogging();
+        if (isEnabled) {
 
-        String timeStamp = new SimpleDateFormat(SIMPLE_DATE_FORMAT).format(Calendar.getInstance().getTime());
+            if (isMaxFileSizeReached) {
 
-        try {
-           mBuf = new BufferedWriter(new FileWriter(mLogFile, true));
-           mBuf.newLine();
-           mBuf.write(timeStamp);
-           mBuf.newLine();
-           mBuf.write(text);
-           mBuf.newLine();
-           mBuf.close();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+                // Move current log file info to another file (old logs)
+                File olderFile = new File(mFolder + File.separator + mLogFileNames[1]);
+                if (mLogFile.exists()) {
+                    mLogFile.renameTo(olderFile);
+                }
+
+                // Construct a new file for current log info
+                mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
+                isMaxFileSizeReached = false;
+            }
+
+	        String timeStamp = new SimpleDateFormat(SIMPLE_DATE_FORMAT).format(Calendar.getInstance().getTime());
+
+	        try {
+	            mBuf = new BufferedWriter(new FileWriter(mLogFile, true));
+	            mBuf.newLine();
+	            mBuf.write(timeStamp);
+	            mBuf.newLine();
+	            mBuf.write(text);
+	            mBuf.newLine();
+	            mBuf.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+
+            // Check if current log file size is bigger than the max file size defined
+            if (mLogFile.length() > MAX_FILE_SIZE) {
+                isMaxFileSizeReached = true;
+            }
+        }
     }
 
     public static String[] getLogFileNames() {
         return mLogFileNames;
     }
 
-    public static void setmLogFileNames(String[] logFileNames) {
-        Log_OC.mLogFileNames = logFileNames;
-    }
 }
