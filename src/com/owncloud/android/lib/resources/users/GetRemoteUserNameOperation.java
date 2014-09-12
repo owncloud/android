@@ -30,11 +30,10 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 /**
@@ -83,7 +82,7 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
 			status = client.executeMethod(get);
 			if(isSuccess(status)) {
 				 String response = get.getResponseBodyAsString();
-				 Log.d(TAG, "Successful response: " + response);
+				 Log_OC.d(TAG, "Successful response: " + response);
 
 				 // Parse the response
 				 JSONObject respJSON = new JSONObject(response);
@@ -101,21 +100,21 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
                  result.setData(data);
 				 mUserName =  displayName;
 				 
-				 Log.d(TAG, "*** Parsed user information: " + id + " - " + displayName + " - " + email);
+				 Log_OC.d(TAG, "*** Parsed user information: " + id + " - " + displayName + " - " + email);
 				 
 			} else {
 				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
 				String response = get.getResponseBodyAsString();
-				Log.e(TAG, "Failed response while getting user information ");
+				Log_OC.e(TAG, "Failed response while getting user information ");
 				if (response != null) {
-					Log.e(TAG, "*** status code: " + status + " ; response message: " + response);
+					Log_OC.e(TAG, "*** status code: " + status + " ; response message: " + response);
 				} else {
-					Log.e(TAG, "*** status code: " + status);
+					Log_OC.e(TAG, "*** status code: " + status);
 				}
 			}
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			Log.e(TAG, "Exception while getting OC user information", e);
+			Log_OC.e(TAG, "Exception while getting OC user information", e);
 			
 		} finally {
 			get.releaseConnection();

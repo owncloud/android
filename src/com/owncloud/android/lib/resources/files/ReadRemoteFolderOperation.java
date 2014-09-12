@@ -31,13 +31,12 @@ import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.WebdavEntry;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Remote operation performing the read of remote file or folder in the ownCloud server.
@@ -109,12 +108,12 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             if (query != null)
                 query.releaseConnection();  // let the connection available for other methods
             if (result.isSuccess()) {
-                Log.i(TAG, "Synchronized "  + mRemotePath + ": " + result.getLogMessage());
+                Log_OC.i(TAG, "Synchronized "  + mRemotePath + ": " + result.getLogMessage());
             } else {
                 if (result.isException()) {
-                    Log.e(TAG, "Synchronized " + mRemotePath  + ": " + result.getLogMessage(), result.getException());
+                    Log_OC.e(TAG, "Synchronized " + mRemotePath  + ": " + result.getLogMessage(), result.getException());
                 } else {
-                    Log.e(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage());
+                    Log_OC.e(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage());
                 }
             }
             
