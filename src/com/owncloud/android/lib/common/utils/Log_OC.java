@@ -13,18 +13,22 @@ import android.util.Log;
 
 public class Log_OC {
     private static final String SIMPLE_DATE_FORMAT = "yyyy/MM/dd HH:mm:ss";
-    private static final String OWNCLOUD_DATA_FOLDER = "owncloud";
+    private static final String LOG_FOLDER_NAME = "log";
     private static final long MAX_FILE_SIZE = 1000000; // 1MB
+
+    private static String mOwncloudDataFolderLog = "owncloud_log";
 
     private static File mLogFile;
     private static File mFolder;
     private static BufferedWriter mBuf;
 
     private static String[] mLogFileNames = {"currentLog.txt", "olderLog.txt"};
-    private static String mLogPath =  Environment.getExternalStorageDirectory() + File.separator +
-                    OWNCLOUD_DATA_FOLDER + File.separator + "log";
 
     private static boolean isMaxFileSizeReached = false;
+
+    public static void setLogDataFolder(String logFolder){
+    	mOwncloudDataFolderLog = logFolder;
+    }
 
     public static void i(String TAG, String message){
 
@@ -69,7 +73,9 @@ public class Log_OC {
      * Start doing logging
      * @param logPath : path of log file
      */
-    public static void startLogging(String logPath) {
+    public static void startLogging() {
+    	String logPath = Environment.getExternalStorageDirectory() + File.separator + 
+    					mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
         mFolder = new File(logPath);
         mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
         
@@ -78,7 +84,7 @@ public class Log_OC {
         if (!mFolder.exists()) {
             mFolder.mkdirs();
             isFileCreated = true;
-            Log_OC.d("LOG_OC", "Log file created");
+            Log.d("LOG_OC", "Log file created");
         }
 
         try { 
@@ -143,7 +149,9 @@ public class Log_OC {
      * @param text : text for adding to the log file
      */
     private static void appendLog(String text) { 
-        startLogging(mLogPath);
+
+        startLogging();
+
         String timeStamp = new SimpleDateFormat(SIMPLE_DATE_FORMAT).format(Calendar.getInstance().getTime());
 
         try {
