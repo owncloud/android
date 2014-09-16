@@ -153,6 +153,8 @@ OnSslUntrustedCertListener, SwipeRefreshLayout.OnRefreshListener {
     private String DIALOG_UNTRUSTED_CERT;
     
     private OCFile mWaitingToSend;
+    
+    private Integer sortItemChecked = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -489,6 +491,32 @@ OnSslUntrustedCertListener, SwipeRefreshLayout.OnRefreshListener {
                 onBackPressed(); 
                 
             }
+            break;
+        }
+        case R.id.action_sort: {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.actionbar_sort_title)
+            .setSingleChoiceItems(R.array.actionbar_sortby, sortItemChecked , new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    sortItemChecked = which;
+
+                    switch (which){
+                    case 0:
+                        sortByName(true);
+                        break;
+                    case 1:
+                        sortByDate(false);
+                        break;
+                    case 2:
+                        sortBySize(false);
+                        break;
+                    }
+                    
+                    dialog.dismiss();
+                    
+                }
+            });
+            builder.create().show();
             break;
         }
         default:
@@ -1724,6 +1752,18 @@ OnSslUntrustedCertListener, SwipeRefreshLayout.OnRefreshListener {
                 startSyncFolderOperation(folder);
             }
         }
+    }
+    
+    private void sortByDate(boolean ascending){
+        getListOfFilesFragment().sortByDate(ascending);
+    }
+
+    private void sortBySize(boolean ascending){
+        getListOfFilesFragment().sortBySize(ascending);
+    }
+
+    private void sortByName(boolean ascending){
+        getListOfFilesFragment().sortByName(ascending);
     }
 
 }
