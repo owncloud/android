@@ -30,12 +30,11 @@ import java.io.InputStream;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.client.methods.DeleteMethod;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Remove a share
@@ -94,13 +93,13 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 					result = new RemoteOperationResult(false, status, delete.getResponseHeaders());	
 				}
 				
-				Log.d(TAG, "Unshare " + id + ": " + result.getLogMessage());
+				Log_OC.d(TAG, "Unshare " + id + ": " + result.getLogMessage());
 			} else {
 				result = new RemoteOperationResult(false, status, delete.getResponseHeaders());
 			}
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			Log.e(TAG, "Unshare Link Exception " + result.getLogMessage(), e);
+			Log_OC.e(TAG, "Unshare Link Exception " + result.getLogMessage(), e);
 
 		} finally {
 			if (delete != null)

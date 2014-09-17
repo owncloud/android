@@ -30,15 +30,12 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
-//import java.security.Provider;
 import java.security.cert.X509Certificate;
-//import java.util.Enumeration;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
-//import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
@@ -48,8 +45,7 @@ import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 
-//import android.os.Build;
-import android.util.Log;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 
@@ -97,39 +93,39 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
     /*
     private void logSslInfo() {
     	if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
-	    	Log.v(TAG, "SUPPORTED SSL PARAMETERS");
+	    	Log_OC.v(TAG, "SUPPORTED SSL PARAMETERS");
 	    	logSslParameters(mSslContext.getSupportedSSLParameters());
-	    	Log.v(TAG, "DEFAULT SSL PARAMETERS");
+	    	Log_OC.v(TAG, "DEFAULT SSL PARAMETERS");
 	    	logSslParameters(mSslContext.getDefaultSSLParameters());
-	    	Log.i(TAG, "CURRENT PARAMETERS");
-	    	Log.i(TAG, "Protocol: " + mSslContext.getProtocol());
+	    	Log_OC.i(TAG, "CURRENT PARAMETERS");
+	    	Log_OC.i(TAG, "Protocol: " + mSslContext.getProtocol());
     	}
-    	Log.i(TAG, "PROVIDER");
+    	Log_OC.i(TAG, "PROVIDER");
     	logSecurityProvider(mSslContext.getProvider());
 	}
     
     private void logSecurityProvider(Provider provider) {
-    	Log.i(TAG, "name: " + provider.getName());
-    	Log.i(TAG, "version: " + provider.getVersion());
-    	Log.i(TAG, "info: " + provider.getInfo());
+    	Log_OC.i(TAG, "name: " + provider.getName());
+    	Log_OC.i(TAG, "version: " + provider.getVersion());
+    	Log_OC.i(TAG, "info: " + provider.getInfo());
     	Enumeration<?> keys = provider.propertyNames();
     	String key;
     	while (keys.hasMoreElements()) {
     		key = (String) keys.nextElement();
-        	Log.i(TAG, "  property " + key + " : " + provider.getProperty(key));
+        	Log_OC.i(TAG, "  property " + key + " : " + provider.getProperty(key));
     	}
 	}
 
 	private void logSslParameters(SSLParameters params) {
-    	Log.v(TAG, "Cipher suites: ");
+    	Log_OC.v(TAG, "Cipher suites: ");
     	String [] elements = params.getCipherSuites();
     	for (int i=0; i<elements.length ; i++) {
-    		Log.v(TAG, "  " + elements[i]);
+    		Log_OC.v(TAG, "  " + elements[i]);
     	}
-    	Log.v(TAG, "Protocols: ");
+    	Log_OC.v(TAG, "Protocols: ");
     	elements = params.getProtocols();
     	for (int i=0; i<elements.length ; i++) {
-    		Log.v(TAG, "  " + elements[i]);
+    		Log_OC.v(TAG, "  " + elements[i]);
     	}
 	}
 	*/
@@ -154,7 +150,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
             final InetAddress localAddress, final int localPort,
             final HttpConnectionParams params) throws IOException,
             UnknownHostException, ConnectTimeoutException {
-        Log.d(TAG, "Creating SSL Socket with remote " + host + ":" + port + ", local " + localAddress + ":" + localPort + ", params: " + params);
+        Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port + ", local " + localAddress + ":" + localPort + ", params: " + params);
         if (params == null) {
             throw new IllegalArgumentException("Parameters may not be null");
         } 
@@ -163,7 +159,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
         //logSslInfo();
         
         SocketFactory socketfactory = mSslContext.getSocketFactory();
-        Log.d(TAG, " ... with connection timeout " + timeout + " and socket timeout " + params.getSoTimeout());
+        Log_OC.d(TAG, " ... with connection timeout " + timeout + " and socket timeout " + params.getSoTimeout());
         Socket socket = socketfactory.createSocket();
         SocketAddress localaddr = new InetSocketAddress(localAddress, localPort);
         SocketAddress remoteaddr = new InetSocketAddress(host, port);
@@ -180,7 +176,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
      */
     public Socket createSocket(String host, int port) throws IOException,
             UnknownHostException {
-    	Log.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);
+    	Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port);
         verifyPeerIdentity(host, port, socket);
         return socket; 

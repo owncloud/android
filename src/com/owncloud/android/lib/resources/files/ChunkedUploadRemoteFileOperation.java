@@ -37,9 +37,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.ChunkFromFileChannelRequestEntity;
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
 import com.owncloud.android.lib.common.network.WebdavUtils;
-
-
-import android.util.Log;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation {
@@ -81,7 +79,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 mPutMethod.setRequestEntity(mEntity);
                 status = client.executeMethod(mPutMethod);
                 client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
-                Log.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ", chunk index " + chunkIndex + ", count " + chunkCount + ", HTTP result status " + status);
+                Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ", chunk index " + chunkIndex + ", count " + chunkCount + ", HTTP result status " + status);
                 if (!isSuccess(status))
                     break;
             }

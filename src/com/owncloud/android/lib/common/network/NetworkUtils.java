@@ -45,7 +45,8 @@ import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 
 import android.content.Context;
-import android.util.Log;
+
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class NetworkUtils {
     
@@ -133,7 +134,7 @@ public class NetworkUtils {
             //mKnownServersStore = KeyStore.getInstance("BKS");
             mKnownServersStore = KeyStore.getInstance(KeyStore.getDefaultType());
             File localTrustStoreFile = new File(context.getFilesDir(), LOCAL_TRUSTSTORE_FILENAME);
-            Log.d(TAG, "Searching known-servers store at " + localTrustStoreFile.getAbsolutePath());
+            Log_OC.d(TAG, "Searching known-servers store at " + localTrustStoreFile.getAbsolutePath());
             if (localTrustStoreFile.exists()) {
                 InputStream in = new FileInputStream(localTrustStoreFile);
                 try {
@@ -175,7 +176,7 @@ public class NetworkUtils {
     public static boolean isCertInKnownServersStore(Certificate cert, Context context) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
     	
     	KeyStore knownServers = getKnownServersStore(context);
-    	Log.d(TAG, "Certificate - HashCode: " + cert.hashCode() + " "
+    	Log_OC.d(TAG, "Certificate - HashCode: " + cert.hashCode() + " "
     			+ Boolean.toString(knownServers.isCertificateEntry(Integer.toString(cert.hashCode()))));
     	return knownServers.isCertificateEntry(Integer.toString(cert.hashCode()));
     }

@@ -43,10 +43,10 @@ import org.json.JSONException;
 
 import android.accounts.Account;
 import android.accounts.AccountsException;
-import android.util.Log;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 /**
@@ -150,7 +150,7 @@ public class RemoteOperationResult implements Serializable {
 				break;
             default:
                 mCode = ResultCode.UNHANDLED_HTTP_CODE;
-                Log.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " + httpCode);
+                Log_OC.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " + httpCode);
             }
         }
     }

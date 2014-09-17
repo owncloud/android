@@ -44,11 +44,11 @@ import org.apache.http.HttpStatus;
 import org.apache.http.params.CoreProtocolPNames;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class OwnCloudClient extends HttpClient {
 	
@@ -79,7 +79,7 @@ public class OwnCloudClient extends HttpClient {
         mBaseUri = baseUri;
         
         mInstanceNumber = sIntanceCounter++;
-        Log.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
+        Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
         
         getParams().setParameter(HttpMethodParams.USER_AGENT, USER_AGENT);
         getParams().setParameter(
@@ -125,7 +125,7 @@ public class OwnCloudClient extends HttpClient {
         HeadMethod head = new HeadMethod(getWebdavUri() + WebdavUtils.encodePath(path));
         try {
             int status = executeMethod(head);
-            Log.d(TAG, "HEAD to " + path + " finished with HTTP status " + status +
+            Log_OC.d(TAG, "HEAD to " + path + " finished with HTTP status " + status +
             		((status != HttpStatus.SC_OK)?"(FAIL)":""));
             exhaustResponse(head.getResponseBodyAsStream());
             return (status == HttpStatus.SC_OK);
@@ -185,7 +185,7 @@ public class OwnCloudClient extends HttpClient {
 	            customRedirectionNeeded = mFollowRedirects;
 	        }
         
-	        Log.d(TAG + " #" + mInstanceNumber, "REQUEST " + 
+	        Log_OC.d(TAG + " #" + mInstanceNumber, "REQUEST " + 
 	        		method.getName() + " " + method.getPath());
         
 //	        logCookiesAtRequest(method.getRequestHeaders(), "before");
@@ -204,7 +204,7 @@ public class OwnCloudClient extends HttpClient {
 	        return status;
 	        
         } catch (IOException e) {
-        	Log.d(TAG + " #" + mInstanceNumber, "Exception occured", e);
+        	Log_OC.d(TAG + " #" + mInstanceNumber, "Exception occured", e);
         	throw e;
         }
     }
@@ -222,7 +222,7 @@ public class OwnCloudClient extends HttpClient {
             	location = method.getResponseHeader("location");
             }
             if (location != null) {
-                Log.d(TAG + " #" + mInstanceNumber,  
+                Log_OC.d(TAG + " #" + mInstanceNumber,  
                 		"Location to redirect: " + location.getValue());
                 method.setURI(new URI(location.getValue(), true));
                 Header destination = method.getRequestHeader("Destination");
@@ -249,7 +249,7 @@ public class OwnCloudClient extends HttpClient {
                 redirectionsCount++;
                 
             } else {
-                Log.d(TAG + " #" + mInstanceNumber,  "No location to redirect!");
+                Log_OC.d(TAG + " #" + mInstanceNumber,  "No location to redirect!");
                 status = HttpStatus.SC_NOT_FOUND;
             }
         }
@@ -268,7 +268,7 @@ public class OwnCloudClient extends HttpClient {
                 responseBodyAsStream.close();
             
             } catch (IOException io) {
-                Log.e(TAG, "Unexpected exception while exhausting not interesting HTTP response;" +
+                Log_OC.e(TAG, "Unexpected exception while exhausting not interesting HTTP response;" +
                 		" will be IGNORED", io);
             }
         }
@@ -326,24 +326,24 @@ public class OwnCloudClient extends HttpClient {
         int counter = 0;
         for (int i=0; i<headers.length; i++) {
         	if (headers[i].getName().toLowerCase().equals("cookie")) {
-        		Log.d(TAG + " #" + mInstanceNumber, 
+        		Log_OC.d(TAG + " #" + mInstanceNumber, 
         				"Cookies at request (" + when + ") (" + counter++ + "): " + 
         						headers[i].getValue());
         	}
         }
         if (counter == 0) {
-    		Log.d(TAG + " #" + mInstanceNumber, "No cookie at request before");
+    		Log_OC.d(TAG + " #" + mInstanceNumber, "No cookie at request before");
         }
 	}
 
     private void logCookiesAtState(String string) {
         Cookie[] cookies = getState().getCookies();
         if (cookies.length == 0) {
-    		Log.d(TAG + " #" + mInstanceNumber, "No cookie at STATE before");
+    		Log_OC.d(TAG + " #" + mInstanceNumber, "No cookie at STATE before");
         } else {
-    		Log.d(TAG + " #" + mInstanceNumber, "Cookies at STATE (before)");
+    		Log_OC.d(TAG + " #" + mInstanceNumber, "Cookies at STATE (before)");
 	        for (int i=0; i<cookies.length; i++) {
-	    		Log.d(TAG + " #" + mInstanceNumber, "    (" + i + "):" +
+	    		Log_OC.d(TAG + " #" + mInstanceNumber, "    (" + i + "):" +
 	    				"\n        name: " + cookies[i].getName() +
 	    				"\n        value: " + cookies[i].getValue() +
 	    				"\n        domain: " + cookies[i].getDomain() +
@@ -357,12 +357,12 @@ public class OwnCloudClient extends HttpClient {
         int counter = 0;
         for (int i=0; i<headers.length; i++) {
         	if (headers[i].getName().toLowerCase().equals("set-cookie")) {
-        		Log.d(TAG + " #" + mInstanceNumber, 
+        		Log_OC.d(TAG + " #" + mInstanceNumber, 
         				"Set-Cookie (" + counter++ + "): " + headers[i].getValue());
         	}
         }
         if (counter == 0) {
-    		Log.d(TAG + " #" + mInstanceNumber, "No set-cookie");
+    		Log_OC.d(TAG + " #" + mInstanceNumber, "No set-cookie");
         }
         
 	}
@@ -389,15 +389,15 @@ public class OwnCloudClient extends HttpClient {
 	}
 	
 	private void logCookie(Cookie cookie) {
-    	Log.d(TAG, "Cookie name: "+ cookie.getName() );
-    	Log.d(TAG, "       value: "+ cookie.getValue() );
-    	Log.d(TAG, "       domain: "+ cookie.getDomain());
-    	Log.d(TAG, "       path: "+ cookie.getPath() );
-    	Log.d(TAG, "       version: "+ cookie.getVersion() );
-    	Log.d(TAG, "       expiryDate: " + 
+    	Log_OC.d(TAG, "Cookie name: "+ cookie.getName() );
+    	Log_OC.d(TAG, "       value: "+ cookie.getValue() );
+    	Log_OC.d(TAG, "       domain: "+ cookie.getDomain());
+    	Log_OC.d(TAG, "       path: "+ cookie.getPath() );
+    	Log_OC.d(TAG, "       version: "+ cookie.getVersion() );
+    	Log_OC.d(TAG, "       expiryDate: " + 
     			(cookie.getExpiryDate() != null ? cookie.getExpiryDate().toString() : "--"));
-    	Log.d(TAG, "       comment: "+ cookie.getComment() );
-    	Log.d(TAG, "       secure: "+ cookie.getSecure() );
+    	Log_OC.d(TAG, "       comment: "+ cookie.getComment() );
+    	Log_OC.d(TAG, "       secure: "+ cookie.getSecure() );
     }
 
 

@@ -27,14 +27,14 @@ package com.owncloud.android.lib.resources.files;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.HeadMethod;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.util.Log;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Operation to check the existence or absence of a path in a remote server.
@@ -80,11 +80,11 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
             client.exhaustResponse(head.getResponseBodyAsStream());
             boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) || (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
             result = new RemoteOperationResult(success, status, head.getResponseHeaders());
-            Log.d(TAG, "Existence check for " + client.getWebdavUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + "finished with HTTP status " + status + (!success?"(FAIL)":""));
+            Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + "finished with HTTP status " + status + (!success?"(FAIL)":""));
             
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log.e(TAG, "Existence check for " + client.getWebdavUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + ": " + result.getLogMessage(), result.getException());
+            Log_OC.e(TAG, "Existence check for " + client.getWebdavUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + ": " + result.getLogMessage(), result.getException());
             
         } finally {
             if (head != null)

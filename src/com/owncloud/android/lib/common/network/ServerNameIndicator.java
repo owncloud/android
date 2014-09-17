@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.net.ssl.SSLSocket;
 
-import android.util.Log;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 /**
@@ -80,19 +80,19 @@ public class ServerNameIndicator {
 		if (setHostnameMethod != null) {
 			try {
 				setHostnameMethod.invoke(sslSocket, hostname);
-				Log.i(TAG, "SNI done, hostname: " + hostname);
+				Log_OC.i(TAG, "SNI done, hostname: " + hostname);
 				
 			} catch (IllegalArgumentException e) {
-				Log.e(TAG, "Call to SSLSocket#setHost(String) failed ", e);
+				Log_OC.e(TAG, "Call to SSLSocket#setHost(String) failed ", e);
 				
 			} catch (IllegalAccessException e) {
-				Log.e(TAG, "Call to SSLSocket#setHost(String) failed ", e);
+				Log_OC.e(TAG, "Call to SSLSocket#setHost(String) failed ", e);
 				
 			} catch (InvocationTargetException e) {
-				Log.e(TAG, "Call to SSLSocket#setHost(String) failed ", e);
+				Log_OC.e(TAG, "Call to SSLSocket#setHost(String) failed ", e);
 			}
 		} else {
-			Log.i(TAG, "SNI not supported");
+			Log_OC.i(TAG, "SNI not supported");
 		}
 	}
 
@@ -134,15 +134,15 @@ public class ServerNameIndicator {
 	 * @return						Method to call to indicate the server name of interest to the server.
 	 */
 	private static Method initFrom(Class<?> sslSocketClass) {
-        Log.i(TAG, "SSLSocket implementation: " + sslSocketClass.getCanonicalName());
+        Log_OC.i(TAG, "SSLSocket implementation: " + sslSocketClass.getCanonicalName());
 		Method setHostnameMethod = null;
 		try {
 			setHostnameMethod = sslSocketClass.getMethod(METHOD_NAME, String.class);
 		} catch (SecurityException e) {
-			Log.e(TAG, "Could not access to SSLSocket#setHostname(String) method ", e);
+			Log_OC.e(TAG, "Could not access to SSLSocket#setHostname(String) method ", e);
 			
 		} catch (NoSuchMethodException e) {
-			Log.i(TAG, "Could not find SSLSocket#setHostname(String) method - SNI not supported");
+			Log_OC.i(TAG, "Could not find SSLSocket#setHostname(String) method - SNI not supported");
 		}
 		mSingleInstance.set(new ServerNameIndicator(sslSocketClass, setHostnameMethod));
 		return setHostnameMethod;

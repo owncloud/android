@@ -182,7 +182,7 @@ public class ShareXMLParser {
 	 */
 	private void readMeta(XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, NODE_META);
-		//Log.d(TAG, "---- NODE META ---");
+		//Log_OC.d(TAG, "---- NODE META ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -214,7 +214,7 @@ public class ShareXMLParser {
 		OCShare share = null;
 
 		parser.require(XmlPullParser.START_TAG, ns, NODE_DATA);		
-		//Log.d(TAG, "---- NODE DATA ---");
+		//Log_OC.d(TAG, "---- NODE DATA ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -264,7 +264,7 @@ public class ShareXMLParser {
 		
 		OCShare share = new OCShare();
 		
-		//Log.d(TAG, "---- NODE ELEMENT ---");
+		//Log_OC.d(TAG, "---- NODE ELEMENT ---");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -360,7 +360,7 @@ public class ShareXMLParser {
 	private String readNode (XmlPullParser parser, String node) throws XmlPullParserException, IOException{
 		parser.require(XmlPullParser.START_TAG, ns, node);
 		String value = readText(parser);
-		//Log.d(TAG, "node= " + node + ", value= " + value);
+		//Log_OC.d(TAG, "node= " + node + ", value= " + value);
 		parser.require(XmlPullParser.END_TAG, ns, node);
 		return value;
 	}

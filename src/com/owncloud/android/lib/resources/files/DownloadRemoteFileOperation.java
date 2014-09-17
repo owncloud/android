@@ -39,14 +39,13 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Remote operation performing the download of a remote file in the ownCloud server.
@@ -84,11 +83,11 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
         	tmpFile.getParentFile().mkdirs();
         	int status = downloadFile(client, tmpFile);
         	result = new RemoteOperationResult(isSuccess(status), status, (mGet != null ? mGet.getResponseHeaders() : null));
-        	Log.i(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " + result.getLogMessage());
+        	Log_OC.i(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " + result.getLogMessage());
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log.e(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " + result.getLogMessage(), e);
+            Log_OC.e(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " + result.getLogMessage(), e);
         }
         
         return result;

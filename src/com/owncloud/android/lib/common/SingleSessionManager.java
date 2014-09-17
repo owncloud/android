@@ -36,12 +36,10 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Implementation of {@link OwnCloudClientManager}
@@ -65,7 +63,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
     
     @Override
     public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
-		Log.d(TAG, "getClientFor(OwnCloudAccount ... : ");
+		Log_OC.d(TAG, "getClientFor(OwnCloudAccount ... : ");
     	if (account == null) {
     		throw new IllegalArgumentException("Cannot get an OwnCloudClient for a null account");
     	}
@@ -84,17 +82,17 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		if (accountName != null) {
     			client = mClientsWithUnknownUsername.remove(sessionName);
     			if (client != null) {
-    	    		Log.d(TAG, "    reusing client {" + sessionName + ", " + 
+    	    		Log_OC.d(TAG, "    reusing client {" + sessionName + ", " + 
     	    				client.hashCode() + "}");
     				mClientsWithKnownUsername.put(accountName, client);
-    	    		Log.d(TAG, "    moved client to {" + accountName + ", " + 
+    	    		Log_OC.d(TAG, "    moved client to {" + accountName + ", " + 
     	    				client.hashCode() + "}");
     			}
     		} else {
         		client = mClientsWithUnknownUsername.get(sessionName);
     		}
     	} else {
-    		Log.d(TAG, "    reusing client {" + accountName + ", " + client.hashCode() + "}");
+    		Log_OC.d(TAG, "    reusing client {" + accountName + ", " + client.hashCode() + "}");
     		reusingKnown = true;
     	}
     	
@@ -114,15 +112,15 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		client.setCredentials(account.getCredentials());
     		if (accountName != null) {
     			mClientsWithKnownUsername.put(accountName, client);
-    			Log.d(TAG, "    new client {" + accountName + ", " + client.hashCode() + "}");
+    			Log_OC.d(TAG, "    new client {" + accountName + ", " + client.hashCode() + "}");
 
     		} else {
     			mClientsWithUnknownUsername.put(sessionName, client);
-    			Log.d(TAG, "    new client {" + sessionName + ", " + client.hashCode() + "}");
+    			Log_OC.d(TAG, "    new client {" + sessionName + ", " + client.hashCode() + "}");
     		}
     	} else {
     		if (!reusingKnown) {
-    			Log.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
+    			Log_OC.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
     		}
     		keepCredentialsUpdated(account, client);
     		keepUriUpdated(account, client);
@@ -144,10 +142,10 @@ public class SingleSessionManager implements OwnCloudClientManager {
     	if (accountName != null) {
     		client = mClientsWithKnownUsername.remove(accountName);
         	if (client != null) {
-        		Log.d(TAG, "Removed client {" + accountName + ", " + client.hashCode() + "}");
+        		Log_OC.d(TAG, "Removed client {" + accountName + ", " + client.hashCode() + "}");
         		return client;
         	} else {
-        		Log.d(TAG, "No client tracked for  {" + accountName + "}");
+        		Log_OC.d(TAG, "No client tracked for  {" + accountName + "}");
         	}
     	}
     	
@@ -156,12 +154,12 @@ public class SingleSessionManager implements OwnCloudClientManager {
     			account.getCredentials().getAuthToken());
     	client = mClientsWithUnknownUsername.remove(sessionName);
     	if (client != null) {
-			Log.d(TAG, "Removed client {" + sessionName + ", " + client.hashCode() + "}");
+			Log_OC.d(TAG, "Removed client {" + sessionName + ", " + client.hashCode() + "}");
 			return  client;
     	}
-		Log.d(TAG, "No client tracked for  {" + sessionName + "}");
+		Log_OC.d(TAG, "No client tracked for  {" + sessionName + "}");
     		
-		Log.d(TAG, "No client removed");
+		Log_OC.d(TAG, "No client removed");
 		return null;
 		
 	}

@@ -34,12 +34,12 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Checks if the server is valid and if the server supports the Share API
@@ -158,14 +158,14 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         }
         
         if (mLatestResult.isSuccess()) {
-            Log.i(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
+            Log_OC.i(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
             
         } else if (mLatestResult.getException() != null) {
-            Log.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage(), 
+            Log_OC.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage(), 
             		mLatestResult.getException());
             
         } else {
-            Log.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
+            Log_OC.e(TAG, "Connection check at " + baseUrlSt + ": " + mLatestResult.getLogMessage());
         }
 
         return retval;
@@ -191,7 +191,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
             client.setBaseUri(Uri.parse("https://" + baseUriStr));
             boolean httpsSuccess = tryConnection(client); 
 			if (!httpsSuccess && !mLatestResult.isSslRecoverableException()) {
-                Log.d(TAG, "establishing secure connection failed, trying non secure connection");
+                Log_OC.d(TAG, "establishing secure connection failed, trying non secure connection");
                 client.setBaseUri(Uri.parse("http://" + baseUriStr));
                 tryConnection(client);
             }

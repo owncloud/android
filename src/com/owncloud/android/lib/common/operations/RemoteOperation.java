@@ -26,6 +26,13 @@ package com.owncloud.android.lib.common.operations;
 
 import java.io.IOException;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountsException;
+import android.app.Activity;
+import android.content.Context;
+import android.os.Handler;
+
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
@@ -33,16 +40,7 @@ import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-
-
-
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountsException;
-import android.app.Activity;
-import android.content.Context;
-import android.os.Handler;
-import android.util.Log;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 /**
@@ -110,7 +108,7 @@ public abstract class RemoteOperation implements Runnable {
             mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
             		getClientFor(ocAccount, mContext);
         } catch (Exception e) {
-            Log.e(TAG, "Error while trying to access to " + mAccount.name, e);
+            Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
             return new RemoteOperationResult(e);
         }
         return run(mClient);
@@ -266,11 +264,11 @@ public abstract class RemoteOperation implements Runnable {
                 }
             
             } catch (IOException e) {
-                Log.e(TAG, "Error while trying to access to " + mAccount.name, new AccountsException("I/O exception while trying to authorize the account", e));
+                Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, new AccountsException("I/O exception while trying to authorize the account", e));
                 result = new RemoteOperationResult(e);
             
             } catch (AccountsException e) {
-                Log.e(TAG, "Error while trying to access to " + mAccount.name, e);
+                Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
                 result = new RemoteOperationResult(e);
             }
     	

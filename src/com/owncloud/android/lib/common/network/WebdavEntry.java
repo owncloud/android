@@ -33,7 +33,8 @@ import org.apache.jackrabbit.webdav.property.DavPropertySet;
 import org.apache.jackrabbit.webdav.xml.Namespace;
 
 import android.net.Uri;
-import android.util.Log;
+
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class WebdavEntry {
 	private static final String NAMESPACE_OC = "http://owncloud.org/ns";
@@ -125,7 +126,7 @@ public class WebdavEntry {
             }
 
         } else {
-            Log.e("WebdavEntry",
+            Log_OC.e("WebdavEntry",
                     "General fuckup, no status for webdav response");
         }
     }
