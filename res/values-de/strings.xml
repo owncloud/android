@@ -59,7 +59,7 @@
   <string name="filedetails_modified">Geändert:</string>
   <string name="filedetails_download">Herunterladen</string>
   <string name="filedetails_sync_file">Datei aktualisieren</string>
-  <string name="filedetails_renamed_in_upload_msg">Datei wurde wärend des Uploads zu %1$s umbenannt</string>
+  <string name="filedetails_renamed_in_upload_msg">Datei wurde während des Uploads zu %1$s umbenannt</string>
   <string name="action_share_file">Link Teilen</string>
   <string name="action_unshare_file">Link nicht mehr freigeben</string>
   <string name="common_yes">Ja</string>

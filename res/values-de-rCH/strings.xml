@@ -48,7 +48,7 @@
   <string name="filedetails_modified">Geändert:</string>
   <string name="filedetails_download">Herunterladen</string>
   <string name="filedetails_sync_file">Datei aktualisieren</string>
-  <string name="filedetails_renamed_in_upload_msg">Datei wurde wärend des Uploads zu %1$s umbenannt</string>
+  <string name="filedetails_renamed_in_upload_msg">Datei wurde während des Uploads zu %1$s umbenannt</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nein</string>
   <string name="common_ok">OK</string>
@@ -113,7 +113,7 @@
   <string name="media_err_malformed">Mediendatei nicht korrekt kodiert</string>
   <string name="media_err_invalid_progressive_playback">Mediendatei kann nicht gestreamt werden</string>
   <string name="media_err_unknown">Die Mediendatei kann nicht mit dem vorinstallierten Media Player abgespielt werden</string>
-  <string name="media_err_security_ex">Sicherheitsfehler beim abspielen von %1$s</string>
+  <string name="media_err_security_ex">Sicherheitsfehler beim Abspielen von %1$s</string>
   <string name="media_err_io_ex">Eingabefehler beim Versuch %1$s abzuspielen</string>
   <string name="media_err_unexpected">Unerwarteter Fehler beim Versuch %1$s abzuspielen</string>
   <string name="media_rewind_description">Zurückspulen Button</string>
