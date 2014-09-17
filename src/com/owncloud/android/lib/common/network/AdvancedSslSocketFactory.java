@@ -93,39 +93,39 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
     /*
     private void logSslInfo() {
     	if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
-	    	Log_OCv(TAG, "SUPPORTED SSL PARAMETERS");
+	    	Log_OC.v(TAG, "SUPPORTED SSL PARAMETERS");
 	    	logSslParameters(mSslContext.getSupportedSSLParameters());
-	    	Log_OCv(TAG, "DEFAULT SSL PARAMETERS");
+	    	Log_OC.v(TAG, "DEFAULT SSL PARAMETERS");
 	    	logSslParameters(mSslContext.getDefaultSSLParameters());
-	    	Log_OCi(TAG, "CURRENT PARAMETERS");
-	    	Log_OCi(TAG, "Protocol: " + mSslContext.getProtocol());
+	    	Log_OC.i(TAG, "CURRENT PARAMETERS");
+	    	Log_OC.i(TAG, "Protocol: " + mSslContext.getProtocol());
     	}
-    	Log_OCi(TAG, "PROVIDER");
+    	Log_OC.i(TAG, "PROVIDER");
     	logSecurityProvider(mSslContext.getProvider());
 	}
     
     private void logSecurityProvider(Provider provider) {
-    	Log_OCi(TAG, "name: " + provider.getName());
-    	Log_OCi(TAG, "version: " + provider.getVersion());
-    	Log_OCi(TAG, "info: " + provider.getInfo());
+    	Log_OC.i(TAG, "name: " + provider.getName());
+    	Log_OC.i(TAG, "version: " + provider.getVersion());
+    	Log_OC.i(TAG, "info: " + provider.getInfo());
     	Enumeration<?> keys = provider.propertyNames();
     	String key;
     	while (keys.hasMoreElements()) {
     		key = (String) keys.nextElement();
-        	Log_OCi(TAG, "  property " + key + " : " + provider.getProperty(key));
+        	Log_OC.i(TAG, "  property " + key + " : " + provider.getProperty(key));
     	}
 	}
 
 	private void logSslParameters(SSLParameters params) {
-    	Log_OCv(TAG, "Cipher suites: ");
+    	Log_OC.v(TAG, "Cipher suites: ");
     	String [] elements = params.getCipherSuites();
     	for (int i=0; i<elements.length ; i++) {
-    		Log_OCv(TAG, "  " + elements[i]);
+    		Log_OC.v(TAG, "  " + elements[i]);
     	}
-    	Log_OCv(TAG, "Protocols: ");
+    	Log_OC.v(TAG, "Protocols: ");
     	elements = params.getProtocols();
     	for (int i=0; i<elements.length ; i++) {
-    		Log_OCv(TAG, "  " + elements[i]);
+    		Log_OC.v(TAG, "  " + elements[i]);
     	}
 	}
 	*/
