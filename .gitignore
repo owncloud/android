@@ -11,6 +11,7 @@
 # generated files
 bin/
 build/
+gradle/
 gen/
 target/
 *.iml
