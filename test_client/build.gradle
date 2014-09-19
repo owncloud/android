@@ -7,7 +7,6 @@ repositories {
 dependencies {
     compile 'commons-httpclient:commons-httpclient:3.1'
     compile 'com.android.support:support-v4:20.0.0'
-    compile project(':')
 }
 
 android {
