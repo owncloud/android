@@ -10,10 +10,14 @@
 
 # generated files
 bin/
+build/
 gen/
 target/
+*.iml
 
 # Local configuration files (sdk path, etc)
+.idea/
+.gradle/
 local.properties
 sample_client/local.properties
 tests/local.properties
