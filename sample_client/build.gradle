@@ -5,6 +5,7 @@ repositories {
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
     compile project(':')
 }
 
@@ -35,7 +36,7 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-
+    
     lintOptions {
         abortOnError false
     }
