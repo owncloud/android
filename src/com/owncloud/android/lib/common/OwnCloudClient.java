@@ -30,6 +30,7 @@ import java.io.InputStream;
 
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
@@ -92,11 +93,33 @@ public class OwnCloudClient extends HttpClient {
         		PARAM_SINGLE_COOKIE_HEADER, 			// to avoid problems with some web servers
         		PARAM_SINGLE_COOKIE_HEADER_VALUE);
         
+        applyProxySettings();
+        
         clearCredentials();
     }
 
     
-    public void setCredentials(OwnCloudCredentials credentials) {
+    private void applyProxySettings() {
+    	String proxyHost = System.getProperty("http.proxyHost");
+    	String proxyPortSt = System.getProperty("http.proxyPort");
+    	int proxyPort = 0;
+    	try {
+    		if (proxyPortSt != null && proxyPortSt.length() > 0) {
+    			proxyPort = Integer.parseInt(proxyPortSt);
+    		}
+    	} catch (Exception e) {
+    		// nothing to do here
+    	}
+
+    	if (proxyHost != null && proxyHost.length() > 0) {
+	    	HostConfiguration hostCfg = getHostConfiguration();
+	    	hostCfg.setProxy(proxyHost, proxyPort);
+	    	Log_OC.d(TAG, "Proxy settings: " + proxyHost + ":" + proxyPort);
+    	}
+	}
+
+
+	public void setCredentials(OwnCloudCredentials credentials) {
     	if (credentials != null) {
     		mCredentials = credentials;
     		mCredentials.applyTo(this);
