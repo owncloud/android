@@ -6,23 +6,16 @@ buildscript {
         classpath 'com.android.tools.build:gradle:0.13.0'
     }
 }
-apply plugin: 'com.android.library'
-
-
-repositories {
-    mavenCentral()
-}
+apply plugin: 'com.android.application'
 
 dependencies {
-    compile fileTree(include: '*.jar', dir: 'libs')
-    compile project('owncloud-android-library')
-    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    compile 'com.android.support:support-v4:20.0.0'
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 android {
     compileSdkVersion 19
     buildToolsVersion "20.0.0"
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -31,7 +24,7 @@ android {
             aidl.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
-            assets.srcDirs = ['res']
+            assets.srcDirs = ['assets']
         }
 
         // Move the tests to tests/java, tests/res, etc...
@@ -46,24 +39,4 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-    android {
-        lintOptions {
-            abortOnError false
-        }
-    }
-
 }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 19
-    }
-    productFlavors {
-    }
-}
-
-
