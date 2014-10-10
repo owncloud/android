@@ -30,9 +30,6 @@ oc_framework/proguard-project.txt
 oc_framework-test-project/proguard-project.txt
 tests/proguard-project.txt
 
-# Should not be commited inside this repo:
-actionbarsherlock/
-
 # Android Studio and Gradle specific entries
 .gradle
 .idea
