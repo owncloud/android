@@ -16,7 +16,7 @@
         <google.android-version>4.4.2_r4</google.android-version>
         <!-- Usually the latest Android API -->
         <google.android-api>19</google.android-api>
-        <actionbarsherlock-version>4.2.0</actionbarsherlock-version>
+        <actionbarsherlock-version>4.1.0</actionbarsherlock-version>
     </properties>
 
     <url>https://github.com/owncloud/android</url>
@@ -25,9 +25,26 @@
         <connection>scm:git:git@github.com:owncloud/android.git</connection>
         <developerConnection>scm:git:git@github.com:owncloud/android.git</developerConnection>
         <url>https://github.com/owncloud/android</url>
-    </scm>
+</scm>
+
+
+<repositories>
+    <!--other repositories if any-->
+    <repository>
+        <id>project.local</id>
+        <name>project</name>
+        <url>file:${project.basedir}/library-4.1.0</url>
+    </repository>
+</repositories>
     
-    <dependencies>
+<dependencies>
+
+	<dependency>
+    <groupId>com.actionbarsherlock</groupId>
+    <artifactId>actionbarsherlock</artifactId>
+    <version>1.0</version>
+    <type>aar</type>
+</dependency>
 
         <dependency>
             <groupId>android</groupId>
