@@ -10,6 +10,7 @@
     <string name="actionbar_open_with">Open with</string>
     <string name="actionbar_mkdir">New folder</string>
     <string name="actionbar_settings">Settings</string>
+    <string name="actionbar_settings_advanced">Advanced Settings</string>
     <string name="actionbar_see_details">Details</string>
     <string name="actionbar_send_file">Send</string>
     <string name="prefs_category_general">General</string>
@@ -31,6 +32,7 @@
     <string name="prefs_recommend">Recommend to a friend</string>
     <string name="prefs_feedback">Feedback</string>
     <string name="prefs_imprint">Imprint</string>
+    <string name="menu_adv_prefs_reset">Reset advanced preferences</string>
     
 	<string name="recommend_subject">"Try %1$s on your smartphone!"</string>
 	<string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
@@ -241,6 +243,10 @@
     <string name="instant_upload_on_wifi">Upload pictures via WiFi only</string>
     <string name="instant_video_upload_on_wifi">Upload videos via WiFi only</string>
     <string name="instant_upload_path">/InstantUpload</string>
+    <string name="instant_upload_path_title">Upload Path</string>
+    <string name="instant_upload_path_summary">For all InstantUploads</string>
+    
+    
     <string name="conflict_title">Update conflict</string>
     <string name="conflict_message">Remote file %s is not synchronized with local file. Continuing will replace content of file on server.</string>
     <string name="conflict_keep_both">Keep both</string>

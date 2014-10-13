@@ -19,16 +19,18 @@ package com.owncloud.android.utils;
 
 import java.io.File;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.StatFs;
+import android.preference.PreferenceManager;
+
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.StatFs;
 
 
 /**
@@ -73,7 +75,9 @@ public class FileStorageUtils {
     }
 
     public static String getInstantUploadFilePath(Context context, String fileName) {
-        String uploadPath = context.getString(R.string.instant_upload_path);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        String uploadPathDefault = context.getString(R.string.instant_upload_path);
+        String uploadPath = pref.getString("instant_upload_path", uploadPathDefault);        
         String value = uploadPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;
     }

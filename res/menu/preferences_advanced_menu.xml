@@ -17,12 +17,9 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/action_reset_advanced_prefs"
+        android:title="@string/menu_adv_prefs_reset"/>
 
-    <EditTextPreference
-        android:defaultValue="@string/instant_upload_path"
-        android:key="instant_upload_path"
-        android:title="@string/instant_upload_path_title"
-        android:summary="@string/instant_upload_path_summary" />
-
-</PreferenceScreen>
+</menu>
