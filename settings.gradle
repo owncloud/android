@@ -1,4 +1,4 @@
 
-include ':owncloud-android-library', ':library-4.1.0'
+include ':owncloud-android-library'
+include ':library-4.1.0'
 include ':'
-

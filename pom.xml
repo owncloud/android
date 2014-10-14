@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.owncloud.android</groupId>
@@ -25,26 +26,40 @@
         <connection>scm:git:git@github.com:owncloud/android.git</connection>
         <developerConnection>scm:git:git@github.com:owncloud/android.git</developerConnection>
         <url>https://github.com/owncloud/android</url>
-</scm>
+    </scm>
 
 
-<repositories>
-    <!--other repositories if any-->
-    <repository>
-        <id>project.local</id>
-        <name>project</name>
-        <url>file:${project.basedir}/library-4.1.0</url>
-    </repository>
-</repositories>
-    
-<dependencies>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>android-support</id>-->
+            <!--<url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
-	<dependency>
-    <groupId>com.actionbarsherlock</groupId>
-    <artifactId>actionbarsherlock</artifactId>
-    <version>1.0</version>
-    <type>aar</type>
-</dependency>
+    <dependencies>
+
+        <!--<dependency>-->
+            <!--<groupId>com.actionbarsherlock</groupId>-->
+            <!--<artifactId>library</artifactId>-->
+            <!--<version>4.1.0</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>android-support-v4.jar</groupId>
+            <artifactId>android-support-v4.jar</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/third_party/android-support-library/android-support-v4.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.actionbarsherlock</groupId>
+            <artifactId>library</artifactId>
+            <version>4.1.0</version>
+            <type>apklib</type>
+        </dependency>
+
 
         <dependency>
             <groupId>android</groupId>
@@ -53,26 +68,19 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.actionbarsherlock</groupId>
-            <artifactId>actionbarsherlock</artifactId>
-            <version>${actionbarsherlock-version}</version>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>android.support</groupId>-->
+            <!--<artifactId>compatibility-v4</artifactId>-->
+            <!--<version>19.1.0</version>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>com.actionbarsherlock</groupId>
-            <artifactId>actionbarsherlock</artifactId>
-            <version>${actionbarsherlock-version}</version>
-            <type>apklib</type>
-        </dependency>
 
         <!-- MUST BE INSTALLED FIRST: cd owncloud-android-library; mvn install -->
         <dependency>
-         <groupId>com.owncloud.android</groupId>
-         <artifactId>owncloud-android-library</artifactId>
-         <version>${owncloud.version}</version>
-      </dependency>
+            <groupId>com.owncloud.android</groupId>
+            <artifactId>owncloud-android-library</artifactId>
+            <version>${owncloud.version}</version>
+        </dependency>
 
     </dependencies>
 
@@ -96,7 +104,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.2</version>
                 <configuration>
                     <sdk>
                         <path>${env.ANDROID_HOME}</path>
