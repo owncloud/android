@@ -6,6 +6,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:0.13.0'
     }
 }
+
 apply plugin: 'com.android.application'
 
 
@@ -14,9 +15,14 @@ repositories {
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:19.1.0'
     compile project(':library-4.1.0')
     compile project(':owncloud-android-library')
+
+    // If the disklurcache will ever be a managed dependency uncomment
+    // the following line and delete the binary jar in libs
+    // compile 'com.jakewharton:disklrucache:2.0.2'
 }
 
 android {
@@ -45,6 +51,7 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+
     android {
         lintOptions {
             abortOnError false
@@ -56,8 +63,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+    
     productFlavors {
     }
+
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
     }

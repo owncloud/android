@@ -18,7 +18,7 @@
         <google.android-version>4.4.2_r4</google.android-version>
         <!-- Usually the latest Android API -->
         <google.android-api>19</google.android-api>
-        <actionbarsherlock-version>4.1.0</actionbarsherlock-version>
+        <actionbarsherlock-version>4.2.0</actionbarsherlock-version>
     </properties>
 
     <url>https://github.com/owncloud/android</url>
@@ -64,6 +64,12 @@
         <!--</dependency>-->
 
         <dependency>
+            <groupId>com.jakewharton</groupId>
+            <artifactId>disklrucache</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
+        <dependency>
             <groupId>android-support-v4.jar</groupId>
             <artifactId>android-support-v4.jar</artifactId>
             <version>1.0</version>
@@ -75,10 +81,9 @@
         <dependency>
             <groupId>com.actionbarsherlock</groupId>
             <artifactId>library</artifactId>
-            <version>4.1.0</version>
+            <version>${actionbarsherlock-version}</version>
             <type>apklib</type>
         </dependency>
-
 
         <dependency>
             <groupId>android</groupId>
@@ -113,7 +118,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
+                <version>3.1</version>
                 <configuration>
                     <source>${java-version}</source>
                     <target>${java-version}</target>
