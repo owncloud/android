@@ -39,7 +39,3 @@ function initForAnt {
               initForAnt
               exit
  fi
-
-
-
-
