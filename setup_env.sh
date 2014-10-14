@@ -2,14 +2,6 @@
 
 DIRECTORY="actionbarsherlock"
 
- if [ -z "$1" ]; then
-              initDefault
-              exit
- else
-              initForAnt
-              exit
- fi
-
 
 function initDefault {
     git submodule init
@@ -33,4 +25,15 @@ function initForAnt {
         android update test-project -p tests -m ..
     fi
 }
+
+ if [ -z "$1" ]; then
+              initDefault
+              exit
+ else
+              initForAnt
+              exit
+ fi
+
+
+
 
