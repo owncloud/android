@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.1.+'
+    compile 'com.android.support:support-v4:19.1.0'
     compile project(':library-4.1.0')
     compile project(':owncloud-android-library')
 }
