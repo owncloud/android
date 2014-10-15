@@ -2,7 +2,7 @@
 
 
 #Repository
-ActionBarSherlockRepo="git@github.com:JakeWharton/ActionBarSherlock.git"
+ActionBarSherlockRepo="git://github.com/JakeWharton/ActionBarSherlock.git"
 
 #Directory for actionbarsherlock
 DIRECTORY="actionbarsherlock"
