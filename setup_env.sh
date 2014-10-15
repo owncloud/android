@@ -35,7 +35,7 @@ function initForAnt {
         cd ../
 
         #As default it updates the ant scripts
-        android update project -p "$DIRECTORY"/library -n ActionBarSherlock
+        android update project -p "$DIRECTORY"/library -n ActionBarSherlock --target android-19
         android update lib-project -p owncloud-android-library
         android update project -p .
         android update project -p oc_jb_workaround
