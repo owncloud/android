@@ -1,6 +1,14 @@
 #!/bin/bash
 
+
+#Repository
+ActionBarSherlockRepo="git@github.com:JakeWharton/ActionBarSherlock.git"
+
+#Directory for actionbarsherlock
 DIRECTORY="actionbarsherlock"
+
+#Commit for version 4.2 of actionbar sherlock
+COMMIT="90939dc3925ffaaa0de269bbbe1b35e274968ea1"
 
 
 function initDefault {
@@ -13,20 +21,21 @@ function initDefault {
 }
 
 function initForAnt {
+    #If the directory exists the script has already been executed
     if [ ! -d "$DIRECTORY" ]; then
 
         #Gets the owncloud-android-library
         git submodule init
         git submodule update
 
-        #Clones the actionbarsherlock and checks-out the right release (4.1.0)
-        git clone git://github.com/JakeWharton/ActionBarSherlock.git actionbarsherlock
-        cd actionbarsherlock/
-        git checkout 9598f2b
+        #Clones the actionbarsherlock and checks-out the right release (4.2.0)
+        git clone $ActionBarSherlockRepo $DIRECTORY
+        cd $DIRECTORY
+        git checkout $COMMIT
         cd ../
 
         #As default it updates the ant scripts
-        android update project -p actionbarsherlock/library -n ActionBarSherlock
+        android update project -p "$DIRECTORY"/library -n ActionBarSherlock
         android update lib-project -p owncloud-android-library
         android update project -p .
         android update project -p oc_jb_workaround
@@ -35,11 +44,32 @@ function initForAnt {
     fi
 }
 
- if [ -z "$1" ]; then
-              initDefault
-              exit
- else
-              echo "Creating environment for Ant"
-              initForAnt
-              exit
- fi
+#No args
+if [ $# -lt 1 ]; then
+        echo "No args found"
+        echo "Usage : $0 [gradle | maven | ant]"
+        exit
+fi
+
+#checking args
+case "$1" in
+
+    "ant")  
+        echo "Creating Ant environment"
+        initForAnt
+        ;;
+
+    "gradle")  echo  "Creating gradle environment"
+        initDefault
+        ;;
+
+    "maven")  echo  "Creating maven environment"
+        initDefault
+        ;;
+
+    *)  echo "Argument not recognized"
+        echo "Usage : $0 [gradle | maven | ant]"
+       ;;
+esac
+
+exit
