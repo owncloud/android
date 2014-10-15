@@ -11,7 +11,7 @@ before_install:
     - sudo ./.travisScript.sh --install=$COMPONENTS --accept=$LICENSES
     - source ~/.android-sdk-installer/env
     - rm pom.xml
-    - ./setup_env.sh
+    - ./setup_env.sh ant
 
 script:
   - ant clean
