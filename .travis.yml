@@ -4,11 +4,12 @@ before_install:
   # Install base Android SDK
     - sudo apt-get update -qq
     - sudo apt-get install -qq libstdc++6:i386 lib32z1 expect
+    - sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch
     - export COMPONENTS="build-tools-20.0.0,android-14,android-17,android-19,sysimg-19,extra-android-support"
     - export LICENSES="android-sdk-license-5be876d5|android-sdk-license-598b93a6"
     - curl -L https://raw.githubusercontent.com/owncloudChalmers/android/gradleWithInternalDependency/.travisScript.sh > .travisScript.sh
-    - sudo chmod 777 .travisScript.sh
-    - sudo ./.travisScript.sh --install=$COMPONENTS --accept=$LICENSES
+    - chmod +x .travisScript.sh
+    - ./.travisScript.sh --install=$COMPONENTS --accept=$LICENSES
     - source ~/.android-sdk-installer/env
     - rm pom.xml
     - ./setup_env.sh ant
