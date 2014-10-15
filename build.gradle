@@ -12,19 +12,20 @@ apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
+
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 artifacts.add("default", file('libs/actionbarsherlock.aar'))
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile name: 'touch-image-view'
     compile 'com.android.support:support-v4:19.1.0'
     compile project('libs/actionbarsherlock_lib')
     compile project(':owncloud-android-library')
-
-    // If the disklurcache will ever be a managed dependency uncomment
-    // the following line and delete the binary jar in libs
-    // compile 'com.jakewharton:disklrucache:2.0.2'
+    compile 'com.jakewharton:disklrucache:2.0.2'
 }
 
 android {
