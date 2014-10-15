@@ -14,10 +14,12 @@ repositories {
     mavenCentral()
 }
 
+artifacts.add("default", file('libs/actionbarsherlock.aar'))
+
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:19.1.0'
-    compile project(':library-4.1.0')
+    compile project('libs/actionbarsherlock_lib')
     compile project(':owncloud-android-library')
 
     // If the disklurcache will ever be a managed dependency uncomment
