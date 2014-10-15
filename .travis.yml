@@ -6,6 +6,7 @@ android:
     - build-tools-20.0.0
     - android-19
 before_install:
+    - rm pom.xml
     - ./setup_env.sh ant
 script:
   - ./gradlew clean build
