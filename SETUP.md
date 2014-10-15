@@ -20,8 +20,8 @@ At this point you can continue using different tools to build the project. Secti
 NOTE: You must have the Android SDK 'tools/', and 'platforms-tools/' folders in your environment path variable.
 
 * Resolve necessary dependencies running:
-    - Windows: "setup_env.bat -z"
-    - Mac OS/Linux: "./setup_env.sh -z"
+    - Windows: "setup_env.bat ant"
+    - Mac OS/Linux: "./setup_env.sh ant"
 * Run "ant clean".
 * Run "ant debug" to generate a debuggable version of the ownCloud app.
 
@@ -32,8 +32,8 @@ NOTE: You must have mvn (version >= 3.1.1) in your environment path. Current And
 Download/install Android plugin for Maven, then build ownCloud with mvn:
 
 * Resolve necessary dependencies running:
-    - Windows: "setup_env.bat -z"
-    - Mac OS/Linux: "./setup_env.sh -z"
+    - Windows: "setup_env.bat maven"
+    - Mac OS/Linux: "./setup_env.sh maven"
 * cd ..
 * git clone https://github.com/mosabua/maven-android-sdk-deployer.git
 * cd maven-android-sdk-deployer
@@ -47,8 +47,8 @@ Now you can create ownCloud APK using "mvn package" and find it as ownCloud.apk 
 ### 4. Building with Gradle:
 
 * Complete the setup of project properties running:
-    - Windows: "setup_env.bat"
-    - Mac OS/Linux: "./setup_env.sh"
+    - Windows: "setup_env.bat gradle"
+    - Mac OS/Linux: "./setup_env.sh gradle"
 * Open a terminal and go to the "android" directory that contains the repository.
 * Run the 'clean' and 'build' tasks using the Gradle wrapper provided:
     - Windows: gradlew.bat clean build
@@ -82,8 +82,8 @@ NOTE: Even though API level is set to 19, APK also runs on older devices because
 ### 6. Building with Android Studio:
 
 * Complete the setup of project properties running:
-    - Windows: "setup_env.bat"
-    - Mac OS/Linux: "./setup_env.sh"
+    - Windows: "setup_env.bat gradle"
+    - Mac OS/Linux: "./setup_env.sh gradle"
 * The first time you want to open the project in Android Studio, select 'Import Project...' and choose the file "android/settings.gradle".
   Android Studio will then create the '.iml' files it needs. If you ever close the project but the files are still there, you just select
   'Open Project...'. The file chooser will show an Android face as the folder icon, which you can select to reopen the project.

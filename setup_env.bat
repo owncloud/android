@@ -1,16 +1,16 @@
 @echo off
 
-if "%1" == "" goto initDefault :: It would be nice to force selection of a setup type
-if "%1" == "default" goto initDefault
+if "%1" == "gradle" goto initDefault
+if "%1" == "maven" goto initDefault
 if "%1" == "ant" goto initForAnt
 goto initInvalid
 
 :initInvalid
-echo "Input argument invalid. Provide argument [ant | default] to choose setup type. Leaving out the argument automatically chooses default."
+echo "Input argument invalid. Provide argument [ant | maven | gradle] to choose setup type."
 goto exit
 
 :initForAnt
-echo "Executes ANT setup..."
+echo "Executing Ant setup..."
 if not exist .\actionbarsherlock (
     call git submodule init
     call git submodule update
@@ -23,7 +23,6 @@ if not exist .\actionbarsherlock (
 goto exit
 
 :initDefault
-echo "Executes default setup..."
 call git submodule init
 call git submodule update
 call android.bat update lib-project -p owncloud-android-library
