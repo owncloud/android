@@ -13,7 +13,7 @@ before_install:
     - source ~/.android-sdk-installer/env
     - rm pom.xml
     - ./setup_env.sh ant
-    - android update sdk --all --filter extra-android-support --no-ui --force > /dev/null
+    - echo yes | android update sdk --all --filter extra-android-support --no-ui --force > /dev/null
 
 script:
   - ant clean
