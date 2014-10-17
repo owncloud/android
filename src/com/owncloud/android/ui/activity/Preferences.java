@@ -41,6 +41,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
@@ -75,6 +76,7 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
     private String mAccountName;
     private boolean mShowContextMenu = false;
 
+    private int hiddenPrefClickCount = 3;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -251,6 +253,17 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
                } catch (NameNotFoundException e) {
                    Log_OC.e(TAG, "Error while showing about dialog", e);
                }
+               pAboutApp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                   @Override
+                   public boolean onPreferenceClick(Preference preference) {
+                       if(--hiddenPrefClickCount <= 0){
+                           hiddenPrefClickCount = 0; //avoid negative underflow
+                           Intent settingsIntent = new Intent(getApplicationContext(), PreferencesAdvanced.class);
+                           startActivity(settingsIntent);
+                       }
+                       return true;
+                   }
+               });
        }
     }
 
