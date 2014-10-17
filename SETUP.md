@@ -60,8 +60,8 @@ Now you can create ownCloud APK using "mvn package" and find it as ownCloud.apk 
 NOTE: You must have the Android SDK 'tools/', and 'platforms-tools/' folders in your environment path variable.
 
 * Resolve necessary dependencies running:
-    - Windows: "setup_env.bat"
-    - Mac OS/Linux: "./setup_env.sh"
+    - Windows: "setup_env.bat ant"
+    - Mac OS/Linux: "./setup_env.sh ant"
     * Open Eclipse and create new "Android Project from Existing Code". Choose android/actionbarsherlock/library as root.
 * Clean project and compile.
 * If any error appears, check the project properties; in the 'Android' section, API Level should be greater or equal than 14.
