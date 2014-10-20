@@ -48,7 +48,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 public class ReadRemoteFileOperation extends RemoteOperation {
 
     private static final String TAG = ReadRemoteFileOperation.class.getSimpleName();
-    private static final int SYNC_READ_TIMEOUT = 10000;
+    private static final int SYNC_READ_TIMEOUT = 40000;
     private static final int SYNC_CONNECTION_TIMEOUT = 5000;
     
     private String mRemotePath;
