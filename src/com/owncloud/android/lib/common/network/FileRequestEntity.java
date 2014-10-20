@@ -38,7 +38,7 @@ import java.util.Set;
 
 import org.apache.commons.httpclient.methods.RequestEntity;
 
-import android.util.Log;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 
@@ -126,7 +126,7 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
             }
             
         } catch (IOException io) {
-            Log.e("FileRequestException", io.getMessage());
+            Log_OC.e("FileRequestException", io.getMessage());
             throw new RuntimeException("Ugly solution to workaround the default policy of retries when the server falls while uploading ; temporal fix; really", io);   
             
         } finally {

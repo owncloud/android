@@ -30,13 +30,12 @@ import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.WebdavEntry;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 /**
@@ -49,7 +48,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 public class ReadRemoteFileOperation extends RemoteOperation {
 
     private static final String TAG = ReadRemoteFileOperation.class.getSimpleName();
-    private static final int SYNC_READ_TIMEOUT = 10000;
+    private static final int SYNC_READ_TIMEOUT = 40000;
     private static final int SYNC_CONNECTION_TIMEOUT = 5000;
     
     private String mRemotePath;
@@ -82,8 +81,11 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     		int status;
     		status = client.executeMethod(propfind, SYNC_READ_TIMEOUT, SYNC_CONNECTION_TIMEOUT);
 
-    		boolean isMultiStatus = status == HttpStatus.SC_MULTI_STATUS;
-    		if (isMultiStatus) {
+    		boolean isSuccess = (
+    				status == HttpStatus.SC_MULTI_STATUS ||
+    				status == HttpStatus.SC_OK
+			);
+    		if (isSuccess) {
     			// Parse response
     			MultiStatus resp = propfind.getResponseBodyAsMultiStatus();
 				WebdavEntry we = new WebdavEntry(resp.getResponses()[0], client.getWebdavUri().getPath());
@@ -103,7 +105,7 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     	} catch (Exception e) {
     		result = new RemoteOperationResult(e);
     		e.printStackTrace();
-    		Log.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(), result.getException());
+    		Log_OC.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(), result.getException());
     	} finally {
     		if (propfind != null)
     			propfind.releaseConnection();

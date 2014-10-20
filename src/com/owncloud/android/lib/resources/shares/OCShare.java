@@ -26,11 +26,11 @@ package com.owncloud.android.lib.resources.shares;
 
 import java.io.Serializable;
 
-import com.owncloud.android.lib.resources.files.FileUtils;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+
+import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.FileUtils;
 
 
 /**
@@ -70,7 +70,7 @@ public class OCShare implements Parcelable, Serializable {
 	public OCShare(String path) {
 		resetData();
         if (path == null || path.length() <= 0 || !path.startsWith(FileUtils.PATH_SEPARATOR)) {
-            Log.e(TAG, "Trying to create a OCShare with a non valid path");
+            Log_OC.e(TAG, "Trying to create a OCShare with a non valid path");
             throw new IllegalArgumentException("Trying to create a OCShare with a non valid path: " + path);
         }
         mPath = path;

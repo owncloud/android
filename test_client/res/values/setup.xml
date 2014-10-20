@@ -24,9 +24,7 @@
  -->
  
 <resources>
-    <string name="server_base_url"></string>				<!-- the server url, without webdav path -->
-    <string name="webdav_path">/remote.php/webdav</string> 	<!-- default value for webdav path (owncloud version > = 4)-->
+    <string name="server_base_url"></string>
     <string name="username"></string>
     <string name="password"></string>
-    <bool name="chunked">true</bool>
 </resources>

@@ -38,7 +38,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import android.util.Log;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 
@@ -147,7 +147,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
         try {
             return (mKnownServersKeyStore.getCertificateAlias(cert) != null);
         } catch (KeyStoreException e) {
-            Log.d(TAG, "Fail while checking certificate in the known-servers store");
+            Log_OC.d(TAG, "Fail while checking certificate in the known-servers store");
             return false;
         }
     }

@@ -26,7 +26,7 @@ package com.owncloud.android.lib.resources.files;
 
 import java.io.File;
 
-import android.util.Log;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class FileUtils {
 
@@ -47,7 +47,7 @@ public class FileUtils {
 	public static boolean isValidName(String fileName) {
 		boolean result = true;
 		
-		Log.d("FileUtils", "fileName =======" + fileName);
+		Log_OC.d("FileUtils", "fileName =======" + fileName);
 		if (fileName.contains(PATH_SEPARATOR) ||
 				fileName.contains("\\") || fileName.contains("<") || fileName.contains(">") ||
 				fileName.contains(":") || fileName.contains("\"") || fileName.contains("|") || 
@@ -65,7 +65,7 @@ public class FileUtils {
 	public static boolean isValidPath(String path) {
 		boolean result = true;
 		
-		Log.d("FileUtils", "path ....... " + path);
+		Log_OC.d("FileUtils", "path ....... " + path);
 		if (path.contains("\\") || path.contains("<") || path.contains(">") ||
 				path.contains(":") || path.contains("\"") || path.contains("|") || 
 				path.contains("?") || path.contains("*")) {

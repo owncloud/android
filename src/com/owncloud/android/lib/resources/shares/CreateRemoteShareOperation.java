@@ -31,12 +31,11 @@ import java.util.ArrayList;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.HttpStatus;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Creates a new share.  This allows sharing with a user or group or as a link.
@@ -103,7 +102,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 		try {
 			// Post Method
 			post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
-			//Log.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+			//Log_OC.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
 			post.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
 			post.addParameter(PARAM_PATH, mRemoteFilePath);
@@ -131,7 +130,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 				mShares = xmlParser.parseXMLResponse(is);
 				if (xmlParser.isSuccess()) {
 					if (mShares != null) {
-						Log.d(TAG, "Created " + mShares.size() + " share(s)");
+						Log_OC.d(TAG, "Created " + mShares.size() + " share(s)");
 						result = new RemoteOperationResult(ResultCode.OK);
 						ArrayList<Object> sharesObjects = new ArrayList<Object>();
 						for (OCShare share: mShares) {
@@ -142,6 +141,9 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 				} else if (xmlParser.isFileNotFound()){
 					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
 					
+				} else if (xmlParser.isFailure()) {
+					result = new RemoteOperationResult(ResultCode.SHARE_FORBIDDEN);
+
 				} else {
 					result = new RemoteOperationResult(false, status, post.getResponseHeaders());	
 				}
@@ -152,7 +154,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 			
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			Log.e(TAG, "Exception while Creating New Share", e);
+			Log_OC.e(TAG, "Exception while Creating New Share", e);
 			
 		} finally {
 			if (post != null) {

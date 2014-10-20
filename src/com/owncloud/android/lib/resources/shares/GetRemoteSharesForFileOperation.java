@@ -32,12 +32,11 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 
-import android.util.Log;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Provide a list shares for a specific file.  
@@ -110,7 +109,7 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 				ShareXMLParser xmlParser = new ShareXMLParser();
 				mShares = xmlParser.parseXMLResponse(is);
 				if (mShares != null) {
-					Log.d(TAG, "Got " + mShares.size() + " shares");
+					Log_OC.d(TAG, "Got " + mShares.size() + " shares");
 					result = new RemoteOperationResult(ResultCode.OK);
 					ArrayList<Object> sharesObjects = new ArrayList<Object>();
 					for (OCShare share: mShares) {
@@ -129,7 +128,7 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 			
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			Log.e(TAG, "Exception while getting shares", e);
+			Log_OC.e(TAG, "Exception while getting shares", e);
 			
 		} finally {
 			if (get != null) {

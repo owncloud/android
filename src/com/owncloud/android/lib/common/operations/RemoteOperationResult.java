@@ -41,12 +41,12 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.DavException;
 import org.json.JSONException;
 
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.network.CertificateCombinedException;
-
 import android.accounts.Account;
 import android.accounts.AccountsException;
-import android.util.Log;
+
+import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 /**
@@ -98,7 +98,12 @@ public class RemoteOperationResult implements Serializable {
         ACCOUNT_NOT_THE_SAME,
         INVALID_CHARACTER_IN_NAME,
         SHARE_NOT_FOUND,
-        LOCAL_STORAGE_NOT_REMOVED
+		LOCAL_STORAGE_NOT_REMOVED,
+		FORBIDDEN,
+		SHARE_FORBIDDEN,
+		OK_REDIRECT_TO_NON_SECURE_CONNECTION, 
+		INVALID_MOVE_INTO_DESCENDANT, 
+		PARTIAL_MOVE_DONE
     }
 
     private boolean mSuccess = false;
@@ -112,7 +117,7 @@ public class RemoteOperationResult implements Serializable {
 
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
-        mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL || code == ResultCode.OK_NO_SSL);
+		mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL || code == ResultCode.OK_NO_SSL || code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
         mData = null;
     }
 
@@ -140,9 +145,12 @@ public class RemoteOperationResult implements Serializable {
             case HttpStatus.SC_INSUFFICIENT_STORAGE:
                 mCode = ResultCode.QUOTA_EXCEEDED;
                 break;
+			case HttpStatus.SC_FORBIDDEN:
+				mCode = ResultCode.FORBIDDEN;
+				break;
             default:
                 mCode = ResultCode.UNHANDLED_HTTP_CODE;
-                Log.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " + httpCode);
+                Log_OC.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " + httpCode);
             }
         }
     }
@@ -244,6 +252,10 @@ public class RemoteOperationResult implements Serializable {
     public boolean isSslRecoverableException() {
         return mCode == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
     }
+
+	public boolean isRedirectToNonSecureConnection() {
+		return mCode == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION;
+	}
 
     private CertificateCombinedException getCertificateCombinedException(Exception e) {
         CertificateCombinedException result = null;
@@ -366,6 +378,15 @@ public class RemoteOperationResult implements Serializable {
                 mRedirectedLocation.toLowerCase().contains("wayf")));
     }
     
+	/**
+	 * Checks if is a non https connection
+	 * 
+	 * @return boolean true/false
+	 */
+	public boolean isNonSecureRedirection() {
+		return (mRedirectedLocation != null && !(mRedirectedLocation.toLowerCase().startsWith("https://")));
+	}
+
     public String getAuthenticateHeader() {
     	return mAuthenticate;
     }

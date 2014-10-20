@@ -33,16 +33,24 @@ import java.security.GeneralSecurityException;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
-import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Menu;
+
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
+import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
@@ -50,14 +58,6 @@ import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesOperation;
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
-import com.owncloud.android.lib.test_project.R;
-
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.app.Activity;
-import android.util.Log;
-import android.view.Menu;
 
 /**
  * Activity to test OC framework
@@ -72,7 +72,6 @@ public class TestActivity extends Activity {
 	private String mServerUri;
 	private String mUser;
 	private String mPass;
-	private boolean mChunked;
 	
 	private static final int BUFFER_SIZE = 1024;
 	
@@ -91,7 +90,6 @@ public class TestActivity extends Activity {
 		mServerUri = getString(R.string.server_base_url);
 		mUser = getString(R.string.username);
 		mPass = getString(R.string.password);
-		mChunked = getResources().getBoolean(R.bool.chunked);
     	
 		Protocol pr = Protocol.getProtocol("https");
 		if (pr == null || !(pr.getSocketFactory() instanceof SelfSignedConfidentSslSocketFactory)) {
@@ -133,14 +131,32 @@ public class TestActivity extends Activity {
 	/**
 	 * Access to the library method to Create a Folder
 	 * @param remotePath            Full path to the new directory to create in the remote server.
-     * @param createFullPath        'True' means that all the ancestor folders should be created if don't exist yet.
+     * @param createFullPath        'True' means that all the ancestor folders should be created if 
+     * 								don't exist yet.
 	 * 
 	 * @return
 	 */
 	public RemoteOperationResult createFolder(String remotePath, boolean createFullPath) {
 		
-		CreateRemoteFolderOperation createOperation = new CreateRemoteFolderOperation(remotePath, createFullPath);
-		RemoteOperationResult result =  createOperation.execute(mClient);
+		return TestActivity.createFolder(remotePath, createFullPath, mClient);
+	}
+
+	/**
+	 * Access to the library method to Create a Folder
+	 * @param remotePath		Full path to the new directory to create in the remote server.
+     * @param createFullPath    'True' means that all the ancestor folders should be created if 
+     * 							don't exist yet.
+	 * @param client			Client instance configured to access the target OC server.
+	 * 
+	 * @return	Result of the operation
+	 */
+	public static RemoteOperationResult createFolder(
+			String remotePath, boolean createFullPath, OwnCloudClient client
+		) {
+		
+		CreateRemoteFolderOperation createOperation = 
+				new CreateRemoteFolderOperation(remotePath, createFullPath);
+		RemoteOperationResult result =  createOperation.execute(client);
 		
 		return result;
 	}
@@ -170,13 +186,24 @@ public class TestActivity extends Activity {
 	 * @return
 	 */
 	public RemoteOperationResult removeFile(String remotePath) {
-		
 		RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
 		RemoteOperationResult result = removeOperation.execute(mClient);
-		
+		return TestActivity.removeFile(remotePath, mClient);
+	}
+	
+	/** 
+	 * Access to the library method to Remove a File or Folder
+	 * 
+	 * @param remotePath	Remote path of the file or folder in the server.
+	 * @return
+	 */
+	public static RemoteOperationResult removeFile(String remotePath, OwnCloudClient client) {
+		RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
+		RemoteOperationResult result = removeOperation.execute(client);
 		return result;
 	}
 	
+		
 	/**
 	 * Access to the library method to Read a Folder (PROPFIND DEPTH 1)
 	 * @param remotePath
@@ -217,21 +244,39 @@ public class TestActivity extends Activity {
 	 * 
 	 * @return
 	 */
-	public RemoteOperationResult uploadFile(String storagePath, String remotePath, String mimeType) {
-
-		UploadRemoteFileOperation uploadOperation;
-		if ( mChunked && (new File(storagePath)).length() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE ) {
-            uploadOperation = new ChunkedUploadRemoteFileOperation(storagePath, remotePath, mimeType);
-        } else {
-            uploadOperation = new UploadRemoteFileOperation(storagePath, remotePath, mimeType);
-        }
-		
-		RemoteOperationResult result = uploadOperation.execute(mClient);
-		
-		return result;
+	public RemoteOperationResult uploadFile(
+			String storagePath, String remotePath, String mimeType
+			) {
+		return TestActivity.uploadFile(storagePath, remotePath, mimeType, mClient);
 	}
 	
 	
+	/** Access to the library method to Upload a File 
+	 * @param storagePath
+	 * @param remotePath
+	 * @param mimeType
+	 * @param client			Client instance configured to access the target OC server.
+	 * 
+	 * @return
+	 */
+	public static RemoteOperationResult uploadFile(
+			String storagePath, String remotePath, String mimeType, OwnCloudClient client
+			) {
+		UploadRemoteFileOperation uploadOperation;
+		if ((new File(storagePath)).length() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE ) {
+            uploadOperation = new ChunkedUploadRemoteFileOperation(
+            		storagePath, remotePath, mimeType
+    		);
+        } else {
+            uploadOperation = new UploadRemoteFileOperation(
+            		storagePath, remotePath, mimeType
+    		);
+        }
+		
+		RemoteOperationResult result = uploadOperation.execute(client);
+		return result;
+	}
+
 	/** Access to the library method to Get Shares 
 	 * 
 	 * @return
@@ -295,11 +340,22 @@ public class TestActivity extends Activity {
 	 * @return				File instance of the extracted file.
 	 */
 	public File extractAsset(String fileName) throws IOException {
-		File extractedFile = new File(getCacheDir() + File.separator + fileName);
+		return TestActivity.extractAsset(fileName, this);
+	}
+	
+	/**
+	 * Extracts file from AssetManager to cache folder.
+	 * 
+	 * @param	fileName	Name of the asset file to extract.
+	 * @param	context		Android context to access assets and file system.
+	 * @return				File instance of the extracted file.
+	 */
+	public static File extractAsset(String fileName, Context context) throws IOException {
+		File extractedFile = new File(context.getCacheDir() + File.separator + fileName);
 		if (!extractedFile.exists()) {
 			InputStream in = null;
 			FileOutputStream out = null;
-			in = getAssets().open(fileName);
+			in = context.getAssets().open(fileName);
 			out = new FileOutputStream(extractedFile);
 			byte[] buffer = new byte[BUFFER_SIZE];
 			int readCount;
@@ -312,7 +368,6 @@ public class TestActivity extends Activity {
 		}
 		return extractedFile;
 	}
-	
 
 
 }

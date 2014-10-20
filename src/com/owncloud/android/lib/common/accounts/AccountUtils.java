@@ -36,11 +36,11 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class AccountUtils {
@@ -220,7 +220,7 @@ public class AccountUtils {
 			String cookiesString = client.getCookiesString();
 			if (cookiesString != "") {
 				ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString); 
-				// Log.d(TAG, "Saving Cookies: "+ cookiesString );
+				// Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
 			}
 		}
 
@@ -235,7 +235,7 @@ public class AccountUtils {
   */
 	public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
 
-		Log.d(TAG, "Restoring cookies for " + account.name);
+		Log_OC.d(TAG, "Restoring cookies for " + account.name);
 
 		// Account Manager
 		AccountManager am = AccountManager.get(context.getApplicationContext());
@@ -267,7 +267,7 @@ public class AccountUtils {
 	 * @param context
 	 */
 	public static void restoreCookies(String accountName, OwnCloudClient client, Context context) {
-		Log.d(TAG, "Restoring cookies for " + accountName);
+		Log_OC.d(TAG, "Restoring cookies for " + accountName);
 
 		// Account Manager
 		AccountManager am = AccountManager.get(context.getApplicationContext());

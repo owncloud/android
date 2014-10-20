@@ -25,10 +25,10 @@
 package com.owncloud.android.lib.common;
 
 
-import com.owncloud.android.lib.common.accounts.AccountUtils;
-
 import android.content.Context;
-import android.util.Log;
+
+import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class SimpleFactoryManager implements OwnCloudClientManager {
     
@@ -36,13 +36,13 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 
 	@Override
 	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
-		Log.d(TAG, "getClientFor(OwnCloudAccount ... : ");
+		Log_OC.d(TAG, "getClientFor(OwnCloudAccount ... : ");
 		OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
 				account.getBaseUri(), 
 				context.getApplicationContext(),
 				true);
 
-		Log.d(TAG, "    new client {" + 
+		Log_OC.d(TAG, "    new client {" + 
 				(account.getName() != null ? 
 						account.getName() :
 							AccountUtils.buildAccountName(
