@@ -334,7 +334,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 Intent action = new Intent(getActivity(), CopyActivity.class);
 
                 // Pass mTargetFile that contains info of selected file/folder
-                action.putExtra(MoveActivity.EXTRA_TARGET_FILE, mTargetFile);
+                action.putExtra(CopyActivity.EXTRA_TARGET_FILE, mTargetFile);
                 getActivity().startActivityForResult(action, FileDisplayActivity.ACTION_COPY_FILES);
                 return true;
             default:
