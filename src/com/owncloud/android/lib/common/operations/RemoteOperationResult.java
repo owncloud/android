@@ -33,8 +33,12 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import android.accounts.Account;
+import android.accounts.AccountsException;
 
-import javax.net.ssl.SSLException;
+import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.Header;
@@ -43,24 +47,27 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.DavException;
 import org.json.JSONException;
 
-import android.accounts.Account;
-import android.accounts.AccountsException;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.network.CertificateCombinedException;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import javax.net.ssl.SSLException;
 
 
 /**
  * The result of a remote operation required to an ownCloud server.
- * 
+ * <p/>
  * Provides a common classification of remote operation results for all the
  * application.
- * 
+ *
  * @author David A. Velasco
  */
 public class RemoteOperationResult implements Serializable {
-	
+
 	/** Generated - should be refreshed every time the class changes!! */;
     private static final long serialVersionUID = -1909603208238358633L;
 
@@ -71,32 +78,32 @@ public class RemoteOperationResult implements Serializable {
         OK_SSL,
         OK_NO_SSL,
         UNHANDLED_HTTP_CODE,
-        UNAUTHORIZED,        
-        FILE_NOT_FOUND, 
-        INSTANCE_NOT_CONFIGURED, 
-        UNKNOWN_ERROR, 
-        WRONG_CONNECTION,  
-        TIMEOUT, 
-        INCORRECT_ADDRESS, 
-        HOST_NOT_AVAILABLE, 
-        NO_NETWORK_CONNECTION, 
+        UNAUTHORIZED,
+        FILE_NOT_FOUND,
+        INSTANCE_NOT_CONFIGURED,
+        UNKNOWN_ERROR,
+        WRONG_CONNECTION,
+        TIMEOUT,
+        INCORRECT_ADDRESS,
+        HOST_NOT_AVAILABLE,
+        NO_NETWORK_CONNECTION,
         SSL_ERROR,
         SSL_RECOVERABLE_PEER_UNVERIFIED,
         BAD_OC_VERSION,
-        CANCELLED, 
-        INVALID_LOCAL_FILE_NAME, 
+        CANCELLED,
+        INVALID_LOCAL_FILE_NAME,
         INVALID_OVERWRITE,
-        CONFLICT, 
+        CONFLICT,
         OAUTH2_ERROR,
         SYNC_CONFLICT,
-        LOCAL_STORAGE_FULL, 
-        LOCAL_STORAGE_NOT_MOVED, 
-        LOCAL_STORAGE_NOT_COPIED, 
+        LOCAL_STORAGE_FULL,
+        LOCAL_STORAGE_NOT_MOVED,
+        LOCAL_STORAGE_NOT_COPIED,
         OAUTH2_ERROR_ACCESS_DENIED,
-        QUOTA_EXCEEDED, 
-        ACCOUNT_NOT_FOUND, 
-        ACCOUNT_EXCEPTION, 
-        ACCOUNT_NOT_NEW, 
+        QUOTA_EXCEEDED,
+        ACCOUNT_NOT_FOUND,
+        ACCOUNT_EXCEPTION,
+        ACCOUNT_NOT_NEW,
         ACCOUNT_NOT_THE_SAME,
         INVALID_CHARACTER_IN_NAME,
         SHARE_NOT_FOUND,
@@ -106,6 +113,7 @@ public class RemoteOperationResult implements Serializable {
 		OK_REDIRECT_TO_NON_SECURE_CONNECTION, 
 		INVALID_MOVE_INTO_DESCENDANT, 
 		PARTIAL_MOVE_DONE,
+        PARTIAL_COPY_DONE,
         INVALID_CHARACTER_DETECT_IN_SERVER
     }
 
@@ -161,20 +169,20 @@ public class RemoteOperationResult implements Serializable {
             }
         }
     }
-    
+
     public RemoteOperationResult(boolean success, int httpCode, Header[] headers) {
         this(success, httpCode);
         if (headers != null) {
             Header current;
-            for (int i=0; i<headers.length; i++) {
+            for (int i = 0; i < headers.length; i++) {
                 current = headers[i];
                 if ("location".equals(current.getName().toLowerCase())) {
                     mRedirectedLocation = current.getValue();
                     continue;
                 }
                 if ("www-authenticate".equals(current.getName().toLowerCase())) {
-                	mAuthenticate = current.getValue();
-                	continue;
+                    mAuthenticate = current.getValue();
+                    continue;
                 }
             }
         }
@@ -234,10 +242,10 @@ public class RemoteOperationResult implements Serializable {
 
         } else if (e instanceof AccountNotFoundException) {
             mCode = ResultCode.ACCOUNT_NOT_FOUND;
-            
+
         } else if (e instanceof AccountsException) {
             mCode = ResultCode.ACCOUNT_EXCEPTION;
-            
+
         } else if (e instanceof SSLException || e instanceof RuntimeException) {
             CertificateCombinedException se = getCertificateCombinedException(e);
             if (se != null) {
@@ -259,14 +267,14 @@ public class RemoteOperationResult implements Serializable {
     }
 
 
-    public void setData(ArrayList<Object> files){
-    	mData = files;
+    public void setData(ArrayList<Object> files) {
+        mData = files;
     }
-    
-	public ArrayList<Object> getData(){
-		return mData;
-	}
-    
+
+    public ArrayList<Object> getData() {
+        return mData;
+    }
+
     public boolean isSuccess() {
         return mSuccess;
     }
@@ -291,9 +299,9 @@ public class RemoteOperationResult implements Serializable {
         return mCode == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
     }
 
-	public boolean isRedirectToNonSecureConnection() {
-		return mCode == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION;
-	}
+    public boolean isRedirectToNonSecureConnection() {
+        return mCode == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION;
+    }
 
     private CertificateCombinedException getCertificateCombinedException(Exception e) {
         CertificateCombinedException result = null;
@@ -360,10 +368,10 @@ public class RemoteOperationResult implements Serializable {
                 
             } else if (mException instanceof AccountsException) {
                 return "Exception while using account";
-                
+
             } else if (mException instanceof JSONException) {
-            	return "JSON exception";
-            	
+                return "JSON exception";
+
             } else {
                 return "Unexpected exception";
             }
@@ -415,25 +423,24 @@ public class RemoteOperationResult implements Serializable {
     public String getRedirectedLocation() {
         return mRedirectedLocation;
     }
-    
+
     public boolean isIdPRedirection() {
         return (mRedirectedLocation != null &&
-                (mRedirectedLocation.toUpperCase().contains("SAML") || 
-                mRedirectedLocation.toLowerCase().contains("wayf")));
+                (mRedirectedLocation.toUpperCase().contains("SAML") ||
+                        mRedirectedLocation.toLowerCase().contains("wayf")));
     }
-    
-	/**
-	 * Checks if is a non https connection
-	 * 
-	 * @return boolean true/false
-	 */
-	public boolean isNonSecureRedirection() {
-		return (mRedirectedLocation != null &&
-                !(mRedirectedLocation.toLowerCase().startsWith("https://")));
-	}
+
+    /**
+     * Checks if is a non https connection
+     *
+     * @return boolean true/false
+     */
+    public boolean isNonSecureRedirection() {
+        return (mRedirectedLocation != null && !(mRedirectedLocation.toLowerCase().startsWith("https://")));
+    }
 
     public String getAuthenticateHeader() {
-    	return mAuthenticate;
+        return mAuthenticate;
     }
 
     public String getLastPermanentLocation() {
