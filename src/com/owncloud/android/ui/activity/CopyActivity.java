@@ -69,11 +69,11 @@ public class CopyActivity extends HookActivity implements FileFragment.Container
     public static final String EXTRA_CURRENT_FOLDER = UploadFilesActivity.class.getCanonicalName() + ".EXTRA_CURRENT_FOLDER";
     public static final String EXTRA_TARGET_FILE = UploadFilesActivity.class.getCanonicalName() + "EXTRA_TARGET_FILE";
 
-    public static final int RESULT_OK_AND_MOVE = 1;
+    public static final int RESULT_OK_AND_COPY = 1;
 
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
 
-    private static final String TAG = MoveActivity.class.getSimpleName();
+    private static final String TAG = CopyActivity.class.getSimpleName();
 
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
 
@@ -371,12 +371,12 @@ public class CopyActivity extends HookActivity implements FileFragment.Container
             finish();
         } else if (v == mChooseBtn) {
             Intent i = getIntent();
-            OCFile targetFile = i.getParcelableExtra(MoveActivity.EXTRA_TARGET_FILE);
+            OCFile targetFile = i.getParcelableExtra(CopyActivity.EXTRA_TARGET_FILE);
 
             Intent data = new Intent();
             data.putExtra(EXTRA_CURRENT_FOLDER, getCurrentFolder());
             data.putExtra(EXTRA_TARGET_FILE, targetFile);
-            setResult(RESULT_OK_AND_MOVE, data);
+            setResult(RESULT_OK_AND_COPY, data);
             finish();
         }
     }
