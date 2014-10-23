@@ -107,7 +107,6 @@ public class CopyRemoteFileOperation extends RemoteOperation {
             return new RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT);
         }
 
-
         /// perform remote operation
         CopyMethod copyMethod = null;
         RemoteOperationResult result = null;
