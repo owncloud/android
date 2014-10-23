@@ -3,21 +3,13 @@ android:
   components:
     - build-tools-22.0.1
     - android-19
-    - android-17
-    - android-14
-    - extra-android-support
-  licenses:
-    - 'android-sdk-license-5be876d5'
-    - 'android-sdk-license-598b93a6'
-jdk: oraclejdk7
 before_install:
-- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
-- emulator -avd test -no-skin -no-audio -no-window &
-- rm pom.xml
-- android update project -p .
-before_script:
-- chmod +x ./wait_for_emulator.sh
-- ./wait_for_emulator.sh
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - rm pom.xml
+  - android update project -p .
+  - chmod +x ./wait_for_emulator.sh
+  - ./wait_for_emulator.sh
 script:
   - ant clean
   - ant debug
