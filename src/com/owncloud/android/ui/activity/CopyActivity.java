@@ -487,7 +487,13 @@ public class CopyActivity extends HookActivity implements FileFragment.Container
                                 client = (OwnCloudClientManagerFactory.getDefaultSingleton().
                                         removeClientFor(ocAccount));
                                 // TODO get rid of these exceptions
-                            } catch (AccountNotFoundException | AuthenticatorException | OperationCanceledException | IOException e) {
+                            } catch (AccountNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (AuthenticatorException e) {
+                                e.printStackTrace();
+                            } catch (OperationCanceledException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
                                 e.printStackTrace();
                             }
 
