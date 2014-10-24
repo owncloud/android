@@ -64,8 +64,7 @@ public class FolderObserver extends FileObserver {
     */
 
     private String mPath;
-    private Account mAccount;
-    private Context mContext;
+    ObserverActionInterface mObserverAction;
     private Map<String, Boolean> mObservedChildren;
 
     /**
@@ -78,19 +77,17 @@ public class FolderObserver extends FileObserver {
      * @param account       OwnCloud account associated to the folder.
      * @param context       Used to start an operation to synchronize the file, when needed.    
      */
-    public FolderObserver(String path, Account account, Context context) {
+    public FolderObserver(String path, ObserverActionInterface observerAction) {
         super(path, UPDATE_MASK);
         
         if (path == null)
             throw new IllegalArgumentException("NULL path argument received");
-        if (account == null)
-            throw new IllegalArgumentException("NULL account argument received");
-        if (context == null)
-            throw new IllegalArgumentException("NULL context argument received");
-        
+        if (observerAction == null)
+            throw new IllegalArgumentException("NULL observerAction argument received");
+       
+        mObserverAction = observerAction;
         mPath = path;
-        mAccount = account;
-        mContext = context;
+        
         mObservedChildren = new HashMap<String, Boolean>();
     }
 
@@ -126,7 +123,7 @@ public class FolderObserver extends FileObserver {
             }
         }
         if (shouldSynchronize) {
-            startSyncOperation(path);
+            mObserverAction.onFileChanged(mPath, path);            
         }
         
         if ((event & IN_IGNORE) != 0 &&
@@ -181,35 +178,5 @@ public class FolderObserver extends FileObserver {
         }
     }
     
-    
-    /**
-     * Triggers an operation to synchronize the contents of a file inside the observed folder with
-     * its remote counterpart in the associated ownCloud account.
-     *    
-     * @param fileName          Name of a file inside the watched folder.
-     */
-    private void startSyncOperation(String fileName) {
-        FileDataStorageManager storageManager = 
-                new FileDataStorageManager(mAccount, mContext.getContentResolver());
-        // a fresh object is needed; many things could have occurred to the file
-        // since it was registered to observe again, assuming that local files
-        // are linked to a remote file AT MOST, SOMETHING TO BE DONE;
-        OCFile file = storageManager.getFileByLocalPath(mPath + File.separator + fileName);
-        SynchronizeFileOperation sfo = 
-                new SynchronizeFileOperation(file, null, mAccount, true, mContext);
-        RemoteOperationResult result = sfo.execute(storageManager, mContext);
-        if (result.getCode() == ResultCode.SYNC_CONFLICT) {
-            // ISSUE 5: if the user is not running the app (this is a service!),
-            // this can be very intrusive; a notification should be preferred
-            Intent i = new Intent(mContext, ConflictsResolveActivity.class);
-            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra(ConflictsResolveActivity.EXTRA_FILE, file);
-            i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
-            mContext.startActivity(i);
-        }
-        // TODO save other errors in some point where the user can inspect them later;
-        // or maybe just toast them;
-        // or nothing, very strange fails
-    }
 
 }
