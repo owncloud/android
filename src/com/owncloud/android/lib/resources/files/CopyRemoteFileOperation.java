@@ -104,7 +104,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
         }
 
         if (mTargetRemotePath.startsWith(mSrcRemotePath)) {
-            return new RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
+            return new RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT);
         }
 
 

@@ -47,14 +47,6 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.DavException;
 import org.json.JSONException;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-
 import javax.net.ssl.SSLException;
 
 
@@ -69,7 +61,7 @@ import javax.net.ssl.SSLException;
 public class RemoteOperationResult implements Serializable {
 
 	/** Generated - should be refreshed every time the class changes!! */;
-    private static final long serialVersionUID = -1909603208238358633L;
+    private static final long serialVersionUID = 1129130415603799707L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
 
@@ -111,7 +103,8 @@ public class RemoteOperationResult implements Serializable {
 		FORBIDDEN,
 		SHARE_FORBIDDEN,
 		OK_REDIRECT_TO_NON_SECURE_CONNECTION, 
-		INVALID_MOVE_INTO_DESCENDANT, 
+		INVALID_MOVE_INTO_DESCENDANT,
+        INVALID_COPY_INTO_DESCENDANT,
 		PARTIAL_MOVE_DONE,
         PARTIAL_COPY_DONE,
         INVALID_CHARACTER_DETECT_IN_SERVER
