@@ -43,6 +43,7 @@ import javax.net.ssl.SSLSocket;
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -56,7 +57,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
  * @author David A. Velasco
  */
 
-public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
+public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
 
     private static final String TAG = AdvancedSslSocketFactory.class.getSimpleName();
     
@@ -287,5 +288,13 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
             throw io;
         }
     }
+
+	@Override
+	public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException,
+			UnknownHostException {
+		Socket sslSocket = mSslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+		verifyPeerIdentity(host, port, sslSocket);
+		return sslSocket;
+	}
     
 }
