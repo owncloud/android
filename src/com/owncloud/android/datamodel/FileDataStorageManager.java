@@ -157,7 +157,7 @@ public class FileDataStorageManager {
         if (folder != null) {
             // TODO better implementation, filtering in the access to database instead of here 
             Vector<OCFile> tmp = getFolderContent(folder);
-            OCFile current = null;
+            OCFile current;
             for (int i = 0; i < tmp.size(); i++) {
                 current = tmp.get(i);
                 if (current.isImage()) {
@@ -198,7 +198,8 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
 
         boolean sameRemotePath = fileExists(file.getRemotePath());
-        if (sameRemotePath ||                fileExists(file.getFileId())) {           // for renamed files; no more delete and create
+        if (sameRemotePath ||
+                fileExists(file.getFileId())) {           // for renamed files; no more delete and create
 
             OCFile oldFile = null;
             if (sameRemotePath) {
@@ -322,6 +323,7 @@ public class FileDataStorageManager {
 
         // prepare operations to remove files in the given folder
         String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?" + " AND " + ProviderTableMeta.FILE_PATH + "=?";
+
         String[] whereArgs;
         for (OCFile file : filesToRemove) {
             if (file.getParentId() == folder.getFileId()) {
@@ -345,7 +347,6 @@ public class FileDataStorageManager {
                                     ProviderTableMeta.CONTENT_URI_FILE, file.getFileId()
                             )
                     ).withSelection(where, whereArgs).build());
-
                     if (file.isDown()) {
                         new File(file.getStoragePath()).delete();
                     }
@@ -600,7 +601,7 @@ public class FileDataStorageManager {
                         null,
                         ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " + ProviderTableMeta.FILE_PATH + " LIKE ? ",
                         new String[]{mAccount.name, folder.getRemotePath() + "%"}, ProviderTableMeta.FILE_PATH + " ASC ");
- }
+            }
 
             /// 2. prepare a batch of update operations to change all the descendants
             ArrayList<ContentProviderOperation> operations = 
@@ -771,7 +772,6 @@ public class FileDataStorageManager {
                 renamed = localFile.renameTo(targetFile);
             }
             Log_OC.d(TAG, "Local file RENAMED : " + renamed);
-
         }
 
     }
@@ -1139,6 +1139,7 @@ public class FileDataStorageManager {
                     c.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1);
             share.setUserId(c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)));
             share.setIdRemoteShared(c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)));
+
         }
         return share;
     }
@@ -1202,6 +1203,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
         String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " + ProviderTableMeta.FILE_PARENT + "=?";
         String[] whereArgs = new String[]{mAccount.name, String.valueOf(folder.getFileId())};
+
         if (getContentResolver() != null) {
             getContentResolver().update(ProviderTableMeta.CONTENT_URI, cv, where, whereArgs);
 
