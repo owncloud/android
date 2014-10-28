@@ -72,7 +72,10 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
     /**
      * Constructor for AdvancedSSLProtocolSocketFactory.
      */
-    public AdvancedSslSocketFactory(SSLContext sslContext, AdvancedX509TrustManager trustManager, X509HostnameVerifier hostnameVerifier) {
+    public AdvancedSslSocketFactory(
+    		SSLContext sslContext, AdvancedX509TrustManager trustManager, X509HostnameVerifier hostnameVerifier
+		) {
+    	
         if (sslContext == null)
             throw new IllegalArgumentException("AdvancedSslSocketFactory can not be created with a null SSLContext");
         if (trustManager == null)
@@ -85,7 +88,9 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
     /**
      * @see ProtocolSocketFactory#createSocket(java.lang.String,int,java.net.InetAddress,int)
      */
-    public Socket createSocket(String host, int port, InetAddress clientHost, int clientPort) throws IOException, UnknownHostException {
+    public Socket createSocket(String host, int port, InetAddress clientHost, int clientPort) 
+    		throws IOException, UnknownHostException {
+    	
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port, clientHost, clientPort);
         verifyPeerIdentity(host, port, socket);
         return socket;
@@ -151,7 +156,8 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
             final InetAddress localAddress, final int localPort,
             final HttpConnectionParams params) throws IOException,
             UnknownHostException, ConnectTimeoutException {
-        Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port + ", local " + localAddress + ":" + localPort + ", params: " + params);
+        Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port + ", local " + localAddress + ":" + 
+            localPort + ", params: " + params);
         if (params == null) {
             throw new IllegalArgumentException("Parameters may not be null");
         } 
@@ -207,13 +213,15 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
      * 
      * The server certificate is verified first.
      * 
-     * Then, the host name is compared with the content of the server certificate using the current host name verifier, if any.
+     * Then, the host name is compared with the content of the server certificate using the current host name verifier,
+     *  if any.
      * @param socket
      */
     private void verifyPeerIdentity(String host, int port, Socket socket) throws IOException {
         try {
             CertificateCombinedException failInHandshake = null;
-            /// 1. VERIFY THE SERVER CERTIFICATE through the registered TrustManager (that should be an instance of AdvancedX509TrustManager) 
+            /// 1. VERIFY THE SERVER CERTIFICATE through the registered TrustManager 
+            ///	(that should be an instance of AdvancedX509TrustManager) 
             try {
                 SSLSocket sock = (SSLSocket) socket;    // a new SSLSession instance is created as a "side effect" 
                 sock.startHandshake();
@@ -225,7 +233,9 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
                 } else {
                     Throwable cause = e.getCause();
                     Throwable previousCause = null;
-                    while (cause != null && cause != previousCause && !(cause instanceof CertificateCombinedException)) {
+                    while (	cause != null && 
+                    		cause != previousCause && 
+                    		!(cause instanceof CertificateCombinedException)) {
                         previousCause = cause;
                         cause = cause.getCause();
                     }
@@ -264,9 +274,13 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
 
             /// 3. Combine the exceptions to throw, if any
             if (!verifiedHostname) {
-                SSLPeerUnverifiedException pue = new SSLPeerUnverifiedException("Names in the server certificate do not match to " + host + " in the URL");
+                SSLPeerUnverifiedException pue = new SSLPeerUnverifiedException(
+                		"Names in the server certificate do not match to " + host + " in the URL"
+            		);
                 if (failInHandshake == null) {
-                    failInHandshake = new CertificateCombinedException((X509Certificate) newSession.getPeerCertificates()[0]);
+                    failInHandshake = new CertificateCombinedException(
+                    		(X509Certificate) newSession.getPeerCertificates()[0]
+    				);
                     failInHandshake.setHostInUrl(host);
                 }
                 failInHandshake.setSslPeerUnverifiedException(pue);
