@@ -310,5 +310,4 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
 		verifyPeerIdentity(host, port, sslSocket);
 		return sslSocket;
 	}
-    
 }
