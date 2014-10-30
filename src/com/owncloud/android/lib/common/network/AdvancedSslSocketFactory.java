@@ -86,6 +86,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
      */
     public Socket createSocket(String host, int port, InetAddress clientHost, int clientPort) throws IOException, UnknownHostException {
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port, clientHost, clientPort);
+        ((SSLSocket) socket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
         verifyPeerIdentity(host, port, socket);
         return socket;
     }
@@ -161,6 +162,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
         SocketFactory socketfactory = mSslContext.getSocketFactory();
         Log_OC.d(TAG, " ... with connection timeout " + timeout + " and socket timeout " + params.getSoTimeout());
         Socket socket = socketfactory.createSocket();
+        ((SSLSocket) socket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
         SocketAddress localaddr = new InetSocketAddress(localAddress, localPort);
         SocketAddress remoteaddr = new InetSocketAddress(host, port);
         socket.setSoTimeout(params.getSoTimeout());
@@ -178,6 +180,7 @@ public class AdvancedSslSocketFactory implements ProtocolSocketFactory {
             UnknownHostException {
     	Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port);
+        ((SSLSocket) socket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
         verifyPeerIdentity(host, port, socket);
         return socket; 
     }
