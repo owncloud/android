@@ -39,28 +39,47 @@ import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.owncloud.android.MainApp;
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountAuthenticator;
+import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+import java.util.Vector;
 
 
 /**
@@ -69,7 +88,7 @@ import android.widget.Toast;
  * @author Bartek Przybylski
  * 
  */
-public class Uploader extends ListActivity implements OnItemClickListener, android.view.View.OnClickListener {
+public class Uploader extends SherlockListActivity implements OnItemClickListener, android.view.View.OnClickListener {
     private static final String TAG = "ownCloudUploader";
 
     private Account mAccount;
@@ -91,9 +110,11 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         mParents = new Stack<String>();
-        mParents.add("");
+
+        ActionBar actionBar = getSherlock().getActionBar();
+        actionBar.setIcon(DisplayUtils.getSeasonalIconId());
+
         if (prepareStreamsToUpload()) {
             mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
             Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
@@ -104,10 +125,31 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
                 Log_OC.i(TAG, "More then one ownCloud is available");
                 showDialog(DIALOG_MULTIPLE_ACCOUNT);
             } else {
-                mAccount = accounts[0];
-                mStorageManager = new FileDataStorageManager(mAccount, getContentResolver());
-                populateDirectoryList();
+
+            mAccount = accounts[0];
+            mStorageManager = new FileDataStorageManager(mAccount, getContentResolver());
+
+            SharedPreferences appPreferences = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext());
+
+                String last_path = appPreferences.getString("last_upload_path", "");
+                // "/" equals root-directory
+                if(last_path.equals("/")) {
+                    mParents.add("");
+                }
+                else{
+                    String[] dir_names = last_path.split("/");
+                    for (String dir : dir_names)
+                        mParents.add(dir);
+                }
+                //Make sure that path still exists, if it doesn't pop the stack and try the previous path
+                while(!mStorageManager.fileExists(generatePath(mParents))){
+                    mParents.pop();
+                }
             }
+            
+            populateDirectoryList();
+
         } else {
             showDialog(DIALOG_NO_STREAM);
         }
@@ -288,12 +330,18 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
     private void populateDirectoryList() {
         setContentView(R.layout.uploader_layout);
 
-        String full_path = "";
-        for (String a : mParents)
-            full_path += a + "/";
+        String current_dir = mParents.peek();
+        if(current_dir.equals("")){
+            getActionBar().setTitle(getString(R.string.default_display_name_for_root_folder));
+        }
+        else{
+            getActionBar().setTitle(current_dir);
+        }
+
+        String full_path = generatePath(mParents);
         
         Log_OC.d(TAG, "Populating view with content of : " + full_path);
-        
+
         mFile = mStorageManager.getFileByPath(full_path);
         if (mFile != null) {
             Vector<OCFile> files = mStorageManager.getFolderContent(mFile);
@@ -315,6 +363,14 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
             btn.setOnClickListener(this);
             getListView().setOnItemClickListener(this);
         }
+    }
+
+    private String generatePath(Stack<String> dirs) {
+        String full_path = "";
+
+        for (String a : dirs)
+            full_path += a + "/";
+        return full_path;
     }
 
     private boolean prepareStreamsToUpload() {
@@ -408,6 +464,13 @@ public class Uploader extends ListActivity implements OnItemClickListener, andro
             intent.putExtra(FileUploader.KEY_REMOTE_FILE, remote.toArray(new String[remote.size()]));
             intent.putExtra(FileUploader.KEY_ACCOUNT, mAccount);
             startService(intent);
+
+            //Save the path to shared preferences
+            SharedPreferences.Editor appPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext()).edit();
+            appPrefs.putString("last_upload_path", mUploadPath);
+            appPrefs.apply();
+
             finish();
             }
             
