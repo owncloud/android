@@ -203,6 +203,21 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
     public CopyFileTest() {
         super(TestActivity.class);
+
+        Protocol pr = Protocol.getProtocol("https");
+        if (pr == null || !(pr.getSocketFactory() instanceof SelfSignedConfidentSslSocketFactory)) {
+            try {
+                ProtocolSocketFactory psf = new SelfSignedConfidentSslSocketFactory();
+                Protocol.registerProtocol(
+                        "https",
+                        new Protocol("https", psf, 443));
+
+            } catch (GeneralSecurityException e) {
+                throw new AssertionFailedError(
+                        "Self-signed confident SSL context could not be loaded");
+            }
+        }
+
     }
 
 
@@ -428,13 +443,12 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
         mPass = context.getString(R.string.password);
 
         mClient = new OwnCloudClient(
-                Uri.parse("http://" + mServerUri),
+                Uri.parse(mServerUri),
                 NetworkUtils.getMultiThreadedConnManager()
         );
         mClient.setDefaultTimeouts(
                 OwnCloudClientFactory.DEFAULT_DATA_TIMEOUT,
                 OwnCloudClientFactory.DEFAULT_CONNECTION_TIMEOUT);
-        mClient.setBaseUri(Uri.parse("http://" + mServerUri));
         mClient.setFollowRedirects(true);
         mClient.setCredentials(
                 OwnCloudCredentialsFactory.newBasicCredentials(
