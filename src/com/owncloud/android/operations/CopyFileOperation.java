@@ -18,7 +18,7 @@
 package com.owncloud.android.operations;
 
 import android.accounts.Account;
-import android.util.Log;
+import android.content.Context;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -41,16 +41,19 @@ public class CopyFileOperation extends SyncOperation {
     private String mTargetParentPath;
 
     private OCFile mFile;
+    private final Context mContext;
 
 
     /**
      * Constructor
      *
+     * @param context          Context of the application.
      * @param srcPath          Remote path of the {@link OCFile} to move.
      * @param targetParentPath Path to the folder where the file will be copied into.
      * @param account          OwnCloud account containing both the file and the target folder
      */
-    public CopyFileOperation(String srcPath, String targetParentPath, Account account) {
+    public CopyFileOperation(Context context, String srcPath, String targetParentPath, Account account) {
+        mContext = context;
         mSrcPath = srcPath;
         mTargetParentPath = targetParentPath;
         if (!mTargetParentPath.endsWith(OCFile.PATH_SEPARATOR)) {
@@ -84,6 +87,7 @@ public class CopyFileOperation extends SyncOperation {
             targetPath += OCFile.PATH_SEPARATOR;
         }
         CopyRemoteFileOperation operation = new CopyRemoteFileOperation(
+                mContext,
                 mSrcPath,
                 targetPath,
                 false

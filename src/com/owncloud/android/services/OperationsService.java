@@ -375,7 +375,7 @@ public class OperationsService extends Service {
                     } else if (action.equals(ACTION_COPY_FILE)) {
                         String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                         String newParentPath = operationIntent.getStringExtra(EXTRA_NEW_PARENT_PATH);
-                        operation = new CopyFileOperation(remotePath, newParentPath, account);
+                        operation = new CopyFileOperation(getApplicationContext(), remotePath, newParentPath, account);
                     }
 
                 }
