@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -61,6 +62,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
     private String mTargetRemotePath;
 
     private boolean mOverwrite;
+    private Context mContext;
 
 
     /**
@@ -71,10 +73,9 @@ public class CopyRemoteFileOperation extends RemoteOperation {
      * @param srcRemotePath    Remote path of the file/folder to move.
      * @param targetRemotePath Remove path desired for the file/folder after moving it.
      */
-    public CopyRemoteFileOperation(
-            String srcRemotePath, String targetRemotePath, boolean overwrite
+    public CopyRemoteFileOperation(Context context, String srcRemotePath, String targetRemotePath, boolean overwrite
     ) {
-
+        mContext = context;
         mSrcRemotePath = srcRemotePath;
         mTargetRemotePath = targetRemotePath;
         mOverwrite = overwrite;
@@ -105,6 +106,10 @@ public class CopyRemoteFileOperation extends RemoteOperation {
 
         if (mTargetRemotePath.startsWith(mSrcRemotePath)) {
             return new RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT);
+        }
+
+        if (!new ExistenceCheckRemoteOperation(mSrcRemotePath, mContext, Boolean.FALSE).run(getClient()).isSuccess()) {
+            return new RemoteOperationResult(ResultCode.FILE_NOT_FOUND);
         }
 
         /// perform remote operation
