@@ -95,6 +95,7 @@ import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertL
 import com.owncloud.android.ui.fragment.FileDetailFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
+import com.owncloud.android.ui.fragment.QuotaDisplayFragment;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewMediaFragment;
@@ -279,8 +280,9 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
     private void createMinFragments() {
         OCFileListFragment listOfFiles = new OCFileListFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
-        transaction.commit();
+        transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES)
+        .addToBackStack(null)
+        .commit();
     }
     
     private void initFragmentsWithFile() {
@@ -344,8 +346,10 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
      */
     private void setSecondFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.right_fragment_container, fragment, TAG_SECOND_FRAGMENT);
-        transaction.commit();
+        transaction
+        .replace(R.id.right_fragment_container, fragment, TAG_SECOND_FRAGMENT)
+        .addToBackStack(null)
+        .commit();
     }
 
 
@@ -492,6 +496,12 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
         case R.id.action_logger: {
             Intent loggerIntent = new Intent(getApplicationContext(),LogHistoryActivity.class);
             startActivity(loggerIntent);
+            break;
+        }
+        case R.id.action_quota_stats: {
+            Intent quotaDisplayIntent = new Intent(getApplicationContext(),QuotaDisplayActivity.class);
+            quotaDisplayIntent.putExtra(EXTRA_ACCOUNT, getAccount());
+            startActivity(quotaDisplayIntent);
             break;
         }
         case android.R.id.home: {
@@ -711,7 +721,8 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
 
     @Override
     public void onBackPressed() {
-        OCFileListFragment listOfFiles = getListOfFilesFragment(); 
+        OCFileListFragment listOfFiles = getListOfFilesFragment();
+
         if (mDualPane || getSecondFragment() == null) {
             if (listOfFiles != null) {  // should never be null, indeed
                 if (mDirectories.getCount() <= 1) {
@@ -728,7 +739,6 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
             setFile(listOfFiles.getCurrentFile());
         }
         cleanSecondFragment();
-
     }
 
     @Override
