@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape
+            android:innerRadiusRatio="3"
+            android:shape="ring"
+            android:useLevel="false"
+            android:thicknessRatio="12.0">
+            <solid android:color="@color/login_background_color" />
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:fromDegrees="270"
+            android:toDegrees="270"
+            android:pivotX="50%"
+            android:pivotY="50%">
+            <shape
+                android:id="@+id/innerCircle_progressbar_circular"
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thicknessRatio="12.0">
+                <solid android:color="@color/actionbar_start_color" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
