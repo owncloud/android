@@ -278,7 +278,8 @@ public class FileObserverService extends Service {
         String parentPath = file.getParent();
         FolderObserver observer = mFolderObserversMap.get(parentPath);
         if (observer == null) {
-            observer = new FolderObserver(parentPath, account, getApplicationContext());
+            ObserverActionInterface action = new SyncAction(account, getApplicationContext());
+            observer = new FolderObserver(parentPath, action);
             mFolderObserversMap.put(parentPath, observer);
             Log_OC.d(TAG, "Observer added for parent folder " + parentPath + "/");
         }

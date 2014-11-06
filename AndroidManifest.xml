@@ -152,7 +152,7 @@
 
         <service android:name=".services.OperationsService" />
         <service android:name=".files.services.FileDownloader" />
-        <service android:name=".files.services.FileUploader" />
+        <service android:name=".files.services.FileUploadService" />
         <service android:name=".media.MediaService" />
         
         <activity android:name=".ui.activity.PinCodeActivity" />
@@ -173,9 +173,6 @@
             <intent-filter>
                 <action android:name="android.hardware.action.NEW_VIDEO" />
                 <data android:mimeType="video/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
         <receiver android:name=".files.BootupBroadcastReceiver">
