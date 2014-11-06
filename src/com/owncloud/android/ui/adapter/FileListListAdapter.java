@@ -45,7 +45,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncDrawable;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.files.services.FileUploadService.FileUploaderBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -82,10 +82,11 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             Context context, 
             ComponentsGetter transferServiceGetter
             ) {
-        
+
         mJustFolders = justFolders;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
+
         mTransferServiceGetter = transferServiceGetter;
         
         mAppPreferences = PreferenceManager
@@ -98,6 +99,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         
         // initialise thumbnails cache on background thread
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
+
     }
     
     @Override
@@ -217,7 +219,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         if (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon)) {
                             final ThumbnailsCacheManager.ThumbnailGenerationTask task = 
                                     new ThumbnailsCacheManager.ThumbnailGenerationTask(
-                                            fileIcon, mStorageManager
+                                            fileIcon, mStorageManager, mAccount
                                     );
                             if (thumbnail == null) {
                                 thumbnail = ThumbnailsCacheManager.mDefaultImg;

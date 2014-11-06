@@ -29,6 +29,8 @@ NOTE: You must have the Android SDK 'tools/', and 'platforms-tools/' folders in 
 
 ### 2b) Building with console/maven:
 
+WARNING: OBSOLETE!
+
 NOTE: You must have mvn (version >= 3.1.1) in your environment path. Current Android 'platforms-tools' need to be installed.
 
 Download/install Android plugin for Maven, install owncloud-android-library, then build ownCloud with mvn:
@@ -71,6 +73,7 @@ NOTE: Even though API level is set to 19, APK also runs on older devices because
 NOTE: You must sign the [Contributor Agreement][1] before your changes can be accepted!
 
 * Commit your changes locally: "git commit -a"
+* If substantial changes were done to the official repository while you were working, merge those changes: "git merge upstream/develop"
 * Push your changes to your Github repo: "git push"
 * Browse to https://github.com/YOURGITHUBNAME/android/pulls and issue pull request
 * Click "Edit" and set "base:develop"
