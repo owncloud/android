@@ -78,8 +78,11 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
     	
         if (sslContext == null)
             throw new IllegalArgumentException("AdvancedSslSocketFactory can not be created with a null SSLContext");
-        if (trustManager == null)
-            throw new IllegalArgumentException("AdvancedSslSocketFactory can not be created with a null Trust Manager");
+        if (trustManager == null && mHostnameVerifier != null)
+            throw new IllegalArgumentException(
+            		"AdvancedSslSocketFactory can not be created with a null Trust Manager and a " +
+            		"not null Hostname Verifier"
+    		);
         mSslContext = sslContext;
         mTrustManager = trustManager;
         mHostnameVerifier = hostnameVerifier;

@@ -26,9 +26,7 @@ package com.owncloud.android.lib.test_project;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -38,9 +36,7 @@ import java.security.cert.CertStoreException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
@@ -49,7 +45,7 @@ import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 
-import com.owncloud.android.lib.common.network.ServerNameIndicator;
+import com.owncloud.android.lib.common.network.AdvancedSslSocketFactory;
 
 
 /**
@@ -64,7 +60,8 @@ import com.owncloud.android.lib.common.network.ServerNameIndicator;
 public class SelfSignedConfidentSslSocketFactory implements SecureProtocolSocketFactory {
 
 	
-	private SSLContext mSslContext = null;
+	//private SSLContext mSslContext = null;
+	private AdvancedSslSocketFactory mWrappedSslSocketFactory = null;
 	
 	
 	/**
@@ -72,7 +69,13 @@ public class SelfSignedConfidentSslSocketFactory implements SecureProtocolSocket
 	 * @throws GeneralSecurityException 
 	 */
 	public SelfSignedConfidentSslSocketFactory() throws GeneralSecurityException {
-		mSslContext = createSslContext();
+		SSLContext sslContext = SSLContext.getInstance("TLS");
+		sslContext.init(
+				null, 
+				new TrustManager[] { new SelfSignedConfidentX509TrustManager() }, 
+				null
+		);
+        mWrappedSslSocketFactory = new AdvancedSslSocketFactory(sslContext, null, null);		
 	}
 
 	
@@ -81,7 +84,7 @@ public class SelfSignedConfidentSslSocketFactory implements SecureProtocolSocket
 	 */
 	@Override
 	public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
-		return mSslContext.getSocketFactory().createSocket(host, port);
+		return mWrappedSslSocketFactory.createSocket(host, port);
 	}
 	
 	/**
@@ -90,7 +93,7 @@ public class SelfSignedConfidentSslSocketFactory implements SecureProtocolSocket
 	@Override
 	public Socket createSocket(String host, int port, InetAddress clientHost, int clientPort)
 			throws IOException, UnknownHostException {
-		return mSslContext.getSocketFactory().createSocket(host, port, clientHost, clientPort);
+		return mWrappedSslSocketFactory.createSocket(host, port, clientHost, clientPort);
 	}
 	
 	/**
@@ -112,19 +115,7 @@ public class SelfSignedConfidentSslSocketFactory implements SecureProtocolSocket
 			HttpConnectionParams params) throws IOException, UnknownHostException,
 			ConnectTimeoutException {
 		
-		if (params == null) {
-			throw new IllegalArgumentException("Parameters may not be null");
-		}
-		int timeout = params.getConnectionTimeout();
-		SocketFactory socketfactory = mSslContext.getSocketFactory();
-		Socket socket = socketfactory.createSocket();
-		SocketAddress localaddr = new InetSocketAddress(localAddress, localPort);
-		SocketAddress remoteaddr = new InetSocketAddress(host, port);
-		socket.setSoTimeout(params.getSoTimeout());
-		socket.bind(localaddr);
-		ServerNameIndicator.setServerNameIndication(host, (SSLSocket)socket);
-		socket.connect(remoteaddr, timeout);
-		return socket;
+		return mWrappedSslSocketFactory.createSocket(host, port, localAddress, localPort, params);
 	}
 
 	/**
@@ -133,19 +124,9 @@ public class SelfSignedConfidentSslSocketFactory implements SecureProtocolSocket
 	@Override
 	public Socket createSocket(Socket socket, String host, int port, boolean autoClose)
 			throws IOException, UnknownHostException {
-		return mSslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+		return mWrappedSslSocketFactory.createSocket(socket, host, port, autoClose);
 	}
 	
-	
-	
-	private static SSLContext createSslContext() throws GeneralSecurityException {
-		SSLContext context = SSLContext.getInstance("TLS");
-		context.init(
-				null, 
-				new TrustManager[] {new SelfSignedConfidentX509TrustManager()}, 
-				null);
-		return context;
-	}	
 	
 	public static class SelfSignedConfidentX509TrustManager implements X509TrustManager {
 
