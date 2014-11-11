@@ -115,7 +115,7 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 
 	@Override
 	protected void tearDown() throws Exception {
-		if (mUploadedFilePath != null) {
+		if (mUploadedFilePath != null && !mUploadedFilePath.equals(FILE_NOT_FOUND_PATH)) {
 			RemoteOperationResult removeResult = mActivity.removeFile(mUploadedFilePath);
 			if (!removeResult.isSuccess()) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
