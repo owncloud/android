@@ -28,6 +28,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.test_project.R;
 
 public class Utils {
 
