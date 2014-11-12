@@ -45,15 +45,15 @@ public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	private static final String LOG_TAG = RenameFileTest.class.getCanonicalName();
 	
 	/* Folder data to rename. This folder must exist on the account */
-	private static final String OLD_FOLDER_NAME = "folderToRename";
+	private static final String OLD_FOLDER_NAME = "folderToRename" + Utils.getBuildNumber();
 	private static final String OLD_FOLDER_PATH = FileUtils.PATH_SEPARATOR + OLD_FOLDER_NAME;
-	private static final String NEW_FOLDER_NAME = "renamedFolder";
+	private static final String NEW_FOLDER_NAME = "renamedFolder" + Utils.getBuildNumber();
 	private static final String NEW_FOLDER_PATH = FileUtils.PATH_SEPARATOR + NEW_FOLDER_NAME;
 
 	/* File data to rename. This file must exist on the account */
-	private static final String OLD_FILE_NAME = "fileToRename.png";
+	private static final String OLD_FILE_NAME = "fileToRename" + Utils.getBuildNumber() + ".png";
 	private static final String OLD_FILE_PATH = FileUtils.PATH_SEPARATOR + OLD_FILE_NAME;
-	private static final String NEW_FILE_NAME = "renamedFile.png";
+	private static final String NEW_FILE_NAME = "renamedFile" + Utils.getBuildNumber() + ".png";
 	private static final String NEW_FILE_PATH = FileUtils.PATH_SEPARATOR + NEW_FILE_NAME;
 	
 	
@@ -229,12 +229,14 @@ public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	
 	@Override
 	protected void tearDown() throws Exception {
+		/*
 		if (mToCleanUpInServer != null) {
 			RemoteOperationResult removeResult = mActivity.removeFile(mToCleanUpInServer);
 			if (!removeResult.isSuccess()) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}
 		}
+		*/
 		super.tearDown();
 	}
 	

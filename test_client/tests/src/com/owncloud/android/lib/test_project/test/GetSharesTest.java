@@ -43,7 +43,7 @@ public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity
 
 	private static final String LOG_TAG = GetSharesTest.class.getCanonicalName();
 
-	private static final String SHARED_FILE = "/sharedFileToGet.txt";
+	private static final String SHARED_FILE = "/sharedFileToGet" + Utils.getBuildNumber() + ".txt";
 	
 	private TestActivity mActivity;
 	

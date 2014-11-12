@@ -41,7 +41,7 @@ public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivit
 	
 	private static final String LOG_TAG = ReadFolderTest.class.getCanonicalName();
 
-	private static final String FOLDER_PATH = "/folderToRead";
+	private static final String FOLDER_PATH = "/folderToRead" + Utils.getBuildNumber();
 	private static final String [] FILE_PATHS = {
 			FOLDER_PATH + "/file1.txt",
 			FOLDER_PATH + "/file2.txt",

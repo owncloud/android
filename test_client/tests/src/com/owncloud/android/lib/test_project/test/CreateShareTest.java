@@ -37,7 +37,7 @@ public class CreateShareTest extends ActivityInstrumentationTestCase2<TestActivi
 	private static final String LOG_TAG = CreateShareTest.class.getCanonicalName();
 	
 	/* File to share.*/
-	private static final String FILE_TO_SHARE = "/fileToShare.txt";
+	private static final String FILE_TO_SHARE = "/fileToShare" + Utils.getBuildNumber() + ".txt";
 
 	private TestActivity mActivity;
 

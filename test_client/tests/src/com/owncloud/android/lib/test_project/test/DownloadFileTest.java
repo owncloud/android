@@ -46,9 +46,9 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	private static final String LOG_TAG = DownloadFileTest.class.getCanonicalName();
 	
 	/* Files to download. These files must exist on the account */
-	private static final String IMAGE_PATH = "/fileToDownload.png";
-	private static final String IMAGE_PATH_WITH_SPECIAL_CHARS = "/@file@download.png";
-	private static final String IMAGE_NOT_FOUND = "/fileNotFound.png";
+	private static final String IMAGE_PATH = "/fileToDownload" + Utils.getBuildNumber() + ".png";
+	private static final String IMAGE_PATH_WITH_SPECIAL_CHARS = "/@file@download" + Utils.getBuildNumber() + ".png";
+	private static final String IMAGE_NOT_FOUND = "/fileNotFound" + Utils.getBuildNumber() + ".png";
 	private static final String [] FILE_PATHS = { IMAGE_PATH, IMAGE_PATH_WITH_SPECIAL_CHARS }; 
 	
 	private static boolean mGlobalSetupDone = false;

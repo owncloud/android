@@ -43,10 +43,10 @@ public class DeleteFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	private static final String LOG_TAG = DeleteFileTest.class.getCanonicalName();
 
 	/* Folder data to delete. */
-	private static final String FOLDER_PATH = "/folderToDelete";
+	private static final String FOLDER_PATH = "/folderToDelete" + Utils.getBuildNumber();
 	
 	/* File to delete. */
-	private static final String FILE_PATH = "/fileToDelete.txt";
+	private static final String FILE_PATH = "/fileToDelete" + Utils.getBuildNumber() + ".txt";
 
 	private static boolean mGlobalSetupDone = false;
 	

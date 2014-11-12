@@ -30,9 +30,25 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 
 public class Utils {
 
+	private static String LOG_TAG = Utils.class.getSimpleName();
+	
+	private static final String BUILD_NUMBER_ENV_VAR = "TRAVIS_BUILD_NUMBER";
+	private static String sBuildNumber = null;
+	
 	public static void logAndThrow(String tag, RemoteOperationResult result) throws Exception {
 		Log.e(tag, result.getLogMessage(), result.getException());
 		throw new Exception(result.getLogMessage(), result.getException());
 	}
-
+	
+	public static String getBuildNumber() {
+		if (sBuildNumber == null) {
+			sBuildNumber = System.getenv(BUILD_NUMBER_ENV_VAR);
+			if (sBuildNumber == null) {
+				Log.w(LOG_TAG, "Build number unknown, using current time instead");
+				sBuildNumber = Long.toString(System.currentTimeMillis());
+			}
+		}
+		return sBuildNumber;
+	}
+	
 }

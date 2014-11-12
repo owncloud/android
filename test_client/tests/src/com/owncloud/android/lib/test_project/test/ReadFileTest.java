@@ -42,7 +42,7 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	
 	private TestActivity mActivity;
 	
-	private String FILE_PATH = "/fileToRead.txt";
+	private String FILE_PATH = "/fileToRead" + Utils.getBuildNumber() + ".txt";
 	
 	public ReadFileTest() {
 		super(TestActivity.class);

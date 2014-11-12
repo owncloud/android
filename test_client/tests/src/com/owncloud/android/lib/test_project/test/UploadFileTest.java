@@ -42,11 +42,11 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 
 	private static final String LOG_TAG = UploadFileTest.class.getCanonicalName();
 	
-	private static final String UPLOAD_PATH = "/uploadedImage.png"; 
+	private static final String UPLOAD_PATH = "/uploadedImage" + Utils.getBuildNumber() + ".png"; 
 	
-	private static final String CHUNKED_UPLOAD_PATH = "/uploadedVideo.MP4"; 
+	private static final String CHUNKED_UPLOAD_PATH = "/uploadedVideo" + Utils.getBuildNumber() + ".MP4"; 
 	
-	private static final String FILE_NOT_FOUND_PATH = "/notFoundShouldNotBeHere.png"; 
+	private static final String FILE_NOT_FOUND_PATH = "/notFoundShouldNotBeHere" + Utils.getBuildNumber() + ".png"; 
 
 
 	private TestActivity mActivity;

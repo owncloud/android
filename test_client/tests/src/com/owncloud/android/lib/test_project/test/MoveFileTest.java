@@ -76,8 +76,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 	
 	/// Paths to files and folders in fixture
 	
-	private static final String SRC_BASE_FOLDER = "/src/";
-	private static final String TARGET_BASE_FOLDER = "/target/";
+	private static final String SRC_BASE_FOLDER = "/src" + Utils.getBuildNumber() + "/";
+	private static final String TARGET_BASE_FOLDER = "/target" + Utils.getBuildNumber() + "/";
 	private static final String NO_FILE = "nofile.txt";
 	private static final String FILE1 = "file1.txt";
 	private static final String FILE2 = "file2.txt";

@@ -37,7 +37,7 @@ public class RemoveShareTest extends ActivityInstrumentationTestCase2<TestActivi
 	
 	private static final String LOG_TAG = RemoveShareTest.class.getCanonicalName();
 	
-	private static final String FILE_TO_UNSHARE = "/fileToUnshare.txt";
+	private static final String FILE_TO_UNSHARE = "/fileToUnshare" + Utils.getBuildNumber() + ".txt";
 
 	private TestActivity mActivity;
 

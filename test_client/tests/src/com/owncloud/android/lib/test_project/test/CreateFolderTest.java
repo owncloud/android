@@ -46,7 +46,7 @@ public class CreateFolderTest extends ActivityInstrumentationTestCase2<TestActiv
 	
 	private static final String LOG_TAG = CreateFolderTest.class.getCanonicalName();
 
-	private static final String FOLDER_PATH_BASE = "/testCreateFolder";
+	private static final String FOLDER_PATH_BASE = "/testCreateFolder" + Utils.getBuildNumber();
 
 	private TestActivity mActivity;
 	private String mCurrentDate;
