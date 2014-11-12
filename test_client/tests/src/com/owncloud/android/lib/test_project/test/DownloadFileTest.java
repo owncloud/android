@@ -136,7 +136,7 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	protected void tearDown() throws Exception {
 		if (mDownloadedFilePath != null) {
 			RemoteOperationResult removeResult = mActivity.removeFile(mDownloadedFilePath);
-			if (!removeResult.isSuccess()) {
+			if (!removeResult.isSuccess()  && removeResult.getCode() != ResultCode.TIMEOUT) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}
 		}

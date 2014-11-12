@@ -27,6 +27,7 @@ package com.owncloud.android.lib.test_project.test;
 import java.io.File;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.TestActivity;
 
@@ -68,7 +69,7 @@ public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity
 		}
 		
 		result = mActivity.createShare(SHARED_FILE, ShareType.PUBLIC_LINK, "", false, "", 1);
-		if (!result.isSuccess()) {
+		if (!result.isSuccess()  && result.getCode() != ResultCode.TIMEOUT) {
 			Utils.logAndThrow(LOG_TAG, result);
 		}
 		
@@ -87,7 +88,7 @@ public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity
 	@Override
 	protected void tearDown() throws Exception {
 		RemoteOperationResult removeResult = mActivity.removeFile(SHARED_FILE);
-		if (!removeResult.isSuccess()) {
+		if (!removeResult.isSuccess() && removeResult.getCode() != ResultCode.TIMEOUT) {
 			Utils.logAndThrow(LOG_TAG, removeResult);
 		}
 		super.tearDown();

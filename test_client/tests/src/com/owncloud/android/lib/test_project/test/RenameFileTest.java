@@ -77,7 +77,7 @@ public class RenameFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	    	
 			Log.v(LOG_TAG, "Starting global set up");
 			RemoteOperationResult result = mActivity.createFolder(OLD_FOLDER_NAME, true);
-			if (!result.isSuccess()) {
+			if (!result.isSuccess() && result.getCode() != ResultCode.TIMEOUT) {
 				Utils.logAndThrow(LOG_TAG, result);
 			}
 			

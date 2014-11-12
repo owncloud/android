@@ -245,7 +245,7 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 	    RemoteOperationResult result = null;
 	    for (String folderPath : FOLDERS_IN_FIXTURE) {
 	    	result = TestActivity.createFolder(folderPath, true, mClient);
-			if (!result.isSuccess()) {
+			if (!result.isSuccess() && result.getCode() != ResultCode.TIMEOUT) {
 				Utils.logAndThrow(LOG_TAG, result);
 			}	    	
 	    }

@@ -130,7 +130,7 @@ public class CreateFolderTest extends ActivityInstrumentationTestCase2<TestActiv
 		RemoteOperationResult removeResult = null;
 		while (it.hasNext()) {
 			removeResult = mActivity.removeFile(it.next());
-			if (!removeResult.isSuccess()) {
+			if (!removeResult.isSuccess() && removeResult.getCode() != ResultCode.TIMEOUT) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}
 		}

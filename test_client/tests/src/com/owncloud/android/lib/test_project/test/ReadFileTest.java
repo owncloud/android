@@ -26,6 +26,7 @@ package com.owncloud.android.lib.test_project.test;
 import java.io.File;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -78,7 +79,7 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	@Override
 	protected void tearDown() throws Exception {
 		RemoteOperationResult removeResult = mActivity.removeFile(FILE_PATH);
-		if (!removeResult.isSuccess()) {
+		if (!removeResult.isSuccess() && removeResult.getCode() != ResultCode.TIMEOUT) {
 			Utils.logAndThrow(LOG_TAG, removeResult);
 		}
 		

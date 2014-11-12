@@ -27,6 +27,7 @@ package com.owncloud.android.lib.test_project.test;
 import java.io.File;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -66,7 +67,7 @@ public class DeleteFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	    	
 			Log.v(LOG_TAG, "Starting global set up");
 			RemoteOperationResult result = mActivity.createFolder(FOLDER_PATH, true);
-			if (!result.isSuccess()) {
+			if (!result.isSuccess()  && result.getCode() != ResultCode.TIMEOUT) {
 				Utils.logAndThrow(LOG_TAG, result);
 			}
 			
