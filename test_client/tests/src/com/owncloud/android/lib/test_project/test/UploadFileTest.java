@@ -26,8 +26,6 @@ package com.owncloud.android.lib.test_project.test;
 
 import java.io.File;
 
-import android.test.ActivityInstrumentationTestCase2;
-
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
@@ -39,25 +37,21 @@ import com.owncloud.android.lib.test_project.TestActivity;
  *
  */
 
-public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivity> {
+public class UploadFileTest extends RemoteTest {
 
 	private static final String LOG_TAG = UploadFileTest.class.getCanonicalName();
 	
-	private static final String UPLOAD_PATH = "/uploadedImage" + Utils.getBuildNumber() + ".png"; 
+	private static final String UPLOAD_PATH = "/uploadedImage.png"; 
 	
-	private static final String CHUNKED_UPLOAD_PATH = "/uploadedVideo" + Utils.getBuildNumber() + ".MP4"; 
+	private static final String CHUNKED_UPLOAD_PATH = "/uploadedVideo.MP4"; 
 	
-	private static final String FILE_NOT_FOUND_PATH = "/notFoundShouldNotBeHere" + Utils.getBuildNumber() + ".png"; 
+	private static final String FILE_NOT_FOUND_PATH = "/notFoundShouldNotBeHere.png"; 
 
 
 	private TestActivity mActivity;
 	private File mFileToUpload, mFileToUploadWithChunks;
 	private String mUploadedFilePath;
 	
-	
-	public UploadFileTest() {
-	    super(TestActivity.class);
-	}
 	
 	@Override
 	  protected void setUp() throws Exception {
@@ -76,12 +70,13 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testUploadFile() {
 		
+		String fullPath2Upload = mBaseFolderPath + UPLOAD_PATH;
 		RemoteOperationResult result = mActivity.uploadFile(
 				mFileToUpload.getAbsolutePath(), 
-				UPLOAD_PATH, 
+				fullPath2Upload, 
 				"image/png"
 				);
-	    mUploadedFilePath = UPLOAD_PATH;
+	    mUploadedFilePath = fullPath2Upload;
 		assertTrue(result.isSuccess());
 	}
 	
@@ -90,12 +85,13 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testUploadFileWithChunks() {
 		
+		String fullPath2Upload = mBaseFolderPath + CHUNKED_UPLOAD_PATH;
 		RemoteOperationResult result = mActivity.uploadFile(
 				mFileToUploadWithChunks.getAbsolutePath(),
-				CHUNKED_UPLOAD_PATH, 
+				fullPath2Upload, 
 				"video/mp4"
 				);
-	    mUploadedFilePath = CHUNKED_UPLOAD_PATH;
+	    mUploadedFilePath = fullPath2Upload;
 		assertTrue(result.isSuccess());
 	}
 	
@@ -104,12 +100,13 @@ public class UploadFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testUploadFileNotFound() {
 
+		String fullPath2Upload = mBaseFolderPath + FILE_NOT_FOUND_PATH;
 		RemoteOperationResult result = mActivity.uploadFile(
 				FILE_NOT_FOUND_PATH, 
-				FILE_NOT_FOUND_PATH, 
+				fullPath2Upload, 
 				"image/png"
 				);
-		mUploadedFilePath = FILE_NOT_FOUND_PATH;
+		mUploadedFilePath = fullPath2Upload;
 		assertFalse(result.isSuccess());
 	}
 	

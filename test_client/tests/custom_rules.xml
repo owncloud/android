@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="custom_rules">
+	
+	<target name="-pre-build" >
+		<!-- Make Travis build number available to the test app in the emulator -->
+		<if>
+			<condition>
+				<isset property="env.TRAVIS_BUILD_NUMBER" />
+			</condition>
+			<then>
+				<replaceregexp
+				file="res/values/setup.xml"
+				match='("build_number"&gt;)\s*(&lt;)'
+				replace="\1${env.TRAVIS_BUILD_NUMBER}\2"
+				byline="true" />
+			</then>
+		</if>
+	</target>
+	
 	<!-- Run regular Android target 'test', but fails if any test is not successful -->
 	<target name="acceptance-test" depends="clean, debug, install" >
 		<property name="log.file" value="tests_output.txt" />

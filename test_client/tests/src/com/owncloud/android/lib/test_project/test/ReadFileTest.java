@@ -29,25 +29,20 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
 
-import android.test.ActivityInstrumentationTestCase2;
-
 /**
  * Class to test Read File Operation
  * @author masensio
  * @author David A. Velasco
  */
 
-public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity> {
+public class ReadFileTest extends RemoteTest {
 	
 	private static final String LOG_TAG = ReadFileTest.class.getCanonicalName();
 	
 	private TestActivity mActivity;
 	
-	private String FILE_PATH = "/fileToRead" + Utils.getBuildNumber() + ".txt";
-	
-	public ReadFileTest() {
-		super(TestActivity.class);
-	}
+	private String FILE_PATH = "/fileToRead.txt";
+	private String mFullPath2File;
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -55,11 +50,12 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 
 		setActivityInitialTouchMode(false);
 		mActivity = getActivity();
+		mFullPath2File = mBaseFolderPath + FILE_PATH;
 		
 		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
 		RemoteOperationResult uploadResult = mActivity.uploadFile(
 				textFile.getAbsolutePath(), 
-				FILE_PATH, 
+				mFullPath2File, 
 				"txt/plain");
 		if (!uploadResult.isSuccess()) {
 			Utils.logAndThrow(LOG_TAG, uploadResult);
@@ -70,7 +66,7 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	 * Test Read File
 	 */
 	public void testReadFile() {
-		RemoteOperationResult result = mActivity.readFile(FILE_PATH);
+		RemoteOperationResult result = mActivity.readFile(mFullPath2File);
 		assertTrue(result.getData() != null && result.getData().size() ==  1);
 		assertTrue(result.isSuccess());
 		// TODO check more properties of the result
@@ -78,7 +74,7 @@ public class ReadFileTest extends 	ActivityInstrumentationTestCase2<TestActivity
 	
 	@Override
 	protected void tearDown() throws Exception {
-		RemoteOperationResult removeResult = mActivity.removeFile(FILE_PATH);
+		RemoteOperationResult removeResult = mActivity.removeFile(mFullPath2File);
 		if (!removeResult.isSuccess() && removeResult.getCode() != ResultCode.TIMEOUT) {
 			Utils.logAndThrow(LOG_TAG, removeResult);
 		}

@@ -30,7 +30,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
 
-import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
 /**
@@ -39,34 +38,34 @@ import android.util.Log;
  *
  */
 
-public class DeleteFileTest extends ActivityInstrumentationTestCase2<TestActivity> {
+public class DeleteFileTest extends RemoteTest {
 
 	private static final String LOG_TAG = DeleteFileTest.class.getCanonicalName();
 
 	/* Folder data to delete. */
-	private static final String FOLDER_PATH = "/folderToDelete" + Utils.getBuildNumber();
+	private static final String FOLDER_PATH = "/folderToDelete";
 	
 	/* File to delete. */
-	private static final String FILE_PATH = "/fileToDelete" + Utils.getBuildNumber() + ".txt";
+	private static final String FILE_PATH = "/fileToDelete.txt";
 
 	private static boolean mGlobalSetupDone = false;
 	
 	private TestActivity mActivity;
-	
-	public DeleteFileTest() {
-	    super(TestActivity.class);
-	}
+	private String mFullPath2Folder; 
+	private String mFullPath2File; 
 	
 	@Override
 	  protected void setUp() throws Exception {
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
+		mFullPath2Folder = mBaseFolderPath + FOLDER_PATH; 
+		mFullPath2File = mBaseFolderPath + FILE_PATH;
 	    
 	    if (!mGlobalSetupDone) {
 	    	
 			Log.v(LOG_TAG, "Starting global set up");
-			RemoteOperationResult result = mActivity.createFolder(FOLDER_PATH, true);
+			RemoteOperationResult result = mActivity.createFolder(mFullPath2Folder, true);
 			if (!result.isSuccess()  && result.getCode() != ResultCode.TIMEOUT) {
 				Utils.logAndThrow(LOG_TAG, result);
 			}
@@ -74,7 +73,7 @@ public class DeleteFileTest extends ActivityInstrumentationTestCase2<TestActivit
 			File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
 			result = mActivity.uploadFile(
 					textFile.getAbsolutePath(), 
-					FILE_PATH, 
+					mFullPath2File, 
 					"txt/plain");
 			if (!result.isSuccess()) {
 				Utils.logAndThrow(LOG_TAG, result);
@@ -91,7 +90,7 @@ public class DeleteFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testRemoveFolder() {
 
-		RemoteOperationResult result = mActivity.removeFile(FOLDER_PATH);
+		RemoteOperationResult result = mActivity.removeFile(mFullPath2Folder);
 		assertTrue(result.isSuccess());
 	}
 	
@@ -100,7 +99,7 @@ public class DeleteFileTest extends ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testRemoveFile() {
 		
-		RemoteOperationResult result = mActivity.removeFile(FILE_PATH);
+		RemoteOperationResult result = mActivity.removeFile(mFullPath2File);
 		assertTrue(result.isSuccess());
 	}
 
