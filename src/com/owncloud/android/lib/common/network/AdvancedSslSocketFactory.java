@@ -313,6 +313,7 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
 	public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException,
 			UnknownHostException {
 		Socket sslSocket = mSslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+		((SSLSocket) sslSocket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
 		verifyPeerIdentity(host, port, sslSocket);
 		return sslSocket;
 	}
