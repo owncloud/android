@@ -31,8 +31,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.test_project.TestActivity;
 
-import android.util.Log;
-
 /**
  * Class to test Rename File Operation
  * @author masensio
@@ -56,8 +54,6 @@ public class RenameFileTest extends RemoteTest {
 	private static final String NEW_FILE_PATH = FileUtils.PATH_SEPARATOR + NEW_FILE_NAME;
 	
 	
-	private static boolean mGlobalSetupDone = false;
-	
 	private String mToCleanUpInServer;
 	private TestActivity mActivity;
 	private String mFullPath2OldFolder;
@@ -74,28 +70,20 @@ public class RenameFileTest extends RemoteTest {
     	mFullPath2NewFolder = mBaseFolderPath + NEW_FOLDER_PATH;
     	mFullPath2OldFile = mBaseFolderPath + OLD_FILE_PATH;
     	mFullPath2NewFile = mBaseFolderPath + NEW_FILE_PATH;
-    	
 	    
-	    if (!mGlobalSetupDone) {
-	    	
-			Log.v(LOG_TAG, "Starting global set up");
-			RemoteOperationResult result = mActivity.createFolder(mFullPath2OldFolder, true);
-			if (!result.isSuccess() && result.getCode() != ResultCode.TIMEOUT) {
-				Utils.logAndThrow(LOG_TAG, result);
-			}
-			
-			File imageFile = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
-			result = mActivity.uploadFile(
-					imageFile.getAbsolutePath(), 
-					mFullPath2OldFile, 
-					"image/png");
-			if (!result.isSuccess()) {
-				Utils.logAndThrow(LOG_TAG, result);
-			}
-			
-			Log.v(LOG_TAG, "Global set up done");
-		    mGlobalSetupDone = true;
-	    }
+		RemoteOperationResult result = mActivity.createFolder(mFullPath2OldFolder, true);
+		if (!result.isSuccess() && result.getCode() != ResultCode.TIMEOUT) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
+		File imageFile = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
+		result = mActivity.uploadFile(
+				imageFile.getAbsolutePath(), 
+				mFullPath2OldFile, 
+				"image/png");
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
 	    
 		mToCleanUpInServer = null;
 	}
@@ -232,14 +220,12 @@ public class RenameFileTest extends RemoteTest {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		/*
 		if (mToCleanUpInServer != null) {
 			RemoteOperationResult removeResult = mActivity.removeFile(mToCleanUpInServer);
 			if (!removeResult.isSuccess()) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}
 		}
-		*/
 		super.tearDown();
 	}
 	

@@ -31,8 +31,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
 
-import android.util.Log;
-
 /**
  * Class to test Download File Operation
  * @author masensio
@@ -48,8 +46,6 @@ public class DownloadFileTest extends RemoteTest {
 	private static final String IMAGE_PATH = "/fileToDownload.png";
 	private static final String IMAGE_PATH_WITH_SPECIAL_CHARS = "/@file@download.png";
 	private static final String IMAGE_NOT_FOUND = "/fileNotFound.png";
-	
-	private static boolean mGlobalSetupDone = false;
 	
 	private String mFullPath2Image;
 	private String mFullPath2ImageWitSpecialChars;
@@ -68,35 +64,29 @@ public class DownloadFileTest extends RemoteTest {
     	mFullPath2ImageWitSpecialChars = mBaseFolderPath + IMAGE_PATH_WITH_SPECIAL_CHARS;
     	mFullPath2ImageNotFound = mBaseFolderPath + IMAGE_NOT_FOUND;
 	    
-	    if (!mGlobalSetupDone) {
-	    	
-			File imageFile = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
+		File imageFile = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
 
-	    	RemoteOperationResult result = mActivity.uploadFile(
-					imageFile.getAbsolutePath(), 
-					mFullPath2Image, 
-					"image/png");
-			if (!result.isSuccess()) {
-				Utils.logAndThrow(LOG_TAG, result);
-			}
-			
-			result = mActivity.uploadFile(
-					imageFile.getAbsolutePath(), 
-					mFullPath2ImageWitSpecialChars, 
-					"image/png");
-			if (!result.isSuccess()) {
-				Utils.logAndThrow(LOG_TAG, result);
-			}
-			
-			result = mActivity.removeFile(mFullPath2ImageNotFound);
-			if (!result.isSuccess() && result.getCode() != ResultCode.FILE_NOT_FOUND) {
-				Utils.logAndThrow(LOG_TAG, result);
-			}
-			
-			Log.v(LOG_TAG, "Global set up done");
-		    mGlobalSetupDone = true;
-	    }
-	    
+    	RemoteOperationResult result = mActivity.uploadFile(
+				imageFile.getAbsolutePath(), 
+				mFullPath2Image, 
+				"image/png");
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
+		result = mActivity.uploadFile(
+				imageFile.getAbsolutePath(), 
+				mFullPath2ImageWitSpecialChars, 
+				"image/png");
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
+		result = mActivity.removeFile(mFullPath2ImageNotFound);
+		if (!result.isSuccess() && result.getCode() != ResultCode.FILE_NOT_FOUND) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
 	}
 
 	/**
