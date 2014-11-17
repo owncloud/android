@@ -36,6 +36,7 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
@@ -78,8 +79,11 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
     	
         if (sslContext == null)
             throw new IllegalArgumentException("AdvancedSslSocketFactory can not be created with a null SSLContext");
-        if (trustManager == null)
-            throw new IllegalArgumentException("AdvancedSslSocketFactory can not be created with a null Trust Manager");
+        if (trustManager == null && mHostnameVerifier != null)
+            throw new IllegalArgumentException(
+            		"AdvancedSslSocketFactory can not be created with a null Trust Manager and a " +
+            		"not null Hostname Verifier"
+    		);
         mSslContext = sslContext;
         mTrustManager = trustManager;
         mHostnameVerifier = hostnameVerifier;
@@ -92,6 +96,7 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
     		throws IOException, UnknownHostException {
     	
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port, clientHost, clientPort);
+        enableSecureProtocols(socket);
         verifyPeerIdentity(host, port, socket);
         return socket;
     }
@@ -168,6 +173,7 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
         SocketFactory socketfactory = mSslContext.getSocketFactory();
         Log_OC.d(TAG, " ... with connection timeout " + timeout + " and socket timeout " + params.getSoTimeout());
         Socket socket = socketfactory.createSocket();
+        enableSecureProtocols(socket);
         SocketAddress localaddr = new InetSocketAddress(localAddress, localPort);
         SocketAddress remoteaddr = new InetSocketAddress(host, port);
         socket.setSoTimeout(params.getSoTimeout());
@@ -185,10 +191,22 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
             UnknownHostException {
     	Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port);
+        enableSecureProtocols(socket);
         verifyPeerIdentity(host, port, socket);
         return socket; 
     }
 
+    
+	@Override
+    public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException,
+    		UnknownHostException {
+	    Socket sslSocket = mSslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+	    enableSecureProtocols(sslSocket);
+	    verifyPeerIdentity(host, port, sslSocket);
+	    return sslSocket;
+	}
+
+    
     public boolean equals(Object obj) {
         return ((obj != null) && obj.getClass().equals(
                 AdvancedSslSocketFactory.class));
@@ -303,11 +321,22 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
         }
     }
 
-	@Override
-	public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException,
-			UnknownHostException {
-		Socket sslSocket = mSslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
-		verifyPeerIdentity(host, port, sslSocket);
-		return sslSocket;
-	}
+	/**
+	 * Grants that all protocols supported by the Security Provider in mSslContext are enabled in socket.
+	 * 
+	 * Grants also that no unsupported protocol is tried to be enabled. That would trigger an exception, breaking
+	 * the connection process although some protocols are supported.
+	 * 
+	 * This is not cosmetic: not all the supported protocols are enabled by default. Too see an overview of 
+	 * supported and enabled protocols in the stock Security Provider in Android see the tables in
+	 * http://developer.android.com/reference/javax/net/ssl/SSLSocket.html.
+	 *  
+	 * @param socket
+	 */
+    private void enableSecureProtocols(Socket socket) {
+    	SSLParameters params = mSslContext.getSupportedSSLParameters();
+    	String [] supportedProtocols = params.getProtocols();
+    	((SSLSocket) socket).setEnabledProtocols(supportedProtocols);
+    }
+	
 }

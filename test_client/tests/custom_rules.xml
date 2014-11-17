@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="custom_rules">
+	
 	<!-- Run regular Android target 'test', but fails if any test is not successful -->
 	<target name="acceptance-test" depends="clean, debug, install" >
 		<property name="log.file" value="tests_output.txt" />

@@ -27,10 +27,9 @@ package com.owncloud.android.lib.test_project.test;
 import java.io.File;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.TestActivity;
-
-import android.test.ActivityInstrumentationTestCase2;
 
 /** 
  * Class to test Get Shares Operation
@@ -39,36 +38,33 @@ import android.test.ActivityInstrumentationTestCase2;
  *
  */
 
-public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity> {
+public class GetSharesTest extends RemoteTest {
 
 	private static final String LOG_TAG = GetSharesTest.class.getCanonicalName();
 
 	private static final String SHARED_FILE = "/sharedFileToGet.txt";
 	
 	private TestActivity mActivity;
+	private String mFullPath2SharedFile;
 	
-	public GetSharesTest() {
-		super(TestActivity.class);
-		
-	}
-
 	@Override
 	  protected void setUp() throws Exception {
 	    super.setUp();
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
-
+	    mFullPath2SharedFile = mBaseFolderPath + SHARED_FILE; 
+	    		
 		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
 		RemoteOperationResult result = mActivity.uploadFile(
 				textFile.getAbsolutePath(), 
-				SHARED_FILE, 
+				mFullPath2SharedFile, 
 				"txt/plain");
 		if (!result.isSuccess()) {
 			Utils.logAndThrow(LOG_TAG, result);
 		}
 		
-		result = mActivity.createShare(SHARED_FILE, ShareType.PUBLIC_LINK, "", false, "", 1);
-		if (!result.isSuccess()) {
+		result = mActivity.createShare(mFullPath2SharedFile, ShareType.PUBLIC_LINK, "", false, "", 1);
+		if (!result.isSuccess()  && result.getCode() != ResultCode.TIMEOUT) {
 			Utils.logAndThrow(LOG_TAG, result);
 		}
 		
@@ -86,8 +82,8 @@ public class GetSharesTest extends ActivityInstrumentationTestCase2<TestActivity
 
 	@Override
 	protected void tearDown() throws Exception {
-		RemoteOperationResult removeResult = mActivity.removeFile(SHARED_FILE);
-		if (!removeResult.isSuccess()) {
+		RemoteOperationResult removeResult = mActivity.removeFile(mFullPath2SharedFile);
+		if (!removeResult.isSuccess() && removeResult.getCode() != ResultCode.TIMEOUT) {
 			Utils.logAndThrow(LOG_TAG, removeResult);
 		}
 		super.tearDown();

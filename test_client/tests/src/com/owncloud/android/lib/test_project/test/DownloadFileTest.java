@@ -31,16 +31,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
 
-import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-
 /**
  * Class to test Download File Operation
  * @author masensio
  * @author David A. Velasco
  */
 
-public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActivity> {
+public class DownloadFileTest extends RemoteTest {
 
 	
 	private static final String LOG_TAG = DownloadFileTest.class.getCanonicalName();
@@ -49,17 +46,13 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	private static final String IMAGE_PATH = "/fileToDownload.png";
 	private static final String IMAGE_PATH_WITH_SPECIAL_CHARS = "/@file@download.png";
 	private static final String IMAGE_NOT_FOUND = "/fileNotFound.png";
-	private static final String [] FILE_PATHS = { IMAGE_PATH, IMAGE_PATH_WITH_SPECIAL_CHARS }; 
 	
-	private static boolean mGlobalSetupDone = false;
-	
+	private String mFullPath2Image;
+	private String mFullPath2ImageWitSpecialChars;
+	private String mFullPath2ImageNotFound;
 	private String mDownloadedFilePath;
 	private TestActivity mActivity;
 
-	
-	public DownloadFileTest() {
-	    super(TestActivity.class);
-	}
 	
 	@Override
 	  protected void setUp() throws Exception {
@@ -67,31 +60,33 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	    setActivityInitialTouchMode(false);
 	    mActivity = getActivity();
 	    mDownloadedFilePath = null;
+    	mFullPath2Image = mBaseFolderPath + IMAGE_PATH;
+    	mFullPath2ImageWitSpecialChars = mBaseFolderPath + IMAGE_PATH_WITH_SPECIAL_CHARS;
+    	mFullPath2ImageNotFound = mBaseFolderPath + IMAGE_NOT_FOUND;
 	    
-	    if (!mGlobalSetupDone) {
-	    	
-	    	RemoteOperationResult result = null;
-			File imageFile = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
+		File imageFile = mActivity.extractAsset(TestActivity.ASSETS__IMAGE_FILE_NAME);
 
-			for (int i=0; i<FILE_PATHS.length && (result == null || result.isSuccess()); i++) {
-				result = mActivity.uploadFile(
-						imageFile.getAbsolutePath(), 
-						FILE_PATHS[i], 
-						"image/png");
-			}
-			if (!result.isSuccess()) {
-				Utils.logAndThrow(LOG_TAG, result);
-			}
-			
-			result = mActivity.removeFile(IMAGE_NOT_FOUND);
-			if (!result.isSuccess() && result.getCode() != ResultCode.FILE_NOT_FOUND) {
-				Utils.logAndThrow(LOG_TAG, result);
-			}
-			
-			Log.v(LOG_TAG, "Global set up done");
-		    mGlobalSetupDone = true;
-	    }
-	    
+    	RemoteOperationResult result = mActivity.uploadFile(
+				imageFile.getAbsolutePath(), 
+				mFullPath2Image, 
+				"image/png");
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
+		result = mActivity.uploadFile(
+				imageFile.getAbsolutePath(), 
+				mFullPath2ImageWitSpecialChars, 
+				"image/png");
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
+		result = mActivity.removeFile(mFullPath2ImageNotFound);
+		if (!result.isSuccess() && result.getCode() != ResultCode.FILE_NOT_FOUND) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+		
 	}
 
 	/**
@@ -99,10 +94,10 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	 */
 	public void testDownloadFile() {
 		RemoteOperationResult result = mActivity.downloadFile(
-				new RemoteFile(IMAGE_PATH), 
+				new RemoteFile(mFullPath2Image), 
 				mActivity.getFilesDir().getAbsolutePath()
 				);
-		mDownloadedFilePath = IMAGE_PATH;
+		mDownloadedFilePath = mFullPath2Image;
 		assertTrue(result.isSuccess());
 		// TODO some checks involving the local file
 	}
@@ -112,10 +107,10 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	 */
 	public void testDownloadFileSpecialChars() {
 		RemoteOperationResult result = mActivity.downloadFile(
-				new RemoteFile(IMAGE_PATH_WITH_SPECIAL_CHARS),
+				new RemoteFile(mFullPath2ImageWitSpecialChars),
 				mActivity.getFilesDir().getAbsolutePath()
 				);
-		mDownloadedFilePath = IMAGE_PATH_WITH_SPECIAL_CHARS;
+		mDownloadedFilePath = mFullPath2ImageWitSpecialChars;
 		assertTrue(result.isSuccess());
 		// TODO some checks involving the local file
 	}
@@ -125,7 +120,7 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	 */
 	public void testDownloadFileNotFound() {
 		RemoteOperationResult result = mActivity.downloadFile(
-				new RemoteFile(IMAGE_NOT_FOUND), 
+				new RemoteFile(mFullPath2ImageNotFound), 
 				mActivity.getFilesDir().getAbsolutePath()
 				);
 		assertFalse(result.isSuccess());
@@ -136,7 +131,7 @@ public class DownloadFileTest extends ActivityInstrumentationTestCase2<TestActiv
 	protected void tearDown() throws Exception {
 		if (mDownloadedFilePath != null) {
 			RemoteOperationResult removeResult = mActivity.removeFile(mDownloadedFilePath);
-			if (!removeResult.isSuccess()) {
+			if (!removeResult.isSuccess()  && removeResult.getCode() != ResultCode.TIMEOUT) {
 				Utils.logAndThrow(LOG_TAG, removeResult);
 			}
 		}

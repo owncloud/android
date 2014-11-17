@@ -21,66 +21,49 @@
  *   THE SOFTWARE.
  *
  */
-
 package com.owncloud.android.lib.test_project.test;
-
-import java.io.File;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.TestActivity;
 
-public class CreateShareTest extends RemoteTest {
+import android.test.ActivityInstrumentationTestCase2;
 
-	private static final String LOG_TAG = CreateShareTest.class.getCanonicalName();
-	
-	/* File to share.*/
-	private static final String FILE_TO_SHARE = "/fileToShare.txt";
+/**
+ * Class to test Create Folder Operation
+ * @author David A. Velasco
+ *
+ */
+public class RemoteTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
-	private TestActivity mActivity;
-	private String mFullPath2FileToShare;
+	private static final String LOG_TAG = RemoteTest.class.getSimpleName();
 	
-	@Override
-	protected void setUp() throws Exception {
-	    super.setUp();
-	    setActivityInitialTouchMode(false);
-	    mActivity = getActivity();
-	    mFullPath2FileToShare = mBaseFolderPath + FILE_TO_SHARE;  
-	    		
-		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
-		RemoteOperationResult result = mActivity.uploadFile(
-				textFile.getAbsolutePath(), 
-				mFullPath2FileToShare, 
-				"txt/plain");
-		if (!result.isSuccess()) {
-			Utils.logAndThrow(LOG_TAG, result);
-		}
+	protected String mBaseFolderPath = "/test_for_build_";
+	
+	public RemoteTest() {
+	    super(TestActivity.class);
 	}
 	
-	/**
-	 * Test Create Share: the server must support SHARE API
-	 */
-	public void testCreatePublicShare() {
-		RemoteOperationResult result = mActivity.createShare(
-				mFullPath2FileToShare, 
-				ShareType.PUBLIC_LINK, 
-				"", 
-				false, 
-				"", 
-				1);
-		assertTrue(result.isSuccess());
+	@Override
+	  protected void setUp() throws Exception {
+	    super.setUp();
+	    setActivityInitialTouchMode(false);
+	    mBaseFolderPath += Utils.getBuildNumber(getActivity());
+	    
+		RemoteOperationResult result = getActivity().createFolder(mBaseFolderPath, true);
+		if (!result.isSuccess()  && result.getCode() != ResultCode.TIMEOUT) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
 	}
 	
 	
 	@Override
 	protected void tearDown() throws Exception {
-		RemoteOperationResult removeResult = mActivity.removeFile(mFullPath2FileToShare);
-		if (!removeResult.isSuccess()  && removeResult.getCode() != ResultCode.TIMEOUT) {
+		RemoteOperationResult removeResult = getActivity().removeFile(mBaseFolderPath);
+		if (!removeResult.isSuccess() && removeResult.getCode() != ResultCode.TIMEOUT) {
 			Utils.logAndThrow(LOG_TAG, removeResult);
 		}
 		super.tearDown();
 	}
-	
 	
 }

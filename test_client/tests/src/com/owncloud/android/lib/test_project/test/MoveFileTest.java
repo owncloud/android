@@ -46,8 +46,6 @@ import com.owncloud.android.lib.test_project.TestActivity;
 
 import android.content.Context;
 import android.net.Uri;
-import android.test.ActivityInstrumentationTestCase2;
-//import android.test.AndroidTestCase;
 import android.util.Log;
 
 /**
@@ -69,7 +67,7 @@ import android.util.Log;
  */
 
 //public class MoveFileTest extends AndroidTestCase {
-public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity> {
+public class MoveFileTest extends RemoteTest {
 
 	private static final String LOG_TAG = MoveFileTest.class.getCanonicalName();
 	
@@ -209,7 +207,7 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 	OwnCloudClient mClient = null;
 	
 	public MoveFileTest() {
-		super(TestActivity.class);
+		super();
 		
 		Protocol pr = Protocol.getProtocol("https");
 		if (pr == null || !(pr.getSocketFactory() instanceof SelfSignedConfidentSslSocketFactory)) {
@@ -244,8 +242,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 	    
 	    RemoteOperationResult result = null;
 	    for (String folderPath : FOLDERS_IN_FIXTURE) {
-	    	result = TestActivity.createFolder(folderPath, true, mClient);
-			if (!result.isSuccess()) {
+	    	result = TestActivity.createFolder(mBaseFolderPath + folderPath, true, mClient);
+			if (!result.isSuccess() && result.getCode() != ResultCode.TIMEOUT) {
 				Utils.logAndThrow(LOG_TAG, result);
 			}	    	
 	    }
@@ -255,7 +253,7 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		);
 	    for (String filePath : FILES_IN_FIXTURE) {
 	    	result = TestActivity.uploadFile(
-	    			txtFile.getAbsolutePath(), filePath, "txt/plain", mClient
+	    			txtFile.getAbsolutePath(), mBaseFolderPath + filePath, "txt/plain", mClient
 			);
 			if (!result.isSuccess()) {
 				Utils.logAndThrow(LOG_TAG, result);
@@ -277,8 +275,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
 		// move file
 		MoveRemoteFileOperation moveOperation = new MoveRemoteFileOperation(
-				SRC_PATH_TO_FILE_1,
-				TARGET_PATH_TO_FILE_1,
+				mBaseFolderPath + SRC_PATH_TO_FILE_1,
+				mBaseFolderPath + TARGET_PATH_TO_FILE_1,
 				false
 		);
 		RemoteOperationResult result = moveOperation.execute(mClient);
@@ -286,8 +284,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// move & rename file, different location
 		moveOperation = new MoveRemoteFileOperation(
-				SRC_PATH_TO_FILE_2,
-				TARGET_PATH_TO_FILE_2_RENAMED,
+				mBaseFolderPath + SRC_PATH_TO_FILE_2,
+				mBaseFolderPath + TARGET_PATH_TO_FILE_2_RENAMED,
 				false
 		);
 		result = moveOperation.execute(mClient);
@@ -295,8 +293,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// move & rename file, same location (rename file)
 		moveOperation = new MoveRemoteFileOperation(
-				SRC_PATH_TO_FILE_3,
-				SRC_PATH_TO_FILE_3_RENAMED,
+				mBaseFolderPath + SRC_PATH_TO_FILE_3,
+				mBaseFolderPath + SRC_PATH_TO_FILE_3_RENAMED,
 				false
 		);
 		result = moveOperation.execute(mClient);
@@ -304,8 +302,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// move empty folder
 		moveOperation = new MoveRemoteFileOperation(
-				SRC_PATH_TO_EMPTY_FOLDER,
-				TARGET_PATH_TO_EMPTY_FOLDER,
+				mBaseFolderPath + SRC_PATH_TO_EMPTY_FOLDER,
+				mBaseFolderPath + TARGET_PATH_TO_EMPTY_FOLDER,
 				false
 		);
 		result = moveOperation.execute(mClient);
@@ -313,8 +311,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// move non-empty folder
 		moveOperation = new MoveRemoteFileOperation(
-				SRC_PATH_TO_FULL_FOLDER_1,
-				TARGET_PATH_TO_FULL_FOLDER_1,
+				mBaseFolderPath + SRC_PATH_TO_FULL_FOLDER_1,
+				mBaseFolderPath + TARGET_PATH_TO_FULL_FOLDER_1,
 				false
 		);
 		result = moveOperation.execute(mClient);
@@ -322,8 +320,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// move & rename folder, different location
 		moveOperation = new MoveRemoteFileOperation(
-				SRC_PATH_TO_FULL_FOLDER_2,
-				TARGET_PATH_TO_FULL_FOLDER_2_RENAMED,
+				mBaseFolderPath + SRC_PATH_TO_FULL_FOLDER_2,
+				mBaseFolderPath + TARGET_PATH_TO_FULL_FOLDER_2_RENAMED,
 				false
 		);
 		result = moveOperation.execute(mClient);
@@ -331,8 +329,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// move & rename folder, same location (rename folder)
 		moveOperation = new MoveRemoteFileOperation(
-				SRC_PATH_TO_FULL_FOLDER_3,
-				SRC_PATH_TO_FULL_FOLDER_3_RENAMED,
+				mBaseFolderPath + SRC_PATH_TO_FULL_FOLDER_3,
+				mBaseFolderPath + SRC_PATH_TO_FULL_FOLDER_3_RENAMED,
 				false
 		);
 		result = moveOperation.execute(mClient);
@@ -340,8 +338,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// move for nothing (success, but no interaction with network)
 		moveOperation = new MoveRemoteFileOperation(
-				SRC_PATH_TO_FILE_4,
-				SRC_PATH_TO_FILE_4,
+				mBaseFolderPath + SRC_PATH_TO_FILE_4,
+				mBaseFolderPath + SRC_PATH_TO_FILE_4,
 				false
 		);
 		result = moveOperation.execute(mClient);
@@ -349,9 +347,9 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// move overwriting
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_FULL_FOLDER_4,
-						TARGET_PATH_TO_ALREADY_EXISTENT_EMPTY_FOLDER_4,
-						true
+				mBaseFolderPath + SRC_PATH_TO_FULL_FOLDER_4,
+				mBaseFolderPath + TARGET_PATH_TO_ALREADY_EXISTENT_EMPTY_FOLDER_4,
+				true
 		);
 		result = moveOperation.execute(mClient);
 		assertTrue(result.isSuccess());
@@ -361,45 +359,45 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 		
 		// file to move does not exist
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_NON_EXISTENT_FILE,
-						TARGET_PATH_TO_NON_EXISTENT_FILE,
-						false
+				mBaseFolderPath + SRC_PATH_TO_NON_EXISTENT_FILE,
+				mBaseFolderPath + TARGET_PATH_TO_NON_EXISTENT_FILE,
+				false
 		);
 		result = moveOperation.execute(mClient);
 		assertTrue(result.getCode() == ResultCode.FILE_NOT_FOUND);
 
 		// folder to move into does no exist
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_FILE_5,
-						TARGET_PATH_TO_FILE_5_INTO_NON_EXISTENT_FOLDER,
-						false
+				mBaseFolderPath + SRC_PATH_TO_FILE_5,
+				mBaseFolderPath + TARGET_PATH_TO_FILE_5_INTO_NON_EXISTENT_FOLDER,
+				false
 		);
 		result = moveOperation.execute(mClient);
 		assertTrue(result.getHttpCode() == HttpStatus.SC_CONFLICT);
 
 		// target location (renaming) has invalid characters
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_FILE_6,
-						TARGET_PATH_RENAMED_WITH_INVALID_CHARS,
-						false
+				mBaseFolderPath + SRC_PATH_TO_FILE_6,
+				mBaseFolderPath + TARGET_PATH_RENAMED_WITH_INVALID_CHARS,
+				false
 		);
 		result = moveOperation.execute(mClient);
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 
 		// name collision
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_PATH_TO_FILE_7,
-						TARGET_PATH_TO_ALREADY_EXISTENT_FILE_7,
-						false
+				mBaseFolderPath + SRC_PATH_TO_FILE_7,
+				mBaseFolderPath + TARGET_PATH_TO_ALREADY_EXISTENT_FILE_7,
+				false
 		);
 		result = moveOperation.execute(mClient);
 		assertTrue(result.getCode() == ResultCode.INVALID_OVERWRITE);
 
 		// move a folder into a descendant
 		moveOperation = new MoveRemoteFileOperation(
-						SRC_BASE_FOLDER,
-						SRC_PATH_TO_EMPTY_FOLDER,
-						false
+				mBaseFolderPath + SRC_BASE_FOLDER,
+				mBaseFolderPath + SRC_PATH_TO_EMPTY_FOLDER,
+				false
 		);
 		result = moveOperation.execute(mClient);
 		assertTrue(result.getCode() == ResultCode.INVALID_MOVE_INTO_DESCENDANT);
@@ -411,8 +409,8 @@ public class MoveFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 	    Log.v(LOG_TAG, "Deleting remote fixture...");
 	    
 		String[] mPathsToCleanUp = {
-			SRC_BASE_FOLDER,
-			TARGET_BASE_FOLDER
+				mBaseFolderPath + SRC_BASE_FOLDER,
+				mBaseFolderPath + TARGET_BASE_FOLDER
 		};
 		
 		for (String path : mPathsToCleanUp) {
