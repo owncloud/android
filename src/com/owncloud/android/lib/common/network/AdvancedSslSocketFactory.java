@@ -36,6 +36,7 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
@@ -320,9 +321,22 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
         }
     }
 
-	
+	/**
+	 * Grants that all protocols supported by the Security Provider in mSslContext are enabled in socket.
+	 * 
+	 * Grants also that no unsupported protocol is tried to be enabled. That would trigger an exception, breaking
+	 * the connection process although some protocols are supported.
+	 * 
+	 * This is not cosmetic: not all the supported protocols are enabled by default. Too see an overview of 
+	 * supported and enabled protocols in the stock Security Provider in Android see the tables in
+	 * http://developer.android.com/reference/javax/net/ssl/SSLSocket.html.
+	 *  
+	 * @param socket
+	 */
     private void enableSecureProtocols(Socket socket) {
-        ((SSLSocket) socket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
+    	SSLParameters params = mSslContext.getSupportedSSLParameters();
+    	String [] supportedProtocols = params.getProtocols();
+    	((SSLSocket) socket).setEnabledProtocols(supportedProtocols);
     }
 	
 }
