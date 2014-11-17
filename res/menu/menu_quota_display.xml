@@ -17,13 +17,12 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<resources>
-    
-    <color name="filelist_icon_backgorund">#DDDDDD</color>
-    <color name="owncloud_blue_bright">#00ddff</color>
-    <color name="list_item_lastmod_and_filesize_text">#989898</color>
-    <color name="progressbar_green">#7DD49E</color>
-    <color name="progressbar_orange">#F2D085</color>
-    <color name="progressbar_red">#F24949</color>
-    
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_action_settings"
+        android:orderInCategory="2"
+        android:showAsAction="never"
+        android:title="@string/actionbar_settings"/>
+    <!-- <item android:id="@+id/search" android:title="@string/actionbar_search" android:icon="@drawable/ic_action_search"></item> -->
+</menu>
