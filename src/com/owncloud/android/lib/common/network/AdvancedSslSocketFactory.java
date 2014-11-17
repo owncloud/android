@@ -95,7 +95,7 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
     		throws IOException, UnknownHostException {
     	
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port, clientHost, clientPort);
-        ((SSLSocket) socket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
+        enableSecureProtocols(socket);
         verifyPeerIdentity(host, port, socket);
         return socket;
     }
@@ -172,7 +172,7 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
         SocketFactory socketfactory = mSslContext.getSocketFactory();
         Log_OC.d(TAG, " ... with connection timeout " + timeout + " and socket timeout " + params.getSoTimeout());
         Socket socket = socketfactory.createSocket();
-        ((SSLSocket) socket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
+        enableSecureProtocols(socket);
         SocketAddress localaddr = new InetSocketAddress(localAddress, localPort);
         SocketAddress remoteaddr = new InetSocketAddress(host, port);
         socket.setSoTimeout(params.getSoTimeout());
@@ -190,11 +190,22 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
             UnknownHostException {
     	Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);
         Socket socket = mSslContext.getSocketFactory().createSocket(host, port);
-        ((SSLSocket) socket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
+        enableSecureProtocols(socket);
         verifyPeerIdentity(host, port, socket);
         return socket; 
     }
 
+    
+	@Override
+    public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException,
+    		UnknownHostException {
+	    Socket sslSocket = mSslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+	    enableSecureProtocols(sslSocket);
+	    verifyPeerIdentity(host, port, sslSocket);
+	    return sslSocket;
+	}
+
+    
     public boolean equals(Object obj) {
         return ((obj != null) && obj.getClass().equals(
                 AdvancedSslSocketFactory.class));
@@ -309,12 +320,9 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
         }
     }
 
-	@Override
-	public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException,
-			UnknownHostException {
-		Socket sslSocket = mSslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
-		((SSLSocket) sslSocket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
-		verifyPeerIdentity(host, port, sslSocket);
-		return sslSocket;
-	}
+	
+    private void enableSecureProtocols(Socket socket) {
+        ((SSLSocket) socket).setEnabledProtocols(new String[]{"TLSv1", "TLSv1.1", "TLSv1.2"});
+    }
+	
 }
