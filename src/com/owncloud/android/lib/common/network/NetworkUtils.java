@@ -93,13 +93,22 @@ public class NetworkUtils {
         }
     }
     
-    public static AdvancedSslSocketFactory getAdvancedSslSocketFactory(Context context) throws GeneralSecurityException, IOException {
+    public static AdvancedSslSocketFactory getAdvancedSslSocketFactory(Context context) 
+    		throws GeneralSecurityException, IOException {
         if (mAdvancedSslSocketFactory  == null) {
             KeyStore trustStore = getKnownServersStore(context);
             AdvancedX509TrustManager trustMgr = new AdvancedX509TrustManager(trustStore);
             TrustManager[] tms = new TrustManager[] { trustMgr };
                 
-            SSLContext sslContext = SSLContext.getInstance("TLS");
+            SSLContext sslContext;
+            try {
+            	sslContext = SSLContext.getInstance("TLSv1.2");
+            } catch (NoSuchAlgorithmException e) {
+            	Log_OC.w(TAG, "TLSv1.2 is not supported in this device; falling through TLSv1.0");
+            	sslContext = SSLContext.getInstance("TLSv1");
+            	// should be available in any device; see reference of supported protocols in 
+            	// http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+            }
             sslContext.init(null, tms, null);
                     
             mHostnameVerifier = new BrowserCompatHostnameVerifier();
