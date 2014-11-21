@@ -57,6 +57,12 @@ public class NetworkUtils {
     
     /** Default timeout for establishing a connection */
     public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
+    
+    /** Standard name for protocol TLS version 1.2 in Java Secure Socket Extension (JSSE) API */
+    public static final String PROTOCOL_TLSv1_2 = "TLSv1.2";
+    
+    /** Standard name for protocol TLS version 1.0 in JSSE API */
+    public static final String PROTOCOL_TLSv1_0 = "TLSv1";
 
     /** Connection manager for all the OwnCloudClients */
     private static MultiThreadedHttpConnectionManager mConnManager = null;
@@ -72,7 +78,9 @@ public class NetworkUtils {
      * Registers or unregisters the proper components for advanced SSL handling.
      * @throws IOException 
      */
-    public static void registerAdvancedSslContext(boolean register, Context context) throws GeneralSecurityException, IOException {
+    @SuppressWarnings("deprecation")
+	public static void registerAdvancedSslContext(boolean register, Context context) 
+    		throws GeneralSecurityException, IOException {
         Protocol pr = null;
         try {
             pr = Protocol.getProtocol("https");
@@ -93,13 +101,22 @@ public class NetworkUtils {
         }
     }
     
-    public static AdvancedSslSocketFactory getAdvancedSslSocketFactory(Context context) throws GeneralSecurityException, IOException {
+    public static AdvancedSslSocketFactory getAdvancedSslSocketFactory(Context context) 
+    		throws GeneralSecurityException, IOException {
         if (mAdvancedSslSocketFactory  == null) {
             KeyStore trustStore = getKnownServersStore(context);
             AdvancedX509TrustManager trustMgr = new AdvancedX509TrustManager(trustStore);
             TrustManager[] tms = new TrustManager[] { trustMgr };
                 
-            SSLContext sslContext = SSLContext.getInstance("TLS");
+            SSLContext sslContext;
+            try {
+            	sslContext = SSLContext.getInstance("TLSv1.2");
+            } catch (NoSuchAlgorithmException e) {
+            	Log_OC.w(TAG, "TLSv1.2 is not supported in this device; falling through TLSv1.0");
+            	sslContext = SSLContext.getInstance("TLSv1");
+            	// should be available in any device; see reference of supported protocols in 
+            	// http://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+            }
             sslContext.init(null, tms, null);
                     
             mHostnameVerifier = new BrowserCompatHostnameVerifier();
@@ -127,9 +144,11 @@ public class NetworkUtils {
      * @throws KeyStoreException            When the KeyStore instance could not be created.
      * @throws IOException                  When an existing local trust store could not be loaded.
      * @throws NoSuchAlgorithmException     When the existing local trust store was saved with an unsupported algorithm.
-     * @throws CertificateException         When an exception occurred while loading the certificates from the local trust store.
+     * @throws CertificateException         When an exception occurred while loading the certificates from the local 
+     * 										trust store.
      */
-    private static KeyStore getKnownServersStore(Context context) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
+    private static KeyStore getKnownServersStore(Context context) 
+    		throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
         if (mKnownServersStore == null) {
             //mKnownServersStore = KeyStore.getInstance("BKS");
             mKnownServersStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -143,15 +162,17 @@ public class NetworkUtils {
                     in.close();
                 }
             } else {
-                mKnownServersStore.load(null, LOCAL_TRUSTSTORE_PASSWORD.toCharArray()); // necessary to initialize an empty KeyStore instance
+            	// next is necessary to initialize an empty KeyStore instance
+            	mKnownServersStore.load(null, LOCAL_TRUSTSTORE_PASSWORD.toCharArray()); 
             }
         }
         return mKnownServersStore;
     }
     
     
-    public static void addCertToKnownServersStore(Certificate cert, Context context) throws  KeyStoreException, NoSuchAlgorithmException, 
-                                                                                            CertificateException, IOException {
+    public static void addCertToKnownServersStore(Certificate cert, Context context) 
+    		throws  KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+    	
         KeyStore knownServers = getKnownServersStore(context);
         knownServers.setCertificateEntry(Integer.toString(cert.hashCode()), cert);
         FileOutputStream fos = null;
@@ -173,7 +194,8 @@ public class NetworkUtils {
         return mConnManager;
     }
 
-    public static boolean isCertInKnownServersStore(Certificate cert, Context context) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+    public static boolean isCertInKnownServersStore(Certificate cert, Context context) 
+    		throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
     	
     	KeyStore knownServers = getKnownServersStore(context);
     	Log_OC.d(TAG, "Certificate - HashCode: " + cert.hashCode() + " "

@@ -27,9 +27,8 @@ package com.owncloud.android.lib.test_project.test;
 import java.io.File;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.test_project.TestActivity;
-
-import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * Class to test Read Folder Operation
@@ -37,7 +36,7 @@ import android.test.ActivityInstrumentationTestCase2;
  * @author David A. Velasco
  */
 
-public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivity> {
+public class ReadFolderTest extends	RemoteTest {
 	
 	private static final String LOG_TAG = ReadFolderTest.class.getCanonicalName();
 
@@ -50,24 +49,22 @@ public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivit
 
 	
 	private TestActivity mActivity;
-	
-	public ReadFolderTest() {
-		super(TestActivity.class);
-	}
+	private String mFullPathToFolder;
 	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		setActivityInitialTouchMode(false);
 		mActivity = getActivity();
+		mFullPathToFolder = mBaseFolderPath + FOLDER_PATH;
 		
 		File textFile = mActivity.extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
-		RemoteOperationResult result = mActivity.createFolder(FOLDER_PATH, true);
+		RemoteOperationResult result = mActivity.createFolder( mFullPathToFolder, true);
 		if (result.isSuccess()) {
 			for (int i=0; i<FILE_PATHS.length && result.isSuccess(); i++) {
 				result = mActivity.uploadFile(
 						textFile.getAbsolutePath(), 
-						FILE_PATHS[i], 
+						 mBaseFolderPath + FILE_PATHS[i], 
 						"txt/plain");
 			}
 		}
@@ -83,7 +80,7 @@ public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivit
 	 */
 	public void testReadFolder() {
 
-		RemoteOperationResult result = mActivity.readFile(FOLDER_PATH);
+		RemoteOperationResult result = mActivity.readFile(mFullPathToFolder);
 		assertTrue(result.isSuccess());
 		assertTrue(result.getData() != null && result.getData().size() > 1);
 		assertTrue(result.getData().size() == 4);
@@ -93,8 +90,8 @@ public class ReadFolderTest extends	ActivityInstrumentationTestCase2<TestActivit
 	
 	@Override
 	protected void tearDown() throws Exception {
-		RemoteOperationResult removeResult = mActivity.removeFile(FOLDER_PATH);
-		if (!removeResult.isSuccess()) {
+		RemoteOperationResult removeResult = mActivity.removeFile(mFullPathToFolder);
+		if (!removeResult.isSuccess() && removeResult.getCode() != ResultCode.TIMEOUT) {
 			Utils.logAndThrow(LOG_TAG, removeResult);
 		}
 		

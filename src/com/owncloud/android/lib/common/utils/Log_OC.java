@@ -175,5 +175,4 @@ public class Log_OC {
     public static String[] getLogFileNames() {
         return mLogFileNames;
     }
-
 }

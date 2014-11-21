@@ -24,6 +24,7 @@
  -->
  
 <resources>
+    <string name="build_number"></string>
     <string name="server_base_url"></string>
     <string name="username"></string>
     <string name="password"></string>

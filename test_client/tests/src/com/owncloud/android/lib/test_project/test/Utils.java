@@ -24,15 +24,32 @@
 
 package com.owncloud.android.lib.test_project.test;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.test_project.R;
 
 public class Utils {
 
+	private static String LOG_TAG = Utils.class.getSimpleName();
+	
+	private static String sBuildNumber = null;
+	
 	public static void logAndThrow(String tag, RemoteOperationResult result) throws Exception {
 		Log.e(tag, result.getLogMessage(), result.getException());
 		throw new Exception(result.getLogMessage(), result.getException());
 	}
-
+	
+	public static String getBuildNumber(Context context) {
+		if (sBuildNumber == null) {
+			sBuildNumber = context.getString(R.string.build_number);
+			if (sBuildNumber == null || sBuildNumber.length() == 0) {
+				Log.w(LOG_TAG, "Build number unknown, using current time instead");
+				sBuildNumber = Long.toString(System.currentTimeMillis());
+			}
+		}
+		return sBuildNumber;
+	}
+	
 }

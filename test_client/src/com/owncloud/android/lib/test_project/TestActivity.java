@@ -188,7 +188,7 @@ public class TestActivity extends Activity {
 	public RemoteOperationResult removeFile(String remotePath) {
 		RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
 		RemoteOperationResult result = removeOperation.execute(mClient);
-		return TestActivity.removeFile(remotePath, mClient);
+		return result;
 	}
 	
 	/** 
