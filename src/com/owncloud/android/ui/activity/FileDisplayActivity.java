@@ -545,6 +545,12 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
             builder.create().show();
             break;
         }
+        case R.id.action_quota_stats: {
+            Intent quotaDisplayIntent = new Intent(getApplicationContext(),QuotaDisplayActivity.class);
+            quotaDisplayIntent.putExtra(EXTRA_ACCOUNT, getAccount());
+            startActivity(quotaDisplayIntent);
+            break;
+        }
         default:
             retval = super.onOptionsItemSelected(item);
         }
