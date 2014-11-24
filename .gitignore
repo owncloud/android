@@ -8,16 +8,20 @@
 # Java class files
 *.class
 
-# generated files
+# IntelliJ and Gradle specific entries
+.gradle
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/libraries/*.xml
+dataSources.ids
+datasources.xml
+gradle.xml
+build
 bin/
-build/
 gen/
 target/
-*.iml
 
 # Local configuration files (sdk path, etc)
-.idea/
-.gradle/
 local.properties
 sample_client/local.properties
 tests/local.properties
