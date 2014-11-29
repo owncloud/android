@@ -93,7 +93,6 @@ import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.UnshareLinkOperation;
 import com.owncloud.android.services.observer.FileObserverService;
-import com.owncloud.android.services.observer.InstantUploadFolderObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
@@ -179,7 +178,7 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
             Intent initObserversIntent = FileObserverService.makeInitIntent(this);
             startService(initObserversIntent);
         }
-         
+        
         /// Load of saved instance state
         if(savedInstanceState != null) {
             mWaitingToPreview = (OCFile) savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
