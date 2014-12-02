@@ -26,8 +26,11 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.File;
 
-import third_parties.daveKoeller.AlphanumComparator;
+import com.owncloud.android.MainApp;
 
+import third_parties.daveKoeller.AlphanumComparator;
+import android.content.Intent;
+import android.net.Uri;
 public class OCFile implements Parcelable, Comparable<OCFile> {
 
     public static final Parcelable.Creator<OCFile> CREATOR = new Parcelable.Creator<OCFile>() {
@@ -296,6 +299,17 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
                 mRemotePath += PATH_SEPARATOR;
             }
             Log_OC.d(TAG, "OCFile name changed to " + mRemotePath);
+            
+            // Notify MediaScanner about removed file
+            Intent intent1 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent1.setData(Uri.fromFile(new File(this.getStoragePath())));
+            MainApp.getAppContext().sendBroadcast(intent1);
+            
+            // Notify MediaScanner about new file
+            Intent intent2 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            String folder = new File(this.getStoragePath()).getParent();
+            intent2.setData(Uri.fromFile(new File(folder+ PATH_SEPARATOR+name)));
+            MainApp.getAppContext().sendBroadcast(intent2);
         }
     }
 
