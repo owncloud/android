@@ -90,7 +90,7 @@ public class CopyActivity extends HookActivity implements FileFragment.Container
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.files_move);
+        setContentView(R.layout.files_folder_picker);
 
         if (savedInstanceState == null) {
             createFragments();
@@ -359,9 +359,9 @@ public class CopyActivity extends HookActivity implements FileFragment.Container
      * Set per-view controllers
      */
     private void initControls() {
-        mCancelBtn = (Button) findViewById(R.id.move_files_btn_cancel);
+        mCancelBtn = (Button) findViewById(R.id.folder_picker_btn_choose);
         mCancelBtn.setOnClickListener(this);
-        mChooseBtn = (Button) findViewById(R.id.move_files_btn_choose);
+        mChooseBtn = (Button) findViewById(R.id.folder_picker_btn_cancel);
         mChooseBtn.setOnClickListener(this);
     }
 
