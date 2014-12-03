@@ -355,7 +355,7 @@ public class OperationsService extends Service {
                     } else if (action.equals(ACTION_RENAME)) {
                         String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                         String newName = operationIntent.getStringExtra(EXTRA_NEWNAME);
-                        operation = new RenameFileOperation(remotePath, account, newName);
+                        operation = new RenameFileOperation(remotePath, newName);
                     } else if (action.equals(ACTION_REMOVE)) {
                         String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
                         boolean onlyLocalCopy = operationIntent.getBooleanExtra(EXTRA_REMOVE_ONLY_LOCAL, false);

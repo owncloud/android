@@ -616,10 +616,7 @@ public class FileDisplayActivity extends HookActivity implements
 
         } else if (requestCode == ACTION_SELECT_MULTIPLE_FILES && (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
             requestMultipleUpload(data, resultCode);
-
-        } else if (requestCode == ACTION_MOVE_FILES && (resultCode == RESULT_OK ||
-                resultCode == MoveActivity.RESULT_OK_AND_MOVE)) {
-
+        } else if (requestCode == ACTION_MOVE_FILES && resultCode == RESULT_OK) {
             final Intent fData = data;
             final int fResultCode = resultCode;
             getHandler().postDelayed(
@@ -760,8 +757,8 @@ public class FileDisplayActivity extends HookActivity implements
      * @param resultCode Result code received
      */
     private void requestMoveOperation(Intent data, int resultCode) {
-        OCFile folderToMoveAt = data.getParcelableExtra(MoveActivity.EXTRA_CURRENT_FOLDER);
-        OCFile targetFile = data.getParcelableExtra(MoveActivity.EXTRA_TARGET_FILE);
+        OCFile folderToMoveAt = (OCFile) data.getParcelableExtra(FolderPickerActivity.EXTRA_FOLDER);
+        OCFile targetFile = (OCFile) data.getParcelableExtra(FolderPickerActivity.EXTRA_FILE);
         getFileOperationsHelper().moveFile(folderToMoveAt, targetFile);
     }
 
@@ -982,7 +979,7 @@ public class FileDisplayActivity extends HookActivity implements
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] { split[1] };
+                final String[] selectionArgs = new String[]{split[1]};
 
                 return UriUtils.getDataColumn(getApplicationContext(), contentUri, selection, selectionArgs);
             }

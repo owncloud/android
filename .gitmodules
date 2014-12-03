@@ -1,4 +1,4 @@
 [submodule "owncloud-android-library"]
 	path = owncloud-android-library
-	url = git://github.com/owncloudChalmers/android-library.git
+	url = https://github.com/owncloudChalmers/android-library.git
 	branch = copy_operation
