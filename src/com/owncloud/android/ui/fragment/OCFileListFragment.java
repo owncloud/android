@@ -17,32 +17,27 @@
  */
 package com.owncloud.android.ui.fragment;
 
-import java.io.File;
-import java.util.Vector;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView;
-import android.view.LayoutInflater;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.activity.CopyActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
-import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFileDialogFragment;
@@ -50,36 +45,39 @@ import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewMediaFragment;
 
+import java.io.File;
+import java.util.Vector;
+
 /**
  * A Fragment that lists all files and folders in a given path.
- * 
+ * <p/>
  * TODO refactorize to get rid of direct dependency on FileDisplayActivity
- * 
+ *
  * @author Bartek Przybylski
  * @author masensio
  * @author David A. Velasco
  */
 public class OCFileListFragment extends ExtendedListFragment {
-    
+
     private static final String TAG = OCFileListFragment.class.getSimpleName();
 
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
-            
+
     public final static String ARG_JUST_FOLDERS = MY_PACKAGE + ".JUST_FOLDERS";
     public final static String ARG_ALLOW_CONTEXTUAL_ACTIONS = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
-            
+
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
 
     private FileFragment.ContainerActivity mContainerActivity;
-   
+
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
     private View mFooterView;
-    
+
     private OCFile mTargetFile;
 
-    
+
     /**
      * {@inheritDoc}
      */
@@ -89,21 +87,21 @@ public class OCFileListFragment extends ExtendedListFragment {
         Log_OC.e(TAG, "onAttach");
         try {
             mContainerActivity = (FileFragment.ContainerActivity) activity;
-            
+
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement " + 
+            throw new ClassCastException(activity.toString() + " must implement " +
                     FileFragment.ContainerActivity.class.getSimpleName());
         }
         try {
             setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) activity);
-            
+
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement " + 
+            throw new ClassCastException(activity.toString() + " must implement " +
                     SwipeRefreshLayout.OnRefreshListener.class.getSimpleName());
         }
     }
 
-    
+
     @Override
     public void onDetach() {
         setOnRefreshListener(null);
@@ -124,16 +122,16 @@ public class OCFileListFragment extends ExtendedListFragment {
         }
 
         mFooterView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
-                        R.layout.list_footer, null, false);
+                R.layout.list_footer, null, false);
         setFooterView(mFooterView);
 
         Bundle args = getArguments();
-        boolean justFolders = (args == null) ? false : args.getBoolean(ARG_JUST_FOLDERS, false); 
+        boolean justFolders = (args == null) ? false : args.getBoolean(ARG_JUST_FOLDERS, false);
         mAdapter = new FileListListAdapter(
                 justFolders,
-                getSherlockActivity(), 
+                getSherlockActivity(),
                 mContainerActivity
-                );
+        );
         setListAdapter(mAdapter);
 
         registerForContextMenu(getListView());
@@ -144,31 +142,31 @@ public class OCFileListFragment extends ExtendedListFragment {
      * Saves the current listed folder.
      */
     @Override
-    public void onSaveInstanceState (Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(KEY_FILE, mFile);
     }
-    
+
     /**
      * Call this, when the user presses the up button.
-     * 
-     * Tries to move up the current folder one level. If the parent folder was removed from the 
+     * <p/>
+     * Tries to move up the current folder one level. If the parent folder was removed from the
      * database, it continues browsing up until finding an existing folders.
-     * 
+     * <p/>
      * return       Count of folder levels browsed up.
      */
     public int onBrowseUp() {
         OCFile parentDir = null;
         int moveCount = 0;
-        
-        if(mFile != null){
+
+        if (mFile != null) {
             FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
-            
+
             String parentPath = null;
             if (mFile.getParentId() != FileDataStorageManager.ROOT_PARENT_ID) {
                 parentPath = new File(mFile.getRemotePath()).getParent();
-                parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : 
-                	parentPath + OCFile.PATH_SEPARATOR;
+                parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath :
+                        parentPath + OCFile.PATH_SEPARATOR;
                 parentDir = storageManager.getFileByPath(parentPath);
                 moveCount++;
             } else {
@@ -176,89 +174,89 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
             while (parentDir == null) {
                 parentPath = new File(parentPath).getParent();
-                parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : 
-                	parentPath + OCFile.PATH_SEPARATOR;
+                parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath :
+                        parentPath + OCFile.PATH_SEPARATOR;
                 parentDir = storageManager.getFileByPath(parentPath);
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
             mFile = parentDir;
-            
+
             listDirectory(mFile);
 
             onRefresh(false);
-            
+
             // restore index and top position
             restoreIndexAndTopPosition();
-            
+
         }   // else - should never happen now
-   
+
         return moveCount;
     }
-    
+
     @Override
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         OCFile file = (OCFile) mAdapter.getItem(position);
         if (file != null) {
-            if (file.isFolder()) { 
+            if (file.isFolder()) {
                 // update state and view of this fragment
                 listDirectory(file);
                 // then, notify parent activity to let it update its state and view
                 mContainerActivity.onBrowsedDownTo(file);
                 // save index and top position
                 saveIndexAndTopPosition(position);
-                
+
             } else { /// Click on a file
                 if (PreviewImageFragment.canBePreviewed(file)) {
                     // preview image - it handles the download, if needed
-                    ((FileDisplayActivity)mContainerActivity).startImagePreview(file);
-                    
+                    ((FileDisplayActivity) mContainerActivity).startImagePreview(file);
+
                 } else if (file.isDown()) {
                     if (PreviewMediaFragment.canBePreviewed(file)) {
                         // media preview
-                        ((FileDisplayActivity)mContainerActivity).startMediaPreview(file, 0, true);
+                        ((FileDisplayActivity) mContainerActivity).startMediaPreview(file, 0, true);
                     } else {
                         mContainerActivity.getFileOperationsHelper().openFile(file);
                     }
-                    
+
                 } else {
                     // automatic download, preview on finish
-                    ((FileDisplayActivity)mContainerActivity).startDownloadForPreview(file);
+                    ((FileDisplayActivity) mContainerActivity).startDownloadForPreview(file);
                 }
-                    
+
             }
-            
+
         } else {
             Log_OC.d(TAG, "Null object in ListAdapter!!");
         }
-        
+
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onCreateContextMenu (
+    public void onCreateContextMenu(
             ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         Bundle args = getArguments();
-        boolean allowContextualActions = 
-                (args == null) ? true : args.getBoolean(ARG_ALLOW_CONTEXTUAL_ACTIONS, true); 
+        boolean allowContextualActions =
+                (args == null) ? true : args.getBoolean(ARG_ALLOW_CONTEXTUAL_ACTIONS, true);
         if (allowContextualActions) {
             MenuInflater inflater = getSherlockActivity().getMenuInflater();
             inflater.inflate(R.menu.file_actions_menu, menu);
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
             OCFile targetFile = (OCFile) mAdapter.getItem(info.position);
-            
+
             if (mContainerActivity.getStorageManager() != null) {
                 FileMenuFilter mf = new FileMenuFilter(
-                    targetFile,
-                    mContainerActivity.getStorageManager().getAccount(),
-                    mContainerActivity,
-                    getSherlockActivity()
+                        targetFile,
+                        mContainerActivity.getStorageManager().getAccount(),
+                        mContainerActivity,
+                        getSherlockActivity()
                 );
                 mf.filter(menu);
             }
-            
+
             /// additional restrictions for this fragment 
             // TODO allow in the future 'open with' for previewable files
             MenuItem item = menu.findItem(R.id.action_open_file_with);
@@ -267,8 +265,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                 item.setEnabled(false);
             }
             /// TODO break this direct dependency on FileDisplayActivity... if possible
-            FileFragment frag = ((FileDisplayActivity)getSherlockActivity()).getSecondFragment();
-            if (frag != null && frag instanceof FileDetailFragment && 
+            FileFragment frag = ((FileDisplayActivity) getSherlockActivity()).getSecondFragment();
+            if (frag != null && frag instanceof FileDetailFragment &&
                     frag.getFile().getFileId() == targetFile.getFileId()) {
                 item = menu.findItem(R.id.action_see_details);
                 if (item != null) {
@@ -278,16 +276,16 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
         }
     }
-    
-    
+
+
     /**
      * {@inhericDoc}
      */
     @Override
-    public boolean onContextItemSelected (MenuItem item) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();        
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         mTargetFile = (OCFile) mAdapter.getItem(info.position);
-        switch (item.getItemId()) {                
+        switch (item.getItemId()) {
             case R.id.action_share_file: {
                 mContainerActivity.getFileOperationsHelper().shareFileWithLink(mTargetFile);
                 return true;
@@ -306,14 +304,14 @@ public class OCFileListFragment extends ExtendedListFragment {
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
-            case R.id.action_download_file: 
+            case R.id.action_download_file:
             case R.id.action_sync_file: {
                 mContainerActivity.getFileOperationsHelper().syncFile(mTargetFile);
                 return true;
             }
             case R.id.action_cancel_download:
             case R.id.action_cancel_upload: {
-                ((FileDisplayActivity)mContainerActivity).cancelTransference(mTargetFile);
+                ((FileDisplayActivity) mContainerActivity).cancelTransference(mTargetFile);
                 return true;
             }
             case R.id.action_see_details: {
@@ -324,8 +322,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                 // Obtain the file
                 if (!mTargetFile.isDown()) {  // Download the file
                     Log_OC.d(TAG, mTargetFile.getRemotePath() + " : File must be downloaded");
-                    ((FileDisplayActivity)mContainerActivity).startDownloadForSending(mTargetFile);
-                    
+                    ((FileDisplayActivity) mContainerActivity).startDownloadForSending(mTargetFile);
+
                 } else {
                     mContainerActivity.getFileOperationsHelper().sendDownloadedFile(mTargetFile);
                 }
@@ -340,14 +338,14 @@ public class OCFileListFragment extends ExtendedListFragment {
                 return true;
             }
             case R.id.action_copy:
-                Intent action = new Intent(getActivity(), CopyActivity.class);
+                Intent action = new Intent(getActivity(), FolderPickerActivity.class);
 
                 // Pass mTargetFile that contains info of selected file/folder
-                action.putExtra(CopyActivity.EXTRA_TARGET_FILE, mTargetFile);
+                action.putExtra(FolderPickerActivity.EXTRA_FILE, mTargetFile);
                 getActivity().startActivityForResult(action, FileDisplayActivity.ACTION_COPY_FILES);
                 return true;
             default:
-                return super.onContextItemSelected(item); 
+                return super.onContextItemSelected(item);
         }
     }
 
@@ -355,24 +353,25 @@ public class OCFileListFragment extends ExtendedListFragment {
     /**
      * Use this to query the {@link OCFile} that is currently
      * being displayed by this fragment
+     *
      * @return The currently viewed OCFile
      */
-    public OCFile getCurrentFile(){
+    public OCFile getCurrentFile() {
         return mFile;
     }
-    
+
     /**
      * Calls {@link OCFileListFragment#listDirectory(OCFile)} with a null parameter
      */
-    public void listDirectory(){
+    public void listDirectory() {
         listDirectory(null);
     }
-    
+
     /**
      * Lists the given directory on the view. When the input parameter is null,
      * it will either refresh the last known directory. list the root
      * if there never was a directory.
-     * 
+     *
      * @param directory File to be listed
      */
     public void listDirectory(OCFile directory) {
@@ -380,18 +379,18 @@ public class OCFileListFragment extends ExtendedListFragment {
         if (storageManager != null) {
 
             // Check input parameters for null
-            if(directory == null){
-                if(mFile != null){
+            if (directory == null) {
+                if (mFile != null) {
                     directory = mFile;
                 } else {
                     directory = storageManager.getFileByPath("/");
                     if (directory == null) return; // no files, wait for sync
                 }
             }
-        
-        
+
+
             // If that's not a directory -> List its parent
-            if(!directory.isFolder()){
+            if (!directory.isFolder()) {
                 Log_OC.w(TAG, "You see, that is not a directory -> " + directory.toString());
                 directory = storageManager.getFileById(directory.getParentId());
             }
@@ -401,7 +400,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 mList.setSelectionFromTop(0, 0);
             }
             mFile = directory;
-            
+
             // Update Footer
             TextView footerText = (TextView) mFooterView.findViewById(R.id.footerText);
             Log_OC.d("footer", String.valueOf(System.currentTimeMillis()));
@@ -409,7 +408,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             Log_OC.d("footer", String.valueOf(System.currentTimeMillis()));
         }
     }
-    
+
     private String generateFooterText(OCFile directory) {
         Integer files = 0;
         Integer folders = 0;
@@ -426,15 +425,15 @@ public class OCFileListFragment extends ExtendedListFragment {
         }
 
         String output = "";
-       
-        if (files > 0){
+
+        if (files > 0) {
             if (files == 1) {
                 output = output + files.toString() + " " + getResources().getString(R.string.file_list_file);
             } else {
                 output = output + files.toString() + " " + getResources().getString(R.string.file_list_files);
             }
         }
-        if (folders > 0 && files > 0){
+        if (folders > 0 && files > 0) {
             output = output + ", ";
         }
         if (folders == 1) {
@@ -442,10 +441,10 @@ public class OCFileListFragment extends ExtendedListFragment {
         } else if (folders > 1) {
             output = output + folders.toString() + " " + getResources().getString(R.string.file_list_folders);
         }
-        
+
         return output;
     }
-    
+
     public void sortByName(boolean descending) {
         mAdapter.setSortOrder(FileListListAdapter.SORT_NAME, descending);
     }
@@ -456,6 +455,6 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     public void sortBySize(boolean descending) {
         mAdapter.setSortOrder(FileListListAdapter.SORT_SIZE, descending);
-    }  
+    }
 
 }
