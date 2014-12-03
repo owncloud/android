@@ -19,6 +19,7 @@
 package com.owncloud.android.files;
 
 import java.io.File;
+import java.util.Date;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
@@ -77,6 +78,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         String file_path = null;
         String file_name = null;
         String mime_type = null;
+        Date date_taken = null;
 
         Log_OC.w(TAG, "New photo received");
         
@@ -91,7 +93,8 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
-        String[] CONTENT_PROJECTION = { Images.Media.DATA, Images.Media.DISPLAY_NAME, Images.Media.MIME_TYPE, Images.Media.SIZE };
+        String[] CONTENT_PROJECTION = { Images.Media.DATA, Images.Media.DISPLAY_NAME, Images.Media.MIME_TYPE,
+                Images.Media.SIZE, Images.Media.DATE_TAKEN };
         c = context.getContentResolver().query(intent.getData(), CONTENT_PROJECTION, null, null, null);
         if (!c.moveToFirst()) {
             Log_OC.e(TAG, "Couldn't resolve given uri: " + intent.getDataString());
@@ -100,6 +103,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         file_path = c.getString(c.getColumnIndex(Images.Media.DATA));
         file_name = c.getString(c.getColumnIndex(Images.Media.DISPLAY_NAME));
         mime_type = c.getString(c.getColumnIndex(Images.Media.MIME_TYPE));
+        date_taken = new Date(c.getLong(c.getColumnIndex(Images.Media.DATE_TAKEN)));
         c.close();
         
         Log_OC.d(TAG, file_path + "");
@@ -116,7 +120,8 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         Intent i = new Intent(context, FileUploader.class);
         i.putExtra(FileUploader.KEY_ACCOUNT, account);
         i.putExtra(FileUploader.KEY_LOCAL_FILE, file_path);
-        i.putExtra(FileUploader.KEY_REMOTE_FILE, FileStorageUtils.getInstantUploadFilePath(context, file_name));
+        i.putExtra(FileUploader.KEY_REMOTE_FILE, FileStorageUtils.getInstantUploadFilePath(context,
+                FileStorageUtils.getInstantUploadFileName(context, file_name, date_taken)));
         i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
         i.putExtra(FileUploader.KEY_MIME_TYPE, mime_type);
         i.putExtra(FileUploader.KEY_INSTANT_UPLOAD, true);
@@ -128,6 +133,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         String file_path = null;
         String file_name = null;
         String mime_type = null;
+        Date date_taken = null;
 
         Log_OC.w(TAG, "New video received");
         
@@ -142,7 +148,8 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
-        String[] CONTENT_PROJECTION = { Video.Media.DATA, Video.Media.DISPLAY_NAME, Video.Media.MIME_TYPE, Video.Media.SIZE };
+        String[] CONTENT_PROJECTION = { Video.Media.DATA, Video.Media.DISPLAY_NAME, Video.Media.MIME_TYPE,
+                Video.Media.SIZE, Video.Media.DATE_TAKEN };
         c = context.getContentResolver().query(intent.getData(), CONTENT_PROJECTION, null, null, null);
         if (!c.moveToFirst()) {
             Log_OC.e(TAG, "Couldn't resolve given uri: " + intent.getDataString());
@@ -151,6 +158,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         file_path = c.getString(c.getColumnIndex(Video.Media.DATA));
         file_name = c.getString(c.getColumnIndex(Video.Media.DISPLAY_NAME));
         mime_type = c.getString(c.getColumnIndex(Video.Media.MIME_TYPE));
+        date_taken = new Date(c.getLong(c.getColumnIndex(Images.Media.DATE_TAKEN)));
         c.close();
         Log_OC.d(TAG, file_path + "");
 
@@ -161,7 +169,8 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         Intent i = new Intent(context, FileUploader.class);
         i.putExtra(FileUploader.KEY_ACCOUNT, account);
         i.putExtra(FileUploader.KEY_LOCAL_FILE, file_path);
-        i.putExtra(FileUploader.KEY_REMOTE_FILE, FileStorageUtils.getInstantUploadFilePath(context, file_name));
+        i.putExtra(FileUploader.KEY_REMOTE_FILE, FileStorageUtils.getInstantUploadFilePath(context,
+                FileStorageUtils.getInstantUploadFileName(context, file_name, date_taken)));
         i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
         i.putExtra(FileUploader.KEY_MIME_TYPE, mime_type);
         i.putExtra(FileUploader.KEY_INSTANT_UPLOAD, true);

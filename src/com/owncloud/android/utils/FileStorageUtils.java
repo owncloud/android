@@ -18,6 +18,8 @@
 package com.owncloud.android.utils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -80,6 +82,26 @@ public class FileStorageUtils {
         String uploadPath = pref.getString("instant_upload_path", uploadPathdef);
         String value = uploadPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;
+    }
+
+    public static String getInstantUploadFileName(Context context, String defaultFileName, Date dateTaken) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        if (pref.getBoolean("instant_upload_rename", false)) {
+            // Extract the file extension (including the dot)
+            String extension = "";
+            int lastDot = defaultFileName.lastIndexOf('.');
+            if (lastDot > 0) {
+                extension = defaultFileName.substring(lastDot);
+            }
+
+            // Parse the format and append the extension
+            String defaultPattern = context.getString(R.string.instant_upload_rename_files_format);
+            String uploadPattern = pref.getString("instant_upload_rename_files_format", defaultPattern);
+            SimpleDateFormat sdf = new SimpleDateFormat(uploadPattern);
+            return sdf.format(dateTaken) + extension;
+        } else {
+            return defaultFileName;
+        }
     }
     
     public static String getParentPath(String remotePath) {
