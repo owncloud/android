@@ -30,7 +30,9 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.Matrix;
 import android.graphics.Point;
+import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -48,11 +50,14 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.datamodel.ThumbnailsCacheManager.ThumbnailGenerationTask;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFileDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
+import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.TouchImageViewCustom;
 
 
@@ -412,6 +417,11 @@ public class PreviewImageFragment extends FileFragment {
                 Log_OC.e(TAG, "Unexpected error loading " + getFile().getStoragePath(), t);
                 
             }
+            
+            // Rotate image, obeying exif tag
+            result = BitmapUtils.rotateImage(result, storagePath);
+           
+            
             return result;
         }
         
