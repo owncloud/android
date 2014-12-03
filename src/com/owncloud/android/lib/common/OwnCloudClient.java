@@ -247,6 +247,12 @@ public class OwnCloudClient extends HttpClient {
             if (location != null) {
                 Log_OC.d(TAG + " #" + mInstanceNumber,  
                 		"Location to redirect: " + location.getValue());
+
+                // Release the connection to avoid reach the max number of connections per host
+                // due to it will be set a different url
+                exhaustResponse(method.getResponseBodyAsStream());
+                method.releaseConnection();
+
                 method.setURI(new URI(location.getValue(), true));
                 Header destination = method.getRequestHeader("Destination");
                 if (destination == null) {
