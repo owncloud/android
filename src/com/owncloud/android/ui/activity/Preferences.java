@@ -17,10 +17,13 @@
  */
 package com.owncloud.android.ui.activity;
 
+import java.util.HashSet;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -50,9 +53,12 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
+import com.owncloud.android.datamodel.InstantUploadPreference;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.services.observer.InstantUploadFolderObserverService;
 import com.owncloud.android.ui.LongClickableCheckBoxPreference;
+import com.owncloud.android.ui.LongClickablePreference;
 import com.owncloud.android.utils.DisplayUtils;
 
 
@@ -71,9 +77,12 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
     private Preference pAboutApp;
 
     private PreferenceCategory mAccountsPrefCategory = null;
+    private PreferenceCategory mInstantUploadsCategory = null;
     private final Handler mHandler = new Handler();
     private String mAccountName;
+    private String mInstantUpload;
     private boolean mShowContextMenu = false;
+    private boolean mShowAccountContextMenu = false;
     private String mUploadPath;
 
 
@@ -92,7 +101,8 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
         loadInstantUploadPath();
 
         // Load the accounts category for adding the list of accounts
-        mAccountsPrefCategory = (PreferenceCategory) findPreference("accounts_category");
+        mAccountsPrefCategory =   (PreferenceCategory) findPreference("accounts_category");
+        mInstantUploadsCategory = (PreferenceCategory) findPreference("instantUploads_category");
 
         ListView listView = getListView();
         listView.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -104,8 +114,19 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
 
                 if (obj != null && obj instanceof LongClickableCheckBoxPreference) {
                     mShowContextMenu = true;
+                    mShowAccountContextMenu = true;
                     mAccountName = ((LongClickableCheckBoxPreference) obj).getKey();
 
+                    Preferences.this.openContextMenu(listView);
+
+                    View.OnLongClickListener longListener = (View.OnLongClickListener) obj;
+                    return longListener.onLongClick(view);
+                }
+                
+                if (obj != null && obj instanceof LongClickablePreference) {
+                    mShowContextMenu = true;
+                    mInstantUpload = ((LongClickablePreference) obj).getKey();
+                    
                     Preferences.this.openContextMenu(listView);
 
                     View.OnLongClickListener longListener = (View.OnLongClickListener) obj;
@@ -265,6 +286,52 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
                    Log_OC.e(TAG, "Error while showing about dialog", e);
                }
        }
+       
+       addInstantUploadFolders();
+       
+       
+       // mInstantUploadsCategory.setL
+    }
+    
+    private void addInstantUploadFolders(){
+        // Remove folders in case list is refreshing for avoiding to have duplicate items
+        if (mInstantUploadsCategory.getPreferenceCount() > 0) {
+            mInstantUploadsCategory.removeAll();
+        }
+        
+        /* Instant Upload Folders */
+        for (InstantUploadPreference preference : InstantUploadFolderObserverService.getAll()) {
+            LongClickablePreference addInstantUploadPref = new LongClickablePreference(this);
+            addInstantUploadPref.setKey(preference.getId());
+            addInstantUploadPref.setTitle(preference.toString());
+            mInstantUploadsCategory.addPreference(addInstantUploadPref);
+
+            addInstantUploadPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {                  
+                    Intent settingsIntent = new Intent(MainApp.getAppContext(), InstantUploadPreferencesActivity.class);
+                    settingsIntent.putExtra(InstantUploadPreferencesActivity.NUMBER, preference.getKey());
+                    startActivity(settingsIntent);
+                    return true;
+                }
+            });
+        }
+      
+        LongClickablePreference addInstantUploadPref = new LongClickablePreference(this);
+        addInstantUploadPref.setTitle("Add instant upload");
+        mInstantUploadsCategory.addPreference(addInstantUploadPref);
+        addInstantUploadPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                // Create new InstantUploadPreference
+                String newValue = InstantUploadFolderObserverService.add();
+                
+                Intent settingsIntent = new Intent(MainApp.getAppContext(), InstantUploadPreferencesActivity.class);
+                settingsIntent.putExtra(InstantUploadPreferencesActivity.NUMBER, newValue);
+                startActivity(settingsIntent);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -276,12 +343,20 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 
+        Log_OC.d(TAG, "contextAccount: " + mShowAccountContextMenu);
+        
         // Filter for only showing contextual menu when long press on the
         // accounts
         if (mShowContextMenu) {
-            getMenuInflater().inflate(R.menu.account_picker_long_click, menu);
+            if (mShowAccountContextMenu){
+                getMenuInflater().inflate(R.menu.account_picker_long_click, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.instant_upload_folder_picker_long_click, menu);
+            }
             mShowContextMenu = false;
         }
+        mShowAccountContextMenu = false;
+        
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
@@ -296,25 +371,32 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
     public boolean onContextItemSelected(android.view.MenuItem item) {
         AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
-        for (Account a : accounts) {
-            if (a.name.equals(mAccountName)) {
-                if (item.getItemId() == R.id.change_password) {
+        
+        if ((item.getItemId() == R.id.change_password) || (item.getItemId() == R.id.delete_account)){
+            for (Account a : accounts) {
+                if (a.name.equals(mAccountName)) {
+                    if (item.getItemId() == R.id.change_password) {
 
-                    // Change account password
-                    Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-                    updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, a);
-                    updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION,
-                            AuthenticatorActivity.ACTION_UPDATE_TOKEN);
-                    startActivity(updateAccountCredentials);
+                        // Change account password
+                        Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
+                        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, a);
+                        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION,
+                                AuthenticatorActivity.ACTION_UPDATE_TOKEN);
+                        startActivity(updateAccountCredentials);
 
-                } else if (item.getItemId() == R.id.delete_account) {
+                    } else if (item.getItemId() == R.id.delete_account) {
 
-                    // Remove account
-                    am.removeAccount(a, this, mHandler);
+                        // Remove account
+                        am.removeAccount(a, this, mHandler);
+                    }
                 }
             }
         }
-
+        
+        if (item.getItemId() == R.id.delete_instant_upload){
+            InstantUploadFolderObserverService.delete(mInstantUpload);
+            addInstantUploadFolders();
+        }
         return true;
     }
 
@@ -342,6 +424,9 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
 
         // Populate the accounts category with the list of accounts
         addAccountsCheckboxPreferences();
+        
+        // Populate the instan upload folders category with the list of folders
+        addInstantUploadFolders();
     }
 
     @Override

@@ -86,6 +86,10 @@
             android:name=".ui.activity.Preferences"
             android:theme="@style/Theme.ownCloud" >
         </activity>
+         <activity
+            android:name=".ui.activity.InstantUploadPreferencesActivity">
+         </activity>
+        
         <activity android:name=".ui.activity.PreferencesNewSessionewSession" >
         </activity>
         
