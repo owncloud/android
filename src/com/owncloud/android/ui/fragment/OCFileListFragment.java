@@ -48,6 +48,7 @@ import com.owncloud.android.ui.dialog.RemoveFileDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewMediaFragment;
+import com.owncloud.android.ui.preview.PreviewTextFragment;
 
 /**
  * A Fragment that lists all files and folders in a given path.
@@ -210,7 +211,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                 if (PreviewImageFragment.canBePreviewed(file)) {
                     // preview image - it handles the download, if needed
                     ((FileDisplayActivity)mContainerActivity).startImagePreview(file);
-                    
+                } else if (PreviewTextFragment.canBePreviewed(file)){
+                    ((FileDisplayActivity)mContainerActivity).startTextPreview(file);
                 } else if (file.isDown()) {
                     if (PreviewMediaFragment.canBePreviewed(file)) {
                         // media preview
