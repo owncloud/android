@@ -25,6 +25,8 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -605,18 +607,27 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
 
     /**
      * Called, when the user selected something for uploading
+     *
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ACTION_SELECT_CONTENT_FROM_APPS && (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
-            requestSimpleUpload(data, resultCode);
-
+            //getClipData is only supported on api level 16+, Jelly Bean
+            if (data.getData() == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                for( int i = 0; i < data.getClipData().getItemCount(); i++){
+                    Intent intent = new Intent();
+                    intent.setData(data.getClipData().getItemAt(i).getUri());
+                    requestSimpleUpload(intent, resultCode);
+                }
+            }else {
+                requestSimpleUpload(data, resultCode);
+            }
         } else if (requestCode == ACTION_SELECT_MULTIPLE_FILES && (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
             requestMultipleUpload(data, resultCode);
 
-        } else if (requestCode == ACTION_MOVE_FILES && (resultCode == RESULT_OK || 
-                resultCode == MoveActivity.RESULT_OK_AND_MOVE)){
+        } else if (requestCode == ACTION_MOVE_FILES && resultCode == RESULT_OK){
 
             final Intent fData = data;
             final int fResultCode = resultCode; 
@@ -744,8 +755,8 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
      * @param resultCode        Result code received
      */
     private void requestMoveOperation(Intent data, int resultCode) {
-        OCFile folderToMoveAt = (OCFile) data.getParcelableExtra(MoveActivity.EXTRA_CURRENT_FOLDER);
-        OCFile targetFile = (OCFile) data.getParcelableExtra(MoveActivity.EXTRA_TARGET_FILE);
+        OCFile folderToMoveAt = (OCFile) data.getParcelableExtra(FolderPickerActivity.EXTRA_FOLDER);
+        OCFile targetFile = (OCFile) data.getParcelableExtra(FolderPickerActivity.EXTRA_FILE);
         getFileOperationsHelper().moveFile(folderToMoveAt, targetFile);
     }
 
@@ -878,6 +889,10 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
                     } else if (item == 1) {
                         Intent action = new Intent(Intent.ACTION_GET_CONTENT);
                         action = action.setType("*/*").addCategory(Intent.CATEGORY_OPENABLE);
+                        //Intent.EXTRA_ALLOW_MULTIPLE is only supported on api level 18+, Jelly Bean
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                            action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                        }
                         startActivityForResult(Intent.createChooser(action, getString(R.string.upload_chooser_title)),
                                 ACTION_SELECT_CONTENT_FROM_APPS);
                     }
