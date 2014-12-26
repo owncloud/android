@@ -36,6 +36,7 @@ import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Operation to find out what authentication method requires

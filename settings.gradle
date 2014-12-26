@@ -1,3 +1,0 @@
-include ':owncloud-android-library'
-include 'libs/actionbarsherlock_lib'
-include ':'

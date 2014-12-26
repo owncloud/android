@@ -400,7 +400,6 @@ public class FileDownloader extends Service implements OnDatatransferProgressLis
         file.setFileLength((new File(mCurrentDownload.getSavePath()).length()));
         file.setRemoteId(mCurrentDownload.getFile().getRemoteId());
         mStorageManager.saveFile(file);
-        mStorageManager.triggerMediaScan(file.getStoragePath());
     }
 
 

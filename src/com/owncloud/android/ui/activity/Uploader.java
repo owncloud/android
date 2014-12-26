@@ -39,22 +39,22 @@ import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -62,10 +62,6 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.MenuItem;
-import com.owncloud.android.utils.DisplayUtils;
 
 /**
  * This can be used to upload things to an ownCloud instance.
@@ -73,7 +69,7 @@ import com.owncloud.android.utils.DisplayUtils;
  * @author Bartek Przybylski
  * 
  */
-public class Uploader extends SherlockListActivity implements OnItemClickListener, android.view.View.OnClickListener {
+public class Uploader extends ListActivity implements OnItemClickListener, android.view.View.OnClickListener {
     private static final String TAG = "ownCloudUploader";
 
     private Account mAccount;
@@ -95,11 +91,9 @@ public class Uploader extends SherlockListActivity implements OnItemClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         mParents = new Stack<String>();
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(DisplayUtils.getSeasonalIconId());
-
+        mParents.add("");
         if (prepareStreamsToUpload()) {
             mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
             Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
@@ -112,11 +106,8 @@ public class Uploader extends SherlockListActivity implements OnItemClickListene
             } else {
                 mAccount = accounts[0];
                 mStorageManager = new FileDataStorageManager(mAccount, getContentResolver());
-                initTargetFolder();
                 populateDirectoryList();
-                
             }
-            
         } else {
             showDialog(DIALOG_NO_STREAM);
         }
@@ -170,7 +161,7 @@ public class Uploader extends SherlockListActivity implements OnItemClickListene
         case DIALOG_MULTIPLE_ACCOUNT:
             CharSequence ac[] = new CharSequence[mAccountManager.getAccountsByType(MainApp.getAccountType()).length];
             for (int i = 0; i < ac.length; ++i) {
-                ac[i] = DisplayUtils.convertIdn(mAccountManager.getAccountsByType(MainApp.getAccountType())[i].name, false);
+                ac[i] = mAccountManager.getAccountsByType(MainApp.getAccountType())[i].name;
             }
             builder.setTitle(R.string.common_choose_account);
             builder.setItems(ac, new OnClickListener() {
@@ -178,7 +169,6 @@ public class Uploader extends SherlockListActivity implements OnItemClickListene
                 public void onClick(DialogInterface dialog, int which) {
                     mAccount = mAccountManager.getAccountsByType(MainApp.getAccountType())[which];
                     mStorageManager = new FileDataStorageManager(mAccount, getContentResolver());
-                    initTargetFolder();
                     populateDirectoryList();
                 }
             });
@@ -298,22 +288,12 @@ public class Uploader extends SherlockListActivity implements OnItemClickListene
     private void populateDirectoryList() {
         setContentView(R.layout.uploader_layout);
 
-        String current_dir = mParents.peek();
-        if(current_dir.equals("")){
-            getSupportActionBar().setTitle(getString(R.string.default_display_name_for_root_folder));
-        }
-        else{
-            getSupportActionBar().setTitle(current_dir);
-        }
-        boolean notRoot = (mParents.size() > 1);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(notRoot);
-        actionBar.setHomeButtonEnabled(notRoot);
-
-        String full_path = generatePath(mParents);
+        String full_path = "";
+        for (String a : mParents)
+            full_path += a + "/";
         
         Log_OC.d(TAG, "Populating view with content of : " + full_path);
-
+        
         mFile = mStorageManager.getFileByPath(full_path);
         if (mFile != null) {
             Vector<OCFile> files = mStorageManager.getFolderContent(mFile);
@@ -335,14 +315,6 @@ public class Uploader extends SherlockListActivity implements OnItemClickListene
             btn.setOnClickListener(this);
             getListView().setOnItemClickListener(this);
         }
-    }
-
-    private String generatePath(Stack<String> dirs) {
-        String full_path = "";
-
-        for (String a : dirs)
-            full_path += a + "/";
-        return full_path;
     }
 
     private boolean prepareStreamsToUpload() {
@@ -436,13 +408,6 @@ public class Uploader extends SherlockListActivity implements OnItemClickListene
             intent.putExtra(FileUploader.KEY_REMOTE_FILE, remote.toArray(new String[remote.size()]));
             intent.putExtra(FileUploader.KEY_ACCOUNT, mAccount);
             startService(intent);
-
-            //Save the path to shared preferences
-            SharedPreferences.Editor appPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(getApplicationContext()).edit();
-            appPrefs.putString("last_upload_path", mUploadPath);
-            appPrefs.apply();
-
             finish();
             }
             
@@ -451,52 +416,5 @@ public class Uploader extends SherlockListActivity implements OnItemClickListene
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();            
         }
     }
-    
-    /**
-     *  Loads the target folder initialize shown to the user.
-     * 
-     *  The target account has to be chosen before this method is called. 
-     */
-    private void initTargetFolder() {
-        if (mStorageManager == null) {
-            throw new IllegalStateException("Do not call this method before initializing mStorageManager");
-        }
-        
-        SharedPreferences appPreferences = PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext());
 
-        String last_path = appPreferences.getString("last_upload_path", "");
-        // "/" equals root-directory
-        if(last_path.equals("/")) {
-            mParents.add("");
-        }
-        else{
-            String[] dir_names = last_path.split("/");
-            for (String dir : dir_names)
-                mParents.add(dir);
-        }
-        //Make sure that path still exists, if it doesn't pop the stack and try the previous path
-            while(!mStorageManager.fileExists(generatePath(mParents)) && mParents.size() > 1){
-                mParents.pop();
-            }
-    }
-
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean retval = true;
-        switch (item.getItemId()) {
-        case android.R.id.home: {
-            if((mParents.size() > 1)) {                
-                onBackPressed(); 
-            }
-            break;
-        }
-        default:
-            retval = super.onOptionsItemSelected(item);
-        }
-        return retval;
-    }
-
-    
 }
