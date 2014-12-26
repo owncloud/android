@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="NewApi">
+        <ignore path="src/com/owncloud/android/datamodel/InstantUploadPreference.java" />
+        <ignore path="src/com/owncloud/android/services/observer/InstantUploadFolderObserverService.java" />
+        <ignore path="src/com/owncloud/android/ui/activity/FileDisplayActivity.java" />
+    </issue>
+</lint>
