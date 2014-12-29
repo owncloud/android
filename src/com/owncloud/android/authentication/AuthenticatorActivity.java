@@ -731,7 +731,9 @@ SsoWebViewClientListener, OnSslUntrustedCertListener {
 
 
     private void checkOcServer() {
-        String uri = mHostUrlInput.getText().toString().trim();
+        // Remove multiple "/" at the end
+        String uri = mHostUrlInput.getText().toString().trim().replaceFirst("/*$", "/");
+        Log_OC.d("Auth", "uri: " + uri);
         mServerIsValid = false;
         mServerIsChecked = false;
         mOkButton.setEnabled(false);
