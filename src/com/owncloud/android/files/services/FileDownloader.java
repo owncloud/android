@@ -169,6 +169,12 @@ public class FileDownloader extends Service implements OnDatatransferProgressLis
                     newDownload.addDatatransferProgressListener(this);
                     newDownload.addDatatransferProgressListener((FileDownloaderBinder) mBinder);
                     requestedDownloads.add(downloadKey);
+
+                    // Store file on db with state 'downloading'
+                    FileDataStorageManager storageManager = new FileDataStorageManager(account, getContentResolver());
+                    file.setDownloading(true);
+                    storageManager.saveFile(file);
+
                     sendBroadcastNewDownload(newDownload);
 
                 } catch (IllegalArgumentException e) {
@@ -415,6 +421,7 @@ public class FileDownloader extends Service implements OnDatatransferProgressLis
         file.setStoragePath(mCurrentDownload.getSavePath());
         file.setFileLength((new File(mCurrentDownload.getSavePath()).length()));
         file.setRemoteId(mCurrentDownload.getFile().getRemoteId());
+        file.setDownloading(false);
         mStorageManager.saveFile(file);
         mStorageManager.triggerMediaScan(file.getStoragePath());
     }
