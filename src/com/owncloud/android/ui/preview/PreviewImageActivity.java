@@ -23,13 +23,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
@@ -37,8 +35,10 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.ortiz.touch.ExtendedViewPager;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.authentication.PinCheck;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
@@ -89,6 +89,8 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
     
     private View mFullScreenAnchorView;
     
+    private Boolean mUnlocked = false;
+    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +105,10 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
         actionBar.hide();
         
         // PIN CODE request
-        if (getIntent().getExtras() != null && savedInstanceState == null && fromNotification()) {
-            requestPinCode();
+        if (PinCheck.checkIfPinEntry()){
+            Intent i = new Intent(MainApp.getAppContext(), PinCodeActivity.class);
+            i.putExtra(PinCodeActivity.EXTRA_ACTIVITY, "PreviewImageActivity");
+            startActivity(i);
         }
 
         // Make sure we're running on Honeycomb or higher to use FullScreen and
@@ -322,6 +326,13 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
     @Override
     protected void onResume() {
         super.onResume();
+        
+        if (PinCheck.checkIfPinEntry()){
+            Intent i = new Intent(MainApp.getAppContext(), PinCodeActivity.class);
+            i.putExtra(PinCodeActivity.EXTRA_ACTIVITY, "PreviewImageActivity");
+            startActivity(i);
+        }
+        
         //Log_OC.e(TAG, "ACTIVITY, ONRESUME");
         mDownloadFinishReceiver = new DownloadFinishReceiver();
         
@@ -338,8 +349,12 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
     
     @Override
     public void onPause() {
-        unregisterReceiver(mDownloadFinishReceiver);
-        mDownloadFinishReceiver = null;
+        if (mDownloadFinishReceiver != null){
+            unregisterReceiver(mDownloadFinishReceiver);
+            mDownloadFinishReceiver = null;
+        }
+        
+        PinCheck.setUnlockTimestamp();
         super.onPause();
     }
     
@@ -526,21 +541,6 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
             }
         }
     }
-    
-    
-    /**
-     * Launch an intent to request the PIN code to the user before letting him use the app
-     */
-    private void requestPinCode() {
-        boolean pinStart = false;
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        pinStart = appPrefs.getBoolean("set_pincode", false);
-        if (pinStart) {
-            Intent i = new Intent(getApplicationContext(), PinCodeActivity.class);
-            i.putExtra(PinCodeActivity.EXTRA_ACTIVITY, "PreviewImageActivity");
-            startActivity(i);
-        }
-    }
 
     @Override
     public void onBrowsedDownTo(OCFile folder) {
@@ -587,5 +587,4 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
         }
         return false;
     }
-
 }

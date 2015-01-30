@@ -395,9 +395,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             
             // Update Footer
             TextView footerText = (TextView) mFooterView.findViewById(R.id.footerText);
-            Log_OC.d("footer", String.valueOf(System.currentTimeMillis()));
             footerText.setText(generateFooterText(directory));
-            Log_OC.d("footer", String.valueOf(System.currentTimeMillis()));
         }
     }
     

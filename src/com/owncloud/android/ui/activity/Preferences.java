@@ -50,6 +50,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
+import com.owncloud.android.authentication.PinCheck;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -362,6 +363,8 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
     @Override
     protected void onPause() {
         super.onPause();
+        
+        PinCheck.setUnlockTimestamp();
     }
 
     @Override
