@@ -47,7 +47,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     
     private static final String TAG = CreateRemoteFolderOperation.class.getSimpleName();
 
-    private static final int READ_TIMEOUT = 10000;
+    private static final int READ_TIMEOUT = 30000;
     private static final int CONNECTION_TIMEOUT = 5000;
     
 

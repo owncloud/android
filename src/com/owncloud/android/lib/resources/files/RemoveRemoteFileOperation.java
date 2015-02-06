@@ -42,7 +42,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 public class RemoveRemoteFileOperation extends RemoteOperation {
     private static final String TAG = RemoveRemoteFileOperation.class.getSimpleName();
 
-    private static final int REMOVE_READ_TIMEOUT = 10000;
+    private static final int REMOVE_READ_TIMEOUT = 30000;
     private static final int REMOVE_CONNECTION_TIMEOUT = 5000;
 
 	private String mRemotePath;
