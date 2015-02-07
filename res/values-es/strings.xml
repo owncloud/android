@@ -46,7 +46,7 @@
   <string name="auth_host_url">Dirección del servidor https://…</string>
   <string name="auth_username">Nombre de usuario</string>
   <string name="auth_password">Contraseña</string>
-  <string name="auth_register">Nuevo para %1$s?</string>
+  <string name="auth_register">¿Nuevo en %1$s?</string>
   <string name="sync_string_files">Archivos</string>
   <string name="setup_btn_connect">Conectar</string>
   <string name="uploader_btn_upload_text">Subir</string>
@@ -142,8 +142,8 @@
   <string name="media_event_done">%1$s reproducción finalizada</string>
   <string name="media_err_nothing_to_play">No se encontró el archivo multimedia</string>
   <string name="media_err_no_account">No se ha proporcionado cuenta</string>
-  <string name="media_err_not_in_owncloud">El archivo no esta en una cuenta valida </string>
-  <string name="media_err_unsupported">Codec No Soportado</string>
+  <string name="media_err_not_in_owncloud">El archivo no está en una cuenta válida </string>
+  <string name="media_err_unsupported">Codec no soportado</string>
   <string name="media_err_io">El archivo de medios no pudo ser leído </string>
   <string name="media_err_malformed">Archivo no codificado correctamente</string>
   <string name="media_err_timeout">Tiempo de espera agotado en el intento de reproducción</string>
@@ -174,7 +174,7 @@
   <string name="auth_bad_oc_version_title">No se reconoce  la versión del servidor </string>
   <string name="auth_wrong_connection_title">No se ha podido establecer la conexión</string>
   <string name="auth_secure_connection">Conexión segura establecida</string>
-  <string name="auth_unauthorized">Nombre de usuario o contraseña incorrecta</string>
+  <string name="auth_unauthorized">Nombre de usuario o contraseña incorrectos</string>
   <string name="auth_oauth_error">Autorización no satisfactoria</string>
   <string name="auth_oauth_error_access_denied">Acceso denegado por servidor de autorización</string>
   <string name="auth_wtf_reenter_URL">Estado inesperado; por favor, introduzca la URL del servidor de nuevo</string>
@@ -215,7 +215,7 @@
   <string name="ssl_validator_header">La identidad del sitio no puede ser verificada</string>
   <string name="ssl_validator_reason_cert_not_trusted">- El certificado del servidor no es de confianza</string>
   <string name="ssl_validator_reason_cert_expired">- El certificado del servidor expiró</string>
-  <string name="ssl_validator_reason_cert_not_yet_valid">- El certificado del servidor es de una fecha que aún no llega</string>
+  <string name="ssl_validator_reason_cert_not_yet_valid">- El certificado del servidor es de una fecha que aún no ha llegado</string>
   <string name="ssl_validator_reason_hostname_not_verified">- La URL no coincide con el nombre de dominio del certificado</string>
   <string name="ssl_validator_question">¿Confías de todas formas en este certificado?</string>
   <string name="ssl_validator_not_saved">El certificado no pudo ser guardado</string>
@@ -280,7 +280,7 @@
   <string name="prefs_category_accounts">Cuentas</string>
   <string name="prefs_add_account">Agregar cuenta</string>
   <string name="auth_redirect_non_secure_connection_title">La conexión segura está siendo desviada por una ruta insegura.</string>
-  <string name="actionbar_logger">Logs</string>
+  <string name="actionbar_logger">Registros</string>
   <string name="log_send_history_button">Enviar historial</string>
   <string name="log_send_no_mail_app">No se ha encontrado una app para enviar logs. Instale la app mail!</string>
   <string name="log_send_mail_subject">Se han encontrado %1$s logs de la app Android</string>
@@ -297,7 +297,8 @@
   <string name="forbidden_permissions_move">para mover este archivo</string>
   <string name="prefs_category_instant_uploading">Subidas instantáneas</string>
   <string name="prefs_category_security">Seguridad</string>
-  <string name="prefs_instant_video_upload_path_title">Ruta de vídeo de subida</string>
+  <string name="prefs_instant_video_upload_path_title">Guardar videos subidos en la carpeta:</string>
+  <string name="download_folder_failed_content">La descarga de la carpeta %1$s no ha podido ser completada</string>
   <string name="shared_subject_header">compartido</string>
   <string name="with_you_subject_header">contigo</string>
   <string name="subject_token">%1$s %2$s &gt;&gt;%3$s&lt;&lt; %4$s</string>
