@@ -30,6 +30,7 @@ import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.provider.MediaStore;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
@@ -198,6 +199,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.getPermissions());
         cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.getRemoteId());
         cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
+        cv.put(ProviderTableMeta.FILE_IS_DOWNLOADING, file.isDownloading());
 
         boolean sameRemotePath = fileExists(file.getRemotePath());
         if (sameRemotePath ||
@@ -307,6 +309,7 @@ public class FileDataStorageManager {
             cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.getPermissions());
             cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.getRemoteId());
             cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
+            cv.put(ProviderTableMeta.FILE_IS_DOWNLOADING, file.isDownloading());
 
             boolean existsByPath = fileExists(file.getRemotePath());
             if (existsByPath || fileExists(file.getFileId())) {
@@ -492,7 +495,7 @@ public class FileDataStorageManager {
                 if (removeLocalCopy && file.isDown() && localPath != null && success) {
                     success = new File(localPath).delete();
                     if (success) {
-                        triggerMediaScan(localPath);
+                        deleteFileInMediaScan(localPath);
                     }
                     if (!removeDBData && success) {
                         // maybe unnecessary, but should be checked TODO remove if unnecessary
@@ -538,7 +541,8 @@ public class FileDataStorageManager {
 
     private boolean removeLocalFolder(OCFile folder) {
         boolean success = true;
-        File localFolder = new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, folder));
+        String localFolderPath = FileStorageUtils.getDefaultSavePathFor(mAccount.name, folder);
+        File localFolder = new File(localFolderPath);
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
             Vector<OCFile> files = getFolderContent(folder.getFileId());
@@ -548,13 +552,13 @@ public class FileDataStorageManager {
                         success &= removeLocalFolder(file);
                     } else {
                         if (file.isDown()) {
-                            String path = file.getStoragePath();
                             File localFile = new File(file.getStoragePath());
                             success &= localFile.delete();
                             if (success) {
+                                // notify MediaScanner about removed file
+                                deleteFileInMediaScan(file.getStoragePath());
                                 file.setStoragePath(null);
                                 saveFile(file);
-                                triggerMediaScan(path); // notify MediaScanner about removed file
                             }
                         }
                     }
@@ -578,7 +582,6 @@ public class FileDataStorageManager {
                 } else {
                     String path = localFile.getAbsolutePath();
                     success &= localFile.delete();
-                    triggerMediaScan(path); // notify MediaScanner about removed file
                 }
             }
         }
@@ -713,7 +716,7 @@ public class FileDataStorageManager {
                 Iterator<String> it = originalPathsToTriggerMediaScan.iterator();
                 while (it.hasNext()) {
                     // Notify MediaScanner about removed file
-                    triggerMediaScan(it.next());
+                    deleteFileInMediaScan(it.next());
                 }
                 it = newPathsToTriggerMediaScan.iterator();
                 while (it.hasNext()) {
@@ -926,7 +929,8 @@ public class FileDataStorageManager {
             file.setRemoteId(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID)));
             file.setNeedsUpdateThumbnail(c.getInt(
                     c.getColumnIndex(ProviderTableMeta.FILE_UPDATE_THUMBNAIL)) == 1 ? true : false);
-
+            file.setDownloading(c.getInt(
+                    c.getColumnIndex(ProviderTableMeta.FILE_IS_DOWNLOADING)) == 1 ? true : false);
         }
         return file;
     }
@@ -1290,6 +1294,10 @@ public class FileDataStorageManager {
                         ProviderTableMeta.FILE_UPDATE_THUMBNAIL,
                         file.needsUpdateThumbnail() ? 1 : 0
                 );
+                cv.put(
+                        ProviderTableMeta.FILE_IS_DOWNLOADING,
+                        file.isDownloading() ? 1 : 0
+                );
 
                 boolean existsByPath = fileExists(file.getRemotePath());
                 if (existsByPath || fileExists(file.getFileId())) {
@@ -1511,6 +1519,48 @@ public class FileDataStorageManager {
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         intent.setData(Uri.fromFile(new File(path)));
         MainApp.getAppContext().sendBroadcast(intent);
+    }
+
+    public void deleteFileInMediaScan(String path) {
+
+        String mimetypeString = FileStorageUtils.getMimeTypeFromName(path);
+        ContentResolver contentResolver = getContentResolver();
+
+        if (contentResolver != null) {
+            if (mimetypeString.startsWith("image/")) {
+                // Images
+                contentResolver.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        MediaStore.Images.Media.DATA + "=?", new String[]{path});
+            } else if (mimetypeString.startsWith("audio/")) {
+                // Audio
+                contentResolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        MediaStore.Audio.Media.DATA + "=?", new String[]{path});
+            } else if (mimetypeString.startsWith("video/")) {
+                // Video
+                contentResolver.delete(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        MediaStore.Video.Media.DATA + "=?", new String[]{path});
+            }
+        } else {
+            ContentProviderClient contentProviderClient = getContentProviderClient();
+            try {
+                if (mimetypeString.startsWith("image/")) {
+                    // Images
+                    contentProviderClient.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            MediaStore.Images.Media.DATA + "=?", new String[]{path});
+                } else if (mimetypeString.startsWith("audio/")) {
+                    // Audio
+                    contentProviderClient.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                            MediaStore.Audio.Media.DATA + "=?", new String[]{path});
+                } else if (mimetypeString.startsWith("video/")) {
+                    // Video
+                    contentProviderClient.delete(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                            MediaStore.Video.Media.DATA + "=?", new String[]{path});
+                }
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, "Exception deleting media file in MediaStore " + e.getMessage());
+            }
+        }
+
     }
 
 }

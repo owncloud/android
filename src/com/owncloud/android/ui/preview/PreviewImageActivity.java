@@ -79,7 +79,9 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
     private static final int INITIAL_HIDE_DELAY = 0; // immediate hide
 
     private ExtendedViewPager mViewPager;
-    private PreviewImagePagerAdapter mPreviewImagePagerAdapter;    
+    private PreviewImagePagerAdapter mPreviewImagePagerAdapter;
+    private int mSavedPosition = 0;
+    private boolean mHasSavedPosition = false;
     
     private boolean mRequestWaitingForBinder;
     
@@ -146,7 +148,7 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
         }
         mPreviewImagePagerAdapter = new PreviewImagePagerAdapter(getSupportFragmentManager(), parentFolder, getAccount(), getStorageManager());
         mViewPager = (ExtendedViewPager) findViewById(R.id.fragmentPager);
-        int position = mPreviewImagePagerAdapter.getFilePosition(getFile());
+        int position = mHasSavedPosition ? mSavedPosition : mPreviewImagePagerAdapter.getFilePosition(getFile());
         position = (position >= 0) ? position : 0;
         mViewPager.setAdapter(mPreviewImagePagerAdapter); 
         mViewPager.setOnPageChangeListener(this);
@@ -378,6 +380,8 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
      */
     @Override
     public void onPageSelected(int position) {
+        mSavedPosition = position;
+        mHasSavedPosition = true;
         if (mDownloaderBinder == null) {
             mRequestWaitingForBinder = true;
             
@@ -422,7 +426,7 @@ ViewPager.OnPageChangeListener, OnRemoteOperationListener {
     
 
     /**
-     * Class waiting for broadcast events from the {@link FielDownloader} service.
+     * Class waiting for broadcast events from the {@link FileDownloader} service.
      * 
      * Updates the UI when a download is started or finished, provided that it is relevant for the
      * folder displayed in the gallery.

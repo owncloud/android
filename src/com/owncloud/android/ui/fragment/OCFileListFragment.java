@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView;
@@ -38,12 +39,15 @@ import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
+import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
 import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFileDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewMediaFragment;
+import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
 import java.util.Vector;
@@ -93,7 +97,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                     FileFragment.ContainerActivity.class.getSimpleName());
         }
         try {
-            setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) activity);
+            setOnRefreshListener((OnEnforceableRefreshListener) activity);
 
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement " +
@@ -133,11 +137,11 @@ public class OCFileListFragment extends ExtendedListFragment {
                 mContainerActivity
         );
         setListAdapter(mAdapter);
-
-        registerForContextMenu(getListView());
-        getListView().setOnCreateContextMenuListener(this);
-    }
-
+        
+        registerForContextMenu(getGridView());
+        getGridView().setOnCreateContextMenuListener(this);
+  }
+    
     /**
      * Saves the current listed folder.
      */
@@ -257,15 +261,9 @@ public class OCFileListFragment extends ExtendedListFragment {
                 mf.filter(menu);
             }
 
-            /// additional restrictions for this fragment 
-            // TODO allow in the future 'open with' for previewable files
-            MenuItem item = menu.findItem(R.id.action_open_file_with);
-            if (item != null) {
-                item.setVisible(false);
-                item.setEnabled(false);
-            }
             /// TODO break this direct dependency on FileDisplayActivity... if possible
-            FileFragment frag = ((FileDisplayActivity) getSherlockActivity()).getSecondFragment();
+            MenuItem item = menu.findItem(R.id.action_open_file_with);
+            FileFragment frag = ((FileDisplayActivity)getSherlockActivity()).getSecondFragment();
             if (frag != null && frag instanceof FileDetailFragment &&
                     frag.getFile().getFileId() == targetFile.getFileId()) {
                 item = menu.findItem(R.id.action_see_details);
@@ -288,6 +286,10 @@ public class OCFileListFragment extends ExtendedListFragment {
         switch (item.getItemId()) {
             case R.id.action_share_file: {
                 mContainerActivity.getFileOperationsHelper().shareFileWithLink(mTargetFile);
+                return true;
+            }
+            case R.id.action_open_file_with: {
+                mContainerActivity.getFileOperationsHelper().openFile(mTargetFile);
                 return true;
             }
             case R.id.action_unshare_file: {
@@ -397,15 +399,19 @@ public class OCFileListFragment extends ExtendedListFragment {
 
             mAdapter.swapDirectory(directory, storageManager);
             if (mFile == null || !mFile.equals(directory)) {
-                mList.setSelectionFromTop(0, 0);
+                imageView.setSelection(0);
             }
             mFile = directory;
 
+            Vector<OCFile> files = storageManager.getFolderContent(directory);
             // Update Footer
             TextView footerText = (TextView) mFooterView.findViewById(R.id.footerText);
-            Log_OC.d("footer", String.valueOf(System.currentTimeMillis()));
             footerText.setText(generateFooterText(directory));
-            Log_OC.d("footer", String.valueOf(System.currentTimeMillis()));
+            if (DisplayUtils.decideViewLayout(files)){
+                switchImageView();
+            } else {
+                switchFileView();
+            }
         }
     }
 
@@ -442,19 +448,30 @@ public class OCFileListFragment extends ExtendedListFragment {
             output = output + folders.toString() + " " + getResources().getString(R.string.file_list_folders);
         }
 
+        // Fix for showing or not to show the footerView
+        if (folders == 0 && files == 0) {   // If no files or folders, remove footerView for allowing
+                                            // to show the emptyList message
+            removeFooterView(mFooterView);
+        } else { // set a new footerView if there is not one for showing the number or files/folders
+            if (getFooterViewCount()== 0) {
+                ((ViewGroup)mFooterView.getParent()).removeView(mFooterView);
+                setFooterView(mFooterView);
+            }
+        }
+
         return output;
     }
 
     public void sortByName(boolean descending) {
-        mAdapter.setSortOrder(FileListListAdapter.SORT_NAME, descending);
+        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
     }
 
     public void sortByDate(boolean descending) {
-        mAdapter.setSortOrder(FileListListAdapter.SORT_DATE, descending);
+        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
     }
 
     public void sortBySize(boolean descending) {
-        mAdapter.setSortOrder(FileListListAdapter.SORT_SIZE, descending);
+        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
     }
 
 }

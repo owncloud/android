@@ -98,7 +98,7 @@ public class CopyFileOperation extends SyncOperation {
         if (result.isSuccess()) {
             getStorageManager().copyLocalFile(mFile, targetPath);
         }
-        // TODO handle ResultCode.PARTIAL_COPY_DONE in client Activity, for the moment
+        // TODO Implement and handle ResultCode.PARTIAL_COPY_DONE in client Activity, for the moment
 
         return result;
     }

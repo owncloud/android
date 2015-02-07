@@ -22,6 +22,8 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -88,7 +90,7 @@ import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
-import com.owncloud.android.operations.SynchronizeFolderOperation;
+import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.UnshareLinkOperation;
 import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
@@ -105,6 +107,7 @@ import com.owncloud.android.ui.preview.PreviewMediaFragment;
 import com.owncloud.android.ui.preview.PreviewVideoActivity;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.UriUtils;
 
 import java.io.File;
@@ -485,13 +488,13 @@ public class FileDisplayActivity extends HookActivity implements
                 dialog.show(getSupportFragmentManager(), "createdirdialog");
                 break;
             }
-            case R.id.action_sort: {
+            case R.id.action_sort:{
                 SharedPreferences appPreferences = PreferenceManager
                         .getDefaultSharedPreferences(this);
 
                 // Read sorting order, default to sort by name ascending
                 Integer sortOrder = appPreferences
-                        .getInt("sortOrder", FileListListAdapter.SORT_NAME);
+                        .getInt("sortOrder", FileStorageUtils.SORT_NAME);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.actionbar_sort_title)
@@ -607,13 +610,23 @@ public class FileDisplayActivity extends HookActivity implements
 
     /**
      * Called, when the user selected something for uploading
+     *
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ACTION_SELECT_CONTENT_FROM_APPS && (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
-            requestSimpleUpload(data, resultCode);
-
+            //getClipData is only supported on api level 16+, Jelly Bean
+            if (data.getData() == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                for( int i = 0; i < data.getClipData().getItemCount(); i++){
+                    Intent intent = new Intent();
+                    intent.setData(data.getClipData().getItemAt(i).getUri());
+                    requestSimpleUpload(intent, resultCode);
+                }
+            }else {
+                requestSimpleUpload(data, resultCode);
+            }
         } else if (requestCode == ACTION_SELECT_MULTIPLE_FILES && (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
             requestMultipleUpload(data, resultCode);
         } else if (requestCode == ACTION_MOVE_FILES && resultCode == RESULT_OK) {
@@ -821,8 +834,8 @@ public class FileDisplayActivity extends HookActivity implements
         IntentFilter syncIntentFilter = new IntentFilter(FileSyncAdapter.EVENT_FULL_SYNC_START);
         syncIntentFilter.addAction(FileSyncAdapter.EVENT_FULL_SYNC_END);
         syncIntentFilter.addAction(FileSyncAdapter.EVENT_FULL_SYNC_FOLDER_CONTENTS_SYNCED);
-        syncIntentFilter.addAction(SynchronizeFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED);
-        syncIntentFilter.addAction(SynchronizeFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED);
+        syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED);
+        syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED);
         mSyncBroadcastReceiver = new SyncBroadcastReceiver();
         registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
         //LocalBroadcastManager.getInstance(this).registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
@@ -901,6 +914,10 @@ public class FileDisplayActivity extends HookActivity implements
                         } else if (item == 1) {
                             Intent action = new Intent(Intent.ACTION_GET_CONTENT);
                             action = action.setType("*/*").addCategory(Intent.CATEGORY_OPENABLE);
+                            //Intent.EXTRA_ALLOW_MULTIPLE is only supported on api level 18+, Jelly Bean
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                                action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                            }
                             startActivityForResult(Intent.createChooser(action, getString(R.string.upload_chooser_title)),
                                     ACTION_SELECT_CONTENT_FROM_APPS);
                         }
@@ -1110,12 +1127,10 @@ public class FileDisplayActivity extends HookActivity implements
                             }
                             setFile(currentFile);
                         }
-
-                        mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) && !SynchronizeFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED.equals(event));
-
-                        if (SynchronizeFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
-                                equals(event) &&
-                                /// TODO refactor and make common
+                        mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) && !RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED.equals(event));
+                                
+                        if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
+                                    equals(event) &&                                /// TODO refactor and make common
                                 synchResult != null && !synchResult.isSuccess() &&
                                 (synchResult.getCode() == ResultCode.UNAUTHORIZED ||
                                         synchResult.isIdPRedirection() ||
@@ -1268,12 +1283,12 @@ public class FileDisplayActivity extends HookActivity implements
 
 
     /**
-     * Class waiting for broadcast events from the {@link FileDownloader} service.
-     * <p/>
      * Updates the UI when a download is started or finished, provided that it is relevant for the
      * current folder.
      */
     private class DownloadFinishReceiver extends BroadcastReceiver {
+
+        //int refreshCounter = 0;
         @Override
         public void onReceive(Context context, Intent intent) {
             try {
@@ -1282,12 +1297,20 @@ public class FileDisplayActivity extends HookActivity implements
                 boolean isDescendant = isDescendant(downloadedRemotePath);
 
                 if (sameAccount && isDescendant) {
-                    refreshListOfFilesFragment();
-                    refreshSecondFragment(intent.getAction(), downloadedRemotePath, intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false));
+                    String linkedToRemotePath = intent.getStringExtra(FileDownloader.EXTRA_LINKED_TO_PATH);
+                    if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
+                        //Log_OC.v(TAG, "refresh #" + ++refreshCounter);
+                        refreshListOfFilesFragment();
+                    }
+                    refreshSecondFragment(
+                            intent.getAction(),
+                            downloadedRemotePath,
+                            intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false)
+                    );
                 }
 
                 if (mWaitingToSend != null) {
-                    mWaitingToSend = getStorageManager().getFileByPath(mWaitingToSend.getRemotePath()); // Update the file to send
+                    mWaitingToSend = getStorageManager().getFileByPath(mWaitingToSend.getRemotePath());
                     if (mWaitingToSend.isDown()) {
                         sendDownloadedFile();
                     }
@@ -1302,7 +1325,19 @@ public class FileDisplayActivity extends HookActivity implements
 
         private boolean isDescendant(String downloadedRemotePath) {
             OCFile currentDir = getCurrentDir();
-            return (currentDir != null && downloadedRemotePath != null && downloadedRemotePath.startsWith(currentDir.getRemotePath()));
+            return (
+                currentDir != null &&
+                downloadedRemotePath != null &&
+                downloadedRemotePath.startsWith(currentDir.getRemotePath())
+            );
+        }
+
+        private boolean isAscendant(String linkedToRemotePath) {
+            OCFile currentDir = getCurrentDir();
+            return (
+                currentDir != null &&
+                currentDir.getRemotePath().startsWith(linkedToRemotePath)
+            );
         }
 
         private boolean isSameAccount(Context context, Intent intent) {
@@ -1768,6 +1803,7 @@ public class FileDisplayActivity extends HookActivity implements
 
     private void requestForDownload() {
         Account account = getAccount();
+        //if (!mWaitingToPreview.isDownloading()) {
         if (!mDownloaderBinder.isDownloading(account, mWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
             i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
@@ -1796,15 +1832,15 @@ public class FileDisplayActivity extends HookActivity implements
         mSyncInProgress = true;
 
         // perform folder synchronization
-        RemoteOperation synchFolderOp = new SynchronizeFolderOperation(folder,
-                currentSyncTime,
-                false,
-                getFileOperationsHelper().isSharedSupported(),
-                ignoreETag,
-                getStorageManager(),
-                getAccount(),
-                getApplicationContext()
-        );
+        RemoteOperation synchFolderOp = new RefreshFolderOperation( folder,
+                                                                        currentSyncTime, 
+                                                                        false,
+                                                                        getFileOperationsHelper().isSharedSupported(),
+                                                                        ignoreETag,
+                                                                        getStorageManager(), 
+                                                                        getAccount(), 
+                                                                        getApplicationContext()
+                                                                      );
         synchFolderOp.execute(getAccount(), this, null, null);
 
         setSupportProgressBarIndeterminateVisibility(true);
@@ -1825,7 +1861,7 @@ public class FileDisplayActivity extends HookActivity implements
 
     private void requestForDownload(OCFile file) {
         Account account = getAccount();
-        if (!mDownloaderBinder.isDownloading(account, file)) {
+        if (!mDownloaderBinder.isDownloading(account, mWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
             i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
             i.putExtra(FileDownloader.EXTRA_FILE, file);

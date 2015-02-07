@@ -18,6 +18,11 @@
 package com.owncloud.android.utils;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
+
+import third_parties.daveKoeller.AlphanumComparator;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -31,14 +36,22 @@ import android.preference.PreferenceManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
+import android.webkit.MimeTypeMap;
 
 
 /**
  * Static methods to help in access to local file system.
- * 
+ *
  * @author David A. Velasco
  */
 public class FileStorageUtils {
+    public static Integer mSortOrder;
+    public static Boolean mSortAscending;
+    public static final Integer SORT_NAME = 0;
+    public static final Integer SORT_DATE = 1;
+    public static final Integer SORT_SIZE = 2;
+
+
     //private static final String LOG_TAG = "FileStorageUtils";
 
     public static final String getSavePath(String accountName) {
@@ -54,7 +67,7 @@ public class FileStorageUtils {
     public static final String getTemporalPath(String accountName) {
         File sdCard = Environment.getExternalStorageDirectory();
         return sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder() + "/tmp/" + Uri.encode(accountName, "@");
-            // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names, that can be in the accountName since 0.1.190B
+        // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names, that can be in the accountName since 0.1.190B
     }
 
     @SuppressLint("NewApi")
@@ -69,7 +82,7 @@ public class FileStorageUtils {
         }
 
     }
-    
+
     public static final String getLogPath()  {
         return Environment.getExternalStorageDirectory() + File.separator + MainApp.getDataFolder() + File.separator + "log";
     }
@@ -95,16 +108,16 @@ public class FileStorageUtils {
         String value = uploadVideoPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;
     }
-    
+
     public static String getParentPath(String remotePath) {
         String parentPath = new File(remotePath).getParent();
         parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : parentPath + OCFile.PATH_SEPARATOR;
         return parentPath;
     }
-    
+
     /**
      * Creates and populates a new {@link OCFile} object with the data read from the server.
-     * 
+     *
      * @param remote    remote file read from the server (remote file or folder).
      * @return          New OCFile instance representing the remote resource described by we.
      */
@@ -119,11 +132,11 @@ public class FileStorageUtils {
         file.setRemoteId(remote.getRemoteId());
         return file;
     }
-    
+
     /**
      * Creates and populates a new {@link RemoteFile} object with the data read from an {@link OCFile}.
-     * 
-     * @param oCFile    OCFile 
+     *
+     * @param ocFile    OCFile
      * @return          New RemoteFile instance representing the resource described by ocFile.
      */
     public static RemoteFile fillRemoteFile(OCFile ocFile){
@@ -137,5 +150,156 @@ public class FileStorageUtils {
         file.setRemoteId(ocFile.getRemoteId());
         return file;
     }
-  
+
+    /**
+     * Sorts all filenames, regarding last user decision 
+     */
+    public static Vector<OCFile> sortFolder(Vector<OCFile> files){
+        switch (mSortOrder){
+            case 0:
+                files = FileStorageUtils.sortByName(files);
+                break;
+            case 1:
+                files = FileStorageUtils.sortByDate(files);
+                break;
+            case 2:
+                // mFiles = FileStorageUtils.sortBySize(mSortAscending);
+                break;
+        }
+
+        return files;
+    }
+
+    /**
+     * Sorts list by Date
+     * @param files
+     */
+    public static Vector<OCFile> sortByDate(Vector<OCFile> files){
+        final Integer val;
+        if (mSortAscending){
+            val = 1;
+        } else {
+            val = -1;
+        }
+
+        Collections.sort(files, new Comparator<OCFile>() {
+            public int compare(OCFile o1, OCFile o2) {
+                if (o1.isFolder() && o2.isFolder()) {
+                    Long obj1 = o1.getModificationTimestamp();
+                    return val * obj1.compareTo(o2.getModificationTimestamp());
+                }
+                else if (o1.isFolder()) {
+                    return -1;
+                } else if (o2.isFolder()) {
+                    return 1;
+                } else if (o1.getModificationTimestamp() == 0 || o2.getModificationTimestamp() == 0){
+                    return 0;
+                } else {
+                    Long obj1 = o1.getModificationTimestamp();
+                    return val * obj1.compareTo(o2.getModificationTimestamp());
+                }
+            }
+        });
+
+        return files;
+    }
+
+//    /**
+//     * Sorts list by Size
+//     * @param sortAscending true: ascending, false: descending
+//     */
+//    public static Vector<OCFile> sortBySize(Vector<OCFile> files){
+//        final Integer val;
+//        if (mSortAscending){
+//            val = 1;
+//        } else {
+//            val = -1;
+//        }
+//        
+//        Collections.sort(files, new Comparator<OCFile>() {
+//            public int compare(OCFile o1, OCFile o2) {
+//                if (o1.isFolder() && o2.isFolder()) {
+//                    Long obj1 = getFolderSize(new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, o1)));
+//                    return val * obj1.compareTo(getFolderSize(new File(FileStorageUtils.getDefaultSavePathFor(mAccount.name, o2))));
+//                }
+//                else if (o1.isFolder()) {
+//                    return -1;
+//                } else if (o2.isFolder()) {
+//                    return 1;
+//                } else if (o1.getFileLength() == 0 || o2.getFileLength() == 0){
+//                    return 0;
+//                } else {
+//                    Long obj1 = o1.getFileLength();
+//                    return val * obj1.compareTo(o2.getFileLength());
+//                }
+//            }
+//        });
+//        
+//        return files;
+//    }
+
+    /**
+     * Sorts list by Name
+     * @param files     files to sort
+     */
+    public static Vector<OCFile> sortByName(Vector<OCFile> files){
+        final Integer val;
+        if (mSortAscending){
+            val = 1;
+        } else {
+            val = -1;
+        }
+
+        Collections.sort(files, new Comparator<OCFile>() {
+            public int compare(OCFile o1, OCFile o2) {
+                if (o1.isFolder() && o2.isFolder()) {
+                    return val * o1.getRemotePath().toLowerCase().compareTo(o2.getRemotePath().toLowerCase());
+                } else if (o1.isFolder()) {
+                    return -1;
+                } else if (o2.isFolder()) {
+                    return 1;
+                }
+                return val * new AlphanumComparator().compare(o1, o2);
+            }
+        });
+
+        return files;
+    }
+
+    /**
+     * Local Folder size
+     * @param dir File
+     * @return Size in bytes
+     */
+    public static long getFolderSize(File dir) {
+        if (dir.exists()) {
+            long result = 0;
+            File[] fileList = dir.listFiles();
+            for(int i = 0; i < fileList.length; i++) {
+                if(fileList[i].isDirectory()) {
+                    result += getFolderSize(fileList[i]);
+                } else {
+                    result += fileList[i].length();
+                }
+            }
+            return result;
+        }
+        return 0;
+    }
+
+    /**
+     * Mimetype String of a file
+     * @param path
+     * @return
+     */
+    public static String getMimeTypeFromName(String path) {
+        String extension = "";
+        int pos = path.lastIndexOf('.');
+        if (pos >= 0) {
+            extension = path.substring(pos + 1);
+        }
+        String result = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+        return (result != null) ? result : "";
+    }
+
 }

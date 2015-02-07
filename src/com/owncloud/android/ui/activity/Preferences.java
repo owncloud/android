@@ -53,7 +53,7 @@ import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.DbHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.LongClickableCheckBoxPreference;
+import com.owncloud.android.ui.RadioButtonPreference;
 import com.owncloud.android.utils.DisplayUtils;
 
 
@@ -79,8 +79,13 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
     private String mAccountName;
     private boolean mShowContextMenu = false;
     private String mUploadPath;
+    private PreferenceCategory mPrefInstantUploadCategory;
+    private Preference mPrefInstantUpload;
     private Preference mPrefInstantUploadPath;
+    private Preference mPrefInstantUploadPathWiFi;
+    private Preference mPrefInstantVideoUpload;
     private Preference mPrefInstantVideoUploadPath;
+    private Preference mPrefInstantVideoUploadPathWiFi;
     private String mUploadVideoPath;
 
 
@@ -107,9 +112,9 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
                 ListAdapter listAdapter = listView.getAdapter();
                 Object obj = listAdapter.getItem(position);
 
-                if (obj != null && obj instanceof LongClickableCheckBoxPreference) {
+                if (obj != null && obj instanceof RadioButtonPreference) {
                     mShowContextMenu = true;
-                    mAccountName = ((LongClickableCheckBoxPreference) obj).getKey();
+                    mAccountName = ((RadioButtonPreference) obj).getKey();
 
                     Preferences.this.openContextMenu(listView);
 
@@ -119,7 +124,18 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
                 return false;
             }
         });
-
+        
+        // Load package info
+        String temp;
+        try {
+            PackageInfo pkg = getPackageManager().getPackageInfo(getPackageName(), 0);
+            temp = pkg.versionName;
+        } catch (NameNotFoundException e) {
+            temp = "";
+            Log_OC.e(TAG, "Error while showing about dialog", e);
+        } 
+        final String appVersion = temp;
+       
         // Register context menu for list of preferences.
         registerForContextMenu(getListView());
 
@@ -208,7 +224,7 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         String feedbackMail   =(String) getText(R.string.mail_feedback);
-                        String feedback   =(String) getText(R.string.prefs_feedback);
+                        String feedback   =(String) getText(R.string.prefs_feedback) + " - android v" + appVersion;
                         Intent intent = new Intent(Intent.ACTION_SENDTO); 
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
@@ -264,7 +280,23 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
                     }
                 });
         }
-
+        
+        mPrefInstantUploadCategory = (PreferenceCategory) findPreference("instant_uploading_category");
+        
+        mPrefInstantUploadPathWiFi =  findPreference("instant_upload_on_wifi");
+        mPrefInstantUpload = findPreference("instant_uploading");
+        
+        toggleInstantPictureOptions(((CheckBoxPreference) mPrefInstantUpload).isChecked());
+        
+        mPrefInstantUpload.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                toggleInstantPictureOptions((Boolean) newValue);
+                return true;
+            }
+        });
+       
         mPrefInstantVideoUploadPath =  findPreference("instant_video_upload_path");
         if (mPrefInstantVideoUploadPath != null){
 
@@ -281,23 +313,50 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
                     }
                 });
         }
+        
+        mPrefInstantVideoUploadPathWiFi =  findPreference("instant_video_upload_on_wifi");
+        mPrefInstantVideoUpload = findPreference("instant_video_uploading");
+        toggleInstantVideoOptions(((CheckBoxPreference) mPrefInstantVideoUpload).isChecked());
+        
+        mPrefInstantVideoUpload.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                toggleInstantVideoOptions((Boolean) newValue);
+                return true;
+            }
+        });
             
         /* About App */
        pAboutApp = (Preference) findPreference("about_app");
        if (pAboutApp != null) { 
                pAboutApp.setTitle(String.format(getString(R.string.about_android), getString(R.string.app_name)));
-               PackageInfo pkg;
-               try {
-                   pkg = getPackageManager().getPackageInfo(getPackageName(), 0);
-                   pAboutApp.setSummary(String.format(getString(R.string.about_version), pkg.versionName));
-               } catch (NameNotFoundException e) {
-                   Log_OC.e(TAG, "Error while showing about dialog", e);
-               }
+               pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
        }
 
        loadInstantUploadPath();
        loadInstantUploadVideoPath();
 
+    }
+    
+    private void toggleInstantPictureOptions(Boolean value){
+        if (value){
+            mPrefInstantUploadCategory.addPreference(mPrefInstantUploadPathWiFi);
+            mPrefInstantUploadCategory.addPreference(mPrefInstantUploadPath);
+        } else {
+            mPrefInstantUploadCategory.removePreference(mPrefInstantUploadPathWiFi);
+            mPrefInstantUploadCategory.removePreference(mPrefInstantUploadPath);
+        }
+    }
+    
+    private void toggleInstantVideoOptions(Boolean value){
+        if (value){
+            mPrefInstantUploadCategory.addPreference(mPrefInstantVideoUploadPathWiFi);
+            mPrefInstantUploadCategory.addPreference(mPrefInstantVideoUploadPath);
+        } else {
+            mPrefInstantUploadCategory.removePreference(mPrefInstantVideoUploadPathWiFi);
+            mPrefInstantUploadCategory.removePreference(mPrefInstantVideoUploadPath);
+        }
     }
 
     @Override
@@ -463,7 +522,7 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
         else {
 
             for (Account a : accounts) {
-                LongClickableCheckBoxPreference accountPreference = new LongClickableCheckBoxPreference(this);
+                RadioButtonPreference accountPreference = new RadioButtonPreference(this);
                 accountPreference.setKey(a.name);
                 // Handle internationalized domain names
                 accountPreference.setTitle(DisplayUtils.convertIdn(a.name, false));
@@ -483,7 +542,7 @@ public class Preferences extends SherlockPreferenceActivity implements AccountMa
                         AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
                         Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
                         for (Account a : accounts) {
-                            CheckBoxPreference p = (CheckBoxPreference) findPreference(a.name);
+                            RadioButtonPreference p = (RadioButtonPreference) findPreference(a.name);
                             if (key.equals(a.name)) {
                                 boolean accountChanged = !p.isChecked(); 
                                 p.setChecked(true);
