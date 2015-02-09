@@ -62,7 +62,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
     
     
     @Override
-    public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context) {
+    public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
+            throws AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {
+
 		Log_OC.d(TAG, "getClientFor(OwnCloudAccount ... : ");
     	if (account == null) {
     		throw new IllegalArgumentException("Cannot get an OwnCloudClient for a null account");
@@ -70,10 +72,13 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
     	OwnCloudClient client = null;
     	String accountName = account.getName();
-    	String sessionName = AccountUtils.buildAccountName(
-    			account.getBaseUri(), 
-    			account.getCredentials().getAuthToken());
-    	
+    	String sessionName = account.getCredentials() == null ? "" :
+            AccountUtils.buildAccountName (
+                account.getBaseUri(),
+                account.getCredentials().getAuthToken()
+            )
+        ;
+
     	if (accountName != null) {
     		client = mClientsWithKnownUsername.get(accountName);
     	}
@@ -82,10 +87,11 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		if (accountName != null) {
     			client = mClientsWithUnknownUsername.remove(sessionName);
     			if (client != null) {
+                    // TODO REMOVE THIS LOG
     	    		Log_OC.d(TAG, "    reusing client {" + sessionName + ", " + 
     	    				client.hashCode() + "}");
     				mClientsWithKnownUsername.put(accountName, client);
-    	    		Log_OC.d(TAG, "    moved client to {" + accountName + ", " + 
+    	    		Log_OC.d(TAG, "    moved client to {" + accountName + ", " +
     	    				client.hashCode() + "}");
     			}
     		} else {
@@ -105,10 +111,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
             client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
             	// enable cookie tracking
             
-    		
-    		// Restore Cookies ??
-    		AccountUtils.restoreCookies(accountName, client, context);		
-    		
+    		AccountUtils.restoreCookies(accountName, client, context);
+
+            account.loadCredentials(context);
     		client.setCredentials(account.getCredentials());
     		if (accountName != null) {
     			mClientsWithKnownUsername.put(accountName, client);
@@ -116,10 +121,12 @@ public class SingleSessionManager implements OwnCloudClientManager {
 
     		} else {
     			mClientsWithUnknownUsername.put(sessionName, client);
+                // TODO REMOVE THIS LOG
     			Log_OC.d(TAG, "    new client {" + sessionName + ", " + client.hashCode() + "}");
     		}
     	} else {
     		if (!reusingKnown) {
+                // TODO REMOVE THIS LOG
     			Log_OC.d(TAG, "    reusing client {" + sessionName + ", " + client.hashCode() + "}");
     		}
     		keepCredentialsUpdated(account, client);
@@ -148,18 +155,9 @@ public class SingleSessionManager implements OwnCloudClientManager {
         		Log_OC.d(TAG, "No client tracked for  {" + accountName + "}");
         	}
     	}
-    	
-    	String sessionName = AccountUtils.buildAccountName(
-    			account.getBaseUri(), 
-    			account.getCredentials().getAuthToken());
-    	client = mClientsWithUnknownUsername.remove(sessionName);
-    	if (client != null) {
-			Log_OC.d(TAG, "Removed client {" + sessionName + ", " + client.hashCode() + "}");
-			return  client;
-    	}
-		Log_OC.d(TAG, "No client tracked for  {" + sessionName + "}");
-    		
-		Log_OC.d(TAG, "No client removed");
+
+        mClientsWithUnknownUsername.clear();
+
 		return null;
 		
 	}
