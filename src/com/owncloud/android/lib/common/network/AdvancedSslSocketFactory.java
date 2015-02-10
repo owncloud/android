@@ -92,6 +92,7 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
     /**
      * @see ProtocolSocketFactory#createSocket(java.lang.String,int,java.net.InetAddress,int)
      */
+    @Override
     public Socket createSocket(String host, int port, InetAddress clientHost, int clientPort) 
     		throws IOException, UnknownHostException {
     	
@@ -157,6 +158,7 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
      * @throws UnknownHostException if the IP address of the host cannot be
      *             determined
      */
+    @Override
     public Socket createSocket(final String host, final int port,
             final InetAddress localAddress, final int localPort,
             final HttpConnectionParams params) throws IOException,
@@ -187,6 +189,7 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
 	/**
      * @see ProtocolSocketFactory#createSocket(java.lang.String,int)
      */
+    @Override
     public Socket createSocket(String host, int port) throws IOException,
             UnknownHostException {
     	Log_OC.d(TAG, "Creating SSL Socket with remote " + host + ":" + port);

@@ -54,6 +54,11 @@ public class OwnCloudAccount {
         if (savedAccount == null) {
             throw new IllegalArgumentException("Parameter 'savedAccount' cannot be null");
         }
+
+        if (context == null) {
+            throw new IllegalArgumentException("Parameter 'context' cannot be null");
+        }
+
         mSavedAccount = savedAccount;
         mSavedAccountName = savedAccount.name;
         mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, mSavedAccount));
@@ -73,8 +78,14 @@ public class OwnCloudAccount {
         throws AccountNotFoundException, AuthenticatorException,
                 IOException, OperationCanceledException {
 
-        mCredentials = AccountUtils.getCredentialsForAccount(context, mSavedAccount);
-    }
+        if (context == null) {
+            throw new IllegalArgumentException("Parameter 'context' cannot be null");
+        }
+
+		if (mSavedAccount != null) {
+			mCredentials = AccountUtils.getCredentialsForAccount(context, mSavedAccount);
+		}
+	}
 
     /*
     public OwnCloudAccount(Account savedAccount, Context context)
