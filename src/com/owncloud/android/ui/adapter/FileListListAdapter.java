@@ -52,7 +52,7 @@ import com.owncloud.android.utils.FileStorageUtils;
 /**
  * This Adapter populates a ListView with all files and folders in an ownCloud
  * instance.
- * 
+ *
  * @author Bartek Przybylski
  * @author Tobias Kaminsky
  * @author David A. Velasco
@@ -73,13 +73,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private enum ViewType {LIST_ITEM, GRID_IMAGE, GRID_ITEM };
 
     private SharedPreferences mAppPreferences;
-    
+
     public FileListListAdapter(
-            boolean justFolders, 
+            boolean justFolders,
             Context context,
             ComponentsGetter transferServiceGetter
-            ) {
-        
+    ) {
+
         mJustFolders = justFolders;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
@@ -87,16 +87,16 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         mAppPreferences = PreferenceManager
                 .getDefaultSharedPreferences(mContext);
-        
+
         // Read sorting order, default to sort by name ascending
         FileStorageUtils.mSortOrder = mAppPreferences.getInt("sortOrder", 0);
         FileStorageUtils.mSortAscending = mAppPreferences.getBoolean("sortAscending", true);
 
-        
+
         // initialise thumbnails cache on background thread
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
     }
-    
+
     @Override
     public boolean areAllItemsEnabled() {
         return true;
@@ -258,9 +258,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                     break;
             }
-            
+
             // For all Views
-            
+
             // this if-else is needed even though favorite icon is visible by default
             // because android reuses views in listview
             if (!file.keepInSync()) {
@@ -268,14 +268,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             } else {
                 view.findViewById(R.id.favoriteIcon).setVisibility(View.VISIBLE);
             }
-            
+
             // No Folder
             if (!file.isFolder()) {
                 if (file.isImage() && file.getRemoteId() != null){
                     // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
                             String.valueOf(file.getRemoteId())
-                            );
+                    );
                     if (thumbnail != null && !file.needsUpdateThumbnail()){
                         fileIcon.setImageBitmap(thumbnail);
                     } else {
@@ -284,15 +284,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                             final ThumbnailsCacheManager.ThumbnailGenerationTask task =
                                     new ThumbnailsCacheManager.ThumbnailGenerationTask(
                                             fileIcon, mStorageManager, mAccount
-                                            );
+                                    );
                             if (thumbnail == null) {
                                 thumbnail = ThumbnailsCacheManager.mDefaultImg;
                             }
                             final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
                                     new ThumbnailsCacheManager.AsyncDrawable(
-                                    mContext.getResources(), 
-                                    thumbnail, 
-                                    task
+                                            mContext.getResources(),
+                                            thumbnail,
+                                            task
                                     );
                             fileIcon.setImageDrawable(asyncDrawable);
                             task.execute(file);
@@ -322,7 +322,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     /**
      * Local Folder size in human readable format
-     * 
+     *
      * @param path
      *            String
      * @return Size in human readable format
@@ -358,7 +358,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             return result;
         }
         return 0;
-    } 
+    }
 
     @Override
     public int getViewTypeCount() {
@@ -392,7 +392,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mFiles = mStorageManager.getFolderContent(mFile);
             mFilesOrig.clear();
             mFilesOrig.addAll(mFiles);
-            
+
             if (mJustFolders) {
                 mFiles = getFolders(mFiles);
             }
@@ -403,7 +403,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         mFiles = FileStorageUtils.sortFolder(mFiles);
         notifyDataSetChanged();
     }
-    
+
 
     /**
      * Filter for getting only the folders
@@ -411,8 +411,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
      * @return Vector<OCFile>
      */
     public Vector<OCFile> getFolders(Vector<OCFile> files) {
-        Vector<OCFile> ret = new Vector<OCFile>(); 
-        OCFile current = null; 
+        Vector<OCFile> ret = new Vector<OCFile>();
+        OCFile current = null;
         for (int i=0; i<files.size(); i++) {
             current = files.get(i);
             if (current.isFolder()) {
@@ -421,19 +421,19 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         }
         return ret;
     }
-    
-    
+
+
     /**
      * Check if parent folder does not include 'S' permission and if file/folder
      * is shared with me
-     * 
+     *
      * @param file: OCFile
      * @return boolean: True if it is shared with me and false if it is not
      */
     private boolean checkIfFileIsSharedWithMe(OCFile file) {
-        return (mFile.getPermissions() != null 
+        return (mFile.getPermissions() != null
                 && !mFile.getPermissions().contains(PERMISSION_SHARED_WITH_ME)
-                && file.getPermissions() != null 
+                && file.getPermissions() != null
                 && file.getPermissions().contains(PERMISSION_SHARED_WITH_ME));
     }
 
@@ -442,16 +442,16 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         editor.putInt("sortOrder", order);
         editor.putBoolean("sortAscending", ascending);
         editor.commit();
-        
+
         FileStorageUtils.mSortOrder = order;
         FileStorageUtils.mSortAscending = ascending;
-        
+
 
         mFiles = FileStorageUtils.sortFolder(mFiles);
         notifyDataSetChanged();
 
     }
-    
+
     private CharSequence showRelativeTimestamp(OCFile file){
         return DisplayUtils.getRelativeDateTimeString(mContext, file.getModificationTimestamp(),
                 DateUtils.SECOND_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0);

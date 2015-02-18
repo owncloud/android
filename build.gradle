@@ -31,6 +31,12 @@ dependencies {
 android {
     compileSdkVersion 19
     buildToolsVersion "20.0.0"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_5
+        targetCompatibility JavaVersion.VERSION_1_5
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -59,12 +65,6 @@ android {
         lintOptions {
             abortOnError false
         }
-    }
-
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
     }
     
     productFlavors {
