@@ -20,8 +20,11 @@ package com.owncloud.android.ui.activity;
 import java.io.File;
 
 import android.accounts.Account;
+import android.app.LoaderManager;
+import android.content.AsyncTaskLoader;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.Loader;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.DialogFragment;
@@ -54,7 +57,8 @@ import com.owncloud.android.utils.FileStorageUtils;
  */
 
 public class UploadFilesActivity extends FileActivity implements
-    LocalFileListFragment.ContainerActivity, OnNavigationListener, OnClickListener, ConfirmationDialogFragmentListener {
+    LocalFileListFragment.ContainerActivity, OnNavigationListener, OnClickListener,
+                                                          ConfirmationDialogFragmentListener, LoaderManager.LoaderCallbacks<Boolean> {
     
     private ArrayAdapter<String> mDirectories;
     private File mCurrentDir = null;
@@ -279,60 +283,26 @@ public class UploadFilesActivity extends FileActivity implements
             finish();
             
         } else if (v.getId() == R.id.upload_files_btn_upload) {
-            new CheckAvailableSpaceTask().execute();
+            getLoaderManager().initLoader(0, null, this);
         }
     }
 
+    @Override
+    public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+        return new CheckAvailableSpaceTask(this);
+    }
 
     /**
-     * Asynchronous task checking if there is space enough to copy all the files chosen
-     * to upload into the ownCloud local folder.
+     * Updates the activity UI after the check of space is done.
      * 
-     * Maybe an AsyncTask is not strictly necessary, but who really knows.
+     * If there is not space enough. shows a new dialog to query the user if wants to move the files instead
+     * of copy them.
      * 
-     * @author David A. Velasco
+     * @param result        'True' when there is space enough to copy all the selected files.
      */
-    private class CheckAvailableSpaceTask extends AsyncTask<Void, Void, Boolean> {
-
-        /**
-         * Updates the UI before trying the movement
-         */
-        @Override
-        protected void onPreExecute () {
-            /// progress dialog and disable 'Move' button
-            mCurrentDialog = IndeterminateProgressDialog.newInstance(R.string.wait_a_moment, false);
-            mCurrentDialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
-        }
-        
-        
-        /**
-         * Checks the available space
-         * 
-         * @return     'True' if there is space enough.
-         */
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            String[] checkedFilePaths = mFileListFragment.getCheckedFilePaths();
-            long total = 0;
-            for (int i=0; checkedFilePaths != null && i < checkedFilePaths.length ; i++) {
-                String localPath = checkedFilePaths[i];
-                File localFile = new File(localPath);
-                total += localFile.length();
-            }
-            return (FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= total);
-        }
-
-        /**
-         * Updates the activity UI after the check of space is done.
-         * 
-         * If there is not space enough. shows a new dialog to query the user if wants to move the files instead
-         * of copy them.
-         * 
-         * @param result        'True' when there is space enough to copy all the selected files.
-         */
-        @Override
-        protected void onPostExecute(Boolean result) {
-            mCurrentDialog.dismiss();
+    @Override
+    public void onLoadFinished(Loader<Boolean> loader, Boolean result) {
+        mCurrentDialog.dismiss();
             mCurrentDialog = null;
             
             if (result) {
@@ -349,6 +319,53 @@ public class UploadFilesActivity extends FileActivity implements
                 dialog.setOnConfirmationListener(UploadFilesActivity.this);
                 dialog.show(getSupportFragmentManager(), QUERY_TO_MOVE_DIALOG_TAG);
             }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Boolean> loader) {
+    }
+
+    /**
+     * Asynchronous task checking if there is space enough to copy all the files chosen
+     * to upload into the ownCloud local folder.
+     * 
+     * Maybe an AsyncTask is not strictly necessary, but who really knows.
+     * 
+     * @author David A. Velasco
+     */
+    private class CheckAvailableSpaceTask extends AsyncTaskLoader<Boolean> {
+
+        CheckAvailableSpaceTask(Context context) {
+            super(context);
+        }
+
+        /**
+         * Updates the UI before trying the movement
+         */
+        @Override
+        protected void onStartLoading() {
+            /// progress dialog and disable 'Move' button
+            mCurrentDialog = IndeterminateProgressDialog.newInstance(R.string.wait_a_moment, false);
+            mCurrentDialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
+            forceLoad();
+        }
+        
+        
+        /**
+         * Checks the available space
+         * 
+         * @return     'True' if there is space enough.
+         */
+        @Override
+        public Boolean loadInBackground() {
+            String[] checkedFilePaths = mFileListFragment.getCheckedFilePaths();
+            long total = 0;
+            for (int i=0; checkedFilePaths != null && i < checkedFilePaths.length ; i++) {
+                String localPath = checkedFilePaths[i];
+                File localFile = new File(localPath);
+                total += localFile.length();
+            }
+            return (FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= total);
         }
     }
 
