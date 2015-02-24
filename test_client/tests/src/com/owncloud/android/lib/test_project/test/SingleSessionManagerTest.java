@@ -93,22 +93,31 @@ public class SingleSessionManagerTest extends AndroidTestCase {
 	}
 	
 	public void testGetClientFor() {
-		OwnCloudClient client1 = mSSMgr.getClientFor(mValidAccount, getContext());
-		OwnCloudClient client2 = mSSMgr.getClientFor(mAnonymousAccount, getContext());
-		
-		assertNotSame("Got same client instances for different accounts",
-				client1, client2);
-		assertSame("Got different client instances for same account",
-				client1, mSSMgr.getClientFor(mValidAccount,  getContext()));
-		
+		try {
+			OwnCloudClient client1 = mSSMgr.getClientFor(mValidAccount, getContext());
+			OwnCloudClient client2 = mSSMgr.getClientFor(mAnonymousAccount, getContext());
+
+			assertNotSame("Got same client instances for different accounts",
+					client1, client2);
+			assertSame("Got different client instances for same account",
+					client1, mSSMgr.getClientFor(mValidAccount,  getContext()));
+
+		} catch (Exception e) {
+			throw new AssertionFailedError("Exception getting client for account: " + e.getMessage());
+		}
+
 		// TODO harder tests
 	}
     
 	public void testRemoveClientFor() {
-		OwnCloudClient client1 = mSSMgr.getClientFor(mValidAccount, getContext());
-		mSSMgr.removeClientFor(mValidAccount);
-		assertNotSame("Got same client instance after removing it from manager",
-				client1, mSSMgr.getClientFor(mValidAccount,  getContext()));
+		try {
+			OwnCloudClient client1 = mSSMgr.getClientFor(mValidAccount, getContext());
+			mSSMgr.removeClientFor(mValidAccount);
+			assertNotSame("Got same client instance after removing it from manager",
+					client1, mSSMgr.getClientFor(mValidAccount,  getContext()));
+		} catch (Exception e) {
+			throw new AssertionFailedError("Exception getting client for account: " + e.getMessage());
+		}
 		
 		// TODO harder tests
 	}

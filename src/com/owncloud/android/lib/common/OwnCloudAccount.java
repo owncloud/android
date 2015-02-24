@@ -41,9 +41,54 @@ public class OwnCloudAccount {
     private OwnCloudCredentials mCredentials;
     
     private String mSavedAccountName;
-    
-    
-    public OwnCloudAccount(Account savedAccount, Context context) 
+
+    private Account mSavedAccount;
+
+
+    /**
+     * Constructor for already saved OC accounts.
+     *
+     * Do not use for anonymous credentials.
+     */
+    public OwnCloudAccount(Account savedAccount, Context context) throws AccountNotFoundException {
+        if (savedAccount == null) {
+            throw new IllegalArgumentException("Parameter 'savedAccount' cannot be null");
+        }
+
+        if (context == null) {
+            throw new IllegalArgumentException("Parameter 'context' cannot be null");
+        }
+
+        mSavedAccount = savedAccount;
+        mSavedAccountName = savedAccount.name;
+        mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, mSavedAccount));
+        mCredentials = null;
+    }
+
+    /**
+     * Method for deferred load of account attributes from AccountManager
+     *
+     * @param context
+     * @throws AccountNotFoundException
+     * @throws AuthenticatorException
+     * @throws IOException
+     * @throws OperationCanceledException
+     */
+    public void loadCredentials(Context context)
+        throws AccountNotFoundException, AuthenticatorException,
+                IOException, OperationCanceledException {
+
+        if (context == null) {
+            throw new IllegalArgumentException("Parameter 'context' cannot be null");
+        }
+
+		if (mSavedAccount != null) {
+			mCredentials = AccountUtils.getCredentialsForAccount(context, mSavedAccount);
+		}
+	}
+
+    /*
+    public OwnCloudAccount(Account savedAccount, Context context)
     		throws AccountNotFoundException, AuthenticatorException, 
     		IOException, OperationCanceledException {
     	
@@ -61,12 +106,19 @@ public class OwnCloudAccount {
         	mCredentials = OwnCloudCredentialsFactory.getAnonymousCredentials();
         }
     }
-    
-    
+    */
+
+    /**
+     * Constructor for non yet saved OC accounts.
+     *
+     * @param baseUri           URI to the OC server to get access to.
+     * @param credentials       Credentials to authenticate in the server. NULL is valid for anonymous credentials.
+     */
     public OwnCloudAccount(Uri baseUri, OwnCloudCredentials credentials) {
         if (baseUri == null) {
             throw new IllegalArgumentException("Parameter 'baseUri' cannot be null");
         }
+        mSavedAccount = null;
         mSavedAccountName = null;
         mBaseUri = baseUri;
         mCredentials = credentials != null ? 
@@ -80,7 +132,7 @@ public class OwnCloudAccount {
 
 	public boolean isAnonymous() {
         return (mCredentials == null);
-    }
+    }   // TODO no more
     
     public Uri getBaseUri() {
         return mBaseUri;
