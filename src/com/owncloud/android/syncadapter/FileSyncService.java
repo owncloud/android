@@ -1,19 +1,20 @@
 /**
- *    @author |"[insert key contributors here, as we wish or delete the line]"
- *    Copyright (C) 2011  Bartek Przybylski
- *    Copyright (C) 2015 ownCloud, Inc.
+ * @author Bartek Przybylski
+ * @author David A. Velasco
+ * Copyright (C) 2011  Bartek Przybylski
+ * Copyright (C) 2015 ownCloud, Inc.
  *
- *    This code is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU Affero General Public License, version 3,
- *    as published by the Free Software Foundation.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *    GNU Affero General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- *    You should have received a copy of the GNU Affero General Public License, version 3,
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 package com.owncloud.android.syncadapter;
@@ -25,10 +26,7 @@ import android.os.IBinder;
 /**
  * Background service for synchronizing remote files with their local state.
  * 
- * Serves as a connector to an instance of {@link FileSyncAdapter}, as required by standard Android APIs. 
- * 
- * @author Bartek Przybylski
- * @author David A. Velasco
+ * Serves as a connector to an instance of {@link FileSyncAdapter}, as required by standard Android APIs.
  */
 public class FileSyncService extends Service {
     

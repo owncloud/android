@@ -1,5 +1,7 @@
 /**
- *    @author |"[insert key contributors here, as we wish or delete the line]"
+ *    @author Bartek Przybylski
+ *    @author David A. Velasco
+ *    @author masensio
  *    Copyright (C) 2012  Bartek Przybylski
  *    Copyright (C) 2015 ownCloud, Inc.
  *
@@ -7,7 +9,7 @@
  *    it under the terms of the GNU Affero General Public License, version 3,
  *    as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
+ *    This program is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *    GNU Affero General Public License for more details.
@@ -92,10 +94,6 @@ import com.owncloud.android.utils.DisplayUtils;
 
 /**
  * This Activity is used to add an ownCloud account to the App
- * 
- * @author Bartek Przybylski
- * @author David A. Velasco
- * @author masensio
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity
         implements  OnRemoteOperationListener, OnFocusChangeListener, OnEditorActionListener,
