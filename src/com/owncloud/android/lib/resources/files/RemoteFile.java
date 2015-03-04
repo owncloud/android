@@ -50,6 +50,7 @@ public class RemoteFile implements Parcelable, Serializable {
 	private String mEtag;
 	private String mPermissions;
 	private String mRemoteId;
+    private long mSize;
 
 	/** 
 	 * Getters and Setters
@@ -119,6 +120,14 @@ public class RemoteFile implements Parcelable, Serializable {
 		this.mRemoteId = remoteId;
 	}
 
+    public long getSize() {
+        return mSize;
+    }
+
+    public void setSize (long size){
+        mSize = size;
+    }
+
 	public RemoteFile() {
 		resetData();
 	}
@@ -147,6 +156,7 @@ public class RemoteFile implements Parcelable, Serializable {
         this.setEtag(we.etag());
         this.setPermissions(we.permissions());
         this.setRemoteId(we.remoteId());
+        this.setSize(we.size());
 	}
 
 	/**
@@ -161,6 +171,7 @@ public class RemoteFile implements Parcelable, Serializable {
         mEtag = null;
         mPermissions = null;
         mRemoteId = null;
+        mSize = 0;
     }
 
     /** 
@@ -197,6 +208,7 @@ public class RemoteFile implements Parcelable, Serializable {
         mEtag = source.readString();
         mPermissions= source.readString();
         mRemoteId = source.readString();
+        mSize = source.readLong();
     }
     
 	@Override
@@ -214,7 +226,7 @@ public class RemoteFile implements Parcelable, Serializable {
 		dest.writeString(mEtag);
 		dest.writeString(mPermissions);
 		dest.writeString(mRemoteId);
+        dest.writeLong(mSize);
 	}
-    
     
 }
