@@ -168,6 +168,9 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         file.setEtag(we.etag());
         file.setPermissions(we.permissions());
         file.setRemoteId(we.remoteId());
+        file.setSize(we.size());
+        file.setQuotaUsedBytes(we.quotaUsedBytes());
+        file.setQuotaAvailableBytes(we.quotaAvailableBytes());
         return file;
     }
 }

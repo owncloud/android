@@ -51,6 +51,8 @@ public class RemoteFile implements Parcelable, Serializable {
 	private String mPermissions;
 	private String mRemoteId;
     private long mSize;
+    private long mQuotaUsedBytes;
+    private long mQuotaAvailableBytes;
 
 	/** 
 	 * Getters and Setters
@@ -128,6 +130,14 @@ public class RemoteFile implements Parcelable, Serializable {
         mSize = size;
     }
 
+    public void setQuotaUsedBytes (long quotaUsedBytes) {
+        mQuotaUsedBytes = quotaUsedBytes;
+    }
+
+    public void setQuotaAvailableBytes (long quotaAvailableBytes) {
+        mQuotaAvailableBytes = quotaAvailableBytes;
+    }
+
 	public RemoteFile() {
 		resetData();
 	}
@@ -157,6 +167,8 @@ public class RemoteFile implements Parcelable, Serializable {
         this.setPermissions(we.permissions());
         this.setRemoteId(we.remoteId());
         this.setSize(we.size());
+        this.setQuotaUsedBytes(we.quotaUsedBytes());
+        this.setQuotaAvailableBytes(we.quotaAvailableBytes());
 	}
 
 	/**
@@ -172,6 +184,8 @@ public class RemoteFile implements Parcelable, Serializable {
         mPermissions = null;
         mRemoteId = null;
         mSize = 0;
+        mQuotaUsedBytes = 0;
+        mQuotaAvailableBytes = 0;
     }
 
     /** 
@@ -209,6 +223,8 @@ public class RemoteFile implements Parcelable, Serializable {
         mPermissions= source.readString();
         mRemoteId = source.readString();
         mSize = source.readLong();
+        mQuotaUsedBytes = source.readLong();
+        mQuotaAvailableBytes = source.readLong();
     }
     
 	@Override
@@ -227,6 +243,8 @@ public class RemoteFile implements Parcelable, Serializable {
 		dest.writeString(mPermissions);
 		dest.writeString(mRemoteId);
         dest.writeLong(mSize);
+        dest.writeLong(mQuotaUsedBytes);
+        dest.writeLong(mQuotaAvailableBytes);
 	}
-    
+
 }
