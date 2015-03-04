@@ -38,9 +38,7 @@ import android.widget.Toast;
 /**
  *  Dialog to input the name for a new folder to create.  
  * 
- *  Triggers the folder creation when name is confirmed. 
- *  
- *  @author David A. Velasco
+ *  Triggers the folder creation when name is confirmed.
  */
 public class CreateFolderDialogFragment 
 extends SherlockDialogFragment implements DialogInterface.OnClickListener {

@@ -30,8 +30,10 @@ import com.owncloud.android.R;
 
 public class IndeterminateProgressDialog extends SherlockDialogFragment {
 
-    private static final String ARG_MESSAGE_ID = IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_MESSAGE_ID";
-    private static final String ARG_CANCELABLE = IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_CANCELABLE";
+    private static final String ARG_MESSAGE_ID =
+            IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_MESSAGE_ID";
+    private static final String ARG_CANCELABLE =
+            IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_CANCELABLE";
 
 
     /**

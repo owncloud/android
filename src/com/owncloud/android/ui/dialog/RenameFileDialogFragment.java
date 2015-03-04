@@ -1,4 +1,5 @@
 /**
+ * @author David A. Velasco
  * Copyright (C) 2015 ownCloud, Inc.
  *
  * This code is free software: you can redistribute it and/or modify
@@ -43,9 +44,7 @@ import com.owncloud.android.ui.activity.ComponentsGetter;
 /**
  *  Dialog to input a new name for a file or folder to rename.  
  * 
- *  Triggers the rename operation when name is confirmed. 
- *  
- *  @author David A. Velasco
+ *  Triggers the rename operation when name is confirmed.
  */
 public class RenameFileDialogFragment
 extends SherlockDialogFragment implements DialogInterface.OnClickListener {

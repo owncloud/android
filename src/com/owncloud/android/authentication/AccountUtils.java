@@ -1,5 +1,4 @@
 /**
- * @author |"[insert key contributors here, as we wish or delete the line]"
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2015 ownCloud, Inc.
  *

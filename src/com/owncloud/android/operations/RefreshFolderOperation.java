@@ -126,7 +126,7 @@ public class RefreshFolderOperation extends RemoteOperation {
      * @param   syncFullAccount         'True' means that this operation is part of a full account 
      *                                  synchronization.
      * @param   isShareSupported        'True' means that the server supports the sharing API.           
-     * @param   ignoreEtag              'True' means that the content of the remote folder should
+     * @param   ignoreETag              'True' means that the content of the remote folder should
      *                                  be fetched and updated even though the 'eTag' did not 
      *                                  change.  
      * @param   dataStorageManager      Interface with the local database.
