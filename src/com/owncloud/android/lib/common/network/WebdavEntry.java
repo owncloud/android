@@ -42,8 +42,12 @@ public class WebdavEntry {
 	private static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
     private static final String EXTENDED_PROPERTY_NAME_SIZE = "size";
 
+    private static final String PROPERTY_QUOTA_USED_BYTES = "quota-used-bytes";
+    private static final String PROPERTY_QUOTA_AVAILABLE_BYTES = "quota-available-bytes";
+
 	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
 	private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
+    private long mQuotaUsedBytes, mQuotaAvailableBytes;
 
 	public WebdavEntry(MultiStatusResponse ms, String splitElement) {
         resetData();
@@ -67,6 +71,7 @@ public class WebdavEntry {
             }
 
             // use unknown mimetype as default behavior
+            // {DAV:}getcontenttype
             mContentType = "application/octet-stream";
             prop = propSet.get(DavPropertyName.GETCONTENTTYPE);
             if (prop != null) {
@@ -78,7 +83,8 @@ public class WebdavEntry {
                 }
             }
             
-            // check if it's a folder in the standard way: see RFC2518 12.2 . RFC4918 14.3 
+            // check if it's a folder in the standard way: see RFC2518 12.2 . RFC4918 14.3
+            // {DAV:}resourcetype
             prop = propSet.get(DavPropertyName.RESOURCETYPE);
             if (prop!= null) {
                 Object value = prop.getValue();
@@ -90,10 +96,12 @@ public class WebdavEntry {
                 }
             }
 
+            // {DAV:}getcontentlength
             prop = propSet.get(DavPropertyName.GETCONTENTLENGTH);
             if (prop != null)
                 mContentLength = Long.parseLong((String) prop.getValue());
 
+            // {DAV:}getlastmodified
             prop = propSet.get(DavPropertyName.GETLASTMODIFIED);
             if (prop != null) {
                 Date d = WebdavUtils
@@ -107,13 +115,25 @@ public class WebdavEntry {
                         .parseResponseDate((String) prop.getValue());
                 mCreateTimestamp = (d != null) ? d.getTime() : 0;
             }
-            
+
+            // {DAV:}getetag
             prop = propSet.get(DavPropertyName.GETETAG);
             if (prop != null) {
                 mEtag = (String) prop.getValue();
                 mEtag = mEtag.substring(1, mEtag.length()-1);
             }
 
+            // {DAV:}quota-used-bytes
+            prop = propSet.get(DavPropertyName.create(PROPERTY_QUOTA_USED_BYTES));
+            if (prop != null) {
+                mQuotaUsedBytes = Long.parseLong((String) prop.getValue());
+            }
+
+            // {DAV:}quota-available-bytes
+            prop = propSet.get(DavPropertyName.create(PROPERTY_QUOTA_AVAILABLE_BYTES));
+            if (prop != null) {
+                mQuotaAvailableBytes = Long.parseLong((String) prop.getValue());
+            }
             // OC permissions property <oc:permissions>
             prop = propSet.get(
             		EXTENDED_PROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC)
@@ -130,6 +150,7 @@ public class WebdavEntry {
                 mRemoteId = prop.getValue().toString();
             }
 
+            // TODO: is it necessary?
             // OC size property <oc:size>
             prop = propSet.get(
             		EXTENDED_PROPERTY_NAME_SIZE, Namespace.getNamespace(NAMESPACE_OC)
@@ -196,9 +217,19 @@ public class WebdavEntry {
         return mSize;
     }
 
+    public long quotaUsedBytes() {
+        return mQuotaUsedBytes;
+    }
+
+    public long quotaAvailableBytes() {
+        return mQuotaAvailableBytes;
+    }
+
     private void resetData() {
         mName = mUri = mContentType = mPermissions = null; mRemoteId = null;
         mContentLength = mCreateTimestamp = mModifiedTimestamp = 0;
         mSize = 0;
+        mQuotaUsedBytes = 0;
+        mQuotaAvailableBytes = 0;
     }
 }
