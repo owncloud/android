@@ -40,9 +40,10 @@ public class WebdavEntry {
 	private static final String NAMESPACE_OC = "http://owncloud.org/ns";
 	private static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
 	private static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
+    private static final String EXTENDED_PROPERTY_NAME_SIZE = "size";
 
 	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
-	private long mContentLength, mCreateTimestamp, mModifiedTimestamp;
+	private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
 
 	public WebdavEntry(MultiStatusResponse ms, String splitElement) {
         resetData();
@@ -70,7 +71,8 @@ public class WebdavEntry {
             prop = propSet.get(DavPropertyName.GETCONTENTTYPE);
             if (prop != null) {
                 mContentType = (String) prop.getValue();
-                // dvelasco: some builds of ownCloud server 4.0.x added a trailing ';' to the MIME type ; if looks fixed, but let's be cautious
+                // dvelasco: some builds of ownCloud server 4.0.x added a trailing ';'
+                // to the MIME type ; if looks fixed, but let's be cautious
                 if (mContentType.indexOf(";") >= 0) {
                     mContentType = mContentType.substring(0, mContentType.indexOf(";"));
                 }
@@ -81,7 +83,10 @@ public class WebdavEntry {
             if (prop!= null) {
                 Object value = prop.getValue();
                 if (value != null) {
-                    mContentType = "DIR";   // a specific attribute would be better, but this is enough; unless while we have no reason to distinguish MIME types for folders
+                    mContentType = "DIR";   // a specific attribute would be better,
+                                            // but this is enough;
+                                            // unless while we have no reason to distinguish
+                                            // MIME types for folders
                 }
             }
 
@@ -123,6 +128,14 @@ public class WebdavEntry {
     		);
             if (prop != null) {
                 mRemoteId = prop.getValue().toString();
+            }
+
+            // OC size property <oc:size>
+            prop = propSet.get(
+            		EXTENDED_PROPERTY_NAME_SIZE, Namespace.getNamespace(NAMESPACE_OC)
+    		);
+            if (prop != null) {
+                mSize = Long.parseLong((String) prop.getValue());
             }
 
         } else {
@@ -179,8 +192,13 @@ public class WebdavEntry {
         return mRemoteId;
     }
 
+    public long size(){
+        return mSize;
+    }
+
     private void resetData() {
         mName = mUri = mContentType = mPermissions = null; mRemoteId = null;
         mContentLength = mCreateTimestamp = mModifiedTimestamp = 0;
+        mSize = 0;
     }
 }
