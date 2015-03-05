@@ -1,17 +1,18 @@
-/* ownCloud Android client application
- *   Copyright (C) 2012-2014 ownCloud Inc.
+/**
+ * @author David A. Velasco
+ * Copyright (C) 2015 ownCloud, Inc.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -28,9 +29,7 @@ import android.accounts.Account;
 
 
 /**
- * Operation mmoving an {@link OCFile} to a different folder.
- * 
- * @author David A. Velasco
+ * Operation moving an {@link OCFile} to a different folder.
  */
 public class MoveFileOperation extends SyncOperation {
     
@@ -46,9 +45,9 @@ public class MoveFileOperation extends SyncOperation {
     /**
      * Constructor
      * 
-     * @param path              Remote path of the {@link OCFile} to move.
-     * @param newParentPath     Path to the folder where the file will be moved into. 
-     * @param account           OwnCloud account containing both the file and the target folder 
+     * @param srcPath             Remote path of the {@link OCFile} to move.
+     * @param targetParentPath    Path to the folder where the file will be moved into.
+     * @param account             OwnCloud account containing both the file and the target folder
      */
     public MoveFileOperation(String srcPath, String targetParentPath, Account account) {
         mSrcPath = srcPath;

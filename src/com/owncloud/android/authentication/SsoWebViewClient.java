@@ -1,17 +1,18 @@
-/* ownCloud Android client application
- *   Copyright (C) 2012-2015 ownCloud Inc.
+/**
+ * @author David A. Velasco
+ * Copyright (C) 2015 ownCloud, Inc.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -43,15 +44,12 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-
 /**
  * Custom {@link WebViewClient} client aimed to catch the end of a single-sign-on process 
  * running in the {@link WebView} that is attached to.
  * 
  * Assumes that the single-sign-on is kept thanks to a cookie set at the end of the
  * authentication process.
- *   
- * @author David A. Velasco
  */
 public class SsoWebViewClient extends WebViewClient {
         

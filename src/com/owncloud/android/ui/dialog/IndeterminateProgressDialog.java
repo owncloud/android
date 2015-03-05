@@ -1,17 +1,17 @@
-/* ownCloud Android client application
- *   Copyright (C) 2012-2013 ownCloud Inc.
+/**
+ * Copyright (C) 2015 ownCloud, Inc.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -30,8 +30,10 @@ import com.owncloud.android.R;
 
 public class IndeterminateProgressDialog extends SherlockDialogFragment {
 
-    private static final String ARG_MESSAGE_ID = IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_MESSAGE_ID";
-    private static final String ARG_CANCELABLE = IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_CANCELABLE";
+    private static final String ARG_MESSAGE_ID =
+            IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_MESSAGE_ID";
+    private static final String ARG_CANCELABLE =
+            IndeterminateProgressDialog.class.getCanonicalName() + ".ARG_CANCELABLE";
 
 
     /**

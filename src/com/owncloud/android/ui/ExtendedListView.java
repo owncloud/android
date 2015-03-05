@@ -1,18 +1,19 @@
-/* ownCloud Android client application
- *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2012-2015 ownCloud Inc.
+/**
+ * @author David A. Velasco
+ * Copyright (C) 2012 Bartek Przybylski
+ * Copyright (C) 2015 ownCloud, Inc.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -28,9 +29,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 /**
  * ListView allowing to specify the position of an item that should be centered in the visible area, if possible.
  *
- * The cleanest way I found to overcome the problem due to getHeight() returns 0 until the view is really drawn. 
- *
- * @author David A. Velasco
+ * The cleanest way I found to overcome the problem due to getHeight() returns 0 until the view is really drawn.
  */
 public class ExtendedListView extends ListView {
 

@@ -1,17 +1,18 @@
-/* ownCloud Android client application
- *   Copyright (C) 2012-2013 ownCloud Inc.
+/**
+ * @author David A. Velasco
+ * Copyright (C) 2015 ownCloud, Inc.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -47,8 +48,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.IndeterminateProgressDialog;
 import com.owncloud.android.utils.FileStorageUtils;
 
-
-
 /**
  * Activity reporting errors occurred when local files uploaded to an ownCloud account with an app in
  * version under 1.3.16 where being copied to the ownCloud local folder.
@@ -57,8 +56,6 @@ import com.owncloud.android.utils.FileStorageUtils;
  * files.
  * 
  * Shown when the error notification summarizing the list of errors is clicked by the user.
- * 
- * @author David A. Velasco
  */
 public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity implements OnClickListener {
 
