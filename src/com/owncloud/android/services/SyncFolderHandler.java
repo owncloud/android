@@ -1,4 +1,6 @@
-/* ownCloud Android client application
+/**
+ *   ownCloud Android client application
+ *
  *   Copyright (C) 2015 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -126,7 +128,7 @@ class SyncFolderHandler extends Handler {
             } finally {
                 mPendingOperations.removePayload(account, remotePath);
 
-                mService.dispatchResultToOperationListeners(null, mCurrentSyncOperation, result);
+                mService.dispatchResultToOperationListeners(mCurrentSyncOperation, result);
 
                 sendBroadcastFinishedSyncFolder(account, remotePath, result.isSuccess());
             }

@@ -1,6 +1,10 @@
-/* ownCloud Android client application
+/**
+ *   ownCloud Android client application
+ *
+ *   @author Bartek Przybylski
+ *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2012-2014 ownCloud Inc.
+ *   Copyright (C) 2015 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -96,7 +100,6 @@ import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.UnshareLinkOperation;
 import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
-import com.owncloud.android.ui.adapter.FileListListAdapter;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
@@ -115,9 +118,6 @@ import com.owncloud.android.utils.UriUtils;
 
 /**
  * Displays, what files the user has available in his ownCloud.
- * 
- * @author Bartek Przybylski
- * @author David A. Velasco
  */
 
 public class FileDisplayActivity extends HookActivity implements
@@ -649,6 +649,7 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
         if (filePaths != null) {
             String[] remotePaths = new String[filePaths.length];
             String remotePathBase = "";
+
             for (int j = mDirectories.getCount() - 2; j >= 0; --j) {
                 remotePathBase += OCFile.PATH_SEPARATOR + mDirectories.getItem(j);
             }
@@ -1110,40 +1111,34 @@ OnSslUntrustedCertListener, OnEnforceableRefreshListener {
                                     (synchResult.isException() && synchResult.getException() 
                                             instanceof AuthenticatorException))) {
 
-                            OwnCloudClient client = null;
+
                             try {
-                                OwnCloudAccount ocAccount = 
+                                OwnCloudClient client;
+                                OwnCloudAccount ocAccount =
                                         new OwnCloudAccount(getAccount(), context);
                                 client = (OwnCloudClientManagerFactory.getDefaultSingleton().
                                         removeClientFor(ocAccount));
-                                // TODO get rid of these exceptions
-                            } catch (AccountNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (AuthenticatorException e) {
-                                e.printStackTrace();
-                            } catch (OperationCanceledException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            
-                            if (client != null) {
-                                OwnCloudCredentials cred = client.getCredentials();
-                                if (cred != null) {
-                                    AccountManager am = AccountManager.get(context);
-                                    if (cred.authTokenExpires()) {
-                                        am.invalidateAuthToken(
-                                                getAccount().type, 
-                                                cred.getAuthToken()
-                                        );
-                                    } else {
-                                        am.clearPassword(getAccount());
+
+                                if (client != null) {
+                                    OwnCloudCredentials cred = client.getCredentials();
+                                    if (cred != null) {
+                                        AccountManager am = AccountManager.get(context);
+                                        if (cred.authTokenExpires()) {
+                                            am.invalidateAuthToken(
+                                                    getAccount().type,
+                                                    cred.getAuthToken()
+                                            );
+                                        } else {
+                                            am.clearPassword(getAccount());
+                                        }
                                     }
                                 }
+                                requestCredentialsUpdate();
+
+                            } catch (AccountNotFoundException e) {
+                                Log_OC.e(TAG, "Account " + getAccount() + " was removed!", e);
                             }
-                            
-                            requestCredentialsUpdate();
-                            
+
                         }
                     }
                     removeStickyBroadcast(intent);

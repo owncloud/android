@@ -1,6 +1,9 @@
-/* ownCloud Android client application
+/**
+ *   ownCloud Android client application
+ *
+ *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2012-2014 ownCloud Inc.
+ *   Copyright (C) 2015 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -56,7 +59,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateShareOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.UnshareLinkOperation;
-
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.LoadingDialog;
@@ -65,11 +67,9 @@ import com.owncloud.android.utils.ErrorMessageAdapter;
 
 /**
  * Activity with common behaviour for activities handling {@link OCFile}s in ownCloud {@link Account}s .
- * 
- * @author David A. Velasco
  */
-public class FileActivity extends SherlockFragmentActivity 
-implements OnRemoteOperationListener, ComponentsGetter {
+public class FileActivity extends SherlockFragmentActivity
+        implements OnRemoteOperationListener, ComponentsGetter {
 
     public static final String EXTRA_FILE = "com.owncloud.android.ui.activity.FILE";
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
@@ -79,7 +79,7 @@ implements OnRemoteOperationListener, ComponentsGetter {
     public static final String TAG = FileActivity.class.getSimpleName();
     
     private static final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
-    private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";;
+    private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
     
     protected static final long DELAY_TO_REQUEST_OPERATION_ON_ACTIVITY_RESULTS = 200;
     
@@ -158,7 +158,7 @@ implements OnRemoteOperationListener, ComponentsGetter {
         if (mUploadServiceConnection != null) {
             bindService(new Intent(this, FileUploader.class), mUploadServiceConnection, Context.BIND_AUTO_CREATE);
         }
-        
+
     }
 
     
@@ -221,6 +221,7 @@ implements OnRemoteOperationListener, ComponentsGetter {
             unbindService(mUploadServiceConnection);
             mUploadServiceConnection = null;
         }
+
         super.onDestroy();
     }
     
@@ -256,8 +257,6 @@ implements OnRemoteOperationListener, ComponentsGetter {
      *  to create a new ownCloud {@link Account}.
      *  
      *  POSTCONDITION: updates {@link #mAccountWasSet} and {@link #mAccountWasRestored}.
-     *   
-     *  @return     'True' if the checked {@link Account} was valid.
      */
     private void swapToDefaultAccount() {
         // default to the most recently used account
@@ -356,15 +355,12 @@ implements OnRemoteOperationListener, ComponentsGetter {
     protected ServiceConnection newTransferenceServiceConnection() {
         return null;
     }
-    
 
     /**
      * Helper class handling a callback from the {@link AccountManager} after the creation of
      * a new ownCloud {@link Account} finished, successfully or not.
      * 
      * At this moment, only called after the creation of the first account.
-     * 
-     * @author David A. Velasco
      */
     public class AccountCreationCallback implements AccountManagerCallback<Bundle> {
 
@@ -605,7 +601,7 @@ implements OnRemoteOperationListener, ComponentsGetter {
     @Override
     public FileUploaderBinder getFileUploaderBinder() {
         return mUploaderBinder;
-    };    
+    }
     
     
 }

@@ -1,5 +1,8 @@
-/* ownCloud Android client application
- *   Copyright (C) 2012-2014 ownCloud Inc. 
+/**
+ *   ownCloud Android client application
+ *
+ *   @author David A. Velasco
+ *   Copyright (C) 2015 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -64,8 +67,6 @@ import com.owncloud.android.utils.TouchImageViewCustom;
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will produce an {@link IllegalStateException}.
  * 
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is generated on instantiation too.
- * 
- * @author David A. Velasco
  */
 public class PreviewImageFragment extends FileFragment {
 
