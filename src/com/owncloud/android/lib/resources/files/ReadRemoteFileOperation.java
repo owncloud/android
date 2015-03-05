@@ -29,6 +29,9 @@ import org.apache.http.HttpStatus;
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
+import org.apache.jackrabbit.webdav.property.DavPropertyName;
+import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
+import org.apache.jackrabbit.webdav.xml.Namespace;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.WebdavEntry;
@@ -75,8 +78,27 @@ public class ReadRemoteFileOperation extends RemoteOperation {
 
     	/// take the duty of check the server for the current state of the file there
     	try {
+                        // PropFind Properties ( instead of DavConstants.PROPFIND_ALL_PROP )
+            DavPropertyNameSet propSet = new DavPropertyNameSet();
+            propSet.add(DavPropertyName.DISPLAYNAME);
+            propSet.add(DavPropertyName.GETCONTENTTYPE);
+            propSet.add(DavPropertyName.RESOURCETYPE);
+            propSet.add(DavPropertyName.GETCONTENTLENGTH);
+            propSet.add(DavPropertyName.GETLASTMODIFIED);
+            propSet.add(DavPropertyName.CREATIONDATE);
+            propSet.add(DavPropertyName.GETETAG);
+            propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_USED_BYTES));
+            propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_AVAILABLE_BYTES));
+            propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PERMISSIONS,
+                    Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+            propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_REMOTE_ID,
+                    Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+            propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
+                    Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+
+            // remote request
     		propfind = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
-    				DavConstants.PROPFIND_ALL_PROP,
+    				propSet,
     				DavConstants.DEPTH_0);
     		int status;
     		status = client.executeMethod(propfind, SYNC_READ_TIMEOUT, SYNC_CONNECTION_TIMEOUT);
@@ -88,7 +110,8 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     		if (isSuccess) {
     			// Parse response
     			MultiStatus resp = propfind.getResponseBodyAsMultiStatus();
-				WebdavEntry we = new WebdavEntry(resp.getResponses()[0], client.getWebdavUri().getPath());
+				WebdavEntry we = new WebdavEntry(resp.getResponses()[0],
+                        client.getWebdavUri().getPath());
 				RemoteFile remoteFile = new RemoteFile(we);
 				ArrayList<Object> files = new ArrayList<Object>();
 				files.add(remoteFile);
@@ -105,7 +128,8 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     	} catch (Exception e) {
     		result = new RemoteOperationResult(e);
     		e.printStackTrace();
-    		Log_OC.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(), result.getException());
+    		Log_OC.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(),
+                    result.getException());
     	} finally {
     		if (propfind != null)
     			propfind.releaseConnection();

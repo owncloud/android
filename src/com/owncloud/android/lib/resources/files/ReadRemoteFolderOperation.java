@@ -30,6 +30,9 @@ import org.apache.http.HttpStatus;
 import org.apache.jackrabbit.webdav.DavConstants;
 import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
+import org.apache.jackrabbit.webdav.property.DavPropertyName;
+import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
+import org.apache.jackrabbit.webdav.xml.Namespace;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.WebdavEntry;
@@ -72,9 +75,27 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         PropFindMethod query = null;
         
         try {
-            // remote request 
+            // PropFind Properties ( instead of DavConstants.PROPFIND_ALL_PROP )
+            DavPropertyNameSet propSet = new DavPropertyNameSet();
+            propSet.add(DavPropertyName.DISPLAYNAME);
+            propSet.add(DavPropertyName.GETCONTENTTYPE);
+            propSet.add(DavPropertyName.RESOURCETYPE);
+            propSet.add(DavPropertyName.GETCONTENTLENGTH);
+            propSet.add(DavPropertyName.GETLASTMODIFIED);
+            propSet.add(DavPropertyName.CREATIONDATE);
+            propSet.add(DavPropertyName.GETETAG);
+            propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_USED_BYTES));
+            propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_AVAILABLE_BYTES));
+            propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PERMISSIONS,
+                    Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+            propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_REMOTE_ID,
+                    Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+            propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
+                    Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+
+            // remote request
             query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
-                    DavConstants.PROPFIND_ALL_PROP,
+                    propSet,
                     DavConstants.DEPTH_1);
             int status = client.executeMethod(query);
 
@@ -111,7 +132,8 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                 Log_OC.i(TAG, "Synchronized "  + mRemotePath + ": " + result.getLogMessage());
             } else {
                 if (result.isException()) {
-                    Log_OC.e(TAG, "Synchronized " + mRemotePath  + ": " + result.getLogMessage(), result.getException());
+                    Log_OC.e(TAG, "Synchronized " + mRemotePath  + ": " + result.getLogMessage(),
+                            result.getException());
                 } else {
                     Log_OC.e(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage());
                 }
@@ -139,7 +161,8 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         mFolderAndFiles = new ArrayList<Object>();
         
         // parse data from remote folder 
-        WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0], client.getWebdavUri().getPath());
+        WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0],
+                client.getWebdavUri().getPath());
         mFolderAndFiles.add(fillOCFile(we));
         
         // loop to update every child

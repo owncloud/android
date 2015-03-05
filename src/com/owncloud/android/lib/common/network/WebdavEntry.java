@@ -37,13 +37,13 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class WebdavEntry {
-	private static final String NAMESPACE_OC = "http://owncloud.org/ns";
-	private static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
-	private static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
-    private static final String EXTENDED_PROPERTY_NAME_SIZE = "size";
+	public static final String NAMESPACE_OC = "http://owncloud.org/ns";
+	public static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
+	public static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
+    public static final String EXTENDED_PROPERTY_NAME_SIZE = "size";
 
-    private static final String PROPERTY_QUOTA_USED_BYTES = "quota-used-bytes";
-    private static final String PROPERTY_QUOTA_AVAILABLE_BYTES = "quota-available-bytes";
+    public static final String PROPERTY_QUOTA_USED_BYTES = "quota-used-bytes";
+    public static final String PROPERTY_QUOTA_AVAILABLE_BYTES = "quota-available-bytes";
 
 	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
 	private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
