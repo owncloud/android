@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2014 ownCloud Inc.
+ *   Copyright (C) 2015 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,7 @@ public class AdvancedX509TrustManager implements X509TrustManager {
     /**
      * Constructor for AdvancedX509TrustManager
      * 
-     * @param  knownServersCertStore    Local certificates store with server certificates explicitly trusted by the user.
+     * @param  knownServersKeyStore    Local certificates store with server certificates explicitly trusted by the user.
      * @throws CertStoreException       When no default X509TrustManager instance was found in the system.
      */
     public AdvancedX509TrustManager(KeyStore knownServersKeyStore)
