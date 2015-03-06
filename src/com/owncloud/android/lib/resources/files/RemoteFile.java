@@ -39,9 +39,9 @@ import com.owncloud.android.lib.common.network.WebdavEntry;
 
 public class RemoteFile implements Parcelable, Serializable {
 
-	/** Generated - should be refreshed every time the class changes!! */
-	private static final long serialVersionUID = 532139091191390616L;
-	
+    /** Generated - should be refreshed every time the class changes!! */
+    private static final long serialVersionUID = 3130865437811248451L;
+
 	private String mRemotePath;
 	private String mMimeType;
 	private long mLength;

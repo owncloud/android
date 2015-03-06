@@ -45,6 +45,8 @@ public class WebdavEntry {
     public static final String PROPERTY_QUOTA_USED_BYTES = "quota-used-bytes";
     public static final String PROPERTY_QUOTA_AVAILABLE_BYTES = "quota-available-bytes";
 
+    private static final int CODE_PROP_NOT_FOUND = 404;
+
 	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
 	private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
     private long mQuotaUsedBytes, mQuotaAvailableBytes;
@@ -57,6 +59,9 @@ public class WebdavEntry {
             mPath = mUri.split(splitElement, 2)[1];
 
             int status = ms.getStatus()[0].getStatusCode();
+            if ( status == CODE_PROP_NOT_FOUND ) {
+                status = ms.getStatus()[1].getStatusCode();
+            }
             DavPropertySet propSet = ms.getProperties(status);
             @SuppressWarnings("rawtypes")
             DavProperty prop = propSet.get(DavPropertyName.DISPLAYNAME);
