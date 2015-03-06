@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2014 ownCloud Inc.
+ *   Copyright (C) 2015 ownCloud Inc.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -311,14 +311,14 @@ public class AccountUtils {
 	     * Value under this key should handle path to webdav php script. Will be
 	     * removed and usage should be replaced by combining
 	     * {@link com.owncloud.android.authentication.AuthenticatorActivity.KEY_OC_BASE_URL} and
-	     * {@link com.owncloud.android.lib.resources.status.utils.OwnCloudVersion}
+	     * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
 	     * 
 	     * @deprecated
 	     */
 	    public static final String KEY_OC_URL = "oc_url";
 	    /**
 	     * Version should be 3 numbers separated by dot so it can be parsed by
-	     * {@link com.owncloud.android.lib.resources.status.utils.OwnCloudVersion}
+	     * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
 	     */
 	    public static final String KEY_OC_VERSION = "oc_version";
 	    /**
