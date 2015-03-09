@@ -39,9 +39,9 @@ import com.owncloud.android.lib.common.network.WebdavEntry;
 
 public class RemoteFile implements Parcelable, Serializable {
 
-	/** Generated - should be refreshed every time the class changes!! */
-	private static final long serialVersionUID = 532139091191390616L;
-	
+    /** Generated - should be refreshed every time the class changes!! */
+    private static final long serialVersionUID = 3130865437811248451L;
+
 	private String mRemotePath;
 	private String mMimeType;
 	private long mLength;
@@ -50,6 +50,9 @@ public class RemoteFile implements Parcelable, Serializable {
 	private String mEtag;
 	private String mPermissions;
 	private String mRemoteId;
+    private long mSize;
+    private long mQuotaUsedBytes;
+    private long mQuotaAvailableBytes;
 
 	/** 
 	 * Getters and Setters
@@ -119,6 +122,22 @@ public class RemoteFile implements Parcelable, Serializable {
 		this.mRemoteId = remoteId;
 	}
 
+    public long getSize() {
+        return mSize;
+    }
+
+    public void setSize (long size){
+        mSize = size;
+    }
+
+    public void setQuotaUsedBytes (long quotaUsedBytes) {
+        mQuotaUsedBytes = quotaUsedBytes;
+    }
+
+    public void setQuotaAvailableBytes (long quotaAvailableBytes) {
+        mQuotaAvailableBytes = quotaAvailableBytes;
+    }
+
 	public RemoteFile() {
 		resetData();
 	}
@@ -147,6 +166,9 @@ public class RemoteFile implements Parcelable, Serializable {
         this.setEtag(we.etag());
         this.setPermissions(we.permissions());
         this.setRemoteId(we.remoteId());
+        this.setSize(we.size());
+        this.setQuotaUsedBytes(we.quotaUsedBytes());
+        this.setQuotaAvailableBytes(we.quotaAvailableBytes());
 	}
 
 	/**
@@ -161,6 +183,9 @@ public class RemoteFile implements Parcelable, Serializable {
         mEtag = null;
         mPermissions = null;
         mRemoteId = null;
+        mSize = 0;
+        mQuotaUsedBytes = 0;
+        mQuotaAvailableBytes = 0;
     }
 
     /** 
@@ -197,6 +222,9 @@ public class RemoteFile implements Parcelable, Serializable {
         mEtag = source.readString();
         mPermissions= source.readString();
         mRemoteId = source.readString();
+        mSize = source.readLong();
+        mQuotaUsedBytes = source.readLong();
+        mQuotaAvailableBytes = source.readLong();
     }
     
 	@Override
@@ -214,7 +242,9 @@ public class RemoteFile implements Parcelable, Serializable {
 		dest.writeString(mEtag);
 		dest.writeString(mPermissions);
 		dest.writeString(mRemoteId);
+        dest.writeLong(mSize);
+        dest.writeLong(mQuotaUsedBytes);
+        dest.writeLong(mQuotaAvailableBytes);
 	}
-    
-    
+
 }

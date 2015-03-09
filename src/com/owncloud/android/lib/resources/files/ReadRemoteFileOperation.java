@@ -75,8 +75,9 @@ public class ReadRemoteFileOperation extends RemoteOperation {
 
     	/// take the duty of check the server for the current state of the file there
     	try {
+            // remote request
     		propfind = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
-    				DavConstants.PROPFIND_ALL_PROP,
+    				WebdavUtils.getFilePropSet(),    // PropFind Properties
     				DavConstants.DEPTH_0);
     		int status;
     		status = client.executeMethod(propfind, SYNC_READ_TIMEOUT, SYNC_CONNECTION_TIMEOUT);
@@ -88,7 +89,8 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     		if (isSuccess) {
     			// Parse response
     			MultiStatus resp = propfind.getResponseBodyAsMultiStatus();
-				WebdavEntry we = new WebdavEntry(resp.getResponses()[0], client.getWebdavUri().getPath());
+				WebdavEntry we = new WebdavEntry(resp.getResponses()[0],
+                        client.getWebdavUri().getPath());
 				RemoteFile remoteFile = new RemoteFile(we);
 				ArrayList<Object> files = new ArrayList<Object>();
 				files.add(remoteFile);
@@ -105,7 +107,8 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     	} catch (Exception e) {
     		result = new RemoteOperationResult(e);
     		e.printStackTrace();
-    		Log_OC.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(), result.getException());
+    		Log_OC.e(TAG, "Synchronizing  file " + mRemotePath + ": " + result.getLogMessage(),
+                    result.getException());
     	} finally {
     		if (propfind != null)
     			propfind.releaseConnection();

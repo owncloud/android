@@ -37,12 +37,19 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class WebdavEntry {
-	private static final String NAMESPACE_OC = "http://owncloud.org/ns";
-	private static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
-	private static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
+	public static final String NAMESPACE_OC = "http://owncloud.org/ns";
+	public static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
+	public static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
+    public static final String EXTENDED_PROPERTY_NAME_SIZE = "size";
+
+    public static final String PROPERTY_QUOTA_USED_BYTES = "quota-used-bytes";
+    public static final String PROPERTY_QUOTA_AVAILABLE_BYTES = "quota-available-bytes";
+
+    private static final int CODE_PROP_NOT_FOUND = 404;
 
 	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
-	private long mContentLength, mCreateTimestamp, mModifiedTimestamp;
+	private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
+    private long mQuotaUsedBytes, mQuotaAvailableBytes;
 
 	public WebdavEntry(MultiStatusResponse ms, String splitElement) {
         resetData();
@@ -52,6 +59,9 @@ public class WebdavEntry {
             mPath = mUri.split(splitElement, 2)[1];
 
             int status = ms.getStatus()[0].getStatusCode();
+            if ( status == CODE_PROP_NOT_FOUND ) {
+                status = ms.getStatus()[1].getStatusCode();
+            }
             DavPropertySet propSet = ms.getProperties(status);
             @SuppressWarnings("rawtypes")
             DavProperty prop = propSet.get(DavPropertyName.DISPLAYNAME);
@@ -66,29 +76,37 @@ public class WebdavEntry {
             }
 
             // use unknown mimetype as default behavior
+            // {DAV:}getcontenttype
             mContentType = "application/octet-stream";
             prop = propSet.get(DavPropertyName.GETCONTENTTYPE);
             if (prop != null) {
                 mContentType = (String) prop.getValue();
-                // dvelasco: some builds of ownCloud server 4.0.x added a trailing ';' to the MIME type ; if looks fixed, but let's be cautious
+                // dvelasco: some builds of ownCloud server 4.0.x added a trailing ';'
+                // to the MIME type ; if looks fixed, but let's be cautious
                 if (mContentType.indexOf(";") >= 0) {
                     mContentType = mContentType.substring(0, mContentType.indexOf(";"));
                 }
             }
             
-            // check if it's a folder in the standard way: see RFC2518 12.2 . RFC4918 14.3 
+            // check if it's a folder in the standard way: see RFC2518 12.2 . RFC4918 14.3
+            // {DAV:}resourcetype
             prop = propSet.get(DavPropertyName.RESOURCETYPE);
             if (prop!= null) {
                 Object value = prop.getValue();
                 if (value != null) {
-                    mContentType = "DIR";   // a specific attribute would be better, but this is enough; unless while we have no reason to distinguish MIME types for folders
+                    mContentType = "DIR";   // a specific attribute would be better,
+                                            // but this is enough;
+                                            // unless while we have no reason to distinguish
+                                            // MIME types for folders
                 }
             }
 
+            // {DAV:}getcontentlength
             prop = propSet.get(DavPropertyName.GETCONTENTLENGTH);
             if (prop != null)
                 mContentLength = Long.parseLong((String) prop.getValue());
 
+            // {DAV:}getlastmodified
             prop = propSet.get(DavPropertyName.GETLASTMODIFIED);
             if (prop != null) {
                 Date d = WebdavUtils
@@ -102,13 +120,25 @@ public class WebdavEntry {
                         .parseResponseDate((String) prop.getValue());
                 mCreateTimestamp = (d != null) ? d.getTime() : 0;
             }
-            
+
+            // {DAV:}getetag
             prop = propSet.get(DavPropertyName.GETETAG);
             if (prop != null) {
                 mEtag = (String) prop.getValue();
                 mEtag = mEtag.substring(1, mEtag.length()-1);
             }
 
+            // {DAV:}quota-used-bytes
+            prop = propSet.get(DavPropertyName.create(PROPERTY_QUOTA_USED_BYTES));
+            if (prop != null) {
+                mQuotaUsedBytes = Long.parseLong((String) prop.getValue());
+            }
+
+            // {DAV:}quota-available-bytes
+            prop = propSet.get(DavPropertyName.create(PROPERTY_QUOTA_AVAILABLE_BYTES));
+            if (prop != null) {
+                mQuotaAvailableBytes = Long.parseLong((String) prop.getValue());
+            }
             // OC permissions property <oc:permissions>
             prop = propSet.get(
             		EXTENDED_PROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC)
@@ -123,6 +153,15 @@ public class WebdavEntry {
     		);
             if (prop != null) {
                 mRemoteId = prop.getValue().toString();
+            }
+
+            // TODO: is it necessary?
+            // OC size property <oc:size>
+            prop = propSet.get(
+            		EXTENDED_PROPERTY_NAME_SIZE, Namespace.getNamespace(NAMESPACE_OC)
+    		);
+            if (prop != null) {
+                mSize = Long.parseLong((String) prop.getValue());
             }
 
         } else {
@@ -179,8 +218,23 @@ public class WebdavEntry {
         return mRemoteId;
     }
 
+    public long size(){
+        return mSize;
+    }
+
+    public long quotaUsedBytes() {
+        return mQuotaUsedBytes;
+    }
+
+    public long quotaAvailableBytes() {
+        return mQuotaAvailableBytes;
+    }
+
     private void resetData() {
         mName = mUri = mContentType = mPermissions = null; mRemoteId = null;
         mContentLength = mCreateTimestamp = mModifiedTimestamp = 0;
+        mSize = 0;
+        mQuotaUsedBytes = 0;
+        mQuotaAvailableBytes = 0;
     }
 }

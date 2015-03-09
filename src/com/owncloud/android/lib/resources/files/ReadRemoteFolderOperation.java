@@ -72,9 +72,9 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         PropFindMethod query = null;
         
         try {
-            // remote request 
+            // remote request
             query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
-                    DavConstants.PROPFIND_ALL_PROP,
+                    WebdavUtils.getAllPropSet(),    // PropFind Properties
                     DavConstants.DEPTH_1);
             int status = client.executeMethod(query);
 
@@ -111,7 +111,8 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                 Log_OC.i(TAG, "Synchronized "  + mRemotePath + ": " + result.getLogMessage());
             } else {
                 if (result.isException()) {
-                    Log_OC.e(TAG, "Synchronized " + mRemotePath  + ": " + result.getLogMessage(), result.getException());
+                    Log_OC.e(TAG, "Synchronized " + mRemotePath  + ": " + result.getLogMessage(),
+                            result.getException());
                 } else {
                     Log_OC.e(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage());
                 }
@@ -139,7 +140,8 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         mFolderAndFiles = new ArrayList<Object>();
         
         // parse data from remote folder 
-        WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0], client.getWebdavUri().getPath());
+        WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0],
+                client.getWebdavUri().getPath());
         mFolderAndFiles.add(fillOCFile(we));
         
         // loop to update every child
@@ -168,6 +170,9 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         file.setEtag(we.etag());
         file.setPermissions(we.permissions());
         file.setRemoteId(we.remoteId());
+        file.setSize(we.size());
+        file.setQuotaUsedBytes(we.quotaUsedBytes());
+        file.setQuotaAvailableBytes(we.quotaAvailableBytes());
         return file;
     }
 }
