@@ -32,6 +32,10 @@ import java.util.Locale;
 
 import android.net.Uri;
 
+import org.apache.jackrabbit.webdav.property.DavPropertyName;
+import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
+import org.apache.jackrabbit.webdav.xml.Namespace;
+
 public class WebdavUtils {
     public static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat(
             "dd.MM.yyyy hh:mm");
@@ -78,5 +82,53 @@ public class WebdavUtils {
             encodedPath = "/" + encodedPath;
         return encodedPath;
     }
-    
+
+    /**
+     * Builds a DavPropertyNameSet with all prop
+     * For using instead of DavConstants.PROPFIND_ALL_PROP
+     * @return
+     */
+    public static DavPropertyNameSet getAllPropSet(){
+        DavPropertyNameSet propSet = new DavPropertyNameSet();
+        propSet.add(DavPropertyName.DISPLAYNAME);
+        propSet.add(DavPropertyName.GETCONTENTTYPE);
+        propSet.add(DavPropertyName.RESOURCETYPE);
+        propSet.add(DavPropertyName.GETCONTENTLENGTH);
+        propSet.add(DavPropertyName.GETLASTMODIFIED);
+        propSet.add(DavPropertyName.CREATIONDATE);
+        propSet.add(DavPropertyName.GETETAG);
+        propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_USED_BYTES));
+        propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_AVAILABLE_BYTES));
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PERMISSIONS,
+                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_REMOTE_ID,
+                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
+                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+
+        return propSet;
+    }
+
+    /**
+     * Builds a DavPropertyNameSet with properties for files
+     * @return
+     */
+    public static DavPropertyNameSet getFilePropSet(){
+        DavPropertyNameSet propSet = new DavPropertyNameSet();
+        propSet.add(DavPropertyName.DISPLAYNAME);
+        propSet.add(DavPropertyName.GETCONTENTTYPE);
+        propSet.add(DavPropertyName.RESOURCETYPE);
+        propSet.add(DavPropertyName.GETCONTENTLENGTH);
+        propSet.add(DavPropertyName.GETLASTMODIFIED);
+        propSet.add(DavPropertyName.CREATIONDATE);
+        propSet.add(DavPropertyName.GETETAG);
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PERMISSIONS,
+                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_REMOTE_ID,
+                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
+                Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+
+        return propSet;
+    }
 }
