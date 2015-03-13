@@ -72,6 +72,7 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 			delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
 
 			delete.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            delete.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
             
 			status = client.executeMethod(delete);
 

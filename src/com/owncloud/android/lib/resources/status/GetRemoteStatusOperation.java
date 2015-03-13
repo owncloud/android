@@ -75,6 +75,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         String baseUrlSt = client.getBaseUri().toString();
         try {
             get = new GetMethod(baseUrlSt + AccountUtils.STATUS_PATH);
+            get.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
             
             client.setFollowRedirects(false);
             boolean isRedirectToNonSecureConnection = false;

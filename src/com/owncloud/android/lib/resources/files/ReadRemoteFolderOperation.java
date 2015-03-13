@@ -76,6 +76,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
                     WebdavUtils.getAllPropSet(),    // PropFind Properties
                     DavConstants.DEPTH_1);
+            query.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
             int status = client.executeMethod(query);
 
             // check and process response

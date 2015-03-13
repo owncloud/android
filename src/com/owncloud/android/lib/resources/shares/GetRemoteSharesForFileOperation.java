@@ -86,6 +86,7 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 		try {
 			// Get Method
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
+            get.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
 
 			// Add Parameters to Get Method
 			get.setQueryString(new NameValuePair[] { 

@@ -104,7 +104,10 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 			post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 			//Log_OC.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
-			post.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
+			post.setRequestHeader( "Content-Type",
+                    "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
+            post.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
+
 			post.addParameter(PARAM_PATH, mRemoteFilePath);
 			post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
 			post.addParameter(PARAM_SHARE_WITH, mShareWith);
