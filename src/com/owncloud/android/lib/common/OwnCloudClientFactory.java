@@ -61,19 +61,29 @@ public class OwnCloudClientFactory {
      * 
      * @param account                       The ownCloud account
      * @param appContext                    Android application context
+     * @param userAgent                     OwnCloud userAgent string
      * @return                              A OwnCloudClient object ready to be used
-     * @throws AuthenticatorException       If the authenticator failed to get the authorization token for the account.
-     * @throws OperationCanceledException   If the authenticator operation was cancelled while getting the authorization token for the account. 
-     * @throws IOException                  If there was some I/O error while getting the authorization token for the account.
+     * @throws AuthenticatorException       If the authenticator failed to get the authorization
+     *                                      token for the account.
+     * @throws OperationCanceledException   If the authenticator operation was cancelled while
+     *                                      getting the authorization token for the account.
+     * @throws IOException                  If there was some I/O error while getting the
+     *                                      authorization token for the account.
      * @throws AccountNotFoundException     If 'account' is unknown for the AccountManager
      */
-    public static OwnCloudClient createOwnCloudClient (Account account, Context appContext) throws OperationCanceledException, AuthenticatorException, IOException, AccountNotFoundException {
+    public static OwnCloudClient createOwnCloudClient (Account account, Context appContext,
+                                                       String userAgent)
+            throws OperationCanceledException, AuthenticatorException, IOException,
+            AccountNotFoundException {
         //Log_OC.d(TAG, "Creating OwnCloudClient associated to " + account.name);
         Uri baseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(appContext, account));
         AccountManager am = AccountManager.get(appContext);
-        boolean isOauth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;   // TODO avoid calling to getUserData here
-        boolean isSamlSso = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
+        // TODO avoid calling to getUserData here
+        boolean isOauth2 =
+                am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
+        boolean isSamlSso =
+                am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
+        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso, userAgent);
         
         if (isOauth2) {    
             String accessToken = am.blockingGetAuthToken(
@@ -116,12 +126,18 @@ public class OwnCloudClientFactory {
     }
     
     
-    public static OwnCloudClient createOwnCloudClient (Account account, Context appContext, Activity currentActivity) throws OperationCanceledException, AuthenticatorException, IOException, AccountNotFoundException {
+    public static OwnCloudClient createOwnCloudClient (Account account, Context appContext,
+                                                       Activity currentActivity, String userAgent)
+            throws OperationCanceledException, AuthenticatorException, IOException,
+            AccountNotFoundException {
         Uri baseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(appContext, account));
         AccountManager am = AccountManager.get(appContext);
-        boolean isOauth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;   // TODO avoid calling to getUserData here
-        boolean isSamlSso = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
+        // TODO avoid calling to getUserData here
+        boolean isOauth2 =
+                am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
+        boolean isSamlSso =
+                am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
+        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso, userAgent);
         
         if (isOauth2) {    // TODO avoid a call to getUserData here
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
@@ -159,7 +175,8 @@ public class OwnCloudClientFactory {
         } else {
             String username = account.name.substring(0, account.name.lastIndexOf('@'));
             //String password = am.getPassword(account);
-            //String password = am.blockingGetAuthToken(account, MainApp.getAuthTokenTypePass(), false);
+            //String password = am.blockingGetAuthToken(account, MainApp.getAuthTokenTypePass(),
+            // false);
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
             		account,  
             		AccountTypeUtils.getAuthTokenTypePass(account.type), 
@@ -182,23 +199,29 @@ public class OwnCloudClientFactory {
     }
     
     /**
-     * Creates a OwnCloudClient to access a URL and sets the desired parameters for ownCloud client connections.
+     * Creates a OwnCloudClient to access a URL and sets the desired parameters for ownCloud
+     * client connections.
      * 
      * @param uri       URL to the ownCloud server; BASE ENTRY POINT, not WebDavPATH
      * @param context   Android context where the OwnCloudClient is being created.
+     * @param userAgent OwnCloud userAgent string
      * @return          A OwnCloudClient object ready to be used
      */
-    public static OwnCloudClient createOwnCloudClient(Uri uri, Context context, boolean followRedirects) {
+    public static OwnCloudClient createOwnCloudClient(Uri uri, Context context,
+                                                      boolean followRedirects, String userAgent) {
         try {
             NetworkUtils.registerAdvancedSslContext(true, context);
         }  catch (GeneralSecurityException e) {
-            Log_OC.e(TAG, "Advanced SSL Context could not be loaded. Default SSL management in the system will be used for HTTPS connections", e);
+            Log_OC.e(TAG, "Advanced SSL Context could not be loaded. Default SSL management in" +
+                    " the system will be used for HTTPS connections", e);
             
         } catch (IOException e) {
-            Log_OC.e(TAG, "The local server truststore could not be read. Default SSL management in the system will be used for HTTPS connections", e);
+            Log_OC.e(TAG, "The local server truststore could not be read. Default SSL management" +
+                    " in the system will be used for HTTPS connections", e);
         }
         
-        OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager());
+        OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager(),
+                userAgent);
         client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
         client.setFollowRedirects(followRedirects);
         

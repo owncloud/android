@@ -54,7 +54,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 public class OwnCloudClient extends HttpClient {
 	
     private static final String TAG = OwnCloudClient.class.getSimpleName();
-    public static final String USER_AGENT = "Android-ownCloud";
     private static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
@@ -71,7 +70,7 @@ public class OwnCloudClient extends HttpClient {
     /**
      * Constructor
      */
-    public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr) {
+    public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr, String userAgent) {
         super(connectionMgr);
         
         if (baseUri == null) {
@@ -82,7 +81,7 @@ public class OwnCloudClient extends HttpClient {
         mInstanceNumber = sIntanceCounter++;
         Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
         
-        getParams().setParameter(HttpMethodParams.USER_AGENT, USER_AGENT);
+        getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
         getParams().setParameter(
         		CoreProtocolPNames.PROTOCOL_VERSION, 
         		HttpVersion.HTTP_1_1);

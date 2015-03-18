@@ -107,16 +107,18 @@ public abstract class RemoteOperation implements Runnable {
      */
     public RemoteOperationResult execute(Account account, Context context, String userAgent) {
         if (account == null)
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Account");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
+                    "Account");
         if (context == null)
-            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL Context");
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
+                    "Context");
         mAccount = account;
         mContext = context.getApplicationContext();
         mUserAgent = userAgent;
         try {
         	OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
             mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-            		getClientFor(ocAccount, mContext);
+            		getClientFor(ocAccount, mContext, mUserAgent);
         } catch (Exception e) {
             Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
             return new RemoteOperationResult(e);
@@ -137,7 +139,8 @@ public abstract class RemoteOperation implements Runnable {
 	 */
 	public RemoteOperationResult execute(OwnCloudClient client, String userAgent) {
 		if (client == null)
-			throw new IllegalArgumentException("Trying to execute a remote operation with a NULL OwnCloudClient");
+			throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
+                    "OwnCloudClient");
 		mClient = client;
         mUserAgent = userAgent;
 		return run(client);
@@ -284,12 +287,12 @@ public abstract class RemoteOperation implements Runnable {
                     	/** DEPRECATED BLOCK - will be removed at version 1.0 */
                         if (mCallerActivity != null) {
                             mClient = OwnCloudClientFactory.createOwnCloudClient(
-                            		mAccount, mContext, mCallerActivity);
+                            		mAccount, mContext, mCallerActivity, mUserAgent);
                         } else {
                         /** EOF DEPRECATED */
                         	OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
                             mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                            		getClientFor(ocAccount, mContext);
+                            		getClientFor(ocAccount, mContext, mUserAgent);
                         }
                         
                     } else {
