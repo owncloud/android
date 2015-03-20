@@ -26,5 +26,6 @@
 <resources>
 
     <string name="app_name">Oc_framework-testTest</string>
+    <string name ="user_agent">Android-ownCloud</string>
 
 </resources>

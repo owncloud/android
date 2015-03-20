@@ -279,7 +279,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_FILE_1,
 				false
 		);
-		RemoteOperationResult result = moveOperation.execute(mClient);
+		RemoteOperationResult result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 		
 		// move & rename file, different location
@@ -288,7 +289,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_FILE_2_RENAMED,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 		
 		// move & rename file, same location (rename file)
@@ -297,7 +299,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + SRC_PATH_TO_FILE_3_RENAMED,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 		
 		// move empty folder
@@ -306,7 +309,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_EMPTY_FOLDER,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 		
 		// move non-empty folder
@@ -315,7 +319,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_FULL_FOLDER_1,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 		
 		// move & rename folder, different location
@@ -324,7 +329,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_FULL_FOLDER_2_RENAMED,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 		
 		// move & rename folder, same location (rename folder)
@@ -333,7 +339,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + SRC_PATH_TO_FULL_FOLDER_3_RENAMED,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 		
 		// move for nothing (success, but no interaction with network)
@@ -342,7 +349,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + SRC_PATH_TO_FILE_4,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 		
 		// move overwriting
@@ -351,7 +359,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_ALREADY_EXISTENT_EMPTY_FOLDER_4,
 				true
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.isSuccess());
 
 
@@ -363,7 +372,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_NON_EXISTENT_FILE,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.getCode() == ResultCode.FILE_NOT_FOUND);
 
 		// folder to move into does no exist
@@ -372,7 +382,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_FILE_5_INTO_NON_EXISTENT_FOLDER,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.getHttpCode() == HttpStatus.SC_CONFLICT);
 
 		// target location (renaming) has invalid characters
@@ -381,7 +392,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_RENAMED_WITH_INVALID_CHARS,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.getCode() == ResultCode.INVALID_CHARACTER_IN_NAME);
 
 		// name collision
@@ -390,7 +402,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + TARGET_PATH_TO_ALREADY_EXISTENT_FILE_7,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.getCode() == ResultCode.INVALID_OVERWRITE);
 
 		// move a folder into a descendant
@@ -399,7 +412,8 @@ public class MoveFileTest extends RemoteTest {
 				mBaseFolderPath + SRC_PATH_TO_EMPTY_FOLDER,
 				false
 		);
-		result = moveOperation.execute(mClient);
+		result = moveOperation.execute(mClient, 
+				getContext().getString(R.string.user_agent));
 		assertTrue(result.getCode() == ResultCode.INVALID_MOVE_INTO_DESCENDANT);
 		
 	}
@@ -436,7 +450,8 @@ public class MoveFileTest extends RemoteTest {
 		
 		mClient = new OwnCloudClient(
 				Uri.parse(mServerUri), 
-				NetworkUtils.getMultiThreadedConnManager()
+				NetworkUtils.getMultiThreadedConnManager(), 
+				getContext().getString(R.string.user_agent)
 		);
 		mClient.setDefaultTimeouts(
 				OwnCloudClientFactory.DEFAULT_DATA_TIMEOUT, 

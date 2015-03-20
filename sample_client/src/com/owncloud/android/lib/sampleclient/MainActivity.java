@@ -79,7 +79,8 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         mHandler = new Handler();
         
     	Uri serverUri = Uri.parse(getString(R.string.server_base_url));
-    	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
+    	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true,
+    			getString(R.string.user_agent));
     	mClient.setCredentials(
     			OwnCloudCredentialsFactory.newBasicCredentials(
     					getString(R.string.username), 
@@ -149,7 +150,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     
     private void startRefresh() {
     	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
-    	refreshOperation.execute(mClient, this, mHandler);
+    	refreshOperation.execute(mClient, getString(R.string.user_agent), this, mHandler);
     }
     
     private void startUpload() {
@@ -159,7 +160,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     	String mimeType = getString(R.string.sample_file_mimetype);
     	UploadRemoteFileOperation uploadOperation = new UploadRemoteFileOperation(fileToUpload.getAbsolutePath(), remotePath, mimeType);
     	uploadOperation.addDatatransferProgressListener(this);
-    	uploadOperation.execute(mClient, this, mHandler);
+    	uploadOperation.execute(mClient, getString(R.string.user_agent), this, mHandler);
     }
     
     private void startRemoteDeletion() {
@@ -167,7 +168,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     	File fileToUpload = upFolder.listFiles()[0]; 
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
     	RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
-    	removeOperation.execute(mClient, this, mHandler);
+    	removeOperation.execute(mClient, getString(R.string.user_agent), this, mHandler);
     }
     
     private void startDownload() {
@@ -178,7 +179,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
     	DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remotePath, downFolder.getAbsolutePath());
     	downloadOperation.addDatatransferProgressListener(this);
-    	downloadOperation.execute(mClient, this, mHandler);
+    	downloadOperation.execute(mClient, getString(R.string.user_agent), this, mHandler);
     }
     
     @SuppressWarnings("deprecation")

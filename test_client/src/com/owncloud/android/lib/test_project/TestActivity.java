@@ -72,6 +72,7 @@ public class TestActivity extends Activity {
 	private String mServerUri;
 	private String mUser;
 	private String mPass;
+	private static String mUserAgent;
 	
 	private static final int BUFFER_SIZE = 1024;
 	
@@ -90,6 +91,7 @@ public class TestActivity extends Activity {
 		mServerUri = getString(R.string.server_base_url);
 		mUser = getString(R.string.username);
 		mPass = getString(R.string.password);
+		mUserAgent = getString(R.string.user_agent);
     	
 		Protocol pr = Protocol.getProtocol("https");
 		if (pr == null || !(pr.getSocketFactory() instanceof SelfSignedConfidentSslSocketFactory)) {
@@ -104,7 +106,8 @@ public class TestActivity extends Activity {
 			}
 		}
 		
-		mClient = new OwnCloudClient(Uri.parse(mServerUri), NetworkUtils.getMultiThreadedConnManager());
+		mClient = new OwnCloudClient(Uri.parse(mServerUri), NetworkUtils.getMultiThreadedConnManager(),
+				mUserAgent);
 		mClient.setDefaultTimeouts(
 				OwnCloudClientFactory.DEFAULT_DATA_TIMEOUT, 
 				OwnCloudClientFactory.DEFAULT_CONNECTION_TIMEOUT);
@@ -156,7 +159,7 @@ public class TestActivity extends Activity {
 		
 		CreateRemoteFolderOperation createOperation = 
 				new CreateRemoteFolderOperation(remotePath, createFullPath);
-		RemoteOperationResult result =  createOperation.execute(client);
+		RemoteOperationResult result =  createOperation.execute(client, mUserAgent);
 		
 		return result;
 	}
@@ -174,7 +177,7 @@ public class TestActivity extends Activity {
 	public RemoteOperationResult renameFile(String oldName, String oldRemotePath, String newName, boolean isFolder) {
 		
 		RenameRemoteFileOperation renameOperation = new RenameRemoteFileOperation(oldName, oldRemotePath, newName, isFolder);
-		RemoteOperationResult result = renameOperation.execute(mClient);
+		RemoteOperationResult result = renameOperation.execute(mClient, mUserAgent);
 		
 		return result;
 	}
@@ -187,7 +190,7 @@ public class TestActivity extends Activity {
 	 */
 	public RemoteOperationResult removeFile(String remotePath) {
 		RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
-		RemoteOperationResult result = removeOperation.execute(mClient);
+		RemoteOperationResult result = removeOperation.execute(mClient, mUserAgent);
 		return result;
 	}
 	
@@ -199,7 +202,7 @@ public class TestActivity extends Activity {
 	 */
 	public static RemoteOperationResult removeFile(String remotePath, OwnCloudClient client) {
 		RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
-		RemoteOperationResult result = removeOperation.execute(client);
+		RemoteOperationResult result = removeOperation.execute(client, mUserAgent);
 		return result;
 	}
 	
@@ -213,7 +216,7 @@ public class TestActivity extends Activity {
 	public RemoteOperationResult readFile(String remotePath) {
 		
 		ReadRemoteFolderOperation readOperation= new ReadRemoteFolderOperation(remotePath);
-		RemoteOperationResult result = readOperation.execute(mClient);
+		RemoteOperationResult result = readOperation.execute(mClient, mUserAgent);
 
 		return result;
 	}
@@ -232,7 +235,7 @@ public class TestActivity extends Activity {
 		folder.mkdirs();
 		
 		DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remoteFile.getRemotePath(), folder.getAbsolutePath());
-		RemoteOperationResult result = downloadOperation.execute(mClient);
+		RemoteOperationResult result = downloadOperation.execute(mClient, mUserAgent);
 
 		return result;
 	}
@@ -273,7 +276,7 @@ public class TestActivity extends Activity {
     		);
         }
 		
-		RemoteOperationResult result = uploadOperation.execute(client);
+		RemoteOperationResult result = uploadOperation.execute(client, mUserAgent);
 		return result;
 	}
 
@@ -284,7 +287,7 @@ public class TestActivity extends Activity {
 	public RemoteOperationResult getShares(){
 		
 		GetRemoteSharesOperation getOperation = new GetRemoteSharesOperation();
-		RemoteOperationResult result = getOperation.execute(mClient);
+		RemoteOperationResult result = getOperation.execute(mClient, mUserAgent);
 		
 		return result;
 	}
@@ -312,7 +315,7 @@ public class TestActivity extends Activity {
 			String password, int permissions){
 		
 		CreateRemoteShareOperation createOperation = new CreateRemoteShareOperation(path, shareType, shareWith, publicUpload, password, permissions);
-		RemoteOperationResult result = createOperation.execute(mClient);
+		RemoteOperationResult result = createOperation.execute(mClient, mUserAgent);
 		
 		return result;
 	}
@@ -326,7 +329,7 @@ public class TestActivity extends Activity {
 	
 	public RemoteOperationResult removeShare(int idShare) {
 		RemoveRemoteShareOperation removeOperation = new RemoveRemoteShareOperation(idShare);
-		RemoteOperationResult result = removeOperation.execute(mClient);
+		RemoteOperationResult result = removeOperation.execute(mClient, mUserAgent);
 		
 		return result;
 		
