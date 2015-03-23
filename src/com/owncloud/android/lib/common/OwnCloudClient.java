@@ -41,6 +41,7 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.http.HttpStatus;
 import org.apache.http.params.CoreProtocolPNames;
 
@@ -66,6 +67,7 @@ public class OwnCloudClient extends HttpClient {
     private int mInstanceNumber = 0;
     
     private Uri mBaseUri;
+    private String mUserAgent;
     
     /**
      * Constructor
@@ -80,8 +82,9 @@ public class OwnCloudClient extends HttpClient {
         
         mInstanceNumber = sIntanceCounter++;
         Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
-        
-        getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
+
+        mUserAgent = userAgent;
+        getParams().setParameter(HttpMethodParams.USER_AGENT, mUserAgent);
         getParams().setParameter(
         		CoreProtocolPNames.PROTOCOL_VERSION, 
         		HttpVersion.HTTP_1_1);
@@ -167,9 +170,9 @@ public class OwnCloudClient extends HttpClient {
      * The timeouts are both in milliseconds; 0 means 'infinite'; 
      * < 0 means 'do not change the default'
      * 
-     * @param method            HTTP method request.
-     * @param readTimeout       Timeout to set for data reception
-     * @param conntionTimout    Timeout to set for connection establishment
+     * @param method                HTTP method request.
+     * @param readTimeout           Timeout to set for data reception
+     * @param connectionTimeout     Timeout to set for connection establishment
      */
     public int executeMethod(HttpMethodBase method, int readTimeout, int connectionTimeout) 
     		throws HttpException, IOException {
@@ -206,7 +209,11 @@ public class OwnCloudClient extends HttpClient {
         		*/
 	            customRedirectionNeeded = mFollowRedirects;
 	        }
-        
+
+            // Update User Agent
+            HttpParams params = method.getParams();
+            params.setParameter(HttpMethodParams.USER_AGENT, mUserAgent);
+
 	        Log_OC.d(TAG + " #" + mInstanceNumber, "REQUEST " + 
 	        		method.getName() + " " + method.getPath());
         
@@ -226,7 +233,7 @@ public class OwnCloudClient extends HttpClient {
 	        return status;
 	        
         } catch (IOException e) {
-        	Log_OC.d(TAG + " #" + mInstanceNumber, "Exception occured", e);
+        	Log_OC.d(TAG + " #" + mInstanceNumber, "Exception occurred", e);
         	throw e;
         }
     }

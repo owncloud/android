@@ -28,6 +28,8 @@ import java.util.ArrayList;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -76,7 +78,11 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         try {
             get = new GetMethod(baseUrlSt + AccountUtils.STATUS_PATH);
             get.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
-            
+
+            HttpParams params = get.getParams().getDefaultParams();
+            params.setParameter(HttpMethodParams.USER_AGENT, getUserAgent());
+            get.getParams().setDefaults(params);
+
             client.setFollowRedirects(false);
             boolean isRedirectToNonSecureConnection = false;
             int status = client.executeMethod(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
