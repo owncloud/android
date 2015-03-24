@@ -60,9 +60,6 @@ public abstract class RemoteOperation implements Runnable {
     /** OCS API header value */
     public static final String OCS_API_HEADER_VALUE = "true";
 
-    /** User agent header */
-    public static final String USER_AGENT_HEADER = "User-Agent";
-
     /** ownCloud account in the remote ownCloud server to operate */
     private Account mAccount = null;
     
