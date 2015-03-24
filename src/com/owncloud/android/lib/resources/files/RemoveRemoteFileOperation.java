@@ -68,7 +68,6 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
         
         try {
         	delete = new DeleteMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
-            delete.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
         	int status = client.executeMethod(delete, REMOVE_READ_TIMEOUT, REMOVE_CONNECTION_TIMEOUT);
         	
         	delete.getResponseBodyAsString();   // exhaust the response, although not interesting

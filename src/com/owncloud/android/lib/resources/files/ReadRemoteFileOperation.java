@@ -79,7 +79,6 @@ public class ReadRemoteFileOperation extends RemoteOperation {
     		propfind = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
     				WebdavUtils.getFilePropSet(),    // PropFind Properties
     				DavConstants.DEPTH_0);
-            propfind.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
     		int status;
     		status = client.executeMethod(propfind, SYNC_READ_TIMEOUT, SYNC_CONNECTION_TIMEOUT);
 

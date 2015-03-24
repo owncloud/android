@@ -67,12 +67,11 @@ public class OwnCloudClient extends HttpClient {
     private int mInstanceNumber = 0;
     
     private Uri mBaseUri;
-    private String mUserAgent;
     
     /**
      * Constructor
      */
-    public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr, String userAgent) {
+    public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr) {
         super(connectionMgr);
         
         if (baseUri == null) {
@@ -83,8 +82,8 @@ public class OwnCloudClient extends HttpClient {
         mInstanceNumber = sIntanceCounter++;
         Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
 
-        mUserAgent = userAgent;
-        getParams().setParameter(HttpMethodParams.USER_AGENT, mUserAgent);
+        String userAgent = OwnCloudClientManagerFactory.getUserAgent();
+        getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
         getParams().setParameter(
         		CoreProtocolPNames.PROTOCOL_VERSION, 
         		HttpVersion.HTTP_1_1);
@@ -212,7 +211,8 @@ public class OwnCloudClient extends HttpClient {
 
             // Update User Agent
             HttpParams params = method.getParams();
-            params.setParameter(HttpMethodParams.USER_AGENT, mUserAgent);
+            String userAgent = OwnCloudClientManagerFactory.getUserAgent();
+            params.setParameter(HttpMethodParams.USER_AGENT, userAgent);
 
 	        Log_OC.d(TAG + " #" + mInstanceNumber, "REQUEST " + 
 	        		method.getName() + " " + method.getPath());

@@ -78,8 +78,7 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
         	result = createFolder(client);
     		if (!result.isSuccess() && mCreateFullPath && 
     				RemoteOperationResult.ResultCode.CONFLICT == result.getCode()) {
-    			result = createParentFolder(FileUtils.getParentPath(mRemotePath), client,
-                        getUserAgent());
+    			result = createParentFolder(FileUtils.getParentPath(mRemotePath), client);
     			if (result.isSuccess()) {
 	    			result = createFolder(client);	// second (and last) try
     			}
@@ -98,7 +97,6 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
         MkColMethod mkcol = null;
     	try {
     		mkcol = new MkColMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
-            mkcol.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
     		int status =  client.executeMethod(mkcol, READ_TIMEOUT, CONNECTION_TIMEOUT);
     		result = new RemoteOperationResult(mkcol.succeeded(), status, mkcol.getResponseHeaders());
     		Log_OC.d(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage());
@@ -115,11 +113,10 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     	return result;
 	}
 
-	private RemoteOperationResult createParentFolder(String parentPath, OwnCloudClient client,
-                                                     String userAgent) {
+	private RemoteOperationResult createParentFolder(String parentPath, OwnCloudClient client) {
         RemoteOperation operation = new CreateRemoteFolderOperation(parentPath,
                                                                 mCreateFullPath);
-        return operation.execute(client, userAgent);
+        return operation.execute(client);
     }
     
    

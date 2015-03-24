@@ -106,7 +106,6 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
 			post.setRequestHeader( "Content-Type",
                     "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
-            post.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
 
 			post.addParameter(PARAM_PATH, mRemoteFilePath);
 			post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));

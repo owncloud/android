@@ -38,6 +38,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -77,10 +78,10 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         String baseUrlSt = client.getBaseUri().toString();
         try {
             get = new GetMethod(baseUrlSt + AccountUtils.STATUS_PATH);
-            get.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
 
             HttpParams params = get.getParams().getDefaultParams();
-            params.setParameter(HttpMethodParams.USER_AGENT, getUserAgent());
+            params.setParameter(HttpMethodParams.USER_AGENT,
+                    OwnCloudClientManagerFactory.getUserAgent());
             get.getParams().setDefaults(params);
 
             client.setFollowRedirects(false);

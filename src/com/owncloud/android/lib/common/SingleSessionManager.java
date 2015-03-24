@@ -62,8 +62,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
     
     
     @Override
-    public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context,
-                                                    String userAgent)
+    public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
             throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
             IOException {
 
@@ -109,8 +108,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
     		client = OwnCloudClientFactory.createOwnCloudClient(
     				account.getBaseUri(), 
     				context.getApplicationContext(), 
-    				true,
-                    userAgent);	// TODO remove dependency on OwnCloudClientFactory
+    				true);	// TODO remove dependency on OwnCloudClientFactory
             client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
             	// enable cookie tracking
             

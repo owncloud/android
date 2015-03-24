@@ -82,7 +82,6 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 				} else {
 					mPutMethod = new PutMethod(client.getWebdavUri() +
                             WebdavUtils.encodePath(mRemotePath));
-                    mPutMethod.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
 				}
 			}
 

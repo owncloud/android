@@ -107,7 +107,6 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             move = new LocalMoveMethod( client.getWebdavUri() +
                     WebdavUtils.encodePath(mOldRemotePath),
             		client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath));
-            move.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
             int status = client.executeMethod(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
             
             move.getResponseBodyAsString(); // exhaust response, although not interesting

@@ -97,8 +97,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 	
 	public void testConstructor() {
 		try {
-			new OwnCloudClient(null, NetworkUtils.getMultiThreadedConnManager(), 
-					mUserAgent);
+			new OwnCloudClient(null, NetworkUtils.getMultiThreadedConnManager());
 			throw new AssertionFailedError("Accepted NULL parameter");
 			
 		} catch(Exception e) {
@@ -107,7 +106,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		}
 		
 		try {
-			new OwnCloudClient(mServerUri, null, mUserAgent);
+			new OwnCloudClient(mServerUri, null);
 			throw new AssertionFailedError("Accepted NULL parameter");
 			
 		} catch(Exception e) {
@@ -116,8 +115,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		}
 		
 		OwnCloudClient client = 
-				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager(),
-						mUserAgent);
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		assertNotNull("OwnCloudClient instance not built", client);
 		assertEquals("Wrong user agent", 
 				client.getParams().getParameter(HttpMethodParams.USER_AGENT), 
@@ -127,8 +125,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 	
 	public void testGetSetCredentials() {
 		OwnCloudClient client = 
-				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager(),
-						mUserAgent);
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		
 		assertNotNull("Returned NULL credentials", client.getCredentials());
 		assertEquals("Not instanced without credentials", 
@@ -151,8 +148,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
     
 	public void testExecuteMethodWithTimeouts() throws HttpException, IOException {
 		OwnCloudClient client = 
-				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager(),
-						mUserAgent);
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		int connectionTimeout = client.getConnectionTimeout();
 		int readTimeout = client.getDataTimeout();
 		
@@ -200,8 +196,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
     
 	public void testExecuteMethod() {
 		OwnCloudClient client = 
-				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager(),
-						mUserAgent);
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
         HeadMethod head = new HeadMethod(client.getWebdavUri() + "/");
         int status = -1;
         try {
@@ -222,8 +217,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 	
 	public void testExhaustResponse() {
 		OwnCloudClient client = 
-				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager(),
-						mUserAgent);
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 
 		PropFindMethod propfind = null;
 		try {
@@ -265,8 +259,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 	
 	public void testGetSetDefaultTimeouts() {
 		OwnCloudClient client = 
-				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager(),
-						mUserAgent);
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		
 		int oldDataTimeout = client.getDataTimeout();
 		int oldConnectionTimeout = client.getConnectionTimeout();
@@ -306,8 +299,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 	
 	public void testGetWebdavUri() {
 		OwnCloudClient client = 
-				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager(),
-						mUserAgent);
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		client.setCredentials(OwnCloudCredentialsFactory.newBearerCredentials("fakeToken"));
 		Uri webdavUri = client.getWebdavUri();
 		assertTrue("WebDAV URI does not point to the right entry point for OAuth2 " +
@@ -345,8 +337,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
     
 	public void testGetSetBaseUri() {
 		OwnCloudClient client = 
-				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager(),
-						mUserAgent);
+				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		assertEquals("Returned base URI different that URI passed to constructor", 
 				mServerUri, client.getBaseUri());
 		

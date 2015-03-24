@@ -61,7 +61,6 @@ public class OwnCloudClientFactory {
      * 
      * @param account                       The ownCloud account
      * @param appContext                    Android application context
-     * @param userAgent                     OwnCloud userAgent string
      * @return                              A OwnCloudClient object ready to be used
      * @throws AuthenticatorException       If the authenticator failed to get the authorization
      *                                      token for the account.
@@ -71,8 +70,7 @@ public class OwnCloudClientFactory {
      *                                      authorization token for the account.
      * @throws AccountNotFoundException     If 'account' is unknown for the AccountManager
      */
-    public static OwnCloudClient createOwnCloudClient (Account account, Context appContext,
-                                                       String userAgent)
+    public static OwnCloudClient createOwnCloudClient (Account account, Context appContext)
             throws OperationCanceledException, AuthenticatorException, IOException,
             AccountNotFoundException {
         //Log_OC.d(TAG, "Creating OwnCloudClient associated to " + account.name);
@@ -83,7 +81,7 @@ public class OwnCloudClientFactory {
                 am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
         boolean isSamlSso =
                 am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso, userAgent);
+        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
         
         if (isOauth2) {    
             String accessToken = am.blockingGetAuthToken(
@@ -127,7 +125,7 @@ public class OwnCloudClientFactory {
     
     
     public static OwnCloudClient createOwnCloudClient (Account account, Context appContext,
-                                                       Activity currentActivity, String userAgent)
+                                                       Activity currentActivity)
             throws OperationCanceledException, AuthenticatorException, IOException,
             AccountNotFoundException {
         Uri baseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(appContext, account));
@@ -137,7 +135,7 @@ public class OwnCloudClientFactory {
                 am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
         boolean isSamlSso =
                 am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso, userAgent);
+        OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
         
         if (isOauth2) {    // TODO avoid a call to getUserData here
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
@@ -204,11 +202,10 @@ public class OwnCloudClientFactory {
      * 
      * @param uri       URL to the ownCloud server; BASE ENTRY POINT, not WebDavPATH
      * @param context   Android context where the OwnCloudClient is being created.
-     * @param userAgent OwnCloud userAgent string
      * @return          A OwnCloudClient object ready to be used
      */
     public static OwnCloudClient createOwnCloudClient(Uri uri, Context context,
-                                                      boolean followRedirects, String userAgent) {
+                                                      boolean followRedirects) {
         try {
             NetworkUtils.registerAdvancedSslContext(true, context);
         }  catch (GeneralSecurityException e) {
@@ -220,8 +217,7 @@ public class OwnCloudClientFactory {
                     " in the system will be used for HTTPS connections", e);
         }
         
-        OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager(),
-                userAgent);
+        OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager());
         client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
         client.setFollowRedirects(followRedirects);
         

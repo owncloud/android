@@ -113,7 +113,6 @@ public class MoveRemoteFileOperation extends RemoteOperation {
             		client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
             		mOverwrite
     		);
-            move.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
             int status = client.executeMethod(move, MOVE_READ_TIMEOUT, MOVE_CONNECTION_TIMEOUT);
             
             /// process response

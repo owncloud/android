@@ -77,7 +77,6 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         HeadMethod head = null;
         try {
             head = new HeadMethod(client.getWebdavUri() + WebdavUtils.encodePath(mPath));
-            head.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
             int status = client.executeMethod(head, TIMEOUT, TIMEOUT);
             client.exhaustResponse(head.getResponseBodyAsStream());
             boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) ||

@@ -102,7 +102,6 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
         int status = -1;
         boolean savedFile = false;
         mGet = new GetMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
-        mGet.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
         Iterator<OnDatatransferProgressListener> it = null;
         
         FileOutputStream fos = null;

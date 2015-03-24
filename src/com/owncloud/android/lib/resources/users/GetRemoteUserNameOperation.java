@@ -79,7 +79,6 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
 		try {
 			get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
 			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
-            get.addRequestHeader(USER_AGENT_HEADER, getUserAgent());
 			status = client.executeMethod(get);
 			if(isSuccess(status)) {
 				 String response = get.getResponseBodyAsString();
