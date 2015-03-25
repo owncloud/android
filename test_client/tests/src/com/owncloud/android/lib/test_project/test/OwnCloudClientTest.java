@@ -64,7 +64,6 @@ public class OwnCloudClientTest extends AndroidTestCase {
 	private Uri mServerUri;
 	private String mUsername;
 	private String mPassword;
-	private String mUserAgent;
 
 	public OwnCloudClientTest() {
 		super();
@@ -91,7 +90,6 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		mServerUri = Uri.parse(getContext().getString(R.string.server_base_url));
 		mUsername = getContext().getString(R.string.username);
 		mPassword = getContext().getString(R.string.password);
-		mUserAgent = getContext().getString(R.string.user_agent);
 	}
 	
 	
@@ -117,9 +115,6 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		OwnCloudClient client = 
 				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		assertNotNull("OwnCloudClient instance not built", client);
-		assertEquals("Wrong user agent", 
-				client.getParams().getParameter(HttpMethodParams.USER_AGENT), 
-				mUserAgent);
 	}
 
 	

@@ -26,6 +26,5 @@
 <resources>
 
     <string name="app_name">Oc_framework-testTest</string>
-    <string name ="user_agent">Mozilla/5.0 (Android) ownCloud test cases</string>
 
 </resources>
