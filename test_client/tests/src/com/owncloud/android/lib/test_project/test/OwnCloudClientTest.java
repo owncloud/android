@@ -115,9 +115,6 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		OwnCloudClient client = 
 				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		assertNotNull("OwnCloudClient instance not built", client);
-		assertEquals("Wrong user agent", 
-				client.getParams().getParameter(HttpMethodParams.USER_AGENT), 
-				OwnCloudClient.USER_AGENT);
 	}
 
 	

@@ -80,13 +80,15 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 				if (mCancellationRequested.get()) {
 					throw new OperationCancelledException();
 				} else {
-					mPutMethod = new PutMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
+					mPutMethod = new PutMethod(client.getWebdavUri() +
+                            WebdavUtils.encodePath(mRemotePath));
 				}
 			}
 
 			int status = uploadFile(client);
 
-			result  = new RemoteOperationResult(isSuccess(status), status, (mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
+			result  = new RemoteOperationResult(isSuccess(status), status,
+                    (mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
 
 		} catch (Exception e) {
 			// TODO something cleaner with cancellations
@@ -100,16 +102,19 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	}
 
 	public boolean isSuccess(int status) {
-		return ((status == HttpStatus.SC_OK || status == HttpStatus.SC_CREATED || status == HttpStatus.SC_NO_CONTENT));
+		return ((status == HttpStatus.SC_OK || status == HttpStatus.SC_CREATED ||
+                status == HttpStatus.SC_NO_CONTENT));
 	}
 
-	protected int uploadFile(OwnCloudClient client) throws HttpException, IOException, OperationCancelledException {
+	protected int uploadFile(OwnCloudClient client) throws HttpException, IOException,
+            OperationCancelledException {
 		int status = -1;
 		try {
 			File f = new File(mLocalPath);
 			mEntity  = new FileRequestEntity(f, mMimeType);
 			synchronized (mDataTransferListeners) {
-				((ProgressiveDataTransferer)mEntity).addDatatransferProgressListeners(mDataTransferListeners);
+				((ProgressiveDataTransferer)mEntity)
+                        .addDatatransferProgressListeners(mDataTransferListeners);
 			}
 			mPutMethod.setRequestEntity(mEntity);
 			status = client.executeMethod(mPutMethod);

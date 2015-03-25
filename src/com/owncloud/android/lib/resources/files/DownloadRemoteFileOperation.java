@@ -82,19 +82,23 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
         try {
         	tmpFile.getParentFile().mkdirs();
         	int status = downloadFile(client, tmpFile);
-        	result = new RemoteOperationResult(isSuccess(status), status, (mGet != null ? mGet.getResponseHeaders() : null));
-        	Log_OC.i(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " + result.getLogMessage());
+        	result = new RemoteOperationResult(isSuccess(status), status,
+                    (mGet != null ? mGet.getResponseHeaders() : null));
+        	Log_OC.i(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
+                    result.getLogMessage());
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log_OC.e(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " + result.getLogMessage(), e);
+            Log_OC.e(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
+                    result.getLogMessage(), e);
         }
         
         return result;
 	}
 
 	
-    protected int downloadFile(OwnCloudClient client, File targetFile) throws HttpException, IOException, OperationCancelledException {
+    protected int downloadFile(OwnCloudClient client, File targetFile) throws HttpException,
+            IOException, OperationCancelledException {
         int status = -1;
         boolean savedFile = false;
         mGet = new GetMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
@@ -110,7 +114,9 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                 long transferred = 0;
                 
                 Header contentLength = mGet.getResponseHeader("Content-Length");
-                long totalToTransfer = (contentLength != null && contentLength.getValue().length() >0) ? Long.parseLong(contentLength.getValue()) : 0;
+                long totalToTransfer = (contentLength != null &&
+                        contentLength.getValue().length() >0) ?
+                        Long.parseLong(contentLength.getValue()) : 0;
 
                 byte[] bytes = new byte[4096];
                 int readResult = 0;
@@ -126,7 +132,8 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     synchronized (mDataTransferListeners) {
                         it = mDataTransferListeners.iterator();
                         while (it.hasNext()) {
-                            it.next().onTransferProgress(readResult, transferred, totalToTransfer, targetFile.getName());
+                            it.next().onTransferProgress(readResult, transferred, totalToTransfer,
+                                    targetFile.getName());
                         }
                     }
                 }

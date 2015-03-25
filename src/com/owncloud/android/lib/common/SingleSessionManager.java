@@ -63,7 +63,8 @@ public class SingleSessionManager implements OwnCloudClientManager {
     
     @Override
     public synchronized OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-            throws AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {
+            throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
+            IOException {
 
 		Log_OC.d(TAG, "getClientFor(OwnCloudAccount ... : ");
     	if (account == null) {

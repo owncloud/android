@@ -28,6 +28,8 @@ import java.util.ArrayList;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +38,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -75,7 +78,12 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         String baseUrlSt = client.getBaseUri().toString();
         try {
             get = new GetMethod(baseUrlSt + AccountUtils.STATUS_PATH);
-            
+
+            HttpParams params = get.getParams().getDefaultParams();
+            params.setParameter(HttpMethodParams.USER_AGENT,
+                    OwnCloudClientManagerFactory.getUserAgent());
+            get.getParams().setDefaults(params);
+
             client.setFollowRedirects(false);
             boolean isRedirectToNonSecureConnection = false;
             int status = client.executeMethod(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);

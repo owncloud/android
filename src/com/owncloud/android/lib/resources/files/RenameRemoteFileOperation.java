@@ -63,13 +63,15 @@ public class RenameRemoteFileOperation extends RemoteOperation {
      * @param newName			New name to set as the name of file.
      * @param isFolder			'true' for folder and 'false' for files
      */
-	public RenameRemoteFileOperation(String oldName, String oldRemotePath, String newName, boolean isFolder) {
+	public RenameRemoteFileOperation(String oldName, String oldRemotePath, String newName,
+                                     boolean isFolder) {
 		mOldName = oldName;
 		mOldRemotePath = oldRemotePath;
 		mNewName = newName;
 		
         String parent = (new File(mOldRemotePath)).getParent();
-        parent = (parent.endsWith(FileUtils.PATH_SEPARATOR)) ? parent : parent + FileUtils.PATH_SEPARATOR; 
+        parent = (parent.endsWith(FileUtils.PATH_SEPARATOR)) ? parent : parent +
+                FileUtils.PATH_SEPARATOR;
         mNewRemotePath =  parent + mNewName;
         if (isFolder) {
             mNewRemotePath += FileUtils.PATH_SEPARATOR;
@@ -102,17 +104,21 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             	return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
             }
             
-            move = new LocalMoveMethod( client.getWebdavUri() + WebdavUtils.encodePath(mOldRemotePath),
+            move = new LocalMoveMethod( client.getWebdavUri() +
+                    WebdavUtils.encodePath(mOldRemotePath),
             		client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath));
             int status = client.executeMethod(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
             
             move.getResponseBodyAsString(); // exhaust response, although not interesting
             result = new RemoteOperationResult(move.succeeded(), status, move.getResponseHeaders());
-            Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " + result.getLogMessage());
+            Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
+                    result.getLogMessage());
             
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " + ((mNewRemotePath==null) ? mNewName : mNewRemotePath) + ": " + result.getLogMessage(), e);
+            Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " +
+                    ((mNewRemotePath==null) ? mNewName : mNewRemotePath) + ": " +
+                    result.getLogMessage(), e);
             
         } finally {
             if (move != null)

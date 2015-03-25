@@ -58,7 +58,8 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
      * 
      * @param remotePath              Path to append to the URL owned by the client instance.
      * @param context           Android application context.
-     * @param successIfAbsent   When 'true', the operation finishes in success if the path does NOT exist in the remote server (HTTP 404).
+     * @param successIfAbsent   When 'true', the operation finishes in success if the path does
+     *                          NOT exist in the remote server (HTTP 404).
      */
     public ExistenceCheckRemoteOperation(String remotePath, Context context, boolean successIfAbsent) {
         mPath = (remotePath != null) ? remotePath : "";
@@ -78,13 +79,20 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
             head = new HeadMethod(client.getWebdavUri() + WebdavUtils.encodePath(mPath));
             int status = client.executeMethod(head, TIMEOUT, TIMEOUT);
             client.exhaustResponse(head.getResponseBodyAsStream());
-            boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) || (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
+            boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) ||
+                    (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
             result = new RemoteOperationResult(success, status, head.getResponseHeaders());
-            Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + "finished with HTTP status " + status + (!success?"(FAIL)":""));
+            Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() +
+                    WebdavUtils.encodePath(mPath) + " targeting for " +
+                    (mSuccessIfAbsent ? " absence " : " existence ") +
+                    "finished with HTTP status " + status + (!success?"(FAIL)":""));
             
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log_OC.e(TAG, "Existence check for " + client.getWebdavUri() + WebdavUtils.encodePath(mPath) + " targeting for " + (mSuccessIfAbsent ? " absence " : " existence ") + ": " + result.getLogMessage(), result.getException());
+            Log_OC.e(TAG, "Existence check for " + client.getWebdavUri() +
+                    WebdavUtils.encodePath(mPath) + " targeting for " +
+                    (mSuccessIfAbsent ? " absence " : " existence ") + ": " +
+                    result.getLogMessage(), result.getException());
             
         } finally {
             if (head != null)

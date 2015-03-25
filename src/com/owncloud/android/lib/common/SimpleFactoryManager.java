@@ -41,7 +41,8 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
 
 	@Override
 	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-            throws AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {
+            throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
+            IOException {
 
 		Log_OC.d(TAG, "getClientFor(OwnCloudAccount ... : ");
 
