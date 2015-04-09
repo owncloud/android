@@ -44,6 +44,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     
     public static final long CHUNK_SIZE = 1024000;
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
+    private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
     public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType) {
@@ -75,7 +76,8 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 }
                 mPutMethod = new PutMethod(uriPrefix + chunkCount + "-" + chunkIndex);
                 mPutMethod.addRequestHeader(OC_CHUNKED_HEADER, OC_CHUNKED_HEADER);
-                ((ChunkFromFileChannelRequestEntity)mEntity).setOffset(offset);
+                mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(file.length()));
+                ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
                 mPutMethod.setRequestEntity(mEntity);
                 status = client.executeMethod(mPutMethod);
                 client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
