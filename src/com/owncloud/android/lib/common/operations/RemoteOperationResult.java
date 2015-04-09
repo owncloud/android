@@ -350,7 +350,9 @@ public class RemoteOperationResult implements Serializable {
             return "Authenticated with a different account than the one updating";
         } else if (mCode == ResultCode.INVALID_CHARACTER_IN_NAME) {
                 return "The file name contains an forbidden character";
-        }
+        } else if (mCode == ResultCode.FILE_NOT_FOUND) {
+	  	return "Local file does not exist";
+ 	}
 
         return "Operation finished with HTTP status code " + mHttpCode + " (" + (isSuccess() ? "success" : "fail") + ")";
 
