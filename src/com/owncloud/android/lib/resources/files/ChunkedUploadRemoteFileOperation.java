@@ -44,7 +44,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     
     public static final long CHUNK_SIZE = 1024000;
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
-    private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
     public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType) {

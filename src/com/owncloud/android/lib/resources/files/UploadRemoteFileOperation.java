@@ -53,6 +53,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 
 public class UploadRemoteFileOperation extends RemoteOperation {
 
+	protected static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
 
 	protected String mLocalPath;
 	protected String mRemotePath;
@@ -116,6 +117,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 				((ProgressiveDataTransferer)mEntity)
                         .addDatatransferProgressListeners(mDataTransferListeners);
 			}
+			mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(f.length()));
 			mPutMethod.setRequestEntity(mEntity);
 			status = client.executeMethod(mPutMethod);
 			client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
