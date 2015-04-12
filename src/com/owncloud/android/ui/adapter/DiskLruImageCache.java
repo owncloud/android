@@ -26,6 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.SoftReference;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -45,6 +49,8 @@ public class DiskLruImageCache {
     private static final int IO_BUFFER_SIZE = 8 * 1024;
             
     private static final String TAG = DiskLruImageCache.class.getSimpleName();
+
+    private Map<String, SoftReference<Bitmap>> mBitmapCache = Collections.synchronizedMap(new HashMap<String, SoftReference<Bitmap>>());
 
     //public DiskLruImageCache( Context context,String uniqueName, int diskCacheSize,
     public DiskLruImageCache(
@@ -76,6 +82,18 @@ public class DiskLruImageCache {
         DiskLruCache.Editor editor = null;
         String validKey = convertToValidKey(key);
         try {
+            // put into in memmory cache
+            if(mBitmapCache.containsKey(key)) {
+                mBitmapCache.remove(key);
+                if ( BuildConfig.DEBUG ) {
+                    Log_OC.d( "cache_test_DISK_", "image alredy existed in memory cache and was removed " + validKey );
+                }
+            }
+            mBitmapCache.put(key, new SoftReference<Bitmap>(data));
+            if ( BuildConfig.DEBUG ) {
+                Log_OC.d( "cache_test_DISK_", "image put into memory cache " + validKey );
+            }
+
             editor = mDiskCache.edit( validKey );
             if ( editor == null ) {
                 return;
@@ -109,6 +127,16 @@ public class DiskLruImageCache {
 
     public Bitmap getBitmap( String key ) {
 
+        if(mBitmapCache.containsKey((key))) {
+            SoftReference<Bitmap> bitmapRef = mBitmapCache.get(key);
+            Bitmap bm = bitmapRef.get();
+            if(bm != null) {
+                return bm;
+            }
+            else {
+                mBitmapCache.remove(key);
+            }
+        }
         Bitmap bitmap = null;
         DiskLruCache.Snapshot snapshot = null;
         String validKey = convertToValidKey(key);
@@ -120,10 +148,12 @@ public class DiskLruImageCache {
             }
             final InputStream in = snapshot.getInputStream( 0 );
             if ( in != null ) {
-                final BufferedInputStream buffIn = 
+                final BufferedInputStream buffIn =
                 new BufferedInputStream( in, IO_BUFFER_SIZE );
-                bitmap = BitmapFactory.decodeStream( buffIn );              
-            }   
+                bitmap = BitmapFactory.decodeStream( buffIn );
+                buffIn.close();
+                in.close();
+            }
         } catch ( IOException e ) {
             e.printStackTrace();
         } finally {
@@ -136,6 +166,8 @@ public class DiskLruImageCache {
             Log_OC.d("cache_test_DISK_", bitmap == null ? 
                     "not found" : "image read from disk " + validKey);
         }
+
+        mBitmapCache.put(key, new SoftReference<Bitmap>(bitmap));
 
         return bitmap;
 
@@ -163,9 +195,10 @@ public class DiskLruImageCache {
 
     public void clearCache() {
         if ( BuildConfig.DEBUG ) {
-            Log_OC.d( "cache_test_DISK_", "disk cache CLEARED");
+            Log_OC.d( "cache_test_DISK_", "disk and memory cache CLEARED");
         }
         try {
+            mBitmapCache.clear();
             mDiskCache.delete();
         } catch ( IOException e ) {
             e.printStackTrace();
@@ -188,6 +221,9 @@ public class DiskLruImageCache {
         String validKey = convertToValidKey(key);
         try {
             mDiskCache.remove(validKey);
+            if(mBitmapCache.containsKey(key)) {
+                mBitmapCache.remove(key);
+            }
             Log_OC.d(TAG, "removeKey from cache: " + validKey);
         } catch (IOException e) {
             e.printStackTrace();
