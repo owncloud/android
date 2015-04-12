@@ -26,6 +26,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.SoftReference;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -45,6 +49,8 @@ public class DiskLruImageCache {
     private static final int IO_BUFFER_SIZE = 8 * 1024;
             
     private static final String TAG = DiskLruImageCache.class.getSimpleName();
+
+    private Map<String, SoftReference<Bitmap>> bitmapCache = Collections.synchronizedMap(new HashMap<String, SoftReference<Bitmap>>());
 
     //public DiskLruImageCache( Context context,String uniqueName, int diskCacheSize,
     public DiskLruImageCache(
@@ -109,6 +115,16 @@ public class DiskLruImageCache {
 
     public Bitmap getBitmap( String key ) {
 
+        if(bitmapCache.containsKey((key))) {
+            SoftReference<Bitmap> bitmapRef = bitmapCache.get(key);
+            Bitmap bm = bitmapRef.get();
+            if(bm != null) {
+                return bm;
+            }
+            else {
+                bitmapCache.remove(key);
+            }
+        }
         Bitmap bitmap = null;
         DiskLruCache.Snapshot snapshot = null;
         String validKey = convertToValidKey(key);
@@ -120,10 +136,12 @@ public class DiskLruImageCache {
             }
             final InputStream in = snapshot.getInputStream( 0 );
             if ( in != null ) {
-                final BufferedInputStream buffIn = 
+                final BufferedInputStream buffIn =
                 new BufferedInputStream( in, IO_BUFFER_SIZE );
-                bitmap = BitmapFactory.decodeStream( buffIn );              
-            }   
+                bitmap = BitmapFactory.decodeStream( buffIn );
+                buffIn.close();
+                in.close();
+            }
         } catch ( IOException e ) {
             e.printStackTrace();
         } finally {
@@ -136,6 +154,8 @@ public class DiskLruImageCache {
             Log_OC.d("cache_test_DISK_", bitmap == null ? 
                     "not found" : "image read from disk " + validKey);
         }
+
+        bitmapCache.put(key, new SoftReference<Bitmap>(bitmap));
 
         return bitmap;
 
