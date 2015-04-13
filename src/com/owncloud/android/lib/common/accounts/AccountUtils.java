@@ -199,7 +199,7 @@ public class AccountUtils {
 	}
 
 	
-    public static String buildAccountName(Uri serverBaseUrl, String username) {
+    public static String buildAccountNameOld(Uri serverBaseUrl, String username) {
     	if (serverBaseUrl.getScheme() == null) {
     		serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString()); 
     	}
@@ -209,7 +209,21 @@ public class AccountUtils {
         }
         return accountName;
     }
-    
+
+    public static String buildAccountName(Uri serverBaseUrl, String username) {
+    	if (serverBaseUrl.getScheme() == null) {
+    		serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString());
+    	}
+
+        // Remove http:// or https://
+        String url = serverBaseUrl.toString();
+        if (url.contains("://")) {
+            url = url.substring(serverBaseUrl.toString().indexOf("://") + 3);
+        }
+        String accountName = username + "@" + url;
+
+        return accountName;
+    }
 
 	public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
 
