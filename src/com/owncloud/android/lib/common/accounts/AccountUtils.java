@@ -199,7 +199,7 @@ public class AccountUtils {
 	}
 
 	
-    public static String buildAccountName(Uri serverBaseUrl, String username) {
+    public static String buildAccountNameOld(Uri serverBaseUrl, String username) {
     	if (serverBaseUrl.getScheme() == null) {
     		serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString()); 
     	}
@@ -209,7 +209,21 @@ public class AccountUtils {
         }
         return accountName;
     }
-    
+
+    public static String buildAccountName(Uri serverBaseUrl, String username) {
+    	if (serverBaseUrl.getScheme() == null) {
+    		serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString());
+    	}
+
+        // Remove http:// or https://
+        String url = serverBaseUrl.toString();
+        if (url.contains("://")) {
+            url = url.substring(serverBaseUrl.toString().indexOf("://") + 3);
+        }
+        String accountName = username + "@" + url;
+
+        return accountName;
+    }
 
 	public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
 
@@ -336,12 +350,18 @@ public class AccountUtils {
 	    public static final String KEY_SUPPORTS_SAML_WEB_SSO = "oc_supports_saml_web_sso";
 	    /**
 	    * Flag signaling if the ownCloud server supports Share API"
-	    */
+        * @deprecated
+        */
 	    public static final String KEY_SUPPORTS_SHARE_API = "oc_supports_share_api";
 	    /**
-	     * OC accout cookies
+	     * OC account cookies
 	     */
 	    public static final String KEY_COOKIES = "oc_account_cookies";
-	}
+
+        /**
+         * OC account version
+         */
+        public static final String KEY_OC_ACCOUNT_VERSION = "oc_account_version";
+    }
 
 }
