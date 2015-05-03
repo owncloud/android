@@ -19,22 +19,22 @@
 
 package com.owncloud.android.ui.activity;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -46,12 +46,15 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.services.LoadingLogService;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 
 
 public class LogHistoryActivity extends SherlockFragmentActivity  {
+
+    public static final String LOG_RECEIVER_FILTER = "LogHistoryActivity_LogReceiver";
 
     private static final String MAIL_ATTACHMENT_TYPE = "text/plain";
 
@@ -64,6 +67,7 @@ public class LogHistoryActivity extends SherlockFragmentActivity  {
     private String mLogPath = FileStorageUtils.getLogPath();
     private File logDIR = null;
     private String mLogText;
+    private LoadingLogReceiver logReceiver;
 
 
     @Override
@@ -106,13 +110,26 @@ public class LogHistoryActivity extends SherlockFragmentActivity  {
                 // Show a dialog while log data is being loaded
                 showLoadingDialog();
 
-                // Start a new thread that will load all the log data
-                LoadingLogTask task = new LoadingLogTask(logTV);
-                task.execute();
+                // Start a new service that will load all the log data
+                logReceiver = new LoadingLogReceiver(logTV);
+                LocalBroadcastManager.getInstance(this)
+                    .registerReceiver(logReceiver, new IntentFilter(LOG_RECEIVER_FILTER));
+                Intent logService = new Intent(this, LoadingLogService.class);
+                logService.putExtra("mLogPath", mLogPath);
+                logService.putExtra("TAG", TAG);
+                this.startService(logService);
             }
         } else {
             mLogText = savedInstanceState.getString(KEY_LOG_TEXT);
             logTV.setText(mLogText);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (logReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(logReceiver);
         }
     }
 
@@ -178,22 +195,19 @@ public class LogHistoryActivity extends SherlockFragmentActivity  {
 
     /**
      *
-     * Class for loading the log data async
+     * Receiver for loading the log data async
      *
      */
-    private class LoadingLogTask extends AsyncTask<String, Void, String> {
+    private class LoadingLogReceiver extends BroadcastReceiver {
         private final WeakReference<TextView> textViewReference;
 
-        public LoadingLogTask(TextView logTV){
+        public LoadingLogReceiver(TextView logTV){
             // Use of a WeakReference to ensure the TextView can be garbage collected
             textViewReference  = new WeakReference<TextView>(logTV);
         }
 
-        protected String doInBackground(String... args) {
-            return readLogFile();
-        }
-
-        protected void onPostExecute(String result) {
+        public void onReceive(Context receiverContext, Intent receiverIntent) {
+            String result = receiverIntent.getStringExtra("result");
             if (textViewReference != null && result != null) {
                 final TextView logTV = textViewReference.get();
                 if (logTV != null) {
@@ -203,52 +217,7 @@ public class LogHistoryActivity extends SherlockFragmentActivity  {
                 }
             }
         }
-
-        /**
-         * Read and show log file info
-         */
-        private String readLogFile() {
-
-            String[] logFileName = Log_OC.getLogFileNames();
-
-            //Read text from files
-            StringBuilder text = new StringBuilder();
-
-            BufferedReader br = null;
-            try {
-                String line;
-
-                for (int i = logFileName.length-1; i >= 0; i--) {
-                    File file = new File(mLogPath,logFileName[i]);
-                    if (file.exists()) {
-                        // Check if FileReader is ready
-                        if (new FileReader(file).ready()) {
-                            br = new BufferedReader(new FileReader(file));
-                            while ((line = br.readLine()) != null) {
-                                // Append the log info
-                                text.append(line);
-                                text.append('\n');
-                            }
-                        }
-                    }
-                }
-            }
-            catch (IOException e) {
-                Log_OC.d(TAG, e.getMessage().toString());
-                
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        // ignore
-                    }
-                }
-            }
-
-            return text.toString();
-        }
-   }
+    }
 
     /**
      * Show loading dialog
@@ -279,6 +248,8 @@ public class LogHistoryActivity extends SherlockFragmentActivity  {
         super.onSaveInstanceState(outState);
 
         /// global state
-        outState.putString(KEY_LOG_TEXT, mLogText);
+        if (mLogText != null) {
+            outState.putString(KEY_LOG_TEXT, mLogText);
+        }
     }
 }
