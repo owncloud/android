@@ -20,16 +20,17 @@
 
 package com.owncloud.android.ui.activity;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import android.accounts.Account;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,12 +44,9 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
+import com.owncloud.android.services.MoveFilesService;
 import com.owncloud.android.ui.dialog.IndeterminateProgressDialog;
-import com.owncloud.android.utils.FileStorageUtils;
 
 
 
@@ -65,6 +63,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity
 
     private static final String TAG = ErrorsWhileCopyingHandlerActivity.class.getSimpleName();
     
+    public static final String MOVE_FILES_RECEIVER_FILTER = "ErrorsWhileCopyingHandlerActivity_MoveFilesReceiver";
     public static final String EXTRA_ACCOUNT = ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".EXTRA_ACCOUNT";
     public static final String EXTRA_LOCAL_PATHS = ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".EXTRA_LOCAL_PATHS";
     public static final String EXTRA_REMOTE_PATHS = ErrorsWhileCopyingHandlerActivity.class.getCanonicalName() + ".EXTRA_REMOTE_PATHS";
@@ -72,12 +71,12 @@ public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity
     private static final String WAIT_DIALOG_TAG = "WAIT_DIALOG";
     
     protected Account mAccount;
-    protected FileDataStorageManager mStorageManager;
     protected ArrayList<String> mLocalPaths;
     protected ArrayList<String> mRemotePaths;
     protected ArrayAdapter<String> mAdapter;
     protected Handler mHandler;
     private DialogFragment mCurrentDialog;
+    private MoveFilesReceiver moveFilesReceiver;
     
     /**
      * {@link}
@@ -91,7 +90,6 @@ public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity
         mAccount = intent.getParcelableExtra(EXTRA_ACCOUNT);
         mRemotePaths = intent.getStringArrayListExtra(EXTRA_REMOTE_PATHS);
         mLocalPaths = intent.getStringArrayListExtra(EXTRA_LOCAL_PATHS);
-        mStorageManager = new FileDataStorageManager(mAccount, getContentResolver());
         mHandler = new Handler();
         if (mCurrentDialog != null) {
             mCurrentDialog.dismiss();
@@ -125,9 +123,20 @@ public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity
         okBtn.setText(R.string.foreign_files_move);
         cancelBtn.setOnClickListener(this);
         okBtn.setOnClickListener(this);
+
+        moveFilesReceiver = new MoveFilesReceiver();
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(moveFilesReceiver, new IntentFilter(MOVE_FILES_RECEIVER_FILTER));
     }
-    
-    
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (moveFilesReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(moveFilesReceiver);
+        }
+    }
+
     /**
      * Customized adapter, showing the local files as main text in two-lines list item and the remote files
      * as the secondary text.
@@ -184,7 +193,12 @@ public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity
         if (v.getId() == R.id.ok) {
             /// perform movement operation in background thread
             Log_OC.d(TAG, "Clicked MOVE, start movement");
-            new MoveFilesTask().execute();            
+            Intent moveFilesService = new Intent(this, MoveFilesService.class);
+            moveFilesReceiver.updateUI();
+            moveFilesService.putExtra("mLocalPaths", mLocalPaths);
+            moveFilesService.putExtra("mAccount", mAccount);
+            moveFilesService.putExtra("mRemotePaths", mRemotePaths);
+            this.startService(moveFilesService);
             
         } else if (v.getId() == R.id.cancel) {
             /// just finish
@@ -200,13 +214,12 @@ public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity
     /**
      * Asynchronous task performing the move of all the local files to the ownCloud folder.
      */
-    private class MoveFilesTask extends AsyncTask<Void, Void, Boolean> {
+    private class MoveFilesReceiver extends BroadcastReceiver {
 
         /**
          * Updates the UI before trying the movement
          */
-        @Override
-        protected void onPreExecute () {
+        public void updateUI() {
             /// progress dialog and disable 'Move' button
             mCurrentDialog = IndeterminateProgressDialog.newInstance(R.string.wait_a_moment, false);
             mCurrentDialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
@@ -214,35 +227,6 @@ public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity
         }
         
         
-        /**
-         * Performs the movement
-         * 
-         * @return     'False' when the movement of any file fails.
-         */
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            while (!mLocalPaths.isEmpty()) {
-                String currentPath = mLocalPaths.get(0);
-                File currentFile = new File(currentPath);
-                String expectedPath = FileStorageUtils.getSavePath(mAccount.name) + mRemotePaths.get(0);
-                File expectedFile = new File(expectedPath);
-
-                if (expectedFile.equals(currentFile) || currentFile.renameTo(expectedFile)) {
-                    // SUCCESS
-                    OCFile file = mStorageManager.getFileByPath(mRemotePaths.get(0));
-                    file.setStoragePath(expectedPath);
-                    mStorageManager.saveFile(file);
-                    mRemotePaths.remove(0);
-                    mLocalPaths.remove(0);
-                        
-                } else {
-                    // FAIL
-                    return false;   
-                }
-            }
-            return true;
-        }
-
         /**
          * Updates the activity UI after the movement of local files is tried.
          * 
@@ -253,23 +237,29 @@ public class ErrorsWhileCopyingHandlerActivity  extends SherlockFragmentActivity
          * @param result      'True' when the movement was successful.
          */
         @Override
-        protected void onPostExecute(Boolean result) {
+        public void onReceive(Context receiverContext, Intent receiverIntent) {
+            boolean result = receiverIntent.getBooleanExtra("result", false);
+            ErrorsWhileCopyingHandlerActivity.this.mRemotePaths = receiverIntent
+                    .getStringArrayListExtra("mRemotePaths");
+            ErrorsWhileCopyingHandlerActivity.this.mLocalPaths = receiverIntent.getStringArrayListExtra("mLocalPaths");
             mAdapter.notifyDataSetChanged();
-            mCurrentDialog.dismiss();
-            mCurrentDialog = null;
+            if (mCurrentDialog != null) {
+                mCurrentDialog.dismiss();
+                mCurrentDialog = null;
+            }
             findViewById(R.id.ok).setEnabled(true);
             
             if (result) {
                 // nothing else to do in this activity
                 Toast t = Toast.makeText(ErrorsWhileCopyingHandlerActivity.this, getString(R.string.foreign_files_success), Toast.LENGTH_LONG);
                 t.show();
-                finish();
+                ErrorsWhileCopyingHandlerActivity.this.finish();
                 
             } else {
                 Toast t = Toast.makeText(ErrorsWhileCopyingHandlerActivity.this, getString(R.string.foreign_files_fail), Toast.LENGTH_LONG);
                 t.show();
             }
         }
-    }    
+    }
 
 }

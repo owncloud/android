@@ -151,6 +151,7 @@
         <service android:name=".files.services.FileUploader" />
         <service android:name=".media.MediaService" />
         <service android:name=".services.LoadingLogService" android:exported="false"/>
+        <service android:name=".services.MoveFilesService" android:exported="false"/>
         
         <activity android:name=".ui.activity.PinCodeActivity" />
         <activity android:name=".ui.activity.ConflictsResolveActivity"/>
