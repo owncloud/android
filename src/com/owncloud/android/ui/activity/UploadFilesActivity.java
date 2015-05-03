@@ -23,11 +23,14 @@ package com.owncloud.android.ui.activity;
 import java.io.File;
 
 import android.accounts.Account;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -40,12 +43,12 @@ import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.MenuItem;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.services.CheckAvailableSpaceService;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.IndeterminateProgressDialog;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
+import com.owncloud.android.ui.dialog.IndeterminateProgressDialog;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
 import com.owncloud.android.utils.DisplayUtils;
-import com.owncloud.android.utils.FileStorageUtils;
 
 
 /**
@@ -63,11 +66,13 @@ public class UploadFilesActivity extends FileActivity implements
     private Button mUploadBtn;
     private Account mAccountOnCreation;
     private DialogFragment mCurrentDialog;
+    private CheckAvailableSpaceReceiver checkSpaceReceiver;
     
     public static final String EXTRA_CHOSEN_FILES =
             UploadFilesActivity.class.getCanonicalName() + ".EXTRA_CHOSEN_FILES";
 
     public static final int RESULT_OK_AND_MOVE = RESULT_FIRST_USER; 
+    public static final String CHECK_SPACE_RECEIVER_FILTER = "UploadFilesActivity_CheckSpaceReceiver";
     
     private static final String KEY_DIRECTORY_PATH =
             UploadFilesActivity.class.getCanonicalName() + ".KEY_DIRECTORY_PATH";
@@ -126,10 +131,21 @@ public class UploadFilesActivity extends FileActivity implements
             mCurrentDialog.dismiss();
             mCurrentDialog = null;
         }
-            
+
+        checkSpaceReceiver = new CheckAvailableSpaceReceiver();
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(checkSpaceReceiver, new IntentFilter(CHECK_SPACE_RECEIVER_FILTER));
+
         Log_OC.d(TAG, "onCreate() end");
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (checkSpaceReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(checkSpaceReceiver);
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -282,47 +298,32 @@ public class UploadFilesActivity extends FileActivity implements
             finish();
             
         } else if (v.getId() == R.id.upload_files_btn_upload) {
-            new CheckAvailableSpaceTask().execute();
+            Intent checkSpaceService = new Intent(this, CheckAvailableSpaceService.class);
+            checkSpaceReceiver.updateUI();
+            checkSpaceService.putExtra("mAccountOnCreation", mAccountOnCreation);
+            checkSpaceService.putExtra("filePaths", mFileListFragment.getCheckedFilePaths());
+            this.startService(checkSpaceService);
         }
     }
 
 
     /**
-     * Asynchronous task checking if there is space enough to copy all the files chosen
-     * to upload into the ownCloud local folder.
+     * Receiver for CheckAvailableSpaceService, checking if there is space enough to copy 
+     * all the files chosen to upload into the ownCloud local folder.
      * 
-     * Maybe an AsyncTask is not strictly necessary, but who really knows.
      */
-    private class CheckAvailableSpaceTask extends AsyncTask<Void, Void, Boolean> {
+    private class CheckAvailableSpaceReceiver extends BroadcastReceiver {
 
         /**
          * Updates the UI before trying the movement
          */
-        @Override
-        protected void onPreExecute () {
+        public void updateUI () {
             /// progress dialog and disable 'Move' button
             mCurrentDialog = IndeterminateProgressDialog.newInstance(R.string.wait_a_moment, false);
             mCurrentDialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
         }
         
         
-        /**
-         * Checks the available space
-         * 
-         * @return     'True' if there is space enough.
-         */
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            String[] checkedFilePaths = mFileListFragment.getCheckedFilePaths();
-            long total = 0;
-            for (int i=0; checkedFilePaths != null && i < checkedFilePaths.length ; i++) {
-                String localPath = checkedFilePaths[i];
-                File localFile = new File(localPath);
-                total += localFile.length();
-            }
-            return (new Boolean(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= total));
-        }
-
         /**
          * Updates the activity UI after the check of space is done.
          * 
@@ -332,16 +333,19 @@ public class UploadFilesActivity extends FileActivity implements
          * @param result        'True' when there is space enough to copy all the selected files.
          */
         @Override
-        protected void onPostExecute(Boolean result) {
-            mCurrentDialog.dismiss();
-            mCurrentDialog = null;
+        public void onReceive(Context receiverContext, Intent receiverIntent) {
+            boolean result = receiverIntent.getBooleanExtra("result", false);
+            if (mCurrentDialog != null) {
+                mCurrentDialog.dismiss();
+                mCurrentDialog = null;
+            }
             
             if (result) {
                 // return the list of selected files (success)
                 Intent data = new Intent();
                 data.putExtra(EXTRA_CHOSEN_FILES, mFileListFragment.getCheckedFilePaths());
-                setResult(RESULT_OK, data);
-                finish();
+                UploadFilesActivity.this.setResult(RESULT_OK, data);
+                UploadFilesActivity.this.finish();
                 
             } else {
                 // show a dialog to query the user if wants to move the selected files
