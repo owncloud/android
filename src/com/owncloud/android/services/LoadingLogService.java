@@ -16,8 +16,8 @@ public class LoadingLogService extends IntentService {
     private String mLogPath;
     private String TAG;
 
-    public LoadingLogService(String name) {
-        super(name);
+    public LoadingLogService() {
+        super("LoadingLogService");
     }
 
     private void init(Intent intent) {
