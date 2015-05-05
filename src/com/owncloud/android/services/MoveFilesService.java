@@ -18,8 +18,8 @@ public class MoveFilesService extends IntentService {
     Account mAccount;
     ArrayList<String> mRemotePaths;
 
-    public MoveFilesService(String name) {
-        super(name);
+    public MoveFilesService() {
+        super("MoveFilesService");
     }
 
     private void init(Intent intent) {
