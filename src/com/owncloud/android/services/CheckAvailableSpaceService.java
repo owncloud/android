@@ -13,8 +13,8 @@ import com.owncloud.android.utils.FileStorageUtils;
 public class CheckAvailableSpaceService extends IntentService {
     Account mAccountOnCreation;
 
-    public CheckAvailableSpaceService(String name) {
-        super(name);
+    public CheckAvailableSpaceService() {
+        super("CheckAvailableSpaceService");
     }
 
     private void init(Intent intent) {
