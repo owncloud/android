@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.common.network;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
@@ -37,6 +38,9 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class WebdavEntry {
+
+    private static final String TAG = WebdavEntry.class.getSimpleName();
+
 	public static final String NAMESPACE_OC = "http://owncloud.org/ns";
 	public static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
 	public static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
@@ -131,14 +135,29 @@ public class WebdavEntry {
             // {DAV:}quota-used-bytes
             prop = propSet.get(DavPropertyName.create(PROPERTY_QUOTA_USED_BYTES));
             if (prop != null) {
-                mQuotaUsedBytes = Long.parseLong((String) prop.getValue());
+                String quotaUsedBytesSt = (String) prop.getValue();
+                try {
+                    mQuotaUsedBytes = Long.parseLong(quotaUsedBytesSt);
+                } catch (NumberFormatException e) {
+                    BigDecimal bd = new BigDecimal(quotaUsedBytesSt);
+                    mQuotaUsedBytes = bd.longValue();
+                }
+                Log_OC.d(TAG , "QUOTA_USED_BYTES " + quotaUsedBytesSt );
             }
 
             // {DAV:}quota-available-bytes
             prop = propSet.get(DavPropertyName.create(PROPERTY_QUOTA_AVAILABLE_BYTES));
             if (prop != null) {
-                mQuotaAvailableBytes = Long.parseLong((String) prop.getValue());
+                String quotaAvailableBytesSt = (String) prop.getValue();
+                try {
+                    mQuotaAvailableBytes = Long.parseLong(quotaAvailableBytesSt);
+               } catch (NumberFormatException e) {
+                    BigDecimal bd = new BigDecimal(quotaAvailableBytesSt);
+                    mQuotaAvailableBytes = bd.longValue();
+                }
+                Log_OC.d(TAG , "QUOTA_AVAILABLE_BYTES " + quotaAvailableBytesSt );
             }
+
             // OC permissions property <oc:permissions>
             prop = propSet.get(
             		EXTENDED_PROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC)
