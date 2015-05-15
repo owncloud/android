@@ -53,7 +53,7 @@ public class WebdavEntry {
 
 	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
 	private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
-    private long mQuotaUsedBytes, mQuotaAvailableBytes;
+    private BigDecimal mQuotaUsedBytes, mQuotaAvailableBytes;
 
 	public WebdavEntry(MultiStatusResponse ms, String splitElement) {
         resetData();
@@ -137,10 +137,9 @@ public class WebdavEntry {
             if (prop != null) {
                 String quotaUsedBytesSt = (String) prop.getValue();
                 try {
-                    mQuotaUsedBytes = Long.parseLong(quotaUsedBytesSt);
+                    mQuotaUsedBytes = new BigDecimal(quotaUsedBytesSt);
                 } catch (NumberFormatException e) {
-                    BigDecimal bd = new BigDecimal(quotaUsedBytesSt);
-                    mQuotaUsedBytes = bd.longValue();
+                    Log_OC.w(TAG, "No value for QuotaUsedBytes");
                 }
                 Log_OC.d(TAG , "QUOTA_USED_BYTES " + quotaUsedBytesSt );
             }
@@ -150,10 +149,9 @@ public class WebdavEntry {
             if (prop != null) {
                 String quotaAvailableBytesSt = (String) prop.getValue();
                 try {
-                    mQuotaAvailableBytes = Long.parseLong(quotaAvailableBytesSt);
-               } catch (NumberFormatException e) {
-                    BigDecimal bd = new BigDecimal(quotaAvailableBytesSt);
-                    mQuotaAvailableBytes = bd.longValue();
+                    mQuotaAvailableBytes = new BigDecimal(quotaAvailableBytesSt);
+                } catch (NumberFormatException e) {
+                    Log_OC.w(TAG, "No value for QuotaAvailableBytes");
                 }
                 Log_OC.d(TAG , "QUOTA_AVAILABLE_BYTES " + quotaAvailableBytesSt );
             }
@@ -241,11 +239,11 @@ public class WebdavEntry {
         return mSize;
     }
 
-    public long quotaUsedBytes() {
+    public BigDecimal quotaUsedBytes() {
         return mQuotaUsedBytes;
     }
 
-    public long quotaAvailableBytes() {
+    public BigDecimal quotaAvailableBytes() {
         return mQuotaAvailableBytes;
     }
 
@@ -253,7 +251,7 @@ public class WebdavEntry {
         mName = mUri = mContentType = mPermissions = null; mRemoteId = null;
         mContentLength = mCreateTimestamp = mModifiedTimestamp = 0;
         mSize = 0;
-        mQuotaUsedBytes = 0;
-        mQuotaAvailableBytes = 0;
+        mQuotaUsedBytes = null;
+        mQuotaAvailableBytes = null;
     }
 }
