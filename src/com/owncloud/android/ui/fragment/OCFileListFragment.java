@@ -101,7 +101,7 @@ public class OCFileListFragment extends ExtendedListFragment
     private OCFile mTargetFile;
 
     private boolean miniFabClicked = false;
-   
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +143,7 @@ public class OCFileListFragment extends ExtendedListFragment
         return v;
     }
 
-    
+
     @Override
     public void onDetach() {
         setOnRefreshListener(null);
@@ -200,7 +200,7 @@ public class OCFileListFragment extends ExtendedListFragment
                 removeFabLabels();
             }
         }
-  }
+    }
 
     /**
      * adds labels to all mini FABs.
@@ -506,10 +506,10 @@ public class OCFileListFragment extends ExtendedListFragment
 
             if (mContainerActivity.getStorageManager() != null) {
                 FileMenuFilter mf = new FileMenuFilter(
-                    targetFile,
-                    mContainerActivity.getStorageManager().getAccount(),
-                    mContainerActivity,
-                    getActivity()
+                        targetFile,
+                        mContainerActivity.getStorageManager().getAccount(),
+                        mContainerActivity,
+                        getActivity()
                 );
                 mf.filter(menu);
             }
