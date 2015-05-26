@@ -139,7 +139,9 @@ public class WebdavEntry {
                 try {
                     mQuotaUsedBytes = new BigDecimal(quotaUsedBytesSt);
                 } catch (NumberFormatException e) {
-                    Log_OC.w(TAG, "No value for QuotaUsedBytes");
+                    Log_OC.w(TAG, "No value for QuotaUsedBytes - NumberFormatException");
+                } catch (NullPointerException e ){
+                    Log_OC.w(TAG, "No value for QuotaUsedBytes - NullPointerException");
                 }
                 Log_OC.d(TAG , "QUOTA_USED_BYTES " + quotaUsedBytesSt );
             }
@@ -151,6 +153,8 @@ public class WebdavEntry {
                 try {
                     mQuotaAvailableBytes = new BigDecimal(quotaAvailableBytesSt);
                 } catch (NumberFormatException e) {
+                    Log_OC.w(TAG, "No value for QuotaAvailableBytes - NumberFormatException");
+                } catch (NullPointerException e ){
                     Log_OC.w(TAG, "No value for QuotaAvailableBytes");
                 }
                 Log_OC.d(TAG , "QUOTA_AVAILABLE_BYTES " + quotaAvailableBytesSt );
