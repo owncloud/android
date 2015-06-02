@@ -28,6 +28,7 @@ import org.apache.jackrabbit.webdav.client.methods.MkColMethod;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.InvalidCharacterExceptionParser;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -98,9 +99,16 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     	try {
     		mkcol = new MkColMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
     		int status =  client.executeMethod(mkcol, READ_TIMEOUT, CONNECTION_TIMEOUT);
-    		result = new RemoteOperationResult(mkcol.succeeded(), status, mkcol.getResponseHeaders());
-    		Log_OC.d(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage());
-    		client.exhaustResponse(mkcol.getResponseBodyAsStream());
+            if ( status == 400 ) {
+                result = new RemoteOperationResult(mkcol.succeeded(),
+                        mkcol.getResponseBodyAsString(), status);
+                Log_OC.d(TAG, mkcol.getResponseBodyAsString());
+
+            } else {
+                result = new RemoteOperationResult(mkcol.succeeded(), status, mkcol.getResponseHeaders());
+                Log_OC.d(TAG, "Create directory " + mRemotePath + ": " + result.getLogMessage());
+            }
+            client.exhaustResponse(mkcol.getResponseBodyAsStream());
 
     	} catch (Exception e) {
     		result = new RemoteOperationResult(e);
