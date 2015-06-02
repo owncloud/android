@@ -23,8 +23,6 @@
   <string name="prefs_category_more">Več</string>
   <string name="prefs_accounts">Računi</string>
   <string name="prefs_manage_accounts">Upravljanje z računi</string>
-  <string name="prefs_pincode">Koda PIN programa</string>
-  <string name="prefs_pincode_summary">Zaščitite odjemalec</string>
   <string name="prefs_instant_upload">Takojšnje pošiljanje slik</string>
   <string name="prefs_instant_upload_summary">Takojšnje pošiljanje slik, zajetih s fotoaparatom, na strežnik</string>
   <string name="prefs_instant_video_upload">Takojšnje pošiljanje posnetkov</string>
@@ -50,6 +48,7 @@
   <string name="sync_string_files">Datoteke</string>
   <string name="setup_btn_connect">Poveži</string>
   <string name="uploader_btn_upload_text">Pošlji</string>
+  <string name="uploader_btn_new_folder_text">Nova mapa</string>
   <string name="uploader_top_message">Izbor mape za pošiljanje:</string>
   <string name="uploader_wrn_no_account_title">Uporabniškega računa ni mogoče najti</string>
   <string name="uploader_wrn_no_account_text">Na napravi ni računov %1$s. Nastaviti je treba vsaj en račun.</string>
@@ -127,15 +126,6 @@
   <string name="foreign_files_local_text">Krajevno: %1$s</string>
   <string name="foreign_files_remote_text">Oddaljeno: %1$s</string>
   <string name="upload_query_move_foreign_files">Ni dovolj prostora za kopiranje izbranih datotek v mapo %1$s. Ali jih želite premakniti?</string>
-  <string name="pincode_enter_pin_code">Vnesite kodo PIN programa</string>
-  <string name="pincode_configure_your_pin">Vnesite kodo PIN programa</string>
-  <string name="pincode_configure_your_pin_explanation">Koda PIN bo zahtevana vsakič pred zagonom programa.</string>
-  <string name="pincode_reenter_your_pincode">Ponovno vnesite kodo PIN programa</string>
-  <string name="pincode_remove_your_pincode">Odstrani kodo PIN programa</string>
-  <string name="pincode_mismatch">Vrednosti kod PIN programa nista enaki</string>
-  <string name="pincode_wrong">Nepravilna koda PIN programa</string>
-  <string name="pincode_removed">Koda PIN programa je odstranjena</string>
-  <string name="pincode_stored">Koda PIN programa je shranjena</string>
   <string name="media_notif_ticker">Predvajalnik glasbe %1$s</string>
   <string name="media_state_playing">%1$s (se predvaja)</string>
   <string name="media_state_loading">%1$s (se nalaga)</string>
@@ -160,6 +150,7 @@
   <string name="auth_no_net_conn_title">Ni omrežne povezave</string>
   <string name="auth_nossl_plain_ok_title">Varna povezava ni na voljo.</string>
   <string name="auth_connection_established">Povezava je vzpostavljena</string>
+  <string name="auth_testing_connection">Preizkusna povezava</string>
   <string name="auth_not_configured_title">Napačno oblikovane nastavitve strežnika</string>
   <string name="auth_account_not_new">Na napravi račun za istega uporabnika in strežnik že obstaja</string>
   <string name="auth_account_not_the_same">Vpisan uporabnik ni lastnik tega računa</string>
@@ -302,5 +293,6 @@
   <string name="prefs_instant_video_upload_path_title">Pot videa za pošiljanje</string>
   <string name="download_folder_failed_content">Imenika %1$s  ni mogoče prejeti v celoti</string>
   <string name="subject_token">Uporabnik %1$s je omogočil souporabo \"%2$s\".</string>
+  <string name="auth_refresh_button">Osveži povezavo</string>
   <string name="auth_host_address">Naslov strežnika</string>
 </resources>

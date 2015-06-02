@@ -23,8 +23,6 @@
   <string name="prefs_category_more">Більше</string>
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
-  <string name="prefs_pincode">App програмний PIN</string>
-  <string name="prefs_pincode_summary">Захист Вашог App клієнта</string>
   <string name="prefs_instant_upload">Миттєві зображення</string>
   <string name="prefs_instant_upload_summary">Миттєві зображення з камери</string>
   <string name="prefs_instant_video_upload">Миттєві відео</string>
@@ -50,6 +48,7 @@
   <string name="sync_string_files">Файли</string>
   <string name="setup_btn_connect">З\'єднати</string>
   <string name="uploader_btn_upload_text">Відвантажити</string>
+  <string name="uploader_btn_new_folder_text">Нова тека</string>
   <string name="uploader_top_message">Оберіть теку для завантаження:</string>
   <string name="uploader_wrn_no_account_title">Не знайдено облікового запису</string>
   <string name="uploader_wrn_no_account_text">На Вашому пристрої відсутні облікові записи %1$s. Будь ласка, спочатку створіть запис.</string>
@@ -127,15 +126,6 @@
   <string name="foreign_files_local_text">Локально: %1$s</string>
   <string name="foreign_files_remote_text">Віддалено: %1$s</string>
   <string name="upload_query_move_foreign_files">Недостатньо місця для копіювання обраних файлів у теку %1$s. Чи бажаєте ви перемістити їх замість копіювання?</string>
-  <string name="pincode_enter_pin_code">Будь ласка, введіть свій програмний PIN</string>
-  <string name="pincode_configure_your_pin">Введіть програмний PIN</string>
-  <string name="pincode_configure_your_pin_explanation">PIN необхідно буде вводити щоразу при запуску цієї програми</string>
-  <string name="pincode_reenter_your_pincode">Повторно введіть App програмний PIN, будь ласка</string>
-  <string name="pincode_remove_your_pincode">Видалити свій App програмний PIN</string>
-  <string name="pincode_mismatch">Обидва App програмних PIN не однакові</string>
-  <string name="pincode_wrong">Не вірний App програмний PIN</string>
-  <string name="pincode_removed">App програмний PIN видалено</string>
-  <string name="pincode_stored">App програмний PIN збережено</string>
   <string name="media_notif_ticker">%1$s музичний плеєр</string>
   <string name="media_state_playing">%1$s (відтворення)</string>
   <string name="media_state_loading">%1$s (завантаження)</string>
@@ -211,6 +201,7 @@
   <string name="filedisplay_unexpected_bad_get_content">Несподівані проблеми ; будь ласка, спробуйте використати іншу програму для вибору файлу</string>
   <string name="filedisplay_no_file_selected">Не обрано файл</string>
   <string name="activity_chooser_title">Надіслати посилання...</string>
+  <string name="wait_for_tmp_copy_from_private_storage">Копіювання файлу з приватного сховища</string>
   <string name="oauth_check_onoff">Увійти через oAuth2</string>
   <string name="oauth_login_connection">Підключення до серверу oAuth2...</string>
   <string name="ssl_validator_header">Не вдалося перевірити ідентифікацію сайта</string>
