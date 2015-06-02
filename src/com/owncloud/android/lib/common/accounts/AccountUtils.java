@@ -218,7 +218,7 @@ public class AccountUtils {
 
 		if (client != null) {
 			String cookiesString = client.getCookiesString();
-			if (cookiesString != "") {
+			if (!cookiesString.equals("")) {
 				ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString); 
 				// Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
 			}
