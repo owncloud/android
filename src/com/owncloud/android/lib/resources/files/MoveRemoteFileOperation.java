@@ -89,7 +89,8 @@ public class MoveRemoteFileOperation extends RemoteOperation {
 	protected RemoteOperationResult run(OwnCloudClient client) {
 		
     	/// check parameters
-        if (!FileUtils.isValidPath(mTargetRemotePath)) {
+        if (!FileUtils.isValidPath(mTargetRemotePath,
+                client.getOwnCloudVersion().isVersionWithForbiddenCharacters())) {
         	return new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
         }
         

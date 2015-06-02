@@ -51,6 +51,7 @@ import com.owncloud.android.lib.common.OwnCloudCredentialsFactory.OwnCloudAnonym
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class OwnCloudClient extends HttpClient {
 	
@@ -67,6 +68,8 @@ public class OwnCloudClient extends HttpClient {
     private int mInstanceNumber = 0;
     
     private Uri mBaseUri;
+
+    private OwnCloudVersion mVersion = null;
     
     /**
      * Constructor
@@ -436,4 +439,12 @@ public class OwnCloudClient extends HttpClient {
     }
 
 
+    public void setOwnCloudVersion(String version){
+        OwnCloudVersion ver = new OwnCloudVersion(version);
+        mVersion = ver;
+    }
+
+    public OwnCloudVersion getOwnCloudVersion(){
+        return mVersion;
+    }
 }

@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.client.methods.MkColMethod;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -73,7 +72,8 @@ public class CreateRemoteFolderOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        boolean noInvalidChars = FileUtils.isValidPath(mRemotePath);
+        boolean noInvalidChars = FileUtils.isValidPath(mRemotePath,
+                client.getOwnCloudVersion().isVersionWithForbiddenCharacters());
         if (noInvalidChars) {
         	result = createFolder(client);
     		if (!result.isSuccess() && mCreateFullPath && 

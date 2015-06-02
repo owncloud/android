@@ -89,7 +89,8 @@ public class RenameRemoteFileOperation extends RemoteOperation {
 		
 		LocalMoveMethod move = null;
         
-        boolean noInvalidChars = FileUtils.isValidPath(mNewRemotePath);
+        boolean noInvalidChars = FileUtils.isValidPath(mNewRemotePath,
+                client.getOwnCloudVersion().isVersionWithForbiddenCharacters());
         
         if (noInvalidChars) {
         try {
