@@ -94,11 +94,9 @@ public class RenameRemoteFileOperation extends RemoteOperation {
         
         if (noInvalidChars) {
         try {
-        	
             if (mNewName.equals(mOldName)) {
                 return new RemoteOperationResult(ResultCode.OK);
             }
-        
             
             // check if a file with the new name already exists
             if (client.existsFile(mNewRemotePath)) {
@@ -109,12 +107,18 @@ public class RenameRemoteFileOperation extends RemoteOperation {
                     WebdavUtils.encodePath(mOldRemotePath),
             		client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath));
             int status = client.executeMethod(move, RENAME_READ_TIMEOUT, RENAME_CONNECTION_TIMEOUT);
-            
-            move.getResponseBodyAsString(); // exhaust response, although not interesting
-            result = new RemoteOperationResult(move.succeeded(), status, move.getResponseHeaders());
-            Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
-                    result.getLogMessage());
-            
+
+            if (status == 400) {
+				result = new RemoteOperationResult(move.succeeded(),
+						move.getResponseBodyAsString(), status);
+				Log_OC.d(TAG, move.getResponseBodyAsString());
+			} else {
+                move.getResponseBodyAsString(); // exhaust response, although not interesting
+                result = new RemoteOperationResult(move.succeeded(), status,
+                        move.getResponseHeaders());
+                Log_OC.i(TAG, "Rename " + mOldRemotePath + " to " + mNewRemotePath + ": " +
+                        result.getLogMessage());
+            }
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
             Log_OC.e(TAG, "Rename " + mOldRemotePath + " to " +

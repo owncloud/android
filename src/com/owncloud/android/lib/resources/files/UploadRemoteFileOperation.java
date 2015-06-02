@@ -43,6 +43,7 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Remote operation performing the upload of a remote file to the ownCloud server.
@@ -52,6 +53,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
  */
 
 public class UploadRemoteFileOperation extends RemoteOperation {
+
+	private static final String TAG = UploadRemoteFileOperation.class.getSimpleName();
 
 	protected static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
 
@@ -87,10 +90,14 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			}
 
 			int status = uploadFile(client);
-
-			result  = new RemoteOperationResult(isSuccess(status), status,
-                    (mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
-
+			if (status == 400) {
+				result = new RemoteOperationResult(isSuccess(status),
+						mPutMethod.getResponseBodyAsString(), status);
+				Log_OC.d(TAG, mPutMethod.getResponseBodyAsString());
+			} else {
+				result = new RemoteOperationResult(isSuccess(status), status,
+						(mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
+			}
 		} catch (Exception e) {
 			// TODO something cleaner with cancellations
 			if (mCancellationRequested.get()) {

@@ -42,7 +42,6 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.DavException;
 import org.json.JSONException;
-import org.xmlpull.v1.XmlPullParserException;
 
 import android.accounts.Account;
 import android.accounts.AccountsException;
@@ -50,7 +49,6 @@ import android.accounts.AccountsException;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.ShareXMLParser;
 
 
 /**
@@ -64,10 +62,10 @@ import com.owncloud.android.lib.resources.shares.ShareXMLParser;
 public class RemoteOperationResult implements Serializable {
 	
 	/** Generated - should be refreshed every time the class changes!! */;
-	private static final long serialVersionUID = -9003837206000993465L;
-	
-	private static final String TAG = "RemoteOperationResult";
-    
+    private static final long serialVersionUID = -4184015692120731701L;
+
+    private static final String TAG = RemoteOperationResult.class.getSimpleName();
+
     public enum ResultCode { 
         OK,
         OK_SSL,

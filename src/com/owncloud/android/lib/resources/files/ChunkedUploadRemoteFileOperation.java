@@ -46,7 +46,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
-    public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType) {
+    public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType){
 		 super(storagePath, remotePath, mimeType);	
 	}
     
@@ -61,17 +61,21 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             raf = new RandomAccessFile(file, "r");
             channel = raf.getChannel();
             mEntity = new ChunkFromFileChannelRequestEntity(channel, mMimeType, CHUNK_SIZE, file);
-            //((ProgressiveDataTransferer)mEntity).addDatatransferProgressListeners(getDataTransferListeners());
+            //((ProgressiveDataTransferer)mEntity).
+            // addDatatransferProgressListeners(getDataTransferListeners());
             synchronized (mDataTransferListeners) {
-				((ProgressiveDataTransferer)mEntity).addDatatransferProgressListeners(mDataTransferListeners);
+				((ProgressiveDataTransferer)mEntity)
+                        .addDatatransferProgressListeners(mDataTransferListeners);
 			}
             
             long offset = 0;
-            String uriPrefix = client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath) + "-chunking-" + Math.abs((new Random()).nextInt(9000)+1000) + "-" ;
+            String uriPrefix = client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath) +
+                    "-chunking-" + Math.abs((new Random()).nextInt(9000)+1000) + "-" ;
             long chunkCount = (long) Math.ceil((double)file.length() / CHUNK_SIZE);
             for (int chunkIndex = 0; chunkIndex < chunkCount ; chunkIndex++, offset += CHUNK_SIZE) {
                 if (mPutMethod != null) {
-                    mPutMethod.releaseConnection();    // let the connection available for other methods
+                    mPutMethod.releaseConnection();     // let the connection available
+                                                        // for other methods
                 }
                 mPutMethod = new PutMethod(uriPrefix + chunkCount + "-" + chunkIndex);
                 mPutMethod.addRequestHeader(OC_CHUNKED_HEADER, OC_CHUNKED_HEADER);
@@ -80,7 +84,8 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 mPutMethod.setRequestEntity(mEntity);
                 status = client.executeMethod(mPutMethod);
                 client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
-                Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ", chunk index " + chunkIndex + ", count " + chunkCount + ", HTTP result status " + status);
+                Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ", chunk index " +
+                        chunkIndex + ", count " + chunkCount + ", HTTP result status " + status);
                 if (!isSuccess(status))
                     break;
             }
