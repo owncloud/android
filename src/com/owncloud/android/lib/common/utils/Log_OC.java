@@ -60,7 +60,7 @@ public class Log_OC {
     }
     
     public static void w(String TAG, String message) {
-        Log.w(TAG,message);
+        Log.w(TAG, message);
         appendLog(TAG+" : "+ message);
     }
     
@@ -99,8 +99,16 @@ public class Log_OC {
             }
 
         } catch (IOException e) {
-            e.printStackTrace(); 
-        } 
+            e.printStackTrace();
+        } finally {
+            if(mBuf != null) {
+                try {
+                    mBuf.close();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
