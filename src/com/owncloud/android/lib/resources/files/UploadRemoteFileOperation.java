@@ -24,8 +24,10 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,6 +42,7 @@ import com.owncloud.android.lib.common.network.FileRequestEntity;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.InvalidCharacterExceptionParser;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -62,6 +65,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	protected String mRemotePath;
 	protected String mMimeType;
 	protected PutMethod mPutMethod = null;
+	protected boolean mForbiddenCharsInServer = false;
 	
 	private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
 	protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
@@ -90,10 +94,10 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			}
 
 			int status = uploadFile(client);
-			if (status == 400) {
-				result = new RemoteOperationResult(isSuccess(status),
-						mPutMethod.getResponseBodyAsString(), status);
-				Log_OC.d(TAG, mPutMethod.getResponseBodyAsString());
+			// TODO: Detect INVALID_CHARACTER_DETECT_IN SERVER in a better way?
+			if (mForbiddenCharsInServer){
+				result = new RemoteOperationResult(
+						RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER);
 			} else {
 				result = new RemoteOperationResult(isSuccess(status), status,
 						(mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
@@ -127,6 +131,21 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(f.length()));
 			mPutMethod.setRequestEntity(mEntity);
 			status = client.executeMethod(mPutMethod);
+
+			// TODO: Detect INVALID_CHARACTER_DETECT_IN SERVER in a better way?
+			if (status == 400 || status == 500) {
+				InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
+				InputStream is = new ByteArrayInputStream(
+						mPutMethod.getResponseBodyAsString().getBytes());
+				try {
+					mForbiddenCharsInServer = xmlParser.parseXMLResponse(is);
+
+				} catch (Exception e) {
+					mForbiddenCharsInServer = false;
+					Log_OC.e(TAG, "Exception reading exception from server", e);
+				}
+			}
+
 			client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
 
 		} finally {

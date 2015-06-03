@@ -24,8 +24,10 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.Random;
@@ -37,6 +39,8 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.ChunkFromFileChannelRequestEntity;
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.InvalidCharacterExceptionParser;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 
@@ -83,9 +87,26 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
                 mPutMethod.setRequestEntity(mEntity);
                 status = client.executeMethod(mPutMethod);
+
+                // TODO: Detect INVALID_CHARACTER_DETECT_IN SERVER in a better way?
+                if (status == 400 || status == 500) {
+                    InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
+                    InputStream is = new ByteArrayInputStream(
+                            mPutMethod.getResponseBodyAsString().getBytes());
+                    try {
+                        mForbiddenCharsInServer = xmlParser.parseXMLResponse(is);
+
+                    } catch (Exception e) {
+                        mForbiddenCharsInServer = false;
+                        Log_OC.e(TAG, "Exception reading exception from server", e);
+                    }
+                }
+
                 client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
-                Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath + ", chunk index " +
-                        chunkIndex + ", count " + chunkCount + ", HTTP result status " + status);
+                Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath +
+                        ", chunk index " + chunkIndex + ", count " + chunkCount +
+                        ", HTTP result status " + status);
+
                 if (!isSuccess(status))
                     break;
             }

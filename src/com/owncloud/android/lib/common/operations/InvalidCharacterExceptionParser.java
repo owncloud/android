@@ -35,11 +35,12 @@ import java.io.InputStream;
 
 /**
  * Parser for Invalid Character server exception
- * @author masensio on 02/06/2015.
+ * @author masensio
  */
 public class InvalidCharacterExceptionParser {
 
     private static final String EXCEPTION_STRING = "OC\\Connector\\Sabre\\Exception\\InvalidPath";
+	private static final String EXCEPTION_UPLOAD_STRING = "OCP\\Files\\InvalidPathException";
 
     // No namespaces
 	private static final String ns = null;
@@ -48,7 +49,7 @@ public class InvalidCharacterExceptionParser {
     private static final String NODE_ERROR = "d:error";
 	private static final String NODE_EXCEPTION = "s:exception";
     /**
-	 * Parse is as response of Share API
+	 * Parse is as an Invalid Path Exception
 	 * @param is
 	 * @return if The exception is an Invalid Char Exception
 	 * @throws XmlPullParserException
@@ -98,7 +99,8 @@ public class InvalidCharacterExceptionParser {
 			}
 
 		}
-		return exception.equalsIgnoreCase(EXCEPTION_STRING);
+		return exception.equalsIgnoreCase(EXCEPTION_STRING) ||
+				exception.equalsIgnoreCase(EXCEPTION_UPLOAD_STRING);
 
 
 	}
