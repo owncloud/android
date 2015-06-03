@@ -167,10 +167,15 @@ public class Log_OC {
 	            mBuf.newLine();
 	            mBuf.write(text);
 	            mBuf.newLine();
-	            mBuf.close();
 	        } catch (IOException e) {
 	            e.printStackTrace();
-	        }
+	        } finally {
+                try {
+                    mBuf.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             // Check if current log file size is bigger than the max file size defined
             if (mLogFile.length() > MAX_FILE_SIZE) {
