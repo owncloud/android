@@ -46,7 +46,7 @@ public final class Config {
 	public static final String fileToTestSendByEmailName = "test";
 	public static final String bigFileToTestName = "test";
 	
-	public static final String folderSpecialCharactersName="a%&@()";
+	public static final String folderSpecialCharactersName="a%&@()ño";
 	
 	public static final String passcode1 = "passcode1";
 	public static final String passcode2 = "passcode2";
