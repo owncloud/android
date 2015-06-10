@@ -23,34 +23,34 @@ package com.owncloud.android.test.ui.testSuites;
 public final class Config {
 
 	//without http or https
-	public static final String URL = "owncloudServerVar";
-	public static boolean isTrusted = true;
+	public static final String URL = "docker.oc.solidgear.es:50019";
+	public static boolean isTrusted = false;
 
 	//without http or https
-	public static final String URL2 = "owncloudServer2Var";
-	public static boolean isTrusted2 = true;
+	public static final String URL2 = "docker.oc.solidgear.es:50019";
+	public static boolean isTrusted2 = false;
 
-	public static final String user = "owncloudUserVar";
-	public static final String password = "owncloudPasswordVar";
-	public static final String user2 = "owncloudUser2Var";
-	public static final String password2 = "owncloudPassword2Var";
+	public static final String user = "testAndroid";
+	public static final String password = "testAndroid";
+	public static final String user2 = "testAndroid2";
+	public static final String password2 = "testAndroid2";
 	public static final String userAccount = user + "@"+ URL;
 	public static final String userAccount2 = user2 + "@"+ URL2;
 
-	public static final String gmailAccount = "gmailAccountVar";
+	public static final String gmailAccount = "automationOwncloud@gmail.com";
 	
 	public static final String fileWhichIsInTheServer1 ="ownCloudUserManual.pdf";
 	public static final String fileWhichIsInTheServer2 ="ownCloudUserManual.pdf";
 	
-	public static final String fileToTestName = "test";
+	public static final String fileToTestName = "doc.txt";
 	public static final String fileToTestSendByEmailName = "test";
-	public static final String bigFileToTestName = "test";
-	
+	public static final String bigFileToTestName = "video.mp4";
+
 	public static final String folderSpecialCharactersName="a%&@()ño";
 	
-	public static final String passcode1 = "passcode1";
-	public static final String passcode2 = "passcode2";
-	public static final String passcode3 = "passcode3";
-	public static final String passcode4 = "passcode4";
+	public static final String passcode1 = "1";
+	public static final String passcode2 = "1";
+	public static final String passcode3 = "2";
+	public static final String passcode4 = "2";
 
 }

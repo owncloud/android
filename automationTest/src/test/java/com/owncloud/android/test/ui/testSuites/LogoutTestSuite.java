@@ -57,7 +57,7 @@ public class LogoutTestSuite{
 	public void testLogout () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		MenuList menulist = fileListView.clickOnMenuButton();
 		SettingsView settingsView = menulist.clickOnSettingsButton();
 		settingsView.tapOnAccountElement(1,1, 1000);

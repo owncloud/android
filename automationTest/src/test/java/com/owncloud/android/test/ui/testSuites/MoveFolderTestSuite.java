@@ -63,7 +63,7 @@ public class MoveFolderTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
 		     //fileListView.getProgressCircular(), 1000);

@@ -62,7 +62,7 @@ public class CreateFolderTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, 
 				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
@@ -86,7 +86,7 @@ public class CreateFolderTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, 
 				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(FOLDER_NAME, fileListView, driver);

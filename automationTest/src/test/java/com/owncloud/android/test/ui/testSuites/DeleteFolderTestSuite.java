@@ -60,7 +60,7 @@ public class DeleteFolderTestSuite{
 	public void testDeleteFolder () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		//TODO. if the folder already exists, do no created
 		//create the folder

@@ -56,7 +56,7 @@ public class RefreshFolderTestSuite{
 	public void testPulldownToRefreshFolder () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		//TODO. Remove the sleep and check why is not working the assert 
 		//when using waitTillElementIsNotPresent
 		Thread.sleep(5000);

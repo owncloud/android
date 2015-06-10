@@ -39,6 +39,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.owncloud.android.test.ui.models.FileListView;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 
@@ -145,6 +147,7 @@ public class Common{
 			}
 			Thread.sleep(pollingTime);
 		}
+		throw new TimeoutException();
 	}
 	
 	protected void takeScreenShotOnFailed (String testName) 
@@ -158,16 +161,13 @@ public class Common{
 		FileUtils.copyFile(file, new File(screenShotName));
 	}
 
-	protected void assertIsInFileListView() throws InterruptedException {
-		//waitForTextPresent("Wrong username or password", 
-			//	changePasswordForm.getAuthStatusText());
-		Thread.sleep(2000);
-		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
-				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".resourceId(\"android:id/action_bar_title\")")));
-		assertTrue(isElementPresent((AndroidElement) driver
-				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".description(\"Upload\")")));	
+	protected void assertIsInFileListView(FileListView fileListView) throws InterruptedException {
+		Thread.sleep(10000);
+		
+		Common.waitTillElementIsPresent(
+				fileListView.getTitleTextElement(),300000);
+		assertTrue(waitForTextPresent("ownCloud",fileListView.getTitleTextElement()));
+		assertTrue(fileListView.getUploadButton().isDisplayed());	
 	}
 
 	protected void assertIsNotInFileListView() throws InterruptedException {
@@ -196,6 +196,7 @@ public class Common{
 	}
 
 	protected void assertIsInSettingsView() throws InterruptedException {
+		//TODO. Change it here also
 		assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
 						+ ".resourceId(\"android:id/action_bar_title\")")));

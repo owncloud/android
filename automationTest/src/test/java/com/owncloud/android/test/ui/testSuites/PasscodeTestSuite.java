@@ -39,6 +39,7 @@ import com.owncloud.android.test.ui.models.MenuList;
 import com.owncloud.android.test.ui.models.PassCodeRequestView;
 import com.owncloud.android.test.ui.models.PassCodeView;
 import com.owncloud.android.test.ui.models.SettingsView;
+import com.owncloud.android.test.ui.models.UploadFilesView;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PasscodeTestSuite {
@@ -59,7 +60,7 @@ public class PasscodeTestSuite {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		MenuList menu = fileListView.clickOnMenuButton();
 		SettingsView settingsView = menu.clickOnSettingsButton();
@@ -84,7 +85,8 @@ public class PasscodeTestSuite {
 				PassCodeRequestView(driver);
 		passCodeReequestView.enterPasscode(Config.passcode1, Config.passcode2,
 				Config.passcode3, Config.passcode4);
-		common.assertIsInFileListView();
+		FileListView newFileListView = new FileListView(driver);
+		common.assertIsInFileListView(newFileListView);
 	}
 	
 	
