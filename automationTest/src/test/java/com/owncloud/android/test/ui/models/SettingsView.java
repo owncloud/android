@@ -40,6 +40,11 @@ public class SettingsView {
 	@CacheLookup
 	@AndroidFindBy(name = Config.userAccount2)
 	private AndroidElement accountElement2;
+	
+	@CacheLookup
+	@AndroidFindBy(uiAutomator = "new UiSelector()"
+			+ ".resourceId(\"android:id/action_bar_title\")")
+	private AndroidElement titleText;
 
 	@AndroidFindBy(name = "Delete account")
 	private AndroidElement deleteAccountElement;
@@ -96,6 +101,10 @@ public class SettingsView {
 		}
 		PassCodeView passcodeview = new PassCodeView(driver);
 		return passcodeview;
+	}
+	
+	public AndroidElement getTitleTextElement () {
+		return titleText;
 	}
 
 }

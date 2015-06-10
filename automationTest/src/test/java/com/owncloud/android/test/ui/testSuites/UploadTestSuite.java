@@ -38,10 +38,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.FailingTestCategory;
-import com.owncloud.android.test.ui.groups.InProgressCategory;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.groups.UnfinishedTestCategory;
 import com.owncloud.android.test.ui.models.FileDetailsView;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
@@ -50,7 +47,6 @@ import com.owncloud.android.test.ui.models.GmailEmailView;
 import com.owncloud.android.test.ui.models.ImageView;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.NotificationView;
-import com.owncloud.android.test.ui.models.SettingsView;
 import com.owncloud.android.test.ui.models.UploadView;
 
 

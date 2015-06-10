@@ -33,8 +33,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.MoveView;
@@ -57,7 +56,7 @@ public class MoveFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testMoveFolder () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 

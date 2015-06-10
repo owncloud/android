@@ -33,7 +33,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.UnfinishedTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileListView;
 
 

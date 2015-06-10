@@ -100,13 +100,13 @@ public class LoginTestSuite{
 		SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
-		fileListView = Actions.login(Config.URL2, Config.user2,
+		Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
-		common.assertIsInSettingsView();
+		common.assertIsInSettingsView(settingsView);
 	}
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testMultiAccountAndShowFiles () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
@@ -120,9 +120,9 @@ public class LoginTestSuite{
 		SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
-		fileListView = Actions.login(Config.URL2, Config.user2,
+		Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
-		common.assertIsInSettingsView();
+		common.assertIsInSettingsView(settingsView);
 		settingsView.tapOnAccountElement(2,1, 100);
 		common.assertIsInFileListView(fileListView);
 		

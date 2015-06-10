@@ -40,6 +40,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.PassCodeRequestView;
+import com.owncloud.android.test.ui.models.SettingsView;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -161,16 +163,18 @@ public class Common{
 		FileUtils.copyFile(file, new File(screenShotName));
 	}
 
-	protected void assertIsInFileListView(FileListView fileListView) throws InterruptedException {
-		Thread.sleep(10000);
-		
+	protected void assertIsInFileListView(FileListView fileListView) 
+			throws InterruptedException {
+		//Thread.sleep(10000);
 		Common.waitTillElementIsPresent(
-				fileListView.getTitleTextElement(),300000);
-		assertTrue(waitForTextPresent("ownCloud",fileListView.getTitleTextElement()));
+				fileListView.getTitleTextElement(),30000);
+		assertTrue(waitForTextPresent("ownCloud",
+				fileListView.getTitleTextElement()));
 		assertTrue(fileListView.getUploadButton().isDisplayed());	
 	}
 
 	protected void assertIsNotInFileListView() throws InterruptedException {
+		//TODO. Change here
 		AndroidElement fileElement;
 		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
@@ -185,21 +189,31 @@ public class Common{
 		assertNull(fileElement);
 	}
 
-	protected void assertIsPasscodeRequestView() throws InterruptedException {
-		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
-				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".resourceId(\"android:id/action_bar_title\")")));
-		assertTrue(((AndroidElement) driver.findElementByAndroidUIAutomator(
-				"new UiSelector().text(\"Please, insert your pass code\")"))
-				.isDisplayed());
+	protected void assertIsPasscodeRequestView(
+			PassCodeRequestView passCodeReequestView) 
+			throws InterruptedException {
+		Common.waitTillElementIsPresent(
+				passCodeReequestView.getTitleTextElement(),30000);
+		assertTrue(waitForTextPresent("ownCloud",
+				passCodeReequestView.getTitleTextElement()));
+		assertTrue(passCodeReequestView.getInsertMessage().isDisplayed());	
+	
+		
+		//assertTrue(((AndroidElement) driver.findElementByAndroidUIAutomator(
+			//	"new UiSelector().text(\"Please, insert your pass code\")"))
+				//.isDisplayed());
 
 	}
 
-	protected void assertIsInSettingsView() throws InterruptedException {
-		//TODO. Change it here also
-		assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
-				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".resourceId(\"android:id/action_bar_title\")")));
+	protected void assertIsInSettingsView(SettingsView settingsView) 
+			throws InterruptedException {
+		Common.waitTillElementIsPresent(
+				settingsView.getTitleTextElement(),30000);
+		assertTrue(waitForTextPresent("Settings",
+				settingsView.getTitleTextElement()));
+		//assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
+			//	.findElementByAndroidUIAutomator("new UiSelector()"
+				//		+ ".resourceId(\"android:id/action_bar_title\")")));
 	}
 
 }
