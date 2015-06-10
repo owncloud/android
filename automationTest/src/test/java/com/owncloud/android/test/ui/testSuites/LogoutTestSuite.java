@@ -52,7 +52,7 @@ public class LogoutTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testLogout () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);

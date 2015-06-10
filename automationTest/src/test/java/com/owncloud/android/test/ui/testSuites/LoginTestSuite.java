@@ -106,7 +106,7 @@ public class LoginTestSuite{
 	}
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testMultiAccountAndShowFiles () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
