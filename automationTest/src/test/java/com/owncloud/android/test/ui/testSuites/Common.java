@@ -165,7 +165,6 @@ public class Common{
 
 	protected void assertIsInFileListView(FileListView fileListView) 
 			throws InterruptedException {
-		//Thread.sleep(10000);
 		Common.waitTillElementIsPresent(
 				fileListView.getTitleTextElement(),30000);
 		assertTrue(waitForTextPresent("ownCloud",
@@ -174,7 +173,6 @@ public class Common{
 	}
 
 	protected void assertIsNotInFileListView() throws InterruptedException {
-		//TODO. Change here
 		AndroidElement fileElement;
 		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
@@ -197,12 +195,6 @@ public class Common{
 		assertTrue(waitForTextPresent("ownCloud",
 				passCodeReequestView.getTitleTextElement()));
 		assertTrue(passCodeReequestView.getInsertMessage().isDisplayed());	
-	
-		
-		//assertTrue(((AndroidElement) driver.findElementByAndroidUIAutomator(
-			//	"new UiSelector().text(\"Please, insert your pass code\")"))
-				//.isDisplayed());
-
 	}
 
 	protected void assertIsInSettingsView(SettingsView settingsView) 
@@ -211,9 +203,6 @@ public class Common{
 				settingsView.getTitleTextElement(),30000);
 		assertTrue(waitForTextPresent("Settings",
 				settingsView.getTitleTextElement()));
-		//assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
-			//	.findElementByAndroidUIAutomator("new UiSelector()"
-				//		+ ".resourceId(\"android:id/action_bar_title\")")));
 	}
 
 }
