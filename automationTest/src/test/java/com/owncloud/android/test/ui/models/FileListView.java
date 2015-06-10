@@ -165,12 +165,12 @@ public class FileListView {
 	}
 	
 	public ElementMenuOptions longPressOnElement (String elementName) {
-		scrollTillFindElement(elementName).tap(1, 1000);
+		getFileElement(elementName).tap(1, 1000);
 		ElementMenuOptions menuOptions = new ElementMenuOptions(driver);
 		return menuOptions;
 	}
 	
-	public AndroidElement scrollTillFindElement (String elementName) {
+	/*public AndroidElement scrollTillFindElement (String elementName) {
         fileElement = Actions
         		.scrollTillFindElement (elementName,filesLayout,driver);
 		try {
@@ -181,10 +181,10 @@ public class FileListView {
         	fileElementLayout = null;
         }
 		return fileElement;
-	}
+	}*/
 	
 	public void tapOnElement (String elementName) {
-		scrollTillFindElement(elementName).tap(1, 1);
+		getFileElement(elementName).tap(1, 1);
 	}
 	
 	public AndroidElement getFileElementLayout (String elementName) {
