@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -70,12 +71,12 @@ public class CreateFolderTestSuite{
 				.createFolder(FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertNotNull(fileListView.getFileElement());
-		assertTrue(
-			folderHasBeenCreated=fileListView.getFileElement().isDisplayed());	
+		//fileListView.scrollTillFindElement(FOLDER_NAME);
+		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
+		assertNotNull(folder);
+		assertTrue(folderHasBeenCreated=folder.isDisplayed());	
 		CurrentCreatedFolder = FOLDER_NAME;
-		assertEquals(FOLDER_NAME , fileListView.getFileElement().getText());
+		assertEquals(FOLDER_NAME , folder.getText());
 	}
 	
 	@Test
@@ -94,12 +95,12 @@ public class CreateFolderTestSuite{
 				.createFolder(FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertNotNull(fileListView.getFileElement());
-		assertTrue(
-			folderHasBeenCreated=fileListView.getFileElement().isDisplayed());	
+		//fileListView.scrollTillFindElement(FOLDER_NAME);
+		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
+		assertNotNull(folder);
+		assertTrue(folderHasBeenCreated=folder.isDisplayed());	
 		CurrentCreatedFolder = FOLDER_NAME;
-		assertEquals(FOLDER_NAME , fileListView.getFileElement().getText());
+		assertEquals(FOLDER_NAME , folder.getText());
 	}
 
 	@After

@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -72,10 +73,10 @@ public class RenameFolderTestSuite{
 				.createFolder(OLD_FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(OLD_FOLDER_NAME);
+		//fileListView.scrollTillFindElement(OLD_FOLDER_NAME);
 
-		assertTrue(
-			folderHasBeenCreated = fileListView.getFileElement().isDisplayed());
+		assertTrue(folderHasBeenCreated =
+				fileListView.getFileElement(OLD_FOLDER_NAME).isDisplayed());
 
 		//check if the folder with the new name already exists 
 		//and if true, delete them
@@ -90,11 +91,11 @@ public class RenameFolderTestSuite{
 		CurrentCreatedFolder = FOLDER_NAME;
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertNotNull(fileListView.getFileElement());
-		assertTrue(
-			folderHasBeenCreated = fileListView.getFileElement().isDisplayed());	
-		assertEquals(FOLDER_NAME , fileListView.getFileElement().getText());
+		//fileListView.scrollTillFindElement(FOLDER_NAME);
+		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
+		assertNotNull(folder);
+		assertTrue(folderHasBeenCreated = folder.isDisplayed());	
+		assertEquals(FOLDER_NAME , folder.getText());
 	}
 
 	@After

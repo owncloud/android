@@ -151,13 +151,21 @@ public class FileListView {
 		return listItemLayout;
 	}
 	
-	public AndroidElement getFileElement () {
+	public AndroidElement getFileElement (String elementName) {
+		fileElement = Actions
+        		.scrollTillFindElement (elementName,filesLayout,driver);
+		try {
+        	fileElementLayout = (AndroidElement) driver
+        			.findElementByAndroidUIAutomator("new UiSelector()"
+        				+ ".description(\"LinearLayout-"+ elementName +"\")");
+        } catch (NoSuchElementException e) {
+        	fileElementLayout = null;
+        }
 		return fileElement;
 	}
 	
 	public ElementMenuOptions longPressOnElement (String elementName) {
 		scrollTillFindElement(elementName).tap(1, 1000);
-		//fileElement.tap(1, 1000);
 		ElementMenuOptions menuOptions = new ElementMenuOptions(driver);
 		return menuOptions;
 	}
@@ -175,7 +183,20 @@ public class FileListView {
 		return fileElement;
 	}
 	
-	public AndroidElement getFileElementLayout () {
+	public void tapOnElement (String elementName) {
+		scrollTillFindElement(elementName).tap(1, 1);
+	}
+	
+	public AndroidElement getFileElementLayout (String elementName) {
+		fileElement = Actions
+        		.scrollTillFindElement (elementName,filesLayout,driver);
+		try {
+        	fileElementLayout = (AndroidElement) driver
+        			.findElementByAndroidUIAutomator("new UiSelector()"
+        				+ ".description(\"LinearLayout-"+ elementName +"\")");
+        } catch (NoSuchElementException e) {
+        	fileElementLayout = null;
+        }
 		return fileElementLayout;
 	}
 	

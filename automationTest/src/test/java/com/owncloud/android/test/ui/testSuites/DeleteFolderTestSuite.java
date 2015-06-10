@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -67,14 +68,33 @@ public class DeleteFolderTestSuite{
 				.createFolder(FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertTrue(
-			folderHasBeenCreated = fileListView.getFileElement().isDisplayed());
+		//fileListView.scrollTillFindElement(FOLDER_NAME);
+		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
+		assertTrue(folderHasBeenCreated = folder.isDisplayed());
 
 		//delete the folder
 		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
-		assertFalse(
-			folderHasBeenCreated =fileListView.getFileElement().isDisplayed());
+		assertFalse(folderHasBeenCreated =folder.isDisplayed());
+	}
+	
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	public void testDeleteFolderWithContents () throws Exception {
+		FileListView fileListView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFileListView(fileListView);
+		
+		//TODO. if the folder already exists, do no created
+		//create the folder
+		WaitAMomentPopUp waitAMomentPopUp = Actions
+				.createFolder(FOLDER_NAME, fileListView);
+		Common.waitTillElementIsNotPresentWithoutTimeout(
+				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+		//fileListView.scrollTillFindElement(FOLDER_NAME);
+		assertTrue(folderHasBeenCreated =
+				fileListView.getFileElement(FOLDER_NAME).isDisplayed());
+		fileListView.tapOnElement(FOLDER_NAME);
+		//TODO. keep doing things
 	}
 
 	@After

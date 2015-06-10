@@ -81,8 +81,9 @@ public class LoginTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		
-		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer1);
-		assertTrue(fileListView.getFileElement().isDisplayed());
+		//fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer1);
+		assertTrue(fileListView.getFileElement(Config.fileWhichIsInTheServer1)
+				.isDisplayed());
 	}
 	
 	
@@ -112,8 +113,9 @@ public class LoginTestSuite{
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
-		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer1);
-		assertTrue(fileListView.getFileElement().isDisplayed());
+		//fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer1);
+		assertTrue(fileListView
+				.getFileElement(Config.fileWhichIsInTheServer1).isDisplayed());
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		MenuList menu = fileListView.clickOnMenuButton();
@@ -126,8 +128,9 @@ public class LoginTestSuite{
 		settingsView.tapOnAccountElement(2,1, 100);
 		common.assertIsInFileListView(fileListView);
 		
-		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer2);
-		assertTrue(fileListView.getFileElement().isDisplayed());
+		//fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer2);
+		assertTrue(fileListView.getFileElement(Config.fileWhichIsInTheServer2)
+				.isDisplayed());
 	}
 	
 	@Test

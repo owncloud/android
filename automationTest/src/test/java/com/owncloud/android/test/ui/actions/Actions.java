@@ -166,14 +166,14 @@ public class Actions {
 			Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
 					.getProgressCircular(), 1000);
 			common.wait.until(ExpectedConditions.visibilityOf(
-					fileListView.getFileElementLayout()
+					fileListView.getFileElementLayout(elementName)
 					.findElement(By.id(FileListView
 							.getSharedElementIndicator()))));
 
 		}catch(NoSuchElementException e){
 			return null;
 		}
-		return (AndroidElement) fileListView.getFileElementLayout()
+		return (AndroidElement) fileListView.getFileElementLayout(elementName)
 				.findElement(By.id(FileListView.getSharedElementIndicator()));
 	}
 
@@ -194,12 +194,12 @@ public class Actions {
 			Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 					.getWaitAMomentTextElement(), 100);
 			common.wait.until(ExpectedConditions.visibilityOf(
-					fileListView.getFileElementLayout()
+					fileListView.getFileElementLayout(elementName)
 					.findElement(By.id(FileListView.getSharedElementIndicator()))));
 		}catch(NoSuchElementException e){
 			return null;
 		}
-		return (AndroidElement) fileListView.getFileElementLayout()
+		return (AndroidElement) fileListView.getFileElementLayout(elementName)
 				.findElement(By.id(FileListView.getSharedElementIndicator()));
 	}
 	
@@ -219,7 +219,7 @@ public class Actions {
 			Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 					.getWaitAMomentTextElement(), 100);
 			Common.waitTillElementIsNotPresent((AndroidElement) fileListView
-					.getFileElementLayout()
+					.getFileElementLayout(elementName)
 					.findElement(By.id(FileListView.getSharedElementIndicator())
 					),100);
 		}catch(NoSuchElementException e){

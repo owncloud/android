@@ -63,9 +63,9 @@ public class ShareLinkFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 				
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
+				.getFileElement(FILE_NAME).isDisplayed());
 		
 		sharedElementIndicator = Actions.shareLinkElementByGmail(FILE_NAME,
 				fileListViewAfterUploadFile,driver,common);
@@ -85,9 +85,9 @@ public class ShareLinkFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 				
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
+				.getFileElement(FILE_NAME).isDisplayed());
 		
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(FILE_NAME,
 				fileListViewAfterUploadFile,driver,common);
@@ -106,9 +106,9 @@ public class ShareLinkFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 				
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
+				.getFileElement(FILE_NAME).isDisplayed());
 		
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(FILE_NAME,
 				fileListViewAfterUploadFile,driver,common);

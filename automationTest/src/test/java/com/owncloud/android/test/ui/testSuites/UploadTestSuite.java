@@ -85,20 +85,21 @@ public class UploadTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
-		assertTrue(fileListViewAfterUploadFile.getFileElement().isDisplayed());
+		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		assertTrue(fileListViewAfterUploadFile.getFileElement(FILE_NAME)
+				.isDisplayed());
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListViewAfterUploadFile.getProgressCircular(), 1000);
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile.getFileElementLayout()
+				fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
-		assertTrue(fileListViewAfterUploadFile.getFileElementLayout()
+		assertTrue(fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))
 				.isDisplayed());
 		fileListView = new FileListView(driver);
-		fileListView.scrollTillFindElement(FILE_NAME);
-		assertTrue(
-				fileHasBeenUploaded = fileListView.getFileElement().isDisplayed());
+		//fileListView.scrollTillFindElement(FILE_NAME);
+		assertTrue(fileHasBeenUploaded =
+				fileListView.getFileElement(FILE_NAME).isDisplayed());
 	}
 
 	
@@ -136,22 +137,23 @@ public class UploadTestSuite{
 					".ui.activity.FileDisplayActivity");
 		}
 
-		fileListViewAfterUploadFile.scrollTillFindElement(BIG_FILE_NAME);
+		//fileListViewAfterUploadFile.scrollTillFindElement(BIG_FILE_NAME);
 
-		assertTrue(fileListViewAfterUploadFile.getFileElement().isDisplayed());
+		assertTrue(fileListViewAfterUploadFile.getFileElement(BIG_FILE_NAME)
+				.isDisplayed());
 		
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListViewAfterUploadFile.getProgressCircular(), 1000);
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile.getFileElementLayout()
+				fileListViewAfterUploadFile.getFileElementLayout(BIG_FILE_NAME)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
-		assertTrue(fileListViewAfterUploadFile.getFileElementLayout()
+		assertTrue(fileListViewAfterUploadFile.getFileElementLayout(BIG_FILE_NAME)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))
 				.isDisplayed());
 		fileListView = new FileListView(driver);
-		fileListView.scrollTillFindElement(BIG_FILE_NAME);
-		assertTrue(
-				fileHasBeenUploaded = fileListView.getFileElement().isDisplayed());
+		//fileListView.scrollTillFindElement(BIG_FILE_NAME);
+		assertTrue(fileHasBeenUploaded =
+				fileListView.getFileElement(BIG_FILE_NAME).isDisplayed());
 	}
 
 
@@ -185,9 +187,9 @@ public class UploadTestSuite{
 		assertEquals(Config.fileToTestSendByEmailName ,
 				driver.findElementByName(FILE_GMAIL_NAME).getText());
 		fileListView = new FileListView(driver);
-		fileListView.scrollTillFindElement(FILE_GMAIL_NAME);
+		//fileListView.scrollTillFindElement(FILE_GMAIL_NAME);
 		assertTrue(fileHasBeenUploadedFromGmail = fileListView
-				.getFileElement().isDisplayed());
+				.getFileElement(FILE_GMAIL_NAME).isDisplayed());
 		//TODO. correct assert if fileListView is shown in grid mode
 	}
 
@@ -205,9 +207,9 @@ public class UploadTestSuite{
 
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenUploaded = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
+				.getFileElement(FILE_NAME).isDisplayed());
 
 		ElementMenuOptions menuOptions = fileListViewAfterUploadFile
 				.longPressOnElement(FILE_NAME);
@@ -216,9 +218,9 @@ public class UploadTestSuite{
 		Thread.sleep(3000);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 		assertTrue(common.isElementPresent(
-				fileListViewAfterUploadFile.getFileElementLayout(), 
+				fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME), 
 				MobileBy.id(FileListView.getFavoriteFileIndicator())));
-		assertTrue(fileListViewAfterUploadFile.getFileElementLayout()
+		assertTrue(fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME)
 				.findElement(By.id(FileListView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}
@@ -236,9 +238,9 @@ public class UploadTestSuite{
 
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenUploaded = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
+				.getFileElement(FILE_NAME).isDisplayed());
 
 		ElementMenuOptions menuOptions = fileListViewAfterUploadFile
 				.longPressOnElement(FILE_NAME);
@@ -253,9 +255,9 @@ public class UploadTestSuite{
 				100);
 
 		assertTrue(common.isElementPresent(
-				fileListViewAfterUploadFile.getFileElementLayout(), 
+				fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME), 
 				MobileBy.id(FileListView.getFavoriteFileIndicator())));
-		assertTrue(fileListViewAfterUploadFile.getFileElementLayout()
+		assertTrue(fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME)
 				.findElement(By.id(FileListView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}

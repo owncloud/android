@@ -65,15 +65,15 @@ public class DeleteFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 		
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListViewAfterUploadFile.getProgressCircular(), 1000);
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile.getFileElementLayout()
+				fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
 		
 		Actions.deleteElement(FILE_NAME,fileListViewAfterUploadFile, driver);
-		assertFalse(fileListViewAfterUploadFile.getFileElement().isDisplayed());
+		assertFalse(fileListViewAfterUploadFile.getFileElement(FILE_NAME).isDisplayed());
 	}
 
 	@After

@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,6 +34,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
@@ -73,14 +75,14 @@ public class RenameFileTestSuite{
 		//check if the file with the new name already exists, if true delete it
 		Actions.deleteElement(FILE_NAME, fileListView, driver);
 
-		fileListViewAfterUploadFile.scrollTillFindElement(OLD_FILE_NAME);
+		//fileListViewAfterUploadFile.scrollTillFindElement(OLD_FILE_NAME);
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
+				.getFileElement(OLD_FILE_NAME).isDisplayed());
 		CurrentCreatedFile = OLD_FILE_NAME;
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListViewAfterUploadFile
 				.getProgressCircular(), 1000);
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile.getFileElementLayout()
+				fileListViewAfterUploadFile.getFileElementLayout(OLD_FILE_NAME)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
 		ElementMenuOptions menuOptions = fileListViewAfterUploadFile
 				.longPressOnElement(OLD_FILE_NAME);
@@ -90,11 +92,11 @@ public class RenameFileTestSuite{
 				.clickOnNewFolderOkButton();
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
-		assertNotNull(fileListViewAfterUploadFile.getFileElement());
-		assertTrue(fileListViewAfterUploadFile.getFileElement().isDisplayed());	
-		assertEquals(FILE_NAME , fileListViewAfterUploadFile.getFileElement()
-				.getText());
+		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		AndroidElement file = fileListViewAfterUploadFile.getFileElement(FILE_NAME);
+		assertNotNull(file);
+		assertTrue(file.isDisplayed());	
+		assertEquals(FILE_NAME , file.getText());
 		CurrentCreatedFile = FILE_NAME;
 	}
 
