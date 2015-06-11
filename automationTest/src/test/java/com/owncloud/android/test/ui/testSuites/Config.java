@@ -42,6 +42,7 @@ public final class Config {
 	public static final String fileWhichIsInTheServer1 ="ownCloudUserManual.pdf";
 	public static final String fileWhichIsInTheServer2 ="ownCloudUserManual.pdf";
 	
+	public static final String folderWhereFilesToUploadAre = "ocAutomation";
 	public static final String fileToTestName = "test";
 	public static final String fileToTestSendByEmailName = "test";
 	public static final String bigFileToTestName = "test";

@@ -64,4 +64,9 @@ public class UploadFilesView{
 		scrollTillFindFile(fileName);
 		fileElement.click();
 	}
+	
+	public void tapOnElement (String elementName) {
+		scrollTillFindFile(elementName);
+		fileElement.tap(1,1);
+	}
 }

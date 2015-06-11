@@ -94,7 +94,7 @@ public class DeleteFolderTestSuite{
 		assertTrue(folderHasBeenCreated =
 				fileListView.getFileElement(FOLDER_NAME).isDisplayed());
 		fileListView.tapOnElement(FOLDER_NAME);
-		//TODO. keep doing things
+		
 	}
 
 	@After

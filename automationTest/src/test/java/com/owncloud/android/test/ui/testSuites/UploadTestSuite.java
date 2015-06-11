@@ -39,7 +39,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
-import com.owncloud.android.test.ui.groups.UnfinishedTestCategory;
 import com.owncloud.android.test.ui.models.FileDetailsView;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.GmailEmailListView;
@@ -72,7 +71,7 @@ public class UploadTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testUploadFile () throws Exception {
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,

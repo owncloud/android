@@ -233,6 +233,7 @@ public class Actions {
 		fileListView.clickOnUploadButton();
 		UploadFilesView uploadFilesView = fileListView
 				.clickOnFilesElementUploadFile();
+		uploadFilesView.tapOnElement(Config.folderWhereFilesToUploadAre);
 		uploadFilesView.clickOnFileName(elementName);
 		FileListView fileListViewAfterUploadFile = uploadFilesView
 				.clickOnUploadButton();
