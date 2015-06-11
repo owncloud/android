@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -71,9 +72,12 @@ public class DeleteFileTestSuite{
 		common.wait.until(ExpectedConditions.visibilityOf(
 				fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
+		AndroidElement file = fileListViewAfterUploadFile.getFileElement(FILE_NAME);
+		assertTrue(file.isDisplayed());
 		
 		Actions.deleteElement(FILE_NAME,fileListViewAfterUploadFile, driver);
-		assertFalse(fileListViewAfterUploadFile.getFileElement(FILE_NAME).isDisplayed());
+		
+		assertFalse(file.isDisplayed());
 	}
 
 	@After
