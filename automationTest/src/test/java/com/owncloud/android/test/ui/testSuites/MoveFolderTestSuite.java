@@ -76,14 +76,12 @@ public class MoveFolderTestSuite{
 				.createFolder(FOLDER_WHERE_MOVE, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		//fileListView.scrollTillFindElement(FOLDER_WHERE_MOVE);
 		assertTrue(fileListView.getFileElement(FOLDER_WHERE_MOVE).isDisplayed());
 
 		//Create the folder which is going to be moved
 		waitAMomentPopUp = Actions.createFolder(FOLDER_TO_MOVE, fileListView);
 		Common.waitTillElementIsNotPresent(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		//fileListView.scrollTillFindElement(FOLDER_TO_MOVE);
 		assertTrue(fileListView.getFileElement(FOLDER_TO_MOVE).isDisplayed());
 
 		//select to move the folder
@@ -102,7 +100,6 @@ public class MoveFolderTestSuite{
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView.getProgressCircular(),
 				1000);
 		Thread.sleep(1000);
-		//fileListView.scrollTillFindElement(FOLDER_TO_MOVE);
 		assertEquals(FOLDER_TO_MOVE , fileListView
 				.getFileElement(FOLDER_TO_MOVE).getText());
 	}

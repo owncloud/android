@@ -71,7 +71,6 @@ public class CreateFolderTestSuite{
 				.createFolder(FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		//fileListView.scrollTillFindElement(FOLDER_NAME);
 		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
 		assertNotNull(folder);
 		assertTrue(folderHasBeenCreated=folder.isDisplayed());	
@@ -95,7 +94,6 @@ public class CreateFolderTestSuite{
 				.createFolder(FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		//fileListView.scrollTillFindElement(FOLDER_NAME);
 		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
 		assertNotNull(folder);
 		assertTrue(folderHasBeenCreated=folder.isDisplayed());	

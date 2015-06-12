@@ -234,6 +234,7 @@ public class Actions {
 		UploadFilesView uploadFilesView = fileListView
 				.clickOnFilesElementUploadFile();
 		uploadFilesView.tapOnElement(Config.folderWhereFilesToUploadAre);
+		Thread.sleep(15000);
 		uploadFilesView.clickOnFileName(elementName);
 		FileListView fileListViewAfterUploadFile = uploadFilesView
 				.clickOnUploadButton();

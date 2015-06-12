@@ -73,7 +73,6 @@ public class RenameFolderTestSuite{
 				.createFolder(OLD_FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		//fileListView.scrollTillFindElement(OLD_FOLDER_NAME);
 
 		assertTrue(folderHasBeenCreated =
 				fileListView.getFileElement(OLD_FOLDER_NAME).isDisplayed());
@@ -91,7 +90,6 @@ public class RenameFolderTestSuite{
 		CurrentCreatedFolder = FOLDER_NAME;
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		//fileListView.scrollTillFindElement(FOLDER_NAME);
 		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
 		assertNotNull(folder);
 		assertTrue(folderHasBeenCreated = folder.isDisplayed());	

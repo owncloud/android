@@ -75,7 +75,6 @@ public class RenameFileTestSuite{
 		//check if the file with the new name already exists, if true delete it
 		Actions.deleteElement(FILE_NAME, fileListView, driver);
 
-		//fileListViewAfterUploadFile.scrollTillFindElement(OLD_FILE_NAME);
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
 				.getFileElement(OLD_FILE_NAME).isDisplayed());
 		CurrentCreatedFile = OLD_FILE_NAME;
@@ -92,7 +91,6 @@ public class RenameFileTestSuite{
 				.clickOnNewFolderOkButton();
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		AndroidElement file = fileListViewAfterUploadFile.getFileElement(FILE_NAME);
 		assertNotNull(file);
 		assertTrue(file.isDisplayed());	

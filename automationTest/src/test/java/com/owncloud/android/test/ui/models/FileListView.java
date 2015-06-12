@@ -170,18 +170,6 @@ public class FileListView {
 		return menuOptions;
 	}
 	
-	/*public AndroidElement scrollTillFindElement (String elementName) {
-        fileElement = Actions
-        		.scrollTillFindElement (elementName,filesLayout,driver);
-		try {
-        	fileElementLayout = (AndroidElement) driver
-        			.findElementByAndroidUIAutomator("new UiSelector()"
-        				+ ".description(\"LinearLayout-"+ elementName +"\")");
-        } catch (NoSuchElementException e) {
-        	fileElementLayout = null;
-        }
-		return fileElement;
-	}*/
 	
 	public void tapOnElement (String elementName) {
 		getFileElement(elementName).tap(1, 1);

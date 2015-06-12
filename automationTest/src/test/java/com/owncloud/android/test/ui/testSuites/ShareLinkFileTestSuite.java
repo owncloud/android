@@ -52,7 +52,7 @@ public class ShareLinkFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, InProgressCategory.class})
 	public void testShareLinkFileByGmail () throws Exception {	
 		AndroidElement sharedElementIndicator;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
@@ -63,14 +63,15 @@ public class ShareLinkFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 				
-		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
 				.getFileElement(FILE_NAME).isDisplayed());
 		
 		sharedElementIndicator = Actions.shareLinkElementByGmail(FILE_NAME,
 				fileListViewAfterUploadFile,driver,common);
 		
-		assertTrue(sharedElementIndicator.isDisplayed());
+		assertTrue(fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME)
+		.findElement(By.id(FileListView.getSharedElementIndicator())).isDisplayed());
+		//assertTrue(sharedElementIndicator.isDisplayed());
 	}
 	
 	@Test
@@ -85,7 +86,6 @@ public class ShareLinkFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 				
-		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
 				.getFileElement(FILE_NAME).isDisplayed());
 		
@@ -106,7 +106,6 @@ public class ShareLinkFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 				
-		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
 				.getFileElement(FILE_NAME).isDisplayed());
 		

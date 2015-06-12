@@ -71,7 +71,7 @@ public class UploadTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFile () throws Exception {
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
@@ -84,7 +84,6 @@ public class UploadTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
 
-		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileListViewAfterUploadFile.getFileElement(FILE_NAME)
 				.isDisplayed());
 		Common.waitTillElementIsNotPresentWithoutTimeout(
@@ -96,7 +95,6 @@ public class UploadTestSuite{
 				.findElement(By.id(FileListView.getLocalFileIndicator()))
 				.isDisplayed());
 		fileListView = new FileListView(driver);
-		//fileListView.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenUploaded =
 				fileListView.getFileElement(FILE_NAME).isDisplayed());
 	}
@@ -136,8 +134,6 @@ public class UploadTestSuite{
 					".ui.activity.FileDisplayActivity");
 		}
 
-		//fileListViewAfterUploadFile.scrollTillFindElement(BIG_FILE_NAME);
-
 		assertTrue(fileListViewAfterUploadFile.getFileElement(BIG_FILE_NAME)
 				.isDisplayed());
 		
@@ -150,7 +146,6 @@ public class UploadTestSuite{
 				.findElement(By.id(FileListView.getLocalFileIndicator()))
 				.isDisplayed());
 		fileListView = new FileListView(driver);
-		//fileListView.scrollTillFindElement(BIG_FILE_NAME);
 		assertTrue(fileHasBeenUploaded =
 				fileListView.getFileElement(BIG_FILE_NAME).isDisplayed());
 	}
@@ -186,7 +181,6 @@ public class UploadTestSuite{
 		assertEquals(Config.fileToTestSendByEmailName ,
 				driver.findElementByName(FILE_GMAIL_NAME).getText());
 		fileListView = new FileListView(driver);
-		//fileListView.scrollTillFindElement(FILE_GMAIL_NAME);
 		assertTrue(fileHasBeenUploadedFromGmail = fileListView
 				.getFileElement(FILE_GMAIL_NAME).isDisplayed());
 		//TODO. correct assert if fileListView is shown in grid mode
@@ -206,7 +200,6 @@ public class UploadTestSuite{
 
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
-		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenUploaded = fileListViewAfterUploadFile
 				.getFileElement(FILE_NAME).isDisplayed());
 
@@ -237,7 +230,6 @@ public class UploadTestSuite{
 
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
-		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileHasBeenUploaded = fileListViewAfterUploadFile
 				.getFileElement(FILE_NAME).isDisplayed());
 

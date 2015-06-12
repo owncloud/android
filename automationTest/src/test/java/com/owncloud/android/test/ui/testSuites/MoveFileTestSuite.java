@@ -76,12 +76,10 @@ public class MoveFileTestSuite{
 				.createFolder(FOLDER_WHERE_MOVE, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		//fileListView.scrollTillFindElement(FOLDER_WHERE_MOVE);
 		assertTrue(fileListView.getFileElement(FOLDER_WHERE_MOVE).isDisplayed());
 
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(FILE_NAME, fileListView);
-		//fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		assertTrue(fileListViewAfterUploadFile.getFileElement(FILE_NAME)
 				.isDisplayed());
 
@@ -101,7 +99,6 @@ public class MoveFileTestSuite{
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListView.getProgressCircular(),1000);
 		Thread.sleep(1000);
-		//fileListView.scrollTillFindElement(FILE_NAME);
 		assertEquals(FILE_NAME , fileListView.getFileElement(FILE_NAME).getText());
 
 	}
