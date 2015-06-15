@@ -131,6 +131,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
                 if (move != null)
                     move.releaseConnection();
             }
+
         } else {
         	result = new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
         }

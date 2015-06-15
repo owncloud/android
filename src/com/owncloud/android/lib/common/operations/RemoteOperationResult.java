@@ -62,11 +62,11 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 public class RemoteOperationResult implements Serializable {
 	
 	/** Generated - should be refreshed every time the class changes!! */;
-    private static final long serialVersionUID = -4184015692120731701L;
+    private static final long serialVersionUID = -1909603208238358633L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
 
-    public enum ResultCode { 
+    public enum ResultCode {
         OK,
         OK_SSL,
         OK_NO_SSL,
@@ -115,6 +115,7 @@ public class RemoteOperationResult implements Serializable {
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
     private String mRedirectedLocation;
     private String mAuthenticate;
+    private String mLastPermanentLocation = null;
 
     private ArrayList<Object> mData;
 
@@ -431,6 +432,14 @@ public class RemoteOperationResult implements Serializable {
 
     public String getAuthenticateHeader() {
     	return mAuthenticate;
+    }
+
+    public String getLastPermanentLocation() {
+        return mLastPermanentLocation;
+    }
+
+    public void setLastPermanentLocation(String lastPermanentLocation) {
+        mLastPermanentLocation = lastPermanentLocation;
     }
 
 }
