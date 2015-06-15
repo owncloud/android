@@ -31,6 +31,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -52,7 +53,10 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
     private Context mContext;
     private boolean mSuccessIfAbsent;
 
-    
+    /** Sequence of redirections followed. Available only after executing the operation */
+    private RedirectionPath mRedirectionPath = null;
+        // TODO move to {@link RemoteOperation}, that needs a nice refactoring
+
     /**
      * Full constructor. Success of the operation will depend upon the value of successIfAbsent.
      * 
@@ -75,9 +79,13 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         }
         RemoteOperationResult result = null;
         HeadMethod head = null;
+        boolean previousFollowRedirects = client.getFollowRedirects();
         try {
             head = new HeadMethod(client.getWebdavUri() + WebdavUtils.encodePath(mPath));
-            int status = client.executeMethod(head, TIMEOUT, TIMEOUT);
+            client.setFollowRedirects(false);
+            client.executeMethod(head, TIMEOUT, TIMEOUT);
+            mRedirectionPath = client.followRedirection(head);
+            int status = mRedirectionPath.getLastStatus();
             client.exhaustResponse(head.getResponseBodyAsStream());
             boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) ||
                     (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
@@ -97,6 +105,7 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         } finally {
             if (head != null)
                 head.releaseConnection();
+            client.setFollowRedirects(previousFollowRedirects);
         }
         return result;
 	}
@@ -109,4 +118,19 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
     }
 
 
+    /**
+     * Gets the sequence of redirections followed during the execution of the operation.
+     *
+     * @return      Sequence of redirections followed, if any, or NULL if the operation was not executed.
+     */
+    public RedirectionPath getRedirectionPath() {
+        return mRedirectionPath;
+    }
+
+    /**
+     * @return      'True' if the operation was executed and at least one redirection was followed.
+     */
+    public boolean wasRedirected() {
+        return (mRedirectionPath != null && mRedirectionPath.getRedirectionsCount() > 0);
+    }
 }

@@ -93,7 +93,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
         
         if (noInvalidChars) {
         try {
-        	
+
             if (mNewName.equals(mOldName)) {
                 return new RemoteOperationResult(ResultCode.OK);
             }
@@ -103,7 +103,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
             if (client.existsFile(mNewRemotePath)) {
             	return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
             }
-            
+
             move = new LocalMoveMethod( client.getWebdavUri() +
                     WebdavUtils.encodePath(mOldRemotePath),
             		client.getWebdavUri() + WebdavUtils.encodePath(mNewRemotePath));
