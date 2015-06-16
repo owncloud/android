@@ -40,6 +40,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 
 /**
@@ -88,10 +89,13 @@ public class MoveRemoteFileOperation extends RemoteOperation {
      */
 	@Override
 	protected RemoteOperationResult run(OwnCloudClient client) {
-		
+
+		OwnCloudVersion version = client.getOwnCloudVersion();
+		boolean versionWithForbiddenChars =
+                (version != null && version.isVersionWithForbiddenCharacters());
+
     	/// check parameters
-        if (!FileUtils.isValidPath(mTargetRemotePath,
-                client.getOwnCloudVersion().isVersionWithForbiddenCharacters())) {
+        if (!FileUtils.isValidPath(mTargetRemotePath, versionWithForbiddenChars)) {
         	return new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
         }
         

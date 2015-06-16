@@ -34,6 +34,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 
 /**
@@ -88,9 +89,11 @@ public class RenameRemoteFileOperation extends RemoteOperation {
 		RemoteOperationResult result = null;
 		
 		LocalMoveMethod move = null;
-        
-        boolean noInvalidChars = FileUtils.isValidPath(mNewRemotePath,
-                client.getOwnCloudVersion().isVersionWithForbiddenCharacters());
+
+        OwnCloudVersion version = client.getOwnCloudVersion();
+        boolean versionWithForbiddenChars =
+                (version != null && version.isVersionWithForbiddenCharacters());
+        boolean noInvalidChars = FileUtils.isValidPath(mNewRemotePath, versionWithForbiddenChars);
         
         if (noInvalidChars) {
             try {
