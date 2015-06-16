@@ -94,7 +94,6 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			}
 
 			int status = uploadFile(client);
-			// TODO: Detect INVALID_CHARACTER_DETECT_IN SERVER in a better way?
 			if (mForbiddenCharsInServer){
 				result = new RemoteOperationResult(
 						RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER);
@@ -132,8 +131,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			mPutMethod.setRequestEntity(mEntity);
 			status = client.executeMethod(mPutMethod);
 
-			// TODO: Detect INVALID_CHARACTER_DETECT_IN SERVER in a better way?
-			if (status == 400 || status == 500) {
+			if (status == 400) {
 				InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
 				InputStream is = new ByteArrayInputStream(
 						mPutMethod.getResponseBodyAsString().getBytes());

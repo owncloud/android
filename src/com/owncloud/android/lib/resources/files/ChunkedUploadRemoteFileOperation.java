@@ -40,7 +40,6 @@ import com.owncloud.android.lib.common.network.ChunkFromFileChannelRequestEntity
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.InvalidCharacterExceptionParser;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 
@@ -88,9 +87,9 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 mPutMethod.setRequestEntity(mEntity);
                 status = client.executeMethod(mPutMethod);
 
-                // TODO: Detect INVALID_CHARACTER_DETECT_IN SERVER in a better way?
-                if (status == 400 || status == 500) {
-                    InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
+                if (status == 400) {
+                    InvalidCharacterExceptionParser xmlParser =
+                            new InvalidCharacterExceptionParser();
                     InputStream is = new ByteArrayInputStream(
                             mPutMethod.getResponseBodyAsString().getBytes());
                     try {
