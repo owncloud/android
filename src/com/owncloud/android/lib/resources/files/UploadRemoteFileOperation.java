@@ -24,8 +24,10 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,9 +42,11 @@ import com.owncloud.android.lib.common.network.FileRequestEntity;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
 import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.InvalidCharacterExceptionParser;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Remote operation performing the upload of a remote file to the ownCloud server.
@@ -53,12 +57,15 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 
 public class UploadRemoteFileOperation extends RemoteOperation {
 
+	private static final String TAG = UploadRemoteFileOperation.class.getSimpleName();
+
 	protected static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
 
 	protected String mLocalPath;
 	protected String mRemotePath;
 	protected String mMimeType;
 	protected PutMethod mPutMethod = null;
+	protected boolean mForbiddenCharsInServer = false;
 	
 	private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
 	protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
@@ -87,10 +94,13 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			}
 
 			int status = uploadFile(client);
-
-			result  = new RemoteOperationResult(isSuccess(status), status,
-                    (mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
-
+			if (mForbiddenCharsInServer){
+				result = new RemoteOperationResult(
+						RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER);
+			} else {
+				result = new RemoteOperationResult(isSuccess(status), status,
+						(mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
+			}
 		} catch (Exception e) {
 			// TODO something cleaner with cancellations
 			if (mCancellationRequested.get()) {
@@ -120,6 +130,20 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(f.length()));
 			mPutMethod.setRequestEntity(mEntity);
 			status = client.executeMethod(mPutMethod);
+
+			if (status == 400) {
+				InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
+				InputStream is = new ByteArrayInputStream(
+						mPutMethod.getResponseBodyAsString().getBytes());
+				try {
+					mForbiddenCharsInServer = xmlParser.parseXMLResponse(is);
+
+				} catch (Exception e) {
+					mForbiddenCharsInServer = false;
+					Log_OC.e(TAG, "Exception reading exception from server", e);
+				}
+			}
+
 			client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
 
 		} finally {

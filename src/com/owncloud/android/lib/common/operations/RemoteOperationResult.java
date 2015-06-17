@@ -24,7 +24,9 @@
 
 package com.owncloud.android.lib.common.operations;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.SocketException;
@@ -60,7 +62,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 public class RemoteOperationResult implements Serializable {
 	
 	/** Generated - should be refreshed every time the class changes!! */;
-    private static final long serialVersionUID = 25745846447996048L;
+    private static final long serialVersionUID = -1909603208238358633L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
 
@@ -103,7 +105,8 @@ public class RemoteOperationResult implements Serializable {
 		SHARE_FORBIDDEN,
 		OK_REDIRECT_TO_NON_SECURE_CONNECTION, 
 		INVALID_MOVE_INTO_DESCENDANT, 
-		PARTIAL_MOVE_DONE
+		PARTIAL_MOVE_DONE,
+        INVALID_CHARACTER_DETECT_IN_SERVER
     }
 
     private boolean mSuccess = false;
@@ -118,7 +121,9 @@ public class RemoteOperationResult implements Serializable {
 
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
-		mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL || code == ResultCode.OK_NO_SSL || code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
+		mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL ||
+                code == ResultCode.OK_NO_SSL ||
+                code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
         mData = null;
     }
 
@@ -148,10 +153,11 @@ public class RemoteOperationResult implements Serializable {
                 break;
 			case HttpStatus.SC_FORBIDDEN:
 				mCode = ResultCode.FORBIDDEN;
-				break;
+                break;
             default:
                 mCode = ResultCode.UNHANDLED_HTTP_CODE;
-                Log_OC.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " + httpCode);
+                Log_OC.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
+                        httpCode);
             }
         }
     }
@@ -172,7 +178,38 @@ public class RemoteOperationResult implements Serializable {
                 }
             }
         }
-    }    
+    }
+
+    public RemoteOperationResult(boolean success, String bodyResponse, int httpCode) {
+        mSuccess = success;
+        mHttpCode = httpCode;
+
+        if (success) {
+            mCode = ResultCode.OK;
+
+        } else if (httpCode > 0) {
+            switch (httpCode) {
+                case HttpStatus.SC_BAD_REQUEST:
+
+                    InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
+                    InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
+                    try {
+                        if (xmlParser.parseXMLResponse(is))
+                            mCode = ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER;
+
+                    } catch (Exception e) {
+                        mCode = ResultCode.UNHANDLED_HTTP_CODE;
+                        Log_OC.e(TAG, "Exception reading exception from server", e);
+                    }
+                    break;
+                default:
+                    mCode = ResultCode.UNHANDLED_HTTP_CODE;
+                    Log_OC.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
+                            httpCode);
+            }
+        }
+
+    }
 
     public RemoteOperationResult(Exception e) {
         mException = e;
@@ -265,7 +302,8 @@ public class RemoteOperationResult implements Serializable {
         }
         Throwable cause = mException.getCause();
         Throwable previousCause = null;
-        while (cause != null && cause != previousCause && !(cause instanceof CertificateCombinedException)) {
+        while (cause != null && cause != previousCause &&
+                !(cause instanceof CertificateCombinedException)) {
             previousCause = cause;
             cause = cause.getCause();
         }
@@ -315,8 +353,10 @@ public class RemoteOperationResult implements Serializable {
                 return "Unrecovered transport exception";
 
             } else if (mException instanceof AccountNotFoundException) {
-                Account failedAccount = ((AccountNotFoundException)mException).getFailedAccount();
-                return mException.getMessage() + " (" + (failedAccount != null ? failedAccount.name : "NULL") + ")";
+                Account failedAccount =
+                        ((AccountNotFoundException)mException).getFailedAccount();
+                return mException.getMessage() + " (" +
+                        (failedAccount != null ? failedAccount.name : "NULL") + ")";
                 
             } else if (mException instanceof AccountsException) {
                 return "Exception while using account";
@@ -353,7 +393,8 @@ public class RemoteOperationResult implements Serializable {
                 return "The file name contains an forbidden character";
         }
 
-        return "Operation finished with HTTP status code " + mHttpCode + " (" + (isSuccess() ? "success" : "fail") + ")";
+        return "Operation finished with HTTP status code " + mHttpCode + " (" +
+                (isSuccess() ? "success" : "fail") + ")";
 
     }
 
@@ -385,7 +426,8 @@ public class RemoteOperationResult implements Serializable {
 	 * @return boolean true/false
 	 */
 	public boolean isNonSecureRedirection() {
-		return (mRedirectedLocation != null && !(mRedirectedLocation.toLowerCase().startsWith("https://")));
+		return (mRedirectedLocation != null &&
+                !(mRedirectedLocation.toLowerCase().startsWith("https://")));
 	}
 
     public String getAuthenticateHeader() {
