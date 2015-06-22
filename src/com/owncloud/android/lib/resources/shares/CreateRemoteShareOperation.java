@@ -110,7 +110,9 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 			post.addParameter(PARAM_PATH, mRemoteFilePath);
 			post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
 			post.addParameter(PARAM_SHARE_WITH, mShareWith);
-			post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
+			if (mPublicUpload) {
+				post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
+			}
 			if (mPassword != null && mPassword.length() > 0) {
 				post.addParameter(PARAM_PASSWORD, mPassword);
 			}
