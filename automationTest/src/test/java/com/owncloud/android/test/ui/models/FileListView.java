@@ -82,9 +82,15 @@ public class FileListView {
 	@AndroidFindBy(uiAutomator = "new UiSelector().className(\"android.widget.FrameLayout\").index(0)")
 	private AndroidElement deviceScreen;
 	
+	@AndroidFindBy(uiAutomator = "new UiSelector().description(\"ownCloud, Navigate up\")")
+	private AndroidElement backButton;
+	
+	
 	private AndroidElement fileElement;
 	
 	private AndroidElement fileElementLayout;
+	
+	
 	
 	private static String localFileIndicator = 
 			"com.owncloud.android:id/localFileIndicator";
@@ -123,6 +129,10 @@ public class FileListView {
 	
 	public void clickOnUploadButton () {
 		uploadButton.click();
+	}
+	
+	public void clickOnBackButton () {
+		backButton.click();
 	}
 	
 	public UploadFilesView clickOnFilesElementUploadFile () {

@@ -45,7 +45,6 @@ public class DeleteFileTestSuite{
 	
 	AndroidDriver driver;
 	Common common;
-	private final String FILE_NAME = Config.fileToTestName;
 	
 	@Rule public TestName name = new TestName();
 	
@@ -64,17 +63,23 @@ public class DeleteFileTestSuite{
 		
 		//TODO. if the file already exists, do not upload
 		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(FILE_NAME, fileListView);
+				.uploadFile(Config.fileToTest, fileListView);
 		
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListViewAfterUploadFile.getProgressCircular(), 1000);
+		
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile.getFileElementLayout(FILE_NAME)
+				fileListViewAfterUploadFile
+				.getFileElementLayout(Config.fileToTest)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
-		AndroidElement file = fileListViewAfterUploadFile.getFileElement(FILE_NAME);
+		
+		AndroidElement file = fileListViewAfterUploadFile
+				.getFileElement(Config.fileToTest);
+		
 		assertTrue(file.isDisplayed());
 		
-		Actions.deleteElement(FILE_NAME,fileListViewAfterUploadFile, driver);
+		Actions.deleteElement(Config.fileToTest,fileListViewAfterUploadFile,
+				driver);
 		
 		assertFalse(file.isDisplayed());
 	}

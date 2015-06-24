@@ -243,4 +243,24 @@ public class Actions {
 		return fileListViewAfterUploadFile; 
 	}
 	
+	public static FileListView uploadSeveralFile(String elementName,
+			String elementName2, String elementName3,FileListView fileListView)
+					throws InterruptedException{
+		
+		fileListView.clickOnUploadButton();
+		UploadFilesView uploadFilesView = fileListView
+				.clickOnFilesElementUploadFile();
+		uploadFilesView.tapOnElement(Config.folderWhereFilesToUploadAre);
+		Thread.sleep(15000);
+		uploadFilesView.clickOnFileName(elementName);
+		uploadFilesView.clickOnFileName(elementName2);
+		uploadFilesView.clickOnFileName(elementName3);
+		
+		FileListView fileListViewAfterUploadFile = uploadFilesView
+				.clickOnUploadButton();
+		//TO DO. detect when the file is successfully uploaded
+		Thread.sleep(15000);
+		return fileListViewAfterUploadFile; 
+	}
+	
 }
