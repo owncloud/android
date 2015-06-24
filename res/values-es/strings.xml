@@ -19,6 +19,14 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Todos los archivos</string>
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">Ajustes</string>
+  <string name="drawer_item_logs">Registros</string>
+  <string name="drawer_close">Cerrar</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
   <string name="prefs_accounts">Cuentas</string>
@@ -207,6 +215,7 @@
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
   <string name="create_dir_fail_msg">No se pudo crear la carpeta</string>
   <string name="filename_forbidden_characters">Carácteres ilegales: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_forbidden_charaters_from_server">Nombre de archivo contiene al menos un caracter no válido</string>
   <string name="filename_empty">El nombre de archivo no puede estar vacío</string>
   <string name="wait_a_moment">Espere un momento</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, pruebe otra app para seleccionar el archivo</string>
@@ -304,8 +313,10 @@
   <string name="prefs_category_security">Seguridad</string>
   <string name="prefs_instant_video_upload_path_title">Guardar videos subidos en la carpeta:</string>
   <string name="download_folder_failed_content">La descarga de la carpeta %1$s no ha podido ser completada</string>
-  <string name="subject_token">%1$s compartió \"%2$s\" contigo</string>
+  <string name="shared_subject_header">compartido</string>
+  <string name="with_you_subject_header">con usted</string>
   <string name="auth_refresh_button">Refrescar la conexión</string>
   <string name="auth_host_address">Dirección del servidor</string>
   <string name="common_error_out_memory">No hay suficiente memoria</string>
+  <string name="username">Nombre de usuario</string>
 </resources>

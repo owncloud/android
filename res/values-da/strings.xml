@@ -19,6 +19,14 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Alle filer</string>
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">Indstillinger</string>
+  <string name="drawer_item_logs">Logregistreringer</string>
+  <string name="drawer_close">Luk</string>
   <string name="prefs_category_general">Generel</string>
   <string name="prefs_category_more">Mere</string>
   <string name="prefs_accounts">Konti</string>
@@ -75,6 +83,7 @@
   <string name="filedetails_download">Hent</string>
   <string name="filedetails_sync_file">Genopfrisk fil</string>
   <string name="filedetails_renamed_in_upload_msg">Filen blev omdøbt til %1$s under upload</string>
+  <string name="list_layout">Listevisning</string>
   <string name="action_share_file">Del link</string>
   <string name="action_unshare_file">Ophæv deling</string>
   <string name="common_yes">Ja</string>
@@ -302,8 +311,10 @@
   <string name="prefs_category_security">Sikkerhed</string>
   <string name="prefs_instant_video_upload_path_title">Sti til videoupload</string>
   <string name="download_folder_failed_content">Download af %1$s mappe kunne ikke fuldføres</string>
-  <string name="subject_token">%1$s delt \"%2$s\" med dig</string>
+  <string name="shared_subject_header">delt</string>
+  <string name="with_you_subject_header">med dig</string>
   <string name="auth_refresh_button">Genopfrisk forbindelsen</string>
   <string name="auth_host_address">Serveradresse</string>
   <string name="common_error_out_memory">Ikke tilstrækkelig hukommelse</string>
+  <string name="username">Brugernavn</string>
 </resources>
