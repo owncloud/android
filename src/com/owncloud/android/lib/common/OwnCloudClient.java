@@ -444,9 +444,8 @@ public class OwnCloudClient extends HttpClient {
     }
 
 
-    public void setOwnCloudVersion(String version){
-        OwnCloudVersion ver = new OwnCloudVersion(version);
-        mVersion = ver;
+    public void setOwnCloudVersion(OwnCloudVersion version){
+        mVersion = version;
     }
 
     public OwnCloudVersion getOwnCloudVersion(){
