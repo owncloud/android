@@ -138,11 +138,13 @@ public class ExtendedListFragment extends Fragment
 
         mListView = (ExtendedListView)(v.findViewById(R.id.list_root));
         mListView.setOnItemClickListener(this);
+        mListView.setFastScrollEnabled(true);
         mListFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
         mGridView = (GridViewWithHeaderAndFooter) (v.findViewById(R.id.grid_root));
         mGridView.setNumColumns(GridView.AUTO_FIT);
         mGridView.setOnItemClickListener(this);
+        mGridView.setFastScrollEnabled(true);
         mGridFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
         if (savedInstanceState != null) {
