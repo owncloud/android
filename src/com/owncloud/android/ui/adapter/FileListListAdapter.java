@@ -29,6 +29,7 @@ import java.util.Vector;
 import android.accounts.Account;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -314,15 +315,18 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                             fileIcon, mStorageManager, mAccount
                                     );
                             if (thumbnail == null) {
-                                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(
-                                    file.getMimetype(), file.getFileName()));
+                                Integer id = MimetypeIconUtil.getFileTypeIconId(
+                                    file.getMimetype(),
+                                    file.getFileName()
+                                );
+                                thumbnail = BitmapFactory.decodeResource(mContext.getResources(), id);
                             }
                             final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
-                                    new ThumbnailsCacheManager.AsyncDrawable(
-                                            mContext.getResources(),
-                                            thumbnail,
-                                            task
-                                    );
+                                new ThumbnailsCacheManager.AsyncDrawable(
+                                    mContext.getResources(),
+                                    thumbnail,
+                                    task
+                                );
                             fileIcon.setImageDrawable(asyncDrawable);
                             task.execute(file);
                         }
