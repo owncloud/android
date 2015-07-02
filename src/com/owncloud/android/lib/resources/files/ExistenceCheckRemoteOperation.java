@@ -83,9 +83,11 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         try {
             head = new HeadMethod(client.getWebdavUri() + WebdavUtils.encodePath(mPath));
             client.setFollowRedirects(false);
-            client.executeMethod(head, TIMEOUT, TIMEOUT);
-            mRedirectionPath = client.followRedirection(head);
-            int status = mRedirectionPath.getLastStatus();
+            int status = client.executeMethod(head, TIMEOUT, TIMEOUT);
+            if (previousFollowRedirects) {
+                mRedirectionPath = client.followRedirection(head);
+                status = mRedirectionPath.getLastStatus();
+            }
             client.exhaustResponse(head.getResponseBodyAsStream());
             boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) ||
                     (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
