@@ -254,6 +254,34 @@ public abstract class RemoteOperation implements Runnable {
 		runnerThread.start();
 		return runnerThread;
 	}
+
+    /**
+     * Asynchronously executes the remote operation without a handler
+     *
+     * @param client			Client object to reach an ownCloud server
+     *                          during the execution of the operation.
+     * @param listener			Listener to be notified about the execution of the operation.
+     * @return					Thread were the remote operation is executed.
+     */
+    public Thread execute(OwnCloudClient client,
+                          OnRemoteOperationListener listener) {
+        if (client == null) {
+            throw new IllegalArgumentException
+                    ("Trying to execute a remote operation with a NULL OwnCloudClient");
+        }
+        mClient = client;
+
+        if (listener == null) {
+            throw new IllegalArgumentException
+                    ("Trying to execute a remote operation asynchronously " +
+                            "without a listener to notiy the result");
+        }
+        mListener = listener;
+
+        Thread runnerThread = new Thread(this);
+        runnerThread.start();
+        return runnerThread;
+    }
 	
 	/**
 	 * Asynchronous execution of the operation 
@@ -345,6 +373,9 @@ public abstract class RemoteOperation implements Runnable {
                     mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
                 }
             });
+        }
+        else if(mListener != null) {
+            mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
         }
     }
 
