@@ -29,6 +29,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -46,6 +47,7 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
@@ -273,11 +275,20 @@ public class ThumbnailsCacheManager {
                     // Download thumbnail from server
                     OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
                     if (mClient != null && serverOCVersion != null) {
-                        if (serverOCVersion.supportsRemoteThumbnails()) {
+                        if (serverOCVersion.compareTo(
+                                new OwnCloudVersion("7.0.6")) >= 0) {
                             try {
-                                String uri = mClient.getBaseUri() + "" +
+                                String uri;
+                                if (serverOCVersion.supportsRemoteThumbnails()) {
+                                    uri = mClient.getBaseUri() + "" +
                                         "/index.php/apps/files/api/v1/thumbnail/" +
                                         px + "/" + px + Uri.encode(file.getRemotePath(), "/");
+                                } else {
+                                    uri = mClient.getBaseUri() + "" +
+                                        "/index.php/core/preview.png" +
+                                        "?file=" + Uri.encode(file.getRemotePath(), "/") +
+                                        "&x=" + px + "&y=" + px;
+                                }
                                 Log_OC.d("Thumbnail", "URI: " + uri);
                                 GetMethod get = new GetMethod(uri);
                                 int status = mClient.executeMethod(get);
