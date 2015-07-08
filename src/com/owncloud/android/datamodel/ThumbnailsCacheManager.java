@@ -47,7 +47,6 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
@@ -71,6 +70,12 @@ public class ThumbnailsCacheManager {
     private static final CompressFormat mCompressFormat = CompressFormat.JPEG;
     private static final int mCompressQuality = 70;
     private static OwnCloudClient mClient = null;
+    private static String mServerVersion = null;
+	private static final int THUMBNAIL_GET_TYPE_GUESS = 0;
+	private static final int THUMBNAIL_GET_TYPE_API_V1 = 1;
+	private static final int THUMBNAIL_GET_TYPE_PREVIEW_PNG = 2;
+	private static final int THUMBNAIL_GET_TYPE_NO_WAY = 3;
+	private static int mThumbnailGetType = THUMBNAIL_GET_TYPE_GUESS;
 
     public static Bitmap mDefaultImg = 
             BitmapFactory.decodeResource(
@@ -155,6 +160,12 @@ public class ThumbnailsCacheManager {
                 throw new IllegalArgumentException("storageManager must not be NULL");
             mStorageManager = storageManager;
             mAccount = account;
+			OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
+			if (serverOCVersion.supportsRemoteThumbnails()) {
+				mThumbnailGetType = THUMBNAIL_GET_TYPE_API_V1;
+			} else {
+				mThumbnailGetType = THUMBNAIL_GET_TYPE_GUESS;
+			}
         }
 
         public ThumbnailGenerationTask(ImageView imageView) {
@@ -247,6 +258,56 @@ public class ThumbnailsCacheManager {
             return Math.round(r.getDimension(R.dimen.file_icon_size_grid));
         }
 
+		private Bitmap getThumbnailFromServerUri(String uri, int px){
+			Log_OC.d(TAG, "URI: " + uri);
+			try {
+				GetMethod get = new GetMethod(uri);
+				int status = mClient.executeMethod(get);
+				if (status == HttpStatus.SC_OK) {
+					//byte[] bytes = get.getResponseBody();
+					//Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+					//											    bytes.length);
+                    InputStream inputStream = get.getResponseBodyAsStream();
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    Bitmap thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
+                    return thumbnail;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		private Bitmap getThumbnailFromServerAPIV1(String file, int px) {
+			String uri = mClient.getBaseUri() + "" +
+				"/index.php/apps/files/api/v1/thumbnail/" +
+				px + "/" + px + file;
+			return getThumbnailFromServerUri(uri, px);
+		}
+
+		private Bitmap getThumbnailFromServerPreviewPng(String file, int px) {
+			String uri = mClient.getBaseUri() + "" +
+				"/index.php/core/preview.png" +
+				"?file=" + file +
+				"&x=" + px + "&y=" + px;
+			return getThumbnailFromServerUri(uri, px);
+		}
+
+		private Bitmap getThumbnailFromServerGuess(String file, int px) {
+			Bitmap tumbnail = getThumbnailFromServerAPIV1(file, px);
+			if (tumbnail != null) {
+				mThumbnailGetType = THUMBNAIL_GET_TYPE_API_V1;
+				return tumbnail;
+			}
+			tumbnail = getThumbnailFromServerPreviewPng(file, px);
+			if (tumbnail != null) {
+				mThumbnailGetType = THUMBNAIL_GET_TYPE_PREVIEW_PNG;
+				return tumbnail;
+			}
+			mThumbnailGetType = THUMBNAIL_GET_TYPE_NO_WAY;
+			return null;
+		}
+
         private Bitmap doOCFileInBackground() {
             OCFile file = (OCFile)mFile;
 
@@ -273,44 +334,22 @@ public class ThumbnailsCacheManager {
 
                 } else {
                     // Download thumbnail from server
-                    OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
-                    if (mClient != null && serverOCVersion != null) {
-                        if (serverOCVersion.compareTo(
-                                new OwnCloudVersion("7.0.6")) >= 0) {
-                            try {
-                                String uri;
-                                if (serverOCVersion.supportsRemoteThumbnails()) {
-                                    uri = mClient.getBaseUri() + "" +
-                                        "/index.php/apps/files/api/v1/thumbnail/" +
-                                        px + "/" + px + Uri.encode(file.getRemotePath(), "/");
-                                } else {
-                                    uri = mClient.getBaseUri() + "" +
-                                        "/index.php/core/preview.png" +
-                                        "?file=" + Uri.encode(file.getRemotePath(), "/") +
-                                        "&x=" + px + "&y=" + px;
-                                }
-                                Log_OC.d("Thumbnail", "URI: " + uri);
-                                GetMethod get = new GetMethod(uri);
-                                int status = mClient.executeMethod(get);
-                                if (status == HttpStatus.SC_OK) {
-//                                    byte[] bytes = get.getResponseBody();
-//                                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
-//                                            bytes.length);
-                                    InputStream inputStream = get.getResponseBodyAsStream();
-                                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                    thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
+                    if (mClient != null) {
+						String uri = Uri.encode(file.getRemotePath(), "/");
+						if (mThumbnailGetType== THUMBNAIL_GET_TYPE_GUESS) {
+							thumbnail = getThumbnailFromServerGuess(uri, px);
+						} else if (mThumbnailGetType== THUMBNAIL_GET_TYPE_API_V1) {
+							thumbnail = getThumbnailFromServerAPIV1(uri, px);
+						} else if (mThumbnailGetType== THUMBNAIL_GET_TYPE_PREVIEW_PNG) {
+							thumbnail = getThumbnailFromServerPreviewPng(uri, px);
+						} else {
+							thumbnail = null;
+						}
 
-                                    // Add thumbnail to cache
-                                    if (thumbnail != null) {
-                                        addBitmapToCache(imageKey, thumbnail);
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            Log_OC.d(TAG, "Server too old");
-                        }
+						// Add thumbnail to cache
+						if (thumbnail != null) {
+							addBitmapToCache(imageKey, thumbnail);
+						}
                     }
                 }
             }
