@@ -76,7 +76,8 @@ public class ThumbnailsCacheManager {
 	private static final int THUMBNAIL_GET_TYPE_PREVIEW_PNG = 2;
 	private static final int THUMBNAIL_GET_TYPE_NO_WAY = 3;
 	private static int mThumbnailGetType = THUMBNAIL_GET_TYPE_GUESS;
-
+	private static Object mGuessLock = new Object();
+	
     public static Bitmap mDefaultImg = 
             BitmapFactory.decodeResource(
                     MainApp.getAppContext().getResources(), 
@@ -294,17 +295,21 @@ public class ThumbnailsCacheManager {
 		}
 
 		private Bitmap getThumbnailFromServerGuess(String file, int px) {
-			Bitmap tumbnail = getThumbnailFromServerAPIV1(file, px);
-			if (tumbnail != null) {
-				mThumbnailGetType = THUMBNAIL_GET_TYPE_API_V1;
-				return tumbnail;
+			synchronized (mGuessLock) {
+				if (mThumbnailGetType == THUMBNAIL_GET_TYPE_GUESS) {
+					Bitmap tumbnail = getThumbnailFromServerAPIV1(file, px);
+					if (tumbnail != null) {
+						mThumbnailGetType = THUMBNAIL_GET_TYPE_API_V1;
+						return tumbnail;
+					}
+					tumbnail = getThumbnailFromServerPreviewPng(file, px);
+					if (tumbnail != null) {
+						mThumbnailGetType = THUMBNAIL_GET_TYPE_PREVIEW_PNG;
+						return tumbnail;
+					}
+					mThumbnailGetType = THUMBNAIL_GET_TYPE_NO_WAY;
+				}
 			}
-			tumbnail = getThumbnailFromServerPreviewPng(file, px);
-			if (tumbnail != null) {
-				mThumbnailGetType = THUMBNAIL_GET_TYPE_PREVIEW_PNG;
-				return tumbnail;
-			}
-			mThumbnailGetType = THUMBNAIL_GET_TYPE_NO_WAY;
 			return null;
 		}
 
@@ -336,8 +341,12 @@ public class ThumbnailsCacheManager {
                     // Download thumbnail from server
                     if (mClient != null) {
 						String uri = Uri.encode(file.getRemotePath(), "/");
+						thumbnail = null;
 						if (mThumbnailGetType== THUMBNAIL_GET_TYPE_GUESS) {
 							thumbnail = getThumbnailFromServerGuess(uri, px);
+						}
+						if (thumbnail != null) {
+							;
 						} else if (mThumbnailGetType== THUMBNAIL_GET_TYPE_API_V1) {
 							thumbnail = getThumbnailFromServerAPIV1(uri, px);
 						} else if (mThumbnailGetType== THUMBNAIL_GET_TYPE_PREVIEW_PNG) {
