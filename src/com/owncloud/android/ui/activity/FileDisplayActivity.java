@@ -100,6 +100,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.UriUtils;
+import com.owncloud.android.widgets.ShortcutsWidget;
 
 import java.io.File;
 
@@ -125,6 +126,9 @@ public class FileDisplayActivity extends HookActivity
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
     private static final String KEY_WAITING_TO_SEND = "WAITING_TO_SEND";
 
+    public static final String EXTRA_UPLOAD_FROM_WIDGET =
+            "com.owncloud.android.ui.activity.UPLOAD_FROM_WIDGET";
+
     public static final String ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS";
 
     public static final int ACTION_SELECT_CONTENT_FROM_APPS = 1;
@@ -146,6 +150,8 @@ public class FileDisplayActivity extends HookActivity
     private static String DIALOG_CERT_NOT_SAVED = "DIALOG_CERT_NOT_SAVED";
 
     private OCFile mWaitingToSend;
+
+    private boolean mUploadFromWidget = false;
 
     
     @Override
@@ -169,11 +175,13 @@ public class FileDisplayActivity extends HookActivity
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
             mWaitingToSend = (OCFile) savedInstanceState.getParcelable(
                     FileDisplayActivity.KEY_WAITING_TO_SEND);
-           
         } else {
             mWaitingToPreview = null;
             mSyncInProgress = false;
             mWaitingToSend = null;
+
+            mUploadFromWidget = getIntent().getBooleanExtra(
+                    FileDisplayActivity.EXTRA_UPLOAD_FROM_WIDGET, false);
         }        
 
         /// USER INTERFACE
@@ -210,6 +218,14 @@ public class FileDisplayActivity extends HookActivity
         Log_OC.v(TAG, "onStart() start");
         super.onStart();
         getSupportActionBar().setIcon(DisplayUtils.getSeasonalIconId());
+
+        // Widget Actions
+        if (mUploadFromWidget) {
+            UploadSourceDialogFragment dialog =
+                    UploadSourceDialogFragment.newInstance(getAccount());
+            dialog.show(getSupportFragmentManager(), DIALOG_UPLOAD_SOURCE);
+        }
+
         Log_OC.v(TAG, "onStart() end");
     }
 
