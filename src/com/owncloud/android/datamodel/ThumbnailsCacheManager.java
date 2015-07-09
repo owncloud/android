@@ -71,13 +71,13 @@ public class ThumbnailsCacheManager {
     private static final int mCompressQuality = 70;
     private static OwnCloudClient mClient = null;
     private static String mServerVersion = null;
-	private static final int THUMBNAIL_GET_TYPE_GUESS = 0;
-	private static final int THUMBNAIL_GET_TYPE_API_V1 = 1;
-	private static final int THUMBNAIL_GET_TYPE_PREVIEW_PNG = 2;
-	private static final int THUMBNAIL_GET_TYPE_NO_WAY = 3;
-	private static int mThumbnailGetType = THUMBNAIL_GET_TYPE_GUESS;
-	private static Object mGuessLock = new Object();
-	
+    private static final int THUMBNAIL_GET_TYPE_GUESS = 0;
+    private static final int THUMBNAIL_GET_TYPE_API_V1 = 1;
+    private static final int THUMBNAIL_GET_TYPE_PREVIEW_PNG = 2;
+    private static final int THUMBNAIL_GET_TYPE_NO_WAY = 3;
+    private static int mThumbnailGetType = THUMBNAIL_GET_TYPE_GUESS;
+    private static Object mGuessLock = new Object();
+    
     public static Bitmap mDefaultImg = 
             BitmapFactory.decodeResource(
                     MainApp.getAppContext().getResources(), 
@@ -161,12 +161,12 @@ public class ThumbnailsCacheManager {
                 throw new IllegalArgumentException("storageManager must not be NULL");
             mStorageManager = storageManager;
             mAccount = account;
-			OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
-			if (serverOCVersion.supportsRemoteThumbnails()) {
-				mThumbnailGetType = THUMBNAIL_GET_TYPE_API_V1;
-			} else {
-				mThumbnailGetType = THUMBNAIL_GET_TYPE_GUESS;
-			}
+            OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
+            if (serverOCVersion.supportsRemoteThumbnails()) {
+                mThumbnailGetType = THUMBNAIL_GET_TYPE_API_V1;
+            } else {
+                mThumbnailGetType = THUMBNAIL_GET_TYPE_GUESS;
+            }
         }
 
         public ThumbnailGenerationTask(ImageView imageView) {
@@ -259,59 +259,59 @@ public class ThumbnailsCacheManager {
             return Math.round(r.getDimension(R.dimen.file_icon_size_grid));
         }
 
-		private Bitmap getThumbnailFromServerUri(String uri, int px){
-			Log_OC.d(TAG, "URI: " + uri);
-			try {
-				GetMethod get = new GetMethod(uri);
-				int status = mClient.executeMethod(get);
-				if (status == HttpStatus.SC_OK) {
-					//byte[] bytes = get.getResponseBody();
-					//Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
-					//											    bytes.length);
+        private Bitmap getThumbnailFromServerUri(String uri, int px){
+            Log_OC.d(TAG, "URI: " + uri);
+            try {
+                GetMethod get = new GetMethod(uri);
+                int status = mClient.executeMethod(get);
+                if (status == HttpStatus.SC_OK) {
+                    //byte[] bytes = get.getResponseBody();
+                    //Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+                    //                                              bytes.length);
                     InputStream inputStream = get.getResponseBodyAsStream();
                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     return ThumbnailUtils.extractThumbnail(bitmap, px, px);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
 
-		private Bitmap getThumbnailFromServerAPIV1(String file, int px) {
-			String uri = mClient.getBaseUri() + "" +
-				"/index.php/apps/files/api/v1/thumbnail/" +
-				px + "/" + px + file;
-			return getThumbnailFromServerUri(uri, px);
-		}
+        private Bitmap getThumbnailFromServerAPIV1(String file, int px) {
+            String uri = mClient.getBaseUri() + "" +
+                "/index.php/apps/files/api/v1/thumbnail/" +
+                px + "/" + px + file;
+            return getThumbnailFromServerUri(uri, px);
+        }
 
-		private Bitmap getThumbnailFromServerPreviewPng(String file, int px) {
-			String uri = mClient.getBaseUri() + "" +
-				"/index.php/core/preview.png" +
-				"?file=" + file +
-				"&x=" + px + "&y=" + px;
-			return getThumbnailFromServerUri(uri, px);
-		}
+        private Bitmap getThumbnailFromServerPreviewPng(String file, int px) {
+            String uri = mClient.getBaseUri() + "" +
+                "/index.php/core/preview.png" +
+                "?file=" + file +
+                "&x=" + px + "&y=" + px;
+            return getThumbnailFromServerUri(uri, px);
+        }
 
-		private Bitmap getThumbnailFromServerGuess(String file, int px) {
-			synchronized (mGuessLock) {
-				if (mThumbnailGetType == THUMBNAIL_GET_TYPE_GUESS) {
-					Bitmap thumbnail = getThumbnailFromServerAPIV1(file, px);
-					if (thumbnail != null) {
-						mThumbnailGetType = THUMBNAIL_GET_TYPE_API_V1;
-					} else {
-						thumbnail = getThumbnailFromServerPreviewPng(file, px);
-						if (thumbnail != null) {
-							mThumbnailGetType = THUMBNAIL_GET_TYPE_PREVIEW_PNG;
-						} else {
-							mThumbnailGetType = THUMBNAIL_GET_TYPE_NO_WAY;
-						}
-					}
-					mGuessLock.notifyAll();
-				}
-			}
-			return null;
-		}
+        private Bitmap getThumbnailFromServerGuess(String file, int px) {
+            synchronized (mGuessLock) {
+                if (mThumbnailGetType == THUMBNAIL_GET_TYPE_GUESS) {
+                    Bitmap thumbnail = getThumbnailFromServerAPIV1(file, px);
+                    if (thumbnail != null) {
+                        mThumbnailGetType = THUMBNAIL_GET_TYPE_API_V1;
+                    } else {
+                        thumbnail = getThumbnailFromServerPreviewPng(file, px);
+                        if (thumbnail != null) {
+                            mThumbnailGetType = THUMBNAIL_GET_TYPE_PREVIEW_PNG;
+                        } else {
+                            mThumbnailGetType = THUMBNAIL_GET_TYPE_NO_WAY;
+                        }
+                    }
+                    mGuessLock.notifyAll();
+                }
+            }
+            return null;
+        }
 
         private Bitmap doOCFileInBackground() {
             OCFile file = (OCFile)mFile;
@@ -340,25 +340,25 @@ public class ThumbnailsCacheManager {
                 } else {
                     // Download thumbnail from server
                     if (mClient != null) {
-						String uri = Uri.encode(file.getRemotePath(), "/");
-						thumbnail = null;
-						if (mThumbnailGetType == THUMBNAIL_GET_TYPE_GUESS) {
-							thumbnail = getThumbnailFromServerGuess(uri, px);
-						}
-						if (thumbnail != null) {
-							;
-						} else if (mThumbnailGetType == THUMBNAIL_GET_TYPE_API_V1) {
-							thumbnail = getThumbnailFromServerAPIV1(uri, px);
+                        String uri = Uri.encode(file.getRemotePath(), "/");
+                        thumbnail = null;
+                        if (mThumbnailGetType == THUMBNAIL_GET_TYPE_GUESS) {
+                            thumbnail = getThumbnailFromServerGuess(uri, px);
+                        }
+                        if (thumbnail != null) {
+                            ;
+                        } else if (mThumbnailGetType == THUMBNAIL_GET_TYPE_API_V1) {
+                            thumbnail = getThumbnailFromServerAPIV1(uri, px);
                         } else if (mThumbnailGetType == THUMBNAIL_GET_TYPE_PREVIEW_PNG) {
-							thumbnail = getThumbnailFromServerPreviewPng(uri, px);
-						} else {
-							thumbnail = null;
-						}
+                            thumbnail = getThumbnailFromServerPreviewPng(uri, px);
+                        } else {
+                            thumbnail = null;
+                        }
 
-						// Add thumbnail to cache
-						if (thumbnail != null) {
-							addBitmapToCache(imageKey, thumbnail);
-						}
+                        // Add thumbnail to cache
+                        if (thumbnail != null) {
+                            addBitmapToCache(imageKey, thumbnail);
+                        }
                     }
                 }
             }
@@ -438,10 +438,10 @@ public class ThumbnailsCacheManager {
         }
     }
 
-	public static boolean supportsRemoteThumbnails() {
-		if (mThumbnailGetType == THUMBNAIL_GET_TYPE_NO_WAY) {
-			return false;
-		}
-		return true;
-	}
+    public static boolean supportsRemoteThumbnails() {
+        if (mThumbnailGetType == THUMBNAIL_GET_TYPE_NO_WAY) {
+            return false;
+        }
+        return true;
+    }
 }
