@@ -39,6 +39,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -413,6 +414,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     private void updateLayout() {
         if (!mJustFolders) {
             int filesCount = 0, foldersCount = 0, imagesCount = 0;
+			int downCount = 0;
             int count = mAdapter.getCount();
             OCFile file;
             for (int i=0; i < count ; i++) {
@@ -423,17 +425,31 @@ public class OCFileListFragment extends ExtendedListFragment {
                     filesCount++;
                     if (file.isImage()){
                         imagesCount++;
+						if (file.isDown()){
+							downCount++;
+						}
                     }
                 }
             }
             // set footer text
             setFooterText(generateFooterText(filesCount, foldersCount));
 
-            // decide grid vs list view
-            OwnCloudVersion version = AccountUtils.getServerVersion(
-                    ((FileActivity)mContainerActivity).getAccount());
-            if (version != null && version.supportsRemoteThumbnails() &&
-                imagesCount > 0 && imagesCount == filesCount) {
+			// decide grid vs list view
+			boolean gridView = false;
+			if (imagesCount > 0 && imagesCount * 4 > filesCount * 3) {
+				if (downCount * 4 > imagesCount * 3) {
+					gridView = true;
+				} else {
+					OwnCloudVersion version = AccountUtils.getServerVersion(
+						((FileActivity)mContainerActivity).getAccount());
+					if (version != null && version.supportsRemoteThumbnails()) {
+						gridView = true;
+					} else if (ThumbnailsCacheManager.supportsRemoteThumbnails()) {
+						gridView = true;
+					}
+				}
+			}
+            if (gridView) {
                 switchToGridView();
             } else {
                 switchToListView();
