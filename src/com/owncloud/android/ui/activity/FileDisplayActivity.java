@@ -100,7 +100,6 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.UriUtils;
-import com.owncloud.android.widgets.ShortcutsWidget;
 
 import java.io.File;
 
@@ -155,6 +154,7 @@ public class FileDisplayActivity extends HookActivity
 
     private boolean mUploadFromWidget = false;
     private boolean mNewFromWidget = false;
+    private boolean mRefreshFromWidget = false;
 
     
     @Override
