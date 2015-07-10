@@ -25,7 +25,7 @@
     <color name="black">#000000</color>
     <color name="textColor">#303030</color>
     <color name="list_divider_background">#fff0f0f0</color>
-    <color name="widget_background_color">#601D2D44</color>
+    <color name="widget_background_color">#901D2D44</color>
     <color name="widget_text_color">#FFFFFF</color>
 
 </resources>
