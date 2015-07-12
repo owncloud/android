@@ -531,8 +531,8 @@ public class Preferences extends PreferenceActivity
     public boolean onContextItemSelected(android.view.MenuItem item) {
         AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
-        
-        if ((item.getItemId() == R.id.change_password) || (item.getItemId() == R.id.delete_account)){
+
+        if ((item.getItemId() == R.id.change_password) || (item.getItemId() == R.id.delete_account)) {
             for (Account a : accounts) {
                 if (a.name.equals(mAccountName)) {
                     if (item.getItemId() == R.id.change_password) {
@@ -546,16 +546,18 @@ public class Preferences extends PreferenceActivity
 
                     } else if (item.getItemId() == R.id.delete_account) {
 
-                    // Remove account
-                    am.removeAccount(a, this, mHandler);
+                        // Remove account
+                        am.removeAccount(a, this, mHandler);
+                    }
                 }
             }
         }
-        
-        if (item.getItemId() == R.id.delete_instant_upload){
+
+        if (item.getItemId() == R.id.delete_instant_upload) {
             InstantUploadFolderObserverService.delete(mInstantUpload);
             addInstantUploadFolders();
         }
+
         return true;
     }
 
