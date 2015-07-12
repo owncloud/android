@@ -1,6 +1,11 @@
-/* ownCloud Android client application
+/**
+ *   ownCloud Android client application
+ *
+ *   @author Bartek Przybylski
+ *   @author masensio
+ *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2012-2014 ownCloud Inc.
+ *   Copyright (C) 2015 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -18,10 +23,8 @@
 package com.owncloud.android.ui.fragment;
 
 import java.io.File;
-import java.util.Vector;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -31,14 +34,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.TextView;
-import android.view.LayoutInflater;
 
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
@@ -48,15 +52,12 @@ import com.owncloud.android.ui.dialog.RemoveFileDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.ui.preview.PreviewMediaFragment;
+import com.owncloud.android.utils.FileStorageUtils;
 
 /**
  * A Fragment that lists all files and folders in a given path.
  * 
- * TODO refactorize to get rid of direct dependency on FileDisplayActivity
- * 
- * @author Bartek Przybylski
- * @author masensio
- * @author David A. Velasco
+ * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
 public class OCFileListFragment extends ExtendedListFragment {
     
@@ -74,10 +75,11 @@ public class OCFileListFragment extends ExtendedListFragment {
    
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
-    private View mFooterView;
+    private boolean mJustFolders;
     
     private OCFile mTargetFile;
-
+    
+   
     
     /**
      * {@inheritDoc}
@@ -122,22 +124,23 @@ public class OCFileListFragment extends ExtendedListFragment {
             mFile = savedInstanceState.getParcelable(KEY_FILE);
         }
 
-        mFooterView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
-                        R.layout.list_footer, null, false);
-        setFooterView(mFooterView);
+        if (mJustFolders) {
+            setFooterEnabled(false);
+        } else {
+            setFooterEnabled(true);
+        }
 
         Bundle args = getArguments();
-        boolean justFolders = (args == null) ? false : args.getBoolean(ARG_JUST_FOLDERS, false); 
+        mJustFolders = (args == null) ? false : args.getBoolean(ARG_JUST_FOLDERS, false);
         mAdapter = new FileListListAdapter(
-                justFolders,
-                getSherlockActivity(), 
+                mJustFolders,
+                getActivity(),
                 mContainerActivity
                 );
         setListAdapter(mAdapter);
 
-        registerForContextMenu(getListView());
-        getListView().setOnCreateContextMenuListener(this);
-    }
+        registerForContextMenu();
+  }
 
     /**
      * Saves the current listed folder.
@@ -181,8 +184,9 @@ public class OCFileListFragment extends ExtendedListFragment {
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
             mFile = parentDir;
-            
-            listDirectory(mFile);
+
+            // TODO Enable when "On Device" is recovered ?
+            listDirectory(mFile /*, MainApp.getOnlyOnDevice()*/);
 
             onRefresh(false);
             
@@ -200,7 +204,8 @@ public class OCFileListFragment extends ExtendedListFragment {
         if (file != null) {
             if (file.isFolder()) { 
                 // update state and view of this fragment
-                listDirectory(file);
+                // TODO Enable when "On Device" is recovered ?
+                listDirectory(file/*, MainApp.getOnlyOnDevice()*/);
                 // then, notify parent activity to let it update its state and view
                 mContainerActivity.onBrowsedDownTo(file);
                 // save index and top position
@@ -243,7 +248,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         boolean allowContextualActions = 
                 (args == null) ? true : args.getBoolean(ARG_ALLOW_CONTEXTUAL_ACTIONS, true); 
         if (allowContextualActions) {
-            MenuInflater inflater = getSherlockActivity().getMenuInflater();
+            MenuInflater inflater = getActivity().getMenuInflater();
             inflater.inflate(R.menu.file_actions_menu, menu);
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
             OCFile targetFile = (OCFile) mAdapter.getItem(info.position);
@@ -253,20 +258,14 @@ public class OCFileListFragment extends ExtendedListFragment {
                     targetFile,
                     mContainerActivity.getStorageManager().getAccount(),
                     mContainerActivity,
-                    getSherlockActivity()
+                    getActivity()
                 );
                 mf.filter(menu);
             }
-            
-            /// additional restrictions for this fragment 
-            // TODO allow in the future 'open with' for previewable files
-            MenuItem item = menu.findItem(R.id.action_open_file_with);
-            if (item != null) {
-                item.setVisible(false);
-                item.setEnabled(false);
-            }
+                 
             /// TODO break this direct dependency on FileDisplayActivity... if possible
-            FileFragment frag = ((FileDisplayActivity)getSherlockActivity()).getSecondFragment();
+            MenuItem item = menu.findItem(R.id.action_open_file_with);
+            FileFragment frag = ((FileDisplayActivity)getActivity()).getSecondFragment();
             if (frag != null && frag instanceof FileDetailFragment && 
                     frag.getFile().getFileId() == targetFile.getFileId()) {
                 item = menu.findItem(R.id.action_see_details);
@@ -289,6 +288,10 @@ public class OCFileListFragment extends ExtendedListFragment {
         switch (item.getItemId()) {                
             case R.id.action_share_file: {
                 mContainerActivity.getFileOperationsHelper().shareFileWithLink(mTargetFile);
+                return true;
+            }
+            case R.id.action_open_file_with: {
+                mContainerActivity.getFileOperationsHelper().openFile(mTargetFile);
                 return true;
             }
             case R.id.action_unshare_file: {
@@ -356,8 +359,15 @@ public class OCFileListFragment extends ExtendedListFragment {
     /**
      * Calls {@link OCFileListFragment#listDirectory(OCFile)} with a null parameter
      */
-    public void listDirectory(){
+    public void listDirectory(/*boolean onlyOnDevice*/){
         listDirectory(null);
+        // TODO Enable when "On Device" is recovered ?
+        // listDirectory(null, onlyOnDevice);
+    }
+    
+    public void refreshDirectory(){
+        // TODO Enable when "On Device" is recovered ?
+        listDirectory(getCurrentFile()/*, MainApp.getOnlyOnDevice()*/);
     }
     
     /**
@@ -367,7 +377,7 @@ public class OCFileListFragment extends ExtendedListFragment {
      * 
      * @param directory File to be listed
      */
-    public void listDirectory(OCFile directory) {
+    public void listDirectory(OCFile directory/*, boolean onlyOnDevice*/) {
         FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
         if (storageManager != null) {
 
@@ -388,66 +398,83 @@ public class OCFileListFragment extends ExtendedListFragment {
                 directory = storageManager.getFileById(directory.getParentId());
             }
 
-            mAdapter.swapDirectory(directory, storageManager);
+            // TODO Enable when "On Device" is recovered ?
+            mAdapter.swapDirectory(directory, storageManager/*, onlyOnDevice*/);
             if (mFile == null || !mFile.equals(directory)) {
-                mList.setSelectionFromTop(0, 0);
+                mCurrentListView.setSelection(0);
             }
             mFile = directory;
-            
-            // Update Footer
-            TextView footerText = (TextView) mFooterView.findViewById(R.id.footerText);
-            Log_OC.d("footer", String.valueOf(System.currentTimeMillis()));
-            footerText.setText(generateFooterText(directory));
-            Log_OC.d("footer", String.valueOf(System.currentTimeMillis()));
+
+            updateLayout();
+
         }
     }
-    
-    private String generateFooterText(OCFile directory) {
-        Integer files = 0;
-        Integer folders = 0;
 
-        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
-        Vector<OCFile> mFiles = storageManager.getFolderContent(mFile);
+    private void updateLayout() {
+        if (!mJustFolders) {
+            int filesCount = 0, foldersCount = 0, imagesCount = 0;
+            int count = mAdapter.getCount();
+            OCFile file;
+            for (int i=0; i < count ; i++) {
+                file = (OCFile) mAdapter.getItem(i);
+                if (file.isFolder()) {
+                    foldersCount++;
+                } else {
+                    filesCount++;
+                    if (file.isImage()){
+                        imagesCount++;
+                    }
+                }
+            }
+            // set footer text
+            setFooterText(generateFooterText(filesCount, foldersCount));
 
-        for (OCFile ocFile : mFiles) {
-            if (ocFile.isFolder()) {
-                folders++;
+            // decide grid vs list view
+            OwnCloudVersion version = AccountUtils.getServerVersion(
+                    ((FileActivity)mContainerActivity).getAccount());
+            if (version != null && version.supportsRemoteThumbnails() &&
+                imagesCount > 0 && imagesCount == filesCount) {
+                switchToGridView();
             } else {
-                files++;
+                switchToListView();
             }
         }
+    }
 
+    private String generateFooterText(int filesCount, int foldersCount) {
         String output = "";
-       
-        if (files > 0){
-            if (files == 1) {
-                output = output + files.toString() + " " + getResources().getString(R.string.file_list_file);
+        if (filesCount > 0){
+            if (filesCount == 1) {
+                output = output + filesCount + " " + getResources().getString(R.string.file_list_file);
             } else {
-                output = output + files.toString() + " " + getResources().getString(R.string.file_list_files);
+                output = output + filesCount + " " + getResources().getString(R.string.file_list_files);
             }
         }
-        if (folders > 0 && files > 0){
+        if (foldersCount > 0 && filesCount > 0){
             output = output + ", ";
         }
-        if (folders == 1) {
-            output = output + folders.toString() + " " + getResources().getString(R.string.file_list_folder);
-        } else if (folders > 1) {
-            output = output + folders.toString() + " " + getResources().getString(R.string.file_list_folders);
+        if (foldersCount == 1) {
+            output = output + foldersCount + " " + getResources().getString(R.string.file_list_folder);
+        } else if (foldersCount > 1) {
+            output = output + foldersCount + " " + getResources().getString(R.string.file_list_folders);
         }
-        
+
         return output;
     }
-    
+
+
     public void sortByName(boolean descending) {
-        mAdapter.setSortOrder(FileListListAdapter.SORT_NAME, descending);
+        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
     }
 
     public void sortByDate(boolean descending) {
-        mAdapter.setSortOrder(FileListListAdapter.SORT_DATE, descending);
+        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
     }
 
     public void sortBySize(boolean descending) {
-        mAdapter.setSortOrder(FileListListAdapter.SORT_SIZE, descending);
+        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
     }  
-
+    
+   
+    
 }

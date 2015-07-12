@@ -1,5 +1,8 @@
-/* ownCloud Android client application
- *   Copyright (C) 2014 ownCloud Inc.
+/**
+ *   ownCloud Android client application
+ *
+ *   @author David A. Velasco
+ *   Copyright (C) 2015 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -20,9 +23,7 @@ package com.owncloud.android.ui.dialog;
 /**
  *  Dialog requiring confirmation before removing a given OCFile.  
  * 
- *  Triggers the removal according to the user response. 
- *  
- *  @author David A. Velasco
+ *  Triggers the removal according to the user response.
  */
 import java.util.Vector;
 
@@ -92,7 +93,7 @@ implements ConfirmationDialogFragmentListener {
      */
     @Override
     public void onConfirmation(String callerTag) {
-        ComponentsGetter cg = (ComponentsGetter)getSherlockActivity();
+        ComponentsGetter cg = (ComponentsGetter)getActivity();
         FileDataStorageManager storageManager = cg.getStorageManager();
         if (storageManager.getFileById(mTargetFile.getFileId()) != null) {
             cg.getFileOperationsHelper().removeFile(mTargetFile, false);
@@ -104,14 +105,15 @@ implements ConfirmationDialogFragmentListener {
      */
     @Override
     public void onNeutral(String callerTag) {
-        ComponentsGetter cg = (ComponentsGetter)getSherlockActivity();
+        ComponentsGetter cg = (ComponentsGetter)getActivity();
         cg.getFileOperationsHelper().removeFile(mTargetFile, true);
         
         FileDataStorageManager storageManager = cg.getStorageManager();
         
         boolean containsKeepInSync = false;
         if (mTargetFile.isFolder()) {
-            Vector<OCFile> files = storageManager.getFolderContent(mTargetFile);
+            // TODO Enable when "On Device" is recovered ?
+            Vector<OCFile> files = storageManager.getFolderContent(mTargetFile/*, false*/);
             for(OCFile file: files) {
                 containsKeepInSync = file.keepInSync() || containsKeepInSync;
 
