@@ -39,6 +39,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -170,7 +171,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             if (mFile.getParentId() != FileDataStorageManager.ROOT_PARENT_ID) {
                 parentPath = new File(mFile.getRemotePath()).getParent();
                 parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : 
-                	parentPath + OCFile.PATH_SEPARATOR;
+                    parentPath + OCFile.PATH_SEPARATOR;
                 parentDir = storageManager.getFileByPath(parentPath);
                 moveCount++;
             } else {
@@ -179,7 +180,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             while (parentDir == null) {
                 parentPath = new File(parentPath).getParent();
                 parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : 
-                	parentPath + OCFile.PATH_SEPARATOR;
+                    parentPath + OCFile.PATH_SEPARATOR;
                 parentDir = storageManager.getFileByPath(parentPath);
                 moveCount++;
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
@@ -413,6 +414,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     private void updateLayout() {
         if (!mJustFolders) {
             int filesCount = 0, foldersCount = 0, imagesCount = 0;
+            int downCount = 0;
             int count = mAdapter.getCount();
             OCFile file;
             for (int i=0; i < count ; i++) {
@@ -423,6 +425,9 @@ public class OCFileListFragment extends ExtendedListFragment {
                     filesCount++;
                     if (file.isImage()){
                         imagesCount++;
+                        if (file.isDown()){
+                            downCount++;
+                        }
                     }
                 }
             }
@@ -430,10 +435,21 @@ public class OCFileListFragment extends ExtendedListFragment {
             setFooterText(generateFooterText(filesCount, foldersCount));
 
             // decide grid vs list view
-            OwnCloudVersion version = AccountUtils.getServerVersion(
-                    ((FileActivity)mContainerActivity).getAccount());
-            if (version != null && version.supportsRemoteThumbnails() &&
-                imagesCount > 0 && imagesCount == filesCount) {
+            boolean gridView = false;
+            if (imagesCount > 0 && imagesCount * 4 > filesCount * 3) {
+                if (downCount * 4 > imagesCount * 3) {
+                    gridView = true;
+                } else {
+                    OwnCloudVersion version = AccountUtils.getServerVersion(
+                        ((FileActivity)mContainerActivity).getAccount());
+                    if (version != null && version.supportsRemoteThumbnails()) {
+                        gridView = true;
+                    } else if (ThumbnailsCacheManager.supportsRemoteThumbnails()) {
+                        gridView = true;
+                    }
+                }
+            }
+            if (gridView) {
                 switchToGridView();
             } else {
                 switchToListView();
