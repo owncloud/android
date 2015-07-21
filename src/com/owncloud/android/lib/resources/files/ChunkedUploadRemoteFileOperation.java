@@ -54,7 +54,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 	}
     
     @Override
-    protected int uploadFile(OwnCloudClient client) throws HttpException, IOException {
+    protected int uploadFile(OwnCloudClient client) throws IOException {
         int status = -1;
 
         FileChannel channel = null;

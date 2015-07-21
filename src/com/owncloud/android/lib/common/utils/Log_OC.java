@@ -32,8 +32,7 @@ public class Log_OC {
     }
 
     public static void i(String TAG, String message){
-
-        // Write the log message to the file
+        Log.i(TAG, message);
         appendLog(TAG+" : "+ message);
     }
 

@@ -140,6 +140,9 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                 if (transferred == totalToTransfer) {  // Check if the file is completed
                 	savedFile = true;
                 	Header modificationTime = mGet.getResponseHeader("Last-Modified");
+                    if (modificationTime == null) {
+                        modificationTime = mGet.getResponseHeader("last-modified");
+                    }
                 	if (modificationTime != null) {
                 		Date d = WebdavUtils.parseResponseDate((String) modificationTime.getValue());
                 		mModificationTimestamp = (d != null) ? d.getTime() : 0;

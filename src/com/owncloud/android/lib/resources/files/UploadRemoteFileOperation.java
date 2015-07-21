@@ -102,8 +102,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 						(mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
 			}
 		} catch (Exception e) {
-			// TODO something cleaner with cancellations
-			if (mCancellationRequested.get()) {
+			if (mCancellationRequested.get() && !(e instanceof OperationCancelledException)) {
 				result = new RemoteOperationResult(new OperationCancelledException());
 			} else {
 				result = new RemoteOperationResult(e);
@@ -117,8 +116,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
                 status == HttpStatus.SC_NO_CONTENT));
 	}
 
-	protected int uploadFile(OwnCloudClient client) throws HttpException, IOException,
-            OperationCancelledException {
+	protected int uploadFile(OwnCloudClient client) throws IOException {
 		int status = -1;
 		try {
 			File f = new File(mLocalPath);
