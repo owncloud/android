@@ -67,7 +67,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	protected PutMethod mPutMethod = null;
 	protected boolean mForbiddenCharsInServer = false;
 	
-	private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
+	protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
 	protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
 
 	protected RequestEntity mEntity = null;
@@ -83,27 +83,28 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 		RemoteOperationResult result = null;
 
 		try {
-			// / perform the upload
-			synchronized (mCancellationRequested) {
-				if (mCancellationRequested.get()) {
-					throw new OperationCancelledException();
+			mPutMethod = new PutMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
+
+			if (mCancellationRequested.get()) {
+				// the operation was cancelled before getting it's turn to be executed in the queue of uploads
+				result = new RemoteOperationResult(new OperationCancelledException());
+
+			} else {
+				// perform the upload
+				int status = uploadFile(client);
+				if (mForbiddenCharsInServer){
+					result = new RemoteOperationResult(
+							RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER);
 				} else {
-					mPutMethod = new PutMethod(client.getWebdavUri() +
-                            WebdavUtils.encodePath(mRemotePath));
+					result = new RemoteOperationResult(isSuccess(status), status,
+							(mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
 				}
 			}
 
-			int status = uploadFile(client);
-			if (mForbiddenCharsInServer){
-				result = new RemoteOperationResult(
-						RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER);
-			} else {
-				result = new RemoteOperationResult(isSuccess(status), status,
-						(mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
-			}
 		} catch (Exception e) {
-			if (mCancellationRequested.get() && !(e instanceof OperationCancelledException)) {
+			if (mPutMethod != null && mPutMethod.isAborted()) {
 				result = new RemoteOperationResult(new OperationCancelledException());
+
 			} else {
 				result = new RemoteOperationResult(e);
 			}

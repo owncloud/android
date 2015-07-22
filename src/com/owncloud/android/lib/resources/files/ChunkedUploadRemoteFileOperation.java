@@ -32,7 +32,6 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.Random;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PutMethod;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -85,6 +84,10 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(file.length()));
                 ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
                 mPutMethod.setRequestEntity(mEntity);
+                if (mCancellationRequested.get()) {
+                    mPutMethod.abort();
+                    // next method will throw an exception
+                }
                 status = client.executeMethod(mPutMethod);
 
                 if (status == 400) {
