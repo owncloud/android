@@ -12,6 +12,10 @@
   <string name="actionbar_send_file">Sendi</string>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">Ĝeneralo</string>
   <string name="prefs_category_more">Pli</string>
   <string name="prefs_accounts">Kontoj</string>
@@ -37,11 +41,6 @@
   <string name="uploader_info_uploading">Alŝutante</string>
   <string name="file_list_seconds_ago">sekundoj antaŭe</string>
   <string name="file_list_empty">Nenio estas ĉi tie. Alŝutu ion!</string>
-  <string name="file_list_loading">Ŝargante...</string>
-  <string name="file_list_folder">dosierujo</string>
-  <string name="file_list_folders">dosierujoj</string>
-  <string name="file_list_file">dosiero</string>
-  <string name="file_list_files">dosieroj</string>
   <string name="filedetails_size">Grando:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Kreita je:</string>

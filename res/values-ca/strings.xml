@@ -19,6 +19,10 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Més</string>
   <string name="prefs_accounts">Comptes</string>
@@ -58,12 +62,7 @@
   <string name="uploader_info_uploading">S\'està pujant</string>
   <string name="file_list_seconds_ago">segons enrere</string>
   <string name="file_list_empty">Res per aquí. Pugeu alguna cosa!</string>
-  <string name="file_list_loading">Carregant...</string>
   <string name="local_file_list_empty">No hi ha arxius a aquesta carpeta</string>
-  <string name="file_list_folder">carpeta</string>
-  <string name="file_list_folders">carpetes</string>
-  <string name="file_list_file">fitxer</string>
-  <string name="file_list_files">fitxers</string>
   <string name="filedetails_select_file">Feu clic en un fitxer per mostrar informació addicional.</string>
   <string name="filedetails_size">Mida:</string>
   <string name="filedetails_type">Tipus:</string>

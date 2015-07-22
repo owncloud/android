@@ -19,6 +19,14 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Tutti i file</string>
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">Impostazioni</string>
+  <string name="drawer_item_logs">Registri</string>
+  <string name="drawer_close">Chiudi</string>
   <string name="prefs_category_general">Generale</string>
   <string name="prefs_category_more">Altro</string>
   <string name="prefs_accounts">Account</string>
@@ -63,10 +71,6 @@
   <string name="file_list_empty">Non c\'è niente qui. Carica qualcosa!</string>
   <string name="file_list_loading">Caricamento in corso...</string>
   <string name="local_file_list_empty">Non ci sono file in questa cartella.</string>
-  <string name="file_list_folder">cartella</string>
-  <string name="file_list_folders">cartelle</string>
-  <string name="file_list_file">file</string>
-  <string name="file_list_files">file</string>
   <string name="filedetails_select_file">Tocca un file per visualizzare informazioni aggiuntive.</string>
   <string name="filedetails_size">Dimensione:</string>
   <string name="filedetails_type">Tipo:</string>
@@ -75,6 +79,7 @@
   <string name="filedetails_download">Scarica</string>
   <string name="filedetails_sync_file">Aggiorna file</string>
   <string name="filedetails_renamed_in_upload_msg">Il file è stato rinominato in %1$s durante il caricamento</string>
+  <string name="list_layout">Struttura elenco</string>
   <string name="action_share_file">Condividi collegamento</string>
   <string name="action_unshare_file">Rimuovi condivisione collegamento</string>
   <string name="common_yes">Sì</string>
@@ -206,6 +211,7 @@
   <string name="sync_file_nothing_to_do_msg">Contenuti del file già sincronizzati</string>
   <string name="create_dir_fail_msg">La cartella non può essere creata</string>
   <string name="filename_forbidden_characters">Caratteri proibiti: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_forbidden_charaters_from_server">Il nome del file contiene almeno un carattere non valido</string>
   <string name="filename_empty">Il nome del file non può essere vuoto</string>
   <string name="wait_a_moment">Attendi</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inatteso; prova un\'altra applicazione per selezionare il file</string>
@@ -303,8 +309,19 @@
   <string name="prefs_category_security">Protezione</string>
   <string name="prefs_instant_video_upload_path_title">Percorso di caricamento video</string>
   <string name="download_folder_failed_content">Lo scaricamento della cartella %1$s non può essere completato</string>
+  <string name="shared_subject_header">condiviso</string>
+  <string name="with_you_subject_header">con te</string>
   <string name="subject_token">%1$s ha condiviso \"%2$s\" con te</string>
   <string name="auth_refresh_button">Aggiorna la connessione</string>
   <string name="auth_host_address">Indirizzo del server</string>
   <string name="common_error_out_memory">Memoria insufficiente</string>
+  <string name="username">Nome utente</string>
+  <string name="file_list__footer__folder">1 cartella</string>
+  <string name="file_list__footer__folders">%1$d cartelle</string>
+  <string name="file_list__footer__file">1 file</string>
+  <string name="file_list__footer__file_and_folder">1 file, 1 cartella</string>
+  <string name="file_list__footer__file_and_folders">1 file, %1$d cartelle</string>
+  <string name="file_list__footer__files">%1$d file</string>
+  <string name="file_list__footer__files_and_folder">%1$d file, 1 cartella</string>
+  <string name="file_list__footer__files_and_folders">%1$d file, %2$d cartelle</string>
 </resources>

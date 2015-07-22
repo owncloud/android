@@ -268,15 +268,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     }
 
                     // share with me icon
-                    if (!file.isFolder()) {
-                        ImageView sharedWithMeIconV = (ImageView)
-                                view.findViewById(R.id.sharedWithMeIcon);
-                        sharedWithMeIconV.bringToFront();
-                        if (checkIfFileIsSharedWithMe(file)) {
-                            sharedWithMeIconV.setVisibility(View.VISIBLE);
-                        } else {
-                            sharedWithMeIconV.setVisibility(View.GONE);
-                        }
+                    ImageView sharedWithMeIconV = (ImageView)
+                            view.findViewById(R.id.sharedWithMeIcon);
+                    sharedWithMeIconV.bringToFront();
+                    if (checkIfFileIsSharedWithMe(file) &&
+                            (!file.isFolder() || !mGridMode)) {
+                        sharedWithMeIconV.setVisibility(View.VISIBLE);
+                    } else {
+                        sharedWithMeIconV.setVisibility(View.GONE);
                     }
 
                     break;
@@ -407,14 +406,16 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
      * @param updatedStorageManager     Optional updated storage manager; used to replace 
      *                                  mStorageManager if is different (and not NULL)
      */
-    public void swapDirectory(OCFile directory, FileDataStorageManager updatedStorageManager) {
+    public void swapDirectory(OCFile directory, FileDataStorageManager updatedStorageManager
+            /*, boolean onlyOnDevice*/) {
         mFile = directory;
         if (updatedStorageManager != null && updatedStorageManager != mStorageManager) {
             mStorageManager = updatedStorageManager;
             mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
         }
         if (mStorageManager != null) {
-            mFiles = mStorageManager.getFolderContent(mFile);
+            // TODO Enable when "On Device" is recovered ?
+            mFiles = mStorageManager.getFolderContent(mFile/*, onlyOnDevice*/);
             mFilesOrig.clear();
             mFilesOrig.addAll(mFiles);
             

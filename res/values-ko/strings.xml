@@ -19,6 +19,10 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">일반</string>
   <string name="prefs_category_more">더 보기</string>
   <string name="prefs_accounts">계정</string>
@@ -61,12 +65,7 @@
   <string name="uploader_info_uploading">업로드 중</string>
   <string name="file_list_seconds_ago">초 지남</string>
   <string name="file_list_empty">내용이 없습니다. 업로드할 수 있습니다!</string>
-  <string name="file_list_loading">불러오는 중...</string>
   <string name="local_file_list_empty">이 폴더에 파일이 없습니다.</string>
-  <string name="file_list_folder">폴더</string>
-  <string name="file_list_folders">폴더</string>
-  <string name="file_list_file">파일</string>
-  <string name="file_list_files">파일</string>
   <string name="filedetails_select_file">파일을 누르면 추가 정보가 표시됩니다.</string>
   <string name="filedetails_size">크기:</string>
   <string name="filedetails_type">종류:</string>
@@ -302,7 +301,6 @@
   <string name="prefs_category_security">보안</string>
   <string name="prefs_instant_video_upload_path_title">동영상 업로드 경로</string>
   <string name="download_folder_failed_content">폴더 %1$s을(를) 다운로드할 수 없음</string>
-  <string name="subject_token">%1$s 님이 \"%2$s\"을(를) 공유함</string>
   <string name="auth_refresh_button">연결 새로 고침</string>
   <string name="auth_host_address">서버 주소</string>
 </resources>
