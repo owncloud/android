@@ -3,11 +3,13 @@ android:
   components:
     - build-tools-22.0.1
     - android-22
-    - android-16
+	# Additional components
+    - extra-google-m2repository
+    - extra-android-m2repository
 before_install:
   - rm pom.xml
 script:
-  - ./setup_env.sh ant
-  - ant clean
-  - ant debug
+  - ./setup_env.sh gradle
+  - ./gradlew clean
+  - ./gradlew assembleDebug
   
