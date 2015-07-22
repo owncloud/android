@@ -71,10 +71,6 @@
   <string name="file_list_empty">Non c\'è niente qui. Carica qualcosa!</string>
   <string name="file_list_loading">Caricamento in corso...</string>
   <string name="local_file_list_empty">Non ci sono file in questa cartella.</string>
-  <string name="file_list_folder">cartella</string>
-  <string name="file_list_folders">cartelle</string>
-  <string name="file_list_file">file</string>
-  <string name="file_list_files">file</string>
   <string name="filedetails_select_file">Tocca un file per visualizzare informazioni aggiuntive.</string>
   <string name="filedetails_size">Dimensione:</string>
   <string name="filedetails_type">Tipo:</string>
@@ -315,8 +311,17 @@
   <string name="download_folder_failed_content">Lo scaricamento della cartella %1$s non può essere completato</string>
   <string name="shared_subject_header">condiviso</string>
   <string name="with_you_subject_header">con te</string>
+  <string name="subject_token">%1$s ha condiviso \"%2$s\" con te</string>
   <string name="auth_refresh_button">Aggiorna la connessione</string>
   <string name="auth_host_address">Indirizzo del server</string>
   <string name="common_error_out_memory">Memoria insufficiente</string>
   <string name="username">Nome utente</string>
+  <string name="file_list__footer__folder">1 cartella</string>
+  <string name="file_list__footer__folders">%1$d cartelle</string>
+  <string name="file_list__footer__file">1 file</string>
+  <string name="file_list__footer__file_and_folder">1 file, 1 cartella</string>
+  <string name="file_list__footer__file_and_folders">1 file, %1$d cartelle</string>
+  <string name="file_list__footer__files">%1$d file</string>
+  <string name="file_list__footer__files_and_folder">%1$d file, 1 cartella</string>
+  <string name="file_list__footer__files_and_folders">%1$d file, %2$d cartelle</string>
 </resources>

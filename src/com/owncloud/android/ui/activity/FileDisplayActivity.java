@@ -49,7 +49,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,6 +58,7 @@ import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -322,7 +322,7 @@ public class FileDisplayActivity extends HookActivity
                         startPlaybackPosition, autoplay);
 
             } else {
-                secondFragment = new FileDetailFragment(file, getAccount());
+                secondFragment = FileDetailFragment.newInstance(file, getAccount());
             }
         }
         return secondFragment;
@@ -621,10 +621,7 @@ public class FileDisplayActivity extends HookActivity
         String[] filePaths = data.getStringArrayExtra(UploadFilesActivity.EXTRA_CHOSEN_FILES);
         if (filePaths != null) {
             String[] remotePaths = new String[filePaths.length];
-            String remotePathBase = "";
-
-            if (!remotePathBase.endsWith(OCFile.PATH_SEPARATOR))
-                remotePathBase += OCFile.PATH_SEPARATOR;
+            String remotePathBase = getCurrentDir().getRemotePath();
             for (int j = 0; j< remotePaths.length; j++) {
                 remotePaths[j] = remotePathBase + (new File(filePaths[j])).getName();
             }
@@ -733,7 +730,8 @@ public class FileDisplayActivity extends HookActivity
     public void onBackPressed() {
         OCFileListFragment listOfFiles = getListOfFilesFragment(); 
         if (mDualPane || getSecondFragment() == null) {
-            if (getFile() != null && getFile().getParentId() == 0) {
+            OCFile currentDir = getCurrentDir();
+            if (currentDir == null || currentDir.getParentId() == FileDataStorageManager.ROOT_PARENT_ID) {
                 finish();
                 return;
             }
@@ -1149,7 +1147,7 @@ public class FileDisplayActivity extends HookActivity
      */
     @Override
     public void showDetails(OCFile file) {
-        Fragment detailFragment = new FileDetailFragment(file, getAccount());
+        Fragment detailFragment = FileDetailFragment.newInstance(file, getAccount());
         setSecondFragment(detailFragment);
         updateFragmentsVisibility(true);
         updateActionBarTitleAndHomeButton(file);
@@ -1641,7 +1639,7 @@ public class FileDisplayActivity extends HookActivity
      * @param file          {@link OCFile} to download and preview.
      */
     public void startDownloadForPreview(OCFile file) {
-        Fragment detailFragment = new FileDetailFragment(file, getAccount());
+        Fragment detailFragment = FileDetailFragment.newInstance(file, getAccount());
         setSecondFragment(detailFragment);
         mWaitingToPreview = file;
         requestForDownload();

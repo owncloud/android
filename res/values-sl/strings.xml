@@ -69,12 +69,7 @@
   <string name="uploader_info_uploading">Pošiljanje</string>
   <string name="file_list_seconds_ago">pred nekaj sekundami</string>
   <string name="file_list_empty">Tukaj še ni ničesar. Najprej je treba datoteke poslati v oblak!</string>
-  <string name="file_list_loading">Poteka nalaganje ...</string>
   <string name="local_file_list_empty">V tej mapi ni datotek.</string>
-  <string name="file_list_folder">mapa</string>
-  <string name="file_list_folders">mape</string>
-  <string name="file_list_file">datoteka</string>
-  <string name="file_list_files">datoteke</string>
   <string name="filedetails_select_file">Pritisnite na datoteko za prikaz dodatnih podrobnosti.</string>
   <string name="filedetails_size">Velikost:</string>
   <string name="filedetails_type">Vrsta:</string>
@@ -315,6 +310,7 @@
   <string name="download_folder_failed_content">Imenika %1$s  ni mogoče prejeti v celoti</string>
   <string name="shared_subject_header">v souporabi</string>
   <string name="with_you_subject_header">z vami</string>
+  <string name="subject_token">Uporabnik %1$s je omogočil souporabo %2$s z vami</string>
   <string name="auth_refresh_button">Osveži povezavo</string>
   <string name="auth_host_address">Naslov strežnika</string>
   <string name="common_error_out_memory">Ni dovolj pomnilnika</string>

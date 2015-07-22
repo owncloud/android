@@ -36,10 +36,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
@@ -54,7 +57,7 @@ import com.owncloud.android.utils.FileStorageUtils;
 /**
  * A Fragment that lists all files and folders in a given path.
  * 
- * TODO refactorize to get rid of direct dependency on FileDisplayActivity
+ * TODO refactor to get rid of direct dependency on FileDisplayActivity
  */
 public class OCFileListFragment extends ExtendedListFragment {
     
@@ -67,8 +70,6 @@ public class OCFileListFragment extends ExtendedListFragment {
     public final static String ARG_ALLOW_CONTEXTUAL_ACTIONS = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
             
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
-
-    private final static Double THUMBNAIL_THRESHOLD = 0.5;
 
     private FileFragment.ContainerActivity mContainerActivity;
    
@@ -429,7 +430,10 @@ public class OCFileListFragment extends ExtendedListFragment {
             setFooterText(generateFooterText(filesCount, foldersCount));
 
             // decide grid vs list view
-            if (((double)imagesCount / (double)filesCount) >= THUMBNAIL_THRESHOLD) {
+            OwnCloudVersion version = AccountUtils.getServerVersion(
+                    ((FileActivity)mContainerActivity).getAccount());
+            if (version != null && version.supportsRemoteThumbnails() &&
+                imagesCount > 0 && imagesCount == filesCount) {
                 switchToGridView();
             } else {
                 switchToListView();
@@ -438,23 +442,42 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     private String generateFooterText(int filesCount, int foldersCount) {
-        String output = "";
-        if (filesCount > 0){
-            if (filesCount == 1) {
-                output = output + filesCount + " " + getResources().getString(R.string.file_list_file);
-            } else {
-                output = output + filesCount + " " + getResources().getString(R.string.file_list_files);
+        String output;
+        if (filesCount <= 0) {
+            if (foldersCount <= 0) {
+                output = "";
+
+            } else if (foldersCount == 1) {
+                output = getResources().getString(R.string.file_list__footer__folder);
+
+            } else { // foldersCount > 1
+                output = getResources().getString(R.string.file_list__footer__folders, foldersCount);
+            }
+
+        } else if (filesCount == 1) {
+            if (foldersCount <= 0) {
+                output = getResources().getString(R.string.file_list__footer__file);
+
+            } else if (foldersCount == 1) {
+                output = getResources().getString(R.string.file_list__footer__file_and_folder);
+
+            } else { // foldersCount > 1
+                output = getResources().getString(R.string.file_list__footer__file_and_folders, foldersCount);
+            }
+        } else {    // filesCount > 1
+            if (foldersCount <= 0) {
+                output = getResources().getString(R.string.file_list__footer__files, filesCount);
+
+            } else if (foldersCount == 1) {
+                output = getResources().getString(R.string.file_list__footer__files_and_folder, filesCount);
+
+            } else { // foldersCount > 1
+                output = getResources().getString(
+                        R.string.file_list__footer__files_and_folders, filesCount, foldersCount
+                );
+
             }
         }
-        if (foldersCount > 0 && filesCount > 0){
-            output = output + ", ";
-        }
-        if (foldersCount == 1) {
-            output = output + foldersCount + " " + getResources().getString(R.string.file_list_folder);
-        } else if (foldersCount > 1) {
-            output = output + foldersCount + " " + getResources().getString(R.string.file_list_folders);
-        }
-
         return output;
     }
 
