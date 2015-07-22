@@ -2,6 +2,8 @@ language: android
 android:
   components:
     - build-tools-22.0.1
+    # old build tools due to core lib
+    - build-tools-20.0.0
     - android-22
     # Additional components
     - extra-google-m2repository
