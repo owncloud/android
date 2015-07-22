@@ -52,6 +52,7 @@ public class Common{
 
 	public WebDriverWait wait;
 
+
 	protected AndroidDriver setUpCommonDriver () throws Exception {
 		File rootPath = new File(System.getProperty("user.dir"));
 		File appDir = new File(rootPath,"src/test/resources");
@@ -65,7 +66,8 @@ public class Common{
 				".ui.activity.FileDisplayActivity");	
 		capabilities.setCapability("appWaitActivity", 
 				".authentication.AuthenticatorActivity");
-		capabilities.setCapability("unicodeKeyboard", true);
+		//capabilities.setCapability("unicodeKeyboard", true);
+		//capabilities.setCapability("resetKeyboard", true);
 		driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"),
 				capabilities);
 		driver.manage().timeouts().implicitlyWait(waitingTime,
@@ -74,6 +76,7 @@ public class Common{
 		return driver;
 
 	}
+
 
 	protected boolean waitForTextPresent(String text, AndroidElement element)
 			throws InterruptedException{
@@ -135,7 +138,7 @@ public class Common{
 			Thread.sleep(pollingTime);
 		}
 	}
-	
+
 	public static void waitTillElementIsPresent (
 			AndroidElement element,int pollingTime) 
 					throws InterruptedException {
@@ -145,13 +148,13 @@ public class Common{
 					return;
 				}
 			} catch (NoSuchElementException e){
-				
+
 			}
 			Thread.sleep(pollingTime);
 		}
 		throw new TimeoutException();
 	}
-	
+
 	protected void takeScreenShotOnFailed (String testName) 
 			throws IOException {
 		File file  = ((RemoteWebDriver) driver)
@@ -189,7 +192,7 @@ public class Common{
 
 	protected void assertIsPasscodeRequestView(
 			PassCodeRequestView passCodeReequestView) 
-			throws InterruptedException {
+					throws InterruptedException {
 		Common.waitTillElementIsPresent(
 				passCodeReequestView.getTitleTextElement(),30000);
 		assertTrue(waitForTextPresent("ownCloud",

@@ -41,12 +41,12 @@ import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CreateFolderTestSuite{
-	
+
 	AndroidDriver driver;
 	Common common;
 	private Boolean folderHasBeenCreated = false;
 	private String CurrentCreatedFolder = "";
-	
+
 	@Rule public TestName name = new TestName();
 
 	@Before
@@ -77,9 +77,9 @@ public class CreateFolderTestSuite{
 		CurrentCreatedFolder = FOLDER_NAME;
 		assertEquals(FOLDER_NAME , folder.getText());
 	}
-	
+
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({UnfinishedTestCategory.class})
 	public void testCreateFolderWithSpecialCharacters () throws Exception {
 		String FOLDER_NAME = Config.folderSpecialCharactersName;
 
@@ -89,6 +89,7 @@ public class CreateFolderTestSuite{
 
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
+
 
 		WaitAMomentPopUp waitAMomentPopUp = Actions
 				.createFolder(FOLDER_NAME, fileListView);
