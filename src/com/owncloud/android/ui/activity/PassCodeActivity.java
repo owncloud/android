@@ -22,12 +22,9 @@
  */
 package com.owncloud.android.ui.activity;
 
-import java.util.Arrays;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -41,7 +38,8 @@ import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.utils.DisplayUtils;
+
+import java.util.Arrays;
 
 public class PassCodeActivity extends ActionBarActivity {
 
@@ -128,9 +126,6 @@ public class PassCodeActivity extends ActionBarActivity {
         }
 
         setTextListeners();
-        
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(DisplayUtils.getSeasonalIconId());
     }
 
 

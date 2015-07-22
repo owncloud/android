@@ -20,12 +20,9 @@
 
 package com.owncloud.android.ui.activity;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -36,7 +33,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.utils.DisplayUtils;
+
+import java.util.ArrayList;
 
 
 /**
@@ -81,9 +79,6 @@ public class GenericExplanationActivity  extends ActionBarActivity {
         } else {
             listView.setVisibility(View.GONE);
         }
-        
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(DisplayUtils.getSeasonalIconId());
     }
     
     public class ExplanationListAdapterView extends ArrayAdapter<String> {

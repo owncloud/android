@@ -34,7 +34,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -125,19 +124,9 @@ public class Preferences extends PreferenceActivity
         mDbHandler = new DbHandler(getBaseContext());
         addPreferencesFromResource(R.xml.preferences);
 
-        // Set properties of Action Bar in an ugly workaround to build correctly without
-        // upgrading minSdk
-        // TODO : increase minSdk; scheduled for next realease, don't wont to mix with this US
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            ActionBar actionBar = getSupportActionBar();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                actionBar.setIcon(DisplayUtils.getSeasonalIconId());
-            }
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.actionbar_settings);
-        } else {
-            setTitle(R.string.actionbar_settings);
-        }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.actionbar_settings);
 
         // For adding content description tag to a title field in the action bar
         int actionBarTitleId = getResources().getIdentifier("action_bar_title", "id", "android");

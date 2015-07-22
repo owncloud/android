@@ -20,39 +20,21 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true" >
+    android:layout_height="match_parent">
 
-    <!-- The main content view -->
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_color"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:id="@+id/ListLayout"
-        android:contentDescription="@string/list_layout"
+        android:orientation="vertical"
         >
 
+        <!-- toolbar -->
+        <include layout="@layout/toolbar" />
 
-        <FrameLayout
-            android:id="@+id/left_fragment_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <FrameLayout
-            android:id="@+id/right_fragment_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2" />
+        <!-- The main content view -->
+        <include layout="@layout/files_content" />
     </LinearLayout>
 
-    <include
-        layout="@layout/drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"/>
+    <include layout="@layout/drawer"/>
 
 </android.support.v4.widget.DrawerLayout>
