@@ -19,6 +19,10 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">Ümumi</string>
   <string name="prefs_category_more">Daha da</string>
   <string name="prefs_accounts">Hesablar</string>
@@ -60,12 +64,7 @@
   <string name="uploader_info_uploading">Yüklənmə gedir</string>
   <string name="file_list_seconds_ago">saniyələr öncə</string>
   <string name="file_list_empty">Burda heçnə yoxdur. Nese yükləyin!</string>
-  <string name="file_list_loading">Yüklənir...</string>
   <string name="local_file_list_empty">Bu qovluqda heç bir fayl movcud deyil.</string>
-  <string name="file_list_folder">qovluq</string>
-  <string name="file_list_folders">qovluqlar</string>
-  <string name="file_list_file">fayl</string>
-  <string name="file_list_files">fayllar</string>
   <string name="filedetails_select_file">Faylın üstünə sıxın ki, əlavə məlumat ekrana çıxsın.</string>
   <string name="filedetails_size">Həcm:</string>
   <string name="filedetails_type">Tip:</string>
@@ -295,7 +294,6 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="prefs_category_security">Təhlükəsizlik</string>
   <string name="prefs_instant_video_upload_path_title">Video ünvanını yüklə</string>
   <string name="download_folder_failed_content">Qovluğun endirilməsinin %1$s hissəsi tamamlana bilməz </string>
-  <string name="subject_token">%1$s paylaşdı \"%2$s\" sizinlə</string>
   <string name="auth_refresh_button">Qoşulmanı yenilə</string>
   <string name="auth_host_address">Server ünvanı</string>
 </resources>

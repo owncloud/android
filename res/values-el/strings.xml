@@ -19,6 +19,14 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Όλα τα αρχεία</string>
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">Ρυθμίσεις</string>
+  <string name="drawer_item_logs">Αρχεία καταγραφών</string>
+  <string name="drawer_close">Κλείσιμο</string>
   <string name="prefs_category_general">Γενικά</string>
   <string name="prefs_category_more">Περισσότερα</string>
   <string name="prefs_accounts">Λογαριασμοί</string>
@@ -63,10 +71,6 @@
   <string name="file_list_empty">Δεν υπάρχει τίποτα εδώ. Μεταφορτώστε κάτι!</string>
   <string name="file_list_loading">Φόρτωση...</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
-  <string name="file_list_folder">φάκελος</string>
-  <string name="file_list_folders">φάκελοι</string>
-  <string name="file_list_file">αρχείο</string>
-  <string name="file_list_files">αρχεία</string>
   <string name="filedetails_select_file">Αγγίξτε κάποιο αρχείο για να προβάλετε περισσότερες πληροφορίες.</string>
   <string name="filedetails_size">Μέγεθος:</string>
   <string name="filedetails_type">Τύπος:</string>
@@ -207,6 +211,7 @@
   <string name="sync_file_nothing_to_do_msg">Τα περιεχόμενα του αρχείου έχουν ήδη συγχρονιστεί</string>
   <string name="create_dir_fail_msg">Η δημιουργία φακέλου απέτυχε</string>
   <string name="filename_forbidden_characters">Μη-επιτρεπόμενοι χαρακτήρες: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_forbidden_charaters_from_server">Το όνομα αρχείου περιέχει έναν τουλάχιστον μη έγκυρο χαρακτήρα</string>
   <string name="filename_empty">Το όνομα αρχείου δεν μπορεί να είναι κενό.</string>
   <string name="wait_a_moment">Παρακαλούμε περιμένετε</string>
   <string name="filedisplay_unexpected_bad_get_content">Απροσδόκητο σφάλμα - παρακαλώ επιλέξτε το αρχείο από μια άλλη εφαρμογή</string>
@@ -304,8 +309,19 @@
   <string name="prefs_category_security">Ασφάλεια</string>
   <string name="prefs_instant_video_upload_path_title">Διαδρομή Μεταφόρτωσης Βίντεο</string>
   <string name="download_folder_failed_content">Η λήψη του φακέλου %1$s δεν ολοκληρώθηκε με επιτυχία.</string>
-  <string name="subject_token">%1$s μοιράστηκε \"%2$s\" μαζί σας</string>
+  <string name="shared_subject_header">διαμοιρασμένα</string>
+  <string name="with_you_subject_header">με εσάς</string>
+  <string name="subject_token">Ο %1$s διαμοιράστηκε το \"%2$s\" με εσάς</string>
   <string name="auth_refresh_button">Ανανέωση σύνδεσης</string>
   <string name="auth_host_address">Διεύθυνση διακομιστή</string>
   <string name="common_error_out_memory">Δεν υπάρχει αρκετή μνήμη</string>
+  <string name="username">Όνομα χρήστη</string>
+  <string name="file_list__footer__folder">1 φάκελος</string>
+  <string name="file_list__footer__folders">%1$d φάκελοι</string>
+  <string name="file_list__footer__file">1 αρχείο</string>
+  <string name="file_list__footer__file_and_folder">1 αρχείο, 1 φάκελος</string>
+  <string name="file_list__footer__file_and_folders">1 αρχείο, %1$d φάκελοι</string>
+  <string name="file_list__footer__files">%1$d αρχεία</string>
+  <string name="file_list__footer__files_and_folder">%1$d αρχεία, 1 φάκελος</string>
+  <string name="file_list__footer__files_and_folders">%1$d αρχεία, %2$d φάκελοι</string>
 </resources>

@@ -19,6 +19,10 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">Bendras</string>
   <string name="prefs_category_more">Daugiau</string>
   <string name="prefs_accounts">Paskyros</string>
@@ -59,12 +63,7 @@
   <string name="uploader_info_uploading">Išsiunčiama</string>
   <string name="file_list_seconds_ago">prieš sekundę</string>
   <string name="file_list_empty">Čia tuščia. Įkelkite ką nors!</string>
-  <string name="file_list_loading">Įkeliama ...</string>
   <string name="local_file_list_empty">Šiame aplanke nėra failų.</string>
-  <string name="file_list_folder">katalogas</string>
-  <string name="file_list_folders">katalogai</string>
-  <string name="file_list_file">failas</string>
-  <string name="file_list_files">failai</string>
   <string name="filedetails_select_file">Palieskite failą, kad parodyti papildomą informaciją.</string>
   <string name="filedetails_size">Dydis:</string>
   <string name="filedetails_type">Tipas:</string>

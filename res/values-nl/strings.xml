@@ -19,6 +19,14 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Alle bestanden</string>
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">Instellingen</string>
+  <string name="drawer_item_logs">Logs</string>
+  <string name="drawer_close">Sluiten</string>
   <string name="prefs_category_general">Algemeen</string>
   <string name="prefs_category_more">Meer</string>
   <string name="prefs_accounts">Accounts</string>
@@ -62,12 +70,8 @@ Download hier: %2$s</string>
   <string name="uploader_info_uploading">Uploaden</string>
   <string name="file_list_seconds_ago">seconden geleden</string>
   <string name="file_list_empty">Er bevindt zich hier niets. Upload een bestand!</string>
-  <string name="file_list_loading">Laden ...</string>
+  <string name="file_list_loading">Laden...</string>
   <string name="local_file_list_empty">Er staan geen bestanden in deze map.</string>
-  <string name="file_list_folder">map</string>
-  <string name="file_list_folders">mappen</string>
-  <string name="file_list_file">bestand</string>
-  <string name="file_list_files">bestanden</string>
   <string name="filedetails_select_file">Druk op een bestand om extra informatie weer te geven</string>
   <string name="filedetails_size">Grootte:</string>
   <string name="filedetails_type">Type:</string>
@@ -210,6 +214,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="sync_file_nothing_to_do_msg">Bestandsinhoud is al gesynchroniseerd</string>
   <string name="create_dir_fail_msg">Map kon niet worden aangemaakt</string>
   <string name="filename_forbidden_characters">Verboden tekens: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_forbidden_charaters_from_server">De bestandsnaam bevat ten minste één ongeldig teken</string>
   <string name="filename_empty">Bestandsnaam mag niet leeg zijn</string>
   <string name="wait_a_moment">Even geduld</string>
   <string name="filedisplay_unexpected_bad_get_content">Onverwacht probleem; probeer een andere app om het bestand te selecteren</string>
@@ -307,8 +312,19 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="prefs_category_security">Beveiliging</string>
   <string name="prefs_instant_video_upload_path_title">Upload Video Pad</string>
   <string name="download_folder_failed_content">Download van %1$s map kon niet worden voltooid</string>
+  <string name="shared_subject_header">gedeeld</string>
+  <string name="with_you_subject_header">met u</string>
   <string name="subject_token">%1$s deelde \"%2$s\" met u</string>
   <string name="auth_refresh_button">Verversen verbinding</string>
   <string name="auth_host_address">Serveradres</string>
   <string name="common_error_out_memory">Niet voldoende geheugen</string>
+  <string name="username">Gebruikersnaam</string>
+  <string name="file_list__footer__folder">1 map</string>
+  <string name="file_list__footer__folders">%1$d mappen</string>
+  <string name="file_list__footer__file">1 bestand</string>
+  <string name="file_list__footer__file_and_folder">1 bestand, 1 map</string>
+  <string name="file_list__footer__file_and_folders">1 bestand, %1$d mappen</string>
+  <string name="file_list__footer__files">%1$d bestanden</string>
+  <string name="file_list__footer__files_and_folder">%1$d bestanden, 1 map</string>
+  <string name="file_list__footer__files_and_folders">%1$d bestanden, %2$d mappen</string>
 </resources>

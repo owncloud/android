@@ -19,6 +19,14 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Усі файли</string>
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">Налаштування</string>
+  <string name="drawer_item_logs">Журнали</string>
+  <string name="drawer_close">Закрити</string>
   <string name="prefs_category_general">Основне</string>
   <string name="prefs_category_more">Більше</string>
   <string name="prefs_accounts">Облікові записи</string>
@@ -60,12 +68,8 @@
   <string name="uploader_info_uploading">Завантаження</string>
   <string name="file_list_seconds_ago">секунди тому</string>
   <string name="file_list_empty">Тут нічого немає. Відвантажте що-небудь!</string>
-  <string name="file_list_loading">Завантаження...</string>
+  <string name="file_list_loading">Завантаження…</string>
   <string name="local_file_list_empty">В цій теці немає файлів.</string>
-  <string name="file_list_folder">тека</string>
-  <string name="file_list_folders">теки</string>
-  <string name="file_list_file">файл</string>
-  <string name="file_list_files">файли</string>
   <string name="filedetails_select_file">Натисніть на файлі для відображення додаткової інформації</string>
   <string name="filedetails_size">Розмір:</string>
   <string name="filedetails_type">Тип:</string>
@@ -196,6 +200,7 @@
   <string name="sync_file_nothing_to_do_msg">Зміст файлу вже синхронізовано</string>
   <string name="create_dir_fail_msg">Не вдалося створити теку</string>
   <string name="filename_forbidden_characters">Заборонені символи: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_forbidden_charaters_from_server">Ім’я файлу містить принаймні один некоректний символ</string>
   <string name="filename_empty"> Ім\'я файлу не може бути порожнім.</string>
   <string name="wait_a_moment">Зачекайте хвилинку</string>
   <string name="filedisplay_unexpected_bad_get_content">Несподівані проблеми ; будь ласка, спробуйте використати іншу програму для вибору файлу</string>
@@ -292,7 +297,18 @@
   <string name="prefs_category_security">Безпека</string>
   <string name="prefs_instant_video_upload_path_title">Шлях завантаження відео</string>
   <string name="download_folder_failed_content">Скачування теки %1$s не може бути завершено</string>
-  <string name="subject_token">%1$s розшарено \"%2$s\" з вами</string>
+  <string name="with_you_subject_header">з Вами</string>
+  <string name="subject_token">%1$s поділився \"%2$s\" з вами</string>
   <string name="auth_refresh_button">Оновити з\'єднання</string>
   <string name="auth_host_address">Ареса серверу</string>
+  <string name="common_error_out_memory">Недостатньо пам\'яті</string>
+  <string name="username">Ім\'я користувача</string>
+  <string name="file_list__footer__folder">1 тека</string>
+  <string name="file_list__footer__folders">%1$d тек</string>
+  <string name="file_list__footer__file">1 файл</string>
+  <string name="file_list__footer__file_and_folder">1 файл, 1 тека</string>
+  <string name="file_list__footer__file_and_folders">1 файл, %1$d тек</string>
+  <string name="file_list__footer__files">%1$d файлів</string>
+  <string name="file_list__footer__files_and_folder">%1$d файлів, 1 тека</string>
+  <string name="file_list__footer__files_and_folders">%1$d файлів, %2$d тек</string>
 </resources>
