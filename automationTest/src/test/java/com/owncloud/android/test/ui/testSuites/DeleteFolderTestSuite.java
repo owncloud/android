@@ -55,7 +55,7 @@ public class DeleteFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFolder () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
@@ -79,19 +79,22 @@ public class DeleteFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testDeleteFolderWithContents () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//TODO. if the folder already exists, do no created
-		//create the folder
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(FOLDER_NAME, fileListView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(fileListView.getFileElement(FOLDER_NAME).isDisplayed());
+		//if the folder already exists, do no created
+		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
+		if(folder==null){
+			WaitAMomentPopUp waitAMomentPopUp = Actions
+					.createFolder(FOLDER_NAME, fileListView);
+			Common.waitTillElementIsNotPresentWithoutTimeout(
+					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			folder = fileListView.getFileElement(FOLDER_NAME);
+		}
+		assertTrue(folder.isDisplayed());
 		fileListView.tapOnElement(FOLDER_NAME);
 
 		fileListView = Actions.uploadSeveralFile(Config.fileToTest,
@@ -105,7 +108,7 @@ public class DeleteFolderTestSuite{
 				.getFileElement(Config.fileToTest3).isDisplayed());
 
 		fileListView.clickOnBackButton();
-		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
+		folder = fileListView.getFileElement(FOLDER_NAME);
 		assertTrue(folder.isDisplayed());
 
 		//delete the folder
@@ -125,7 +128,7 @@ public class DeleteFolderTestSuite{
 		common.takeScreenShotOnFailed(name.getMethodName());
 		FileListView fileListView = new FileListView(driver);
 		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
-		//driver.removeApp("com.owncloud.android");
+		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
 
