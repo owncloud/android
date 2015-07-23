@@ -27,7 +27,7 @@
     	<item name="android:buttonStyle">@style/Theme.ownCloud.ButtonStyle</item>
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
-		<item name="colorAccent">@color/owncloud_blue_bright</item>
+		<item name="colorAccent">@color/color_accent</item>
 	</style>
 	
 	<style name="Theme.ownCloud.noActionBar" parent="style/Theme.AppCompat.Light.DarkActionBar">
@@ -36,7 +36,7 @@
 		<item name="windowActionBar">false</item>
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
-		<item name="colorAccent">@color/owncloud_blue_bright</item>
+		<item name="colorAccent">@color/color_accent</item>
     </style>
 
 	<style name="Theme.ownCloud.Fullscreen" parent="style/Theme.AppCompat">

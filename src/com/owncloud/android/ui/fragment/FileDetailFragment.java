@@ -21,10 +21,10 @@
  */
 package com.owncloud.android.ui.fragment;
 
-import java.lang.ref.WeakReference;
-
 import android.accounts.Account;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,6 +52,8 @@ import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.dialog.RemoveFileDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
+
+import java.lang.ref.WeakReference;
 
 
 /**
@@ -135,6 +137,14 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.fdProgressBar);
             mProgressListener = new ProgressListener(progressBar);
             mView.findViewById(R.id.fdCancelBtn).setOnClickListener(this);
+
+            // change coloring for pre-lollipop
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                progressBar.getIndeterminateDrawable().setColorFilter(
+                        getResources().getColor(R.color.color_accent), PorterDuff.Mode.SRC_IN);
+                progressBar.getProgressDrawable().setColorFilter(
+                        getResources().getColor(R.color.color_accent), PorterDuff.Mode.SRC_IN);
+            }
         }
 
         updateFileDetails(false, false);
