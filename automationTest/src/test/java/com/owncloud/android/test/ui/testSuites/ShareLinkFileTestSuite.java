@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.TestName;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
@@ -40,7 +41,6 @@ public class ShareLinkFileTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	private Boolean fileHasBeenCreated = false;
 
 	@Rule public TestName name = new TestName();
 
@@ -51,28 +51,36 @@ public class ShareLinkFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, InProgressCategory.class})
 	public void testShareLinkFileByGmail () throws Exception {	
-		AndroidElement sharedElementIndicator;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//TODO. if the file already exists, do not upload
-		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(Config.fileToTest, fileListView);
+		//if the file already exists, delete in case it is already sharedByLink
+		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
+		if(file!=null){
+			Actions.deleteElement(Config.fileToTest,fileListView, driver);
+			file = fileListView.getFileElement(Config.fileToTest);
+			assertFalse(file.isDisplayed());
+		}
+		//now we are sure that we are going to delete it remote and locally
+		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
+		
+		file = fileListView.getFileElement(Config.fileToTest);
+		
+		assertTrue(file.isDisplayed());
 
-		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
-				.getFileElement(Config.fileToTest).isDisplayed());
+		Actions.shareLinkElementByGmail(
+				Config.fileToTest,fileListView,driver,common);
 
-		sharedElementIndicator = Actions.shareLinkElementByGmail(
-				Config.fileToTest,fileListViewAfterUploadFile,driver,common);
+		common.wait.until(ExpectedConditions.visibilityOf(
+				fileListView.getFileElementLayout(Config.fileToTest)
+				.findElement(By.id(FileListView.getSharedElementIndicator()))));
 
-		assertTrue(fileListViewAfterUploadFile
-				.getFileElementLayout(Config.fileToTest)
+		assertTrue(fileListView.getFileElementLayout(Config.fileToTest)
 				.findElement(By.id(FileListView.getSharedElementIndicator()))
 				.isDisplayed());
-		//assertTrue(sharedElementIndicator.isDisplayed());
 	}
 
 	@Test
@@ -87,13 +95,13 @@ public class ShareLinkFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(Config.fileToTest, fileListView);
 
-		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
+		assertTrue(fileListViewAfterUploadFile
 				.getFileElement(Config.fileToTest).isDisplayed());
 
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
 				Config.fileToTest,
 				fileListViewAfterUploadFile,driver,common);
-		
+
 		assertTrue(sharedElementIndicator.isDisplayed());
 	}
 
@@ -109,12 +117,12 @@ public class ShareLinkFileTestSuite{
 		FileListView fileListViewAfterUploadFile = Actions
 				.uploadFile(Config.fileToTest, fileListView);
 
-		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
+		assertTrue(fileListViewAfterUploadFile
 				.getFileElement(Config.fileToTest).isDisplayed());
 
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
 				Config.fileToTest,fileListViewAfterUploadFile,driver,common);
-		
+
 		assertTrue(sharedElementIndicator.isDisplayed());
 		Actions.unshareLinkElement(Config.fileToTest,
 				fileListViewAfterUploadFile,driver,common);
@@ -125,10 +133,10 @@ public class ShareLinkFileTestSuite{
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		if (fileHasBeenCreated) {
-			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(Config.fileToTest,fileListView, driver);
-		}
+
+		FileListView fileListView = new FileListView(driver);
+		Actions.deleteElement(Config.fileToTest,fileListView, driver);
+
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

@@ -58,7 +58,7 @@ public class RenameFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testRenameFolder () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp = null;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
@@ -94,7 +94,7 @@ public class RenameFolderTestSuite{
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
 		assertEquals(Config.folderToRename , folder.getText());
-		CurrentCreatedFolder = Config.folderBeforeRename;
+		CurrentCreatedFolder = Config.folderToRename;
 	}
 
 	@After

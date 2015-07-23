@@ -65,7 +65,6 @@ public class DeleteFileTestSuite{
 		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
 		if(file!=null){
 			Actions.deleteElement(Config.fileToTest,fileListView, driver);
-			common.assertIsInFileListView(fileListView);
 			assertFalse(file.isDisplayed());
 		}
 		//now we are sure that we are going to delete it remote and locally
