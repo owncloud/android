@@ -49,6 +49,7 @@ public final class Config {
 	public static final String fileToTestSendByEmail = "test";
 	public static final String bigFileToTest = "video.mp4";
 
+	public static final String folderToCreate="testCreateFolder";
 	public static final String folderSpecialCharactersName="a%&@()ño";
 
 	public static final String passcode1 = "1";

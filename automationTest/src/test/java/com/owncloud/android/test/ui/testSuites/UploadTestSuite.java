@@ -66,7 +66,8 @@ public class UploadTestSuite{
 	}
 
 
-	public void uploadFile(FileListView fileListView, String file) throws Exception{
+	public void uploadFile(FileListView fileListView, String file) 
+			throws Exception{
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(file, fileListView, driver);
 

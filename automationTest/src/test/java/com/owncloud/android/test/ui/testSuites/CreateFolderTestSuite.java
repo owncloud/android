@@ -44,7 +44,6 @@ public class CreateFolderTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	private Boolean folderHasBeenCreated = false;
 	private String CurrentCreatedFolder = "";
 
 	@Rule public TestName name = new TestName();
@@ -55,60 +54,50 @@ public class CreateFolderTestSuite{
 		driver=common.setUpCommonDriver();
 	}
 
+	public void createFolder(FileListView fileListView, String folderName) 
+			throws Exception{
+		//check if the folder already exists and if true, delete them
+		Actions.deleteElement(folderName, fileListView, driver);
+
+		WaitAMomentPopUp waitAMomentPopUp = Actions
+				.createFolder(folderName, fileListView);
+		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+				.getWaitAMomentTextElement(), 100);
+		AndroidElement folder = fileListView.getFileElement(folderName);
+		assertNotNull(folder);
+		assertTrue(folder.isDisplayed());	
+		CurrentCreatedFolder = folderName;
+		assertEquals(folderName , folder.getText());
+	}
+
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testCreateFolder () throws Exception {
-		String FOLDER_NAME = "testCreateFolder";
 
 		FileListView fileListView = Actions.login(Config.URL, 
 				Config.user,Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
-
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(FOLDER_NAME, fileListView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-				.getWaitAMomentTextElement(), 100);
-		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
-		assertNotNull(folder);
-		assertTrue(folderHasBeenCreated=folder.isDisplayed());	
-		CurrentCreatedFolder = FOLDER_NAME;
-		assertEquals(FOLDER_NAME , folder.getText());
+		createFolder(fileListView, Config.folderToCreate);
 	}
 
 	@Test
 	@Category({UnfinishedTestCategory.class})
 	public void testCreateFolderWithSpecialCharacters () throws Exception {
-		String FOLDER_NAME = Config.folderSpecialCharactersName;
-
 		FileListView fileListView = Actions.login(Config.URL, 
 				Config.user,Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
-
-
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(FOLDER_NAME, fileListView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-				.getWaitAMomentTextElement(), 100);
-		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
-		assertNotNull(folder);
-		assertTrue(folderHasBeenCreated=folder.isDisplayed());	
-		CurrentCreatedFolder = FOLDER_NAME;
-		assertEquals(FOLDER_NAME , folder.getText());
+		createFolder(fileListView, Config.folderSpecialCharactersName);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		if (folderHasBeenCreated) {
-			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
-		}
+
+		FileListView fileListView = new FileListView(driver);
+		Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
+		
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
