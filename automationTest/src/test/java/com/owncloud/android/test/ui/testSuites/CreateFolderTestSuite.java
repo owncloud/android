@@ -71,7 +71,7 @@ public class CreateFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testCreateFolder () throws Exception {
 
 		FileListView fileListView = Actions.login(Config.URL, 

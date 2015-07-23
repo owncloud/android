@@ -55,7 +55,7 @@ public class LoginTestSuite{
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
-	public void test1LoginPortrait () throws Exception {
+	public void testLoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
@@ -65,11 +65,21 @@ public class LoginTestSuite{
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
-	public void test2LoginLandscape () throws Exception {
+	public void testLoginLandscape () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
+	}
+	
+	@Test
+	@Category({NoIgnoreTestCategory.class})
+	public void testLoginWrongPassword () throws Exception {
+		LoginForm loginForm = new LoginForm(driver);
+		Actions.login(Config.URL, 
+				Config.user,Config.password+"wrong", Config.isTrusted, driver);
+		assertTrue(common.waitForTextPresent("Wrong username or password", 
+				loginForm.getAuthStatusText()));
 	}
 	
 	@Test
@@ -89,7 +99,7 @@ public class LoginTestSuite{
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void test3MultiAccountRotate () throws Exception {
+	public void testMultiAccountRotate () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
@@ -132,7 +142,7 @@ public class LoginTestSuite{
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
-	public void test4ExistingAccountRotate () throws Exception {
+	public void testExistingAccountRotate () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
@@ -153,7 +163,7 @@ public class LoginTestSuite{
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
-	public void test5ChangePasswordWrong () throws Exception {
+	public void testChangePasswordWrong () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
