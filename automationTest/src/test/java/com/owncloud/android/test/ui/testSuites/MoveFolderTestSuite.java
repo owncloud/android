@@ -44,8 +44,6 @@ import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 public class MoveFolderTestSuite{
 	AndroidDriver driver;
 	Common common;
-	private String FOLDER_TO_MOVE = "folderToMove";
-	private String FOLDER_WHERE_MOVE = "folderWhereMove";
 	
 	@Rule public TestName name = new TestName();
 
@@ -68,40 +66,43 @@ public class MoveFolderTestSuite{
 		     //fileListView.getProgressCircular(), 1000);
 
 		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(FOLDER_WHERE_MOVE, fileListView, driver);
-		Actions.deleteElement(FOLDER_TO_MOVE, fileListView, driver);
+		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
+		Actions.deleteElement(Config.folderToMove, fileListView, driver);
 
 		//Create the folder where the other is gone to be moved
 		waitAMomentPopUp = Actions
-				.createFolder(FOLDER_WHERE_MOVE, fileListView);
+				.createFolder(Config.folderWhereMove, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(fileListView.getFileElement(FOLDER_WHERE_MOVE).isDisplayed());
+		assertTrue(fileListView.getFileElement(
+				Config.folderWhereMove).isDisplayed());
 
 		//Create the folder which is going to be moved
-		waitAMomentPopUp = Actions.createFolder(FOLDER_TO_MOVE, fileListView);
+		waitAMomentPopUp = Actions.createFolder(
+				Config.folderToMove, fileListView);
 		Common.waitTillElementIsNotPresent(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(fileListView.getFileElement(FOLDER_TO_MOVE).isDisplayed());
+		assertTrue(fileListView.getFileElement(
+				Config.folderToMove).isDisplayed());
 
 		//select to move the folder
 		ElementMenuOptions menuOptions = fileListView
-				.longPressOnElement(FOLDER_TO_MOVE);
+				.longPressOnElement(Config.folderToMove);
 		MoveView moveView = menuOptions.clickOnMove();
 
 		//to move to a folder
-		moveView.tapOnElement(FOLDER_WHERE_MOVE);
+		moveView.tapOnElement(Config.folderWhereMove);
 		waitAMomentPopUp = moveView.clickOnChoose();
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
 		
 		//check that the folder moved is inside the other
-		fileListView.tapOnElement(FOLDER_WHERE_MOVE);
-		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView.getProgressCircular(),
-				1000);
+		fileListView.tapOnElement(Config.folderWhereMove);
+		Common.waitTillElementIsNotPresentWithoutTimeout(
+				fileListView.getProgressCircular(), 1000);
 		Thread.sleep(1000);
-		assertEquals(FOLDER_TO_MOVE , fileListView
-				.getFileElement(FOLDER_TO_MOVE).getText());
+		assertEquals(Config.folderToMove , fileListView
+				.getFileElement(Config.folderToMove).getText());
 	}
 
 	@After
@@ -109,8 +110,8 @@ public class MoveFolderTestSuite{
 		common.takeScreenShotOnFailed(name.getMethodName());
 		FileListView fileListView = new FileListView(driver);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
-		Actions.deleteElement(FOLDER_WHERE_MOVE, fileListView, driver);
-		Actions.deleteElement(FOLDER_TO_MOVE, fileListView, driver);
+		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
+		Actions.deleteElement(Config.folderToMove, fileListView, driver);
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

@@ -71,22 +71,18 @@ public class UploadTestSuite{
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(file, fileListView, driver);
 
-		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(file, fileListView);
+		fileListView = Actions.uploadFile(file, fileListView);
 
-		assertTrue(fileListViewAfterUploadFile
-				.getFileElement(file).isDisplayed());
+		assertTrue(fileListView.getFileElement(file).isDisplayed());
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListViewAfterUploadFile.getProgressCircular(), 1000);
+				fileListView.getProgressCircular(), 1000);
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile
-				.getFileElementLayout(file)
+				fileListView.getFileElementLayout(file)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
 
-		assertTrue(fileListViewAfterUploadFile
-				.getFileElementLayout(file)
+		assertTrue(fileListView.getFileElementLayout(file)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))
 				.isDisplayed());
 	}

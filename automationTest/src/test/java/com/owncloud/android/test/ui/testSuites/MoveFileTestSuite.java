@@ -54,7 +54,7 @@ public class MoveFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testMoveFile () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 

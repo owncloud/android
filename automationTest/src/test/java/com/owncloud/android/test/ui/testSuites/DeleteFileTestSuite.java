@@ -61,9 +61,8 @@ public class DeleteFileTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//if the file already exists, delete it remote and/or locally
+		//if the file already exists, delete it remote
 		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
-		
 		if(file!=null){
 			Actions.deleteElement(Config.fileToTest,fileListView, driver);
 			common.assertIsInFileListView(fileListView);

@@ -48,11 +48,8 @@ public class RenameFileTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	private Boolean fileHasBeenCreated = false;
-	//private final String OLD_FILE_NAME = Config.fileToTest;
-	private final String FILE_NAME = "newNameFile";
 	private String CurrentCreatedFile = "";
-	
+
 	@Rule public TestName name = new TestName();
 
 	@Before
@@ -62,59 +59,70 @@ public class RenameFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testRenameFile () throws Exception {
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	public void testRenameDownloadedFile () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//TODO. if the file already exists, do not upload
-		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(Config.fileToTest, fileListView);
+		//if the file already exists, delete it 
+		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
+		if(file!=null){
+			Actions.deleteElement(Config.fileToTest,fileListView, driver);
+			common.assertIsInFileListView(fileListView);
+			assertFalse(file.isDisplayed());
+		}
+		//now we are sure that we are going to rename a downloaded file
+		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
+		
+		//check that it is downloaded
+		common.wait.until(ExpectedConditions.visibilityOf(
+				fileListView.getFileElementLayout(Config.fileToTest)
+				.findElement(By.id(FileListView.getLocalFileIndicator()))));
+		
+		assertTrue(fileListView.getFileElementLayout(Config.fileToTest)
+				.findElement(By.id(FileListView.getLocalFileIndicator()))
+				.isDisplayed());
 
 		//check if the file with the new name already exists, if true delete it
-		Actions.deleteElement(FILE_NAME, fileListView, driver);
+		Actions.deleteElement(Config.fileToRename, fileListView, driver);
 
-		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
+		assertTrue(fileListView
 				.getFileElement(Config.fileToTest).isDisplayed());
 		CurrentCreatedFile = Config.fileToTest;
 		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListViewAfterUploadFile.getProgressCircular(), 1000);
-		
+				fileListView.getProgressCircular(), 1000);
+
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile
-				.getFileElementLayout(Config.fileToTest)
+				fileListView.getFileElementLayout(Config.fileToTest)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
-		
-		ElementMenuOptions menuOptions = fileListViewAfterUploadFile
+
+		ElementMenuOptions menuOptions = fileListView
 				.longPressOnElement(Config.fileToTest);
-		
+
 		NewFolderPopUp newFolderPopUp = menuOptions.clickOnRename();
-		
-		newFolderPopUp.typeNewFolderName(FILE_NAME);
-		
+
+		newFolderPopUp.typeNewFolderName(Config.fileToRename);
+
 		WaitAMomentPopUp waitAMomentPopUp = newFolderPopUp
 				.clickOnNewFolderOkButton();
-		
+
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		
-		AndroidElement file = fileListViewAfterUploadFile
-				.getFileElement(FILE_NAME);
-		
+
+		file = fileListView.getFileElement(Config.fileToRename);
+
 		assertNotNull(file);
 		assertTrue(file.isDisplayed());	
-		assertEquals(FILE_NAME , file.getText());
-		CurrentCreatedFile = FILE_NAME;
+		assertEquals(Config.fileToRename , file.getText());
+		CurrentCreatedFile = Config.fileToRename;
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		if (fileHasBeenCreated) {
-			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(CurrentCreatedFile,fileListView, driver);
-		}
+		FileListView fileListView = new FileListView(driver);
+		Actions.deleteElement(CurrentCreatedFile,fileListView, driver);
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
