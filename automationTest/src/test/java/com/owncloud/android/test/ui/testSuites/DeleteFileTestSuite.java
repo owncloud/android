@@ -55,15 +55,14 @@ public class DeleteFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFileRemoteAndLocal () throws Exception {		
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
 		//if the file already exists, delete it remote and/or locally
-		AndroidElement file = fileListView
-				.getFileElement(Config.fileToTest);
+		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
 		
 		if(file!=null){
 			Actions.deleteElement(Config.fileToTest,fileListView, driver);
@@ -85,11 +84,14 @@ public class DeleteFileTestSuite{
 		
 		assertTrue(file.isDisplayed());
 
-		Actions.deleteElementRemoteAndLocal(Config.fileToTest,fileListView, driver);
+		Actions.deleteElementRemoteAndLocal(Config.fileToTest,fileListView,
+				driver);
 		
 		common.assertIsInFileListView(fileListView);
 		assertFalse(file.isDisplayed());
 	}
+	
+	//TODO. Delete local and delete remote
 
 	@After
 	public void tearDown() throws Exception {
