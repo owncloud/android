@@ -39,7 +39,7 @@ import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.FileListView;
-import com.owncloud.android.test.ui.models.NewFolderPopUp;
+import com.owncloud.android.test.ui.models.FolderPopUp;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
@@ -59,7 +59,7 @@ public class RenameFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testRenameDownloadedFile () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
@@ -75,6 +75,12 @@ public class RenameFileTestSuite{
 		//now we are sure that we are going to rename a downloaded file
 		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
 		
+		assertTrue(fileListView
+				.getFileElement(Config.fileToTest).isDisplayed());
+		CurrentCreatedFile = Config.fileToTest;
+		Common.waitTillElementIsNotPresentWithoutTimeout(
+				fileListView.getProgressCircular(), 1000);
+		
 		//check that it is downloaded
 		common.wait.until(ExpectedConditions.visibilityOf(
 				fileListView.getFileElementLayout(Config.fileToTest)
@@ -87,24 +93,14 @@ public class RenameFileTestSuite{
 		//check if the file with the new name already exists, if true delete it
 		Actions.deleteElement(Config.fileToRename, fileListView, driver);
 
-		assertTrue(fileListView
-				.getFileElement(Config.fileToTest).isDisplayed());
-		CurrentCreatedFile = Config.fileToTest;
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListView.getProgressCircular(), 1000);
-
-		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))));
-
 		ElementMenuOptions menuOptions = fileListView
 				.longPressOnElement(Config.fileToTest);
 
-		NewFolderPopUp newFolderPopUp = menuOptions.clickOnRename();
+		FolderPopUp folderPopUp = menuOptions.clickOnRename();
 
-		newFolderPopUp.typeNewFolderName(Config.fileToRename);
+		folderPopUp.typeNewFolderName(Config.fileToRename);
 
-		WaitAMomentPopUp waitAMomentPopUp = newFolderPopUp
+		WaitAMomentPopUp waitAMomentPopUp = folderPopUp
 				.clickOnNewFolderOkButton();
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp

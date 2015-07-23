@@ -54,6 +54,8 @@ public final class Config {
     public static final String folderToCreateSpecialCharacters="a%&@()ño";
     public static final String folderWhereMove="folderWhereMove";
     public static final String folderToMove="folderToMove";
+    public static final String folderBeforeRename="folderBeforeRename";
+    public static final String folderToRename="folderToRename";
 
 	public static final String passcode1 = "1";
 	public static final String passcode2 = "1";

@@ -37,7 +37,7 @@ import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.FileListView;
-import com.owncloud.android.test.ui.models.NewFolderPopUp;
+import com.owncloud.android.test.ui.models.FolderPopUp;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
@@ -46,11 +46,8 @@ public class RenameFolderTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	private Boolean folderHasBeenCreated = false;
-	private final String OLD_FOLDER_NAME = "beforeRemoving";
-	private final String FOLDER_NAME = "testCreateFolder";
 	private String CurrentCreatedFolder = "";
-	
+
 	@Rule public TestName name = new TestName();
 
 
@@ -61,48 +58,52 @@ public class RenameFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testRenameFolder () throws Exception {
+		WaitAMomentPopUp waitAMomentPopUp = null;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//TODO. if the folder already exists, do no created
-		//create the folder to rename
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(OLD_FOLDER_NAME, fileListView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+		//if the folder already exists, do no created
+		AndroidElement folder = fileListView.getFileElement(Config.folderBeforeRename);
+		if(folder==null){
+			//create the folder to rename
+			waitAMomentPopUp = Actions
+					.createFolder(Config.folderBeforeRename, fileListView);
+			Common.waitTillElementIsNotPresentWithoutTimeout(
+					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			folder = fileListView.getFileElement(Config.folderBeforeRename);
+		}
 
-		assertTrue(folderHasBeenCreated =
-				fileListView.getFileElement(OLD_FOLDER_NAME).isDisplayed());
-
+		assertTrue(folder.isDisplayed());
+		CurrentCreatedFolder = Config.folderBeforeRename;
+		
 		//check if the folder with the new name already exists 
 		//and if true, delete them
-		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
+		Actions.deleteElement(Config.folderToRename, fileListView, driver);
 
-		CurrentCreatedFolder = OLD_FOLDER_NAME;
 		ElementMenuOptions menuOptions = fileListView
-				.longPressOnElement(OLD_FOLDER_NAME);
-		NewFolderPopUp FolderPopUp = menuOptions.clickOnRename();
-		FolderPopUp.typeNewFolderName(FOLDER_NAME);
+				.longPressOnElement(Config.folderBeforeRename);
+		FolderPopUp FolderPopUp = menuOptions.clickOnRename();
+		FolderPopUp.typeNewFolderName(Config.folderToRename);
 		FolderPopUp.clickOnNewFolderOkButton();
-		CurrentCreatedFolder = FOLDER_NAME;
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
+		folder = fileListView.getFileElement(Config.folderToRename);
 		assertNotNull(folder);
-		assertTrue(folderHasBeenCreated = folder.isDisplayed());	
-		assertEquals(FOLDER_NAME , folder.getText());
+		assertTrue(folder.isDisplayed());	
+		assertEquals(Config.folderToRename , folder.getText());
+		CurrentCreatedFolder = Config.folderBeforeRename;
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		if(folderHasBeenCreated){
-			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
-		}
+		
+		FileListView fileListView = new FileListView(driver);
+		Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
+		
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

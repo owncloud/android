@@ -121,9 +121,9 @@ public class FileListView {
 		return settingsView;
 	}
 	
-	public NewFolderPopUp clickOnNewFolderButton () {
+	public FolderPopUp clickOnNewFolderButton () {
 		newFolderButton.click();
-		NewFolderPopUp newFolderPopUp = new NewFolderPopUp(driver);
+		FolderPopUp newFolderPopUp = new FolderPopUp(driver);
 		return newFolderPopUp;
 	}
 	

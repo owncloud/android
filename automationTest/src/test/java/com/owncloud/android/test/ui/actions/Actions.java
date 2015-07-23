@@ -38,7 +38,7 @@ import com.owncloud.android.test.ui.models.UploadFilesView;
 import com.owncloud.android.test.ui.models.LoginForm;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.MenuList;
-import com.owncloud.android.test.ui.models.NewFolderPopUp;
+import com.owncloud.android.test.ui.models.FolderPopUp;
 import com.owncloud.android.test.ui.models.RemoveConfirmationView;
 import com.owncloud.android.test.ui.models.SettingsView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
@@ -77,7 +77,7 @@ public class Actions {
 
 	public static WaitAMomentPopUp createFolder(String folderName,
 			FileListView fileListView){
-		NewFolderPopUp newFolderPopUp = fileListView.clickOnNewFolderButton();
+		FolderPopUp newFolderPopUp = fileListView.clickOnNewFolderButton();
 		newFolderPopUp.typeNewFolderName(folderName);
 		WaitAMomentPopUp waitAMomentPopUp = newFolderPopUp
 				.clickOnNewFolderOkButton();
