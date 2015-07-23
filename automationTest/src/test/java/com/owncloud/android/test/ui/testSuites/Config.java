@@ -50,7 +50,8 @@ public final class Config {
 	public static final String bigFileToTest = "video.mp4";
 
 	public static final String folderToCreate="testCreateFolder";
-	public static final String folderSpecialCharactersName="a%&@()ño";
+	public static final String folderSpecialCharacters="a%&@()ño";
+	public static final String folderWhereMove="folderWhereMove";
 
 	public static final String passcode1 = "1";
 	public static final String passcode2 = "1";

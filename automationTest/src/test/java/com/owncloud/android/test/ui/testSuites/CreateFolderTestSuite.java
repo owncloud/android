@@ -88,7 +88,7 @@ public class CreateFolderTestSuite{
 				Config.user,Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		createFolder(fileListView, Config.folderSpecialCharactersName);
+		createFolder(fileListView, Config.folderSpecialCharacters);
 	}
 
 	@After
