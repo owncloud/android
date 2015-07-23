@@ -68,11 +68,7 @@ public class UploadTestSuite{
 	}
 
 
-	public void testLogin(String file) throws Exception{
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
-
+	public void uploadFile(FileListView fileListView, String file) throws Exception{
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(file, fileListView, driver);
 
@@ -99,13 +95,19 @@ public class UploadTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFile () throws Exception {
-		testLogin(Config.fileToTest);
+		FileListView fileListView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFileListView(fileListView);
+		uploadFile(fileListView, Config.fileToTest);
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFileWithSpecialCharacters () throws Exception {
-		testLogin(Config.fileToTest2);
+		FileListView fileListView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFileListView(fileListView);
+		uploadFile(fileListView, Config.fileToTest2);
 	}
 
 	@Test
