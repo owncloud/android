@@ -1458,6 +1458,7 @@ public class FileDisplayActivity extends HookActivity
                                 operation, getResources()), Toast.LENGTH_LONG);
                 msg.show();
             }
+            invalidateOptionsMenu();
         }
     }
 
