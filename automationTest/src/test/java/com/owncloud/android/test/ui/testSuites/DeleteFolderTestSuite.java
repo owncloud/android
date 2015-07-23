@@ -61,7 +61,7 @@ public class DeleteFolderTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//TODO. if the folder already exists, do no created
+		//if the folder already exists, do no created
 		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
 		if(folder==null){
 			//create the folder
