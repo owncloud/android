@@ -122,6 +122,31 @@ public class Actions {
 	}
 
 
+	public static AndroidElement deleteElementRemoteAndLocal(String elementName,  
+			FileListView fileListView, AndroidDriver driver) throws Exception{
+		AndroidElement fileElement;
+		WaitAMomentPopUp waitAMomentPopUp;
+		try{
+			//To open directly the "file list view" and
+			//we don't need to know in which view we are
+			driver.startActivity("com.owncloud.android",
+					".ui.activity.FileDisplayActivity");
+			fileElement = (AndroidElement) driver
+					.findElementByName(elementName);
+			ElementMenuOptions menuOptions = fileListView
+					.longPressOnElement(elementName);
+			RemoveConfirmationView removeConfirmationView = menuOptions
+					.clickOnRemove();
+			waitAMomentPopUp = removeConfirmationView
+					.clickOnRemoteAndLocalButton();
+			Common.waitTillElementIsNotPresent(
+					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+		}catch(NoSuchElementException e){
+			fileElement=null;
+		}
+		return fileElement;
+	}
+	
 	public static AndroidElement deleteElement(String elementName,  
 			FileListView fileListView, AndroidDriver driver) throws Exception{
 		AndroidElement fileElement;
@@ -136,11 +161,11 @@ public class Actions {
 			ElementMenuOptions menuOptions = fileListView
 					.longPressOnElement(elementName);
 			RemoveConfirmationView removeConfirmationView = menuOptions
-					.clickOnRemove();;
-					waitAMomentPopUp = removeConfirmationView
-							.clickOnRemoteAndLocalButton();
-					Common.waitTillElementIsNotPresent(
-							waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+					.clickOnRemove();
+			waitAMomentPopUp = removeConfirmationView
+					.clickOnAnyRemoteButton();
+			Common.waitTillElementIsNotPresent(
+					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
 		}catch(NoSuchElementException e){
 			fileElement=null;
 		}
@@ -202,8 +227,8 @@ public class Actions {
 		return (AndroidElement) fileListView.getFileElementLayout(elementName)
 				.findElement(By.id(FileListView.getSharedElementIndicator()));
 	}
-	
-	
+
+
 	public static void unshareLinkElement(String elementName,  
 			FileListView fileListView, AndroidDriver driver, Common common) 
 					throws Exception{
@@ -221,7 +246,7 @@ public class Actions {
 			Common.waitTillElementIsNotPresent((AndroidElement) fileListView
 					.getFileElementLayout(elementName)
 					.findElement(By.id(FileListView.getSharedElementIndicator())
-					),100);
+							),100);
 		}catch(NoSuchElementException e){
 
 		}
@@ -242,11 +267,11 @@ public class Actions {
 		Thread.sleep(15000);
 		return fileListViewAfterUploadFile; 
 	}
-	
+
 	public static FileListView uploadSeveralFile(String elementName,
 			String elementName2, String elementName3,FileListView fileListView)
 					throws InterruptedException{
-		
+
 		fileListView.clickOnUploadButton();
 		UploadFilesView uploadFilesView = fileListView
 				.clickOnFilesElementUploadFile();
@@ -255,12 +280,12 @@ public class Actions {
 		uploadFilesView.clickOnFileName(elementName);
 		uploadFilesView.clickOnFileName(elementName2);
 		uploadFilesView.clickOnFileName(elementName3);
-		
+
 		FileListView fileListViewAfterUploadFile = uploadFilesView
 				.clickOnUploadButton();
 		//TO DO. detect when the file is successfully uploaded
 		Thread.sleep(15000);
 		return fileListViewAfterUploadFile; 
 	}
-	
+
 }
