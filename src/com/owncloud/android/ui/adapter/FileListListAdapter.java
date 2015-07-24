@@ -31,6 +31,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -306,7 +308,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                             String.valueOf(file.getRemoteId())
                     );
                     if (thumbnail != null && !file.needsUpdateThumbnail()) {
-                        fileIcon.setImageBitmap(thumbnail);
+
+                        if (file.isVideo()) {
+                            Bitmap withOverlay = ThumbnailsCacheManager.addVideoOverlay(thumbnail);
+                            fileIcon.setImageBitmap(withOverlay);
+                        } else {
+                            fileIcon.setImageBitmap(thumbnail);
+                        }
                     } else {
                         // generate new Thumbnail
                         if (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon)) {
