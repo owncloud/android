@@ -55,7 +55,7 @@ public class MoveFileTestSuite{
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testMoveFile () throws Exception {
+	public void testMoveDownloadedFile () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
