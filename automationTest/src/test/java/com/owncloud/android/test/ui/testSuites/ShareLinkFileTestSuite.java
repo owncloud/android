@@ -51,7 +51,7 @@ public class ShareLinkFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class})
 	public void testShareLinkFileByGmail () throws Exception {	
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
@@ -66,9 +66,9 @@ public class ShareLinkFileTestSuite{
 		}
 		//now we are sure that we are going to delete it remote and locally
 		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
-		
+
 		file = fileListView.getFileElement(Config.fileToTest);
-		
+
 		assertTrue(file.isDisplayed());
 
 		Actions.shareLinkElementByGmail(
@@ -91,16 +91,24 @@ public class ShareLinkFileTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//TODO. if the file already exists, do not upload
-		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(Config.fileToTest, fileListView);
+		//if the file already exists, delete in case it is already sharedByLink
+		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
+		if(file!=null){
+			Actions.deleteElement(Config.fileToTest,fileListView, driver);
+			file = fileListView.getFileElement(Config.fileToTest);
+			assertFalse(file.isDisplayed());
+		}
+		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
 
-		assertTrue(fileListViewAfterUploadFile
+		assertTrue(fileListView
 				.getFileElement(Config.fileToTest).isDisplayed());
 
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
-				Config.fileToTest,
-				fileListViewAfterUploadFile,driver,common);
+				Config.fileToTest,fileListView,driver,common);
+		
+		common.wait.until(ExpectedConditions.visibilityOf(
+				fileListView.getFileElementLayout(Config.fileToTest)
+				.findElement(By.id(FileListView.getSharedElementIndicator()))));
 
 		assertTrue(sharedElementIndicator.isDisplayed());
 	}
@@ -113,21 +121,29 @@ public class ShareLinkFileTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
-		//TODO. if the file already exists, do not upload
-		FileListView fileListViewAfterUploadFile = Actions
+		//if the file already exists, do not upload 
+		//(we do not care if it is already share)
+		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
+		if(file==null){
+			fileListView = Actions
 				.uploadFile(Config.fileToTest, fileListView);
+			file = fileListView.getFileElement(Config.fileToTest);
+		}
 
-		assertTrue(fileListViewAfterUploadFile
-				.getFileElement(Config.fileToTest).isDisplayed());
+		assertTrue(file.isDisplayed());
 
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
-				Config.fileToTest,fileListViewAfterUploadFile,driver,common);
+				Config.fileToTest,fileListView,driver,common);
+		common.wait.until(ExpectedConditions.visibilityOf(
+				fileListView.getFileElementLayout(Config.fileToTest)
+				.findElement(By.id(FileListView.getSharedElementIndicator()))));
 
 		assertTrue(sharedElementIndicator.isDisplayed());
+		
 		Actions.unshareLinkElement(Config.fileToTest,
-				fileListViewAfterUploadFile,driver,common);
+				fileListView,driver,common);
+		
 		assertFalse(sharedElementIndicator.isDisplayed());
-
 	}
 
 	@After
