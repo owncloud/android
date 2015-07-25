@@ -180,6 +180,9 @@ public class FileDisplayActivity extends HookActivity
 
         // Inflate and set the layout view
         setContentView(R.layout.files);
+
+        //detect toolbar
+        setupActionBar();
         
         // Navigation Drawer
         initDrawer();
@@ -209,7 +212,6 @@ public class FileDisplayActivity extends HookActivity
     protected void onStart() {
         Log_OC.v(TAG, "onStart() start");
         super.onStart();
-        getSupportActionBar().setIcon(DisplayUtils.getSeasonalIconId());
         Log_OC.v(TAG, "onStart() end");
     }
 
@@ -1165,7 +1167,6 @@ public class FileDisplayActivity extends HookActivity
         }
 
     }
-
 
     @Override
     protected ServiceConnection newTransferenceServiceConnection() {

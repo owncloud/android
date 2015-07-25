@@ -60,7 +60,6 @@ import com.owncloud.android.operations.UnshareLinkOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.utils.DisplayUtils;
 
 
 /**
@@ -104,7 +103,6 @@ public class PreviewImageActivity extends FileActivity implements
 
         // ActionBar
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(DisplayUtils.getSeasonalIconId());
         updateActionBarTitleAndHomeButton(null);
         actionBar.hide();
 
