@@ -35,7 +35,7 @@ import org.junit.Test;
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.MoveView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
@@ -58,7 +58,7 @@ public class MoveFolderTestSuite{
 	public void testMoveFolder () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -68,6 +68,9 @@ public class MoveFolderTestSuite{
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
 		Actions.deleteElement(Config.folderToMove, fileListView, driver);
+		
+		assertNull(fileListView.getFileElement(Config.folderWhereMove));
+		assertNull(fileListView.getFileElement(Config.folderToMove));
 
 		//Create the folder where the other is gone to be moved
 		waitAMomentPopUp = Actions
@@ -101,14 +104,14 @@ public class MoveFolderTestSuite{
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListView.getProgressCircular(), 1000);
 		Thread.sleep(1000);
-		assertEquals(Config.folderToMove , fileListView
-				.getFileElement(Config.folderToMove).getText());
+		assertTrue(fileListView.getFileElement(Config.folderToMove)
+				.isDisplayed());
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		FileListView fileListView = new FileListView(driver);
+		FilesView fileListView = new FilesView(driver);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
 		Actions.deleteElement(Config.folderToMove, fileListView, driver);

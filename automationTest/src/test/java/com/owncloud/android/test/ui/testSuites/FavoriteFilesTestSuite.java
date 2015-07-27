@@ -37,7 +37,7 @@ import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileDetailsView;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 
 
 
@@ -62,7 +62,7 @@ public class FavoriteFilesTestSuite{
 	@Category({FailingTestCategory.class})
 	public void testKeepFileUpToDate () throws Exception {
 
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -85,8 +85,8 @@ public class FavoriteFilesTestSuite{
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 
 		assertTrue(fileListView
-				.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getFavoriteFileIndicator()))
+				.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}
 
@@ -94,7 +94,7 @@ public class FavoriteFilesTestSuite{
 	@Category({NoIgnoreTestCategory.class})
 	public void testKeepFileUpToDateAndRefresh () throws Exception {
 
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -121,8 +121,8 @@ public class FavoriteFilesTestSuite{
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
 				.getProgressCircular(), 100);
 
-		assertTrue(fileListView.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getFavoriteFileIndicator()))
+		assertTrue(fileListView.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}
 
@@ -130,7 +130,7 @@ public class FavoriteFilesTestSuite{
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		FileListView fileListView = new FileListView(driver);
+		FilesView fileListView = new FilesView(driver);
 		Actions.deleteElement(Config.fileToTest,fileListView, driver);
 
 		driver.removeApp("com.owncloud.android");

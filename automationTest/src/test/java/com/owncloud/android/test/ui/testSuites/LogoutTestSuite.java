@@ -34,7 +34,7 @@ import org.junit.rules.TestName;
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.LoginForm;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.MenuList;
 import com.owncloud.android.test.ui.models.SettingsView;
 
@@ -54,7 +54,7 @@ public class LogoutTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testLogout () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		MenuList menulist = fileListView.clickOnMenuButton();

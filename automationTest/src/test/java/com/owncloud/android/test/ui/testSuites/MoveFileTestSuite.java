@@ -35,7 +35,7 @@ import org.junit.runners.MethodSorters;
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.MoveView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
@@ -58,13 +58,16 @@ public class MoveFileTestSuite{
 	public void testMoveDownloadedFile () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
 		Actions.deleteElement(Config.fileToTest, fileListView, driver);
+		
+		assertNull(fileListView.getFileElement(Config.folderWhereMove));
+		assertNull(fileListView.getFileElement(Config.fileToTest));
 
 		//Create the folder where the other is gone to be moved
 		waitAMomentPopUp = Actions
@@ -74,9 +77,8 @@ public class MoveFileTestSuite{
 		assertTrue(fileListView.getFileElement(Config.folderWhereMove)
 				.isDisplayed());
 
-		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(Config.fileToTest, fileListView);
-		assertTrue(fileListViewAfterUploadFile.getFileElement(Config.fileToTest)
+		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
+		assertTrue(fileListView.getFileElement(Config.fileToTest)
 				.isDisplayed());
 
 		//select to move the file
@@ -96,15 +98,15 @@ public class MoveFileTestSuite{
 				fileListView.getProgressCircular(),1000);
 
 		Thread.sleep(1000);
-		assertEquals(Config.fileToTest , 
-				fileListView.getFileElement(Config.fileToTest).getText());
+		assertTrue(fileListView.getFileElement(Config.fileToTest)
+				.isDisplayed());
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		FileListView fileListView = new FileListView(driver);
+		FilesView fileListView = new FilesView(driver);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
 		Actions.deleteElement(Config.fileToTest, fileListView, driver);

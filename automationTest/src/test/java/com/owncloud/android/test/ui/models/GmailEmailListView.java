@@ -29,30 +29,26 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.PageFactory;
 
 public class GmailEmailListView {
-	
+
 	final AndroidDriver driver;
-	
-	@AndroidFindBy(uiAutomator = "new UiSelector().description(\""
-			+ "me about UploadFile,  on May 11, conversation read\")")
-	private AndroidElement emailAmericanFormatDate;
-	@AndroidFindBy(uiAutomator = "new UiSelector().description(\""
-			+ "me about UploadFile,  on 11 May, conversation read\")")
-	private AndroidElement emailEuropeanFormatDate;
-	
-		
+
+	@AndroidFindBy(uiAutomator = "new UiSelector().descriptionStartsWith("
+			+ "\"me about UploadFile\")")
+	private AndroidElement email;
+
+
+
+
 	public GmailEmailListView (AndroidDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
-	
+
 	public GmailEmailView clickOnEmail (){
-		try{
-			emailAmericanFormatDate.click();
-		}catch (NoSuchElementException e) {
-			emailEuropeanFormatDate.click();
-		}
+		email.click();
+
 		GmailEmailView gmailEmailView = new GmailEmailView(driver);
 		return gmailEmailView;
 	}
-	
+
 }

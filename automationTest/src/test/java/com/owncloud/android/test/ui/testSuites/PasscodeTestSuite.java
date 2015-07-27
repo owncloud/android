@@ -34,7 +34,7 @@ import org.openqa.selenium.ScreenOrientation;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.MenuList;
 import com.owncloud.android.test.ui.models.PassCodeRequestView;
 import com.owncloud.android.test.ui.models.PassCodeView;
@@ -57,7 +57,7 @@ public class PasscodeTestSuite {
 	@Category({NoIgnoreTestCategory.class})
 	public void testPincodeEnable () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		
@@ -87,7 +87,7 @@ public class PasscodeTestSuite {
 		
 		passCodeReequestView.enterPasscode(Config.passcode1, Config.passcode2,
 				Config.passcode3, Config.passcode4);
-		FileListView newFileListView = new FileListView(driver);
+		FilesView newFileListView = new FilesView(driver);
 		common.assertIsInFileListView(newFileListView);
 	}
 	

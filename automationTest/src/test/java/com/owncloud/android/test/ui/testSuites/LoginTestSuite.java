@@ -36,7 +36,7 @@ import org.openqa.selenium.ScreenOrientation;
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.LoginForm;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.MenuList;
 import com.owncloud.android.test.ui.models.SettingsView;
 
@@ -58,7 +58,7 @@ public class LoginTestSuite{
 	public void testLoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 	}
@@ -67,7 +67,7 @@ public class LoginTestSuite{
 	@Category({NoIgnoreTestCategory.class})
 	public void testLoginLandscape () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 	}
@@ -87,7 +87,7 @@ public class LoginTestSuite{
 	public void testLoginAndShowFiles () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		
@@ -101,7 +101,7 @@ public class LoginTestSuite{
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testMultiAccountRotate () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		
@@ -119,7 +119,7 @@ public class LoginTestSuite{
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testMultiAccountAndShowFiles () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		assertTrue(fileListView
@@ -144,7 +144,7 @@ public class LoginTestSuite{
 	@Category({NoIgnoreTestCategory.class})
 	public void testExistingAccountRotate () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		
@@ -165,7 +165,7 @@ public class LoginTestSuite{
 	@Category({NoIgnoreTestCategory.class})
 	public void testChangePasswordWrong () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		MenuList menu = fileListView.clickOnMenuButton();

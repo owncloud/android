@@ -46,7 +46,7 @@ public final class Config {
 	public static final String fileToTest = "doc.txt";
 	public static final String fileToTest2 = "docümento.txt";
 	public static final String fileToTest3 = "año.pdf";
-	public static final String fileToTestSendByEmail = "test";
+	public static final String fileToTestSendByEmail = "test.jpg";
 	public static final String bigFileToTest = "video.mp4";
 	public static final String fileToRename = "newName";
 

@@ -35,7 +35,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
-import com.owncloud.android.test.ui.models.FileListView;;
+import com.owncloud.android.test.ui.models.FilesView;;
 
 public class ShareLinkFileTestSuite{
 
@@ -53,7 +53,7 @@ public class ShareLinkFileTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class})
 	public void testShareLinkFileByGmail () throws Exception {	
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -61,25 +61,23 @@ public class ShareLinkFileTestSuite{
 		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
 		if(file!=null){
 			Actions.deleteElement(Config.fileToTest,fileListView, driver);
-			file = fileListView.getFileElement(Config.fileToTest);
-			assertFalse(file.isDisplayed());
+			assertNull(fileListView.getFileElement(Config.fileToTest));
 		}
 		//now we are sure that we are going to delete it remote and locally
 		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
 
 		file = fileListView.getFileElement(Config.fileToTest);
-
 		assertTrue(file.isDisplayed());
 
 		Actions.shareLinkElementByGmail(
 				Config.fileToTest,fileListView,driver,common);
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getSharedElementIndicator()))));
+				fileListView.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getSharedElementIndicator()))));
 
-		assertTrue(fileListView.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getSharedElementIndicator()))
+		assertTrue(fileListView.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getSharedElementIndicator()))
 				.isDisplayed());
 	}
 
@@ -87,7 +85,7 @@ public class ShareLinkFileTestSuite{
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testShareLinkFileByCopyLink () throws Exception {	
 		AndroidElement sharedElementIndicator;
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -95,8 +93,7 @@ public class ShareLinkFileTestSuite{
 		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
 		if(file!=null){
 			Actions.deleteElement(Config.fileToTest,fileListView, driver);
-			file = fileListView.getFileElement(Config.fileToTest);
-			assertFalse(file.isDisplayed());
+			assertNull(fileListView.getFileElement(Config.fileToTest));
 		}
 		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
 
@@ -107,17 +104,17 @@ public class ShareLinkFileTestSuite{
 				Config.fileToTest,fileListView,driver,common);
 		
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getSharedElementIndicator()))));
+				fileListView.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getSharedElementIndicator()))));
 
 		assertTrue(sharedElementIndicator.isDisplayed());
 	}
 
 	@Test
-	@Category({IgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUnshareLinkFile () throws Exception {	
 		AndroidElement sharedElementIndicator;
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -135,8 +132,8 @@ public class ShareLinkFileTestSuite{
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
 				Config.fileToTest,fileListView,driver,common);
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getSharedElementIndicator()))));
+				fileListView.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getSharedElementIndicator()))));
 
 		assertTrue(sharedElementIndicator.isDisplayed());
 		
@@ -150,7 +147,7 @@ public class ShareLinkFileTestSuite{
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
 
-		FileListView fileListView = new FileListView(driver);
+		FilesView fileListView = new FilesView(driver);
 		Actions.deleteElement(Config.fileToTest,fileListView, driver);
 
 		driver.removeApp("com.owncloud.android");

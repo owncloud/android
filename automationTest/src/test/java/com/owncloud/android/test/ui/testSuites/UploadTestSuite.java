@@ -23,6 +23,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,12 +35,13 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.GmailEmailListView;
 import com.owncloud.android.test.ui.models.GmailEmailView;
 import com.owncloud.android.test.ui.models.ImageView;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.NotificationView;
 import com.owncloud.android.test.ui.models.UploadView;
 
@@ -61,7 +63,7 @@ public class UploadTestSuite{
 	}
 
 
-	public void uploadFile(FileListView fileListView, String file) 
+	public void uploadFile(FilesView fileListView, String file) 
 			throws Exception{
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(file, fileListView, driver);
@@ -74,18 +76,18 @@ public class UploadTestSuite{
 				fileListView.getProgressCircular(), 1000);
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElementLayout(file)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))));
+				fileListView.getFileElement(file)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
-		assertTrue(fileListView.getFileElementLayout(file)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))
+		assertTrue(fileListView.getFileElement(file)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFile () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		uploadFile(fileListView, Config.fileToTest);
@@ -94,7 +96,7 @@ public class UploadTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFileWithSpecialCharacters () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		uploadFile(fileListView, Config.fileToTest2);
@@ -103,7 +105,7 @@ public class UploadTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadSeveralFile () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -112,48 +114,41 @@ public class UploadTestSuite{
 		Actions.deleteElement(Config.fileToTest2, fileListView, driver);
 		Actions.deleteElement(Config.fileToTest3, fileListView, driver);
 
-		FileListView fileListViewAfterUploadFile = Actions
-				.uploadSeveralFile(Config.fileToTest,Config.fileToTest2,
-						Config.fileToTest3, fileListView);
+		fileListView = Actions.uploadSeveralFile(Config.fileToTest,
+				Config.fileToTest2, Config.fileToTest3, fileListView);
 
-		assertTrue(fileListViewAfterUploadFile
+		assertTrue(fileListView
 				.getFileElement(Config.fileToTest).isDisplayed());
-		assertTrue(fileListViewAfterUploadFile
+		assertTrue(fileListView
 				.getFileElement(Config.fileToTest2).isDisplayed());
-		assertTrue(fileListViewAfterUploadFile
+		assertTrue(fileListView
 				.getFileElement(Config.fileToTest3).isDisplayed());
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListViewAfterUploadFile.getProgressCircular(), 1000);
+				fileListView.getProgressCircular(), 1000);
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile
-				.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))));
+				fileListView.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile
-				.getFileElementLayout(Config.fileToTest2)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))));
+				fileListView.getFileElement(Config.fileToTest2)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile
-				.getFileElementLayout(Config.fileToTest3)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))));
+				fileListView.getFileElement(Config.fileToTest3)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
-		assertTrue(fileListViewAfterUploadFile
-				.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))
+		assertTrue(fileListView.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 
-		assertTrue(fileListViewAfterUploadFile
-				.getFileElementLayout(Config.fileToTest2)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))
+		assertTrue(fileListView.getFileElement(Config.fileToTest2)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 
-		assertTrue(fileListViewAfterUploadFile
-				.getFileElementLayout(Config.fileToTest3)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))
+		assertTrue(fileListView.getFileElement(Config.fileToTest3)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 
 		//assertTrue(fileListViewAfterUploadFile
@@ -164,15 +159,14 @@ public class UploadTestSuite{
 	@Category({UnfinishedTestCategory.class})
 	public void testUploadBigFile () throws Exception {
 
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(Config.bigFileToTest, fileListView, driver);
 
-		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(Config.bigFileToTest, fileListView);
+		fileListView = Actions.uploadFile(Config.bigFileToTest, fileListView);
 
 
 		driver.openNotifications();
@@ -195,35 +189,33 @@ public class UploadTestSuite{
 					".ui.activity.FileDisplayActivity");
 		}
 
-		assertTrue(fileListViewAfterUploadFile
+		assertTrue(fileListView
 				.getFileElement(Config.bigFileToTest).isDisplayed());
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListViewAfterUploadFile.getProgressCircular(), 1000);
+				fileListView.getProgressCircular(), 1000);
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile
-				.getFileElementLayout(Config.bigFileToTest)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))));
-		assertTrue(fileListViewAfterUploadFile
-				.getFileElementLayout(Config.bigFileToTest)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))
+				fileListView.getFileElement(Config.bigFileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))));
+		assertTrue(fileListView.getFileElement(Config.bigFileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
-		fileListView = new FileListView(driver);
+		fileListView = new FilesView(driver);
 		assertTrue(fileListView
 				.getFileElement(Config.bigFileToTest).isDisplayed());
 	}
 
 
 	@Test
-	@Category(UnfinishedTestCategory.class)
+	@Category({UnfinishedTestCategory.class, InProgressCategory.class})
 	public void testUploadFromGmail () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		driver.startActivity("com.google.android.gm",
 				".ConversationListActivityGmail");
 		GmailEmailListView gmailEmailListView = new GmailEmailListView(driver);
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		GmailEmailView gmailEmailView = gmailEmailListView.clickOnEmail();
 		ImageView imageView = gmailEmailView.clickOnfileButton();
 		imageView.clickOnOptionsButton();
@@ -239,25 +231,18 @@ public class UploadTestSuite{
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_HOME);
 		driver.startActivity("com.owncloud.android",
 				".ui.activity.FileDisplayActivity");
-		common.wait.until(ExpectedConditions
-				.visibilityOfAllElementsLocatedBy(
-						By.name(Config.fileToTestSendByEmail)));
-
-		assertEquals(Config.fileToTestSendByEmail ,
-				driver.findElementByName(
-						Config.fileToTestSendByEmail).getText());
-
-		fileListView = new FileListView(driver);
+		
+		fileListView = new FilesView(driver);
 		assertTrue(fileListView
 				.getFileElement(Config.fileToTestSendByEmail).isDisplayed());
-		//TODO. correct assert if fileListView is shown in grid mode
+		
 	}
 
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		FileListView fileListView = new FileListView(driver);
+		FilesView fileListView = new FilesView(driver);
 
 		Actions.deleteElement(Config.fileToTestSendByEmail,fileListView,
 				driver);

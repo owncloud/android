@@ -39,7 +39,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.PassCodeRequestView;
 import com.owncloud.android.test.ui.models.SettingsView;
 
@@ -166,7 +166,7 @@ public class Common{
 		FileUtils.copyFile(file, new File(screenShotName));
 	}
 
-	protected void assertIsInFileListView(FileListView fileListView) 
+	protected void assertIsInFileListView(FilesView fileListView) 
 			throws InterruptedException {
 		Common.waitTillElementIsPresent(
 				fileListView.getTitleTextElement(),30000);

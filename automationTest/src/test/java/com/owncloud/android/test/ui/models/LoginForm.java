@@ -86,9 +86,9 @@ public class LoginForm {
 		//driver.hideKeyboard();
 	}
 	
-	public FileListView clickOnConnectButton () {
+	public FilesView clickOnConnectButton () {
 		connectButton.click();
-		FileListView fileListView = new FileListView(driver);
+		FilesView fileListView = new FilesView(driver);
 		return fileListView;
 	}
 	

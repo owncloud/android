@@ -48,9 +48,9 @@ public class UploadFilesView{
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
 	
-	public FileListView clickOnUploadButton () {
+	public FilesView clickOnUploadButton () {
 		uploadButton.click();
-		FileListView fileListView = new FileListView (driver);
+		FilesView fileListView = new FilesView (driver);
 		return fileListView;
 	}
 	

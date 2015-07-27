@@ -36,7 +36,7 @@ import org.junit.Test;
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.FolderPopUp;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
@@ -61,9 +61,13 @@ public class RenameFolderTestSuite{
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testRenameFolder () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp = null;
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
+
+		//check if the folder with the new name already exists 
+		//and if true, delete it
+		Actions.deleteElement(Config.folderToRename, fileListView, driver);
 
 		//if the folder already exists, do no created
 		AndroidElement folder = fileListView.getFileElement(Config.folderBeforeRename);
@@ -78,10 +82,7 @@ public class RenameFolderTestSuite{
 
 		assertTrue(folder.isDisplayed());
 		CurrentCreatedFolder = Config.folderBeforeRename;
-		
-		//check if the folder with the new name already exists 
-		//and if true, delete them
-		Actions.deleteElement(Config.folderToRename, fileListView, driver);
+		assertNull(fileListView.getFileElement(Config.folderToRename));
 
 		ElementMenuOptions menuOptions = fileListView
 				.longPressOnElement(Config.folderBeforeRename);
@@ -93,17 +94,16 @@ public class RenameFolderTestSuite{
 		folder = fileListView.getFileElement(Config.folderToRename);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
-		assertEquals(Config.folderToRename , folder.getText());
 		CurrentCreatedFolder = Config.folderToRename;
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		
-		FileListView fileListView = new FileListView(driver);
+
+		FilesView fileListView = new FilesView(driver);
 		Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
-		
+
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

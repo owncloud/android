@@ -34,7 +34,7 @@ import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -54,7 +54,7 @@ public class RefreshFolderTestSuite{
 	@Test
 	@Category({UnfinishedTestCategory.class})
 	public void testPulldownToRefreshFolder () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		//TODO. Remove the sleep and check why is not working the assert 

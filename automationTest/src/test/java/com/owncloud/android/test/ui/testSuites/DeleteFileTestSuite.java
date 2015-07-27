@@ -37,7 +37,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -57,7 +57,7 @@ public class DeleteFileTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFileRemoteAndLocal () throws Exception {		
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -65,7 +65,7 @@ public class DeleteFileTestSuite{
 		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
 		if(file!=null){
 			Actions.deleteElement(Config.fileToTest,fileListView, driver);
-			assertFalse(file.isDisplayed());
+			assertNull(fileListView.getFileElement(Config.fileToTest));
 		}
 		//now we are sure that we are going to delete it remote and locally
 		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
@@ -75,8 +75,8 @@ public class DeleteFileTestSuite{
 
 		common.wait.until(ExpectedConditions.visibilityOf(
 				fileListView
-				.getFileElementLayout(Config.fileToTest)
-				.findElement(By.id(FileListView.getLocalFileIndicator()))));
+				.getFileElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 		
 		file = fileListView.getFileElement(Config.fileToTest);
 		
@@ -86,7 +86,7 @@ public class DeleteFileTestSuite{
 				driver);
 		
 		common.assertIsInFileListView(fileListView);
-		assertFalse(file.isDisplayed());
+		assertNull(fileListView.getFileElement(Config.fileToTest));
 	}
 	
 	//TODO. Delete local and delete remote

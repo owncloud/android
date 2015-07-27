@@ -26,17 +26,20 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.RemoteWebElement;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.owncloud.android.test.ui.models.CertificatePopUp;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.GmailSendMailView;
 import com.owncloud.android.test.ui.models.ShareView;
 import com.owncloud.android.test.ui.models.UploadFilesView;
 import com.owncloud.android.test.ui.models.LoginForm;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.MenuList;
 import com.owncloud.android.test.ui.models.FolderPopUp;
 import com.owncloud.android.test.ui.models.RemoveConfirmationView;
@@ -47,7 +50,7 @@ import com.owncloud.android.test.ui.testSuites.Config;
 
 public class Actions {
 
-	public static FileListView login(String url, String user, String password,
+	public static FilesView login(String url, String user, String password,
 			Boolean isTrusted, AndroidDriver driver) 
 					throws InterruptedException {
 		LoginForm loginForm = new LoginForm(driver);
@@ -76,7 +79,7 @@ public class Actions {
 	}
 
 	public static WaitAMomentPopUp createFolder(String folderName,
-			FileListView fileListView){
+			FilesView fileListView){
 		FolderPopUp newFolderPopUp = fileListView.clickOnNewFolderButton();
 		newFolderPopUp.typeNewFolderName(folderName);
 		WaitAMomentPopUp waitAMomentPopUp = newFolderPopUp
@@ -85,11 +88,12 @@ public class Actions {
 		return waitAMomentPopUp;
 	}
 
+	
 
 	public static AndroidElement scrollTillFindElement (String elementName,
 			AndroidElement element, AndroidDriver driver) {
 		AndroidElement fileElement;
-
+		
 		if(element.getAttribute("scrollable").equals("true")){
 			HashMap<String, String> scrollObject = new HashMap<String,String>();
 			scrollObject.put("text", elementName);
@@ -97,16 +101,25 @@ public class Actions {
 			driver.executeScript("mobile: scrollTo", scrollObject);
 		}
 		try {
+			//TODO. in gridview it is failing here
 			fileElement = (AndroidElement) driver
-					.findElementByName(elementName);
+					.findElementByAndroidUIAutomator("new UiSelector()"
+							+ ".description(\"LinearLayout-"+ elementName +"\")");
 		} catch (NoSuchElementException e) {
-			fileElement = null;
+			try {
+				//TODO. in gridview it is failing here?
+				//In the uploadsView the description is not LinearLayout
+				fileElement = (AndroidElement) driver
+						.findElementByName(elementName);
+			} catch (NoSuchElementException e1) {
+				fileElement = null;
+			}
 		}
 		return fileElement;
 	}
 
 
-	public static void deleteAccount (int accountPosition,FileListView fileListView) {	
+	public static void deleteAccount (int accountPosition,FilesView fileListView) {	
 		MenuList menulist = fileListView.clickOnMenuButton();
 		SettingsView settingView = menulist.clickOnSettingsButton();
 		deleteAccount(accountPosition,settingView);
@@ -123,7 +136,7 @@ public class Actions {
 
 
 	public static AndroidElement deleteElementRemoteAndLocal(String elementName,  
-			FileListView fileListView, AndroidDriver driver) throws Exception{
+			FilesView fileListView, AndroidDriver driver) throws Exception{
 		AndroidElement fileElement;
 		WaitAMomentPopUp waitAMomentPopUp;
 		try{
@@ -148,7 +161,7 @@ public class Actions {
 	}
 	
 	public static AndroidElement deleteElement(String elementName,  
-			FileListView fileListView, AndroidDriver driver) throws Exception{
+			FilesView fileListView, AndroidDriver driver) throws Exception{
 		AndroidElement fileElement;
 		WaitAMomentPopUp waitAMomentPopUp;
 		try{
@@ -173,7 +186,7 @@ public class Actions {
 	}
 
 	public static AndroidElement shareLinkElementByGmail(String elementName,  
-			FileListView fileListView, AndroidDriver driver, Common common) 
+			FilesView fileListView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
 			//To open directly the "file list view" and
@@ -191,19 +204,19 @@ public class Actions {
 			Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
 					.getProgressCircular(), 1000);
 			common.wait.until(ExpectedConditions.visibilityOf(
-					fileListView.getFileElementLayout(elementName)
-					.findElement(By.id(FileListView
+					fileListView.getFileElement(elementName)
+					.findElement(By.id(FilesView
 							.getSharedElementIndicator()))));
 
 		}catch(NoSuchElementException e){
 			return null;
 		}
-		return (AndroidElement) fileListView.getFileElementLayout(elementName)
-				.findElement(By.id(FileListView.getSharedElementIndicator()));
+		return (AndroidElement) fileListView.getFileElement(elementName)
+				.findElement(By.id(FilesView.getSharedElementIndicator()));
 	}
 
 	public static AndroidElement shareLinkElementByCopyLink(String elementName,  
-			FileListView fileListView, AndroidDriver driver, Common common) 
+			FilesView fileListView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
 			//To open directly the "file list view" and
@@ -219,18 +232,18 @@ public class Actions {
 			Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 					.getWaitAMomentTextElement(), 100);
 			common.wait.until(ExpectedConditions.visibilityOf(
-					fileListView.getFileElementLayout(elementName)
-					.findElement(By.id(FileListView.getSharedElementIndicator()))));
+					fileListView.getFileElement(elementName)
+					.findElement(By.id(FilesView.getSharedElementIndicator()))));
 		}catch(NoSuchElementException e){
 			return null;
 		}
-		return (AndroidElement) fileListView.getFileElementLayout(elementName)
-				.findElement(By.id(FileListView.getSharedElementIndicator()));
+		return (AndroidElement) fileListView.getFileElement(elementName)
+				.findElement(By.id(FilesView.getSharedElementIndicator()));
 	}
 
 
 	public static void unshareLinkElement(String elementName,  
-			FileListView fileListView, AndroidDriver driver, Common common) 
+			FilesView fileListView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
 			//To open directly the "file list view" and
@@ -244,8 +257,8 @@ public class Actions {
 			Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 					.getWaitAMomentTextElement(), 100);
 			Common.waitTillElementIsNotPresent((AndroidElement) fileListView
-					.getFileElementLayout(elementName)
-					.findElement(By.id(FileListView.getSharedElementIndicator())
+					.getFileElement(elementName)
+					.findElement(By.id(FilesView.getSharedElementIndicator())
 							),100);
 		}catch(NoSuchElementException e){
 
@@ -253,23 +266,23 @@ public class Actions {
 	}
 
 
-	public static FileListView uploadFile(String elementName,
-			FileListView fileListView) throws InterruptedException{
+	public static FilesView uploadFile(String elementName,
+			FilesView fileListView) throws InterruptedException{
 		fileListView.clickOnUploadButton();
 		UploadFilesView uploadFilesView = fileListView
 				.clickOnFilesElementUploadFile();
 		uploadFilesView.tapOnElement(Config.folderWhereFilesToUploadAre);
 		Thread.sleep(15000);
 		uploadFilesView.clickOnFileName(elementName);
-		FileListView fileListViewAfterUploadFile = uploadFilesView
+		FilesView fileListViewAfterUploadFile = uploadFilesView
 				.clickOnUploadButton();
 		//TO DO. detect when the file is successfully uploaded
 		Thread.sleep(15000);
 		return fileListViewAfterUploadFile; 
 	}
 
-	public static FileListView uploadSeveralFile(String elementName,
-			String elementName2, String elementName3,FileListView fileListView)
+	public static FilesView uploadSeveralFile(String elementName,
+			String elementName2, String elementName3,FilesView fileListView)
 					throws InterruptedException{
 
 		fileListView.clickOnUploadButton();
@@ -281,7 +294,7 @@ public class Actions {
 		uploadFilesView.clickOnFileName(elementName2);
 		uploadFilesView.clickOnFileName(elementName3);
 
-		FileListView fileListViewAfterUploadFile = uploadFilesView
+		FilesView fileListViewAfterUploadFile = uploadFilesView
 				.clickOnUploadButton();
 		//TO DO. detect when the file is successfully uploaded
 		Thread.sleep(15000);

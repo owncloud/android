@@ -35,7 +35,7 @@ import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
@@ -56,7 +56,7 @@ public class DeleteFolderTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFolder () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -74,13 +74,13 @@ public class DeleteFolderTestSuite{
 
 		//delete the folder
 		Actions.deleteElement(Config.folderToCreate, fileListView, driver);
-		assertFalse(folder.isDisplayed());
+		assertNull(fileListView.getFileElement(Config.folderToCreate));
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFolderWithContents () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 
@@ -112,20 +112,22 @@ public class DeleteFolderTestSuite{
 
 		//delete the folder
 		Actions.deleteElement(Config.folderToCreate, fileListView, driver);
-		assertFalse(folder.isDisplayed());
+		//assertFalse(folder.isDisplayed());
+		assertNull(fileListView.getFileElement(Config.folderToCreate));
 
 		fileListView.pulldownToRefresh();
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
 				.getProgressCircular(), 100);
-		assertFalse(folder.isDisplayed());
+		//assertFalse(folder.isDisplayed());
+		assertNull(fileListView.getFileElement(Config.folderToCreate));
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		FileListView fileListView = new FileListView(driver);
+		FilesView fileListView = new FilesView(driver);
 		Actions.deleteElement(Config.folderToCreate, fileListView, driver);
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
