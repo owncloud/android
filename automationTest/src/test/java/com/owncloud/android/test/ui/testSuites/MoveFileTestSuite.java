@@ -66,19 +66,19 @@ public class MoveFileTestSuite{
 		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
 		Actions.deleteElement(Config.fileToTest, fileListView, driver);
 		
-		assertNull(fileListView.getFileElement(Config.folderWhereMove));
-		assertNull(fileListView.getFileElement(Config.fileToTest));
+		assertNull(fileListView.getElement(Config.folderWhereMove));
+		assertNull(fileListView.getElement(Config.fileToTest));
 
 		//Create the folder where the other is gone to be moved
 		waitAMomentPopUp = Actions
 				.createFolder(Config.folderWhereMove, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(fileListView.getFileElement(Config.folderWhereMove)
+		assertTrue(fileListView.getElement(Config.folderWhereMove)
 				.isDisplayed());
 
 		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
-		assertTrue(fileListView.getFileElement(Config.fileToTest)
+		assertTrue(fileListView.getElement(Config.fileToTest)
 				.isDisplayed());
 
 		//select to move the file
@@ -98,7 +98,7 @@ public class MoveFileTestSuite{
 				fileListView.getProgressCircular(),1000);
 
 		Thread.sleep(1000);
-		assertTrue(fileListView.getFileElement(Config.fileToTest)
+		assertTrue(fileListView.getElement(Config.fileToTest)
 				.isDisplayed());
 
 	}

@@ -70,16 +70,16 @@ public class UploadTestSuite{
 
 		fileListView = Actions.uploadFile(file, fileListView);
 
-		assertTrue(fileListView.getFileElement(file).isDisplayed());
+		assertTrue(fileListView.getElement(file).isDisplayed());
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListView.getProgressCircular(), 1000);
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElement(file)
+				fileListView.getElement(file)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
-		assertTrue(fileListView.getFileElement(file)
+		assertTrue(fileListView.getElement(file)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 	}
@@ -118,36 +118,35 @@ public class UploadTestSuite{
 				Config.fileToTest2, Config.fileToTest3, fileListView);
 
 		assertTrue(fileListView
-				.getFileElement(Config.fileToTest).isDisplayed());
+				.getElement(Config.fileToTest).isDisplayed());
 		assertTrue(fileListView
-				.getFileElement(Config.fileToTest2).isDisplayed());
-		assertTrue(fileListView
-				.getFileElement(Config.fileToTest3).isDisplayed());
+				.getElement(Config.fileToTest2).isDisplayed());
+		assertTrue(fileListView.getElement(Config.fileToTest3).isDisplayed());
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListView.getProgressCircular(), 1000);
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElement(Config.fileToTest)
+				fileListView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElement(Config.fileToTest2)
+				fileListView.getElement(Config.fileToTest2)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElement(Config.fileToTest3)
+				fileListView.getElement(Config.fileToTest3)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
-		assertTrue(fileListView.getFileElement(Config.fileToTest)
+		assertTrue(fileListView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 
-		assertTrue(fileListView.getFileElement(Config.fileToTest2)
+		assertTrue(fileListView.getElement(Config.fileToTest2)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 
-		assertTrue(fileListView.getFileElement(Config.fileToTest3)
+		assertTrue(fileListView.getElement(Config.fileToTest3)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 
@@ -189,20 +188,19 @@ public class UploadTestSuite{
 					".ui.activity.FileDisplayActivity");
 		}
 
-		assertTrue(fileListView
-				.getFileElement(Config.bigFileToTest).isDisplayed());
+		assertTrue(fileListView.getElement(Config.bigFileToTest).isDisplayed());
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListView.getProgressCircular(), 1000);
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElement(Config.bigFileToTest)
+				fileListView.getElement(Config.bigFileToTest)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))));
-		assertTrue(fileListView.getFileElement(Config.bigFileToTest)
+		assertTrue(fileListView.getElement(Config.bigFileToTest)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
 		fileListView = new FilesView(driver);
-		assertTrue(fileListView
-				.getFileElement(Config.bigFileToTest).isDisplayed());
+		assertTrue(fileListView.getElement(Config.bigFileToTest)
+				.isDisplayed());
 	}
 
 
@@ -234,8 +232,7 @@ public class UploadTestSuite{
 		
 		fileListView = new FilesView(driver);
 		assertTrue(fileListView
-				.getFileElement(Config.fileToTestSendByEmail).isDisplayed());
-		
+				.getElement(Config.fileToTestSendByEmail).isDisplayed());
 	}
 
 

@@ -61,20 +61,20 @@ public class DeleteFolderTestSuite{
 		common.assertIsInFileListView(fileListView);
 
 		//if the folder already exists, do no created
-		AndroidElement folder = fileListView.getFileElement(Config.folderToCreate);
+		AndroidElement folder = fileListView.getElement(Config.folderToCreate);
 		if(folder==null){
 			//create the folder
 			WaitAMomentPopUp waitAMomentPopUp = Actions
 					.createFolder(Config.folderToCreate, fileListView);
 			Common.waitTillElementIsNotPresentWithoutTimeout(
 					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-			folder = fileListView.getFileElement(Config.folderToCreate);
+			folder = fileListView.getElement(Config.folderToCreate);
 		}
 		assertTrue(folder.isDisplayed());
 
 		//delete the folder
 		Actions.deleteElement(Config.folderToCreate, fileListView, driver);
-		assertNull(fileListView.getFileElement(Config.folderToCreate));
+		assertNull(fileListView.getElement(Config.folderToCreate));
 	}
 
 	@Test
@@ -85,13 +85,13 @@ public class DeleteFolderTestSuite{
 		common.assertIsInFileListView(fileListView);
 
 		//if the folder already exists, do no created
-		AndroidElement folder = fileListView.getFileElement(Config.folderToCreate);
+		AndroidElement folder = fileListView.getElement(Config.folderToCreate);
 		if(folder==null){
 			WaitAMomentPopUp waitAMomentPopUp = Actions
 					.createFolder(Config.folderToCreate, fileListView);
 			Common.waitTillElementIsNotPresentWithoutTimeout(
 					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-			folder = fileListView.getFileElement(Config.folderToCreate);
+			folder = fileListView.getElement(Config.folderToCreate);
 		}
 		assertTrue(folder.isDisplayed());
 		fileListView.tapOnElement(Config.folderToCreate);
@@ -100,27 +100,27 @@ public class DeleteFolderTestSuite{
 				Config.fileToTest2,Config.fileToTest3, fileListView);
 
 		assertTrue(fileListView
-				.getFileElement(Config.fileToTest).isDisplayed());
+				.getElement(Config.fileToTest).isDisplayed());
 		assertTrue(fileListView
-				.getFileElement(Config.fileToTest2).isDisplayed());
+				.getElement(Config.fileToTest2).isDisplayed());
 		assertTrue(fileListView
-				.getFileElement(Config.fileToTest3).isDisplayed());
+				.getElement(Config.fileToTest3).isDisplayed());
 
 		fileListView.clickOnBackButton();
-		folder = fileListView.getFileElement(Config.folderToCreate);
+		folder = fileListView.getElement(Config.folderToCreate);
 		assertTrue(folder.isDisplayed());
 
 		//delete the folder
 		Actions.deleteElement(Config.folderToCreate, fileListView, driver);
 		//assertFalse(folder.isDisplayed());
-		assertNull(fileListView.getFileElement(Config.folderToCreate));
+		assertNull(fileListView.getElement(Config.folderToCreate));
 
 		fileListView.pulldownToRefresh();
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
 				.getProgressCircular(), 100);
 		//assertFalse(folder.isDisplayed());
-		assertNull(fileListView.getFileElement(Config.folderToCreate));
+		assertNull(fileListView.getElement(Config.folderToCreate));
 
 	}
 

@@ -58,13 +58,13 @@ public class CreateFolderTestSuite{
 			throws Exception{
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(folderName, fileListView, driver);
-		assertNull(fileListView.getFileElement(folderName));
+		assertNull(fileListView.getElement(folderName));
 
 		WaitAMomentPopUp waitAMomentPopUp = Actions
 				.createFolder(folderName, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		AndroidElement folder = fileListView.getFileElement(folderName);
+		AndroidElement folder = fileListView.getElement(folderName);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
 		CurrentCreatedFolder = folderName;

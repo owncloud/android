@@ -70,19 +70,19 @@ public class RenameFolderTestSuite{
 		Actions.deleteElement(Config.folderToRename, fileListView, driver);
 
 		//if the folder already exists, do no created
-		AndroidElement folder = fileListView.getFileElement(Config.folderBeforeRename);
+		AndroidElement folder = fileListView.getElement(Config.folderBeforeRename);
 		if(folder==null){
 			//create the folder to rename
 			waitAMomentPopUp = Actions
 					.createFolder(Config.folderBeforeRename, fileListView);
 			Common.waitTillElementIsNotPresentWithoutTimeout(
 					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-			folder = fileListView.getFileElement(Config.folderBeforeRename);
+			folder = fileListView.getElement(Config.folderBeforeRename);
 		}
 
 		assertTrue(folder.isDisplayed());
 		CurrentCreatedFolder = Config.folderBeforeRename;
-		assertNull(fileListView.getFileElement(Config.folderToRename));
+		assertNull(fileListView.getElement(Config.folderToRename));
 
 		ElementMenuOptions menuOptions = fileListView
 				.longPressOnElement(Config.folderBeforeRename);
@@ -91,7 +91,7 @@ public class RenameFolderTestSuite{
 		FolderPopUp.clickOnNewFolderOkButton();
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		folder = fileListView.getFileElement(Config.folderToRename);
+		folder = fileListView.getElement(Config.folderToRename);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
 		CurrentCreatedFolder = Config.folderToRename;

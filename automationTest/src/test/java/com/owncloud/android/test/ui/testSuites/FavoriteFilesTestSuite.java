@@ -70,10 +70,10 @@ public class FavoriteFilesTestSuite{
 				.getProgressCircular(), 1000);
 
 		//if the file already exists, it is not necessary to upload it
-		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
+		AndroidElement file = fileListView.getElement(Config.fileToTest);
 		if(file==null){
 			fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
-			file = fileListView.getFileElement(Config.fileToTest);
+			file = fileListView.getElement(Config.fileToTest);
 		}
 		assertTrue(file.isDisplayed());
 
@@ -84,8 +84,7 @@ public class FavoriteFilesTestSuite{
 		Thread.sleep(3000);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 
-		assertTrue(fileListView
-				.getFileElement(Config.fileToTest)
+		assertTrue(fileListView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}
@@ -102,10 +101,10 @@ public class FavoriteFilesTestSuite{
 				fileListView.getProgressCircular(), 1000);
 
 		//if the file already exists, it is not necessary to upload it
-		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
+		AndroidElement file = fileListView.getElement(Config.fileToTest);
 		if(file==null){
 			fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
-			file = fileListView.getFileElement(Config.fileToTest);
+			file = fileListView.getElement(Config.fileToTest);
 		}
 		assertTrue(file.isDisplayed());
 
@@ -121,7 +120,7 @@ public class FavoriteFilesTestSuite{
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
 				.getProgressCircular(), 100);
 
-		assertTrue(fileListView.getFileElement(Config.fileToTest)
+		assertTrue(fileListView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}

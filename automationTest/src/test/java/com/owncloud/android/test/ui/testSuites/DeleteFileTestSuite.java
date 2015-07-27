@@ -62,10 +62,10 @@ public class DeleteFileTestSuite{
 		common.assertIsInFileListView(fileListView);
 
 		//if the file already exists, delete it remote
-		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
+		AndroidElement file = fileListView.getElement(Config.fileToTest);
 		if(file!=null){
 			Actions.deleteElement(Config.fileToTest,fileListView, driver);
-			assertNull(fileListView.getFileElement(Config.fileToTest));
+			assertNull(fileListView.getElement(Config.fileToTest));
 		}
 		//now we are sure that we are going to delete it remote and locally
 		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
@@ -75,10 +75,10 @@ public class DeleteFileTestSuite{
 
 		common.wait.until(ExpectedConditions.visibilityOf(
 				fileListView
-				.getFileElement(Config.fileToTest)
+				.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 		
-		file = fileListView.getFileElement(Config.fileToTest);
+		file = fileListView.getElement(Config.fileToTest);
 		
 		assertTrue(file.isDisplayed());
 
@@ -86,7 +86,7 @@ public class DeleteFileTestSuite{
 				driver);
 		
 		common.assertIsInFileListView(fileListView);
-		assertNull(fileListView.getFileElement(Config.fileToTest));
+		assertNull(fileListView.getElement(Config.fileToTest));
 	}
 	
 	//TODO. Delete local and delete remote

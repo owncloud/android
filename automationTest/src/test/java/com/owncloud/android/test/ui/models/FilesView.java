@@ -169,30 +169,19 @@ public class FilesView {
 	}
 
 	public ElementMenuOptions longPressOnElement (String elementName) {
-		getFileElement(elementName).tap(1, 1000);
+		Actions.getElementInFilesView(elementName,driver).tap(1, 1000);
 		ElementMenuOptions menuOptions = new ElementMenuOptions(driver);
 		return menuOptions;
 	}
 
 
 	public void tapOnElement (String elementName) {
-		getFileElement(elementName).tap(1, 1);
+		Actions.getElementInFilesView(elementName,driver).tap(1, 1);
 	}
 
 
-	public AndroidElement getFileElement (String elementName) {
-		try {
-			if(isGridView()){
-				fileElementLayout = Actions
-						.scrollTillFindElement (elementName,gridLayout,driver);
-			}else{
-				fileElementLayout = Actions
-						.scrollTillFindElement (elementName,listLayout,driver);
-			}
-
-		} catch (NoSuchElementException e) {
-			fileElementLayout = null;
-		}
+	public AndroidElement getElement (String elementName) {
+		fileElementLayout = Actions.getElementInFilesView(elementName, driver);
 		return fileElementLayout;
 	}
 

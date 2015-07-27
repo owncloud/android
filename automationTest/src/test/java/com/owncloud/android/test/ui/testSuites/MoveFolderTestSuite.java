@@ -69,15 +69,15 @@ public class MoveFolderTestSuite{
 		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
 		Actions.deleteElement(Config.folderToMove, fileListView, driver);
 		
-		assertNull(fileListView.getFileElement(Config.folderWhereMove));
-		assertNull(fileListView.getFileElement(Config.folderToMove));
+		assertNull(fileListView.getElement(Config.folderWhereMove));
+		assertNull(fileListView.getElement(Config.folderToMove));
 
 		//Create the folder where the other is gone to be moved
 		waitAMomentPopUp = Actions
 				.createFolder(Config.folderWhereMove, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(fileListView.getFileElement(
+		assertTrue(fileListView.getElement(
 				Config.folderWhereMove).isDisplayed());
 
 		//Create the folder which is going to be moved
@@ -85,7 +85,7 @@ public class MoveFolderTestSuite{
 				Config.folderToMove, fileListView);
 		Common.waitTillElementIsNotPresent(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(fileListView.getFileElement(
+		assertTrue(fileListView.getElement(
 				Config.folderToMove).isDisplayed());
 
 		//select to move the folder
@@ -104,7 +104,7 @@ public class MoveFolderTestSuite{
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListView.getProgressCircular(), 1000);
 		Thread.sleep(1000);
-		assertTrue(fileListView.getFileElement(Config.folderToMove)
+		assertTrue(fileListView.getElement(Config.folderToMove)
 				.isDisplayed());
 	}
 

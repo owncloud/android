@@ -91,7 +91,7 @@ public class LoginTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		
-		assertTrue(fileListView.getFileElement(Config.fileWhichIsInTheServer1)
+		assertTrue(fileListView.getElement(Config.fileWhichIsInTheServer1)
 				.isDisplayed());
 	}
 	
@@ -123,7 +123,7 @@ public class LoginTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView(fileListView);
 		assertTrue(fileListView
-				.getFileElement(Config.fileWhichIsInTheServer1).isDisplayed());
+				.getElement(Config.fileWhichIsInTheServer1).isDisplayed());
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		MenuList menu = fileListView.clickOnMenuButton();
@@ -136,7 +136,7 @@ public class LoginTestSuite{
 		settingsView.tapOnAccountElement(2,1, 100);
 		common.assertIsInFileListView(fileListView);
 		
-		assertTrue(fileListView.getFileElement(Config.fileWhichIsInTheServer2)
+		assertTrue(fileListView.getElement(Config.fileWhichIsInTheServer2)
 				.isDisplayed());
 	}
 	

@@ -88,12 +88,11 @@ public class Actions {
 		return waitAMomentPopUp;
 	}
 
-	
 
 	public static AndroidElement scrollTillFindElement (String elementName,
 			AndroidElement element, AndroidDriver driver) {
 		AndroidElement fileElement;
-		
+
 		if(element.getAttribute("scrollable").equals("true")){
 			HashMap<String, String> scrollObject = new HashMap<String,String>();
 			scrollObject.put("text", elementName);
@@ -101,13 +100,11 @@ public class Actions {
 			driver.executeScript("mobile: scrollTo", scrollObject);
 		}
 		try {
-			//TODO. in gridview it is failing here
 			fileElement = (AndroidElement) driver
 					.findElementByAndroidUIAutomator("new UiSelector()"
 							+ ".description(\"LinearLayout-"+ elementName +"\")");
 		} catch (NoSuchElementException e) {
 			try {
-				//TODO. in gridview it is failing here?
 				//In the uploadsView the description is not LinearLayout
 				fileElement = (AndroidElement) driver
 						.findElementByName(elementName);
@@ -116,6 +113,20 @@ public class Actions {
 			}
 		}
 		return fileElement;
+	}
+
+	public static AndroidElement getElementInFilesView (String elementName, AndroidDriver driver) {
+		AndroidElement layout=null, element;
+		try {
+			layout = (AndroidElement) driver
+					.findElementById("com.owncloud.android:id/list_root");
+
+		} catch (NoSuchElementException e) {
+			layout = (AndroidElement) driver
+					.findElementById("com.owncloud.android:id/grid_root");
+		}
+		element = Actions.scrollTillFindElement (elementName,layout,driver);
+		return element;
 	}
 
 
@@ -144,22 +155,23 @@ public class Actions {
 			//we don't need to know in which view we are
 			driver.startActivity("com.owncloud.android",
 					".ui.activity.FileDisplayActivity");
-			fileElement = (AndroidElement) driver
-					.findElementByName(elementName);
-			ElementMenuOptions menuOptions = fileListView
-					.longPressOnElement(elementName);
-			RemoveConfirmationView removeConfirmationView = menuOptions
-					.clickOnRemove();
-			waitAMomentPopUp = removeConfirmationView
-					.clickOnRemoteAndLocalButton();
-			Common.waitTillElementIsNotPresent(
-					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			fileElement = getElementInFilesView(elementName, driver);
+			if(fileElement!=null){
+				ElementMenuOptions menuOptions = fileListView
+						.longPressOnElement(elementName);
+				RemoveConfirmationView removeConfirmationView = menuOptions
+						.clickOnRemove();
+				waitAMomentPopUp = removeConfirmationView
+						.clickOnRemoteAndLocalButton();
+				Common.waitTillElementIsNotPresent(
+						waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			}
 		}catch(NoSuchElementException e){
 			fileElement=null;
 		}
 		return fileElement;
 	}
-	
+
 	public static AndroidElement deleteElement(String elementName,  
 			FilesView fileListView, AndroidDriver driver) throws Exception{
 		AndroidElement fileElement;
@@ -169,16 +181,17 @@ public class Actions {
 			//we don't need to know in which view we are
 			driver.startActivity("com.owncloud.android",
 					".ui.activity.FileDisplayActivity");
-			fileElement = (AndroidElement) driver
-					.findElementByName(elementName);
-			ElementMenuOptions menuOptions = fileListView
-					.longPressOnElement(elementName);
-			RemoveConfirmationView removeConfirmationView = menuOptions
-					.clickOnRemove();
-			waitAMomentPopUp = removeConfirmationView
-					.clickOnAnyRemoteButton();
-			Common.waitTillElementIsNotPresent(
-					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			fileElement = getElementInFilesView(elementName, driver);
+			if(fileElement!=null){
+				ElementMenuOptions menuOptions = fileListView
+						.longPressOnElement(elementName);
+				RemoveConfirmationView removeConfirmationView = menuOptions
+						.clickOnRemove();
+				waitAMomentPopUp = removeConfirmationView
+						.clickOnAnyRemoteButton();
+				Common.waitTillElementIsNotPresent(
+						waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			}
 		}catch(NoSuchElementException e){
 			fileElement=null;
 		}
@@ -204,14 +217,15 @@ public class Actions {
 			Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
 					.getProgressCircular(), 1000);
 			common.wait.until(ExpectedConditions.visibilityOf(
-					fileListView.getFileElement(elementName)
+					Actions.getElementInFilesView(elementName,driver)
 					.findElement(By.id(FilesView
 							.getSharedElementIndicator()))));
 
 		}catch(NoSuchElementException e){
 			return null;
 		}
-		return (AndroidElement) fileListView.getFileElement(elementName)
+		return (AndroidElement) Actions
+				.getElementInFilesView(elementName,driver)
 				.findElement(By.id(FilesView.getSharedElementIndicator()));
 	}
 
@@ -232,12 +246,13 @@ public class Actions {
 			Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 					.getWaitAMomentTextElement(), 100);
 			common.wait.until(ExpectedConditions.visibilityOf(
-					fileListView.getFileElement(elementName)
+					Actions.getElementInFilesView(elementName,driver)
 					.findElement(By.id(FilesView.getSharedElementIndicator()))));
 		}catch(NoSuchElementException e){
 			return null;
 		}
-		return (AndroidElement) fileListView.getFileElement(elementName)
+		return (AndroidElement) Actions
+				.getElementInFilesView(elementName,driver)
 				.findElement(By.id(FilesView.getSharedElementIndicator()));
 	}
 
@@ -256,8 +271,8 @@ public class Actions {
 					.clickOnUnshareLinkElement();
 			Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 					.getWaitAMomentTextElement(), 100);
-			Common.waitTillElementIsNotPresent((AndroidElement) fileListView
-					.getFileElement(elementName)
+			Common.waitTillElementIsNotPresent((AndroidElement) Actions
+					.getElementInFilesView(elementName,driver)
 					.findElement(By.id(FilesView.getSharedElementIndicator())
 							),100);
 		}catch(NoSuchElementException e){

@@ -69,30 +69,29 @@ public class RenameFileTestSuite{
 		Actions.deleteElement(Config.fileToRename, fileListView, driver);
 
 		//if the file to rename already exists, delete it 
-		AndroidElement file = fileListView.getFileElement(Config.fileToTest);
+		AndroidElement file = fileListView.getElement(Config.fileToTest);
 		if(file!=null){
 			Actions.deleteElement(Config.fileToTest,fileListView, driver);
 			common.assertIsInFileListView(fileListView);
-			assertNull(fileListView.getFileElement(Config.fileToTest));
+			assertNull(fileListView.getElement(Config.fileToTest));
 		}
 		//now we are sure that we are going to rename a downloaded file
 		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
 
-		assertTrue(fileListView
-				.getFileElement(Config.fileToTest).isDisplayed());
+		assertTrue(fileListView.getElement(Config.fileToTest).isDisplayed());
 		CurrentCreatedFile = Config.fileToTest;
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListView.getProgressCircular(), 1000);
 
 		//check that it is downloaded
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView.getFileElement(Config.fileToTest)
+				fileListView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 
-		assertTrue(fileListView.getFileElement(Config.fileToTest)
+		assertTrue(fileListView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))
 				.isDisplayed());
-		assertNull(fileListView.getFileElement(Config.fileToRename));
+		assertNull(fileListView.getElement(Config.fileToRename));
 
 		ElementMenuOptions menuOptions = fileListView
 				.longPressOnElement(Config.fileToTest);
@@ -107,7 +106,7 @@ public class RenameFileTestSuite{
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
 
-		file = fileListView.getFileElement(Config.fileToRename);
+		file = fileListView.getElement(Config.fileToRename);
 
 		assertNotNull(file);
 		assertTrue(file.isDisplayed());	
