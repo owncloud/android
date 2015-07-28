@@ -61,6 +61,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
 	private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
     private long mModificationTimestamp = 0;
+    private String mEtag = "";
     private GetMethod mGet;
     
     private String mRemotePath;
@@ -146,9 +147,25 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                 	if (modificationTime != null) {
                 		Date d = WebdavUtils.parseResponseDate((String) modificationTime.getValue());
                 		mModificationTimestamp = (d != null) ? d.getTime() : 0;
-                	}
+                	} else {
+                        Log_OC.e(TAG, "Could not read modification time from response downloading " + mRemotePath);
+                    }
+                    Header eTag = mGet.getResponseHeader("ETag");
+                    if (eTag == null) {
+                        eTag = mGet.getResponseHeader("etag");
+                    }
+                    if (eTag != null) {
+                        mEtag = eTag.getValue();
+                        if (mEtag.charAt(0) == '"' && mEtag.charAt(mEtag.length() - 1) == '"') {
+                            mEtag = mEtag.substring(1, mEtag.length() - 1);
+                        }
+                    } else {
+                        Log_OC.e(TAG, "Could not read eTag from response downloading " + mRemotePath);
+                    }
+
                 } else {
                 	client.exhaustResponse(mGet.getResponseBodyAsStream());
+                    // TODO some kind of error control!
                 }
                 
             } else {
@@ -193,4 +210,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
 		return mModificationTimestamp;
 	}
 
+    public String getEtag() {
+        return mEtag;
+    }
 }
