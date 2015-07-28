@@ -40,7 +40,7 @@ import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.GmailEmailListView;
 import com.owncloud.android.test.ui.models.GmailEmailView;
-import com.owncloud.android.test.ui.models.ImageView;
+import com.owncloud.android.test.ui.models.ImageViewFromOtherApp;
 import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.NotificationView;
 import com.owncloud.android.test.ui.models.UploadView;
@@ -205,7 +205,7 @@ public class UploadTestSuite{
 
 
 	@Test
-	@Category({UnfinishedTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class})
 	public void testUploadFromGmail () throws Exception {
 		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
@@ -215,7 +215,8 @@ public class UploadTestSuite{
 		GmailEmailListView gmailEmailListView = new GmailEmailListView(driver);
 		Thread.sleep(5000);
 		GmailEmailView gmailEmailView = gmailEmailListView.clickOnEmail();
-		ImageView imageView = gmailEmailView.clickOnfileButton();
+		ImageViewFromOtherApp imageView = gmailEmailView.clickOnfileButton();
+		Thread.sleep(2000);
 		imageView.clickOnOptionsButton();
 		imageView.clickOnShareButton();
 		imageView.clickOnOwnCloudButton();

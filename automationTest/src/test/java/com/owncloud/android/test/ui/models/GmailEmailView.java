@@ -42,9 +42,9 @@ public class GmailEmailView {
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
 	
-	public ImageView clickOnfileButton (){
+	public ImageViewFromOtherApp clickOnfileButton (){
 		fileButton.click();
-		ImageView imageView = new ImageView(driver);
+		ImageViewFromOtherApp imageView = new ImageViewFromOtherApp(driver);
 		return imageView;
 	}
 }

@@ -24,6 +24,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.PageFactory;
 
@@ -31,7 +32,7 @@ import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.testSuites.Common;
 
 
-public class ImageView {
+public class ImageViewFromOtherApp {
 	final AndroidDriver driver;
 
 	@CacheLookup
@@ -54,7 +55,7 @@ public class ImageView {
 	@AndroidFindBy(id = "android:id/resolver_list")
 	private AndroidElement sharingAppsLayout;
 
-	public ImageView (AndroidDriver driver) {
+	public ImageViewFromOtherApp (AndroidDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
@@ -68,10 +69,10 @@ public class ImageView {
 	}
 
 	public void clickOnOwnCloudButton(){
-		if(Common.isElementPresent(ownCloudButton)){
+		if(!Common.isElementPresent(shareWithOwnCloudButton)){
 			Actions.scrollTillFindElement("ownCloud",sharingAppsLayout,driver);
 			ownCloudButton.click();
-		}else if(Common.isElementPresent(shareWithOwnCloudButton)){}
+		}
 	}
 
 	public void clickOnJustOnceButton(){

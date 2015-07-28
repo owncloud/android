@@ -54,19 +54,16 @@ public class UploadFilesView{
 		return fileListView;
 	}
 	
-	//change to scrollTillFindElement
-	public void scrollTillFindFile (String fileName) {
-		fileElement = Actions
-				.scrollTillFindElement(fileName,filesLayout,driver);
-	}
 	
-	public void clickOnFileName (String fileName) {
-		scrollTillFindFile(fileName);
+	public void clickOnElement (String elementName) {
+		fileElement = Actions
+				.scrollTillFindElement(elementName,filesLayout,driver);
 		fileElement.click();
 	}
 	
 	public void tapOnElement (String elementName) {
-		scrollTillFindFile(elementName);
+		fileElement = Actions
+				.scrollTillFindElement(elementName,filesLayout,driver);
 		fileElement.tap(1,1);
 	}
 }

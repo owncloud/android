@@ -105,7 +105,7 @@ public class Actions {
 							+ ".description(\"LinearLayout-"+ elementName +"\")");
 		} catch (NoSuchElementException e) {
 			try {
-				//In the uploadsView the description is not LinearLayout
+				//if the description is not LinearLayout
 				fileElement = (AndroidElement) driver
 						.findElementByName(elementName);
 			} catch (NoSuchElementException e1) {
@@ -288,7 +288,7 @@ public class Actions {
 				.clickOnFilesElementUploadFile();
 		uploadFilesView.tapOnElement(Config.folderWhereFilesToUploadAre);
 		Thread.sleep(15000);
-		uploadFilesView.clickOnFileName(elementName);
+		uploadFilesView.clickOnElement(elementName);
 		FilesView fileListViewAfterUploadFile = uploadFilesView
 				.clickOnUploadButton();
 		//TO DO. detect when the file is successfully uploaded
@@ -305,9 +305,9 @@ public class Actions {
 				.clickOnFilesElementUploadFile();
 		uploadFilesView.tapOnElement(Config.folderWhereFilesToUploadAre);
 		Thread.sleep(15000);
-		uploadFilesView.clickOnFileName(elementName);
-		uploadFilesView.clickOnFileName(elementName2);
-		uploadFilesView.clickOnFileName(elementName3);
+		uploadFilesView.clickOnElement(elementName);
+		uploadFilesView.clickOnElement(elementName2);
+		uploadFilesView.clickOnElement(elementName3);
 
 		FilesView fileListViewAfterUploadFile = uploadFilesView
 				.clickOnUploadButton();
