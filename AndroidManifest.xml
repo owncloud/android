@@ -85,6 +85,13 @@
             android:name=".ui.activity.Preferences"
             android:theme="@style/Theme.ownCloud" >
         </activity>
+         <activity
+            android:name=".ui.activity.InstantUploadPreferencesActivity">
+         </activity>
+        
+        <activity android:name=".ui.activity.PreferencesNewSessionewSession" >
+        </activity>
+        
         <activity	
             android:name=".ui.preview.PreviewImageActivity" 
             />
@@ -119,6 +126,8 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter_files" />
         </service>
+        
+       
 
         <provider
             android:name=".providers.FileContentProvider"
@@ -180,6 +189,8 @@
             </intent-filter>
         </receiver>
         <service android:name=".services.observer.FileObserverService"/>
+        <service android:name=".services.observer.InstantUploadFolderObserverService"/>
+         
         
 		<activity
 			android:name=".ui.activity.CopyToClipboardActivity"
