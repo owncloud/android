@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.2.3'
     }
 }
 apply plugin: 'com.android.library'
@@ -13,9 +13,7 @@ repositories {
 }
 
 dependencies {
-    compile 'commons-httpclient:commons-httpclient:3.1'
-    compile 'org.apache.jackrabbit:jackrabbit-webdav:2.7.2'
-    compile 'org.slf4j:slf4j-api:1.7.5'
+    compile 'org.apache.jackrabbit:jackrabbit-webdav:2.10.1'
 }
 
 android {
