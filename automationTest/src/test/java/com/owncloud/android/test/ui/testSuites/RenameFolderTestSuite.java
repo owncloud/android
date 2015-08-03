@@ -61,37 +61,37 @@ public class RenameFolderTestSuite{
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testRenameFolder () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp = null;
-		FilesView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
+		common.assertIsInFilesView(filesView);
 
 		//check if the folder with the new name already exists 
 		//and if true, delete it
-		Actions.deleteElement(Config.folderToRename, fileListView, driver);
+		Actions.deleteElement(Config.folderToRename, filesView, driver);
 
 		//if the folder already exists, do no created
-		AndroidElement folder = fileListView.getElement(Config.folderBeforeRename);
+		AndroidElement folder = filesView.getElement(Config.folderBeforeRename);
 		if(folder==null){
 			//create the folder to rename
 			waitAMomentPopUp = Actions
-					.createFolder(Config.folderBeforeRename, fileListView);
+					.createFolder(Config.folderBeforeRename, filesView);
 			Common.waitTillElementIsNotPresentWithoutTimeout(
 					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-			folder = fileListView.getElement(Config.folderBeforeRename);
+			folder = filesView.getElement(Config.folderBeforeRename);
 		}
 
 		assertTrue(folder.isDisplayed());
 		CurrentCreatedFolder = Config.folderBeforeRename;
-		assertNull(fileListView.getElement(Config.folderToRename));
+		assertNull(filesView.getElement(Config.folderToRename));
 
-		ElementMenuOptions menuOptions = fileListView
+		ElementMenuOptions menuOptions = filesView
 				.longPressOnElement(Config.folderBeforeRename);
 		FolderPopUp FolderPopUp = menuOptions.clickOnRename();
 		FolderPopUp.typeNewFolderName(Config.folderToRename);
 		FolderPopUp.clickOnNewFolderOkButton();
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		folder = fileListView.getElement(Config.folderToRename);
+		folder = filesView.getElement(Config.folderToRename);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
 		CurrentCreatedFolder = Config.folderToRename;
@@ -101,8 +101,8 @@ public class RenameFolderTestSuite{
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
 
-		FilesView fileListView = new FilesView(driver);
-		Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
+		FilesView filesView = new FilesView(driver);
+		Actions.deleteElement(CurrentCreatedFolder, filesView, driver);
 
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

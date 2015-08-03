@@ -88,8 +88,8 @@ public class LoginForm {
 	
 	public FilesView clickOnConnectButton () {
 		connectButton.click();
-		FilesView fileListView = new FilesView(driver);
-		return fileListView;
+		FilesView filesView = new FilesView(driver);
+		return filesView;
 	}
 	
 	public AndroidElement gethostUrlInput () {

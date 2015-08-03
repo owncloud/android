@@ -35,8 +35,6 @@ import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.LoginForm;
 import com.owncloud.android.test.ui.models.FilesView;
-import com.owncloud.android.test.ui.models.MenuList;
-import com.owncloud.android.test.ui.models.SettingsView;
 
 public class LogoutTestSuite{
 	
@@ -54,13 +52,10 @@ public class LogoutTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testLogout () throws Exception {
-		FilesView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
-		MenuList menulist = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menulist.clickOnSettingsButton();
-		settingsView.tapOnAccountElement(1,1, 1000);
-		LoginForm loginForm = settingsView.clickOnDeleteAccountElement();
+		common.assertIsInFilesView(filesView);
+		LoginForm loginForm = Actions.openDrawerAndDeleteAccount(1, filesView);
 		assertEquals("Server address https://…",
 				loginForm.gethostUrlInput().getText());
 		assertEquals("Username", loginForm.getUserNameInput().getText());

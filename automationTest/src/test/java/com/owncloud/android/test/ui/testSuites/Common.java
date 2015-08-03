@@ -166,16 +166,16 @@ public class Common{
 		FileUtils.copyFile(file, new File(screenShotName));
 	}
 
-	protected void assertIsInFileListView(FilesView fileListView) 
+	protected void assertIsInFilesView(FilesView filesView) 
 			throws InterruptedException {
 		Common.waitTillElementIsPresent(
-				fileListView.getTitleTextElement(),30000);
+				filesView.getTitleTextElement(),30000);
 		assertTrue(waitForTextPresent("ownCloud",
-				fileListView.getTitleTextElement()));
-		assertTrue(fileListView.getUploadButton().isDisplayed());	
+				filesView.getTitleTextElement()));
+		assertTrue(filesView.getUploadButton().isDisplayed());	
 	}
 
-	protected void assertIsNotInFileListView() throws InterruptedException {
+	protected void assertIsNotInFilesView() throws InterruptedException {
 		AndroidElement fileElement;
 		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"

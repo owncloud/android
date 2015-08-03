@@ -50,8 +50,8 @@ public class UploadFilesView{
 	
 	public FilesView clickOnUploadButton () {
 		uploadButton.click();
-		FilesView fileListView = new FilesView (driver);
-		return fileListView;
+		FilesView filesView = new FilesView (driver);
+		return filesView;
 	}
 	
 	

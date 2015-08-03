@@ -62,29 +62,29 @@ public class FavoriteFilesTestSuite{
 	@Category({FailingTestCategory.class})
 	public void testKeepFileUpToDate () throws Exception {
 
-		FilesView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
+		common.assertIsInFilesView(filesView);
 
-		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
+		Common.waitTillElementIsNotPresentWithoutTimeout(filesView
 				.getProgressCircular(), 1000);
 
 		//if the file already exists, it is not necessary to upload it
-		AndroidElement file = fileListView.getElement(Config.fileToTest);
+		AndroidElement file = filesView.getElement(Config.fileToTest);
 		if(file==null){
-			fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
-			file = fileListView.getElement(Config.fileToTest);
+			filesView = Actions.uploadFile(Config.fileToTest, filesView);
+			file = filesView.getElement(Config.fileToTest);
 		}
 		assertTrue(file.isDisplayed());
 
-		ElementMenuOptions menuOptions = fileListView
+		ElementMenuOptions menuOptions = filesView
 				.longPressOnElement(Config.fileToTest);
 		FileDetailsView fileDetailsView = menuOptions.clickOnDetails();
 		fileDetailsView.checkKeepFileUpToDateCheckbox();
 		Thread.sleep(3000);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 
-		assertTrue(fileListView.getElement(Config.fileToTest)
+		assertTrue(filesView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}
@@ -93,34 +93,34 @@ public class FavoriteFilesTestSuite{
 	@Category({NoIgnoreTestCategory.class})
 	public void testKeepFileUpToDateAndRefresh () throws Exception {
 
-		FilesView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
+		common.assertIsInFilesView(filesView);
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListView.getProgressCircular(), 1000);
+				filesView.getProgressCircular(), 1000);
 
 		//if the file already exists, it is not necessary to upload it
-		AndroidElement file = fileListView.getElement(Config.fileToTest);
+		AndroidElement file = filesView.getElement(Config.fileToTest);
 		if(file==null){
-			fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
-			file = fileListView.getElement(Config.fileToTest);
+			filesView = Actions.uploadFile(Config.fileToTest, filesView);
+			file = filesView.getElement(Config.fileToTest);
 		}
 		assertTrue(file.isDisplayed());
 
-		ElementMenuOptions menuOptions = fileListView
+		ElementMenuOptions menuOptions = filesView
 				.longPressOnElement(Config.fileToTest);
 		FileDetailsView fileDetailsView = menuOptions.clickOnDetails();
 		fileDetailsView.checkKeepFileUpToDateCheckbox();
 		Thread.sleep(3000);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 
-		fileListView.pulldownToRefresh();
-		//assertTrue(fileListView.getProgressCircular().isDisplayed());
-		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
+		filesView.pulldownToRefresh();
+		//assertTrue(filesView.getProgressCircular().isDisplayed());
+		Common.waitTillElementIsNotPresentWithoutTimeout(filesView
 				.getProgressCircular(), 100);
 
-		assertTrue(fileListView.getElement(Config.fileToTest)
+		assertTrue(filesView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}
@@ -129,8 +129,8 @@ public class FavoriteFilesTestSuite{
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		FilesView fileListView = new FilesView(driver);
-		Actions.deleteElement(Config.fileToTest,fileListView, driver);
+		FilesView filesView = new FilesView(driver);
+		Actions.deleteElement(Config.fileToTest,filesView, driver);
 
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

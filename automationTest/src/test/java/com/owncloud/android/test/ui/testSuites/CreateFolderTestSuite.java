@@ -54,17 +54,17 @@ public class CreateFolderTestSuite{
 		driver=common.setUpCommonDriver();
 	}
 
-	public void createFolder(FilesView fileListView, String folderName) 
+	public void createFolder(FilesView filesView, String folderName) 
 			throws Exception{
 		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(folderName, fileListView, driver);
-		assertNull(fileListView.getElement(folderName));
+		Actions.deleteElement(folderName, filesView, driver);
+		assertNull(filesView.getElement(folderName));
 
 		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(folderName, fileListView);
+				.createFolder(folderName, filesView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		AndroidElement folder = fileListView.getElement(folderName);
+		AndroidElement folder = filesView.getElement(folderName);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
 		CurrentCreatedFolder = folderName;
@@ -74,29 +74,29 @@ public class CreateFolderTestSuite{
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testCreateFolder () throws Exception {
 
-		FilesView fileListView = Actions.login(Config.URL, 
+		FilesView filesView = Actions.login(Config.URL, 
 				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
+		common.assertIsInFilesView(filesView);
 
-		createFolder(fileListView, Config.folderToCreate);
+		createFolder(filesView, Config.folderToCreate);
 	}
 
 	@Test
 	@Category({UnfinishedTestCategory.class})
 	public void testCreateFolderWithSpecialCharacters () throws Exception {
-		FilesView fileListView = Actions.login(Config.URL, 
+		FilesView filesView = Actions.login(Config.URL, 
 				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
+		common.assertIsInFilesView(filesView);
 
-		createFolder(fileListView, Config.folderToCreateSpecialCharacters);
+		createFolder(filesView, Config.folderToCreateSpecialCharacters);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
 
-		FilesView fileListView = new FilesView(driver);
-		Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
+		FilesView filesView = new FilesView(driver);
+		Actions.deleteElement(CurrentCreatedFolder, filesView, driver);
 		
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

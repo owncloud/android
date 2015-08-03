@@ -58,31 +58,31 @@ public class MoveFileTestSuite{
 	public void testMoveDownloadedFile () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 
-		FilesView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
+		common.assertIsInFilesView(filesView);
 
 		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
-		Actions.deleteElement(Config.fileToTest, fileListView, driver);
+		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
+		Actions.deleteElement(Config.fileToTest, filesView, driver);
 		
-		assertNull(fileListView.getElement(Config.folderWhereMove));
-		assertNull(fileListView.getElement(Config.fileToTest));
+		assertNull(filesView.getElement(Config.folderWhereMove));
+		assertNull(filesView.getElement(Config.fileToTest));
 
 		//Create the folder where the other is gone to be moved
 		waitAMomentPopUp = Actions
-				.createFolder(Config.folderWhereMove, fileListView);
+				.createFolder(Config.folderWhereMove, filesView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(fileListView.getElement(Config.folderWhereMove)
+		assertTrue(filesView.getElement(Config.folderWhereMove)
 				.isDisplayed());
 
-		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
-		assertTrue(fileListView.getElement(Config.fileToTest)
+		filesView = Actions.uploadFile(Config.fileToTest, filesView);
+		assertTrue(filesView.getElement(Config.fileToTest)
 				.isDisplayed());
 
 		//select to move the file
-		ElementMenuOptions menuOptions = fileListView
+		ElementMenuOptions menuOptions = filesView
 				.longPressOnElement(Config.fileToTest);
 		MoveView moveView = menuOptions.clickOnMove();
 
@@ -93,12 +93,12 @@ public class MoveFileTestSuite{
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
 
 		//check that the element moved is inside the other
-		fileListView.tapOnElement(Config.folderWhereMove);
+		filesView.tapOnElement(Config.folderWhereMove);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListView.getProgressCircular(),1000);
+				filesView.getProgressCircular(),1000);
 
 		Thread.sleep(1000);
-		assertTrue(fileListView.getElement(Config.fileToTest)
+		assertTrue(filesView.getElement(Config.fileToTest)
 				.isDisplayed());
 
 	}
@@ -106,10 +106,10 @@ public class MoveFileTestSuite{
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		FilesView fileListView = new FilesView(driver);
+		FilesView filesView = new FilesView(driver);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
-		Actions.deleteElement(Config.folderWhereMove, fileListView, driver);
-		Actions.deleteElement(Config.fileToTest, fileListView, driver);
+		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
+		Actions.deleteElement(Config.fileToTest, filesView, driver);
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

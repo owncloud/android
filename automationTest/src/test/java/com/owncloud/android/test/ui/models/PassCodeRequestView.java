@@ -20,8 +20,6 @@
 
 package com.owncloud.android.test.ui.models;
 
-import static org.junit.Assert.assertTrue;
-
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.PageFactory;
 
@@ -56,7 +54,7 @@ final AndroidDriver driver;
 	
 	@CacheLookup
 	@AndroidFindBy(uiAutomator = "new UiSelector()"
-			+ ".text(\"Please, insert your pass code\")")
+			+ ".text(\"Please, insert your passcode\")")
 	private AndroidElement insertMessage;
 	
 	public PassCodeRequestView (AndroidDriver driver) {

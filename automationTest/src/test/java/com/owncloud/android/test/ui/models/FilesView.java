@@ -21,13 +21,12 @@
 package com.owncloud.android.test.ui.models;
 
 import java.util.List;
-
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.PageFactory;
@@ -56,6 +55,9 @@ public class FilesView {
 
 	@AndroidFindBy(id = "com.owncloud.android:id/grid_root")
 	private AndroidElement gridLayout;
+	
+	@AndroidFindBy(id = "android:id/home")
+	private AndroidElement home;
 
 	@CacheLookup
 	@AndroidFindBy(uiAutomator = "new UiSelector()"
@@ -112,15 +114,15 @@ public class FilesView {
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
 
-	public MenuList clickOnMenuButton () {
+	public TopbarMenu clickOnTopbarMenuButton () {
 		//if the menu option is not in the actionBar, it is opening again
 		try {
 			menuButton.click();
 		} catch (NoSuchElementException e){
 			driver.sendKeyEvent(AndroidKeyCode.MENU);
 		}
-		MenuList menuList = new MenuList (driver);
-		return menuList;
+		TopbarMenu topbarMenu = new TopbarMenu (driver);
+		return topbarMenu;
 	}
 
 	public SettingsView getSettingsView () {
@@ -200,20 +202,38 @@ public class FilesView {
 	public static String getSharedElementIndicator() {
 		return sharedElementIndicator;
 	}
+	
 	public void pulldownToRefresh () throws InterruptedException {
 		Point listLocation = filesView.getLocation();
 		driver.swipe(listLocation.getX(),listLocation.getY(), 
 				listLocation.getX(),listLocation.getY()+1000, 5000);
 	}
 
-
-
 	public void pulldownToSeeNotification () throws InterruptedException {
 		Point listLocation = deviceScreen.getLocation();
 		driver.swipe(listLocation.getX(),listLocation.getY(), 
 				listLocation.getX(),listLocation.getY()+1000, 5000);
 	}
+	
+	public void clickOnHomeButton () {
+		home.click();
+	}
 
+	public Drawer swipeToShowDrawer () throws InterruptedException {
+		Point listLocation = filesView.getLocation();
+		Dimension dimensions = filesView.getSize(); 
+		driver.swipe(listLocation.getX()+1,
+				listLocation.getY() + dimensions.getHeight()/2,
+				listLocation.getX()+(dimensions.getWidth()/2),
+				listLocation.getY() + dimensions.getHeight()/2, 200);
+		Drawer drawer = new Drawer(driver);
+		return drawer;
+	}
+	
+
+	
+	
+	
 
 	public boolean isGridView () {
 

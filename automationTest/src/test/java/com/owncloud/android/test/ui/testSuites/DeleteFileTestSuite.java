@@ -57,36 +57,35 @@ public class DeleteFileTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFileRemoteAndLocal () throws Exception {		
-		FilesView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView(fileListView);
+		common.assertIsInFilesView(filesView);
 
 		//if the file already exists, delete it remote
-		AndroidElement file = fileListView.getElement(Config.fileToTest);
+		AndroidElement file = filesView.getElement(Config.fileToTest);
 		if(file!=null){
-			Actions.deleteElement(Config.fileToTest,fileListView, driver);
-			assertNull(fileListView.getElement(Config.fileToTest));
+			Actions.deleteElement(Config.fileToTest,filesView, driver);
+			assertNull(filesView.getElement(Config.fileToTest));
 		}
 		//now we are sure that we are going to delete it remote and locally
-		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
+		filesView = Actions.uploadFile(Config.fileToTest, filesView);
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListView.getProgressCircular(), 1000);
+				filesView.getProgressCircular(), 1000);
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListView
-				.getElement(Config.fileToTest)
+				filesView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 		
-		file = fileListView.getElement(Config.fileToTest);
+		file = filesView.getElement(Config.fileToTest);
 		
 		assertTrue(file.isDisplayed());
 
-		Actions.deleteElementRemoteAndLocal(Config.fileToTest,fileListView,
+		Actions.deleteElementRemoteAndLocal(Config.fileToTest,filesView,
 				driver);
 		
-		common.assertIsInFileListView(fileListView);
-		assertNull(fileListView.getElement(Config.fileToTest));
+		common.assertIsInFilesView(filesView);
+		assertNull(filesView.getElement(Config.fileToTest));
 	}
 	
 	//TODO. Delete local and delete remote

@@ -34,13 +34,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.owncloud.android.test.ui.models.CertificatePopUp;
+import com.owncloud.android.test.ui.models.Drawer;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.GmailSendMailView;
 import com.owncloud.android.test.ui.models.ShareView;
 import com.owncloud.android.test.ui.models.UploadFilesView;
 import com.owncloud.android.test.ui.models.LoginForm;
 import com.owncloud.android.test.ui.models.FilesView;
-import com.owncloud.android.test.ui.models.MenuList;
 import com.owncloud.android.test.ui.models.FolderPopUp;
 import com.owncloud.android.test.ui.models.RemoveConfirmationView;
 import com.owncloud.android.test.ui.models.SettingsView;
@@ -79,8 +79,8 @@ public class Actions {
 	}
 
 	public static WaitAMomentPopUp createFolder(String folderName,
-			FilesView fileListView){
-		FolderPopUp newFolderPopUp = fileListView.clickOnNewFolderButton();
+			FilesView filesView){
+		FolderPopUp newFolderPopUp = filesView.clickOnNewFolderButton();
 		newFolderPopUp.typeNewFolderName(folderName);
 		WaitAMomentPopUp waitAMomentPopUp = newFolderPopUp
 				.clickOnNewFolderOkButton();
@@ -134,15 +134,16 @@ public class Actions {
 	}
 
 
-	public static void deleteAccount (int accountPosition,FilesView fileListView) {	
-		MenuList menulist = fileListView.clickOnMenuButton();
-		SettingsView settingView = menulist.clickOnSettingsButton();
-		deleteAccount(accountPosition,settingView);
+	public static LoginForm openDrawerAndDeleteAccount (int accountPosition,FilesView filesView) 
+			throws InterruptedException {	
+		Drawer drawer = filesView.swipeToShowDrawer();
+		SettingsView settingView = drawer.clickOnSettingsButton();
+		return deleteAccount(accountPosition,settingView);
 	}
 
-	public static void deleteAccount (int accountPosition, SettingsView settingsView) {
+	public static LoginForm deleteAccount (int accountPosition, SettingsView settingsView) {
 		settingsView.tapOnAccountElement(accountPosition,1, 1000);
-		settingsView.clickOnDeleteAccountElement();
+		return settingsView.clickOnDeleteAccountElement();
 	}
 
 	public static void clickOnMainLayout(AndroidDriver driver){
@@ -151,7 +152,7 @@ public class Actions {
 
 
 	public static AndroidElement deleteElementRemoteAndLocal(String elementName,  
-			FilesView fileListView, AndroidDriver driver) throws Exception{
+			FilesView filesView, AndroidDriver driver) throws Exception{
 		AndroidElement fileElement;
 		WaitAMomentPopUp waitAMomentPopUp;
 		try{
@@ -161,7 +162,7 @@ public class Actions {
 					".ui.activity.FileDisplayActivity");
 			fileElement = getElementInFilesView(elementName, driver);
 			if(fileElement!=null){
-				ElementMenuOptions menuOptions = fileListView
+				ElementMenuOptions menuOptions = filesView
 						.longPressOnElement(elementName);
 				RemoveConfirmationView removeConfirmationView = menuOptions
 						.clickOnRemove();
@@ -177,7 +178,7 @@ public class Actions {
 	}
 
 	public static AndroidElement deleteElement(String elementName,  
-			FilesView fileListView, AndroidDriver driver) throws Exception{
+			FilesView filesView, AndroidDriver driver) throws Exception{
 		AndroidElement fileElement;
 		WaitAMomentPopUp waitAMomentPopUp;
 		try{
@@ -187,7 +188,7 @@ public class Actions {
 					".ui.activity.FileDisplayActivity");
 			fileElement = getElementInFilesView(elementName, driver);
 			if(fileElement!=null){
-				ElementMenuOptions menuOptions = fileListView
+				ElementMenuOptions menuOptions = filesView
 						.longPressOnElement(elementName);
 				RemoveConfirmationView removeConfirmationView = menuOptions
 						.clickOnRemove();
@@ -203,14 +204,14 @@ public class Actions {
 	}
 
 	public static AndroidElement shareLinkElementByGmail(String elementName,  
-			FilesView fileListView, AndroidDriver driver, Common common) 
+			FilesView filesView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
 			//To open directly the "file list view" and
 			//we don't need to know in which view we are
 			driver.startActivity("com.owncloud.android",
 					".ui.activity.FileDisplayActivity");
-			ElementMenuOptions menuOptions = fileListView
+			ElementMenuOptions menuOptions = filesView
 					.longPressOnElement(elementName);
 			ShareView shareView = menuOptions.clickOnShareLinkElement();
 			Actions.scrollTillFindElement("Gmail", shareView
@@ -218,7 +219,7 @@ public class Actions {
 			GmailSendMailView gmailSendMailView = new GmailSendMailView(driver);
 			gmailSendMailView.typeToEmailAdress(Config.gmailAccount);
 			gmailSendMailView.clickOnSendButton();
-			Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
+			Common.waitTillElementIsNotPresentWithoutTimeout(filesView
 					.getProgressCircular(), 1000);
 			common.wait.until(ExpectedConditions.visibilityOf(
 					Actions.getElementInFilesView(elementName,driver)
@@ -234,14 +235,14 @@ public class Actions {
 	}
 
 	public static AndroidElement shareLinkElementByCopyLink(String elementName,  
-			FilesView fileListView, AndroidDriver driver, Common common) 
+			FilesView filesView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
 			//To open directly the "file list view" and
 			//we don't need to know in which view we are
 			driver.startActivity("com.owncloud.android",
 					".ui.activity.FileDisplayActivity");
-			ElementMenuOptions menuOptions = fileListView
+			ElementMenuOptions menuOptions = filesView
 					.longPressOnElement(elementName);
 			ShareView shareView = menuOptions.clickOnShareLinkElement();
 			Actions.scrollTillFindElement("Copy link", shareView.getListViewLayout(), 
@@ -262,14 +263,14 @@ public class Actions {
 
 
 	public static void unshareLinkElement(String elementName,  
-			FilesView fileListView, AndroidDriver driver, Common common) 
+			FilesView filesView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
 			//To open directly the "file list view" and
 			//we don't need to know in which view we are
 			driver.startActivity("com.owncloud.android",
 					".ui.activity.FileDisplayActivity");
-			ElementMenuOptions menuOptions = fileListView
+			ElementMenuOptions menuOptions = filesView
 					.longPressOnElement(elementName);
 			WaitAMomentPopUp waitAMomentPopUp = menuOptions
 					.clickOnUnshareLinkElement();
@@ -286,26 +287,25 @@ public class Actions {
 
 
 	public static FilesView uploadFile(String elementName,
-			FilesView fileListView) throws InterruptedException{
-		fileListView.clickOnUploadButton();
-		UploadFilesView uploadFilesView = fileListView
+			FilesView filesView) throws InterruptedException{
+		filesView.clickOnUploadButton();
+		UploadFilesView uploadFilesView = filesView
 				.clickOnFilesElementUploadFile();
 		uploadFilesView.tapOnElement(Config.folderWhereFilesToUploadAre);
 		Thread.sleep(15000);
 		uploadFilesView.clickOnElement(elementName);
-		FilesView fileListViewAfterUploadFile = uploadFilesView
-				.clickOnUploadButton();
+		filesView = uploadFilesView.clickOnUploadButton();
 		//TO DO. detect when the file is successfully uploaded
 		Thread.sleep(15000);
-		return fileListViewAfterUploadFile; 
+		return filesView; 
 	}
 
 	public static FilesView uploadSeveralFile(String elementName,
-			String elementName2, String elementName3,FilesView fileListView)
+			String elementName2, String elementName3,FilesView filesView)
 					throws InterruptedException{
 
-		fileListView.clickOnUploadButton();
-		UploadFilesView uploadFilesView = fileListView
+		filesView.clickOnUploadButton();
+		UploadFilesView uploadFilesView = filesView
 				.clickOnFilesElementUploadFile();
 		uploadFilesView.tapOnElement(Config.folderWhereFilesToUploadAre);
 		Thread.sleep(15000);
@@ -313,11 +313,10 @@ public class Actions {
 		uploadFilesView.clickOnElement(elementName2);
 		uploadFilesView.clickOnElement(elementName3);
 
-		FilesView fileListViewAfterUploadFile = uploadFilesView
-				.clickOnUploadButton();
+		filesView = uploadFilesView.clickOnUploadButton();
 		//TO DO. detect when the file is successfully uploaded
 		Thread.sleep(15000);
-		return fileListViewAfterUploadFile; 
+		return filesView; 
 	}
 
 }
