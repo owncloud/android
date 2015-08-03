@@ -94,10 +94,14 @@ public class Actions {
 		AndroidElement fileElement;
 
 		if(element.getAttribute("scrollable").equals("true")){
-			HashMap<String, String> scrollObject = new HashMap<String,String>();
-			scrollObject.put("text", elementName);
-			scrollObject.put("element", ( (RemoteWebElement) element).getId());
-			driver.executeScript("mobile: scrollTo", scrollObject);
+			if(element.getId()=="com.owncloud.android:id/grid_root"){
+				driver.scrollTo(elementName);
+			}else{
+				HashMap<String, String> scrollObject = new HashMap<String,String>();
+				scrollObject.put("text", elementName);
+				scrollObject.put("element", ( (RemoteWebElement) element).getId());
+				driver.executeScript("mobile: scrollTo", scrollObject);
+			}
 		}
 		try {
 			fileElement = (AndroidElement) driver
