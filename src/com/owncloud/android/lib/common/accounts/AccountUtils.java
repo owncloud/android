@@ -167,7 +167,9 @@ public class AccountUtils {
         boolean isSamlSso = am.getUserData(
         		account, 
         		AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
-        
+
+        String username = account.name.substring(0, account.name.lastIndexOf('@'));
+
         if (isOauth2) {    
             String accessToken = am.blockingGetAuthToken(
             		account, 
@@ -182,10 +184,9 @@ public class AccountUtils {
             		AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type), 
             		false);
             
-            credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(accessToken);
+            credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken);
 
         } else {
-            String username = account.name.substring(0, account.name.lastIndexOf('@'));
             String password = am.blockingGetAuthToken(
             		account, 
             		AccountTypeUtils.getAuthTokenTypePass(account.type), 
