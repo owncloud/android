@@ -19,14 +19,14 @@ __Step 2.__ Define a dependency within your project. For that, access to Propert
 
 The repository holds two main branches with an infinite lifetime:
 
-- master
-- develop 
+- stable
+- master 
 
-Branch __origin/master__ is considered the main branch where the source code of HEAD always reflects a production-ready state.
+Branch __origin/stable__ is considered the main branch where the source code of HEAD always reflects a production-ready state.
 
-Branch __origin/develop__ is considered the main branch where the source code of HEAD always reflects a state with the latest delivered development changes for the next release.
+Branch __origin/master__ is considered the main branch where the source code of HEAD always reflects a state with the latest delivered development changes for the next release.
 
-When the source code in the develop branch reaches a stable point and is ready to be released, all of the changes should be merged back into master somehow and then tagged with a release number. 
+When the source code in the master branch reaches a stable point and is ready to be released, all of the changes should be merged back into stable somehow and then tagged with a release number. 
 
 Other branches, some supporting branches are used to aid parallel development between team members, ease tracking of features, prepare for production releases and to assist in quickly fixing live production problems. Unlike the main branches, these branches always have a limited life time, since they will be removed eventually.
 
@@ -35,7 +35,7 @@ The different types of branches we may use are:
 - Branch __perNewFeature__    
 - Branch  __releaseBranches__
 
-Both of them branch off from develop and must merge back into develop branch through a Pull Request in Github. Once the PR is approved and merged, the US branch may be deleted.
+Both of them branch off from master and must merge back into master branch through a Pull Request in Github. Once the PR is approved and merged, the US branch may be deleted.
 
 Source: http://nvie.com/posts/a-successful-git-branching-model 
 
