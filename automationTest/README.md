@@ -9,6 +9,7 @@ Tests are to be run with the tool Appium. Check [here][0] to install it and all 
 * You will need to include the ownCloud.apk to test in automationTest/src/test/resources/.
 * To run the test succesfully, you will need to have an gmail account active in the device. This email account should have an email which subject UploadFile and a test.jpg file attached.
 * To run the test succesfully, you will need a folder called ocAutomation. Inside that folder should be several files: año.pdf, doc.txt, docümento.txt, image.jpg, test and video.mp4
+* Take into account that the device should be in English
 
 To run the tests from command line, plug a device to your computer or start and emulator. Then type 
 
