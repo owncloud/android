@@ -30,9 +30,11 @@ import android.net.Uri;
 
 public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 
+	private String mUsername;
 	private String mSessionCookie;
 
-	public OwnCloudSamlSsoCredentials(String sessionCookie) {
+	public OwnCloudSamlSsoCredentials(String username, String sessionCookie) {
+		mUsername = username != null ? username : "";
 		mSessionCookie = sessionCookie != null ? sessionCookie : "";
 	}
 
@@ -63,8 +65,8 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 
 	@Override
 	public String getUsername() {
-		// its unknown
-		return null;
+		// not relevant for authentication, but relevant for informational purposes
+		return mUsername;
 	}
 	
 	@Override

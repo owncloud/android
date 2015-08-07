@@ -135,7 +135,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		client.setCredentials(credentials);
 		assertEquals("Bearer credentials not set", credentials, client.getCredentials());
 
-		credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials("samlSessionCookie=124");
+		credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials("user", "samlSessionCookie=124");
 		client.setCredentials(credentials);
 		assertEquals("SAML2 session credentials not set", credentials, client.getCredentials());
 		
