@@ -24,6 +24,7 @@ package com.owncloud.android.test.ui.testSuites;
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,6 +34,7 @@ import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.openqa.selenium.By;
+
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileDetailsView;
@@ -60,7 +62,7 @@ public class FavoriteFilesTestSuite{
 
 	@Test	
 	@Category({FailingTestCategory.class})
-	public void testKeepFileUpToDate () throws Exception {
+	public void testFavoriteFile () throws Exception {
 
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
@@ -80,7 +82,7 @@ public class FavoriteFilesTestSuite{
 		ElementMenuOptions menuOptions = filesView
 				.longPressOnElement(Config.fileToTest);
 		FileDetailsView fileDetailsView = menuOptions.clickOnDetails();
-		fileDetailsView.checkKeepFileUpToDateCheckbox();
+		fileDetailsView.checkFavoriteCheckbox();
 		Thread.sleep(3000);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 
@@ -91,7 +93,7 @@ public class FavoriteFilesTestSuite{
 
 	@Test	
 	@Category({NoIgnoreTestCategory.class})
-	public void testKeepFileUpToDateAndRefresh () throws Exception {
+	public void testFavoriteFileAndRefresh () throws Exception {
 
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
@@ -111,7 +113,7 @@ public class FavoriteFilesTestSuite{
 		ElementMenuOptions menuOptions = filesView
 				.longPressOnElement(Config.fileToTest);
 		FileDetailsView fileDetailsView = menuOptions.clickOnDetails();
-		fileDetailsView.checkKeepFileUpToDateCheckbox();
+		fileDetailsView.checkFavoriteCheckbox();
 		Thread.sleep(3000);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 
