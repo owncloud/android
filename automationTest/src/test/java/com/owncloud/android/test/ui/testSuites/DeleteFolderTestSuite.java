@@ -78,7 +78,7 @@ public class DeleteFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class,InProgressCategory.class})
 	public void testDeleteFolderWithContents () throws Exception {
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);

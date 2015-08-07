@@ -91,8 +91,7 @@ public class FilesView {
 			+ ".className(\"android.widget.FrameLayout\").index(0)")
 	private AndroidElement deviceScreen;
 
-	@AndroidFindBy(uiAutomator = "new UiSelector()"
-			+ ".description(\"ownCloud, Navigate up\")")
+	@AndroidFindBy(id = "android:id/up")
 	private AndroidElement backButton;
 
 
