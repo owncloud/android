@@ -37,7 +37,6 @@ The different types of branches we may use are:
 
 Both of them branch off from master and must merge back into master branch through a Pull Request in Github. Once the PR is approved and merged, the US branch may be deleted.
 
-Source: http://nvie.com/posts/a-successful-git-branching-model 
 
 ###  License
 
