@@ -96,8 +96,10 @@ public class CreateFolderTestSuite{
 		common.takeScreenShotOnFailed(name.getMethodName());
 
 		FilesView filesView = new FilesView(driver);
-		Actions.deleteElement(CurrentCreatedFolder, filesView, driver);
-		
+		if(CurrentCreatedFolder != ""){
+			Actions.deleteElement(CurrentCreatedFolder, filesView, driver);
+		}
+
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

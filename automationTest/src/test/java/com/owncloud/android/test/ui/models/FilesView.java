@@ -55,7 +55,7 @@ public class FilesView {
 
 	@AndroidFindBy(id = "com.owncloud.android:id/grid_root")
 	private AndroidElement gridLayout;
-	
+
 	@AndroidFindBy(id = "android:id/home")
 	private AndroidElement home;
 
@@ -201,7 +201,7 @@ public class FilesView {
 	public static String getSharedElementIndicator() {
 		return sharedElementIndicator;
 	}
-	
+
 	public void pulldownToRefresh () throws InterruptedException {
 		Point listLocation = filesView.getLocation();
 		driver.swipe(listLocation.getX(),listLocation.getY(), 
@@ -213,7 +213,7 @@ public class FilesView {
 		driver.swipe(listLocation.getX(),listLocation.getY(), 
 				listLocation.getX(),listLocation.getY()+1000, 5000);
 	}
-	
+
 	public void clickOnHomeButton () {
 		home.click();
 	}
@@ -228,14 +228,8 @@ public class FilesView {
 		Drawer drawer = new Drawer(driver);
 		return drawer;
 	}
-	
-
-	
-	
-	
 
 	public boolean isGridView () {
-
 		try {
 			gridLayout = (AndroidElement) driver
 					.findElementById("com.owncloud.android:id/grid_root");
@@ -248,7 +242,6 @@ public class FilesView {
 		}else{
 			return false;
 		}
-
 	}
 
 }

@@ -70,7 +70,7 @@ public class RefreshFolderTestSuite{
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		driver.removeApp("com.owncloud.android");
+		//driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
 
