@@ -32,8 +32,8 @@ import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-
 import com.owncloud.android.test.ui.actions.Actions;
+import com.owncloud.android.test.ui.actions.UnicodeEncoder;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
@@ -82,13 +82,24 @@ public class CreateFolderTestSuite{
 	}
 
 	@Test
-	@Category({UnfinishedTestCategory.class})
+	@Category({UnfinishedTestCategory.class, InProgressCategory.class})
 	public void testCreateFolderWithSpecialCharacters () throws Exception {
 		FilesView filesView = Actions.login(Config.URL, 
 				Config.user,Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
-
-		createFolder(filesView, Config.folderToCreateSpecialCharacters);
+		
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
+	    //ime.getAvailableEngines();
+	    //for (String engine : ime.getAvailableEngines()) {
+	      //System.out.println(engine);
+	    //}
+	    ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+	    
+		createFolder(filesView, UnicodeEncoder.encode(Config.folderToCreateSpecialCharacters));
+		//createFolder(filesView, Config.folderToCreateSpecialCharacters);
+		
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
 	}
 
 	@After

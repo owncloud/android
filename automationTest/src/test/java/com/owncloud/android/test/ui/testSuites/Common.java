@@ -73,6 +73,9 @@ public class Common{
 		driver.manage().timeouts().implicitlyWait(waitingTime,
 				TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, waitingTime, 50);
+		AndroidDriver.ImeHandler ime = driver.manage().ime(); 
+	    ime.activateEngine("com.google.android.inputmethod.latin/"
+	    		+ "com.android.inputmethod.latin.LatinIME");
 		return driver;
 
 	}
