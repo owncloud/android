@@ -190,9 +190,10 @@ public class ErrorMessageAdapter {
             }
         } else if (operation instanceof MoveFileOperation) {
 
-            if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+            if(isNetworkError(result.getCode())){
+                message = getErrorMessage(result, res);
+            } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
                 message = res.getString(R.string.move_file_not_found);
-
             } else if (result.getCode() == ResultCode.INVALID_MOVE_INTO_DESCENDANT) {
                 message = res.getString(R.string.move_file_invalid_into_descendent);
 
@@ -208,11 +209,11 @@ public class ErrorMessageAdapter {
                 message = res.getString(R.string.move_file_error);
             }
         } else if (operation instanceof CopyFileOperation) {
-
-            if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+            if(isNetworkError(result.getCode())){
+                message = getErrorMessage(result, res);
+            } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
                 message = res.getString(R.string.copy_file_not_found);
-
-            } else if (result.getCode() == ResultCode.INVALID_MOVE_INTO_DESCENDANT) {
+            } else if (result.getCode() == ResultCode.INVALID_COPY_INTO_DESCENDANT) {
                 message = res.getString(R.string.copy_file_invalid_into_descendent);
 
             } else if (result.getCode() == ResultCode.INVALID_OVERWRITE) {

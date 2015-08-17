@@ -72,9 +72,19 @@ public class CopyFileOperation extends SyncOperation {
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result;
 
+        /// 0. Check if server is reachable. Otherwise, the storage manager won't be able to find
+        // the remote file and will confound network errors with path-related ones
+        if (!new GetServerInfoOperation(getClient().getBaseUri().toString(),
+                mContext).run
+                (getClient()).isSuccess()) {
+            return new RemoteOperationResult(ResultCode.HOST_NOT_AVAILABLE);
+        }
+
         /// 1. check copy validity
-        if (mTargetParentPath.startsWith(mSrcPath)) {
-            return new RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
+        {
+            if (mTargetParentPath.startsWith(mSrcPath)) {
+                return new RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT);
+            }
         }
         mFile = getStorageManager().getFileByPath(mSrcPath);
         if (mFile == null) {
