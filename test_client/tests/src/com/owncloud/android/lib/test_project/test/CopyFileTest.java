@@ -397,6 +397,7 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy a folder into a descendant
         copyOperation = new CopyRemoteFileOperation(
+                getContext(),
                 SRC_BASE_FOLDER,
                 SRC_PATH_TO_EMPTY_FOLDER,
                 false
