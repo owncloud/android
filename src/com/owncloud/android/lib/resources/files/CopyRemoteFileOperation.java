@@ -105,7 +105,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
             return new RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT);
         }
 
-        if (!new ExistenceCheckRemoteOperation(mSrcRemotePath, Boolean.FALSE).run(getClient()).isSuccess()) {
+        if (new ExistenceCheckRemoteOperation(mSrcRemotePath, true).run(getClient()).isSuccess()) {
             return new RemoteOperationResult(ResultCode.FILE_NOT_FOUND);
         }
 
