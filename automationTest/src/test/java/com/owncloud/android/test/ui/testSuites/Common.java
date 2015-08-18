@@ -66,8 +66,8 @@ public class Common{
 				".ui.activity.FileDisplayActivity");	
 		capabilities.setCapability("appWaitActivity", 
 				".authentication.AuthenticatorActivity");
-		//capabilities.setCapability("unicodeKeyboard", true);
-		//capabilities.setCapability("resetKeyboard", true);
+		capabilities.setCapability("unicodeKeyboard", true);
+		capabilities.setCapability("resetKeyboard", true);
 		driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"),
 				capabilities);
 		driver.manage().timeouts().implicitlyWait(waitingTime,
