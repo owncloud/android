@@ -277,7 +277,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy file
         CopyRemoteFileOperation copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FILE_1,
                 TARGET_PATH_TO_FILE_1,
                 false
@@ -287,7 +286,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy & rename file, different location
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FILE_2,
                 TARGET_PATH_TO_FILE_2_RENAMED,
                 false
@@ -297,7 +295,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy & rename file, same location (rename file)
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FILE_3,
                 SRC_PATH_TO_FILE_3_RENAMED,
                 false
@@ -307,7 +304,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy empty folder
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_EMPTY_FOLDER,
                 TARGET_PATH_TO_EMPTY_FOLDER,
                 false
@@ -317,7 +313,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy non-empty folder
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FULL_FOLDER_1,
                 TARGET_PATH_TO_FULL_FOLDER_1,
                 false
@@ -327,7 +322,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy & rename folder, different location
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FULL_FOLDER_2,
                 TARGET_PATH_TO_FULL_FOLDER_2_RENAMED,
                 false
@@ -337,7 +331,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy & rename folder, same location (rename folder)
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FULL_FOLDER_3,
                 SRC_PATH_TO_FULL_FOLDER_3_RENAMED,
                 false
@@ -347,7 +340,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy for nothing (success, but no interaction with network)
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FILE_4,
                 SRC_PATH_TO_FILE_4,
                 false
@@ -357,7 +349,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy overwriting
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FULL_FOLDER_4,
                 TARGET_PATH_TO_ALREADY_EXISTENT_EMPTY_FOLDER_4,
                 true
@@ -370,7 +361,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // file to copy does not exist
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_NON_EXISTENT_FILE,
                 TARGET_PATH_TO_NON_EXISTENT_FILE,
                 false
@@ -380,7 +370,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // folder to copy into does no exist
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FILE_5,
                 TARGET_PATH_TO_FILE_5_INTO_NON_EXISTENT_FOLDER,
                 false
@@ -390,7 +379,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // target location (renaming) has invalid characters
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FILE_6,
                 TARGET_PATH_RENAMED_WITH_INVALID_CHARS,
                 false
@@ -400,7 +388,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // name collision
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_PATH_TO_FILE_1,
                 TARGET_PATH_TO_ALREADY_EXISTENT_FILE_7,
                 false
@@ -410,7 +397,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
         // copy a folder into a descendant
         copyOperation = new CopyRemoteFileOperation(
-                getContext(),
                 SRC_BASE_FOLDER,
                 SRC_PATH_TO_EMPTY_FOLDER,
                 false

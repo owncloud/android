@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -62,7 +61,6 @@ public class CopyRemoteFileOperation extends RemoteOperation {
     private String mTargetRemotePath;
 
     private boolean mOverwrite;
-    private Context mContext;
 
 
     /**
@@ -73,9 +71,8 @@ public class CopyRemoteFileOperation extends RemoteOperation {
      * @param srcRemotePath    Remote path of the file/folder to move.
      * @param targetRemotePath Remove path desired for the file/folder after moving it.
      */
-    public CopyRemoteFileOperation(Context context, String srcRemotePath, String targetRemotePath, boolean overwrite
+    public CopyRemoteFileOperation(String srcRemotePath, String targetRemotePath, boolean overwrite
     ) {
-        mContext = context;
         mSrcRemotePath = srcRemotePath;
         mTargetRemotePath = targetRemotePath;
         mOverwrite = overwrite;
@@ -108,10 +105,6 @@ public class CopyRemoteFileOperation extends RemoteOperation {
             return new RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT);
         }
 
-        if (!new ExistenceCheckRemoteOperation(mSrcRemotePath, mContext, Boolean.FALSE).run(getClient()).isSuccess()) {
-            return new RemoteOperationResult(ResultCode.FILE_NOT_FOUND);
-        }
-
         /// perform remote operation
         CopyMethod copyMethod = null;
         RemoteOperationResult result = null;
@@ -136,6 +129,9 @@ public class CopyRemoteFileOperation extends RemoteOperation {
                 /// for other errors that could be explicitly handled, check first:
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
 
+            } else if (status == 400) {
+                result = new RemoteOperationResult(copyMethod.succeeded(),
+                        copyMethod.getResponseBodyAsString(), status);
             } else {
                 result = new RemoteOperationResult(
                         isSuccess(status),    // copy.succeeded()? trustful?
