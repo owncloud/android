@@ -1,4 +1,26 @@
-## 1.7.0 (19 February 2015)
+## 1.7.2 (July 2015)
+- New navigation drawer
+- Improved Passcode
+- Automatic grid view just for folders full of images
+- More characters allowed in file names
+- Support for servers in same domain, different path
+- Bugs fixed:
+  + Frequent crashes in folder with several images
+  + Sync error in servers with huge quota and external storage enable
+  + Share by link error 
+  + Some other crashes and minor bugs
+
+## 1.7.1 (April 2015)
+
+- Share link even with password enforced by server
+- Get the app ready for oc 8.1 servers
+- Added option to create new folder in uploads from external apps
+- Improved management of deleted users
+- Bugs fixed
+  + Fixed crash on Android 2.x devices
+  + Improvements on uploads
+
+## 1.7.0 (February 2015)
 
 - Download full folders
 - Grid view for images
@@ -15,6 +37,6 @@
 - Settings view updated
 - Improved subjects in e-mails
 - Bugs fixed
-...
+
 
 

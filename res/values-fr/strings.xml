@@ -19,12 +19,19 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Tous les fichiers</string>
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">Paramètres</string>
+  <string name="drawer_item_logs">Logs</string>
+  <string name="drawer_close">Fermer</string>
   <string name="prefs_category_general">Général</string>
   <string name="prefs_category_more">Plus</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gestion des comptes</string>
-  <string name="prefs_pincode">Code de sécurité</string>
-  <string name="prefs_pincode_summary">Protéger l\'accès à l\'application</string>
+  <string name="prefs_passcode">Code de sécurité</string>
   <string name="prefs_instant_upload">Téléversement immédiat des photos</string>
   <string name="prefs_instant_upload_summary">Téléverser immédiatement les photos prises par la caméra</string>
   <string name="prefs_instant_video_upload">Téléversement immédiat des vidéos</string>
@@ -37,7 +44,7 @@
   <string name="prefs_help">Aide</string>
   <string name="prefs_recommend">Recommander à un ami</string>
   <string name="prefs_feedback">Commentaires</string>
-  <string name="prefs_imprint">Empreinte</string>
+  <string name="prefs_imprint">Mentions</string>
   <string name="prefs_remember_last_share_location">Mémoriser l\'emplacement de partage</string>
   <string name="prefs_remember_last_upload_location_summary">Mémoriser le dernier emplacement de téléversement</string>
   <string name="recommend_subject">Essayez %1$s sur votre smartphone !</string>
@@ -51,7 +58,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="sync_string_files">Fichiers</string>
   <string name="setup_btn_connect">Connecter</string>
   <string name="uploader_btn_upload_text">Téléverser</string>
-  <string name="uploader_btn_new_folder_text">Créer un dossier</string>
+  <string name="uploader_btn_new_folder_text">Nouveau dossier</string>
   <string name="uploader_top_message">Sélectionner le dossier d\'envoi :</string>
   <string name="uploader_wrn_no_account_title">Aucun compte n\'a été trouvé</string>
   <string name="uploader_wrn_no_account_text">Aucun compte %1$s n\'a été trouvé. Veuillez commencer par en configurer un.</string>
@@ -63,13 +70,9 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_info_uploading">Téléversement...</string>
   <string name="file_list_seconds_ago">il y a quelques secondes</string>
   <string name="file_list_empty">Il n\'y a rien ici ! Envoyez donc quelque chose :)</string>
-  <string name="file_list_loading">Chargement…</string>
+  <string name="file_list_loading">Chargement...</string>
   <string name="local_file_list_empty">Aucun fichier n\'est présent dans ce dossier.</string>
-  <string name="file_list_folder">dossier</string>
-  <string name="file_list_folders">dossiers</string>
-  <string name="file_list_file">fichier</string>
-  <string name="file_list_files">fichiers</string>
-  <string name="filedetails_select_file">Effleurez un fichier pour afficher les informations complémentaires.</string>
+  <string name="filedetails_select_file">Appuyez sur un fichier pour afficher les informations supplémentaires</string>
   <string name="filedetails_size">Taille :</string>
   <string name="filedetails_type">Type :</string>
   <string name="filedetails_created">Créé le :</string>
@@ -77,6 +80,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="filedetails_download">Télécharger</string>
   <string name="filedetails_sync_file">Actualiser le fichier</string>
   <string name="filedetails_renamed_in_upload_msg">Le fichier a été renommé en %s pendant le téléversement</string>
+  <string name="list_layout">Affichage en liste</string>
   <string name="action_share_file">Partager le lien</string>
   <string name="action_unshare_file">Ne plus partager ce lien</string>
   <string name="common_yes">Oui</string>
@@ -121,7 +125,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="sync_fail_in_favourites_content">Le contenu de %1$d fichiers n\'a pu être synchronisé (%2$d conflits)</string>
   <string name="sync_foreign_files_forgotten_ticker">Certains fichiers locaux ont été oubliés</string>
   <string name="sync_foreign_files_forgotten_content">%1$d fichiers du dossier %2$s n\'ont pas pu être copiés dans</string>
-  <string name="sync_foreign_files_forgotten_explanation">Depuis la version 1.3.16, les fichiers envoyés depuis ce périphérique sont copiés dans le dossier local %1$s pour éviter une perte de données lorsqu\'un même fichier est synchronisé avec plusieurs comptes.
+  <string name="sync_foreign_files_forgotten_explanation">Depuis la version 1.3.16, les fichiers envoyés depuis cet appareil sont copiés dans le dossier local %1$s pour éviter une perte de données lorsqu\'un même fichier est synchronisé avec plusieurs comptes.
 
 En raison de cette modification, tous les fichiers envoyés avec des versions antérieures de cette application ont été copiés dans le dossier %2$s. Cependant, une erreur a empêché l\'achèvement de cette opération pendant la synchronisation du compte. Vous pouvez soit laisser les fichiers tels quels et supprimer le lien vers %3$s, soit déplacer les fichiers dans le dossier %1$s et garder le lien vers %4$s.
 
@@ -133,15 +137,15 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="foreign_files_local_text">Local : %1$s</string>
   <string name="foreign_files_remote_text">Distant : %1$s</string>
   <string name="upload_query_move_foreign_files">Il n\'y a pas assez de place disponible pour copier les fichiers sélectionnés dans le dossier %1$s. Voulez-vous les déplacer à la place ?</string>
-  <string name="pincode_enter_pin_code">Veuillez saisir votre code de sécurité</string>
-  <string name="pincode_configure_your_pin">Veuillez saisir votre code de sécurité </string>
-  <string name="pincode_configure_your_pin_explanation">Le code de sécurité vous sera demandé à chaque lancement de l\'application</string>
-  <string name="pincode_reenter_your_pincode">Veuillez saisir de nouveau votre code de sécurité</string>
-  <string name="pincode_remove_your_pincode">Retirer le code de sécurité</string>
-  <string name="pincode_mismatch">Les deux codes saisis ne concordent pas</string>
-  <string name="pincode_wrong">Code de sécurité incorrect</string>
-  <string name="pincode_removed">Code de sécurité retiré</string>
-  <string name="pincode_stored">Code de sécurité enregistré</string>
+  <string name="pass_code_enter_pass_code">Veuillez saisir votre code de sécurité</string>
+  <string name="pass_code_configure_your_pass_code">Saisissez votre code de sécurité</string>
+  <string name="pass_code_configure_your_pass_code_explanation">Le code de sécurité sera demandé à chaque ouverture de l\'application</string>
+  <string name="pass_code_reenter_your_pass_code">Veuillez à nouveau saisir votre code de sécurité</string>
+  <string name="pass_code_remove_your_pass_code">Supprimer votre code de sécurité</string>
+  <string name="pass_code_mismatch">Les codes de sécurité ne sont pas identiques</string>
+  <string name="pass_code_wrong">Code de sécurité incorrect</string>
+  <string name="pass_code_removed">Code de sécurité supprimé</string>
+  <string name="pass_code_stored">Code de sécurité enregistré</string>
   <string name="media_notif_ticker">%1$s lecteur de musique</string>
   <string name="media_state_playing">%1$s (lecture)</string>
   <string name="media_state_loading">%1$s (chargement)</string>
@@ -168,7 +172,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="auth_connection_established">Connexion établie</string>
   <string name="auth_testing_connection">Test de connexion</string>
   <string name="auth_not_configured_title">Configuration du serveur erronée</string>
-  <string name="auth_account_not_new">Un compte pour le même utilisateur et serveur existe déjà sur cet appareil</string>
+  <string name="auth_account_not_new">Un compte pour les mêmes utilisateur et serveur existe déjà sur cet appareil</string>
   <string name="auth_account_not_the_same">L\'utilisateur entré ne correspond pas à l\'utilisateur de ce compte</string>
   <string name="auth_unknown_error_title">Une erreur inconnue s\'est produite.</string>
   <string name="auth_unknown_host_title">Impossible de trouver l\'hôte</string>
@@ -194,7 +198,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
 </string>
   <string name="auth_can_not_auth_against_server">Impossible de s\'authentifier sur ce serveur</string>
   <string name="auth_account_does_not_exist">Le compte n\'existe pas encore sur ce périphérique</string>
-  <string name="fd_keep_in_sync">Maintenir le fichier à jour</string>
+  <string name="favorite">Ajouter aux favoris</string>
+  <string name="unfavorite">Supprimer des favoris</string>
   <string name="common_rename">Renommer</string>
   <string name="common_remove">Supprimer</string>
   <string name="confirmation_remove_alert">Voulez-vous vraiment supprimer %1$s ?</string>
@@ -212,11 +217,13 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="sync_file_nothing_to_do_msg">Le contenu du fichier est déjà synchronisé</string>
   <string name="create_dir_fail_msg">Le dossier n\'a pas pu être créé</string>
   <string name="filename_forbidden_characters">Caractères interdits : / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_forbidden_charaters_from_server">Le nom de fichier contient au moins un caractère non valide</string>
   <string name="filename_empty">Le nom du fichier ne peut pas être vide</string>
   <string name="wait_a_moment">Veuillez patienter</string>
   <string name="filedisplay_unexpected_bad_get_content">Problème inattendu. Veuillez essayer une autre application pour la sélection du fichier</string>
   <string name="filedisplay_no_file_selected">Aucun fichier sélectionné</string>
   <string name="activity_chooser_title">Envoyer le lien vers…</string>
+  <string name="wait_for_tmp_copy_from_private_storage">Copie du fichier depuis le stockage privé</string>
   <string name="oauth_check_onoff">Connexion avec oAuth2</string>
   <string name="oauth_login_connection">Connexion au serveur oAuth2…</string>
   <string name="ssl_validator_header">L\'identité du site ne peut être vérifiée</string>
@@ -252,11 +259,11 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="instant_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="instant_video_upload_on_wifi">Téléverser les vidéos via une connexion WiFi uniquement</string>
   <string name="instant_upload_path">/InstantUpload</string>
-  <string name="conflict_title">Conflit de mise à jour</string>
-  <string name="conflict_message">Le fichier distant %s n\'est pas synchronisé avec le fichier local. En choisissant de continuer, vous remplacerez le contenu du fichier sur le serveur.</string>
+  <string name="conflict_title">Conflit de fichiers</string>
+  <string name="conflict_message">Quel(s) fichier(s) voulez-vous garder ? Si vous sélectionnez les deux, un chiffre sera ajouté au nom du fichier local.</string>
   <string name="conflict_keep_both">Garder les deux versions</string>
-  <string name="conflict_overwrite">Écraser</string>
-  <string name="conflict_dont_upload">Ne pas téléverser</string>
+  <string name="conflict_use_local_version">Utiliser la version locale</string>
+  <string name="conflict_use_server_version">Utiliser la version du serveur</string>
   <string name="preview_image_description">Prévisualisation de l\'image</string>
   <string name="preview_image_error_unknown_format">Cette image ne peut pas être affichée</string>
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>
@@ -307,7 +314,20 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="prefs_category_security">Sécurité</string>
   <string name="prefs_instant_video_upload_path_title">Répertoire de téléversement des vidéos</string>
   <string name="download_folder_failed_content">Le téléchargement du dossier %1$s n\'a pas pu être achevé</string>
+  <string name="shared_subject_header">a partagé</string>
+  <string name="with_you_subject_header">avec vous</string>
   <string name="subject_token">%1$s a partagé \"%2$s\" avec vous</string>
+  <string name="saml_subject_token">\"%1$s\" a été partagé avec vous</string>
   <string name="auth_refresh_button">Actualiser la connexion</string>
   <string name="auth_host_address">Adresse du serveur</string>
+  <string name="common_error_out_memory">Mémoire insuffisante</string>
+  <string name="username">Nom d\'utilisateur</string>
+  <string name="file_list__footer__folder">1 dossier</string>
+  <string name="file_list__footer__folders">%1$d dossiers</string>
+  <string name="file_list__footer__file">1 fichier</string>
+  <string name="file_list__footer__file_and_folder">1 fichier, 1 dossier</string>
+  <string name="file_list__footer__file_and_folders">1 fichier, %1$d dossiers</string>
+  <string name="file_list__footer__files">%1$d fichiers</string>
+  <string name="file_list__footer__files_and_folder">%1$d fichiers, 1 dossier</string>
+  <string name="file_list__footer__files_and_folders">%1$d fichiers, %2$d dossiers</string>
 </resources>

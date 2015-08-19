@@ -19,12 +19,15 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">Ogólne</string>
   <string name="prefs_category_more">Więcej</string>
   <string name="prefs_accounts">Konta</string>
   <string name="prefs_manage_accounts">Zarządzaj kontami</string>
-  <string name="prefs_pincode">PIN aplikacji</string>
-  <string name="prefs_pincode_summary">Chroń swojego klienta</string>
+  <string name="prefs_passcode">Blokowanie hasła</string>
   <string name="prefs_instant_upload">natychmiastowa wysyłka obrazków</string>
   <string name="prefs_instant_upload_summary">Wysyłaj od razu zdjęcia zrobione aparatem</string>
   <string name="prefs_instant_video_upload">Natychmiastowa wysyłka wideo</string>
@@ -62,12 +65,7 @@
   <string name="uploader_info_uploading">Wysyłanie</string>
   <string name="file_list_seconds_ago">sekund temu</string>
   <string name="file_list_empty">Pusto. Wyślij coś!</string>
-  <string name="file_list_loading">Ładowanie...</string>
   <string name="local_file_list_empty">Nie ma plików w tym folderze.</string>
-  <string name="file_list_folder">folder</string>
-  <string name="file_list_folders">foldery</string>
-  <string name="file_list_file">plik</string>
-  <string name="file_list_files">pliki</string>
   <string name="filedetails_select_file">Dotknij plik aby wyświetlić dodatkowe informacje</string>
   <string name="filedetails_size">Rozmiar:</string>
   <string name="filedetails_type">Typ:</string>
@@ -76,6 +74,7 @@
   <string name="filedetails_download">Pobierz</string>
   <string name="filedetails_sync_file">Odśwież plik</string>
   <string name="filedetails_renamed_in_upload_msg">Podczas wysyłania nazwa pliku została zmieniona na %1$s</string>
+  <string name="list_layout">Lista szablonów wyglądu</string>
   <string name="action_share_file">Udostępnij link</string>
   <string name="action_unshare_file">Anuluj udostępnianie</string>
   <string name="common_yes">Tak</string>
@@ -128,15 +127,15 @@
   <string name="foreign_files_local_text">Lokalnie: %1$s</string>
   <string name="foreign_files_remote_text">Zdalnie: %1$s</string>
   <string name="upload_query_move_foreign_files">Nie ma wystarczająco miejśca, aby skopiować zaznaczone pliki do folderu %1$s. Chciałbyś je przenieść?</string>
-  <string name="pincode_enter_pin_code">Podaj PIN aplikacji</string>
-  <string name="pincode_configure_your_pin">Wpisz PIN aplikacji</string>
-  <string name="pincode_configure_your_pin_explanation">Kod PIN będzie wymagany za każdym razem, gdy aplikacja będzie uruchamiana.</string>
-  <string name="pincode_reenter_your_pincode">Ponownie wpisz PIN aplikacji</string>
-  <string name="pincode_remove_your_pincode">Usuń PIN aplikacji</string>
-  <string name="pincode_mismatch">Podane numery PIN są różne</string>
-  <string name="pincode_wrong">Niepoprawny PIN aplikacji</string>
-  <string name="pincode_removed">Usunięto PIN aplikacji</string>
-  <string name="pincode_stored">Zapisano PIN aplikacji</string>
+  <string name="pass_code_enter_pass_code">Proszę podać swoje hasło</string>
+  <string name="pass_code_configure_your_pass_code">Wpisz swoje hasło</string>
+  <string name="pass_code_configure_your_pass_code_explanation">Hasło będzie wymagane przy każdym uruchomieniu aplikacji</string>
+  <string name="pass_code_reenter_your_pass_code">Proszę powtórzyć hasło</string>
+  <string name="pass_code_remove_your_pass_code">Usuń swoje hasło</string>
+  <string name="pass_code_mismatch">Podane hasła nie są takie same</string>
+  <string name="pass_code_wrong">Nieprawidłowe hasło</string>
+  <string name="pass_code_removed">Hasło zostało usunięte</string>
+  <string name="pass_code_stored">Hasło zostało zapisane</string>
   <string name="media_notif_ticker">%1$s odtwarzacz muzyki</string>
   <string name="media_state_playing">%1$s (odtwarzany)</string>
   <string name="media_state_loading">%1$s (wczytywany)</string>
@@ -189,7 +188,8 @@
 	</string>
   <string name="auth_can_not_auth_against_server">Nie można autoryzować przy użyciu tego serwera</string>
   <string name="auth_account_does_not_exist">Konto nie istnieje jeszcze na tym urządzeniu</string>
-  <string name="fd_keep_in_sync">Automatyczne aktualizuj plik</string>
+  <string name="favorite">Ulubione</string>
+  <string name="unfavorite">Usuń z ulubionych</string>
   <string name="common_rename">Zmień nazwę</string>
   <string name="common_remove">Usuń</string>
   <string name="confirmation_remove_alert">Czy naprawdę chcesz usunąć %1$s?</string>
@@ -212,6 +212,7 @@
   <string name="filedisplay_unexpected_bad_get_content">Nieoczekiwany problem; spróbuj wybrać plik z innej aplikacji</string>
   <string name="filedisplay_no_file_selected">Nie wybrano żadnych plików</string>
   <string name="activity_chooser_title">Wyślij link do ...</string>
+  <string name="wait_for_tmp_copy_from_private_storage">Kopiowanie pliku z prywatnego zasobu</string>
   <string name="oauth_check_onoff">Loguj przez oAuth2</string>
   <string name="oauth_login_connection">Łączenie z serwerem oAuth2...</string>
   <string name="ssl_validator_header">Nie można zweryfikować tożsamości strony</string>
@@ -247,11 +248,7 @@
   <string name="instant_upload_on_wifi">Wysyłaj zdjęcia tylko przez WiFi</string>
   <string name="instant_video_upload_on_wifi">Aktualizuj filmy tylko przez WiFi</string>
   <string name="instant_upload_path">/InstantUpload</string>
-  <string name="conflict_title">Konflikt aktualizacji</string>
-  <string name="conflict_message">Zdalny plik %s nie jest zsynchronizowany z plikiem lokalnym. Kontynuując zastąpisz zawartość pliku na serwerze.</string>
   <string name="conflict_keep_both">Zatrzymaj oba</string>
-  <string name="conflict_overwrite">Zastąp</string>
-  <string name="conflict_dont_upload">Nie wysyłaj</string>
   <string name="preview_image_description">Podgląd</string>
   <string name="preview_image_error_unknown_format">Ten obrazek nie może zostać wyświetlony</string>
   <string name="error__upload__local_file_not_copied">%1$s nie może zostać skopiowany do lokalnego folderu %2$s</string>
@@ -303,7 +300,7 @@
   <string name="prefs_category_security">Bezpieczeństwo</string>
   <string name="prefs_instant_video_upload_path_title">Katalog wysyłania dla wideo</string>
   <string name="download_folder_failed_content">Pobieranie %1$s katalogu nie może zostać ukończone</string>
-  <string name="subject_token">%1$s wspólne \"%2$s\" z tobą</string>
   <string name="auth_refresh_button">Odśwież połączenie</string>
   <string name="auth_host_address">Adres Serwera</string>
+  <string name="common_error_out_memory">Brak wystarczającej pamięci</string>
 </resources>

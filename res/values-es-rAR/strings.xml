@@ -19,12 +19,14 @@
   </string-array>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
+  <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
+  <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <!--TODO re-enable when "On Device" is available
+    <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
-  <string name="prefs_pincode">PIN de aplicación</string>
-  <string name="prefs_pincode_summary">Protejé tu cliente</string>
   <string name="prefs_instant_upload">Subir fotos instantáneamente. </string>
   <string name="prefs_instant_upload_summary">Subir instantáneamente fotos tomadas por la cámara.</string>
   <string name="prefs_instant_video_upload">Subir videos instantáneamente. </string>
@@ -62,12 +64,7 @@
   <string name="uploader_info_uploading">Subiendo</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">No hay nada. ¡Subí contenido!</string>
-  <string name="file_list_loading">Cargando...</string>
   <string name="local_file_list_empty">No existen archivos en esta carpeta.</string>
-  <string name="file_list_folder">carpeta</string>
-  <string name="file_list_folders">carpetas</string>
-  <string name="file_list_file">archivo</string>
-  <string name="file_list_files">archivos</string>
   <string name="filedetails_select_file">Pulsá sobre un archivo para mostrar información adicional.</string>
   <string name="filedetails_size">Tamaño:</string>
   <string name="filedetails_type">Tipo:</string>
@@ -127,15 +124,6 @@
   <string name="foreign_files_local_text">Local: %1$s</string>
   <string name="foreign_files_remote_text">Remote: %1$s</string>
   <string name="upload_query_move_foreign_files">No hay espacio suficiente para copiar los archivos seleccionados dentro de la carpeta %1$s. ¿Te gustaría en su lugar moverlos?</string>
-  <string name="pincode_enter_pin_code">Por favor, escribí el PIN de la aplicación</string>
-  <string name="pincode_configure_your_pin">Ingresá el PIN de la aplicación</string>
-  <string name="pincode_configure_your_pin_explanation">Se te pedirá el PIN cada vez que esta app sea iniciada.</string>
-  <string name="pincode_reenter_your_pincode">Por favor, ingresá nuevamente el PIN de la aplicación</string>
-  <string name="pincode_remove_your_pincode">Borrar tu PIN de la aplicación</string>
-  <string name="pincode_mismatch">Los PIN no son iguales</string>
-  <string name="pincode_wrong">El PIN de la aplicación es incorrecto</string>
-  <string name="pincode_removed">El PIN de la aplicación fue borrado</string>
-  <string name="pincode_stored">El PIN de la aplicación fue almacenado</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>
@@ -185,7 +173,7 @@
   <string name="auth_unsupported_multiaccount">%1$s no soporta múltiples cuentas</string>
   <string name="auth_fail_get_user_name">Tú servidor no esta regresando una identificación de usuario correcta, por favor contacta a un administrador</string>
   <string name="auth_can_not_auth_against_server">No se puede autenticar contra este servidor</string>
-  <string name="fd_keep_in_sync">Mantener el archivo actualizado</string>
+  <string name="favorite">Favorito</string>
   <string name="common_rename">Renombrar</string>
   <string name="common_remove">Borrar</string>
   <string name="confirmation_remove_alert">¿Realmente quieres eliminar %1$s?</string>
@@ -243,11 +231,7 @@
   <string name="instant_upload_on_wifi">Subir imágenes solamente a través de WiFi</string>
   <string name="instant_video_upload_on_wifi">Cargar videos mediante WiFi solamente</string>
   <string name="instant_upload_path">/SubidasInstantáneas</string>
-  <string name="conflict_title">Conflicto en la actualización</string>
-  <string name="conflict_message">El archivo remoto %s no está sincronizado con el archivo local. Si seguís adelante, vas a reemplazar el contenido del archivo en el servidor.</string>
   <string name="conflict_keep_both">Mantener ambas</string>
-  <string name="conflict_overwrite">Sobrescribir</string>
-  <string name="conflict_dont_upload">No subir</string>
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">Esta imagen no puede ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s no pudo ser copiado a la carpeta local %2$s </string>

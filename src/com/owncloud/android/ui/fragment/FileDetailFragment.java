@@ -27,6 +27,9 @@ import android.accounts.Account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -35,9 +38,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -68,12 +68,34 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private static final String TAG = FileDetailFragment.class.getSimpleName();
     public static final String FTAG_CONFIRMATION = "REMOVE_CONFIRMATION_FRAGMENT";
     public static final String FTAG_RENAME_FILE = "RENAME_FILE_FRAGMENT";
-    
+
+    private static final String ARG_FILE = "FILE";
+    private static final String ARG_ACCOUNT = "ACCOUNT";
+
+
+    /**
+     * Public factory method to create new FileDetailFragment instances.
+     *
+     * When 'fileToDetail' or 'ocAccount' are null, creates a dummy layout (to use when a file wasn't tapped before).
+     *
+     * @param fileToDetail      An {@link OCFile} to show in the fragment
+     * @param account           An ownCloud account; needed to start downloads
+     * @return                  New fragment with arguments set
+     */
+    public static FileDetailFragment newInstance(OCFile fileToDetail, Account account) {
+        FileDetailFragment frag = new FileDetailFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_FILE, fileToDetail);
+        args.putParcelable(ARG_ACCOUNT, account);
+        frag.setArguments(args);
+        return frag;
+    }
 
     /**
      * Creates an empty details fragment.
      * 
-     * It's necessary to keep a public constructor without parameters; the system uses it when tries to reinstantiate a fragment automatically. 
+     * It's necessary to keep a public constructor without parameters; the system uses it when tries
+     * to reinstantiate a fragment automatically.
      */
     public FileDetailFragment() {
         super();
@@ -82,22 +104,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         mProgressListener = null;
     }
     
-    /**
-     * Creates a details fragment.
-     * 
-     * When 'fileToDetail' or 'ocAccount' are null, creates a dummy layout (to use when a file wasn't tapped before).
-     * 
-     * @param fileToDetail      An {@link OCFile} to show in the fragment
-     * @param ocAccount         An ownCloud account; needed to start downloads
-     */
-    public FileDetailFragment(OCFile fileToDetail, Account ocAccount) {
-        super(fileToDetail);
-        mAccount = ocAccount;
-        mLayout = R.layout.file_details_empty;
-        mProgressListener = null;
-    }
-    
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +115,10 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        
+
+        setFile((OCFile) getArguments().getParcelable(ARG_FILE));
+        mAccount = getArguments().getParcelable(ARG_ACCOUNT);
+
         if (savedInstanceState != null) {
             setFile((OCFile)savedInstanceState.getParcelable(FileActivity.EXTRA_FILE));
             mAccount = savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT);
@@ -118,19 +128,17 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             mLayout = R.layout.file_details_fragment;
         }
         
-        View view = null;
-        view = inflater.inflate(mLayout, null);
-        mView = view;
+        mView = inflater.inflate(mLayout, null);
         
         if (mLayout == R.layout.file_details_fragment) {
-            mView.findViewById(R.id.fdKeepInSync).setOnClickListener(this);
+            mView.findViewById(R.id.fdFavorite).setOnClickListener(this);
             ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.fdProgressBar);
             mProgressListener = new ProgressListener(progressBar);
             mView.findViewById(R.id.fdCancelBtn).setOnClickListener(this);
         }
-        
+
         updateFileDetails(false, false);
-        return view;
+        return mView;
     }
 
     @Override
@@ -181,7 +189,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 getFile(),
                 mContainerActivity.getStorageManager().getAccount(),
                 mContainerActivity,
-                getSherlockActivity()
+                getActivity()
             );
             mf.filter(menu);
         }
@@ -251,6 +259,14 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 }
                 return true;
             }
+            case R.id.action_favorite_file:{
+                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), true);
+                return true;
+            }
+            case R.id.action_unfavorite_file:{
+                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), false);
+                return true;
+            }
             default:
                 return false;
         }
@@ -259,8 +275,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fdKeepInSync: {
-                toggleKeepInSync();
+            case R.id.fdFavorite: {
+                CheckBox cb = (CheckBox) getView().findViewById(R.id.fdFavorite);
+                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(),cb.isChecked());
                 break;
             }
             case R.id.fdCancelBtn: {
@@ -271,27 +288,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 Log_OC.e(TAG, "Incorrect view clicked!");
         }
     }
-    
-    
-    private void toggleKeepInSync() {
-        CheckBox cb = (CheckBox) getView().findViewById(R.id.fdKeepInSync);
-        OCFile file = getFile();
-        file.setKeepInSync(cb.isChecked());
-        mContainerActivity.getStorageManager().saveFile(file);
-        
-        /// register the OCFile instance in the observer service to monitor local updates
-        Intent observedFileIntent = FileObserverService.makeObservedFileIntent(
-                getActivity(),
-                file, 
-                mAccount,
-                cb.isChecked());
-        getActivity().startService(observedFileIntent);
-        
-        /// immediate content synchronization
-        if (file.keepInSync()) {
-            mContainerActivity.getFileOperationsHelper().syncFile(getFile());
-        }
-    }
+
 
     /**
      * Check if the fragment was created with an empty layout. An empty fragment can't show file details, must be replaced.
@@ -337,14 +334,11 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             setFilename(file.getFileName());
             setFiletype(file.getMimetype(), file.getFileName());
             setFilesize(file.getFileLength());
-            if(ocVersionSupportsTimeCreated()){
-                setTimeCreated(file.getCreationTimestamp());
-            }
-           
+
             setTimeModified(file.getModificationTimestamp());
             
-            CheckBox cb = (CheckBox)getView().findViewById(R.id.fdKeepInSync);
-            cb.setChecked(file.keepInSync());
+            CheckBox cb = (CheckBox)getView().findViewById(R.id.fdFavorite);
+            cb.setChecked(file.isFavorite());
 
             // configure UI for depending upon local state of the file
             FileDownloaderBinder downloaderBinder = mContainerActivity.getFileDownloaderBinder();
@@ -360,7 +354,8 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 setButtonsForDown();
                 
             } else {
-                // TODO load default preview image; when the local file is removed, the preview remains there
+                // TODO load default preview image; when the local file is removed, the preview
+                // remains there
                 setButtonsForRemote();
             }
         }
@@ -389,13 +384,13 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     /**
      * Updates the MIME type in view
-     * @param mimetype to set
-     * @param filename
+     * @param mimetype      MIME type to set
+     * @param filename      Name of the file, to deduce the icon to use in case the MIME type is not precise enough
      */
     private void setFiletype(String mimetype, String filename) {
         TextView tv = (TextView) getView().findViewById(R.id.fdType);
         if (tv != null) {
-            String printableMimetype = DisplayUtils.convertMIMEtoPrettyPrint(mimetype);;        
+            String printableMimetype = DisplayUtils.convertMIMEtoPrettyPrint(mimetype);
             tv.setText(printableMimetype);
         }
         ImageView iv = (ImageView) getView().findViewById(R.id.fdIcon);
@@ -415,20 +410,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     }
     
     /**
-     * Updates the time that the file was created in view
-     * @param milliseconds Unix time to set
-     */
-    private void setTimeCreated(long milliseconds){
-        TextView tv = (TextView) getView().findViewById(R.id.fdCreated);
-        TextView tvLabel = (TextView) getView().findViewById(R.id.fdCreatedLabel);
-        if(tv != null){
-            tv.setText(DisplayUtils.unixTimeToHumanReadable(milliseconds));
-            tv.setVisibility(View.VISIBLE);
-            tvLabel.setVisibility(View.VISIBLE);
-        }
-    }
-    
-    /**
      * Updates the time that the file was last modified
      * @param milliseconds Unix time to set
      */
@@ -445,7 +426,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setButtonsForTransferring() {
         if (!isEmpty()) {
             // let's protect the user from himself ;)
-            getView().findViewById(R.id.fdKeepInSync).setEnabled(false);
+            getView().findViewById(R.id.fdFavorite).setEnabled(false);
             
             // show the progress bar for the transfer
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.VISIBLE);
@@ -467,7 +448,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      */
     private void setButtonsForDown() {
         if (!isEmpty()) {
-            getView().findViewById(R.id.fdKeepInSync).setEnabled(true);
+            getView().findViewById(R.id.fdFavorite).setEnabled(true);
             
             // hides the progress bar
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
@@ -481,7 +462,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      */
     private void setButtonsForRemote() {
         if (!isEmpty()) {
-            getView().findViewById(R.id.fdKeepInSync).setEnabled(true);
+            getView().findViewById(R.id.fdFavorite).setEnabled(true);
             
             // hides the progress bar
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
@@ -491,33 +472,15 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     }
     
 
-    /**
-     * In ownCloud 3.X.X and 4.X.X there is a bug that SabreDAV does not return
-     * the time that the file was created. There is a chance that this will
-     * be fixed in future versions. Use this method to check if this version of
-     * ownCloud has this fix.
-     * @return True, if ownCloud the ownCloud version is supporting creation time
-     */
-    private boolean ocVersionSupportsTimeCreated(){
-        /*if(mAccount != null){
-            AccountManager accManager = (AccountManager) getActivity().getSystemService(Context.ACCOUNT_SERVICE);
-            OwnCloudVersion ocVersion = new OwnCloudVersion(accManager
-                    .getUserData(mAccount, AccountAuthenticator.KEY_OC_VERSION));
-            if(ocVersion.compareTo(new OwnCloudVersion(0x030000)) < 0) {
-                return true;
-            }
-        }*/
-        return false;
-    }
-    
-
     public void listenForTransferProgress() {
         if (mProgressListener != null) {
             if (mContainerActivity.getFileDownloaderBinder() != null) {
-                mContainerActivity.getFileDownloaderBinder().addDatatransferProgressListener(mProgressListener, mAccount, getFile());
+                mContainerActivity.getFileDownloaderBinder().
+                        addDatatransferProgressListener(mProgressListener, mAccount, getFile());
             }
             if (mContainerActivity.getFileUploaderBinder() != null) {
-                mContainerActivity.getFileUploaderBinder().addDatatransferProgressListener(mProgressListener, mAccount, getFile());
+                mContainerActivity.getFileUploaderBinder().
+                        addDatatransferProgressListener(mProgressListener, mAccount, getFile());
             }
         }
     }
@@ -526,10 +489,12 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     public void leaveTransferProgress() {
         if (mProgressListener != null) {
             if (mContainerActivity.getFileDownloaderBinder() != null) {
-                mContainerActivity.getFileDownloaderBinder().removeDatatransferProgressListener(mProgressListener, mAccount, getFile());
+                mContainerActivity.getFileDownloaderBinder().
+                        removeDatatransferProgressListener(mProgressListener, mAccount, getFile());
             }
             if (mContainerActivity.getFileUploaderBinder() != null) {
-                mContainerActivity.getFileUploaderBinder().removeDatatransferProgressListener(mProgressListener, mAccount, getFile());
+                mContainerActivity.getFileUploaderBinder().
+                        removeDatatransferProgressListener(mProgressListener, mAccount, getFile());
             }
         }
     }
@@ -537,7 +502,8 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     
     /**
-     * Helper class responsible for updating the progress bar shown for file uploading or downloading
+     * Helper class responsible for updating the progress bar shown for file uploading or
+     * downloading
      */
     private class ProgressListener implements OnDatatransferProgressListener {
         int mLastPercent = 0;
@@ -548,7 +514,8 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
         
         @Override
-        public void onTransferProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer, String filename) {
+        public void onTransferProgress(long progressRate, long totalTransferredSoFar,
+                                       long totalToTransfer, String filename) {
             int percent = (int)(100.0*((double)totalTransferredSoFar)/((double)totalToTransfer));
             if (percent != mLastPercent) {
                 ProgressBar pb = mProgressBar.get();
@@ -560,6 +527,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             mLastPercent = percent;
         }
 
-    };
+    }
 
 }

@@ -201,7 +201,8 @@ public class RefreshFolderOperation extends RemoteOperation {
             if (mRemoteFolderChanged) {
                 result = fetchAndSyncRemoteFolder(client);
             } else {
-                mChildren = mStorageManager.getFolderContent(mLocalFolder);
+                // TODO Enable when "On Device" is recovered ?
+                mChildren = mStorageManager.getFolderContent(mLocalFolder/*, false*/);
             }
         }
         
@@ -341,7 +342,8 @@ public class RefreshFolderOperation extends RemoteOperation {
         List<SynchronizeFileOperation> filesToSyncContents = new Vector<SynchronizeFileOperation>();
 
         // get current data about local contents of the folder to synchronize
-        List<OCFile> localFiles = mStorageManager.getFolderContent(mLocalFolder);
+        // TODO Enable when "On Device" is recovered ?
+        List<OCFile> localFiles = mStorageManager.getFolderContent(mLocalFolder/*, false*/);
         Map<String, OCFile> localFilesMap = new HashMap<String, OCFile>(localFiles.size());
         for (OCFile file : localFiles) {
             localFilesMap.put(file.getRemotePath(), file);
@@ -363,7 +365,7 @@ public class RefreshFolderOperation extends RemoteOperation {
             if (localFile != null) {
                 // some properties of local state are kept unmodified
                 remoteFile.setFileId(localFile.getFileId());
-                remoteFile.setKeepInSync(localFile.keepInSync());
+                remoteFile.setFavorite(localFile.isFavorite());
                 remoteFile.setLastSyncDateForData(localFile.getLastSyncDateForData());
                 remoteFile.setModificationTimestampAtLastSyncForData(
                         localFile.getModificationTimestampAtLastSyncForData()
@@ -395,7 +397,7 @@ public class RefreshFolderOperation extends RemoteOperation {
             searchForLocalFileInDefaultPath(remoteFile);    // legacy   
 
             /// prepare content synchronization for kept-in-sync files
-            if (remoteFile.keepInSync()) {
+            if (remoteFile.isFavorite()) {
                 SynchronizeFileOperation operation = new SynchronizeFileOperation(  localFile,        
                                                                                     remoteFile, 
                                                                                     mAccount, 

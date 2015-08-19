@@ -24,7 +24,6 @@ package com.owncloud.android.files;
 import org.apache.http.protocol.HTTP;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
@@ -32,15 +31,16 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.services.OperationsService;
+import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 
@@ -70,19 +70,25 @@ public class FileOperationsHelper {
             
             Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
             intentForSavedMimeType.setDataAndType(Uri.parse("file://"+ encodedStoragePath), file.getMimetype());
-            intentForSavedMimeType.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intentForSavedMimeType.setFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            );
             
             Intent intentForGuessedMimeType = null;
             if (storagePath.lastIndexOf('.') >= 0) {
-                String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(storagePath.substring(storagePath.lastIndexOf('.') + 1));
+                String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                        storagePath.substring(storagePath.lastIndexOf('.') + 1)
+                );
                 if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
                     intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
                     intentForGuessedMimeType.setDataAndType(Uri.parse("file://"+ encodedStoragePath), guessedMimeType);
-                    intentForGuessedMimeType.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    intentForGuessedMimeType.setFlags(
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    );
                 }
             }
             
-            Intent chooserIntent = null;
+            Intent chooserIntent;
             if (intentForGuessedMimeType != null) {
                 chooserIntent = Intent.createChooser(intentForGuessedMimeType, mFileActivity.getString(R.string.actionbar_open_with));
             } else {
@@ -113,7 +119,9 @@ public class FileOperationsHelper {
             
         } else {
             // Show a Message
-            Toast t = Toast.makeText(mFileActivity, mFileActivity.getString(R.string.share_link_no_support_share_api), Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(
+                    mFileActivity, mFileActivity.getString(R.string.share_link_no_support_share_api), Toast.LENGTH_LONG
+            );
             t.show();
         }
     }
@@ -151,10 +159,8 @@ public class FileOperationsHelper {
      */
     public boolean isSharedSupported() {
         if (mFileActivity.getAccount() != null) {
-            AccountManager accountManager = AccountManager.get(mFileActivity);
-
-            String version = accountManager.getUserData(mFileActivity.getAccount(), Constants.KEY_OC_VERSION);
-            return (new OwnCloudVersion(version)).isSharedSupported();
+            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
+            return (serverVersion != null && serverVersion.isSharedSupported());
         }
         return false;
     }
@@ -182,12 +188,14 @@ public class FileOperationsHelper {
     
     public void sendDownloadedFile(OCFile file) {
         if (file != null) {
+            String storagePath = file.getStoragePath();
+            String encodedStoragePath = WebdavUtils.encodePath(storagePath);
             Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
             // set MimeType
             sendIntent.setType(file.getMimetype());
-            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getStoragePath()));
+            sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + encodedStoragePath));
             sendIntent.putExtra(Intent.ACTION_SEND, true);      // Send Action
-            
+
             // Show dialog, without the own app
             String[] packagesToExclude = new String[] { mFileActivity.getPackageName() };
             DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude, file);
@@ -216,6 +224,24 @@ public class FileOperationsHelper {
             intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
             mFileActivity.startService(intent);
+        }
+    }
+
+    public void toggleFavorite(OCFile file, boolean isFavorite) {
+        file.setFavorite(isFavorite);
+        mFileActivity.getStorageManager().saveFile(file);
+
+        /// register the OCFile instance in the observer service to monitor local updates
+        Intent observedFileIntent = FileObserverService.makeObservedFileIntent(
+                mFileActivity,
+                file,
+                mFileActivity.getAccount(),
+                isFavorite);
+        mFileActivity.startService(observedFileIntent);
+
+        /// immediate content synchronization
+        if (file.isFavorite()) {
+            syncFile(file);
         }
     }
     
@@ -277,8 +303,8 @@ public class FileOperationsHelper {
             downloaderBinder.cancel(account, file);
 
             // TODO - review why is this here, and solve in a better way
-            // Remove etag for parent, if file is a keep_in_sync
-            if (file.keepInSync()) {
+            // Remove etag for parent, if file is a favorite
+            if (file.isFavorite()) {
                 OCFile parent = mFileActivity.getStorageManager().getFileById(file.getParentId());
                 parent.setEtag("");
                 mFileActivity.getStorageManager().saveFile(parent);
@@ -316,5 +342,14 @@ public class FileOperationsHelper {
         mWaitingForOpId = waitingForOpId;
     }
     
-    
+    /**
+     *  @return 'True' if the server doesn't need to check forbidden characters
+     */
+    public boolean isVersionWithForbiddenCharacters() {
+        if (mFileActivity.getAccount() != null) {
+            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
+            return (serverVersion != null && serverVersion.isVersionWithForbiddenCharacters());
+        }
+        return false;
+    }
 }
