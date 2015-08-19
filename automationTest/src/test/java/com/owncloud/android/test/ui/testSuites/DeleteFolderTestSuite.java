@@ -37,7 +37,6 @@ import org.openqa.selenium.By;
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FilesView;
-import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -65,10 +64,7 @@ public class DeleteFolderTestSuite{
 		AndroidElement folder = filesView.getElement(Config.folderToCreate);
 		if(folder==null){
 			//create the folder
-			WaitAMomentPopUp waitAMomentPopUp = Actions
-					.createFolder(Config.folderToCreate, filesView);
-			Common.waitTillElementIsNotPresentWithoutTimeout(
-					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			Actions.createFolder(Config.folderToCreate, filesView, driver);
 			folder = filesView.getElement(Config.folderToCreate);
 		}
 		assertTrue(folder.isDisplayed());
@@ -88,10 +84,7 @@ public class DeleteFolderTestSuite{
 		//if the folder already exists, do no created
 		AndroidElement folder = filesView.getElement(Config.folderToCreate);
 		if(folder==null){
-			WaitAMomentPopUp waitAMomentPopUp = Actions
-					.createFolder(Config.folderToCreate, filesView);
-			Common.waitTillElementIsNotPresentWithoutTimeout(
-					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			Actions.createFolder(Config.folderToCreate, filesView, driver);
 			folder = filesView.getElement(Config.folderToCreate);
 		}
 		assertTrue(folder.isDisplayed());

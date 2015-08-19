@@ -70,12 +70,7 @@ public class MoveFileTestSuite{
 		assertNull(filesView.getElement(Config.fileToTest));
 
 		//Create the folder where the other is gone to be moved
-		waitAMomentPopUp = Actions
-				.createFolder(Config.folderWhereMove, filesView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(filesView.getElement(Config.folderWhereMove)
-				.isDisplayed());
+		Actions.createFolder(Config.folderWhereMove, filesView, driver);
 
 		filesView = Actions.uploadFile(Config.fileToTest, filesView);
 		assertTrue(filesView.getElement(Config.fileToTest)

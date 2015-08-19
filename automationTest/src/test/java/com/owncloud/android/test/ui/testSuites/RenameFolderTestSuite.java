@@ -39,7 +39,6 @@ import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.FolderPopUp;
-import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -47,7 +46,6 @@ public class RenameFolderTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	private String CurrentCreatedFolder = "";
 
 	@Rule public TestName name = new TestName();
 
@@ -61,7 +59,7 @@ public class RenameFolderTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testRenameFolder () throws Exception {
-		WaitAMomentPopUp waitAMomentPopUp = null;
+		//WaitAMomentPopUp waitAMomentPopUp = null;
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
@@ -75,15 +73,11 @@ public class RenameFolderTestSuite{
 		AndroidElement folder = filesView.getElement(Config.folderBeforeRename);
 		if(folder==null){
 			//create the folder to rename
-			waitAMomentPopUp = Actions
-					.createFolder(Config.folderBeforeRename, filesView);
-			Common.waitTillElementIsNotPresentWithoutTimeout(
-					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			Actions.createFolder(Config.folderBeforeRename, filesView, driver);
 			folder = filesView.getElement(Config.folderBeforeRename);
 		}
 
 		assertTrue(folder.isDisplayed());
-		CurrentCreatedFolder = Config.folderBeforeRename;
 		assertNull(filesView.getElement(Config.folderToRename));
 
 		ElementMenuOptions menuOptions = filesView
@@ -91,45 +85,35 @@ public class RenameFolderTestSuite{
 		FolderPopUp FolderPopUp = menuOptions.clickOnRename();
 		FolderPopUp.typeNewFolderName(Config.folderToRename);
 		FolderPopUp.clickOnNewFolderOkButton();
-		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-				.getWaitAMomentTextElement(), 100);
+		//TODO. get the waitAMomentPopUp
+		//Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+			//	.getWaitAMomentTextElement(), 100);
 		folder = filesView.getElement(Config.folderToRename);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
-		CurrentCreatedFolder = Config.folderToRename;
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testRenameFolderWithDownloadedFiles () throws Exception {
-		WaitAMomentPopUp waitAMomentPopUp = null;
+		//WaitAMomentPopUp waitAMomentPopUp = null;
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 
 		//check if the folder with the new name already exists 
-		//and if true, delete them
+		//and if true, delete it
 		Actions.deleteElement(Config.folderToRename, filesView, driver);
-		Actions.deleteElement(Config.folderBeforeRename, filesView, driver);
 		assertNull(filesView.getElement(Config.folderToRename));
-		assertNull(filesView.getElement(Config.folderBeforeRename));
 
 		//create the folder to rename
-		waitAMomentPopUp = Actions
-				.createFolder(Config.folderBeforeRename, filesView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		AndroidElement folder = filesView.getElement(Config.folderBeforeRename);
-		assertTrue(folder.isDisplayed());
-		CurrentCreatedFolder = Config.folderBeforeRename;
+		Actions.createFolder(Config.folderBeforeRename, filesView, driver);
 		assertNull(filesView.getElement(Config.folderToRename));
-
 
 		//create content in the folder
 		Actions.createContentInsideFolder(Config.folderBeforeRename, 
 				Config.fileToTest,  Config.fileToTest2,  Config.fileToTest3,
 				Config.folderToCreateSpecialCharacters, filesView, driver);
-
 
 		//select to rename the folder
 		ElementMenuOptions menuOptions = filesView
@@ -137,12 +121,12 @@ public class RenameFolderTestSuite{
 		FolderPopUp FolderPopUp = menuOptions.clickOnRename();
 		FolderPopUp.typeNewFolderName(Config.folderToRename);
 		FolderPopUp.clickOnNewFolderOkButton();
-		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-				.getWaitAMomentTextElement(), 100);
-		folder = filesView.getElement(Config.folderToRename);
+		//TODO. get the waitAMomentPopUp
+		//Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+			//	.getWaitAMomentTextElement(), 100);
+		AndroidElement folder = filesView.getElement(Config.folderToRename);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
-		CurrentCreatedFolder = Config.folderToRename;
 
 		//check that the files inside are there and still downloaded
 		filesView.tapOnElement(Config.folderToRename);
@@ -172,7 +156,8 @@ public class RenameFolderTestSuite{
 		common.takeScreenShotOnFailed(name.getMethodName());
 
 		FilesView filesView = new FilesView(driver);
-		Actions.deleteElement(CurrentCreatedFolder, filesView, driver);
+		Actions.deleteElement(Config.folderBeforeRename, filesView, driver);
+		Actions.deleteElement(Config.folderToRename, filesView, driver);
 
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

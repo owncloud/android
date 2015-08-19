@@ -74,18 +74,10 @@ public class MoveFolderTestSuite{
 		assertNull(filesView.getElement(Config.folderToMove));
 
 		//Create the folder where the other is gone to be moved
-		waitAMomentPopUp = Actions
-				.createFolder(Config.folderWhereMove, filesView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(filesView.getElement(
-				Config.folderWhereMove).isDisplayed());
+		Actions.createFolder(Config.folderWhereMove, filesView, driver);
 
 		//Create the folder which is going to be moved
-		waitAMomentPopUp = Actions.createFolder(Config.folderToMove, filesView);
-		Common.waitTillElementIsNotPresent(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(filesView.getElement(Config.folderToMove).isDisplayed());
+		Actions.createFolder(Config.folderToMove, filesView, driver);
 
 		//select to move the folder
 		ElementMenuOptions menuOptions = filesView
@@ -127,20 +119,12 @@ public class MoveFolderTestSuite{
 		assertNull(filesView.getElement(Config.folderToMove));
 
 		//Create the folder where the other is gone to be moved
-		waitAMomentPopUp = Actions
-				.createFolder(Config.folderWhereMove, filesView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(filesView.getElement(
-				Config.folderWhereMove).isDisplayed());
+		Actions.createFolder(Config.folderWhereMove, filesView, driver);
 
 		//Create the folder which is going to be moved
-		waitAMomentPopUp = Actions.createFolder(Config.folderToMove, filesView);
-		Common.waitTillElementIsNotPresent(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		assertTrue(filesView.getElement(Config.folderToMove).isDisplayed());
+		Actions.createFolder(Config.folderToMove, filesView, driver);
 		
-		
+		//Create content inside the folder
 		Actions.createContentInsideFolder(Config.folderToMove, 
 				Config.fileToTest,  Config.fileToTest2,  Config.fileToTest3,
 				Config.folderToCreateSpecialCharacters, filesView, driver);

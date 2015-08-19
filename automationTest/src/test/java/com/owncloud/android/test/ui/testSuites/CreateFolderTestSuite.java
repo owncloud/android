@@ -20,10 +20,7 @@
 
 package com.owncloud.android.test.ui.testSuites;
 
-import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -35,7 +32,6 @@ import org.junit.Test;
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FilesView;
-import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -43,7 +39,6 @@ public class CreateFolderTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	private String CurrentCreatedFolder = "";
 
 	@Rule public TestName name = new TestName();
 
@@ -53,7 +48,7 @@ public class CreateFolderTestSuite{
 		driver=common.setUpCommonDriver();
 	}
 
-	public void createFolder(FilesView filesView, String folderName) 
+	/*public void createFolder(FilesView filesView, String folderName) 
 			throws Exception{
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(folderName, filesView, driver);
@@ -67,7 +62,7 @@ public class CreateFolderTestSuite{
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
 		CurrentCreatedFolder = folderName;
-	}
+	}*/
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
@@ -77,7 +72,7 @@ public class CreateFolderTestSuite{
 				Config.user,Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 
-		Actions.createFolder(filesView, Config.folderToCreate, driver);
+		Actions.createFolder(Config.folderToCreate, filesView, driver);
 	}
 
 	@Test
@@ -88,12 +83,9 @@ public class CreateFolderTestSuite{
 		common.assertIsInFilesView(filesView);
 		
 		AndroidDriver.ImeHandler ime = driver.manage().ime();
-	    //ime.getAvailableEngines();
-	    //for (String engine : ime.getAvailableEngines()) {
-	      //System.out.println(engine);
-	    //}
 	    ime.activateEngine("io.appium.android.ime/.UnicodeIME");
-	    createFolder(filesView, Config.folderToCreateSpecialCharacters);
+	    Actions.createFolder(Config.folderToCreateSpecialCharacters, filesView,
+	    		driver);
 		
 		ime.activateEngine("com.google.android.inputmethod.latin/"
 				+ "com.android.inputmethod.latin.LatinIME");
@@ -104,9 +96,9 @@ public class CreateFolderTestSuite{
 		common.takeScreenShotOnFailed(name.getMethodName());
 
 		FilesView filesView = new FilesView(driver);
-		if(CurrentCreatedFolder != ""){
-			Actions.deleteElement(CurrentCreatedFolder, filesView, driver);
-		}
+		Actions.deleteElement(Config.folderToCreateSpecialCharacters, filesView
+				,driver);
+		Actions.deleteElement(Config.folderToCreate, filesView, driver);
 
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

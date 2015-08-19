@@ -59,22 +59,6 @@ public class SmokeTestSuite{
 		driver=common.setUpCommonDriver();
 	}
 
-	public void createFolder(FilesView filesView, String folderName) 
-			throws Exception{
-		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(folderName, filesView, driver);
-		assertNull(filesView.getElement(folderName));
-
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(folderName, filesView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-				.getWaitAMomentTextElement(), 100);
-		AndroidElement folder = filesView.getElement(folderName);
-		assertNotNull(folder);
-		assertTrue(folder.isDisplayed());	
-		CurrentCreatedFolder = folderName;
-	}
-
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testSmokeTest () throws Exception {
@@ -107,13 +91,13 @@ public class SmokeTestSuite{
 		//}
 		//create a folder
 		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
-		createFolder(filesView, Config.folderToCreateSpecialCharacters);
+		Actions.createFolder(Config.folderToCreateSpecialCharacters, filesView, driver);
 
 		ime.activateEngine("com.google.android.inputmethod.latin/"
 				+ "com.android.inputmethod.latin.LatinIME");
 		
 		//create another folder
-		createFolder(filesView, Config.folderWhereMove);
+		Actions.createFolder(Config.folderWhereMove, filesView, driver);
 
 		//uploads file inside one of the folders
 		filesView.tapOnElement(Config.folderToCreateSpecialCharacters);
