@@ -77,7 +77,7 @@ public class CreateFolderTestSuite{
 				Config.user,Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 
-		createFolder(filesView, Config.folderToCreate);
+		Actions.createFolder(filesView, Config.folderToCreate, driver);
 	}
 
 	@Test

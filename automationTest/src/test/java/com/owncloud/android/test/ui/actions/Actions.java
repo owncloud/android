@@ -20,6 +20,10 @@
 
 package com.owncloud.android.test.ui.actions;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 
 import org.openqa.selenium.By;
@@ -78,14 +82,19 @@ public class Actions {
 		return loginForm.clickOnConnectButton();
 	}
 
-	public static WaitAMomentPopUp createFolder(String folderName,
-			FilesView filesView){
+	public static void createFolder(String folderName,
+			FilesView filesView, AndroidDriver driver) throws Exception{
+		deleteElement(folderName, filesView, driver);
+		assertNull(filesView.getElement(folderName));
 		FolderPopUp newFolderPopUp = filesView.clickOnNewFolderButton();
 		newFolderPopUp.typeNewFolderName(folderName);
 		WaitAMomentPopUp waitAMomentPopUp = newFolderPopUp
 				.clickOnNewFolderOkButton();
-		//TODO. assert here
-		return waitAMomentPopUp;
+		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+				.getWaitAMomentTextElement(), 100);
+		AndroidElement folder = filesView.getElement(folderName);
+		assertNotNull(folder);
+		assertTrue(folder.isDisplayed());
 	}
 
 
@@ -317,6 +326,44 @@ public class Actions {
 		//TO DO. detect when the file is successfully uploaded
 		Thread.sleep(15000);
 		return filesView; 
+	}
+
+	public static void createContentInsideFolder(String folderWhereCreateContent, 
+			String fileToUpload,  String fileToUpload2,  String fileToUpload3,
+			String folderToCreate, FilesView filesView, AndroidDriver driver) 
+					throws Exception{
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
+		//access to the folder
+		filesView.tapOnElement(folderWhereCreateContent);
+		Thread.sleep(1000);
+
+		//upload some files
+		filesView = Actions.uploadSeveralFile(fileToUpload,
+				fileToUpload2,fileToUpload3, filesView);
+
+		assertTrue(filesView.getElement(fileToUpload).isDisplayed());
+		assertTrue(filesView.getElement(fileToUpload2).isDisplayed());
+		assertTrue(filesView.getElement(fileToUpload3).isDisplayed());
+
+		assertTrue(filesView.getElement(fileToUpload)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(fileToUpload2)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(fileToUpload3)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+
+		//create some folder
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+		createFolder(folderToCreate,filesView, driver);
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
+
+		filesView.clickOnBackButton();
+		AndroidElement folder = filesView.getElement(folderWhereCreateContent);
+		assertTrue(folder.isDisplayed());
 	}
 
 }

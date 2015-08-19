@@ -32,6 +32,7 @@ import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
@@ -102,6 +103,16 @@ public class DeleteFolderTestSuite{
 		assertTrue(filesView.getElement(Config.fileToTest).isDisplayed());
 		assertTrue(filesView.getElement(Config.fileToTest2).isDisplayed());
 		assertTrue(filesView.getElement(Config.fileToTest3).isDisplayed());
+
+		assertTrue(filesView.getElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest2)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest3)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
 
 		filesView.clickOnBackButton();
 		folder = filesView.getElement(Config.folderToCreate);

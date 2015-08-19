@@ -31,6 +31,7 @@ import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
@@ -44,7 +45,7 @@ import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 public class MoveFolderTestSuite{
 	AndroidDriver driver;
 	Common common;
-	
+
 	@Rule public TestName name = new TestName();
 
 	@Before
@@ -63,12 +64,12 @@ public class MoveFolderTestSuite{
 		common.assertIsInFilesView(filesView);
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
-		     //fileListView.getProgressCircular(), 1000);
+		//fileListView.getProgressCircular(), 1000);
 
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
 		Actions.deleteElement(Config.folderToMove, filesView, driver);
-		
+
 		assertNull(filesView.getElement(Config.folderWhereMove));
 		assertNull(filesView.getElement(Config.folderToMove));
 
@@ -96,7 +97,7 @@ public class MoveFolderTestSuite{
 		waitAMomentPopUp = moveView.clickOnChoose();
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		
+
 		//check that the folder moved is inside the other
 		filesView.tapOnElement(Config.folderWhereMove);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
@@ -104,6 +105,86 @@ public class MoveFolderTestSuite{
 		Thread.sleep(1000);
 		assertTrue(filesView.getElement(Config.folderToMove)
 				.isDisplayed());
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	public void testMoveFolderWithDownloadedFiles () throws Exception {
+		WaitAMomentPopUp waitAMomentPopUp;
+
+		FilesView filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
+
+		//Common.waitTillElementIsNotPresentWithoutTimeout(
+		//fileListView.getProgressCircular(), 1000);
+
+		//check if the folder already exists and if true, delete them
+		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
+		Actions.deleteElement(Config.folderToMove, filesView, driver);
+
+		assertNull(filesView.getElement(Config.folderWhereMove));
+		assertNull(filesView.getElement(Config.folderToMove));
+
+		//Create the folder where the other is gone to be moved
+		waitAMomentPopUp = Actions
+				.createFolder(Config.folderWhereMove, filesView);
+		Common.waitTillElementIsNotPresentWithoutTimeout(
+				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+		assertTrue(filesView.getElement(
+				Config.folderWhereMove).isDisplayed());
+
+		//Create the folder which is going to be moved
+		waitAMomentPopUp = Actions.createFolder(Config.folderToMove, filesView);
+		Common.waitTillElementIsNotPresent(
+				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+		assertTrue(filesView.getElement(Config.folderToMove).isDisplayed());
+		
+		
+		Actions.createContentInsideFolder(Config.folderToMove, 
+				Config.fileToTest,  Config.fileToTest2,  Config.fileToTest3,
+				Config.folderToCreateSpecialCharacters, filesView, driver);
+
+		//select to move the folder
+		ElementMenuOptions menuOptions = filesView
+				.longPressOnElement(Config.folderToMove);
+		MoveView moveView = menuOptions.clickOnMove();
+
+		//to move to a folder
+		moveView.tapOnElement(Config.folderWhereMove);
+		waitAMomentPopUp = moveView.clickOnChoose();
+		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+				.getWaitAMomentTextElement(), 100);
+
+		//check that the folder moved is inside the other
+		filesView.tapOnElement(Config.folderWhereMove);
+		Common.waitTillElementIsNotPresentWithoutTimeout(
+				filesView.getProgressCircular(), 1000);
+		Thread.sleep(1000);
+		assertTrue(filesView.getElement(Config.folderToMove)
+				.isDisplayed());
+
+		//check that the files inside are there and still downloaded
+		filesView.tapOnElement(Config.folderToMove);
+		Common.waitTillElementIsNotPresentWithoutTimeout(
+				filesView.getProgressCircular(), 1000);
+		Thread.sleep(1000);
+		assertTrue(filesView.getElement(Config.fileToTest).isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest2).isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest3).isDisplayed());
+
+		assertTrue(filesView.getElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest2)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest3)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(Config.folderToCreateSpecialCharacters)
+				.isDisplayed());
+		filesView.clickOnBackButton();
 	}
 
 	@After

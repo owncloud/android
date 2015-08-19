@@ -37,13 +37,15 @@ import org.openqa.selenium.ScreenOrientation;
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.Drawer;
+import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.FilesView;
+import com.owncloud.android.test.ui.models.MoveView;
 import com.owncloud.android.test.ui.models.SettingsView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SmokeTest{
+public class SmokeTestSuite{
 
 	AndroidDriver driver;
 	Common common;
@@ -83,34 +85,38 @@ public class SmokeTest{
 		common.assertIsInFilesView(filesView);
 		assertTrue(filesView
 				.getElement(Config.fileWhichIsInTheServer1).isDisplayed());
-		
+
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		Drawer drawer = filesView.swipeToShowDrawer();
 		SettingsView settingsView = drawer.clickOnSettingsButton();
-		
+
 		settingsView.tapOnAddAccount(1, 1000);
 		Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
 		common.assertIsInSettingsView(settingsView);
 		settingsView.tapOnAccountElement(2,1, 100);
 		common.assertIsInFilesView(filesView);
-		
+
 		assertTrue(filesView.getElement(Config.fileWhichIsInTheServer2)
 				.isDisplayed());
-		
+
 		AndroidDriver.ImeHandler ime = driver.manage().ime();
-	    //ime.getAvailableEngines();
-	    //for (String engine : ime.getAvailableEngines()) {
-	      //System.out.println(engine);
-	    //}
-	    ime.activateEngine("io.appium.android.ime/.UnicodeIME");
-	    createFolder(filesView, Config.folderToCreateSpecialCharacters);
-		
+		//ime.getAvailableEngines();
+		//for (String engine : ime.getAvailableEngines()) {
+		//System.out.println(engine);
+		//}
+		//create a folder
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+		createFolder(filesView, Config.folderToCreateSpecialCharacters);
+
 		ime.activateEngine("com.google.android.inputmethod.latin/"
 				+ "com.android.inputmethod.latin.LatinIME");
 		
-		filesView.tapOnElement(Config.folderToCreateSpecialCharacters);
+		//create another folder
+		createFolder(filesView, Config.folderWhereMove);
 
+		//uploads file inside one of the folders
+		filesView.tapOnElement(Config.folderToCreateSpecialCharacters);
 		filesView = Actions.uploadSeveralFile(Config.fileToTest,
 				Config.fileToTest2,Config.fileToTest3, filesView);
 
@@ -119,20 +125,46 @@ public class SmokeTest{
 		assertTrue(filesView.getElement(Config.fileToTest3).isDisplayed());
 
 		filesView.clickOnBackButton();
-		AndroidElement folder = filesView.getElement(Config.folderToCreateSpecialCharacters);
+		AndroidElement folder = filesView
+				.getElement(Config.folderToCreateSpecialCharacters);
+		assertTrue(folder.isDisplayed());
+
+		//select to move the folder
+		ElementMenuOptions menuOptions = filesView
+				.longPressOnElement(Config.folderToCreateSpecialCharacters);
+		MoveView moveView = menuOptions.clickOnMove();
+
+		//to move to a folder
+		moveView.tapOnElement(Config.folderWhereMove);
+		WaitAMomentPopUp waitAMomentPopUp = moveView.clickOnChoose();
+		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+				.getWaitAMomentTextElement(), 100);
+
+
+		//check that the folder moved is inside the other
+		filesView.tapOnElement(Config.folderWhereMove);
+		Common.waitTillElementIsNotPresentWithoutTimeout(
+				filesView.getProgressCircular(), 1000);
+		Thread.sleep(1000);
+		assertTrue(filesView.getElement(Config.folderToCreateSpecialCharacters)
+				.isDisplayed());
+
+		//Go back and check that the folder is there
+		filesView.clickOnBackButton();
+		folder = filesView.getElement(Config.folderWhereMove);
 		assertTrue(folder.isDisplayed());
 
 		//delete the folder
-		Actions.deleteElement(Config.folderToCreateSpecialCharacters, filesView, driver);
+		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
 		//assertFalse(folder.isDisplayed());
-		assertNull(filesView.getElement(Config.folderToCreateSpecialCharacters));
+		assertNull(filesView.getElement(Config.folderWhereMove));
 
 		filesView.pulldownToRefresh();
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(filesView
 				.getProgressCircular(), 100);
 		//assertFalse(folder.isDisplayed());
-		assertNull(filesView.getElement(Config.folderToCreateSpecialCharacters));
+		assertNull(filesView.getElement(Config.folderWhereMove));
 	}
 
 	@After
