@@ -48,7 +48,6 @@ public class RenameFileTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	private String CurrentCreatedFile = "";
 	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
@@ -62,10 +61,9 @@ public class RenameFileTestSuite{
 						Config.password, Config.isTrusted, driver);
 				common.assertIsInFilesView(filesView);
 	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testRenameDownloadedFile () throws Exception {
+	
+	public static void renameDownloadedFileMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
 		//check if the file with the new name already exists, if true delete it
 		Actions.deleteElement(Config.fileToRename, filesView, driver);
 
@@ -80,7 +78,6 @@ public class RenameFileTestSuite{
 		filesView = Actions.uploadFile(Config.fileToTest, filesView);
 
 		assertTrue(filesView.getElement(Config.fileToTest).isDisplayed());
-		CurrentCreatedFile = Config.fileToTest;
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				filesView.getProgressCircular(), 1000);
 
@@ -111,14 +108,20 @@ public class RenameFileTestSuite{
 
 		assertNotNull(file);
 		assertTrue(file.isDisplayed());	
-		CurrentCreatedFile = Config.fileToRename;
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testRenameDownloadedFile () throws Exception {
+		renameDownloadedFileMethod (driver, common, filesView);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
 		FilesView filesView = new FilesView(driver);
-		Actions.deleteElement(CurrentCreatedFile,filesView, driver);
+		Actions.deleteElement(Config.fileToTest,filesView, driver);
+		Actions.deleteElement(Config.fileToRename,filesView, driver);
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

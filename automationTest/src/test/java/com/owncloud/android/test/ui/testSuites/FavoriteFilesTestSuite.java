@@ -91,8 +91,8 @@ public class FavoriteFilesTestSuite{
 				.isDisplayed());
 	}
 
-	public void favoriteFileAndRefreshMethod (AndroidDriver driver, 
-			Common common) throws Exception {
+	public static void favoriteFileAndRefreshMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				filesView.getProgressCircular(), 1000);
 
@@ -124,7 +124,7 @@ public class FavoriteFilesTestSuite{
 	@Test	
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testFavoriteFileAndRefresh () throws Exception {
-		favoriteFileAndRefreshMethod (driver,common);
+		favoriteFileAndRefreshMethod (driver,common,filesView);
 	}
 
 

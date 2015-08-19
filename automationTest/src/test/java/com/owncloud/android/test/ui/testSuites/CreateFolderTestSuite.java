@@ -61,8 +61,8 @@ public class CreateFolderTestSuite{
 		Actions.createFolder(Config.folderToCreate, filesView, driver);
 	}
 	
-	public void createFolderWithSpecialCharactersMethod (AndroidDriver driver, 
-			Common common) throws Exception {
+	public static void createFolderWithSpecialCharactersMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
 		AndroidDriver.ImeHandler ime = driver.manage().ime();
 		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
 		Actions.createFolder(Config.folderToCreateSpecialCharacters, filesView,
@@ -75,7 +75,7 @@ public class CreateFolderTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testCreateFolderWithSpecialCharacters () throws Exception {
-		createFolderWithSpecialCharactersMethod (driver, common);
+		createFolderWithSpecialCharactersMethod (driver, common, filesView);
 	}
 
 	@After

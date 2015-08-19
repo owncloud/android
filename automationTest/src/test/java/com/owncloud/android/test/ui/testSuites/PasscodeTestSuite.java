@@ -57,10 +57,9 @@ public class PasscodeTestSuite {
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class})
-	public void testPasscodeEnable () throws Exception {
+	
+	public void passcodeEnableMethod (AndroidDriver driver, 
+			Common common) throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 
 		Drawer drawer = filesView.swipeToShowDrawer();
@@ -91,6 +90,12 @@ public class PasscodeTestSuite {
 				Config.passcode3, Config.passcode4);
 		FilesView newFilesView = new FilesView(driver);
 		common.assertIsInFilesView(newFilesView);
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class})
+	public void testPasscodeEnable () throws Exception {
+		passcodeEnableMethod(driver, common);
 	}
 
 

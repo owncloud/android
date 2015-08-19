@@ -53,36 +53,48 @@ public class SmokeTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testSmokeTest () throws Exception {
 
-		LoginTestSuite loginTS = new LoginTestSuite();
-		loginTS.loginAndShowFilesMethod (driver, common);
+		//TODO. login and logout and then continue. 
+		//The seccond time that you log out, it goes directly to settings
+		FilesView filesView = LoginTestSuite
+				.multiAccountAndShowFilesMethod(driver, common); 
 		
-		LogoutTestSuite logoutTS = new LogoutTestSuite();
-		logoutTS.logoutMethod (driver, common);
+		//driver.rotate(ScreenOrientation.LANDSCAPE);
 		
-		loginTS.multiAccountAndShowFilesMethod(driver, common); 
-		
-		driver.rotate(ScreenOrientation.LANDSCAPE);
-		
-		CreateFolderTestSuite createFolderTS = new CreateFolderTestSuite();
-		createFolderTS.createFolderWithSpecialCharactersMethod(driver, common);
+		CreateFolderTestSuite
+		.createFolderWithSpecialCharactersMethod(driver, common, filesView);
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		DeleteFileTestSuite deleteFileTS = new DeleteFileTestSuite();
-		deleteFileTS.deleteFileRemoteAndLocalMethod (driver, common);
+		DeleteFileTestSuite
+			.deleteFileRemoteAndLocalMethod (driver, common, filesView);
 		
-		DeleteFolderTestSuite deleteFolderTS = new DeleteFolderTestSuite();
-		deleteFolderTS.deleteFolderWithContentsMethod (driver, common);
-		driver.rotate(ScreenOrientation.LANDSCAPE);
+		//PasscodeTestSuite passcodeTS = new PasscodeTestSuite();
+		//passcodeTS.passcodeEnableMethod(driver, common);
 		
-		FavoriteFilesTestSuite  favoriteFilesTS = new FavoriteFilesTestSuite();
-		favoriteFilesTS.favoriteFileAndRefreshMethod (driver,common);
+		MoveFolderTestSuite
+			.moveFolderWithDownloadedFilesMethod(driver,common, filesView);
+		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 		
+		DeleteFolderTestSuite
+			.deleteFolderWithContentsMethod(driver, common, filesView);
+		//driver.rotate(ScreenOrientation.LANDSCAPE);
 		
-	
-
+		RenameFileTestSuite
+		.renameDownloadedFileMethod(driver, common, filesView);
+		
+		FavoriteFilesTestSuite
+		.favoriteFileAndRefreshMethod (driver,common,filesView);
+		
+		MoveFileTestSuite.moveDownloadedFileMethod(driver, common, filesView);
+		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
+		
+		ShareLinkFileTestSuite
+		.unshareLinkFileMethod (driver, common, filesView);
+		
+		RenameFolderTestSuite
+		.renameFolderWithDownloadedFilesMethod(driver, common, filesView);
 	}
 
 	@After
@@ -92,7 +104,13 @@ public class SmokeTestSuite{
 		FilesView filesView = new FilesView(driver);
 		Actions.deleteElement(Config.folderToCreateSpecialCharacters, filesView
 				,driver);
-
+		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
+		Actions.deleteElement(Config.folderToMove, filesView, driver);
+		Actions.deleteElement(Config.fileToTest, filesView, driver);
+		Actions.deleteElement(Config.folderToCreate, filesView, driver);
+		Actions.deleteElement(Config.folderBeforeRename, filesView, driver);
+		Actions.deleteElement(Config.folderToRename, filesView, driver);
+		Actions.deleteElement(Config.fileToRename,filesView, driver);
 
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

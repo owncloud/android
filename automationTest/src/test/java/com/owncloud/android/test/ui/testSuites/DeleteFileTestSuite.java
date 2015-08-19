@@ -59,8 +59,8 @@ public class DeleteFileTestSuite{
 		common.assertIsInFilesView(filesView);
 	}
 	
-	public void deleteFileRemoteAndLocalMethod (AndroidDriver driver, 
-			Common common) throws Exception {		
+	public static void deleteFileRemoteAndLocalMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {		
 		//if the file already exists, delete it remote
 		AndroidElement file = filesView.getElement(Config.fileToTest);
 		if(file!=null){
@@ -91,7 +91,7 @@ public class DeleteFileTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFileRemoteAndLocal () throws Exception {		
-		deleteFileRemoteAndLocalMethod (driver, common);
+		deleteFileRemoteAndLocalMethod (driver, common, filesView);
 	}
 	
 	//TODO. Delete local and delete remote

@@ -76,8 +76,8 @@ public class DeleteFolderTestSuite{
 	}
 	
 	
-	public void deleteFolderWithContentsMethod (AndroidDriver driver, 
-			Common common) throws Exception {
+	public static void deleteFolderWithContentsMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
 		//if the folder already exists, do no created
 		AndroidElement folder = filesView.getElement(Config.folderToCreate);
 		if(folder==null){
@@ -125,7 +125,7 @@ public class DeleteFolderTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFolderWithContents () throws Exception {
-		deleteFolderWithContentsMethod (driver, common);
+		deleteFolderWithContentsMethod (driver, common, filesView);
 	}
 
 	@After

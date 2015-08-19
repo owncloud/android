@@ -40,7 +40,7 @@ public class LogoutTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	FilesView filesView;
+	static FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -54,8 +54,8 @@ public class LogoutTestSuite{
 		common.assertIsInFilesView(filesView);
 	}
 	
-	public void logoutMethod (AndroidDriver driver, 
-			Common common) throws Exception {
+	public static void logoutMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
 		LoginForm loginForm = Actions.openDrawerAndDeleteAccount(1, filesView);
 		assertEquals("Server address https://…",
 				loginForm.gethostUrlInput().getText());
@@ -66,7 +66,7 @@ public class LogoutTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testLogout () throws Exception {
-		logoutMethod (driver, common);
+		logoutMethod (driver, common, filesView);
 	}
 
 	@After

@@ -106,10 +106,9 @@ public class ShareLinkFileTestSuite{
 
 		assertTrue(sharedElementIndicator.isDisplayed());
 	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testUnshareLinkFile () throws Exception {	
+	
+	public static void unshareLinkFileMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {	
 		AndroidElement sharedElementIndicator;
 
 		//if the file already exists, do not upload 
@@ -133,6 +132,12 @@ public class ShareLinkFileTestSuite{
 		Actions.unshareLinkElement(Config.fileToTest,filesView,driver,common);
 
 		assertFalse(sharedElementIndicator.isDisplayed());
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testUnshareLinkFile () throws Exception {	
+		unshareLinkFileMethod (driver, common, filesView);
 	}
 
 	@After

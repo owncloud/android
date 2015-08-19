@@ -94,10 +94,11 @@ public class RenameFolderTestSuite{
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
 	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testRenameFolderWithDownloadedFiles () throws Exception {
+	
+	
+	
+	public static void renameFolderWithDownloadedFilesMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
 		//WaitAMomentPopUp waitAMomentPopUp = null;
 		
 		//check if the folder with the new name already exists 
@@ -148,6 +149,12 @@ public class RenameFolderTestSuite{
 		assertTrue(filesView.getElement(Config.folderToCreateSpecialCharacters)
 				.isDisplayed());
 		filesView.clickOnBackButton();
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testRenameFolderWithDownloadedFiles () throws Exception {
+		renameFolderWithDownloadedFilesMethod(driver, common, filesView);
 	}
 
 	@After

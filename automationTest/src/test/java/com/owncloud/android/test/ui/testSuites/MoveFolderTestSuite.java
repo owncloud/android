@@ -99,10 +99,9 @@ public class MoveFolderTestSuite{
 		assertTrue(filesView.getElement(Config.folderToMove)
 				.isDisplayed());
 	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testMoveFolderWithDownloadedFiles () throws Exception {
+	
+	public static void moveFolderWithDownloadedFilesMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
@@ -166,6 +165,12 @@ public class MoveFolderTestSuite{
 		assertTrue(filesView.getElement(Config.folderToCreateSpecialCharacters)
 				.isDisplayed());
 		filesView.clickOnBackButton();
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testMoveFolderWithDownloadedFiles () throws Exception {
+		moveFolderWithDownloadedFilesMethod(driver,common, filesView);
 	}
 
 	@After

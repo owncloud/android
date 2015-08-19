@@ -58,10 +58,9 @@ public class MoveFileTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testMoveDownloadedFile () throws Exception {
+	
+	public static void moveDownloadedFileMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 
 		//check if the folder already exists and if true, delete them
@@ -98,6 +97,12 @@ public class MoveFileTestSuite{
 		assertTrue(filesView.getElement(Config.fileToTest)
 				.isDisplayed());
 
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testMoveDownloadedFile () throws Exception {
+		moveDownloadedFileMethod(driver, common, filesView);
 	}
 
 	@After

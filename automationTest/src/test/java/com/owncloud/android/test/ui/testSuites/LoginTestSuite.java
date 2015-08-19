@@ -90,16 +90,17 @@ public class LoginTestSuite{
 	
 	
 	
-	public void loginAndShowFilesMethod (AndroidDriver driver, 
+	public static FilesView loginAndShowFilesMethod (AndroidDriver driver, 
 			Common common) throws Exception {
-		driver.rotate(ScreenOrientation.PORTRAIT);
+		//driver.rotate(ScreenOrientation.PORTRAIT);
 
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 
-		assertTrue(filesView.getElement(Config.fileWhichIsInTheServer1)
-				.isDisplayed());
+		//assertTrue(filesView.getElement(Config.fileWhichIsInTheServer1)
+			//	.isDisplayed());
+		return filesView;
 	}
 
 	@Test
@@ -132,7 +133,7 @@ public class LoginTestSuite{
 	
 
 	
-	public void multiAccountAndShowFilesMethod(AndroidDriver driver, 
+	public static FilesView multiAccountAndShowFilesMethod(AndroidDriver driver, 
 			Common common) throws InterruptedException{
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FilesView filesView = Actions.login(Config.URL, Config.user,
@@ -154,10 +155,11 @@ public class LoginTestSuite{
 
 		assertTrue(filesView.getElement(Config.fileWhichIsInTheServer2)
 				.isDisplayed());
+		return filesView;
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testMultiAccountAndShowFiles () throws Exception {
 		multiAccountAndShowFilesMethod(driver, common); 
 	}
@@ -209,15 +211,16 @@ public class LoginTestSuite{
 	
 	public void loginLogoutAndLoginMethod (AndroidDriver driver, 
 			Common common) throws Exception {
-		loginAndShowFilesMethod (driver, common);
-		LogoutTestSuite logoutTS = new LogoutTestSuite();
-		logoutTS.logoutMethod (driver, common);
+		FilesView filesView = loginAndShowFilesMethod (driver, common);
+		LogoutTestSuite.logoutMethod (driver, common, filesView);
 		loginAndShowFilesMethod (driver, common);
 	}
 	
+	
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({UnfinishedTestCategory.class})
 	public void testLoginLogoutAndLogin () throws Exception {
+		//TODO. The second time it is gone directly to settings
 		loginLogoutAndLoginMethod (driver, common);
 	}
 
