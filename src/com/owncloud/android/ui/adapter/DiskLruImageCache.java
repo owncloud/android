@@ -131,6 +131,9 @@ public class DiskLruImageCache {
             SoftReference<Bitmap> bitmapRef = mBitmapCache.get(key);
             Bitmap bm = bitmapRef.get();
             if(bm != null) {
+                if ( BuildConfig.DEBUG ) {
+                    Log_OC.d("cache_test_DISK_", "image delivered from ram cache");
+                }
                 return bm;
             }
             else {

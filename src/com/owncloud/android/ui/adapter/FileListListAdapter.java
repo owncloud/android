@@ -30,6 +30,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
@@ -294,32 +295,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             // No Folder
             if (!file.isFolder()) {
                 if (file.isImage() && file.getRemoteId() != null){
-                    // Thumbnail in Cache?
-                    Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
-                            String.valueOf(file.getRemoteId())
-                            );
-                    if (thumbnail != null && !file.needsUpdateThumbnail()){
-                        fileIcon.setImageBitmap(thumbnail);
-                    } else {
-                        // generate new Thumbnail
-                        if (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon)) {
-                            final ThumbnailsCacheManager.ThumbnailGenerationTask task =
-                                    new ThumbnailsCacheManager.ThumbnailGenerationTask(
-                                            fileIcon, mStorageManager, mAccount
-                                            );
-                            if (thumbnail == null) {
-                                thumbnail = ThumbnailsCacheManager.mDefaultImg;
-                            }
-                            final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
-                                    new ThumbnailsCacheManager.AsyncDrawable(
-                                    mContext.getResources(), 
-                                    thumbnail, 
-                                    task
-                                    );
-                            fileIcon.setImageDrawable(asyncDrawable);
-                            task.execute(file);
-                        }
-                    }
+                    fileIcon.setImageBitmap(ThumbnailsCacheManager.mDefaultImg);
+                    new ThumbailLoaderTask().execute(file, fileIcon);
                 } else {
                     fileIcon.setImageResource(DisplayUtils.getFileTypeIconId(file.getMimetype(),
                             file.getFileName()));
@@ -342,6 +319,48 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         }
 
         return view;
+    }
+
+    private class ThumbailLoaderTask extends AsyncTask<Object, Void, Bitmap> {
+        OCFile file;
+        ImageView fileIcon;
+
+        protected Bitmap doInBackground(Object... data) {
+            this.file = (OCFile)data[0];
+            this.fileIcon = (ImageView)data[1];
+
+            // get thumbnail from disk cache in async task
+            Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
+                    String.valueOf(file.getRemoteId())
+            );
+
+            return thumbnail;
+        }
+
+        protected void onPostExecute(Bitmap thumbnail) {
+            if (thumbnail != null && !file.needsUpdateThumbnail()){
+                fileIcon.setImageBitmap(thumbnail);
+            } else {
+                // generate new Thumbnail
+                if (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon)) {
+                    final ThumbnailsCacheManager.ThumbnailGenerationTask task =
+                            new ThumbnailsCacheManager.ThumbnailGenerationTask(
+                                    fileIcon, mStorageManager, mAccount
+                            );
+                    if (thumbnail == null) {
+                        thumbnail = ThumbnailsCacheManager.mDefaultImg;
+                    }
+                    final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
+                            new ThumbnailsCacheManager.AsyncDrawable(
+                                    mContext.getResources(),
+                                    thumbnail,
+                                    task
+                            );
+                    fileIcon.setImageDrawable(asyncDrawable);
+                    task.execute(file);
+                }
+            }
+        }
     }
 
     /**
