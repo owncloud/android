@@ -43,6 +43,7 @@ import com.owncloud.android.test.ui.models.FilesView;
 public class DeleteFolderTestSuite{
 	AndroidDriver driver;
 	Common common;
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -51,15 +52,15 @@ public class DeleteFolderTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFolder () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
 		//if the folder already exists, do no created
 		AndroidElement folder = filesView.getElement(Config.folderToCreate);
 		if(folder==null){
@@ -73,14 +74,10 @@ public class DeleteFolderTestSuite{
 		Actions.deleteElement(Config.folderToCreate, filesView, driver);
 		assertNull(filesView.getElement(Config.folderToCreate));
 	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testDeleteFolderWithContents () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
+	
+	
+	public void deleteFolderWithContentsMethod (AndroidDriver driver, 
+			Common common) throws Exception {
 		//if the folder already exists, do no created
 		AndroidElement folder = filesView.getElement(Config.folderToCreate);
 		if(folder==null){
@@ -123,6 +120,12 @@ public class DeleteFolderTestSuite{
 		//assertFalse(folder.isDisplayed());
 		assertNull(filesView.getElement(Config.folderToCreate));
 
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testDeleteFolderWithContents () throws Exception {
+		deleteFolderWithContentsMethod (driver, common);
 	}
 
 	@After

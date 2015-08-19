@@ -41,22 +41,24 @@ import com.owncloud.android.test.ui.models.FilesView;
 public class RefreshFolderTestSuite{
 	AndroidDriver driver;
 	Common common;
-	
+	FilesView filesView;
+
 	@Rule public TestName name = new TestName();
 
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 
 	@Test
 	@Category({UnfinishedTestCategory.class})
 	public void testPulldownToRefreshFolder () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 		//TODO. Remove the sleep and check why is not working the assert 
 		//when using waitTillElementIsNotPresent
 		Thread.sleep(5000);

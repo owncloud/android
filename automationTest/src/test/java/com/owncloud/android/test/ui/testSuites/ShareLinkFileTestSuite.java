@@ -41,6 +41,7 @@ public class ShareLinkFileTestSuite{
 
 	AndroidDriver driver;
 	Common common;
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -48,15 +49,15 @@ public class ShareLinkFileTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class})
 	public void testShareLinkFileByGmail () throws Exception {	
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
 		//if the file already exists, delete in case it is already sharedByLink
 		AndroidElement file = filesView.getElement(Config.fileToTest);
 		if(file!=null){
@@ -85,9 +86,6 @@ public class ShareLinkFileTestSuite{
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testShareLinkFileByCopyLink () throws Exception {	
 		AndroidElement sharedElementIndicator;
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 
 		//if the file already exists, delete in case it is already sharedByLink
 		AndroidElement file = filesView.getElement(Config.fileToTest);
@@ -101,7 +99,7 @@ public class ShareLinkFileTestSuite{
 
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
 				Config.fileToTest,filesView,driver,common);
-		
+
 		common.wait.until(ExpectedConditions.visibilityOf(
 				filesView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getSharedElementIndicator()))));
@@ -113,9 +111,6 @@ public class ShareLinkFileTestSuite{
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUnshareLinkFile () throws Exception {	
 		AndroidElement sharedElementIndicator;
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 
 		//if the file already exists, do not upload 
 		//(we do not care if it is already share)
@@ -134,9 +129,9 @@ public class ShareLinkFileTestSuite{
 				.findElement(By.id(FilesView.getSharedElementIndicator()))));
 
 		assertTrue(sharedElementIndicator.isDisplayed());
-		
+
 		Actions.unshareLinkElement(Config.fileToTest,filesView,driver,common);
-		
+
 		assertFalse(sharedElementIndicator.isDisplayed());
 	}
 

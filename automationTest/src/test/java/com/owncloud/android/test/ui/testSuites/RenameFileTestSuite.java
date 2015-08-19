@@ -49,6 +49,7 @@ public class RenameFileTestSuite{
 	AndroidDriver driver;
 	Common common;
 	private String CurrentCreatedFile = "";
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -56,15 +57,15 @@ public class RenameFileTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+				filesView = Actions.login(Config.URL, Config.user,
+						Config.password, Config.isTrusted, driver);
+				common.assertIsInFilesView(filesView);
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testRenameDownloadedFile () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
 		//check if the file with the new name already exists, if true delete it
 		Actions.deleteElement(Config.fileToRename, filesView, driver);
 

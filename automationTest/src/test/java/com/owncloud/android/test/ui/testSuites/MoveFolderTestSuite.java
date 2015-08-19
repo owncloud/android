@@ -45,6 +45,7 @@ import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 public class MoveFolderTestSuite{
 	AndroidDriver driver;
 	Common common;
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -52,16 +53,16 @@ public class MoveFolderTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testMoveFolder () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
-
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
 		//fileListView.getProgressCircular(), 1000);
@@ -100,13 +101,9 @@ public class MoveFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testMoveFolderWithDownloadedFiles () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
-
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
 		//fileListView.getProgressCircular(), 1000);
@@ -123,7 +120,7 @@ public class MoveFolderTestSuite{
 
 		//Create the folder which is going to be moved
 		Actions.createFolder(Config.folderToMove, filesView, driver);
-		
+
 		//Create content inside the folder
 		Actions.createContentInsideFolder(Config.folderToMove, 
 				Config.fileToTest,  Config.fileToTest2,  Config.fileToTest3,

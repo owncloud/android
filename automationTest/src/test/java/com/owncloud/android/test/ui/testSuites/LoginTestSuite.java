@@ -44,24 +44,28 @@ import com.owncloud.android.test.ui.models.SettingsView;
 public class LoginTestSuite{
 	AndroidDriver driver;
 	Common common;
-	
+
 	@Rule public TestName name = new TestName();
-	
+
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
 	}
+
+	
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
 	public void testLoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		
+
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 	}
+
+	
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
@@ -71,6 +75,8 @@ public class LoginTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 	}
+
+	
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
@@ -82,21 +88,28 @@ public class LoginTestSuite{
 				loginForm.getAuthStatusText()));
 	}
 	
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testLoginAndShowFiles () throws Exception {
+	
+	
+	public void loginAndShowFilesMethod (AndroidDriver driver, 
+			Common common) throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		
+
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
-		
+
 		assertTrue(filesView.getElement(Config.fileWhichIsInTheServer1)
 				.isDisplayed());
 	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testLoginAndShowFiles () throws Exception {
+		loginAndShowFilesMethod (driver, common);
+	}
+
 	
-	
-	
+
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testMultiAccountRotate () throws Exception {
@@ -104,43 +117,52 @@ public class LoginTestSuite{
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
-		
+
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		
+
 		//filesView.clickOnHomeButton();
 		Drawer drawer = filesView.swipeToShowDrawer();
 		SettingsView settingsView = drawer.clickOnSettingsButton();
-		
+
 		settingsView.tapOnAddAccount(1, 1000);
 		Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
 		common.assertIsInSettingsView(settingsView);
 	}
 	
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testMultiAccountAndShowFiles () throws Exception {
+
+	
+	public void multiAccountAndShowFilesMethod(AndroidDriver driver, 
+			Common common) throws InterruptedException{
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 		assertTrue(filesView
 				.getElement(Config.fileWhichIsInTheServer1).isDisplayed());
-		
-		driver.rotate(ScreenOrientation.PORTRAIT);
+
+		//driver.rotate(ScreenOrientation.PORTRAIT);
 		Drawer drawer = filesView.swipeToShowDrawer();
 		SettingsView settingsView = drawer.clickOnSettingsButton();
-		
+
 		settingsView.tapOnAddAccount(1, 1000);
 		Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
 		common.assertIsInSettingsView(settingsView);
 		settingsView.tapOnAccountElement(2,1, 100);
 		common.assertIsInFilesView(filesView);
-		
+
 		assertTrue(filesView.getElement(Config.fileWhichIsInTheServer2)
 				.isDisplayed());
 	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	public void testMultiAccountAndShowFiles () throws Exception {
+		multiAccountAndShowFilesMethod(driver, common); 
+	}
+
+	
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
@@ -149,12 +171,12 @@ public class LoginTestSuite{
 		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
-		
+
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		Drawer drawer = filesView.swipeToShowDrawer();
 		SettingsView settingsView = drawer.clickOnSettingsButton();
 		settingsView.tapOnAddAccount(1, 1000);
-		
+
 		LoginForm loginForm = new LoginForm(driver);
 		filesView = Actions.login(Config.URL, Config.user,Config.password, 
 				Config.isTrusted, driver);	
@@ -162,6 +184,8 @@ public class LoginTestSuite{
 				+ " server already exists in the device", 
 				loginForm.getAuthStatusText()));
 	}
+
+	
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
@@ -181,6 +205,22 @@ public class LoginTestSuite{
 				changePasswordForm.getAuthStatusText()));
 	}
 	
+	
+	
+	public void loginLogoutAndLoginMethod (AndroidDriver driver, 
+			Common common) throws Exception {
+		loginAndShowFilesMethod (driver, common);
+		LogoutTestSuite logoutTS = new LogoutTestSuite();
+		logoutTS.logoutMethod (driver, common);
+		loginAndShowFilesMethod (driver, common);
+	}
+	
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testLoginLogoutAndLogin () throws Exception {
+		loginLogoutAndLoginMethod (driver, common);
+	}
+
 
 	@After
 	public void tearDown() throws Exception {
@@ -188,6 +228,6 @@ public class LoginTestSuite{
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
-	
-	
+
+
 }

@@ -37,29 +37,36 @@ import com.owncloud.android.test.ui.models.LoginForm;
 import com.owncloud.android.test.ui.models.FilesView;
 
 public class LogoutTestSuite{
-	
+
 	AndroidDriver driver;
 	Common common;
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
-	
+
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
-	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testLogout () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
+	}
+	
+	public void logoutMethod (AndroidDriver driver, 
+			Common common) throws Exception {
 		LoginForm loginForm = Actions.openDrawerAndDeleteAccount(1, filesView);
 		assertEquals("Server address https://…",
 				loginForm.gethostUrlInput().getText());
 		assertEquals("Username", loginForm.getUserNameInput().getText());
 		assertEquals("", loginForm.getPasswordInput().getText());
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testLogout () throws Exception {
+		logoutMethod (driver, common);
 	}
 
 	@After

@@ -45,12 +45,18 @@ import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 public class MoveFileTestSuite{
 	AndroidDriver driver;
 	Common common;
-	@Rule public TestName name = new TestName();
+	FilesView filesView;
 	
+	@Rule public TestName name = new TestName();
+
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 	@Test
@@ -58,14 +64,10 @@ public class MoveFileTestSuite{
 	public void testMoveDownloadedFile () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
 
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
 		Actions.deleteElement(Config.fileToTest, filesView, driver);
-		
+
 		assertNull(filesView.getElement(Config.folderWhereMove));
 		assertNull(filesView.getElement(Config.fileToTest));
 

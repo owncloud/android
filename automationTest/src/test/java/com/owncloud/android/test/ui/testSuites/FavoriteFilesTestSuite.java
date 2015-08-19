@@ -49,6 +49,7 @@ public class FavoriteFilesTestSuite{
 
 	AndroidDriver driver;
 	Common common;
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -57,17 +58,16 @@ public class FavoriteFilesTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 
 	@Test	
 	@Category({FailingTestCategory.class})
 	public void testFavoriteFile () throws Exception {
-
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
 		Common.waitTillElementIsNotPresentWithoutTimeout(filesView
 				.getProgressCircular(), 1000);
 
@@ -91,14 +91,8 @@ public class FavoriteFilesTestSuite{
 				.isDisplayed());
 	}
 
-	@Test	
-	@Category({NoIgnoreTestCategory.class})
-	public void testFavoriteFileAndRefresh () throws Exception {
-
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
+	public void favoriteFileAndRefreshMethod (AndroidDriver driver, 
+			Common common) throws Exception {
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				filesView.getProgressCircular(), 1000);
 
@@ -125,6 +119,12 @@ public class FavoriteFilesTestSuite{
 		assertTrue(filesView.getElement(Config.fileToTest)
 				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
+	}
+	
+	@Test	
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testFavoriteFileAndRefresh () throws Exception {
+		favoriteFileAndRefreshMethod (driver,common);
 	}
 
 

@@ -21,6 +21,7 @@
 package com.owncloud.android.test.ui.testSuites;
 
 import io.appium.java_client.android.AndroidDriver;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,6 +30,7 @@ import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FilesView;
@@ -39,6 +41,7 @@ public class CreateFolderTestSuite{
 
 	AndroidDriver driver;
 	Common common;
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -46,49 +49,33 @@ public class CreateFolderTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+
+		filesView = Actions.login(Config.URL, 
+				Config.user,Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
-
-	/*public void createFolder(FilesView filesView, String folderName) 
-			throws Exception{
-		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(folderName, filesView, driver);
-		assertNull(filesView.getElement(folderName));
-
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(folderName, filesView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-				.getWaitAMomentTextElement(), 100);
-		AndroidElement folder = filesView.getElement(folderName);
-		assertNotNull(folder);
-		assertTrue(folder.isDisplayed());	
-		CurrentCreatedFolder = folderName;
-	}*/
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testCreateFolder () throws Exception {
-
-		FilesView filesView = Actions.login(Config.URL, 
-				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
 		Actions.createFolder(Config.folderToCreate, filesView, driver);
+	}
+	
+	public void createFolderWithSpecialCharactersMethod (AndroidDriver driver, 
+			Common common) throws Exception {
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+		Actions.createFolder(Config.folderToCreateSpecialCharacters, filesView,
+				driver);
+
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testCreateFolderWithSpecialCharacters () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, 
-				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-		
-		AndroidDriver.ImeHandler ime = driver.manage().ime();
-	    ime.activateEngine("io.appium.android.ime/.UnicodeIME");
-	    Actions.createFolder(Config.folderToCreateSpecialCharacters, filesView,
-	    		driver);
-		
-		ime.activateEngine("com.google.android.inputmethod.latin/"
-				+ "com.android.inputmethod.latin.LatinIME");
+		createFolderWithSpecialCharactersMethod (driver, common);
 	}
 
 	@After

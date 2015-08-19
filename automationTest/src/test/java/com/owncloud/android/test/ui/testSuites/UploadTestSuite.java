@@ -52,6 +52,7 @@ public class UploadTestSuite{
 
 	AndroidDriver driver;
 	Common common;
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -60,6 +61,10 @@ public class UploadTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 
@@ -87,28 +92,18 @@ public class UploadTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFile () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 		uploadFile(filesView, Config.fileToTest);
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFileWithSpecialCharacters () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 		uploadFile(filesView, Config.fileToTest2);
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUploadSeveralFile () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(Config.fileToTest, filesView, driver);
 		Actions.deleteElement(Config.fileToTest2, filesView, driver);
@@ -153,10 +148,6 @@ public class UploadTestSuite{
 	@Test
 	@Category({UnfinishedTestCategory.class})
 	public void testUploadBigFile () throws Exception {
-
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(Config.bigFileToTest, filesView, driver);
@@ -203,9 +194,7 @@ public class UploadTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class})
 	public void testUploadFromGmail () throws Exception {
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
+
 		driver.startActivity("com.google.android.gm",
 				".ConversationListActivityGmail");
 		GmailEmailListView gmailEmailListView = new GmailEmailListView(driver);
@@ -226,7 +215,7 @@ public class UploadTestSuite{
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_HOME);
 		driver.startActivity("com.owncloud.android",
 				".ui.activity.FileDisplayActivity");
-		
+
 		filesView = new FilesView(driver);
 		assertTrue(filesView
 				.getElement(Config.fileToTestSendByEmail).isDisplayed());

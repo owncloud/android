@@ -46,6 +46,7 @@ public class RenameFolderTestSuite{
 
 	AndroidDriver driver;
 	Common common;
+	FilesView filesView;
 
 	@Rule public TestName name = new TestName();
 
@@ -54,15 +55,16 @@ public class RenameFolderTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testRenameFolder () throws Exception {
 		//WaitAMomentPopUp waitAMomentPopUp = null;
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
 
 		//check if the folder with the new name already exists 
 		//and if true, delete it
@@ -87,20 +89,17 @@ public class RenameFolderTestSuite{
 		FolderPopUp.clickOnNewFolderOkButton();
 		//TODO. get the waitAMomentPopUp
 		//Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-			//	.getWaitAMomentTextElement(), 100);
+		//	.getWaitAMomentTextElement(), 100);
 		folder = filesView.getElement(Config.folderToRename);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testRenameFolderWithDownloadedFiles () throws Exception {
 		//WaitAMomentPopUp waitAMomentPopUp = null;
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-
+		
 		//check if the folder with the new name already exists 
 		//and if true, delete it
 		Actions.deleteElement(Config.folderToRename, filesView, driver);
@@ -123,7 +122,7 @@ public class RenameFolderTestSuite{
 		FolderPopUp.clickOnNewFolderOkButton();
 		//TODO. get the waitAMomentPopUp
 		//Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-			//	.getWaitAMomentTextElement(), 100);
+		//	.getWaitAMomentTextElement(), 100);
 		AndroidElement folder = filesView.getElement(Config.folderToRename);
 		assertNotNull(folder);
 		assertTrue(folder.isDisplayed());	

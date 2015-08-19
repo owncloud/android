@@ -44,26 +44,28 @@ import com.owncloud.android.test.ui.models.SettingsView;
 public class PasscodeTestSuite {
 	AndroidDriver driver;
 	Common common;
-	
+	FilesView filesView;
+
 	@Rule public TestName name = new TestName();
-	
+
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
-	
+
 	@Test
 	@Category({NoIgnoreTestCategory.class})
 	public void testPasscodeEnable () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		FilesView filesView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFilesView(filesView);
-		
+
 		Drawer drawer = filesView.swipeToShowDrawer();
 		SettingsView settingsView = drawer.clickOnSettingsButton();
-		
+
 		PassCodeView passCodeview = settingsView.EnablePassCode();
 		PassCodeView passCodeview2 = passCodeview.enterPasscode(
 				Config.passcode1, Config.passcode2, Config.passcode3, 
@@ -71,7 +73,7 @@ public class PasscodeTestSuite {
 		Thread.sleep(1000);
 		passCodeview2.reenterPasscode(Config.passcode1, Config.passcode2, 
 				Config.passcode3, Config.passcode4);
-		
+
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_HOME);
 		//TO DO. Open the app instead of start an activity
 		driver.startActivity("com.owncloud.android", 
@@ -81,17 +83,17 @@ public class PasscodeTestSuite {
 		//common.assertIsNotInFilesView();
 		PassCodeRequestView passCodeReequestView = new 
 				PassCodeRequestView(driver);
-		
+
 		common.assertIsPasscodeRequestView(passCodeReequestView);
-		
-		
+
+
 		passCodeReequestView.enterPasscode(Config.passcode1, Config.passcode2,
 				Config.passcode3, Config.passcode4);
 		FilesView newFilesView = new FilesView(driver);
 		common.assertIsInFilesView(newFilesView);
 	}
-	
-	
+
+
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
