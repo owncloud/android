@@ -72,21 +72,21 @@ public class FavoriteFilesTestSuite{
 				.getProgressCircular(), 1000);
 
 		//if the file already exists, it is not necessary to upload it
-		AndroidElement file = filesView.getElement(Config.fileToTest);
+		AndroidElement file = filesView.getElement(Config.fileToTest2);
 		if(file==null){
-			filesView = Actions.uploadFile(Config.fileToTest, filesView);
-			file = filesView.getElement(Config.fileToTest);
+			filesView = Actions.uploadFile(Config.fileToTest2, filesView);
+			file = filesView.getElement(Config.fileToTest2);
 		}
 		assertTrue(file.isDisplayed());
 
 		ElementMenuOptions menuOptions = filesView
-				.longPressOnElement(Config.fileToTest);
+				.longPressOnElement(Config.fileToTest2);
 		FileDetailsView fileDetailsView = menuOptions.clickOnDetails();
 		fileDetailsView.checkFavoriteCheckbox();
 		Thread.sleep(3000);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 
-		assertTrue(filesView.getElement(Config.fileToTest)
+		assertTrue(filesView.getElement(Config.fileToTest2)
 				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}
@@ -97,15 +97,15 @@ public class FavoriteFilesTestSuite{
 				filesView.getProgressCircular(), 1000);
 
 		//if the file already exists, it is not necessary to upload it
-		AndroidElement file = filesView.getElement(Config.fileToTest);
+		AndroidElement file = filesView.getElement(Config.fileToTest2);
 		if(file==null){
-			filesView = Actions.uploadFile(Config.fileToTest, filesView);
-			file = filesView.getElement(Config.fileToTest);
+			filesView = Actions.uploadFile(Config.fileToTest2, filesView);
+			file = filesView.getElement(Config.fileToTest2);
 		}
 		assertTrue(file.isDisplayed());
 
 		ElementMenuOptions menuOptions = filesView
-				.longPressOnElement(Config.fileToTest);
+				.longPressOnElement(Config.fileToTest2);
 		FileDetailsView fileDetailsView = menuOptions.clickOnDetails();
 		fileDetailsView.checkFavoriteCheckbox();
 		Thread.sleep(3000);
@@ -116,7 +116,7 @@ public class FavoriteFilesTestSuite{
 		Common.waitTillElementIsNotPresentWithoutTimeout(filesView
 				.getProgressCircular(), 100);
 
-		assertTrue(filesView.getElement(Config.fileToTest)
+		assertTrue(filesView.getElement(Config.fileToTest2)
 				.findElement(By.id(FilesView.getFavoriteFileIndicator()))
 				.isDisplayed());
 	}
@@ -132,7 +132,7 @@ public class FavoriteFilesTestSuite{
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
 		FilesView filesView = new FilesView(driver);
-		Actions.deleteElement(Config.fileToTest,filesView, driver);
+		Actions.deleteElement(Config.fileToTest2,filesView, driver);
 
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

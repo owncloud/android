@@ -107,6 +107,7 @@ public class SmokeTestSuite{
 		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
 		Actions.deleteElement(Config.folderToMove, filesView, driver);
 		Actions.deleteElement(Config.fileToTest, filesView, driver);
+		Actions.deleteElement(Config.fileToTest2, filesView, driver);
 		Actions.deleteElement(Config.folderToCreate, filesView, driver);
 		Actions.deleteElement(Config.folderBeforeRename, filesView, driver);
 		Actions.deleteElement(Config.folderToRename, filesView, driver);
