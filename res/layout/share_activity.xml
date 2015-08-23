@@ -21,7 +21,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.owncloud.android.ui.activity.ShareActivity">
+    tools:context="com.owncloud.android.ui.activity.ShareActivity"
+    android:filterTouchesWhenObscured="true"
+    >
 
     <FrameLayout
         android:layout_width="match_parent"

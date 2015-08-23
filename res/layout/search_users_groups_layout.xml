@@ -16,14 +16,17 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/search_layout"
     android:minWidth="200dp"
     android:layout_marginRight="@dimen/standard_margin"
-    android:layout_marginBottom="@dimen/standard_half_margin">
+    android:layout_marginBottom="@dimen/standard_half_margin"
+    android:filterTouchesWhenObscured="true"
+    >
 
     <TextView
         android:id="@+id/searchUserGroupsTitle"

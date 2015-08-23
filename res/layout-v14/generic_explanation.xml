@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <!--
+<!-- 
   ownCloud Android client application
 
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2015 ownCloud Inc.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -15,54 +15,55 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
+ -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/background_color" 
+    android:id="@+id/explanation"
     android:orientation="vertical"
     android:filterTouchesWhenObscured="true">
 
-    <ProgressBar android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:padding="0dp"
-        android:layout_margin="0dp"
-        style="@style/Widget.ownCloud.TopProgressBar"
-        android:indeterminate="false"
-        android:indeterminateOnly="false"
-        android:background="@color/background_color"
-        android:visibility="visible"
-        />
-
-	<FrameLayout 
+	<TextView
+		android:id="@+id/message"
 		android:layout_width="match_parent"
-		android:layout_height="0dip"
-        android:layout_weight="1"
-		android:id="@+id/fragment_container" />
-	
-	<LinearLayout
+		android:layout_height="0dp"
+		android:layout_weight="2"
+	    android:padding="10dip"
+	    android:scrollbarAlwaysDrawVerticalTrack="true"
+		android:text="@string/placeholder_sentence" 
+		/>
+    
+	<ListView 
+	    android:id="@+id/list"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+		android:layout_weight="3"
+	    android:padding="10dip"
+	    />
+	    
+    <LinearLayout
+        android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/folder_picker_btn_cancel"
-            android:theme="@style/Button"
+        <!-- 'OK' / 'CANCEL' BUTTONS CHANGE THEIR ORDER FROM ANDROID 4.0 ; THANKS, GOOGLE -->
+        <Button
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/common_cancel" />
 
-        <android.support.v7.widget.AppCompatButton
-		    android:id="@+id/folder_picker_btn_choose"
-            android:theme="@style/Button.Primary"
+		<Button
+		    android:id="@+id/ok"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_weight="1"
-		    android:text="@string/folder_picker_choose_button_text" />
-
+		    android:text="@string/common_ok" />
+		
 	</LinearLayout>
-
- </LinearLayout>
+	
+</LinearLayout>

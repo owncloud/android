@@ -27,6 +27,8 @@
     android:layout_marginTop="@dimen/standard_margin"
     android:layout_marginBottom="@dimen/standard_margin"
     android:minHeight="?android:attr/listPreferredItemHeight">
+    android:filterTouchesWhenObscured="true"
+    >
 
     <ImageView
         android:id="@+id/itemIcon"
