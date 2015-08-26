@@ -24,22 +24,66 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.PageFactory;
+
 
 public class RemoveConfirmationView {
 	final AndroidDriver driver;
-	
+
 	@AndroidFindBy(name = "Remote and local")
 	private AndroidElement remoteAndLocalButton;
-	
+
+	@AndroidFindBy(name = "Remove from server")
+	private AndroidElement remoteButton;
+
+	@AndroidFindBy(name = "Local only")
+	private AndroidElement localButton;
+
 	public RemoveConfirmationView (AndroidDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
-	
+
+	public WaitAMomentPopUp clickOnAnyRemoteButton () {
+		
+		try {
+			remoteAndLocalButton = (AndroidElement) driver
+					.findElementByName("Remote and local");
+		} catch (NoSuchElementException e) {
+			remoteAndLocalButton = null;
+		}
+		try {
+			remoteButton = (AndroidElement) driver
+					.findElementByName("Remove from server");
+		} catch (NoSuchElementException e) {
+			remoteButton = null;
+		}
+		
+		if(remoteAndLocalButton != null){
+			remoteAndLocalButton.click();
+		}else if(remoteButton!= null){
+			remoteButton.click();
+		}
+		
+		WaitAMomentPopUp waitAMomentPopUp = new WaitAMomentPopUp(driver);
+		return waitAMomentPopUp;
+	}
+
 	public WaitAMomentPopUp clickOnRemoteAndLocalButton () {
 		remoteAndLocalButton.click();
+		WaitAMomentPopUp waitAMomentPopUp = new WaitAMomentPopUp(driver);
+		return waitAMomentPopUp;
+	}
+
+	public WaitAMomentPopUp clickOnRemoteButton () {
+		remoteButton.click();
+		WaitAMomentPopUp waitAMomentPopUp = new WaitAMomentPopUp(driver);
+		return waitAMomentPopUp;
+	}
+
+	public WaitAMomentPopUp clickOnLocalButton () {
+		localButton.click();
 		WaitAMomentPopUp waitAMomentPopUp = new WaitAMomentPopUp(driver);
 		return waitAMomentPopUp;
 	}

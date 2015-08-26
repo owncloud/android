@@ -27,21 +27,20 @@ import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 
-public class MenuList {
+public class TopbarMenu {
 
 	final AndroidDriver driver;
 	
-	@AndroidFindBy(name = "Settings")
-	private AndroidElement settingsButton;
+	@AndroidFindBy(name = "Refresh account")
+	private AndroidElement refreshAccountButton;
 	
-	public MenuList (AndroidDriver driver) {
+	@AndroidFindBy(name = "Sort")
+	private AndroidElement sortButton;
+	
+	public TopbarMenu (AndroidDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
 	
-	public SettingsView clickOnSettingsButton () {
-		settingsButton.click();
-		SettingsView settingsView = new SettingsView(driver);
-		return settingsView;
-	}
+	
 }

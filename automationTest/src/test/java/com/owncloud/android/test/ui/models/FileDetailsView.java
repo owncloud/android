@@ -32,8 +32,8 @@ public class FileDetailsView {
 	final AndroidDriver driver;
 	
 	@CacheLookup
-	@AndroidFindBy(name = "Keep file up to date")
-	private AndroidElement keepFileUpToDateCheckbox;
+	@AndroidFindBy(name = "Favorite")
+	private AndroidElement favoriteCheckbox;
 	
 	@AndroidFindBy(id = "com.owncloud.android:id/fdProgressBar")
 	private AndroidElement progressBar;
@@ -43,15 +43,15 @@ public class FileDetailsView {
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
 	
-	public void checkKeepFileUpToDateCheckbox () {
-		if(keepFileUpToDateCheckbox.getAttribute("checked").equals("false")){
-			keepFileUpToDateCheckbox.click();
+	public void checkFavoriteCheckbox () {
+		if(favoriteCheckbox.getAttribute("checked").equals("false")){
+			favoriteCheckbox.click();
 		}
 	}
 	
-	public void unCheckKeepFileUpToDateCheckbox () {
-		if(keepFileUpToDateCheckbox.getAttribute("checked").equals("true")){
-			keepFileUpToDateCheckbox.click();
+	public void unCheckFavoriteCheckbox () {
+		if(favoriteCheckbox.getAttribute("checked").equals("true")){
+			favoriteCheckbox.click();
 		}
 	}
 	

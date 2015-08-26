@@ -32,12 +32,9 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.TestName;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.LoginForm;
-import com.owncloud.android.test.ui.models.FileListView;
-import com.owncloud.android.test.ui.models.MenuList;
-import com.owncloud.android.test.ui.models.SettingsView;
+import com.owncloud.android.test.ui.models.FilesView;
 
 public class LogoutTestSuite{
 	
@@ -55,13 +52,10 @@ public class LogoutTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testLogout () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-		MenuList menulist = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menulist.clickOnSettingsButton();
-		settingsView.tapOnAccountElement(1,1, 1000);
-		LoginForm loginForm = settingsView.clickOnDeleteAccountElement();
+		common.assertIsInFilesView(filesView);
+		LoginForm loginForm = Actions.openDrawerAndDeleteAccount(1, filesView);
 		assertEquals("Server address https://…",
 				loginForm.gethostUrlInput().getText());
 		assertEquals("Username", loginForm.getUserNameInput().getText());
@@ -71,7 +65,7 @@ public class LogoutTestSuite{
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		//driver.removeApp("com.owncloud.android");
+		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
 }
