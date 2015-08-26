@@ -33,8 +33,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.UnfinishedTestCategory;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.groups.*;
+import com.owncloud.android.test.ui.models.FilesView;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -54,15 +54,15 @@ public class RefreshFolderTestSuite{
 	@Test
 	@Category({UnfinishedTestCategory.class})
 	public void testPulldownToRefreshFolder () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView filesView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFilesView(filesView);
 		//TODO. Remove the sleep and check why is not working the assert 
 		//when using waitTillElementIsNotPresent
 		Thread.sleep(5000);
-		//waitTillElementIsNotPresentWithoutTimeout(fileListView.getProgressCircular(), 1000);
-		fileListView.pulldownToRefresh();
-		assertTrue(fileListView.getProgressCircular().isDisplayed());
+		//waitTillElementIsNotPresentWithoutTimeout(filesView.getProgressCircular(), 1000);
+		filesView.pulldownToRefresh();
+		assertTrue(filesView.getProgressCircular().isDisplayed());
 		//TODO insert a file in the web, and check that it's shown here
 	}
 

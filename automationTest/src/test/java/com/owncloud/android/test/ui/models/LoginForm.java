@@ -86,10 +86,10 @@ public class LoginForm {
 		//driver.hideKeyboard();
 	}
 	
-	public FileListView clickOnConnectButton () {
+	public FilesView clickOnConnectButton () {
 		connectButton.click();
-		FileListView fileListView = new FileListView(driver);
-		return fileListView;
+		FilesView filesView = new FilesView(driver);
+		return filesView;
 	}
 	
 	public AndroidElement gethostUrlInput () {

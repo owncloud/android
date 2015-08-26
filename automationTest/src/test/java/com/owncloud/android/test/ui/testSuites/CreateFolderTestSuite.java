@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,23 +32,19 @@ import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.groups.*;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CreateFolderTestSuite{
-	
+
 	AndroidDriver driver;
 	Common common;
-	private Boolean folderHasBeenCreated = false;
-	private final String FOLDER_NAME = "testCreateFolder";
 	private String CurrentCreatedFolder = "";
-	
+
 	@Rule public TestName name = new TestName();
 
 	@Before
@@ -56,37 +53,61 @@ public class CreateFolderTestSuite{
 		driver=common.setUpCommonDriver();
 	}
 
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testCreateNewFolder () throws Exception {
-		String NEW_FOLDER_NAME = "testCreateFolder";
-
-		FileListView fileListView = Actions.login(Config.URL, 
-				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-
+	public void createFolder(FilesView filesView, String folderName) 
+			throws Exception{
 		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(NEW_FOLDER_NAME, fileListView, driver);
+		Actions.deleteElement(folderName, filesView, driver);
+		assertNull(filesView.getElement(folderName));
 
 		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(NEW_FOLDER_NAME, fileListView);
+				.createFolder(folderName, filesView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertNotNull(fileListView.getFileElement());
-		assertTrue(
-			folderHasBeenCreated=fileListView.getFileElement().isDisplayed());	
-		CurrentCreatedFolder = FOLDER_NAME;
-		assertEquals(FOLDER_NAME , fileListView.getFileElement().getText());
+		AndroidElement folder = filesView.getElement(folderName);
+		assertNotNull(folder);
+		assertTrue(folder.isDisplayed());	
+		CurrentCreatedFolder = folderName;
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testCreateFolder () throws Exception {
+
+		FilesView filesView = Actions.login(Config.URL, 
+				Config.user,Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
+
+		createFolder(filesView, Config.folderToCreate);
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testCreateFolderWithSpecialCharacters () throws Exception {
+		FilesView filesView = Actions.login(Config.URL, 
+				Config.user,Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
+		
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
+	    //ime.getAvailableEngines();
+	    //for (String engine : ime.getAvailableEngines()) {
+	      //System.out.println(engine);
+	    //}
+	    ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+	    createFolder(filesView, Config.folderToCreateSpecialCharacters);
+		
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		if (folderHasBeenCreated) {
-			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
+
+		FilesView filesView = new FilesView(driver);
+		if(CurrentCreatedFolder != ""){
+			Actions.deleteElement(CurrentCreatedFolder, filesView, driver);
 		}
+
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
