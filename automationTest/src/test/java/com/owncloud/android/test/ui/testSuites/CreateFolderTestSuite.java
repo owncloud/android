@@ -56,7 +56,7 @@ public class CreateFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testCreateFolder () throws Exception {
 		Actions.createFolder(Config.folderToCreate, filesView, driver);
 	}
@@ -64,16 +64,19 @@ public class CreateFolderTestSuite{
 	public static void createFolderWithSpecialCharactersMethod (AndroidDriver driver, 
 			Common common, FilesView filesView) throws Exception {
 		AndroidDriver.ImeHandler ime = driver.manage().ime();
+		
+		//set unicode keyboard for special character
 		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
 		Actions.createFolder(Config.folderToCreateSpecialCharacters, filesView,
 				driver);
-
+		
+		//set normal keyboard
 		ime.activateEngine("com.google.android.inputmethod.latin/"
 				+ "com.android.inputmethod.latin.LatinIME");
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testCreateFolderWithSpecialCharacters () throws Exception {
 		createFolderWithSpecialCharactersMethod (driver, common, filesView);
 	}

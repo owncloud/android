@@ -47,7 +47,7 @@ import com.owncloud.android.test.ui.models.UploadView;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@Category({NoIgnoreTestCategory.class})
+@Category({RegresionTestCategory.class})
 public class UploadTestSuite{
 
 	AndroidDriver driver;
@@ -90,19 +90,19 @@ public class UploadTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFile () throws Exception {
 		uploadFile(filesView, Config.fileToTest);
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testUploadFileWithSpecialCharacters () throws Exception {
 		uploadFile(filesView, Config.fileToTest2);
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testUploadSeveralFile () throws Exception {
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(Config.fileToTest, filesView, driver);
@@ -192,7 +192,7 @@ public class UploadTestSuite{
 
 
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({RegresionTestCategory.class})
 	public void testUploadFromGmail () throws Exception {
 
 		driver.startActivity("com.google.android.gm",

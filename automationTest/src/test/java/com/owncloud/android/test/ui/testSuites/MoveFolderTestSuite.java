@@ -60,9 +60,10 @@ public class MoveFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testMoveFolder () throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
 		//fileListView.getProgressCircular(), 1000);
@@ -74,12 +75,19 @@ public class MoveFolderTestSuite{
 		assertNull(filesView.getElement(Config.folderWhereMove));
 		assertNull(filesView.getElement(Config.folderToMove));
 
+		//set unicode keyboard for special character
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+
 		//Create the folder where the other is gone to be moved
 		Actions.createFolder(Config.folderWhereMove, filesView, driver);
 
 		//Create the folder which is going to be moved
 		Actions.createFolder(Config.folderToMove, filesView, driver);
 
+		//set normal keyboard
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
+		
 		//select to move the folder
 		ElementMenuOptions menuOptions = filesView
 				.longPressOnElement(Config.folderToMove);
@@ -99,10 +107,11 @@ public class MoveFolderTestSuite{
 		assertTrue(filesView.getElement(Config.folderToMove)
 				.isDisplayed());
 	}
-	
+
 	public static void moveFolderWithDownloadedFilesMethod (AndroidDriver driver, 
 			Common common, FilesView filesView) throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
 		//fileListView.getProgressCircular(), 1000);
@@ -114,11 +123,18 @@ public class MoveFolderTestSuite{
 		assertNull(filesView.getElement(Config.folderWhereMove));
 		assertNull(filesView.getElement(Config.folderToMove));
 
+		//set unicode keyboard for special character
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+
 		//Create the folder where the other is gone to be moved
 		Actions.createFolder(Config.folderWhereMove, filesView, driver);
 
 		//Create the folder which is going to be moved
 		Actions.createFolder(Config.folderToMove, filesView, driver);
+
+		//set normal keyboard
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
 
 		//Create content inside the folder
 		Actions.createContentInsideFolder(Config.folderToMove, 
@@ -168,7 +184,7 @@ public class MoveFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testMoveFolderWithDownloadedFiles () throws Exception {
 		moveFolderWithDownloadedFilesMethod(driver,common, filesView);
 	}

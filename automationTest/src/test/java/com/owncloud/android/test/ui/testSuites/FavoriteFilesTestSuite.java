@@ -44,7 +44,7 @@ import com.owncloud.android.test.ui.models.FilesView;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@Category({NoIgnoreTestCategory.class})
+@Category({RegresionTestCategory.class})
 public class FavoriteFilesTestSuite{
 
 	AndroidDriver driver;
@@ -122,7 +122,7 @@ public class FavoriteFilesTestSuite{
 	}
 	
 	@Test	
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testFavoriteFileAndRefresh () throws Exception {
 		favoriteFileAndRefreshMethod (driver,common,filesView);
 	}

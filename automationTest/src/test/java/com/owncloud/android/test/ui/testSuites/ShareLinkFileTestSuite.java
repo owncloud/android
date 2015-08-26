@@ -56,7 +56,7 @@ public class ShareLinkFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({RegresionTestCategory.class})
 	public void testShareLinkFileByGmail () throws Exception {	
 		//if the file already exists, delete in case it is already sharedByLink
 		AndroidElement file = filesView.getElement(Config.fileToTest2);
@@ -81,30 +81,35 @@ public class ShareLinkFileTestSuite{
 				.findElement(By.id(FilesView.getSharedElementIndicator()))
 				.isDisplayed());
 	}
-
-	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testShareLinkFileByCopyLink () throws Exception {	
+	
+	public static void shareLinkFileByCopyLinkMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {	
 		AndroidElement sharedElementIndicator;
 
 		//if the file already exists, delete in case it is already sharedByLink
-		AndroidElement file = filesView.getElement(Config.fileToTest2);
+		AndroidElement file = filesView.getElement(Config.fileToTest3);
 		if(file!=null){
-			Actions.deleteElement(Config.fileToTest2,filesView, driver);
-			assertNull(filesView.getElement(Config.fileToTest2));
+			Actions.deleteElement(Config.fileToTest3,filesView, driver);
+			assertNull(filesView.getElement(Config.fileToTest3));
 		}
-		filesView = Actions.uploadFile(Config.fileToTest2, filesView);
+		filesView = Actions.uploadFile(Config.fileToTest3, filesView);
 
-		assertTrue(filesView.getElement(Config.fileToTest2).isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest3).isDisplayed());
 
 		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
-				Config.fileToTest2,filesView,driver,common);
+				Config.fileToTest3,filesView,driver,common);
 
 		common.wait.until(ExpectedConditions.visibilityOf(
-				filesView.getElement(Config.fileToTest2)
+				filesView.getElement(Config.fileToTest3)
 				.findElement(By.id(FilesView.getSharedElementIndicator()))));
 
 		assertTrue(sharedElementIndicator.isDisplayed());
+	}
+
+	@Test
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
+	public void testShareLinkFileByCopyLink () throws Exception {	
+		shareLinkFileByCopyLinkMethod (driver, common,filesView);
 	}
 	
 	public static void unshareLinkFileMethod (AndroidDriver driver, 
@@ -135,7 +140,7 @@ public class ShareLinkFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testUnshareLinkFile () throws Exception {	
 		unshareLinkFileMethod (driver, common, filesView);
 	}
@@ -146,6 +151,7 @@ public class ShareLinkFileTestSuite{
 
 		FilesView filesView = new FilesView(driver);
 		Actions.deleteElement(Config.fileToTest2,filesView, driver);
+		Actions.deleteElement(Config.fileToTest3,filesView, driver);
 
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

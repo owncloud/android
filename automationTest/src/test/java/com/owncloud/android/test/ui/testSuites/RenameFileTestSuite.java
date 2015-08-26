@@ -57,13 +57,15 @@ public class RenameFileTestSuite{
 		common=new Common();
 		driver=common.setUpCommonDriver();
 		//login
-				filesView = Actions.login(Config.URL, Config.user,
-						Config.password, Config.isTrusted, driver);
-				common.assertIsInFilesView(filesView);
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
-	
+
 	public static void renameDownloadedFileMethod (AndroidDriver driver, 
 			Common common, FilesView filesView) throws Exception {
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
+
 		//check if the file with the new name already exists, if true delete it
 		Actions.deleteElement(Config.fileToRename, filesView, driver);
 
@@ -96,7 +98,14 @@ public class RenameFileTestSuite{
 
 		FolderPopUp folderPopUp = menuOptions.clickOnRename();
 
+		//set unicode keyboard for special character
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+
 		folderPopUp.typeNewFolderName(Config.fileToRename);
+
+		//set normal keyboard
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
 
 		WaitAMomentPopUp waitAMomentPopUp = folderPopUp
 				.clickOnNewFolderOkButton();
@@ -111,7 +120,7 @@ public class RenameFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testRenameDownloadedFile () throws Exception {
 		renameDownloadedFileMethod (driver, common, filesView);
 	}

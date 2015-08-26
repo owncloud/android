@@ -89,7 +89,7 @@ public class DeleteFileTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFileRemoteAndLocal () throws Exception {		
 		deleteFileRemoteAndLocalMethod (driver, common, filesView);
 	}

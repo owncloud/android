@@ -53,7 +53,7 @@ public class SmokeTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class, InProgressCategory.class})
 	public void testSmokeTest () throws Exception {
 
 		//TODO. login and logout and then continue. 
@@ -66,7 +66,13 @@ public class SmokeTestSuite{
 		CreateFolderTestSuite
 		.createFolderWithSpecialCharactersMethod(driver, common, filesView);
 		
-		driver.rotate(ScreenOrientation.PORTRAIT);
+		ShareLinkFileTestSuite
+		.shareLinkFileByCopyLinkMethod(driver, common, filesView);
+		
+		FavoriteFilesTestSuite
+		.favoriteFileAndRefreshMethod (driver,common,filesView);
+		
+		//driver.rotate(ScreenOrientation.PORTRAIT);
 		DeleteFileTestSuite
 			.deleteFileRemoteAndLocalMethod (driver, common, filesView);
 		
@@ -83,9 +89,6 @@ public class SmokeTestSuite{
 		
 		RenameFileTestSuite
 		.renameDownloadedFileMethod(driver, common, filesView);
-		
-		FavoriteFilesTestSuite
-		.favoriteFileAndRefreshMethod (driver,common,filesView);
 		
 		MoveFileTestSuite.moveDownloadedFileMethod(driver, common, filesView);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);

@@ -165,10 +165,6 @@ public class Actions {
 		AndroidElement fileElement;
 		WaitAMomentPopUp waitAMomentPopUp;
 		try{
-			//To open directly the "file list view" and
-			//we don't need to know in which view we are
-			//driver.startActivity("com.owncloud.android",
-				//	".ui.activity.FileDisplayActivity");
 			fileElement = getElementInFilesView(elementName, driver);
 			if(fileElement!=null){
 				ElementMenuOptions menuOptions = filesView
@@ -191,10 +187,6 @@ public class Actions {
 		AndroidElement fileElement;
 		WaitAMomentPopUp waitAMomentPopUp;
 		try{
-			//To open directly the "file list view" and
-			//we don't need to know in which view we are
-			//driver.startActivity("com.owncloud.android",
-			//	".ui.activity.FileDisplayActivity");
 			fileElement = getElementInFilesView(elementName, driver);
 			if(fileElement!=null){
 				ElementMenuOptions menuOptions = filesView
@@ -216,10 +208,6 @@ public class Actions {
 			FilesView filesView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
-			//To open directly the "file list view" and
-			//we don't need to know in which view we are
-			//driver.startActivity("com.owncloud.android",
-			//	".ui.activity.FileDisplayActivity");
 			ElementMenuOptions menuOptions = filesView
 					.longPressOnElement(elementName);
 			ShareView shareView = menuOptions.clickOnShareLinkElement();
@@ -247,10 +235,6 @@ public class Actions {
 			FilesView filesView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
-			//To open directly the "file list view" and
-			//we don't need to know in which view we are
-			//driver.startActivity("com.owncloud.android",
-			//	".ui.activity.FileDisplayActivity");
 			ElementMenuOptions menuOptions = filesView
 					.longPressOnElement(elementName);
 			ShareView shareView = menuOptions.clickOnShareLinkElement();
@@ -275,10 +259,6 @@ public class Actions {
 			FilesView filesView, AndroidDriver driver, Common common) 
 					throws Exception{
 		try{
-			//To open directly the "file list view" and
-			//we don't need to know in which view we are
-			//driver.startActivity("com.owncloud.android",
-				//	".ui.activity.FileDisplayActivity");
 			ElementMenuOptions menuOptions = filesView
 					.longPressOnElement(elementName);
 			WaitAMomentPopUp waitAMomentPopUp = menuOptions

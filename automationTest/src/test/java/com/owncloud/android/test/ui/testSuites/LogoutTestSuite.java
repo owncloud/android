@@ -64,7 +64,7 @@ public class LogoutTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testLogout () throws Exception {
 		logoutMethod (driver, common, filesView);
 	}

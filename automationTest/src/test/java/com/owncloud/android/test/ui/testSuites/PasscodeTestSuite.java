@@ -93,7 +93,7 @@ public class PasscodeTestSuite {
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({RegresionTestCategory.class})
 	public void testPasscodeEnable () throws Exception {
 		passcodeEnableMethod(driver, common);
 	}

@@ -48,14 +48,14 @@ public final class Config {
 	public static final String fileToTest3 = "año.pdf";
 	public static final String fileToTestSendByEmail = "test.jpg";
 	public static final String bigFileToTest = "video.mp4";
-	public static final String fileToRename = "newName";
+	public static final String fileToRename = "newNÁme";
 
 	public static final String folderToCreate="testCreateFolder";
     public static final String folderToCreateSpecialCharacters="a%&@()ño";
-    public static final String folderWhereMove="folderWhereMove";
-    public static final String folderToMove="folderToMove";
-    public static final String folderBeforeRename="folderBeforeRename";
-    public static final String folderToRename="folderToRename";
+    public static final String folderWhereMove="foldérWhereMove";
+    public static final String folderToMove="folderTöMove";
+    public static final String folderBeforeRename="folderBeforeRèname";
+    public static final String folderToRename="folderToRenáme";
 
 	public static final String passcode1 = "1";
 	public static final String passcode2 = "1";

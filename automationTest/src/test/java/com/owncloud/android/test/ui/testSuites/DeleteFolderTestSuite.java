@@ -59,7 +59,7 @@ public class DeleteFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFolder () throws Exception {
 		//if the folder already exists, do no created
 		AndroidElement folder = filesView.getElement(Config.folderToCreate);
@@ -123,7 +123,7 @@ public class DeleteFolderTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFolderWithContents () throws Exception {
 		deleteFolderWithContentsMethod (driver, common, filesView);
 	}

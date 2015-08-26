@@ -56,7 +56,7 @@ public class LoginTestSuite{
 	
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({RegresionTestCategory.class})
 	public void testLoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 
@@ -68,7 +68,7 @@ public class LoginTestSuite{
 	
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({RegresionTestCategory.class})
 	public void testLoginLandscape () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FilesView filesView = Actions.login(Config.URL, Config.user,
@@ -79,7 +79,7 @@ public class LoginTestSuite{
 	
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({RegresionTestCategory.class})
 	public void testLoginWrongPassword () throws Exception {
 		LoginForm loginForm = new LoginForm(driver);
 		Actions.login(Config.URL, 
@@ -104,7 +104,7 @@ public class LoginTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testLoginAndShowFiles () throws Exception {
 		loginAndShowFilesMethod (driver, common);
 	}
@@ -112,7 +112,7 @@ public class LoginTestSuite{
 	
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testMultiAccountRotate () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FilesView filesView = Actions.login(Config.URL, Config.user,
@@ -159,7 +159,7 @@ public class LoginTestSuite{
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testMultiAccountAndShowFiles () throws Exception {
 		multiAccountAndShowFilesMethod(driver, common); 
 	}
@@ -167,7 +167,7 @@ public class LoginTestSuite{
 	
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({RegresionTestCategory.class})
 	public void testExistingAccountRotate () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		FilesView filesView = Actions.login(Config.URL, Config.user,
@@ -190,7 +190,7 @@ public class LoginTestSuite{
 	
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({RegresionTestCategory.class})
 	public void testChangePasswordWrong () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		FilesView filesView = Actions.login(Config.URL, Config.user,

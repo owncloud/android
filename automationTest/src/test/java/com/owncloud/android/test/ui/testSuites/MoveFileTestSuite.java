@@ -46,7 +46,7 @@ public class MoveFileTestSuite{
 	AndroidDriver driver;
 	Common common;
 	FilesView filesView;
-	
+
 	@Rule public TestName name = new TestName();
 
 	@Before
@@ -58,28 +58,36 @@ public class MoveFileTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFilesView(filesView);
 	}
-	
+
 	public static void moveDownloadedFileMethod (AndroidDriver driver, 
 			Common common, FilesView filesView) throws Exception {
 		WaitAMomentPopUp waitAMomentPopUp;
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
 
 		//check if the folder already exists and if true, delete them
 		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
-		Actions.deleteElement(Config.fileToTest, filesView, driver);
+		Actions.deleteElement(Config.fileToTest2, filesView, driver);
 
 		assertNull(filesView.getElement(Config.folderWhereMove));
-		assertNull(filesView.getElement(Config.fileToTest));
+		assertNull(filesView.getElement(Config.fileToTest2));
+
+		//set unicode keyboard for special character
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
 
 		//Create the folder where the other is gone to be moved
 		Actions.createFolder(Config.folderWhereMove, filesView, driver);
 
-		filesView = Actions.uploadFile(Config.fileToTest, filesView);
-		assertTrue(filesView.getElement(Config.fileToTest)
+		//set normal keyboard
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
+		
+		filesView = Actions.uploadFile(Config.fileToTest2, filesView);
+		assertTrue(filesView.getElement(Config.fileToTest2)
 				.isDisplayed());
 
 		//select to move the file
 		ElementMenuOptions menuOptions = filesView
-				.longPressOnElement(Config.fileToTest);
+				.longPressOnElement(Config.fileToTest2);
 		MoveView moveView = menuOptions.clickOnMove();
 
 		//to move to a folder
@@ -94,13 +102,13 @@ public class MoveFileTestSuite{
 				filesView.getProgressCircular(),1000);
 
 		Thread.sleep(1000);
-		assertTrue(filesView.getElement(Config.fileToTest)
+		assertTrue(filesView.getElement(Config.fileToTest2)
 				.isDisplayed());
 
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testMoveDownloadedFile () throws Exception {
 		moveDownloadedFileMethod(driver, common, filesView);
 	}
@@ -111,7 +119,7 @@ public class MoveFileTestSuite{
 		FilesView filesView = new FilesView(driver);
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_BACK);
 		Actions.deleteElement(Config.folderWhereMove, filesView, driver);
-		Actions.deleteElement(Config.fileToTest, filesView, driver);
+		Actions.deleteElement(Config.fileToTest2, filesView, driver);
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
