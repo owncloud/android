@@ -375,11 +375,12 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             Parcelable targetFile = i.getParcelableExtra(FolderPickerActivity.EXTRA_FILE);
 
             Intent data = new Intent();
-            data.putExtra(EXTRA_FOLDER, getCurrentFolder());
+            data.putExtra(EXTRA_FOLDER, (Parcelable)getCurrentFolder());
             if (targetFile != null) {
                 data.putExtra(EXTRA_FILE, targetFile);
             }
             setResult(RESULT_OK, data);
+
             finish();
         }
     }

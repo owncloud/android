@@ -30,6 +30,7 @@ import third_parties.daveKoeller.AlphanumComparator;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.UploadDbObject;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 
 import android.annotation.SuppressLint;
@@ -55,22 +56,51 @@ public class FileStorageUtils {
     
     //private static final String LOG_TAG = "FileStorageUtils";
 
+    /**
+     * Takes a full path to owncloud file and removes beginning which is path to ownload data folder.
+     * If fullPath does not start with that folder, fullPath is returned as is.
+     */
+    public static final String removeDataFolderPath(String fullPath) {
+        File sdCard = Environment.getExternalStorageDirectory();
+        String dataFolderPath = sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder() + "/";
+        if(fullPath.indexOf(dataFolderPath) == 0) {
+            return fullPath.substring(dataFolderPath.length());
+        }
+        return fullPath;
+    }
+    
+    /**
+     * Get local owncloud storage path for accountName.
+     */
     public static final String getSavePath(String accountName) {
         File sdCard = Environment.getExternalStorageDirectory();
         return sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder() + "/" + Uri.encode(accountName, "@");
         // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names, that can be in the accountName since 0.1.190B
     }
 
+    /**
+     * Get local path where OCFile file is to be stored after upload. That is,
+     * corresponding local path (in local owncloud storage) to remote uploaded
+     * file.
+     */
     public static final String getDefaultSavePathFor(String accountName, OCFile file) {
         return getSavePath(accountName) + file.getRemotePath();
     }
 
+    /**
+     * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
+     */
     public static final String getTemporalPath(String accountName) {
         File sdCard = Environment.getExternalStorageDirectory();
         return sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder() + "/tmp/" + Uri.encode(accountName, "@");
             // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names, that can be in the accountName since 0.1.190B
     }
 
+    /**
+     * Optimistic number of bytes available on sd-card. accountName is ignored.
+     * @param accountName not used. can thus be null.
+     * @return Optimistic number of available bytes (can be less)
+     */
     @SuppressLint("NewApi")
     public static final long getUsableSpace(String accountName) {
         File savePath = Environment.getExternalStorageDirectory();

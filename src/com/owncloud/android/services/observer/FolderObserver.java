@@ -28,6 +28,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.os.FileObserver;
+import android.os.Parcelable;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -204,7 +205,7 @@ public class FolderObserver extends FileObserver {
             // this can be very intrusive; a notification should be preferred
             Intent i = new Intent(mContext, ConflictsResolveActivity.class);
             i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra(ConflictsResolveActivity.EXTRA_FILE, file);
+            i.putExtra(ConflictsResolveActivity.EXTRA_FILE, (Parcelable)file);
             i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
             mContext.startActivity(i);
         }

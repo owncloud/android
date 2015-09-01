@@ -40,6 +40,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -558,7 +559,7 @@ public class PreviewMediaFragment extends FileFragment implements
     private void startFullScreenVideo() {
         Intent i = new Intent(getActivity(), PreviewVideoActivity.class);
         i.putExtra(FileActivity.EXTRA_ACCOUNT, mAccount);
-        i.putExtra(FileActivity.EXTRA_FILE, getFile());
+        i.putExtra(FileActivity.EXTRA_FILE, (Parcelable)getFile());
         i.putExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, mVideoPreview.isPlaying());
         mVideoPreview.pause();
         i.putExtra(PreviewVideoActivity.EXTRA_START_POSITION, mVideoPreview.getCurrentPosition());

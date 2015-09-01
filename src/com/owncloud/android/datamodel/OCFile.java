@@ -20,16 +20,27 @@
 
 package com.owncloud.android.datamodel;
 
+
+import java.io.File;
+import java.io.Serializable;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.FileStorageUtils;
 
-import java.io.File;
-
 import third_parties.daveKoeller.AlphanumComparator;
-public class OCFile implements Parcelable, Comparable<OCFile> {
+
+// OCFile needs to be Serializable because it is stored persistently inside UploadDbObject.
+// (Parcelable is not suitable for persistent storage.)
+public class OCFile implements Parcelable, Comparable<OCFile>, Serializable {
+
+    /**
+     * Should be changed whenever any property of OCFile changes.
+     */
+    private static final long serialVersionUID = 5604080482686390078L;
+
 
     public static final Parcelable.Creator<OCFile> CREATOR = new Parcelable.Creator<OCFile>() {
         @Override
@@ -204,7 +215,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     /**
-     * Can be used to set the path where the file is stored
+     * Can be used to set the path where the local file is stored
      *
      * @param storage_path to set
      */

@@ -24,14 +24,16 @@ package com.owncloud.android.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.FileUploadService;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.OnConflictDecisionMadeListener;
+
 
 /**
  * Wrapper activity which will be launched if keep-in-sync file will be modified by external
@@ -48,7 +50,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
 
     @Override
     public void conflictDecisionMade(Decision decision) {
-        Intent i = new Intent(getApplicationContext(), FileUploader.class);
+        Intent i = new Intent(getApplicationContext(), FileUploadService.class);
         
         switch (decision) {
             case CANCEL:
@@ -56,16 +58,16 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 return;
             case OVERWRITE:
                 // use local version -> overwrite on server
-                i.putExtra(FileUploader.KEY_FORCE_OVERWRITE, true);
+                i.putExtra(FileUploadService.KEY_FORCE_OVERWRITE, true);
                 break;
             case KEEP_BOTH:
-                i.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                i.putExtra(FileUploadService.KEY_LOCAL_BEHAVIOUR, FileUploadService.LocalBehaviour.LOCAL_BEHAVIOUR_MOVE);
                 break;
             case SERVER:
                 // use server version -> delete local, request download
                 Intent intent = new Intent(this, FileDownloader.class);
                 intent.putExtra(FileDownloader.EXTRA_ACCOUNT, getAccount());
-                intent.putExtra(FileDownloader.EXTRA_FILE, getFile());
+                intent.putExtra(FileDownloader.EXTRA_FILE, (Parcelable) getFile());
                 startService(intent);
                 finish();
                 return;
@@ -73,9 +75,9 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 Log_OC.wtf(TAG, "Unhandled conflict decision " + decision);
                 return;
         }
-        i.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
-        i.putExtra(FileUploader.KEY_FILE, getFile());
-        i.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
+        i.putExtra(FileUploadService.KEY_ACCOUNT, getAccount());
+        i.putExtra(FileUploadService.KEY_FILE, (Parcelable)getFile());
+        i.putExtra(FileUploadService.KEY_UPLOAD_TYPE, FileUploadService.UploadSingleMulti.UPLOAD_SINGLE_FILE);
         
         startService(i);
         finish();

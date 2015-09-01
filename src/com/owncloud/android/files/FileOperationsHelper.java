@@ -33,9 +33,10 @@ import android.widget.Toast;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.UploadDbObject;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-
+import com.owncloud.android.files.services.FileUploadService.FileUploaderBinder;
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -49,7 +50,7 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog;
  */
 public class FileOperationsHelper {
 
-    private static final String TAG = FileOperationsHelper.class.getName();
+    private static final String TAG = FileOperationsHelper.class.getSimpleName();
     
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG"; 
 
@@ -69,7 +70,8 @@ public class FileOperationsHelper {
             String encodedStoragePath = WebdavUtils.encodePath(storagePath);
             
             Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
-            intentForSavedMimeType.setDataAndType(Uri.parse("file://"+ encodedStoragePath), file.getMimetype());
+            intentForSavedMimeType.setDataAndType(Uri.parse("file://"+ encodedStoragePath),
+                    file.getMimetype());
             intentForSavedMimeType.setFlags(
                     Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             );
@@ -81,18 +83,22 @@ public class FileOperationsHelper {
                 );
                 if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
                     intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
-                    intentForGuessedMimeType.setDataAndType(Uri.parse("file://"+ encodedStoragePath), guessedMimeType);
+                    intentForGuessedMimeType.setDataAndType(Uri.parse("file://" +
+                            encodedStoragePath), guessedMimeType);
                     intentForGuessedMimeType.setFlags(
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     );
                 }
             }
             
             Intent chooserIntent;
             if (intentForGuessedMimeType != null) {
-                chooserIntent = Intent.createChooser(intentForGuessedMimeType, mFileActivity.getString(R.string.actionbar_open_with));
+                chooserIntent = Intent.createChooser(intentForGuessedMimeType,
+                        mFileActivity.getString(R.string.actionbar_open_with));
             } else {
-                chooserIntent = Intent.createChooser(intentForSavedMimeType, mFileActivity.getString(R.string.actionbar_open_with));
+                chooserIntent = Intent.createChooser(intentForSavedMimeType,
+                        mFileActivity.getString(R.string.actionbar_open_with));
             }
             
             mFileActivity.startActivity(chooserIntent);
@@ -110,7 +116,8 @@ public class FileOperationsHelper {
                 String link = "https://fake.url";
                 Intent intent = createShareWithLinkIntent(link);
                 String[] packagesToExclude = new String[] { mFileActivity.getPackageName() };
-                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intent, packagesToExclude, file);
+                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intent,
+                        packagesToExclude, file);
                 chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
                 
             } else {
@@ -120,7 +127,9 @@ public class FileOperationsHelper {
         } else {
             // Show a Message
             Toast t = Toast.makeText(
-                    mFileActivity, mFileActivity.getString(R.string.share_link_no_support_share_api), Toast.LENGTH_LONG
+                    mFileActivity,
+                    mFileActivity.getString(R.string.share_link_no_support_share_api),
+                    Toast.LENGTH_LONG
             );
             t.show();
         }
@@ -180,7 +189,9 @@ public class FileOperationsHelper {
             
         } else {
             // Show a Message
-            Toast t = Toast.makeText(mFileActivity, mFileActivity.getString(R.string.share_link_no_support_share_api), Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(mFileActivity,
+                    mFileActivity.getString(R.string.share_link_no_support_share_api),
+                    Toast.LENGTH_LONG);
             t.show();
             
         }
@@ -198,7 +209,8 @@ public class FileOperationsHelper {
 
             // Show dialog, without the own app
             String[] packagesToExclude = new String[] { mFileActivity.getPackageName() };
-            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude, file);
+            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent,
+                    packagesToExclude, file);
             chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
 
         } else {
@@ -284,13 +296,41 @@ public class FileOperationsHelper {
     }
 
     /**
+     * Retry uploading a failed or cancelled upload with force.
+     */
+    public void retryUpload(UploadDbObject upload) {
+        Account account = mFileActivity.getAccount();
+        FileUploaderBinder uploaderBinder = mFileActivity.getFileUploaderBinder();
+        if (uploaderBinder != null) {
+            upload.removeAllUploadRestrictions(); //only this object, upload DB stays untouched.
+            uploaderBinder.retry(account, upload);            
+        }  else {
+            Log_OC.w(TAG, "uploaderBinder not set. Cannot remove " + upload.getOCFile());            
+        }
+    }
+    
+    /**
+     * Remove upload from upload list.
+     */
+    public void removeUploadFromList(UploadDbObject upload) {
+        Account account = mFileActivity.getAccount();
+        FileUploaderBinder uploaderBinder = mFileActivity.getFileUploaderBinder();
+        if (uploaderBinder != null) {
+            uploaderBinder.remove(account, upload.getOCFile());            
+        }  else {
+            Log_OC.w(TAG, "uploaderBinder not set. Cannot remove " + upload.getOCFile());            
+        }
+    }
+
+    /**
      * Cancel the transference in downloads (files/folders) and file uploads
      * @param file OCFile
      */
     public void cancelTransference(OCFile file) {
         Account account = mFileActivity.getAccount();
         if (file.isFolder()) {
-            OperationsService.OperationsServiceBinder opsBinder = mFileActivity.getOperationsServiceBinder();
+            OperationsService.OperationsServiceBinder opsBinder =
+                    mFileActivity.getOperationsServiceBinder();
             if (opsBinder != null) {
                 opsBinder.cancel(account, file);
             }
@@ -299,19 +339,29 @@ public class FileOperationsHelper {
         // for both files and folders
         FileDownloaderBinder downloaderBinder = mFileActivity.getFileDownloaderBinder();
         FileUploaderBinder uploaderBinder = mFileActivity.getFileUploaderBinder();
-        if (downloaderBinder != null && downloaderBinder.isDownloading(account, file)) {
-            downloaderBinder.cancel(account, file);
+        if (downloaderBinder != null) {
+            if (downloaderBinder.isDownloading(account, file)) {
+                // Remove etag for parent, if file is a keep_in_sync
+                if (file.isFavorite()) {
+                    OCFile parent = mFileActivity.getStorageManager().getFileById(file.getParentId());
+                    parent.setEtag("");
+                    mFileActivity.getStorageManager().saveFile(parent);
+                }
 
-            // TODO - review why is this here, and solve in a better way
-            // Remove etag for parent, if file is a favorite
-            if (file.isFavorite()) {
-                OCFile parent = mFileActivity.getStorageManager().getFileById(file.getParentId());
-                parent.setEtag("");
-                mFileActivity.getStorageManager().saveFile(parent);
+                downloaderBinder.cancel(account, file);
+            } else {
+                Log_OC.d(TAG, "Download for " + file + " not in progress. Cannot cancel " + file);
             }
-
-        } else if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
-            uploaderBinder.cancel(account, file);
+        } 
+        if (uploaderBinder != null) {
+            if (uploaderBinder.isUploading(account, file)) {
+                uploaderBinder.cancel(account, file);
+            } else {
+                Log_OC.d(TAG, "Upload for " + file + " not in progress. Cannot cancel.");
+            }
+        } 
+        if(downloaderBinder == null && uploaderBinder == null) {
+            Log_OC.w(TAG, "Neither downloaderBinder nor uploaderBinder set. Cannot cancel.");
         }
     }
 
@@ -347,7 +397,8 @@ public class FileOperationsHelper {
      */
     public boolean isVersionWithForbiddenCharacters() {
         if (mFileActivity.getAccount() != null) {
-            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
+            OwnCloudVersion serverVersion =
+                    AccountUtils.getServerVersion(mFileActivity.getAccount());
             return (serverVersion != null && serverVersion.isVersionWithForbiddenCharacters());
         }
         return false;

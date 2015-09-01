@@ -25,6 +25,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -44,12 +45,14 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -70,10 +73,10 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.db.DbHandler;
+import com.owncloud.android.db.UploadDbHandler;
 import com.owncloud.android.files.FileOperationsHelper;
 import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.FileUploadService;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.RadioButtonPreference;
@@ -91,10 +94,12 @@ public class Preferences extends PreferenceActivity
     
     private static final String TAG = "OwnCloudPreferences";
 
+
+    private UploadDbHandler mDbHandler;
+
     private static final int ACTION_SELECT_UPLOAD_PATH = 1;
     private static final int ACTION_SELECT_UPLOAD_VIDEO_PATH = 2;
 
-    private DbHandler mDbHandler;
     private CheckBoxPreference pCode;
     private Preference pAboutApp;
     private AppCompatDelegate mDelegate;
@@ -114,7 +119,7 @@ public class Preferences extends PreferenceActivity
     private String mUploadVideoPath;
 
     protected FileDownloader.FileDownloaderBinder mDownloaderBinder = null;
-    protected FileUploader.FileUploaderBinder mUploaderBinder = null;
+    protected FileUploadService.FileUploaderBinder mUploaderBinder = null;
     private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
 
     @SuppressWarnings("deprecation")
@@ -123,7 +128,7 @@ public class Preferences extends PreferenceActivity
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
-        mDbHandler = new DbHandler(getBaseContext());
+        mDbHandler = UploadDbHandler.getInstance(getBaseContext());
         addPreferencesFromResource(R.xml.preferences);
 
         ActionBar actionBar = getSupportActionBar();
@@ -296,7 +301,8 @@ public class Preferences extends PreferenceActivity
                         String username = currentAccount.name.substring(0,
                                 currentAccount.name.lastIndexOf('@'));
                         
-                        String recommendSubject = String.format(getString(R.string.recommend_subject),
+                        String recommendSubject =
+                                String.format(getString(R.string.recommend_subject),
                                 appName);
                         String recommendText = String.format(getString(R.string.recommend_text),
                                 appName, downloadUrl);
@@ -323,7 +329,8 @@ public class Preferences extends PreferenceActivity
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         String feedbackMail   =(String) getText(R.string.mail_feedback);
-                        String feedback   =(String) getText(R.string.prefs_feedback) + " - android v" + appVersion;
+                        String feedback   =(String) getText(R.string.prefs_feedback) +
+                                " - android v" + appVersion;
                         Intent intent = new Intent(Intent.ACTION_SENDTO); 
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
@@ -431,7 +438,8 @@ public class Preferences extends PreferenceActivity
         /* About App */
        pAboutApp = (Preference) findPreference("about_app");
        if (pAboutApp != null) { 
-               pAboutApp.setTitle(String.format(getString(R.string.about_android), getString(R.string.app_name)));
+               pAboutApp.setTitle(String.format(getString(R.string.about_android),
+                       getString(R.string.app_name)));
                pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
        }
 
@@ -446,7 +454,7 @@ public class Preferences extends PreferenceActivity
         }
         mUploadServiceConnection = newTransferenceServiceConnection();
         if (mUploadServiceConnection != null) {
-            bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
+            bindService(new Intent(this, FileUploadService.class), mUploadServiceConnection,
                     Context.BIND_AUTO_CREATE);
         }
 
@@ -827,7 +835,7 @@ public class Preferences extends PreferenceActivity
 
 
     @Override
-    public FileUploader.FileUploaderBinder getFileUploaderBinder() {
+    public FileUploadService.FileUploaderBinder getFileUploaderBinder() {
         return mUploaderBinder;
     }
 
@@ -859,9 +867,10 @@ public class Preferences extends PreferenceActivity
             if (component.equals(new ComponentName(Preferences.this, FileDownloader.class))) {
                 mDownloaderBinder = (FileDownloader.FileDownloaderBinder) service;
 
-            } else if (component.equals(new ComponentName(Preferences.this, FileUploader.class))) {
+            } else if (component.equals(new ComponentName(Preferences.this,
+                    FileUploadService.class))) {
                 Log_OC.d(TAG, "Upload service connected");
-                mUploaderBinder = (FileUploader.FileUploaderBinder) service;
+                mUploaderBinder = (FileUploadService.FileUploaderBinder) service;
             } else {
                 return;
             }
@@ -873,7 +882,8 @@ public class Preferences extends PreferenceActivity
             if (component.equals(new ComponentName(Preferences.this, FileDownloader.class))) {
                 Log_OC.d(TAG, "Download service suddenly disconnected");
                 mDownloaderBinder = null;
-            } else if (component.equals(new ComponentName(Preferences.this, FileUploader.class))) {
+            } else if (component.equals(new ComponentName(Preferences.this,
+                    FileUploadService.class))) {
                 Log_OC.d(TAG, "Upload service suddenly disconnected");
                 mUploaderBinder = null;
             }

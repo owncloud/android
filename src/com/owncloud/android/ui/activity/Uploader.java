@@ -22,19 +22,14 @@
 
 package com.owncloud.android.ui.activity;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
-import java.util.Vector;
-
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
+
+import android.annotation.SuppressLint;
+
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -74,16 +69,24 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticator;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.files.services.FileUploadService;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.utils.CopyTmpFileAsyncTask;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.ErrorMessageAdapter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+import java.util.Vector;
 
 
 /**
@@ -222,7 +225,8 @@ public class Uploader extends FileActivity
             builder.setIcon(android.R.drawable.ic_dialog_alert);
             builder.setTitle(R.string.uploader_wrn_no_account_title);
             builder.setMessage(String.format(
-                    getString(R.string.uploader_wrn_no_account_text), getString(R.string.app_name)));
+                    getString(R.string.uploader_wrn_no_account_text),
+                    getString(R.string.app_name)));
             builder.setCancelable(false);
             builder.setPositiveButton(R.string.uploader_wrn_no_account_setup_btn_text, new OnClickListener() {
                 @Override
@@ -466,7 +470,8 @@ public class Uploader extends FileActivity
         return (mStreamsToUpload != null && mStreamsToUpload.get(0) != null);
     }
 
-    public void uploadFiles() {
+    @SuppressLint("NewApi")
+	public void uploadFiles() {
         try {
 
             // ArrayList for files with path in external storage
@@ -562,12 +567,14 @@ public class Uploader extends FileActivity
                     throw new SecurityException();
                 }
 
-                Intent intent = new Intent(getApplicationContext(), FileUploader.class);
-                intent.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_MULTIPLE_FILES);
-                intent.putExtra(FileUploader.KEY_LOCAL_FILE, local.toArray(new String[local.size()]));
-                intent.putExtra(FileUploader.KEY_REMOTE_FILE,
+                Intent intent = new Intent(getApplicationContext(), FileUploadService.class);
+                intent.putExtra(FileUploadService.KEY_UPLOAD_TYPE,
+                        FileUploadService.UploadSingleMulti.UPLOAD_MULTIPLE_FILES);
+                intent.putExtra(FileUploadService.KEY_LOCAL_FILE,
+                        local.toArray(new String[local.size()]));
+                intent.putExtra(FileUploadService.KEY_REMOTE_FILE,
                         remote.toArray(new String[remote.size()]));
-                intent.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
+                intent.putExtra(FileUploadService.KEY_ACCOUNT, getAccount());
                 startService(intent);
 
                 //Save the path to shared preferences
@@ -698,11 +705,12 @@ public class Uploader extends FileActivity
             dismissWaitingCopyDialog();
         }
         if (result != null) {
-            Intent intent = new Intent(getApplicationContext(), FileUploader.class);
-            intent.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_SINGLE_FILE);
-            intent.putExtra(FileUploader.KEY_LOCAL_FILE, result);
-            intent.putExtra(FileUploader.KEY_REMOTE_FILE, mRemoteCacheData.get(index));
-            intent.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
+            Intent intent = new Intent(getApplicationContext(), FileUploadService.class);
+            intent.putExtra(FileUploadService.KEY_UPLOAD_TYPE,
+                    FileUploadService.UploadSingleMulti.UPLOAD_SINGLE_FILE);
+            intent.putExtra(FileUploadService.KEY_LOCAL_FILE, result);
+            intent.putExtra(FileUploadService.KEY_REMOTE_FILE, mRemoteCacheData.get(index));
+            intent.putExtra(FileUploadService.KEY_ACCOUNT, getAccount());
             startService(intent);
 
         } else {

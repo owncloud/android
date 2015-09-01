@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ListItemLayout"
+    android:layout_width="fill_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:focusableInTouchMode="false">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="@dimen/file_icon_size"
+            android:layout_height="@dimen/file_icon_size"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_menu_archive" />
+  
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/upload_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="#303030"
+            android:textSize="16dip" />
+
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/upload_local_path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:textColor="@color/list_item_lastmod_and_filesize_text"
+                android:textSize="12dip"/>
+
+            <TextView
+                android:id="@+id/upload_file_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="@color/list_item_lastmod_and_filesize_text"
+                android:layout_weight=".5"
+                android:textSize="12dip"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/upload_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+             />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/upload_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:textColor="@color/list_item_lastmod_and_filesize_text"
+                android:textSize="12dip"/>
+
+            <TextView
+                android:id="@+id/upload_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="@color/list_item_lastmod_and_filesize_text"
+                android:layout_weight=".5"
+                android:textSize="12dip"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    
+    <FrameLayout
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:paddingLeft="8dp"
+     >
+    
+     <Button
+        android:id="@+id/upload_right_button"
+        android:background ="@drawable/btn_small_round"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+     />
+
+	</FrameLayout>
+    
+    
+</LinearLayout>

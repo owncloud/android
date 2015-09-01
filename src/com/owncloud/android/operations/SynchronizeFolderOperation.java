@@ -30,6 +30,7 @@ import java.util.Vector;
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.util.Log;
 
 
@@ -432,7 +433,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 }
                 Intent i = new Intent(mContext, FileDownloader.class);
                 i.putExtra(FileDownloader.EXTRA_ACCOUNT, mAccount);
-                i.putExtra(FileDownloader.EXTRA_FILE, file);
+                i.putExtra(FileDownloader.EXTRA_FILE, (Parcelable) file);
                 mContext.startService(i);
             }
         }
@@ -486,15 +487,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
      * @return          New OCFile instance representing the remote resource described by we.
      */
     private OCFile fillOCFile(RemoteFile remote) {
-        OCFile file = new OCFile(remote.getRemotePath());
-        file.setCreationTimestamp(remote.getCreationTimestamp());
-        file.setFileLength(remote.getLength());
-        file.setMimetype(remote.getMimeType());
-        file.setModificationTimestamp(remote.getModifiedTimestamp());
-        file.setEtag(remote.getEtag());
-        file.setPermissions(remote.getPermissions());
-        file.setRemoteId(remote.getRemoteId());
-        return file;
+        return FileStorageUtils.fillOCFile(remote);
     }
 
 

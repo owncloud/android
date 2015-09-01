@@ -75,6 +75,11 @@
     <string name="file_list_empty">Nothing in here. Upload something!</string>
     <string name="file_list_loading">Loading&#8230;</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
+    <string name="upload_list_empty">No uploads available.</string>
+    <string name="file_list_folder">folder</string>
+    <string name="file_list_folders">folders</string>
+    <string name="file_list_file">file</string>
+    <string name="file_list_files">files</string>
     <string name="filedetails_select_file">Tap on a file to display additional information.</string>
     <string name="filedetails_size">Size:</string>
     <string name="filedetails_type">Type:</string>
@@ -91,6 +96,8 @@
     <string name="common_ok">OK</string>
     <string name="common_cancel_download">Cancel download</string>
     <string name="common_cancel_upload">Cancel upload</string>
+    <string name="common_remove_upload">Remove upload</string>
+    <string name="common_retry_upload">Retry upload</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_save_exit">Save &amp; Exit</string>
     <string name="common_error">Error</string>

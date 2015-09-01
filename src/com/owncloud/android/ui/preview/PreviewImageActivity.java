@@ -32,6 +32,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -47,8 +49,8 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
-import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.files.services.FileUploadService;
+import com.owncloud.android.files.services.FileUploadService.FileUploaderBinder;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -300,7 +302,7 @@ public class PreviewImageActivity extends FileActivity implements
                 }
 
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
-                    FileUploader.class))) {
+                    FileUploadService.class))) {
                 Log_OC.d(TAG, "Upload service connected");
                 mUploaderBinder = (FileUploaderBinder) service;
             } else {
@@ -316,7 +318,7 @@ public class PreviewImageActivity extends FileActivity implements
                 Log_OC.d(TAG, "Download service suddenly disconnected");
                 mDownloaderBinder = null;
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
-                    FileUploader.class))) {
+                    FileUploadService.class))) {
                 Log_OC.d(TAG, "Upload service suddenly disconnected");
                 mUploaderBinder = null;
             }
@@ -391,7 +393,7 @@ public class PreviewImageActivity extends FileActivity implements
     public void showDetails(OCFile file) {
         Intent showDetailsIntent = new Intent(this, FileDisplayActivity.class);
         showDetailsIntent.setAction(FileDisplayActivity.ACTION_DETAILS);
-        showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, file);
+        showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, (Parcelable)file);
         showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT,
                 AccountUtils.getCurrentOwnCloudAccount(this));
         startActivity(showDetailsIntent);
@@ -408,7 +410,7 @@ public class PreviewImageActivity extends FileActivity implements
         } else if (!mDownloaderBinder.isDownloading(getAccount(), file)) {
             Intent i = new Intent(this, FileDownloader.class);
             i.putExtra(FileDownloader.EXTRA_ACCOUNT, getAccount());
-            i.putExtra(FileDownloader.EXTRA_FILE, file);
+            i.putExtra(FileDownloader.EXTRA_FILE, (Parcelable)file);
             startService(i);
         }
     }

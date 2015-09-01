@@ -40,7 +40,10 @@ import android.net.Uri;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.FileUploadService;
+import com.owncloud.android.files.services.FileUploadService.LocalBehaviour;
+import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
@@ -64,33 +67,43 @@ public class UploadFileOperation extends RemoteOperation {
     private static final String TAG = UploadFileOperation.class.getSimpleName();
 
     private Account mAccount;
+    /**
+     * OCFile which is to be uploaded.
+     */
     private OCFile mFile;
+    /**
+     * Original OCFile which is to be uploaded in case file had to be renamed
+     * (if forceOverwrite==false and remote file already exists).
+     */
     private OCFile mOldFile;
     private String mRemotePath = null;
     private boolean mChunked = false;
-    private boolean mIsInstant = false;
     private boolean mRemoteFolderToBeCreated = false;
     private boolean mForceOverwrite = false;
-    private int mLocalBehaviour = FileUploader.LOCAL_BEHAVIOUR_COPY;
+    private LocalBehaviour mLocalBehaviour = FileUploadService.LocalBehaviour.LOCAL_BEHAVIOUR_COPY;
     private boolean mWasRenamed = false;
     private String mOriginalFileName = null;
+    /**
+     * Local path to file which is to be uploaded (before any possible renaming or moving).
+     */
     private String mOriginalStoragePath = null;
     PutMethod mPutMethod = null;
     private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
-    private AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
+
+    private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
+    private final AtomicBoolean mUploadStarted = new AtomicBoolean(false);
+
     private Context mContext;
     
     private UploadRemoteFileOperation mUploadOperation;
 
     protected RequestEntity mEntity = null;
 
-    
     public UploadFileOperation( Account account,
                                 OCFile file,
                                 boolean chunked,
-                                boolean isInstant, 
                                 boolean forceOverwrite,
-                                int localBehaviour, 
+                                LocalBehaviour localBehaviour, 
                                 Context context) {
         if (account == null)
             throw new IllegalArgumentException("Illegal NULL account in UploadFileOperation " +
@@ -107,7 +120,6 @@ public class UploadFileOperation extends RemoteOperation {
         mFile = file;
         mRemotePath = file.getRemotePath();
         mChunked = chunked;
-        mIsInstant = isInstant;
         mForceOverwrite = forceOverwrite;
         mLocalBehaviour = localBehaviour;
         mOriginalStoragePath = mFile.getStoragePath();
@@ -127,6 +139,10 @@ public class UploadFileOperation extends RemoteOperation {
         return mFile;
     }
 
+    /**
+     * If remote file was renamed, return original OCFile which was uploaded. Is
+     * null is file was not renamed.
+     */
     public OCFile getOldFile() {
         return mOldFile;
     }
@@ -145,10 +161,6 @@ public class UploadFileOperation extends RemoteOperation {
 
     public String getMimeType() {
         return mFile.getMimetype();
-    }
-
-    public boolean isInstant() {
-        return mIsInstant;
     }
 
     public boolean isRemoteFolderToBeCreated() {
@@ -178,6 +190,9 @@ public class UploadFileOperation extends RemoteOperation {
         if (mEntity != null) {
             ((ProgressiveDataTransferer)mEntity).addDatatransferProgressListener(listener);
         }
+        if(mUploadOperation != null){
+            mUploadOperation.addDatatransferProgressListener(listener);
+        }
     }
     
     public void removeDatatransferProgressListener(OnDatatransferProgressListener listener) {
@@ -187,10 +202,15 @@ public class UploadFileOperation extends RemoteOperation {
         if (mEntity != null) {
             ((ProgressiveDataTransferer)mEntity).removeDatatransferProgressListener(listener);
         }
+        if(mUploadOperation != null){
+            mUploadOperation.removeDatatransferProgressListener(listener);
+        }
     }
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
+        mCancellationRequested.set(false);
+        mUploadStarted.set(true);
         RemoteOperationResult result = null;
         boolean localCopyPassed = false, nameCheckPassed = false;
         File temporalFile = null, originalFile = new File(mOriginalStoragePath), expectedFile = null;
@@ -211,11 +231,16 @@ public class UploadFileOperation extends RemoteOperation {
                                                                                                 // getAvailableRemotePath()
                                                                                                 // !!!
             expectedFile = new File(expectedPath);
+            
+            if (mCancellationRequested.get()) {
+                throw new OperationCancelledException();
+            }
 
             // check location of local file; if not the expected, copy to a
             // temporal file before upload (if COPY is the expected behaviour)
             if (!mOriginalStoragePath.equals(expectedPath) &&
-                    mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_COPY) {
+                    mLocalBehaviour == FileUploadService.LocalBehaviour.LOCAL_BEHAVIOUR_COPY) {
+
 
                 if (FileStorageUtils.getUsableSpace(mAccount.name) < originalFile.length()) {
                     result = new RemoteOperationResult(ResultCode.LOCAL_STORAGE_FULL);
@@ -232,11 +257,13 @@ public class UploadFileOperation extends RemoteOperation {
                     File temporalParent = temporalFile.getParentFile();
                     temporalParent.mkdirs();
                     if (!temporalParent.isDirectory()) {
-                        throw new IOException("Unexpected error: parent directory could not be created");
+                        throw new IOException(
+                                "Unexpected error: parent directory could not be created");
                     }
                     temporalFile.createNewFile();
                     if (!temporalFile.isFile()) {
-                        throw new IOException("Unexpected error: target file could not be created");
+                        throw new IOException(
+                                "Unexpected error: target file could not be created");
                     }
 
                     InputStream in = null;
@@ -306,6 +333,10 @@ public class UploadFileOperation extends RemoteOperation {
                 }
             }
             localCopyPassed = (result == null);
+            
+            if (mCancellationRequested.get()) {
+                throw new OperationCancelledException();
+            }
 
             /// perform the upload
             if ( mChunked &&
@@ -321,40 +352,38 @@ public class UploadFileOperation extends RemoteOperation {
             while (listener.hasNext()) {
                 mUploadOperation.addDatatransferProgressListener(listener.next());
             }
-            if (!mCancellationRequested.get()) {
-                result = mUploadOperation.execute(client);
+            result = mUploadOperation.execute(client);
 
-                /// move local temporal file or original file to its corresponding
-                // location in the ownCloud local folder
-                if (result.isSuccess()) {
-                    if (mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_FORGET) {
-                        mFile.setStoragePath(null);
+            /// move local temporal file or original file to its corresponding
+            // location in the ownCloud local folder
+            if (result.isSuccess()) {
+                if (mLocalBehaviour == FileUploadService.LocalBehaviour.LOCAL_BEHAVIOUR_FORGET) {
+                    mFile.setStoragePath(null);
 
-                    } else {
-                        mFile.setStoragePath(expectedPath);
-                        File fileToMove = null;
-                        if (temporalFile != null) { // FileUploader.LOCAL_BEHAVIOUR_COPY
-                            // ; see where temporalFile was
-                            // set
-                            fileToMove = temporalFile;
-                        } else { // FileUploader.LOCAL_BEHAVIOUR_MOVE
-                            fileToMove = originalFile;
-                        }
-                        if (!expectedFile.equals(fileToMove)) {
-                            File expectedFolder = expectedFile.getParentFile();
-                            expectedFolder.mkdirs();
-                            if (!expectedFolder.isDirectory() || !fileToMove.renameTo(expectedFile)) {
-                                mFile.setStoragePath(null); // forget the local file
-                                // by now, treat this as a success; the file was
-                                // uploaded; the user won't like that the local file
-                                // is not linked, but this should be a very rare
-                                // fail;
-                                // the best option could be show a warning message
-                                // (but not a fail)
-                                // result = new
-                                // RemoteOperationResult(ResultCode.LOCAL_STORAGE_NOT_MOVED);
-                                // return result;
-                            }
+                } else {
+                    mFile.setStoragePath(expectedPath);
+                    File fileToMove = null;
+                    if (temporalFile != null) { // FileUploader.LOCAL_BEHAVIOUR_COPY
+                                                // ; see where temporalFile was
+                                                // set
+                        fileToMove = temporalFile;
+                    } else { // FileUploader.LOCAL_BEHAVIOUR_MOVE
+                        fileToMove = originalFile;
+                    }
+                    if (!expectedFile.equals(fileToMove)) {
+                        File expectedFolder = expectedFile.getParentFile();
+                        expectedFolder.mkdirs();
+                        if (!expectedFolder.isDirectory() || !fileToMove.renameTo(expectedFile)) {
+                            mFile.setStoragePath(null); // forget the local file
+                            // by now, treat this as a success; the file was
+                            // uploaded; the user won't like that the local file
+                            // is not linked, but this should be a very rare
+                            // fail;
+                            // the best option could be show a warning message
+                            // (but not a fail)
+                            // result = new
+                            // RemoteOperationResult(ResultCode.LOCAL_STORAGE_NOT_MOVED);
+                            // return result;
                         }
                     }
                 }
@@ -369,6 +398,7 @@ public class UploadFileOperation extends RemoteOperation {
             }
 
         } finally {
+            mUploadStarted.set(false);
             if (temporalFile != null && !originalFile.equals(temporalFile)) {
                 temporalFile.delete();
             }
@@ -385,8 +415,14 @@ public class UploadFileOperation extends RemoteOperation {
                                 FileStorageUtils.getSavePath(mAccount.name)
                                 + ")";
                     }
-                    Log_OC.e(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath +
-                            ": " + result.getLogMessage() + complement, result.getException());
+                    if(result.isCancelled()){
+                        Log_OC.w(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath +
+                                ": " + result.getLogMessage());
+                    } else {
+                        Log_OC.e(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath +
+                                ": " + result.getLogMessage() + complement, result.getException());
+                    }                    
+
                 } else {
                     Log_OC.e(TAG, "Upload of " + mOriginalStoragePath + " to " + mRemotePath +
                             ": " + result.getLogMessage());
@@ -397,6 +433,11 @@ public class UploadFileOperation extends RemoteOperation {
         return result;
     }
 
+    /**
+     * Create a new OCFile mFile with new remote path. This is required if forceOverwrite==false.
+     * New file is stored as mFile, original as mOldFile. 
+     * @param newRemotePath new remote path
+     */
     private void createNewOCFile(String newRemotePath) {
         // a new OCFile instance must be created for a new remote path
         OCFile newFile = new OCFile(newRemotePath);
@@ -463,10 +504,30 @@ public class UploadFileOperation extends RemoteOperation {
         return result.isSuccess();
     }
     
+    /**
+     * Allows to cancel the actual upload operation. If actual upload operating
+     * is in progress it is cancelled, if upload preparation is being performed
+     * upload will not take place.
+     */
     public void cancel() {
-        mCancellationRequested = new AtomicBoolean(true);
-        if (mUploadOperation != null) {
+        if (mUploadOperation == null) {
+            if (mUploadStarted.get()) {
+                Log_OC.d(TAG, "Cancelling upload during upload preparations.");
+                mCancellationRequested.set(true);
+            } else {
+                Log_OC.e(TAG, "No upload in progress. This should not happen.");
+            }
+        } else {
+            Log_OC.d(TAG, "Cancelling upload during actual upload operation.");
             mUploadOperation.cancel();
         }
+    }
+    
+    /**
+     * As soon as this method return true, upload can be cancel via cancel().
+     */
+    public boolean isUploadInProgress() {
+        return mUploadStarted.get();
+
     }
 }
