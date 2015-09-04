@@ -39,7 +39,6 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 
@@ -137,7 +136,6 @@ public class MoveRemoteFileOperation extends RemoteOperation {
         	} else if (status == 400) {
 				result = new RemoteOperationResult(move.succeeded(),
 						move.getResponseBodyAsString(), status);
-				Log_OC.d(TAG, move.getResponseBodyAsString());
 			} else {
 					result = new RemoteOperationResult(
 							isSuccess(status), 	// move.succeeded()? trustful?
