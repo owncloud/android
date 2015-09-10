@@ -365,4 +365,8 @@
     <string name="file_list__footer__files_and_folder">%1$d files, 1 folder</string>
     <string name="file_list__footer__files_and_folders">%1$d files, %2$d folders</string>
 
+    <string name="appwidget_title_content_description">widget</string>
+    <string name="appwidget_start_sync">Start synchronization for account %1$s</string>
+
+
 </resources>
