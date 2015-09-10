@@ -4,6 +4,7 @@
  *   @author Bartek Przybylski
  *   @author Tobias Kaminsky
  *   @author David A. Velasco
+ *   @author masensio
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2015 ownCloud Inc.
  *
@@ -268,15 +269,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     }
 
                     // share with me icon
-                    if (!file.isFolder()) {
-                        ImageView sharedWithMeIconV = (ImageView)
-                                view.findViewById(R.id.sharedWithMeIcon);
-                        sharedWithMeIconV.bringToFront();
-                        if (checkIfFileIsSharedWithMe(file)) {
-                            sharedWithMeIconV.setVisibility(View.VISIBLE);
-                        } else {
-                            sharedWithMeIconV.setVisibility(View.GONE);
-                        }
+                    ImageView sharedWithMeIconV = (ImageView)
+                            view.findViewById(R.id.sharedWithMeIcon);
+                    sharedWithMeIconV.bringToFront();
+                    if (checkIfFileIsSharedWithMe(file) &&
+                            (!file.isFolder() || !mGridMode)) {
+                        sharedWithMeIconV.setVisibility(View.VISIBLE);
+                    } else {
+                        sharedWithMeIconV.setVisibility(View.GONE);
                     }
 
                     break;
@@ -286,7 +286,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             
             // this if-else is needed even though favorite icon is visible by default
             // because android reuses views in listview
-            if (!file.keepInSync()) {
+            if (!file.isFavorite()) {
                 view.findViewById(R.id.favoriteIcon).setVisibility(View.GONE);
             } else {
                 view.findViewById(R.id.favoriteIcon).setVisibility(View.VISIBLE);
@@ -321,6 +321,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                             task.execute(file);
                         }
                     }
+
+                    if (file.getMimetype().equalsIgnoreCase("image/png")) {
+                        fileIcon.setBackgroundColor(mContext.getResources()
+                                .getColor(R.color.background_color));
+                    }
+
+
                 } else {
                     fileIcon.setImageResource(DisplayUtils.getFileTypeIconId(file.getMimetype(),
                             file.getFileName()));
@@ -328,6 +335,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             } else {
                 // Folder
+
                 if (checkIfFileIsSharedWithMe(file)) {
                     fileIcon.setImageResource(R.drawable.shared_with_me_folder);
                 } else if (file.isShareByLink()) {

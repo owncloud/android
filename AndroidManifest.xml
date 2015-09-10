@@ -22,10 +22,6 @@
     android:versionCode="10700200"
     android:versionName="1.7.2" >
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
-
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
@@ -37,50 +33,43 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
-    </uses-permission>
-
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="22" />
 
     <application
         android:name=".MainApp"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.ownCloud" >
+        android:theme="@style/Theme.ownCloud">
         <activity
             android:name=".ui.activity.FileDisplayActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.UploadFilesActivity" >
-        </activity>
-        <activity android:name=".ui.activity.Uploader" >
+
+        <activity android:name=".ui.activity.UploadFilesActivity"></activity>
+        <activity android:name=".ui.activity.Uploader">
             <intent-filter>
-                <action android:name="android.intent.action.SEND" >
-                </action>
+                <action android:name="android.intent.action.SEND"></action>
 
-                <category android:name="android.intent.category.DEFAULT" >
-                </category>
+                <category android:name="android.intent.category.DEFAULT"></category>
 
-                <data android:mimeType="*/*" >
-                </data>
+                <data android:mimeType="*/*"></data>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE" >
-                </action>
+                <action android:name="android.intent.action.SEND_MULTIPLE"></action>
 
-                <category android:name="android.intent.category.DEFAULT" >
-                </category>
-
+                <category android:name="android.intent.category.DEFAULT"></category>
                 <data android:mimeType="*/*" >
                 </data>
             </intent-filter>
@@ -89,17 +78,21 @@
             android:name=".ui.activity.Preferences"
             android:theme="@style/Theme.ownCloud" >
         </activity>
-        <activity android:name=".ui.preview.PreviewImageActivity" />
-        <activity
+
+        <activity	
+            android:name=".ui.preview.PreviewImageActivity"
+            android:theme="@style/Theme.ownCloud.Overlay"
+            />
+		        
+        <activity	
             android:name=".ui.preview.PreviewVideoActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ownCloud.Fullscreen" >
-        </activity>
+            android:theme="@style/Theme.ownCloud.Fullscreen"></activity>
 
         <service
             android:name=".authentication.AccountAuthenticatorService"
-            android:exported="true" >
-            <intent-filter android:priority="100" >
+            android:exported="true">
+            <intent-filter android:priority="100">
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
 
@@ -109,7 +102,7 @@
         </service>
         <service
             android:name=".syncadapter.FileSyncService"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -125,14 +118,13 @@
             android:enabled="true"
             android:exported="false"
             android:label="@string/sync_string_files"
-            android:syncable="true" >
-        </provider>
+            android:syncable="true"></provider>
 
         <activity
             android:name=".authentication.AuthenticatorActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.ownCloud.noActionBar" >
+            android:theme="@style/Theme.ownCloud.noActionBar"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -181,6 +173,7 @@
         <receiver android:name=".files.BootupBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
             </intent-filter>
         </receiver>
 
@@ -232,6 +225,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/shortcuts_widget_info" />
         </receiver>
+
+        <service android:name=".services.observer.FileObserverService"/>
+
     </application>
 
 </manifest>
