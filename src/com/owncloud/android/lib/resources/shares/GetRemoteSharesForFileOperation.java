@@ -65,12 +65,14 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 	 * Constructor
 	 * 
 	 * @param remoteFilePath	Path to file or folder
-	 * @param reshares			If set to false (default), only shares from the current user are returned
+	 * @param reshares			If set to false (default), only shares from the current user are
+	 *                          returned
 	 * 							If set to true, all shares from the given file are returned
 	 * @param subfiles			If set to false (default), lists only the folder being shared
 	 * 							If set to true, all shared files within the folder are returned.
 	 */
-	public GetRemoteSharesForFileOperation(String remoteFilePath, boolean reshares, boolean subfiles) {
+	public GetRemoteSharesForFileOperation(String remoteFilePath, boolean reshares,
+										   boolean subfiles) {
 		mRemoteFilePath = remoteFilePath;
 		mReshares = reshares;
 		mSubfiles = subfiles;
@@ -113,9 +115,11 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 					result = new RemoteOperationResult(ResultCode.OK);
 					ArrayList<Object> sharesObjects = new ArrayList<Object>();
 					for (OCShare share: mShares) {
-						// Build the link 
-						if (share.getToken().length() > 0) {
-							share.setShareLink(client.getBaseUri() + ShareUtils.SHARING_LINK_TOKEN + share.getToken());
+						// Build the link
+						if (( share.getShareLink() == null) &&
+								(share.getToken().length() > 0)) {
+							share.setShareLink(client.getBaseUri() + ShareUtils.SHARING_LINK_TOKEN +
+									share.getToken());
 						}
 						sharesObjects.add(share);
 					}
