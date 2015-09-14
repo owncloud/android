@@ -24,6 +24,8 @@
 
 package com.owncloud.android.lib.resources.shares;
 
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+
 /**
  * Contains Constants for Share Operation
  * 
@@ -36,7 +38,18 @@ public class ShareUtils {
 	// OCS Route
 	public static final String SHARING_API_PATH ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
 
-    // String to build the link with the token of a share: server address + "/public.php?service=files&t=" + token
-    public static final String SHARING_LINK_TOKEN = "/public.php?service=files&t=";
+    // String to build the link with the token of a share:
+    // server address + "/public.php?service=files&t=" + token
+    public static final String SHARING_LINK_TOKEN_BEFORE_VERSION_8 = "/public.php?service=files&t=";
+    public static final String SHARING_LINK_TOKEN_AFTER_VERSION_8= "/index.php/s/";
+
+    public static String getSharingToken(OwnCloudVersion version){
+        if (version!= null && version.isAfter8Version()){
+            return SHARING_LINK_TOKEN_AFTER_VERSION_8;
+        } else {
+            return SHARING_LINK_TOKEN_BEFORE_VERSION_8;
+        }
+
+    }
     
 }

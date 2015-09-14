@@ -37,6 +37,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 /**
  * Provide a list shares for a specific file.  
@@ -65,12 +66,14 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 	 * Constructor
 	 * 
 	 * @param remoteFilePath	Path to file or folder
-	 * @param reshares			If set to false (default), only shares from the current user are returned
+	 * @param reshares			If set to false (default), only shares from the current user are
+	 *                          returned
 	 * 							If set to true, all shares from the given file are returned
 	 * @param subfiles			If set to false (default), lists only the folder being shared
 	 * 							If set to true, all shared files within the folder are returned.
 	 */
-	public GetRemoteSharesForFileOperation(String remoteFilePath, boolean reshares, boolean subfiles) {
+	public GetRemoteSharesForFileOperation(String remoteFilePath, boolean reshares,
+										   boolean subfiles) {
 		mRemoteFilePath = remoteFilePath;
 		mReshares = reshares;
 		mSubfiles = subfiles;
@@ -88,11 +91,11 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
 			// Add Parameters to Get Method
-			get.setQueryString(new NameValuePair[] { 
-				    new NameValuePair(PARAM_PATH, mRemoteFilePath),
-				    new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)),
-				    new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
-				}); 
+			get.setQueryString(new NameValuePair[]{
+					new NameValuePair(PARAM_PATH, mRemoteFilePath),
+					new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)),
+					new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
+			});
 
 			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
             
@@ -113,9 +116,13 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 					result = new RemoteOperationResult(ResultCode.OK);
 					ArrayList<Object> sharesObjects = new ArrayList<Object>();
 					for (OCShare share: mShares) {
-						// Build the link 
-						if (share.getToken().length() > 0) {
-							share.setShareLink(client.getBaseUri() + ShareUtils.SHARING_LINK_TOKEN + share.getToken());
+						// Build the link
+						if (( share.getShareLink() == null) &&
+								(share.getToken().length() > 0)) {
+							String linkToken = ShareUtils.getSharingToken(
+									client.getOwnCloudVersion());
+							share.setShareLink(client.getBaseUri() + linkToken +
+									share.getToken());
 						}
 						sharesObjects.add(share);
 					}
