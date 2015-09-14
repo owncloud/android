@@ -126,7 +126,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public ArrayList<OCShare> parseXMLResponse(InputStream is) throws XmlPullParserException, IOException {
+	public ArrayList<OCShare> parseXMLResponse(InputStream is) throws XmlPullParserException,
+			IOException {
 
 		try {
 			// XMLPullParser
@@ -151,7 +152,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ArrayList<OCShare> readOCS (XmlPullParser parser) throws XmlPullParserException, IOException {
+	private ArrayList<OCShare> readOCS (XmlPullParser parser) throws XmlPullParserException,
+			IOException {
 		ArrayList<OCShare> shares = new ArrayList<OCShare>();
 		parser.require(XmlPullParser.START_TAG,  ns , NODE_OCS);
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -209,7 +211,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ArrayList<OCShare> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private ArrayList<OCShare> readData(XmlPullParser parser) throws XmlPullParserException,
+			IOException {
 		ArrayList<OCShare> shares = new ArrayList<OCShare>();
 		OCShare share = null;
 
@@ -259,7 +262,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void readElement(XmlPullParser parser, ArrayList<OCShare> shares) throws XmlPullParserException, IOException {
+	private void readElement(XmlPullParser parser, ArrayList<OCShare> shares)
+			throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, NODE_ELEMENT);
 		
 		OCShare share = new OCShare();
@@ -273,7 +277,8 @@ public class ShareXMLParser {
 			String name = parser.getName();
 
 			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
-				// patch to work around servers responding with extra <element> surrounding all the shares on the same file before
+				// patch to work around servers responding with extra <element> surrounding all
+				// the shares on the same file before
 				// https://github.com/owncloud/core/issues/6992 was fixed
 				readElement(parser, shares);
 
@@ -327,6 +332,11 @@ public class ShareXMLParser {
 			} else if (name.equalsIgnoreCase(NODE_SHARE_WITH_DISPLAY_NAME)) {
 				share.setSharedWithDisplayName(readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME));
 
+			} else if (name.equalsIgnoreCase(NODE_URL)) {
+				share.setShareType(ShareType.PUBLIC_LINK);
+				String value = readNode(parser, NODE_URL);
+				share.setShareLink(value);
+
 			} else {
 				skip(parser);
 			} 
@@ -344,7 +354,8 @@ public class ShareXMLParser {
 	}
 
 	private void fixPathForFolder(OCShare share) {
-		if (share.isFolder() && share.getPath() != null && share.getPath().length() > 0 && !share.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {
+		if (share.isFolder() && share.getPath() != null && share.getPath().length() > 0 &&
+				!share.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {
 			share.setPath(share.getPath() + FileUtils.PATH_SEPARATOR);
 		}
 	}
@@ -357,7 +368,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private String readNode (XmlPullParser parser, String node) throws XmlPullParserException, IOException{
+	private String readNode (XmlPullParser parser, String node) throws XmlPullParserException,
+			IOException{
 		parser.require(XmlPullParser.START_TAG, ns, node);
 		String value = readText(parser);
 		//Log_OC.d(TAG, "node= " + node + ", value= " + value);

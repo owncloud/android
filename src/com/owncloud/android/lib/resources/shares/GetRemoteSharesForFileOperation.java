@@ -37,6 +37,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 /**
  * Provide a list shares for a specific file.  
@@ -90,11 +91,11 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
 			// Add Parameters to Get Method
-			get.setQueryString(new NameValuePair[] { 
-				    new NameValuePair(PARAM_PATH, mRemoteFilePath),
-				    new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)),
-				    new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
-				}); 
+			get.setQueryString(new NameValuePair[]{
+					new NameValuePair(PARAM_PATH, mRemoteFilePath),
+					new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)),
+					new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
+			});
 
 			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
             
@@ -118,7 +119,9 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 						// Build the link
 						if (( share.getShareLink() == null) &&
 								(share.getToken().length() > 0)) {
-							share.setShareLink(client.getBaseUri() + ShareUtils.SHARING_LINK_TOKEN +
+							String linkToken = ShareUtils.getSharingToken(
+									client.getOwnCloudVersion());
+							share.setShareLink(client.getBaseUri() + linkToken +
 									share.getToken());
 						}
 						sharesObjects.add(share);
