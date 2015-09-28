@@ -129,7 +129,7 @@ public class WebdavEntry {
             prop = propSet.get(DavPropertyName.GETETAG);
             if (prop != null) {
                 mEtag = (String) prop.getValue();
-                mEtag = mEtag.substring(1, mEtag.length()-1);
+                mEtag = WebdavUtils.parseEtag(mEtag);
             }
 
             // {DAV:}quota-used-bytes
