@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.http.HttpStatus;
@@ -60,12 +59,14 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	private static final String TAG = UploadRemoteFileOperation.class.getSimpleName();
 
 	protected static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
+	protected static final String IF_MATCH_HEADER = "If-Match";
 
 	protected String mLocalPath;
 	protected String mRemotePath;
 	protected String mMimeType;
 	protected PutMethod mPutMethod = null;
 	protected boolean mForbiddenCharsInServer = false;
+	protected String mRequiredEtag = null;
 	
 	protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
 	protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
@@ -75,7 +76,12 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType) {
 		mLocalPath = localPath;
 		mRemotePath = remotePath;
-		mMimeType = mimeType;	
+		mMimeType = mimeType;
+	}
+
+	public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType, String requiredEtag) {
+		this(localPath, remotePath, mimeType);
+		mRequiredEtag = requiredEtag;
 	}
 
 	@Override
@@ -125,6 +131,9 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			synchronized (mDataTransferListeners) {
 				((ProgressiveDataTransferer)mEntity)
                         .addDatatransferProgressListeners(mDataTransferListeners);
+			}
+			if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
+				mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
 			}
 			mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(f.length()));
 			mPutMethod.setRequestEntity(mEntity);
