@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -58,7 +59,8 @@ public class FileMenuFilter {
      *                          {@link FileUploader} and {@link FileDownloader} services
      * @param context           Android {@link Context}, needed to access build setup resources.
      */
-    public FileMenuFilter(OCFile targetFile, Account account, ComponentsGetter cg, Context context) {
+    public FileMenuFilter(OCFile targetFile, Account account, ComponentsGetter cg,
+                          Context context) {
         mFile = targetFile;
         mAccount = account;
         mComponentsGetter = cg;
@@ -108,13 +110,17 @@ public class FileMenuFilter {
     private void filter(List<Integer> toShow, List <Integer> toHide) {
         boolean downloading = false;
         boolean uploading = false;
+        boolean shareWithUsersEnable = false;
         if (mComponentsGetter != null && mFile != null && mAccount != null) {
             FileDownloaderBinder downloaderBinder = mComponentsGetter.getFileDownloaderBinder();
-            downloading = (downloaderBinder != null && downloaderBinder.isDownloading(mAccount, mFile));
+            downloading = (downloaderBinder != null &&
+                    downloaderBinder.isDownloading(mAccount, mFile));
             OperationsServiceBinder opsBinder = mComponentsGetter.getOperationsServiceBinder();
-            downloading |= (opsBinder != null && opsBinder.isSynchronizing(mAccount, mFile.getRemotePath()));
+            downloading |= (opsBinder != null &&
+                    opsBinder.isSynchronizing(mAccount, mFile.getRemotePath()));
             FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
             uploading = (uploaderBinder != null && uploaderBinder.isUploading(mAccount, mFile));
+            shareWithUsersEnable = AccountUtils.hasSearchUsersSupport(mAccount);
         }
 
         /// decision is taken for each possible action on a file in the menu
@@ -201,15 +207,14 @@ public class FileMenuFilter {
         }
 
         // SHARE FILE, with Users
-        if (!shareAllowed || mFile == null) {
+        if (!shareAllowed || !shareWithUsersEnable || mFile == null) {
             toHide.add(R.id.action_share_with_users);
         } else {
             toShow.add(R.id.action_share_with_users);
         }
 
         // UNSHARE FILE, with Users
-        // TODO add check on SHARE available on server side?
-        if ( !shareAllowed || (mFile == null || !mFile.isShareByLink())) {
+        if ( !shareAllowed || !shareWithUsersEnable || (mFile == null || !mFile.isShareByLink())) {
             toHide.add(R.id.action_unshare_with_users);
         } else {
             toShow.add(R.id.action_unshare_with_users);
