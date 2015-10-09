@@ -40,8 +40,10 @@ import java.util.ArrayList;
 /**
  * Created by masensio on 08/10/2015.
  *
- * Retrieves a list of users from the ownCloud server. Authentication is done by sending a Basic HTTP Authorization header.
- * Syntax: ocs/v1.php/cloud/users
+ * Retrieves a list of users or groups from the ownCloud server.
+ * Authentication is done by sending a Basic HTTP Authorization header.
+ * Syntax: ocs/v1.php/cloud/users (Users)
+ *         ocs/v1.php/cloud/groups (Groups)
  *    HTTP method: GET
  *    url arguments: search - string, optional search string
  *    url arguments: limit - int, optional limit value
@@ -50,12 +52,13 @@ import java.util.ArrayList;
  * Status codes:
  *    100 - successful
  */
-public class GetRemoteUsersOperation extends RemoteOperation{
+public class GetRemoteUsersOrGroupsOperation extends RemoteOperation{
 
-    private static final String TAG = GetRemoteUserNameOperation.class.getSimpleName();
+    private static final String TAG = GetRemoteUsersOrGroupsOperation.class.getSimpleName();
 
-    // OCS Route
-    private static final String OCS_ROUTE ="/ocs/v1.php/cloud/users?format=json";
+    // OCS Routes
+    private static final String OCS_ROUTE_USERS ="/ocs/v1.php/cloud/users?format=json";
+    private static final String OCS_ROUTE_GROUPS ="/ocs/v1.php/cloud/groups?format=json";
 
     // Arguments
     private static final String PARAM_SEARCH = "search";
@@ -66,12 +69,14 @@ public class GetRemoteUsersOperation extends RemoteOperation{
     private static final String NODE_OCS = "ocs";
     private static final String NODE_DATA = "data";
     private static final String NODE_USERS = "users";
+    private static final String NODE_GROUPS = "groups";
 
-    private ArrayList<String> mUsers;  // List of users
+    private ArrayList<String> mNames;  // List of users or groups
 
     private String mSearchString;
     private int mLimit;
     private int mOffset;
+    private boolean mGetGroup = false;
 
     /**
      * Constructor
@@ -79,11 +84,14 @@ public class GetRemoteUsersOperation extends RemoteOperation{
      * @param searchString  	string for searching users, optional
      * @param limit 			limit, optional
      * @param offset			offset, optional
+     * @param getGroups         true: for searching groups, false: for searching users
      */
-    public GetRemoteUsersOperation(String searchString, int limit, int offset) {
+    public GetRemoteUsersOrGroupsOperation(String searchString, int limit, int offset,
+                                           boolean getGroups) {
         mSearchString = searchString;
         mLimit = limit;
         mOffset = offset;
+        mGetGroup = getGroups;
     }
 
     @Override
@@ -92,9 +100,16 @@ public class GetRemoteUsersOperation extends RemoteOperation{
         int status = -1;
         GetMethod get = null;
 
+        String ocs_route = OCS_ROUTE_USERS;
+        String nodeUsersOrGroups = NODE_USERS;
+        if(mGetGroup){
+            ocs_route = OCS_ROUTE_GROUPS;
+            nodeUsersOrGroups = NODE_GROUPS;
+        }
+
         try{
             // Get Method
-            get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
+            get = new GetMethod(client.getBaseUri() + ocs_route);
 
             // Add Parameters to Get Method
             get.setQueryString(new NameValuePair[]{
@@ -116,27 +131,27 @@ public class GetRemoteUsersOperation extends RemoteOperation{
                 JSONObject respJSON = new JSONObject(response);
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
                 JSONObject respData = respOCS.getJSONObject(NODE_DATA);
-                JSONArray  respUsers = respData.getJSONArray(NODE_USERS);
-                mUsers = new ArrayList<String>();
+                JSONArray  respUsersOrGroups = respData.getJSONArray(nodeUsersOrGroups);
+                mNames = new ArrayList<String>();
                 ArrayList<Object> data = new ArrayList<Object>(); // For result data
-                for(int i=0; i<= respUsers.length(); i++){
-                    JSONObject jsonUser = respUsers.getJSONObject(i);
-                    String user = jsonUser.toString();
-                    mUsers.add(user);
-                    data.add(user);
-                    Log_OC.d(TAG, "*** USER : " + user);
+                for(int i=0; i<= respUsersOrGroups.length(); i++){
+                    JSONObject jsonUser = respUsersOrGroups.getJSONObject(i);
+                    String name = jsonUser.toString();
+                    mNames.add(name);
+                    data.add(name);
+                    Log_OC.d(TAG, "*** "+ nodeUsersOrGroups + " : " + name);
                 }
 
                 // Result
                 result = new RemoteOperationResult(true, status, get.getResponseHeaders());
                 result.setData(data);
 
-                Log_OC.d(TAG, "*** Get Users completed " );
+                Log_OC.d(TAG, "*** Get Users or groups completed " );
 
             } else {
                 result = new RemoteOperationResult(false, status, get.getResponseHeaders());
                 String response = get.getResponseBodyAsString();
-                Log_OC.e(TAG, "Failed response while getting users from the server ");
+                Log_OC.e(TAG, "Failed response while getting users/groups from the server ");
                 if (response != null) {
                     Log_OC.e(TAG, "*** status code: " + status + "; response message: " + response);
                 } else {
@@ -146,7 +161,7 @@ public class GetRemoteUsersOperation extends RemoteOperation{
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log_OC.e(TAG, "Exception while getting users", e);
+            Log_OC.e(TAG, "Exception while getting users/groups", e);
 
         } finally {
             if (get != null) {
