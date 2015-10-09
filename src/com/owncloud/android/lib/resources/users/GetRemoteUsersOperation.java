@@ -64,10 +64,6 @@ public class GetRemoteUsersOperation extends RemoteOperation{
 
     // JSON Node names
     private static final String NODE_OCS = "ocs";
-    private static final String NODE_META = "meta";
-    private static final String NODE_STATUS = "status";
-    private static final String NODE_STATUSCODE = "statuscode";
-    private static final String NODE_MESSAGE = "message";
     private static final String NODE_DATA = "data";
     private static final String NODE_USERS = "users";
 
