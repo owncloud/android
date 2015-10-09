@@ -35,6 +35,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.CheckBoxPreference;
@@ -116,6 +117,8 @@ public class Preferences extends PreferenceActivity
     protected FileDownloader.FileDownloaderBinder mDownloaderBinder = null;
     protected FileUploader.FileUploaderBinder mUploaderBinder = null;
     private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
+    private Preference mPrefStoragePath;
+    private String mStoragePath;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -363,6 +366,23 @@ public class Preferences extends PreferenceActivity
             }
         }
 
+        mPrefStoragePath =  findPreference("storage_path");
+        if (mPrefStoragePath != null){
+
+            mPrefStoragePath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (!mUploadPath.endsWith(OCFile.PATH_SEPARATOR)) {
+                        mUploadPath += OCFile.PATH_SEPARATOR;
+                    }
+                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
+                    intent.putExtra(UploadPathActivity.KEY_INSTANT_UPLOAD_PATH, mUploadPath);
+                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_PATH);
+                    return true;
+                }
+            });
+        }
+
         mPrefInstantUploadPath =  findPreference("instant_upload_path");
         if (mPrefInstantUploadPath != null){
 
@@ -436,6 +456,7 @@ public class Preferences extends PreferenceActivity
        }
 
        loadInstantUploadPath();
+       loadStoragePath();
        loadInstantUploadVideoPath();
 
         /* ComponentsGetter */
@@ -785,6 +806,17 @@ public class Preferences extends PreferenceActivity
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mUploadPath = appPrefs.getString("instant_upload_path", getString(R.string.instant_upload_path));
         mPrefInstantUploadPath.setSummary(mUploadPath);
+    }
+
+    /**
+     * Load storage path set on preferences
+     */
+    private void loadStoragePath() {
+        SharedPreferences appPrefs =
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mStoragePath = appPrefs.getString("storage_path", Environment.getExternalStorageDirectory()
+                                                         .getAbsolutePath());
+        mPrefStoragePath.setSummary(mStoragePath);
     }
 
     /**
