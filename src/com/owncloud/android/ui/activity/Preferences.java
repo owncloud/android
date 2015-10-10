@@ -369,18 +369,27 @@ public class Preferences extends PreferenceActivity
         mPrefStoragePath =  findPreference("storage_path");
         if (mPrefStoragePath != null){
 
-            mPrefStoragePath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (!mUploadPath.endsWith(OCFile.PATH_SEPARATOR)) {
-                        mUploadPath += OCFile.PATH_SEPARATOR;
+                mPrefStoragePath.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        MainApp.setStoragePath((String) newValue);
+                        return true;
                     }
-                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
-                    intent.putExtra(UploadPathActivity.KEY_INSTANT_UPLOAD_PATH, mUploadPath);
-                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_PATH);
-                    return true;
-                }
-            });
+                });
+
+//            mPrefStoragePath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+//
+////                    if (!mUploadPath.endsWith(OCFile.PATH_SEPARATOR)) {
+////                        mUploadPath += OCFile.PATH_SEPARATOR;
+////                    }
+////                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
+////                    intent.putExtra(UploadPathActivity.KEY_INSTANT_UPLOAD_PATH, mUploadPath);
+////                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_PATH);
+////                    return true;
+//                }
+//            });
         }
 
         mPrefInstantUploadPath =  findPreference("instant_upload_path");
@@ -834,10 +843,7 @@ public class Preferences extends PreferenceActivity
      * Load upload video path set on preferences
      */
     private void loadInstantUploadVideoPath() {
-        SharedPreferences appPrefs =
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mUploadVideoPath = appPrefs.getString("instant_video_upload_path", getString(R.string.instant_upload_path));
-        mPrefInstantVideoUploadPath.setSummary(mUploadVideoPath);
+        mPrefInstantVideoUploadPath.setSummary(MainApp.getStoragePath());
     }
 
     /**
