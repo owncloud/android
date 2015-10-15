@@ -348,9 +348,7 @@ public class ShareXMLParser {
 	}
 
 	private boolean isValidShare(OCShare share) {
-		return ((share.getIdRemoteShared() > -1) &&
-				(share.getShareType() == ShareType.PUBLIC_LINK)	// at this moment we only care about public shares
-				);
+		return (share.getIdRemoteShared() > -1);
 	}
 
 	private void fixPathForFolder(OCShare share) {
