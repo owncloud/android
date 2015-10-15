@@ -39,7 +39,6 @@ import android.content.Intent;
 import android.util.Log;
 //import android.support.v4.content.LocalBroadcastManager;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 
@@ -390,7 +389,7 @@ public class RefreshFolderOperation extends RemoteOperation {
                     Log.d(TAG, "Image " + remoteFile.getFileName() + " updated on the server");
                 }
                 remoteFile.setPublicLink(localFile.getPublicLink());
-                remoteFile.setShareByLink(localFile.isShareByLink());
+                remoteFile.setShareViaLink(localFile.isSharedViaLink());
             } else {
                 // remote eTag will not be updated unless contents are synchronized 
                 //  (Synchronize[File|Folder]Operation with remoteFile as parameter)
@@ -549,14 +548,20 @@ public class RefreshFolderOperation extends RemoteOperation {
             }
         }
     }
-    
-    
+
+    /**
+     * Syncs the Share resources for the files contained in the folder refreshed (children, not deeper descendants).
+     *
+     * @param client    Handler of a session with an OC server.
+     * @return          The result of the remote operation retrieving the Share resources in the folder refreshed by
+     *                  the operation.
+     */
     private RemoteOperationResult refreshSharesForFolder(OwnCloudClient client) {
         RemoteOperationResult result = null;
         
         // remote request 
         GetRemoteSharesForFileOperation operation = 
-                new GetRemoteSharesForFileOperation(mLocalFolder.getRemotePath(), false, true);
+                new GetRemoteSharesForFileOperation(mLocalFolder.getRemotePath(), true, true);
         result = operation.execute(client);
         
         if (result.isSuccess()) {

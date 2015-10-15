@@ -35,7 +35,6 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 
@@ -200,7 +199,7 @@ public class FileMenuFilter {
 
         // UNSHARE FILE
         // TODO add check on SHARE available on server side?
-        if ( !shareAllowed || (mFile == null || !mFile.isShareByLink())) {
+        if ( !shareAllowed || (mFile == null || !mFile.isSharedViaLink())) {
             toHide.add(R.id.action_unshare_file);
         } else {
             toShow.add(R.id.action_unshare_file);
@@ -214,7 +213,7 @@ public class FileMenuFilter {
         }
 
         // UNSHARE FILE, with Users
-        if ( !shareAllowed || !shareWithUsersEnable || (mFile == null || !mFile.isShareWithUser())) {
+        if ( !shareAllowed || !shareWithUsersEnable || (mFile == null || !mFile.isSharedViaUsers())) {
             toHide.add(R.id.action_unshare_with_users);
         } else {
             toShow.add(R.id.action_unshare_with_users);

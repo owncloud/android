@@ -63,7 +63,6 @@ import com.owncloud.android.utils.MimetypeIconUtil;
  * instance.
  */
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
-    private final static String PERMISSION_SHARED_WITH_ME = "S";
 
     private Context mContext;
     private OCFile mFile = null;
@@ -235,12 +234,20 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 case GRID_IMAGE:
                     // sharedIcon
                     ImageView sharedIconV = (ImageView) view.findViewById(R.id.sharedIcon);
-                    if (file.isShareByLink()) {
+                    if (file.isSharedViaLink()) {
+                        sharedIconV.setImageResource(R.drawable.shared_via_link);
+                        sharedIconV.setVisibility(View.VISIBLE);
+                        sharedIconV.bringToFront();
+                    } else if (file.isSharedViaUsers() || file.isSharedWithMe() ) {
+                        sharedIconV.setImageResource(R.drawable.shared_via_users);
                         sharedIconV.setVisibility(View.VISIBLE);
                         sharedIconV.bringToFront();
                     } else {
                         sharedIconV.setVisibility(View.GONE);
                     }
+
+                    /*ImageView sharedWithMeIcon = (ImageView) view.findViewById(R.id.sharedWithMeIcon);
+                    sharedWithMeIcon.bringToFront();*/
 
                     // local state
                     ImageView localStateView = (ImageView) view.findViewById(R.id.localFileIndicator);
@@ -267,17 +274,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         localStateView.setVisibility(View.VISIBLE);
                     } else {
                         localStateView.setVisibility(View.INVISIBLE);
-                    }
-
-                    // share with me icon
-                    ImageView sharedWithMeIconV = (ImageView)
-                            view.findViewById(R.id.sharedWithMeIcon);
-                    sharedWithMeIconV.bringToFront();
-                    if (checkIfFileIsSharedWithMe(file) &&
-                            (!file.isFolder() || !mGridMode)) {
-                        sharedWithMeIconV.setVisibility(View.VISIBLE);
-                    } else {
-                        sharedWithMeIconV.setVisibility(View.GONE);
                     }
 
                     break;
@@ -338,7 +334,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 // Folder
                 fileIcon.setImageResource(
                         MimetypeIconUtil.getFolderTypeIconId(
-                                checkIfFileIsSharedWithMe(file), file.isShareByLink()));
+                                file.isSharedWithMe() || file.isSharedViaUsers(),
+                                file.isSharedViaLink()
+                        )
+                );
             }
         }
 
@@ -450,20 +449,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     }
     
     
-    /**
-     * Check if parent folder does not include 'S' permission and if file/folder
-     * is shared with me
-     * 
-     * @param file: OCFile
-     * @return boolean: True if it is shared with me and false if it is not
-     */
-    private boolean checkIfFileIsSharedWithMe(OCFile file) {
-        return (mFile.getPermissions() != null 
-                && !mFile.getPermissions().contains(PERMISSION_SHARED_WITH_ME)
-                && file.getPermissions() != null 
-                && file.getPermissions().contains(PERMISSION_SHARED_WITH_ME));
-    }
-
     public void setSortOrder(Integer order, boolean ascending) {
         SharedPreferences.Editor editor = mAppPreferences.edit();
         editor.putInt("sortOrder", order);
