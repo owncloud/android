@@ -75,7 +75,7 @@ public class ShareXMLParser {
 	private static final String NODE_TOKEN = "token";
 	private static final String NODE_STORAGE = "storage";
 	private static final String NODE_MAIL_SEND = "mail_send";
-	private static final String NODE_SHARE_WITH_DISPLAY_NAME = "share_with_display_name";
+	private static final String NODE_SHARE_WITH_DISPLAY_NAME = "share_with_displayname";
 	
 	private static final String NODE_URL = "url";
 
