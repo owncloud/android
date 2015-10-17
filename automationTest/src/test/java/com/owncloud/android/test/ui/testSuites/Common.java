@@ -39,6 +39,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.owncloud.android.test.ui.models.FilesView;
+import com.owncloud.android.test.ui.models.PassCodeRequestView;
+import com.owncloud.android.test.ui.models.SettingsView;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 
@@ -47,6 +51,7 @@ public class Common{
 	static int waitingTime = 30;
 
 	public WebDriverWait wait;
+
 
 	protected AndroidDriver setUpCommonDriver () throws Exception {
 		File rootPath = new File(System.getProperty("user.dir"));
@@ -61,14 +66,20 @@ public class Common{
 				".ui.activity.FileDisplayActivity");	
 		capabilities.setCapability("appWaitActivity", 
 				".authentication.AuthenticatorActivity");
+		capabilities.setCapability("unicodeKeyboard", true);
+		capabilities.setCapability("resetKeyboard", true);
 		driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"),
 				capabilities);
 		driver.manage().timeouts().implicitlyWait(waitingTime,
 				TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, waitingTime, 50);
+		AndroidDriver.ImeHandler ime = driver.manage().ime(); 
+	    ime.activateEngine("com.google.android.inputmethod.latin/"
+	    		+ "com.android.inputmethod.latin.LatinIME");
 		return driver;
 
 	}
+
 
 	protected boolean waitForTextPresent(String text, AndroidElement element)
 			throws InterruptedException{
@@ -130,7 +141,7 @@ public class Common{
 			Thread.sleep(pollingTime);
 		}
 	}
-	
+
 	public static void waitTillElementIsPresent (
 			AndroidElement element,int pollingTime) 
 					throws InterruptedException {
@@ -140,12 +151,13 @@ public class Common{
 					return;
 				}
 			} catch (NoSuchElementException e){
-				
+
 			}
 			Thread.sleep(pollingTime);
 		}
+		throw new TimeoutException();
 	}
-	
+
 	protected void takeScreenShotOnFailed (String testName) 
 			throws IOException {
 		File file  = ((RemoteWebDriver) driver)
@@ -157,19 +169,16 @@ public class Common{
 		FileUtils.copyFile(file, new File(screenShotName));
 	}
 
-	protected void assertIsInFileListView() throws InterruptedException {
-		//waitForTextPresent("Wrong username or password", 
-			//	changePasswordForm.getAuthStatusText());
-		Thread.sleep(2000);
-		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
-				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".resourceId(\"android:id/action_bar_title\")")));
-		assertTrue(isElementPresent((AndroidElement) driver
-				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".description(\"Upload\")")));	
+	protected void assertIsInFilesView(FilesView filesView) 
+			throws InterruptedException {
+		Common.waitTillElementIsPresent(
+				filesView.getTitleTextElement(),30000);
+		assertTrue(waitForTextPresent("ownCloud",
+				filesView.getTitleTextElement()));
+		assertTrue(filesView.getUploadButton().isDisplayed());	
 	}
 
-	protected void assertIsNotInFileListView() throws InterruptedException {
+	protected void assertIsNotInFilesView() throws InterruptedException {
 		AndroidElement fileElement;
 		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
@@ -184,20 +193,22 @@ public class Common{
 		assertNull(fileElement);
 	}
 
-	protected void assertIsPasscodeRequestView() throws InterruptedException {
-		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
-				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".resourceId(\"android:id/action_bar_title\")")));
-		assertTrue(((AndroidElement) driver.findElementByAndroidUIAutomator(
-				"new UiSelector().text(\"Please, insert your pass code\")"))
-				.isDisplayed());
-
+	protected void assertIsPasscodeRequestView(
+			PassCodeRequestView passCodeReequestView) 
+					throws InterruptedException {
+		Common.waitTillElementIsPresent(
+				passCodeReequestView.getTitleTextElement(),30000);
+		assertTrue(waitForTextPresent("ownCloud",
+				passCodeReequestView.getTitleTextElement()));
+		assertTrue(passCodeReequestView.getInsertMessage().isDisplayed());	
 	}
 
-	protected void assertIsInSettingsView() throws InterruptedException {
-		assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
-				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".resourceId(\"android:id/action_bar_title\")")));
+	protected void assertIsInSettingsView(SettingsView settingsView) 
+			throws InterruptedException {
+		Common.waitTillElementIsPresent(
+				settingsView.getTitleTextElement(),30000);
+		assertTrue(waitForTextPresent("Settings",
+				settingsView.getTitleTextElement()));
 	}
 
 }

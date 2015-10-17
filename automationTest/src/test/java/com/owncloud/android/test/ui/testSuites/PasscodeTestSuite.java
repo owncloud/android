@@ -33,9 +33,9 @@ import org.junit.runners.MethodSorters;
 import org.openqa.selenium.ScreenOrientation;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.models.FileListView;
-import com.owncloud.android.test.ui.models.MenuList;
+import com.owncloud.android.test.ui.groups.*;
+import com.owncloud.android.test.ui.models.Drawer;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.PassCodeRequestView;
 import com.owncloud.android.test.ui.models.PassCodeView;
 import com.owncloud.android.test.ui.models.SettingsView;
@@ -44,50 +44,61 @@ import com.owncloud.android.test.ui.models.SettingsView;
 public class PasscodeTestSuite {
 	AndroidDriver driver;
 	Common common;
-	
+	FilesView filesView;
+
 	@Rule public TestName name = new TestName();
-	
+
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 	
-	@Test
-	@Category({NoIgnoreTestCategory.class})
-	public void testPincodeEnable () throws Exception {
+	public void passcodeEnableMethod (AndroidDriver driver, 
+			Common common) throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-		
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
-		
+
+		Drawer drawer = filesView.swipeToShowDrawer();
+		SettingsView settingsView = drawer.clickOnSettingsButton();
+
 		PassCodeView passCodeview = settingsView.EnablePassCode();
 		PassCodeView passCodeview2 = passCodeview.enterPasscode(
 				Config.passcode1, Config.passcode2, Config.passcode3, 
 				Config.passcode4);
+		Thread.sleep(1000);
 		passCodeview2.reenterPasscode(Config.passcode1, Config.passcode2, 
 				Config.passcode3, Config.passcode4);
-		
+
 		driver.sendKeyEvent(android.view.KeyEvent.KEYCODE_HOME);
 		//TO DO. Open the app instead of start an activity
 		driver.startActivity("com.owncloud.android", 
 				".ui.activity.FileDisplayActivity");
 		//here we check that we are not in the fileDisplayActivity,
 		//because pincode is asked
-		common.assertIsNotInFileListView();
-		common.assertIsPasscodeRequestView();
-		
+		//common.assertIsNotInFilesView();
 		PassCodeRequestView passCodeReequestView = new 
 				PassCodeRequestView(driver);
+
+		common.assertIsPasscodeRequestView(passCodeReequestView);
+
+
 		passCodeReequestView.enterPasscode(Config.passcode1, Config.passcode2,
 				Config.passcode3, Config.passcode4);
-		common.assertIsInFileListView();
+		FilesView newFilesView = new FilesView(driver);
+		common.assertIsInFilesView(newFilesView);
 	}
-	
-	
+
+	@Test
+	@Category({RegresionTestCategory.class})
+	public void testPasscodeEnable () throws Exception {
+		passcodeEnableMethod(driver, common);
+	}
+
+
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());

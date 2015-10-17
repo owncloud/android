@@ -20,7 +20,6 @@
 
 package com.owncloud.android.test.ui.testSuites;
 
-import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
 
 import org.junit.After;
@@ -33,60 +32,64 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
-import com.owncloud.android.test.ui.models.FileListView;
-import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
+import com.owncloud.android.test.ui.groups.*;
+import com.owncloud.android.test.ui.models.FilesView;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CreateFolderTestSuite{
-	
+
 	AndroidDriver driver;
 	Common common;
-	private Boolean folderHasBeenCreated = false;
-	private final String FOLDER_NAME = "testCreateFolder";
-	private String CurrentCreatedFolder = "";
-	
+	FilesView filesView;
+
 	@Rule public TestName name = new TestName();
 
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+
+		filesView = Actions.login(Config.URL, 
+				Config.user,Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testCreateNewFolder () throws Exception {
-		String NEW_FOLDER_NAME = "testCreateFolder";
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
+	public void testCreateFolder () throws Exception {
+		Actions.createFolder(Config.folderToCreate, filesView, driver);
+	}
+	
+	public static void createFolderWithSpecialCharactersMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
+		
+		//set unicode keyboard for special character
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+		Actions.createFolder(Config.folderToCreateSpecialCharacters, filesView,
+				driver);
+		
+		//set normal keyboard
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
+	}
 
-		FileListView fileListView = Actions.login(Config.URL, 
-				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-
-		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(NEW_FOLDER_NAME, fileListView, driver);
-
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(NEW_FOLDER_NAME, fileListView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-				.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertNotNull(fileListView.getFileElement());
-		assertTrue(
-			folderHasBeenCreated=fileListView.getFileElement().isDisplayed());	
-		CurrentCreatedFolder = FOLDER_NAME;
-		assertEquals(FOLDER_NAME , fileListView.getFileElement().getText());
+	@Test
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
+	public void testCreateFolderWithSpecialCharacters () throws Exception {
+		createFolderWithSpecialCharactersMethod (driver, common, filesView);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		if (folderHasBeenCreated) {
-			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
-		}
+
+		FilesView filesView = new FilesView(driver);
+		Actions.deleteElement(Config.folderToCreateSpecialCharacters, filesView
+				,driver);
+		Actions.deleteElement(Config.folderToCreate, filesView, driver);
+
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

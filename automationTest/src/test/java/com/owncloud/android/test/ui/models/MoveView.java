@@ -51,7 +51,11 @@ public class MoveView {
 		return waitAMomentPopUp;
 	}
 	
-	public  AndroidElement scrollTillFindElement (String elementName) {
+	public  AndroidElement getElement (String elementName) {
 		return Actions.scrollTillFindElement (elementName,filesLayout,driver);
+	}
+	
+	public void tapOnElement (String elementName) {
+		Actions.scrollTillFindElement (elementName,filesLayout,driver).tap(1, 1);
 	}
 }

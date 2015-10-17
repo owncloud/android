@@ -57,13 +57,13 @@ public class PassCodeView {
 	public PassCodeView enterPasscode(String codeNumber1, String codeNumber2, 
 			String codeNumber3, String codeNumber4){
 		codeElement1
-		  .sendKeys(codeNumber1 + codeNumber1 + codeNumber1 + codeNumber1);
+		  .sendKeys(codeNumber1 + codeNumber2 + codeNumber3 + codeNumber4);
 		return this;
 	}
 	public SettingsView reenterPasscode(String codeNumber1,
 			String codeNumber2, String codeNumber3, String codeNumber4){
 		codeElement1
-		   .sendKeys(codeNumber1 + codeNumber1 + codeNumber1 + codeNumber1);
+		   .sendKeys(codeNumber1 + codeNumber2 + codeNumber3 + codeNumber4);
 		SettingsView settingsView = new SettingsView(driver);
 		return settingsView;
 	}

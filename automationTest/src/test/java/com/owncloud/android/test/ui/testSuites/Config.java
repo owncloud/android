@@ -37,18 +37,28 @@ public final class Config {
 	public static final String userAccount = user + "@"+ URL;
 	public static final String userAccount2 = user2 + "@"+ URL2;
 
-	public static final String gmailAccount = "gmailAccountVar";
-	
-	public static final String fileWhichIsInTheServer1 ="test";
-	public static final String fileWhichIsInTheServer2 ="test";
-	
-	public static final String fileToTestName = "test";
-	public static final String fileToTestSendByEmailName = "test";
-	public static final String bigFileToTestName = "test";
-	
-	public static final String passcode1 = "passcode1";
-	public static final String passcode2 = "passcode2";
-	public static final String passcode3 = "passcode3";
-	public static final String passcode4 = "passcode4";
+	public static final String gmailAccount = "automationOwncloud@gmail.com";
 
+	public static final String fileWhichIsInTheServer1 ="ownCloudUserManual.pdf";
+	public static final String fileWhichIsInTheServer2 ="ownCloudUserManual.pdf";
+
+	public static final String folderWhereFilesToUploadAre = "ocAutomation";
+	public static final String fileToTest = "doc.txt";
+	public static final String fileToTest2 = "docümento.txt";
+	public static final String fileToTest3 = "año.pdf";
+	public static final String fileToTestSendByEmail = "test.jpg";
+	public static final String bigFileToTest = "video.mp4";
+	public static final String fileToRename = "newNÁme";
+
+	public static final String folderToCreate="testCreateFolder";
+    public static final String folderToCreateSpecialCharacters="a%&@()ño";
+    public static final String folderWhereMove="foldérWhereMove";
+    public static final String folderToMove="folderTöMove";
+    public static final String folderBeforeRename="folderBeforeRèname";
+    public static final String folderToRename="folderToRenáme";
+
+	public static final String passcode1 = "1";
+	public static final String passcode2 = "1";
+	public static final String passcode3 = "2";
+	public static final String passcode4 = "2";
 }

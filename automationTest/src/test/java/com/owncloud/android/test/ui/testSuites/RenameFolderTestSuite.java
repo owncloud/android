@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,14 +32,13 @@ import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
-import com.owncloud.android.test.ui.models.FileListView;
-import com.owncloud.android.test.ui.models.NewFolderPopUp;
-import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
+import com.owncloud.android.test.ui.models.FilesView;
+import com.owncloud.android.test.ui.models.FolderPopUp;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -46,11 +46,8 @@ public class RenameFolderTestSuite{
 
 	AndroidDriver driver;
 	Common common;
-	private Boolean folderHasBeenCreated = false;
-	private final String OLD_FOLDER_NAME = "beforeRemoving";
-	private final String FOLDER_NAME = "testCreateFolder";
-	private String CurrentCreatedFolder = "";
-	
+	FilesView filesView;
+
 	@Rule public TestName name = new TestName();
 
 
@@ -58,53 +55,136 @@ public class RenameFolderTestSuite{
 	public void setUp() throws Exception {
 		common=new Common();
 		driver=common.setUpCommonDriver();
+		//login
+		filesView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFilesView(filesView);
 	}
 
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
 	public void testRenameFolder () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-
-		//TODO. if the folder already exists, do no created
-		//create the folder to rename
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(OLD_FOLDER_NAME, fileListView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(OLD_FOLDER_NAME);
-
-		assertTrue(
-			folderHasBeenCreated = fileListView.getFileElement().isDisplayed());
+		//WaitAMomentPopUp waitAMomentPopUp = null;
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
 
 		//check if the folder with the new name already exists 
-		//and if true, delete them
-		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
+		//and if true, delete it
+		Actions.deleteElement(Config.folderToRename, filesView, driver);
+		assertNull(filesView.getElement(Config.folderToRename));
 
-		CurrentCreatedFolder = OLD_FOLDER_NAME;
-		ElementMenuOptions menuOptions = fileListView
-				.longPressOnElement(OLD_FOLDER_NAME);
-		NewFolderPopUp FolderPopUp = menuOptions.clickOnRename();
-		FolderPopUp.typeNewFolderName(FOLDER_NAME);
+		//if the folder already exists, do no created
+		AndroidElement folder = filesView.getElement(Config.folderBeforeRename);
+		if(folder==null){
+			//set unicode keyboard for special character
+			ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+			//create the folder to rename
+			Actions.createFolder(Config.folderBeforeRename, filesView, driver);
+			//set normal keyboard
+			ime.activateEngine("com.google.android.inputmethod.latin/"
+					+ "com.android.inputmethod.latin.LatinIME");
+			folder = filesView.getElement(Config.folderBeforeRename);
+		}
+
+		assertTrue(folder.isDisplayed());
+		assertNull(filesView.getElement(Config.folderToRename));
+
+		ElementMenuOptions menuOptions = filesView
+				.longPressOnElement(Config.folderBeforeRename);
+		FolderPopUp FolderPopUp = menuOptions.clickOnRename();
+		FolderPopUp.typeNewFolderName(Config.folderToRename);
 		FolderPopUp.clickOnNewFolderOkButton();
-		CurrentCreatedFolder = FOLDER_NAME;
-		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
-				.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertNotNull(fileListView.getFileElement());
-		assertTrue(
-			folderHasBeenCreated = fileListView.getFileElement().isDisplayed());	
-		assertEquals(FOLDER_NAME , fileListView.getFileElement().getText());
+		//TODO. get the waitAMomentPopUp
+		//Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+		//	.getWaitAMomentTextElement(), 100);
+		folder = filesView.getElement(Config.folderToRename);
+		assertNotNull(folder);
+		assertTrue(folder.isDisplayed());	
+	}
+
+
+
+	public static void renameFolderWithDownloadedFilesMethod (AndroidDriver driver, 
+			Common common, FilesView filesView) throws Exception {
+		//WaitAMomentPopUp waitAMomentPopUp = null;
+		AndroidDriver.ImeHandler ime = driver.manage().ime();
+
+		//check if the folder with the new name already exists 
+		//and if true, delete it
+		Actions.deleteElement(Config.folderToRename, filesView, driver);
+		assertNull(filesView.getElement(Config.folderToRename));
+
+		//set unicode keyboard for special character
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+		//create the folder to rename
+		Actions.createFolder(Config.folderBeforeRename, filesView, driver);
+		//set normal keyboard
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
+
+		assertNull(filesView.getElement(Config.folderToRename));
+
+		//create content in the folder
+		Actions.createContentInsideFolder(Config.folderBeforeRename, 
+				Config.fileToTest,  Config.fileToTest2,  Config.fileToTest3,
+				Config.folderToCreateSpecialCharacters, filesView, driver);
+
+		//select to rename the folder
+		ElementMenuOptions menuOptions = filesView
+				.longPressOnElement(Config.folderBeforeRename);
+		FolderPopUp FolderPopUp = menuOptions.clickOnRename();
+		//set unicode keyboard for special character
+		ime.activateEngine("io.appium.android.ime/.UnicodeIME");
+
+		FolderPopUp.typeNewFolderName(Config.folderToRename);
+
+		//set normal keyboard
+		ime.activateEngine("com.google.android.inputmethod.latin/"
+				+ "com.android.inputmethod.latin.LatinIME");
+		FolderPopUp.clickOnNewFolderOkButton();
+		//TODO. get the waitAMomentPopUp
+		//Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+		//	.getWaitAMomentTextElement(), 100);
+		AndroidElement folder = filesView.getElement(Config.folderToRename);
+		assertNotNull(folder);
+		assertTrue(folder.isDisplayed());	
+
+		//check that the files inside are there and still downloaded
+		filesView.tapOnElement(Config.folderToRename);
+		Common.waitTillElementIsNotPresentWithoutTimeout(
+				filesView.getProgressCircular(), 1000);
+		Thread.sleep(1000);
+		assertTrue(filesView.getElement(Config.fileToTest).isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest2).isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest3).isDisplayed());
+
+		assertTrue(filesView.getElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest2)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(Config.fileToTest3)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))
+				.isDisplayed());
+		assertTrue(filesView.getElement(Config.folderToCreateSpecialCharacters)
+				.isDisplayed());
+		filesView.clickOnBackButton();
+	}
+
+	@Test
+	@Category({RegresionTestCategory.class, SmokeTestCategory.class})
+	public void testRenameFolderWithDownloadedFiles () throws Exception {
+		renameFolderWithDownloadedFilesMethod(driver, common, filesView);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		if(folderHasBeenCreated){
-			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(CurrentCreatedFolder, fileListView, driver);
-		}
+
+		FilesView filesView = new FilesView(driver);
+		Actions.deleteElement(Config.folderBeforeRename, filesView, driver);
+		Actions.deleteElement(Config.folderToRename, filesView, driver);
+
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}

@@ -34,7 +34,7 @@ public class GmailEmailView {
 	final AndroidDriver driver;
 	
 	@CacheLookup
-	@AndroidFindBy(name = Config.fileToTestSendByEmailName)
+	@AndroidFindBy(name = Config.fileToTestSendByEmail)
 	private AndroidElement fileButton;
 		
 	public GmailEmailView (AndroidDriver driver) {
@@ -42,9 +42,9 @@ public class GmailEmailView {
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
 	
-	public ImageView clickOnfileButton (){
+	public ImageViewFromOtherApp clickOnfileButton (){
 		fileButton.click();
-		ImageView imageView = new ImageView(driver);
+		ImageViewFromOtherApp imageView = new ImageViewFromOtherApp(driver);
 		return imageView;
 	}
 }
