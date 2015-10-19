@@ -373,5 +373,6 @@
     <string name="share_no_users">No data shared with users yet</string>
     <string name="share_add_user_or_group">Add User or Group</string>
     <string name="share_search">Search</string>
+    <string name="share_group_indicator">(group)</string>
 
 </resources>
