@@ -1,4 +1,7 @@
 /* ownCloud Android Library is available under MIT license
+ *
+ *   @author masensio
+ *   @author David A. Velasco
  *   Copyright (C) 2015 ownCloud Inc.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,12 +27,14 @@
 
 package com.owncloud.android.lib.resources.users;
 
+import android.net.Uri;
+import android.util.Pair;
+
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -57,69 +62,69 @@ public class GetRemoteUsersOrGroupsOperation extends RemoteOperation{
     private static final String TAG = GetRemoteUsersOrGroupsOperation.class.getSimpleName();
 
     // OCS Routes
-    private static final String OCS_ROUTE_USERS ="/ocs/v1.php/cloud/users?format=json";
-    private static final String OCS_ROUTE_GROUPS ="/ocs/v1.php/cloud/groups?format=json";
+    private static final String OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/sharees";    // from OC 8.2
 
-    // Arguments
+    // Arguments - names
+    private static final String PARAM_FORMAT = "format";
+    private static final String PARAM_ITEM_TYPE = "itemType";
     private static final String PARAM_SEARCH = "search";
-    private static final String PARAM_LIMIT = "limit";
-    private static final String PARAM_OFFSET = "offset";
+    private static final String PARAM_PAGE = "page";                //  default = 1
+    private static final String PARAM_PER_PAGE = "perPage";         //  default = 200
+
+    // Arguments - constant values
+    private static final String VALUE_FORMAT = "json";
+    private static final String VALUE_ITEM_TYPE = "search";     //  to get the server search for users / groups
+
 
     // JSON Node names
     private static final String NODE_OCS = "ocs";
     private static final String NODE_DATA = "data";
+    private static final String NODE_EXACT = "exact";
     private static final String NODE_USERS = "users";
     private static final String NODE_GROUPS = "groups";
+    private static final String NODE_VALUE = "value";
+    private static final String PROPERTY_LABEL = "label";
+    private static final String PROPERTY_SHARE_TYPE = "shareType";
 
-    private ArrayList<String> mNames;  // List of users or groups
+    // Result types
+    public static final Byte USER_TYPE = 0;
+    public static final Byte GROUP_TYPE = 1;
 
     private String mSearchString;
-    private int mLimit;
-    private int mOffset;
-    private boolean mGetGroup = false;
+    private int mPage;
+    private int mPerPage;
 
     /**
      * Constructor
      *
      * @param searchString  	string for searching users, optional
-     * @param limit 			limit, optional
-     * @param offset			offset, optional
-     * @param getGroups         true: for searching groups, false: for searching users
+     * @param page			    page index in the list of results; beginning in 1
+     * @param perPage           maximum number of results in a single page
      */
-    public GetRemoteUsersOrGroupsOperation(String searchString, int limit, int offset,
-                                           boolean getGroups) {
+    public GetRemoteUsersOrGroupsOperation(String searchString, int page, int perPage) {
         mSearchString = searchString;
-        mLimit = limit;
-        mOffset = offset;
-        mGetGroup = getGroups;
+        mPage = page;
+        mPerPage = perPage;
     }
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        int status = -1;
+        int status;
         GetMethod get = null;
 
-        String ocs_route = OCS_ROUTE_USERS;
-        String nodeUsersOrGroups = NODE_USERS;
-        if(mGetGroup){
-            ocs_route = OCS_ROUTE_GROUPS;
-            nodeUsersOrGroups = NODE_GROUPS;
-        }
-
         try{
+            Uri requestUri = client.getBaseUri();
+            Uri.Builder uriBuilder = requestUri.buildUpon();
+            uriBuilder.appendEncodedPath(OCS_ROUTE);
+            uriBuilder.appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT);
+            uriBuilder.appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE);
+            uriBuilder.appendQueryParameter(PARAM_SEARCH, Uri.encode(mSearchString));
+            uriBuilder.appendQueryParameter(PARAM_PAGE, String.valueOf(mPage));
+            uriBuilder.appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
+
             // Get Method
-            get = new GetMethod(client.getBaseUri() + ocs_route);
-
-            // Add Parameters to Get Method
-            get.setQueryString(new NameValuePair[]{
-                    new NameValuePair(PARAM_SEARCH, mSearchString),
-                    new NameValuePair(PARAM_LIMIT, String.valueOf(mLimit)),
-                    new NameValuePair(PARAM_OFFSET, String.valueOf(mOffset))
-            });
-
-            //¿?
-            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            get = new GetMethod(uriBuilder.build().toString());
 
             status = client.executeMethod(get);
 
@@ -131,15 +136,30 @@ public class GetRemoteUsersOrGroupsOperation extends RemoteOperation{
                 JSONObject respJSON = new JSONObject(response);
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
                 JSONObject respData = respOCS.getJSONObject(NODE_DATA);
-                JSONArray  respUsersOrGroups = respData.getJSONArray(nodeUsersOrGroups);
-                mNames = new ArrayList<String>();
+                JSONObject respExact = respData.getJSONObject(NODE_EXACT);
+                JSONArray respExactUsers = respExact.getJSONArray(NODE_USERS);
+                JSONArray respExactGroups = respExact.getJSONArray(NODE_GROUPS);
+                JSONArray respPartialUsers = respData.getJSONArray(NODE_USERS);
+                JSONArray respPartialGroups = respData.getJSONArray(NODE_GROUPS);
+                JSONArray[] jsonResults = {
+                        respExactUsers,
+                        respExactGroups,
+                        respPartialUsers,
+                        respPartialGroups
+                };
+
                 ArrayList<Object> data = new ArrayList<Object>(); // For result data
-                for(int i=0; i<= respUsersOrGroups.length(); i++){
-                    JSONObject jsonUser = respUsersOrGroups.getJSONObject(i);
-                    String name = jsonUser.toString();
-                    mNames.add(name);
-                    data.add(name);
-                    Log_OC.d(TAG, "*** "+ nodeUsersOrGroups + " : " + name);
+                Pair<String, Byte> match;
+                for (int i=0; i<4; i++) {
+                    for(int j=0; j< jsonResults[i].length(); j++){
+                        JSONObject jsonResult = jsonResults[i].getJSONObject(j);
+                        match =  new Pair<String, Byte>(
+                                jsonResult.getString(PROPERTY_LABEL),
+                                (byte)jsonResult.getJSONObject(NODE_VALUE).getInt(PROPERTY_SHARE_TYPE)
+                        );
+                        data.add(match);
+                        Log_OC.d(TAG, "*** Added item: " + match.first);
+                    }
                 }
 
                 // Result
