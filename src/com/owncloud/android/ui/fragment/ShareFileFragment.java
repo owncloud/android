@@ -201,7 +201,7 @@ public class ShareFileFragment extends Fragment
 
     // Get users and groups to fill the "share with" list
     private void getShares(OCFile file){
-        mShares = new ArrayList<>();
+        mShares = new ArrayList<OCShare>();
 
         RemoteOperationResult result = null;
 
