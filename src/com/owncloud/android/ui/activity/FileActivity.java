@@ -43,7 +43,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -71,7 +70,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateShareOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.operations.UnshareLinkOperation;
+import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.NavigationDrawerItem;
@@ -183,7 +182,9 @@ public class FileActivity extends AppCompatActivity
                     savedInstanceState.getLong(KEY_WAITING_FOR_OP_ID, Long.MAX_VALUE)
                     );
             mTryShareAgain = savedInstanceState.getBoolean(KEY_TRY_SHARE_AGAIN);
-            getSupportActionBar().setTitle(savedInstanceState.getString(KEY_ACTION_BAR_TITLE));
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(savedInstanceState.getString(KEY_ACTION_BAR_TITLE));
+            }
         } else {
             account = getIntent().getParcelableExtra(FileActivity.EXTRA_ACCOUNT);
             mFile = getIntent().getParcelableExtra(FileActivity.EXTRA_FILE);
@@ -552,7 +553,7 @@ public class FileActivity extends AppCompatActivity
         outState.putBoolean(FileActivity.EXTRA_FROM_NOTIFICATION, mFromNotification);
         outState.putLong(KEY_WAITING_FOR_OP_ID, mFileOperationsHelper.getOpIdWaitingFor());
         outState.putBoolean(KEY_TRY_SHARE_AGAIN, mTryShareAgain);
-        if(getSupportActionBar().getTitle() != null) {
+        if(getSupportActionBar() != null && getSupportActionBar().getTitle() != null) {
             // Null check in case the actionbar is used in ActionBar.NAVIGATION_MODE_LIST
             // since it doesn't have a title then
             outState.putString(KEY_ACTION_BAR_TITLE, getSupportActionBar().getTitle().toString());
@@ -730,8 +731,8 @@ public class FileActivity extends AppCompatActivity
         } else if (operation instanceof CreateShareOperation) {
             onCreateShareOperationFinish((CreateShareOperation) operation, result);
 
-        } else if (operation instanceof UnshareLinkOperation) {
-            onUnshareLinkOperationFinish((UnshareLinkOperation)operation, result);
+        } else if (operation instanceof UnshareOperation) {
+            onUnshareLinkOperationFinish((UnshareOperation)operation, result);
 
         } else if (operation instanceof SynchronizeFolderOperation) {
             onSynchronizeFolderOperationFinish((SynchronizeFolderOperation)operation, result);
@@ -788,7 +789,7 @@ public class FileActivity extends AppCompatActivity
     }
 
 
-    private void onUnshareLinkOperationFinish(UnshareLinkOperation operation,
+    private void onUnshareLinkOperationFinish(UnshareOperation operation,
                                               RemoteOperationResult result) {
         dismissLoadingDialog();
 
@@ -846,9 +847,9 @@ public class FileActivity extends AppCompatActivity
     /**
      * Show loading dialog
      */
-    public void showLoadingDialog() {
+    public void showLoadingDialog(String message) {
         // Construct dialog
-        LoadingDialog loading = new LoadingDialog(getResources().getString(R.string.wait_a_moment));
+        LoadingDialog loading = new LoadingDialog(message);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         loading.show(ft, DIALOG_WAIT_TAG);

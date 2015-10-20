@@ -21,8 +21,6 @@
 package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -31,36 +29,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
-import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
-import com.owncloud.android.lib.resources.shares.ShareType;
-import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.activity.ShareActivity;
-import com.owncloud.android.ui.adapter.LocalFileListAdapter;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
-import com.owncloud.android.utils.CopyTmpFileAsyncTask;
 import com.owncloud.android.utils.DisplayUtils;
-import com.owncloud.android.utils.GetShareWithUserAsyncTask;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -73,8 +58,8 @@ import java.util.ArrayList;
  * Use the {@link ShareFileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShareFileFragment extends Fragment
-        implements GetShareWithUserAsyncTask.OnGetSharesWithUserTaskListener{
+public class ShareFileFragment extends Fragment {
+
     private static final String TAG = ShareFileFragment.class.getSimpleName();
 
     // the fragment initialization parameters
@@ -93,11 +78,11 @@ public class ShareFileFragment extends Fragment
     /**
      * Public factory method to create new ShareFileFragment instances.
      *
-     * @param fileToShare   An {@link OCFile} to show in the fragment
-     * @param account       An ownCloud account
+     * @param fileToShare An {@link OCFile} to show in the fragment
+     * @param account     An ownCloud account
      * @return A new instance of fragment ShareFileFragment.
      */
-    public static ShareFileFragment  newInstance(OCFile fileToShare, Account account) {
+    public static ShareFileFragment newInstance(OCFile fileToShare, Account account) {
         ShareFileFragment fragment = new ShareFileFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, fileToShare);
@@ -133,7 +118,7 @@ public class ShareFileFragment extends Fragment
         if (mFile.isImage()) {
             String remoteId = String.valueOf(mFile.getRemoteId());
             Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(remoteId);
-            if (thumbnail != null){
+            if (thumbnail != null) {
                 icon.setImageBitmap(thumbnail);
             }
         }
@@ -142,17 +127,11 @@ public class ShareFileFragment extends Fragment
         filename.setText(mFile.getFileName());
         // Size
         TextView size = (TextView) view.findViewById(R.id.shareFileSize);
-        if (mFile.isFolder()){
+        if (mFile.isFolder()) {
             size.setVisibility(View.GONE);
         } else {
             size.setText(DisplayUtils.bytesToHumanReadable(mFile.getFileLength()));
         }
-
-        // List of share with users
-        TextView noShares = (TextView) view.findViewById(R.id.shareNoUsers);
-
-        // TODO: Get shares from DB and show
-
 
         //  Add User Button
         Button addUserGroupButton = (Button)
@@ -172,7 +151,7 @@ public class ShareFileFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getShares(mFile);
+        refreshUsersOrGroupsList();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -200,51 +179,18 @@ public class ShareFileFragment extends Fragment
     }
 
     // Get users and groups to fill the "share with" list
-    private void getShares(OCFile file){
-        RemoteOperationResult result = null;
-
-        // Show loading
-        // TODO: Activate loading
-//        ( (ShareActivity) getActivity()).showWaitingLoadDialog();
+    public void refreshUsersOrGroupsList(){
         // Get Users and Groups
-        GetShareWithUserAsyncTask getTask = new GetShareWithUserAsyncTask(this);
         FileDataStorageManager fileDataStorageManager =
                 new FileDataStorageManager(mAccount, getActivity().getContentResolver());
-        mShares = fileDataStorageManager.getSharesWithForAFile(mFile.getRemotePath(), mAccount.name);
-
-//        Object[] params = { mFile, mAccount, fileDataStorageManager};
-//        getTask.execute(params);
-
-//        // Remove loading
-//        ((ShareActivity) getActivity()).dismissWaitingLoadDialog();
+        mShares = fileDataStorageManager.getSharesWithForAFile(mFile.getRemotePath(),
+                mAccount.name);
 
         // Update list of users/groups
         updateListOfUserGroups();
     }
 
-    @Override
-    public void onGetDataShareWithFinish(RemoteOperationResult result) {
-        // Remove loading
-        ((ShareActivity) getActivity()).dismissWaitingLoadDialog();
-        if (result != null && result.isSuccess()) {
-            // update local database
-            for(Object obj: result.getData()) {
-                if ( ((OCShare) obj).getShareType() == ShareType.USER ||
-                        ((OCShare) obj).getShareType() == ShareType.GROUP ){
-                    mShares.add((OCShare) obj);
-                }
-            }
-
-            // Update list of users/groups
-           updateListOfUserGroups();
-
-        } else {
-            Toast.makeText(getActivity(), result.getLogMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    private void updateListOfUserGroups(){
+    private void updateListOfUserGroups() {
         // Update list of users/groups
         mUserGroupsAdapter = new ShareUserListAdapter(getActivity().getApplicationContext(),
                 R.layout.share_user_item, mShares);
@@ -258,11 +204,53 @@ public class ShareFileFragment extends Fragment
             usersList.setVisibility(View.VISIBLE);
             usersList.setAdapter(mUserGroupsAdapter);
 
+            // Add unshare options
+            registerLongClickListener(usersList);
+
         } else {
             noShares.setVisibility(View.VISIBLE);
             usersList.setVisibility(View.GONE);
         }
     }
+
+    private void registerLongClickListener(final ListView listView) {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position,
+                                           long id) {
+                // Show unshare button
+                ImageView unshareButton = (ImageView) view.findViewById(R.id.unshareButton);
+                if (unshareButton.getVisibility() == View.GONE) {
+                    unshareButton.setVisibility(View.VISIBLE);
+                    unshareButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Unshare
+                            unshareWith(mShares.get(position));
+                            Log_OC.d(TAG, "Unshare - " +
+                                    mShares.get(position).getSharedWithDisplayName());
+                        }
+                    });
+
+                } else {
+                    unshareButton.setVisibility(View.GONE);
+                }
+                view.setAlpha(0);
+                view.animate().alpha(1).setDuration(500).start();
+                return false;
+            }
+        });
+    }
+
+    private void unshareWith(OCShare share){
+        OCFile file = ((FileActivity) getActivity()).getFile();
+
+        ((FileActivity) getActivity()).getFileOperationsHelper().
+                unshareFileWithUserOrGroup(
+                        file, share.getShareType(), share.getShareWith()
+                );
+    }
+
 
     // TODO: review if it is necessary
     /**

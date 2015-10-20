@@ -39,6 +39,7 @@ import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.observer.FileObserverService;
@@ -167,7 +168,8 @@ public class FileOperationsHelper {
     public void shareFileWithLinkToApp(OCFile file, String password, Intent sendIntent) {
         
         if (file != null) {
-            mFileActivity.showLoadingDialog();
+            mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                    getString(R.string.wait_a_moment));
 
             Intent service = new Intent(mFileActivity, OperationsService.class);
             service.setAction(OperationsService.ACTION_CREATE_SHARE);
@@ -205,15 +207,39 @@ public class FileOperationsHelper {
 
     public void unshareFileWithLink(OCFile file) {
 
+        // Unshare the file: Create the intent
+        Intent unshareService = new Intent(mFileActivity, OperationsService.class);
+        unshareService.setAction(OperationsService.ACTION_UNSHARE);
+        unshareService.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        unshareService.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+        unshareService.putExtra(OperationsService.EXTRA_SHARE_TYPE, ShareType.PUBLIC_LINK);
+        unshareService.putExtra(OperationsService.EXTRA_SHARE_WITH, "");
+
+        unshareFile(unshareService);
+    }
+
+    public void unshareFileWithUserOrGroup(OCFile file, ShareType shareType, String userOrGroup){
+
+        // Unshare the file: Create the intent
+        Intent unshareService = new Intent(mFileActivity, OperationsService.class);
+        unshareService.setAction(OperationsService.ACTION_UNSHARE);
+        unshareService.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        unshareService.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+        unshareService.putExtra(OperationsService.EXTRA_SHARE_TYPE, shareType);
+        unshareService.putExtra(OperationsService.EXTRA_SHARE_WITH, userOrGroup);
+
+        unshareFile(unshareService);
+    }
+
+
+    private void unshareFile(Intent unshareService){
         if (isSharedSupported()) {
             // Unshare the file
-            Intent service = new Intent(mFileActivity, OperationsService.class);
-            service.setAction(OperationsService.ACTION_UNSHARE);
-            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-            
-            mFileActivity.showLoadingDialog();
+            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().
+                    queueNewOperation(unshareService);
+
+            mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                    getString(R.string.wait_a_moment));
 
         } else {
             // Show a Message
@@ -264,7 +290,8 @@ public class FileOperationsHelper {
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
             intent.putExtra(OperationsService.EXTRA_SYNC_FILE_CONTENTS, true);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(intent);
-            mFileActivity.showLoadingDialog();
+            mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                    getString(R.string.wait_a_moment));
             
         } else {
             Intent intent = new Intent(mFileActivity, OperationsService.class);
@@ -302,7 +329,8 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_NEWNAME, newFilename);
         mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         
-        mFileActivity.showLoadingDialog();
+        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                getString(R.string.wait_a_moment));
     }
 
 
@@ -315,7 +343,8 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
         mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         
-        mFileActivity.showLoadingDialog();
+        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                getString(R.string.wait_a_moment));
     }
 
 
@@ -328,7 +357,8 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_CREATE_FULL_PATH, createFullPath);
         mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         
-        mFileActivity.showLoadingDialog();
+        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                getString(R.string.wait_a_moment));
     }
 
     /**
@@ -379,7 +409,8 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
         mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
 
-        mFileActivity.showLoadingDialog();
+        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                getString(R.string.wait_a_moment));
     }
 
     /**
@@ -397,7 +428,8 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
         mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
 
-        mFileActivity.showLoadingDialog();
+        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                getString(R.string.wait_a_moment));
     }
 
     public long getOpIdWaitingFor() {
