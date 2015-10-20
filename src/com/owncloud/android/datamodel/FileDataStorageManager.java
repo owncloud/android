@@ -1532,7 +1532,7 @@ public class FileDataStorageManager {
                 c = null;
             }
         }
-        ArrayList<OCShare> shares = new ArrayList<>();
+        ArrayList<OCShare> shares = new ArrayList<OCShare>();
         OCShare share = null;
         if (c.moveToFirst()) {
             do {

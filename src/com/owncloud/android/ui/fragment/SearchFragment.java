@@ -22,15 +22,19 @@ package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Fragment for Searching users and groups
@@ -43,7 +47,7 @@ import com.owncloud.android.datamodel.OCFile;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
-    private static final String TAG = ShareFileFragment.class.getSimpleName();
+    private static final String TAG = SearchFragment.class.getSimpleName();
 
     // the fragment initialization parameters
     private static final String ARG_FILE = "FILE";
@@ -91,6 +95,30 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.search_users_groups_layout, container, false);
+
+        // Get the SearchView and set the searchable configuration
+        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                getActivity().getComponentName())   // assumes parent activity is the searchable activity
+        );
+        searchView.setIconifiedByDefault(false);    // do not iconify the widget; expand it by default
+
+        //searchView.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_FULLSCREEN);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log_OC.v(TAG, "onQueryTextSubmit intercepted, query: " + query);
+                return true;    // return true to prevent the query is processed to be queried;
+                                // a user / group will be picked only if selected in the list of suggestions
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;   // let it for the parent listener in the hierarchy / default behaviour
+            }
+        });
 
         return view;
     }

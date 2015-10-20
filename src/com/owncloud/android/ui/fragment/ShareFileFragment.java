@@ -180,8 +180,6 @@ public class ShareFileFragment extends Fragment {
 
     // Get users and groups to fill the "share with" list
     public void refreshUsersOrGroupsList(){
-        mShares = new ArrayList<>();
-
         // Get Users and Groups
         FileDataStorageManager fileDataStorageManager =
                 new FileDataStorageManager(mAccount, getActivity().getContentResolver());

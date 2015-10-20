@@ -55,8 +55,7 @@ public class GetUsersOrGroupsOperation extends SyncOperation{
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         GetRemoteUsersOrGroupsOperation operation =
-                new GetRemoteUsersOrGroupsOperation(mSearchString,
-                mLimit, mOffset, mGetGroups);
+                new GetRemoteUsersOrGroupsOperation(mSearchString, mOffset, mLimit);
         RemoteOperationResult result = operation.execute(client);
 
         return result;
