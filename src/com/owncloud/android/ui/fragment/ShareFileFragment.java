@@ -254,7 +254,8 @@ public class ShareFileFragment extends Fragment
     }
 
     private void unshareWith(int shareId){
-        ( (ShareActivity) getActivity()).showWaitingLoadDialog();
+        ( (ShareActivity) getActivity()).showLoadingDialog(getActivity().getApplicationContext().
+                getString(R.string.common_loading));
         // Remove Share with id
         UnshareWithUserAsyncTask unshareTask = new UnshareWithUserAsyncTask(this);
         FileDataStorageManager fileDataStorageManager =
@@ -266,7 +267,7 @@ public class ShareFileFragment extends Fragment
     @Override
     public void onUnshareWithFinish(RemoteOperationResult result) {
         // Remove loading
-        ((ShareActivity) getActivity()).dismissWaitingLoadDialog();
+        ((ShareActivity) getActivity()).dismissLoadingDialog();
 
         if (result != null && result.isSuccess()) {
             // Refresh data
