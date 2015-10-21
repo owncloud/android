@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Vector;
 
 import android.accounts.Account;
-import android.content.ContentProvider;
 import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -200,7 +199,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.isFavorite() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_USERS, file.isSharedViaUsers() ? 1 : 0);
+        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());
         cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.getPermissions());
         cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.getRemoteId());
@@ -311,7 +310,7 @@ public class FileDataStorageManager {
             cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.isFavorite() ? 1 : 0);
             cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
             cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
-            cv.put(ProviderTableMeta.FILE_SHARED_VIA_USERS, file.isSharedViaUsers() ? 1 : 0);
+            cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
             cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());
             cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.getPermissions());
             cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.getRemoteId());
@@ -389,7 +388,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, folder.isFavorite() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_ETAG, folder.getEtag());
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, folder.isSharedViaLink() ? 1 : 0);
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_USERS, folder.isSharedViaUsers() ? 1 : 0);
+        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, folder.isSharedWithSharee() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, folder.getPublicLink());
         cv.put(ProviderTableMeta.FILE_PERMISSIONS, folder.getPermissions());
         cv.put(ProviderTableMeta.FILE_REMOTE_ID, folder.getRemoteId());
@@ -945,8 +944,8 @@ public class FileDataStorageManager {
             file.setEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG)));
             file.setShareViaLink(c.getInt(
                     c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_LINK)) == 1 ? true : false);
-            file.setShareViaUsers(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_USERS)) == 1 ? true : false);
+            file.setShareWithSharee(c.getInt(
+                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_WITH_SHAREE)) == 1 ? true : false);
             file.setPublicLink(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PUBLIC_LINK)));
             file.setPermissions(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PERMISSIONS)));
             file.setRemoteId(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID)));
@@ -1130,7 +1129,7 @@ public class FileDataStorageManager {
     private void resetShareFlagsInAllFiles() {
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_USERS, false);
+        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
         cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
         String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?";
         String[] whereArgs = new String[]{mAccount.name};
@@ -1151,7 +1150,7 @@ public class FileDataStorageManager {
     private void resetShareFlagsInFolder(OCFile folder) {
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_USERS, false);
+        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
         cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
         String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
                 ProviderTableMeta.FILE_PARENT + "=?";
@@ -1312,7 +1311,7 @@ public class FileDataStorageManager {
                 cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.isFavorite() ? 1 : 0);
                 cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
                 cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
-                cv.put(ProviderTableMeta.FILE_SHARED_VIA_USERS, file.isSharedViaUsers() ? 1 : 0);
+                cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
                 cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());
                 cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.getPermissions());
                 cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.getRemoteId());

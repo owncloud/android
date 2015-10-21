@@ -76,7 +76,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     private boolean mIsDownloading;
 
-    private boolean mShareWithUser;
+    private boolean mShareWithSharee;
 
 
     /**
@@ -121,7 +121,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mRemoteId = source.readString();
         mNeedsUpdateThumbnail = source.readInt() == 0;
         mIsDownloading = source.readInt() == 0;
-        mShareWithUser = source.readInt() == 1;
+        mShareWithSharee = source.readInt() == 1;
 
     }
 
@@ -147,7 +147,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         dest.writeString(mRemoteId);
         dest.writeInt(mNeedsUpdateThumbnail ? 1 : 0);
         dest.writeInt(mIsDownloading ? 1 : 0);
-        dest.writeInt(mShareWithUser ? 1 : 0);
+        dest.writeInt(mShareWithSharee ? 1 : 0);
     }
 
     /**
@@ -363,7 +363,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mRemoteId = null;
         mNeedsUpdateThumbnail = false;
         mIsDownloading = false;
-        mShareWithUser = false;
+        mShareWithSharee = false;
     }
 
     /**
@@ -610,12 +610,12 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         return false;
     }
 
-    public boolean isSharedViaUsers() {
-        return mShareWithUser;
+    public boolean isSharedWithSharee() {
+        return mShareWithSharee;
     }
 
-    public void setShareViaUsers(boolean shareWithUser) {
-        this.mShareWithUser = shareWithUser;
+    public void setShareWithSharee(boolean shareWithSharee) {
+        this.mShareWithSharee = shareWithSharee;
     }
 
     public boolean isSharedWithMe() {
