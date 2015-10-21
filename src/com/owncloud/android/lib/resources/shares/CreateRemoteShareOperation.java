@@ -62,6 +62,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 	private boolean mPublicUpload;
 	private String mPassword;
 	private int mPermissions;
+	private boolean mGetShareDetails;
 
 	/**
 	 * Constructor
@@ -81,8 +82,14 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 	 * 							To obtain combinations, add the desired values together.  
 	 * 							For instance, for Re-Share, delete, read, update, add 16+8+2+1 = 27.
 	 */
-	public CreateRemoteShareOperation(String remoteFilePath, ShareType shareType, String shareWith, boolean publicUpload, 
-			String password, int permissions) {
+	public CreateRemoteShareOperation(
+			String remoteFilePath,
+			ShareType shareType,
+			String shareWith,
+			boolean publicUpload,
+			String password,
+			int permissions
+	) {
 
 		mRemoteFilePath = remoteFilePath;
 		mShareType = shareType;
@@ -90,6 +97,15 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 		mPublicUpload = publicUpload;
 		mPassword = password;
 		mPermissions = permissions;
+		mGetShareDetails = false; 		// defaults to false for backwards compatibility
+	}
+
+	public boolean isGettingShareDetails () {
+		return mGetShareDetails;
+	}
+
+	public void setGetShareDetails(boolean set) {
+		mGetShareDetails = set;
 	}
 
 	@Override
@@ -141,11 +157,25 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 							sharesObjects.add(share);
 						}
 						result.setData(sharesObjects);
+
+						if (mGetShareDetails) {
+							// retrieve more info
+							OCShare emptyShare = (OCShare) sharesObjects.get(0);
+
+							GetRemoteShareOperation getInfo = new GetRemoteShareOperation(emptyShare.getIdRemoteShared());
+							result = getInfo.execute(client);
+						}
+
+					} else {
+						result = new RemoteOperationResult(ResultCode.UNKNOWN_ERROR);
+						Log_OC.e(TAG, "Successful response with no share in it");
 					}
+
 				} else if (xmlParser.isFileNotFound()){
 					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
 					
 				} else if (xmlParser.isFailure()) {
+					// TODO need deeper processing
 					result = new RemoteOperationResult(ResultCode.SHARE_FORBIDDEN);
 
 				} else {
