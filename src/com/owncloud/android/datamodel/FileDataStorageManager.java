@@ -1172,7 +1172,7 @@ public class FileDataStorageManager {
     private void resetShareFlagInAFile(String filePath){
         ContentValues cv = new ContentValues();
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, false);
-        cv.put(ProviderTableMeta.FILE_SHARED_VIA_USERS, false);
+        cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, false);
         cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, "");
         String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
                 ProviderTableMeta.FILE_PATH+ "=?";
