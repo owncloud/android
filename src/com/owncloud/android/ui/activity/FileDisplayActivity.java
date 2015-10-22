@@ -79,7 +79,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
-import com.owncloud.android.operations.CreateShareOperation;
+import com.owncloud.android.operations.CreateShareViaLinkOperation;
+import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
@@ -1346,8 +1347,11 @@ public class FileDisplayActivity extends HookActivity
         } else if (operation instanceof CreateFolderOperation) {
             onCreateFolderOperationFinish((CreateFolderOperation) operation, result);
 
-        } else if (operation instanceof CreateShareOperation) {
-            onCreateShareOperationFinish((CreateShareOperation) operation, result);
+        } else if (operation instanceof CreateShareViaLinkOperation ||
+                    operation instanceof CreateShareWithShareeOperation ) {
+
+            refreshShowDetails();
+            refreshListOfFilesFragment();
 
         } else if (operation instanceof UnshareOperation) {
             onUnshareLinkOperationFinish((UnshareOperation) operation, result);
@@ -1359,13 +1363,6 @@ public class FileDisplayActivity extends HookActivity
             onCopyFileOperationFinish((CopyFileOperation) operation, result);
         }
 
-    }
-    private void onCreateShareOperationFinish(CreateShareOperation operation,
-                                              RemoteOperationResult result) {
-        if (result.isSuccess()) {
-            refreshShowDetails();
-            refreshListOfFilesFragment();
-        }
     }
 
     private void onUnshareLinkOperationFinish(UnshareOperation operation,
