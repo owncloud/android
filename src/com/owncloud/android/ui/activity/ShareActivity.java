@@ -32,6 +32,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
 import com.owncloud.android.ui.fragment.SearchFragment;
@@ -56,6 +57,7 @@ public class ShareActivity extends FileActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.share_activity);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -142,6 +144,7 @@ public class ShareActivity extends FileActivity
 
     }
 
+
     @Override
     public void showSearchUsersAndGroups() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -173,15 +176,25 @@ public class ShareActivity extends FileActivity
         super.onRemoteOperationFinish(operation, result);
         if (operation instanceof UnshareOperation) {
             if (mShareFileFragment != null){
-                mShareFileFragment.refreshUsersOrGroupsList();
+                mShareFileFragment.refreshUsersOrGroupsListFromDB();
             }
+        } else if (operation instanceof GetSharesForFileOperation) {
+            onGetSharesForFileOperationFinish((GetSharesForFileOperation) operation, result);
         }
 
     }
 
-    @Override
-    public void onShareFragmentInteraction(Uri uri) {
+    private  void onGetSharesForFileOperationFinish(GetSharesForFileOperation operation, RemoteOperationResult result){
+        dismissLoadingDialog();
 
+        if (!result.isSuccess()) {
+            Toast.makeText(getApplicationContext(), result.getLogMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        // Show Shares
+        if (mShareFileFragment != null){
+            mShareFileFragment.refreshUsersOrGroupsListFromDB();
+        }
     }
 
     @Override
