@@ -25,7 +25,7 @@
  *
  */
 
-package com.owncloud.android.lib.resources.users;
+package com.owncloud.android.lib.resources.shares;
 
 import android.net.Uri;
 import android.util.Pair;
@@ -45,21 +45,27 @@ import java.util.ArrayList;
 /**
  * Created by masensio on 08/10/2015.
  *
- * Retrieves a list of users or groups from the ownCloud server.
- * Authentication is done by sending a Basic HTTP Authorization header.
- * Syntax: ocs/v1.php/cloud/users (Users)
- *         ocs/v1.php/cloud/groups (Groups)
+ * Retrieves a list of sharees (possible targets of a share) from the ownCloud server.
+ *
+ * Currently only handles users and groups. Users in other OC servers (federation) should be added later.
+ *
+ * Depends on SHAREE API. {@See https://github.com/owncloud/documentation/issues/1626}
+ *
+ * Syntax:
+ *    Entry point: ocs/v2.php/apps/files_sharing/api/v1/sharees
  *    HTTP method: GET
- *    url arguments: search - string, optional search string
- *    url arguments: limit - int, optional limit value
- *    url arguments: offset - int, optional offset value
+ *    url argument: itemType - string, required
+ *    url argument: format - string, optional
+ *    url argument: search - string, optional
+ *    url arguments: perPage - int, optional
+ *    url arguments: page - int, optional
  *
  * Status codes:
  *    100 - successful
  */
-public class GetRemoteUsersOrGroupsOperation extends RemoteOperation{
+public class GetRemoteShareesOperation extends RemoteOperation{
 
-    private static final String TAG = GetRemoteUsersOrGroupsOperation.class.getSimpleName();
+    private static final String TAG = GetRemoteShareesOperation.class.getSimpleName();
 
     // OCS Routes
     private static final String OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/sharees";    // from OC 8.2
@@ -73,7 +79,7 @@ public class GetRemoteUsersOrGroupsOperation extends RemoteOperation{
 
     // Arguments - constant values
     private static final String VALUE_FORMAT = "json";
-    private static final String VALUE_ITEM_TYPE = "search";     //  to get the server search for users / groups
+    private static final String VALUE_ITEM_TYPE = "search";         //  to get the server search for users / groups
 
 
     // JSON Node names
@@ -101,7 +107,7 @@ public class GetRemoteUsersOrGroupsOperation extends RemoteOperation{
      * @param page			    page index in the list of results; beginning in 1
      * @param perPage           maximum number of results in a single page
      */
-    public GetRemoteUsersOrGroupsOperation(String searchString, int page, int perPage) {
+    public GetRemoteShareesOperation(String searchString, int page, int perPage) {
         mSearchString = searchString;
         mPage = page;
         mPerPage = perPage;
