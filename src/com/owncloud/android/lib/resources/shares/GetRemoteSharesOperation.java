@@ -68,23 +68,45 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 			status = client.executeMethod(get);
+
 			if(isSuccess(status)) {
 				String response = get.getResponseBodyAsString();
+				ArrayList<Object> resultData = new ArrayList<Object>();
 
 				// Parse xml response --> obtain the response in ShareFiles ArrayList
 				// convert String into InputStream
 				InputStream is = new ByteArrayInputStream(response.getBytes());
 				ShareXMLParser xmlParser = new ShareXMLParser();
 				mShares = xmlParser.parseXMLResponse(is);
-				if (mShares != null) {
-					Log_OC.d(TAG, "Got " + mShares.size() + " shares");
-					result = new RemoteOperationResult(ResultCode.OK);
-					ArrayList<Object> sharesObjects = new ArrayList<Object>();
-					for (OCShare share: mShares) {
-						sharesObjects.add(share);
+				if (xmlParser.isSuccess()) {
+					if (mShares != null) {		// 0 shares is a right response
+						Log_OC.d(TAG, "Got " + mShares.size() + " shares");
+						result = new RemoteOperationResult(ResultCode.OK);
+						for (OCShare share : mShares) {
+							resultData.add(share);
+						}
+						result.setData(resultData);
 					}
-					result.setData(sharesObjects);
+
+				} else if (xmlParser.isWrongParameter()){
+					result = new RemoteOperationResult(ResultCode.SHARE_WRONG_PARAMETER);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else if (xmlParser.isNotFound()){
+					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else if (xmlParser.isForbidden()) {
+					result = new RemoteOperationResult(ResultCode.SHARE_FORBIDDEN);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else {
+					result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
 				}
+
 			} else {
 				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
 			}

@@ -140,46 +140,52 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
 			if(isSuccess(status)) {
 				String response = post.getResponseBodyAsString();
+				ArrayList<Object> resultData = new ArrayList<Object>();
 
-				result = new RemoteOperationResult(ResultCode.OK);
-				
 				// Parse xml response --> obtain the response in ShareFiles ArrayList
 				// convert String into InputStream
 				InputStream is = new ByteArrayInputStream(response.getBytes());
 				ShareXMLParser xmlParser = new ShareXMLParser();
 				mShares = xmlParser.parseXMLResponse(is);
 				if (xmlParser.isSuccess()) {
-					if (mShares != null) {
+					if (mShares != null && mShares.size() > 0) {
 						Log_OC.d(TAG, "Created " + mShares.size() + " share(s)");
 						result = new RemoteOperationResult(ResultCode.OK);
-						ArrayList<Object> sharesObjects = new ArrayList<Object>();
 						for (OCShare share: mShares) {
-							sharesObjects.add(share);
+							resultData.add(share);
 						}
-						result.setData(sharesObjects);
+						result.setData(resultData);
 
 						if (mGetShareDetails) {
 							// retrieve more info
-							OCShare emptyShare = (OCShare) sharesObjects.get(0);
+							OCShare emptyShare = (OCShare) resultData.get(0);
 
 							GetRemoteShareOperation getInfo = new GetRemoteShareOperation(emptyShare.getIdRemoteShared());
 							result = getInfo.execute(client);
 						}
 
 					} else {
-						result = new RemoteOperationResult(ResultCode.UNKNOWN_ERROR);
-						Log_OC.e(TAG, "Successful response with no share in it");
+						result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
+						Log_OC.e(TAG, "Successful status with no share in it");
 					}
 
-				} else if (xmlParser.isFileNotFound()){
+				} else if (xmlParser.isWrongParameter()){
+					result = new RemoteOperationResult(ResultCode.SHARE_WRONG_PARAMETER);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else if (xmlParser.isNotFound()){
 					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
-					
-				} else if (xmlParser.isFailure()) {
-					// TODO need deeper processing
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else if (xmlParser.isForbidden()) {
 					result = new RemoteOperationResult(ResultCode.SHARE_FORBIDDEN);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
 
 				} else {
-					result = new RemoteOperationResult(false, status, post.getResponseHeaders());	
+					result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
 				}
 
 			} else {

@@ -26,6 +26,7 @@ package com.owncloud.android.lib.resources.shares;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.client.methods.DeleteMethod;
@@ -77,9 +78,8 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 
 			if(isSuccess(status)) {
 				String response = delete.getResponseBodyAsString();
+				ArrayList<Object> resultData = new ArrayList<Object>();
 
-				result = new RemoteOperationResult(ResultCode.OK);
-				
 				// Parse xml response
 				// convert String into InputStream
 				InputStream is = new ByteArrayInputStream(response.getBytes());
@@ -87,10 +87,23 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 				xmlParser.parseXMLResponse(is);
 				if (xmlParser.isSuccess()) {
 					result = new RemoteOperationResult(ResultCode.OK);
-				} else if (xmlParser.isFileNotFound()){
+				} else if (xmlParser.isWrongParameter()){
+					result = new RemoteOperationResult(ResultCode.SHARE_WRONG_PARAMETER);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else if (xmlParser.isNotFound()){
 					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else if (xmlParser.isForbidden()) {
+					result = new RemoteOperationResult(ResultCode.SHARE_FORBIDDEN);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
 				} else {
-					result = new RemoteOperationResult(false, status, delete.getResponseHeaders());	
+					result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
 				}
 				
 				Log_OC.d(TAG, "Unshare " + id + ": " + result.getLogMessage());

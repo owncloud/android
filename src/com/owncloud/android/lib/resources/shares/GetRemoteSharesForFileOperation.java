@@ -37,7 +37,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 /**
  * Provide a list shares for a specific file.  
@@ -103,32 +102,53 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 
 			if(isSuccess(status)) {
 				String response = get.getResponseBodyAsString();
+				ArrayList<Object> resultData = new ArrayList<Object>();
 
-				result = new RemoteOperationResult(ResultCode.OK);
-				
 				// Parse xml response --> obtain the response in ShareFiles ArrayList
 				// convert String into InputStream
 				InputStream is = new ByteArrayInputStream(response.getBytes());
 				ShareXMLParser xmlParser = new ShareXMLParser();
 				mShares = xmlParser.parseXMLResponse(is);
-				if (mShares != null) {
-					Log_OC.d(TAG, "Got " + mShares.size() + " shares");
-					result = new RemoteOperationResult(ResultCode.OK);
-					ArrayList<Object> sharesObjects = new ArrayList<Object>();
-					for (OCShare share: mShares) {
-						// Build the link
-						if (	share.getShareType() == ShareType.PUBLIC_LINK &&
-								share.getShareLink() == null &&
-								share.getToken().length() > 0
-								) {
-							String linkToken = ShareUtils.getSharingToken(
-									client.getOwnCloudVersion());
-							share.setShareLink(client.getBaseUri() + linkToken +
-									share.getToken());
+				if (xmlParser.isSuccess()) {
+					if (mShares != null) {	// 0 shares is a right response
+						Log_OC.d(TAG, "Got " + mShares.size() + " shares");
+						result = new RemoteOperationResult(ResultCode.OK);
+						for (OCShare share: mShares) {
+							// Build the link
+							if (	share.getShareType() == ShareType.PUBLIC_LINK &&
+									share.getShareLink() == null &&
+									share.getToken().length() > 0
+									) {
+								String linkToken = ShareUtils.getSharingToken(
+										client.getOwnCloudVersion());
+								share.setShareLink(client.getBaseUri() + linkToken +
+										share.getToken());
+							}
+							resultData.add(share);
 						}
-						sharesObjects.add(share);
+						result.setData(resultData);
+					} else {
+						result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
+						Log_OC.e(TAG, "Successful status with no share in it");
 					}
-					result.setData(sharesObjects);
+
+				} else if (xmlParser.isWrongParameter()){
+					result = new RemoteOperationResult(ResultCode.SHARE_WRONG_PARAMETER);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else if (xmlParser.isNotFound()){
+					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else if (xmlParser.isForbidden()) {
+					result = new RemoteOperationResult(ResultCode.SHARE_FORBIDDEN);
+					resultData.add(xmlParser.getMessage());
+					result.setData(resultData);
+
+				} else {
+					result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
 				}
 
 			} else {
