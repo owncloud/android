@@ -64,6 +64,7 @@ public class ShareActivity extends FileActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        onAccountSet(false);
 
         setContentView(R.layout.share_activity);
 
@@ -82,7 +83,6 @@ public class ShareActivity extends FileActivity
                 if (mSearchFragment != null){
                     ft.hide(mShareFileFragment);
                     ft.add(R.id.share_fragment_container, mSearchFragment, TAG_SEARCH_FRAGMENT);
-                    ft.addToBackStack(TAG_SEARCH_FRAGMENT);
                 }
                 ft.commit();
             }
@@ -98,7 +98,7 @@ public class ShareActivity extends FileActivity
 
         handleIntent(getIntent());
 
-        onAccountSet(false);
+
     }
 
 
@@ -185,8 +185,8 @@ public class ShareActivity extends FileActivity
     public void onBackPressed() {
         super.onBackPressed();
         if (mSearchFragment != null){
-            getSupportFragmentManager().popBackStackImmediate();
             mSearchFragment = null;
+            getSupportFragmentManager().popBackStackImmediate();
             mShareFileFragment.refreshUsersOrGroupsListFromDB();
         }
     }
@@ -205,6 +205,8 @@ public class ShareActivity extends FileActivity
             refreshUsersInLists();
         } else if(operation instanceof CreateShareWithShareeOperation){
             refreshUsersInLists();
+            // Clean action
+            getIntent().setAction(null);
         }
     }
 
