@@ -1,4 +1,6 @@
 /* ownCloud Android Library is available under MIT license
+ *   @author masensio
+ *   @author David A. Velasco
  *   Copyright (C) 2015 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,34 +26,25 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 /** 
  * Get the data from the server about ALL the known shares owned by the requester.
  * 
- * @author masensio
- *
  */
 
 public class GetRemoteSharesOperation extends RemoteOperation {
 
 	private static final String TAG = GetRemoteSharesOperation.class.getSimpleName();
 
-	private ArrayList<OCShare> mShares;  // List of shares for result
 
-	
 	public GetRemoteSharesOperation() {
 	}
 
@@ -71,41 +64,14 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 
 			if(isSuccess(status)) {
 				String response = get.getResponseBodyAsString();
-				ArrayList<Object> resultData = new ArrayList<Object>();
 
-				// Parse xml response --> obtain the response in ShareFiles ArrayList
-				// convert String into InputStream
-				InputStream is = new ByteArrayInputStream(response.getBytes());
-				ShareXMLParser xmlParser = new ShareXMLParser();
-				mShares = xmlParser.parseXMLResponse(is);
-				if (xmlParser.isSuccess()) {
-					if (mShares != null) {		// 0 shares is a right response
-						Log_OC.d(TAG, "Got " + mShares.size() + " shares");
-						result = new RemoteOperationResult(ResultCode.OK);
-						for (OCShare share : mShares) {
-							resultData.add(share);
-						}
-						result.setData(resultData);
-					}
-
-				} else if (xmlParser.isWrongParameter()){
-					result = new RemoteOperationResult(ResultCode.SHARE_WRONG_PARAMETER);
-					resultData.add(xmlParser.getMessage());
-					result.setData(resultData);
-
-				} else if (xmlParser.isNotFound()){
-					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
-					resultData.add(xmlParser.getMessage());
-					result.setData(resultData);
-
-				} else if (xmlParser.isForbidden()) {
-					result = new RemoteOperationResult(ResultCode.SHARE_FORBIDDEN);
-					resultData.add(xmlParser.getMessage());
-					result.setData(resultData);
-
-				} else {
-					result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
-				}
+				// Parse xml response and obtain the list of shares
+				ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
+						new ShareXMLParser()
+				);
+				parser.setOwnCloudVersion(client.getOwnCloudVersion());
+				parser.setServerBaseUri(client.getBaseUri());
+				result = parser.parse(response);
 
 			} else {
 				result = new RemoteOperationResult(false, status, get.getResponseHeaders());

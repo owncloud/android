@@ -1,4 +1,6 @@
 /* ownCloud Android Library is available under MIT license
+ *   @author masensio
+ *   @author David A. Velasco
  *   Copyright (C) 2015 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,24 +26,16 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.HttpStatus;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Creates a new share.  This allows sharing with a user or group or as a link.
- * 
- * @author masensio
- *
  */
 public class CreateRemoteShareOperation extends RemoteOperation {
 
@@ -54,8 +48,6 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 	private static final String PARAM_PASSWORD = "password";
 	private static final String PARAM_PERMISSIONS = "permissions";
 
-	private ArrayList<OCShare> mShares;  // List of shares for result, one share in this case
-	
 	private String mRemoteFilePath;
 	private ShareType mShareType;
 	private String mShareWith;
@@ -118,7 +110,6 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 		try {
 			// Post Method
 			post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
-			//Log_OC.d(TAG, "URL ------> " + client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
 			post.setRequestHeader( "Content-Type",
                     "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
@@ -127,7 +118,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 			post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
 			post.addParameter(PARAM_SHARE_WITH, mShareWith);
 			if (mPublicUpload) {
-				post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload));
+				post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(true));
 			}
 			if (mPassword != null && mPassword.length() > 0) {
 				post.addParameter(PARAM_PASSWORD, mPassword);
@@ -140,52 +131,23 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
 			if(isSuccess(status)) {
 				String response = post.getResponseBodyAsString();
-				ArrayList<Object> resultData = new ArrayList<Object>();
 
-				// Parse xml response --> obtain the response in ShareFiles ArrayList
-				// convert String into InputStream
-				InputStream is = new ByteArrayInputStream(response.getBytes());
-				ShareXMLParser xmlParser = new ShareXMLParser();
-				mShares = xmlParser.parseXMLResponse(is);
-				if (xmlParser.isSuccess()) {
-					if (mShares != null && mShares.size() > 0) {
-						Log_OC.d(TAG, "Created " + mShares.size() + " share(s)");
-						result = new RemoteOperationResult(ResultCode.OK);
-						for (OCShare share: mShares) {
-							resultData.add(share);
-						}
-						result.setData(resultData);
+				ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
+						new ShareXMLParser()
+				);
+				parser.setOneOrMoreSharesRequired(true);
+				parser.setOwnCloudVersion(client.getOwnCloudVersion());
+				parser.setServerBaseUri(client.getBaseUri());
+				result = parser.parse(response);
 
-						if (mGetShareDetails) {
-							// retrieve more info
-							OCShare emptyShare = (OCShare) resultData.get(0);
-
-							GetRemoteShareOperation getInfo = new GetRemoteShareOperation(emptyShare.getIdRemoteShared());
-							result = getInfo.execute(client);
-						}
-
-					} else {
-						result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
-						Log_OC.e(TAG, "Successful status with no share in it");
+				if (result.isSuccess()) {
+					Log_OC.d(TAG, "Created " + result.getData().size() + " share(s)");	// should be one
+					if (mGetShareDetails) {
+						// retrieve more info - POST operation only returns the index of the new share
+						OCShare emptyShare = (OCShare) result.getData().get(0);
+						GetRemoteShareOperation getInfo = new GetRemoteShareOperation(emptyShare.getIdRemoteShared());
+						result = getInfo.execute(client);
 					}
-
-				} else if (xmlParser.isWrongParameter()){
-					result = new RemoteOperationResult(ResultCode.SHARE_WRONG_PARAMETER);
-					resultData.add(xmlParser.getMessage());
-					result.setData(resultData);
-
-				} else if (xmlParser.isNotFound()){
-					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
-					resultData.add(xmlParser.getMessage());
-					result.setData(resultData);
-
-				} else if (xmlParser.isForbidden()) {
-					result = new RemoteOperationResult(ResultCode.SHARE_FORBIDDEN);
-					resultData.add(xmlParser.getMessage());
-					result.setData(resultData);
-
-				} else {
-					result = new RemoteOperationResult(ResultCode.WRONG_SERVER_RESPONSE);
 				}
 
 			} else {
