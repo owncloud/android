@@ -37,7 +37,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.users.GetRemoteUsersOrGroupsOperation;
+import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -124,7 +124,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
         Account account = AccountUtils.getCurrentOwnCloudAccount(getContext());
 
         /// request to the OC server about users and groups matching userQuery
-        GetRemoteUsersOrGroupsOperation searchRequest = new GetRemoteUsersOrGroupsOperation(
+        GetRemoteShareesOperation searchRequest = new GetRemoteShareesOperation(
                 userQuery, REQUESTED_PAGE, RESULTS_PER_PAGE
         );
         RemoteOperationResult result = searchRequest.execute(account, getContext());
@@ -148,7 +148,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
 
             while (namesIt.hasNext()) {
                 item = namesIt.next();
-                if (GetRemoteUsersOrGroupsOperation.GROUP_TYPE.equals(item.second)) {
+                if (GetRemoteShareesOperation.GROUP_TYPE.equals(item.second)) {
                     displayName = getContext().getString(R.string.share_group_clarification, item.first);
                     dataUri = Uri.withAppendedPath(groupBaseUri, item.first);
                 } else {
