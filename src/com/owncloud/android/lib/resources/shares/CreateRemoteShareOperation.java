@@ -60,7 +60,8 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 	 * Constructor
 	 * @param remoteFilePath	Full path of the file/folder being shared. Mandatory argument
 	 * @param shareType			0 = user, 1 = group, 3 = Public link. Mandatory argument
-	 * @param shareWith			User/group ID with who the file should be shared.  This is mandatory for shareType of 0 or 1
+	 * @param shareWith			User/group ID with who the file should be shared.  This is mandatory for shareType
+	 *                          of 0 or 1
 	 * @param publicUpload		If false (default) public cannot upload to a public shared folder.
 	 * 							If true public can upload to a shared folder. Only available for public link shares
 	 * @param password			Password to protect a public link share. Only available for public link shares
@@ -140,14 +141,13 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 				parser.setServerBaseUri(client.getBaseUri());
 				result = parser.parse(response);
 
-				if (result.isSuccess()) {
-					Log_OC.d(TAG, "Created " + result.getData().size() + " share(s)");	// should be one
-					if (mGetShareDetails) {
-						// retrieve more info - POST operation only returns the index of the new share
-						OCShare emptyShare = (OCShare) result.getData().get(0);
-						GetRemoteShareOperation getInfo = new GetRemoteShareOperation(emptyShare.getIdRemoteShared());
-						result = getInfo.execute(client);
-					}
+				if (result.isSuccess() && mGetShareDetails) {
+					// retrieve more info - POST only returns the index of the new share
+					OCShare emptyShare = (OCShare) result.getData().get(0);
+					GetRemoteShareOperation getInfo = new GetRemoteShareOperation(
+							emptyShare.getIdRemoteShared()
+					);
+					result = getInfo.execute(client);
 				}
 
 			} else {
