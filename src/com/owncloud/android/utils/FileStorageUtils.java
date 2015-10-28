@@ -53,8 +53,12 @@ public class FileStorageUtils {
     public static Integer mSortOrder = SORT_NAME;
     public static Boolean mSortAscending = true;
 
-    
+    public static final boolean isStorageWritable() {
+        return Environment.getExternalStorageState(sdCard) == Environment.MEDIA_MOUNTED;
+    }
+
     public static final String getSavePath(String accountName) {
+
         File sdCard = Environment.getExternalStorageDirectory();
         return sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder() + "/" + Uri.encode(accountName, "@");
         // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names, that can be in the accountName since 0.1.190B
@@ -82,7 +86,7 @@ public class FileStorageUtils {
         }
 
     }
-    
+
     public static final String getLogPath()  {
         return Environment.getExternalStorageDirectory() + File.separator + MainApp.getDataFolder() + File.separator + "log";
     }
@@ -108,16 +112,16 @@ public class FileStorageUtils {
         String value = uploadVideoPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;
     }
-    
+
     public static String getParentPath(String remotePath) {
         String parentPath = new File(remotePath).getParent();
         parentPath = parentPath.endsWith(OCFile.PATH_SEPARATOR) ? parentPath : parentPath + OCFile.PATH_SEPARATOR;
         return parentPath;
     }
-    
+
     /**
      * Creates and populates a new {@link OCFile} object with the data read from the server.
-     * 
+     *
      * @param remote    remote file read from the server (remote file or folder).
      * @return          New OCFile instance representing the remote resource described by remote.
      */
@@ -132,10 +136,10 @@ public class FileStorageUtils {
         file.setRemoteId(remote.getRemoteId());
         return file;
     }
-    
+
     /**
      * Creates and populates a new {@link RemoteFile} object with the data read from an {@link OCFile}.
-     * 
+     *
      * @param ocFile    OCFile
      * @return          New RemoteFile instance representing the resource described by ocFile.
      */
@@ -150,9 +154,9 @@ public class FileStorageUtils {
         file.setRemoteId(ocFile.getRemoteId());
         return file;
     }
-    
+
     /**
-     * Sorts all filenames, regarding last user decision 
+     * Sorts all filenames, regarding last user decision
      */
     public static Vector<OCFile> sortFolder(Vector<OCFile> files){
         switch (mSortOrder){
@@ -162,14 +166,14 @@ public class FileStorageUtils {
         case 1:
             files = FileStorageUtils.sortByDate(files);
             break;
-        case 2: 
+        case 2:
            // mFiles = FileStorageUtils.sortBySize(mSortAscending);
             break;
         }
-       
+
         return files;
     }
-    
+
     /**
      * Sorts list by Date
      * @param files
@@ -181,7 +185,7 @@ public class FileStorageUtils {
         } else {
             val = -1;
         }
-        
+
         Collections.sort(files, new Comparator<OCFile>() {
             public int compare(OCFile o1, OCFile o2) {
                 if (o1.isFolder() && o2.isFolder()) {
@@ -200,7 +204,7 @@ public class FileStorageUtils {
                 }
             }
         });
-        
+
         return files;
     }
 
@@ -215,7 +219,7 @@ public class FileStorageUtils {
 //        } else {
 //            val = -1;
 //        }
-//        
+//
 //        Collections.sort(files, new Comparator<OCFile>() {
 //            public int compare(OCFile o1, OCFile o2) {
 //                if (o1.isFolder() && o2.isFolder()) {
@@ -234,7 +238,7 @@ public class FileStorageUtils {
 //                }
 //            }
 //        });
-//        
+//
 //        return files;
 //    }
 
@@ -262,10 +266,10 @@ public class FileStorageUtils {
                 return val * new AlphanumComparator().compare(o1, o2);
             }
         });
-        
+
         return files;
     }
-    
+
     /**
      * Local Folder size
      * @param dir File
@@ -301,7 +305,6 @@ public class FileStorageUtils {
         String result = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
         return (result != null) ? result : "";
     }
-
     /**
      * Scans the default location for saving local copies of files searching for
      * a 'lost' file with the same full name as the {@link OCFile} received as
@@ -329,5 +332,4 @@ public class FileStorageUtils {
             }
         }
     }
-
 }
