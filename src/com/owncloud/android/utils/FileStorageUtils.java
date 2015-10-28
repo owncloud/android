@@ -54,7 +54,7 @@ public class FileStorageUtils {
     public static Boolean mSortAscending = true;
 
     public static final boolean isStorageWritable() {
-        return Environment.getExternalStorageState(sdCard) == Environment.MEDIA_MOUNTED;
+        return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED;
     }
 
     public static final String getSavePath(String accountName) {
