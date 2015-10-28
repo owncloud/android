@@ -131,6 +131,7 @@ public class GetRemoteShareesOperation extends RemoteOperation{
 
             // Get Method
             get = new GetMethod(uriBuilder.build().toString());
+            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
             status = client.executeMethod(get);
 
