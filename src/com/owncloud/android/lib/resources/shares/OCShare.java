@@ -45,7 +45,9 @@ public class OCShare implements Parcelable, Serializable {
 	private static final long serialVersionUID = 4124975224281327921L;
 
 	private static final String TAG = OCShare.class.getSimpleName();
-    
+
+    public static final int DEFAULT_PERMISSION = -1;
+
     private long mId;
     private long mFileSource;
     private long mItemSource;

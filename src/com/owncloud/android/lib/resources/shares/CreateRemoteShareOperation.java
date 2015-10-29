@@ -124,7 +124,9 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 			if (mPassword != null && mPassword.length() > 0) {
 				post.addParameter(PARAM_PASSWORD, mPassword);
 			}
-			post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
+			if (OCShare.DEFAULT_PERMISSION != mPermissions) {
+				post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
+			}
 
 			post.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
             
