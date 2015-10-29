@@ -88,9 +88,10 @@ public class GetRemoteShareesOperation extends RemoteOperation{
     private static final String NODE_EXACT = "exact";
     private static final String NODE_USERS = "users";
     private static final String NODE_GROUPS = "groups";
-    private static final String NODE_VALUE = "value";
-    private static final String PROPERTY_LABEL = "label";
-    private static final String PROPERTY_SHARE_TYPE = "shareType";
+    public static final String NODE_VALUE = "value";
+    public static final String PROPERTY_LABEL = "label";
+    public static final String PROPERTY_SHARE_TYPE = "shareType";
+    public static final String PROPERTY_SHARE_WITH = "shareWith";
 
     // Result types
     public static final Byte USER_TYPE = 0;
@@ -156,16 +157,16 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                 };
 
                 ArrayList<Object> data = new ArrayList<Object>(); // For result data
-                Pair<String, Byte> match;
+//                Pair<String, Byte> match;
                 for (int i=0; i<4; i++) {
                     for(int j=0; j< jsonResults[i].length(); j++){
                         JSONObject jsonResult = jsonResults[i].getJSONObject(j);
-                        match =  new Pair<String, Byte>(
-                                jsonResult.getString(PROPERTY_LABEL),
-                                (byte)jsonResult.getJSONObject(NODE_VALUE).getInt(PROPERTY_SHARE_TYPE)
-                        );
-                        data.add(match);
-                        Log_OC.d(TAG, "*** Added item: " + match.first);
+//                        match =  new Pair<String, Byte>(
+//                                jsonResult.getString(PROPERTY_LABEL),
+//                                (byte)jsonResult.getJSONObject(NODE_VALUE).getInt(PROPERTY_SHARE_TYPE)
+//                        );
+                        data.add(jsonResult);
+                        Log_OC.d(TAG, "*** Added item: " + jsonResult.getString(PROPERTY_LABEL));
                     }
                 }
 
