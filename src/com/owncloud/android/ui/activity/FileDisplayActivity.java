@@ -59,6 +59,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -162,6 +166,9 @@ public class FileDisplayActivity extends HookActivity
 
         super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account
                                             // is valid
+
+        // Update security provider to allow TLSv1.2 on devices with Android 16 or higher
+        updateSecurityProvider();
 
         /// grant that FileObserverService is watching favorite files
         if (savedInstanceState == null) {
@@ -284,6 +291,30 @@ public class FileDisplayActivity extends HookActivity
                 updateFragmentsVisibility(!file.isFolder());
                 updateActionBarTitleAndHomeButton(file.isFolder() ? null : file);
             }
+        }
+    }
+
+    private void updateSecurityProvider() {
+        try {
+            ProviderInstaller.installIfNeeded(this);
+        } catch (GooglePlayServicesRepairableException e) {
+
+            // Indicates that Google Play services is out of date, disabled, etc.
+
+            // Prompt the user to install/update/enable Google Play services.
+            GooglePlayServicesUtil.showErrorNotification(
+                e.getConnectionStatusCode(), this);
+
+            Log_OC.e(TAG, "Google Play Services are not updated.");
+            e.printStackTrace();
+
+            return;
+
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Log_OC.e(TAG, "Google Play Services are not available.");
+            e.printStackTrace();
+
+            return;
         }
     }
 
@@ -1801,4 +1832,5 @@ public class FileDisplayActivity extends HookActivity
    public void allFilesOption() {
        browseToRoot();
    }
+
 }
