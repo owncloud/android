@@ -28,7 +28,6 @@
 package com.owncloud.android.lib.resources.shares;
 
 import android.net.Uri;
-import android.util.Pair;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -157,14 +156,9 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                 };
 
                 ArrayList<Object> data = new ArrayList<Object>(); // For result data
-//                Pair<String, Byte> match;
                 for (int i=0; i<4; i++) {
                     for(int j=0; j< jsonResults[i].length(); j++){
                         JSONObject jsonResult = jsonResults[i].getJSONObject(j);
-//                        match =  new Pair<String, Byte>(
-//                                jsonResult.getString(PROPERTY_LABEL),
-//                                (byte)jsonResult.getJSONObject(NODE_VALUE).getInt(PROPERTY_SHARE_TYPE)
-//                        );
                         data.add(jsonResult);
                         Log_OC.d(TAG, "*** Added item: " + jsonResult.getString(PROPERTY_LABEL));
                     }
