@@ -33,7 +33,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 
-
 /** 
  * Get the data about a Share resource, known its remote ID.
  */

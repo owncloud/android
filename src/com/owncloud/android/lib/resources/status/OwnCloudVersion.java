@@ -46,6 +46,8 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public static final int MINIMUM_VERSION_FOR_SEARCHING_USERS = 0x08020000; //8.2
 
     public static final int VERSION_8 = 0x08000000; // 8.0
+
+    public static final int MINIMUM_VERSION_CAPABILITIES_API = 0x08010000; // 8.1
     
     private static final int MAX_DOTS = 3;
     
@@ -143,6 +145,10 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     public boolean isSearchUsersSupported() {
         return (mVersion >= MINIMUM_VERSION_FOR_SEARCHING_USERS);
+    }
+
+    public boolean isVersionWithCapabilitiesAPI(){
+        return (mVersion>= MINIMUM_VERSION_CAPABILITIES_API);
     }
     
     

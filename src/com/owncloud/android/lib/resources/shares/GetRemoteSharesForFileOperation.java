@@ -35,7 +35,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-
 /**
  * Provide a list shares for a specific file.  
  * The input is the full path of the desired file.  
