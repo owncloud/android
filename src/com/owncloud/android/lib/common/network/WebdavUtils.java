@@ -32,6 +32,8 @@ import java.util.Locale;
 
 import android.net.Uri;
 
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.xml.Namespace;
@@ -131,4 +133,47 @@ public class WebdavUtils {
 
         return propSet;
     }
+
+    /**
+     *
+     * @param rawEtag
+     * @return
+     */
+    public static String parseEtag(String rawEtag) {
+        if (rawEtag == null || rawEtag.length() == 0) {
+            return "";
+        }
+        if (rawEtag.endsWith("-gzip")) {
+            rawEtag = rawEtag.substring(0, rawEtag.length() - 5);
+        }
+        if (rawEtag.length() >= 2 && rawEtag.startsWith("\"") && rawEtag.endsWith("\"")) {
+            rawEtag = rawEtag.substring(1, rawEtag.length() - 1);
+        }
+        return rawEtag;
+    }
+
+
+    /**
+     *
+     * @param method
+     * @return
+     */
+    public static String getEtagFromResponse(HttpMethod method) {
+        Header eTag = method.getResponseHeader("OC-ETag");
+        if (eTag == null) {
+            eTag = method.getResponseHeader("oc-etag");
+        }
+        if (eTag == null) {
+            eTag = method.getResponseHeader("ETag");
+        }
+        if (eTag == null) {
+            eTag = method.getResponseHeader("etag");
+        }
+        String result = "";
+        if (eTag != null) {
+            result = parseEtag(eTag.getValue());
+        }
+        return result;
+    }
+
 }

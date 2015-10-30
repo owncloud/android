@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.http.HttpStatus;
@@ -60,14 +59,16 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	private static final String TAG = UploadRemoteFileOperation.class.getSimpleName();
 
 	protected static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
+	protected static final String IF_MATCH_HEADER = "If-Match";
 
 	protected String mLocalPath;
 	protected String mRemotePath;
 	protected String mMimeType;
 	protected PutMethod mPutMethod = null;
 	protected boolean mForbiddenCharsInServer = false;
+	protected String mRequiredEtag = null;
 	
-	private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
+	protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
 	protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
 
 	protected RequestEntity mEntity = null;
@@ -75,7 +76,12 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType) {
 		mLocalPath = localPath;
 		mRemotePath = remotePath;
-		mMimeType = mimeType;	
+		mMimeType = mimeType;
+	}
+
+	public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType, String requiredEtag) {
+		this(localPath, remotePath, mimeType);
+		mRequiredEtag = requiredEtag;
 	}
 
 	@Override
@@ -83,28 +89,28 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 		RemoteOperationResult result = null;
 
 		try {
-			// / perform the upload
-			synchronized (mCancellationRequested) {
-				if (mCancellationRequested.get()) {
-					throw new OperationCancelledException();
+			mPutMethod = new PutMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
+
+			if (mCancellationRequested.get()) {
+				// the operation was cancelled before getting it's turn to be executed in the queue of uploads
+				result = new RemoteOperationResult(new OperationCancelledException());
+
+			} else {
+				// perform the upload
+				int status = uploadFile(client);
+				if (mForbiddenCharsInServer){
+					result = new RemoteOperationResult(
+							RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER);
 				} else {
-					mPutMethod = new PutMethod(client.getWebdavUri() +
-                            WebdavUtils.encodePath(mRemotePath));
+					result = new RemoteOperationResult(isSuccess(status), status,
+							(mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
 				}
 			}
 
-			int status = uploadFile(client);
-			if (mForbiddenCharsInServer){
-				result = new RemoteOperationResult(
-						RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER);
-			} else {
-				result = new RemoteOperationResult(isSuccess(status), status,
-						(mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
-			}
 		} catch (Exception e) {
-			// TODO something cleaner with cancellations
-			if (mCancellationRequested.get()) {
+			if (mPutMethod != null && mPutMethod.isAborted()) {
 				result = new RemoteOperationResult(new OperationCancelledException());
+
 			} else {
 				result = new RemoteOperationResult(e);
 			}
@@ -117,8 +123,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
                 status == HttpStatus.SC_NO_CONTENT));
 	}
 
-	protected int uploadFile(OwnCloudClient client) throws HttpException, IOException,
-            OperationCancelledException {
+	protected int uploadFile(OwnCloudClient client) throws IOException {
 		int status = -1;
 		try {
 			File f = new File(mLocalPath);
@@ -126,6 +131,9 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			synchronized (mDataTransferListeners) {
 				((ProgressiveDataTransferer)mEntity)
                         .addDatatransferProgressListeners(mDataTransferListeners);
+			}
+			if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
+				mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
 			}
 			mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(f.length()));
 			mPutMethod.setRequestEntity(mEntity);

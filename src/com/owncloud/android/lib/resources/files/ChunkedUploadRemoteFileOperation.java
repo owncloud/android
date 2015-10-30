@@ -32,7 +32,6 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.Random;
 
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PutMethod;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -47,14 +46,21 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     
     public static final long CHUNK_SIZE = 1024000;
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
+    private static final String OC_CHUNK_SIZE_HEADER = "OC-Chunk-Size";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
     public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType){
-		 super(storagePath, remotePath, mimeType);	
+        super(storagePath, remotePath, mimeType);
+    }
+
+    public ChunkedUploadRemoteFileOperation(
+            String storagePath, String remotePath, String mimeType, String requiredEtag
+    ){
+		 super(storagePath, remotePath, mimeType, requiredEtag);
 	}
     
     @Override
-    protected int uploadFile(OwnCloudClient client) throws HttpException, IOException {
+    protected int uploadFile(OwnCloudClient client) throws IOException {
         int status = -1;
 
         FileChannel channel = null;
@@ -64,8 +70,6 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             raf = new RandomAccessFile(file, "r");
             channel = raf.getChannel();
             mEntity = new ChunkFromFileChannelRequestEntity(channel, mMimeType, CHUNK_SIZE, file);
-            //((ProgressiveDataTransferer)mEntity).
-            // addDatatransferProgressListeners(getDataTransferListeners());
             synchronized (mDataTransferListeners) {
 				((ProgressiveDataTransferer)mEntity)
                         .addDatatransferProgressListeners(mDataTransferListeners);
@@ -74,17 +78,31 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             long offset = 0;
             String uriPrefix = client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath) +
                     "-chunking-" + Math.abs((new Random()).nextInt(9000)+1000) + "-" ;
-            long chunkCount = (long) Math.ceil((double)file.length() / CHUNK_SIZE);
+            long totalLength = file.length();
+            long chunkCount = (long) Math.ceil((double)totalLength / CHUNK_SIZE);
+            String chunkSizeStr = String.valueOf(CHUNK_SIZE);
+            String totalLengthStr = String.valueOf(file.length());
             for (int chunkIndex = 0; chunkIndex < chunkCount ; chunkIndex++, offset += CHUNK_SIZE) {
+                if (chunkIndex == chunkCount - 1) {
+                    chunkSizeStr = String.valueOf(CHUNK_SIZE * chunkCount - totalLength);
+                }
                 if (mPutMethod != null) {
                     mPutMethod.releaseConnection();     // let the connection available
                                                         // for other methods
                 }
                 mPutMethod = new PutMethod(uriPrefix + chunkCount + "-" + chunkIndex);
+                if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
+                    mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
+                }
                 mPutMethod.addRequestHeader(OC_CHUNKED_HEADER, OC_CHUNKED_HEADER);
-                mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(file.length()));
+                mPutMethod.addRequestHeader(OC_CHUNK_SIZE_HEADER, chunkSizeStr);
+                mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, totalLengthStr);
                 ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
                 mPutMethod.setRequestEntity(mEntity);
+                if (mCancellationRequested.get()) {
+                    mPutMethod.abort();
+                    // next method will throw an exception
+                }
                 status = client.executeMethod(mPutMethod);
 
                 if (status == 400) {
