@@ -49,7 +49,12 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 
 import org.apache.http.protocol.HTTP;
 
+import java.io.IOException;
 import java.util.List;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -69,6 +74,67 @@ public class FileOperationsHelper {
         mFileActivity = fileActivity;
     }
 
+	private Intent createIntentFromFile(OCFile file) {
+		Intent intent = null;
+		String storagePath = file.getStoragePath();
+		int lastIndexOfDot = storagePath.lastIndexOf('.');
+		if (lastIndexOfDot >= 0) {
+			String fileExt = storagePath.substring(lastIndexOfDot + 1);
+			// URL file  see http://www.fmtz.com/formats/url-file-format/article
+			if (fileExt.equalsIgnoreCase("url")) {
+				String url = null;
+				Pattern p = Pattern.compile("^URL=(.+)$");
+
+				try {
+					FileReader fr = new FileReader(storagePath);
+					BufferedReader br = new BufferedReader(fr);
+
+					String line;
+					while ((line = br.readLine()) != null) {
+						Matcher m = p.matcher(line);
+						if (m.find()) {
+							url = m.group(1);
+							break;
+						}
+					}
+					br.close();
+					fr.close();
+				} catch (IOException ex) {
+					;
+				}
+				if (url != null) {
+					intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+				}
+			} else
+			// webloc  see http://stackoverflow.com/questions/146575/crafting-webloc-file
+			if (fileExt.equalsIgnoreCase("webloc")) {
+				String url = null;
+				Pattern p = Pattern.compile("<string>(.+)</string>");
+
+				try {
+					FileReader fr = new FileReader(storagePath);
+					BufferedReader br = new BufferedReader(fr);
+
+					String line;
+					while ((line = br.readLine()) != null) {
+						Matcher m = p.matcher(line);
+						if (m.find()) {
+							url = m.group(1);
+							break;
+						}
+					}
+					br.close();
+					fr.close();
+				} catch (IOException ex) {
+					;
+				}
+				if (url != null) {
+					intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+				}
+			}
+		}
+		return intent;
+	}
 
     public void openFile(OCFile file) {
         if (file != null) {
@@ -78,15 +144,15 @@ public class FileOperationsHelper {
             Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
             intentForSavedMimeType.setDataAndType(Uri.parse("file://"+ encodedStoragePath),
                     file.getMimetype());
-            intentForSavedMimeType.setFlags(
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-            );
-            
+
             Intent intentForGuessedMimeType = null;
-            if (storagePath.lastIndexOf('.') >= 0) {
-                String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                        storagePath.substring(storagePath.lastIndexOf('.') + 1)
-                );
+            Intent intentFromFile = null;
+            int lastIndexOfDot = storagePath.lastIndexOf('.');
+            if (lastIndexOfDot >= 0) {
+				intentFromFile = createIntentFromFile(file);
+
+                String fileExt = storagePath.substring(lastIndexOfDot + 1);
+                String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExt);
                 if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
                     intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
                     intentForGuessedMimeType.
@@ -100,11 +166,16 @@ public class FileOperationsHelper {
             }
 
             Intent openFileWithIntent;
-            if (intentForGuessedMimeType != null) {
+            if (intentFromFile != null){
+                openFileWithIntent = intentFromFile;
+            } else if (intentForGuessedMimeType != null) {
                 openFileWithIntent = intentForGuessedMimeType;
             } else {
                 openFileWithIntent = intentForSavedMimeType;
             }
+			openFileWithIntent.setFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            );
 
             List<ResolveInfo> launchables = mFileActivity.getPackageManager().
                     queryIntentActivities(openFileWithIntent, PackageManager.GET_INTENT_FILTERS);
