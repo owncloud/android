@@ -86,17 +86,17 @@ public class OCShare implements Parcelable, Serializable {
         mFileSource = 0;
         mItemSource = 0;
         mShareType = ShareType.NO_SHARED; 
-        mShareWith = null;
-        mPath = null;
+        mShareWith = "";
+        mPath = "";
         mPermissions = -1;
         mSharedDate = 0;
         mExpirationDate = 0;
-        mToken = null;
-        mSharedWithDisplayName = null;
+        mToken = "";
+        mSharedWithDisplayName = "";
         mIsFolder = false;
         mUserId = -1;
         mIdRemoteShared = -1;
-        mShareLink = null;
+        mShareLink = "";
     }	
     
     /// Getters and Setters
@@ -138,7 +138,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public void setShareWith(String shareWith) {
-        this.mShareWith = shareWith;
+        this.mShareWith = (shareWith != null) ? shareWith : "";
     }
 
     public String getPath() {
@@ -146,7 +146,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public void setPath(String path) {
-        this.mPath = path;
+        this.mPath = (path != null) ? path : "";
     }
 
     public int getPermissions() {
@@ -178,7 +178,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public void setToken(String token) {
-        this.mToken = token;
+        this.mToken = (token != null) ? token : "";
     }
 
     public String getSharedWithDisplayName() {
@@ -186,7 +186,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public void setSharedWithDisplayName(String sharedWithDisplayName) {
-        this.mSharedWithDisplayName = sharedWithDisplayName;
+        this.mSharedWithDisplayName = (sharedWithDisplayName != null) ? sharedWithDisplayName : "";
     }
 
     public boolean isFolder() {
@@ -218,7 +218,7 @@ public class OCShare implements Parcelable, Serializable {
     }
     
     public void setShareLink(String shareLink) {
-    	this.mShareLink = shareLink;
+        this.mShareLink = (shareLink != null) ? shareLink : "";
     }
     
     /** 
