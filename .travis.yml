@@ -1,3 +1,4 @@
+sudo: false
 language: android
 android:
   components:
@@ -20,8 +21,8 @@ script:
 - ./gradlew clean build
 env:
   global:
-  - secure: HxHoqnC8mauCKi87zlo7pQcSsSw0W5MtW+iUcB8T11quwTBgUPWIOmycXv2FcmwpST0E43Ct+dhE+mttm+6P+5PSB33HQNLq00hfTVIJ4ttcb/5eWW8MnP7L+kPK8d0EtfDG6GQto7QktaybeG4+sNKKD336ZlFfM7xgPtPv+tg=
-  - secure: WQMw0ciloe8i2ApGhePhuTmmH8UgAV1Ri10C1qhUH9hVOJAr+/1X5A93VPYGrgJ2EH5MdiL6f2XMDCYAgb9efuvZIUKNE0J92xh8m/yRa8nAVWNBE0PBdS4+OycoHpIQfMcUghooERXjP4GUYd/ZwICvWA+sXdOYWDdKjODUgl4=
-  - secure: QPxKT8vC7sm1b/hYJcfkQkLgpwNRBvVKk8S8S0t43mmqPJfs94FJTQHH4kZaGSwOeuDkRQbGuKzYtXOnGOKX2hhUBqKJd1idpJnUID8id8Kqo6VutjG017+XxZQp0hPHmfmDxYkDvlaLeoZpP2NkpwZ1p4TL2MSCr2Ibl6uTWvc=
+  - secure: a21NrzTCQnkTKtRGo7B1lyF2WWbpBT2N64V2Tf+oUcRLOUx3XM/mDi60mAdGd0WXV9tHD8GGmu0tQ7LGZ2VsIxixVxjzEYwX4HRTodewYez6WxBMjVEHHy+3jmc1zU4k3AAqr+uW7L4BKa5r9tH+nq9ecJMDMgW8o9MKXuP7Vso=
+  - secure: UVnaC5Qzat2C8WlMMb8aycz1ChZKjP8Kz89qBbVcqYK+PLAGKpUNxFa39/2oA5jkMyyOcXYC9bX1ZYzHLH7nJ8LbQgaxXMT4gvgvN0l6KezjDavIW60idD9BbugkwzNj/cjoU/DdxBykPsTn4vSRaESVNTdEbM27YU4FBPzTANY=
+  - secure: XEQY8s7p65lWWOuKbVDdTh6ZJtRTJ74Zw3H/+2Ms6vjZhFZsdUJjGo66LW6YvlhmYDXgiPB9piYQGcrGgT3hXJwXoge6n1pdixnV250J0T0dIZMbXYTWTARxDsyq48+LgUuF3pgqvqDWhBcemrePWv48q7fs/mwzuFSOyc8QwLk=
   matrix:
   - ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a

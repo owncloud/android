@@ -57,7 +57,7 @@ public class ShareXMLParser {
 	private static final String NODE_META = "meta";
 	private static final String NODE_STATUS = "status";
 	private static final String NODE_STATUS_CODE = "statuscode";
-	//private static final String NODE_MESSAGE = "message";
+	private static final String NODE_MESSAGE = "message";
 
 	private static final String NODE_DATA = "data";
 	private static final String NODE_ELEMENT = "element";
@@ -75,18 +75,20 @@ public class ShareXMLParser {
 	private static final String NODE_TOKEN = "token";
 	private static final String NODE_STORAGE = "storage";
 	private static final String NODE_MAIL_SEND = "mail_send";
-	private static final String NODE_SHARE_WITH_DISPLAY_NAME = "share_with_display_name";
+	private static final String NODE_SHARE_WITH_DISPLAY_NAME = "share_with_displayname";
 	
 	private static final String NODE_URL = "url";
 
 	private static final String TYPE_FOLDER = "folder";
 	
 	private static final int SUCCESS = 100;
-	private static final int FAILURE = 403;
-	private static final int FILE_NOT_FOUND = 404;
+	private static final int ERROR_WRONG_PARAMETER = 403;
+	private static final int ERROR_FORBIDDEN = 403;
+	private static final int ERROR_NOT_FOUND = 404;
 
 	private String mStatus;
 	private int mStatusCode;
+	private String mMessage;
 
 	// Getters and Setters
 	public String getStatus() {
@@ -104,21 +106,36 @@ public class ShareXMLParser {
 	public void setStatusCode(int statusCode) {
 		this.mStatusCode = statusCode;
 	}
+
+	public String getMessage() {
+		return mMessage;
+	}
+
+	public void setMessage(String message) {
+		this.mMessage = message;
+	}
+
 	// Constructor
 	public ShareXMLParser() {
-		mStatusCode = 100;
+		mStatusCode = -1;
 	}
 
 	public boolean isSuccess() {
 		return mStatusCode == SUCCESS;
 	}
-	public boolean isFailure() {
-		return mStatusCode == FAILURE;
+
+	public boolean isForbidden() {
+		return mStatusCode == ERROR_FORBIDDEN;
 	}
-	public boolean isFileNotFound() {
-		return mStatusCode == FILE_NOT_FOUND;
+
+	public boolean isNotFound() {
+		return mStatusCode == ERROR_NOT_FOUND;
 	}
-	
+
+	public boolean isWrongParameter() {
+		return mStatusCode == ERROR_WRONG_PARAMETER;
+	}
+
 	/**
 	 * Parse is as response of Share API
 	 * @param is
@@ -196,6 +213,9 @@ public class ShareXMLParser {
 
 			} else if (name.equalsIgnoreCase(NODE_STATUS_CODE)) {
 				setStatusCode(Integer.parseInt(readNode(parser, NODE_STATUS_CODE)));
+
+			} else if (name.equalsIgnoreCase(NODE_MESSAGE)) {
+				setMessage(readNode(parser, NODE_MESSAGE));
 
 			} else {
 				skip(parser);
@@ -348,9 +368,7 @@ public class ShareXMLParser {
 	}
 
 	private boolean isValidShare(OCShare share) {
-		return ((share.getIdRemoteShared() > -1) &&
-				(share.getShareType() == ShareType.PUBLIC_LINK)	// at this moment we only care about public shares
-				);
+		return (share.getIdRemoteShared() > -1);
 	}
 
 	private void fixPathForFolder(OCShare share) {

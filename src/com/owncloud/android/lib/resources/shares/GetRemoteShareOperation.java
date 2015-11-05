@@ -1,5 +1,4 @@
 /* ownCloud Android Library is available under MIT license
- *   @author masensio
  *   @author David A. Velasco
  *   Copyright (C) 2015 ownCloud Inc.
  *   
@@ -26,70 +25,44 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.http.HttpStatus;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.HttpStatus;
 
-/**
- * Provide a list shares for a specific file.  
- * The input is the full path of the desired file.  
- * The output is a list of everyone who has the file shared with them.
+
+/** 
+ * Get the data about a Share resource, known its remote ID.
  */
-public class GetRemoteSharesForFileOperation extends RemoteOperation {
 
-	private static final String TAG = GetRemoteSharesForFileOperation.class.getSimpleName();
-	
-	private static final String PARAM_PATH = "path";
-	private static final String PARAM_RESHARES = "reshares";
-	private static final String PARAM_SUBFILES = "subfiles";
+public class GetRemoteShareOperation extends RemoteOperation {
 
-	private String mRemoteFilePath;
-	private boolean mReshares;
-	private boolean mSubfiles;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param remoteFilePath	Path to file or folder
-	 * @param reshares			If set to false (default), only shares from the current user are
-	 *                          returned
-	 * 							If set to true, all shares from the given file are returned
-	 * @param subfiles			If set to false (default), lists only the folder being shared
-	 * 							If set to true, all shared files within the folder are returned.
-	 */
-	public GetRemoteSharesForFileOperation(String remoteFilePath, boolean reshares,
-										   boolean subfiles) {
-		mRemoteFilePath = remoteFilePath;
-		mReshares = reshares;
-		mSubfiles = subfiles;
+	private static final String TAG = GetRemoteShareOperation.class.getSimpleName();
+
+	private long mRemoteId;
+
+
+	public GetRemoteShareOperation(long remoteId) {
+		mRemoteId = remoteId;
 	}
+
 
 	@Override
 	protected RemoteOperationResult run(OwnCloudClient client) {
 		RemoteOperationResult result = null;
 		int status = -1;
 
+		// Get Method        
 		GetMethod get = null;
 
-		try {
-			// Get Method
-			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
-
-			// Add Parameters to Get Method
-			get.setQueryString(new NameValuePair[]{
-					new NameValuePair(PARAM_PATH, mRemoteFilePath),
-					new NameValuePair(PARAM_RESHARES, String.valueOf(mReshares)),
-					new NameValuePair(PARAM_SUBFILES, String.valueOf(mSubfiles))
-			});
-
+		// Get the response
+		try{
+			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + "/" + Long.toString(mRemoteId));
 			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
-            
+
 			status = client.executeMethod(get);
 
 			if(isSuccess(status)) {
@@ -99,13 +72,10 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 				ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
 						new ShareXMLParser()
 				);
+				parser.setOneOrMoreSharesRequired(true);
 				parser.setOwnCloudVersion(client.getOwnCloudVersion());
 				parser.setServerBaseUri(client.getBaseUri());
 				result = parser.parse(response);
-
-				if (result.isSuccess()) {
-					Log_OC.d(TAG, "Got " + result.getData().size() + " shares");
-				}
 
 			} else {
 				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
@@ -113,7 +83,7 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 			
 		} catch (Exception e) {
 			result = new RemoteOperationResult(e);
-			Log_OC.e(TAG, "Exception while getting shares", e);
+			Log_OC.e(TAG, "Exception while getting remote shares ", e);
 			
 		} finally {
 			if (get != null) {
@@ -126,5 +96,6 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
 	private boolean isSuccess(int status) {
 		return (status == HttpStatus.SC_OK);
 	}
+
 
 }

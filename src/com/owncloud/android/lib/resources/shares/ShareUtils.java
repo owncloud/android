@@ -39,17 +39,15 @@ public class ShareUtils {
 	public static final String SHARING_API_PATH ="/ocs/v1.php/apps/files_sharing/api/v1/shares"; 
 
     // String to build the link with the token of a share:
-    // server address + "/public.php?service=files&t=" + token
-    public static final String SHARING_LINK_TOKEN_BEFORE_VERSION_8 = "/public.php?service=files&t=";
-    public static final String SHARING_LINK_TOKEN_AFTER_VERSION_8= "/index.php/s/";
+    public static final String SHARING_LINK_PATH_BEFORE_VERSION_8 = "/public.php?service=files&t=";
+    public static final String SHARING_LINK_PATH_AFTER_VERSION_8 = "/index.php/s/";
 
-    public static String getSharingToken(OwnCloudVersion version){
+    public static String getSharingLinkPath(OwnCloudVersion version){
         if (version!= null && version.isAfter8Version()){
-            return SHARING_LINK_TOKEN_AFTER_VERSION_8;
+            return SHARING_LINK_PATH_AFTER_VERSION_8;
         } else {
-            return SHARING_LINK_TOKEN_BEFORE_VERSION_8;
+            return SHARING_LINK_PATH_BEFORE_VERSION_8;
         }
-
     }
-    
+
 }

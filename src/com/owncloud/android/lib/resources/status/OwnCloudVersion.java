@@ -43,6 +43,8 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     public static final int MINIMUM_SERVER_VERSION_FOR_REMOTE_THUMBNAILS = 0x07080000; // 7.8.0
 
+    public static final int MINIMUM_VERSION_FOR_SEARCHING_USERS = 0x08020000; //8.2
+
     public static final int VERSION_8 = 0x08000000; // 8.0
     
     private static final int MAX_DOTS = 3;
@@ -137,6 +139,10 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     public boolean isAfter8Version(){
         return (mVersion >= VERSION_8);
+    }
+
+    public boolean isSearchUsersSupported() {
+        return (mVersion >= MINIMUM_VERSION_FOR_SEARCHING_USERS);
     }
     
     
