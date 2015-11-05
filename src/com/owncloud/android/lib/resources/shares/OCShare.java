@@ -61,7 +61,7 @@ public class OCShare implements Parcelable, Serializable {
     private String mSharedWithDisplayName;
     private boolean mIsFolder;
     private long mUserId;
-    private long mIdRemoteShared;
+    private long mRemoteId;
     private String mShareLink;
     
     public OCShare() {
@@ -95,7 +95,7 @@ public class OCShare implements Parcelable, Serializable {
         mSharedWithDisplayName = "";
         mIsFolder = false;
         mUserId = -1;
-        mIdRemoteShared = -1;
+        mRemoteId = -1;
         mShareLink = "";
     }	
     
@@ -205,12 +205,12 @@ public class OCShare implements Parcelable, Serializable {
         this.mUserId = userId;
     }
 
-    public long getIdRemoteShared() {
-        return mIdRemoteShared;
+    public long getRemoteId() {
+        return mRemoteId;
     }
 
-    public void setIdRemoteShared(long idRemoteShared) {
-        this.mIdRemoteShared = idRemoteShared;
+    public void setIdRemoteShared(long remoteId) {
+        this.mRemoteId = remoteId;
     }
     
     public String getShareLink() {
@@ -219,6 +219,10 @@ public class OCShare implements Parcelable, Serializable {
     
     public void setShareLink(String shareLink) {
         this.mShareLink = (shareLink != null) ? shareLink : "";
+    }
+
+    public boolean isPasswordProtected() {
+        return ShareType.PUBLIC_LINK.equals(mShareType) && mShareWith.length() > 0;
     }
     
     /** 
@@ -264,7 +268,7 @@ public class OCShare implements Parcelable, Serializable {
         mSharedWithDisplayName = source.readString();
         mIsFolder = source.readInt() == 0;
         mUserId = source.readLong();
-        mIdRemoteShared = source.readLong();
+        mRemoteId = source.readLong();
         mShareLink = source.readString();
     }
 
@@ -290,7 +294,7 @@ public class OCShare implements Parcelable, Serializable {
         dest.writeString(mSharedWithDisplayName);
         dest.writeInt(mIsFolder ? 1 : 0);
         dest.writeLong(mUserId);
-        dest.writeLong(mIdRemoteShared);
+        dest.writeLong(mRemoteId);
         dest.writeString(mShareLink);
     }
 

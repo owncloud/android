@@ -147,7 +147,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 					// retrieve more info - POST only returns the index of the new share
 					OCShare emptyShare = (OCShare) result.getData().get(0);
 					GetRemoteShareOperation getInfo = new GetRemoteShareOperation(
-							emptyShare.getIdRemoteShared()
+							emptyShare.getRemoteId()
 					);
 					result = getInfo.execute(client);
 				}
