@@ -29,6 +29,16 @@ dependencies {
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
+
+
+    defaultConfig {
+        // Define your application name here.
+        // It must neither be present in /res/values/strings.xml
+        // nor in /res/values/string_no_translate.xml
+        // nor in /res/values/setup.xml
+        resValue 'string', 'app_name', 'ownCloud'
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -56,6 +66,59 @@ android {
     android {
         lintOptions {
             abortOnError false
+        }
+
+        // https://stackoverflow.com/questions/24649240/build-release-apk-with-customize-name-format-in-android-studio
+        // https://stackoverflow.com/questions/32092665/resolve-application-label-for-each-build-type/32220436#32220436
+        // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
+
+        android.applicationVariants.all { variant ->
+
+            variant.outputs.each { output ->
+
+                // get app_name field from defaultConfig
+                def appName = variant.mergedFlavor.resValues.get('app_name').getValue()
+
+                // concat new App name with each flavor's name
+                appName = "${appName}"
+                variant.productFlavors.each { flavor ->
+                    appName += "-${flavor.name}"
+                }
+
+                // optionally add buildType name
+                appName += "-${variant.buildType.name}"
+
+                // your requirement: if buildType == debug, add DEV to App name
+                if (variant.buildType.name == "debug") {
+                    appName += "-DEV"
+                }
+
+                // if you want, you can set a new resValue
+                // variant.resValue 'string', 'app_name', appName
+
+                /*
+                 * Gets the version name from the latest Git tag
+                 */
+
+                def gitVersion = { ->
+                    def stdout = new ByteArrayOutputStream()
+                    exec {
+                        commandLine 'git', 'rev-parse', '--short' ,'HEAD'
+                        standardOutput = stdout
+                    }
+                    return stdout.toString().trim()
+                }
+
+                def manifestParser = new com.android.builder.core.DefaultManifestParser()
+                def manifestVersionName = manifestParser.getVersionName(android.sourceSets.main.manifest.srcFile)
+                def finalName = appName + "-"
+                if (!manifestVersionName.isEmpty()) {
+                    finalName += manifestVersionName + "."
+                }
+                finalName += variant.versionCode + "-" + gitVersion() + ".apk"
+                output.outputFile = new File(output.outputFile.parent, finalName)
+
+            }
         }
     }
 
