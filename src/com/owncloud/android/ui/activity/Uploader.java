@@ -23,18 +23,19 @@
 package com.owncloud.android.ui.activity;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
-
+import java.util.regex.Pattern;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -57,6 +58,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AlertDialog.Builder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,9 +78,9 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticator;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
@@ -98,6 +101,7 @@ public class Uploader extends FileActivity
     private AccountManager mAccountManager;
     private Stack<String> mParents;
     private ArrayList<Parcelable> mStreamsToUpload;
+    private String mSaveIntent;
     private boolean mCreateDir;
     private String mUploadPath;
     private OCFile mFile;
@@ -153,24 +157,19 @@ public class Uploader extends FileActivity
 
     @Override
     protected void setAccount(Account account, boolean savedAccount) {
-        if (somethingToUpload()) {
-            mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
-            Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
-            if (accounts.length == 0) {
-                Log_OC.i(TAG, "No ownCloud account is available");
-                showDialog(DIALOG_NO_ACCOUNT);
-            } else if (accounts.length > 1 && !mAccountSelected && !mAccountSelectionShowing) {
-                Log_OC.i(TAG, "More than one ownCloud is available");
-                showDialog(DIALOG_MULTIPLE_ACCOUNT);
-                mAccountSelectionShowing = true;
-            } else {
-                if (!savedAccount) {
-                    setAccount(accounts[0]);
-                }
-            }
-
+        mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
+        Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
+        if (accounts.length == 0) {
+            Log_OC.i(TAG, "No ownCloud account is available");
+            showDialog(DIALOG_NO_ACCOUNT);
+        } else if (accounts.length > 1 && !mAccountSelected && !mAccountSelectionShowing) {
+            Log_OC.i(TAG, "More than one ownCloud is available");
+            showDialog(DIALOG_MULTIPLE_ACCOUNT);
+            mAccountSelectionShowing = true;
         } else {
-            showDialog(DIALOG_NO_STREAM);
+            if (!savedAccount) {
+                setAccount(accounts[0]);
+            }
         }
 
         super.setAccount(account, savedAccount);
@@ -185,7 +184,7 @@ public class Uploader extends FileActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-         Log_OC.d(TAG, "onSaveInstanceState() start");
+        Log_OC.d(TAG, "onSaveInstanceState() start");
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_PARENTS, mParents);
         //outState.putParcelable(KEY_ACCOUNT, mAccount);
@@ -454,114 +453,149 @@ public class Uploader extends FileActivity
     }
 
     private void prepareStreamsToUpload() {
-        if (getIntent().getAction().equals(Intent.ACTION_SEND)) {
+        Intent intent = getIntent();
+        if (intent.getAction().equals(Intent.ACTION_SEND)) {
+            mSaveIntent = intent.toUri(0);
             mStreamsToUpload = new ArrayList<Parcelable>();
-            mStreamsToUpload.add(getIntent().getParcelableExtra(Intent.EXTRA_STREAM));
-        } else if (getIntent().getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
-            mStreamsToUpload = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+            mStreamsToUpload.add(intent.getParcelableExtra(Intent.EXTRA_STREAM));
+        } else if (intent.getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
+            mSaveIntent = intent.toUri(0);
+            mStreamsToUpload = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         }
-    }
-
-    private boolean somethingToUpload() {
-        return (mStreamsToUpload != null && mStreamsToUpload.get(0) != null);
     }
 
     public void uploadFiles() {
         try {
-
             // ArrayList for files with path in external storage
             ArrayList<String> local = new ArrayList<String>();
             ArrayList<String> remote = new ArrayList<String>();
-            
-            // this checks the mimeType 
-            for (Parcelable mStream : mStreamsToUpload) {
-                
-                Uri uri = (Uri) mStream;
-                String data = null;
-                String filePath = "";
+            Boolean uploadExecute = false;
 
-                if (uri != null) {
-                    if (uri.getScheme().equals("content")) {
-                        String mimeType = getContentResolver().getType(uri);
-
-                        if (mimeType.contains("image")) {
-                            String[] CONTENT_PROJECTION = { Images.Media.DATA,
-                                    Images.Media.DISPLAY_NAME, Images.Media.MIME_TYPE,
-                                    Images.Media.SIZE };
-                            Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null,
-                                    null, null);
-                            c.moveToFirst();
-                            int index = c.getColumnIndex(Images.Media.DATA);
-                            data = c.getString(index);
-                            filePath = mUploadPath +
-                                    c.getString(c.getColumnIndex(Images.Media.DISPLAY_NAME));
-
-                        } else if (mimeType.contains("video")) {
-                            String[] CONTENT_PROJECTION = { Video.Media.DATA,
-                                   Video.Media.DISPLAY_NAME, Video.Media.MIME_TYPE,
-                                   Video.Media.SIZE, Video.Media.DATE_MODIFIED };
-                            Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null,
-                                   null, null);
-                            c.moveToFirst();
-                            int index = c.getColumnIndex(Video.Media.DATA);
-                            data = c.getString(index);
-                            filePath = mUploadPath +
-                                   c.getString(c.getColumnIndex(Video.Media.DISPLAY_NAME));
-                          
-                        } else if (mimeType.contains("audio")) {
-                            String[] CONTENT_PROJECTION = { Audio.Media.DATA,
-                                   Audio.Media.DISPLAY_NAME, Audio.Media.MIME_TYPE,
-                                   Audio.Media.SIZE };
-                            Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null,
-                                   null, null);
-                            c.moveToFirst();
-                            int index = c.getColumnIndex(Audio.Media.DATA);
-                            data = c.getString(index);
-                            filePath = mUploadPath +
-                                   c.getString(c.getColumnIndex(Audio.Media.DISPLAY_NAME));
-
-                        } else  {
-                            Cursor cursor = getContentResolver().query(uri,
-                                   new String[]{MediaStore.MediaColumns.DISPLAY_NAME},
-                                   null, null, null);
-                            cursor.moveToFirst();
-                            int nameIndex = cursor.getColumnIndex(cursor.getColumnNames()[0]);
-                            if (nameIndex >= 0) {
-                               filePath = mUploadPath + cursor.getString(nameIndex);
-                            }
-                        }
-
-                    } else if (uri.getScheme().equals("file")) {
-                        filePath = Uri.decode(uri.toString()).replace(uri.getScheme() +
-                                "://", "");
-                        if (filePath.contains("mnt")) {
-                           String splitedFilePath[] = filePath.split("/mnt");
-                           filePath = splitedFilePath[1];
-                        }
-                        final File file = new File(filePath);
-                        data = file.getAbsolutePath();
-                        filePath = mUploadPath + file.getName();
+            if (mStreamsToUpload == null || mStreamsToUpload.get(0) == null) {
+                Intent saveIntent = Intent.parseUri(mSaveIntent, 0);
+                if (saveIntent.getType().equals("text/plain")) {
+                    String extraText = saveIntent.getStringExtra(Intent.EXTRA_TEXT);
+                    String subjectText = saveIntent.getStringExtra(Intent.EXTRA_SUBJECT);
+                    if (subjectText == null) {
+                        subjectText = saveIntent.getStringExtra(Intent.EXTRA_TITLE);
                     }
-                    else {
+                    // TODO: subjectText <- filename dialog
+                    if (Pattern.compile("^https?://").matcher(extraText).find()) {
+                        // share from web brouser
+                        File file = new File(this.getCacheDir(), "tmp.url");
+                        FileWriter fw = new FileWriter(file);
+                        fw.write("[InternetShortcut]\r\n");
+                        fw.write("URL=" + extraText + "\r\n");
+                        fw.close();
+                        local.add(file.getAbsolutePath());
+                        if (subjectText == null) {
+                            subjectText = "url";
+                        }
+                        remote.add(mUploadPath + subjectText + ".url");
+                    } else {
+                        // text meybe
+                        File file = new File(this.getCacheDir(), "clipText.txt");
+                        FileWriter fw = new FileWriter(file);
+                        fw.write(extraText + "\n");
+                        fw.close();
+                        local.add(file.getAbsolutePath());
+                        if (subjectText == null) {
+                            subjectText = "clipText";
+                        }
+                        remote.add(mUploadPath + subjectText + ".txt");
+                    }
+                }
+            } else {
+                for (Parcelable mStream : mStreamsToUpload) {
+
+                    Uri uri = (Uri) mStream;
+                    String data = null;
+                    String filePath = "";
+
+                    if (uri != null) {
+                        if (uri.getScheme().equals("content")) {
+                            String mimeType = getContentResolver().getType(uri);
+
+                            if (mimeType.contains("image")) {
+                                String[] CONTENT_PROJECTION = {Images.Media.DATA,
+                                        Images.Media.DISPLAY_NAME, Images.Media.MIME_TYPE,
+                                        Images.Media.SIZE};
+                                Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null,
+                                        null, null);
+                                c.moveToFirst();
+                                int index = c.getColumnIndex(Images.Media.DATA);
+                                data = c.getString(index);
+                                filePath = mUploadPath +
+                                        c.getString(c.getColumnIndex(Images.Media.DISPLAY_NAME));
+
+                            } else if (mimeType.contains("video")) {
+                                String[] CONTENT_PROJECTION = {Video.Media.DATA,
+                                        Video.Media.DISPLAY_NAME, Video.Media.MIME_TYPE,
+                                        Video.Media.SIZE, Video.Media.DATE_MODIFIED};
+                                Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null,
+                                        null, null);
+                                c.moveToFirst();
+                                int index = c.getColumnIndex(Video.Media.DATA);
+                                data = c.getString(index);
+                                filePath = mUploadPath +
+                                        c.getString(c.getColumnIndex(Video.Media.DISPLAY_NAME));
+
+                            } else if (mimeType.contains("audio")) {
+                                String[] CONTENT_PROJECTION = {Audio.Media.DATA,
+                                        Audio.Media.DISPLAY_NAME, Audio.Media.MIME_TYPE,
+                                        Audio.Media.SIZE};
+                                Cursor c = getContentResolver().query(uri, CONTENT_PROJECTION, null,
+                                        null, null);
+                                c.moveToFirst();
+                                int index = c.getColumnIndex(Audio.Media.DATA);
+                                data = c.getString(index);
+                                filePath = mUploadPath +
+                                        c.getString(c.getColumnIndex(Audio.Media.DISPLAY_NAME));
+
+                            } else {
+                                Cursor cursor = getContentResolver().query(uri,
+                                        new String[]{MediaStore.MediaColumns.DISPLAY_NAME},
+                                        null, null, null);
+                                cursor.moveToFirst();
+                                int nameIndex = cursor.getColumnIndex(cursor.getColumnNames()[0]);
+                                if (nameIndex >= 0) {
+                                    filePath = mUploadPath + cursor.getString(nameIndex);
+                                }
+                            }
+
+                        } else if (uri.getScheme().equals("file")) {
+                            filePath = Uri.decode(uri.toString()).replace(uri.getScheme() +
+                                    "://", "");
+                            if (filePath.contains("mnt")) {
+                               String splitedFilePath[] = filePath.split("/mnt");
+                               filePath = splitedFilePath[1];
+                            }
+                            final File file = new File(filePath);
+                            data = file.getAbsolutePath();
+                            filePath = mUploadPath + file.getName();
+                        } else {
+                            throw new SecurityException();
+                        }
+                        if (data == null) {
+                            mRemoteCacheData.add(filePath);
+                            CopyTmpFileAsyncTask copyTask = new CopyTmpFileAsyncTask(this);
+                            Object[] params = {uri, filePath, mRemoteCacheData.size() - 1,
+                                    getAccount().name, getContentResolver()};
+                            mNumCacheFile++;
+                            showWaitingCopyDialog();
+                            copyTask.execute(params);
+                            uploadExecute = true;
+                        } else {
+                            remote.add(filePath);
+                            local.add(data);
+                        }
+                    } else {
                         throw new SecurityException();
                     }
-                    if (data == null) {
-                        mRemoteCacheData.add(filePath);
-                        CopyTmpFileAsyncTask copyTask = new CopyTmpFileAsyncTask(this);
-                        Object[] params = { uri, filePath, mRemoteCacheData.size()-1,
-                                getAccount().name, getContentResolver()};
-                        mNumCacheFile++;
-                        showWaitingCopyDialog();
-                        copyTask.execute(params);
-                    } else {
-                        remote.add(filePath);
-                        local.add(data);
-                    }
                 }
-                else {
-                    throw new SecurityException();
-                }
+            }
 
+            if (local.size() != 0 && remote.size() != 0) {
                 Intent intent = new Intent(getApplicationContext(), FileUploader.class);
                 intent.putExtra(FileUploader.KEY_UPLOAD_TYPE, FileUploader.UPLOAD_MULTIPLE_FILES);
                 intent.putExtra(FileUploader.KEY_LOCAL_FILE, local.toArray(new String[local.size()]));
@@ -569,7 +603,12 @@ public class Uploader extends FileActivity
                         remote.toArray(new String[remote.size()]));
                 intent.putExtra(FileUploader.KEY_ACCOUNT, getAccount());
                 startService(intent);
+                uploadExecute = true;
+            }
 
+            if (uploadExecute == false) {
+                showDialog(DIALOG_NO_STREAM);
+            } else {
                 //Save the path to shared preferences
                 SharedPreferences.Editor appPrefs = PreferenceManager
                         .getDefaultSharedPreferences(getApplicationContext()).edit();
@@ -578,11 +617,14 @@ public class Uploader extends FileActivity
 
                 finish();
             }
-            
         } catch (SecurityException e) {
             String message = String.format(getString(R.string.uploader_error_forbidden_content),
                     getString(R.string.app_name));
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();            
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        } catch (URISyntaxException e) {
+            ;
+        } catch (IOException e) {
+            ;
         }
     }
     
