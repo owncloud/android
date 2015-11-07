@@ -70,7 +70,7 @@ public class FileStorageUtils {
      * Get local owncloud storage path for accountName.
      */
     public static final String getSavePath(String accountName) {
-        return MainApp.getStoragePath() + "/" + MainApp.getDataFolder() + "/" + Uri.encode(accountName, "@");
+        return MainApp.getStoragePath() + File.separator + MainApp.getDataFolder() + File.separator + Uri.encode(accountName, "@");
         // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names,
         // that can be in the accountName since 0.1.190B
     }
@@ -88,8 +88,7 @@ public class FileStorageUtils {
      * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
      */
     public static final String getTemporalPath(String accountName) {
-        File sdCard = Environment.getExternalStorageDirectory();
-        return sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder() + "/tmp/" + Uri.encode(accountName, "@");
+        return MainApp.getStoragePath() + File.separator + MainApp.getDataFolder() + File.separator + "tmp" + File.separator + Uri.encode(accountName, "@");
             // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names,
             // that can be in the accountName since 0.1.190B
     }
@@ -101,7 +100,7 @@ public class FileStorageUtils {
      */
     @SuppressLint("NewApi")
     public static final long getUsableSpace(String accountName) {
-        File savePath = Environment.getExternalStorageDirectory();
+        File savePath = new File(MainApp.getStoragePath());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
             return savePath.getUsableSpace();
 
@@ -113,7 +112,7 @@ public class FileStorageUtils {
     }
     
     public static final String getLogPath()  {
-        return Environment.getExternalStorageDirectory() + File.separator + MainApp.getDataFolder() + File.separator + "log";
+        return MainApp.getStoragePath() + File.separator + MainApp.getDataFolder() + File.separator + "log";
     }
 
     public static String getInstantUploadFilePath(Context context, String fileName) {
