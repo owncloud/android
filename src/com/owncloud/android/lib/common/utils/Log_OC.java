@@ -71,11 +71,11 @@ public class Log_OC {
 
     /**
      * Start doing logging
-     * @param logPath : path of log file
+     * @param storagePath : directory for keeping logs
      */
-    public static void startLogging() {
-    	String logPath = Environment.getExternalStorageDirectory() + File.separator + 
-    					mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
+    public static void startLogging(String storagePath) {
+		String logPath = storagePath + File.separator +
+			mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
         mFolder = new File(logPath);
         mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
 
