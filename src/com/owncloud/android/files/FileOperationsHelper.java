@@ -151,17 +151,14 @@ public class FileOperationsHelper {
             if (lastIndexOfDot >= 0) {
 				intentFromFile = createIntentFromFile(file);
 
-                String fileExt = storagePath.substring(lastIndexOfDot + 1);
-                String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExt);
+                String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                        storagePath.substring(lastIndexOfDot + 1)
+                );
                 if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
                     intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
                     intentForGuessedMimeType.
                             setDataAndType(Uri.parse("file://"+ encodedStoragePath),
                                     guessedMimeType);
-                    intentForGuessedMimeType.setFlags(
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION |
-                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                    );
                 }
             }
 
