@@ -65,7 +65,7 @@ public class Log_OC {
     }
     
     public static void wtf(String TAG, String message) {
-        Log.wtf(TAG,message);
+        Log.wtf(TAG, message);
         appendLog(TAG+" : "+ message);
     }
 
@@ -108,6 +108,22 @@ public class Log_OC {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public static void stopLogging() {
+        try {
+            mBuf.close();
+            isEnabled = false;
+
+            mLogFile = null;
+            mFolder = null;
+            mBuf = null;
+            isMaxFileSizeReached = false;
+            isEnabled = false;
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
