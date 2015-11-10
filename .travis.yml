@@ -4,6 +4,10 @@ android:
   components:
   - build-tools-22.0.1
   - android-19
+branches:
+  only:
+    - master
+
 before_install:
 - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   -c 20M
