@@ -22,10 +22,15 @@
  */
 package com.owncloud.android.ui.fragment;
 
+import android.accounts.Account;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +40,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.PopupMenu;
 
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -42,6 +48,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.media.MediaService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.activity.FolderPickerActivity;
@@ -276,15 +283,13 @@ public class OCFileListFragment extends ExtendedListFragment
                     ((FileDisplayActivity)mContainerActivity).startImagePreview(file);
                 } else if (PreviewTextFragment.canBePreviewed(file)){
                     ((FileDisplayActivity)mContainerActivity).startTextPreview(file);
-                } else if (file.isDown()) {
-                    if (PreviewMediaFragment.canBePreviewed(file)) {
+                } else if (PreviewMediaFragment.canBePreviewed(file)) {
                         // media preview
                         ((FileDisplayActivity) mContainerActivity).startMediaPreview(file, 0, true);
-                    } else {
+                    } else if (file.isDown()) {
                         mContainerActivity.getFileOperationsHelper().openFile(file);
                     }
-
-                } else {
+                else {
                     // automatic download, preview on finish
                     ((FileDisplayActivity) mContainerActivity).startDownloadForPreview(file);
                 }
@@ -391,6 +396,14 @@ public class OCFileListFragment extends ExtendedListFragment
                 } else {
                     mContainerActivity.getFileOperationsHelper().sendDownloadedFile(mTargetFile);
                 }
+                return true;
+            }
+            case R.id.action_stream_file: {
+                Account account = ((FileActivity)mContainerActivity).getAccount();
+                Context context = MainApp.getAppContext();
+                String uri = PreviewMediaFragment.generateUrlWithCredentials(account, context, mTargetFile);
+                MediaService.streamWithExternalApp(uri, getActivity()).show();
+
                 return true;
             }
             case R.id.action_move: {
