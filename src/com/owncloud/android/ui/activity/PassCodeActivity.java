@@ -27,7 +27,6 @@ import java.util.Arrays;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -51,8 +50,8 @@ public class PassCodeActivity extends AppCompatActivity {
     public final static String ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT";
     public final static String ACTION_CHECK = "ACTION_CHECK";
 
-	public final static String KEY_PASSCODE  = "KEY_PASSCODE";
-	public final static String KEY_CHECK_RESULT = "KEY_CHECK_RESULT";
+    public final static String KEY_PASSCODE  = "KEY_PASSCODE";
+    public final static String KEY_CHECK_RESULT = "KEY_CHECK_RESULT";
 
     private Button mBCancel;
     private TextView mPassCodeHdr;
@@ -299,9 +298,9 @@ public class PassCodeActivity extends AppCompatActivity {
         } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
             if (checkPassCode()) {
 
-				Intent resultIntent = new Intent();
-				resultIntent.putExtra(KEY_CHECK_RESULT, true);
-				setResult(RESULT_OK, resultIntent);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(KEY_CHECK_RESULT, true);
+                setResult(RESULT_OK, resultIntent);
 
                 finish();
             } else {
@@ -331,7 +330,7 @@ public class PassCodeActivity extends AppCompatActivity {
                                      int explanationVisibility) {
         Arrays.fill(mPassCodeDigits, null);
         CharSequence errorSeq = getString(errorMessage);
-		Toast.makeText(this, errorSeq, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, errorSeq, Toast.LENGTH_LONG).show();
         mPassCodeHdr.setText(headerMessage);                // TODO check if really needed
         mPassCodeHdrExplanation.setVisibility(explanationVisibility); // TODO check if really needed
         clearBoxes();
@@ -411,7 +410,7 @@ public class PassCodeActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount()== 0){
             if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction()) ||
-					ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+                    ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
                 revertActionAndExit();
             }
             return true;
@@ -426,11 +425,11 @@ public class PassCodeActivity extends AppCompatActivity {
         SharedPreferences.Editor appPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext()).edit();
 
-		Intent resultIntent = new Intent();
-		resultIntent.putExtra(KEY_PASSCODE,
-				mPassCodeDigits[0] + mPassCodeDigits[1] + mPassCodeDigits[2] + mPassCodeDigits[3]);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(KEY_PASSCODE,
+                mPassCodeDigits[0] + mPassCodeDigits[1] + mPassCodeDigits[2] + mPassCodeDigits[3]);
 
-		setResult(RESULT_OK, resultIntent);
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 
@@ -459,9 +458,9 @@ public class PassCodeActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putBoolean(PassCodeActivity.KEY_CONFIRMING_PASSCODE, mConfirmingPassCode);
         outState.putStringArray(PassCodeActivity.KEY_PASSCODE_DIGITS, mPassCodeDigits);
-	}
+    }
 
-	private class PassCodeDigitTextWatcher implements TextWatcher {
+    private class PassCodeDigitTextWatcher implements TextWatcher {
 
         private int mIndex = -1;
         private boolean mLastOne = false;
