@@ -24,8 +24,6 @@
 
 package com.owncloud.android.lib.common.operations;
 
-import java.io.IOException;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
@@ -41,6 +39,8 @@ import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.io.IOException;
 
 
 /**

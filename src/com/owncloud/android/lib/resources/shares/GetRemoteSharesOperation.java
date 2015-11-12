@@ -34,7 +34,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-
 /** 
  * Get the data from the server about ALL the known shares owned by the requester.
  * 
@@ -72,7 +71,6 @@ public class GetRemoteSharesOperation extends RemoteOperation {
 				parser.setOwnCloudVersion(client.getOwnCloudVersion());
 				parser.setServerBaseUri(client.getBaseUri());
 				result = parser.parse(response);
-
 			} else {
 				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
 			}
