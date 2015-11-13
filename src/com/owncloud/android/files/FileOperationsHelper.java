@@ -48,7 +48,6 @@ import com.owncloud.android.ui.activity.ShareActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
 
-import org.apache.http.protocol.HTTP;
 
 import java.util.List;
 
@@ -174,22 +173,21 @@ public class FileOperationsHelper {
         }
     }
 
-
-    public void shareFileWithLinkOLD(OCFile file) {
-
+    public void getFileWithLink(OCFile file){
         if (isSharedSupported()) {
             if (file != null) {
-                String link = "https://fake.url";
-                Intent intent = createShareWithLinkIntent(link);
-                String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intent,
-                        packagesToExclude, file);
-                chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+                mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
+                        getString(R.string.wait_a_moment));
+
+                Intent service = new Intent(mFileActivity, OperationsService.class);
+                service.setAction(OperationsService.ACTION_CREATE_SHARE_VIA_LINK);
+                service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+                service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+                mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
 
             } else {
                 Log_OC.wtf(TAG, "Trying to share a NULL OCFile");
             }
-
         } else {
             // Show a Message
             Toast t = Toast.makeText(
@@ -199,7 +197,6 @@ public class FileOperationsHelper {
             t.show();
         }
     }
-
 
     public void shareFileWithLinkToApp(OCFile file, String password, Intent sendIntent) {
         
@@ -219,15 +216,6 @@ public class FileOperationsHelper {
             Log_OC.wtf(TAG, "Trying to open a NULL OCFile");
         }
     }
-
-
-    private Intent createShareWithLinkIntent(String link) {
-        Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
-        intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
-        intentToShareLink.setType(HTTP.PLAIN_TEXT_TYPE);
-        return intentToShareLink;
-    }
-
 
     /**
      * Helper method to share a file with a known sharee. Starts a request to do it in {@link OperationsService}
