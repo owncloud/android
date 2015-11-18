@@ -64,6 +64,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     /// Intent actions that we are prepared to handle
     public static final String ACTION_PLAY_FILE = MY_PACKAGE + ".action.PLAY_FILE";
     public static final String ACTION_STOP_ALL = MY_PACKAGE + ".action.STOP_ALL";
+    public static final String ACTION_STOP_FILE = MY_PACKAGE + ".action.STOP_FILE";
 
     /// Keys to add extras to the action
     public static final String EXTRA_FILE = MY_PACKAGE + ".extra.FILE";
@@ -250,9 +251,23 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             
         } else if (action.equals(ACTION_STOP_ALL)) {
             processStopRequest(true);
+        } else if(action.equals(ACTION_STOP_FILE)) {
+            processStopFileRequest(intent);
         }
 
         return START_NOT_STICKY; // don't want it to restart in case it's killed.
+    }
+
+    private void processStopFileRequest(Intent intent) {
+        OCFile file = intent.getExtras().getParcelable(EXTRA_FILE);
+        try {
+            if(file.equals(mFile)) {
+                processStopRequest(true);
+            }
+        }
+        catch (NullPointerException e) {
+            Log_OC.e(TAG, "NullPointerException while stopping on OCFile ", e);
+        }
     }
 
 
