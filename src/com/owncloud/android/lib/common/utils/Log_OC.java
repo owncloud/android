@@ -73,7 +73,7 @@ public class Log_OC {
      * Start doing logging
      * @param storagePath : directory for keeping logs
      */
-    public static void startLogging(String storagePath) {
+    synchronized public static void startLogging(String storagePath) {
 		String logPath = storagePath + File.separator +
 			mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
         mFolder = new File(logPath);
@@ -111,7 +111,7 @@ public class Log_OC {
         }
     }
 
-    public static void stopLogging() {
+    synchronized public static void stopLogging() {
         try {
 			if (mBuf != null)
                 mBuf.close();
@@ -164,7 +164,7 @@ public class Log_OC {
      * Append to the log file the info passed
      * @param text : text for adding to the log file
      */
-    private static void appendLog(String text) { 
+    synchronized private static void appendLog(String text) {
 
         if (isEnabled) {
 
