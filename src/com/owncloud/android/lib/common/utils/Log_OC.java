@@ -113,7 +113,8 @@ public class Log_OC {
 
     public static void stopLogging() {
         try {
-            mBuf.close();
+			if (mBuf != null)
+                mBuf.close();
             isEnabled = false;
 
             mLogFile = null;
@@ -123,7 +124,13 @@ public class Log_OC {
             isEnabled = false;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            // Because we are stopping logging, we only lon to Android console.
+            Log.e("OC_Log", "Closing log file failed: ", e);
+        } catch (Exception e) {
+            // This catch should never fire because we do null check on mBuf.
+            // But just for the sake of stability let's log this odd situation.
+            // Because we are stopping logging, we only lon to Android console.
+            Log.e("OC_Log", "Stopping logging failed: ", e);
         }
     }
 
