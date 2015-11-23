@@ -319,10 +319,6 @@ public class PreviewTextFragment extends FileFragment {
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
-            case R.id.action_see_details: {
-                seeDetails();
-                return true;
-            }
             case R.id.action_send_file: {
                 sendFile();
                 return true;

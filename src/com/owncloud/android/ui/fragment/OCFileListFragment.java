@@ -182,18 +182,6 @@ public class OCFileListFragment extends ExtendedListFragment
                 mf.filter(menu);
             }
 
-            /// TODO break this direct dependency on FileDisplayActivity... if possible
-            MenuItem item = menu.findItem(R.id.action_open_file_with);
-            FileFragment frag = ((FileDisplayActivity)getActivity()).getSecondFragment();
-            if (frag != null && frag instanceof FileDetailFragment &&
-                    frag.getFile().getFileId() == targetFile.getFileId()) {
-                item = menu.findItem(R.id.action_see_details);
-                if (item != null) {
-                    item.setVisible(false);
-                    item.setEnabled(false);
-                }
-            }
-
             FileActionsDialogFragment dialog = FileActionsDialogFragment.newInstance(menu,
                     fileIndex, targetFile.getFileName());
             dialog.setTargetFragment(this, 0);
@@ -321,18 +309,6 @@ public class OCFileListFragment extends ExtendedListFragment
                 );
                 mf.filter(menu);
             }
-                 
-            /// TODO break this direct dependency on FileDisplayActivity... if possible
-            MenuItem item = menu.findItem(R.id.action_open_file_with);
-            FileFragment frag = ((FileDisplayActivity)getActivity()).getSecondFragment();
-            if (frag != null && frag instanceof FileDetailFragment && 
-                    frag.getFile().getFileId() == targetFile.getFileId()) {
-                item = menu.findItem(R.id.action_see_details);
-                if (item != null) {
-                    item.setVisible(false);
-                    item.setEnabled(false);
-                }
-            }
         }
     }
 
@@ -376,10 +352,6 @@ public class OCFileListFragment extends ExtendedListFragment
             }
             case R.id.action_cancel_sync: {
                 ((FileDisplayActivity)mContainerActivity).cancelTransference(mTargetFile);
-                return true;
-            }
-            case R.id.action_see_details: {
-                mContainerActivity.showDetails(mTargetFile);
                 return true;
             }
             case R.id.action_send_file: {
