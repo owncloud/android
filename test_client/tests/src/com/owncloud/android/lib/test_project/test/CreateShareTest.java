@@ -132,7 +132,7 @@ public class CreateShareTest extends RemoteTest {
 				31);
 		assertFalse(result.isSuccess());
 		assertEquals(
-				RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER, 
+				RemoteOperationResult.ResultCode.SHARE_FORBIDDEN, 
 				result.getCode()
 		);
 		assertTrue(		// error message from server as part of the result
@@ -189,7 +189,7 @@ public class CreateShareTest extends RemoteTest {
 				31);
 		assertFalse(result.isSuccess());
 		assertEquals(
-				RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER, 
+				RemoteOperationResult.ResultCode.SHARE_FORBIDDEN, 
 				result.getCode()
 		);
 		assertTrue(		// error message from server as part of the result

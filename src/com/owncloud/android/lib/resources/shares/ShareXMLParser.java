@@ -82,7 +82,7 @@ public class ShareXMLParser {
 	private static final String TYPE_FOLDER = "folder";
 	
 	private static final int SUCCESS = 100;
-	private static final int ERROR_WRONG_PARAMETER = 403;
+	private static final int ERROR_WRONG_PARAMETER = 400;
 	private static final int ERROR_FORBIDDEN = 403;
 	private static final int ERROR_NOT_FOUND = 404;
 
@@ -368,7 +368,7 @@ public class ShareXMLParser {
 	}
 
 	private boolean isValidShare(OCShare share) {
-		return (share.getIdRemoteShared() > -1);
+		return (share.getRemoteId() > -1);
 	}
 
 	private void fixPathForFolder(OCShare share) {

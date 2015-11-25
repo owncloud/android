@@ -90,7 +90,8 @@ public class ShareToRemoteOperationResultParser {
                             resultData.add(share);
                             // build the share link if not in the response (only received when the share is created)
                             if (share.getShareType() == ShareType.PUBLIC_LINK &&
-                                    share.getShareLink() == null &&
+                                    (share.getShareLink() == null ||
+                                            share.getShareLink().length() <= 0) &&
                                     share.getToken().length() > 0
                                     ) {
                                 if (mServerBaseUri != null) {
