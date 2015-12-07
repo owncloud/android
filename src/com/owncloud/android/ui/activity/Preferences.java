@@ -93,7 +93,6 @@ import com.owncloud.android.utils.DisplayUtils;
  */
 public class Preferences extends PreferenceActivity
         implements AccountManagerCallback<Boolean>, ComponentsGetter, StorageMigration.StorageMigrationProgressListener {
-    
     private static final String TAG = Preferences.class.getSimpleName();
 
 
@@ -388,28 +387,28 @@ public class Preferences extends PreferenceActivity
 
         mPrefStoragePath =  (ListPreference) findPreference(Keys.STORAGE_PATH);
         if (mPrefStoragePath != null) {
-			DataStorageUtils.Storage[] storageOptions = DataStorageUtils.getAvailableStoragePoints(getApplicationContext());
-			String[] entries = new String[storageOptions.length];
-			String[] values = new String[storageOptions.length];
-			for (int i = 0; i < storageOptions.length; ++i) {
-				entries[i] = storageOptions[i].getDescription();
-				values[i] = storageOptions[i].getPath();
-			}
-			mPrefStoragePath.setEntries(entries);
-			mPrefStoragePath.setEntryValues(values);
+            DataStorageUtils.Storage[] storageOptions = DataStorageUtils.getAvailableStoragePoints(getApplicationContext());
+            String[] entries = new String[storageOptions.length];
+            String[] values = new String[storageOptions.length];
+            for (int i = 0; i < storageOptions.length; ++i) {
+                entries[i] = storageOptions[i].getDescription();
+                values[i] = storageOptions[i].getPath();
+            }
+            mPrefStoragePath.setEntries(entries);
+            mPrefStoragePath.setEntryValues(values);
 
             mPrefStoragePath.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
-						String newPath = (String)newValue;
-						if (mStoragePath.equals(newPath))
-							return true;
+                        String newPath = (String)newValue;
+                        if (mStoragePath.equals(newPath))
+                            return true;
 
-						StorageMigration storageMigration = new StorageMigration(Preferences.this, mStoragePath, newPath);
+                        StorageMigration storageMigration = new StorageMigration(Preferences.this, mStoragePath, newPath);
 
-						storageMigration.setStorageMigrationProgressListener(Preferences.this);
+                        storageMigration.setStorageMigrationProgressListener(Preferences.this);
 
-						storageMigration.migrate();
+                        storageMigration.migrate();
 
                         return false;
                     }
@@ -919,9 +918,9 @@ public class Preferences extends PreferenceActivity
         SharedPreferences.Editor editor = appPrefs.edit();
         editor.putString(Keys.STORAGE_PATH, mStoragePath);
         editor.commit();
-		String storageDescription = DataStorageUtils.getStorageDescriptionByPath(mStoragePath, this);
+        String storageDescription = DataStorageUtils.getStorageDescriptionByPath(mStoragePath, this);
         mPrefStoragePath.setSummary(storageDescription);
-		mPrefStoragePath.setValue(newStoragePath);
+        mPrefStoragePath.setValue(newStoragePath);
     }
 
     /**
@@ -932,8 +931,8 @@ public class Preferences extends PreferenceActivity
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mStoragePath = appPrefs.getString(Keys.STORAGE_PATH, Environment.getExternalStorageDirectory()
                                                          .getAbsolutePath());
-		String storageDescription = DataStorageUtils.getStorageDescriptionByPath(mStoragePath, getApplicationContext());
-		mPrefStoragePath.setSummary(storageDescription);
+        String storageDescription = DataStorageUtils.getStorageDescriptionByPath(mStoragePath, getApplicationContext());
+        mPrefStoragePath.setSummary(storageDescription);
     }
 
     /**
@@ -996,18 +995,18 @@ public class Preferences extends PreferenceActivity
         return new PreferencesServiceConnection();
     }
 
-	@Override
-	public void onStorageMigrationFinished(String storagePath, boolean succeed) {
-		if (succeed)
-			saveStoragePath(storagePath);
-	}
+    @Override
+    public void onStorageMigrationFinished(String storagePath, boolean succeed) {
+        if (succeed)
+            saveStoragePath(storagePath);
+    }
 
-	@Override
-	public void onCancelMigration() {
-		// Migration was canceled so we don't do anything
-	}
+    @Override
+    public void onCancelMigration() {
+        // Migration was canceled so we don't do anything
+    }
 
-	/** Defines callbacks for service binding, passed to bindService() */
+    /** Defines callbacks for service binding, passed to bindService() */
     private class PreferencesServiceConnection implements ServiceConnection {
 
         @Override
