@@ -125,7 +125,7 @@ public class GetRemoteShareesOperation extends RemoteOperation{
             uriBuilder.appendEncodedPath(OCS_ROUTE);
             uriBuilder.appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT);
             uriBuilder.appendQueryParameter(PARAM_ITEM_TYPE, VALUE_ITEM_TYPE);
-            uriBuilder.appendQueryParameter(PARAM_SEARCH, Uri.encode(mSearchString, "@"));
+            uriBuilder.appendQueryParameter(PARAM_SEARCH, mSearchString);
             uriBuilder.appendQueryParameter(PARAM_PAGE, String.valueOf(mPage));
             uriBuilder.appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
 
