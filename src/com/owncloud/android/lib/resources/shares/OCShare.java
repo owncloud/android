@@ -47,6 +47,11 @@ public class OCShare implements Parcelable, Serializable {
 	private static final String TAG = OCShare.class.getSimpleName();
 
     public static final int DEFAULT_PERMISSION = -1;
+    public static final int READ_PERMISSION_FLAG = 1;
+    public static final int UPDATE_PERMISSION_FLAG = 2;
+    public static final int CREATE_PERMISSION_FLAG = 4;
+    public static final int DELETE_PERMISSION_FLAG = 8;
+    public static final int SHARE_PERMISSION_FLAG = 16;
 
     private long mId;
     private long mFileSource;
