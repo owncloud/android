@@ -60,7 +60,7 @@ public class Log_OC {
     }
     
     public static void w(String TAG, String message) {
-        Log.w(TAG,message);
+        Log.w(TAG, message);
         appendLog(TAG+" : "+ message);
     }
     
@@ -99,8 +99,16 @@ public class Log_OC {
             }
 
         } catch (IOException e) {
-            e.printStackTrace(); 
-        } 
+            e.printStackTrace();
+        } finally {
+            if(mBuf != null) {
+                try {
+                    mBuf.close();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -159,10 +167,15 @@ public class Log_OC {
 	            mBuf.newLine();
 	            mBuf.write(text);
 	            mBuf.newLine();
-	            mBuf.close();
 	        } catch (IOException e) {
 	            e.printStackTrace();
-	        }
+	        } finally {
+                try {
+                    mBuf.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             // Check if current log file size is bigger than the max file size defined
             if (mLogFile.length() > MAX_FILE_SIZE) {
