@@ -56,6 +56,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
 
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_EXPIRATION_DATE = "expireDate";
+    private static final String PARAM_PERMISSIONS = "permissions";
     private static final String FORMAT_EXPIRATION_DATE = "yyyy-MM-dd";
     private static final String ENTITY_CONTENT_TYPE  = "application/x-www-form-urlencoded";
     private static final String ENTITY_CHARSET = "UTF-8";
@@ -69,6 +70,9 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
 
     /** Expiration date to set for the public link */
     private long mExpirationDateInMillis;
+
+    /** Access permissions for the file bound to the share */
+    private int mPermissions;
 
 
     /**
@@ -98,7 +102,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
     /**
      * Set expiration date to update in Share resource.
      *
-     * @param expirationDateInMillis    Expiration date to set to the public link.
+     * @param expirationDateInMillis    Expiration date to set to the target share.
      *                                  A negative value clears the current expiration date.
      *                                  Zero value (start-of-epoch) results in no update done on
      *                                  the expiration date.
@@ -107,6 +111,16 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         mExpirationDateInMillis = expirationDateInMillis;
     }
 
+
+    /**
+     * Set permissions to update in Share resource.
+     *
+     * @param permissions       Permissions date to set to the target share.
+     *                          Values <= 0 result in no update applied to the permissions.
+     */
+    public void setPermissions(int permissions) {
+        mPermissions = permissions;
+    }
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
@@ -131,11 +145,12 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
             parametersToUpdate.add(new Pair(PARAM_EXPIRATION_DATE, formattedExpirationDate));
 
         } // else, ignore - no update
+        if (mPermissions > 0) {
+            // set permissions
+            parametersToUpdate.add(new Pair(PARAM_PERMISSIONS, Integer.toString(mPermissions)));
+        }
 
         /* TODO complete rest of parameters
-        if (mPermissions > 0) {
-            parametersToUpdate.add(new Pair("permissions", Integer.toString(mPermissions)));
-        }
         if (mPublicUpload != null) {
             parametersToUpdate.add(new Pair("publicUpload", mPublicUpload.toString());
         }
