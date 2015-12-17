@@ -482,6 +482,13 @@ public class FileDisplayActivity extends HookActivity
                     detailsFragment.updateFileDetails(false, (success));
                 }
             }
+        }else{
+            //when you are in file list, for instance
+            if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
+                if (success) {
+                    mWaitingToPreview = null;
+                }
+            }
         }
     }
 
