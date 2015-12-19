@@ -151,8 +151,7 @@ Sections 1 and 2 above provided that you also do one of the following:
     allowed only for noncommercial distribution and only if you
     received the program in object code or executable form with such
     an offer, in accord with Subsection b above.)
-
-The source code for a work means the preferred form of the work for
+\The source code for a work means the preferred form of the work for
 making modifications to it.  For an executable work, complete source
 code means all the source code for all modules it contains, plus any
 associated interface definition files, plus the scripts used to
