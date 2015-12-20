@@ -27,6 +27,7 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -50,6 +51,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -105,6 +107,7 @@ import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.UriUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Displays, what files the user has available in his ownCloud.
@@ -622,8 +625,51 @@ public class FileDisplayActivity extends HookActivity
                     intent.setData(data.getClipData().getItemAt(i).getUri());
                     requestSimpleUpload(intent, resultCode);
                 }
-            }else {
-                requestSimpleUpload(data, resultCode);
+            } else {
+                int dataLength = data.getClipData().getItemCount();
+
+                if (dataLength > 1) {
+                    ClipData clipData = data.getClipData();
+                    ArrayList<String> result = new ArrayList<>();
+
+                    for (int i=0; i<dataLength; i++) {
+                        String filePath = null;
+
+                        Uri selectedItemUri = clipData.getItemAt(i).getUri();
+
+                        try {
+                            String fileManagerString = selectedItemUri.getPath();
+                            String selectedItemPath = UriUtils.getLocalPath(selectedItemUri, this);
+
+                            if (selectedItemPath != null) {
+                                filePath = selectedItemPath;
+                            }
+                            else {
+                                filePath = fileManagerString;
+                            }
+                            result.add(filePath);
+
+                        } catch (Exception e) {
+                            Log_OC.e(TAG, "Unexpected exception when trying to read the result of " +
+                                    "Intent.ACTION_SELECT_CONTENT_FROM_APPS", e);
+                        } finally {
+                            if (filePath == null) {
+                                Log_OC.e(TAG, "Couldn't resolve path to file");
+                                Toast t = Toast.makeText(
+                                        this, getString(R.string.filedisplay_unexpected_bad_get_content),
+                                        Toast.LENGTH_LONG
+                                );
+                                t.show();
+                                return;
+                            }
+                        }
+                    }
+                    String[] dataExtra = result.toArray(new String[result.size()]);
+                    data.putExtra(UploadFilesActivity.EXTRA_CHOSEN_FILES, dataExtra);
+                    requestMultipleUpload(data, resultCode);
+                } else {
+                    requestSimpleUpload(data, resultCode);
+                }
             }
         } else if (requestCode == ACTION_SELECT_MULTIPLE_FILES && (resultCode == RESULT_OK ||
                 resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
