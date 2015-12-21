@@ -174,6 +174,20 @@ public class MainApp extends Application {
         return getAppContext().getResources().getString(R.string.account_type);
     }
 
+
+    // Non gradle build systems do not provide BuildConfig.VERSION_CODE
+    // so we must fallback to this method :(
+    public static int getVersionCode() {
+        try {
+            String thisPackageName = getAppContext().getPackageName();
+            return getAppContext().getPackageManager().getPackageInfo(thisPackageName, 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            return 0;
+        }
+    }
+
+    //  From AccountAuthenticator 
+    //  public static final String AUTHORITY = "org.owncloud";
     public static String getAuthority() {
         return getAppContext().getResources().getString(R.string.authority);
     }
