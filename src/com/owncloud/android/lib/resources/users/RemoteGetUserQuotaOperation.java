@@ -1,33 +1,68 @@
-package com.owncloud.android.lib.resources.users;
+/* ownCloud Android Library is available under MIT license
+ *
+ *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2015 Bartosz Przybylski
+ *   Copyright (C) 2014 Marcello Steiner
+ *
+ *   Permission is hereby granted, free of charge, to any person obtaining a copy
+ *   of this software and associated documentation files (the "Software"), to deal
+ *   in the Software without restriction, including without limitation the rights
+ *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *   copies of the Software, and to permit persons to whom the Software is
+ *   furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in
+ *   all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *   THE SOFTWARE.
+ *
+ */
 
-import android.util.Base64;
-import android.util.Log;
+package com.owncloud.android.lib.resources.users;
 
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
- * Created by marcello on 11/11/14.
+ * @author marcello
  */
-public class GetRemoteUserQuotaOperation extends RemoteOperation {
+public class RemoteGetUserQuotaOperation extends RemoteOperation {
 
-    private static final String TAG = GetRemoteUserNameOperation.class.getSimpleName();
+    static public class Quota {
+        long mFree, mUsed, mTotal;
+        double mRelative;
 
+        public Quota(long free, long used, long total, double relative) {
+            mFree = free;
+            mUsed = used;
+            mTotal = total;
+            mRelative = relative;
+        }
+
+        public long getFree() { return mFree; }
+        public long getUsed() { return mUsed; }
+        public long getTotal() { return mTotal; }
+        public double getRelative() { return mRelative; }
+    }
+
+    private static final String TAG = RemoteGetUserQuotaOperation.class.getSimpleName();
 
     private static final String NODE_OCS = "ocs";
     private static final String NODE_DATA = "data";
@@ -43,7 +78,7 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        int status = -1;
+        int status;
         GetMethod get = null;
 
 
@@ -53,7 +88,6 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
             String url = client.getBaseUri() + OCS_ROUTE + credentials.getUsername();
 
             get = new GetMethod(url);
-            get.addRequestHeader(createAuthenticationHeader(credentials));
             get.setQueryString(new NameValuePair[]{new NameValuePair("format","json")});
             status = client.executeMethod(get);
 
@@ -75,10 +109,7 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
                 result = new RemoteOperationResult(true, status, get.getResponseHeaders());
                 //Quota data in data collection
                 ArrayList<Object> data = new ArrayList<Object>();
-                data.add(quotaFree);
-                data.add(quotaUsed);
-                data.add(quotaTotal);
-                data.add(quotaRelative);
+                data.add(new Quota(quotaFree, quotaUsed, quotaTotal, quotaRelative));
                 result.setData(data);
 
             } else {
@@ -104,15 +135,6 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
 
     private boolean isSuccess(int status) {
         return (status == HttpStatus.SC_OK);
-    }
-
-    private Header createAuthenticationHeader(OwnCloudCredentials credentials){
-        Header h = new Header();
-        h.setName("Authorization");
-        String authString = credentials.getUsername()+":"+credentials.getAuthToken();
-        String encodedString = Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
-        h.setValue("Basic "+encodedString);
-        return h;
     }
 
 
