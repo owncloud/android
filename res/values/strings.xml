@@ -395,4 +395,6 @@
     <string name="share_sharee_unavailable">Sorry, your server version does not allow share with users within clients.
         \nPlease contact your administrator</string>
 
+    <string name="permission_storage_access">Additional permissions required to upload &amp; download files.</string>
+
 </resources>
