@@ -805,13 +805,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             String userInfo = uri.getUserInfo();
             if(userInfo != null) {
-                String username = userInfo.split(":", 2)[0];
-                if(username.length() != 0) {
-                    mUsernameInput.setText(username);
+                String[] userInfoParts = userInfo.split(":", 2);
+                if(userInfoParts.length > 0 && userInfoParts[0].length() > 0) {
+                    mUsernameInput.setText(userInfoParts[0]);
                 }
-                String password = userInfo.split(":", 2)[1];
-                if(password.length() != 0) {
-                    mPasswordInput.setText(password);
+                if(userInfoParts.length > 1 && userInfoParts[1].length() > 0) {
+                    mPasswordInput.setText(userInfoParts[1]);
                 }
             }
         }
