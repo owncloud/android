@@ -1,5 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
+ *   @author David A. Velasco
  *   Copyright (C) 2015 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -54,26 +55,32 @@ import com.owncloud.android.lib.test_project.TestActivity;
 
 /**
  * Class to test UpdateRemoteShareOperation
+ * with private shares
  *
  */
-public class UpdateShareTest extends RemoteTest {
-	private static final String LOG_TAG = UpdateShareTest.class.getCanonicalName();
+public class UpdatePrivateShareTest extends RemoteTest {
+	private static final String LOG_TAG = UpdatePrivateShareTest.class.getCanonicalName();
 	
-	/* File to share and update.*/
+	/* File to share and update */
 	private static final String FILE_TO_SHARE = "/fileToShare.txt";
-	
-	// Data for tests 
-	private static final String PASSWORD = "password";
-	private static final String PASS_SPECIAL_CHARS = "p@sswórd";
-	
+
+	/* Folder to share and update */
+	private static final String FOLDER_TO_SHARE = "/folderToShare";
+
+	/* Sharees */
+	private static final String USER_SHAREE = "admin";
+	private static final String GROUP_SHAREE = "admin";
+
 	private String mFullPath2FileToShare;
-	
-	private OCShare mShare;
-	
+	private String mFullPath2FolderToShare;
+
+	private OCShare mFileShare;
+	private OCShare mFolderShare;
+
 	String mServerUri, mUser, mPass;
 	OwnCloudClient mClient = null;
 	
-	public UpdateShareTest(){
+	public UpdatePrivateShareTest(){
 		super();
 		
 		Protocol pr = Protocol.getProtocol("https");
@@ -105,7 +112,7 @@ public class UpdateShareTest extends RemoteTest {
 	    
 	    Log.v(LOG_TAG, "Setting up the remote fixture...");
 	    
-	    // Upload the files
+	    // Upload the file
 	    mFullPath2FileToShare = mBaseFolderPath + FILE_TO_SHARE;
 	    
 	    File textFile = getActivity().extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
@@ -115,83 +122,87 @@ public class UpdateShareTest extends RemoteTest {
 				"txt/plain");
 		if (!result.isSuccess()) {
 			Utils.logAndThrow(LOG_TAG, result);
-		}	    
-		
-		// Share the file
+		}
+
+		// Share the file privately with other user
 		result = getActivity().createShare(
 				mFullPath2FileToShare, 
-				ShareType.PUBLIC_LINK, 
-				"", 
+				ShareType.USER,
+				USER_SHAREE,
 				false, 
 				"", 
-				1);
+				OCShare.MAXIMUM_PERMISSIONS_FOR_FILE);
 
 	    if (result.isSuccess()){
-	    	mShare = (OCShare) result.getData().get(0);
+	    	mFileShare = (OCShare) result.getData().get(0);
 	    } else{
-	    	mShare = null;
+	    	mFileShare = null;
 	    }
-	    
+
+		// Create the folder
+		mFullPath2FolderToShare = mBaseFolderPath + FOLDER_TO_SHARE;
+		result = getActivity().createFolder(
+				mFullPath2FolderToShare,
+				true);
+		if (!result.isSuccess()) {
+			Utils.logAndThrow(LOG_TAG, result);
+		}
+
+		// Share the folder privately with a group
+		result = getActivity().createShare(
+				mFullPath2FolderToShare,
+				ShareType.GROUP,
+				GROUP_SHAREE,
+				false,
+				"",
+				OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER);
+
+		if (result.isSuccess()){
+			mFolderShare = (OCShare) result.getData().get(0);
+		} else{
+			mFolderShare = null;
+		}
+
 		Log.v(LOG_TAG, "Remote fixture created.");
 		
 	}
 	
 	
-	public void testUpdateRemoteShareOperation() {
-		Log.v(LOG_TAG, "testUpdateShare in");
+	public void testUpdateSharePermissions() {
+		Log.v(LOG_TAG, "testUpdateSharePermissions in");
 		
-		if (mShare != null) {
-			// successful tests
-			// Update Share with password
-			UpdateRemoteShareOperation updateShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
-			updateShare.setPassword(PASSWORD);
+		if (mFileShare != null) {
+			/// successful tests
+			// Update Share permissions on a shared file
+			UpdateRemoteShareOperation updateShare = new UpdateRemoteShareOperation(mFileShare.getRemoteId());
+			updateShare.setPermissions(OCShare.READ_PERMISSION_FLAG);	// minimum permissions
 			RemoteOperationResult result = updateShare.execute(mClient);
 			assertTrue(result.isSuccess());
-									
-			// Update Share with password with special characters
-			updateShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
-			updateShare.setPassword(PASS_SPECIAL_CHARS);
+
+			// Update Share permissions on a shared folder
+			updateShare = new UpdateRemoteShareOperation(mFolderShare.getRemoteId());
+			updateShare.setPermissions(OCShare.READ_PERMISSION_FLAG + OCShare.DELETE_PERMISSION_FLAG);
 			result = updateShare.execute(mClient);
 			assertTrue(result.isSuccess());
-			
-			// Update Share with expiration date
-			updateShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
-			Calendar calendar = Calendar.getInstance();
-			calendar.add(Calendar.DAY_OF_MONTH, 7);
-			long expirationDateInMillis = calendar.getTimeInMillis() ;
-			updateShare.setExpirationDate(expirationDateInMillis);
-			result = updateShare.execute(mClient);
-			assertTrue(result.isSuccess());
-					
-			// unsuccessful test
-			// Update Share with expiration date in the past
-			updateShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
-			calendar.set(Calendar.YEAR, 2014);
-			expirationDateInMillis = calendar.getTimeInMillis() ;
-			updateShare.setExpirationDate(expirationDateInMillis);
+
+
+			/// unsuccessful tests
+			// Update Share with invalid permissions
+			updateShare = new UpdateRemoteShareOperation(mFileShare.getRemoteId());
+			updateShare.setPermissions(OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER + 1); // greater than maximum value
 			result = updateShare.execute(mClient);
 			assertFalse(result.isSuccess());
-			
-			// Unshare the file before the unsuccessful tests
-			RemoveRemoteShareOperation unshare = new RemoveRemoteShareOperation((int) mShare.getRemoteId());
+
+			// Unshare the file before next unsuccessful tests
+			RemoveRemoteShareOperation unshare = new RemoveRemoteShareOperation((int) mFileShare.getRemoteId());
 			result = unshare.execute(mClient);
 			
 			if (result.isSuccess()) {				
-				// Update Share with password on unknown share
-				UpdateRemoteShareOperation updateNoShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
-				updateNoShare.setPassword(PASSWORD);
-				result = updateNoShare.execute(mClient);
+				// Update Share permissions on unknown share
+				UpdateRemoteShareOperation updateNoShare = new UpdateRemoteShareOperation(mFileShare.getRemoteId());
+				updateShare.setPermissions(OCShare.READ_PERMISSION_FLAG);	// minimum permissions
+				result = updateShare.execute(mClient);
 				assertFalse(result.isSuccess());
-	
-				// Update Share with expiration date on unknown share
-				updateNoShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
-				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DAY_OF_MONTH, 7);
-				expirationDateInMillis = cal.getTimeInMillis() ;
-				updateNoShare.setExpirationDate(expirationDateInMillis);
-				result = updateNoShare.execute(mClient);
-				assertFalse(result.isSuccess());				
-				
 			}
 				
 		} 		
