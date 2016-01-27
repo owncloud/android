@@ -1,5 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
+ *   @author David A. Velasco
  *   Copyright (C) 2015 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -54,17 +55,18 @@ import com.owncloud.android.lib.test_project.TestActivity;
 
 /**
  * Class to test UpdateRemoteShareOperation
+ * with public shares
  *
  */
-public class UpdateShareTest extends RemoteTest {
-	private static final String LOG_TAG = UpdateShareTest.class.getCanonicalName();
+public class UpdatePublicShareTest extends RemoteTest {
+	private static final String LOG_TAG = UpdatePublicShareTest.class.getCanonicalName();
 	
 	/* File to share and update.*/
 	private static final String FILE_TO_SHARE = "/fileToShare.txt";
 	
 	// Data for tests 
 	private static final String PASSWORD = "password";
-	private static final String PASS_SPECIAL_CHARS = "p@sswórd";
+	private static final String PASS_SPECIAL_CHARS = "p@sswï¿½rd";
 	
 	private String mFullPath2FileToShare;
 	
@@ -73,7 +75,7 @@ public class UpdateShareTest extends RemoteTest {
 	String mServerUri, mUser, mPass;
 	OwnCloudClient mClient = null;
 	
-	public UpdateShareTest(){
+	public UpdatePublicShareTest(){
 		super();
 		
 		Protocol pr = Protocol.getProtocol("https");
@@ -117,7 +119,7 @@ public class UpdateShareTest extends RemoteTest {
 			Utils.logAndThrow(LOG_TAG, result);
 		}	    
 		
-		// Share the file
+		// Share the file with a public link
 		result = getActivity().createShare(
 				mFullPath2FileToShare, 
 				ShareType.PUBLIC_LINK, 
@@ -137,8 +139,8 @@ public class UpdateShareTest extends RemoteTest {
 	}
 	
 	
-	public void testUpdateRemoteShareOperation() {
-		Log.v(LOG_TAG, "testUpdateShare in");
+	public void testUpdatePublicShare() {
+		Log.v(LOG_TAG, "testUpdatePublicShare in");
 		
 		if (mShare != null) {
 			// successful tests
