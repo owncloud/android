@@ -174,7 +174,9 @@ public class UpdatePrivateShareTest extends RemoteTest {
 		if (mFileShare != null) {
 			/// successful tests
 			// Update Share permissions on a shared file
-			UpdateRemoteShareOperation updateShare = new UpdateRemoteShareOperation(mFileShare.getRemoteId());
+			UpdateRemoteShareOperation updateShare = new UpdateRemoteShareOperation(
+					mFileShare.getRemoteId()
+			);
 			updateShare.setPermissions(OCShare.READ_PERMISSION_FLAG);	// minimum permissions
 			RemoteOperationResult result = updateShare.execute(mClient);
 			assertTrue(result.isSuccess());
@@ -189,17 +191,22 @@ public class UpdatePrivateShareTest extends RemoteTest {
 			/// unsuccessful tests
 			// Update Share with invalid permissions
 			updateShare = new UpdateRemoteShareOperation(mFileShare.getRemoteId());
-			updateShare.setPermissions(OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER + 1); // greater than maximum value
+			// greater than maximum value
+			updateShare.setPermissions(OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER + 1);
 			result = updateShare.execute(mClient);
 			assertFalse(result.isSuccess());
 
 			// Unshare the file before next unsuccessful tests
-			RemoveRemoteShareOperation unshare = new RemoveRemoteShareOperation((int) mFileShare.getRemoteId());
+			RemoveRemoteShareOperation unshare = new RemoveRemoteShareOperation(
+					(int) mFileShare.getRemoteId()
+			);
 			result = unshare.execute(mClient);
 			
 			if (result.isSuccess()) {				
 				// Update Share permissions on unknown share
-				UpdateRemoteShareOperation updateNoShare = new UpdateRemoteShareOperation(mFileShare.getRemoteId());
+				UpdateRemoteShareOperation updateNoShare = new UpdateRemoteShareOperation(
+						mFileShare.getRemoteId()
+				);
 				updateShare.setPermissions(OCShare.READ_PERMISSION_FLAG);	// minimum permissions
 				result = updateShare.execute(mClient);
 				assertFalse(result.isSuccess());
