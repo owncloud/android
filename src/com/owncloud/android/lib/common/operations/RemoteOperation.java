@@ -224,7 +224,7 @@ public abstract class RemoteOperation implements Runnable {
 	 * @param client			Client object to reach an ownCloud server
      *                          during the execution of the operation.
 	 * @param listener			Listener to be notified about the execution of the operation.
-	 * @param listenerHandler	Handler associated to the thread where the methods of
+	 * @param listenerHandler	Handler, if passed in, associated to the thread where the methods of
      *                          the listener objects must be called.
 	 * @return					Thread were the remote operation is executed.
 	 */
@@ -243,46 +243,17 @@ public abstract class RemoteOperation implements Runnable {
 		}
 		mListener = listener;
 		
-		if (listenerHandler == null) {
-			throw new IllegalArgumentException
-                    ("Trying to execute a remote operation asynchronously " +
-                            "without a handler to the listener's thread");
+		if (listenerHandler != null) {
+            mListenerHandler = listenerHandler;
 		}
-		mListenerHandler = listenerHandler;
+
 		
 		Thread runnerThread = new Thread(this);
 		runnerThread.start();
 		return runnerThread;
 	}
 
-    /**
-     * Asynchronously executes the remote operation without a handler
-     *
-     * @param client			Client object to reach an ownCloud server
-     *                          during the execution of the operation.
-     * @param listener			Listener to be notified about the execution of the operation.
-     * @return					Thread were the remote operation is executed.
-     */
-    public Thread execute(OwnCloudClient client,
-                          OnRemoteOperationListener listener) {
-        if (client == null) {
-            throw new IllegalArgumentException
-                    ("Trying to execute a remote operation with a NULL OwnCloudClient");
-        }
-        mClient = client;
 
-        if (listener == null) {
-            throw new IllegalArgumentException
-                    ("Trying to execute a remote operation asynchronously " +
-                            "without a listener to notiy the result");
-        }
-        mListener = listener;
-
-        Thread runnerThread = new Thread(this);
-        runnerThread.start();
-        return runnerThread;
-    }
-	
 	/**
 	 * Asynchronous execution of the operation 
 	 * started by {@link RemoteOperation#execute(OwnCloudClient,
