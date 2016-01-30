@@ -27,8 +27,11 @@ package com.owncloud.android.lib.resources.files;
 import java.io.File;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class FileUtils {
+
+	private static final  String TAG = FileUtils.class.getSimpleName();
 
 	public static final String PATH_SEPARATOR = "/";
 
@@ -40,39 +43,44 @@ public class FileUtils {
 	}
 	
 	/**
-	 * Validate the fileName to detect if contains any forbidden character: / , \ , < , > , : , " , | , ? , *
+	 * Validate the fileName to detect if contains any forbidden character: / , \ , < , > ,
+	 * : , " , | , ? , *
 	 * @param fileName
+	 * @param versionSupportsForbiddenChars
 	 * @return
 	 */
-	public static boolean isValidName(String fileName) {
+	public static boolean isValidName(String fileName, boolean versionSupportsForbiddenChars) {
 		boolean result = true;
 		
-		Log_OC.d("FileUtils", "fileName =======" + fileName);
-		if (fileName.contains(PATH_SEPARATOR) ||
+		Log_OC.d(TAG, "fileName =======" + fileName);
+		if ( (versionSupportsForbiddenChars && fileName.contains(PATH_SEPARATOR)) ||
+				(!versionSupportsForbiddenChars && ( fileName.contains(PATH_SEPARATOR) ||
 				fileName.contains("\\") || fileName.contains("<") || fileName.contains(">") ||
-				fileName.contains(":") || fileName.contains("\"") || fileName.contains("|") || 
-				fileName.contains("?") || fileName.contains("*")) {
+				fileName.contains(":") || fileName.contains("\"") || fileName.contains("|") ||
+				fileName.contains("?") || fileName.contains("*") ) ) ) {
+
 			result = false;
 		}
 		return result;
 	}
 	
 	/**
-	 * Validate the path to detect if contains any forbidden character: \ , < , > , : , " , | , ? , *
+	 * Validate the path to detect if contains any forbidden character: \ , < , > , : , " , | ,
+	 * ? , *
 	 * @param path
 	 * @return
 	 */
-	public static boolean isValidPath(String path) {
+	public static boolean isValidPath(String path, boolean versionSupportsForbidenChars) {
 		boolean result = true;
 		
-		Log_OC.d("FileUtils", "path ....... " + path);
-		if (path.contains("\\") || path.contains("<") || path.contains(">") ||
+		Log_OC.d(TAG, "path ....... " + path);
+		if (!versionSupportsForbidenChars &&
+				(path.contains("\\") || path.contains("<") || path.contains(">") ||
 				path.contains(":") || path.contains("\"") || path.contains("|") || 
-				path.contains("?") || path.contains("*")) {
+				path.contains("?") || path.contains("*") ) ){
 			result = false;
 		}
 		return result;
 	}
-
 	
 }

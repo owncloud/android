@@ -45,7 +45,24 @@ public class OCShare implements Parcelable, Serializable {
 	private static final long serialVersionUID = 4124975224281327921L;
 
 	private static final String TAG = OCShare.class.getSimpleName();
-    
+
+    public static final int DEFAULT_PERMISSION = -1;
+    public static final int READ_PERMISSION_FLAG = 1;
+    public static final int UPDATE_PERMISSION_FLAG = 2;
+    public static final int CREATE_PERMISSION_FLAG = 4;
+    public static final int DELETE_PERMISSION_FLAG = 8;
+    public static final int SHARE_PERMISSION_FLAG = 16;
+    public static final int MAXIMUM_PERMISSIONS_FOR_FILE =
+            READ_PERMISSION_FLAG +
+            UPDATE_PERMISSION_FLAG +
+            SHARE_PERMISSION_FLAG
+    ;
+    public static final int MAXIMUM_PERMISSIONS_FOR_FOLDER =
+            MAXIMUM_PERMISSIONS_FOR_FILE +
+            CREATE_PERMISSION_FLAG +
+            DELETE_PERMISSION_FLAG
+    ;
+
     private long mId;
     private long mFileSource;
     private long mItemSource;
@@ -59,7 +76,7 @@ public class OCShare implements Parcelable, Serializable {
     private String mSharedWithDisplayName;
     private boolean mIsFolder;
     private long mUserId;
-    private long mIdRemoteShared;
+    private long mRemoteId;
     private String mShareLink;
     
     public OCShare() {
@@ -84,17 +101,17 @@ public class OCShare implements Parcelable, Serializable {
         mFileSource = 0;
         mItemSource = 0;
         mShareType = ShareType.NO_SHARED; 
-        mShareWith = null;
-        mPath = null;
+        mShareWith = "";
+        mPath = "";
         mPermissions = -1;
         mSharedDate = 0;
         mExpirationDate = 0;
-        mToken = null;
-        mSharedWithDisplayName = null;
+        mToken = "";
+        mSharedWithDisplayName = "";
         mIsFolder = false;
         mUserId = -1;
-        mIdRemoteShared = -1;
-        mShareLink = null;
+        mRemoteId = -1;
+        mShareLink = "";
     }	
     
     /// Getters and Setters
@@ -136,7 +153,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public void setShareWith(String shareWith) {
-        this.mShareWith = shareWith;
+        this.mShareWith = (shareWith != null) ? shareWith : "";
     }
 
     public String getPath() {
@@ -144,7 +161,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public void setPath(String path) {
-        this.mPath = path;
+        this.mPath = (path != null) ? path : "";
     }
 
     public int getPermissions() {
@@ -176,7 +193,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public void setToken(String token) {
-        this.mToken = token;
+        this.mToken = (token != null) ? token : "";
     }
 
     public String getSharedWithDisplayName() {
@@ -184,7 +201,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public void setSharedWithDisplayName(String sharedWithDisplayName) {
-        this.mSharedWithDisplayName = sharedWithDisplayName;
+        this.mSharedWithDisplayName = (sharedWithDisplayName != null) ? sharedWithDisplayName : "";
     }
 
     public boolean isFolder() {
@@ -203,12 +220,12 @@ public class OCShare implements Parcelable, Serializable {
         this.mUserId = userId;
     }
 
-    public long getIdRemoteShared() {
-        return mIdRemoteShared;
+    public long getRemoteId() {
+        return mRemoteId;
     }
 
-    public void setIdRemoteShared(long idRemoteShared) {
-        this.mIdRemoteShared = idRemoteShared;
+    public void setIdRemoteShared(long remoteId) {
+        this.mRemoteId = remoteId;
     }
     
     public String getShareLink() {
@@ -216,7 +233,11 @@ public class OCShare implements Parcelable, Serializable {
     }
     
     public void setShareLink(String shareLink) {
-    	this.mShareLink = shareLink;
+        this.mShareLink = (shareLink != null) ? shareLink : "";
+    }
+
+    public boolean isPasswordProtected() {
+        return ShareType.PUBLIC_LINK.equals(mShareType) && mShareWith.length() > 0;
     }
     
     /** 
@@ -262,7 +283,7 @@ public class OCShare implements Parcelable, Serializable {
         mSharedWithDisplayName = source.readString();
         mIsFolder = source.readInt() == 0;
         mUserId = source.readLong();
-        mIdRemoteShared = source.readLong();
+        mRemoteId = source.readLong();
         mShareLink = source.readString();
     }
 
@@ -288,7 +309,7 @@ public class OCShare implements Parcelable, Serializable {
         dest.writeString(mSharedWithDisplayName);
         dest.writeInt(mIsFolder ? 1 : 0);
         dest.writeLong(mUserId);
-        dest.writeLong(mIdRemoteShared);
+        dest.writeLong(mRemoteId);
         dest.writeString(mShareLink);
     }
 

@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -51,8 +52,8 @@ public class RemoteFile implements Parcelable, Serializable {
 	private String mPermissions;
 	private String mRemoteId;
     private long mSize;
-    private long mQuotaUsedBytes;
-    private long mQuotaAvailableBytes;
+    private BigDecimal mQuotaUsedBytes;
+    private BigDecimal mQuotaAvailableBytes;
 
 	/** 
 	 * Getters and Setters
@@ -130,11 +131,11 @@ public class RemoteFile implements Parcelable, Serializable {
         mSize = size;
     }
 
-    public void setQuotaUsedBytes (long quotaUsedBytes) {
+    public void setQuotaUsedBytes (BigDecimal quotaUsedBytes) {
         mQuotaUsedBytes = quotaUsedBytes;
     }
 
-    public void setQuotaAvailableBytes (long quotaAvailableBytes) {
+    public void setQuotaAvailableBytes (BigDecimal quotaAvailableBytes) {
         mQuotaAvailableBytes = quotaAvailableBytes;
     }
 
@@ -184,8 +185,8 @@ public class RemoteFile implements Parcelable, Serializable {
         mPermissions = null;
         mRemoteId = null;
         mSize = 0;
-        mQuotaUsedBytes = 0;
-        mQuotaAvailableBytes = 0;
+        mQuotaUsedBytes = null;
+        mQuotaAvailableBytes = null;
     }
 
     /** 
@@ -223,8 +224,8 @@ public class RemoteFile implements Parcelable, Serializable {
         mPermissions= source.readString();
         mRemoteId = source.readString();
         mSize = source.readLong();
-        mQuotaUsedBytes = source.readLong();
-        mQuotaAvailableBytes = source.readLong();
+        mQuotaUsedBytes = (BigDecimal) source.readSerializable();
+        mQuotaAvailableBytes = (BigDecimal) source.readSerializable();
     }
     
 	@Override
@@ -243,8 +244,8 @@ public class RemoteFile implements Parcelable, Serializable {
 		dest.writeString(mPermissions);
 		dest.writeString(mRemoteId);
         dest.writeLong(mSize);
-        dest.writeLong(mQuotaUsedBytes);
-        dest.writeLong(mQuotaAvailableBytes);
+        dest.writeSerializable(mQuotaUsedBytes);
+        dest.writeSerializable(mQuotaAvailableBytes);
 	}
 
 }

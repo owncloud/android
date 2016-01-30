@@ -36,8 +36,8 @@ public class OwnCloudCredentialsFactory {
         return new OwnCloudBearerCredentials(authToken);
 	}
     
-	public static OwnCloudCredentials newSamlSsoCredentials(String sessionCookie) {
-		return new OwnCloudSamlSsoCredentials(sessionCookie);
+	public static OwnCloudCredentials newSamlSsoCredentials(String username, String sessionCookie) {
+		return new OwnCloudSamlSsoCredentials(username, sessionCookie);
 	}
 
 	public static final OwnCloudCredentials getAnonymousCredentials() {

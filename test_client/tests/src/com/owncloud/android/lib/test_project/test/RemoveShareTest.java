@@ -65,7 +65,7 @@ public class RemoveShareTest extends RemoteTest {
 			Utils.logAndThrow(LOG_TAG, result);
 		} else {
 			OCShare created = (OCShare) result.getData().get(0);
-			mShareId = created.getIdRemoteShared();
+			mShareId = created.getRemoteId();
 		}
 		
 	}

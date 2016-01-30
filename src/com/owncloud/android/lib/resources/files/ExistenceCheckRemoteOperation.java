@@ -28,9 +28,9 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.HeadMethod;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -49,35 +49,50 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
     private static final String TAG = ExistenceCheckRemoteOperation.class.getSimpleName();
     
     private String mPath;
-    private Context mContext;
     private boolean mSuccessIfAbsent;
 
-    
+    /** Sequence of redirections followed. Available only after executing the operation */
+    private RedirectionPath mRedirectionPath = null;
+        // TODO move to {@link RemoteOperation}, that needs a nice refactoring
+
     /**
      * Full constructor. Success of the operation will depend upon the value of successIfAbsent.
-     * 
-     * @param remotePath              Path to append to the URL owned by the client instance.
-     * @param context           Android application context.
+     *
+     * @param remotePath        Path to append to the URL owned by the client instance.
      * @param successIfAbsent   When 'true', the operation finishes in success if the path does
      *                          NOT exist in the remote server (HTTP 404).
      */
-    public ExistenceCheckRemoteOperation(String remotePath, Context context, boolean successIfAbsent) {
+    public ExistenceCheckRemoteOperation(String remotePath, boolean successIfAbsent) {
         mPath = (remotePath != null) ? remotePath : "";
-        mContext = context;
         mSuccessIfAbsent = successIfAbsent;
     }
-    
 
-	@Override
+    /**
+     * Full constructor. Success of the operation will depend upon the value of successIfAbsent.
+     * 
+     * @param remotePath        Path to append to the URL owned by the client instance.
+     * @param context           Android application context.
+     * @param successIfAbsent   When 'true', the operation finishes in success if the path does
+     *                          NOT exist in the remote server (HTTP 404).
+     * @deprecated
+     */
+    public ExistenceCheckRemoteOperation(String remotePath, Context context, boolean successIfAbsent) {
+        this(remotePath, successIfAbsent);
+    }
+
+    @Override
 	protected RemoteOperationResult run(OwnCloudClient client) {
-        if (!isOnline()) {
-            return new RemoteOperationResult(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
-        }
         RemoteOperationResult result = null;
         HeadMethod head = null;
+        boolean previousFollowRedirects = client.getFollowRedirects();
         try {
             head = new HeadMethod(client.getWebdavUri() + WebdavUtils.encodePath(mPath));
+            client.setFollowRedirects(false);
             int status = client.executeMethod(head, TIMEOUT, TIMEOUT);
+            if (previousFollowRedirects) {
+                mRedirectionPath = client.followRedirection(head);
+                status = mRedirectionPath.getLastStatus();
+            }
             client.exhaustResponse(head.getResponseBodyAsStream());
             boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) ||
                     (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
@@ -97,16 +112,25 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         } finally {
             if (head != null)
                 head.releaseConnection();
+            client.setFollowRedirects(previousFollowRedirects);
         }
         return result;
 	}
 
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) mContext
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm != null && cm.getActiveNetworkInfo() != null
-                && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+
+    /**
+     * Gets the sequence of redirections followed during the execution of the operation.
+     *
+     * @return      Sequence of redirections followed, if any, or NULL if the operation was not executed.
+     */
+    public RedirectionPath getRedirectionPath() {
+        return mRedirectionPath;
     }
 
-
+    /**
+     * @return      'True' if the operation was executed and at least one redirection was followed.
+     */
+    public boolean wasRedirected() {
+        return (mRedirectionPath != null && mRedirectionPath.getRedirectionsCount() > 0);
+    }
 }

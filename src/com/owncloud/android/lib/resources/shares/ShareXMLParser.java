@@ -57,7 +57,7 @@ public class ShareXMLParser {
 	private static final String NODE_META = "meta";
 	private static final String NODE_STATUS = "status";
 	private static final String NODE_STATUS_CODE = "statuscode";
-	//private static final String NODE_MESSAGE = "message";
+	private static final String NODE_MESSAGE = "message";
 
 	private static final String NODE_DATA = "data";
 	private static final String NODE_ELEMENT = "element";
@@ -75,18 +75,20 @@ public class ShareXMLParser {
 	private static final String NODE_TOKEN = "token";
 	private static final String NODE_STORAGE = "storage";
 	private static final String NODE_MAIL_SEND = "mail_send";
-	private static final String NODE_SHARE_WITH_DISPLAY_NAME = "share_with_display_name";
+	private static final String NODE_SHARE_WITH_DISPLAY_NAME = "share_with_displayname";
 	
 	private static final String NODE_URL = "url";
 
 	private static final String TYPE_FOLDER = "folder";
 	
 	private static final int SUCCESS = 100;
-	private static final int FAILURE = 403;
-	private static final int FILE_NOT_FOUND = 404;
+	private static final int ERROR_WRONG_PARAMETER = 400;
+	private static final int ERROR_FORBIDDEN = 403;
+	private static final int ERROR_NOT_FOUND = 404;
 
 	private String mStatus;
 	private int mStatusCode;
+	private String mMessage;
 
 	// Getters and Setters
 	public String getStatus() {
@@ -104,21 +106,36 @@ public class ShareXMLParser {
 	public void setStatusCode(int statusCode) {
 		this.mStatusCode = statusCode;
 	}
+
+	public String getMessage() {
+		return mMessage;
+	}
+
+	public void setMessage(String message) {
+		this.mMessage = message;
+	}
+
 	// Constructor
 	public ShareXMLParser() {
-		mStatusCode = 100;
+		mStatusCode = -1;
 	}
 
 	public boolean isSuccess() {
 		return mStatusCode == SUCCESS;
 	}
-	public boolean isFailure() {
-		return mStatusCode == FAILURE;
+
+	public boolean isForbidden() {
+		return mStatusCode == ERROR_FORBIDDEN;
 	}
-	public boolean isFileNotFound() {
-		return mStatusCode == FILE_NOT_FOUND;
+
+	public boolean isNotFound() {
+		return mStatusCode == ERROR_NOT_FOUND;
 	}
-	
+
+	public boolean isWrongParameter() {
+		return mStatusCode == ERROR_WRONG_PARAMETER;
+	}
+
 	/**
 	 * Parse is as response of Share API
 	 * @param is
@@ -126,7 +143,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public ArrayList<OCShare> parseXMLResponse(InputStream is) throws XmlPullParserException, IOException {
+	public ArrayList<OCShare> parseXMLResponse(InputStream is) throws XmlPullParserException,
+			IOException {
 
 		try {
 			// XMLPullParser
@@ -151,7 +169,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ArrayList<OCShare> readOCS (XmlPullParser parser) throws XmlPullParserException, IOException {
+	private ArrayList<OCShare> readOCS (XmlPullParser parser) throws XmlPullParserException,
+			IOException {
 		ArrayList<OCShare> shares = new ArrayList<OCShare>();
 		parser.require(XmlPullParser.START_TAG,  ns , NODE_OCS);
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -195,6 +214,9 @@ public class ShareXMLParser {
 			} else if (name.equalsIgnoreCase(NODE_STATUS_CODE)) {
 				setStatusCode(Integer.parseInt(readNode(parser, NODE_STATUS_CODE)));
 
+			} else if (name.equalsIgnoreCase(NODE_MESSAGE)) {
+				setMessage(readNode(parser, NODE_MESSAGE));
+
 			} else {
 				skip(parser);
 			}
@@ -209,7 +231,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private ArrayList<OCShare> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
+	private ArrayList<OCShare> readData(XmlPullParser parser) throws XmlPullParserException,
+			IOException {
 		ArrayList<OCShare> shares = new ArrayList<OCShare>();
 		OCShare share = null;
 
@@ -259,7 +282,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void readElement(XmlPullParser parser, ArrayList<OCShare> shares) throws XmlPullParserException, IOException {
+	private void readElement(XmlPullParser parser, ArrayList<OCShare> shares)
+			throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, NODE_ELEMENT);
 		
 		OCShare share = new OCShare();
@@ -273,7 +297,8 @@ public class ShareXMLParser {
 			String name = parser.getName();
 
 			if (name.equalsIgnoreCase(NODE_ELEMENT)) {
-				// patch to work around servers responding with extra <element> surrounding all the shares on the same file before
+				// patch to work around servers responding with extra <element> surrounding all
+				// the shares on the same file before
 				// https://github.com/owncloud/core/issues/6992 was fixed
 				readElement(parser, shares);
 
@@ -327,6 +352,11 @@ public class ShareXMLParser {
 			} else if (name.equalsIgnoreCase(NODE_SHARE_WITH_DISPLAY_NAME)) {
 				share.setSharedWithDisplayName(readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME));
 
+			} else if (name.equalsIgnoreCase(NODE_URL)) {
+				share.setShareType(ShareType.PUBLIC_LINK);
+				String value = readNode(parser, NODE_URL);
+				share.setShareLink(value);
+
 			} else {
 				skip(parser);
 			} 
@@ -338,13 +368,12 @@ public class ShareXMLParser {
 	}
 
 	private boolean isValidShare(OCShare share) {
-		return ((share.getIdRemoteShared() > -1) &&
-				(share.getShareType() == ShareType.PUBLIC_LINK)	// at this moment we only care about public shares
-				);
+		return (share.getRemoteId() > -1);
 	}
 
 	private void fixPathForFolder(OCShare share) {
-		if (share.isFolder() && share.getPath() != null && share.getPath().length() > 0 && !share.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {
+		if (share.isFolder() && share.getPath() != null && share.getPath().length() > 0 &&
+				!share.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {
 			share.setPath(share.getPath() + FileUtils.PATH_SEPARATOR);
 		}
 	}
@@ -357,7 +386,8 @@ public class ShareXMLParser {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private String readNode (XmlPullParser parser, String node) throws XmlPullParserException, IOException{
+	private String readNode (XmlPullParser parser, String node) throws XmlPullParserException,
+			IOException{
 		parser.require(XmlPullParser.START_TAG, ns, node);
 		String value = readText(parser);
 		//Log_OC.d(TAG, "node= " + node + ", value= " + value);

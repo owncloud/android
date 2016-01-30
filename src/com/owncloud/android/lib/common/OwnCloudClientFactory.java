@@ -82,8 +82,9 @@ public class OwnCloudClientFactory {
         boolean isSamlSso =
                 am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
         OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
-        
-        if (isOauth2) {    
+
+        String username = account.name.substring(0, account.name.lastIndexOf('@'));
+        if (isOauth2) {
             String accessToken = am.blockingGetAuthToken(
             		account, 
             		AccountTypeUtils.getAuthTokenTypeAccessToken(account.type), 
@@ -100,11 +101,10 @@ public class OwnCloudClientFactory {
             		false);
             
             client.setCredentials(
-            		OwnCloudCredentialsFactory.newSamlSsoCredentials(accessToken)
+            		OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken)
     		);
 
         } else {
-            String username = account.name.substring(0, account.name.lastIndexOf('@'));
             //String password = am.getPassword(account);
             String password = am.blockingGetAuthToken(
             		account, 
@@ -136,7 +136,8 @@ public class OwnCloudClientFactory {
         boolean isSamlSso =
                 am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
         OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
-        
+
+        String username = account.name.substring(0, account.name.lastIndexOf('@'));
         if (isOauth2) {    // TODO avoid a call to getUserData here
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
             		account,  
@@ -166,12 +167,11 @@ public class OwnCloudClientFactory {
             String accessToken = result.getString(AccountManager.KEY_AUTHTOKEN);
             if (accessToken == null) throw new AuthenticatorException("WTF!");
             client.setCredentials(
-            		OwnCloudCredentialsFactory.newSamlSsoCredentials(accessToken)
+            		OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken)
     		);
 
 
         } else {
-            String username = account.name.substring(0, account.name.lastIndexOf('@'));
             //String password = am.getPassword(account);
             //String password = am.blockingGetAuthToken(account, MainApp.getAuthTokenTypePass(),
             // false);

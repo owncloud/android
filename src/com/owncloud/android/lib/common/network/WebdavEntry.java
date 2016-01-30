@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.common.network;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
@@ -37,6 +38,9 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class WebdavEntry {
+
+    private static final String TAG = WebdavEntry.class.getSimpleName();
+
 	public static final String NAMESPACE_OC = "http://owncloud.org/ns";
 	public static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
 	public static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
@@ -49,7 +53,7 @@ public class WebdavEntry {
 
 	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
 	private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
-    private long mQuotaUsedBytes, mQuotaAvailableBytes;
+    private BigDecimal mQuotaUsedBytes, mQuotaAvailableBytes;
 
 	public WebdavEntry(MultiStatusResponse ms, String splitElement) {
         resetData();
@@ -125,20 +129,37 @@ public class WebdavEntry {
             prop = propSet.get(DavPropertyName.GETETAG);
             if (prop != null) {
                 mEtag = (String) prop.getValue();
-                mEtag = mEtag.substring(1, mEtag.length()-1);
+                mEtag = WebdavUtils.parseEtag(mEtag);
             }
 
             // {DAV:}quota-used-bytes
             prop = propSet.get(DavPropertyName.create(PROPERTY_QUOTA_USED_BYTES));
             if (prop != null) {
-                mQuotaUsedBytes = Long.parseLong((String) prop.getValue());
+                String quotaUsedBytesSt = (String) prop.getValue();
+                try {
+                    mQuotaUsedBytes = new BigDecimal(quotaUsedBytesSt);
+                } catch (NumberFormatException e) {
+                    Log_OC.w(TAG, "No value for QuotaUsedBytes - NumberFormatException");
+                } catch (NullPointerException e ){
+                    Log_OC.w(TAG, "No value for QuotaUsedBytes - NullPointerException");
+                }
+                Log_OC.d(TAG , "QUOTA_USED_BYTES " + quotaUsedBytesSt );
             }
 
             // {DAV:}quota-available-bytes
             prop = propSet.get(DavPropertyName.create(PROPERTY_QUOTA_AVAILABLE_BYTES));
             if (prop != null) {
-                mQuotaAvailableBytes = Long.parseLong((String) prop.getValue());
+                String quotaAvailableBytesSt = (String) prop.getValue();
+                try {
+                    mQuotaAvailableBytes = new BigDecimal(quotaAvailableBytesSt);
+                } catch (NumberFormatException e) {
+                    Log_OC.w(TAG, "No value for QuotaAvailableBytes - NumberFormatException");
+                } catch (NullPointerException e ){
+                    Log_OC.w(TAG, "No value for QuotaAvailableBytes");
+                }
+                Log_OC.d(TAG , "QUOTA_AVAILABLE_BYTES " + quotaAvailableBytesSt );
             }
+
             // OC permissions property <oc:permissions>
             prop = propSet.get(
             		EXTENDED_PROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC)
@@ -222,11 +243,11 @@ public class WebdavEntry {
         return mSize;
     }
 
-    public long quotaUsedBytes() {
+    public BigDecimal quotaUsedBytes() {
         return mQuotaUsedBytes;
     }
 
-    public long quotaAvailableBytes() {
+    public BigDecimal quotaAvailableBytes() {
         return mQuotaAvailableBytes;
     }
 
@@ -234,7 +255,7 @@ public class WebdavEntry {
         mName = mUri = mContentType = mPermissions = null; mRemoteId = null;
         mContentLength = mCreateTimestamp = mModifiedTimestamp = 0;
         mSize = 0;
-        mQuotaUsedBytes = 0;
-        mQuotaAvailableBytes = 0;
+        mQuotaUsedBytes = null;
+        mQuotaAvailableBytes = null;
     }
 }

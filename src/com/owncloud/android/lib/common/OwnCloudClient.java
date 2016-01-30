@@ -49,13 +49,15 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class OwnCloudClient extends HttpClient {
 	
     private static final String TAG = OwnCloudClient.class.getSimpleName();
-    private static final int MAX_REDIRECTIONS_COUNT = 3;
+    public static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
     
@@ -67,6 +69,8 @@ public class OwnCloudClient extends HttpClient {
     private int mInstanceNumber = 0;
     
     private Uri mBaseUri;
+
+    private OwnCloudVersion mVersion = null;
     
     /**
      * Constructor
@@ -168,13 +172,13 @@ public class OwnCloudClient extends HttpClient {
      * 
      * The timeouts are both in milliseconds; 0 means 'infinite'; 
      * < 0 means 'do not change the default'
-     * 
+     *
      * @param method                HTTP method request.
      * @param readTimeout           Timeout to set for data reception
      * @param connectionTimeout     Timeout to set for connection establishment
      */
-    public int executeMethod(HttpMethodBase method, int readTimeout, int connectionTimeout) 
-    		throws HttpException, IOException {
+    public int executeMethod(HttpMethodBase method, int readTimeout, int connectionTimeout) throws IOException {
+
         int oldSoTimeout = getParams().getSoTimeout();
         int oldConnectionTimeout = getHttpConnectionManager().getParams().getConnectionTimeout();
         try {
@@ -191,55 +195,53 @@ public class OwnCloudClient extends HttpClient {
             getHttpConnectionManager().getParams().setConnectionTimeout(oldConnectionTimeout);
         }
     }
-    
-    
-    @Override
-    public int executeMethod(HttpMethod method) throws IOException, HttpException {
-        try {	// just to log 
-	        boolean customRedirectionNeeded = false;
-	        
-	        try {
-	            method.setFollowRedirects(mFollowRedirects);
-	        } catch (Exception e) {
-	        	/*
-	            if (mFollowRedirects) 
-	        		Log_OC.d(TAG, "setFollowRedirects failed for " + method.getName() 
-	        			+ " method, custom redirection will be used if needed");
-        		*/
-	            customRedirectionNeeded = mFollowRedirects;
-	        }
 
+
+    /**
+     * Requests the received method.
+     *
+     * Executes the method through the inherited HttpClient.executedMethod(method).
+     *
+     * @param method                HTTP method request.
+     */
+    @Override
+    public int executeMethod(HttpMethod method) throws IOException {
+        try {
             // Update User Agent
             HttpParams params = method.getParams();
             String userAgent = OwnCloudClientManagerFactory.getUserAgent();
             params.setParameter(HttpMethodParams.USER_AGENT, userAgent);
 
-	        Log_OC.d(TAG + " #" + mInstanceNumber, "REQUEST " + 
-	        		method.getName() + " " + method.getPath());
-        
+            Log_OC.d(TAG + " #" + mInstanceNumber, "REQUEST " +
+                    method.getName() + " " + method.getPath());
+
 //	        logCookiesAtRequest(method.getRequestHeaders(), "before");
 //	        logCookiesAtState("before");
-	        
-	        int status = super.executeMethod(method);
-        
-	        if (customRedirectionNeeded) {
-	        	status = patchRedirection(status, method);
-	        }
+            method.setFollowRedirects(false);
+
+            int status = super.executeMethod(method);
+
+            if (mFollowRedirects) {
+                status = followRedirection(method).getLastStatus();
+            }
 
 //	        logCookiesAtRequest(method.getRequestHeaders(), "after");
 //	        logCookiesAtState("after");
 //	        logSetCookiesAtResponse(method.getResponseHeaders());
-	        
-	        return status;
-	        
+
+            return status;
+
         } catch (IOException e) {
-        	Log_OC.d(TAG + " #" + mInstanceNumber, "Exception occurred", e);
-        	throw e;
+            //Log_OC.d(TAG + " #" + mInstanceNumber, "Exception occurred", e);
+            throw e;
         }
     }
 
-	private int patchRedirection(int status, HttpMethod method) throws HttpException, IOException {
+
+	public RedirectionPath followRedirection(HttpMethod method) throws IOException {
         int redirectionsCount = 0;
+        int status = method.getStatusCode();
+        RedirectionPath result = new RedirectionPath(status, MAX_REDIRECTIONS_COUNT);
         while (redirectionsCount < MAX_REDIRECTIONS_COUNT &&
                 (   status == HttpStatus.SC_MOVED_PERMANENTLY || 
                     status == HttpStatus.SC_MOVED_TEMPORARILY ||
@@ -254,18 +256,20 @@ public class OwnCloudClient extends HttpClient {
                 Log_OC.d(TAG + " #" + mInstanceNumber,  
                 		"Location to redirect: " + location.getValue());
 
+                String locationStr = location.getValue();
+                result.addLocation(locationStr);
+
                 // Release the connection to avoid reach the max number of connections per host
                 // due to it will be set a different url
                 exhaustResponse(method.getResponseBodyAsStream());
                 method.releaseConnection();
 
-                method.setURI(new URI(location.getValue(), true));
+                method.setURI(new URI(locationStr, true));
                 Header destination = method.getRequestHeader("Destination");
                 if (destination == null) {
                 	destination = method.getRequestHeader("destination");
                 }
                 if (destination != null) {
-                	String locationStr = location.getValue();
                 	int suffixIndex = locationStr.lastIndexOf(
                 	    	(mCredentials instanceof OwnCloudBearerCredentials) ? 
                 	    			AccountUtils.ODAV_PATH :
@@ -281,6 +285,7 @@ public class OwnCloudClient extends HttpClient {
                     method.setRequestHeader(destination);
                 }
                 status = super.executeMethod(method);
+                result.addStatus(status);
                 redirectionsCount++;
                 
             } else {
@@ -288,7 +293,7 @@ public class OwnCloudClient extends HttpClient {
                 status = HttpStatus.SC_NOT_FOUND;
             }
         }
-        return status;
+        return result;
 	}
 
 	/**
@@ -356,7 +361,10 @@ public class OwnCloudClient extends HttpClient {
         mFollowRedirects = followRedirects;
     }
 
-    
+    public boolean getFollowRedirects() {
+        return mFollowRedirects;
+    }
+
 	private void logCookiesAtRequest(Header[] headers, String when) {
         int counter = 0;
         for (int i=0; i<headers.length; i++) {
@@ -436,4 +444,11 @@ public class OwnCloudClient extends HttpClient {
     }
 
 
+    public void setOwnCloudVersion(OwnCloudVersion version){
+        mVersion = version;
+    }
+
+    public OwnCloudVersion getOwnCloudVersion(){
+        return mVersion;
+    }
 }

@@ -39,6 +39,7 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 
 /**
@@ -87,9 +88,13 @@ public class MoveRemoteFileOperation extends RemoteOperation {
      */
 	@Override
 	protected RemoteOperationResult run(OwnCloudClient client) {
-		
+
+		OwnCloudVersion version = client.getOwnCloudVersion();
+		boolean versionWithForbiddenChars =
+                (version != null && version.isVersionWithForbiddenCharacters());
+
     	/// check parameters
-        if (!FileUtils.isValidPath(mTargetRemotePath)) {
+        if (!FileUtils.isValidPath(mTargetRemotePath, versionWithForbiddenChars)) {
         	return new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
         }
         
@@ -128,15 +133,17 @@ public class MoveRemoteFileOperation extends RemoteOperation {
     		/// for other errors that could be explicitly handled, check first:
     		/// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
         		
-        	} else {
-        		
-	            result = new RemoteOperationResult(
-	            		isSuccess(status), 	// move.succeeded()? trustful?
-	            		status, 
-	            		move.getResponseHeaders()
-        		);
-        		client.exhaustResponse(move.getResponseBodyAsStream());
-            }
+        	} else if (status == 400) {
+				result = new RemoteOperationResult(move.succeeded(),
+						move.getResponseBodyAsString(), status);
+			} else {
+					result = new RemoteOperationResult(
+							isSuccess(status), 	// move.succeeded()? trustful?
+							status,
+							move.getResponseHeaders()
+					);
+					client.exhaustResponse(move.getResponseBodyAsStream());
+			}
             
             Log.i(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + 
         		result.getLogMessage());

@@ -1,4 +1,6 @@
 /* ownCloud Android Library is available under MIT license
+ *   @author masensio
+ *   @author David A. Velasco
  *   Copyright (C) 2015 ownCloud Inc.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,23 +26,16 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.jackrabbit.webdav.client.methods.DeleteMethod;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Remove a share
- * 
- * @author masensio
- *
  */
 
 public class RemoveRemoteShareOperation extends RemoteOperation {
@@ -72,28 +67,20 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
 			delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
 
 			delete.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
-            
+
 			status = client.executeMethod(delete);
 
 			if(isSuccess(status)) {
 				String response = delete.getResponseBodyAsString();
 
-				result = new RemoteOperationResult(ResultCode.OK);
-				
-				// Parse xml response
-				// convert String into InputStream
-				InputStream is = new ByteArrayInputStream(response.getBytes());
-				ShareXMLParser xmlParser = new ShareXMLParser();
-				xmlParser.parseXMLResponse(is);
-				if (xmlParser.isSuccess()) {
-					result = new RemoteOperationResult(ResultCode.OK);
-				} else if (xmlParser.isFileNotFound()){
-					result = new RemoteOperationResult(ResultCode.SHARE_NOT_FOUND);
-				} else {
-					result = new RemoteOperationResult(false, status, delete.getResponseHeaders());	
-				}
-				
+				// Parse xml response and obtain the list of shares
+				ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
+						new ShareXMLParser()
+				);
+				result = parser.parse(response);
+
 				Log_OC.d(TAG, "Unshare " + id + ": " + result.getLogMessage());
+
 			} else {
 				result = new RemoteOperationResult(false, status, delete.getResponseHeaders());
 			}
