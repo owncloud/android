@@ -43,7 +43,8 @@ public enum ShareType {
     GROUP (1),
     PUBLIC_LINK (3),
     EMAIL (4),
-    CONTACT (5);
+    CONTACT (5),
+    FEDERATED (6);
     
     private int value;
     
@@ -72,6 +73,8 @@ public enum ShareType {
             return EMAIL;
         case 5:
             return CONTACT;
+        case 6:
+            return FEDERATED;
         }
         return null;
     }
