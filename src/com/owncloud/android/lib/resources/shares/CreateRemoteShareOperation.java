@@ -26,8 +26,8 @@
 
 package com.owncloud.android.lib.resources.shares;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.http.HttpStatus;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;

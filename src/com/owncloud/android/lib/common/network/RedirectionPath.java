@@ -27,7 +27,7 @@
 
 package com.owncloud.android.lib.common.network;
 
-import org.apache.http.HttpStatus;
+import org.apache.commons.httpclient.HttpStatus;
 
 import java.util.Arrays;
 
@@ -53,7 +53,6 @@ public class RedirectionPath {
     private String[] mLocations = null;
 
     private int mLastLocation = -1;
-    private int maxRedirections;
 
     /**
      * Public constructor.

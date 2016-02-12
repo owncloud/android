@@ -26,8 +26,8 @@ package com.owncloud.android.lib.resources.users;
 
 import java.util.ArrayList;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
