@@ -227,8 +227,8 @@ public class TestActivity extends Activity {
 	public RemoteOperationResult downloadFile(RemoteFile remoteFile, String temporalFolder) {
 		// Create folder 
 		String path =  "/owncloud/tmp/" + temporalFolder;
-		File sdCard = Environment.getExternalStorageDirectory();
-		File folder = new File(sdCard.getAbsolutePath() + "/" + path);
+		File privateFolder = getFilesDir();
+		File folder = new File(privateFolder.getAbsolutePath() + "/" + path);
 		folder.mkdirs();
 		
 		DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remoteFile.getRemotePath(), folder.getAbsolutePath());
