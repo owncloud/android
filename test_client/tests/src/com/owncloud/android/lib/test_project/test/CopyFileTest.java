@@ -109,8 +109,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
 
     private static final String SRC_PATH_TO_FILE_6 = SRC_BASE_FOLDER + FILE6;
 
-    private static final String SRC_PATH_TO_FILE_7 = SRC_BASE_FOLDER + FILE7;
-
     private static final String SRC_PATH_TO_NON_EXISTENT_FILE = SRC_BASE_FOLDER + NO_FILE;
 
     private static final String SRC_PATH_TO_EMPTY_FOLDER = SRC_BASE_FOLDER + EMPTY;
