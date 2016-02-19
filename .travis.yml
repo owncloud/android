@@ -2,8 +2,11 @@ sudo: false
 language: android
 android:
   components:
-  - build-tools-22.0.1
-  - android-19
+  - platform-tools
+  - tools
+  - build-tools-23.0.2
+  - android-23
+  - sys-img-armeabi-v7a-android-23
 branches:
   only:
   - master
@@ -33,7 +36,7 @@ env:
   - secure: AnxLVarfwM7IhJ7Sca35USyRlFHFvlcBhWTt2TVDcyQ+ldDyb+U6IWXFK0Yy82QP0ZH/RCLu7FnmHK/rKG0BHNRt1Ymco1VkTQql0MZcHXP+4IKgEvgJyUn1TqYj+hSVmM6lgTA+QUjZYGSfwU8mhUFiU7644ZTdTe6ALdqa+v8=
   - secure: ezKyZbb3q1Phcv/vJntuJe0C2req+Hp4/C+tFZIWZ3o8wRO9jVI3bnED9TWQyQOOT0SoRYjJ5zqp0UcEOGCzPeWFO6bA7RWp+zA/R9sziLNcVWMVv3WXnuClQjPBHJeXRnP7YmNjxDmSfV97a14dk5d9LgJZYliTDepH4dLsxro=
   matrix:
-  - ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
+  - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
 addons:
   coverity_scan:
     project:
