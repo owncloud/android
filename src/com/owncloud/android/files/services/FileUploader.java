@@ -51,7 +51,6 @@ import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.PreferenceReader;
-import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
@@ -1088,6 +1087,7 @@ public class FileUploader extends Service
                         AuthenticatorActivity.EXTRA_ACTION,
                         AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN
                 );
+
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 updateAccountCredentials.addFlags(Intent.FLAG_FROM_BACKGROUND);
@@ -1131,7 +1131,7 @@ public class FileUploader extends Service
 //                }
             }
 
-            if (!uploadResult.isSuccess()) {
+            if (!uploadResult.isSuccess() && !needsToUpdateCredentials ) {
                 //in case of failure, do not show details file view (because there is no file!)
                 Intent showUploadListIntent = new Intent(this, UploadListActivity.class);
                 showUploadListIntent.putExtra(FileActivity.EXTRA_FILE, upload.getFile());
@@ -1225,6 +1225,5 @@ public class FileUploader extends Service
 //    public static void retry(Context context) {
 //        retry(context, null);
 //    }
-
 
 }
