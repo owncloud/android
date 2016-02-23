@@ -108,7 +108,9 @@ public class RemoteOperationResult implements Serializable {
 		PARTIAL_MOVE_DONE,
         PARTIAL_COPY_DONE,
         SHARE_WRONG_PARAMETER,
-        WRONG_SERVER_RESPONSE, INVALID_CHARACTER_DETECT_IN_SERVER
+        WRONG_SERVER_RESPONSE,
+        INVALID_CHARACTER_DETECT_IN_SERVER,
+        DELAYED_FOR_WIFI
     }
 
     private boolean mSuccess = false;
