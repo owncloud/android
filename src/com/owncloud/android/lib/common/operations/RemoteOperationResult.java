@@ -110,7 +110,8 @@ public class RemoteOperationResult implements Serializable {
         SHARE_WRONG_PARAMETER,
         WRONG_SERVER_RESPONSE,
         INVALID_CHARACTER_DETECT_IN_SERVER,
-        DELAYED_FOR_WIFI
+        DELAYED_FOR_WIFI,
+        LOCAL_FILE_NOT_FOUND
     }
 
     private boolean mSuccess = false;
