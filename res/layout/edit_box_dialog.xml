@@ -18,18 +18,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="clip_horizontal"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="clip_horizontal"
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/dialog_side_padding"
+              android:paddingRight="@dimen/dialog_side_padding"
+              android:paddingTop="@dimen/standard_half_grid_padding">
 
     <EditText
         android:id="@+id/user_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" 
-		android:inputType="textNoSuggestions"
-		>
+        android:ems="10"
+        android:inputType="textNoSuggestions">
 
     </EditText>
 
