@@ -93,10 +93,6 @@ public class GetRemoteShareesOperation extends RemoteOperation{
     public static final String PROPERTY_SHARE_TYPE = "shareType";
     public static final String PROPERTY_SHARE_WITH = "shareWith";
 
-    // Result types
-    public static final Byte USER_TYPE = 0;
-    public static final Byte GROUP_TYPE = 1;
-
     private String mSearchString;
     private int mPage;
     private int mPerPage;

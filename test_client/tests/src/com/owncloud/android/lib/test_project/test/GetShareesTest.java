@@ -41,6 +41,7 @@ import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.R;
 import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 
@@ -125,15 +126,15 @@ public class GetShareesTest extends RemoteTest {
 		RemoteOperationResult result = getShareesOperation.execute(mClient);
 		JSONObject resultItem;
 		JSONObject value;
-		byte type;
+		int type;
 		int userCount = 0, groupCount = 0;
 		assertTrue(result.isSuccess() && result.getData().size() > 0);
 		try {
 			for (int i=0; i<result.getData().size(); i++) {
 				resultItem = (JSONObject) result.getData().get(i);
 	            value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
-	            type = (byte) value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
-				if (GetRemoteShareesOperation.GROUP_TYPE.equals(type)) {
+	            type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
+				if (type == ShareType.GROUP) {
 					groupCount++;
 				} else {
 					userCount++;
@@ -156,8 +157,8 @@ public class GetShareesTest extends RemoteTest {
 			for (int i=0; i<2; i++) {
 				resultItem = (JSONObject) result.getData().get(i);
 	            value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
-	            type = (byte) value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
-				if (GetRemoteShareesOperation.GROUP_TYPE.equals(type)) {
+	            type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
+				if (type == ShareType.GROUP) {
 					groupCount++;
 				} else {
 					userCount++;
