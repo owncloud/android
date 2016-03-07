@@ -134,7 +134,7 @@ public class GetShareesTest extends RemoteTest {
 				resultItem = (JSONObject) result.getData().get(i);
 	            value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
 	            type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
-				if (type == ShareType.GROUP) {
+				if (type == ShareType.GROUP.getValue()) {
 					groupCount++;
 				} else {
 					userCount++;
@@ -158,7 +158,7 @@ public class GetShareesTest extends RemoteTest {
 				resultItem = (JSONObject) result.getData().get(i);
 	            value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
 	            type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
-				if (type == ShareType.GROUP) {
+				if (type == ShareType.GROUP.getValue()) {
 					groupCount++;
 				} else {
 					userCount++;
