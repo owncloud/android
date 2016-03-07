@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -179,8 +179,8 @@ public class ShareFileFragment extends Fragment
             }
         }
         // Name
-        TextView filename = (TextView) view.findViewById(R.id.shareFileName);
-        filename.setText(mFile.getFileName());
+        TextView fileNameHeader = (TextView) view.findViewById(R.id.shareFileNameHeader);
+        fileNameHeader.setText(getResources().getString(R.string.share_file, mFile.getFileName()));
         // Size
         TextView size = (TextView) view.findViewById(R.id.shareFileSize);
         if (mFile.isFolder()) {
@@ -227,7 +227,7 @@ public class ShareFileFragment extends Fragment
      */
     private void initShareViaLinkListener(View shareView) {
         mOnShareViaLinkSwitchCheckedChangeListener = new OnShareViaLinkListener();
-        Switch shareViaLinkSwitch = (Switch) shareView.findViewById(R.id.shareViaLinkSectionSwitch);
+        SwitchCompat shareViaLinkSwitch = (SwitchCompat) shareView.findViewById(R.id.shareViaLinkSectionSwitch);
         shareViaLinkSwitch.setOnCheckedChangeListener(mOnShareViaLinkSwitchCheckedChangeListener);
     }
 
@@ -240,7 +240,7 @@ public class ShareFileFragment extends Fragment
         /**
          * Called by R.id.shareViaLinkSectionSwitch to create or delete a public link.
          *
-         * @param switchView    {@link Switch} toggled by the user, R.id.shareViaLinkSectionSwitch
+         * @param switchView    {@link SwitchCompat} toggled by the user, R.id.shareViaLinkSectionSwitch
          * @param isChecked     New switch state.
          */
         @Override
@@ -289,7 +289,7 @@ public class ShareFileFragment extends Fragment
     private void initExpirationListener(View shareView) {
         mOnExpirationDateInteractionListener = new OnExpirationDateInteractionListener();
 
-        ((Switch) shareView.findViewById(R.id.shareViaLinkExpirationSwitch)).
+        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkExpirationSwitch)).
                 setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
 
         shareView.findViewById(R.id.shareViaLinkExpirationLabel).
@@ -308,7 +308,7 @@ public class ShareFileFragment extends Fragment
         /**
          * Called by R.id.shareViaLinkExpirationSwitch to set or clear the expiration date.
          *
-         * @param switchView    {@link Switch} toggled by the user, R.id.shareViaLinkExpirationSwitch
+         * @param switchView    {@link SwitchCompat} toggled by the user, R.id.shareViaLinkExpirationSwitch
          * @param isChecked     New switch state.
          */
         @Override
@@ -373,7 +373,7 @@ public class ShareFileFragment extends Fragment
     private void initPasswordListener(View shareView) {
         mOnPasswordInteractionListener = new OnPasswordInteractionListener();
 
-        ((Switch) shareView.findViewById(R.id.shareViaLinkPasswordSwitch)).
+        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkPasswordSwitch)).
                 setOnCheckedChangeListener(mOnPasswordInteractionListener);
 
         shareView.findViewById(R.id.shareViaLinkPasswordLabel).
@@ -393,7 +393,7 @@ public class ShareFileFragment extends Fragment
         /**
          * Called by R.id.shareViaLinkPasswordSwitch to set or clear the password.
          *
-         * @param switchView    {@link Switch} toggled by the user, R.id.shareViaLinkPasswordSwitch
+         * @param switchView    {@link SwitchCompat} toggled by the user, R.id.shareViaLinkPasswordSwitch
          * @param isChecked     New switch state.
          */
         @Override
@@ -438,7 +438,7 @@ public class ShareFileFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         Log_OC.d(TAG, "onActivityCreated");
 
-        getActivity().setTitle(R.string.share_dialog_title);
+        getActivity().setTitle(getResources().getString(R.string.share_file, mFile.getFileName()));
 
         // Load known capabilities of the server from DB
         refreshCapabilitiesFromDB();
@@ -586,7 +586,7 @@ public class ShareFileFragment extends Fragment
     private void updatePublicShareSection() {
         if (mPublicShare != null && ShareType.PUBLIC_LINK.equals(mPublicShare.getShareType())) {
             /// public share bound -> expand section
-            Switch shareViaLinkSwitch = getShareViaLinkSwitch();
+            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
             if (!shareViaLinkSwitch.isChecked()) {
                 // set null listener before setChecked() to prevent infinite loop of calls
                 shareViaLinkSwitch.setOnCheckedChangeListener(null);
@@ -611,7 +611,7 @@ public class ShareFileFragment extends Fragment
             });
 
             /// update state of expiration date switch and message depending on expiration date
-            Switch expirationDateSwitch = getExpirationDateSwitch();
+            SwitchCompat expirationDateSwitch = getExpirationDateSwitch();
             // set null listener before setChecked() to prevent infinite loop of calls
             expirationDateSwitch.setOnCheckedChangeListener(null);
             long expirationDate = mPublicShare.getExpirationDate();
@@ -636,7 +636,7 @@ public class ShareFileFragment extends Fragment
             );
 
             /// update state of password switch and message depending on password protection
-            Switch passwordSwitch = getPasswordSwitch();
+            SwitchCompat passwordSwitch = getPasswordSwitch();
             // set null listener before setChecked() to prevent infinite loop of calls
             passwordSwitch.setOnCheckedChangeListener(null);
             if (mPublicShare.isPasswordProtected()) {
@@ -658,7 +658,7 @@ public class ShareFileFragment extends Fragment
 
         } else {
             /// no public share -> collapse section
-            Switch shareViaLinkSwitch = getShareViaLinkSwitch();
+            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
             if (shareViaLinkSwitch.isChecked()) {
                 shareViaLinkSwitch.setOnCheckedChangeListener(null);
                 getShareViaLinkSwitch().setChecked(false);
@@ -675,16 +675,16 @@ public class ShareFileFragment extends Fragment
 
     /// BEWARE: next methods will failed with NullPointerException if called before onCreateView() finishes
 
-    private Switch getShareViaLinkSwitch() {
-        return (Switch) getView().findViewById(R.id.shareViaLinkSectionSwitch);
+    private SwitchCompat getShareViaLinkSwitch() {
+        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkSectionSwitch);
     }
 
     private View getExpirationDateSection() {
         return getView().findViewById(R.id.shareViaLinkExpirationSection);
     }
 
-    private Switch getExpirationDateSwitch() {
-        return (Switch) getView().findViewById(R.id.shareViaLinkExpirationSwitch);
+    private SwitchCompat getExpirationDateSwitch() {
+        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkExpirationSwitch);
     }
 
     private TextView getExpirationDateValue() {
@@ -695,8 +695,8 @@ public class ShareFileFragment extends Fragment
         return getView().findViewById(R.id.shareViaLinkPasswordSection);
     }
 
-    private Switch getPasswordSwitch() {
-        return (Switch) getView().findViewById(R.id.shareViaLinkPasswordSwitch);
+    private SwitchCompat getPasswordSwitch() {
+        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkPasswordSwitch);
     }
 
     private TextView getPasswordValue() {
