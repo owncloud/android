@@ -26,6 +26,7 @@
 <resources>
     <string name="build_number"></string>
     <string name="server_base_url"></string>
+    <string name="server_base_url_2"></string>
     <string name="username"></string>
     <string name="password"></string>
     <string name ="user_agent">Mozilla/5.0 (Android) ownCloud test project</string>
