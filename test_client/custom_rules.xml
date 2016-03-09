@@ -15,6 +15,20 @@
 			</then>
 		</if>
 		
+		<!-- Replace OC server URL 2 if set in environment -->
+		<if>
+			<condition>
+				<isset property="env.OCTEST_SERVER_BASE_URL_2" />
+			</condition>
+			<then>
+				<replaceregexp
+					file="res/values/setup.xml"
+					match='("server_base_url_2"&gt;)\s*(&lt;)'
+					replace="\1${env.OCTEST_SERVER_BASE_URL_2}\2"
+					byline="true" />
+			</then>
+		</if>
+		
 		<!-- Replace test username if set in environment -->
 		<if>
 			<condition>
