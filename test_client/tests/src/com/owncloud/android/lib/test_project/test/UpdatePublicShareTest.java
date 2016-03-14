@@ -164,7 +164,13 @@ public class UpdatePublicShareTest extends RemoteTest {
 			updateShare.setExpirationDate(expirationDateInMillis);
 			result = updateShare.execute(mClient);
 			assertTrue(result.isSuccess());
-					
+
+            // Update Share with edit permission
+            updateShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
+            updateShare.setPublicUpload(true);
+            result = updateShare.execute(mClient);
+            assertTrue(result.isSuccess());
+
 			// unsuccessful test
 			// Update Share with expiration date in the past
 			updateShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
@@ -173,7 +179,7 @@ public class UpdatePublicShareTest extends RemoteTest {
 			updateShare.setExpirationDate(expirationDateInMillis);
 			result = updateShare.execute(mClient);
 			assertFalse(result.isSuccess());
-			
+
 			// Unshare the file before the unsuccessful tests
 			RemoveRemoteShareOperation unshare = new RemoveRemoteShareOperation((int) mShare.getRemoteId());
 			result = unshare.execute(mClient);
