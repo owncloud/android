@@ -307,7 +307,8 @@ public abstract class RemoteOperation implements Runnable {
         	 * 						to trigger authentication update */
             if (mCallerActivity != null && mAccount != null && mContext != null &&
                     !result.isSuccess() &&
-                    (result.getCode() == ResultCode.UNAUTHORIZED || result.isIdPRedirection())) {
+                    ResultCode.UNAUTHORIZED.equals(result.getCode())
+                ) {
                 /// possible fail due to lack of authorization
                 // in an operation performed in foreground
                 OwnCloudCredentials cred = mClient.getCredentials();

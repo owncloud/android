@@ -183,6 +183,9 @@ public class RemoteOperationResult implements Serializable {
                 }
             }
         }
+        if (isIdPRedirection()) {
+            mCode = ResultCode.UNAUTHORIZED;    // overrides default ResultCode.UNKNOWN
+        }
     }
 
     public RemoteOperationResult(boolean success, String bodyResponse, int httpCode) {
