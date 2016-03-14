@@ -25,28 +25,28 @@
 
 package com.owncloud.android.lib.resources.shares;
 
-        import android.net.Uri;
-        import android.util.Pair;
+import android.net.Uri;
+import android.util.Pair;
 
-        import com.owncloud.android.lib.common.OwnCloudClient;
-        import com.owncloud.android.lib.common.operations.RemoteOperation;
-        import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-        import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
-        import org.apache.commons.httpclient.HttpStatus;
-        import org.apache.commons.httpclient.methods.PutMethod;
-        import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 
-        import java.text.DateFormat;
-        import java.text.SimpleDateFormat;
-        import java.util.ArrayList;
-        import java.util.Calendar;
-        import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 /**
  * Updates parameters of an existing Share resource, known its remote ID.
- *
+ * <p/>
  * Allow updating several parameters, triggering a request to the server per parameter.
  */
 
@@ -57,42 +57,57 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_EXPIRATION_DATE = "expireDate";
     private static final String PARAM_PERMISSIONS = "permissions";
+    private static final String PARAM_PUBLIC_UPLOAD = "publicUpload";
     private static final String FORMAT_EXPIRATION_DATE = "yyyy-MM-dd";
-    private static final String ENTITY_CONTENT_TYPE  = "application/x-www-form-urlencoded";
+    private static final String ENTITY_CONTENT_TYPE = "application/x-www-form-urlencoded";
     private static final String ENTITY_CHARSET = "UTF-8";
 
 
-    /** Identifier of the share to update */
+    /**
+     * Identifier of the share to update
+     */
     private long mRemoteId;
 
-    /** Password to set for the public link */
+    /**
+     * Password to set for the public link
+     */
     private String mPassword;
 
-    /** Expiration date to set for the public link */
+    /**
+     * Expiration date to set for the public link
+     */
     private long mExpirationDateInMillis;
 
-    /** Access permissions for the file bound to the share */
+    /**
+     * Access permissions for the file bound to the share
+     */
     private int mPermissions;
+
+    /**
+     * Upload permissions for the public link (only folders)
+     */
+    private boolean mPublicUpload;
 
 
     /**
      * Constructor. No update is initialized by default, need to be applied with setters below.
      *
-     * @param remoteId  Identifier of the share to update.
+     * @param remoteId Identifier of the share to update.
      */
     public UpdateRemoteShareOperation(long remoteId) {
         mRemoteId = remoteId;
         mPassword = null;               // no update
         mExpirationDateInMillis = 0;    // no update
+        mPublicUpload = false;
     }
 
 
     /**
      * Set password to update in Share resource.
      *
-     * @param password      Password to set to the target share.
-     *                      Empty string clears the current password.
-     *                      Null results in no update applied to the password.
+     * @param password Password to set to the target share.
+     *                 Empty string clears the current password.
+     *                 Null results in no update applied to the password.
      */
     public void setPassword(String password) {
         mPassword = password;
@@ -102,10 +117,10 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
     /**
      * Set expiration date to update in Share resource.
      *
-     * @param expirationDateInMillis    Expiration date to set to the target share.
-     *                                  A negative value clears the current expiration date.
-     *                                  Zero value (start-of-epoch) results in no update done on
-     *                                  the expiration date.
+     * @param expirationDateInMillis Expiration date to set to the target share.
+     *                               A negative value clears the current expiration date.
+     *                               Zero value (start-of-epoch) results in no update done on
+     *                               the expiration date.
      */
     public void setExpirationDate(long expirationDateInMillis) {
         mExpirationDateInMillis = expirationDateInMillis;
@@ -115,11 +130,20 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
     /**
      * Set permissions to update in Share resource.
      *
-     * @param permissions       Permissions date to set to the target share.
-     *                          Values <= 0 result in no update applied to the permissions.
+     * @param permissions Permissions to set to the target share.
+     *                    Values <= 0 result in no update applied to the permissions.
      */
     public void setPermissions(int permissions) {
         mPermissions = permissions;
+    }
+
+    /**
+     * Enable upload permissions to update in Share resource.
+     *
+     * @param publicUpload Upload Permission to set to the target share.
+     */
+    public void setPublicUpload(boolean publicUpload) {
+        mPublicUpload = publicUpload;
     }
 
     @Override
@@ -150,6 +174,8 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
             parametersToUpdate.add(new Pair(PARAM_PERMISSIONS, Integer.toString(mPermissions)));
         }
 
+        parametersToUpdate.add(new Pair(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload)));
+
         /* TODO complete rest of parameters
         if (mPublicUpload != null) {
             parametersToUpdate.add(new Pair("publicUpload", mPublicUpload.toString());
@@ -160,7 +186,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         PutMethod put = null;
         String uriString = null;
 
-        try{
+        try {
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH.substring(1));
@@ -174,9 +200,9 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
                 put = new PutMethod(uriString);
                 put.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
                 put.setRequestEntity(new StringRequestEntity(
-                    parameter.first + "=" + parameter.second,
-                    ENTITY_CONTENT_TYPE,
-                    ENTITY_CHARSET
+                        parameter.first + "=" + parameter.second,
+                        ENTITY_CONTENT_TYPE,
+                        ENTITY_CHARSET
                 ));
 
                 status = client.executeMethod(put);
