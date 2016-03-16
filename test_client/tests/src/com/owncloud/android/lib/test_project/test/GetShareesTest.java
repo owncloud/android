@@ -41,6 +41,7 @@ import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.test_project.R;
 import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
 
@@ -68,7 +69,7 @@ public class GetShareesTest extends RemoteTest {
 
 	private static final String LOG_TAG = GetShareesTest.class.getCanonicalName();
 		
-	String mServerUri, mUser, mPass;
+	String mServerUri, mUser, mPass, mServerUri2;
 	OwnCloudClient mClient = null;
 	
 	public GetShareesTest() {
@@ -125,15 +126,15 @@ public class GetShareesTest extends RemoteTest {
 		RemoteOperationResult result = getShareesOperation.execute(mClient);
 		JSONObject resultItem;
 		JSONObject value;
-		byte type;
+		int type;
 		int userCount = 0, groupCount = 0;
 		assertTrue(result.isSuccess() && result.getData().size() > 0);
 		try {
 			for (int i=0; i<result.getData().size(); i++) {
 				resultItem = (JSONObject) result.getData().get(i);
 	            value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
-	            type = (byte) value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
-				if (GetRemoteShareesOperation.GROUP_TYPE.equals(type)) {
+	            type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
+				if (type == ShareType.GROUP.getValue()) {
 					groupCount++;
 				} else {
 					userCount++;
@@ -156,8 +157,8 @@ public class GetShareesTest extends RemoteTest {
 			for (int i=0; i<2; i++) {
 				resultItem = (JSONObject) result.getData().get(i);
 	            value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
-	            type = (byte) value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
-				if (GetRemoteShareesOperation.GROUP_TYPE.equals(type)) {
+	            type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
+				if (type == ShareType.GROUP.getValue()) {
 					groupCount++;
 				} else {
 					userCount++;
@@ -190,6 +191,59 @@ public class GetShareesTest extends RemoteTest {
 		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpStatus.SC_BAD_REQUEST);
 	}
 	
+	/**
+	 *  Test get federated sharees
+	 * 
+	 *  Requires OC server 8.2 or later
+	 */
+	public void testGetFederatedShareesOperation() {
+		Log.v(LOG_TAG, "testGetFederatedSharees in");
+
+		/// successful cases
+
+		// search for sharees including "@"
+		GetRemoteShareesOperation getShareesOperation = new GetRemoteShareesOperation("@", 1, 50);
+		RemoteOperationResult result = getShareesOperation.execute(mClient);
+		JSONObject resultItem;
+		JSONObject value;
+		int type;
+		int fedCount = 0;
+		assertTrue(result.isSuccess() && result.getData().size() > 0);
+		try {
+			for (int i=0; i<result.getData().size(); i++) {
+				resultItem = (JSONObject) result.getData().get(i);
+				value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
+				type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
+				if (type == ShareType.FEDERATED.getValue()) {
+					fedCount++;
+				}
+			}
+			assertTrue(fedCount > 0);
+		} catch (JSONException e) {
+			AssertionFailedError afe = new AssertionFailedError(e.getLocalizedMessage());
+			afe.setStackTrace(e.getStackTrace());
+			throw afe;
+		}
+
+		// search for 'admin' sharee from external server - expecting at least 1 result
+		String remoteSharee = "admin@" + mServerUri2.split("//")[1];
+		getShareesOperation = new GetRemoteShareesOperation(remoteSharee, 1, 50);
+		result = getShareesOperation.execute(mClient);
+		assertTrue(result.isSuccess() && result.getData().size() > 0);
+
+		
+		/// failed cases
+		
+		// search for sharees including wrong page values
+		getShareesOperation = new GetRemoteShareesOperation("@", 0, 50);
+		result = getShareesOperation.execute(mClient);
+		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpStatus.SC_BAD_REQUEST);
+		
+		getShareesOperation = new GetRemoteShareesOperation("@", 1, 0);
+		result = getShareesOperation.execute(mClient);
+		assertTrue(!result.isSuccess() && result.getHttpCode() == HttpStatus.SC_BAD_REQUEST);
+	}
+	
 	@Override
 	protected void tearDown() throws Exception {
 	    Log.v(LOG_TAG, "Deleting remote fixture...");
@@ -202,6 +256,7 @@ public class GetShareesTest extends RemoteTest {
 	    Log.v(LOG_TAG, "Setting up client instance to access OC server...");
 		
 		mServerUri = context.getString(R.string.server_base_url);
+		mServerUri2 = context.getString(R.string.server_base_url_2);
 		mUser = context.getString(R.string.username);
 		mPass = context.getString(R.string.password);
 		
