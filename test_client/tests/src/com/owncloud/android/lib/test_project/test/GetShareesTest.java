@@ -225,7 +225,7 @@ public class GetShareesTest extends RemoteTest {
 			throw afe;
 		}
 
-		// search for sharees including "admin@qa2.oc.solidgear.es" - expecting at least 1 result
+		// search for 'admin' sharee from external server - expecting at least 1 result
 		String remoteSharee = "admin@" + mServerUri2.split("//")[1];
 		getShareesOperation = new GetRemoteShareesOperation(remoteSharee, 1, 50);
 		result = getShareesOperation.execute(mClient);
