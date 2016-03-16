@@ -212,8 +212,8 @@ public class GetShareesTest extends RemoteTest {
 		try {
 			for (int i=0; i<result.getData().size(); i++) {
 				resultItem = (JSONObject) result.getData().get(i);
-	            value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
-	            type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
+				value = resultItem.getJSONObject(GetRemoteShareesOperation.NODE_VALUE);
+				type = value.getInt(GetRemoteShareesOperation.PROPERTY_SHARE_TYPE);
 				if (type == ShareType.FEDERATED.getValue()) {
 					fedCount++;
 				}

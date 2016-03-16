@@ -259,22 +259,22 @@ public class CreateShareTest extends RemoteTest {
 		);
 		
 		// remote server doesn't exist
-				result = mActivity.createShare(
-						mFullPath2FileToShare, 
-						ShareType.FEDERATED, 
-						"no_exist", 
-						false, 
-						"", 
-						31);
-				assertFalse(result.isSuccess());
-				assertEquals(
-						RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER, 
-						result.getCode()
-				);
-				assertTrue(		// error message from server as part of the result
-						result.getData().size() == 1 && 
-						result.getData().get(0) instanceof String
-				);
+		result = mActivity.createShare(
+				mFullPath2FileToShare,
+				ShareType.FEDERATED,
+				"no_exist",
+				false,
+				"",
+				31);
+		assertFalse(result.isSuccess());
+		assertEquals(
+				RemoteOperationResult.ResultCode.SHARE_WRONG_PARAMETER,
+				result.getCode()
+		);
+		assertTrue(		// error message from server as part of the result
+				result.getData().size() == 1 &&
+				result.getData().get(0) instanceof String
+		);
 		
 		// file doesn't exist
 		result = mActivity.createShare(
