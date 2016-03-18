@@ -86,7 +86,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
     /**
      * Upload permissions for the public link (only folders)
      */
-    private boolean mPublicUpload;
+    private Boolean mPublicUpload;
 
 
     /**
@@ -98,7 +98,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         mRemoteId = remoteId;
         mPassword = null;               // no update
         mExpirationDateInMillis = 0;    // no update
-        mPublicUpload = false;
+        mPublicUpload = null;
     }
 
 
@@ -174,13 +174,9 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
             parametersToUpdate.add(new Pair(PARAM_PERMISSIONS, Integer.toString(mPermissions)));
         }
 
-        parametersToUpdate.add(new Pair(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload)));
-
-        /* TODO complete rest of parameters
         if (mPublicUpload != null) {
-            parametersToUpdate.add(new Pair("publicUpload", mPublicUpload.toString());
+            parametersToUpdate.add(new Pair(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload)));
         }
-        */
 
         /// perform required PUT requests
         PutMethod put = null;
