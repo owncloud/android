@@ -136,32 +136,32 @@ public class UpdatePublicShareTest extends RemoteTest {
 	    if (result.isSuccess()){
 	    	mShare = (OCShare) result.getData().get(0);
 	    } else{
-	    	mShare = null;
+	    	Utils.logAndThrow(LOG_TAG, result);
 	    }
 	    
-	 // Create the folder
-	 		mFullPath2FolderToShare = mBaseFolderPath + FOLDER_TO_SHARE;
-	 		result = getActivity().createFolder(
-	 				mFullPath2FolderToShare,
-	 				true);
-	 		if (!result.isSuccess()) {
-	 			Utils.logAndThrow(LOG_TAG, result);
-	 		}
+	    // Create the folder
+ 		mFullPath2FolderToShare = mBaseFolderPath + FOLDER_TO_SHARE;
+ 		result = getActivity().createFolder(
+ 				mFullPath2FolderToShare,
+ 				true);
+ 		if (!result.isSuccess()) {
+ 			Utils.logAndThrow(LOG_TAG, result);
+ 		}
 
-	 		// Share the folder privately with a group
-	 		result = getActivity().createShare(
-	 				mFullPath2FolderToShare,
-	 				ShareType.PUBLIC_LINK,
-	 				"",
-	 				false,
-	 				"",
-	 				OCShare.READ_PERMISSION_FLAG);
+ 		// Share the folder publicly via link
+ 		result = getActivity().createShare(
+ 				mFullPath2FolderToShare,
+ 				ShareType.PUBLIC_LINK,
+ 				"",
+ 				false,
+ 				"",
+ 				OCShare.READ_PERMISSION_FLAG);
 
-	 		if (result.isSuccess()){
-	 			mFolderShare = (OCShare) result.getData().get(0);
-	 		} else{
-	 			mFolderShare = null;
-	 		}
+ 		if (result.isSuccess()){
+ 			mFolderShare = (OCShare) result.getData().get(0);
+ 		} else{
+ 			Utils.logAndThrow(LOG_TAG, result);
+ 		}
 	    
 		Log.v(LOG_TAG, "Remote fixtures created.");
 		
