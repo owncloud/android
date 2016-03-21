@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.common.operations;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -259,6 +260,9 @@ public class RemoteOperationResult implements Serializable {
             } else {
                 mCode = ResultCode.SSL_ERROR;
             }
+
+        } else if (e instanceof FileNotFoundException) {
+            mCode = ResultCode.LOCAL_FILE_NOT_FOUND;
 
         } else {
             mCode = ResultCode.UNKNOWN_ERROR;

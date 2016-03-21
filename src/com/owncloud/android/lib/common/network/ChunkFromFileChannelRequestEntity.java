@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.common.network;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -58,7 +59,9 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
     Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private ByteBuffer mBuffer = ByteBuffer.allocate(4096);
 
-    public ChunkFromFileChannelRequestEntity(final FileChannel channel, final String contentType, long chunkSize, final File file) {
+    public ChunkFromFileChannelRequestEntity(
+        final FileChannel channel, final String contentType, long chunkSize, final File file
+    ) {
         super();
         if (channel == null) {
             throw new IllegalArgumentException("File may not be null");
@@ -119,15 +122,20 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
     public void writeRequest(final OutputStream out) throws IOException {
         int readCount = 0;
         Iterator<OnDatatransferProgressListener> it = null;
-        
-       try {
+
+        try {
             mChannel.position(mOffset);
             long size = mFile.length();
             if (size == 0) size = -1;
             long maxCount = Math.min(mOffset + mChunkSize, mChannel.size());
             while (mChannel.position() < maxCount) {
                 readCount = mChannel.read(mBuffer);
-                out.write(mBuffer.array(), 0, readCount);
+                try {
+                    out.write(mBuffer.array(), 0, readCount);
+                } catch (IOException io) {
+                    // work-around try catch to filter exception in writing
+                    throw new FileRequestEntity.WriteException(io);
+                }
                 mBuffer.clear();
                 if (mTransferred < maxCount) {  // condition to avoid accumulate progress for repeated chunks
                     mTransferred += readCount;
@@ -139,12 +147,21 @@ public class ChunkFromFileChannelRequestEntity implements RequestEntity, Progres
                     }
                 }
             }
-            
+
         } catch (IOException io) {
-            Log_OC.e(TAG, io.getMessage());
-            throw new RuntimeException("Ugly solution to workaround the default policy of retries when the server falls while uploading ; temporal fix; really", io);   
-            
+            // any read problem will be handled as if the file is not there
+            if (io instanceof FileNotFoundException) {
+                throw io;
+            } else {
+                FileNotFoundException fnf = new FileNotFoundException("Exception reading source file");
+                fnf.initCause(io);
+                throw fnf;
+            }
+
+        } catch (FileRequestEntity.WriteException we) {
+            throw we.getWrapped();
         }
+            
     }
 
 }
