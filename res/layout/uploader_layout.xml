@@ -17,27 +17,28 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/upload_files_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:filterTouchesWhenObscured="true"
-    android:gravity="center"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical" >
+
+    <include
+        layout="@layout/toolbar_standard" />
 
     <FrameLayout
         android:id="@+id/upload_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/upload_actions"
+        android:layout_weight="1"
         >
 
         <ListView
             android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:divider="@color/list_divider_background"
             android:dividerHeight="1dip"
             >
@@ -46,18 +47,29 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/upload_actions"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:src="@drawable/uploader_list_separator"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/upload_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/standard_padding"
-        >
+        android:padding="@dimen/standard_padding">
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/uploader_cancel"
             style="@style/ownCloud.Button"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
@@ -67,7 +79,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/uploader_choose_folder"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
@@ -76,4 +88,4 @@
             />
 
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
