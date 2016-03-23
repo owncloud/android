@@ -186,6 +186,9 @@ public abstract class DrawerActivity extends ToolbarActivity {
         if (mDrawerLayout != null && account != null) {
             TextView username = (TextView) ((NavigationView) findViewById(R.id.nav_view))
                     .getHeaderView(0).findViewById(R.id.drawer_username);
+            TextView usernameFull = (TextView) ((NavigationView) findViewById(R.id.nav_view))
+                .getHeaderView(0).findViewById(R.id.drawer_username_full);
+            usernameFull.setText(account.name);
             try {
                 OwnCloudAccount oca = new OwnCloudAccount(account, this);
                 username.setText(oca.getDisplayName());
