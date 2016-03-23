@@ -82,8 +82,11 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         // but that's other story
         setFile(null);
 
-        // Navigation Drawer
-        initDrawer();
+        // setup toolbar
+        setupToolbar();
+
+        // setup drawer
+        setupDrawer();
 
         // Add fragment with a transaction for setting a tag
         if(savedInstanceState == null) {
@@ -340,7 +343,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         }
     }
 
-    @Override
     protected String getDefaultTitle() {
         return getString(R.string.uploads_view_title);
     }
@@ -354,7 +356,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         super.onAccountSet(stateWasRecovered);
         updateActionBarTitleAndHomeButton(null);
         if (mAccountWasSet) {
-            setUsernameInDrawer(findViewById(R.id.left_drawer), getAccount());
+            setUsernameInDrawer(getAccount());
         }
     }
 

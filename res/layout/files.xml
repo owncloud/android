@@ -18,35 +18,47 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                        xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:filterTouchesWhenObscured="true">
+    android:filterTouchesWhenObscured="true"
+    android:fitsSystemWindows="true"
+    android:clickable="true" >
 
     <!-- The main content view -->
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_color"
+        android:orientation="vertical">
 
-        android:orientation="horizontal"
-        android:id="@+id/ListLayout"
-        android:contentDescription="@string/list_layout"
-        >
+        <include
+            layout="@layout/toolbar_standard" />
 
-        <FrameLayout
-            android:id="@+id/left_fragment_container"
-            android:layout_width="0dp"
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:background="@color/background_color"
 
-        <FrameLayout
-            android:id="@+id/right_fragment_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2" />
+            android:orientation="horizontal"
+            android:id="@+id/ListLayout"
+            android:contentDescription="@string/list_layout"
+            >
+
+            <FrameLayout
+                android:id="@+id/left_fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <FrameLayout
+                android:id="@+id/right_fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <include

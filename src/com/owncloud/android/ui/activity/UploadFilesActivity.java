@@ -114,6 +114,7 @@ public class UploadFilesActivity extends FileActivity implements
 
         // Inflate and set the layout view
         setContentView(R.layout.upload_files_layout);
+
         mFileListFragment = (LocalFileListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.local_files_list);
         
@@ -138,7 +139,9 @@ public class UploadFilesActivity extends FileActivity implements
         if (localBehaviour == FileUploader.LOCAL_BEHAVIOUR_COPY){
             mRadioBtnCopyFiles.setChecked(true);
         }
-        
+
+        // setup the toolbar
+        setupToolbar();
             
         // Action bar setup
         ActionBar actionBar = getSupportActionBar();

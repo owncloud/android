@@ -41,6 +41,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -48,6 +50,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -167,8 +170,11 @@ public class FileDisplayActivity extends HookActivity
         // Inflate and set the layout view
         setContentView(R.layout.files);
 
-        // Navigation Drawer
-        initDrawer();
+        // setup toolbar
+        setupToolbar();
+
+        // setup drawer
+        setupDrawer();
 
         mDualPane = getResources().getBoolean(R.bool.large_land_layout);
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
@@ -226,6 +232,9 @@ public class FileDisplayActivity extends HookActivity
         if (savedInstanceState == null) {
             createMinFragments();
         }
+
+        setIndeterminate(mSyncInProgress);
+        // always AFTER setContentView(...) in onCreate(); to work around bug in its implementation
 
         setBackgroundText();
     }
@@ -302,7 +311,7 @@ public class FileDisplayActivity extends HookActivity
             setFile(file);
 
             if (mAccountWasSet) {
-                setUsernameInDrawer(findViewById(R.id.left_drawer), getAccount());
+                setUsernameInDrawer(getAccount());
             }
 
             if (!stateWasRecovered) {
@@ -500,7 +509,9 @@ public class FileDisplayActivity extends HookActivity
 
         // Prevent tapjacking
         View actionBarView = findViewById(R.id.action_bar);
-        actionBarView.setFilterTouchesWhenObscured(true);
+        if (actionBarView != null) {
+            actionBarView.setFilterTouchesWhenObscured(true);
+        }
 
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_create_dir).setVisible(false);
@@ -808,8 +819,9 @@ public class FileDisplayActivity extends HookActivity
     protected void onResume() {
         Log_OC.v(TAG, "onResume() start");
         super.onResume();
+        //TODO re-enable account list
         // refresh Navigation Drawer account list
-        mNavigationDrawerAdapter.updateAccountList();
+        //mNavigationDrawerAdapter.updateAccountList();
 
         // refresh list of files
         refreshListOfFilesFragment(true);
@@ -965,7 +977,7 @@ public class FileDisplayActivity extends HookActivity
                             }
 
                             if (synchFolderRemotePath.equals(OCFile.ROOT_PATH)) {
-                                setUsernameInDrawer(mDrawerLayout, getAccount());
+                                setUsernameInDrawer(getAccount());
                             }
                         }
 
@@ -976,9 +988,10 @@ public class FileDisplayActivity extends HookActivity
                     if (fileListFragment != null) {
                         fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
                     }
+                    Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
+                    setIndeterminate(mSyncInProgress);
 
                     setBackgroundText();
-
                 }
 
                 if (synchResult != null) {
@@ -1070,6 +1083,8 @@ public class FileDisplayActivity extends HookActivity
                         updateActionBarTitleAndHomeButton(getFile());
                     }
                 }
+
+                setIndeterminate(false);
 
             } finally {
                 if (intent != null) {
@@ -1284,6 +1299,9 @@ public class FileDisplayActivity extends HookActivity
 
     @Override
     protected void updateActionBarTitleAndHomeButton(OCFile chosenFile) {
+        if (chosenFile == null) {
+            chosenFile = getFile();     // if no file is passed, current file decides
+        }
         if (mDualPane) {
             // in dual pane mode, keep the focus of title an action bar in the current folder
             super.updateActionBarTitleAndHomeButton(getCurrentDir());
@@ -1628,6 +1646,7 @@ public class FileDisplayActivity extends HookActivity
                         if (fileListFragment != null) {
                             fileListFragment.setProgressBarAsIndeterminate(true);
                         }
+                        setIndeterminate(true);
 
                         setBackgroundText();
                     }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
