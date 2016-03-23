@@ -18,10 +18,20 @@ import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.TextDrawable;
+import com.owncloud.android.utils.BitmapUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Base class to handle setup of the drawer implementation.
@@ -35,6 +45,9 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigationView;
     private ImageView mAccountChooserToggle;
+
+    private List<Integer> mAccountMenuItemIds = new ArrayList<Integer>();
+    private Account mCurrentAccount;
 
     private boolean mIsAccountChooserActive;
 
@@ -154,7 +167,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                 am.addAccount(MainApp.getAccountType(), null, null, null, DrawerActivity.this,
                                         null, null);
                             case R.id.drawer_menu_account_manage:
-                                Toast.makeText(getApplicationContext(),"Not implemented yet",Toast.LENGTH_SHORT);
+                                Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT);
                         }
 
                         return true;
@@ -213,6 +226,64 @@ public abstract class DrawerActivity extends ToolbarActivity {
         if (mDrawerToggle != null) {
             mDrawerToggle.setDrawerIndicatorEnabled(enable);
         }
+    }
+
+    /**
+     * updates the account list in the drawer.
+     */
+    // TODO call updateAccountList() after n.o. accounts changed
+    public void updateAccountList() {
+        AccountManager am = (AccountManager) this.getSystemService(this.ACCOUNT_SERVICE);
+
+        // populate UI
+        repopulateAccountList(am.getAccountsByType(MainApp.getAccountType()));
+        setUsernameInDrawer(AccountUtils.getCurrentOwnCloudAccount(this));
+    }
+
+    /**
+     * re-populates the account list.
+     *
+     * @param accounts list of accounts
+     */
+    private void repopulateAccountList(Account[] accounts) {
+        // remove all accounts from list
+        mNavigationView.getMenu().removeItem(Menu.NONE);
+
+        // add all accounts to list
+        for (int i = 0; i < accounts.length; i++) {
+            try {
+                int[] rgb = calculateRGB(accounts[i]);
+                TextDrawable icon = new TextDrawable(accounts[i].name.substring(0, 1).toUpperCase(),
+                        rgb[0], rgb[1], rgb[2]);
+                mNavigationView.getMenu().add(R.id.drawer_menu_accounts, Menu.NONE, 0, accounts[i].name).setIcon(icon);
+            } catch (Exception e) {
+                Log_OC.e(TAG, "Error calculating RGB value for account menu item.", e);
+                mNavigationView.getMenu().add(R.id.drawer_menu_accounts, Menu.NONE, 0, accounts[i].name).setIcon(R
+                        .drawable.ic_account_circle);
+            }
+        }
+
+        // adding sets menu group back to visible, so safety check and setting invisible
+        if (!mIsAccountChooserActive) {
+            mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
+        }
+    }
+
+    private int[] calculateRGB(Account account) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        // using adapted algorithm from /core/js/placeholder.js:50
+        int lastAtPos = account.name.lastIndexOf("@");
+        String username = account.name.substring(0, lastAtPos);
+        byte[] seed = username.getBytes("UTF-8");
+        MessageDigest md = MessageDigest.getInstance("MD5");
+//                        Integer seedMd5Int = Math.abs(new String(Hex.encodeHex(seedMd5))
+//                      .hashCode());
+        Integer seedMd5Int = String.format(Locale.ROOT, "%032x",
+                new BigInteger(1, md.digest(seed))).hashCode();
+
+        double maxRange = Integer.MAX_VALUE;
+        float hue = (float) (seedMd5Int / maxRange * 360);
+
+        return BitmapUtils.HSLtoRGB(hue, 90.0f, 65.0f, 1.0f);
     }
 
     /**
@@ -289,6 +360,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 mDrawerToggle.setDrawerIndicatorEnabled(true);
             }
         }
+        updateAccountList();
     }
 
     @Override
