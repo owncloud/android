@@ -1,20 +1,18 @@
 package com.owncloud.android.ui.activity;
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -27,8 +25,11 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private static final String TAG = DrawerActivity.class.getSimpleName();
 
     // Navigation Drawer
-    protected DrawerLayout mDrawerLayout;
-    protected ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private ImageView mAccountChooserToggle;
+
+    private boolean mIsAccountChooserActive;
 
     /**
      * Initializes the drawer and its content. This method needs to be called after the content view has been set.
@@ -39,6 +40,17 @@ public abstract class DrawerActivity extends ToolbarActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
+            mAccountChooserToggle = (ImageView) findNavigationViewChildById(R.id.drawer_account_chooser_toogle);
+            mAccountChooserToggle.setImageResource(R.drawable.ic_down);
+            mIsAccountChooserActive = false;
+
+            findNavigationViewChildById(R.id.drawer_active_user)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            toggleAccountList();
+                        }
+                    });
         }
 
         // TODO re-enable when "Accounts" is available in Navigation Drawer
@@ -143,19 +155,47 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * @return <code>true</code> if the drawer is open, else <code>false</code>
      */
     public boolean isDrawerOpen() {
-        if(mDrawerLayout != null) {
-            return mDrawerLayout.isDrawerOpen(GravityCompat.START);
-        } else {
-            return false;
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
+    }
+
+    /**
+     * closes the drawer.
+     */
+    public void closeDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
     /**
-     * closes the navigation drawer.
+     * opens the drawer.
      */
-    public void closeNavDrawer() {
-        if(mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+    public void openDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+
+    /**
+     * Enable or disable interaction with all drawers.
+     *
+     * @param lockMode The new lock mode for the given drawer. One of {@link DrawerLayout#LOCK_MODE_UNLOCKED},
+     *                 {@link DrawerLayout#LOCK_MODE_LOCKED_CLOSED} or {@link DrawerLayout#LOCK_MODE_LOCKED_OPEN}.
+     */
+    public void setDrawerLockMode(int lockMode) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.setDrawerLockMode(lockMode);
+        }
+    }
+
+    /**
+     * Enable or disable the drawer indicator.
+     *
+     * @param enable <code>true</code> to enable, <code>false</code> to disable
+     */
+    public void setDrawerIndicatorEnabled(boolean enable) {
+        if (mDrawerToggle != null) {
+            mDrawerToggle.setDrawerIndicatorEnabled(enable);
         }
     }
 
@@ -180,7 +220,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * sets the given account name in the drawer in case the drawer is available. The account name is shortened
      * beginning from the @-sign in the username.
      *
-     * @param account            the account to be set in the drawer
+     * @param account the account to be set in the drawer
      */
     protected void setUsernameInDrawer(Account account) {
         if (mDrawerLayout != null && account != null) {
@@ -200,6 +240,21 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 username.setText(account.name.substring(0, lastAtPos));
             }
         }
+    }
+
+    /**
+     * Toggle between drawer menu and account list.
+     */
+    private void toggleAccountList() {
+        if (mIsAccountChooserActive) {
+            // TODO close accounts list and display drawer menu again
+            mAccountChooserToggle.setImageResource(R.drawable.ic_down);
+        } else {
+            // TODO show accounts list
+            mAccountChooserToggle.setImageResource(R.drawable.ic_up);
+        }
+
+        mIsAccountChooserActive = !mIsAccountChooserActive;
     }
 
     @Override
@@ -226,9 +281,19 @@ public abstract class DrawerActivity extends ToolbarActivity {
     @Override
     public void onBackPressed() {
         if (isDrawerOpen()) {
-            closeNavDrawer();
+            closeDrawer();
             return;
         }
         super.onBackPressed();
+    }
+
+    /**
+     * Finds a view that was identified by the id attribute from the drawer header.
+     *
+     * @param id the view's id
+     * @return The view if found or <code>null</code> otherwise.
+     */
+    private View findNavigationViewChildById(int id) {
+        return ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(id);
     }
 }

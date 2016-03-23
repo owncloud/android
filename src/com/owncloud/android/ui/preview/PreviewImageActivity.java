@@ -110,10 +110,10 @@ public class PreviewImageActivity extends FileActivity implements
                 ActionBar actionBar = getSupportActionBar();
                 if (visible) {
                     actionBar.show();
-                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 } else {
                     actionBar.hide();
-                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 }
             }
         });
@@ -271,8 +271,8 @@ public class PreviewImageActivity extends FileActivity implements
         
         switch(item.getItemId()){
         case android.R.id.home:
-            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+            if (isDrawerOpen()) {
+                closeDrawer();
             } else {
                 backToDisplayActivity();
             }
@@ -338,7 +338,7 @@ public class PreviewImageActivity extends FileActivity implements
 
             OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position);
             getSupportActionBar().setTitle(currentFile.getFileName());
-            mDrawerToggle.setDrawerIndicatorEnabled(false);
+            setDrawerIndicatorEnabled(false);
             if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
                 getFileOperationsHelper().syncFile(currentFile);
             }
