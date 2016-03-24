@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -252,9 +253,9 @@ public abstract class DrawerActivity extends ToolbarActivity {
         // add all accounts to list
         for (int i = 0; i < accounts.length; i++) {
             try {
-                int[] rgb = calculateRGB(accounts[i]);
-                TextDrawable icon = new TextDrawable(accounts[i].name.substring(0, 1).toUpperCase(),
-                        rgb[0], rgb[1], rgb[2]);
+                int[] rgb = calculateRGB(accounts[i].name);
+                TextDrawable icon = new TextDrawable(accounts[i].name.substring(0, 1).toUpperCase()
+                        , rgb[0], rgb[1], rgb[2]);
                 mNavigationView.getMenu().add(R.id.drawer_menu_accounts, Menu.NONE, 0, accounts[i].name).setIcon(icon);
             } catch (Exception e) {
                 Log_OC.e(TAG, "Error calculating RGB value for account menu item.", e);
@@ -269,10 +270,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
         }
     }
 
-    private int[] calculateRGB(Account account) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    private int[] calculateRGB(String accountName) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // using adapted algorithm from /core/js/placeholder.js:50
-        int lastAtPos = account.name.lastIndexOf("@");
-        String username = account.name.substring(0, lastAtPos);
+        int lastAtPos = accountName.lastIndexOf("@");
+        String username = accountName.substring(0, lastAtPos);
         byte[] seed = username.getBytes("UTF-8");
         MessageDigest md = MessageDigest.getInstance("MD5");
 //                        Integer seedMd5Int = Math.abs(new String(Hex.encodeHex(seedMd5))
@@ -325,6 +326,18 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
                 int lastAtPos = account.name.lastIndexOf("@");
                 username.setText(account.name.substring(0, lastAtPos));
+            }
+
+            ImageView usericon = (ImageView) ((NavigationView) findViewById(R.id.nav_view))
+                    .getHeaderView(0).findViewById(R.id.drawer_usericon);
+            try {
+                int[] rgb = calculateRGB(account.name);
+                TextDrawable icon = new TextDrawable(
+                        account.name.substring(0, 1).toUpperCase(), rgb[0], rgb[1], rgb[2]);
+                usericon.setImageDrawable(icon);
+            } catch (Exception e) {
+                Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
+                usericon.setImageResource(R.drawable.ic_account_circle);
             }
         }
     }
