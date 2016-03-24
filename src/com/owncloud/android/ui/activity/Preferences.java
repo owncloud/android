@@ -92,11 +92,11 @@ import java.io.File;
  * It proxies the necessary calls via {@link android.support.v7.app.AppCompatDelegate} to be used
  * with AppCompat.
  */
-public class Preferences extends PreferenceActivity
-        implements AccountManagerCallback<Boolean>, ComponentsGetter {
+// TODO possible remove AccountManagerCallback and ComponentsGetter
+public class Preferences extends PreferenceActivity {
+        //implements AccountManagerCallback<Boolean>, ComponentsGetter {
     
     private static final String TAG = Preferences.class.getSimpleName();
-
 
     private static final int ACTION_SELECT_UPLOAD_PATH = 1;
     private static final int ACTION_SELECT_UPLOAD_VIDEO_PATH = 2;
@@ -104,13 +104,14 @@ public class Preferences extends PreferenceActivity
     private static final int ACTION_REQUEST_PASSCODE = 5;
     private static final int ACTION_CONFIRM_PASSCODE = 6;
 
+    private DbHandler mDbHandler;
     private CheckBoxPreference pCode;
     private Preference pAboutApp;
     private AppCompatDelegate mDelegate;
 
     private PreferenceCategory mAccountsPrefCategory = null;
-    private final Handler mHandler = new Handler();
-    private String mAccountName;
+    //private final Handler mHandler = new Handler();
+    //private String mAccountName;
     private boolean mShowContextMenu = false;
 
     private String mUploadPath;
@@ -127,9 +128,9 @@ public class Preferences extends PreferenceActivity
     private Preference mPrefInstantUploadSourcePath;
     private Preference mPrefInstantUploadBehaviour;
 
-    protected FileDownloader.FileDownloaderBinder mDownloaderBinder = null;
-    protected FileUploader.FileUploaderBinder mUploaderBinder = null;
-    private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
+    //protected FileDownloader.FileDownloaderBinder mDownloaderBinder = null;
+    //protected FileUploader.FileUploaderBinder mUploaderBinder = null;
+    //private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
 
 
     @SuppressWarnings("deprecation")
@@ -138,6 +139,7 @@ public class Preferences extends PreferenceActivity
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
+        mDbHandler = new DbHandler(getBaseContext());
         addPreferencesFromResource(R.xml.preferences);
 
         ActionBar actionBar = getSupportActionBar();
@@ -152,6 +154,7 @@ public class Preferences extends PreferenceActivity
                     setContentDescription(getString(R.string.actionbar_settings));
         }
 
+        // TODO remove accounts code - DONE
         // Load the accounts category for adding the list of accounts
         mAccountsPrefCategory = (PreferenceCategory) findPreference("accounts_category");
 
@@ -166,7 +169,7 @@ public class Preferences extends PreferenceActivity
 
                 if (obj != null && obj instanceof RadioButtonPreference) {
                     mShowContextMenu = true;
-                    mAccountName = ((RadioButtonPreference) obj).getKey();
+                    //mAccountName = ((RadioButtonPreference) obj).getKey();
 
                     String[] items = {
                             getResources().getString(R.string.change_password),
@@ -188,7 +191,8 @@ public class Preferences extends PreferenceActivity
                             AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
                             Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
                             for (Account a : accounts) {
-                                if (a.name.equals(mAccountName)) {
+                                //if (a.name.equals(mAccountName)) {
+                                if (a.name.equals("")) {
                                     if (position==0) {
 
                                         // Change account password
@@ -202,7 +206,8 @@ public class Preferences extends PreferenceActivity
                                     } else if (position==1) {
 
                                         // Remove account
-                                        am.removeAccount(a, Preferences.this, mHandler);
+                                        //am.removeAccount(a, Preferences.this, mHandler);
+                                        am.removeAccount(a, null, new Handler());
                                         Log_OC.d(TAG, "Remove an account " + a.name);
                                         alertDialog.cancel();
                                     }
@@ -298,8 +303,7 @@ public class Preferences extends PreferenceActivity
                         String appName = getString(R.string.app_name);
                         String downloadUrl = getString(R.string.url_app_download);
 
-                        String recommendSubject =
-                                String.format(getString(R.string.recommend_subject),
+                        String recommendSubject = String.format(getString(R.string.recommend_subject),
                                 appName);
                         String recommendText = String.format(getString(R.string.recommend_text),
                                 appName, downloadUrl);
@@ -326,8 +330,7 @@ public class Preferences extends PreferenceActivity
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         String feedbackMail   =(String) getText(R.string.mail_feedback);
-                        String feedback   =(String) getText(R.string.prefs_feedback) +
-                                " - android v" + appVersion;
+                        String feedback   =(String) getText(R.string.prefs_feedback) + " - android v" + appVersion;
                         Intent intent = new Intent(Intent.ACTION_SENDTO); 
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
@@ -483,18 +486,18 @@ public class Preferences extends PreferenceActivity
                 ((CheckBoxPreference)mPrefInstantUpload).isChecked());
 
         /* About App */
-        pAboutApp = (Preference) findPreference("about_app");
-        if (pAboutApp != null) {
-            pAboutApp.setTitle(String.format(getString(R.string.about_android),
-            getString(R.string.app_name)));
-            pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
-        }
+       pAboutApp = (Preference) findPreference("about_app");
+       if (pAboutApp != null) { 
+           pAboutApp.setTitle(String.format(getString(R.string.about_android), getString(R.string.app_name)));
+           pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
+       }
 
         loadInstantUploadPath();
         loadInstantUploadVideoPath();
         loadInstantUploadSourcePath();
 
-        /* ComponentsGetter */
+        // TODO remove after test - DONE
+        /* ComponentsGetter
         mDownloadServiceConnection = newTransferenceServiceConnection();
         if (mDownloadServiceConnection != null) {
             bindService(new Intent(this, FileDownloader.class), mDownloadServiceConnection,
@@ -505,7 +508,7 @@ public class Preferences extends PreferenceActivity
             bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
                     Context.BIND_AUTO_CREATE);
         }
-
+*/
     }
     
     private void toggleInstantPictureOptions(Boolean value){
@@ -550,6 +553,8 @@ public class Preferences extends PreferenceActivity
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
+    // TODO remove, moved to account manager - DONE
+    /*
     @Override
     public void run(AccountManagerFuture<Boolean> future) {
         if (future.isDone()) {
@@ -577,6 +582,7 @@ public class Preferences extends PreferenceActivity
             addAccountsCheckboxPreferences();
         }
     }
+    */
 
     @Override
     protected void onResume() {
@@ -729,6 +735,10 @@ public class Preferences extends PreferenceActivity
 
     @Override
     protected void onDestroy() {
+        mDbHandler.close();
+
+        // TODO remove after test - DONE
+        /*
         if (mDownloadServiceConnection != null) {
             unbindService(mDownloadServiceConnection);
             mDownloadServiceConnection = null;
@@ -737,6 +747,7 @@ public class Preferences extends PreferenceActivity
             unbindService(mUploadServiceConnection);
             mUploadServiceConnection = null;
         }
+        */
 
         super.onDestroy();
         getDelegate().onDestroy();
@@ -761,6 +772,7 @@ public class Preferences extends PreferenceActivity
         return mDelegate;
     }
 
+    // TODO remove/move after test
     /**
      * Create the list of accounts that has been added into the app
      */
@@ -858,6 +870,7 @@ public class Preferences extends PreferenceActivity
         }
     }
 
+    // TODO remove after finished -DONE
     /**
      * Create the preference for allow adding new accounts
      */
@@ -962,7 +975,9 @@ public class Preferences extends PreferenceActivity
         editor.commit();
     }
 
+    //TODO remove this implementation
     // Methods for ComponetsGetter
+    /*
     @Override
     public FileDownloader.FileDownloaderBinder getFileDownloaderBinder() {
         return mDownloaderBinder;
@@ -989,11 +1004,14 @@ public class Preferences extends PreferenceActivity
         return null;
     }
 
+
     protected ServiceConnection newTransferenceServiceConnection() {
         return new PreferencesServiceConnection();
     }
+    */
 
     /** Defines callbacks for service binding, passed to bindService() */
+    /*
     private class PreferencesServiceConnection implements ServiceConnection {
 
         @Override
@@ -1002,8 +1020,7 @@ public class Preferences extends PreferenceActivity
             if (component.equals(new ComponentName(Preferences.this, FileDownloader.class))) {
                 mDownloaderBinder = (FileDownloader.FileDownloaderBinder) service;
 
-            } else if (component.equals(new ComponentName(Preferences.this,
-                    FileUploader.class))) {
+            } else if (component.equals(new ComponentName(Preferences.this, FileUploader.class))) {
                 Log_OC.d(TAG, "Upload service connected");
                 mUploaderBinder = (FileUploader.FileUploaderBinder) service;
             } else {
@@ -1017,11 +1034,11 @@ public class Preferences extends PreferenceActivity
             if (component.equals(new ComponentName(Preferences.this, FileDownloader.class))) {
                 Log_OC.d(TAG, "Download service suddenly disconnected");
                 mDownloaderBinder = null;
-            } else if (component.equals(new ComponentName(Preferences.this,
-                    FileUploader.class))) {
+            } else if (component.equals(new ComponentName(Preferences.this, FileUploader.class))) {
                 Log_OC.d(TAG, "Upload service suddenly disconnected");
                 mUploaderBinder = null;
             }
         }
     };
+    */
 }
