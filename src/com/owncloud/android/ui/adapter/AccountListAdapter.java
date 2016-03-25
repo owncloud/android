@@ -29,11 +29,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.ui.TextDrawable;
 import com.owncloud.android.ui.activity.ManageAccountsActivity;
 import com.owncloud.android.utils.BitmapUtils;
+import com.owncloud.android.utils.DisplayUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -86,7 +88,23 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
             // create account item
             if (AccountListItem.TYPE_ACCOUNT == accountListItem.getType()) {
                 Account account = accountListItem.getAccount();
-                viewHolder.textViewItem.setText(account.name);
+                try {
+                    OwnCloudAccount oca = new OwnCloudAccount(account, mContext);
+                    viewHolder.textViewItem.setText(
+                        oca.getDisplayName() + " @ " +
+                            DisplayUtils.convertIdn(
+                                account.name.substring(account.name.lastIndexOf("@") + 1),
+                                false
+                            )
+                    );
+                } catch (Exception e) {
+                    Log_OC.w(
+                        TAG,
+                        "Account not found right after being read :\\ ; using account name instead of display name"
+                    );
+                    // Handle internationalized domain names
+                    viewHolder.textViewItem.setText(DisplayUtils.convertIdn(account.name, false));
+                }
                 viewHolder.textViewItem.setTag(account.name);
 
                 try {

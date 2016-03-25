@@ -74,6 +74,7 @@ public class ManageAccountsActivity extends ToolbarActivity
         setContentView(R.layout.accounts_layout);
 
         mListView = (ListView) findViewById(R.id.account_list);
+        mListView.setFilterTouchesWhenObscured(true);
 
         setupToolbar();
         updateActionBarTitleAndHomeButtonByString(getResources().getString(R.string.prefs_manage_accounts));
