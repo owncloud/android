@@ -29,10 +29,12 @@ import java.util.Vector;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +53,14 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.ShareActivity;
+import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
@@ -64,6 +72,7 @@ import com.owncloud.android.utils.MimetypeIconUtil;
  */
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
+    private static final String TAG = FileListListAdapter.class.getSimpleName();
     private Context mContext;
     private OCFile mFile = null;
     private Vector<OCFile> mFiles = null;
@@ -190,123 +199,74 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.ListItemLayout);
             linearLayout.setContentDescription("LinearLayout-" + name);
 
-            switch (viewType){
-                case LIST_ITEM:
-                    TextView fileSizeV = (TextView) view.findViewById(R.id.file_size);
-                    TextView fileSizeSeparatorV = (TextView) view.findViewById(R.id.file_separator);
-                    TextView lastModV = (TextView) view.findViewById(R.id.last_mod);
-                    ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
 
-                    lastModV.setVisibility(View.VISIBLE);
-                    lastModV.setText(showRelativeTimestamp(file));
-
-                    checkBoxV.setVisibility(View.GONE);
-
-                    fileSizeSeparatorV.setVisibility(View.VISIBLE);
-                    fileSizeV.setVisibility(View.VISIBLE);
-                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
-
-                    if (!file.isFolder()) {
-                        AbsListView parentList = (AbsListView)parent;
-                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                            if (parentList.getChoiceMode() == AbsListView.CHOICE_MODE_NONE) {
-                                checkBoxV.setVisibility(View.GONE);
-                            } else {
-                                if (parentList.isItemChecked(position)) {
-                                    checkBoxV.setImageResource(
-                                            R.drawable.ic_checkbox_marked);
-                                } else {
-                                    checkBoxV.setImageResource(
-                                            R.drawable.ic_checkbox_blank_outline);
-                                }
-                                checkBoxV.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                    } else { //Folder
-                        fileSizeSeparatorV.setVisibility(View.GONE);
-                        fileSizeV.setVisibility(View.GONE);
-                    }
-
-                case GRID_ITEM:
-                    // filename
-                    fileName = (TextView) view.findViewById(R.id.Filename);
-                    name = file.getFileName();
-                    fileName.setText(name);
-
-                case GRID_IMAGE:
-                    // sharedIcon
-                    ImageView sharedIconV = (ImageView) view.findViewById(R.id.sharedIcon);
-                    if (file.isSharedViaLink()) {
-                        sharedIconV.setImageResource(R.drawable.shared_via_link);
-                        sharedIconV.setVisibility(View.VISIBLE);
-                        sharedIconV.bringToFront();
-                    } else if (file.isSharedWithSharee() || file.isSharedWithMe() ) {
-                        sharedIconV.setImageResource(R.drawable.shared_via_users);
-                        sharedIconV.setVisibility(View.VISIBLE);
-                        sharedIconV.bringToFront();
-                    } else {
-                        sharedIconV.setVisibility(View.GONE);
-                    }
-
-                    /*ImageView sharedWithMeIcon = (ImageView) view.findViewById(R.id.sharedWithMeIcon);
-                    sharedWithMeIcon.bringToFront();*/
-
-                    // local state
-                    ImageView localStateView = (ImageView) view.findViewById(R.id.localFileIndicator);
-                    localStateView.bringToFront();
-                    FileDownloaderBinder downloaderBinder =
-                            mTransferServiceGetter.getFileDownloaderBinder();
-                    FileUploaderBinder uploaderBinder =
-                            mTransferServiceGetter.getFileUploaderBinder();
-                    OperationsServiceBinder opsBinder =
-                            mTransferServiceGetter.getOperationsServiceBinder();
-
-                    localStateView.setVisibility(View.INVISIBLE);   // default first
-
-                    if ( //synchronizing
-                                opsBinder != null &&
-                                opsBinder.isSynchronizing(mAccount, file.getRemotePath())
-                            ) {
-                        localStateView.setImageResource(R.drawable.synchronizing_file_indicator);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if ( // downloading
-                                downloaderBinder != null &&
-                                downloaderBinder.isDownloading(mAccount, file)
-                            ) {
-                        localStateView.setImageResource(
-                                file.isFolder() ?
-                                        R.drawable.synchronizing_file_indicator :
-                                        R.drawable.downloading_file_indicator
-                        );
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if ( //uploading
-                                uploaderBinder != null &&
-                                uploaderBinder.isUploading(mAccount, file)
-                            ) {
-                        localStateView.setImageResource(
-                                file.isFolder() ?
-                                        R.drawable.synchronizing_file_indicator :
-                                        R.drawable.uploading_file_indicator
-                        );
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if (file.getEtagInConflict() != null) {   // conflict
-                        localStateView.setImageResource(R.drawable.conflict_file_indicator);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if (file.isDown()) {
-                        localStateView.setImageResource(R.drawable.local_file_indicator);
-                        localStateView.setVisibility(View.VISIBLE);
-                    }
-
-                    break;
-            }
             
             // For all Views
-            
+
+            // sharedIcon
+            ImageView sharedIconV = (ImageView) view.findViewById(R.id.sharedIcon);
+            if (file.isSharedViaLink()) {
+                sharedIconV.setImageResource(R.drawable.shared_via_link);
+                sharedIconV.setVisibility(View.VISIBLE);
+                sharedIconV.bringToFront();
+            } else if (file.isSharedWithSharee() || file.isSharedWithMe() ) {
+                sharedIconV.setImageResource(R.drawable.shared_via_users);
+                sharedIconV.setVisibility(View.VISIBLE);
+                sharedIconV.bringToFront();
+            } else {
+                sharedIconV.setVisibility(View.GONE);
+            }
+
+            // local state
+            ImageView localStateView = (ImageView) view.findViewById(R.id.localFileIndicator);
+            localStateView.bringToFront();
+            FileDownloaderBinder downloaderBinder =
+                    mTransferServiceGetter.getFileDownloaderBinder();
+            FileUploaderBinder uploaderBinder =
+                    mTransferServiceGetter.getFileUploaderBinder();
+            OperationsServiceBinder opsBinder =
+                    mTransferServiceGetter.getOperationsServiceBinder();
+
+            localStateView.setVisibility(View.INVISIBLE);   // default first
+
+            if ( //synchronizing
+                    opsBinder != null &&
+                            opsBinder.isSynchronizing(mAccount, file.getRemotePath())
+                    ) {
+                localStateView.setImageResource(R.drawable.synchronizing_file_indicator);
+                localStateView.setVisibility(View.VISIBLE);
+
+            } else if ( // downloading
+                    downloaderBinder != null &&
+                            downloaderBinder.isDownloading(mAccount, file)
+                    ) {
+                localStateView.setImageResource(
+                        file.isFolder() ?
+                                R.drawable.synchronizing_file_indicator :
+                                R.drawable.downloading_file_indicator
+                );
+                localStateView.setVisibility(View.VISIBLE);
+
+            } else if ( //uploading
+                    uploaderBinder != null &&
+                            uploaderBinder.isUploading(mAccount, file)
+                    ) {
+                localStateView.setImageResource(
+                        file.isFolder() ?
+                                R.drawable.synchronizing_file_indicator :
+                                R.drawable.uploading_file_indicator
+                );
+                localStateView.setVisibility(View.VISIBLE);
+
+            } else if (file.getEtagInConflict() != null) {   // conflict
+                localStateView.setImageResource(R.drawable.conflict_file_indicator);
+                localStateView.setVisibility(View.VISIBLE);
+
+            } else if (file.isDown()) {
+                localStateView.setImageResource(R.drawable.local_file_indicator);
+                localStateView.setVisibility(View.VISIBLE);
+            }
+
             // this if-else is needed even though favorite icon is visible by default
             // because android reuses views in listview
             if (!file.isFavorite()) {
@@ -365,6 +325,105 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         )
                 );
             }
+
+            switch (viewType){
+                case LIST_ITEM:
+                    TextView fileSizeV = (TextView) view.findViewById(R.id.file_size);
+                    TextView fileSizeSeparatorV = (TextView) view.findViewById(R.id.file_separator);
+                    TextView lastModV = (TextView) view.findViewById(R.id.last_mod);
+                    ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
+
+                    // filename
+                    fileName = (TextView) view.findViewById(R.id.Filename);
+                    name = file.getFileName();
+                    fileName.setText(name);
+
+                    lastModV.setVisibility(View.VISIBLE);
+                    lastModV.setText(showRelativeTimestamp(file));
+
+                    checkBoxV.setVisibility(View.GONE);
+
+                    fileSizeSeparatorV.setVisibility(View.VISIBLE);
+                    fileSizeV.setVisibility(View.VISIBLE);
+                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
+
+                    if (!file.isFolder()) {
+                        AbsListView parentList = (AbsListView)parent;
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                            if (parentList.getChoiceMode() == AbsListView.CHOICE_MODE_NONE) {
+                                checkBoxV.setVisibility(View.GONE);
+                            } else {
+                                if (parentList.isItemChecked(position)) {
+                                    checkBoxV.setImageResource(
+                                            R.drawable.ic_checkbox_marked);
+                                } else {
+                                    checkBoxV.setImageResource(
+                                            R.drawable.ic_checkbox_blank_outline);
+                                }
+                                checkBoxV.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                    } else { //Folder
+                        fileSizeSeparatorV.setVisibility(View.GONE);
+                        fileSizeV.setVisibility(View.GONE);
+                    }
+
+                    // Shared icon clickable
+                    if (file.isSharedViaLink()) {
+                        final OCFile temp = file;
+                        sharedIconV.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                                // Send link to the app
+                                OCShare publicShareLink = mStorageManager.getFirstShareByPathAndType(
+                                        temp.getRemotePath(),
+                                        ShareType.PUBLIC_LINK,
+                                        ""
+                                );
+//
+//                                if (publicShareLink != null){
+//                                    Log_OC.d(TAG, "Share link = " + publicShareLink.getShareLink());
+//                                } else {
+//                                    Log_OC.d(TAG, "Share link is NULL");
+//                                }
+
+                                // mTransferServiceGetter.getFileOperationsHelper().getFileWithLink(temp);
+
+
+//                                Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
+//                                intentToShareLink.putExtra(Intent.EXTRA_TEXT, publicShareLink);
+//                                intentToShareLink.setType("text/plain");
+//                                String[] packagesToExclude = new String[]{getPackageName()};
+//                                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
+//                                chooserDialog.show(getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+                            }
+                        });
+                    } else if (file.isSharedWithSharee()) {
+                        final OCFile temp = file;
+                        sharedIconV.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(mContext, ShareActivity.class);
+                                intent.putExtra(FileActivity.EXTRA_FILE, temp);
+                                intent.putExtra(FileActivity.EXTRA_ACCOUNT, mAccount);
+                                mContext.startActivity(intent);
+                            }
+                        });
+                    }
+                    break;
+
+                case GRID_ITEM:
+                    // filename
+                    fileName = (TextView) view.findViewById(R.id.Filename);
+                    name = file.getFileName();
+                    fileName.setText(name);
+                    break;
+
+                case GRID_IMAGE:
+                    break;
+            }
+
         }
 
         return view;
