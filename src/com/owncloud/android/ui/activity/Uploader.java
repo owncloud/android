@@ -61,6 +61,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
@@ -134,6 +135,9 @@ public class Uploader extends FileActivity
 
     private static final String DIALOG_WAIT_COPY_FILE = "DIALOG_WAIT_COPY_FILE";
 
+    private RadioButton mRadioBtnCopyFiles;
+    private RadioButton mRadioBtnMoveFiles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         prepareStreamsToUpload();
@@ -156,6 +160,12 @@ public class Uploader extends FileActivity
         }
 
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.uploader_layout);
+
+        mRadioBtnMoveFiles = (RadioButton) findViewById(R.id.uploader_radio_move);
+        mRadioBtnCopyFiles = (RadioButton) findViewById(R.id.uploader_radio_copy);
+        mRadioBtnCopyFiles.setChecked(true);
 
         if (mAccountSelected) {
             setAccount((Account) savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT));
@@ -429,8 +439,6 @@ public class Uploader extends FileActivity
     }
 
     private void populateDirectoryList() {
-        setContentView(R.layout.uploader_layout);
-
         ListView mListView = (ListView) findViewById(android.R.id.list);
         ActionBar actionBar = getSupportActionBar();
 
