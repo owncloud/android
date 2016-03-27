@@ -25,19 +25,20 @@
             android:id="@+id/shareScroll">
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/editShareTitle"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/share_with_edit_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:padding="@dimen/standard_padding"
             android:singleLine="true"
-            android:ellipsize="middle"/>
+            android:ellipsize="middle"
+            />
 
         <View
             android:id="@+id/share_header_divider"
@@ -45,25 +46,25 @@
             android:layout_height="2dp"
             android:background="@color/owncloud_blue"
             />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginRight="@dimen/standard_margin"
+        android:layout_marginBottom="@dimen/standard_margin">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <android.support.v7.widget.SwitchCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/standard_margin"
-            android:layout_marginRight="@dimen/standard_margin"
-            android:layout_marginBottom="@dimen/standard_margin">
-
-            <android.support.v7.widget.SwitchCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/share_privilege_can_edit"
-                android:id="@+id/canEditSwitch"
-                android:layout_gravity="start"
-                android:layout_marginTop="@dimen/standard_half_margin"
-                android:textColor="@color/color_accent"
-                style="?android:attr/listSeparatorTextViewStyle"
-                />
+            android:text="@string/share_privilege_can_edit"
+            android:id="@+id/canEditSwitch"
+            android:layout_gravity="start"
+            android:layout_marginTop="@dimen/standard_half_margin"
+            android:textColor="@color/color_accent"
+            android:paddingLeft="0dp"
+            style="?android:attr/listSeparatorTextViewStyle"
+            />
 
             <CheckBox
                 android:layout_width="match_parent"
@@ -89,17 +90,17 @@
                 android:visibility="gone"
                 />
 
-            <android.support.v7.widget.SwitchCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/share_privilege_can_share"
-                android:id="@+id/canShareSwitch"
-                android:layout_gravity="start"
-                android:layout_marginTop="@dimen/standard_half_margin"
-                android:textColor="@color/color_accent"
-                style="?android:attr/listSeparatorTextViewStyle"
-                />
-
-        </LinearLayout>
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/share_privilege_can_share"
+            android:id="@+id/canShareSwitch"
+            android:layout_gravity="start"
+            android:layout_marginTop="@dimen/standard_half_margin"
+            android:textColor="@color/color_accent"
+            android:paddingLeft="0dp"
+            style="?android:attr/listSeparatorTextViewStyle"
+            />
+    </LinearLayout>
     </LinearLayout>
 </ScrollView>

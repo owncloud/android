@@ -70,6 +70,7 @@
 		<item name="android:windowBackground">@color/transparent</item>
 		<item name="android:windowTitleBackgroundStyle">@drawable/process_dialog_background</item>
 	</style>
+
 	<style name="ownCloud.SearchView" parent="Widget.AppCompat.SearchView">
 		<!-- Close button icon -->
 		<item name="closeIcon">@drawable/ic_close</item>
@@ -78,7 +79,6 @@
 		<!-- Layout for query suggestion rows // unused for now, staying with the standard layout -->
 		<!--<item name="suggestionRowLayout">...</item>-->
 	</style>
-
 
 	<style name="ownCloud.Button" parent="Widget.AppCompat.Button">
 		<item name="colorButtonNormal">@color/primary</item>
