@@ -23,17 +23,17 @@ package com.owncloud.android.test.ui.testSuites;
 public final class Config {
 
 	//without http or https
-	public static final String URL = "owncloudServerVar";
-	public static boolean isTrusted = true;
+	public static final String URL = "docker.oc.solidgear.es:56219";
+	public static boolean isTrusted = false;
 
 	//without http or https
-	public static final String URL2 = "owncloudServer2Var";
-	public static boolean isTrusted2 = true;
+	public static final String URL2 = "docker.oc.solidgear.es:56219";
+	public static boolean isTrusted2 = false;
 
-	public static final String user = "owncloudUserVar";
-	public static final String password = "owncloudPasswordVar";
-	public static final String user2 = "owncloudUser2Var";
-	public static final String password2 = "owncloudPassword2Var";
+	public static final String user = "user1";
+	public static final String password = "a";
+	public static final String user2 = "user2";
+	public static final String password2 = "a";
 	public static final String userAccount = user + "@"+ URL;
 	public static final String userAccount2 = user2 + "@"+ URL2;
 

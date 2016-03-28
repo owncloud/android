@@ -26,10 +26,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.RemoteWebElement;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.owncloud.android.test.ui.models.CertificatePopUp;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.GmailSendMailView;
@@ -53,7 +56,7 @@ public class Actions {
 		LoginForm loginForm = new LoginForm(driver);
 		CertificatePopUp certificatePopUp = loginForm.typeHostUrl(url);	
 		if(!isTrusted){
-			WebDriverWait wait = new WebDriverWait(driver, 30);
+			WebDriverWait wait = new WebDriverWait(driver, 5);
 			//sometimes the certificate has been already accept 
 			//and it doesn't appear again
 			try {

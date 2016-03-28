@@ -44,7 +44,7 @@ import io.appium.java_client.android.AndroidElement;
 
 public class Common{
 	AndroidDriver driver;
-	static int waitingTime = 30;
+	static int waitingTime = 5;
 
 	public WebDriverWait wait;
 
@@ -65,7 +65,7 @@ public class Common{
 				capabilities);
 		driver.manage().timeouts().implicitlyWait(waitingTime,
 				TimeUnit.SECONDS);
-		wait = new WebDriverWait(driver, waitingTime, 50);
+		wait = new WebDriverWait(driver, waitingTime, 5);
 		return driver;
 
 	}
@@ -161,12 +161,14 @@ public class Common{
 		//waitForTextPresent("Wrong username or password", 
 			//	changePasswordForm.getAuthStatusText());
 		Thread.sleep(2000);
-		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
+		/*assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
 						+ ".resourceId(\"android:id/action_bar_title\")")));
 		assertTrue(isElementPresent((AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".description(\"Upload\")")));	
+						+ ".description(\"Upload\")")));	*/
+		assertTrue(isElementPresent(
+				(AndroidElement) driver.findElementByAndroidUIAutomator("new UiSelector()"+ ".resourceId(\"com.owncloud.android:id/action_bar\")")));
 	}
 
 	protected void assertIsNotInFileListView() throws InterruptedException {
