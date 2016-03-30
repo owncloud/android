@@ -32,9 +32,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.FileRequestEntity;
@@ -87,8 +89,16 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 	@Override
 	protected RemoteOperationResult run(OwnCloudClient client) {
 		RemoteOperationResult result = null;
+		DefaultHttpMethodRetryHandler oldRetryHandler =
+			(DefaultHttpMethodRetryHandler) client.getParams().getParameter(HttpMethodParams.RETRY_HANDLER);
 
 		try {
+			// prevent that uploads are retried automatically by network library
+			client.getParams().setParameter(
+				HttpMethodParams.RETRY_HANDLER,
+				new DefaultHttpMethodRetryHandler(0, false)
+			);
+
 			mPutMethod = new PutMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
 
 			if (mCancellationRequested.get()) {
@@ -114,6 +124,12 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 			} else {
 				result = new RemoteOperationResult(e);
 			}
+		} finally {
+			// reset previous retry handler
+			client.getParams().setParameter(
+				HttpMethodParams.RETRY_HANDLER,
+				oldRetryHandler
+			);
 		}
 		return result;
 	}

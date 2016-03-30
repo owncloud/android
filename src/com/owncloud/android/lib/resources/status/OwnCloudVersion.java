@@ -36,7 +36,9 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
             0x04000000);
     public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(
             0x04050000);
-    
+
+    public static final int MINIMUN_VERSION_FOR_CHUNKED_UPLOADS = 0x04050000; // 4.5
+
     public static final int MINIMUM_VERSION_FOR_SHARING_API = 0x05001B00; // 5.0.27
 
     public static final int MINIMUM_VERSION_WITH_FORBIDDEN_CHARS = 0x08010000; // 8.1
@@ -125,8 +127,12 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     	return versionValue; 
     }
-    
-    
+
+
+    public boolean isChunkedUploadSupported() {
+        return (mVersion >= MINIMUN_VERSION_FOR_CHUNKED_UPLOADS);
+    }
+
     public boolean isSharedSupported() {
     	return (mVersion >= MINIMUM_VERSION_FOR_SHARING_API);
     }
@@ -150,6 +156,4 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public boolean isVersionWithCapabilitiesAPI(){
         return (mVersion>= MINIMUM_VERSION_CAPABILITIES_API);
     }
-    
-    
 }
