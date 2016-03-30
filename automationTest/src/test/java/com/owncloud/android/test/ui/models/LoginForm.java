@@ -41,7 +41,8 @@ public class LoginForm {
 	private AndroidElement userNameInput;
 	
 	@CacheLookup
-	@AndroidFindBy(uiAutomator = "new UiSelector().description(\"Password\")")
+	//@AndroidFindBy(uiAutomator = "new UiSelector().description(\"Password\")")
+	@AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"com.owncloud.android:id/account_password\")")
 	private AndroidElement passwordInput;
 	
 	@CacheLookup

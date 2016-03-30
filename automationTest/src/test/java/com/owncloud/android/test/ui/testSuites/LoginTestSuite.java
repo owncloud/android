@@ -54,7 +54,7 @@ public class LoginTestSuite{
 	}
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, LoginTestCategory.class})
 	public void test1LoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		
@@ -64,7 +64,7 @@ public class LoginTestSuite{
 	}
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, LoginTestCategory.class})
 	public void test2LoginLandscape () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		Actions.login(Config.URL, Config.user,

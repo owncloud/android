@@ -27,7 +27,7 @@ public final class Config {
 	public static boolean isTrusted = false;
 
 	//without http or https
-	public static final String URL2 = "docker.oc.solidgear.es:56219";
+	public static final String URL2 = "docker.oc.solidgear.es:56066";
 	public static boolean isTrusted2 = false;
 
 	public static final String user = "user1";
@@ -39,8 +39,8 @@ public final class Config {
 
 	public static final String gmailAccount = "gmailAccountVar";
 	
-	public static final String fileWhichIsInTheServer1 ="test";
-	public static final String fileWhichIsInTheServer2 ="test";
+	public static final String fileWhichIsInTheServer1 ="ok.txt";
+	public static final String fileWhichIsInTheServer2 ="algo.txt";
 	
 	public static final String fileToTestName = "test";
 	public static final String fileToTestSendByEmailName = "test";
