@@ -627,6 +627,8 @@ public class Uploader extends FileActivity
                     throw new SecurityException();
                 }
 
+                // TODO Tobi: wo unterscheiden zw. copy & move?
+
                 //Save the path to shared preferences
                 SharedPreferences.Editor appPrefs = PreferenceManager
                         .getDefaultSharedPreferences(getApplicationContext()).edit();
