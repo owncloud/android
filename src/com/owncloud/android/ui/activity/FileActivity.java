@@ -45,6 +45,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -86,6 +87,7 @@ import com.owncloud.android.ui.NavigationDrawerItem;
 import com.owncloud.android.ui.adapter.NavigationDrawerListAdapter;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
+import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 
 import java.util.ArrayList;
@@ -168,10 +170,7 @@ public class FileActivity extends AppCompatActivity
 
     protected NavigationDrawerListAdapter mNavigationDrawerAdapter = null;
 
-
-
-    // TODO re-enable when "Accounts" is available in Navigation Drawer
-//    protected boolean mShowAccounts = false;
+    protected boolean mShowAccounts = false;
 
     /**
      * Loads the ownCloud {@link Account} and main {@link OCFile} to be handled by the instance of
@@ -359,20 +358,19 @@ public class FileActivity extends AppCompatActivity
         RelativeLayout navigationDrawerLayout = (RelativeLayout) findViewById(R.id.left_drawer);
         mDrawerList = (ListView) navigationDrawerLayout.findViewById(R.id.drawer_list);
 
-        // TODO re-enable when "Accounts" is available in Navigation Drawer
-//        // load Account in the Drawer Title
-//        // User-Icon
-//        ImageView userIcon = (ImageView) navigationDrawerLayout.findViewById(R.id.drawer_userIcon);
-//        userIcon.setImageResource(DisplayUtils.getSeasonalIconId());
-//
-//        // Username
-//        TextView username = (TextView) navigationDrawerLayout.findViewById(R.id.drawer_username);
-//        Account account = AccountUtils.getCurrentOwnCloudAccount(getApplicationContext());
-//
-//        if (account != null) {
-//            int lastAtPos = account.name.lastIndexOf("@");
-//            username.setText(account.name.substring(0, lastAtPos));
-//        }
+        // load Account in the Drawer Title
+        // User-Icon
+        ImageView userIcon = (ImageView) navigationDrawerLayout.findViewById(R.id.drawer_userIcon);
+        userIcon.setImageResource(DisplayUtils.getSeasonalIconId());
+
+        // Username
+        TextView username = (TextView) navigationDrawerLayout.findViewById(R.id.drawer_username);
+        Account account = AccountUtils.getCurrentOwnCloudAccount(getApplicationContext());
+
+        if (account != null) {
+            int lastAtPos = account.name.lastIndexOf("@");
+            username.setText(account.name.substring(0, lastAtPos));
+        }
 
         // Display username in drawer
         setUsernameInDrawer(navigationDrawerLayout, AccountUtils.getCurrentOwnCloudAccount(getApplicationContext()));
@@ -387,13 +385,13 @@ public class FileActivity extends AppCompatActivity
         // nav drawer items
         mDrawerItems = new ArrayList<NavigationDrawerItem>();
         // adding nav drawer items to array
-        // TODO re-enable when "Accounts" is available in Navigation Drawer
-        // Accounts
-        // mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[0],
-        // mDrawerContentDescriptions[0]));
         // All Files
         mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[0], mDrawerContentDescriptions[0],
                 R.drawable.ic_folder_open));
+
+        // Accounts
+        mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[1], mDrawerContentDescriptions[1],
+                R.drawable.ic_account_circle));
 
         // TODO Enable when "On Device" is recovered
         // On Device
@@ -401,12 +399,12 @@ public class FileActivity extends AppCompatActivity
         //        mDrawerContentDescriptions[2]));
 
         // Settings
-        mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[1], mDrawerContentDescriptions[1],
+        mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[2], mDrawerContentDescriptions[2],
                 R.drawable.ic_settings));
         // Logs
         if (BuildConfig.DEBUG) {
-            mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[2],
-                    mDrawerContentDescriptions[2],R.drawable.ic_log));
+            mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[3],
+                    mDrawerContentDescriptions[3],R.drawable.ic_log));
         }
 
         // setting the nav drawer list adapter
@@ -997,10 +995,9 @@ public class FileActivity extends AppCompatActivity
         startActivity(i);
     }
 
-//    TODO re-enable when "Accounts" is available in Navigation Drawer
-//    public void closeDrawer() {
-//        mDrawerLayout.closeDrawers();
-//    }
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawers();
+    }
 
     public void allFilesOption(){
         restart();
@@ -1009,18 +1006,10 @@ public class FileActivity extends AppCompatActivity
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            // TODO re-enable when "Accounts" is available in Navigation Drawer
-//            if (mShowAccounts && position > 0){
-//                position = position - 1;
-//            }
-            switch (position){
-                // TODO re-enable when "Accounts" is available in Navigation Drawer
-//                case 0: // Accounts
-//                    mShowAccounts = !mShowAccounts;
-//                    mNavigationDrawerAdapter.setShowAccounts(mShowAccounts);
-//                    mNavigationDrawerAdapter.notifyDataSetChanged();
-//                    break;
-
+            if (mShowAccounts && position > 0){
+                position = position - 1;
+            }
+            switch (position) {
                 case 0: // All Files
                     allFilesOption();
                     mDrawerLayout.closeDrawers();
@@ -1032,19 +1021,25 @@ public class FileActivity extends AppCompatActivity
 //                    mDrawerLayout.closeDrawers();
 //                    break;
 
-                case 1: // Settings
-                    Intent settingsIntent = new Intent(getApplicationContext(),
-                            Preferences.class);
-                    startActivity(settingsIntent);
-                    mDrawerLayout.closeDrawers();
+                case 1: // Accounts
+                    mShowAccounts = !mShowAccounts;
+                    mNavigationDrawerAdapter.setShowAccounts(mShowAccounts);
+                    mNavigationDrawerAdapter.notifyDataSetChanged();
                     break;
 
-                case 2: // Logs
-                    Intent loggerIntent = new Intent(getApplicationContext(),
+                case 2: // Settings
+                Intent settingsIntent = new Intent(getApplicationContext(),
+                            Preferences.class);
+                startActivity(settingsIntent);
+                mDrawerLayout.closeDrawers();
+                break;
+
+                case 3: // Logs
+                Intent loggerIntent = new Intent(getApplicationContext(),
                             LogHistoryActivity.class);
-                    startActivity(loggerIntent);
-                    mDrawerLayout.closeDrawers();
-                    break;
+                startActivity(loggerIntent);
+                mDrawerLayout.closeDrawers();
+                break;
             }
         }
     }
