@@ -24,9 +24,6 @@
 package com.owncloud.android.ui.adapter;
 
 
-import java.io.File;
-import java.util.Vector;
-
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +31,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,17 +49,15 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
-import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.ShareActivity;
-import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+
+import java.util.Vector;
 
 
 /**
@@ -199,8 +193,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.ListItemLayout);
             linearLayout.setContentDescription("LinearLayout-" + name);
 
-
-            
             // For all Views
 
             // sharedIcon
@@ -370,36 +362,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     }
 
                     // Shared icon clickable
-                    if (file.isSharedViaLink()) {
-                        final OCFile temp = file;
-                        sharedIconV.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-//                                // Send link to the app
-                                OCShare publicShareLink = mStorageManager.getFirstShareByPathAndType(
-                                        temp.getRemotePath(),
-                                        ShareType.PUBLIC_LINK,
-                                        ""
-                                );
-//
-//                                if (publicShareLink != null){
-//                                    Log_OC.d(TAG, "Share link = " + publicShareLink.getShareLink());
-//                                } else {
-//                                    Log_OC.d(TAG, "Share link is NULL");
-//                                }
-
-                                // mTransferServiceGetter.getFileOperationsHelper().getFileWithLink(temp);
-
-
-//                                Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
-//                                intentToShareLink.putExtra(Intent.EXTRA_TEXT, publicShareLink);
-//                                intentToShareLink.setType("text/plain");
-//                                String[] packagesToExclude = new String[]{getPackageName()};
-//                                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
-//                                chooserDialog.show(getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
-                            }
-                        });
-                    } else if (file.isSharedWithSharee()) {
+                    if (file.isSharedViaLink() || file.isSharedWithSharee()) {
                         final OCFile temp = file;
                         sharedIconV.setOnClickListener(new View.OnClickListener() {
                             @Override
