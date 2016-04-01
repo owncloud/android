@@ -37,15 +37,19 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.MimetypeIconUtil;
 
 /**
  * This Adapter populates a ListView with all files and directories contained
  * in a local directory
  */
 public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
-    
+
+    private static final String TAG = LocalFileListAdapter.class.getSimpleName();
+
     private Context mContext;
     private File mDirectory;
     private File[] mFiles = null;
@@ -103,6 +107,12 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             fileName.setText(name);
             
             ImageView fileIcon = (ImageView) view.findViewById(R.id.thumbnail);
+
+            /** Cancellation needs do be checked and done before changing the drawable in fileIcon, or
+             * {@link ThumbnailsCacheManager#cancelPotentialWork} will NEVER cancel any task.
+             **/
+            boolean allowedToCreateNewThumbnail = (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon));
+
             if (!file.isDirectory()) {
                 fileIcon.setImageResource(R.drawable.file);
             } else {
@@ -111,9 +121,11 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             fileIcon.setTag(file.hashCode());
 
             TextView fileSizeV = (TextView) view.findViewById(R.id.file_size);
+            TextView fileSizeSeparatorV = (TextView) view.findViewById(R.id.file_separator);
             TextView lastModV = (TextView) view.findViewById(R.id.last_mod);
             ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
             if (!file.isDirectory()) {
+                fileSizeSeparatorV.setVisibility(View.VISIBLE);
                 fileSizeV.setVisibility(View.VISIBLE);
                 fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length()));
 
@@ -124,9 +136,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                     checkBoxV.setVisibility(View.GONE);
                 } else {
                     if (parentList.isItemChecked(position)) {
-                        checkBoxV.setImageResource(android.R.drawable.checkbox_on_background);
+                        checkBoxV.setImageResource(R.drawable.ic_checkbox_marked);
                     } else {
-                        checkBoxV.setImageResource(android.R.drawable.checkbox_off_background);
+                        checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline);
                     }
                     checkBoxV.setVisibility(View.VISIBLE);
                 }
@@ -142,7 +154,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                     } else {
 
                         // generate new Thumbnail
-                        if (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon)) {
+                        if (allowedToCreateNewThumbnail) {
                             final ThumbnailsCacheManager.ThumbnailGenerationTask task =
                                     new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon);
                             if (thumbnail == null) {
@@ -156,13 +168,16 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 		        );
                             fileIcon.setImageDrawable(asyncDrawable);
                             task.execute(file);
-                        }
+                            Log_OC.v(TAG, "Executing task to generate a new thumbnail");
+
+                        } // else, already being generated, don't restart it
                     }
                 } else {
-                    fileIcon.setImageResource(DisplayUtils.getFileTypeIconId(null, file.getName()));
+                    fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(null, file.getName()));
                 }  
 
             } else {
+                fileSizeSeparatorV.setVisibility(View.GONE);
                 fileSizeV.setVisibility(View.GONE);
                 lastModV.setVisibility(View.GONE);
                 checkBoxV.setVisibility(View.GONE);
@@ -173,7 +188,6 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             view.findViewById(R.id.favoriteIcon).setVisibility(View.GONE);
             
             view.findViewById(R.id.sharedIcon).setVisibility(View.GONE);
-            view.findViewById(R.id.sharedWithMeIcon).setVisibility(View.GONE);
         }
 
         return view;

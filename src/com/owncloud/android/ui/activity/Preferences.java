@@ -35,8 +35,8 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -47,17 +47,25 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
-//import android.support.v7.app.ActionBar;
-import android.app.ActionBar;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
@@ -81,18 +89,24 @@ import com.owncloud.android.utils.DisplayUtils;
 
 /**
  * An Activity that allows the user to change the application's settings.
+ *
+ * It proxies the necessary calls via {@link android.support.v7.app.AppCompatDelegate} to be used
+ * with AppCompat.
  */
 public class Preferences extends PreferenceActivity
         implements AccountManagerCallback<Boolean>, ComponentsGetter {
     
-    private static final String TAG = "OwnCloudPreferences";
+    private static final String TAG = Preferences.class.getSimpleName();
 
     private static final int ACTION_SELECT_UPLOAD_PATH = 1;
     private static final int ACTION_SELECT_UPLOAD_VIDEO_PATH = 2;
+    private static final int ACTION_REQUEST_PASSCODE = 5;
+    private static final int ACTION_CONFIRM_PASSCODE = 6;
 
     private DbHandler mDbHandler;
     private CheckBoxPreference pCode;
     private Preference pAboutApp;
+    private AppCompatDelegate mDelegate;
 
     private PreferenceCategory mAccountsPrefCategory = null;
     private PreferenceCategory mInstantUploadsCategory = null;
@@ -104,6 +118,7 @@ public class Preferences extends PreferenceActivity
     private String mUploadPath;
     private PreferenceCategory mPrefInstantUploadCategory;
     private Preference mPrefInstantUpload;
+    private Preference mPrefInstantUploadBehaviour;
     private Preference mPrefInstantUploadPath;
     private Preference mPrefInstantUploadPathWiFi;
     private Preference mPrefInstantVideoUpload;
@@ -115,26 +130,19 @@ public class Preferences extends PreferenceActivity
     protected FileUploader.FileUploaderBinder mUploaderBinder = null;
     private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
 
+
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getDelegate().installViewFactory();
+        getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         mDbHandler = new DbHandler(getBaseContext());
         addPreferencesFromResource(R.xml.preferences);
 
-        // Set properties of Action Bar in an ugly workaround to build correctly without
-        // upgrading minSdk
-        // TODO : increase minSdk; scheduled for next realease, don't wont to mix with this US
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            ActionBar actionBar = getActionBar();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                actionBar.setIcon(DisplayUtils.getSeasonalIconId());
-            }
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.actionbar_settings);
-        } else {
-            setTitle(R.string.actionbar_settings);
-        }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.actionbar_settings);
 
         // For adding content description tag to a title field in the action bar
         int actionBarTitleId = getResources().getIdentifier("action_bar_title", "id", "android");
@@ -161,16 +169,58 @@ public class Preferences extends PreferenceActivity
                     mShowAccountContextMenu = true;
                     mAccountName = ((RadioButtonPreference) obj).getKey();
 
-                    Preferences.this.openContextMenu(listView);
+                    String[] items = {
+                            getResources().getString(R.string.change_password),
+                            getResources().getString(R.string.delete_account)
+                    };
+                    final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Preferences.this);
+                    View convertView = getLayoutInflater().inflate(R.layout.alert_dialog_list_view, null);
+                    alertDialogBuilder.setView(convertView);
+                    ListView lv = (ListView) convertView.findViewById(R.id.list);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                            Preferences.this,R.layout.simple_dialog_list_item,items);
+                    lv.setAdapter(adapter);
+
+                    //Setup proper inline listener
+                    final AlertDialog alertDialog = alertDialogBuilder.create();
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+                            Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
+                            for (Account a : accounts) {
+                                if (a.name.equals(mAccountName)) {
+                                    if (position==0) {
+
+                                        // Change account password
+                                        Intent updateAccountCredentials = new Intent(Preferences.this, AuthenticatorActivity.class);
+                                        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, a);
+                                        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION,
+                                                AuthenticatorActivity.ACTION_UPDATE_TOKEN);
+                                        startActivity(updateAccountCredentials);
+                                        alertDialog.cancel();
+
+                                    } else if (position==1) {
+
+                                        // Remove account
+                                        am.removeAccount(a, Preferences.this, mHandler);
+                                        Log_OC.d(TAG, "Remove an account " + a.name);
+                                        alertDialog.cancel();
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    alertDialog.show();
 
                     View.OnLongClickListener longListener = (View.OnLongClickListener) obj;
                     return longListener.onLongClick(view);
                 }
-                
+
                 if (obj != null && obj instanceof LongClickablePreference) {
                     mShowContextMenu = true;
                     mInstantUpload = ((LongClickablePreference) obj).getKey();
-                    
+
                     Preferences.this.openContextMenu(listView);
 
                     View.OnLongClickListener longListener = (View.OnLongClickListener) obj;
@@ -194,24 +244,30 @@ public class Preferences extends PreferenceActivity
         // Register context menu for list of preferences.
         registerForContextMenu(getListView());
 
-        pCode = (CheckBoxPreference) findPreference("set_pincode");
+        pCode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
         if (pCode != null){
             pCode.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
-                    Boolean enable = (Boolean) newValue;
+                    Boolean incoming = (Boolean) newValue;
+
                     i.setAction(
-                            enable.booleanValue() ? PassCodeActivity.ACTION_ENABLE :
-                                    PassCodeActivity.ACTION_DISABLE
+                            incoming.booleanValue() ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
+                                    PassCodeActivity.ACTION_CHECK_WITH_RESULT
                     );
-                    startActivity(i);
-                    
-                    return true;
+
+                    startActivityForResult(i, incoming.booleanValue() ? ACTION_REQUEST_PASSCODE :
+                            ACTION_CONFIRM_PASSCODE);
+
+                    // Don't update just yet, we will decide on it in onActivityResult
+                    return false;
                 }
-            });            
+            });
             
         }
+
+
 
         PreferenceCategory preferenceCategory = (PreferenceCategory) findPreference("more");
         
@@ -369,6 +425,9 @@ public class Preferences extends PreferenceActivity
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 toggleInstantPictureOptions((Boolean) newValue);
+                toggleInstantUploadBehaviour(
+                        ((CheckBoxPreference)mPrefInstantVideoUpload).isChecked(),
+                        (Boolean) newValue);
                 return true;
             }
         });
@@ -396,30 +455,38 @@ public class Preferences extends PreferenceActivity
         toggleInstantVideoOptions(((CheckBoxPreference) mPrefInstantVideoUpload).isChecked());
         
         mPrefInstantVideoUpload.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            
+
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 toggleInstantVideoOptions((Boolean) newValue);
+                toggleInstantUploadBehaviour(
+                        (Boolean) newValue,
+                        ((CheckBoxPreference) mPrefInstantUpload).isChecked());
                 return true;
             }
         });
-            
+
+        mPrefInstantUploadBehaviour = findPreference("prefs_instant_behaviour");
+        toggleInstantUploadBehaviour(
+                ((CheckBoxPreference)mPrefInstantVideoUpload).isChecked(),
+                ((CheckBoxPreference)mPrefInstantUpload).isChecked());
+
         /* About App */
        pAboutApp = (Preference) findPreference("about_app");
        if (pAboutApp != null) { 
                pAboutApp.setTitle(String.format(getString(R.string.about_android), getString(R.string.app_name)));
                pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
        }
-       
+
        addInstantUploadFolders();
-       
-       
-       
+
+
+
        // mInstantUploadsCategory.setL
 
        loadInstantUploadPath();
        loadInstantUploadVideoPath();
-        
+
          /* ComponentsGetter */
         mDownloadServiceConnection = newTransferenceServiceConnection();
         if (mDownloadServiceConnection != null) {
@@ -439,7 +506,7 @@ public class Preferences extends PreferenceActivity
         if (mInstantUploadsCategory.getPreferenceCount() > 0) {
             mInstantUploadsCategory.removeAll();
         }
-        
+
         /* Instant Upload Folders */
         for (InstantUploadPreference preference : InstantUploadFolderObserverService.getAll()) {
             LongClickablePreference addInstantUploadPref = new LongClickablePreference(this);
@@ -449,7 +516,7 @@ public class Preferences extends PreferenceActivity
 
             addInstantUploadPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
-                public boolean onPreferenceClick(Preference preference) {                  
+                public boolean onPreferenceClick(Preference preference) {
                     Intent settingsIntent = new Intent(MainApp.getAppContext(), InstantUploadPreferencesActivity.class);
                     settingsIntent.putExtra(InstantUploadPreferencesActivity.NUMBER, preference.getKey());
                     startActivity(settingsIntent);
@@ -457,7 +524,7 @@ public class Preferences extends PreferenceActivity
                 }
             });
         }
-      
+
         LongClickablePreference addInstantUploadPref = new LongClickablePreference(this);
         addInstantUploadPref.setTitle("Add instant upload");
         mInstantUploadsCategory.addPreference(addInstantUploadPref);
@@ -466,7 +533,7 @@ public class Preferences extends PreferenceActivity
             public boolean onPreferenceClick(Preference preference) {
                 // Create new InstantUploadPreference
                 String newValue = InstantUploadFolderObserverService.add();
-                
+
                 Intent settingsIntent = new Intent(MainApp.getAppContext(), InstantUploadPreferencesActivity.class);
                 settingsIntent.putExtra(InstantUploadPreferencesActivity.NUMBER, newValue);
                 startActivity(settingsIntent);
@@ -479,7 +546,7 @@ public class Preferences extends PreferenceActivity
     protected void onPause() {
         super.onPause();
     }
-    
+
     private void toggleInstantPictureOptions(Boolean value){
         if (value){
             mPrefInstantUploadCategory.addPreference(mPrefInstantUploadPathWiFi);
@@ -500,11 +567,19 @@ public class Preferences extends PreferenceActivity
         }
     }
 
+    private void toggleInstantUploadBehaviour(Boolean video, Boolean picture){
+        if (picture || video){
+            mPrefInstantUploadCategory.addPreference(mPrefInstantUploadBehaviour);
+        } else {
+            mPrefInstantUploadCategory.removePreference(mPrefInstantUploadBehaviour);
+        }
+    }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 
         Log_OC.d(TAG, "contextAccount: " + mShowAccountContextMenu);
-        
+
         // Filter for only showing contextual menu when long press on the
         // accounts
         if (mShowContextMenu) {
@@ -516,7 +591,7 @@ public class Preferences extends PreferenceActivity
             mShowContextMenu = false;
         }
         mShowAccountContextMenu = false;
-        
+
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
@@ -532,6 +607,7 @@ public class Preferences extends PreferenceActivity
         AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
 
+        // TODO Tobi needed?
         if ((item.getItemId() == R.id.change_password) || (item.getItemId() == R.id.delete_account)) {
             for (Account a : accounts) {
                 if (a.name.equals(mAccountName)) {
@@ -594,12 +670,12 @@ public class Preferences extends PreferenceActivity
         super.onResume();
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean state = appPrefs.getBoolean("set_pincode", false);
+        boolean state = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
         pCode.setChecked(state);
 
         // Populate the accounts category with the list of accounts
         addAccountsCheckboxPreferences();
-        
+
         // Populate the instan upload folders category with the list of folders
         addInstantUploadFolders();
     }
@@ -659,7 +735,85 @@ public class Preferences extends PreferenceActivity
             mPrefInstantVideoUploadPath.setSummary(mUploadVideoPath);
 
             saveInstantUploadVideoPathOnPreferences();
+        } else if (requestCode == ACTION_REQUEST_PASSCODE && resultCode == RESULT_OK) {
+            String passcode = data.getStringExtra(PassCodeActivity.KEY_PASSCODE);
+            if (passcode != null && passcode.length() == 4) {
+                SharedPreferences.Editor appPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext()).edit();
+
+                for (int i = 1; i <= 4; ++i) {
+                    appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, passcode.substring(i-1, i));
+                }
+                appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
+                appPrefs.commit();
+                Toast.makeText(this, R.string.pass_code_stored, Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == ACTION_CONFIRM_PASSCODE && resultCode == RESULT_OK) {
+            if (data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)) {
+
+                SharedPreferences.Editor appPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext()).edit();
+                appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+                appPrefs.commit();
+
+                Toast.makeText(this, R.string.pass_code_removed, Toast.LENGTH_LONG).show();
+            }
         }
+    }
+
+    public ActionBar getSupportActionBar() {
+        return getDelegate().getSupportActionBar();
+    }
+
+    public void setSupportActionBar(@Nullable Toolbar toolbar) {
+        getDelegate().setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public MenuInflater getMenuInflater() {
+        return getDelegate().getMenuInflater();
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        getDelegate().setContentView(layoutResID);
+    }
+    @Override
+    public void setContentView(View view) {
+        getDelegate().setContentView(view);
+    }
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        getDelegate().setContentView(view, params);
+    }
+
+    @Override
+    public void addContentView(View view, ViewGroup.LayoutParams params) {
+        getDelegate().addContentView(view, params);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getDelegate().onPostResume();
+    }
+
+    @Override
+    protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
+        getDelegate().setTitle(title);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getDelegate().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getDelegate().onPostCreate(savedInstanceState);
     }
 
     @Override
@@ -676,6 +830,24 @@ public class Preferences extends PreferenceActivity
         }
 
         super.onDestroy();
+        getDelegate().onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getDelegate().onStop();
+    }
+
+    public void invalidateOptionsMenu() {
+        getDelegate().invalidateOptionsMenu();
+    }
+
+    private AppCompatDelegate getDelegate() {
+        if (mDelegate == null) {
+            mDelegate = AppCompatDelegate.create(this, null);
+        }
+        return mDelegate;
     }
 
     /**

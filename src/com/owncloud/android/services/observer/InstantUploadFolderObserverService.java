@@ -24,9 +24,10 @@ public class InstantUploadFolderObserverService extends Service {
 
     @Override
     public void onCreate() {
-        File sdcard = new File("/mnt/sdcard/WhatsApp/Media");
+        // TODO start Observer for each stored Entry
+        File sdcard = new File("/mnt/sdcard/DCIM/Camera/");
         Log_OC.d("InstantUploadFolderObserverService", "watching file: " + sdcard.getAbsolutePath());
-        fileOb = new InstantUploadFolderObserver(sdcard.getAbsolutePath(), "WhatsApp");
+        fileOb = new InstantUploadFolderObserver(sdcard.getAbsolutePath(), "/cam/");
         fileOb.startWatching();
     }
 

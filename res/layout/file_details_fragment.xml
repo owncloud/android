@@ -21,6 +21,7 @@
 	android:id="@+id/fdScrollView"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:fillViewport="true"
 	>
 
 	<RelativeLayout
@@ -31,8 +32,9 @@
 			android:id="@+id/fdFileHeaderContainer"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="16dp"
-			android:layout_marginTop="4dp" >
+			android:layout_marginLeft="@dimen/standard_margin"
+			android:layout_marginRight="@dimen/standard_margin"
+			android:layout_marginTop="@dimen/standard_margin">
 	
 			<ImageView
 				android:id="@+id/fdIcon"
@@ -55,6 +57,9 @@
 			android:id="@+id/fdDetailsContainer"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/standard_margin"
+			android:layout_marginRight="@dimen/standard_margin"
+			android:layout_marginTop="@dimen/standard_margin"
 			android:layout_below="@id/fdFileHeaderContainer" >
 		
 			<RelativeLayout
@@ -62,14 +67,12 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_alignParentLeft="true"
-				android:layout_alignParentTop="true"
-				android:layout_marginLeft="16dp" >
+				android:layout_alignParentTop="true" >
 				
 				<TextView
 					android:id="@+id/fdTypeLabel"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="24dp"
 					android:text="@string/filedetails_type"
 					android:textAppearance="?android:attr/textAppearanceMedium" />
 					
@@ -107,14 +110,13 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_alignParentTop="true"
-				android:layout_marginLeft="12dp"
+				android:layout_marginLeft="@dimen/standard_margin"
 				android:layout_toRightOf="@+id/fdLabelContainer" >
 				
 				<TextView
 					android:id="@+id/fdType"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="24dp"
 					android:text="@string/placeholder_filetype"
 					android:textAppearance="?android:attr/textAppearanceMedium" />
 					
@@ -156,20 +158,21 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/fdDetailsContainer"
 			android:gravity="center_horizontal" 
-			android:layout_margin="16dp"
+			android:layout_margin="@dimen/standard_margin"
 			>
 			
-			<CheckBox
-				android:id="@+id/fdKeepInSync"
+			<android.support.v7.widget.AppCompatCheckBox
+				android:id="@+id/fdFavorite"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true"
-				android:text="@string/fd_keep_in_sync" />
+				android:text="@string/favorite"
+				android:checked="false" />
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_below="@id/fdKeepInSync"
+				android:layout_below="@id/fdFavorite"
 				android:orientation="vertical" >
 				
     			<TextView 
@@ -194,8 +197,8 @@
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
-						android:progressDrawable="@android:drawable/progress_horizontal"
-						android:indeterminate="false" 
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:indeterminate="false"
 						android:indeterminateOnly="false" 
 					/>
 				    								
@@ -204,7 +207,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_marginLeft="12dp"
-						android:src="@drawable/btn_cancel"
+						android:src="@drawable/ic_cancel"
 						android:background="@android:color/transparent"
 						/>
 						

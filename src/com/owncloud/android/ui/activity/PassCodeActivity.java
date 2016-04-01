@@ -24,11 +24,12 @@ package com.owncloud.android.ui.activity;
 
 import java.util.Arrays;
 
+import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -41,27 +42,36 @@ import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.utils.DisplayUtils;
 
-public class PassCodeActivity extends ActionBarActivity {
-
+public class PassCodeActivity extends AppCompatActivity {
 
     private static final String TAG = PassCodeActivity.class.getSimpleName();
 
-    public final static String ACTION_ENABLE = PassCodeActivity.class.getCanonicalName() +
-            ".ENABLE";
-    public final static String ACTION_DISABLE = PassCodeActivity.class.getCanonicalName() +
-            ".DISABLE";
-    public final static String ACTION_REQUEST = PassCodeActivity.class.getCanonicalName()  +
-            ".REQUEST";
+    public final static String ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT";
+    public final static String ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT";
+    public final static String ACTION_CHECK = "ACTION_CHECK";
+
+    public final static String KEY_PASSCODE  = "KEY_PASSCODE";
+    public final static String KEY_CHECK_RESULT = "KEY_CHECK_RESULT";
+
+    // NOTE: PREFERENCE_SET_PASSCODE must have the same value as preferences.xml-->android:key for passcode preference
+    public final static String PREFERENCE_SET_PASSCODE = "set_pincode";
+
+    public final static String PREFERENCE_PASSCODE_D = "PrefPinCode";
+    public final static String PREFERENCE_PASSCODE_D1 = "PrefPinCode1";
+    public final static String PREFERENCE_PASSCODE_D2 = "PrefPinCode2";
+    public final static String PREFERENCE_PASSCODE_D3 = "PrefPinCode3";
+    public final static String PREFERENCE_PASSCODE_D4 = "PrefPinCode4";
 
     private Button mBCancel;
     private TextView mPassCodeHdr;
     private TextView mPassCodeHdrExplanation;
     private EditText[] mPassCodeEditTexts = new EditText[4];
-    
+
     private String [] mPassCodeDigits = {"","","",""};
+    private static String KEY_PASSCODE_DIGITS = "PASSCODE_DIGITS";
     private boolean mConfirmingPassCode = false;
+    private static String KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE";
 
     private boolean mBChange = true; // to control that only one blocks jump
 
@@ -89,22 +99,31 @@ public class PassCodeActivity extends ActionBarActivity {
         mPassCodeEditTexts[2] = (EditText) findViewById(R.id.txt2);
         mPassCodeEditTexts[3] = (EditText) findViewById(R.id.txt3);
 
-        if (ACTION_REQUEST.equals(getIntent().getAction())) {
+        if (ACTION_CHECK.equals(getIntent().getAction())) {
             /// this is a pass code request; the user has to input the right value
             mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
             mPassCodeHdrExplanation.setVisibility(View.INVISIBLE);
             setCancelButtonEnabled(false);      // no option to cancel
 
-        } else if (ACTION_ENABLE.equals(getIntent().getAction())) {
-            /// pass code preference has just been activated in Preferences;
-            // will receive and confirm pass code value
-            mPassCodeHdr.setText(R.string.pass_code_configure_your_pass_code);
-            //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
-            // TODO choose a header, check iOS
-            mPassCodeHdrExplanation.setVisibility(View.VISIBLE);
-            setCancelButtonEnabled(true);
+        } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
+            if (savedInstanceState != null) {
+                mConfirmingPassCode = savedInstanceState.getBoolean(PassCodeActivity.KEY_CONFIRMING_PASSCODE);
+                mPassCodeDigits = savedInstanceState.getStringArray(PassCodeActivity.KEY_PASSCODE_DIGITS);
+            }
+            if(mConfirmingPassCode){
+                //the app was in the passcodeconfirmation
+                requestPassCodeConfirmation();
+            }else{
+                /// pass code preference has just been activated in Preferences;
+                // will receive and confirm pass code value
+                mPassCodeHdr.setText(R.string.pass_code_configure_your_pass_code);
+                //mPassCodeHdr.setText(R.string.pass_code_enter_pass_code);
+                // TODO choose a header, check iOS
+                mPassCodeHdrExplanation.setVisibility(View.VISIBLE);
+                setCancelButtonEnabled(true);
+            }
 
-        } else if (ACTION_DISABLE.equals(getIntent().getAction())) {
+        } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
             /// pass code preference has just been disabled in Preferences;
             // will confirm user knows pass code, then remove it
             mPassCodeHdr.setText(R.string.pass_code_remove_your_pass_code);
@@ -117,9 +136,6 @@ public class PassCodeActivity extends ActionBarActivity {
         }
 
         setTextListeners();
-        
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(DisplayUtils.getSeasonalIconId());
     }
 
 
@@ -135,7 +151,7 @@ public class PassCodeActivity extends ActionBarActivity {
             mBCancel.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    revertActionAndExit();
+                    finish();
                 }
             });
         } else {
@@ -279,7 +295,7 @@ public class PassCodeActivity extends ActionBarActivity {
      * the previously typed pass code, if any.
      */
     private void processFullPassCode() {
-        if (ACTION_REQUEST.equals(getIntent().getAction())) {
+        if (ACTION_CHECK.equals(getIntent().getAction())) {
             if (checkPassCode()) {
                 /// pass code accepted in request, user is allowed to access the app
                 finish();
@@ -289,24 +305,19 @@ public class PassCodeActivity extends ActionBarActivity {
                         View.INVISIBLE);
             }
 
-        } else if (ACTION_DISABLE.equals(getIntent().getAction())) {
+        } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
             if (checkPassCode()) {
-                /// pass code accepted when disabling, pass code is removed
-                SharedPreferences.Editor appPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext()).edit();
-                appPrefs.putBoolean("set_pincode", false);  // TODO remove; this should be
-                // unnecessary, was done before entering in the activity
-                appPrefs.commit();
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(KEY_CHECK_RESULT, true);
+                setResult(RESULT_OK, resultIntent);
 
-                Toast.makeText(PassCodeActivity.this, R.string.pass_code_removed, Toast.LENGTH_LONG).show();
                 finish();
-
             } else {
                 showErrorAndRestart(R.string.pass_code_wrong, R.string.pass_code_enter_pass_code,
                         View.INVISIBLE);
             }
 
-        } else if (ACTION_ENABLE.equals(getIntent().getAction())) {
+        } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
             /// enabling pass code
             if (!mConfirmingPassCode) {
                 requestPassCodeConfirmation();
@@ -356,14 +367,14 @@ public class PassCodeActivity extends ActionBarActivity {
             .getDefaultSharedPreferences(getApplicationContext());
 
         String savedPassCodeDigits[] = new String[4];
-        savedPassCodeDigits[0] = appPrefs.getString("PrefPinCode1", null);
-        savedPassCodeDigits[1] = appPrefs.getString("PrefPinCode2", null);
-        savedPassCodeDigits[2] = appPrefs.getString("PrefPinCode3", null);
-        savedPassCodeDigits[3] = appPrefs.getString("PrefPinCode4", null);
+        savedPassCodeDigits[0] = appPrefs.getString(PREFERENCE_PASSCODE_D1, null);
+        savedPassCodeDigits[1] = appPrefs.getString(PREFERENCE_PASSCODE_D2, null);
+        savedPassCodeDigits[2] = appPrefs.getString(PREFERENCE_PASSCODE_D3, null);
+        savedPassCodeDigits[3] = appPrefs.getString(PREFERENCE_PASSCODE_D4, null);
 
         boolean result = true;
         for (int i = 0; i < mPassCodeDigits.length && result; i++) {
-            result = result && (mPassCodeDigits[i] != null) &&
+            result = (mPassCodeDigits[i] != null) &&
                     mPassCodeDigits[i].equals(savedPassCodeDigits[i]);
         }
         return result;
@@ -380,8 +391,7 @@ public class PassCodeActivity extends ActionBarActivity {
 
         boolean result = true;
         for (int i = 0; i < mPassCodeEditTexts.length && result; i++) {
-            result = result &&
-                    ((mPassCodeEditTexts[i].getText().toString()).equals(mPassCodeDigits[i]));
+            result = ((mPassCodeEditTexts[i].getText().toString()).equals(mPassCodeDigits[i]));
         }
         return result;
     }
@@ -398,7 +408,7 @@ public class PassCodeActivity extends ActionBarActivity {
 
     /**
      * Overrides click on the BACK arrow to correctly cancel ACTION_ENABLE or ACTION_DISABLE, while
-     * preventing than ACTION_REQUEST may be worked around.
+     * preventing than ACTION_CHECK may be worked around.
      *
      * @param keyCode       Key code of the key that triggered the down event.
      * @param event         Event triggered.
@@ -407,10 +417,10 @@ public class PassCodeActivity extends ActionBarActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount()== 0){
-            if (ACTION_ENABLE.equals(getIntent().getAction()) ||
-                    ACTION_DISABLE.equals(getIntent().getAction())) {
-                revertActionAndExit();
-            }
+            if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction()) ||
+                    ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+                finish();
+            }   // else, do nothing, but report that the key was consumed to stay alive
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -420,41 +430,22 @@ public class PassCodeActivity extends ActionBarActivity {
      * Saves the pass code input by the user as the current pass code.
      */
     protected void savePassCodeAndExit() {
-        SharedPreferences.Editor appPrefs = PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext()).edit();
-        
-        appPrefs.putString("PrefPinCode1", mPassCodeDigits[0]);
-        appPrefs.putString("PrefPinCode2", mPassCodeDigits[1]);
-        appPrefs.putString("PrefPinCode3", mPassCodeDigits[2]);
-        appPrefs.putString("PrefPinCode4", mPassCodeDigits[3]);
-        appPrefs.putBoolean("set_pincode", true);    /// TODO remove; unnecessary,
-                                                     // Preferences did it before entering here
-        appPrefs.commit();
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(KEY_PASSCODE,
+                mPassCodeDigits[0] + mPassCodeDigits[1] + mPassCodeDigits[2] + mPassCodeDigits[3]);
 
-        Toast.makeText(this, R.string.pass_code_stored, Toast.LENGTH_LONG).show();
+        setResult(RESULT_OK, resultIntent);
+
         finish();
     }
 
-    /**
-     * Cancellation of ACTION_ENABLE or ACTION_DISABLE; reverts the enable or disable action done by
-     * {@link Preferences}, then finishes.
-     */
-    protected void revertActionAndExit() {
-        SharedPreferences.Editor appPrefsE = PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext()).edit();
 
-        SharedPreferences appPrefs = PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext());
-
-        boolean state = appPrefs.getBoolean("set_pincode", false);
-        appPrefsE.putBoolean("set_pincode", !state);
-        // TODO WIP: this is reverting the value of the preference because it was changed BEFORE
-        // entering
-        // TODO         in this activity; was the PreferenceCheckBox in the caller who did it
-        appPrefsE.commit();
-        finish();
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(PassCodeActivity.KEY_CONFIRMING_PASSCODE, mConfirmingPassCode);
+        outState.putStringArray(PassCodeActivity.KEY_PASSCODE_DIGITS, mPassCodeDigits);
     }
-
 
     private class PassCodeDigitTextWatcher implements TextWatcher {
 
@@ -491,7 +482,7 @@ public class PassCodeActivity extends ActionBarActivity {
          *  - moves the focus automatically to the next field
          *  - for the last field, triggers the processing of the full pass code
          *
-         * @param s
+         * @param s     Changed text
          */
         @Override
         public void afterTextChanged(Editable s) {
@@ -521,6 +512,5 @@ public class PassCodeActivity extends ActionBarActivity {
         }
 
     }
-
 
 }

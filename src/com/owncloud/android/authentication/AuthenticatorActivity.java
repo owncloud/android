@@ -23,9 +23,6 @@
 
 package com.owncloud.android.authentication;
 
-import java.security.cert.X509Certificate;
-import java.util.Map;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
@@ -92,6 +89,9 @@ import com.owncloud.android.ui.dialog.SamlWebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
 import com.owncloud.android.utils.DisplayUtils;
+
+import java.security.cert.X509Certificate;
+import java.util.Map;
 
 /**
  * This Activity is used to add an ownCloud account to the App
@@ -250,8 +250,32 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         
         /// initialize general UI elements
         initOverallUi();
-        
+
         mOkButton = findViewById(R.id.buttonOK);
+        mOkButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                onOkClick();
+            }
+        });
+
+        findViewById(R.id.centeredRefreshButton).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                checkOcServer();
+            }
+        });
+
+        findViewById(R.id.embeddedRefreshButton).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                checkOcServer();
+            }
+        });
+
 
         /// initialize block to be moved to single Fragment to check server and get info about it 
         initServerPreFragment(savedInstanceState);
@@ -683,7 +707,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         
         mHostUrlInput.removeTextChangedListener(mHostUrlInputWatcher);
         mHostUrlInput.setOnFocusChangeListener(null);
-        
+
         super.onPause();
     }
     
@@ -723,7 +747,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mOAuthTokenEndpointText.getText().toString().trim());
         
         getServerInfoIntent.putExtra(
-                OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS, 
+                OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
                 queryParameters);
         
         if (mOperationsServiceBinder != null) {
@@ -782,8 +806,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showRefreshButton(false);
 
         if (uri.length() != 0) {
+            uri = stripIndexPhpOrAppsFiles(uri, mHostUrlInput);
+
             // Handle internationalized domain names
-            uri = DisplayUtils.convertIdn(uri, true);
+            try {
+                uri = DisplayUtils.convertIdn(uri, true);
+            } catch (IllegalArgumentException ex) {
+                // Let Owncloud library check the error of the malformed URI
+            }
 
             mServerStatusText = R.string.auth_testing_connection;
             mServerStatusIcon = R.drawable.progress_small;
@@ -792,8 +822,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Intent getServerInfoIntent = new Intent();
             getServerInfoIntent.setAction(OperationsService.ACTION_GET_SERVER_INFO);
             getServerInfoIntent.putExtra(
-                OperationsService.EXTRA_SERVER_URL,
-                normalizeUrlSuffix(uri)
+                    OperationsService.EXTRA_SERVER_URL,
+                    normalizeUrlSuffix(uri)
             );
             if (mOperationsServiceBinder != null) {
                 mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
@@ -870,10 +900,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * is postponed until it is available.
      * 
      * IMPORTANT ENTRY POINT 4
-     * 
-     * @param view      OK button
      */
-    public void onOkClick(View view) {
+    public void onOkClick() {
         // this check should be unnecessary
         if (mServerInfo.mVersion == null || 
                 !mServerInfo.mVersion.isVersionValid()  || 
@@ -1126,6 +1154,17 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         return url;
     }
 
+    private String stripIndexPhpOrAppsFiles(String url, EditText mHostUrlInput) {
+        if (url.endsWith("/index.php")) {
+            url = url.substring(0, url.lastIndexOf("/index.php"));
+            mHostUrlInput.setText(url);
+        } else if (url.contains("/index.php/apps/")) {
+            url = url.substring(0, url.lastIndexOf("/index.php/apps/"));
+            mHostUrlInput.setText(url);
+        }
+
+        return url;
+    }
 
     // TODO remove, if possible
     private String trimUrlWebdav(String url){       
@@ -1146,7 +1185,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         switch (result.getCode()) {
         case OK_SSL:
-            mServerStatusIcon = android.R.drawable.ic_secure;
+            mServerStatusIcon = R.drawable.ic_lock;
             mServerStatusText = R.string.auth_secure_connection;
             break;
 
@@ -1157,7 +1196,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mServerStatusIcon = R.drawable.ic_ok;
             } else {
                 mServerStatusText = R.string.auth_nossl_plain_ok_title;
-                mServerStatusIcon = android.R.drawable.ic_partial_secure;
+                mServerStatusIcon = R.drawable.ic_lock_open;
             }
             break;
 
@@ -1207,7 +1246,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerStatusText = R.string.auth_unknown_error_title;
             break;
         case OK_REDIRECT_TO_NON_SECURE_CONNECTION:
-            mServerStatusIcon = android.R.drawable.ic_partial_secure;
+            mServerStatusIcon = R.drawable.ic_lock_open;
             mServerStatusText = R.string.auth_redirect_non_secure_connection_title;
             break;
         default:
@@ -1227,7 +1266,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         switch (result.getCode()) {
         case OK_SSL:
-            mAuthStatusIcon = android.R.drawable.ic_secure;
+            mAuthStatusIcon = R.drawable.ic_lock;
             mAuthStatusText = R.string.auth_secure_connection;
             break;
 
@@ -1238,7 +1277,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mAuthStatusIcon = R.drawable.ic_ok;
             } else {
                 mAuthStatusText = R.string.auth_nossl_plain_ok_title;
-                mAuthStatusIcon = android.R.drawable.ic_partial_secure;
+                mAuthStatusIcon = R.drawable.ic_lock_open;
             }
             break;
 
@@ -1356,6 +1395,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     public void onAuthenticatorTaskCallback(RemoteOperationResult result) {
         mWaitingForOpId = Long.MAX_VALUE;
         dismissDialog(WAIT_DIALOG_TAG);
+        mAsyncTask = null;
 
         if (result.isSuccess()) {
             Log_OC.d(TAG, "Successful access - time to save the account");
@@ -1605,18 +1645,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mRefreshButton.setVisibility(View.GONE);
         }
     }
-
-    /**
-     * Called when the refresh button in the input field for ownCloud host is clicked.
-     * 
-     * Performs a new check on the URL in the input field.
-     * 
-     * @param view      Refresh 'button'
-     */
-    public void onRefreshClick(View view) {
-        checkOcServer();
-    }
-
 
     /**
      * Called when the eye icon in the password field is clicked.

@@ -1,3 +1,56 @@
+## 1.9.1 (February 2016)
+- Set and edit permissions on internal shared data
+- Instant uploads: avoid file duplications, set policy in app settings
+- Control duplication of files uploaded via 'Upload' button
+- Select view mode: either list or grid per folder
+- More Material Design: buttons and checkboxes
+- Fixed battery drain in automatic synchronization
+- Security fixes related to passcode
+- Wording fixes
+
+## 1.9.0 (December 2015)
+- Share privately with users or groups in your server
+- Share link with password protection and expiration date
+- Fully sync a folder in two ways (manually)
+- Detect share configuration in server
+- Fingerprints in untrusted certificate dialog
+- Thumbnail in details view
+- OC color in notifications
+- Fixed video preview
+- Fixed sorting with accents
+- Error shown when no app can "open with" a file
+- Fixed relative date in some languages
+- Media scanner triggered after uploads
+
+## 1.8.0 (September 2015)
+- New MATERIAL DESIGN theme
+- Updated FILE TYPE ICONS
+- Preview TXT files within the app
+- COPY files & folders
+- Preview the full file/folder name from the long press menu
+- Set a file as FAVORITE (kept-in-sync) from the CONTEXT MENU
+- Updated CONFLICT RESOLUTION dialog (wording)
+- Updated background for images with TRANSPARENCY in GALLERY
+- Hidden files will not enforce list view instead of GRID VIEW (folders from Picasa & others)
+- Security:
+  + Updated network stack with security fixes (Jackrabbit 2.10.1)
+- Bugs fixed:
+  + Fixed crash when ETag is lost
+  + Passcode creation not restarted on device rotation
+  + Recovered share icon shown on folders 'shared with me'
+  + User name added to subject when sending a share link through e-mail (fixed on SAMLed apps)
+
+## 1.7.2 (July 2015)
+- New navigation drawer
+- Improved Passcode
+- Automatic grid view just for folders full of images
+- More characters allowed in file names
+- Support for servers in same domain, different path
+- Bugs fixed:
+  + Frequent crashes in folder with several images
+  + Sync error in servers with huge quota and external storage enable
+  + Share by link error 
+  + Some other crashes and minor bugs
 
 ## 1.7.1 (April 2015)
 
