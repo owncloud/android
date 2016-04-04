@@ -51,6 +51,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
     private static final String TAG = DrawerActivity.class.getSimpleName();
     private static final String KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE";
+    private static final String KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM";
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
 
     /**
@@ -77,6 +78,22 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * Flag to signal if the account chooser is active.
      */
     private boolean mIsAccountChooserActive;
+
+    /**
+     * Id of the checked menu item.
+     */
+    private int mCheckedMenuItem = Menu.NONE;
+
+    /**
+     * Initializes the drawer, its content and highlights the menu item with the given id.
+     * This method needs to be called after the content view has been set.
+     *
+     * @param menuItemId the menu item to be checked/highlighted
+     */
+    protected void setupDrawer(int menuItemId) {
+        setupDrawer();
+        setDrawerMenuItemChecked(menuItemId);
+    }
 
     /**
      * Initializes the drawer and its content.
@@ -142,6 +159,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         switch (menuItem.getItemId()) {
                             case R.id.nav_all_files:
                                 menuItem.setChecked(true);
+                                mCheckedMenuItem = menuItem.getItemId();
+
                                 allFilesOption();
                                 break;
                             case R.id.nav_uploads:
@@ -239,7 +258,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     public void updateAccountList() {
         Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
-        if(accounts.length > 0 && mNavigationView != null) {
+        if (accounts.length > 0 && mNavigationView != null) {
             repopulateAccountList(accounts);
             setUsernameInDrawer(AccountUtils.getCurrentOwnCloudAccount(this));
         }
@@ -356,12 +375,27 @@ public abstract class DrawerActivity extends ToolbarActivity {
         }
     }
 
+    /**
+     * checks/highlights the provided menu item if the drawer has been initialized and the menu item exists.
+     *
+     * @param menuItemId the menu item to be highlighted
+     */
+    protected void setDrawerMenuItemChecked(int menuItemId) {
+        if (mNavigationView.getMenu() != null && mNavigationView.getMenu().findItem(menuItemId) != null) {
+            mNavigationView.getMenu().findItem(menuItemId).setChecked(true);
+            mCheckedMenuItem = menuItemId;
+        } else {
+            Log_OC.w(TAG, "setDrawerMenuItemChecked has been called with invalid menu-item-ID");
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
             mIsAccountChooserActive = savedInstanceState.getBoolean(KEY_IS_ACCOUNT_CHOOSER_ACTIVE, false);
+            mCheckedMenuItem = savedInstanceState.getInt(KEY_CHECKED_MENU_ITEM, Menu.NONE);
         }
     }
 
@@ -370,6 +404,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         super.onSaveInstanceState(outState);
 
         outState.putBoolean(KEY_IS_ACCOUNT_CHOOSER_ACTIVE, mIsAccountChooserActive);
+        outState.putInt(KEY_CHECKED_MENU_ITEM, mCheckedMenuItem);
     }
 
     @Override
@@ -377,9 +412,15 @@ public abstract class DrawerActivity extends ToolbarActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         mIsAccountChooserActive = savedInstanceState.getBoolean(KEY_IS_ACCOUNT_CHOOSER_ACTIVE, false);
+        mCheckedMenuItem = savedInstanceState.getInt(KEY_CHECKED_MENU_ITEM, Menu.NONE);
 
         // (re-)setup drawer state
         showMenu();
+
+        // check/highlight the menu item if present
+        if (mCheckedMenuItem > Menu.NONE || mCheckedMenuItem < Menu.NONE) {
+            setDrawerMenuItemChecked(mCheckedMenuItem);
+        }
     }
 
     @Override
@@ -413,6 +454,12 @@ public abstract class DrawerActivity extends ToolbarActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setDrawerMenuItemChecked(mCheckedMenuItem);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -424,7 +471,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 && data.getBooleanExtra(ManageAccountsActivity.KEY_ACCOUNT_LIST_CHANGED, false)) {
 
             // current account has changed
-            if(data.getBooleanExtra(ManageAccountsActivity.KEY_CURRENT_ACCOUNT_CHANGED, false)) {
+            if (data.getBooleanExtra(ManageAccountsActivity.KEY_CURRENT_ACCOUNT_CHANGED, false)) {
                 setAccount(AccountUtils.getCurrentOwnCloudAccount(this));
                 restart();
             } else {
@@ -443,11 +490,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
         return ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(id);
     }
 
-    protected void restart() {
-        Intent i = new Intent(this, FileDisplayActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-    }
+    /**
+     * restart helper method which is called after a changing the current account.
+     */
+    protected abstract void restart();
 
     @Override
     protected void onAccountCreationSuccessful(AccountManagerFuture<Bundle> future) {
