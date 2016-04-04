@@ -25,10 +25,12 @@ import android.accounts.AccountManagerFuture;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +46,9 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.TextDrawable;
 import com.owncloud.android.utils.BitmapUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Base class to handle setup of the drawer implementation.
  */
@@ -53,6 +58,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private static final String KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE";
     private static final String KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM";
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
+    private static final int MENU_ORDER_ACCOUNT = 1;
+    private static final int MENU_ORDER_ACCOUNT_FUNCTION = 2;
 
     /**
      * Reference to the drawer layout.
@@ -70,7 +77,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private NavigationView mNavigationView;
 
     /**
-     * Reference to the account chooser toogle.
+     * Reference to the account chooser toggle.
      */
     private ImageView mAccountChooserToggle;
 
@@ -276,21 +283,29 @@ public abstract class DrawerActivity extends ToolbarActivity {
         // add all accounts to list
         for (int i = 0; i < accounts.length; i++) {
             try {
-                int[] rgb = BitmapUtils.calculateRGB(accounts[i].name);
-                TextDrawable icon = new TextDrawable(accounts[i].name.substring(0, 1).toUpperCase()
-                        , rgb[0], rgb[1], rgb[2]);
-                mNavigationView.getMenu().add(R.id.drawer_menu_accounts, Menu.NONE, 1, accounts[i].name).setIcon(icon);
+                mNavigationView.getMenu().add(
+                        R.id.drawer_menu_accounts,
+                        Menu.NONE,
+                        MENU_ORDER_ACCOUNT,
+                        accounts[i].name)
+                        .setIcon(createAvatar(accounts[i].name, 16));
             } catch (Exception e) {
                 Log_OC.e(TAG, "Error calculating RGB value for account menu item.", e);
-                mNavigationView.getMenu().add(R.id.drawer_menu_accounts, Menu.NONE, 1, accounts[i].name).setIcon(R
-                        .drawable.ic_account_circle);
+                mNavigationView.getMenu().add(
+                        R.id.drawer_menu_accounts,
+                        Menu.NONE,
+                        MENU_ORDER_ACCOUNT,
+                        accounts[i].name)
+                        .setIcon(R.drawable.ic_account_circle);
             }
         }
 
         // re-add add-account and manage-accounts
-        mNavigationView.getMenu().add(R.id.drawer_menu_accounts, R.id.drawer_menu_account_add, 2,
+        mNavigationView.getMenu().add(R.id.drawer_menu_accounts, R.id.drawer_menu_account_add,
+                MENU_ORDER_ACCOUNT_FUNCTION,
                 getResources().getString(R.string.prefs_add_account)).setIcon(R.drawable.ic_account_plus);
-        mNavigationView.getMenu().add(R.id.drawer_menu_accounts, R.id.drawer_menu_account_manage, 2,
+        mNavigationView.getMenu().add(R.id.drawer_menu_accounts, R.id.drawer_menu_account_manage,
+                MENU_ORDER_ACCOUNT_FUNCTION,
                 getResources().getString(R.string.drawer_manage_accounts)).setIcon(R.drawable.ic_settings);
 
         // adding sets menu group back to visible, so safety check and setting invisible
@@ -322,10 +337,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     protected void setUsernameInDrawer(Account account) {
         if (mDrawerLayout != null && account != null) {
-            TextView username = (TextView) ((NavigationView) findViewById(R.id.nav_view))
-                    .getHeaderView(0).findViewById(R.id.drawer_username);
-            TextView usernameFull = (TextView) ((NavigationView) findViewById(R.id.nav_view))
-                .getHeaderView(0).findViewById(R.id.drawer_username_full);
+            TextView username = (TextView) findNavigationViewChildById(R.id.drawer_username);
+            TextView usernameFull = (TextView) findNavigationViewChildById(R.id.drawer_username_full);
             usernameFull.setText(account.name);
             try {
                 OwnCloudAccount oca = new OwnCloudAccount(account, this);
@@ -338,19 +351,33 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 username.setText(account.name.substring(0, lastAtPos));
             }
 
-            ImageView userIcon = (ImageView) ((NavigationView) findViewById(R.id.nav_view))
-                    .getHeaderView(0).findViewById(R.id.drawer_usericon);
+            ImageView userIcon = (ImageView) findNavigationViewChildById(R.id.drawer_usericon);
             try {
-                int[] rgb = BitmapUtils.calculateRGB(account.name);
-                TextDrawable icon = new TextDrawable(
-                        account.name.substring(0, 1).toUpperCase(), rgb[0], rgb[1], rgb[2]);
-                userIcon.setImageDrawable(icon);
+                userIcon.setImageDrawable(
+                        createAvatar(
+                                account.name,
+                                getResources().getDimension(R.dimen.nav_drawer_header_avatar_radius)
+                        )
+                );
             } catch (Exception e) {
                 Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
                 userIcon.setImageResource(R.drawable.ic_account_circle);
             }
         }
     }
+
+    @NonNull
+    private TextDrawable createAvatar(String accountName, float radiusInDp) throws UnsupportedEncodingException,
+            NoSuchAlgorithmException {
+        int[] rgb = BitmapUtils.calculateRGB(accountName);
+        float radiusInPx = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                radiusInDp,
+                getResources().getDisplayMetrics());
+        return new TextDrawable(
+                accountName.substring(0, 1).toUpperCase(), rgb[0], rgb[1], rgb[2], radiusInPx);
+    }
+
 
     /**
      * Toggle between standard menu and account list including saving the state.
