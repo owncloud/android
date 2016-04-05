@@ -31,14 +31,10 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.ui.TextDrawable;
 import com.owncloud.android.ui.activity.ManageAccountsActivity;
-import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -46,7 +42,7 @@ import java.util.List;
  */
 public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
     private static final String TAG = AccountListAdapter.class.getSimpleName();
-
+    private float mAccountAvatarRadiusDimension;
     private final Context mContext;
     private List<AccountListItem> mValues;
     private AccountListAdapterListener mListener;
@@ -56,6 +52,7 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
         this.mContext = context;
         this.mValues = values;
         this.mListener = (AccountListAdapterListener) context;
+        this.mAccountAvatarRadiusDimension = context.getResources().getDimension(R.dimen.nav_drawer_menu_avatar_radius);
     }
 
     public void setAccountList(List<AccountListItem> values) {
@@ -108,9 +105,10 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                 viewHolder.textViewItem.setTag(account.name);
 
                 try {
-                    int[] rgb = BitmapUtils.calculateRGB(account.name);
-                    TextDrawable icon = new TextDrawable(account.name.substring(0, 1).toUpperCase()
-                            , rgb[0], rgb[1], rgb[2]);
+                    TextDrawable icon = TextDrawable.createAvatar(
+                            account.name,
+                            mAccountAvatarRadiusDimension
+                    );
                     viewHolder.imageViewItem.setImageDrawable(icon);
                 } catch (Exception e) {
                     Log_OC.e(TAG, "Error calculating RGB value for account list item.", e);
