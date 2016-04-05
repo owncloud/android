@@ -24,9 +24,12 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -41,6 +44,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.TextDrawable;
@@ -267,7 +271,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
         if (accounts.length > 0 && mNavigationView != null) {
             repopulateAccountList(accounts);
-            setUsernameInDrawer(AccountUtils.getCurrentOwnCloudAccount(this));
+            setAccountInDrawer(AccountUtils.getCurrentOwnCloudAccount(this));
         }
     }
 
@@ -337,7 +341,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
      *
      * @param account the account to be set in the drawer
      */
-    protected void setUsernameInDrawer(Account account) {
+    protected void setAccountInDrawer(Account account) {
         if (mDrawerLayout != null && account != null) {
             TextView username = (TextView) findNavigationViewChildById(R.id.drawer_username);
             TextView usernameFull = (TextView) findNavigationViewChildById(R.id.drawer_username_full);
@@ -354,16 +358,62 @@ public abstract class DrawerActivity extends ToolbarActivity {
             }
 
             ImageView userIcon = (ImageView) findNavigationViewChildById(R.id.drawer_usericon);
-            try {
-                userIcon.setImageDrawable(
-                        createAvatar(
-                                account.name,
-                                getResources().getDimension(R.dimen.nav_drawer_header_avatar_radius)
-                        )
-                );
-            } catch (Exception e) {
-                Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
-                userIcon.setImageResource(R.drawable.ic_account_circle);
+            setAvatarInDrawer(account);
+        }
+    }
+
+    /**
+     * sets the avatar of the current account in the drawer in case the drawer is available.
+     *
+     * @param account the account to be set in the drawer
+     */
+    private void setAvatarInDrawer(Account account) {
+        if (mDrawerLayout != null && account != null) {
+            ImageView userIcon = (ImageView) findNavigationViewChildById(R.id.drawer_usericon);
+            int lastAtPos = account.name.lastIndexOf("@");
+            String username = account.name.substring(0, lastAtPos);
+
+            // Thumbnail in Cache?
+            Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache("a_" + username);
+
+            if (thumbnail != null) {
+                RoundedBitmapDrawable roundedAvatar = RoundedBitmapDrawableFactory.create
+                        (MainApp.getAppContext().getResources(), thumbnail);
+                roundedAvatar.setCircular(true);
+                userIcon.setImageDrawable(roundedAvatar);
+            } else {
+                // generate new avatar
+                if (ThumbnailsCacheManager.cancelPotentialAvatarWork(username, userIcon)) {
+                    final ThumbnailsCacheManager.AvatarGenerationTask task =
+                            new ThumbnailsCacheManager.AvatarGenerationTask(
+                                    userIcon, getStorageManager(), account
+                            );
+                    if (thumbnail == null) {
+                        try {
+                            userIcon.setImageDrawable(
+                                    createAvatar(
+                                            account.name,
+                                            getResources().getDimension(R.dimen.nav_drawer_header_avatar_radius)
+                                    )
+                            );
+                        } catch (Exception e) {
+                            Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
+                            userIcon.setImageResource(R.drawable.ic_account_circle);
+                        }
+                    } else {
+                        final ThumbnailsCacheManager.AsyncAvatarDrawable asyncDrawable =
+                                new ThumbnailsCacheManager.AsyncAvatarDrawable(
+                                        getResources(),
+                                        thumbnail,
+                                        task
+                                );
+                        RoundedBitmapDrawable roundedAvatar = RoundedBitmapDrawableFactory.create
+                                (MainApp.getAppContext().getResources(), asyncDrawable.getBitmap());
+                        roundedAvatar.setCircular(true);
+                        userIcon.setImageDrawable(roundedAvatar);
+                    }
+                    task.execute(username);
+                }
             }
         }
     }

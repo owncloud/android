@@ -35,7 +35,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
-import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncDrawable;
+import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncThumbnailDrawable;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
@@ -120,14 +120,14 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
                 fileIcon.setImageBitmap(thumbnail);
             } else {
                 // generate new Thumbnail
-                if (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon)) {
+                if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                     final ThumbnailsCacheManager.ThumbnailGenerationTask task = 
                             new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mStorageManager, 
                                     mAccount);
                     if (thumbnail == null) {
                         thumbnail = ThumbnailsCacheManager.mDefaultImg;
                     }
-                    final AsyncDrawable asyncDrawable = new AsyncDrawable(
+                    final AsyncThumbnailDrawable asyncDrawable = new AsyncThumbnailDrawable(
                             mContext.getResources(), 
                             thumbnail, 
                             task

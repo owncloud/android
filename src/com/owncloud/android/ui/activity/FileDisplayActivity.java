@@ -305,7 +305,7 @@ public class FileDisplayActivity extends HookActivity
             setFile(file);
 
             if (mAccountWasSet) {
-                setUsernameInDrawer(getAccount());
+                setAccountInDrawer(getAccount());
             }
 
             if (!stateWasRecovered) {
@@ -968,7 +968,7 @@ public class FileDisplayActivity extends HookActivity
                             }
 
                             if (synchFolderRemotePath.equals(OCFile.ROOT_PATH)) {
-                                setUsernameInDrawer(getAccount());
+                                setAccountInDrawer(getAccount());
                             }
                         }
 
