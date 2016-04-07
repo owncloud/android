@@ -1,4 +1,14 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.0.0'
+    }
+}
+
 apply plugin: 'com.android.application'
+
 
 repositories {
     mavenCentral()
@@ -6,13 +16,13 @@ repositories {
 
 dependencies {
     compile 'commons-httpclient:commons-httpclient:3.1'
-    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:support-v4:23.1.1'
     compile project(':')
 }
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     sourceSets {
         main {

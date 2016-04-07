@@ -4,7 +4,7 @@ android:
   components:
   - platform-tools
   - tools
-  - build-tools-23.0.2
+  - build-tools-23.0.3
   - android-23
   - sys-img-armeabi-v7a-android-23
 branches:
@@ -13,6 +13,8 @@ branches:
 before_install:
 - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   -c 20M
+- echo yes | android update sdk --filter extra-android-support --no-ui --force > /dev/null
+- echo yes | android update sdk --filter extra-android-m2repository --no-ui --force > /dev/null
 - emulator -avd test -no-skin -no-audio -no-window &
 - rm pom.xml
 - android update project -p .
