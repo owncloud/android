@@ -47,6 +47,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.TextDrawable;
+import com.owncloud.android.utils.BitmapUtils;
 
 /**
  * Base class to handle setup of the drawer implementation including user switching and avatar fetching and fallback
@@ -443,8 +444,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             } catch (Exception e) {
                 Log_OC.w(TAG, "Couldn't read display name of account; using account name instead");
 
-                int lastAtPos = account.name.lastIndexOf("@");
-                username.setText(account.name.substring(0, lastAtPos));
+                username.setText(AccountUtils.getUsernameOfAccount(account.name));
             }
 
             setAvatar(account, R.id.drawer_current_account, true);
@@ -460,23 +460,20 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     private void setAvatar(Account account, int avatarViewId, boolean currentAccount) {
         if (mDrawerLayout != null && account != null) {
-            int lastAtPos = account.name.lastIndexOf("@");
-            String username = account.name.substring(0, lastAtPos);
 
             ImageView userIcon = (ImageView) findNavigationViewChildById(avatarViewId);
             userIcon.setContentDescription(account.name);
 
             // Thumbnail in Cache?
-            Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache("a_" + username);
+            Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache("a_" + account.name);
 
             if (thumbnail != null) {
-                RoundedBitmapDrawable roundedAvatar = RoundedBitmapDrawableFactory.create
-                        (MainApp.getAppContext().getResources(), thumbnail);
-                roundedAvatar.setCircular(true);
-                userIcon.setImageDrawable(roundedAvatar);
+                userIcon.setImageDrawable(
+                        BitmapUtils.bitmapToCircularBitmapDrawable(MainApp.getAppContext().getResources(), thumbnail)
+                );
             } else {
                 // generate new avatar
-                if (ThumbnailsCacheManager.cancelPotentialAvatarWork(username, userIcon)) {
+                if (ThumbnailsCacheManager.cancelPotentialAvatarWork(account.name, userIcon)) {
                     final ThumbnailsCacheManager.AvatarGenerationTask task =
                             new ThumbnailsCacheManager.AvatarGenerationTask(
                                     userIcon, getStorageManager(), account
@@ -509,12 +506,12 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                         thumbnail,
                                         task
                                 );
-                        RoundedBitmapDrawable roundedAvatar = RoundedBitmapDrawableFactory.create
-                                (MainApp.getAppContext().getResources(), asyncDrawable.getBitmap());
-                        roundedAvatar.setCircular(true);
-                        userIcon.setImageDrawable(roundedAvatar);
+                        userIcon.setImageDrawable(
+                                BitmapUtils.bitmapToCircularBitmapDrawable(
+                                        MainApp.getAppContext().getResources(), asyncDrawable.getBitmap())
+                        );
                     }
-                    task.execute(username);
+                    task.execute(account.name);
                 }
             }
         }
@@ -528,20 +525,17 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     private void setAvatar(Account account, MenuItem menuItem) {
         if (mDrawerLayout != null && account != null) {
-            int lastAtPos = account.name.lastIndexOf("@");
-            String username = account.name.substring(0, lastAtPos);
 
             // Thumbnail in Cache?
-            Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache("a_" + username);
+            Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache("a_" + account.name);
 
             if (thumbnail != null) {
-                RoundedBitmapDrawable roundedAvatar = RoundedBitmapDrawableFactory.create
-                        (MainApp.getAppContext().getResources(), thumbnail);
-                roundedAvatar.setCircular(true);
-                menuItem.setIcon(roundedAvatar);
+                menuItem.setIcon(
+                        BitmapUtils.bitmapToCircularBitmapDrawable(MainApp.getAppContext().getResources(), thumbnail)
+                );
             } else {
                 // generate new avatar
-                if (ThumbnailsCacheManager.cancelPotentialAvatarWork(username, menuItem)) {
+                if (ThumbnailsCacheManager.cancelPotentialAvatarWork(account.name, menuItem)) {
                     final ThumbnailsCacheManager.AvatarGenerationTask task =
                             new ThumbnailsCacheManager.AvatarGenerationTask(
                                     menuItem, getStorageManager(), account
@@ -565,12 +559,12 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                         thumbnail,
                                         task
                                 );
-                        RoundedBitmapDrawable roundedAvatar = RoundedBitmapDrawableFactory.create
-                                (MainApp.getAppContext().getResources(), asyncDrawable.getBitmap());
-                        roundedAvatar.setCircular(true);
-                        menuItem.setIcon(roundedAvatar);
+                        menuItem.setIcon(
+                                BitmapUtils.bitmapToCircularBitmapDrawable(
+                                        MainApp.getAppContext().getResources(), asyncDrawable.getBitmap())
+                        );
                     }
-                    task.execute(username);
+                    task.execute(account.name);
                 }
             }
         }
