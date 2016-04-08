@@ -25,6 +25,9 @@
     android:filterTouchesWhenObscured="true"
     >
 
+    <include
+        layout="@layout/toolbar_standard" />
+
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
