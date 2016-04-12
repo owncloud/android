@@ -20,6 +20,7 @@
 
 package com.owncloud.android.test.ui.models;
 
+
 import java.util.List;
 
 import io.appium.java_client.android.AndroidDriver;
@@ -28,6 +29,7 @@ import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.PageFactory;
@@ -37,6 +39,19 @@ import com.owncloud.android.test.ui.actions.Actions;
 
 public class FileListView {
 	final AndroidDriver driver;
+	
+	//this description is shown when list or grid view. 
+	//Maybe it should be change
+	/*
+	@CacheLookup
+	@AndroidFindBy(uiAutomator = "new UiSelector()"
+			+ ".description(\"List Layout\")")
+	private AndroidElement filesView;
+	*/
+	
+	@AndroidFindBy(uiAutomator = "new UiSelector()"
+			+ ".resourceId(\"com.owncloud.android:id/ListLayout\")")
+	private AndroidElement filesView;
 	
 	@AndroidFindBy(uiAutomator = "new UiSelector()"
 			+ ".description(\"More options\")")
@@ -100,6 +115,7 @@ public class FileListView {
 	public FileListView (AndroidDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+		System.out.println(filesView.getLocation().getX());
 	}
 
 	public MenuList clickOnMenuButton () {
@@ -213,6 +229,20 @@ public class FileListView {
 	
 	public AndroidElement getFloatingButton () {
 		return floatingButton;
+	}
+	
+	public Drawer swipeToShowDrawer () throws InterruptedException {
+
+		Point listLocation = filesView.getLocation();
+		Dimension dimensions = filesView.getSize(); 
+		driver.swipe(listLocation.getX()+1,
+				listLocation.getY() + dimensions.getHeight()/2,
+				listLocation.getX()+(dimensions.getWidth()/2),
+				listLocation.getY() + dimensions.getHeight()/2, 1000);
+		Drawer drawer = new Drawer(driver);
+		return drawer;
 }
+
+
 
 }

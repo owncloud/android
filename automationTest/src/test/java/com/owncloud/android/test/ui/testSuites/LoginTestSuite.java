@@ -35,6 +35,7 @@ import org.openqa.selenium.ScreenOrientation;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
+import com.owncloud.android.test.ui.models.Drawer;
 import com.owncloud.android.test.ui.models.LoginForm;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.MenuList;
@@ -60,8 +61,11 @@ public class LoginTestSuite{
 		
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 					Config.password, Config.isTrusted, driver);
-
-		fileListView.getFloatingButton().click();
+		//To click in the FAB
+		//fileListView.getFloatingButton().click();
+		//To take the drawer off and click on one of the options
+		//Drawer dr = fileListView.swipeToShowDrawer();
+		//dr.clickOnSettingsButton();
 		common.assertIsInFileListView();
 	}
 	
