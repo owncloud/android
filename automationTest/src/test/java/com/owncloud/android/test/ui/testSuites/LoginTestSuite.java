@@ -58,8 +58,10 @@ public class LoginTestSuite{
 	public void test1LoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		
-		Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
+		FileListView fileListView = Actions.login(Config.URL, Config.user,
+					Config.password, Config.isTrusted, driver);
+
+		fileListView.getFloatingButton().click();
 		common.assertIsInFileListView();
 	}
 	

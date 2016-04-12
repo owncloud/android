@@ -82,6 +82,9 @@ public class FileListView {
 	@AndroidFindBy(uiAutomator = "new UiSelector().className(\"android.widget.FrameLayout\").index(0)")
 	private AndroidElement deviceScreen;
 	
+	@AndroidFindBy(id = "com.owncloud.android:id/fab_expand_menu_button")
+	private AndroidElement floatingButton;
+	
 	private AndroidElement fileElement;
 	
 	private AndroidElement fileElementLayout;
@@ -207,5 +210,9 @@ public class FileListView {
 		driver.swipe(listLocation.getX(),listLocation.getY(), 
 				listLocation.getX(),listLocation.getY()+1000, 5000);
 	}
+	
+	public AndroidElement getFloatingButton () {
+		return floatingButton;
+}
 
 }
