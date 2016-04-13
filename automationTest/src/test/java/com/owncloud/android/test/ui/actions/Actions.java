@@ -79,6 +79,7 @@ public class Actions {
 		loginForm.typePassword(password);
 		//TODO. Assert related to check the connection?
 		loginForm.clickOnConnectButton();
+		//Not working yet, no wait the pop up
 		if (driver.getCapabilities().getCapability(CapabilityType.VERSION).equals("6.0")) {
 			//loginForm.clickOnConnectButton();
 			wait.wait(2000);
