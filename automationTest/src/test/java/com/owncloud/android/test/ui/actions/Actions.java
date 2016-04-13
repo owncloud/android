@@ -25,6 +25,7 @@ import java.util.HashMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebElement;
 
 import io.appium.java_client.android.AndroidDriver;
@@ -33,6 +34,7 @@ import io.appium.java_client.android.AndroidElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.owncloud.android.test.ui.models.AllowDenyView;
 import com.owncloud.android.test.ui.models.CertificatePopUp;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.GmailSendMailView;
@@ -55,8 +57,9 @@ public class Actions {
 					throws InterruptedException {
 		LoginForm loginForm = new LoginForm(driver);
 		CertificatePopUp certificatePopUp = loginForm.typeHostUrl(url);	
+		WebDriverWait wait = new WebDriverWait(driver, 5);
 		if(!isTrusted){
-			WebDriverWait wait = new WebDriverWait(driver, 5);
+			
 			//sometimes the certificate has been already accept 
 			//and it doesn't appear again
 			try {
@@ -75,8 +78,18 @@ public class Actions {
 		loginForm.typeUserName(user);
 		loginForm.typePassword(password);
 		//TODO. Assert related to check the connection?
-		return loginForm.clickOnConnectButton();
+		loginForm.clickOnConnectButton();
+		if (driver.getCapabilities().getCapability(CapabilityType.VERSION).equals("6.0")) {
+			//loginForm.clickOnConnectButton();
+			wait.wait(2000);
+			AllowDenyView allowdenyview = new AllowDenyView (driver);
+			allowdenyview.clickOnAcceptButton();
+		} //else
+			return new FileListView(driver);
+		//return loginForm.clickOnConnectButton();
+			
 	}
+	
 
 	public static WaitAMomentPopUp createFolder(String folderName,
 			FileListView fileListView){

@@ -55,7 +55,7 @@ public class Common{
 		File app = new File(appDir,"ownCloud.apk");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability ( CapabilityType.PLATFORM, "Android");
-		capabilities.setCapability ( CapabilityType.VERSION, "6.0");
+		capabilities.setCapability ( CapabilityType.VERSION, "4.3");
 		capabilities.setCapability ("deviceName", "test");
 		capabilities.setCapability ("app", app.getAbsolutePath());
 		capabilities.setCapability ("appPackage", "com.owncloud.android");
