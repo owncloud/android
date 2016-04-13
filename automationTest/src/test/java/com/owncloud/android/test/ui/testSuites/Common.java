@@ -35,6 +35,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -53,15 +54,16 @@ public class Common{
 		File appDir = new File(rootPath,"src/test/resources");
 		File app = new File(appDir,"ownCloud.apk");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("platformName", "Android");
-		capabilities.setCapability("deviceName", "test");
-		capabilities.setCapability("app", app.getAbsolutePath());
-		capabilities.setCapability("appPackage", "com.owncloud.android");
-		capabilities.setCapability("appActivity", 
+		capabilities.setCapability ( CapabilityType.PLATFORM, "Android");
+		capabilities.setCapability ( CapabilityType.VERSION, "6.0");
+		capabilities.setCapability ("deviceName", "test");
+		capabilities.setCapability ("app", app.getAbsolutePath());
+		capabilities.setCapability ("appPackage", "com.owncloud.android");
+		capabilities.setCapability ("appActivity", 
 				".ui.activity.FileDisplayActivity");	
-		capabilities.setCapability("appWaitActivity", 
+		capabilities.setCapability ("appWaitActivity", 
 				".authentication.AuthenticatorActivity");
-		driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"),
+		driver = new AndroidDriver (new URL("http://127.0.0.1:4723/wd/hub"),
 				capabilities);
 		driver.manage().timeouts().implicitlyWait(waitingTime,
 				TimeUnit.SECONDS);
