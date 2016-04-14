@@ -144,9 +144,11 @@ public class LoginTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView();
 		
-		driver.rotate(ScreenOrientation.LANDSCAPE);
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
+		//driver.rotate(ScreenOrientation.LANDSCAPE);
+		//MenuList menu = fileListView.clickOnMenuButton();
+		//SettingsView settingsView = menu.clickOnSettingsButton();
+		Drawer dr = fileListView.swipeToShowDrawer();
+		SettingsView settingsView = dr.clickOnSettingsButton();
 		settingsView.tapOnAddAccount(1, 1000);
 		
 		LoginForm loginForm = new LoginForm(driver);
