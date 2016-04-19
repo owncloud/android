@@ -249,7 +249,7 @@ public class Preferences extends PreferenceActivity
         registerForContextMenu(getListView());
 
         pCode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
-        if (pCode != null){
+        if (pCode != null) {
             pCode.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -262,7 +262,11 @@ public class Preferences extends PreferenceActivity
                     );
                     startActivity(i);
 
-                    return true;
+                    startActivityForResult(i, incoming.booleanValue() ? ACTION_REQUEST_PASSCODE :
+                            ACTION_CONFIRM_PASSCODE);
+
+                    // Don't update just yet, we will decide on it in onActivityResult
+                    return false;
                 }
             });
 
