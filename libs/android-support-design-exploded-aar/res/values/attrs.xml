@@ -34,6 +34,8 @@
         <attr name="pressedTranslationZ" format="dimension"/>
         <!-- The width of the border around the FAB. -->
         <attr name="borderWidth" format="dimension"/>
+        <!-- Enable compat padding. -->
+        <attr name="useCompatPadding" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="ScrimInsetsFrameLayout">
@@ -62,37 +64,53 @@
     </declare-styleable>
 
     <declare-styleable name="TabLayout">
+        <!-- Color of the indicator used to show the currently selected tab. -->
         <attr name="tabIndicatorColor" format="color"/>
+        <!-- Height of the indicator used to show the currently selected tab. -->
         <attr name="tabIndicatorHeight" format="dimension"/>
+        <!-- Position in the Y axis from the starting edge that tabs should be positioned from. -->
         <attr name="tabContentStart" format="dimension"/>
-
+        <!-- Reference to a background to be applied to tabs. -->
         <attr name="tabBackground" format="reference"/>
-
+        <!-- The behavior mode for the Tabs in this layout -->
         <attr name="tabMode">
             <enum name="scrollable" value="0"/>
             <enum name="fixed" value="1"/>
         </attr>
-
-        <!-- Standard gravity constant that a child supplies to its parent.
-             Defines how the child view should be positioned, on both the X and Y axes,
-             within its enclosing layout. -->
+        <!-- Gravity constant for tabs. -->
         <attr name="tabGravity">
             <enum name="fill" value="0"/>
             <enum name="center" value="1"/>
         </attr>
-
+        <!-- The minimum width for tabs. -->
         <attr name="tabMinWidth" format="dimension"/>
+        <!-- The maximum width for tabs. -->
         <attr name="tabMaxWidth" format="dimension"/>
-
+        <!-- A reference to a TextAppearance style to be applied to tabs. -->
         <attr name="tabTextAppearance" format="reference"/>
+        <!-- The default text color to be applied to tabs. -->
         <attr name="tabTextColor" format="color"/>
+        <!-- The text color to be applied to the currently selected tab. -->
         <attr name="tabSelectedTextColor" format="color"/>
-
+        <!-- The preferred padding along the start edge of tabs. -->
         <attr name="tabPaddingStart" format="dimension"/>
+        <!-- The preferred padding along the top edge of tabs. -->
         <attr name="tabPaddingTop" format="dimension"/>
+        <!-- The preferred padding along the end edge of tabs. -->
         <attr name="tabPaddingEnd" format="dimension"/>
+        <!-- The preferred padding along the bottom edge of tabs. -->
         <attr name="tabPaddingBottom" format="dimension"/>
+        <!-- The preferred padding along all edges of tabs. -->
         <attr name="tabPadding" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="TabItem">
+        <!-- Text to display in the tab. -->
+        <attr name="android:text" />
+        <!-- Icon to display in the tab. -->
+        <attr name="android:icon" />
+        <!-- A reference to a layout resource to be displayed in the tab. -->
+        <attr name="android:layout" />
     </declare-styleable>
 
     <declare-styleable name="CoordinatorLayout">
@@ -162,6 +180,8 @@
         <attr name="hintTextAppearance" format="reference"/>
         <!-- The hint to display in the floating label -->
         <attr name="android:hint"/>
+        <!-- Whether the layout's floating label functionality is enabled -->
+        <attr name="hintEnabled" format="boolean"/>
         <!-- Whether the layout is laid out as if an error will be displayed -->
         <attr name="errorEnabled" format="boolean"/>
         <!-- TextAppearance of any error message displayed -->
@@ -260,7 +280,8 @@
              Lollipop with the correct setup. -->
         <attr name="statusBarScrim" format="color" />
         <!-- The id of the primary Toolbar child that you wish to use for the purpose of collapsing.
-             If you do not set this then the first Toolbar child found will be used. -->
+             This Toolbar descendant view does not need to be a direct child of the layout.
+             If you do not set this, the first direct Toolbar child found will be used. -->
         <attr name="toolbarId" format="reference"/>
 
         <!-- Specifies how the title should be positioned when collapsed. -->
@@ -331,6 +352,22 @@
         <!-- The multiplier used when layout_collapseMode is set to 'parallax'. The value should
              be between 0.0 and 1.0. -->
         <attr name="layout_collapseParallaxMultiplier" format="float"/>
+    </declare-styleable>
+
+    <declare-styleable name="BottomSheetBehavior_Params">
+        <!-- The height of the bottom sheet when it is collapsed. -->
+        <attr name="behavior_peekHeight" format="dimension"/>
+        <attr name="behavior_hideable" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="DesignTheme">
+        <!-- Theme to use for modal bottom sheet dialogs spawned from this theme. -->
+        <attr name="bottomSheetDialogTheme" format="reference" />
+        <!-- Style to use for modal bottom sheets in this theme. -->
+        <attr name="bottomSheetStyle" format="reference" />
+
+        <!-- Text color used to indicate an error has occurred. -->
+        <attr name="textColorError" format="color" />
     </declare-styleable>
 
 </resources>

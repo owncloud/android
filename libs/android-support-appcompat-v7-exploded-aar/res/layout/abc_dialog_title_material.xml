@@ -44,4 +44,4 @@ enabled.
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-</android.support.v7.widget.FitWindowsLinearLayout><!-- From: file:/usr/local/google/buildbot/src/googleplex-android/mnc-supportlib-release/frameworks/support/v7/appcompat/res/layout/abc_dialog_title_material.xml -->
+</android.support.v7.widget.FitWindowsLinearLayout>

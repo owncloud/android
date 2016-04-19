@@ -16,6 +16,7 @@
   -->
 
 <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?android:attr/borderlessButtonStyle"
     android:id="@+id/cancel_action"
     android:layout_width="48dp"
@@ -25,4 +26,4 @@
     android:layout_weight="1"
     android:src="@drawable/abc_ic_clear_mtrl_alpha"
     android:gravity="center"
-    android:visibility="gone"/><!-- From: file:/usr/local/google/buildbot/src/googleplex-android/mnc-supportlib-release/frameworks/support/v7/appcompat/res/layout/notification_media_cancel_action.xml -->
+    android:visibility="gone"/>

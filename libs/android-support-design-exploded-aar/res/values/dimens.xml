@@ -18,17 +18,17 @@
 
     <dimen name="design_fab_elevation">6dp</dimen>
     <dimen name="design_fab_translation_z_pressed">6dp</dimen>
-    <dimen name="design_fab_content_size">24dp</dimen>
+    <dimen name="design_fab_image_size">24dp</dimen>
     <dimen name="design_fab_size_normal">56dp</dimen>
     <dimen name="design_fab_size_mini">40dp</dimen>
     <dimen name="design_fab_border_width">0.5dp</dimen>
 
-    <dimen name="design_navigation_max_width">320dp</dimen>
+    <!-- 5 * standard increment (56dp) -->
+    <dimen name="design_navigation_max_width">280dp</dimen>
     <dimen name="design_navigation_elevation">16dp</dimen>
     <dimen name="design_navigation_icon_padding">32dp</dimen>
     <dimen name="design_navigation_icon_size">24dp</dimen>
     <dimen name="design_navigation_separator_vertical_padding">8dp</dimen>
-    <dimen name="design_navigation_padding_top_default">0dp</dimen>
     <dimen name="design_navigation_padding_bottom">8dp</dimen>
 
     <dimen name="design_tab_scrollable_min_width">72dp</dimen>
@@ -54,5 +54,8 @@
     <dimen name="design_snackbar_text_size">14sp</dimen>
 
     <dimen name="design_appbar_elevation">4dp</dimen>
+
+    <dimen name="design_bottom_sheet_modal_elevation">16dp</dimen>
+    <dimen name="design_bottom_sheet_modal_peek_height">256dp</dimen>
 
 </resources>

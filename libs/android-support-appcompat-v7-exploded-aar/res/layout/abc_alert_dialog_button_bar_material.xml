@@ -57,4 +57,3 @@
         android:layout_height="wrap_content" />
 
 </android.support.v7.widget.ButtonBarLayout>
-<!-- From: file:/usr/local/google/buildbot/src/googleplex-android/mnc-supportlib-release/frameworks/support/v7/appcompat/res/layout/abc_alert_dialog_button_bar_material.xml -->
