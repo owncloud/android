@@ -217,6 +217,9 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
                 } else {
                     result = new RemoteOperationResult(false, status, put.getResponseHeaders());
                 }
+                if (!result.isSuccess()) {
+                    break;
+                }
             }
 
         } catch (Exception e) {

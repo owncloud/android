@@ -145,7 +145,23 @@ public class AccountUtils {
         
         return baseurl;
     }
-    
+
+
+    /**
+     * Get the username corresponding to an OC account.
+     *
+     * @param account   An OC account
+     * @return          Username for the given account, extracted from the account.name
+     */
+    public static String getUsernameForAccount(Account account) {
+        String username = null;
+        try {
+            username = account.name.substring(0, account.name.lastIndexOf('@'));
+        } catch (Exception e) {
+            Log_OC.e(TAG, "Couldn't get a username for the given account", e);
+        }
+        return username;
+    }
 
     /**
      * 
@@ -168,7 +184,7 @@ public class AccountUtils {
         		account, 
         		AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
 
-        String username = account.name.substring(0, account.name.lastIndexOf('@'));
+        String username = AccountUtils.getUsernameForAccount(account);
 
         if (isOauth2) {    
             String accessToken = am.blockingGetAuthToken(
