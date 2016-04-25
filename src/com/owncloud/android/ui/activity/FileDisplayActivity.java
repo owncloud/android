@@ -581,7 +581,7 @@ public class FileDisplayActivity extends HookActivity
                 break;
             }
             case R.id.action_switch_view: {
-                if (isGridView()) {
+                /*if (isGridView()) {
                     item.setTitle(getString(R.string.action_switch_grid_view));
                     item.setIcon(ContextCompat.getDrawable(getApplicationContext(),
                             R.drawable.ic_view_module));
@@ -591,7 +591,8 @@ public class FileDisplayActivity extends HookActivity
                     item.setIcon(ContextCompat.getDrawable(getApplicationContext(),
                             R.drawable.ic_view_list));
                     getListOfFilesFragment().setGridAsPreferred();
-                }
+                }*/
+                // TODO : implement proper change layout view with preferences
                 return true;
             }
             default:
@@ -1829,10 +1830,6 @@ public class FileDisplayActivity extends HookActivity
 
     private void sortByName(boolean ascending) {
         getListOfFilesFragment().sortByName(ascending);
-    }
-
-    private boolean isGridView() {
-        return getListOfFilesFragment().isGridView();
     }
 
     public void allFilesOption() {
