@@ -25,7 +25,6 @@
 package com.owncloud.android.lib.common;
 
 public interface OwnCloudCredentials {
-	public static final String CREDENTIAL_CHARSET = "UTF-8";
 
 	public void applyTo(OwnCloudClient ownCloudClient);
 

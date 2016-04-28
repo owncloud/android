@@ -41,7 +41,7 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 	@Override
 	public void applyTo(OwnCloudClient client) {
         client.getParams().setAuthenticationPreemptive(false);
-        client.getParams().setCredentialCharset(CREDENTIAL_CHARSET);
+        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
         client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
         client.setFollowRedirects(false);
         
