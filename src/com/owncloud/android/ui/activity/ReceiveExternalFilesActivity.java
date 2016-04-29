@@ -36,6 +36,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
@@ -74,12 +75,21 @@ import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 
 /**
@@ -96,6 +106,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private AccountManager mAccountManager;
     private Stack<String> mParents;
     private ArrayList<Parcelable> mStreamsToUpload;
+    private String mSaveIntent;
     private String mUploadPath;
     private OCFile mFile;
 
@@ -159,33 +170,19 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     protected void setAccount(Account account, boolean savedAccount) {
-        if (somethingToUpload()) {
-            mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
-            Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
-            if (accounts.length == 0) {
-                Log_OC.i(TAG, "No ownCloud account is available");
-                showDialog(DIALOG_NO_ACCOUNT);
-            } else if (accounts.length > 1 && !mAccountSelected && !mAccountSelectionShowing) {
-                Log_OC.i(TAG, "More than one ownCloud is available");
-                showDialog(DIALOG_MULTIPLE_ACCOUNT);
-                mAccountSelectionShowing = true;
-            } else {
-                if (!savedAccount) {
-                    setAccount(accounts[0]);
-                }
-            }
-
-        } else if (getIntent().getStringExtra(Intent.EXTRA_TEXT) != null) {
-            showErrorDialog(
-                R.string.uploader_error_message_received_piece_of_text,
-                R.string.uploader_error_title_no_file_to_upload
-            );
-
+        mAccountManager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
+        Account[] accounts = mAccountManager.getAccountsByType(MainApp.getAccountType());
+        if (accounts.length == 0) {
+            Log_OC.i(TAG, "No ownCloud account is available");
+            showDialog(DIALOG_NO_ACCOUNT);
+        } else if (accounts.length > 1 && !mAccountSelected && !mAccountSelectionShowing) {
+            Log_OC.i(TAG, "More than one ownCloud is available");
+            showDialog(DIALOG_MULTIPLE_ACCOUNT);
+            mAccountSelectionShowing = true;
         } else {
-            showErrorDialog(
-                R.string.uploader_error_message_no_file_to_upload,
-                R.string.uploader_error_title_no_file_to_upload
-            );
+            if (!savedAccount) {
+                setAccount(accounts[0]);
+            }
         }
 
         super.setAccount(account, savedAccount);
@@ -456,22 +453,109 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void prepareStreamsToUpload() {
-        if (getIntent().getAction().equals(Intent.ACTION_SEND)) {
+        Intent intent = getIntent();
+        if (intent.getAction().equals(Intent.ACTION_SEND)) {
+            mSaveIntent = intent.toUri(0);
             mStreamsToUpload = new ArrayList<>();
-            mStreamsToUpload.add(getIntent().getParcelableExtra(Intent.EXTRA_STREAM));
-        } else if (getIntent().getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
-            mStreamsToUpload = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+            mStreamsToUpload.add(intent.getParcelableExtra(Intent.EXTRA_STREAM));
+        } else if (intent.getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
+            mSaveIntent = intent.toUri(0);
+            mStreamsToUpload = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         }
     }
 
-    private boolean somethingToUpload() {
-        return (mStreamsToUpload != null && mStreamsToUpload.get(0) != null);
-    }
+	private String renameSafeFilename(String filename) {
+        // https://support.microsoft.com/ja-jp/kb/100108
+		filename = filename.replaceAll("[?]", "_");
+		filename = filename.replaceAll("\"", "_");
+		filename = filename.replaceAll("/", "_");
+		//filename = filename.replaceAll("\\", "_");
+		filename = filename.replaceAll("<", "_");
+		filename = filename.replaceAll(">", "_");
+		filename = filename.replaceAll("[*]", "_");
+		filename = filename.replaceAll("[|]", "_");
+		filename = filename.replaceAll(";", "_");
+		filename = filename.replaceAll("=", "_");
+		filename = filename.replaceAll(",", "_");
+
+        try {
+			int maxlength = 128;
+            if (filename.getBytes("UTF-8").length > maxlength) {
+                filename = new String(filename.getBytes("UTF-8"), 0, maxlength, "UTF-8");
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return filename;
+	}
+
+	private File createTempUrlFile(String filename, String url) {
+		File file = new File(this.getCacheDir(), filename);
+        try {
+            FileWriter fw = new FileWriter(file);
+            fw.write("[InternetShortcut]\r\n");
+            fw.write("URL=" + url + "\r\n");
+            fw.close();
+        } catch (IOException e) {
+            return null;
+        }
+		return file;
+	}
+
+	private File createTempCliptextFile(String filename, String text) {
+		File file = new File(this.getCacheDir(), filename);
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(file);
+            fw.write(text + "\n");
+            fw.close();
+        } catch (IOException e) {
+            return null;
+        }
+		return file;
+	}
 
     @SuppressLint("NewApi")
     public void uploadFiles() {
+		if (mStreamsToUpload == null || mStreamsToUpload.get(0) == null) {
+            Intent saveIntent = null;
+            try {
+                saveIntent = Intent.parseUri(mSaveIntent, 0);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            if (saveIntent.getType().equals("text/plain")) {
+				String extraText = saveIntent.getStringExtra(Intent.EXTRA_TEXT);
+				String subjectText = saveIntent.getStringExtra(Intent.EXTRA_SUBJECT);
+				if (subjectText == null) {
+					subjectText = saveIntent.getStringExtra(Intent.EXTRA_TITLE);
+				}
+				if (Pattern.compile("^https?://").matcher(extraText).find()) {
+					// share from web brouser
+					if (subjectText == null) {
+						subjectText = "url";
+					}
+					String filename = renameSafeFilename(subjectText) + ".url";
+					File file = createTempUrlFile(filename, extraText);
+					if (file != null) {
+						mStreamsToUpload.add(Uri.fromFile(new File(file.getAbsolutePath())));
+					}
+				} else {
+					// simply text meybe
+					if (subjectText == null) {
+						subjectText = "cliptext";
+					}
+					String filename = renameSafeFilename(subjectText) + ".txt";
+					File file = createTempCliptextFile(filename, extraText);
+					if (file != null) {
+						mStreamsToUpload.add(Uri.fromFile(new File(file.getAbsolutePath())));
+					}
+				}
+			}
+		}
 
-        UriUploader uploader = new UriUploader(
+		UriUploader uploader = new UriUploader(
                 this,
                 mStreamsToUpload,
                 mUploadPath,
@@ -489,7 +573,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (resultCode == UriUploader.UriUploaderResultCode.OK) {
             finish();
         } else {
-
             int messageResTitle = R.string.uploader_error_title_file_cannot_be_uploaded;
             int messageResId = R.string.common_error_unknown;
 
