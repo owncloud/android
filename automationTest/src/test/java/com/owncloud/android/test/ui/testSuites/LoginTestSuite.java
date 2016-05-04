@@ -102,11 +102,13 @@ public class LoginTestSuite{
 		common.assertIsInFileListView();
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
+		Drawer dr = fileListView.swipeToShowDrawer();
+		SettingsView settingsView = dr.clickOnSettingsButton();
+		//MenuList menu = fileListView.clickOnMenuButton();
+		//SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
-		fileListView = Actions.login(Config.URL2, Config.user2,
+		FileListView fileListView2 = Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
 		common.assertIsInSettingsView();
 	}

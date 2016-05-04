@@ -55,7 +55,7 @@ public class Common{
 		File app = new File(appDir,"ownCloud.apk");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability ( CapabilityType.PLATFORM, "Android");
-		capabilities.setCapability ( CapabilityType.VERSION, "4.3");
+		capabilities.setCapability ( CapabilityType.VERSION, "5.1t");
 		capabilities.setCapability ("deviceName", "test");
 		capabilities.setCapability ("app", app.getAbsolutePath());
 		capabilities.setCapability ("appPackage", "com.owncloud.android");
@@ -168,9 +168,13 @@ public class Common{
 						+ ".resourceId(\"android:id/action_bar_title\")")));
 		assertTrue(isElementPresent((AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".description(\"Upload\")")));	*/
+						+ ".description(\"Upload\")")));*/	
 		assertTrue(isElementPresent(
-				(AndroidElement) driver.findElementByAndroidUIAutomator("new UiSelector()"+ ".resourceId(\"com.owncloud.android:id/action_bar\")")));
+				(AndroidElement) driver.findElementByAndroidUIAutomator("new UiSelector()"+ 
+								".resourceId(\"com.owncloud.android:id/action_bar\")")));
+		assertTrue(isElementPresent(
+				(AndroidElement) driver.findElementByAndroidUIAutomator("new UiSelector()"+ 
+								".resourceId(\"com.owncloud.android:id/fab_expand_menu_button\")")));
 	}
 
 	protected void assertIsNotInFileListView() throws InterruptedException {
@@ -199,9 +203,16 @@ public class Common{
 	}
 
 	protected void assertIsInSettingsView() throws InterruptedException {
-		assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
+		/*assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".resourceId(\"android:id/action_bar_title\")")));
+						+ ".resourceId(\"android:id/action_bar_title\")")));*/
+		/*assertTrue(waitForTextPresent(user+"@"+url, (AndroidElement) driver
+				.findElementByAndroidUIAutomator("new UiSelector()"
+						+ ".resourceId(\"android:id/title\")")));*/
+		assertTrue(waitForTextPresent("Settings",
+				(AndroidElement) driver.findElementByAndroidUIAutomator("new UiSelector()"+ 
+								".resourceId(\"com.owncloud.android:id/action_bar\")")));
+		
 	}
 
 }
