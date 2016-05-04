@@ -23,11 +23,11 @@ package com.owncloud.android.test.ui.testSuites;
 public final class Config {
 
 	//without http or https
-	public static final String URL = "http://docker.oc.solidgear.es:56984";
+	public static final String URL = "docker.oc.solidgear.es:56984";
 	public static boolean isTrusted = false;
 
 	//without http or https
-	public static final String URL2 = "http://docker.oc.solidgear.es:56981";
+	public static final String URL2 = "docker.oc.solidgear.es:56981";
 	public static boolean isTrusted2 = false;
 
 	public static final String user = "user1";

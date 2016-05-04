@@ -55,7 +55,7 @@ public class Common{
 		File app = new File(appDir,"ownCloud.apk");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability ( CapabilityType.PLATFORM, "Android");
-		capabilities.setCapability ( CapabilityType.VERSION, "5.1t");
+		capabilities.setCapability ( CapabilityType.VERSION, "5.1");
 		capabilities.setCapability ("deviceName", "test");
 		capabilities.setCapability ("app", app.getAbsolutePath());
 		capabilities.setCapability ("appPackage", "com.owncloud.android");
@@ -209,9 +209,9 @@ public class Common{
 		/*assertTrue(waitForTextPresent(user+"@"+url, (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
 						+ ".resourceId(\"android:id/title\")")));*/
-		assertTrue(waitForTextPresent("Settings",
-				(AndroidElement) driver.findElementByAndroidUIAutomator("new UiSelector()"+ 
-								".resourceId(\"com.owncloud.android:id/action_bar\")")));
+		assertTrue(((AndroidElement) driver.findElementByName(Config.userAccount)).isDisplayed());
+		assertTrue(((AndroidElement) driver.findElementByName(Config.userAccount2)).isDisplayed());
+								
 		
 	}
 

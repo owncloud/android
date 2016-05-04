@@ -115,7 +115,6 @@ public class FileListView {
 	public FileListView (AndroidDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-		System.out.println(filesView.getLocation().getX());
 	}
 
 	public MenuList clickOnMenuButton () {

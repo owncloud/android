@@ -82,15 +82,54 @@ public class Actions {
 		//Not working yet, no wait the pop up
 		if (driver.getCapabilities().getCapability(CapabilityType.VERSION).equals("6.0")) {
 			//loginForm.clickOnConnectButton();
-			wait.wait(2000);
 			AllowDenyView allowdenyview = new AllowDenyView (driver);
+			wait.until(ExpectedConditions
+					.visibilityOf(allowdenyview.getAllowButtonElement()));
 			allowdenyview.clickOnAcceptButton();
+
 		} //else
 			return new FileListView(driver);
 		//return loginForm.clickOnConnectButton();
 			
 	}
 	
+	public static SettingsView loginSecond(String url, String user, String password,
+			Boolean isTrusted, AndroidDriver driver) 
+					throws InterruptedException {
+		LoginForm loginForm = new LoginForm(driver);
+		CertificatePopUp certificatePopUp = loginForm.typeHostUrl(url);	
+		WebDriverWait wait = new WebDriverWait(driver, 5);
+		if(!isTrusted){
+			
+			//sometimes the certificate has been already accept 
+			//and it doesn't appear again
+			try {
+				wait.until(ExpectedConditions
+						.visibilityOf(certificatePopUp.getOkButtonElement()));
+				//we need to repaint the screen 
+				//because of some element are misplaced
+				driver.rotate(ScreenOrientation.LANDSCAPE);
+				driver.rotate(ScreenOrientation.PORTRAIT);
+				certificatePopUp.clickOnOkButton();
+			}catch (NoSuchElementException e) {
+
+			}
+
+		}
+		loginForm.typeUserName(user);
+		loginForm.typePassword(password);
+		//TODO. Assert related to check the connection?
+		loginForm.clickOnConnectButton();
+		//Not working yet, no wait the pop up
+		if (driver.getCapabilities().getCapability(CapabilityType.VERSION).equals("6.0")) {
+			//loginForm.clickOnConnectButton();
+			AllowDenyView allowdenyview = new AllowDenyView (driver);
+			allowdenyview.clickOnAcceptButton();
+		} //else
+			return new SettingsView(driver);
+		//return loginForm.clickOnConnectButton();
+			
+	}
 
 	public static WaitAMomentPopUp createFolder(String folderName,
 			FileListView fileListView){

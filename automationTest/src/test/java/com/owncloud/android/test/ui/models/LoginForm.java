@@ -54,7 +54,8 @@ public class LoginForm {
 	private AndroidElement serverStatusText;
 	
 	@AndroidFindBy(uiAutomator = "new UiSelector()"
-			+ ".description(\"Wrong username or password\")")
+			+ ".resourceId(\"com.owncloud.android:id/auth_status_text\")")
+			//+ ".description(\"Wrong username or password\")")
 	private AndroidElement authStatusText;
 	
 	public LoginForm (AndroidDriver driver) {

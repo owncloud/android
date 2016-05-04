@@ -58,7 +58,6 @@ public class LoginTestSuite{
 	@Category({NoIgnoreTestCategory.class, LoginTestCategory.class})
 	public void test1LoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 					Config.password, Config.isTrusted, driver);
 		//To click in the FAB
@@ -73,7 +72,7 @@ public class LoginTestSuite{
 	@Category({NoIgnoreTestCategory.class, LoginTestCategory.class})
 	public void test2LoginLandscape () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
-		Actions.login(Config.URL, Config.user,
+		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView();
 	}
@@ -86,7 +85,6 @@ public class LoginTestSuite{
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView();
-		
 		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer1);
 		assertTrue(fileListView.getFileElement().isDisplayed());
 	}
@@ -108,7 +106,7 @@ public class LoginTestSuite{
 		//SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
-		FileListView fileListView2 = Actions.login(Config.URL2, Config.user2,
+		settingsView = Actions.loginSecond(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
 		common.assertIsInSettingsView();
 	}
@@ -124,15 +122,18 @@ public class LoginTestSuite{
 		assertTrue(fileListView.getFileElement().isDisplayed());
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
+		Drawer dr = fileListView.swipeToShowDrawer();
+		SettingsView settingsView = dr.clickOnSettingsButton();
+		//MenuList menu = fileListView.clickOnMenuButton();
+		//SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
-		fileListView = Actions.login(Config.URL2, Config.user2,
+		settingsView = Actions.loginSecond(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
+		
 		common.assertIsInSettingsView();
-		settingsView.tapOnAccountElement(2,1, 100);
-		common.assertIsInFileListView();
+		settingsView.tapOnAccountElement(2, 1, 100);
+		//common.assertIsInFileListView();
 		
 		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer2);
 		assertTrue(fileListView.getFileElement().isDisplayed());
@@ -145,7 +146,6 @@ public class LoginTestSuite{
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView();
-		
 		//driver.rotate(ScreenOrientation.LANDSCAPE);
 		//MenuList menu = fileListView.clickOnMenuButton();
 		//SettingsView settingsView = menu.clickOnSettingsButton();
@@ -154,7 +154,7 @@ public class LoginTestSuite{
 		settingsView.tapOnAddAccount(1, 1000);
 		
 		LoginForm loginForm = new LoginForm(driver);
-		fileListView = Actions.login(Config.URL, Config.user,Config.password, 
+		settingsView = Actions.loginSecond(Config.URL, Config.user,Config.password, 
 				Config.isTrusted, driver);	
 		assertTrue(common.waitForTextPresent("An account for the same user and"
 				+ " server already exists in the device", 
@@ -168,9 +168,11 @@ public class LoginTestSuite{
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView();
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
-		settingsView.tapOnAccountElement(1,1, 1000);
+		//MenuList menu = fileListView.clickOnMenuButton();
+		//SettingsView settingsView = menu.clickOnSettingsButton();
+		//settingsView.tapOnAccountElement(1,1, 1000);
+		Drawer dr = fileListView.swipeToShowDrawer();
+		SettingsView settingsView = dr.clickOnSettingsButton();
 		LoginForm changePasswordForm = settingsView
 				.clickOnChangePasswordElement();
 		changePasswordForm.typePassword("WrongPassword");
