@@ -16,9 +16,9 @@
   <string-array name="actionbar_sortby">
     <item>A-Z</item>
     <item>最新 - 最古</item>
+    <!--TODO re-enable when server-side folder size calculation is available   
+    <item>Biggest - Smallest</item>-->
   </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">すべてのファイル</string>
@@ -375,6 +375,7 @@
   <string name="upload_move_files">ファイルを移動</string>
   <string name="pref_behaviour_entries_keep_file">元のフォルダに保持</string>
   <string name="pref_behaviour_entries_move">アプリフォルダに移動</string>
+  <string name="pref_behaviour_entries_copy">アプリフォルダにコピー</string>
   <string name="share_dialog_title">共有</string>
   <string name="share_file">%1$s を共有</string>
   <string name="share_with_user_section_title">ユーザーとグループで共有</string>
