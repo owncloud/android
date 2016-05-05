@@ -2,12 +2,11 @@ sudo: false
 language: android
 android:
   components:
-    - build-tools-23.0.3
-    - android-23
-    - android-22
-    - android-19
+  - platform-tools
+  - tools
+  - build-tools-23.0.3
+  - android-23
+  - extra-android-m2repository
 script:
-  - ./setup_env.sh ant
-  - ant clean
-  - ant debug
+  - ./gradlew testDebug
   
