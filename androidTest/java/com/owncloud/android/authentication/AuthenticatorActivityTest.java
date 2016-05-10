@@ -21,17 +21,24 @@ package com.owncloud.android.authentication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.owncloud.android.BuildConfig;
+import static org.junit.Assert.assertTrue;
 import com.owncloud.android.R;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.junit.Assert.assertTrue;
+
+import java.lang.reflect.Field;
+
+import android.app.Activity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -44,7 +51,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static org.hamcrest.Matchers.not;
 
-
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class AuthenticatorActivityTest {
@@ -52,12 +58,18 @@ public class AuthenticatorActivityTest {
     public static final String EXTRA_ACTION = "ACTION";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
+    private static int WAIT_LOGIN = 5000;
+
+    private static String ERROR_MESSAGE = "Activity not finished";
+    private static String RESULT_CODE = "mResultCode";
+
 
     @Rule
     public ActivityTestRule<AuthenticatorActivity> mActivityRule = new ActivityTestRule<AuthenticatorActivity>(
             AuthenticatorActivity.class){
         @Override
         protected Intent getActivityIntent() {
+
             Context targetContext = InstrumentationRegistry.getInstrumentation()
                     .getTargetContext();
             Intent result = new Intent(targetContext, AuthenticatorActivity.class);
@@ -68,7 +80,7 @@ public class AuthenticatorActivityTest {
     };
 
     @Test
-    public void check_login() {
+    public void check_login() throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         // Check that login button is disabled
         onView(withId(R.id.buttonOK))
@@ -88,8 +100,14 @@ public class AuthenticatorActivityTest {
                 .perform(typeText(BuildConfig.TEST_PASSWORD), closeSoftKeyboard());
         onView(withId(R.id.buttonOK)).perform(click());
 
-        // Check that login button is now enabled
-        onView(withId(R.id.buttonOK)).check(matches(isEnabled()));
+        // Check that the Activity ends after clicking
+
+        Thread.sleep(WAIT_LOGIN);
+        Field f = Activity.class.getDeclaredField(RESULT_CODE);
+        f.setAccessible(true);
+        int mResultCode = f.getInt(mActivityRule.getActivity());
+
+        assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
 
     }
 }
