@@ -21,20 +21,22 @@ package com.owncloud.android.authentication;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import com.owncloud.android.BuildConfig;
 import static org.junit.Assert.assertTrue;
 import com.owncloud.android.R;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 
@@ -58,10 +60,10 @@ public class AuthenticatorActivityTest {
     public static final String EXTRA_ACTION = "ACTION";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
-    private static int WAIT_LOGIN = 5000;
+    private static final int WAIT_LOGIN = 5000;
 
-    private static String ERROR_MESSAGE = "Activity not finished";
-    private static String RESULT_CODE = "mResultCode";
+    private static final String ERROR_MESSAGE = "Activity not finished";
+    private static final String RESULT_CODE = "mResultCode";
 
 
     @Rule
@@ -73,14 +75,39 @@ public class AuthenticatorActivityTest {
             Context targetContext = InstrumentationRegistry.getInstrumentation()
                     .getTargetContext();
             Intent result = new Intent(targetContext, AuthenticatorActivity.class);
-            result.putExtra(EXTRA_ACTION, "");
+            result.putExtra(EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
             result.putExtra(EXTRA_ACCOUNT, "");
             return result;
         }
     };
 
+    @Before
+    public void init(){
+        UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        Point[] coordinates = new Point[4];
+        coordinates[0] = new Point(248, 1020);
+        coordinates[1] = new Point(248, 429);
+        coordinates[2] = new Point(796, 1020);
+        coordinates[3] = new Point(796, 429);
+        try {
+            if (!uiDevice.isScreenOn()) {
+                uiDevice.wakeUp();
+                //uiDevice.swipe(coordinates, 10);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
-    public void check_login() throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public void check_login()
+        throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Bundle arguments = InstrumentationRegistry.getArguments();
+
+        // Get values passed
+        String testUser = arguments.getString("TEST_USER");
+        String testPassword = arguments.getString("TEST_PASSWORD");
+        String testServerURL = arguments.getString("TEST_SERVER_URL");
 
         // Check that login button is disabled
         onView(withId(R.id.buttonOK))
@@ -88,16 +115,16 @@ public class AuthenticatorActivityTest {
 
         // Type server url
         onView(withId(R.id.hostUrlInput))
-                .perform(typeText(BuildConfig.TEST_SERVER_URL), closeSoftKeyboard());
+                .perform(typeText(testServerURL), closeSoftKeyboard());
         onView(withId(R.id.account_username)).perform(click());
 
         // Type user
         onView(withId(R.id.account_username))
-                .perform(typeText(BuildConfig.TEST_USER), closeSoftKeyboard());
+                .perform(typeText(testUser), closeSoftKeyboard());
 
         // Type user pass
         onView(withId(R.id.account_password))
-                .perform(typeText(BuildConfig.TEST_PASSWORD), closeSoftKeyboard());
+                .perform(typeText(testPassword), closeSoftKeyboard());
         onView(withId(R.id.buttonOK)).perform(click());
 
         // Check that the Activity ends after clicking
