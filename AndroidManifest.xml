@@ -73,6 +73,7 @@
         <activity android:name=".ui.activity.UploadFilesActivity" />
         <activity android:name=".ui.activity.Uploader"
                   android:taskAffinity=""
+                  android:theme="@style/Theme.AppCompat"
                   android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
