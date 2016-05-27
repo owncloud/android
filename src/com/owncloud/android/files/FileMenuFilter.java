@@ -90,8 +90,8 @@ public class FileMenuFilter {
             hideAll(menu);
 
         } else {
-            List<Integer> toShow = new ArrayList<Integer>();
-            List<Integer> toHide = new ArrayList<Integer>();
+            List<Integer> toShow = new ArrayList<>();
+            List<Integer> toHide = new ArrayList<>();
 
             filter(toShow, toHide);
 
@@ -228,14 +228,14 @@ public class FileMenuFilter {
         }
 
         // FAVORITES
-        if (!allFiles() || synchronizing || allFavorites()) {
+        if (synchronizing || allFavorites()) {
             toHide.add(R.id.action_favorite_file);
         } else {
             toShow.add(R.id.action_favorite_file);
         }
 
         // UNFAVORITES
-        if (!allFiles() || synchronizing || allUnfavorites()) {
+        if (synchronizing || allUnfavorites()) {
             toHide.add(R.id.action_unfavorite_file);
         } else {
             toShow.add(R.id.action_unfavorite_file);
@@ -294,10 +294,6 @@ public class FileMenuFilter {
 
     private boolean isSingleFile() {
         return isSingleSelection() && !mFiles.get(0).isFolder();
-    }
-
-    private boolean allFiles() {
-        return mFiles != null && !containsFolder();
     }
 
     private boolean containsFolder() {
