@@ -66,13 +66,13 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OCCapability;
-import com.owncloud.android.operations.CreateShareViaLinkOperation;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
@@ -84,8 +84,9 @@ import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.NavigationDrawerItem;
 import com.owncloud.android.ui.adapter.NavigationDrawerListAdapter;
+import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
-import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
+import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ import java.util.ArrayList;
  * {@link Account}s .
  */
 public class FileActivity extends AppCompatActivity
-        implements OnRemoteOperationListener, ComponentsGetter {
+        implements OnRemoteOperationListener, ComponentsGetter, SslUntrustedCertDialog.OnSslUntrustedCertListener {
 
     public static final String EXTRA_FILE = "com.owncloud.android.ui.activity.FILE";
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
@@ -108,13 +109,16 @@ public class FileActivity extends AppCompatActivity
     private static final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
 
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
-    private static final String DIALOG_SHARE_PASSWORD = "DIALOG_SHARE_PASSWORD";
     private static final String KEY_ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
 
     public static final int REQUEST_CODE__UPDATE_CREDENTIALS = 0;
     public static final int REQUEST_CODE__LAST_SHARED = REQUEST_CODE__UPDATE_CREDENTIALS;
 
     protected static final long DELAY_TO_REQUEST_OPERATIONS_LATER = 200;
+
+    /* Dialog tags */
+    private static final String DIALOG_UNTRUSTED_CERT = "DIALOG_UNTRUSTED_CERT";
+    private static final String DIALOG_CERT_NOT_SAVED = "DIALOG_CERT_NOT_SAVED";
 
     /** OwnCloud {@link Account} where the main {@link OCFile} handled by the activity is located.*/
     private Account mAccount;
@@ -408,12 +412,6 @@ public class FileActivity extends AppCompatActivity
         // Settings
         mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[2], mDrawerContentDescriptions[1],
                 R.drawable.ic_settings));
-
-        // Logs
-        if (BuildConfig.DEBUG) {
-            mDrawerItems.add(new NavigationDrawerItem(mDrawerTitles[3],
-                    mDrawerContentDescriptions[3], R.drawable.ic_log));
-        }
 
         // setting the nav drawer list adapter
         mNavigationDrawerAdapter = new NavigationDrawerListAdapter(getApplicationContext(), this,
@@ -741,7 +739,7 @@ public class FileActivity extends AppCompatActivity
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
         Log_OC.d(TAG, "Received result of operation in FileActivity - common behaviour for all the "
-                + "FileActivities ");
+            + "FileActivities ");
 
         mFileOperationsHelper.setOpIdWaitingFor(Long.MAX_VALUE);
 
@@ -756,10 +754,14 @@ public class FileActivity extends AppCompatActivity
 
             if (result.getCode() == ResultCode.UNAUTHORIZED) {
                 Toast t = Toast.makeText(this, ErrorMessageAdapter.getErrorCauseMessage(result,
-                                operation, getResources()),
-                        Toast.LENGTH_LONG);
+                        operation, getResources()),
+                    Toast.LENGTH_LONG);
                 t.show();
             }
+
+        } else if (!result.isSuccess() && ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(result.getCode())) {
+
+            showUntrustedCertDialog(result);
 
         } else if (operation == null ||
                 operation instanceof CreateShareWithShareeOperation ||
@@ -777,9 +779,6 @@ public class FileActivity extends AppCompatActivity
                         Toast.LENGTH_LONG);
                 t.show();
             }
-
-        } else if (operation instanceof CreateShareViaLinkOperation) {
-            onCreateShareViaLinkOperationFinish((CreateShareViaLinkOperation) operation, result);
 
         } else if (operation instanceof SynchronizeFileOperation) {
             onSynchronizeFileOperationFinish((SynchronizeFileOperation) operation, result);
@@ -861,43 +860,18 @@ public class FileActivity extends AppCompatActivity
 
     }
 
-
-
-    private void onCreateShareViaLinkOperationFinish(CreateShareViaLinkOperation operation,
-                                                     RemoteOperationResult result) {
-        if (result.isSuccess()) {
-            updateFileFromDB();
-
-            Intent sendIntent = operation.getSendIntentWithSubject(this);
-            if (sendIntent != null) {
-                startActivity(sendIntent);
-            }
-
-        } else {
-            // Detect Failure (403) --> needs Password
-            if (result.getCode() == ResultCode.SHARE_FORBIDDEN) {
-                String password = operation.getPassword();
-                if ((password == null || password.length() == 0) &&
-                    getCapabilities().getFilesSharingPublicEnabled().isUnknown())
-                    {
-                    // Was tried without password, but not sure that it's optional. Try with password.
-                    // Try with password before giving up.
-                    // See also ShareFileFragment#OnShareViaLinkListener
-                    SharePasswordDialogFragment dialog =
-                            SharePasswordDialogFragment.newInstance(new OCFile(operation.getPath()), true);
-                    dialog.show(getSupportFragmentManager(), DIALOG_SHARE_PASSWORD);
-                } else {
-                    Toast t = Toast.makeText(this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
-                    t.show();
-                }
-            } else {
-                Toast t = Toast.makeText(this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
-                t.show();
-            }
+    /**
+     * Show untrusted cert dialog
+     */
+    public void showUntrustedCertDialog(RemoteOperationResult result) {
+        // Show a dialog with the certificate info
+        FragmentManager fm = getSupportFragmentManager();
+        SslUntrustedCertDialog dialog = (SslUntrustedCertDialog) fm.findFragmentByTag(DIALOG_UNTRUSTED_CERT);
+        if(dialog == null) {
+            dialog = SslUntrustedCertDialog.newInstanceForFullSslError(
+                (CertificateCombinedException) result.getException());
+            FragmentTransaction ft = fm.beginTransaction();
+            dialog.show(ft, DIALOG_UNTRUSTED_CERT);
         }
     }
 
@@ -1020,11 +994,45 @@ public class FileActivity extends AppCompatActivity
     public void restart(){
         Intent i = new Intent(this, FileDisplayActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(i);
     }
 
     public void allFilesOption(){
         restart();
+    }
+
+    protected OCFile getCurrentDir() {
+        OCFile file = getFile();
+        if (file != null) {
+            if (file.isFolder()) {
+                return file;
+            } else if (getStorageManager() != null) {
+                String parentPath = file.getParentRemotePath();
+                return getStorageManager().getFileByPath(parentPath);
+            }
+        }
+        return null;
+    }
+
+    /* OnSslUntrustedCertListener methods */
+
+    @Override
+    public void onSavedCertificate() {
+        // Nothing to do in this context
+    }
+
+    @Override
+    public void onFailedSavingCertificate() {
+        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
+            R.string.ssl_validator_not_saved, new String[]{}, 0, R.string.common_ok, -1, -1
+        );
+        dialog.show(getSupportFragmentManager(), DIALOG_CERT_NOT_SAVED);
+    }
+
+    @Override
+    public void onCancelCertificate() {
+        // nothing to do
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -1062,12 +1070,6 @@ public class FileActivity extends AppCompatActivity
                     Intent settingsIntent = new Intent(getApplicationContext(),
                             Preferences.class);
                     startActivity(settingsIntent);
-                    break;
-
-                case 3: // Logs
-                    Intent loggerIntent = new Intent(getApplicationContext(),
-                            LogHistoryActivity.class);
-                    startActivity(loggerIntent);
                     break;
             }
             mDrawerLayout.closeDrawers();

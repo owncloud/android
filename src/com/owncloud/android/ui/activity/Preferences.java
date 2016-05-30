@@ -269,21 +269,6 @@ public class Preferences extends PreferenceActivity
             }
             
         }
-
-        if (BuildConfig.DEBUG) {
-            Preference pLog =  findPreference("log");
-            if (pLog != null ){
-                pLog.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        Intent loggerIntent = new Intent(getApplicationContext(),
-                                LogHistoryActivity.class);
-                        startActivity(loggerIntent);
-                        return true;
-                    }
-                });
-            }
-        }
         
        boolean recommendEnabled = getResources().getBoolean(R.bool.recommend_enabled);
        Preference pRecommend =  findPreference("recommend");
@@ -300,11 +285,7 @@ public class Preferences extends PreferenceActivity
                         
                         String appName = getString(R.string.app_name);
                         String downloadUrl = getString(R.string.url_app_download);
-                        Account currentAccount = AccountUtils.
-                                getCurrentOwnCloudAccount(Preferences.this);
-                        String username = currentAccount.name.substring(0,
-                                currentAccount.name.lastIndexOf('@'));
-                        
+
                         String recommendSubject =
                                 String.format(getString(R.string.recommend_subject),
                                 appName);
@@ -349,9 +330,26 @@ public class Preferences extends PreferenceActivity
             } else {
                 preferenceCategory.removePreference(pFeedback);
             }
-            
         }
-        
+
+        boolean loggerEnabled = getResources().getBoolean(R.bool.logger_enabled) || BuildConfig.DEBUG;
+        Preference pLogger =  findPreference("logger");
+        if (pLogger != null){
+            if (loggerEnabled) {
+                pLogger.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        Intent loggerIntent = new Intent(getApplicationContext(), LogHistoryActivity.class);
+                        startActivity(loggerIntent);
+
+                        return true;
+                    }
+                });
+            } else {
+                preferenceCategory.removePreference(pLogger);
+            }
+        }
+
         boolean imprintEnabled = getResources().getBoolean(R.bool.imprint_enabled);
         Preference pImprint =  findPreference("imprint");
         if (pImprint != null) {

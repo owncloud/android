@@ -26,7 +26,6 @@
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Ayarlar</string>
   <string name="drawer_item_uploads_list">Yüklemeler</string>
-  <string name="drawer_item_logs">Günlükler</string>
   <string name="drawer_close">Kapat</string>
   <string name="drawer_open">Aç</string>
   <string name="prefs_category_general">Genel</string>
@@ -59,16 +58,11 @@
   <string name="sync_string_files">Dosyalar</string>
   <string name="setup_btn_connect">Bağlan</string>
   <string name="uploader_btn_upload_text">Yükle</string>
-  <string name="uploader_btn_new_folder_text">Yeni klasör</string>
   <string name="uploader_top_message">Yükleme klasörünü seçin:</string>
   <string name="uploader_wrn_no_account_title">Hesap bulunamadı</string>
   <string name="uploader_wrn_no_account_text">Cihazınızda hiç %1$s hesabı yok. Lütfen ilk olarak bir hesap ayarlayın.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Kurulum</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Çıkış</string>
-  <string name="uploader_wrn_no_content_title">Yüklenecek içerik yok</string>
-  <string name="uploader_wrn_no_content_text">Hiç içerik alınmadı. Yüklenecek hiçbir şey yok.</string>
-  <string name="uploader_error_forbidden_content">%1$s için paylaşılan içeriğe erişim izni yok</string>
-  <string name="uploader_info_uploading">Yükleniyor</string>
   <string name="file_list_seconds_ago">saniyeler önce</string>
   <string name="file_list_empty">Burada hiçbir şey yok. Bir şeyler yükleyin!</string>
   <string name="file_list_loading">Yükleniyor...</string>
@@ -96,9 +90,11 @@
   <string name="common_retry_upload">Yüklemeyi tekrar dene</string>
   <string name="common_cancel_sync">Eşitlemeyi iptal et</string>
   <string name="common_cancel">İptal</string>
+  <string name="common_back">Geri</string>
   <string name="common_save_exit">Kaydet ve çık</string>
   <string name="common_error">Hata</string>
   <string name="common_loading">Yükleniyor...</string>
+  <string name="common_unknown">bilinmiyor</string>
   <string name="common_error_unknown">Bilinmeyen hata</string>
   <string name="about_title">Hakkında</string>
   <string name="change_password">Parola değiştir</string>
@@ -402,9 +398,7 @@
   <string name="action_switch_grid_view">Izgara görünümü</string>
   <string name="action_switch_list_view">Liste görünümü</string>
   <string name="manage_space_title">Alanı ayarla</string>
-  <string name="manage_space_description">Ayarlar, veritabanı ve sunucu sertifikaları %1$s verilerinden tamamen silinecektir.\n\nİndirilen dosyalara dokunulmayacak.\n\nBu işlem biraz zaman alabilir.</string>
   <string name="manage_space_clear_data">Verileri temizle</string>
   <string name="manage_space_error">Bazı dosyalar silinemedi</string>
   <string name="permission_storage_access">Dosya yüklemek ve indirmek için ek izin gerekiyor.</string>
-  <string name="local_file_not_found_toast">Dosya yerelde bulunamadı</string>
 </resources>
