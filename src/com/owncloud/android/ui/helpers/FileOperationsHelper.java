@@ -52,6 +52,7 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -463,6 +464,11 @@ public class FileOperationsHelper {
         file.setFavorite(isFavorite);
         mFileActivity.getStorageManager().saveFile(file);
 
+        // If file is a folder, all children files that were available offline must be unset
+        if (file.isFolder() && isFavorite) {
+           toggleAvailableOfflineFilesInFolder(file, false);
+        }
+
         /// register the OCFile instance in the observer service to monitor local updates
         FileObserverService.observeFile(
                 mFileActivity,
@@ -474,6 +480,18 @@ public class FileOperationsHelper {
         /// immediate content synchronization
         if (file.isFavorite()) {
             syncFile(file);
+        }
+    }
+
+    private void toggleAvailableOfflineFilesInFolder(OCFile file, boolean isAvailableOffline) {
+        Vector<OCFile> filesInFolder = mFileActivity.getStorageManager().getFolderContent(file);
+        for (OCFile fileInFolder: filesInFolder) {
+            if (fileInFolder.isFolder()) {
+                toggleAvailableOfflineFilesInFolder(fileInFolder, isAvailableOffline);
+            } else {
+                fileInFolder.setFavorite(isAvailableOffline);
+                mFileActivity.getStorageManager().saveFile(fileInFolder);
+            }
         }
     }
     
