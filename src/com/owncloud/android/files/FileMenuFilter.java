@@ -228,14 +228,14 @@ public class FileMenuFilter {
         }
 
         // FAVORITES
-        if (synchronizing || allFavorites()) {
+        if (synchronizing || !anyUnfavorite()) {
             toHide.add(R.id.action_favorite_file);
         } else {
             toShow.add(R.id.action_favorite_file);
         }
 
         // UNFAVORITES
-        if (synchronizing || allUnfavorites()) {
+        if (synchronizing || !anyFavorite()) {
             toHide.add(R.id.action_unfavorite_file);
         } else {
             toShow.add(R.id.action_unfavorite_file);
@@ -314,22 +314,22 @@ public class FileMenuFilter {
         return false;
     }
 
-    private boolean allFavorites() {
+    private boolean anyFavorite() {
         for(OCFile file: mFiles) {
-            if(file.isFavorite() != OCFile.FavoriteStatus.FAVORITE.getValue()) {
-                return false;
+            if(file.isFavorite() == OCFile.FavoriteStatus.FAVORITE.getValue()) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    private boolean allUnfavorites() {
+    private boolean anyUnfavorite() {
         for(OCFile file: mFiles) {
-            if(file.isFavorite() != OCFile.FavoriteStatus.NO_FAVORITE.getValue()) {
-                return false;
+            if(file.isFavorite() == OCFile.FavoriteStatus.NO_FAVORITE.getValue()) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
 }
