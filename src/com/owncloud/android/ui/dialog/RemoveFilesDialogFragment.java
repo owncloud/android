@@ -60,7 +60,7 @@ implements ConfirmationDialogFragmentListener {
         for (OCFile file: files) {
             if (file.isFolder()) containsFolder = true;
             if (file.isDown()) containsDown = true;
-            if (file.isFavorite()) containsFavorite = true;
+            if (file.isFavorite() != OCFile.FavoriteStatus.NO_FAVORITE.getValue()) containsFavorite = true;
         }
 
         if (files.size() == 1) {
