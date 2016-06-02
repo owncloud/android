@@ -25,11 +25,16 @@ import java.util.HashMap;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebElement;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.owncloud.android.test.ui.models.AllowDenyView;
 import com.owncloud.android.test.ui.models.CertificatePopUp;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.GmailSendMailView;
@@ -52,8 +57,9 @@ public class Actions {
 					throws InterruptedException {
 		LoginForm loginForm = new LoginForm(driver);
 		CertificatePopUp certificatePopUp = loginForm.typeHostUrl(url);	
+		WebDriverWait wait = new WebDriverWait(driver, 5);
 		if(!isTrusted){
-			WebDriverWait wait = new WebDriverWait(driver, 30);
+			
 			//sometimes the certificate has been already accept 
 			//and it doesn't appear again
 			try {
@@ -72,7 +78,56 @@ public class Actions {
 		loginForm.typeUserName(user);
 		loginForm.typePassword(password);
 		//TODO. Assert related to check the connection?
-		return loginForm.clickOnConnectButton();
+		loginForm.clickOnConnectButton();
+		//Not working yet, no wait the pop up
+		if (driver.getCapabilities().getCapability(CapabilityType.VERSION).equals("6.0")) {
+			//loginForm.clickOnConnectButton();
+			AllowDenyView allowdenyview = new AllowDenyView (driver);
+			wait.until(ExpectedConditions
+					.visibilityOf(allowdenyview.getAllowButtonElement()));
+			allowdenyview.clickOnAcceptButton();
+
+		} //else
+			return new FileListView(driver);
+		//return loginForm.clickOnConnectButton();
+	}
+	
+	public static SettingsView loginSecond(String url, String user, String password,
+			Boolean isTrusted, AndroidDriver driver) 
+					throws InterruptedException {
+		LoginForm loginForm = new LoginForm(driver);
+		CertificatePopUp certificatePopUp = loginForm.typeHostUrl(url);	
+		WebDriverWait wait = new WebDriverWait(driver, 5);
+		if(!isTrusted){
+			
+			//sometimes the certificate has been already accept 
+			//and it doesn't appear again
+			try {
+				wait.until(ExpectedConditions
+						.visibilityOf(certificatePopUp.getOkButtonElement()));
+				//we need to repaint the screen 
+				//because of some element are misplaced
+				driver.rotate(ScreenOrientation.LANDSCAPE);
+				driver.rotate(ScreenOrientation.PORTRAIT);
+				certificatePopUp.clickOnOkButton();
+			}catch (NoSuchElementException e) {
+
+			}
+
+		}
+		loginForm.typeUserName(user);
+		loginForm.typePassword(password);
+		//TODO. Assert related to check the connection?
+		loginForm.clickOnConnectButton();
+		//Not working yet, no wait the pop up
+		if (driver.getCapabilities().getCapability(CapabilityType.VERSION).equals("6.0")) {
+			//loginForm.clickOnConnectButton();
+			AllowDenyView allowdenyview = new AllowDenyView (driver);
+			allowdenyview.clickOnAcceptButton();
+		} //else
+			return new SettingsView(driver);
+		//return loginForm.clickOnConnectButton();
+			
 	}
 
 	public static WaitAMomentPopUp createFolder(String folderName,

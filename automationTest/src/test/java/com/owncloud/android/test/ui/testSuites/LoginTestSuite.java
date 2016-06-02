@@ -35,6 +35,7 @@ import org.openqa.selenium.ScreenOrientation;
 
 import com.owncloud.android.test.ui.actions.Actions;
 import com.owncloud.android.test.ui.groups.*;
+import com.owncloud.android.test.ui.models.Drawer;
 import com.owncloud.android.test.ui.models.LoginForm;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.MenuList;
@@ -54,17 +55,21 @@ public class LoginTestSuite{
 	}
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, LoginTestCategory.class})
 	public void test1LoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		
-		Actions.login(Config.URL, Config.user,
-				Config.password, Config.isTrusted, driver);
+		FileListView fileListView = Actions.login(Config.URL, Config.user,
+					Config.password, Config.isTrusted, driver);
+		//To click in the FAB
+		//fileListView.getFloatingButton().click();
+		//To take the drawer off and click on one of the options
+		//Drawer dr = fileListView.swipeToShowDrawer();
+		//dr.clickOnSettingsButton();
 		common.assertIsInFileListView();
 	}
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, LoginTestCategory.class})
 	public void test2LoginLandscape () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		Actions.login(Config.URL, Config.user,
@@ -73,14 +78,13 @@ public class LoginTestSuite{
 	}
 	
 	@Test
-	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class, LoginTestCategory.class})
 	public void testLoginAndShowFiles () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView();
-		
 		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer1);
 		assertTrue(fileListView.getFileElement().isDisplayed());
 	}
@@ -96,8 +100,10 @@ public class LoginTestSuite{
 		common.assertIsInFileListView();
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
+		Drawer dr = fileListView.swipeToShowDrawer();
+		SettingsView settingsView = dr.clickOnSettingsButton();
+		//MenuList menu = fileListView.clickOnMenuButton();
+		//SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
 		fileListView = Actions.login(Config.URL2, Config.user2,
@@ -116,15 +122,17 @@ public class LoginTestSuite{
 		assertTrue(fileListView.getFileElement().isDisplayed());
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
+		Drawer dr = fileListView.swipeToShowDrawer();
+		SettingsView settingsView = dr.clickOnSettingsButton();
+		//MenuList menu = fileListView.clickOnMenuButton();
+		//SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
 		fileListView = Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
 		common.assertIsInSettingsView();
 		settingsView.tapOnAccountElement(2,1, 100);
-		common.assertIsInFileListView();
+		//common.assertIsInFileListView();
 		
 		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer2);
 		assertTrue(fileListView.getFileElement().isDisplayed());
@@ -138,9 +146,11 @@ public class LoginTestSuite{
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView();
 		
-		driver.rotate(ScreenOrientation.LANDSCAPE);
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
+		//driver.rotate(ScreenOrientation.LANDSCAPE);
+		//MenuList menu = fileListView.clickOnMenuButton();
+		//SettingsView settingsView = menu.clickOnSettingsButton();
+		Drawer dr = fileListView.swipeToShowDrawer();
+		SettingsView settingsView = dr.clickOnSettingsButton();
 		settingsView.tapOnAddAccount(1, 1000);
 		
 		LoginForm loginForm = new LoginForm(driver);
@@ -158,9 +168,11 @@ public class LoginTestSuite{
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
 		common.assertIsInFileListView();
-		MenuList menu = fileListView.clickOnMenuButton();
-		SettingsView settingsView = menu.clickOnSettingsButton();
-		settingsView.tapOnAccountElement(1,1, 1000);
+		//MenuList menu = fileListView.clickOnMenuButton();
+		//SettingsView settingsView = menu.clickOnSettingsButton();
+		//settingsView.tapOnAccountElement(1,1, 1000);
+		Drawer dr = fileListView.swipeToShowDrawer();
+		SettingsView settingsView = dr.clickOnSettingsButton();
 		LoginForm changePasswordForm = settingsView
 				.clickOnChangePasswordElement();
 		changePasswordForm.typePassword("WrongPassword");

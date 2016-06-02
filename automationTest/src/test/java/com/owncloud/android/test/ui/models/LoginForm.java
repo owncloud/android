@@ -41,7 +41,8 @@ public class LoginForm {
 	private AndroidElement userNameInput;
 	
 	@CacheLookup
-	@AndroidFindBy(uiAutomator = "new UiSelector().description(\"Password\")")
+	//@AndroidFindBy(uiAutomator = "new UiSelector().description(\"Password\")")
+	@AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"com.owncloud.android:id/account_password\")")
 	private AndroidElement passwordInput;
 	
 	@CacheLookup
@@ -53,9 +54,10 @@ public class LoginForm {
 	private AndroidElement serverStatusText;
 	
 	@AndroidFindBy(uiAutomator = "new UiSelector()"
-			+ ".description(\"Wrong username or password\")")
+			+ ".resourceId(\"com.owncloud.android:id/auth_status_text\")")
+			//+ ".description(\"Wrong username or password\")")
 	private AndroidElement authStatusText;
-	
+
 	public LoginForm (AndroidDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
@@ -86,10 +88,16 @@ public class LoginForm {
 		//driver.hideKeyboard();
 	}
 	
-	public FileListView clickOnConnectButton () {
+	/*
+	 public FileListView clickOnConnectButton () {
 		connectButton.click();
 		FileListView fileListView = new FileListView(driver);
 		return fileListView;
+	}
+	*/
+	
+	public void clickOnConnectButton () {
+		connectButton.click();
 	}
 	
 	public AndroidElement gethostUrlInput () {

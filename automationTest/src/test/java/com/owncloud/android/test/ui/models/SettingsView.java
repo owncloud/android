@@ -37,16 +37,19 @@ public class SettingsView {
 	@AndroidFindBy(name = Config.userAccount)
 	private AndroidElement accountElement;
 
+
 	@CacheLookup
 	@AndroidFindBy(name = Config.userAccount2)
 	private AndroidElement accountElement2;
-
+	
+	/*
 	@AndroidFindBy(name = "Delete account")
 	private AndroidElement deleteAccountElement;
 
 	@AndroidFindBy(name = "Change password")
 	private AndroidElement changePasswordElement;
-
+	*/
+	
 	@AndroidFindBy(name = "Add account")
 	private AndroidElement addAccountElement;
 
@@ -71,15 +74,16 @@ public class SettingsView {
 	}
 
 	public LoginForm clickOnDeleteAccountElement () {
-		deleteAccountElement.click();
+		//deleteAccountElement.click();
 		LoginForm loginForm = new LoginForm(driver);
 		return loginForm;
 	}
 
 	public LoginForm clickOnChangePasswordElement () {
-		changePasswordElement.click();
-		LoginForm loginForm = new LoginForm(driver);
-		return loginForm;
+		//changePasswordElement.click();
+		tapOnAccountElement (1, 1, 2000);
+		ChangePasswordView changepassword = new ChangePasswordView (driver);
+		return changepassword.changePasswordButton();
 	}
 
 	public PassCodeView EnablePassCode(){

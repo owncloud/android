@@ -161,12 +161,18 @@ public class Common{
 		//waitForTextPresent("Wrong username or password", 
 			//	changePasswordForm.getAuthStatusText());
 		Thread.sleep(2000);
-		assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
+		/*assertTrue(waitForTextPresent("ownCloud", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
 						+ ".resourceId(\"android:id/action_bar_title\")")));
 		assertTrue(isElementPresent((AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".description(\"Upload\")")));	
+						+ ".description(\"Upload\")")));*/	
+		assertTrue(isElementPresent(
+				(AndroidElement) driver.findElementByAndroidUIAutomator("new UiSelector()"+ 
+								".resourceId(\"com.owncloud.android:id/action_bar\")")));
+		assertTrue(isElementPresent(
+				(AndroidElement) driver.findElementByAndroidUIAutomator("new UiSelector()"+ 
+								".resourceId(\"com.owncloud.android:id/fab_expand_menu_button\")")));
 	}
 
 	protected void assertIsNotInFileListView() throws InterruptedException {
@@ -195,9 +201,16 @@ public class Common{
 	}
 
 	protected void assertIsInSettingsView() throws InterruptedException {
-		assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
+		/*assertTrue(waitForTextPresent("Settings", (AndroidElement) driver
 				.findElementByAndroidUIAutomator("new UiSelector()"
-						+ ".resourceId(\"android:id/action_bar_title\")")));
+						+ ".resourceId(\"android:id/action_bar_title\")")));*/
+		/*assertTrue(waitForTextPresent(user+"@"+url, (AndroidElement) driver
+				.findElementByAndroidUIAutomator("new UiSelector()"
+						+ ".resourceId(\"android:id/title\")")));*/
+		assertTrue(((AndroidElement) driver.findElementByName(Config.userAccount)).isDisplayed());
+		assertTrue(((AndroidElement) driver.findElementByName(Config.userAccount2)).isDisplayed());
+								
+		
 	}
 
 }
