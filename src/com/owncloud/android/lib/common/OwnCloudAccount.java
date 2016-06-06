@@ -46,6 +46,8 @@ public class OwnCloudAccount {
     private Uri mBaseUri; 
     
     private OwnCloudCredentials mCredentials;
+
+    private String mDisplayName;
     
     private String mSavedAccountName;
 
@@ -53,24 +55,43 @@ public class OwnCloudAccount {
 
 
     /**
-     * Constructor for already saved OC accounts.
+     * Full constructor.
      *
-     * Do not use for anonymous credentials.
+     * @param baseUri           URI to the OC server to get access to.
+     * @param credentials       Credentials to authenticate in the server. NULL is valid for anonymous credentials.
      */
-    public OwnCloudAccount(Account savedAccount, Context context) throws AccountNotFoundException {
-        if (savedAccount == null) {
-            throw new IllegalArgumentException("Parameter 'savedAccount' cannot be null");
+    public OwnCloudAccount(Uri baseUri, OwnCloudCredentials credentials) {
+        if (baseUri == null) {
+            throw new IllegalArgumentException("Parameter 'baseUri' cannot be null");
         }
-
-        if (context == null) {
-            throw new IllegalArgumentException("Parameter 'context' cannot be null");
+        mSavedAccount = null;
+        mSavedAccountName = null;
+        mBaseUri = baseUri;
+        mCredentials = credentials != null ?
+            credentials : OwnCloudCredentialsFactory.getAnonymousCredentials();
+        String username = mCredentials.getUsername();
+        if (username != null) {
+            mSavedAccountName = AccountUtils.buildAccountName(mBaseUri, username);
         }
+    }
 
-        mSavedAccount = savedAccount;
-        mSavedAccountName = savedAccount.name;
-        mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, mSavedAccount));
+
+    /**
+     * Partial constructor.
+     *
+     * Load of credentials is delayed.
+     * @param baseUri           URI to the OC server to get access to.
+     */
+    public OwnCloudAccount(Uri baseUri) {
+        if (baseUri == null) {
+            throw new IllegalArgumentException("Parameter 'baseUri' cannot be null");
+        }
+        mSavedAccount = null;
+        mSavedAccountName = null;
+        mBaseUri = baseUri;
         mCredentials = null;
     }
+
 
     /**
      * Method for deferred load of account attributes from AccountManager
@@ -94,53 +115,6 @@ public class OwnCloudAccount {
 		}
 	}
 
-    /*
-    public OwnCloudAccount(Account savedAccount, Context context)
-    		throws AccountNotFoundException, AuthenticatorException, 
-    		IOException, OperationCanceledException {
-    	
-    	if (savedAccount == null) {
-    		throw new IllegalArgumentException("Parameter 'savedAccount' cannot be null");
-    	}
-    	if (context == null) {
-    		throw new IllegalArgumentException("Parameter 'context' cannot be null");
-    	}
-    	
-    	mSavedAccountName = savedAccount.name;
-        mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, savedAccount));
-        mCredentials = AccountUtils.getCredentialsForAccount(context, savedAccount);
-        if (mCredentials == null) {
-        	mCredentials = OwnCloudCredentialsFactory.getAnonymousCredentials();
-        }
-    }
-    */
-
-    /**
-     * Constructor for non yet saved OC accounts.
-     *
-     * @param baseUri           URI to the OC server to get access to.
-     * @param credentials       Credentials to authenticate in the server. NULL is valid for anonymous credentials.
-     */
-    public OwnCloudAccount(Uri baseUri, OwnCloudCredentials credentials) {
-        if (baseUri == null) {
-            throw new IllegalArgumentException("Parameter 'baseUri' cannot be null");
-        }
-        mSavedAccount = null;
-        mSavedAccountName = null;
-        mBaseUri = baseUri;
-        mCredentials = credentials != null ? 
-        		credentials : OwnCloudCredentialsFactory.getAnonymousCredentials();
-        String username = mCredentials.getUsername();
-        if (username != null) {
-        	mSavedAccountName = AccountUtils.buildAccountName(mBaseUri, username);
-        }
-    }
-    
-
-	public boolean isAnonymous() {
-        return (mCredentials == null);
-    }   // TODO no more
-    
     public Uri getBaseUri() {
         return mBaseUri;
     }
@@ -153,5 +127,11 @@ public class OwnCloudAccount {
     	return mSavedAccountName;
     }
 
-    
+    public String getDisplayName() {
+        return mDisplayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        mDisplayName = displayName;
+    }
 }
