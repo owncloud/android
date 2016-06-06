@@ -31,7 +31,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.ActionMode;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -111,6 +110,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private boolean hideFab = true;
     private boolean miniFabClicked = false;
+    private ActionMode mActiveActionMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,6 +187,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 getActivity(),
                 mContainerActivity
         );
+        mAdapter.restoreSelectionState(savedInstanceState);
         setListAdapter(mAdapter);
 
         registerLongClickListener();
@@ -211,7 +212,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 removeFabLabels();
             }
         }
-  }
+    }
 
     /**
      * adds labels to all mini FABs.
@@ -349,27 +350,18 @@ public class OCFileListFragment extends ExtendedListFragment {
         setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
-            private Menu menu;
-
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                if (checked) {
-                    mAdapter.setNewSelection(position, checked);
-                } else {
-                    mAdapter.removeSelection(position);
-                }
-
-                updateActionsMenu(mode);
-
+                mAdapter.setNewSelection(position, checked);
+                mode.invalidate();
             }
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mActiveActionMode = mode;
 
                 createContextActionBar(menu);
-                this.menu = menu;
-
-                updateActionsMenu(mode);
+                mode.invalidate();
 
                 //set gray color
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -444,7 +436,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                 return true;
             }
 
-            private void updateActionsMenu(ActionMode mode) {
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 final int checkedCount = getListView().getCheckedItemCount();
 
                 mode.setTitle(checkedCount + " selected");
@@ -454,19 +447,14 @@ public class OCFileListFragment extends ExtendedListFragment {
 
                     if (mContainerActivity.getStorageManager() != null) {
                         FileMenuFilter mf = new FileMenuFilter(
-                            targetFiles,
-                            mContainerActivity.getStorageManager().getAccount(),
-                            mContainerActivity,
-                            getActivity()
-                        );
+                                targetFiles,
+                                mContainerActivity.getStorageManager().getAccount(),
+                                mContainerActivity,
+                                getActivity());
                         mf.filter(menu);
                     }
                 }
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
+                return true;
             }
 
             @Override
@@ -477,6 +465,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 mAdapter.removeSelection();
+                mActiveActionMode = null;
 
                 // reset to primary dark color
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -491,13 +480,14 @@ public class OCFileListFragment extends ExtendedListFragment {
         });
     }
 
-     /**
+    /**
      * Saves the current listed folder.
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(KEY_FILE, mFile);
+        mAdapter.saveSelectionState(outState);
     }
 
     @Override
@@ -833,6 +823,13 @@ public class OCFileListFragment extends ExtendedListFragment {
             } else {
                 switchToListView();
             }
+        }
+        invalidateActionMode();
+    }
+
+    private void invalidateActionMode() {
+        if(mActiveActionMode != null){
+            mActiveActionMode.invalidate();
         }
     }
 
