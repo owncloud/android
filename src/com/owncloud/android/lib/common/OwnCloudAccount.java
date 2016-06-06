@@ -128,7 +128,13 @@ public class OwnCloudAccount {
     }
 
     public String getDisplayName() {
-        return mDisplayName;
+        if (mDisplayName != null && mDisplayName.length() > 0) {
+            return mDisplayName;
+        } else if (mCredentials != null) {
+            return mCredentials.getUsername();
+        } else {
+            return "NONE";
+        }
     }
 
     public void setDisplayName(String displayName) {

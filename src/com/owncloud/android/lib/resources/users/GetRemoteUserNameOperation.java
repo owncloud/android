@@ -59,10 +59,10 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
 	private static final String NODE_DISPLAY_NAME= "display-name";
 	private static final String NODE_EMAIL= "email";
 
-	private String mUserName;
+	private String mDisplayName;
 
-	public String getUserName() {
-		return mUserName;
+	public String getDisplayName() {
+		return mDisplayName;
 	}
 
 	
@@ -98,7 +98,7 @@ public class GetRemoteUserNameOperation extends RemoteOperation {
                  ArrayList<Object> data = new ArrayList<Object>();
                  data.add(displayName);
                  result.setData(data);
-				 mUserName =  displayName;
+				 mDisplayName =  displayName;
 				 
 				 Log_OC.d(TAG, "*** Parsed user information: " + id + " - " + displayName + " - " + email);
 				 
