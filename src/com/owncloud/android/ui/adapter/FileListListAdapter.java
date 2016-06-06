@@ -35,7 +35,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -308,25 +307,22 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
             checkBoxV.setVisibility(View.GONE);
+            view.setBackgroundColor(Color.WHITE);
 
             AbsListView parentList = (AbsListView)parent;
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                view.setBackgroundColor(Color.WHITE);
-                if (parentList.getChoiceMode() == AbsListView.CHOICE_MODE_NONE) {
-                    checkBoxV.setVisibility(View.GONE);
-                } else if (parentList.getCheckedItemCount() > 0){
-                    if (parentList.isItemChecked(position)) {
-                        view.setBackgroundColor(mContext.getResources().getColor(
-                                R.color.selected_item_background));
-                        checkBoxV.setImageResource(
-                                R.drawable.ic_checkbox_marked);
-                    } else {
-                        view.setBackgroundColor(Color.WHITE);
-                        checkBoxV.setImageResource(
-                                R.drawable.ic_checkbox_blank_outline);
-                    }
-                    checkBoxV.setVisibility(View.VISIBLE);
+            if (parentList.getChoiceMode() != AbsListView.CHOICE_MODE_NONE
+                    && parentList.getCheckedItemCount() > 0){
+                if (parentList.isItemChecked(position)) {
+                    view.setBackgroundColor(mContext.getResources().getColor(
+                            R.color.selected_item_background));
+                    checkBoxV.setImageResource(
+                            R.drawable.ic_checkbox_marked);
+                } else {
+                    view.setBackgroundColor(Color.WHITE);
+                    checkBoxV.setImageResource(
+                            R.drawable.ic_checkbox_blank_outline);
                 }
+                checkBoxV.setVisibility(View.VISIBLE);
             }
             
             // For all Views
