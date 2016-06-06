@@ -36,6 +36,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -63,6 +64,8 @@ import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.util.Vector;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 
 /**
@@ -70,6 +73,8 @@ import java.util.Vector;
  * instance.
  */
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
+
+    private static final String SELECTION_KEY = "multiFileSelectionsKey";
 
     private Context mContext;
     private OCFile mFile = null;
@@ -86,7 +91,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     private SharedPreferences mAppPreferences;
 
-    private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
+    private HashSet<Long> mSelection = new LinkedHashSet<Long>();
     
     public FileListListAdapter(
             boolean justFolders, 
@@ -390,7 +395,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             }
         }
 
-        if (mSelection.get(position) != null) {
+        if (mSelection.contains(getItemId(position))) {
             view.setBackgroundColor(mContext.getResources().getColor(R.color.selected_item_background));
         } else {
             view.setBackgroundColor(Color.WHITE);
@@ -486,6 +491,59 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public void setGridMode(boolean gridMode) {
         mGridMode = gridMode;
+    }
+
+    // TODO Tobi: all methods needed?
+    public void setNewSelection(int position, boolean checked) {
+        if(checked){
+            mSelection.add(getItemId(position));
+            notifyDataSetChanged();
+        } else {
+            removeSelection(position);
+        }
+    }
+
+    public void removeSelection(int position) {
+        mSelection.remove(getItemId(position));
+        notifyDataSetChanged();
+    }
+
+    public void removeSelection(){
+         mSelection.clear();
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<OCFile> getCheckedItems() {
+        ArrayList<OCFile> files = new ArrayList<OCFile>();
+        if (mFiles != null && mFiles.size() != 0){
+            for(OCFile file: mFiles){
+                if(mSelection.contains(file.getFileId())){
+                    files.add(file);
+                }
+            }
+        }
+        return files;
+    }
+    public void restoreSelectionState(Bundle savedInstanceState){
+        if (savedInstanceState == null) {
+            return;
+        }
+        long[] selectionState = savedInstanceState.getLongArray(SELECTION_KEY);
+        mSelection.clear();
+        if(selectionState != null) {
+            for (long id : selectionState) {
+                mSelection.add(id);
+            }
+        }
+    }
+
+    public void saveSelectionState(Bundle outState) {
+        long[] selectionStatePrimitive = new long[mSelection.size()];
+        int i = 0;
+        for (Long id : mSelection) {
+            selectionStatePrimitive[i++] = id;
+        }
+        outState.putLongArray(SELECTION_KEY, selectionStatePrimitive);
     }
 
     public boolean isGridMode() {
