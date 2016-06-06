@@ -142,10 +142,9 @@ public class FileDataStorageManager {
     }
 
 
-    public Vector<OCFile> getFolderContent(OCFile f/*, boolean onlyOnDevice*/) {
+    public Vector<OCFile> getFolderContent(OCFile f, boolean onlyOnDevice) {
         if (f != null && f.isFolder() && f.getFileId() != -1) {
-            // TODO Enable when "On Device" is recovered ?
-            return getFolderContent(f.getFileId()/*, onlyOnDevice*/);
+            return getFolderContent(f.getFileId(), onlyOnDevice);
 
         } else {
             return new Vector<OCFile>();
@@ -153,12 +152,11 @@ public class FileDataStorageManager {
     }
 
 
-    public Vector<OCFile> getFolderImages(OCFile folder/*, boolean onlyOnDevice*/) {
+    public Vector<OCFile> getFolderImages(OCFile folder, boolean onlyOnDevice) {
         Vector<OCFile> ret = new Vector<OCFile>();
         if (folder != null) {
             // TODO better implementation, filtering in the access to database instead of here
-            // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> tmp = getFolderContent(folder/*, onlyOnDevice*/);
+            Vector<OCFile> tmp = getFolderContent(folder, onlyOnDevice);
             OCFile current = null;
             for (int i=0; i<tmp.size(); i++) {
                 current = tmp.get(i);
@@ -529,8 +527,7 @@ public class FileDataStorageManager {
         File localFolder = new File(localFolderPath);
         if (localFolder.exists()) {
             // stage 1: remove the local files already registered in the files database
-            // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> files = getFolderContent(folder.getFileId()/*, false*/);
+            Vector<OCFile> files = getFolderContent(folder.getFileId(), false);
             if (files != null) {
                 for (OCFile file : files) {
                     if (file.isFolder()) {
@@ -728,46 +725,78 @@ public class FileDataStorageManager {
                 if (!targetFolder.exists()) {
                     targetFolder.mkdirs();
                 }
-                copied = copyFile(localFile, targetFile);
+                copied = FileStorageUtils.copyFile(localFile, targetFile);
             }
             Log_OC.d(TAG, "Local file COPIED : " + copied);
         }
     }
 
-    private boolean copyFile(File src, File target) {
-        boolean ret = true;
+    public void migrateStoredFiles(String srcPath, String dstPath) throws Exception {
+        Cursor c = null;
+        if (getContentResolver() != null) {
+            c = getContentResolver().query(ProviderTableMeta.CONTENT_URI_FILE,
+                    null,
+                    ProviderTableMeta.FILE_STORAGE_PATH  + " IS NOT NULL",
+                    null,
+                    null);
 
-        InputStream in = null;
-        OutputStream out = null;
-
-        try {
-            in = new FileInputStream(src);
-            out = new FileOutputStream(target);
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-        } catch (IOException ex) {
-            ret = false;
-        } finally {
-            if (in != null) try {
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace(System.err);
-            }
-            if (out != null) try {
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace(System.err);
+        } else {
+            try {
+                c = getContentProviderClient().query(ProviderTableMeta.CONTENT_URI_FILE,
+                        new String[]{ProviderTableMeta._ID, ProviderTableMeta.FILE_STORAGE_PATH},
+                        ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL",
+                        null,
+                        null);
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, e.getMessage());
+                throw e;
             }
         }
 
-        return ret;
+        ArrayList<ContentProviderOperation> operations =
+                new ArrayList<ContentProviderOperation>(c.getCount());
+        if (c.moveToFirst()) {
+            do {
+                ContentValues cv = new ContentValues();
+                long fileId = c.getLong(c.getColumnIndex(ProviderTableMeta._ID));
+                String oldFileStoragePath = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH));
+
+                if (oldFileStoragePath.startsWith(srcPath)) {
+
+                    cv.put(
+                            ProviderTableMeta.FILE_STORAGE_PATH,
+                            oldFileStoragePath.replaceFirst(srcPath, dstPath));
+
+                    operations.add(
+                            ContentProviderOperation.newUpdate(ProviderTableMeta.CONTENT_URI).
+                                    withValues(cv).
+                                    withSelection(
+                                            ProviderTableMeta._ID + "=?",
+                                            new String[]{String.valueOf(fileId)}
+                                    )
+                                    .build());
+                }
+
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        /// 3. apply updates in batch
+        try {
+            if (getContentResolver() != null) {
+                getContentResolver().applyBatch(MainApp.getAuthority(), operations);
+
+            } else {
+                getContentProviderClient().applyBatch(operations);
+            }
+
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 
-    private Vector<OCFile> getFolderContent(long parentId/*, boolean onlyOnDevice*/) {
+    private Vector<OCFile> getFolderContent(long parentId, boolean onlyOnDevice) {
 
         Vector<OCFile> ret = new Vector<OCFile>();
 
@@ -794,10 +823,9 @@ public class FileDataStorageManager {
         if (c.moveToFirst()) {
             do {
                 OCFile child = createFileInstance(c);
-                // TODO Enable when "On Device" is recovered ?
-                // if (child.isFolder() || !onlyOnDevice || onlyOnDevice && child.isDown()){
-                ret.add(child);
-                // }
+                 if (child.isFolder() || !onlyOnDevice || onlyOnDevice && child.isDown()){
+                    ret.add(child);
+                 }
             } while (c.moveToNext());
         }
 
@@ -1604,8 +1632,7 @@ public class FileDataStorageManager {
                     + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?";
             String [] whereArgs = new String[]{ "", mAccount.name };
 
-            // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> files = getFolderContent(folder /*, false*/);
+            Vector<OCFile> files = getFolderContent(folder, false);
 
             for (OCFile file : files) {
                 whereArgs[0] = file.getRemotePath();

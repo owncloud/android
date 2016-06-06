@@ -26,8 +26,13 @@ import android.accounts.Account;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo.State;
+import android.net.Uri;
+import android.os.BatteryManager;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.support.v4.content.ContextCompat;
@@ -72,7 +77,7 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Because we support NEW_PHOTO_ACTION and NEW_PHOTO_ACTION_UNOFFICIAL it can happen that 
+     * Because we support NEW_PHOTO_ACTION and NEW_PHOTO_ACTION_UNOFFICIAL it can happen that
      * handleNewPictureAction is called twice for the same photo. Use this simple static variable to
      * remember last uploaded photo to filter duplicates. Must not be null!
      */
@@ -108,7 +113,12 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
-        c = context.getContentResolver().query(intent.getData(), CONTENT_PROJECTION, null, null, null);
+        Uri contentUri = intent.getData();
+        if (contentUri == null) {
+            Log_OC.e(TAG, "Unexpected NULL URI in Intent: " + intent.toString());
+            return;
+        }
+        c = context.getContentResolver().query(contentUri, CONTENT_PROJECTION, null, null, null);
         if (!c.moveToFirst()) {
             Log_OC.e(TAG, "Couldn't resolve given uri: " + intent.getDataString());
             return;
@@ -117,6 +127,8 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         file_name = c.getString(c.getColumnIndex(Images.Media.DISPLAY_NAME));
         mime_type = c.getString(c.getColumnIndex(Images.Media.MIME_TYPE));
         c.close();
+
+        Log_OC.d(TAG, file_path + "");
 
         if (file_path.equals(lastUploadedPhotoPath)) {
             Log_OC.d(TAG, "Duplicate detected: " + file_path + ". Ignore.");
@@ -202,4 +214,27 @@ public class InstantUploadBroadcastReceiver extends BroadcastReceiver {
         );
     }
 
+    public static boolean isOnline(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    public static boolean isConnectedViaWiFi(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm != null && cm.getActiveNetworkInfo() != null
+                && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI
+                && cm.getActiveNetworkInfo().getState() == State.CONNECTED;
+    }
+
+    public static boolean isCharging(Context context){
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = context.registerReceiver(null, ifilter);
+
+        int status = 0;
+        if (batteryStatus != null) {
+            status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        }
+        return status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL;
+    }
 }

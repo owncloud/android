@@ -23,15 +23,25 @@ package com.owncloud.android;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.ExceptionHandler;
+import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.ui.activity.Preferences;
+import com.owncloud.android.ui.activity.Preferences;
 
 
 /**
@@ -53,15 +63,24 @@ public class MainApp extends Application {
 
     private static Context mContext;
 
-    // TODO Enable when "On Device" is recovered?
-    // TODO better place
-    // private static boolean mOnlyOnDevice = false;
+    private static String storagePath;
+
+    private static boolean mOnlyOnDevice = false;
 
     
     public void onCreate(){
         super.onCreate();
         MainApp.mContext = getApplicationContext();
-        
+
+        // Setup handler for uncaught exceptions.
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+
+
+        SharedPreferences appPrefs =
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        MainApp.storagePath = appPrefs.getString(Preferences.Keys.STORAGE_PATH, Environment.
+                              getExternalStorageDirectory().getAbsolutePath());
+
         boolean isSamlAuth = AUTH_ON.equals(getString(R.string.auth_method_saml_web_sso));
 
         OwnCloudClientManagerFactory.setUserAgent(getUserAgent());
@@ -81,7 +100,7 @@ public class MainApp extends Application {
             // Set folder for store logs
             Log_OC.setLogDataFolder(dataFolder);
 
-            Log_OC.startLogging();
+            Log_OC.startLogging(MainApp.storagePath);
             Log_OC.d("Debug", "start logging");
         }
 
@@ -132,7 +151,15 @@ public class MainApp extends Application {
         return MainApp.mContext;
     }
 
-    // Methods to obtain Strings referring app_name 
+    public static String getStoragePath(){
+        return MainApp.storagePath;
+    }
+
+    public static void setStoragePath(String path){
+        MainApp.storagePath = path;
+    }
+
+    // Methods to obtain Strings referring app_name
     //   From AccountAuthenticator 
     //   public static final String ACCOUNT_TYPE = "owncloud";    
     public static String getAccountType() {
@@ -175,14 +202,13 @@ public class MainApp extends Application {
         return getAppContext().getResources().getString(R.string.log_name);
     }
 
-    // TODO Enable when "On Device" is recovered ?
-//    public static void showOnlyFilesOnDevice(boolean state){
-//        mOnlyOnDevice = state;
-//    }
-//
-//    public static boolean getOnlyOnDevice(){
-//        return mOnlyOnDevice;
-//    }
+    public static void showOnlyFilesOnDevice(boolean state){
+        mOnlyOnDevice = state;
+    }
+
+    public static boolean getOnlyOnDevice(){
+        return mOnlyOnDevice;
+    }
 
     // user agent
     public static String getUserAgent() {

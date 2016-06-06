@@ -104,7 +104,6 @@ public class ShareUserListAdapter extends ArrayAdapter {
                     mListener.unshareButtonPressed(mShares.get(position));
                 }
             });
-
         }
         return view;
     }

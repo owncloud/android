@@ -20,9 +20,6 @@
  */
 package com.owncloud.android.ui.fragment;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +34,10 @@ import android.widget.ListView;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.adapter.LocalFileListAdapter;
+import com.owncloud.android.utils.FileStorageUtils;
+
+import java.io.File;
+import java.util.ArrayList;
 
 
 /**
@@ -97,6 +98,17 @@ public class LocalFileListFragment extends ExtendedListFragment {
         setListAdapter(mAdapter);
         
         Log_OC.i(TAG, "onActivityCreated() stop");
+    }
+
+    public void selectAllFiles(boolean value)
+    {
+        ListView lst = (ListView)getListView();
+        for (int pos = 0; pos < lst.getCount(); pos++) {
+            File file = (File) mAdapter.getItem(pos);
+            if (file.isFile()) {
+                lst.setItemChecked(pos, value);
+            }
+        }
     }
     
     /**
@@ -228,7 +240,19 @@ public class LocalFileListFragment extends ExtendedListFragment {
         return result.toArray(new String[result.size()]);
     }
 
-    
+    public void sortByName(boolean descending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_NAME, descending);
+    }
+
+    public void sortByDate(boolean descending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_DATE, descending);
+    }
+
+    public void sortBySize(boolean descending) {
+        mAdapter.setSortOrder(FileStorageUtils.SORT_SIZE, descending);
+    }
+
+
     /**
      * Interface to implement by any Activity that includes some instance of LocalFileListFragment
      */

@@ -227,7 +227,7 @@
   <string name="unfavorite">Offline verfügbar Markierung entfernen</string>
   <string name="common_rename">Umbenennen</string>
   <string name="common_remove">Löschen</string>
-  <string name="confirmation_remove_alert">Möchtest Du %1$s wirklich löschen?</string>
+  <string name="confirmation_remove_file_alert">Möchtest Du %1$s wirklich löschen?</string>
   <string name="confirmation_remove_folder_alert">Möchtest Du wirklich %1$s und dessen Inhalte entfernen?</string>
   <string name="confirmation_remove_local">Nur lokal</string>
   <string name="remove_success_msg">Erfolgreich gelöscht</string>
@@ -271,7 +271,6 @@
   <string name="ssl_validator_label_validity_to">Bis:</string>
   <string name="ssl_validator_label_signature">Signatur:</string>
   <string name="ssl_validator_label_signature_algorithm">Algorithmus:</string>
-  <string name="digest_algorithm_not_available">Dieser Algorithmus-Auszug ist auf Deinem Handy nicht Verfügbar.</string>
   <string name="ssl_validator_label_certificate_fingerprint">Fingerabdruck:</string>
   <string name="certificate_load_problem">Beim Laden des Zertifikats ist ein Fehler aufgetreten.</string>
   <string name="ssl_validator_null_cert">Das Zertifikat konnte nicht gezeigt werden.</string>
@@ -348,7 +347,8 @@
   <string name="copy_file_invalid_overwrite">Die Datei existiert bereits im Zielverzeichnis</string>
   <string name="copy_file_error">Es ist ein Fehler beim Kopieren der Datei oder des Ordners aufgetreten.</string>
   <string name="forbidden_permissions_copy">diese Datei zu kopieren</string>
-  <string name="prefs_category_instant_uploading">sofort hochladen</string>
+  <string name="prefs_category_instant_uploading">Sofortiges Hochladen</string>
+  <string name="prefs_category_security">Sicherheit</string>
   <string name="prefs_category_details">Details</string>
   <string name="prefs_instant_video_upload_path_title">Video Speicherpfad wählen</string>
   <string name="sync_folder_failed_content">Bei der Synchronisation konnte %1$s Ordner nicht fertig gestellt werden</string>
@@ -368,12 +368,8 @@
   <string name="file_list__footer__files">%1$d Dateien</string>
   <string name="file_list__footer__files_and_folder">%1$d Dateien, 1 Ordner</string>
   <string name="file_list__footer__files_and_folders">%1$d Dateien, %2$d Ordner</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Originaldatei wird...</string>
-  <string name="prefs_instant_behaviour_title">Originaldatei wird...</string>
   <string name="upload_copy_files">kopiere Datei</string>
   <string name="upload_move_files">verschiebe Datei</string>
-  <string name="pref_behaviour_entries_keep_file">im Originalordner behalten</string>
-  <string name="pref_behaviour_entries_move">in den App-Ordner verschoben</string>
   <string name="share_dialog_title">Teilen</string>
   <string name="share_file">Teile %1$s</string>
   <string name="share_with_user_section_title">Mit Benutzern oder Gruppen teilen</string>
@@ -388,7 +384,6 @@
   <string name="share_with_title">Teile mit ...</string>
   <string name="share_with_edit_title">Teile mit %1$s</string>
   <string name="share_search">Suche</string>
-  <string name="search_users_and_groups_hint">Nutzer und Gruppen suchen</string>
   <string name="share_group_clarification">%1$s (Gruppe)</string>
   <string name="share_remote_clarification">%1$s (remote)</string>
   <string name="share_known_remote_clarification">%1$s ( at %2$s )</string>

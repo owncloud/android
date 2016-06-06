@@ -20,12 +20,10 @@
  */
 package com.owncloud.android.ui.adapter;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +38,12 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * This Adapter populates a ListView with all files and directories contained
@@ -53,9 +56,18 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     private Context mContext;
     private File mDirectory;
     private File[] mFiles = null;
+    private SharedPreferences mAppPreferences;
     
     public LocalFileListAdapter(File directory, Context context) {
         mContext = context;
+
+        mAppPreferences = PreferenceManager
+                .getDefaultSharedPreferences(mContext);
+
+        // Read sorting order, default to sort by name ascending
+        FileStorageUtils.mSortOrder = mAppPreferences.getInt("sortOrder", 0);
+        FileStorageUtils.mSortAscending = mAppPreferences.getBoolean("sortAscending", true);
+
         swapDirectory(directory);
     }
 
@@ -109,9 +121,9 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             ImageView fileIcon = (ImageView) view.findViewById(R.id.thumbnail);
 
             /** Cancellation needs do be checked and done before changing the drawable in fileIcon, or
-             * {@link ThumbnailsCacheManager#cancelPotentialWork} will NEVER cancel any task.
+             * {@link ThumbnailsCacheManager#cancelPotentialThumbnailWork} will NEVER cancel any task.
              **/
-            boolean allowedToCreateNewThumbnail = (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon));
+            boolean allowedToCreateNewThumbnail = (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon));
 
             if (!file.isDirectory()) {
                 fileIcon.setImageResource(R.drawable.file);
@@ -147,7 +159,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 if (BitmapUtils.isImage(file)){
                 // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
-                            String.valueOf(file.hashCode())
+                            "t" + String.valueOf(file.hashCode())
                     );
                     if (thumbnail != null){
                         fileIcon.setImageBitmap(thumbnail);
@@ -160,14 +172,14 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                             if (thumbnail == null) {
                                 thumbnail = ThumbnailsCacheManager.mDefaultImg;
                             }
-                            final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
-                        		new ThumbnailsCacheManager.AsyncDrawable(
+                            final ThumbnailsCacheManager.AsyncThumbnailDrawable asyncDrawable =
+                        		new ThumbnailsCacheManager.AsyncThumbnailDrawable(
                                     mContext.getResources(), 
                                     thumbnail, 
                                     task
                 		        );
                             fileIcon.setImageDrawable(asyncDrawable);
-                            task.execute(file);
+                            task.execute(file, true);
                             Log_OC.v(TAG, "Executing task to generate a new thumbnail");
 
                         } // else, already being generated, don't restart it
@@ -215,7 +227,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     public void swapDirectory(File directory) {
         mDirectory = directory;
         mFiles = (mDirectory != null ? mDirectory.listFiles() : null);
-        if (mFiles != null) {
+        if (mFiles != null && mFiles.length > 0) {
             Arrays.sort(mFiles, new Comparator<File>() {
                 @Override
                 public int compare(File lhs, File rhs) {
@@ -232,7 +244,23 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                 }
             
             });
+
+            mFiles = FileStorageUtils.sortLocalFolder(mFiles);
         }
         notifyDataSetChanged();
+    }
+
+    public void setSortOrder(Integer order, boolean ascending) {
+        SharedPreferences.Editor editor = mAppPreferences.edit();
+        editor.putInt("sortOrder", order);
+        editor.putBoolean("sortAscending", ascending);
+        editor.commit();
+
+        FileStorageUtils.mSortOrder = order;
+        FileStorageUtils.mSortAscending = ascending;
+
+        mFiles = FileStorageUtils.sortLocalFolder(mFiles);
+        notifyDataSetChanged();
+
     }
 }

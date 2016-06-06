@@ -20,11 +20,16 @@
 
 package com.owncloud.android.ui.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -37,6 +42,7 @@ import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.ExtendedListView;
@@ -52,14 +58,16 @@ public class ExtendedListFragment extends Fragment
 
     protected static final String TAG = ExtendedListFragment.class.getSimpleName();
 
-    protected static final String KEY_SAVED_LIST_POSITION = "SAVED_LIST_POSITION"; 
+    protected static final String KEY_SAVED_LIST_POSITION = "SAVED_LIST_POSITION";
 
     private static final String KEY_INDEXES = "INDEXES";
     private static final String KEY_FIRST_POSITIONS= "FIRST_POSITIONS";
     private static final String KEY_TOPS = "TOPS";
     private static final String KEY_HEIGHT_CELL = "HEIGHT_CELL";
     private static final String KEY_EMPTY_LIST_MESSAGE = "EMPTY_LIST_MESSAGE";
+    private static final String GRID_COLUMNS = "gridColumns";
 
+    private ScaleGestureDetector mScaleGestureDetector = null;
     protected SwipeRefreshLayout mRefreshListLayout;
     private SwipeRefreshLayout mRefreshGridLayout;
     protected SwipeRefreshLayout mRefreshEmptyLayout;
@@ -85,6 +93,8 @@ public class ExtendedListFragment extends Fragment
     private View mGridFooterView;
 
     private ListAdapter mAdapter;
+
+    private float mScale = -1f;
 
     protected void setListAdapter(ListAdapter listAdapter) {
         mAdapter = listAdapter;
@@ -154,23 +164,80 @@ public class ExtendedListFragment extends Fragment
         }
         return false;
     }
-    
+
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log_OC.d(TAG, "onCreateView");
 
+        // TODO Tobi remove
+//         AbsListView.MultiChoiceModeListener listener = new AbsListView.MultiChoiceModeListener() {
+//            @Override
+//            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+//                // Capture total checked items
+//                final int checkedCount = mListView.getCheckedItemCount();
+//                // Set the CAB title according to total checked items
+//                mode.setTitle(checkedCount + " Selected");
+//                // Calls toggleSelection method from ListViewAdapter Class
+//                 // mAdapter.toggleSelection(position);
+//
+//                if (checked){
+//                    mAdapter.setNewSelection(position,checked);
+//                } else {
+//                    mAdapter.removeSelection(position);
+//                }
+//            }
+//
+//            @Override
+//            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+//                mode.getMenuInflater().inflate(R.menu.context, menu);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onDestroyActionMode(ActionMode mode) {
+//                // mAdapter.removeSelection();
+//            }
+//        };
+
         View v = inflater.inflate(R.layout.list_fragment, null);
 
         mListView = (ExtendedListView)(v.findViewById(R.id.list_root));
         mListView.setOnItemClickListener(this);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        // mListView.setMultiChoiceModeListener(listener);
         mListFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
         mGridView = (GridViewWithHeaderAndFooter) (v.findViewById(R.id.grid_root));
         mGridView.setNumColumns(GridView.AUTO_FIT);
         mGridView.setOnItemClickListener(this);
+        mGridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+        // mGridView.setMultiChoiceModeListener(listener);
+
         mGridFooterView = inflater.inflate(R.layout.list_footer, null, false);
+
+        mScaleGestureDetector = new ScaleGestureDetector(MainApp.getAppContext(),new ScaleListener());
+//        gestureDetector = new GestureDetector(MainApp.getAppContext(), new SingleTapConfirm());
+
+        mGridView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mScaleGestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
 
         if (savedInstanceState != null) {
             int referencePosition = savedInstanceState.getInt(KEY_SAVED_LIST_POSITION);
@@ -206,6 +273,30 @@ public class ExtendedListFragment extends Fragment
         return v;
     }
 
+    private class SingleTapConfirm extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return true;
+        }
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            if (mScale == -1f) {
+                mGridView.setNumColumns(GridView.AUTO_FIT);
+                mScale = mGridView.getNumColumns();
+            }
+            mScale *= 1.f - (detector.getScaleFactor() - 1.f);
+            mScale = Math.max(2.0f, Math.min(mScale, 10.0f));
+            Integer scaleInt = Math.round(mScale);
+            mGridView.setNumColumns(scaleInt);
+            mGridView.invalidateViews();
+
+            return true;
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -226,7 +317,11 @@ public class ExtendedListFragment extends Fragment
             mTops = new ArrayList<Integer>();
             mHeightCell = 0;
         }
-    }    
+
+        SharedPreferences appPreferences = PreferenceManager
+                .getDefaultSharedPreferences(MainApp.getAppContext());
+        mScale = appPreferences.getFloat(GRID_COLUMNS, -1.0f);
+    }
     
     
     @Override
@@ -239,6 +334,10 @@ public class ExtendedListFragment extends Fragment
         savedInstanceState.putIntegerArrayList(KEY_TOPS, mTops);
         savedInstanceState.putInt(KEY_HEIGHT_CELL, mHeightCell);
         savedInstanceState.putString(KEY_EMPTY_LIST_MESSAGE, getEmptyViewText());
+
+        SharedPreferences.Editor editor = PreferenceManager
+                .getDefaultSharedPreferences(MainApp.getAppContext()).edit();
+        editor.putFloat(GRID_COLUMNS, mScale).apply();
     }
 
     /**

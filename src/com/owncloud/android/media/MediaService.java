@@ -21,25 +21,32 @@
 package com.owncloud.android.media;
 
 import android.accounts.Account;
+import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
@@ -145,7 +152,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
     /** Notification builder to create notifications, new reuse way since Android 6 */
     private NotificationCompat.Builder mNotificationBuilder;
-    
+
     /**
      * Helper method to get an error message suitable to show to users for errors occurred in media playback,
      * 
@@ -212,6 +219,25 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             messageId = R.string.media_err_unknown;
         }
         return context.getString(messageId);
+    }
+
+    public static AlertDialog.Builder streamWithExternalApp(final String uri, final Activity activity){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(activity.getString(R.string.stream_expose_password))
+                .setPositiveButton(activity.getString(R.string.common_yes),
+                                   new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(uri));
+                                            activity.startActivity(i);
+                                        }
+                                    })
+                .setNegativeButton(activity.getString(R.string.common_no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        return builder;
     }
 
 
@@ -435,12 +461,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         releaseResources(false); // release everything except MediaPlayer
 
         try {
-            if (mFile == null) { 
-                Toast.makeText(this, R.string.media_err_nothing_to_play, Toast.LENGTH_LONG).show();
-                processStopRequest(true);
-                return;
-                
-            } else if (mAccount == null) {
+            if (mAccount == null) {
                 Toast.makeText(this, R.string.media_err_not_in_owncloud, Toast.LENGTH_LONG).show();
                 processStopRequest(true);
                 return;
@@ -449,12 +470,12 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             createMediaPlayerIfNeeded();
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             String url = mFile.getStoragePath();
-            /* Streaming is not possible right now
+
             if (url == null || url.length() <= 0) {
                 url = AccountUtils.constructFullURLForAccount(this, mAccount) + mFile.getRemotePath();
             }
             mIsStreaming = url.startsWith("http:") || url.startsWith("https:");
-            */
+
             mIsStreaming = false;
             
             mPlayer.setDataSource(url);
@@ -495,6 +516,8 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             Toast.makeText(this, String.format(getString(R.string.media_err_unexpected), mFile.getFileName()),
                     Toast.LENGTH_LONG).show();
             processStopRequest(true);
+        } catch (AccountUtils.AccountNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

@@ -28,9 +28,9 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +54,9 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 
@@ -77,7 +80,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private enum ViewType {LIST_ITEM, GRID_IMAGE, GRID_ITEM };
 
     private SharedPreferences mAppPreferences;
-    
+
+    private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
+
     public FileListListAdapter(
             boolean justFolders, 
             Context context,
@@ -154,7 +159,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         ViewType viewType;
         if (!mGridMode){
             viewType = ViewType.LIST_ITEM;
-        } else if (file.isImage()){
+        } else if (file.isImage() || file.isVideo()){
             viewType = ViewType.GRID_IMAGE;
         } else {
             viewType = ViewType.GRID_ITEM;
@@ -199,7 +204,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
 
                     lastModV.setVisibility(View.VISIBLE);
-                    lastModV.setText(showRelativeTimestamp(file));
+                    lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file));
 
                     checkBoxV.setVisibility(View.GONE);
 
@@ -297,7 +302,26 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                     break;
             }
-            
+
+            ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
+            checkBoxV.setVisibility(View.GONE);
+
+            AbsListView parentList = (AbsListView)parent;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                if (parentList.getChoiceMode() == AbsListView.CHOICE_MODE_NONE) {
+                    checkBoxV.setVisibility(View.GONE);
+                } else if (parentList.getCheckedItemCount() > 0){
+                    if (parentList.isItemChecked(position)) {
+                        checkBoxV.setImageResource(
+                                R.drawable.ic_checkbox_marked);
+                    } else {
+                        checkBoxV.setImageResource(
+                                R.drawable.ic_checkbox_blank_outline);
+                    }
+                    checkBoxV.setVisibility(View.VISIBLE);
+                }
+            }
+
             // For all Views
             
             // this if-else is needed even though favorite icon is visible by default
@@ -310,16 +334,21 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             
             // No Folder
             if (!file.isFolder()) {
-                if (file.isImage() && file.getRemoteId() != null){
+                if ((file.isImage() || file.isVideo()) && file.getRemoteId() != null){
                     // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
-                            String.valueOf(file.getRemoteId())
-                            );
+                            "t" + String.valueOf(file.getRemoteId()));
                     if (thumbnail != null && !file.needsUpdateThumbnail()){
-                        fileIcon.setImageBitmap(thumbnail);
+
+                        if (file.isVideo()) {
+                            Bitmap withOverlay = ThumbnailsCacheManager.addVideoOverlay(thumbnail);
+                            fileIcon.setImageBitmap(withOverlay);
+                        } else {
+                            fileIcon.setImageBitmap(thumbnail);
+                        }
                     } else {
                         // generate new Thumbnail
-                        if (ThumbnailsCacheManager.cancelPotentialWork(file, fileIcon)) {
+                        if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                             final ThumbnailsCacheManager.ThumbnailGenerationTask task =
                                     new ThumbnailsCacheManager.ThumbnailGenerationTask(
                                             fileIcon, mStorageManager, mAccount
@@ -327,14 +356,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                             if (thumbnail == null) {
                                 thumbnail = ThumbnailsCacheManager.mDefaultImg;
                             }
-                            final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
-                                    new ThumbnailsCacheManager.AsyncDrawable(
+                            final ThumbnailsCacheManager.AsyncThumbnailDrawable asyncDrawable =
+                                    new ThumbnailsCacheManager.AsyncThumbnailDrawable(
                                     mContext.getResources(), 
                                     thumbnail, 
                                     task
                                     );
                             fileIcon.setImageDrawable(asyncDrawable);
-                            task.execute(file);
+                            task.execute(file, true);
                         }
                     }
 
@@ -359,6 +388,12 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         )
                 );
             }
+        }
+
+        if (mSelection.get(position) != null) {
+            view.setBackgroundColor(mContext.getResources().getColor(R.color.selected_item_background));
+        } else {
+            view.setBackgroundColor(Color.WHITE);
         }
 
         return view;
@@ -387,15 +422,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
      *                                  mStorageManager if is different (and not NULL)
      */
     public void swapDirectory(OCFile directory, FileDataStorageManager updatedStorageManager
-            /*, boolean onlyOnDevice*/) {
+            , boolean onlyOnDevice) {
         mFile = directory;
         if (updatedStorageManager != null && updatedStorageManager != mStorageManager) {
             mStorageManager = updatedStorageManager;
             mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
         }
         if (mStorageManager != null) {
-            // TODO Enable when "On Device" is recovered ?
-            mFiles = mStorageManager.getFolderContent(mFile/*, onlyOnDevice*/);
+            mFiles = mStorageManager.getFolderContent(mFile, onlyOnDevice);
             mFilesOrig.clear();
             mFilesOrig.addAll(mFiles);
             
@@ -406,7 +440,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mFiles = null;
         }
 
-        mFiles = FileStorageUtils.sortFolder(mFiles);
+        mFiles = FileStorageUtils.sortOcFolder(mFiles);
         notifyDataSetChanged();
     }
     
@@ -428,7 +462,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         return ret;
     }
     
-    
+
     public void setSortOrder(Integer order, boolean ascending) {
         SharedPreferences.Editor editor = mAppPreferences.edit();
         editor.putInt("sortOrder", order);
@@ -439,14 +473,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         FileStorageUtils.mSortAscending = ascending;
         
 
-        mFiles = FileStorageUtils.sortFolder(mFiles);
+        mFiles = FileStorageUtils.sortOcFolder(mFiles);
         notifyDataSetChanged();
 
-    }
-    
-    private CharSequence showRelativeTimestamp(OCFile file){
-        return DisplayUtils.getRelativeDateTimeString(mContext, file.getModificationTimestamp(),
-                DateUtils.SECOND_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0);
     }
 
     public void setGridMode(boolean gridMode) {
@@ -455,5 +484,43 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public boolean isGridMode() {
         return mGridMode;
+    }
+
+    // TODO Tobi: all methods needed?
+    public void setNewSelection(int position, boolean checked) {
+        mSelection.put(position, checked);
+        notifyDataSetChanged();
+    }
+
+    public void removeSelection(int position) {
+        mSelection.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void removeSelection(){
+         mSelection.clear();
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Integer> getCheckedItemPositions() {
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+
+        for (Map.Entry<Integer, Boolean> entry : mSelection.entrySet()){
+            if (entry.getValue()){
+                ids.add(entry.getKey());
+            }
+        }
+        return ids;
+    }
+
+    public ArrayList<OCFile> getCheckedItems() {
+        ArrayList<OCFile> files = new ArrayList<OCFile>();
+
+        for (Map.Entry<Integer, Boolean> entry : mSelection.entrySet()){
+            if (entry.getValue()){
+                files.add((OCFile) getItem(entry.getKey()));
+            }
+        }
+        return files;
     }
 }

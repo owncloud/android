@@ -31,10 +31,11 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.IntentFilter;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -65,6 +66,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
+import com.owncloud.android.ui.adapter.ImageSimpleAdapter;
 import com.owncloud.android.ui.adapter.UploaderAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
@@ -73,6 +75,7 @@ import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.utils.FileStorageUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -312,7 +315,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
         // click on folder in the list
         Log_OC.d(TAG, "on item click");
         // TODO Enable when "On Device" is recovered ?
-        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile /*, false*/);
+        Vector<OCFile> tmpfiles = getStorageManager().getFolderContent(mFile , false);
+        tmpfiles = sortFileList(tmpfiles);
+
         if (tmpfiles.size() <= 0) return;
         // filter on dirtype
         Vector<OCFile> files = new Vector<>();
@@ -335,7 +340,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         switch (v.getId()) {
             case R.id.uploader_choose_folder:
                 mUploadPath = "";   // first element in mParents is root dir, represented by "";
-                // init mUploadPath with "/" results in a "//" prefix
+                                    // init mUploadPath with "/" results in a "//" prefix
                 for (String p : mParents) {
                     mUploadPath += p + OCFile.PATH_SEPARATOR;
                 }
@@ -376,17 +381,19 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private void populateDirectoryList() {
         setContentView(R.layout.uploader_layout);
+        setupToolbar();
+        ActionBar actionBar = getSupportActionBar();
 
         ListView mListView = (ListView) findViewById(android.R.id.list);
 
         String current_dir = mParents.peek();
         if (current_dir.equals("")) {
-            getSupportActionBar().setTitle(getString(R.string.default_display_name_for_root_folder));
+            actionBar.setTitle(getString(R.string.default_display_name_for_root_folder));
         } else {
-            getSupportActionBar().setTitle(current_dir);
+            actionBar.setTitle(current_dir);
         }
         boolean notRoot = (mParents.size() > 1);
-        ActionBar actionBar = getSupportActionBar();
+
         actionBar.setDisplayHomeAsUpEnabled(notRoot);
         actionBar.setHomeButtonEnabled(notRoot);
 
@@ -397,20 +404,24 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mFile = getStorageManager().getFileByPath(full_path);
         if (mFile != null) {
             // TODO Enable when "On Device" is recovered ?
-            Vector<OCFile> files = getStorageManager().getFolderContent(mFile/*, false*/);
-            List<HashMap<String, OCFile>> data = new LinkedList<>();
+            Vector<OCFile> files = getStorageManager().getFolderContent(mFile, false);
+            files = sortFileList(files);
+
+            List<HashMap<String, Object>> data = new LinkedList<HashMap<String, Object>>();
             for (OCFile f : files) {
-                HashMap<String, OCFile> h = new HashMap<>();
-                    h.put("dirname", f);
-                    data.add(h);
+                HashMap<String, Object> h = new HashMap<String, Object>();
+                h.put("dirname", f);
+                h.put("last_mod", DisplayUtils.getRelativeTimestamp(this, f));
+                data.add(h);
             }
 
-            UploaderAdapter sa = new UploaderAdapter(this,
-                                                data,
-                                                R.layout.uploader_list_item_layout,
-                                                new String[] {"dirname"},
-                                                new int[] {R.id.filename},
-                                                getStorageManager(), getAccount());
+            // TODO TOBI UploaderAdapter?
+            ImageSimpleAdapter sa = new ImageSimpleAdapter(this,
+                    data,
+                    R.layout.uploader_list_item_layout,
+                    new String[]{"dirname", "last_mod"},
+                    new int[]{R.id.filename, R.id.last_mod},
+                    getStorageManager(), getAccount());
 
             mListView.setAdapter(sa);
             Button btnChooseFolder = (Button) findViewById(R.id.uploader_choose_folder);
@@ -446,6 +457,17 @@ public class ReceiveExternalFilesActivity extends FileActivity
         synchFolderOp.execute(getAccount(), this, null, null);
     }
 
+    private Vector<OCFile> sortFileList(Vector<OCFile> files) {
+        SharedPreferences sharedPreferences = android.preference.PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        // Read sorting order, default to sort by name ascending
+        FileStorageUtils.mSortOrder = sharedPreferences.getInt("sortOrder", 0);
+        FileStorageUtils.mSortAscending = sharedPreferences.getBoolean("sortAscending", true);
+
+        files = FileStorageUtils.sortOcFolder(files);
+        return files;
+    }
 
     private String generatePath(Stack<String> dirs) {
         String full_path = "";
@@ -530,7 +552,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private void onCreateFolderOperationFinish(CreateFolderOperation operation,
                                                RemoteOperationResult result) {
         if (result.isSuccess()) {
-            populateDirectoryList();
+            // dismissLoadingDialog();
+            // String remotePath = operation.getRemotePath().substring(0, operation.getRemotePath().length() -1);
+            // String newFolder = remotePath.substring(remotePath.lastIndexOf("/") + 1);
+            // mParents.push(newFolder);
+            // populateDirectoryList();
         } else {
             try {
                 Toast msg = Toast.makeText(this,
@@ -576,6 +602,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        // menu.findItem(R.id.action_upload).setVisible(false);
         menu.findItem(R.id.action_sort).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
         return true;

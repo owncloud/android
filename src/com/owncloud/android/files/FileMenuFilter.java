@@ -227,6 +227,20 @@ public class FileMenuFilter {
             toShow.add(R.id.action_unfavorite_file);
         }
 
+        // STREAM
+        if (mFile != null && !mFile.isDown() && (mFile.isAudio() || mFile.isVideo())){
+            toShow.add(R.id.action_stream_file);
+        } else {
+            toHide.add(R.id.action_stream_file);
+        }
+
+        // SET PICTURE AS
+        if (mFile == null || !mFile.isImage()){
+            toHide.add(R.id.action_set_as_wallpaper);
+        } else {
+            toShow.add(R.id.action_set_as_wallpaper);
+        }
+
     }
 
 }

@@ -20,27 +20,36 @@
 
 package com.owncloud.android.utils;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Vector;
-
-import third_parties.daveKoeller.AlphanumComparator;
+import android.accounts.Account;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.StatFs;
+import android.preference.PreferenceManager;
+import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.ui.activity.Preferences;
 
-import android.accounts.Account;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.StatFs;
-import android.webkit.MimeTypeMap;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Vector;
+
+import third_parties.daveKoeller.AlphanumComparator;
 
 
 /**
@@ -65,15 +74,15 @@ public class FileStorageUtils {
         }
         return fullPath;
     }
-    
+
     /**
      * Get local owncloud storage path for accountName.
      */
     public static final String getSavePath(String accountName) {
-        File sdCard = Environment.getExternalStorageDirectory();
-        return sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder() + "/" + Uri.encode(accountName, "@");
-        // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names,
-        // that can be in the accountName since 0.1.190B
+//        File sdCard = Environment.getExternalStorageDirectory();
+
+        return MainApp.getStoragePath() + File.separator + MainApp.getDataFolder() + File.separator + Uri.encode(accountName, "@");
+        // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names, that can be in the accountName since 0.1.190B
     }
 
     /**
@@ -89,10 +98,8 @@ public class FileStorageUtils {
      * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
      */
     public static final String getTemporalPath(String accountName) {
-        File sdCard = Environment.getExternalStorageDirectory();
-        return sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder() + "/tmp/" + Uri.encode(accountName, "@");
-            // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names,
-            // that can be in the accountName since 0.1.190B
+        return MainApp.getStoragePath() + File.separator + MainApp.getDataFolder() + File.separator + "tmp" + File.separator + Uri.encode(accountName, "@");
+            // URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names, that can be in the accountName since 0.1.190B
     }
 
     /**
@@ -102,7 +109,7 @@ public class FileStorageUtils {
      */
     @SuppressLint("NewApi")
     public static final long getUsableSpace(String accountName) {
-        File savePath = Environment.getExternalStorageDirectory();
+        File savePath = new File(MainApp.getStoragePath());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
             return savePath.getUsableSpace();
 
@@ -114,13 +121,13 @@ public class FileStorageUtils {
     }
     
     public static final String getLogPath()  {
-        return Environment.getExternalStorageDirectory() + File.separator + MainApp.getDataFolder() + File.separator + "log";
+        return MainApp.getStoragePath() + File.separator + MainApp.getDataFolder() + File.separator + "log";
     }
 
     public static String getInstantUploadFilePath(Context context, String fileName) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String uploadPathdef = context.getString(R.string.instant_upload_path);
-        String uploadPath = pref.getString("instant_upload_path", uploadPathdef);
+        String uploadPath = pref.getString(Preferences.Keys.INSTANT_UPLOAD_PATH, uploadPathdef);
         String value = uploadPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;
     }
@@ -134,7 +141,7 @@ public class FileStorageUtils {
     public static String getInstantVideoUploadFilePath(Context context, String fileName) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String uploadVideoPathdef = context.getString(R.string.instant_upload_path);
-        String uploadVideoPath = pref.getString("instant_video_upload_path", uploadVideoPathdef);
+        String uploadVideoPath = pref.getString(Preferences.Keys.INSTANT_VIDEO_UPLOAD_PATH, uploadVideoPathdef);
         String value = uploadVideoPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;
     }
@@ -184,13 +191,13 @@ public class FileStorageUtils {
     /**
      * Sorts all filenames, regarding last user decision 
      */
-    public static Vector<OCFile> sortFolder(Vector<OCFile> files){
+    public static Vector<OCFile> sortOcFolder(Vector<OCFile> files){
         switch (mSortOrder){
         case 0:
-            files = FileStorageUtils.sortByName(files);
+            files = FileStorageUtils.sortOCFilesByName(files);
             break;
         case 1:
-            files = FileStorageUtils.sortByDate(files);
+            files = FileStorageUtils.sortOCFilesByDate(files);
             break;
         case 2: 
            // mFiles = FileStorageUtils.sortBySize(mSortAscending);
@@ -199,12 +206,31 @@ public class FileStorageUtils {
        
         return files;
     }
-    
+
+    /**
+     * Sorts all filenames, regarding last user decision
+     */
+    public static File[] sortLocalFolder(File[] files){
+        switch (mSortOrder){
+            case 0:
+                files = FileStorageUtils.sortLocalFilesByName(files);
+                break;
+            case 1:
+                files = FileStorageUtils.sortLocalFilesByDate(files);
+                break;
+            case 2:
+                // mFiles = FileStorageUtils.sortBySize(mSortAscending);
+                break;
+        }
+
+        return files;
+    }
+
     /**
      * Sorts list by Date
      * @param files
      */
-    public static Vector<OCFile> sortByDate(Vector<OCFile> files){
+    public static Vector<OCFile> sortOCFilesByDate(Vector<OCFile> files){
         final Integer val;
         if (mSortAscending){
             val = 1;
@@ -214,15 +240,7 @@ public class FileStorageUtils {
         
         Collections.sort(files, new Comparator<OCFile>() {
             public int compare(OCFile o1, OCFile o2) {
-                if (o1.isFolder() && o2.isFolder()) {
-                    Long obj1 = o1.getModificationTimestamp();
-                    return val * obj1.compareTo(o2.getModificationTimestamp());
-                }
-                else if (o1.isFolder()) {
-                    return -1;
-                } else if (o2.isFolder()) {
-                    return 1;
-                } else if (o1.getModificationTimestamp() == 0 || o2.getModificationTimestamp() == 0){
+                if (o1.getModificationTimestamp() == 0 || o2.getModificationTimestamp() == 0){
                     return 0;
                 } else {
                     Long obj1 = o1.getModificationTimestamp();
@@ -230,8 +248,45 @@ public class FileStorageUtils {
                 }
             }
         });
-        
+
         return files;
+    }
+
+    /**
+     * Sorts list by Date
+     * @param filesArray
+     */
+    public static File[] sortLocalFilesByDate(File[] filesArray){
+        final Integer val;
+        if (mSortAscending){
+            val = 1;
+        } else {
+            val = -1;
+        }
+
+        List<File> files = new ArrayList<File>(Arrays.asList(filesArray));
+
+        Collections.sort(files, new Comparator<File>() {
+            public int compare(File o1, File o2) {
+                if (o1.isDirectory() && o2.isDirectory()) {
+                    Long obj1 = o1.lastModified();
+                    return val * obj1.compareTo(o2.lastModified());
+                }
+                else if (o1.isDirectory()) {
+                    return -1;
+                } else if (o2.isDirectory()) {
+                    return 1;
+                } else if (o1.lastModified() == 0 || o2.lastModified() == 0){
+                    return 0;
+                } else {
+                    Long obj1 = o1.lastModified();
+                    return val * obj1.compareTo(o2.lastModified());
+                }
+            }
+        });
+
+        File[] returnArray = new File[1];
+        return files.toArray(returnArray);
     }
 
 //    /**
@@ -272,7 +327,7 @@ public class FileStorageUtils {
      * Sorts list by Name
      * @param files     files to sort
      */
-    public static Vector<OCFile> sortByName(Vector<OCFile> files){
+    public static Vector<OCFile> sortOCFilesByName(Vector<OCFile> files){
         final Integer val;
         if (mSortAscending){
             val = 1;
@@ -295,7 +350,39 @@ public class FileStorageUtils {
         
         return files;
     }
-    
+
+    /**
+     * Sorts list by Name
+     * @param filesArray    files to sort
+     */
+    public static File[] sortLocalFilesByName(File[] filesArray){
+        final Integer val;
+        if (mSortAscending){
+            val = 1;
+        } else {
+            val = -1;
+        }
+
+        List<File> files = new ArrayList<File>(Arrays.asList(filesArray));
+
+        Collections.sort(files, new Comparator<File>() {
+            public int compare(File o1, File o2) {
+                if (o1.isDirectory() && o2.isDirectory()) {
+                    return val * o1.getPath().toLowerCase().compareTo(o2.getPath().toLowerCase());
+                } else if (o1.isDirectory()) {
+                    return -1;
+                } else if (o2.isDirectory()) {
+                    return 1;
+                }
+                return val * new AlphanumComparator().compare(o1.getPath().toLowerCase(),
+                                                              o2.getPath().toLowerCase());
+            }
+        });
+
+        File[] returnArray = new File[1];
+        return files.toArray(returnArray);
+    }
+
     /**
      * Local Folder size
      * @param dir File
@@ -304,13 +391,11 @@ public class FileStorageUtils {
     public static long getFolderSize(File dir) {
         if (dir.exists()) {
             long result = 0;
-            File[] fileList = dir.listFiles();
-            for(int i = 0; i < fileList.length; i++) {
-                if(fileList[i].isDirectory()) {
-                    result += getFolderSize(fileList[i]);
-                } else {
-                    result += fileList[i].length();
-                }
+            for (File f : dir.listFiles()) {
+                if (f.isDirectory())
+                    result += getFolderSize(f);
+                else
+                    result += f.length();
             }
             return result;
         }
@@ -358,6 +443,38 @@ public class FileStorageUtils {
                 file.setLastSyncDateForData(f.lastModified());
             }
         }
+    }
+
+    public static boolean copyFile(File src, File target) {
+        boolean ret = true;
+
+        InputStream in = null;
+        OutputStream out = null;
+
+        try {
+            in = new FileInputStream(src);
+            out = new FileOutputStream(target);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+        } catch (IOException ex) {
+            ret = false;
+        } finally {
+            if (in != null) try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace(System.err);
+            }
+            if (out != null) try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace(System.err);
+            }
+        }
+
+        return ret;
     }
 
 }

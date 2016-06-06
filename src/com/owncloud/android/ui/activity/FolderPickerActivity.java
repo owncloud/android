@@ -55,6 +55,8 @@ import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 
+import java.util.ArrayList;
+
 public class FolderPickerActivity extends FileActivity implements FileFragment.ContainerActivity, 
     OnClickListener, OnEnforceableRefreshListener {
 
@@ -62,6 +64,8 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                                                             + ".EXTRA_FOLDER";
     public static final String EXTRA_FILE = UploadFilesActivity.class.getCanonicalName()
                                                             + ".EXTRA_FILE";
+    public static final String EXTRA_FILES = UploadFilesActivity.class.getCanonicalName()
+            + ".EXTRA_FILES";
     //TODO: Think something better
 
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
@@ -74,8 +78,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     protected Button mCancelBtn;
     protected Button mChooseBtn;
-    private ProgressBar mProgressBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,15 +95,10 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         initControls();
 
         // Action bar setup
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        setupToolbar();
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mProgressBar.setIndeterminateDrawable(
-                getResources().getDrawable(
-                        R.drawable.actionbar_progress_indeterminate_horizontal));
-        mProgressBar.setIndeterminate(mSyncInProgress);
+        setIndeterminate(mSyncInProgress);
         // always AFTER setContentView(...) ; to work around bug in its implementation
         
         // sets message for empty list of folders
@@ -134,7 +131,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             
             if (!stateWasRecovered) {
                 OCFileListFragment listOfFolders = getListOfFilesFragment(); 
-                listOfFolders.listDirectory(folder/*, false*/);
+                listOfFolders.listDirectory(folder, false);
                 
                 startSyncFolderOperation(folder, false);
             }
@@ -219,7 +216,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                                                                       );
         synchFolderOp.execute(getAccount(), this, null, null);
 
-        mProgressBar.setIndeterminate(true);
+        setIndeterminate(true);
 
         setBackgroundText();
     }
@@ -307,9 +304,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     protected void refreshListOfFilesFragment() {
         OCFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
-            fileListFragment.listDirectory();
-            // TODO Enable when "On Device" is recovered ?
-            // fileListFragment.listDirectory(false);
+            fileListFragment.listDirectory(false);
         }
     }
 
@@ -317,9 +312,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         OCFileListFragment listOfFiles = getListOfFilesFragment(); 
         if (listOfFiles != null) {  // should never be null, indeed
             OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
-            listOfFiles.listDirectory(root);
-            // TODO Enable when "On Device" is recovered ?
-            // listOfFiles.listDirectory(root, false);
+            listOfFiles.listDirectory(root, false);
             setFile(listOfFiles.getCurrentFile());
             updateNavigationElementsInActionBar();
             startSyncFolderOperation(root, false);
@@ -370,11 +363,15 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else if (v == mChooseBtn) {
             Intent i = getIntent();
             Parcelable targetFile = i.getParcelableExtra(FolderPickerActivity.EXTRA_FILE);
+            ArrayList<Parcelable> targetFiles = i.getParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES);
 
             Intent data = new Intent();
             data.putExtra(EXTRA_FOLDER, getCurrentFolder());
             if (targetFile != null) {
                 data.putExtra(EXTRA_FILE, targetFile);
+            }
+            if (targetFiles != null){
+                data.putParcelableArrayListExtra(EXTRA_FILES, targetFiles);
             }
             setResult(RESULT_OK, data);
 
@@ -470,9 +467,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                                     equals(synchFolderRemotePath)) {
                                 OCFileListFragment fileListFragment = getListOfFilesFragment();
                                 if (fileListFragment != null) {
-                                    fileListFragment.listDirectory(currentDir);
-                                    // TODO Enable when "On Device" is recovered ?
-                                    // fileListFragment.listDirectory(currentDir, false);
+                                    fileListFragment.listDirectory(currentDir, false);
                                 }
                             }
                             setFile(currentFile);
@@ -502,7 +497,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                     removeStickyBroadcast(intent);
                     Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
 
-                    mProgressBar.setIndeterminate(mSyncInProgress);
+                    setIndeterminate(mSyncInProgress);
 
                     setBackgroundText();
                 }

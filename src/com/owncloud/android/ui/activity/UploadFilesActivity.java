@@ -21,6 +21,8 @@
 package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,10 +32,13 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -53,33 +58,32 @@ import java.io.File;
 
 /**
  * Displays local files and let the user choose what of them wants to upload
- * to the current ownCloud account
+ * to the current ownCloud account.
  */
-
 public class UploadFilesActivity extends FileActivity implements
     LocalFileListFragment.ContainerActivity, ActionBar.OnNavigationListener,
         OnClickListener, ConfirmationDialogFragmentListener {
     
     private ArrayAdapter<String> mDirectories;
     private File mCurrentDir = null;
-    private LocalFileListFragment mFileListFragment;
-    private Button mCancelBtn;
-    private Button mUploadBtn;
-    private Account mAccountOnCreation;
-    private DialogFragment mCurrentDialog;
+    protected LocalFileListFragment mFileListFragment;
+    protected Button mCancelBtn;
+    protected Button mUploadBtn;
+    protected Account mAccountOnCreation;
+    protected DialogFragment mCurrentDialog;
     
     public static final String EXTRA_CHOSEN_FILES =
             UploadFilesActivity.class.getCanonicalName() + ".EXTRA_CHOSEN_FILES";
 
     public static final int RESULT_OK_AND_MOVE = RESULT_FIRST_USER; 
     
-    private static final String KEY_DIRECTORY_PATH =
+    public static final String KEY_DIRECTORY_PATH =
             UploadFilesActivity.class.getCanonicalName() + ".KEY_DIRECTORY_PATH";
     private static final String TAG = "UploadFilesActivity";
     private static final String WAIT_DIALOG_TAG = "WAIT";
     private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
-    private RadioButton mRadioBtnCopyFiles;
-    private RadioButton mRadioBtnMoveFiles;
+    protected RadioButton mRadioBtnCopyFiles;
+    protected RadioButton mRadioBtnMoveFiles;
 
 
     @Override
@@ -88,8 +92,9 @@ public class UploadFilesActivity extends FileActivity implements
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState != null) {
-            mCurrentDir = new File(savedInstanceState.getString(
-                    UploadFilesActivity.KEY_DIRECTORY_PATH));
+            mCurrentDir = new File(savedInstanceState.getString(KEY_DIRECTORY_PATH));
+        } else if (getIntent() != null && getIntent().hasExtra(KEY_DIRECTORY_PATH)) {
+            mCurrentDir = new File(getIntent().getStringExtra(KEY_DIRECTORY_PATH));
         } else {
             mCurrentDir = Environment.getExternalStorageDirectory();
         }
@@ -110,6 +115,7 @@ public class UploadFilesActivity extends FileActivity implements
 
         // Inflate and set the layout view
         setContentView(R.layout.upload_files_layout);
+
         mFileListFragment = (LocalFileListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.local_files_list);
         
@@ -134,7 +140,9 @@ public class UploadFilesActivity extends FileActivity implements
         if (localBehaviour == FileUploader.LOCAL_BEHAVIOUR_COPY){
             mRadioBtnCopyFiles.setChecked(true);
         }
-        
+
+        // setup the toolbar
+        setupToolbar();
             
         // Action bar setup
         ActionBar actionBar = getSupportActionBar();
@@ -169,6 +177,14 @@ public class UploadFilesActivity extends FileActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.uploader_menu, menu);
+        return true;
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retval = true;
         switch (item.getItemId()) {
@@ -176,6 +192,40 @@ public class UploadFilesActivity extends FileActivity implements
                 if(mCurrentDir != null && mCurrentDir.getParentFile() != null){
                     onBackPressed(); 
                 }
+                break;
+            }
+            case R.id.action_upload_select_all:
+            {
+                item.setChecked(!item.isChecked());
+                mFileListFragment.selectAllFiles(item.isChecked());
+                break;
+            }
+            case R.id.action_sort: {
+                SharedPreferences appPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(this);
+
+                // Read sorting order, default to sort by name ascending
+                Integer sortOrder = appPreferences
+                        .getInt("sortOrder", FileStorageUtils.SORT_NAME);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.actionbar_sort_title)
+                        .setSingleChoiceItems(R.array.actionbar_sortby, sortOrder ,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which){
+                                            case 0:
+                                                mFileListFragment.sortByName(true);
+                                                break;
+                                            case 1:
+                                                mFileListFragment.sortByDate(false);
+                                                break;
+                                        }
+
+                                        dialog.dismiss();
+                                    }
+                                });
+                builder.create().show();
                 break;
             }
             default:

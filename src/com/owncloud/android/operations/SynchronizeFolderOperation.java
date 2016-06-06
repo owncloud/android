@@ -20,18 +20,10 @@
 
 package com.owncloud.android.operations;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -48,6 +40,12 @@ import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -292,8 +290,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         }
 
         // get current data about local contents of the folder to synchronize
-        // TODO Enable when "On Device" is recovered ?
-        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder/*, false*/);
+        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder, false);
         Map<String, OCFile> localFilesMap = new HashMap<String, OCFile>(localFiles.size());
         for (OCFile file : localFiles) {
             localFilesMap.put(file.getRemotePath(), file);
@@ -381,8 +378,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
     
     
     private void prepareOpsFromLocalKnowledge() throws OperationCancelledException {
-        // TODO Enable when "On Device" is recovered ?
-        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder/*, false*/);
+        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder, false);
         for (OCFile child : children) {
             /// classify file to sync/download contents later
             if (child.isFolder()) {

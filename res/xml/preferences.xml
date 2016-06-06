@@ -3,7 +3,7 @@
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2015 ownCloud Inc.
+  Copyright (C) 2012-2013 ownCloud Inc.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -18,8 +18,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="@string/prefs_category_accounts" android:key="accounts_category">
-    </PreferenceCategory>
+	<PreferenceCategory android:title="@string/prefs_category_general">
+		<ListPreference
+			android:title="@string/prefs_storage_path"
+			android:key="storage_path" />
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/prefs_category_security">
+		<android.preference.CheckBoxPreference android:title="@string/prefs_passcode" android:key="set_pincode" />
+	</PreferenceCategory>
 
     <PreferenceCategory android:title="@string/prefs_category_instant_uploading" android:key="instant_uploading_category">
 		<com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle android:key="instant_uploading"
@@ -29,17 +36,35 @@
 							android:title="@string/prefs_instant_upload_path_title"
 							android:key="instant_upload_path" />
 	    <com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
-	        				android:title="@string/instant_upload_on_wifi"
-	        				android:key="instant_upload_on_wifi"/>
-	    <com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle android:key="instant_video_uploading"
-	                        android:title="@string/prefs_instant_video_upload"
-	                        android:summary="@string/prefs_instant_video_upload_summary" />
+			android:dependency="instant_uploading"
+			android:disableDependentsState="true"
+	        android:title="@string/instant_upload_on_wifi"
+	        android:key="instant_upload_on_wifi"/>
+		<com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
+			android:dependency="instant_uploading"
+			android:disableDependentsState="true"
+			android:title="@string/instant_upload_on_charging"
+			android:key="instant_upload_on_charging"/>
+
+		<com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
+			android:key="instant_video_uploading"
+	        android:title="@string/prefs_instant_video_upload"
+	        android:summary="@string/prefs_instant_video_upload_summary" />
 	    <com.owncloud.android.ui.PreferenceWithLongSummary
-							android:title="@string/prefs_instant_video_upload_path_title"
-							android:key="instant_video_upload_path" />
+			android:dependency="instant_video_uploading"
+			android:disableDependentsState="true"
+			android:title="@string/prefs_instant_video_upload_path_title"
+			android:key="instant_video_upload_path" />
 	    <com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
-	        				android:title="@string/instant_video_upload_on_wifi"
-	        				android:key="instant_video_upload_on_wifi"/>
+			android:dependency="instant_video_uploading"
+			android:disableDependentsState="true"
+	        android:title="@string/instant_video_upload_on_wifi"
+	        android:key="instant_video_upload_on_wifi"/>
+		<com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
+			android:dependency="instant_video_uploading"
+			android:disableDependentsState="true"
+			android:title="@string/instant_video_upload_on_charging"
+			android:key="instant_video_upload_on_charging"/>
 		<com.owncloud.android.ui.dialog.OwnCloudListPreference android:key="prefs_instant_behaviour"
 			android:dialogTitle="@string/prefs_instant_behaviour_dialogTitle"
 			android:title="@string/prefs_instant_behaviour_title"
@@ -48,20 +73,14 @@
 			android:defaultValue="NOTHING"
 			android:summary="%s"
 			/>
-	    <!-- DISABLED FOR RELEASE UNTIL FIXED
-	    CheckBoxPreference android:key="log_to_file"
-	                        android:title="@string/prefs_log_title"
-	                        android:summary="@string/prefs_log_summary"/>
-		<Preference 		android:key="log_history"
-	                        android:title="@string/prefs_log_title_history"
-	                        android:summary="@string/prefs_log_summary_history"/ -->
-                        
-    </PreferenceCategory>
-
-	<PreferenceCategory android:title="@string/prefs_category_details">
-		<android.preference.CheckBoxPreference android:title="@string/prefs_passcode" android:key="set_pincode" />
 	</PreferenceCategory>
-	
+
+	<PreferenceCategory android:title="@string/common_category" android:key="common_category">
+		<EditTextPreference android:title="@string/pref_cache_size"
+							android:key="pref_cache_size"
+							android:digits="0123456789"/>
+	</PreferenceCategory>
+
 	<PreferenceCategory android:title="@string/prefs_category_more" android:key="more">
 		<Preference android:title="@string/prefs_help" android:key="help" />
 		<Preference android:title="@string/prefs_recommend" android:key="recommend" />
@@ -69,7 +88,14 @@
 		<Preference android:title="@string/actionbar_logger" android:key="logger" />
 		<Preference android:title="@string/prefs_imprint" android:key="imprint" />
 		<Preference android:title="@string/about_title" android:id="@+id/about_app" android:key="about_app" />
-	</PreferenceCategory>
-    
 
+	<Preference android:id="@+id/beta_link"
+				android:title="Download latest beta version"
+				android:key="beta_link" />
+
+	<Preference android:id="@+id/changelog_link"
+		android:title="Changelog beta version"
+		android:key="changelog_link" />
+
+	</PreferenceCategory>
 </PreferenceScreen>
