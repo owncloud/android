@@ -140,9 +140,10 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
     /**
      * Enable upload permissions to update in Share resource.
      *
-     * @param publicUpload Upload Permission to set to the target share.
+     * @param publicUpload  Upload permission to set to the target share.
+     *                      Null results in no update applied to the upload permission.
      */
-    public void setPublicUpload(boolean publicUpload) {
+    public void setPublicUpload(Boolean publicUpload) {
         mPublicUpload = publicUpload;
     }
 
