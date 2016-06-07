@@ -420,7 +420,7 @@ public class RefreshFolderOperation extends RemoteOperation {
             FileStorageUtils.searchForLocalFileInDefaultPath(updatedFile, mAccount);
 
             /// prepare content synchronization for kept-in-sync files
-            if (updatedFile.getFavoriteStatus() == OCFile.FavoriteStatus.FAVORITE.getValue()) {
+            if (updatedFile.getFavoriteStatus() == OCFile.FavoriteStatus.FAVORITE) {
                 if (updatedFile.isFolder()) {
                     SynchronizeFolderOperation operation = new SynchronizeFolderOperation(
                             mContext,
@@ -540,7 +540,7 @@ public class RefreshFolderOperation extends RemoteOperation {
         List<OCFile> children = mStorageManager.getFolderContent(mLocalFolder);
         for (OCFile child : children) {
             if (!child.isFolder() &&
-                child.getFavoriteStatus() == OCFile.FavoriteStatus.FAVORITE.getValue() &&
+                child.getFavoriteStatus() == OCFile.FavoriteStatus.FAVORITE &&
                 !child.isInConflict()) {
 
                 SynchronizeFileOperation operation = new SynchronizeFileOperation(

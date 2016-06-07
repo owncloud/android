@@ -461,8 +461,8 @@ public class FileOperationsHelper {
     }
 
     public void toggleFavorite(OCFile file, boolean isFavorite) {
-        int favoriteStatus = isFavorite  ?
-                OCFile.FavoriteStatus.FAVORITE.getValue() : OCFile.FavoriteStatus.NO_FAVORITE.getValue();
+        OCFile.FavoriteStatus favoriteStatus = isFavorite  ?
+                OCFile.FavoriteStatus.FAVORITE : OCFile.FavoriteStatus.NO_FAVORITE;
         file.setFavoriteStatus(favoriteStatus);
         mFileActivity.getStorageManager().saveFile(file);
 
@@ -480,14 +480,14 @@ public class FileOperationsHelper {
         );
 
         /// immediate content synchronization
-        if (file.getFavoriteStatus() == OCFile.FavoriteStatus.FAVORITE.getValue()) {
+        if (file.getFavoriteStatus() == OCFile.FavoriteStatus.FAVORITE) {
             syncFile(file);
         }
     }
 
     private void toggleAvailableOfflineFilesInFolder(OCFile file, boolean isAvailableOffline) {
-        int favoriteStatus = isAvailableOffline ?
-                OCFile.FavoriteStatus.FAVORITE.getValue() : OCFile.FavoriteStatus.NO_FAVORITE.getValue();
+        OCFile.FavoriteStatus favoriteStatus = isAvailableOffline ?
+                OCFile.FavoriteStatus.FAVORITE : OCFile.FavoriteStatus.NO_FAVORITE;
         Vector<OCFile> filesInFolder = mFileActivity.getStorageManager().getFolderContent(file);
         for (OCFile fileInFolder: filesInFolder) {
             fileInFolder.setFavoriteStatus(favoriteStatus);
