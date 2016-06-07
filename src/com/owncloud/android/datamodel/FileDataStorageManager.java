@@ -189,7 +189,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_ACCOUNT_OWNER, mAccount.name);
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.getLastSyncDateForProperties());
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.getLastSyncDateForData());
-        cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.getFavoriteStatus().getValue());
+        cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.getAvailableOfflineStatus().getValue());
         cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
@@ -785,7 +785,7 @@ public class FileDataStorageManager {
             if (ret.size() > 0) {
                 if (isAnyParentAFavoriteFolder(parentId)) {
                     for(OCFile file: ret) {
-                        file.setFavoriteStatus(OCFile.FavoriteStatus.FAVORITE_PARENT);
+                        file.setAvailableOfflineStatus(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT);
                     }
                 }
             }
@@ -807,7 +807,7 @@ public class FileDataStorageManager {
         boolean isFavorite = false;
         OCFile file = getFileById(parentId);
         if (file.isFolder()) {
-            if (file.getFavoriteStatus() == OCFile.FavoriteStatus.FAVORITE) {
+            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
                 isFavorite = true;
             } else if (!file.getFileName().equals(OCFile.ROOT_PATH)) {
                 isFavorite = isAnyParentAFavoriteFolder(file.getParentId());
@@ -917,8 +917,8 @@ public class FileDataStorageManager {
                     .getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE)));
             file.setLastSyncDateForData(c.getLong(c.
                     getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA)));
-            file.setFavoriteStatus(
-                    OCFile.FavoriteStatus.fromValue(c.getInt(c.getColumnIndex(ProviderTableMeta.FILE_KEEP_IN_SYNC)))
+            file.setAvailableOfflineStatus(
+                    OCFile.AvailableOfflineStatus.fromValue(c.getInt(c.getColumnIndex(ProviderTableMeta.FILE_KEEP_IN_SYNC)))
             );
             file.setEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG)));
             file.setShareViaLink(c.getInt(
@@ -1369,7 +1369,7 @@ public class FileDataStorageManager {
                         ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA,
                         file.getLastSyncDateForData()
                 );
-                cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.getFavoriteStatus().getValue());
+                cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.getAvailableOfflineStatus().getValue());
                 cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
                 cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
                 cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);

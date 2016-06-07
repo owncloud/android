@@ -316,7 +316,7 @@ public class FileMenuFilter {
 
     private boolean anyFavorite() {
         for(OCFile file: mFiles) {
-            if(file.getFavoriteStatus() == OCFile.FavoriteStatus.FAVORITE) {
+            if(file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
                 return true;
             }
         }
@@ -325,7 +325,7 @@ public class FileMenuFilter {
 
     private boolean anyUnfavorite() {
         for(OCFile file: mFiles) {
-            if(file.getFavoriteStatus() == OCFile.FavoriteStatus.NO_FAVORITE) {
+            if(file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NO_AVAILABLE_OFFLINE) {
                 return true;
             }
         }
