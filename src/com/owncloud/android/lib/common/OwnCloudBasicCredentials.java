@@ -47,6 +47,7 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);        
         
         client.getParams().setAuthenticationPreemptive(true);
+        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
         client.getState().setCredentials(
         		AuthScope.ANY, 
         		new UsernamePasswordCredentials(mUsername, mPassword)
