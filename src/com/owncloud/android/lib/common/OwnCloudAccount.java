@@ -31,6 +31,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
@@ -55,7 +56,35 @@ public class OwnCloudAccount {
 
 
     /**
-     * Full constructor.
+     * Constructor for already saved OC accounts.
+     *
+     * Do not use for anonymous credentials.
+     */
+    public OwnCloudAccount(Account savedAccount, Context context) throws AccountNotFoundException {
+        if (savedAccount == null) {
+            throw new IllegalArgumentException("Parameter 'savedAccount' cannot be null");
+        }
+
+        if (context == null) {
+            throw new IllegalArgumentException("Parameter 'context' cannot be null");
+        }
+
+        mSavedAccount = savedAccount;
+        mSavedAccountName = savedAccount.name;
+        mCredentials = null;    // load of credentials is delayed
+
+        AccountManager ama = AccountManager.get(context.getApplicationContext());
+        String baseUrl = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_OC_BASE_URL);
+        if (baseUrl == null ) {
+            throw new AccountNotFoundException(mSavedAccount, "Account not found", null);
+        }
+        mBaseUri = Uri.parse(AccountUtils.getBaseUrlForAccount(context, mSavedAccount));
+        mDisplayName = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_DISPLAY_NAME);
+    }
+
+
+    /**
+     * Constructor for non yet saved OC accounts.
      *
      * @param baseUri           URI to the OC server to get access to.
      * @param credentials       Credentials to authenticate in the server. NULL is valid for anonymous credentials.
@@ -73,23 +102,6 @@ public class OwnCloudAccount {
         if (username != null) {
             mSavedAccountName = AccountUtils.buildAccountName(mBaseUri, username);
         }
-    }
-
-
-    /**
-     * Partial constructor.
-     *
-     * Load of credentials is delayed.
-     * @param baseUri           URI to the OC server to get access to.
-     */
-    public OwnCloudAccount(Uri baseUri) {
-        if (baseUri == null) {
-            throw new IllegalArgumentException("Parameter 'baseUri' cannot be null");
-        }
-        mSavedAccount = null;
-        mSavedAccountName = null;
-        mBaseUri = baseUri;
-        mCredentials = null;
     }
 
 
@@ -137,7 +149,4 @@ public class OwnCloudAccount {
         }
     }
 
-    public void setDisplayName(String displayName) {
-        mDisplayName = displayName;
-    }
 }

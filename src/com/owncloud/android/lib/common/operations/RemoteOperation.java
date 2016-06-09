@@ -32,7 +32,6 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.OwnCloudAccountStorageManager;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
@@ -109,7 +108,7 @@ public abstract class RemoteOperation implements Runnable {
         mAccount = account;
         mContext = context.getApplicationContext();
         try {
-        	OwnCloudAccount ocAccount = OwnCloudAccountStorageManager.getOwnCloudAccount(mAccount, mContext);
+        	OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
             mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
             		getClientFor(ocAccount, mContext);
         } catch (Exception e) {
@@ -278,8 +277,7 @@ public abstract class RemoteOperation implements Runnable {
                             		mAccount, mContext, mCallerActivity);
                         } else {
                         /** EOF DEPRECATED */
-                        	OwnCloudAccount ocAccount = OwnCloudAccountStorageManager.
-                                    getOwnCloudAccount(mAccount, mContext);
+                        	OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
                             mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
                             		getClientFor(ocAccount, mContext);
                         }
