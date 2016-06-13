@@ -135,6 +135,7 @@ public class FileDisplayActivity extends HookActivity
     private boolean mSyncInProgress = false;
 
     private OCFile mWaitingToSend;
+    private SharedPreferences mAppPreferences;
 
 
     @Override
@@ -143,6 +144,9 @@ public class FileDisplayActivity extends HookActivity
 
         super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account
         // is valid
+
+        // Shared application prefrences
+        mAppPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         /// grant that FileObserverService is watching favorite files
         if (savedInstanceState == null) {
@@ -592,7 +596,7 @@ public class FileDisplayActivity extends HookActivity
                 break;
             }
             case R.id.action_switch_view: {
-                if (isGridView()) {
+                if (getListOfFilesFragment().isGridView()) {
                     item.setTitle(getString(R.string.action_switch_grid_view));
                     item.setIcon(ContextCompat.getDrawable(getApplicationContext(),
                             R.drawable.ic_view_module));
@@ -1786,10 +1790,6 @@ public class FileDisplayActivity extends HookActivity
 
     private void sortByName(boolean ascending) {
         getListOfFilesFragment().sortByName(ascending);
-    }
-
-    private boolean isGridView() {
-        return getListOfFilesFragment().isGridView();
     }
 
     public void allFilesOption() {

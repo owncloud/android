@@ -26,10 +26,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -101,7 +105,8 @@ public class OCFileListFragment extends ExtendedListFragment
     private OCFile mTargetFile;
 
     private boolean miniFabClicked = false;
-   
+    private boolean mGridMode;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +153,7 @@ public class OCFileListFragment extends ExtendedListFragment
     public void onDetach() {
         setOnRefreshListener(null);
         mContainerActivity = null;
+        mAdapter = null;
         super.onDetach();
     }
 
@@ -163,22 +169,11 @@ public class OCFileListFragment extends ExtendedListFragment
             mFile = savedInstanceState.getParcelable(KEY_FILE);
         }
 
-        if (mJustFolders) {
-            setFooterEnabled(false);
-        } else {
-            setFooterEnabled(true);
-        }
-
         Bundle args = getArguments();
         mJustFolders = (args == null) ? false : args.getBoolean(ARG_JUST_FOLDERS, false);
-        mAdapter = new FileListListAdapter(
-                mJustFolders,
-                getActivity(),
-                mContainerActivity
-        );
+        mAdapter = new FileListListAdapter(getContext(), this, mContainerActivity);
         setListAdapter(mAdapter);
-
-        registerLongClickListener();
+        mAdapter.notifyDataSetChanged();
 
         boolean hideFab = (args != null) && args.getBoolean(ARG_HIDE_FAB, false);
         if (hideFab) {
@@ -228,7 +223,7 @@ public class OCFileListFragment extends ExtendedListFragment
         getFabUpload().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity)getActivity())
+                UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
                         .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
                 getFabMain().collapse();
                 recordMiniFabClick();
@@ -334,17 +329,6 @@ public class OCFileListFragment extends ExtendedListFragment
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 
-    private void registerLongClickListener() {
-        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> arg0, View v,
-                                           int index, long arg3) {
-                showFileAction(index);
-                return true;
-            }
-        });
-    }
-
-
     private void showFileAction(int fileIndex) {
         Bundle args = getArguments();
         PopupMenu pm = new PopupMenu(getActivity(),null);
@@ -382,7 +366,7 @@ public class OCFileListFragment extends ExtendedListFragment
             }
 
             FileActionsDialogFragment dialog = FileActionsDialogFragment.newInstance(menu,
-                    fileIndex, targetFile.getFileName());
+                    fileIndex, targetFile);
             dialog.setTargetFragment(this, 0);
             dialog.show(getFragmentManager(), FileActionsDialogFragment.FTAG_FILE_ACTIONS);
         }
@@ -440,53 +424,9 @@ public class OCFileListFragment extends ExtendedListFragment
             listDirectory(mFile /*, MainApp.getOnlyOnDevice()*/);
 
             onRefresh(false);
-
-            // restore index and top position
-            restoreIndexAndTopPosition();
-
         }   // else - should never happen now
 
         return moveCount;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-        OCFile file = (OCFile) mAdapter.getItem(position);
-        if (file != null) {
-            if (file.isFolder()) {
-                // update state and view of this fragment
-                // TODO Enable when "On Device" is recovered ?
-                listDirectory(file/*, MainApp.getOnlyOnDevice()*/);
-                // then, notify parent activity to let it update its state and view
-                mContainerActivity.onBrowsedDownTo(file);
-                // save index and top position
-                saveIndexAndTopPosition(position);
-
-            } else { /// Click on a file
-                if (PreviewImageFragment.canBePreviewed(file)) {
-                    // preview image - it handles the download, if needed
-                    ((FileDisplayActivity)mContainerActivity).startImagePreview(file);
-                } else if (PreviewTextFragment.canBePreviewed(file)){
-                    ((FileDisplayActivity)mContainerActivity).startTextPreview(file);
-                } else if (file.isDown()) {
-                    if (PreviewMediaFragment.canBePreviewed(file)) {
-                        // media preview
-                        ((FileDisplayActivity) mContainerActivity).startMediaPreview(file, 0, true);
-                    } else {
-                        mContainerActivity.getFileOperationsHelper().openFile(file);
-                    }
-
-                } else {
-                    // automatic download, preview on finish
-                    ((FileDisplayActivity) mContainerActivity).startDownloadForPreview(file);
-                }
-
-            }
-
-        } else {
-            Log_OC.d(TAG, "Null object in ListAdapter!!");
-        }
-
     }
 
     /**
@@ -636,6 +576,14 @@ public class OCFileListFragment extends ExtendedListFragment
     }
 
     /**
+     * Sets passed in file as current file
+     * @param file
+     */
+    public void setCurrentFile(OCFile file) {
+        mFile = file;
+    }
+
+    /**
      * Calls {@link OCFileListFragment#listDirectory(OCFile)} with a null parameter
      */
     public void listDirectory(/*boolean onlyOnDevice*/){
@@ -680,19 +628,18 @@ public class OCFileListFragment extends ExtendedListFragment
             // TODO Enable when "On Device" is recovered ?
             mAdapter.swapDirectory(directory, storageManager/*, onlyOnDevice*/);
             if (mFile == null || !mFile.equals(directory)) {
-                mCurrentListView.setSelection(0);
+                mCurrentRecyclerView.scrollToPosition(0);
             }
             mFile = directory;
 
             updateLayout();
-
         }
     }
 
     private void updateLayout() {
         if (!mJustFolders) {
             int filesCount = 0, foldersCount = 0, imagesCount = 0;
-            int count = mAdapter.getCount();
+            int count = mAdapter.getItemCount() - 1;
             OCFile file;
             for (int i=0; i < count ; i++) {
                 file = (OCFile) mAdapter.getItem(i);
@@ -709,17 +656,18 @@ public class OCFileListFragment extends ExtendedListFragment
                 }
             }
             // set footer text
-            setFooterText(generateFooterText(filesCount, foldersCount));
+            // TODO : set footer text
+
+            mAdapter.setFooterText(generateFooterText(filesCount, foldersCount));
 
             // decide grid vs list view
             OwnCloudVersion version = AccountUtils.getServerVersion(
                     ((FileActivity)mContainerActivity).getAccount());
             if (version != null && version.supportsRemoteThumbnails() &&
                     isGridViewPreferred(mFile)) {
-                switchToGridView();
-                registerLongClickListener();
+                switchToGridView(mAdapter);
             } else {
-                switchToListView();
+                switchToListView(mAdapter);
             }
         }
     }
@@ -843,12 +791,12 @@ public class OCFileListFragment extends ExtendedListFragment
 
     public void setListAsPreferred() {
         saveGridAsPreferred(false);
-        switchToListView();
+        switchToListView(mAdapter);
     }
 
     public void setGridAsPreferred() {
         saveGridAsPreferred(true);
-        switchToGridView();
+        switchToGridView(mAdapter);
     }
 
     private void saveGridAsPreferred(boolean setGrid){
@@ -861,5 +809,10 @@ public class OCFileListFragment extends ExtendedListFragment
         editor.apply();
     }
 
-
+    public boolean isGridView(){
+        if (mAdapter instanceof FileListListAdapter) {
+            return mAdapter.isGridMode();
+        }
+        return false;
+    }
 }

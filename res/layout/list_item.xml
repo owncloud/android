@@ -17,16 +17,16 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ListItemLayout"
     android:layout_width="match_parent"
     android:background="@drawable/list_selector"
     android:orientation="vertical"
-    android:layout_height="72dp">
+    android:layout_height="73dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="72dp"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -82,14 +82,17 @@
                 android:singleLine="true"
                 android:text="TextView"
                 android:textColor="@color/textColor"
-                android:textSize="@dimen/two_line_primary_text_size" />
+                android:textSize="@dimen/two_line_primary_text_size"
+                android:gravity="center_vertical" />
 
             <LinearLayout
+                android:id="@+id/second_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="4dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/file_size"
@@ -144,8 +147,9 @@
     </LinearLayout>
 
     <View
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/list_divider_background"></View>
+        android:background="@color/list_divider_background" />
 
-</LinearLayout>
+</RelativeLayout>
