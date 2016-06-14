@@ -773,25 +773,22 @@ public class FileDataStorageManager {
                     new String[]{String.valueOf(parentId)}, null);
         }
 
-        if (c.moveToFirst()) {
-            do {
-                OCFile child = createFileInstance(c);
-                // TODO Enable when "On Device" is recovered ?
-                // if (child.isFolder() || !onlyOnDevice || onlyOnDevice && child.isDown()){
-                ret.add(child);
-                // }
-            } while (c.moveToNext());
-
-            if (ret.size() > 0) {
-                if (isAnyParentAFavoriteFolder(parentId)) {
-                    for(OCFile file: ret) {
-                        file.setAvailableOfflineStatus(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT);
+        if (c!= null) {
+            if (c.moveToFirst()) {
+                boolean inFolderAvailableOffline = isAnyAncestorAvailableOfflineFolder(parentId);
+                do {
+                    OCFile child = createFileInstance(c);
+                    // TODO Enable when "On Device" is recovered ?
+                    // if (child.isFolder() || !onlyOnDevice || onlyOnDevice && child.isDown()){
+                    if (inFolderAvailableOffline) {
+                        child.setAvailableOfflineStatus(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT);
                     }
-                }
+                    ret.add(child);
+                    // }
+                } while (c.moveToNext());
             }
+            c.close();
         }
-
-        c.close();
 
         Collections.sort(ret);
 
@@ -803,14 +800,14 @@ public class FileDataStorageManager {
     * @param parentId
     * @return true/false
     */
-    private boolean isAnyParentAFavoriteFolder(long parentId) {
+    private boolean isAnyAncestorAvailableOfflineFolder(long parentId) {
         boolean isFavorite = false;
         OCFile file = getFileById(parentId);
         if (file.isFolder()) {
             if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
                 isFavorite = true;
             } else if (!file.getFileName().equals(OCFile.ROOT_PATH)) {
-                isFavorite = isAnyParentAFavoriteFolder(file.getParentId());
+                isFavorite = isAnyAncestorAvailableOfflineFolder(file.getParentId());
             }
         }
         return isFavorite;
@@ -918,7 +915,7 @@ public class FileDataStorageManager {
             file.setLastSyncDateForData(c.getLong(c.
                     getColumnIndex(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA)));
             file.setAvailableOfflineStatus(
-                    OCFile.AvailableOfflineStatus.fromValue(c.getInt(c.getColumnIndex(ProviderTableMeta.FILE_KEEP_IN_SYNC)))
+                OCFile.AvailableOfflineStatus.fromValue(c.getInt(c.getColumnIndex(ProviderTableMeta.FILE_KEEP_IN_SYNC)))
             );
             file.setEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG)));
             file.setShareViaLink(c.getInt(

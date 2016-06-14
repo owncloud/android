@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
+import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -227,18 +228,18 @@ public class FileMenuFilter {
             toShow.add(R.id.action_send_file);
         }
 
-        // FAVORITES
+        // SET AS AVAILABLE OFFLINE
         if (synchronizing || !anyUnfavorite()) {
-            toHide.add(R.id.action_favorite_file);
+            toHide.add(R.id.action_set_available_offline);
         } else {
-            toShow.add(R.id.action_favorite_file);
+            toShow.add(R.id.action_set_available_offline);
         }
 
-        // UNFAVORITES
+        // UNSET AS AVAILABLE OFFLINE
         if (synchronizing || !anyFavorite()) {
-            toHide.add(R.id.action_unfavorite_file);
+            toHide.add(R.id.action_unset_available_offline);
         } else {
-            toShow.add(R.id.action_unfavorite_file);
+            toShow.add(R.id.action_unset_available_offline);
         }
 
     }
@@ -325,7 +326,7 @@ public class FileMenuFilter {
 
     private boolean anyUnfavorite() {
         for(OCFile file: mFiles) {
-            if(file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NO_AVAILABLE_OFFLINE) {
+            if(file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
                 return true;
             }
         }

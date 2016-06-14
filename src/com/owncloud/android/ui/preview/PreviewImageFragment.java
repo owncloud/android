@@ -332,11 +332,11 @@ public class PreviewImageFragment extends FileFragment {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-            case R.id.action_favorite_file:{
+            case R.id.action_set_available_offline:{
                 mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), true);
                 return true;
             }
-            case R.id.action_unfavorite_file:{
+            case R.id.action_unset_available_offline:{
                 mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), false);
                 return true;
             }

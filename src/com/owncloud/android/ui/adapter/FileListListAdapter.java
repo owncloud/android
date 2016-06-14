@@ -289,7 +289,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             // this if-else is needed even though favorite icon is visible by default
             // because android reuses views in listview
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NO_AVAILABLE_OFFLINE) {
+            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
                 view.findViewById(R.id.favoriteIcon).setVisibility(View.GONE);
             } else {
                 view.findViewById(R.id.favoriteIcon).setVisibility(View.VISIBLE);

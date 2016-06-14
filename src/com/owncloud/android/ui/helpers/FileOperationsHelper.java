@@ -461,33 +461,42 @@ public class FileOperationsHelper {
     }
 
     public void toggleFavorite(OCFile file, boolean isFavorite) {
-        OCFile.AvailableOfflineStatus availableOfflineStatus = isFavorite  ?
-                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE : OCFile.AvailableOfflineStatus.NO_AVAILABLE_OFFLINE;
-        file.setAvailableOfflineStatus(availableOfflineStatus);
-        mFileActivity.getStorageManager().saveFile(file);
+        if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT) {
+            Toast.makeText(
+                mFileActivity,
+                mFileActivity.getString(R.string.available_offline_inherited_msg),
+                Toast.LENGTH_LONG
+            ).show();
 
-        // If file is a folder, all children files that were available offline must be unset
-        if (file.isFolder() && isFavorite) {
-           toggleAvailableOfflineFilesInFolder(file, false);
-        }
+        } else {
+            OCFile.AvailableOfflineStatus availableOfflineStatus = isFavorite ?
+                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE : OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
+            file.setAvailableOfflineStatus(availableOfflineStatus);
+            mFileActivity.getStorageManager().saveFile(file);
 
-        /// register the OCFile instance in the observer service to monitor local updates
-        FileObserverService.observeFile(
+            // If file is a folder, all children files that were available offline must be unset
+            if (file.isFolder() && isFavorite) {
+                toggleAvailableOfflineFilesInFolder(file, false);
+            }
+
+            /// register the OCFile instance in the observer service to monitor local updates
+            FileObserverService.observeFile(
                 mFileActivity,
                 file,
                 mFileActivity.getAccount(),
                 isFavorite
-        );
+            );
 
-        /// immediate content synchronization
-        if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
-            syncFile(file);
+            /// immediate content synchronization
+            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+                syncFile(file);
+            }
         }
     }
 
     private void toggleAvailableOfflineFilesInFolder(OCFile file, boolean isAvailableOffline) {
         OCFile.AvailableOfflineStatus availableOfflineStatus = isAvailableOffline ?
-                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE : OCFile.AvailableOfflineStatus.NO_AVAILABLE_OFFLINE;
+                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE : OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
         Vector<OCFile> filesInFolder = mFileActivity.getStorageManager().getFolderContent(file);
         for (OCFile fileInFolder: filesInFolder) {
             fileInFolder.setAvailableOfflineStatus(availableOfflineStatus);

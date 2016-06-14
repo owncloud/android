@@ -358,6 +358,11 @@ public class RefreshFolderOperation extends RemoteOperation {
         // get 'fresh data' from the database
         mLocalFolder = mStorageManager.getFileByPath(mLocalFolder.getRemotePath());
 
+        // parse data from remote folder
+        OCFile remoteFolder = FileStorageUtils.fillOCFile((RemoteFile) folderAndFiles.get(0));
+        remoteFolder.setParentId(mLocalFolder.getParentId());
+        remoteFolder.setFileId(mLocalFolder.getFileId());
+
         Log_OC.d(TAG, "Remote folder " + mLocalFolder.getRemotePath()
                 + " changed - starting update of local data ");
         
@@ -445,7 +450,6 @@ public class RefreshFolderOperation extends RemoteOperation {
         }
 
         // save updated contents in local database
-        OCFile remoteFolder = mStorageManager.getFileByPath(((RemoteFile) folderAndFiles.get(0)).getRemotePath());
         mStorageManager.saveFolder(remoteFolder, updatedFiles, localFilesMap.values());
 
         mChildren = updatedFiles;
