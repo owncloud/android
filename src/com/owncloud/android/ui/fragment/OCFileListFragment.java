@@ -42,7 +42,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -101,10 +100,6 @@ public class OCFileListFragment extends ExtendedListFragment {
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
     private boolean mJustFolders;
-
-    private int mStatusBarColorActionMode;
-    private int mStatusBarColor;
-
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -370,69 +365,6 @@ public class OCFileListFragment extends ExtendedListFragment {
 
                 // hide FAB in multi selection mode
                 setFabEnabled(false);
-
-                }
-
-            private void updateActionsMenu(ActionMode mode) {
-                final int checkedCount = getListView().getCheckedItemCount();
-
-                mode.setTitle(checkedCount + " selected");
-
-                if (checkedCount > 0) {
-                    List<OCFile> targetFiles = mAdapter.getCheckedItems();
-
-                    if (mContainerActivity.getStorageManager() != null) {
-                        FileMenuFilter mf = new FileMenuFilter(
-                            targetFiles,
-                            mContainerActivity.getStorageManager().getAccount(),
-                            mContainerActivity,
-                            getActivity()
-                        );
-                        mf.filter(menu);
-                    }
-                }
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                return onFileActionChosen(item.getItemId());
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                mAdapter.removeSelection();
-
-                // reset to primary dark color
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow().setStatusBarColor(mStatusBarColor);
-                }
-
-                // show FAB on multi selection mode exit
-                if(!hideFab) {
-                    setFabEnabled(true);
-                }
-            }
-        });
-    }
-
-    // TODO Tobi needed?
-                this.menu = menu;
-
-                updateActionsMenu(mode);
-
-                //set gray color
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow().setStatusBarColor(mStatusBarColorActionMode);
-                }
-
-                // hide FAB in multi selection mode
-                setFabEnabled(false);
-
                 return true;
             }
 
@@ -447,10 +379,11 @@ public class OCFileListFragment extends ExtendedListFragment {
 
                     if (mContainerActivity.getStorageManager() != null) {
                         FileMenuFilter mf = new FileMenuFilter(
-                                targetFiles,
-                                mContainerActivity.getStorageManager().getAccount(),
-                                mContainerActivity,
-                                getActivity());
+                            targetFiles,
+                            mContainerActivity.getStorageManager().getAccount(),
+                            mContainerActivity,
+                            getActivity()
+                        );
                         mf.filter(menu);
                     }
                 }
