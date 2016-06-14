@@ -5,7 +5,7 @@
  *   @author masensio
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -41,6 +41,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -104,7 +105,9 @@ public class OCFileListFragment extends ExtendedListFragment {
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
 
-    private OCFile mTargetFile;
+
+    private int mStatusBarColorActionMode;
+    private int mStatusBarColor;
 
     private boolean hideFab = true;
     private boolean miniFabClicked = false;
@@ -112,6 +115,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mStatusBarColorActionMode = getResources().getColor(R.color.action_mode_status_bar_background);
         mStatusBarColorActionMode = getResources().getColor(R.color.action_mode_status_bar_background);
         mStatusBarColor = getResources().getColor(R.color.primary_dark);
     }
@@ -236,7 +240,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             @Override
             public void onClick(View v) {
                 UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
-                        .getAccount(), FileDisplayActivity.ACTION_SELECT_MULTIPLE_FILES);
+                        .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
                 getFabMain().collapse();
                 recordMiniFabClick();
             }
@@ -292,7 +296,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 }
                 getActivity().startActivityForResult(
                         Intent.createChooser(action, getString(R.string.upload_chooser_title)),
-                        FileDisplayActivity.ACTION_SELECT_CONTENT_FROM_APPS
+                        FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
                 );
                 getFabMain().collapse();
                 recordMiniFabClick();
@@ -342,7 +346,6 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     private void registerLongClickListener() {
-        AbsListView listView = getListView();
         setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
@@ -364,6 +367,68 @@ public class OCFileListFragment extends ExtendedListFragment {
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 
                 createContextActionBar(menu);
+                this.menu = menu;
+
+                updateActionsMenu(mode);
+
+                //set gray color
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getActivity().getWindow().setStatusBarColor(mStatusBarColorActionMode);
+                }
+
+                // hide FAB in multi selection mode
+                setFabEnabled(false);
+
+                }
+
+            private void updateActionsMenu(ActionMode mode) {
+                final int checkedCount = getListView().getCheckedItemCount();
+
+                mode.setTitle(checkedCount + " selected");
+
+                if (checkedCount > 0) {
+                    List<OCFile> targetFiles = mAdapter.getCheckedItems();
+
+                    if (mContainerActivity.getStorageManager() != null) {
+                        FileMenuFilter mf = new FileMenuFilter(
+                            targetFiles,
+                            mContainerActivity.getStorageManager().getAccount(),
+                            mContainerActivity,
+                            getActivity()
+                        );
+                        mf.filter(menu);
+                    }
+                }
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return onFileActionChosen(item.getItemId());
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                mAdapter.removeSelection();
+
+                // reset to primary dark color
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getActivity().getWindow().setStatusBarColor(mStatusBarColor);
+                }
+
+                // show FAB on multi selection mode exit
+                if(!hideFab) {
+                    setFabEnabled(true);
+                }
+            }
+        });
+    }
+
+    // TODO Tobi needed?
                 this.menu = menu;
 
                 updateActionsMenu(mode);
@@ -540,13 +605,10 @@ public class OCFileListFragment extends ExtendedListFragment {
             inflater.inflate(R.menu.file_actions_menu, menu);
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean onFileActionChosen(int menuId) {
         if (mAdapter.getCheckedItems().size() == 1){
             OCFile mTargetFile = mAdapter.getCheckedItems().get(0);
+
 
             switch (menuId) {
                 case R.id.action_share_file: {
@@ -595,7 +657,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                     ArrayList files = new ArrayList();
                     files.add(mTargetFile);
                     action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, files);
-                    getActivity().startActivityForResult(action, FileDisplayActivity.ACTION_MOVE_FILES);
+                    getActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES);
                     return true;
                 }
                 case R.id.action_favorite_file: {
@@ -611,7 +673,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                     ArrayList files = new ArrayList();
                     files.add(mTargetFile);
                     action.putExtra(FolderPickerActivity.EXTRA_FILES, files);
-                    getActivity().startActivityForResult(action, FileDisplayActivity.ACTION_COPY_FILES);
+                    getActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
                     return true;
                 default:
                     return false;
@@ -637,7 +699,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 case R.id.action_move: {
                     Intent action = new Intent(getActivity(), FolderPickerActivity.class);
                     action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, mTargetFiles);
-                    getActivity().startActivityForResult(action, FileDisplayActivity.ACTION_MOVE_FILES);
+                    getActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES);
                     return true;
                 }
                 case R.id.action_favorite_file: {
@@ -651,7 +713,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 case R.id.action_copy:
                     Intent action = new Intent(getActivity(), FolderPickerActivity.class);
                     action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, mTargetFiles);
-                    getActivity().startActivityForResult(action, FileDisplayActivity.ACTION_COPY_FILES);
+                    getActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
                     return true;
                 default:
                     return false;

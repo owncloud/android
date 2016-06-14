@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2012-2015 ownCloud Inc.
+ *   Copyright (C) 2012-2016 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -50,7 +50,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
-import com.owncloud.android.notifications.NotificationBuilderWithProgressBar;
+import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.notifications.NotificationDelayer;
 import com.owncloud.android.operations.DownloadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -81,7 +81,7 @@ public class FileDownloader extends Service
     public static final String EXTRA_LINKED_TO_PATH = "LINKED_TO";
     public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
 
-    private static final String TAG = "FileDownloader";
+    private static final String TAG = FileDownloader.class.getSimpleName();
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
@@ -172,8 +172,7 @@ public class FileDownloader extends Service
                 newDownload.addDatatransferProgressListener(this);
                 newDownload.addDatatransferProgressListener((FileDownloaderBinder) mBinder);
                 Pair<String, String> putResult = mPendingDownloads.putIfAbsent(
-                        account, file.getRemotePath(), newDownload
-                );
+                        account.name, file.getRemotePath(), newDownload);
                 if (putResult != null) {
                     String downloadKey = putResult.first;
                     requestedDownloads.add(downloadKey);
@@ -191,7 +190,6 @@ public class FileDownloader extends Service
                 msg.obj = requestedDownloads;
                 mServiceHandler.sendMessage(msg);
             }
-            //}
         }
 
         return START_NOT_STICKY;
@@ -253,7 +251,8 @@ public class FileDownloader extends Service
          * @param file    A file in the queue of pending downloads
          */
         public void cancel(Account account, OCFile file) {
-            Pair<DownloadFileOperation, String> removeResult = mPendingDownloads.remove(account, file.getRemotePath());
+            Pair<DownloadFileOperation, String> removeResult =
+                    mPendingDownloads.remove(account.name, file.getRemotePath());
             DownloadFileOperation download = removeResult.first;
             if (download != null) {
                 download.cancel();
@@ -301,7 +300,7 @@ public class FileDownloader extends Service
          */
         public boolean isDownloading(Account account, OCFile file) {
             if (account == null || file == null) return false;
-            return (mPendingDownloads.contains(account, file.getRemotePath()));
+            return (mPendingDownloads.contains(account.name, file.getRemotePath()));
         }
 
         /**
@@ -317,7 +316,7 @@ public class FileDownloader extends Service
         public boolean isDownloading(Account account, List<OCFile> files) {
             if (account == null || files.isEmpty()) return false;
             for(OCFile file: files) {
-                if(mPendingDownloads.contains(account, file.getRemotePath())) {
+                if(mPendingDownloads.contains(account.name, file.getRemotePath())) {
                     return true;
                 }
             }
@@ -369,7 +368,6 @@ public class FileDownloader extends Service
         }
 
     }
-
 
     /**
      * Download worker. Performs the pending downloads in the order they were requested.
@@ -452,8 +450,10 @@ public class FileDownloader extends Service
 
                 } finally {
                     Pair<DownloadFileOperation, String> removeResult =
-                            mPendingDownloads.removePayload(mCurrentAccount,
-                                    mCurrentDownload.getRemotePath());
+                            mPendingDownloads.removePayload(
+                                    mCurrentAccount.name,
+                                    mCurrentDownload.getRemotePath()
+                            );
 
                     /// notify result
                     notifyDownloadResult(mCurrentDownload, downloadResult);
@@ -504,7 +504,7 @@ public class FileDownloader extends Service
         /// create status notification with a progress bar
         mLastPercent = 0;
         mNotificationBuilder =
-                NotificationBuilderWithProgressBar.newNotificationBuilderWithProgressBar(this);
+                NotificationUtils.newNotificationBuilder(this);
         mNotificationBuilder
                 .setSmallIcon(R.drawable.notification_icon)
                 .setTicker(getString(R.string.downloader_download_in_progress_ticker))
@@ -566,10 +566,7 @@ public class FileDownloader extends Service
             int tickerId = (downloadResult.isSuccess()) ? R.string.downloader_download_succeeded_ticker :
                     R.string.downloader_download_failed_ticker;
 
-            boolean needsToUpdateCredentials = (
-                    downloadResult.getCode() == ResultCode.UNAUTHORIZED ||
-                            downloadResult.isIdPRedirection()
-            );
+            boolean needsToUpdateCredentials = (ResultCode.UNAUTHORIZED.equals(downloadResult.getCode()));
             tickerId = (needsToUpdateCredentials) ?
                     R.string.downloader_download_failed_credentials_error : tickerId;
 
@@ -615,7 +612,7 @@ public class FileDownloader extends Service
             // Remove success notification
             if (downloadResult.isSuccess()) {
                 // Sleep 2 seconds, so show the notification before remove it
-                NotificationDelayer.cancelWithDelay(
+                NotificationUtils.cancelWithDelay(
                         mNotificationManager,
                         R.string.downloader_download_succeeded_ticker,
                         2000);
@@ -673,6 +670,6 @@ public class FileDownloader extends Service
      */
     private void cancelDownloadsForAccount(Account account) {
         // Cancel pending downloads
-        mPendingDownloads.remove(account);
+        mPendingDownloads.remove(account.name);
     }
 }

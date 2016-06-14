@@ -6,7 +6,7 @@
  *   @author David A. Velasco
  *   @author masensio
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -24,6 +24,9 @@
 package com.owncloud.android.ui.adapter;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -49,14 +52,15 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Vector;
+
 import java.util.Map;
 import java.util.Vector;
 
@@ -83,7 +87,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private SharedPreferences mAppPreferences;
 
     private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
-
+    
     public FileListListAdapter(
             boolean justFolders, 
             Context context,
@@ -93,12 +97,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         mJustFolders = justFolders;
         mContext = context;
         mAccount = AccountUtils.getCurrentOwnCloudAccount(mContext);
+
         mTransferServiceGetter = transferServiceGetter;
 
         mAppPreferences = PreferenceManager
                 .getDefaultSharedPreferences(mContext);
         
         // Read sorting order, default to sort by name ascending
+
         FileStorageUtils.mSortOrder = mAppPreferences.getInt("sortOrder", 0);
         FileStorageUtils.mSortAscending = mAppPreferences.getBoolean("sortAscending", true);
         
@@ -212,7 +218,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
 
                     if (!file.isFolder()) {
-                        // TODO Tobi: why did i commented this?
 //                        AbsListView parentList = (AbsListView)parent;
 //                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 //                            if (parentList.getChoiceMode() == AbsListView.CHOICE_MODE_NONE) {
@@ -220,13 +225,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 //                            } else {
 //                                if (parentList.isItemChecked(position)) {
 //                                    checkBoxV.setImageResource(
-//                                            android.R.drawable.checkbox_on_background);
+//                                            R.drawable.ic_checkbox_marked);
 //                                } else {
 //                                    checkBoxV.setImageResource(
-//                                            android.R.drawable.checkbox_off_background);
+//                                            R.drawable.ic_checkbox_blank_outline);
 //                                }
 //                                checkBoxV.setVisibility(View.VISIBLE);
 //                            }
+//                        }
 //                        }
 
                     } else { //Folder
@@ -274,37 +280,29 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                                 opsBinder != null &&
                                 opsBinder.isSynchronizing(mAccount, file)
                             ) {
-                        localStateView.setImageResource(R.drawable.synchronizing_file_indicator);
+                        localStateView.setImageResource(R.drawable.ic_synchronizing);
                         localStateView.setVisibility(View.VISIBLE);
 
                     } else if ( // downloading
                                 downloaderBinder != null &&
                                 downloaderBinder.isDownloading(mAccount, file)
                             ) {
-                        localStateView.setImageResource(
-                                file.isFolder() ?
-                                        R.drawable.synchronizing_file_indicator :
-                                        R.drawable.downloading_file_indicator
-                        );
+                        localStateView.setImageResource(R.drawable.ic_synchronizing);
                         localStateView.setVisibility(View.VISIBLE);
 
                     } else if ( //uploading
                                 uploaderBinder != null &&
                                 uploaderBinder.isUploading(mAccount, file)
                             ) {
-                        localStateView.setImageResource(
-                                file.isFolder() ?
-                                        R.drawable.synchronizing_file_indicator :
-                                        R.drawable.uploading_file_indicator
-                        );
+                        localStateView.setImageResource(R.drawable.ic_synchronizing);
                         localStateView.setVisibility(View.VISIBLE);
 
                     } else if (file.getEtagInConflict() != null) {   // conflict
-                        localStateView.setImageResource(R.drawable.conflict_file_indicator);
+                        localStateView.setImageResource(R.drawable.ic_synchronizing_error);
                         localStateView.setVisibility(View.VISIBLE);
 
                     } else if (file.isDown()) {
-                        localStateView.setImageResource(R.drawable.local_file_indicator);
+                        localStateView.setImageResource(R.drawable.ic_synced);
                         localStateView.setVisibility(View.VISIBLE);
                     }
 
@@ -329,7 +327,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     checkBoxV.setVisibility(View.VISIBLE);
                 }
             }
-
+            
             // For all Views
             
             // this if-else is needed even though favorite icon is visible by default
@@ -380,6 +378,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.getMimetype(),
                             file.getFileName()));
                 }
+
 
             } else {
                 // Folder
@@ -530,5 +529,46 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public boolean isGridMode() {
         return mGridMode;
+    }
+
+    public void setNewSelection(int position, boolean checked) {
+        mSelection.put(position, checked);
+        notifyDataSetChanged();
+    }
+
+    public void removeSelection(int position) {
+        mSelection.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void removeSelection(){
+         mSelection.clear();
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Integer> getCheckedItemPositions() {
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+
+        for (Map.Entry<Integer, Boolean> entry : mSelection.entrySet()){
+            if (entry.getValue()){
+                ids.add(entry.getKey());
+            }
+        }
+        return ids;
+    }
+
+    public ArrayList<OCFile> getCheckedItems() {
+        ArrayList<OCFile> files = new ArrayList<OCFile>();
+
+        OCFile checkedFile = null;
+        for (Map.Entry<Integer, Boolean> entry : mSelection.entrySet()){
+            if (entry.getValue()){
+                checkedFile = (OCFile) getItem(entry.getKey());
+                if (checkedFile != null) {
+                    files.add((OCFile) getItem(entry.getKey()));
+                }
+            }
+        }
+        return files;
     }
 }

@@ -40,6 +40,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
 
     private String mPath;
     private String mPassword;
+    private Boolean mPublicUpload;
     private long mExpirationDateInMillis;
 
     /**
@@ -52,6 +53,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         mPath = path;
         mPassword = null;
         mExpirationDateInMillis = 0;
+        mPublicUpload = null;
     }
 
 
@@ -79,6 +81,16 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         mExpirationDateInMillis = expirationDateInMillis;
     }
 
+    /**
+     * Enable upload permissions to update in Share resource.
+     *
+     * @param publicUpload    Upload Permission to set to the public link.
+     *                        Null results in no update applied to the upload permission.
+     */
+    public void setPublicUpload(Boolean publicUpload) {
+        mPublicUpload = publicUpload;
+    }
+
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
@@ -102,6 +114,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         );
         updateOp.setPassword(mPassword);
         updateOp.setExpirationDate(mExpirationDateInMillis);
+        updateOp.setPublicUpload(mPublicUpload);
         RemoteOperationResult result = updateOp.execute(client);
 
         if (result.isSuccess()) {

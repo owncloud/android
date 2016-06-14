@@ -29,7 +29,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -198,14 +197,17 @@ public class FileMenuFilter {
         }
 
         // SHARE FILE
-        boolean shareAllowed = (mContext != null  &&
-                mContext.getString(R.string.share_feature).equalsIgnoreCase("on"));
+        boolean shareViaLinkAllowed = (mContext != null  &&
+                mContext.getResources().getBoolean(R.bool.share_via_link_feature));
+        boolean shareWithUsersAllowed = (mContext != null  &&
+                mContext.getResources().getBoolean(R.bool.share_with_users_feature));
+
         OCCapability capability = mComponentsGetter.getStorageManager().getCapability(mAccount.name);
         boolean shareApiEnabled  = capability != null &&
                 (capability.getFilesSharingApiEnabled().isTrue() ||
                         capability.getFilesSharingApiEnabled().isUnknown()
                 );
-        if (!shareAllowed || !isSingleSelect() || !shareApiEnabled) {
+        if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelect() || !shareApiEnabled) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);
