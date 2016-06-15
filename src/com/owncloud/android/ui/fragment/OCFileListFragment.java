@@ -182,6 +182,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 getActivity(),
                 mContainerActivity
         );
+        mAdapter.restoreSelectionState(savedInstanceState);
         setListAdapter(mAdapter);
 
         registerLongClickListener();
@@ -345,7 +346,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                mAdapter.notifyDataSetChanged();
+                mAdapter.setNewSelection(position, checked);
                 mode.invalidate();
             }
 
@@ -373,7 +374,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 mode.setTitle(checkedCount + " selected");
 
                 if (checkedCount > 0) {
-                    List<OCFile> targetFiles = getCheckedItems();
+                    List<OCFile> targetFiles = mAdapter.getCheckedItems();
 
                     if (mContainerActivity.getStorageManager() != null) {
                         FileMenuFilter mf = new FileMenuFilter(
@@ -397,6 +398,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             public void onDestroyActionMode(ActionMode mode) {
                 mActiveActionMode = null;
                 getListView().clearChoices();
+                mAdapter.clearSelection();
 
                 // reset to primary dark color
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -418,6 +420,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(KEY_FILE, mFile);
+        mAdapter.saveSelectionState(outState);
     }
 
     @Override
@@ -526,7 +529,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         }
     }
     public boolean onFileActionChosen(int menuId) {
-        final ArrayList<OCFile> checkedItems = getCheckedItems();
+        final ArrayList<OCFile> checkedItems = mAdapter.getCheckedItems();
         if (checkedItems.size() == 1){
             OCFile mTargetFile = checkedItems.get(0);
 
