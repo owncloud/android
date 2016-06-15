@@ -145,7 +145,7 @@ public class OwnCloudAccount {
         } else if (mCredentials != null) {
             return mCredentials.getUsername();
         } else {
-            return "NONE";
+            return null;
         }
     }
 
