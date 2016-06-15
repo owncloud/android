@@ -55,7 +55,7 @@ implements ConfirmationDialogFragmentListener {
         int messageStringId = (file.isFolder()) ?
             R.string.confirmation_remove_folder_alert :
             R.string.confirmation_remove_file_alert;
-        
+
         int localRemoveButton = (!file.isFavorite() && (file.isFolder() || file.isDown())) ?
             R.string.confirmation_remove_local :
             -1;
