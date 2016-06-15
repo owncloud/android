@@ -20,13 +20,6 @@
  */
 package com.owncloud.android.ui.adapter;
 
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
-import com.owncloud.android.R;
-import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
@@ -37,6 +30,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.security.auth.x500.X500Principal;
+
+import com.owncloud.android.R;
+import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
+
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 /**
  *

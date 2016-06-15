@@ -21,6 +21,13 @@
 
 package com.owncloud.android.datamodel;
 
+import java.io.File;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
+
 import android.accounts.Account;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -28,6 +35,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -44,13 +52,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
 import com.owncloud.android.utils.BitmapUtils;
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-
-import java.io.File;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
+import com.owncloud.android.utils.DisplayUtils;
 
 /**
  * Manager for concurrent access to thumbnails cache.
