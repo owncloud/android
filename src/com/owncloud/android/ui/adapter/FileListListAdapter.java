@@ -24,13 +24,12 @@
 package com.owncloud.android.ui.adapter;
 
 
-import java.util.Vector;
-
 import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -56,6 +55,10 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Vector;
 
 
 /**
@@ -63,6 +66,8 @@ import com.owncloud.android.utils.MimetypeIconUtil;
  * instance.
  */
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
+
+    private static final String SELECTION_KEY = "multiFileSelectionsKey";
 
     private Context mContext;
     private OCFile mFile = null;
@@ -79,7 +84,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     private SharedPreferences mAppPreferences;
 
-    
+    private HashSet<Long> mSelection = new LinkedHashSet<Long>();
+
     public FileListListAdapter(
             boolean justFolders,
             Context context,
@@ -307,7 +313,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             AbsListView parentList = (AbsListView)parent;
             if (parentList.getChoiceMode() != AbsListView.CHOICE_MODE_NONE
                     && parentList.getCheckedItemCount() > 0){
-                if (parentList.isItemChecked(position)) {
+                if (isItemSelected(position)) {
                     view.setBackgroundColor(mContext.getResources().getColor(
                             R.color.selected_item_background));
                     checkBoxV.setImageResource(
@@ -472,6 +478,62 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     public void setGridMode(boolean gridMode) {
         mGridMode = gridMode;
+    }
+
+    public boolean isItemSelected(int position){
+        return mSelection.contains(getItemId(position));
+    }
+
+    public void setNewSelection(int position, boolean checked) {
+        if(checked){
+            mSelection.add(getItemId(position));
+            notifyDataSetChanged();
+        } else {
+            removeSelection(position);
+        }
+    }
+
+    public void removeSelection(int position) {
+        mSelection.remove(getItemId(position));
+        notifyDataSetChanged();
+    }
+
+    public void clearSelection(){
+         mSelection.clear();
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<OCFile> getCheckedItems() {
+        ArrayList<OCFile> files = new ArrayList<OCFile>();
+        if (mFiles != null && mFiles.size() != 0){
+            for(OCFile file: mFiles){
+                if(mSelection.contains(file.getFileId())){
+                    files.add(file);
+                }
+            }
+        }
+        return files;
+    }
+    public void restoreSelectionState(Bundle savedInstanceState){
+        if (savedInstanceState == null) {
+            return;
+        }
+        long[] selectionState = savedInstanceState.getLongArray(SELECTION_KEY);
+        mSelection.clear();
+        if(selectionState != null) {
+            for (long id : selectionState) {
+                mSelection.add(id);
+            }
+        }
+    }
+
+    public void saveSelectionState(Bundle outState) {
+        long[] selectionStatePrimitive = new long[mSelection.size()];
+        int i = 0;
+        for (Long id : mSelection) {
+            selectionStatePrimitive[i++] = id;
+        }
+        outState.putLongArray(SELECTION_KEY, selectionStatePrimitive);
     }
 
     public boolean isGridMode() {
