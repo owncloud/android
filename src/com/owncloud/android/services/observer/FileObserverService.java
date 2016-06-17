@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.os.Environment;
 import android.os.IBinder;
 
 import com.owncloud.android.MainApp;
@@ -79,7 +80,9 @@ public class FileObserverService extends Service {
     /**
      * Map of observers watching for changes in available offline files in local 'ownCloud' folder
      */
-    private Map<String, FolderObserver> mFolderObserversMap;
+    //private Map<String, FolderObserver> mFolderObserversMap;
+    private Map<String, AvailableOfflineObserver> mObserversMap;
+
 
     /**
      * Broadcast receiver being notified about downloads new and finished downloads to pause and resume
@@ -153,9 +156,10 @@ public class FileObserverService extends Service {
         filter.addAction(FileDownloader.getDownloadFinishMessage());
         registerReceiver(mDownloadReceiver, filter);
 
-        mFolderObserversMap = new HashMap<>();
-
         mInstantUploadsObserver = null;
+
+        //mFolderObserversMap = new HashMap<>();
+        mObserversMap = new HashMap<>();
     }
 
     /**
@@ -167,12 +171,12 @@ public class FileObserverService extends Service {
 
         unregisterReceiver(mDownloadReceiver);
 
-        Iterator<FolderObserver> itOCFolder = mFolderObserversMap.values().iterator();
+        Iterator<AvailableOfflineObserver> itOCFolder = mObserversMap.values().iterator();
         while (itOCFolder.hasNext()) {
             itOCFolder.next().stopWatching();
         }
-        mFolderObserversMap.clear();
-        mFolderObserversMap = null;
+        mObserversMap.clear();
+        mObserversMap = null;
 
         if (mInstantUploadsObserver != null) {
             mInstantUploadsObserver.stopWatching();
@@ -212,8 +216,10 @@ public class FileObserverService extends Service {
             addObservedFile(file, account);
 
         } else if (ACTION_DEL_OBSERVED_FILE.equals(intent.getAction())) {
-            removeObservedFile((OCFile) intent.getParcelableExtra(ARG_FILE),
-                (Account) intent.getParcelableExtra(ARG_ACCOUNT));
+            removeObservedFile(
+                (OCFile) intent.getParcelableExtra(ARG_FILE),
+                (Account) intent.getParcelableExtra(ARG_ACCOUNT)
+            );
 
         } else if (ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS.equals(intent.getAction())) {
             updateInstantUploadsObservers();
@@ -322,19 +328,22 @@ public class FileObserverService extends Service {
         File file = new File(localPath);
 
         if(file.isDirectory()) {
-            File[] children = file.listFiles();
-            if (children != null) {
-                for (File child : children) {
-                    addObservedFile(child.getAbsolutePath(), account);
-                }
-            }
-        } else {
-
-            String parentPath = file.getParent();
-            FolderObserver observer = mFolderObserversMap.get(parentPath);
+            AvailableOfflineObserver observer = mObserversMap.get(localPath);
             if (observer == null) {
-                observer = new FolderObserver(parentPath, account, getApplicationContext());
-                mFolderObserversMap.put(parentPath, observer);
+                observer = new AvailableOfflineRecursiveObserver(localPath, account, getApplicationContext());
+                mObserversMap.put(localPath, observer);
+                Log_OC.d(TAG, "Recursive observer added for folder " + localPath + "/");
+            }
+
+            observer.startWatching();
+            Log_OC.d(TAG, "Started recursive observation of folders");
+
+        } else {
+            String parentPath = file.getParent();
+            AvailableOfflineObserver observer = mObserversMap.get(parentPath);
+            if (observer == null) {
+                observer = new AvailableOfflineNonRecursiveObserver(parentPath, account, getApplicationContext());
+                mObserversMap.put(parentPath, observer);
                 Log_OC.d(TAG, "Observer added for parent folder " + parentPath + "/");
             }
 
@@ -379,17 +388,31 @@ public class FileObserverService extends Service {
      */
     private void removeObservedFile(String localPath) {
         File file = new File(localPath);
-        String parentPath = file.getParent();
-        FolderObserver observer = mFolderObserversMap.get(parentPath);
-        if (observer != null) {
-            observer.stopWatching(file.getName());
-            if (observer.isEmpty()) {
-                mFolderObserversMap.remove(parentPath);
-                Log_OC.d(TAG, "Observer removed for parent folder " + parentPath + "/");
+
+        if(file.isDirectory()) {
+            AvailableOfflineObserver observer = mObserversMap.get(localPath);
+            if (observer != null) {
+                observer.stopWatching();
+                Log_OC.d(TAG, "Recursive observer removed for folder ");
+
+            } else {
+                Log_OC.d(TAG, "No observer to remove for path " + localPath);
             }
-        
+
+
         } else {
-            Log_OC.d(TAG, "No observer to remove for path " + localPath);
+            String parentPath = file.getParent();
+            AvailableOfflineObserver observer = mObserversMap.get(parentPath);
+            if (observer != null) {
+                observer.stopWatching(file.getName());
+                if (observer.isEmpty()) {
+                    mObserversMap.remove(parentPath);
+                    Log_OC.d(TAG, "Observer removed for parent folder " + parentPath + "/");
+                }
+
+            } else {
+                Log_OC.d(TAG, "No observer to remove for path " + localPath);
+            }
         }
     }
 
@@ -446,22 +469,26 @@ public class FileObserverService extends Service {
 
             File downloadedFile = new File(intent.getStringExtra(FileDownloader.EXTRA_FILE_PATH));
             String parentPath = downloadedFile.getParent();
-            FolderObserver observer = mFolderObserversMap.get(parentPath);
-            if (observer != null) {
-                if (intent.getAction().equals(FileDownloader.getDownloadFinishMessage())
+            String topPath = Environment.getExternalStorageDirectory().getPath();   // ugly as hell
+            AvailableOfflineObserver observer;
+            while (!parentPath.equals(topPath)) {
+                observer = mObserversMap.get(parentPath);
+                if (observer != null) {
+                    if (intent.getAction().equals(FileDownloader.getDownloadFinishMessage())
                         && downloadedFile.exists()) {
-                    // no matter if the download was successful or not; the
-                    // file could be down anyway due to a former download or upload
-                    observer.startWatching(downloadedFile.getName());
-                    Log_OC.d(TAG, "Resuming observance of " + downloadedFile.getAbsolutePath());
+                        // no matter if the download was successful or not; the
+                        // file could be down anyway due to a former download or upload
+                        observer.startWatching(downloadedFile.getName());
+                        Log_OC.d(TAG, "Resuming observance of " + downloadedFile.getAbsolutePath());
 
-                } else if (intent.getAction().equals(FileDownloader.getDownloadAddedMessage())) {
-                    observer.stopWatching(downloadedFile.getName());
-                    Log_OC.d(TAG, "Pausing observance of " + downloadedFile.getAbsolutePath());
+                    } else if (intent.getAction().equals(FileDownloader.getDownloadAddedMessage())) {
+                        observer.stopWatching(downloadedFile.getName());
+                        Log_OC.d(TAG, "Pausing observance of " + downloadedFile.getAbsolutePath());
+                    }
+
+                } else {
+                    Log_OC.d(TAG, "No observer for path " + downloadedFile.getAbsolutePath());
                 }
-
-            } else {
-                Log_OC.d(TAG, "No observer for path " + downloadedFile.getAbsolutePath());
             }
         }
 
