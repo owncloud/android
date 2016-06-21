@@ -70,7 +70,8 @@ public class DocumentsStorageProvider extends DocumentsProvider {
         updateCurrentStorageManagerIfNeeded(docId);
 
         final FileCursor result = new FileCursor(projection);
-        result.addFile(mCurrentStorageManager.getFileById(docId));
+        if (result != null)
+          result.addFile(mCurrentStorageManager.getFileById(docId));
 
         return result;
     }
