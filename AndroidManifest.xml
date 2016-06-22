@@ -129,7 +129,7 @@
             android:name=".providers.FileContentProvider"
             android:authorities="@string/authority"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/sync_string_files"
             android:syncable="false" />
 
