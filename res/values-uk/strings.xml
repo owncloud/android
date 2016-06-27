@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s Android-додаток</string>
   <string name="about_version">версія %1$s</string>
   <string name="actionbar_sync">Оновити account</string>
   <string name="actionbar_upload">Відвантажити</string>
@@ -101,6 +102,7 @@
   <string name="uploads_view_group_current_uploads">Поточний</string>
   <string name="uploads_view_group_finished_uploads">Вивантажено</string>
   <string name="uploads_view_upload_status_succeeded">Завершені</string>
+  <string name="uploads_view_upload_status_paused">Призупинено</string>
   <string name="uploads_view_upload_status_failed_file_error">Помилка файлу</string>
   <string name="uploads_view_upload_status_failed_permission_error">Помилка доступу</string>
   <string name="uploads_view_upload_status_unknown_fail">Невідома помилка</string>
