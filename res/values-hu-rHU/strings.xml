@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s Android Alkalmazás</string>
   <string name="about_version">verzió %1$s</string>
   <string name="actionbar_sync">Fiók frissítése</string>
   <string name="actionbar_upload">Feltöltés</string>
@@ -35,14 +36,20 @@
   <string name="prefs_instant_upload_summary">Kamera által készítette képek azonnali feltöltése</string>
   <string name="prefs_instant_video_upload">Azonnali video feltöltések</string>
   <string name="prefs_instant_video_upload_summary">Kamera által készített videó azonnali feltöltése</string>
+  <string name="prefs_log_title">Naplózás engedélyezése</string>
   <string name="prefs_log_summary">Ez használható a problémák naplózásához</string>
+  <string name="prefs_log_title_history">Naplózás előzménye</string>
   <string name="prefs_log_summary_history">Ez megjeleníti a rögzitett eseményeket</string>
+  <string name="prefs_log_delete_history_button">Elözmények törlése</string>
   <string name="prefs_help">Súgó</string>
   <string name="prefs_recommend">Ajánlja egy barátjának</string>
   <string name="prefs_feedback">Visszajelzés</string>
   <string name="prefs_imprint">Impresszum</string>
   <string name="prefs_remember_last_share_location">Emlékezzen a megosztás helyére</string>
   <string name="recommend_subject">Próbálja ki %1$s-t az okostelefonján!</string>
+  <string name="recommend_text">Szeretnélek meghívni, hogy használd %1$s alkalmazást az okostelefonodon!\nTölts le innen: %2$s
+	</string>
+  <string name="auth_check_server">Szerver ellenörzés</string>
   <string name="auth_host_url">Kiszolgáló címe https://...</string>
   <string name="auth_username">Felhasználói név</string>
   <string name="auth_password">Jelszó</string>
@@ -50,9 +57,11 @@
   <string name="sync_string_files">Fájlok</string>
   <string name="setup_btn_connect">Kapcsolódás</string>
   <string name="uploader_btn_upload_text">Feltöltés</string>
+  <string name="uploader_top_message">Válassz feltöltési mappát</string>
   <string name="uploader_wrn_no_account_title">Nincs ilyen felhasználói fiók</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Beállítás</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Kilépés</string>
+  <string name="uploader_error_title_no_file_to_upload">Nincs file amit fel lehet tölteni</string>
   <string name="file_list_seconds_ago">pár másodperce</string>
   <string name="file_list_empty">Itt nincs semmi. Töltsön fel valamit!</string>
   <string name="file_list_loading">Betöltés...</string>
@@ -106,12 +115,14 @@
   <string name="sync_fail_in_favourites_ticker">A szinkronizálandó fájlokat nem sikerült szinkronizálni</string>
   <string name="sync_fail_in_favourites_content">%1$d fájl szinkronizálása nem sikerült (%2$d ütközés)</string>
   <string name="sync_foreign_files_forgotten_ticker">Néhány helyi fájlt figyelmen kívül hagytunk</string>
+  <string name="sync_foreign_files_forgotten_content">Összesen a %2$s fileból  %1$d filet nem lehetett másolni </string>
   <string name="sync_current_folder_was_removed">A %1$s mappa már nem létezik</string>
   <string name="foreign_files_move">Helyezzük át mindet</string>
   <string name="foreign_files_success">Az összes fájlt áthelyeztük</string>
   <string name="foreign_files_fail">Egyes fájlokat nem sikerült áthelyezni</string>
   <string name="foreign_files_local_text">Helyi: %1$s</string>
   <string name="foreign_files_remote_text">Távoli: %1$s</string>
+  <string name="upload_query_move_foreign_files">Nincs elég hely ahoz, hogy a kiválasztott fileokat átmásoljuk a %1$s mappába. Ezért ehelyett átmozgassuk inkább ide a fileokat? </string>
   <string name="pass_code_configure_your_pass_code">Írd be a számkódodat</string>
   <string name="pass_code_configure_your_pass_code_explanation">A számkódra minden alkalommal szükség lesz az applikáció indításához</string>
   <string name="pass_code_remove_your_pass_code">Számkódod eltávolítása</string>
@@ -235,6 +246,7 @@
   <string name="actionbar_move">Mozgatás</string>
   <string name="file_list_empty_moving">Itt nincs semmi! Adj hozzá egy mappát!</string>
   <string name="folder_picker_choose_button_text">Válasszon</string>
+  <string name="forbidden_permissions_move">mozgatni ezt a filet</string>
   <string name="prefs_category_details">Részletek</string>
   <string name="shared_subject_header">megosztva</string>
   <string name="with_you_subject_header">veled</string>
@@ -250,6 +262,7 @@
   <string name="file_list__footer__files_and_folder">%1$d fájl, 1 könyvtár</string>
   <string name="file_list__footer__files_and_folders">%1$d fájl, %2$d könyvtár</string>
   <string name="share_dialog_title">Megosztás</string>
+  <string name="share_no_users">Nincs még semmi megosztva a felhasználókkal</string>
   <string name="share_via_link_section_title">Megosztás hivatkozással</string>
   <string name="share_via_link_expiration_date_label">Legyen lejárati idő</string>
   <string name="share_via_link_password_label">Jelszóval is védem</string>
@@ -260,4 +273,7 @@
   <string name="share_privilege_can_edit_create">létrehoz</string>
   <string name="share_privilege_can_edit_change">változtatás</string>
   <string name="share_privilege_can_edit_delete">törlés</string>
+  <string name="edit_share_done">kész</string>
+  <string name="action_switch_grid_view">Rács nézet</string>
+  <string name="action_switch_list_view">Lista nézet</string>
 </resources>
