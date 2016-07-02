@@ -130,7 +130,11 @@
   <string name="downloader_download_failed_ticker">Erofluede feelgeschloen</string>
   <string name="downloader_download_failed_content">Erofluede vun %1$s konnt net ofgeschloss ginn</string>
   <string name="downloader_not_downloaded_yet">Nach net erofgelueden</string>
+  <string name="downloader_download_failed_credentials_error">Eroflueden feelgeschloen, du muss dech nei aloggen</string>
   <string name="common_choose_account">Kont auswielen</string>
+  <string name="sync_fail_ticker">Synchronisatioun feelgeschloen</string>
+  <string name="sync_fail_ticker_unauthorized">Synchronisatioun feelgeschloen</string>
+  <string name="sync_fail_content">Synchronisatioun vun %1$s konnt net ofgeschloss ginn</string>
   <string name="sync_fail_content_unauthorized">Ongëltegt Passwuert fir %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Konflikter fonnt</string>
   <string name="sync_foreign_files_forgotten_ticker">Verschidde lokal Fichiere goufe vergiess</string>

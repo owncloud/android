@@ -58,6 +58,7 @@
   <string name="sync_string_files">Dosyalar</string>
   <string name="setup_btn_connect">Bağlan</string>
   <string name="uploader_btn_upload_text">Yükle</string>
+  <string name="uploader_top_message">Yükleme klasörü seç</string>
   <string name="uploader_wrn_no_account_title">Hesap bulunamadı</string>
   <string name="uploader_wrn_no_account_text">Cihazınızda hiç %1$s hesabı yok. Lütfen ilk olarak bir hesap ayarlayın.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Kurulum</string>
@@ -303,6 +304,7 @@
   <string name="copy_link">Bağlantıyı kopyala</string>
   <string name="clipboard_text_copied">Panoya kopyalandı</string>
   <string name="clipboard_uxexpected_error">Panoya kopyalanırken beklenmeyen bir hata oluştu</string>
+  <string name="clipboard_label">%1$s\'den metin kopyalandı</string>
   <string name="error_cant_bind_to_operations_service">Ciddi hata: işlem gerçekleştirilemiyor</string>
   <string name="network_error_socket_exception">Sunucuya bağlanılırken bir hata oluştu.</string>
   <string name="network_error_socket_timeout_exception">Sunucu beklenirken bir hata oluştu, işlem yapılamadı</string>
