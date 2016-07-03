@@ -62,6 +62,7 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Beállítás</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Kilépés</string>
   <string name="uploader_error_title_no_file_to_upload">Nincs file amit fel lehet tölteni</string>
+  <string name="uploader_error_title_file_cannot_be_uploaded">A fájlt nem lehetett feltölteni</string>
   <string name="file_list_seconds_ago">pár másodperce</string>
   <string name="file_list_empty">Itt nincs semmi. Töltsön fel valamit!</string>
   <string name="file_list_loading">Betöltés...</string>
@@ -84,11 +85,14 @@
   <string name="common_ok">OK</string>
   <string name="common_cancel">Mégsem</string>
   <string name="common_back">Vissza</string>
+  <string name="common_save_exit">Mentés &amp; kilépés</string>
   <string name="common_error">Hiba</string>
   <string name="common_loading">Betöltés ...</string>
+  <string name="common_unknown">ismeretlen</string>
   <string name="common_error_unknown">Ismeretlen hiba</string>
   <string name="about_title">Rólunk</string>
   <string name="change_password">A jelszó megváltoztatása</string>
+  <string name="delete_account">Fiók eltávolítása</string>
   <string name="create_account">Fiók létrehozása</string>
   <string name="upload_chooser_title">Feltöltés innen ...</string>
   <string name="uploader_info_dirname">Mappanév</string>
@@ -101,6 +105,9 @@
   <string name="uploads_view_group_current_uploads">Jelenlegi</string>
   <string name="uploads_view_group_finished_uploads">Feltöltve</string>
   <string name="uploads_view_upload_status_succeeded">Befejezve</string>
+  <string name="uploads_view_upload_status_failed_connection_error">Kapcsolódási hiba</string>
+  <string name="uploads_view_upload_status_failed_file_error">Fájl hiba</string>
+  <string name="uploads_view_upload_status_failed_permission_error">Jogosultsági hiba</string>
   <string name="uploads_view_upload_status_unknown_fail">Ismeretlen hiba</string>
   <string name="downloader_download_in_progress_ticker">Letöltés ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Letöltés %2$s</string>
@@ -216,6 +223,7 @@
   <string name="ssl_validator_label_validity_to">Eddig a dátumig:</string>
   <string name="ssl_validator_label_signature">Aláírás:</string>
   <string name="ssl_validator_label_signature_algorithm">Algoritmus:</string>
+  <string name="ssl_validator_label_certificate_fingerprint">Ujjlenyomat:</string>
   <string name="ssl_validator_null_cert">A tanúsítvány nem megjeleníthető.</string>
   <string name="ssl_validator_no_info_about_error">- Nincs információ a hibáról</string>
   <string name="placeholder_sentence">Ez egy helyőrző</string>
@@ -238,9 +246,13 @@
   <string name="copy_link">Link másolása</string>
   <string name="clipboard_text_copied">Bemásolva a vágólapra</string>
   <string name="empty"></string>
+  <string name="forbidden_permissions_rename">átnevezni ezt a fájlt</string>
+  <string name="forbidden_permissions_delete">törölni ezt a fájlt</string>
+  <string name="share_link_forbidden_permissions">megosztani ezt a fájlt</string>
   <string name="prefs_category_accounts">Fiókok</string>
   <string name="prefs_add_account">Fiók hozzáadása</string>
   <string name="actionbar_logger">Naplók</string>
+  <string name="log_progress_dialog_text">Adatok betöltése ...</string>
   <string name="saml_authentication_required_text">Felhasználóazonosítás szükséges</string>
   <string name="saml_authentication_wrong_pass">Hibás jelszó</string>
   <string name="actionbar_move">Mozgatás</string>
@@ -261,8 +273,11 @@
   <string name="file_list__footer__files">%1$d fájl</string>
   <string name="file_list__footer__files_and_folder">%1$d fájl, 1 könyvtár</string>
   <string name="file_list__footer__files_and_folders">%1$d fájl, %2$d könyvtár</string>
+  <string name="upload_copy_files">Fájl másolása</string>
+  <string name="upload_move_files">Fájl mozgatása</string>
   <string name="share_dialog_title">Megosztás</string>
   <string name="share_no_users">Nincs még semmi megosztva a felhasználókkal</string>
+  <string name="share_add_user_or_group">Felhasználó, vagy csoport hozzáadása</string>
   <string name="share_via_link_section_title">Megosztás hivatkozással</string>
   <string name="share_via_link_expiration_date_label">Legyen lejárati idő</string>
   <string name="share_via_link_password_label">Jelszóval is védem</string>
@@ -276,4 +291,5 @@
   <string name="edit_share_done">kész</string>
   <string name="action_switch_grid_view">Rács nézet</string>
   <string name="action_switch_list_view">Lista nézet</string>
+  <string name="manage_space_clear_data">Adatok törlése</string>
 </resources>

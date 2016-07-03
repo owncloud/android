@@ -58,6 +58,7 @@
   <string name="sync_string_files">ไฟล์</string>
   <string name="setup_btn_connect">เชื่อมต่อ</string>
   <string name="uploader_btn_upload_text">อัพโหลด</string>
+  <string name="uploader_top_message">เลือกโฟลเดอร์ที่ต้องการอัพโหลด</string>
   <string name="uploader_wrn_no_account_title">ไม่พบบัญชีที่ต้องการ</string>
   <string name="uploader_wrn_no_account_text">ไม่มีบัญชีผู้ใช้ %1$s ในอุปกรณ์ของคุณ กรุณาตั้งค่าบัญชีผู้ใช้ก่อน</string>
   <string name="uploader_wrn_no_account_setup_btn_text">ตั้งค่า</string>
@@ -123,6 +124,7 @@
   <string name="uploads_view_upload_status_cancelled">ยกเลิกแล้ว</string>
   <string name="uploads_view_upload_status_paused">หยุดชั่วคราวแล้ว</string>
   <string name="uploads_view_upload_status_failed_connection_error">การเชื่อมต่อล้มเหลว</string>
+  <string name="uploads_view_upload_status_failed_retry">การอัพโหลดจะถูกทำซ้ำอีกครั้งในไม่ช้า</string>
   <string name="uploads_view_upload_status_failed_credentials_error">ข้อมูลประจำตัวข้อผิดพลาดของ</string>
   <string name="uploads_view_upload_status_failed_folder_error">ข้อผิดพลาดของโฟลเดอร์</string>
   <string name="uploads_view_upload_status_failed_file_error">ข้อผิดพลาดของไฟล์</string>
