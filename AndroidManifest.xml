@@ -129,9 +129,9 @@
             android:name=".providers.FileContentProvider"
             android:authorities="@string/authority"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/sync_string_files"
-            android:syncable="true" />
+            android:syncable="false" />
 
         <provider
             android:name=".providers.UsersAndGroupsSearchProvider"
@@ -150,6 +150,12 @@
             <intent-filter>
                 <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
             </intent-filter>
+        </provider>
+
+        <provider
+            android:name=".ui.adapter.DiskLruImageCacheFileProvider"
+            android:authorities="com.owncloud.imageCache.provider"
+            android:exported="true">
         </provider>
 
         <activity

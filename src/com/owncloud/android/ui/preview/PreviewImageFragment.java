@@ -41,8 +41,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -59,7 +61,7 @@ import third_parties.michaelOrtiz.TouchImageViewCustom;
  *
  * Trying to get an instance with a NULL {@link OCFile} will produce an
  * {@link IllegalStateException}.
- * 
+ *
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is generated on
  * instantiation too.
  */
@@ -69,10 +71,13 @@ public class PreviewImageFragment extends FileFragment {
 
     private static final String ARG_FILE = "FILE";
     private static final String ARG_IGNORE_FIRST = "IGNORE_FIRST";
+    private static final String ARG_SHOW_RESIZED_IMAGE = "SHOW_RESIZED_IMAGE";
 
     private TouchImageViewCustom mImageView;
     private TextView mMessageView;
     private ProgressBar mProgressWheel;
+
+    private Boolean mShowResizedImage = false;
 
     public Bitmap mBitmap = null;
 
@@ -97,23 +102,26 @@ public class PreviewImageFragment extends FileFragment {
      *                                  {@link FragmentStatePagerAdapter}
      *                                  ; TODO better solution
      */
-    public static PreviewImageFragment newInstance(OCFile imageFile, boolean ignoreFirstSavedState){
+    public static PreviewImageFragment newInstance(OCFile imageFile, boolean ignoreFirstSavedState,
+                                                   boolean showResizedImage){
         PreviewImageFragment frag = new PreviewImageFragment();
+        frag.mShowResizedImage = showResizedImage;
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, imageFile);
         args.putBoolean(ARG_IGNORE_FIRST, ignoreFirstSavedState);
+        args.putBoolean(ARG_SHOW_RESIZED_IMAGE, showResizedImage);
         frag.setArguments(args);
         return frag;
     }
 
 
-    
+
     /**
      *  Creates an empty fragment for image previews.
-     * 
+     *
      *  MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
      *  (for instance, when the device is turned a aside).
-     * 
+     *
      *  DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
      *  construction
      */
@@ -130,10 +138,11 @@ public class PreviewImageFragment extends FileFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         setFile((OCFile)args.getParcelable(ARG_FILE));
-            // TODO better in super, but needs to check ALL the class extending FileFragment;
-            // not right now
+        // TODO better in super, but needs to check ALL the class extending FileFragment;
+        // not right now
 
         mIgnoreFirstSavedState = args.getBoolean(ARG_IGNORE_FIRST);
+        mShowResizedImage = args.getBoolean(ARG_SHOW_RESIZED_IMAGE);
         setHasOptionsMenu(true);
     }
 
@@ -179,9 +188,6 @@ public class PreviewImageFragment extends FileFragment {
         if (getFile() == null) {
             throw new IllegalStateException("Instanced with a NULL OCFile");
         }
-        if (!getFile().isDown()) {
-            throw new IllegalStateException("There is no local file to preview");
-        }
     }
 
 
@@ -199,10 +205,56 @@ public class PreviewImageFragment extends FileFragment {
     public void onStart() {
         super.onStart();
         if (getFile() != null) {
-            mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
-            //mLoadBitmapTask.execute(new String[]{getFile().getStoragePath()});
-//            mLoadBitmapTask.execute(getFile().getStoragePath());
-            mLoadBitmapTask.execute(getFile());
+            mImageView.setTag(getFile().getFileId());
+
+            if (mShowResizedImage){
+                Bitmap resizedImage = ThumbnailsCacheManager.getBitmapFromDiskCache(
+                        String.valueOf("r" + getFile().getRemoteId()));
+
+                if (resizedImage != null && !getFile().needsUpdateThumbnail()){
+                    mProgressWheel.setVisibility(View.GONE);
+                    mImageView.setImageBitmap(resizedImage);
+                    mImageView.setVisibility(View.VISIBLE);
+                    mBitmap  = resizedImage;
+                } else {
+                    // show thumbnail while loading resized image
+                    Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
+                            String.valueOf("t" + getFile().getRemoteId()));
+
+                    if (thumbnail != null){
+                        mImageView.setImageBitmap(thumbnail);
+                        mProgressWheel.setVisibility(View.VISIBLE);
+                        mImageView.setVisibility(View.VISIBLE);
+                        mBitmap = thumbnail;
+                    } else {
+                        thumbnail = ThumbnailsCacheManager.mDefaultImg;
+                    }
+
+                    // generate new resized image
+                    if (ThumbnailsCacheManager.cancelPotentialWork(getFile(), mImageView) &&
+                            mContainerActivity.getStorageManager() != null) {
+                        final ThumbnailsCacheManager.ThumbnailGenerationTask task =
+                                new ThumbnailsCacheManager.ThumbnailGenerationTask(
+                                        mImageView, mContainerActivity.getStorageManager(),
+                                        mContainerActivity.getStorageManager().getAccount(),
+                                        mProgressWheel);
+                        if (resizedImage == null) {
+                            resizedImage = thumbnail;
+                        }
+                        final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
+                                new ThumbnailsCacheManager.AsyncDrawable(
+                                        MainApp.getAppContext().getResources(),
+                                        resizedImage,
+                                        task
+                                );
+                        mImageView.setImageDrawable(asyncDrawable);
+                        task.execute(getFile(), false);
+                    }
+                }
+            } else {
+                mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
+                mLoadBitmapTask.execute(getFile());
+            }
         }
     }
 
@@ -238,15 +290,15 @@ public class PreviewImageFragment extends FileFragment {
             setFile(mContainerActivity.getStorageManager().getFileById(getFile().getFileId()));
 
             FileMenuFilter mf = new FileMenuFilter(
-                getFile(),
-                mContainerActivity.getStorageManager().getAccount(),
-                mContainerActivity,
-                getActivity()
+                    getFile(),
+                    mContainerActivity.getStorageManager().getAccount(),
+                    mContainerActivity,
+                    getActivity()
             );
             mf.filter(menu);
         }
 
-        // additional restriction for this fragment 
+        // additional restriction for this fragment
         // TODO allow renaming in PreviewImageFragment
         MenuItem item = menu.findItem(R.id.action_rename_file);
         if (item != null) {
@@ -254,7 +306,7 @@ public class PreviewImageFragment extends FileFragment {
             item.setEnabled(false);
         }
 
-        // additional restriction for this fragment 
+        // additional restriction for this fragment
         // TODO allow refresh file in PreviewImageFragment
         item = menu.findItem(R.id.action_sync_file);
         if (item != null) {
@@ -303,9 +355,15 @@ public class PreviewImageFragment extends FileFragment {
                 return true;
             }
             case R.id.action_send_file: {
-                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
-                return true;
+                if (getFile().isImage() && !getFile().isDown()){
+                    mContainerActivity.getFileOperationsHelper().sendCachedImage(getFile());
+                    return true;
+                } else {
+                    mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
+                    return true;
+                }
             }
+            case R.id.action_download_file:
             case R.id.action_sync_file: {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
@@ -344,9 +402,9 @@ public class PreviewImageFragment extends FileFragment {
         if (mBitmap != null) {
             mBitmap.recycle();
             System.gc();
-                // putting this in onStop() is just the same; the fragment is always destroyed by
-                // {@link FragmentStatePagerAdapter} when the fragment in swiped further than the
-                // valid offscreen distance, and onStop() is never called before than that
+            // putting this in onStop() is just the same; the fragment is always destroyed by
+            // {@link FragmentStatePagerAdapter} when the fragment in swiped further than the
+            // valid offscreen distance, and onStop() is never called before than that
         }
         super.onDestroy();
     }
@@ -360,7 +418,7 @@ public class PreviewImageFragment extends FileFragment {
         finish();
     }
 
-    
+
     private class LoadBitmapTask extends AsyncTask<OCFile, Void, LoadImage> {
 
         /**
@@ -382,7 +440,7 @@ public class PreviewImageFragment extends FileFragment {
 
         /**
          * Weak reference to the target {@link ProgressBar} shown while the load is in progress.
-         * 
+         *
          * Using a weak reference will avoid memory leaks if the target ImageView is retired from
          * memory before the load finishes.
          */
@@ -541,7 +599,7 @@ public class PreviewImageFragment extends FileFragment {
     /**
      * Helper method to test if an {@link OCFile} can be passed to a {@link PreviewImageFragment}
      * to be previewed.
-     * 
+     *
      * @param file      File to test if can be previewed.
      * @return          'True' if the file can be handled by the fragment.
      */
