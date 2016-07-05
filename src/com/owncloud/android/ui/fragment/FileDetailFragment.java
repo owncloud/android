@@ -4,7 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -22,7 +22,6 @@
 package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -217,6 +217,26 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             item.setVisible(false);
             item.setEnabled(false);
         }
+
+        Boolean dualPane = getResources().getBoolean(R.bool.large_land_layout);
+
+        item = menu.findItem(R.id.action_switch_view);
+        if (item != null && !dualPane){
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
+        item = menu.findItem(R.id.action_sync_account);
+        if (item != null && !dualPane) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
+        item = menu.findItem(R.id.action_sort);
+        if (item != null && !dualPane) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
     }
 
 
@@ -227,11 +247,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share_file: {
-                mContainerActivity.getFileOperationsHelper().shareFileWithLink(getFile());
-                return true;
-            }
-            case R.id.action_unshare_file: {
-                mContainerActivity.getFileOperationsHelper().unshareFileWithLink(getFile());
+                mContainerActivity.getFileOperationsHelper().showShareFile(getFile());
                 return true;
             }
             case R.id.action_open_file_with: {
@@ -248,9 +264,8 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 dialog.show(getFragmentManager(), FTAG_RENAME_FILE);
                 return true;
             }
-            case R.id.action_cancel_download:
-            case R.id.action_cancel_upload: {
-                ((FileDisplayActivity) mContainerActivity).cancelTransference(getFile());
+            case R.id.action_cancel_sync: {
+                ((FileDisplayActivity)mContainerActivity).cancelTransference(getFile());
                 return true;
             }
             case R.id.action_download_file:
@@ -263,7 +278,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 if (!getFile().isDown()) {  // Download the file                    
                     Log_OC.d(TAG, getFile().getRemotePath() + " : File must be downloaded");
                     ((FileDisplayActivity) mContainerActivity).startDownloadForSending(getFile());
-
                 }
                 else {
                     mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
@@ -299,7 +313,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 Log_OC.e(TAG, "Incorrect view clicked!");
         }
     }
-
 
     /**
      * Check if the fragment was created with an empty layout. An empty fragment can't show file details, must be replaced.
@@ -406,17 +419,40 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             String printableMimetype = DisplayUtils.convertMIMEtoPrettyPrint(mimetype);
             tv.setText(printableMimetype);
         }
+
         ImageView iv = (ImageView) getView().findViewById(R.id.fdIcon);
+
         if (iv != null) {
-			Bitmap thumbnail = null;
+            Bitmap thumbnail;
+            iv.setTag(file.getFileId());
+
             if (file.isImage()) {
                 String tagId = String.valueOf(file.getRemoteId());
                 thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(tagId);
-			}
-			if (thumbnail != null) {
-				// Display thumbnail
-				iv.setImageBitmap(thumbnail);
-			} else {
+
+                if (thumbnail != null && !file.needsUpdateThumbnail()) {
+                    iv.setImageBitmap(thumbnail);
+                } else {
+                    // generate new Thumbnail
+                    if (ThumbnailsCacheManager.cancelPotentialWork(file, iv)) {
+                        final ThumbnailsCacheManager.ThumbnailGenerationTask task =
+                                new ThumbnailsCacheManager.ThumbnailGenerationTask(
+                                        iv, mContainerActivity.getStorageManager(), mAccount
+                                );
+                        if (thumbnail == null) {
+                            thumbnail = ThumbnailsCacheManager.mDefaultImg;
+                        }
+                        final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
+                                new ThumbnailsCacheManager.AsyncDrawable(
+                                        MainApp.getAppContext().getResources(),
+                                        thumbnail,
+                                        task
+                                );
+                        iv.setImageDrawable(asyncDrawable);
+                        task.execute(file);
+                    }
+                }
+            } else {
 				// Name of the file, to deduce the icon to use in case the MIME type is not precise enough
 				String filename = file.getFileName();
                 iv.setImageResource(MimetypeIconUtil.getFileTypeIconId(mimetype, filename));
@@ -513,6 +549,8 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 mContainerActivity.getFileUploaderBinder().
                         addDatatransferProgressListener(mProgressListener, mAccount, getFile());
             }
+        } else {
+            Log_OC.d(TAG, "mProgressListener == null");
         }
     }
 

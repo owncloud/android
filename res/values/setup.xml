@@ -4,6 +4,7 @@
     <string name="app_name">ownCloud</string>
     <string name="account_type">owncloud</string>	<!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
     <string name="authority">org.owncloud</string>	<!-- better if was the app package with ".provider" appended ; it identifies the provider -->
+    <string name="document_provider_authority">org.owncloud.documents</string>
     <string name ="db_file">owncloud.db</string>
     <string name ="db_name">ownCloud</string>
     <string name ="data_folder">owncloud</string>
@@ -24,16 +25,24 @@
     
     <!-- Flags to enable/disable some features -->
     <string name = "send_files_to_other_apps">on</string>
-    <string name = "share_feature">on</string>
+    <bool name = "share_via_link_feature">true</bool>
+    <bool name = "share_with_users_feature">true</bool>
     
     
     <!-- Colors -->
+    <color name="login_text_color">#000000</color>
+    <color name="login_text_hint_color">#757575</color>
     <color name="login_background_color">#FFFFFF</color>
     <color name="login_logo_background_color">#FFFFFF</color>
-    <color name="background_color">#F7F7F7</color>
+    <color name="background_color">#FFFFFF</color>
     <color name="actionbar_start_color">#1D2D44</color>
     <color name="actionbar_end_color">#1D2D44</color>
-    
+    <color name="primary_button_background_color">@color/owncloud_blue_accent</color>
+    <color name="primary_button_text_color">@color/white</color>
+    <color name="secondary_button_background_color">#D6D7D7</color>
+    <color name="secondary_button_text_color">@color/black</color>
+    <color name="drawer_header_color">@color/owncloud_blue_accent</color>
+
     <!-- Button -->
     <color name="button_text_color">#000000</color>
     
@@ -45,6 +54,7 @@
     <bool name="imprint_enabled">false</bool> 
     <bool name="recommend_enabled">true</bool>
     <bool name="feedback_enabled">true</bool>
+    <bool name="logger_enabled">false</bool>
     <string name="url_help">http://owncloud.com/mobile/help</string>
     <string name="url_imprint"></string>
     <string name="mail_recommend">"mailto:"</string>
