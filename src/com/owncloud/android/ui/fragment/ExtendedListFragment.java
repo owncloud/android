@@ -168,16 +168,11 @@ public class ExtendedListFragment extends Fragment
 
         mListView = (ExtendedListView)(v.findViewById(R.id.list_root));
         mListView.setOnItemClickListener(this);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        // mListView.setMultiChoiceModeListener(listener);
         mListFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
         mGridView = (GridViewWithHeaderAndFooter) (v.findViewById(R.id.grid_root));
         mGridView.setNumColumns(GridView.AUTO_FIT);
         mGridView.setOnItemClickListener(this);
-        mGridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-
-        // mGridView.setMultiChoiceModeListener(listener);
 
         mGridFooterView = inflater.inflate(R.layout.list_footer, null, false);
 
