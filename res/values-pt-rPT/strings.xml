@@ -58,6 +58,7 @@
   <string name="sync_string_files">Ficheiros</string>
   <string name="setup_btn_connect">Ligar</string>
   <string name="uploader_btn_upload_text">Carregar</string>
+  <string name="uploader_top_message">Escolha pasta de envio</string>
   <string name="uploader_wrn_no_account_title">Nenhuma conta encontrada</string>
   <string name="uploader_wrn_no_account_text">Não existem as contas %1$s no seu dispositivo. Por favor, configure primeiro uma conta.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Configurar</string>
@@ -221,6 +222,8 @@
   <string name="auth_fail_get_user_name">O seu servidor não está a devolver a id. correta, por favor, contacte um administrador.</string>
   <string name="auth_can_not_auth_against_server">Não é possível autenticar para este servidor</string>
   <string name="auth_account_does_not_exist">A conta ainda não existe no dispositivo</string>
+  <string name="favorite">Defina como disponível desligado</string>
+  <string name="unfavorite">Defina como não disponível desligado</string>
   <string name="common_rename">Renomear</string>
   <string name="common_remove">Remover</string>
   <string name="confirmation_remove_alert">Tem a certeza que deseja remover %1$s ?</string>

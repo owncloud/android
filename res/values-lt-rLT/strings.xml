@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s Android programa</string>
   <string name="about_version">versija %1$s</string>
   <string name="actionbar_sync">Atnaujinti paskyrą</string>
   <string name="actionbar_upload">Įkelti</string>
@@ -45,6 +46,7 @@
   <string name="prefs_remember_last_upload_location_summary">Prisiminti paskutinio bendrinimo įkėlimo vietą</string>
   <string name="recommend_subject">Išbandykite %1$s savo išmaniajame telefone!</string>
   <string name="recommend_text">Noriu pakviesti tave naudotis %1$s išmaniajame telefone!\nParsisiųks čia: %2$s</string>
+  <string name="auth_check_server">Patikrinti serverį</string>
   <string name="auth_host_url">Serverio adresas </string>
   <string name="auth_username">Prisijungimo vardas</string>
   <string name="auth_password">Slaptažodis</string>
@@ -79,6 +81,7 @@
   <string name="common_back">Atgal</string>
   <string name="common_error">Klaida</string>
   <string name="common_loading">Įkeliama...</string>
+  <string name="common_unknown">nežinomas</string>
   <string name="common_error_unknown">Neatpažinta klaida</string>
   <string name="about_title">Apie</string>
   <string name="change_password">Pakeisti slaptažodį</string>
@@ -93,6 +96,7 @@
   <string name="uploads_view_group_current_uploads">Dabartinis</string>
   <string name="uploads_view_group_finished_uploads">Įkelta</string>
   <string name="uploads_view_upload_status_succeeded">Atliktas</string>
+  <string name="uploads_view_upload_status_paused">Sustabdyta</string>
   <string name="uploads_view_upload_status_unknown_fail">Neatpažinta klaida</string>
   <string name="downloader_download_in_progress_ticker">Atsiunčiama...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Atsiunčiama %2$s</string>
