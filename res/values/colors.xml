@@ -52,4 +52,8 @@
     <!-- special transparent action bar colors for image preview -->
     <color name="owncloud_blue_transparent">#201D2D44</color>
     <color name="owncloud_blue_dark_transparent">#40162233</color>
+
+    <!-- Multiselect backgrounds -->
+    <color name="selected_item_background">#ECECEC</color>
+
 </resources>
