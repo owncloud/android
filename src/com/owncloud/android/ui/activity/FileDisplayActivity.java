@@ -378,7 +378,7 @@ public class FileDisplayActivity extends HookActivity
     private Fragment chooseInitialSecondFragment(OCFile file) {
         Fragment secondFragment = null;
         if (file != null && !file.isFolder()) {
-            if (file.isDown() && PreviewMediaFragment.canBePreviewed(file)
+            if (PreviewMediaFragment.canBePreviewed(file)
                     && file.getLastSyncDateForProperties() > 0  // temporal fix
                     ) {
                 int startPlaybackPosition =
@@ -388,7 +388,7 @@ public class FileDisplayActivity extends HookActivity
                 secondFragment = new PreviewMediaFragment(file, getAccount(),
                         startPlaybackPosition, autoplay);
 
-            } else if (file.isDown() && PreviewTextFragment.canBePreviewed(file)) {
+            } else if (PreviewTextFragment.canBePreviewed(file)) {
                 secondFragment = null;
             } else {
                 secondFragment = FileDetailFragment.newInstance(file, getAccount());
@@ -483,48 +483,60 @@ public class FileDisplayActivity extends HookActivity
     protected void refreshSecondFragment(String downloadEvent, String downloadedRemotePath,
                                          boolean success) {
         FileFragment secondFragment = getSecondFragment();
-        boolean waitedPreview = (mWaitingToPreview != null &&
-                mWaitingToPreview.getRemotePath().equals(downloadedRemotePath));
-        if (secondFragment != null && secondFragment instanceof FileDetailFragment) {
-            FileDetailFragment detailsFragment = (FileDetailFragment) secondFragment;
-            OCFile fileInFragment = detailsFragment.getFile();
-            if (fileInFragment != null &&
+        if (secondFragment != null) {
+            boolean waitedPreview = (
+                mWaitingToPreview != null &&
+                mWaitingToPreview.getRemotePath().equals(downloadedRemotePath)
+            );
+            if (secondFragment instanceof FileDetailFragment) {
+                /// user was watching download progress
+                FileDetailFragment detailsFragment = (FileDetailFragment) secondFragment;
+                OCFile fileInFragment = detailsFragment.getFile();
+                if (fileInFragment != null &&
                     !downloadedRemotePath.equals(fileInFragment.getRemotePath())) {
-                // the user browsed to other file ; forget the automatic preview
-                mWaitingToPreview = null;
-
-            } else if (downloadEvent.equals(FileDownloader.getDownloadAddedMessage())) {
-                // grant that the right panel updates the progress bar
-                detailsFragment.listenForTransferProgress();
-                detailsFragment.updateFileDetails(true, false);
-
-            } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-                //  update the right panel
-                boolean detailsFragmentChanged = false;
-                if (waitedPreview) {
-                    if (success) {
-                        mWaitingToPreview = getStorageManager().getFileById(
-                                mWaitingToPreview.getFileId());   // update the file from database,
-                        // for the local storage path
-                        if (PreviewMediaFragment.canBePreviewed(mWaitingToPreview)) {
-                            startMediaPreview(mWaitingToPreview, 0, true);
-                            detailsFragmentChanged = true;
-                        } else if (PreviewTextFragment.canBePreviewed(mWaitingToPreview)) {
-                            startTextPreview(mWaitingToPreview);
-                            detailsFragmentChanged = true;
-                        } else {
-                            getFileOperationsHelper().openFile(mWaitingToPreview);
-                        }
-                    }
+                    // the user browsed to other file ; forget the automatic preview
                     mWaitingToPreview = null;
+
+                } else if (downloadEvent.equals(FileDownloader.getDownloadAddedMessage())) {
+                    // grant that the right panel updates the progress bar
+                    detailsFragment.listenForTransferProgress();
+                    detailsFragment.updateFileDetails(true, false);
+
+                } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
+                    //  update the right panel
+                    boolean detailsFragmentChanged = false;
+                    if (waitedPreview) {
+                        if (success) {
+                            mWaitingToPreview = getStorageManager().getFileById(
+                                mWaitingToPreview.getFileId());   // update the file from database,
+                            // for the local storage path
+                            if (PreviewMediaFragment.canBePreviewed(mWaitingToPreview)) {
+                                startMediaPreview(mWaitingToPreview, 0, true);
+                                detailsFragmentChanged = true;
+                            } else if (PreviewTextFragment.canBePreviewed(mWaitingToPreview)) {
+                                startTextPreview(mWaitingToPreview);
+                                detailsFragmentChanged = true;
+                            } else {
+                                getFileOperationsHelper().openFile(mWaitingToPreview);
+                            }
+                        }
+                        mWaitingToPreview = null;
+                    }
+                    if (!detailsFragmentChanged) {
+                        detailsFragment.updateFileDetails(false, (success));
+                    }
                 }
-                if (!detailsFragmentChanged) {
-                    detailsFragment.updateFileDetails(false, (success));
-                }
+
+            } else if (secondFragment instanceof PreviewTextFragment) {
+                /// user was previewing previous version of text file while downloading more recent
+                ((PreviewTextFragment) secondFragment).loadAndShowTextPreview();
+
+            } else if (secondFragment instanceof PreviewMediaFragment) {
+                /// user was previewing previous version of media file while downloading more recent
+                OCFile file = getStorageManager().getFileByPath(downloadedRemotePath);
+                startMediaPreview(file, 0, true);           // brute force
+                //((PreviewMediaFragment) secondFragment).restartPlayback();    // clean way, not implemented
             }
-        } else if (secondFragment != null && secondFragment instanceof PreviewTextFragment) {
-            PreviewTextFragment detailsFragment = (PreviewTextFragment) secondFragment;
-            detailsFragment.loadAndShowTextPreview();
         }
     }
 

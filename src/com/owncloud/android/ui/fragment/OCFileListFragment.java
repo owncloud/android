@@ -492,24 +492,24 @@ public class OCFileListFragment extends ExtendedListFragment {
             } else { /// Click on a file
                 if (PreviewImageFragment.canBePreviewed(file)) {
                     // preview image - it handles the download, if needed
-                    ((FileDisplayActivity)mContainerActivity).startImagePreview(file);
-                } else if (PreviewTextFragment.canBePreviewed(file)){
-                    ((FileDisplayActivity)mContainerActivity).startTextPreview(file);
+                    ((FileDisplayActivity) mContainerActivity).startImagePreview(file);
+
+                } else if (PreviewTextFragment.canBePreviewed(file)) {
+                    ((FileDisplayActivity) mContainerActivity).startTextPreview(file);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+
+                } else if (PreviewMediaFragment.canBePreviewed(file)) {
+                    // media preview
+                    ((FileDisplayActivity) mContainerActivity).startMediaPreview(file, 0, true);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+
                 } else if (file.isDown()) {
-                    if (PreviewMediaFragment.canBePreviewed(file)) {
-                        // media preview
-                        ((FileDisplayActivity) mContainerActivity).startMediaPreview(file, 0, true);
-                    } else {
-                        mContainerActivity.getFileOperationsHelper().openFile(file);
-                    }
+                    // TODO - and what about syncing before?
+                    mContainerActivity.getFileOperationsHelper().openFile(file);
 
                 } else {
                     // automatic download, preview on finish
                     ((FileDisplayActivity) mContainerActivity).startDownloadForPreview(file);
-                }
-
-                if(file.needsSync()) {
-                    mContainerActivity.getFileOperationsHelper().syncFile(file);
                 }
 
             }
