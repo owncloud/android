@@ -51,15 +51,6 @@ public class FileFragment extends Fragment {
     }
     
     /**
-     * Creates an instance for a given {@OCFile}.
-     * 
-     * @param file
-     */
-    public FileFragment(OCFile file) {
-        mFile = file;
-    }
-
-    /**
      * Getter for the hold {@link OCFile}
      * 
      * @return The {@link OCFile} hold

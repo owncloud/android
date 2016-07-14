@@ -25,7 +25,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_color"
     android:gravity="center"
-    tools:context=".ui.fragment.FilePreviewFragment">
+    tools:context=".ui.preview.PreviewAudioFragment">
 
     <FrameLayout
         android:id="@+id/visual_area"
@@ -44,14 +44,6 @@
 	        android:contentDescription="@string/preview_image_description"
 	        android:src="@drawable/logo" />
 	    
-	   	<VideoView  
-	   	    android:id="@+id/video_preview"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"  
-			android:layout_gravity="center" 
-			android:visibility="gone"
-			/>
-	   	
    	</FrameLayout>
    	
    	<com.owncloud.android.media.MediaControlView 

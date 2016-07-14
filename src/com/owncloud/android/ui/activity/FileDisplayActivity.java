@@ -81,11 +81,12 @@ import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
+import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.ui.preview.PreviewMediaFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoActivity;
+import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 import com.owncloud.android.utils.PermissionUtil;
@@ -378,15 +379,29 @@ public class FileDisplayActivity extends HookActivity
     private Fragment chooseInitialSecondFragment(OCFile file) {
         Fragment secondFragment = null;
         if (file != null && !file.isFolder()) {
-            if (PreviewMediaFragment.canBePreviewed(file)
-                    && file.getLastSyncDateForProperties() > 0  // temporal fix
+            if ((PreviewAudioFragment.canBePreviewed(file) || PreviewVideoFragment.canBePreviewed(file)) &&
+                    file.getLastSyncDateForProperties() > 0  // temporal fix
                     ) {
                 int startPlaybackPosition =
-                        getIntent().getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0);
+                    getIntent().getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0);
                 boolean autoplay =
-                        getIntent().getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true);
-                secondFragment = new PreviewMediaFragment(file, getAccount(),
-                        startPlaybackPosition, autoplay);
+                    getIntent().getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true);
+
+                if (PreviewAudioFragment.canBePreviewed(file)) {
+                    secondFragment = PreviewAudioFragment.newInstance(
+                        file,
+                        getAccount(),
+                        startPlaybackPosition,
+                        autoplay
+                    );
+                } else {
+                    secondFragment = PreviewVideoFragment.newInstance(
+                        file,
+                        getAccount(),
+                        startPlaybackPosition,
+                        autoplay
+                    );
+                }
 
             } else if (PreviewTextFragment.canBePreviewed(file)) {
                 secondFragment = null;
@@ -510,8 +525,11 @@ public class FileDisplayActivity extends HookActivity
                             mWaitingToPreview = getStorageManager().getFileById(
                                 mWaitingToPreview.getFileId());   // update the file from database,
                             // for the local storage path
-                            if (PreviewMediaFragment.canBePreviewed(mWaitingToPreview)) {
-                                startMediaPreview(mWaitingToPreview, 0, true);
+                            if (PreviewAudioFragment.canBePreviewed(mWaitingToPreview)) {
+                                startAudioPreview(mWaitingToPreview, 0, true);
+                                detailsFragmentChanged = true;
+                            } else if (PreviewVideoFragment.canBePreviewed(mWaitingToPreview)) {
+                                startVideoPreview(mWaitingToPreview, 0, true);
                                 detailsFragmentChanged = true;
                             } else if (PreviewTextFragment.canBePreviewed(mWaitingToPreview)) {
                                 startTextPreview(mWaitingToPreview);
@@ -531,11 +549,17 @@ public class FileDisplayActivity extends HookActivity
                 /// user was previewing previous version of text file while downloading more recent
                 ((PreviewTextFragment) secondFragment).loadAndShowTextPreview();
 
-            } else if (secondFragment instanceof PreviewMediaFragment) {
+            } else if (secondFragment instanceof PreviewAudioFragment) {
                 /// user was previewing previous version of media file while downloading more recent
                 OCFile file = getStorageManager().getFileByPath(downloadedRemotePath);
-                startMediaPreview(file, 0, true);           // brute force
-                //((PreviewMediaFragment) secondFragment).restartPlayback();    // clean way, not implemented
+                startAudioPreview(file, 0, true);           // brute force - DOES NOT WORK
+                //((PreviewAudioFragment) secondFragment).restartPlayback();    // clean way, not implemented
+
+            } else if (secondFragment instanceof PreviewVideoFragment) {
+                /// user was previewing previous version of media file while downloading more recent
+                OCFile file = getStorageManager().getFileByPath(downloadedRemotePath);
+                startVideoPreview(file, 0, true);           // brute force - WORKS
+                //((PreviewAudioFragment) secondFragment).restartPlayback();    // clean way, not implemented
             }
         }
     }
@@ -1375,9 +1399,9 @@ public class FileDisplayActivity extends HookActivity
             OCFile file = details.getFile();
             if (file != null) {
                 file = getStorageManager().getFileByPath(file.getRemotePath());
-                if (details instanceof PreviewMediaFragment) {
+                if (details instanceof PreviewAudioFragment) {
                     // Refresh  OCFile of the fragment
-                    ((PreviewMediaFragment) details).updateFile(file);
+                    ((PreviewAudioFragment) details).updateFile(file);
                 } else if (details instanceof PreviewTextFragment) {
                     // Refresh  OCFile of the fragment
                     ((PreviewTextFragment) details).updateFile(file);
@@ -1407,8 +1431,10 @@ public class FileDisplayActivity extends HookActivity
             OCFile removedFile = operation.getFile();
             FileFragment second = getSecondFragment();
             if (second != null && removedFile.equals(second.getFile())) {
-                if (second instanceof PreviewMediaFragment) {
-                    ((PreviewMediaFragment) second).stopPreview(true);
+                if (second instanceof PreviewAudioFragment) {
+                    ((PreviewAudioFragment) second).stopPreview();
+                } else if (second instanceof PreviewVideoFragment) {
+                    ((PreviewVideoFragment) second).stopPreview();
                 }
                 setFile(getStorageManager().getFileById(removedFile.getParentId()));
                 cleanSecondFragment();
@@ -1485,23 +1511,31 @@ public class FileDisplayActivity extends HookActivity
         OCFile renamedFile = operation.getFile();
         if (result.isSuccess()) {
             FileFragment details = getSecondFragment();
-            if (details != null) {
-                if (details instanceof FileDetailFragment &&
-                        renamedFile.equals(details.getFile())) {
+            if (details != null && renamedFile.equals(details.getFile())) {
+
+                if (details instanceof FileDetailFragment) {
                     ((FileDetailFragment) details).updateFileDetails(renamedFile, getAccount());
                     showDetails(renamedFile);
 
-                } else if (details instanceof PreviewMediaFragment &&
-                        renamedFile.equals(details.getFile())) {
-                    ((PreviewMediaFragment) details).updateFile(renamedFile);
-                    if (PreviewMediaFragment.canBePreviewed(renamedFile)) {
-                        int position = ((PreviewMediaFragment) details).getPosition();
-                        startMediaPreview(renamedFile, position, true);
+                } else if (details instanceof PreviewAudioFragment) {
+                    ((PreviewAudioFragment) details).updateFile(renamedFile);
+                    if (PreviewAudioFragment.canBePreviewed(renamedFile)) {
+                        int position = ((PreviewAudioFragment) details).getPosition();
+                        startAudioPreview(renamedFile, position, true);
                     } else {
                         getFileOperationsHelper().openFile(renamedFile);
                     }
-                } else if (details instanceof PreviewTextFragment &&
-                        renamedFile.equals(details.getFile())) {
+
+                } else if (details instanceof PreviewVideoFragment) {
+                    ((PreviewVideoFragment) details).updateFile(renamedFile);
+                    if (PreviewVideoFragment.canBePreviewed(renamedFile)) {
+                        int position = ((PreviewVideoFragment) details).getPosition();
+                        startVideoPreview(renamedFile, position, true);
+                    } else {
+                        getFileOperationsHelper().openFile(renamedFile);
+                    }
+
+                } else if (details instanceof PreviewTextFragment) {
                     ((PreviewTextFragment) details).updateFile(renamedFile);
                     if (PreviewTextFragment.canBePreviewed(renamedFile)) {
                         startTextPreview(renamedFile);
@@ -1705,7 +1739,7 @@ public class FileDisplayActivity extends HookActivity
     }
 
     /**
-     * Stars the preview of an already down media {@link OCFile}.
+     * Stars the preview of an already down audio {@link OCFile}.
      *
      * @param file                  Media {@link OCFile} to preview.
      * @param startPlaybackPosition Media position where the playback will be started,
@@ -1713,9 +1747,35 @@ public class FileDisplayActivity extends HookActivity
      * @param autoplay              When 'true', the playback will start without user
      *                              interactions.
      */
-    public void startMediaPreview(OCFile file, int startPlaybackPosition, boolean autoplay) {
-        Fragment mediaFragment = new PreviewMediaFragment(file, getAccount(), startPlaybackPosition,
-                autoplay);
+    public void startAudioPreview(OCFile file, int startPlaybackPosition, boolean autoplay) {
+        Fragment mediaFragment = PreviewAudioFragment.newInstance(
+            file,
+            getAccount(),
+            startPlaybackPosition,
+            autoplay
+        );
+        setSecondFragment(mediaFragment);
+        updateFragmentsVisibility(true);
+        updateActionBarTitleAndHomeButton(file);
+        setFile(file);
+    }
+
+    /**
+     * Stars the preview of an already down video {@link OCFile}.
+     *
+     * @param file                  Media {@link OCFile} to preview.
+     * @param startPlaybackPosition Media position where the playback will be started,
+     *                              in milliseconds.
+     * @param autoplay              When 'true', the playback will start without user
+     *                              interactions.
+     */
+    public void startVideoPreview(OCFile file, int startPlaybackPosition, boolean autoplay) {
+        Fragment mediaFragment = PreviewVideoFragment.newInstance(
+            file,
+            getAccount(),
+            startPlaybackPosition,
+            autoplay
+        );
         setSecondFragment(mediaFragment);
         updateFragmentsVisibility(true);
         updateActionBarTitleAndHomeButton(file);

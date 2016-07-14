@@ -60,9 +60,10 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
+import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.ui.preview.PreviewMediaFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
+import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
@@ -498,9 +499,14 @@ public class OCFileListFragment extends ExtendedListFragment {
                     ((FileDisplayActivity) mContainerActivity).startTextPreview(file);
                     mContainerActivity.getFileOperationsHelper().syncFile(file);
 
-                } else if (PreviewMediaFragment.canBePreviewed(file)) {
+                } else if (PreviewAudioFragment.canBePreviewed(file)) {
                     // media preview
-                    ((FileDisplayActivity) mContainerActivity).startMediaPreview(file, 0, true);
+                    ((FileDisplayActivity) mContainerActivity).startAudioPreview(file, 0, true);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+
+                } else if (PreviewVideoFragment.canBePreviewed(file)) {
+                    // media preview
+                    ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0, true);
                     mContainerActivity.getFileOperationsHelper().syncFile(file);
 
                 } else if (file.isDown()) {
