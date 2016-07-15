@@ -501,12 +501,12 @@ public class OCFileListFragment extends ExtendedListFragment {
 
                 } else if (PreviewAudioFragment.canBePreviewed(file)) {
                     // media preview
-                    ((FileDisplayActivity) mContainerActivity).startAudioPreview(file, 0, true);
+                    ((FileDisplayActivity) mContainerActivity).startAudioPreview(file, 0);
                     mContainerActivity.getFileOperationsHelper().syncFile(file);
 
                 } else if (PreviewVideoFragment.canBePreviewed(file)) {
                     // media preview
-                    ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0, true);
+                    ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
                     mContainerActivity.getFileOperationsHelper().syncFile(file);
 
                 } else if (file.isDown()) {

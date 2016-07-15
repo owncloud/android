@@ -361,8 +361,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         mVideoPreview.setOnErrorListener(videoHelper);
     }
 
-    //@SuppressWarnings("static-access")
-    private void playVideo() {
+    public void playVideo() {
         // create and prepare control panel for the user
         mMediaController.setMediaPlayer(mVideoPreview);
 
