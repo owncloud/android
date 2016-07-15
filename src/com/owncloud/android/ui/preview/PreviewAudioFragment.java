@@ -420,15 +420,19 @@ public class PreviewAudioFragment extends FileFragment {
         }
     }
 
-
-    private void playAudio() {
+    public void playAudio(boolean restart) {
         OCFile file = getFile();
-        if (!mMediaServiceBinder.isPlaying(file)) {
+        if (restart) {
+            Log_OC.d(TAG, "restarting playback of " + file.getStoragePath());
+            mAutoplay = true;
+            mSavedPlaybackPosition = 0;
+            mMediaServiceBinder.start(mAccount, file, true, 0);
+
+        } else if (!mMediaServiceBinder.isPlaying(file)) {
             Log_OC.d(TAG, "starting playback of " + file.getStoragePath());
             mMediaServiceBinder.start(mAccount, file, mAutoplay, mSavedPlaybackPosition);
 
-        }
-        else {
+        } else {
             if (!mMediaServiceBinder.isPlaying() && mAutoplay) {
                 mMediaServiceBinder.start();
                 mMediaController.updatePausePlay();
@@ -441,12 +445,12 @@ public class PreviewAudioFragment extends FileFragment {
         Log_OC.d(TAG, "Binding to MediaService...");
         if (mMediaServiceConnection == null) {
             mMediaServiceConnection = new MediaServiceConnection();
-        }
-        getActivity().bindService(  new Intent(getActivity(),
-                                    MediaService.class),
-                                    mMediaServiceConnection, 
-                                    Context.BIND_AUTO_CREATE);
+            getActivity().bindService(  new Intent(getActivity(),
+                    MediaService.class),
+                mMediaServiceConnection,
+                Context.BIND_AUTO_CREATE);
             // follow the flow in MediaServiceConnection#onServiceConnected(...)
+        }
     }
     
     /** Defines callbacks for service binding, passed to bindService() */
@@ -461,12 +465,10 @@ public class PreviewAudioFragment extends FileFragment {
                     mMediaServiceBinder = (MediaServiceBinder) service;
                     if (mMediaServiceBinder != null) {
                         prepareMediaController();
-                        playAudio();    // do not wait for the touch of nobody to play audio
-
+                        playAudio(false);
                         Log_OC.d(TAG, "Successfully bound to MediaService, MediaController ready");
 
-                    }
-                    else {
+                    } else {
                         Log_OC.e(TAG, "Unexpected response from MediaService while binding");
                     }
                 }

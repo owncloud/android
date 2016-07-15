@@ -552,13 +552,11 @@ public class FileDisplayActivity extends HookActivity
                     ((PreviewTextFragment) secondFragment).loadAndShowTextPreview();
 
                 } else if (secondFragment instanceof PreviewAudioFragment) {
-                    /// user was previewing previous version of media file while downloading more recent
-                    OCFile file = getStorageManager().getFileByPath(downloadedRemotePath);
-                    startAudioPreview(file, 0);           // brute force - DOES NOT WORK
-                    //((PreviewAudioFragment) secondFragment).restartPlayback();    // clean way, not implemented
+                    /// user was listening previous version of audio file while downloading more recent
+                    ((PreviewAudioFragment) secondFragment).playAudio(true);
 
                 } else if (secondFragment instanceof PreviewVideoFragment) {
-                    /// user was previewing previous version of media file while downloading more recent
+                    /// user was watching previous version of media file while downloading more recent
                     ((PreviewVideoFragment) secondFragment).playVideo();
                 }
             }
