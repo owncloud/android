@@ -3,6 +3,7 @@
  *
  *   @author masensio
  *   @author David A. Velasco
+ *   @author Juan Carlos González Cabrero
  *   Copyright (C) 2015 ownCloud Inc.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -28,6 +29,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -35,10 +37,13 @@ import android.widget.Toast;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
+import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.services.OperationsService;
@@ -48,16 +53,18 @@ import com.owncloud.android.ui.activity.ShareActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
 
-
+import java.util.Collection;
 import java.util.List;
+
+import java.util.ArrayList;
 
 /**
  *
  */
 public class FileOperationsHelper {
 
-    private static final String TAG = FileOperationsHelper.class.getName();
-
+    private static final String TAG = FileOperationsHelper.class.getSimpleName();
+    
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
 
     protected FileActivity mFileActivity = null;
@@ -89,9 +96,8 @@ public class FileOperationsHelper {
                 );
                 if (guessedMimeType != null && !guessedMimeType.equals(file.getMimetype())) {
                     intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
-                    intentForGuessedMimeType.
-                            setDataAndType(Uri.parse("file://"+ encodedStoragePath),
-                                    guessedMimeType);
+                    intentForGuessedMimeType.setDataAndType(Uri.parse("file://" +
+                            encodedStoragePath), guessedMimeType);
                     intentForGuessedMimeType.setFlags(
                             Intent.FLAG_GRANT_READ_URI_PERMISSION |
                                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION
@@ -202,37 +208,19 @@ public class FileOperationsHelper {
         }
     }
 
-    public void shareFileWithLinkToApp(OCFile file, String password, Intent sendIntent) {
-        
-        if (file != null) {
-            mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                    getString(R.string.wait_a_moment));
-
-            Intent service = new Intent(mFileActivity, OperationsService.class);
-            service.setAction(OperationsService.ACTION_CREATE_SHARE_VIA_LINK);
-            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            service.putExtra(OperationsService.EXTRA_SHARE_PASSWORD, password);
-            service.putExtra(OperationsService.EXTRA_SEND_INTENT, sendIntent);
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-            
-        } else {
-            Log_OC.wtf(TAG, "Trying to open a NULL OCFile");
-        }
-    }
-
     /**
      * Helper method to share a file with a known sharee. Starts a request to do it in {@link OperationsService}
      *
      * @param file          The file to share.
      * @param shareeName    Name (user name or group name) of the target sharee.
      * @param shareType     The share type determines the sharee type.
+     * @param permissions   Permissions to grant to sharee on the shared file.
      */
-    public void shareFileWithSharee(OCFile file, String shareeName, ShareType shareType) {
+    public void shareFileWithSharee(OCFile file, String shareeName, ShareType shareType, int permissions) {
         if (file != null) {
             // TODO check capability?
             mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                    getString(R.string.wait_a_moment));
+                getString(R.string.wait_a_moment));
 
             Intent service = new Intent(mFileActivity, OperationsService.class);
             service.setAction(OperationsService.ACTION_CREATE_SHARE_WITH_SHAREE);
@@ -240,6 +228,7 @@ public class FileOperationsHelper {
             service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
             service.putExtra(OperationsService.EXTRA_SHARE_WITH, shareeName);
             service.putExtra(OperationsService.EXTRA_SHARE_TYPE, shareType);
+            service.putExtra(OperationsService.EXTRA_SHARE_PERMISSIONS, permissions);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
 
         } else {
@@ -319,29 +308,12 @@ public class FileOperationsHelper {
      */
     public void showShareFile(OCFile file){
         Intent intent = new Intent(mFileActivity, ShareActivity.class);
-        intent.putExtra(mFileActivity.EXTRA_FILE, file);
+        intent.putExtra(mFileActivity.EXTRA_FILE, (Parcelable) file);
         intent.putExtra(mFileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
         mFileActivity.startActivity(intent);
 
     }
 
-
-    /**
-     * Starts a dialog that requests a password to the user to protect a share link.
-     *
-     * @param   file            File which public share will be protected by the requested password
-     * @param   createShare     When 'true', the request for password will be followed by the creation of a new
-     *                          public link; when 'false', a public share is assumed to exist, and the password
-     *                          is bound to it.
-     */
-    public void requestPasswordForShareViaLink(OCFile file, boolean createShare) {
-        SharePasswordDialogFragment dialog =
-                SharePasswordDialogFragment.newInstance(file, createShare);
-        dialog.show(
-                mFileActivity.getSupportFragmentManager(),
-                SharePasswordDialogFragment.PASSWORD_FRAGMENT
-        );
-    }
 
     /**
      * Updates a public share on a file to set its password.
@@ -388,9 +360,48 @@ public class FileOperationsHelper {
 
 
     /**
+     * Updates a share on a file to set its access permissions.
+     * Starts a request to do it in {@link OperationsService}
+     *
+     * @param share                     {@link OCShare} instance which permissions will be updated.
+     * @param permissions               New permissions to set. A value <= 0 makes no update.
+     */
+    public void setPermissionsToShare(OCShare share, int permissions) {
+        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
+        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE);
+        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_PERMISSIONS,
+                permissions
+        );
+        queueShareIntent(updateShareIntent);
+    }
+
+    /**
+     * Updates a public share on a folder to set its editing permission.
+     * Starts a request to do it in {@link OperationsService}
+     *
+     * @param folder                     Folder which editing permission of his public share will be modified.
+     * @param uploadPermission          New state of the permission for editing the folder shared via link.
+     */
+    public void setUploadPermissionsToShare(OCFile folder, boolean uploadPermission) {
+        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
+        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE);
+        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        updateShareIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, folder.getRemotePath());
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
+                uploadPermission
+        );
+        queueShareIntent(updateShareIntent);
+    }
+
+
+    /**
      * @return 'True' if the server supports the Search Users API
      */
-    public boolean isSearchUsersSupportedSupported() {
+    public boolean isSearchUserSupportedSupported() {
         if (mFileActivity.getAccount() != null) {
             OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
             return (serverVersion != null && serverVersion.isSearchUsersSupported());
@@ -418,6 +429,12 @@ public class FileOperationsHelper {
         }
     }
 
+    public void syncFiles(Collection<OCFile> files) {
+        for (OCFile file: files) {
+            syncFile(file);
+        }
+    }
+
     /**
      * Request the synchronization of a file or folder with the OC server, including its contents.
      *
@@ -432,7 +449,7 @@ public class FileOperationsHelper {
             intent.putExtra(OperationsService.EXTRA_SYNC_FILE_CONTENTS, true);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(intent);
             mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                    getString(R.string.wait_a_moment));
+                getString(R.string.wait_a_moment));
             
         } else {
             Intent intent = new Intent(mFileActivity, OperationsService.class);
@@ -441,6 +458,12 @@ public class FileOperationsHelper {
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
             mFileActivity.startService(intent);
 
+        }
+    }
+
+    public void toggleFavorites(Collection<OCFile> files, boolean isFavorite){
+        for (OCFile file: files) {
+            toggleFavorite(file, isFavorite);
         }
     }
 
@@ -471,22 +494,29 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_NEWNAME, newFilename);
         mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         
-        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                getString(R.string.wait_a_moment));
+        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
     }
 
 
-    public void removeFile(OCFile file, boolean onlyLocalCopy) {
-        // RemoveFile
-        Intent service = new Intent(mFileActivity, OperationsService.class);
-        service.setAction(OperationsService.ACTION_REMOVE);
-        service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-        service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
-        mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
+    /**
+     * Start operations to delete one or several files
+     *
+     * @param files             Files to delete
+     * @param onlyLocalCopy     When 'true' only local copy of the files is removed; otherwise files are also deleted
+     *                          in the server.
+     */
+    public void removeFiles(Collection<OCFile> files, boolean onlyLocalCopy) {
+        for (OCFile file : files) {
+            // RemoveFile
+            Intent service = new Intent(mFileActivity, OperationsService.class);
+            service.setAction(OperationsService.ACTION_REMOVE);
+            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+            service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
+            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
+        }
         
-        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                getString(R.string.wait_a_moment));
+        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
     }
 
 
@@ -499,8 +529,7 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_CREATE_FULL_PATH, createFullPath);
         mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         
-        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                getString(R.string.wait_a_moment));
+        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
     }
 
     /**
@@ -529,41 +558,39 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Start move file operation
+     * Start operations to move one or several files
      *
-     * @param newfile     File where it is going to be moved
-     * @param currentFile File with the previous info
+     * @param files            Files to move
+     * @param targetFolder     Folder where the files while be moved into
      */
-    public void moveFile(OCFile newfile, OCFile currentFile) {
-        // Move files
-        Intent service = new Intent(mFileActivity, OperationsService.class);
-        service.setAction(OperationsService.ACTION_MOVE_FILE);
-        service.putExtra(OperationsService.EXTRA_NEW_PARENT_PATH, newfile.getRemotePath());
-        service.putExtra(OperationsService.EXTRA_REMOTE_PATH, currentFile.getRemotePath());
-        service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-
-        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                getString(R.string.wait_a_moment));
+    public void moveFiles(Collection<OCFile> files, OCFile targetFolder) {
+        for (OCFile file : files) {
+            Intent service = new Intent(mFileActivity, OperationsService.class);
+            service.setAction(OperationsService.ACTION_MOVE_FILE);
+            service.putExtra(OperationsService.EXTRA_NEW_PARENT_PATH, targetFolder.getRemotePath());
+            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
+        }
+        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
     }
 
     /**
-     * Start copy file operation
+     * Start operations to copy one or several files
      *
-     * @param newfile     File where it is going to be moved
-     * @param currentFile File with the previous info
+     * @param files            Files to copy
+     * @param targetFolder     Folder where the files while be copied into
      */
-    public void copyFile(OCFile newfile, OCFile currentFile) {
-        // Copy files
-        Intent service = new Intent(mFileActivity, OperationsService.class);
-        service.setAction(OperationsService.ACTION_COPY_FILE);
-        service.putExtra(OperationsService.EXTRA_NEW_PARENT_PATH, newfile.getRemotePath());
-        service.putExtra(OperationsService.EXTRA_REMOTE_PATH, currentFile.getRemotePath());
-        service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-
-        mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                getString(R.string.wait_a_moment));
+    public void copyFiles(Collection<OCFile> files, OCFile targetFolder) {
+        for (OCFile file : files) {
+            Intent service = new Intent(mFileActivity, OperationsService.class);
+            service.setAction(OperationsService.ACTION_COPY_FILE);
+            service.putExtra(OperationsService.EXTRA_NEW_PARENT_PATH, targetFolder.getRemotePath());
+            service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+            service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
+        }
+        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
     }
 
     public long getOpIdWaitingFor() {
@@ -587,4 +614,19 @@ public class FileOperationsHelper {
         return false;
     }
 
+    /**
+     * Starts a check of the currenlty stored credentials for the given account.
+     *
+     * @param account       OC account which credentials will be checked.
+     */
+    public void checkCurrentCredentials(Account account) {
+        Intent service = new Intent(mFileActivity, OperationsService.class);
+        service.setAction(OperationsService.ACTION_CHECK_CURRENT_CREDENTIALS);
+        service.putExtra(OperationsService.EXTRA_ACCOUNT, account);
+        mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
+
+        mFileActivity.showLoadingDialog(
+            mFileActivity.getString(R.string.wait_checking_credentials)
+        );
+    }
 }

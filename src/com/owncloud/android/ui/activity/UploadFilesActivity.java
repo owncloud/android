@@ -21,6 +21,7 @@
 package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -153,6 +154,19 @@ public class UploadFilesActivity extends FileActivity implements
         Log_OC.d(TAG, "onCreate() end");
     }
 
+    /**
+     * Helper to launch the UploadFilesActivity for which you would like a result when it finished.
+     * Your onActivityResult() method will be called with the given requestCode.
+     *
+     * @param activity    the activity which should call the upload activity for a result
+     * @param account     the account for which the upload activity is called
+     * @param requestCode If >= 0, this code will be returned in onActivityResult()
+     */
+    public static void startUploadActivityForResult(Activity activity, Account account, int requestCode) {
+        Intent action = new Intent(activity, UploadFilesActivity.class);
+        action.putExtra(EXTRA_ACCOUNT, (account));
+        activity.startActivityForResult(action, requestCode);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -349,8 +363,8 @@ public class UploadFilesActivity extends FileActivity implements
         /**
          * Updates the activity UI after the check of space is done.
          * 
-         * If there is not space enough. shows a new dialog to query the user if wants to move the files instead
-         * of copy them.
+         * If there is not space enough. shows a new dialog to query the user if wants to move the
+         * files instead of copy them.
          * 
          * @param result        'True' when there is space enough to copy all the selected files.
          */
@@ -384,7 +398,8 @@ public class UploadFilesActivity extends FileActivity implements
                 // to the ownCloud folder instead of copying
                 String[] args = {getString(R.string.app_name)};
                 ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
-                    R.string.upload_query_move_foreign_files, args, R.string.common_yes, -1, R.string.common_no
+                    R.string.upload_query_move_foreign_files, args, 0, R.string.common_yes, -1,
+                        R.string.common_no
                 );
                 dialog.setOnConfirmationListener(UploadFilesActivity.this);
                 dialog.show(getSupportFragmentManager(), QUERY_TO_MOVE_DIALOG_TAG);

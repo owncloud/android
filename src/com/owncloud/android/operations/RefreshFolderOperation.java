@@ -187,7 +187,7 @@ public class RefreshFolderOperation extends RemoteOperation {
         
         if (OCFile.ROOT_PATH.equals(mLocalFolder.getRemotePath()) && !mSyncFullAccount) {
             updateOCVersion(client);
-
+            updateUserProfile();
         }
         
         result = checkForChanges(client);
@@ -226,7 +226,6 @@ public class RefreshFolderOperation extends RemoteOperation {
         
     }
 
-
     private void updateOCVersion(OwnCloudClient client) {
         UpdateOCVersionOperation update = new UpdateOCVersionOperation(mAccount, mContext);
         RemoteOperationResult result = update.execute(client);
@@ -235,14 +234,24 @@ public class RefreshFolderOperation extends RemoteOperation {
 
             // Update Capabilities for this account
             if (update.getOCVersion().isVersionWithCapabilitiesAPI()) {
-                updateCapabilities(client);
+                updateCapabilities();
             } else {
                 Log_OC.d(TAG, "Capabilities API disabled");
             }
         }
     }
 
-    private void updateCapabilities(OwnCloudClient client){
+    private void updateUserProfile() {
+        GetUserProfileOperation update = new GetUserProfileOperation();
+        RemoteOperationResult result = update.execute(mStorageManager, mContext);
+        if (!result.isSuccess()) {
+            Log_OC.w(TAG, "Couldn't update user profile from server");
+        } else {
+            Log_OC.i(TAG, "Got display name: " + result.getData().get(0));
+        }
+    }
+
+    private void updateCapabilities(){
         GetCapabilitiesOperarion getCapabilities = new GetCapabilitiesOperarion();
         RemoteOperationResult  result = getCapabilities.execute(mStorageManager,mContext);
         if (!result.isSuccess()){
@@ -527,7 +536,7 @@ public class RefreshFolderOperation extends RemoteOperation {
     private void fetchFavoritesToSyncFromLocalData() {
         List<OCFile> children = mStorageManager.getFolderContent(mLocalFolder);
         for (OCFile child : children) {
-            if (!child.isFolder() && child.isFavorite()) {
+            if (!child.isFolder() && child.isFavorite() && !child.isInConflict()) {
                 SynchronizeFileOperation operation = new SynchronizeFileOperation(
                         child,
                         child,  // cheating with the remote file to get an update to server; to refactor

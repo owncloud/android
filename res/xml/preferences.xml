@@ -20,10 +20,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="@string/prefs_category_accounts" android:key="accounts_category">
     </PreferenceCategory>
-    
-	<PreferenceCategory android:title="@string/prefs_category_security">
-	    <android.preference.CheckBoxPreference android:title="@string/prefs_passcode" android:key="set_pincode" />
-	</PreferenceCategory>
 
     <PreferenceCategory android:title="@string/prefs_category_instant_uploading" android:key="instant_uploading_category">
 		<com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle android:key="instant_uploading"
@@ -61,16 +57,18 @@
 	                        android:summary="@string/prefs_log_summary_history"/ -->
                         
     </PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/prefs_category_details">
+		<android.preference.CheckBoxPreference android:title="@string/prefs_passcode" android:key="set_pincode" />
+	</PreferenceCategory>
 	
 	<PreferenceCategory android:title="@string/prefs_category_more" android:key="more">
-    <Preference android:title="@string/prefs_help" android:key="help" />
-    <Preference android:title="@string/prefs_recommend" android:key="recommend" />
-    <Preference android:title="@string/prefs_feedback" android:key="feedback" />
-    <Preference android:title="@string/prefs_imprint" android:key="imprint" />
-                        
-	<Preference 		android:id="@+id/about_app" 
-        				android:title="@string/about_title" 
-        				android:key="about_app" />
+		<Preference android:title="@string/prefs_help" android:key="help" />
+		<Preference android:title="@string/prefs_recommend" android:key="recommend" />
+		<Preference android:title="@string/prefs_feedback" android:key="feedback" />
+		<Preference android:title="@string/actionbar_logger" android:key="logger" />
+		<Preference android:title="@string/prefs_imprint" android:key="imprint" />
+		<Preference android:title="@string/about_title" android:id="@+id/about_app" android:key="about_app" />
 	</PreferenceCategory>
     
 

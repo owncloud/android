@@ -1,3 +1,33 @@
+## 2.0.1 (June 2016)
+- Favorite files are now called AVAILABLE OFFLINE
+- New overlay icons
+- Bugs fixed, including:
+ + Upload content from other apps works again
+ + Passwords with non-alphanumeric characters work fine
+ + Sending files from other apps does not duplicate them
+ + Favorite setting is not lost after uploading
+ + Instant uploads waiting for Wi-Fi are not shown as failed				
+
+## 2.0.0 (April 2016)
+- Uploads view: track the progress of your uploads and handle failures
+- Federated sharing: share files with users in other ownCloud servers
+- Improvements on the UI following material design lines
+- Set a shared-by-link folder as editable
+- Wifi-only for instant uploads stop on Wifi loss
+- Be warned of server certificate changed in any action
+- Improvements when other apps send files to ownCloud
+- Bug fixing
+
+## 1.9.1 (February 2016)
+- Set and edit permissions on internal shared data
+- Instant uploads: avoid file duplications, set policy in app settings
+- Control duplication of files uploaded via 'Upload' button
+- Select view mode: either list or grid per folder
+- More Material Design: buttons and checkboxes
+- Fixed battery drain in automatic synchronization
+- Security fixes related to passcode
+- Wording fixes
+
 ## 1.9.0 (December 2015)
 - Share privately with users or groups in your server
 - Share link with password protection and expiration date
@@ -69,6 +99,3 @@
 - Settings view updated
 - Improved subjects in e-mails
 - Bugs fixed
-
-
-

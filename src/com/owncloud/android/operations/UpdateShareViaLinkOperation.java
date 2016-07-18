@@ -31,8 +31,6 @@ import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.shares.UpdateRemoteShareOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 
-import java.util.Calendar;
-
 
 /**
  * Updates an existing public share for a given file
@@ -42,6 +40,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
 
     private String mPath;
     private String mPassword;
+    private Boolean mPublicUpload;
     private long mExpirationDateInMillis;
 
     /**
@@ -54,6 +53,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         mPath = path;
         mPassword = null;
         mExpirationDateInMillis = 0;
+        mPublicUpload = null;
     }
 
 
@@ -81,6 +81,16 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         mExpirationDateInMillis = expirationDateInMillis;
     }
 
+    /**
+     * Enable upload permissions to update in Share resource.
+     *
+     * @param publicUpload    Upload Permission to set to the public link.
+     *                        Null results in no update applied to the upload permission.
+     */
+    public void setPublicUpload(Boolean publicUpload) {
+        mPublicUpload = publicUpload;
+    }
+
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
@@ -99,15 +109,16 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         }
 
         // Update remote share with password
-        UpdateRemoteShareOperation udpateOp = new UpdateRemoteShareOperation(
+        UpdateRemoteShareOperation updateOp = new UpdateRemoteShareOperation(
             publicShare.getRemoteId()
         );
-        udpateOp.setPassword(mPassword);
-        udpateOp.setExpirationDate(mExpirationDateInMillis);
-        RemoteOperationResult result = udpateOp.execute(client);
+        updateOp.setPassword(mPassword);
+        updateOp.setExpirationDate(mExpirationDateInMillis);
+        updateOp.setPublicUpload(mPublicUpload);
+        RemoteOperationResult result = updateOp.execute(client);
 
         if (result.isSuccess()) {
-            // Retrieve updated share / save directly with password? -> no; the password is not be saved
+            // Retrieve updated share / save directly with password? -> no; the password is not to be saved
             RemoteOperation getShareOp = new GetRemoteShareOperation(publicShare.getRemoteId());
             result = getShareOp.execute(client);
             if (result.isSuccess()) {
