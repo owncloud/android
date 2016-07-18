@@ -1571,8 +1571,11 @@ public class FileDisplayActivity extends HookActivity
             if (operation.transferWasRequested()) {
                 OCFile syncedFile = operation.getLocalFile();
                 onTransferStateChanged(syncedFile, true, true);
-                invalidateOptionsMenu();
                 refreshShowDetails();
+            } else if (getSecondFragment() == null) {
+                Toast msg = Toast.makeText(this, ErrorMessageAdapter.getErrorCauseMessage(result,
+                    operation, getResources()), Toast.LENGTH_LONG);
+                msg.show();
             }
         }
     }

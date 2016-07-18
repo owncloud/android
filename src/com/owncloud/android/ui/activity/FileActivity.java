@@ -884,6 +884,7 @@ public class FileActivity extends AppCompatActivity
 
     private void onSynchronizeFileOperationFinish(SynchronizeFileOperation operation,
                                                   RemoteOperationResult result) {
+        invalidateOptionsMenu();
         OCFile syncedFile = operation.getLocalFile();
         if (!result.isSuccess()) {
             if (result.getCode() == ResultCode.SYNC_CONFLICT) {
@@ -892,14 +893,6 @@ public class FileActivity extends AppCompatActivity
                 i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, getAccount());
                 startActivity(i);
             }
-
-        } else {
-            if (!operation.transferWasRequested()) {
-                Toast msg = Toast.makeText(this, ErrorMessageAdapter.getErrorCauseMessage(result,
-                        operation, getResources()), Toast.LENGTH_LONG);
-                msg.show();
-            }
-            invalidateOptionsMenu();
         }
     }
 

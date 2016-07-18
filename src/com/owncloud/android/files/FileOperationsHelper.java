@@ -448,9 +448,7 @@ public class FileOperationsHelper {
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
             intent.putExtra(OperationsService.EXTRA_SYNC_FILE_CONTENTS, true);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(intent);
-            mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                getString(R.string.wait_a_moment));
-            
+
         } else {
             Intent intent = new Intent(mFileActivity, OperationsService.class);
             intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
