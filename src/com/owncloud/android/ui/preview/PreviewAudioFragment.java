@@ -23,30 +23,22 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnErrorListener;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
@@ -56,10 +48,12 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
 import com.owncloud.android.media.MediaServiceBinder;
-import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.ComponentsGetter;
+import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
+import com.owncloud.android.utils.DisplayUtils;
 
 
 /**
@@ -86,6 +80,8 @@ public class PreviewAudioFragment extends FileFragment {
     private MediaControlView mMediaController = null;
     private MediaServiceConnection mMediaServiceConnection = null;
     private boolean mAutoplay;
+
+    public TransferProgressController mProgressController;
 
     private static final String TAG = PreviewAudioFragment.class.getSimpleName();
 
@@ -131,6 +127,7 @@ public class PreviewAudioFragment extends FileFragment {
         mAccount = null;
         mSavedPlaybackPosition = 0;
         mAutoplay = true;
+        mProgressController = null;
     }
 
 
@@ -203,6 +200,11 @@ public class PreviewAudioFragment extends FileFragment {
         }
 
         extractAndSetCoverArt(file);
+
+        mProgressController = new TransferProgressController((ComponentsGetter) getActivity());
+        ProgressBar progressBar = (ProgressBar)(getView().findViewById(R.id.transferProgressBar));
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
+        mProgressController.bindTo(progressBar);
     }
 
     /**
@@ -251,6 +253,8 @@ public class PreviewAudioFragment extends FileFragment {
         if (file != null && file.isDown()) {
             bindMediaService();
         }
+
+        mProgressController.startListeningProgressFor(getFile(), mAccount);
     }
 
 
@@ -390,6 +394,8 @@ public class PreviewAudioFragment extends FileFragment {
     @Override
     public void onStop() {
         Log_OC.v(TAG, "onStop");
+
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
 
         if (mMediaServiceConnection != null) {
             Log_OC.d(TAG, "Unbinding from MediaService ...");
@@ -559,4 +565,7 @@ public class PreviewAudioFragment extends FileFragment {
         return mAutoplay;
     }
 
+    public void listenForTransferProgress() {
+        mProgressController.startListeningProgressFor(getFile(), mAccount);
+    }
 }

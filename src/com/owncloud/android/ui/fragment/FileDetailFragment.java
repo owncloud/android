@@ -46,8 +46,10 @@ import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
@@ -65,7 +67,8 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private View mView;
     private Account mAccount;
 
-    public ProgressListener mProgressListener;
+    //public ProgressListener mProgressListener;
+    public TransferProgressController mProgressController;
 
     private static final String TAG = FileDetailFragment.class.getSimpleName();
     public static final String FTAG_CONFIRMATION = "REMOVE_CONFIRMATION_FRAGMENT";
@@ -103,7 +106,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         super();
         mAccount = null;
         mLayout = R.layout.file_details_empty;
-        mProgressListener = null;
+        //mProgressListener = null;
     }
 
 
@@ -111,6 +114,10 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mProgressController = new TransferProgressController((ComponentsGetter) getActivity());
+        ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.fdProgressBar);
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
+        mProgressController.bindTo(progressBar);
     }
 
 
@@ -134,9 +141,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         
         if (mLayout == R.layout.file_details_fragment) {
             mView.findViewById(R.id.fdFavorite).setOnClickListener(this);
-            ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.fdProgressBar);
-            DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
-            mProgressListener = new ProgressListener(progressBar);
+            //ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.fdProgressBar);
+            //DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
+            //mProgressListener = new ProgressListener(progressBar);
             mView.findViewById(R.id.fdCancelBtn).setOnClickListener(this);
         }
 
@@ -540,6 +547,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
 
     public void listenForTransferProgress() {
+        /*
         if (mProgressListener != null) {
             if (mContainerActivity.getFileDownloaderBinder() != null) {
                 mContainerActivity.getFileDownloaderBinder().
@@ -552,10 +560,14 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         } else {
             Log_OC.d(TAG, "mProgressListener == null");
         }
+        */
+        mProgressController.startListeningProgressFor(getFile(), mAccount);
     }
 
 
     public void leaveTransferProgress() {
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
+        /*
         if (mProgressListener != null) {
             if (mContainerActivity.getFileDownloaderBinder() != null) {
                 mContainerActivity.getFileDownloaderBinder().
@@ -566,13 +578,14 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                         removeDatatransferProgressListener(mProgressListener, mAccount, getFile());
             }
         }
+        */
     }
 
 
     /**
      * Helper class responsible for updating the progress bar shown for file uploading or
      * downloading
-     */
+     *-/
     private class ProgressListener implements OnDatatransferProgressListener {
         int mLastPercent = 0;
         WeakReference<ProgressBar> mProgressBar = null;
@@ -596,5 +609,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
 
     }
+        */
 
 }

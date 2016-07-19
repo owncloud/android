@@ -4,7 +4,7 @@
 
     <item
         android:id="@android:id/background"
-        android:drawable="@color/owncloud_blue" />
+        android:drawable="@color/background_color" />
     <item android:id="@android:id/secondaryProgress">
         <scale
             android:drawable="@color/owncloud_blue"

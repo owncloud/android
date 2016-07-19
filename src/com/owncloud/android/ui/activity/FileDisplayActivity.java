@@ -519,7 +519,7 @@ public class FileDisplayActivity extends HookActivity
                     boolean detailsFragmentChanged = false;
                     boolean waitedPreview = (
                         mWaitingToPreview != null &&
-                        mWaitingToPreview.getRemotePath().equals(downloadedRemotePath)
+                            mWaitingToPreview.getRemotePath().equals(downloadedRemotePath)
                     );
                     if (waitedPreview) {
                         if (success) {
@@ -1339,10 +1339,16 @@ public class FileDisplayActivity extends HookActivity
                 // listOfFiles.listDirectory(MainApp.getOnlyOnDevice());
             }
             FileFragment secondFragment = getSecondFragment();
-            if (secondFragment != null && secondFragment instanceof FileDetailFragment) {
-                FileDetailFragment detailFragment = (FileDetailFragment) secondFragment;
-                detailFragment.listenForTransferProgress();
-                detailFragment.updateFileDetails(false, false);
+            if (secondFragment != null) {
+                if (secondFragment instanceof FileDetailFragment) {
+                    FileDetailFragment detailFragment = (FileDetailFragment) secondFragment;
+                    detailFragment.listenForTransferProgress();
+                    detailFragment.updateFileDetails(false, false);
+
+                } else if (secondFragment instanceof PreviewAudioFragment) {
+                    PreviewAudioFragment audioFragment = (PreviewAudioFragment) secondFragment;
+                    audioFragment.listenForTransferProgress();
+                }
             }
         }
 
@@ -1821,7 +1827,7 @@ public class FileDisplayActivity extends HookActivity
      * @param file {@link OCFile} to sync and open.
      */
     public void startSyncThenOpen(OCFile file) {
-        Fragment detailFragment = FileDetailFragment.newInstance(file, getAccount());
+        FileDetailFragment detailFragment = FileDetailFragment.newInstance(file, getAccount());
         setSecondFragment(detailFragment);
         mWaitingToPreview = file;
         getFileOperationsHelper().syncFile(file);
