@@ -1572,12 +1572,25 @@ public class FileDisplayActivity extends HookActivity
                 OCFile syncedFile = operation.getLocalFile();
                 onTransferStateChanged(syncedFile, true, true);
                 refreshShowDetails();
+
             } else if (getSecondFragment() == null) {
                 Toast msg = Toast.makeText(this, ErrorMessageAdapter.getErrorCauseMessage(result,
                     operation, getResources()), Toast.LENGTH_LONG);
                 msg.show();
             }
         }
+
+        /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
+        boolean waitedForPreview = (
+            mWaitingToPreview != null &&
+            mWaitingToPreview.equals(operation.getLocalFile())
+            && mWaitingToPreview.isDown()
+        );
+        if (!operation.transferWasRequested() & waitedForPreview) {
+            getFileOperationsHelper().openFile(mWaitingToPreview);
+            mWaitingToPreview = null;
+        }
+
     }
 
     /**
@@ -1801,17 +1814,17 @@ public class FileDisplayActivity extends HookActivity
     }
 
     /**
-     * Requests the download of the received {@link OCFile} , updates the UI
-     * to monitor the download progress and prepares the activity to preview
-     * or open the file when the download finishes.
+     * Requests the synchronization of the received {@link OCFile},
+     * updates the UI to monitor the progress and prepares the activity
+     * to preview or open the file when the download finishes.
      *
-     * @param file {@link OCFile} to download and preview.
+     * @param file {@link OCFile} to sync and open.
      */
-    public void startDownloadForPreview(OCFile file) {
+    public void startSyncThenOpen(OCFile file) {
         Fragment detailFragment = FileDetailFragment.newInstance(file, getAccount());
         setSecondFragment(detailFragment);
         mWaitingToPreview = file;
-        requestForDownload();
+        getFileOperationsHelper().syncFile(file);
         updateFragmentsVisibility(true);
         updateActionBarTitleAndHomeButton(file);
         setFile(file);

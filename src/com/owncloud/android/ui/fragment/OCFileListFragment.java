@@ -492,7 +492,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
             } else { /// Click on a file
                 if (PreviewImageFragment.canBePreviewed(file)) {
-                    // preview image - it handles the download, if needed
+                    // preview image - it handles the sync, if needed
                     ((FileDisplayActivity) mContainerActivity).startImagePreview(file);
 
                 } else if (PreviewTextFragment.canBePreviewed(file)) {
@@ -509,13 +509,9 @@ public class OCFileListFragment extends ExtendedListFragment {
                     ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
                     mContainerActivity.getFileOperationsHelper().syncFile(file);
 
-                } else if (file.isDown()) {
-                    // TODO - and what about syncing before?
-                    mContainerActivity.getFileOperationsHelper().openFile(file);
-
                 } else {
-                    // automatic download, preview on finish
-                    ((FileDisplayActivity) mContainerActivity).startDownloadForPreview(file);
+                    // sync file content, then open with external apps
+                    ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
                 }
 
             }
