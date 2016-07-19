@@ -22,6 +22,7 @@ package com.owncloud.android.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -58,6 +60,8 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_HEIGHT_CELL = "HEIGHT_CELL";
     private static final String KEY_EMPTY_LIST_MESSAGE = "EMPTY_LIST_MESSAGE";
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
+
+    private ProgressBar mProgressBar;
 
     protected SwipeRefreshLayout mRefreshListLayout;
     private SwipeRefreshLayout mRefreshGridLayout;
@@ -143,6 +147,8 @@ public class ExtendedListFragment extends Fragment
 
         View v = inflater.inflate(R.layout.list_fragment, null);
 
+        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+
         mListView = (ExtendedListView)(v.findViewById(R.id.list_root));
         mListView.setOnItemClickListener(this);
         mListFooterView = inflater.inflate(R.layout.list_footer, null, false);
@@ -195,7 +201,6 @@ public class ExtendedListFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        
         if (savedInstanceState != null) {
             mIndexes = savedInstanceState.getIntegerArrayList(KEY_INDEXES);
             mFirstPositions = savedInstanceState.getIntegerArrayList(KEY_FIRST_POSITIONS);
@@ -442,4 +447,9 @@ public class ExtendedListFragment extends Fragment
         }
     }
 
+    public void setProgressBarAsIndeterminate(boolean indeterminate) {
+        Log_OC.d(TAG, "Setting progress visibility to " + indeterminate);
+        mProgressBar.setIndeterminate(indeterminate);
+        mProgressBar.postInvalidate();
+    }
 }

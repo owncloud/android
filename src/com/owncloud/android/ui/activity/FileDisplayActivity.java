@@ -51,7 +51,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
@@ -113,7 +112,6 @@ public class FileDisplayActivity extends HookActivity
     private boolean mDualPane;
     private View mLeftFragmentContainer;
     private View mRightFragmentContainer;
-    private ProgressBar mProgressBar;
 
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
@@ -172,11 +170,6 @@ public class FileDisplayActivity extends HookActivity
         // Navigation Drawer
         initDrawer();
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mProgressBar.setIndeterminateDrawable(
-                ContextCompat.getDrawable(this,
-                        R.drawable.actionbar_progress_indeterminate_horizontal));
-
         mDualPane = getResources().getBoolean(R.bool.large_land_layout);
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
         mRightFragmentContainer = findViewById(R.id.right_fragment_container);
@@ -233,9 +226,6 @@ public class FileDisplayActivity extends HookActivity
         if (savedInstanceState == null) {
             createMinFragments();
         }
-
-        mProgressBar.setIndeterminate(mSyncInProgress);
-        // always AFTER setContentView(...) in onCreate(); to work around bug in its implementation
 
         setBackgroundText();
     }
@@ -1041,8 +1031,11 @@ public class FileDisplayActivity extends HookActivity
 
                     }
                     removeStickyBroadcast(intent);
-                    Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
-                    mProgressBar.setIndeterminate(mSyncInProgress);
+
+                    OCFileListFragment fileListFragment = getListOfFilesFragment();
+                    if (fileListFragment != null) {
+                        fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
+                    }
 
                     setBackgroundText();
 
@@ -1153,7 +1146,10 @@ public class FileDisplayActivity extends HookActivity
                     }
                 }
 
-                mProgressBar.setIndeterminate(false);
+                OCFileListFragment fileListFragment = getListOfFilesFragment();
+                if (fileListFragment != null) {
+                    fileListFragment.setProgressBarAsIndeterminate(false);
+                }
 
             } finally {
                 if (intent != null) {
@@ -1706,7 +1702,10 @@ public class FileDisplayActivity extends HookActivity
                                     null
                             );
 
-                            mProgressBar.setIndeterminate(true);
+                            OCFileListFragment fileListFragment = getListOfFilesFragment();
+                            if (fileListFragment != null) {
+                                fileListFragment.setProgressBarAsIndeterminate(true);
+                            }
 
                             setBackgroundText();
 
