@@ -45,6 +45,7 @@ import android.widget.VideoView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
@@ -249,6 +250,16 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     public void onTransferServiceConnected() {
         if (mProgressController != null) {
             mProgressController.startListeningProgressFor(getFile(), mAccount);
+        }
+    }
+
+    @Override
+    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
+        if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
+            if (success) {
+                playVideo();
+            }
+            mProgressController.reset();
         }
     }
 

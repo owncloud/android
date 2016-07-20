@@ -490,6 +490,8 @@ public class FileDisplayActivity extends HookActivity
         FileFragment secondFragment = getSecondFragment();
         if (secondFragment != null) {
             invalidateOptionsMenu();
+            secondFragment.onDownloadEvent(downloadEvent, downloadedRemotePath, success);
+
             if (secondFragment instanceof FileDetailFragment) {
                 /// user was watching download progress
                 FileDetailFragment detailsFragment = (FileDetailFragment) secondFragment;
@@ -499,54 +501,31 @@ public class FileDisplayActivity extends HookActivity
                     // the user browsed to other file ; forget the automatic preview
                     mWaitingToPreview = null;
 
-                } else if (downloadEvent.equals(FileDownloader.getDownloadAddedMessage())) {
-                    // grant that the right panel updates the progress bar
-                    detailsFragment.updateFileDetails(true, false);
-
                 } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-                    //  update the right panel
-                    boolean detailsFragmentChanged = false;
+                    //  replace the right panel if waiting for preview
                     boolean waitedPreview = (
-                        mWaitingToPreview != null &&
+                            mWaitingToPreview != null &&
                             mWaitingToPreview.getRemotePath().equals(downloadedRemotePath)
                     );
                     if (waitedPreview) {
                         if (success) {
+                            // update the file from database,
                             mWaitingToPreview = getStorageManager().getFileById(
-                                mWaitingToPreview.getFileId());   // update the file from database,
+                                mWaitingToPreview.getFileId()
+                            );
                             // for the local storage path
                             if (PreviewAudioFragment.canBePreviewed(mWaitingToPreview)) {
                                 startAudioPreview(mWaitingToPreview, 0);
-                                detailsFragmentChanged = true;
                             } else if (PreviewVideoFragment.canBePreviewed(mWaitingToPreview)) {
                                 startVideoPreview(mWaitingToPreview, 0);
-                                detailsFragmentChanged = true;
                             } else if (PreviewTextFragment.canBePreviewed(mWaitingToPreview)) {
                                 startTextPreview(mWaitingToPreview);
-                                detailsFragmentChanged = true;
                             } else {
                                 getFileOperationsHelper().openFile(mWaitingToPreview);
                             }
                         }
                         mWaitingToPreview = null;
                     }
-                    if (!detailsFragmentChanged) {
-                        detailsFragment.updateFileDetails(false, (success));
-                    }
-                }
-
-            } else if (success && downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-                if (secondFragment instanceof PreviewTextFragment) {
-                    /// user was previewing previous version of text file while downloading more recent
-                    ((PreviewTextFragment) secondFragment).loadAndShowTextPreview();
-
-                } else if (secondFragment instanceof PreviewAudioFragment) {
-                    /// user was listening previous version of audio file while downloading more recent
-                    ((PreviewAudioFragment) secondFragment).playAudio(true);
-
-                } else if (secondFragment instanceof PreviewVideoFragment) {
-                    /// user was watching previous version of media file while downloading more recent
-                    ((PreviewVideoFragment) secondFragment).playVideo();
                 }
             }
         }

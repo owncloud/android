@@ -21,6 +21,7 @@ package com.owncloud.android.ui.preview;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.fragment.FileFragment;
 
@@ -255,6 +256,14 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     @Override
     public void onTransferServiceConnected() {
         listenForTransferProgress();
+    }
+
+
+    @Override
+    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
+        if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
+            mProgressController.reset();
+        }
     }
 
 

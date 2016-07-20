@@ -42,6 +42,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -170,6 +171,15 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
     }
 
+    @Override
+    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
+        if (downloadEvent.equals(FileDownloader.getDownloadAddedMessage())) {
+            updateFileDetails(true, false);
+        } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
+            updateFileDetails(false, (success));
+            mProgressController.reset();
+        }
+    }
 
     @Override
     public View getView() {

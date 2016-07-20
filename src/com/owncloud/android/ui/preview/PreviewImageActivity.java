@@ -445,27 +445,11 @@ public class PreviewImageActivity extends FileActivity implements
                     downloadedRemotePath != null) {
 
                 OCFile file = getStorageManager().getFileByPath(downloadedRemotePath);
-                int position = mPreviewImagePagerAdapter.getFilePosition(file);
-                boolean downloadWasFine = intent.getBooleanExtra(
-                        FileDownloader.EXTRA_DOWNLOAD_RESULT, false);
-                //boolean isOffscreen =  Math.abs((mViewPager.getCurrentItem() - position))
-                // <= mViewPager.getOffscreenPageLimit();
-                
-                if (position >= 0 &&
-                        intent.getAction().equals(FileDownloader.getDownloadFinishMessage())) {
-                    if (downloadWasFine) {
-                        mPreviewImagePagerAdapter.updateFile(position, file);   
-                        
-                    } else {
-                        mPreviewImagePagerAdapter.updateWithDownloadError(position);
-                    }
-                    mPreviewImagePagerAdapter.notifyDataSetChanged();   // will trigger the creation
-                                                                        // of new fragments
-                    
-                } else {
-                    Log_OC.d(TAG, "Download finished, but the fragment is offscreen");
-                }
-                
+                mPreviewImagePagerAdapter.onDownloadEvent(
+                    file,
+                    intent.getAction(),
+                    intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false)
+                );
             }
             removeStickyBroadcast(intent);
         }

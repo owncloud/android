@@ -93,6 +93,8 @@ public abstract class FileFragment extends Fragment {
 
     public abstract void onTransferServiceConnected();
 
+    public abstract void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success);
+
 
     /**
      * Interface to implement by any Activity that includes some instance of FileListFragment

@@ -44,6 +44,7 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -222,11 +223,9 @@ public class PreviewImageFragment extends FileFragment {
         super.onStart();
         if (getFile() != null) {
             mProgressController.startListeningProgressFor(getFile(), mAccount);
-            mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
-            mLoadBitmapTask.execute(getFile());
+            loadAndShowImagePreview();
         }
     }
-
 
     @Override
     public void onStop() {
@@ -390,6 +389,20 @@ public class PreviewImageFragment extends FileFragment {
         }
     }
 
+    @Override
+    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
+        if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
+            if (success) {
+                loadAndShowImagePreview();
+            }
+            mProgressController.reset();
+        }
+    }
+
+    private void loadAndShowImagePreview() {
+        mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
+        mLoadBitmapTask.execute(getFile());
+    }
 
     private class LoadBitmapTask extends AsyncTask<OCFile, Void, LoadImage> {
 

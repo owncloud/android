@@ -34,6 +34,8 @@ import android.view.ViewGroup;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.files.services.FileDownloader;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 
@@ -42,7 +44,9 @@ import com.owncloud.android.utils.FileStorageUtils;
  */
 //public class PreviewImagePagerAdapter extends PagerAdapter {
 public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
-    
+
+    private static final String TAG = PreviewImagePagerAdapter.class.getCanonicalName();
+
     private Vector<OCFile> mImageFiles;
     private Account mAccount;
     private Set<Object> mObsoleteFragments;
@@ -138,7 +142,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
     }
 
     
-    public void updateFile(int position, OCFile file) {
+    private void updateFile(int position, OCFile file) {
         FileFragment fragmentToUpdate = mCachedFragments.get(Integer.valueOf(position));
         if (fragmentToUpdate != null) {
             mObsoleteFragments.add(fragmentToUpdate);
@@ -148,7 +152,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
     }
     
     
-    public void updateWithDownloadError(int position) {
+    private void updateWithDownloadError(int position) {
         FileFragment fragmentToUpdate = mCachedFragments.get(Integer.valueOf(position));
         if (fragmentToUpdate != null) {
             mObsoleteFragments.add(fragmentToUpdate);
@@ -210,6 +214,23 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
             if (fileFragment instanceof PreviewImageFragment) {
                 ((PreviewImageFragment) fileFragment).getImageView().resetZoom();
             }
+        }
+    }
+
+    public void onDownloadEvent(OCFile file, String action, boolean success) {
+        int position = getFilePosition(file);
+        if (position >= 0) {
+            if (action.equals(FileDownloader.getDownloadFinishMessage())) {
+                if (success) {
+                    updateFile(position, file);
+
+                } else {
+                    updateWithDownloadError(position);
+                }
+            }
+            notifyDataSetChanged();   // will trigger the creation of new fragments
+        } else {
+            Log_OC.d(TAG, "Download finished, but the fragment is offscreen");
         }
     }
 

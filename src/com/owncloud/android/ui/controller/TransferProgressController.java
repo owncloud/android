@@ -23,6 +23,8 @@ import android.accounts.Account;
 import android.widget.ProgressBar;
 
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.files.services.FileDownloader;
+import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ComponentsGetter;
@@ -49,23 +51,30 @@ public class TransferProgressController implements OnDatatransferProgressListene
     public void setProgressBar(ProgressBar progressBar) {
         mProgressBar = progressBar;
         if (mProgressBar != null) {
-            mProgressBar.setIndeterminate(false);
-            mLastPercent = -1;
+            reset();
         }
     }
 
     public void startListeningProgressFor(OCFile file, Account account) {
-        if (mComponentsGetter.getFileDownloaderBinder() != null) {
-            mComponentsGetter.getFileDownloaderBinder().
-                addDatatransferProgressListener(this, account, file);
+        FileDownloader.FileDownloaderBinder downloaderBinder = mComponentsGetter.getFileDownloaderBinder();
+        FileUploader.FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
+
+        if (downloaderBinder != null) {
+            downloaderBinder.addDatatransferProgressListener(this, account, file);
+            if (mProgressBar != null && downloaderBinder.isDownloading(account, file)) {
+                mProgressBar.setIndeterminate(true);
+            }
         } else {
-            Log_OC.e(TAG, "Download service not ready to notify progress");
+            Log_OC.i(TAG, "Download service not ready to notify progress");
         }
-        if (mComponentsGetter.getFileUploaderBinder() != null) {
-            mComponentsGetter.getFileUploaderBinder().
-                addDatatransferProgressListener(this, account, file);
+
+        if (uploaderBinder != null) {
+            uploaderBinder.addDatatransferProgressListener(this, account, file);
+            if (mProgressBar != null && uploaderBinder.isUploading(account, file)) {
+                mProgressBar.setIndeterminate(true);
+            }
         } else {
-            Log_OC.e(TAG, "Upload service not ready to notify progress");
+            Log_OC.i(TAG, "Upload service not ready to notify progress");
         }
     }
 
@@ -77,6 +86,9 @@ public class TransferProgressController implements OnDatatransferProgressListene
         if (mComponentsGetter.getFileUploaderBinder() != null) {
             mComponentsGetter.getFileUploaderBinder().
                 removeDatatransferProgressListener(this, account, file);
+        }
+        if (mProgressBar != null) {
+            mProgressBar.setIndeterminate(false);
         }
     }
 
@@ -90,6 +102,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
         if (mProgressBar != null) {
             int percent = (int) (100.0 * ((double) totalTransferredSoFar) / ((double) totalToTransfer));
             if (percent != mLastPercent) {
+                mProgressBar.setIndeterminate(false);
                 mProgressBar.setProgress(percent);
                 mProgressBar.postInvalidate();
             }
@@ -97,4 +110,11 @@ public class TransferProgressController implements OnDatatransferProgressListene
         }
     }
 
+    public void reset() {
+        if (mProgressBar != null) {
+            mLastPercent = -1;
+            mProgressBar.setProgress(0);
+            mProgressBar.setIndeterminate(false);
+        }
+    }
 }
