@@ -39,6 +39,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.VideoView;
 
 import com.owncloud.android.R;
@@ -48,9 +49,11 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
 import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
+import com.owncloud.android.utils.DisplayUtils;
 
 
 /**
@@ -70,6 +73,8 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     private static final String EXTRA_PLAYING = "PLAYING";
 
     private Account mAccount;
+    private ProgressBar mProgressBar;
+    private TransferProgressController mProgressController;
     private VideoView mVideoPreview;
     private int mSavedPlaybackPosition;
 
@@ -143,12 +148,12 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         super.onCreateView(inflater, container, savedInstanceState);
         Log_OC.v(TAG, "onCreateView");
 
-
         View view = inflater.inflate(R.layout.preview_video_fragment, container, false);
 
+        mProgressBar = (ProgressBar) view.findViewById(R.id.transferProgressBar);
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mVideoPreview = (VideoView) view.findViewById(R.id.video_preview);
         mVideoPreview.setOnTouchListener(this);
-
         mMediaController = (MediaControlView) view.findViewById(R.id.media_controller);
 
         return view;
@@ -193,6 +198,9 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
             throw new IllegalStateException("Not a video file");
         }
 
+        mProgressController = new TransferProgressController(mContainerActivity);
+        mProgressController.setProgressBar(mProgressBar);
+
         prepareVideo();
     }
 
@@ -221,7 +229,9 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         Log_OC.v(TAG, "onStart");
 
         OCFile file = getFile();
+
         if (file != null && file.isDown()) {
+            mProgressController.startListeningProgressFor(file, mAccount);
             stopAudio();
             playVideo();
         }
@@ -237,7 +247,9 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     @Override
     public void onTransferServiceConnected() {
-        // TODO
+        if (mProgressController != null) {
+            mProgressController.startListeningProgressFor(getFile(), mAccount);
+        }
     }
 
     /**
@@ -467,6 +479,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     @Override
     public void onStop() {
         Log_OC.v(TAG, "onStop");
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
         mPrepared = false;
         super.onStop();
     }

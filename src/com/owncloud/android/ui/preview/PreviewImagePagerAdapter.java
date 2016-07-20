@@ -101,10 +101,13 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
     
     public Fragment getItem(int i) {
         OCFile file = mImageFiles.get(i);
-        Fragment fragment = null;
+        Fragment fragment;
         if (file.isDown()) {
-            fragment = PreviewImageFragment.newInstance(file,
-                    mObsoletePositions.contains(Integer.valueOf(i)));
+            fragment = PreviewImageFragment.newInstance(
+                file,
+                mAccount,
+                mObsoletePositions.contains(Integer.valueOf(i))
+            );
             
         } else if (mDownloadErrors.contains(Integer.valueOf(i))) {
             fragment = FileDownloadFragment.newInstance(file, mAccount, true);
@@ -152,7 +155,14 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         }
         mDownloadErrors.add(Integer.valueOf(position));
     }
-    
+
+    public void onTransferServiceConnected(int position) {
+        FileFragment fragmentToUpdate = mCachedFragments.get(Integer.valueOf(position));
+        if (fragmentToUpdate != null) {
+            fragmentToUpdate.onTransferServiceConnected();
+        }
+    }
+
     public void clearErrorAt(int position) {
         FileFragment fragmentToUpdate = mCachedFragments.get(Integer.valueOf(position));
         if (fragmentToUpdate != null) {

@@ -32,9 +32,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".ui.fragment.PreviewImageFragment" >
+    tools:context=".ui.preview.PreviewImageFragment" >
 
-    <ProgressBar 
+    <ProgressBar
+        android:id="@+id/transferProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:layout_alignParentTop="true"
+        style="@style/Widget.ownCloud.TopProgressBar"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        android:visibility="visible"
+        />
+
+    <ProgressBar
         android:id="@+id/progressWheel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,6 +60,7 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/transferProgressBar"
         android:layout_margin="0dp"
         android:layout_centerInParent="true"
         android:contentDescription="@string/preview_image_description"

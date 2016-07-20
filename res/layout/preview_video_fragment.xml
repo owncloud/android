@@ -27,7 +27,20 @@
     android:gravity="center"
     tools:context=".ui.preview.PreviewAudioFragment">
 
-    <FrameLayout
+	<ProgressBar
+		android:id="@+id/transferProgressBar"
+		android:layout_width="match_parent"
+		android:layout_height="4dp"
+		android:padding="0dp"
+		android:layout_margin="0dp"
+		android:layout_alignParentTop="true"
+		style="@style/Widget.ownCloud.TopProgressBar"
+		android:indeterminate="false"
+		android:indeterminateOnly="false"
+		android:visibility="visible"
+		/>
+
+	<FrameLayout
         android:id="@+id/visual_area"
    	    android:layout_width="match_parent"
    	    android:layout_height="0dp"

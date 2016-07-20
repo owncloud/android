@@ -260,6 +260,7 @@ public class PreviewImageActivity extends FileActivity implements
                     Log_OC.d(TAG, "Simulating reselection of current page after connection " +
                             "of download binder");
                     onPageSelected(mViewPager.getCurrentItem());
+                    mPreviewImagePagerAdapter.onTransferServiceConnected(mViewPager.getCurrentItem());
                 }
 
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
