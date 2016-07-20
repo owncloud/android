@@ -66,21 +66,14 @@ public class PreviewImageActivity extends FileActivity implements
         FileFragment.ContainerActivity,
         ViewPager.OnPageChangeListener, OnRemoteOperationListener {
     
-    public static final int DIALOG_SHORT_WAIT = 0;
-
     public static final String TAG = PreviewImageActivity.class.getSimpleName();
     
-    public static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
-    private static final String KEY_WAITING_FOR_BINDER = "WAITING_FOR_BINDER";
-
     private static final int INITIAL_HIDE_DELAY = 0; // immediate hide
 
     private ExtendedViewPager mViewPager;
     private PreviewImagePagerAdapter mPreviewImagePagerAdapter;
     private int mSavedPosition = 0;
     private boolean mHasSavedPosition = false;
-    
-    private boolean mRequestWaitingForBinder;
     
     private DownloadFinishReceiver mDownloadFinishReceiver;
     
@@ -104,41 +97,31 @@ public class PreviewImageActivity extends FileActivity implements
         actionBar.hide();
 
 
-        // Make sure we're running on Honeycomb or higher to use FullScreen and
-        // Immersive Mode
-        if (isHoneycombOrHigher()) {
-        
-            mFullScreenAnchorView = getWindow().getDecorView();
-            // to keep our UI controls visibility in line with system bars
-            // visibility
-            mFullScreenAnchorView.setOnSystemUiVisibilityChangeListener
-                    (new View.OnSystemUiVisibilityChangeListener() {
-                @SuppressLint("InlinedApi")
-                @Override
-                public void onSystemUiVisibilityChange(int flags) {
-                    boolean visible = (flags & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
-                    ActionBar actionBar = getSupportActionBar();
-                    if (visible) {
-                        actionBar.show();
-                        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                    } else {
-                        actionBar.hide();
-                        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                    }
+        /// FullScreen and Immersive Mode
+        mFullScreenAnchorView = getWindow().getDecorView();
+        // to keep our UI controls visibility in line with system bars
+        // visibility
+        mFullScreenAnchorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+            @SuppressLint("InlinedApi")
+            @Override
+            public void onSystemUiVisibilityChange(int flags) {
+                boolean visible = (flags & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+                ActionBar actionBar = getSupportActionBar();
+                if (visible) {
+                    actionBar.show();
+                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                } else {
+                    actionBar.hide();
+                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 }
-            });
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(getResources().getColor(R.color.owncloud_blue_dark_transparent));
             }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.owncloud_blue_dark_transparent));
         }
-            
-        if (savedInstanceState != null) {
-            mRequestWaitingForBinder = savedInstanceState.getBoolean(KEY_WAITING_FOR_BINDER);
-        } else {
-            mRequestWaitingForBinder = false;
-        }
-        
+
     }
 
     private void initViewPager() {
@@ -152,21 +135,33 @@ public class PreviewImageActivity extends FileActivity implements
         }
 
         // TODO Enable when "On Device" is recovered ?
-        mPreviewImagePagerAdapter = new PreviewImagePagerAdapter(getSupportFragmentManager(),
-                parentFolder, getAccount(), getStorageManager()/*, MainApp.getOnlyOnDevice()*/);
+        mPreviewImagePagerAdapter = new PreviewImagePagerAdapter(
+            getSupportFragmentManager(),
+            parentFolder,
+            getAccount(),
+            getStorageManager()
+            /*, MainApp.getOnlyOnDevice()*/
+        );
 
         mViewPager = (ExtendedViewPager) findViewById(R.id.fragmentPager);
         int position = mHasSavedPosition ? mSavedPosition :
                 mPreviewImagePagerAdapter.getFilePosition(getFile());
         position = (position >= 0) ? position : 0;
-        mViewPager.setAdapter(mPreviewImagePagerAdapter); 
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.setAdapter(mPreviewImagePagerAdapter);
+        mViewPager.addOnPageChangeListener(this);
         mViewPager.setCurrentItem(position);
-        if (position == 0 && !getFile().isDown()) {
-            // this is necessary because mViewPager.setCurrentItem(0) just after setting the
-            // adapter does not result in a call to #onPageSelected(0)
-            mRequestWaitingForBinder = true;
-        }
+        mViewPager.post(new Runnable() {
+            // this is necessary because mViewPager.setCurrentItem(0) does not trigger
+            // a call to onPageSelected in the first layout request aftet mViewPager.setAdapter(...) ;
+            // see, for example:
+            // https://android.googlesource.com/platform/frameworks/support.git/+/android-6.0.1_r55/v4/java/android/support/v4/view/ViewPager.java#541
+            // ; or just:
+            // http://stackoverflow.com/questions/11794269/onpageselected-isnt-triggered-when-calling-setcurrentitem0
+            @Override
+            public void run() {
+                PreviewImageActivity.this.onPageSelected(mViewPager.getCurrentItem());
+            }
+        });
     }
     
     
@@ -183,9 +178,7 @@ public class PreviewImageActivity extends FileActivity implements
     Handler mHideSystemUiHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (isHoneycombOrHigher()) {
-                hideSystemUI(mFullScreenAnchorView);
-            }
+            hideSystemUI(mFullScreenAnchorView);
             getSupportActionBar().hide();
         }
     };
@@ -211,17 +204,6 @@ public class PreviewImageActivity extends FileActivity implements
     
     
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_WAITING_FOR_BINDER, mRequestWaitingForBinder);    
-    }
-
-    @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
         super.onRemoteOperationFinish(operation, result);
         
@@ -238,7 +220,6 @@ public class PreviewImageActivity extends FileActivity implements
         if (result.isSuccess()) {
             invalidateOptionsMenu();
         }
-
     }
 
     @Override
@@ -254,23 +235,17 @@ public class PreviewImageActivity extends FileActivity implements
                 
             if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileDownloader.class))) {
+                Log_OC.e(TAG, "onServiceConnected, FileDownloader");
                 mDownloaderBinder = (FileDownloaderBinder) service;
-                if (mRequestWaitingForBinder) {
-                    mRequestWaitingForBinder = false;
-                    Log_OC.d(TAG, "Simulating reselection of current page after connection " +
-                            "of download binder");
-                    onPageSelected(mViewPager.getCurrentItem());
-                    mPreviewImagePagerAdapter.onTransferServiceConnected(mViewPager.getCurrentItem());
-                }
 
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileUploader.class))) {
-                Log_OC.d(TAG, "Upload service connected");
+                Log_OC.e(TAG, "onServiceConnected, FileUploader");
                 mUploaderBinder = (FileUploaderBinder) service;
-            } else {
-                return;
             }
-            
+
+            mPreviewImagePagerAdapter.onTransferServiceConnected();
+
         }
 
         @Override
@@ -289,19 +264,8 @@ public class PreviewImageActivity extends FileActivity implements
     
     
     @Override
-    public void onStop() {
-        super.onStop();
-    }
-    
-    
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-    
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean returnValue = false;
+        boolean returnValue;
         
         switch(item.getItemId()){
         case android.R.id.home:
@@ -332,11 +296,6 @@ public class PreviewImageActivity extends FileActivity implements
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-    
-    @Override
     public void onPause() {
         if (mDownloadFinishReceiver != null){
             unregisterReceiver(mDownloadFinishReceiver);
@@ -359,21 +318,6 @@ public class PreviewImageActivity extends FileActivity implements
         showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT,
                 AccountUtils.getCurrentOwnCloudAccount(this));
         startActivity(showDetailsIntent);
-        int pos = mPreviewImagePagerAdapter.getFilePosition(file);
-        file = mPreviewImagePagerAdapter.getFileAt(pos);
-        
-    }
-
-    private void requestForDownload(OCFile file) {
-        if (mDownloaderBinder == null) {
-            Log_OC.d(TAG, "requestForDownload called without binder to download service");
-            
-        } else if (!mDownloaderBinder.isDownloading(getAccount(), file)) {
-            Intent i = new Intent(this, FileDownloader.class);
-            i.putExtra(FileDownloader.EXTRA_ACCOUNT, getAccount());
-            i.putExtra(FileDownloader.EXTRA_FILE, file);
-            startService(i);
-        }
     }
 
     /**
@@ -384,23 +328,20 @@ public class PreviewImageActivity extends FileActivity implements
      */
     @Override
     public void onPageSelected(int position) {
+        Log_OC.d(TAG, "onPageSelected " + position);
+
         mSavedPosition = position;
         mHasSavedPosition = true;
-        if (mDownloaderBinder == null) {
-            mRequestWaitingForBinder = true;
-            
-        } else {
-            OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position); 
-            getSupportActionBar().setTitle(currentFile.getFileName());
-            mDrawerToggle.setDrawerIndicatorEnabled(false);
-            if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
-                getFileOperationsHelper().syncFile(currentFile);
-            }
 
-            // Call to reset image zoom to initial state
-            ((PreviewImagePagerAdapter) mViewPager.getAdapter()).resetZoom();
+        OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position);
+        getSupportActionBar().setTitle(currentFile.getFileName());
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
+        if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
+            getFileOperationsHelper().syncFile(currentFile);
         }
 
+        // Call to reset image zoom to initial state
+        ((PreviewImagePagerAdapter) mViewPager.getAdapter()).resetZoom();
     }
     
     /**
@@ -458,35 +399,15 @@ public class PreviewImageActivity extends FileActivity implements
 
     @SuppressLint("InlinedApi")
 	public void toggleFullScreen() {
+        boolean visible = (mFullScreenAnchorView.getSystemUiVisibility()
+                & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
 
-        if (isHoneycombOrHigher()) {
-        
-            boolean visible = (mFullScreenAnchorView.getSystemUiVisibility()
-                    & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
-
-            if (visible) {
-                hideSystemUI(mFullScreenAnchorView);
-                // actionBar.hide(); // propagated through
-                // OnSystemUiVisibilityChangeListener()
-            } else {
-                showSystemUI(mFullScreenAnchorView);
-                // actionBar.show(); // propagated through
-                // OnSystemUiVisibilityChangeListener()
-            }
-
+        if (visible) {
+            hideSystemUI(mFullScreenAnchorView);
+            // actionBar.hide(); // propagated through OnSystemUiVisibilityChangeListener()
         } else {
-
-            ActionBar actionBar = getSupportActionBar();
-            if (!actionBar.isShowing()) {
-                actionBar.show();
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-            } else {
-                actionBar.hide();
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-            }
-
+            showSystemUI(mFullScreenAnchorView);
+            // actionBar.show(); // propagated through OnSystemUiVisibilityChangeListener()
         }
     }
 
@@ -511,9 +432,7 @@ public class PreviewImageActivity extends FileActivity implements
                 /// Refresh the activity according to the Account and OCFile set
                 setFile(file);  // reset after getting it fresh from storageManager
                 getSupportActionBar().setTitle(getFile().getFileName());
-                //if (!stateWasRecovered) {
-                    initViewPager();
-                //}
+                initViewPager();
 
             } else {
                 // handled file not in the current Account
@@ -554,18 +473,6 @@ public class PreviewImageActivity extends FileActivity implements
             |   View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN       // draw full window;     Android >= 4.1
             |   View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION  // draw full window;     Android >= 4.1
         );
-    }
-
-    /**
-     * Checks if OS version is Honeycomb one or higher
-     *
-     * @return boolean
-     */
-    private boolean isHoneycombOrHigher() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            return true;
-        }
-        return false;
     }
 
     @Override

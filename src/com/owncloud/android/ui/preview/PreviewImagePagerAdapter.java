@@ -160,10 +160,11 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         mDownloadErrors.add(Integer.valueOf(position));
     }
 
-    public void onTransferServiceConnected(int position) {
-        FileFragment fragmentToUpdate = mCachedFragments.get(Integer.valueOf(position));
-        if (fragmentToUpdate != null) {
-            fragmentToUpdate.onTransferServiceConnected();
+    public void onTransferServiceConnected() {
+        for (FileFragment fragmentToUpdate : mCachedFragments.values()){
+            if (fragmentToUpdate != null) {
+                fragmentToUpdate.onTransferServiceConnected();
+            }
         }
     }
 
