@@ -33,7 +33,7 @@ import com.owncloud.android.ui.activity.ComponentsGetter;
 /**
  * Common methods for {@link Fragment}s containing {@link OCFile}s
  */
-public class FileFragment extends Fragment {
+public abstract class FileFragment extends Fragment {
     
     private OCFile mFile;
     
@@ -88,9 +88,12 @@ public class FileFragment extends Fragment {
     public void onDetach() {
         mContainerActivity = null;
         super.onDetach();
-    }    
-    
-    
+    }
+
+
+    public abstract void onTransferServiceConnected();
+
+
     /**
      * Interface to implement by any Activity that includes some instance of FileListFragment
      * Interface to implement by any Activity that includes some instance of FileFragment

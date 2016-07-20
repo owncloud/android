@@ -360,7 +360,13 @@ public class PreviewImageFragment extends FileFragment {
         finish();
     }
 
-    
+
+    @Override
+    public void onTransferServiceConnected() {
+        // TODO
+    }
+
+
     private class LoadBitmapTask extends AsyncTask<OCFile, Void, LoadImage> {
 
         /**

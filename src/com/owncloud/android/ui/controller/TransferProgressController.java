@@ -46,12 +46,15 @@ public class TransferProgressController implements OnDatatransferProgressListene
     }
 
 
-    public void bindTo(ProgressBar progressBar) {
+    public void setProgressBar(ProgressBar progressBar) {
         mProgressBar = progressBar;
+        if (mProgressBar != null) {
+            mProgressBar.setIndeterminate(false);
+            mLastPercent = -1;
+        }
     }
 
     public void startListeningProgressFor(OCFile file, Account account) {
-        // TODO - store file and account as members?
         if (mComponentsGetter.getFileDownloaderBinder() != null) {
             mComponentsGetter.getFileDownloaderBinder().
                 addDatatransferProgressListener(this, account, file);
@@ -64,10 +67,6 @@ public class TransferProgressController implements OnDatatransferProgressListene
         } else {
             Log_OC.e(TAG, "Upload service not ready to notify progress");
         }
-        if (mProgressBar != null) {
-            mProgressBar.setProgress(0);
-            mProgressBar.setIndeterminate(true);
-        }
     }
 
     public void stopListeningProgressFor(OCFile file, Account account) {
@@ -79,9 +78,6 @@ public class TransferProgressController implements OnDatatransferProgressListene
             mComponentsGetter.getFileUploaderBinder().
                 removeDatatransferProgressListener(this, account, file);
         }
-        if (mProgressBar != null) {
-            mProgressBar.setIndeterminate(false);
-        }
     }
 
     @Override
@@ -92,7 +88,6 @@ public class TransferProgressController implements OnDatatransferProgressListene
         String filename
     ) {
         if (mProgressBar != null) {
-            mProgressBar.setIndeterminate(false);
             int percent = (int) (100.0 * ((double) totalTransferredSoFar) / ((double) totalToTransfer));
             if (percent != mLastPercent) {
                 mProgressBar.setProgress(percent);

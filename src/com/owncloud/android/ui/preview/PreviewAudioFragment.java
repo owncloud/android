@@ -48,7 +48,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
 import com.owncloud.android.media.MediaServiceBinder;
-import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
@@ -81,6 +80,7 @@ public class PreviewAudioFragment extends FileFragment {
     private MediaServiceConnection mMediaServiceConnection = null;
     private boolean mAutoplay;
 
+    private ProgressBar mProgressBar = null;
     public TransferProgressController mProgressController;
 
     private static final String TAG = PreviewAudioFragment.class.getSimpleName();
@@ -150,12 +150,11 @@ public class PreviewAudioFragment extends FileFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         Log_OC.v(TAG, "onCreateView");
 
-
         View view = inflater.inflate(R.layout.preview_audio_fragment, container, false);
-
         mImagePreview = (ImageView) view.findViewById(R.id.image_preview);
-
         mMediaController = (MediaControlView) view.findViewById(R.id.media_controller);
+        mProgressBar = (ProgressBar)view.findViewById(R.id.transferProgressBar);
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         return view;
     }
@@ -201,10 +200,8 @@ public class PreviewAudioFragment extends FileFragment {
 
         extractAndSetCoverArt(file);
 
-        mProgressController = new TransferProgressController((ComponentsGetter) getActivity());
-        ProgressBar progressBar = (ProgressBar)(getView().findViewById(R.id.transferProgressBar));
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
-        mProgressController.bindTo(progressBar);
+        mProgressController = new TransferProgressController(mContainerActivity);
+        mProgressController.setProgressBar(mProgressBar);
     }
 
     /**
@@ -255,6 +252,14 @@ public class PreviewAudioFragment extends FileFragment {
         }
 
         mProgressController.startListeningProgressFor(getFile(), mAccount);
+    }
+
+
+    @Override
+    public void onTransferServiceConnected() {
+        if (mProgressController != null) {
+            mProgressController.startListeningProgressFor(getFile(), mAccount);
+        }
     }
 
 
@@ -555,17 +560,4 @@ public class PreviewAudioFragment extends FileFragment {
         return mSavedPlaybackPosition;
     }
 
-    public boolean isPlaying() {
-        /// this is only for video!
-        /*
-        if (mPrepared) {
-            mAutoplay = mVideoPreview.isPlaying();
-        }
-        */
-        return mAutoplay;
-    }
-
-    public void listenForTransferProgress() {
-        mProgressController.startListeningProgressFor(getFile(), mAccount);
-    }
 }

@@ -235,6 +235,11 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     }
 
 
+    @Override
+    public void onTransferServiceConnected() {
+        // TODO
+    }
+
     /**
      * {@inheritDoc}
      */

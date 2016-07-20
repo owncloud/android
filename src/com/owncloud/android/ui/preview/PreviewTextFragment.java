@@ -407,6 +407,12 @@ public class PreviewTextFragment extends FileFragment {
         }
     }
 
+    @Override
+    public void onTransferServiceConnected() {
+        // TODO
+    }
+
+
     /**
      * Opens the previewed file with an external application.
      */

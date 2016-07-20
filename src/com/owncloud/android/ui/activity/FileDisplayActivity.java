@@ -501,7 +501,6 @@ public class FileDisplayActivity extends HookActivity
 
                 } else if (downloadEvent.equals(FileDownloader.getDownloadAddedMessage())) {
                     // grant that the right panel updates the progress bar
-                    detailsFragment.listenForTransferProgress();
                     detailsFragment.updateFileDetails(true, false);
 
                 } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
@@ -1336,14 +1335,9 @@ public class FileDisplayActivity extends HookActivity
             }
             FileFragment secondFragment = getSecondFragment();
             if (secondFragment != null) {
+                secondFragment.onTransferServiceConnected();
                 if (secondFragment instanceof FileDetailFragment) {
-                    FileDetailFragment detailFragment = (FileDetailFragment) secondFragment;
-                    detailFragment.listenForTransferProgress();
-                    detailFragment.updateFileDetails(false, false);
-
-                } else if (secondFragment instanceof PreviewAudioFragment) {
-                    PreviewAudioFragment audioFragment = (PreviewAudioFragment) secondFragment;
-                    audioFragment.listenForTransferProgress();
+                    ((FileDetailFragment)secondFragment).updateFileDetails(false, false);
                 }
             }
         }
