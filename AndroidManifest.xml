@@ -18,13 +18,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.owncloud.android"
     android:versionCode="20100000"
     android:versionName="2.1.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="23" />
+        android:targetSdkVersion="24" />
 
     <!-- GET_ACCOUNTS is needed for API < 23.
         For API >= 23 results in the addition of CONTACTS group to the list of permissions that may be
@@ -60,7 +61,9 @@
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:theme="@style/Theme.ownCloud"
-        android:manageSpaceActivity=".ui.activity.ManageSpaceActivity">
+        android:manageSpaceActivity=".ui.activity.ManageSpaceActivity"
+        android:resizeableActivity="true"
+        android:supportsPictureInPicture="false" >
         <activity
             android:name=".ui.activity.FileDisplayActivity"
             android:label="@string/app_name" >
