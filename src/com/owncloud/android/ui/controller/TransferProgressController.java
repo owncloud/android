@@ -20,6 +20,7 @@
 package com.owncloud.android.ui.controller;
 
 import android.accounts.Account;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.owncloud.android.datamodel.OCFile;
@@ -134,11 +135,22 @@ public class TransferProgressController implements OnDatatransferProgressListene
         String filename
     ) {
         if (mProgressBar != null) {
-            int percent = (int) (100.0 * ((double) totalTransferredSoFar) / ((double) totalToTransfer));
+            final int percent = (int) (100.0 * ((double) totalTransferredSoFar) / ((double) totalToTransfer));
             if (percent != mLastPercent) {
-                mProgressBar.setIndeterminate(false);
-                mProgressBar.setProgress(percent);
-                mProgressBar.postInvalidate();
+                mProgressBar.post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            mProgressBar.setIndeterminate(false);
+                            mProgressBar.setProgress(percent);
+                            mProgressBar.invalidate();
+                            if (percent == mProgressBar.getMax()) {
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                );
             }
             mLastPercent = percent;
         }
@@ -147,7 +159,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
     /**
      * Initializes the properties of the linked progress bar, if any.
      */
-    public void reset() {
+    private void reset() {
         mLastPercent = -1;
         if (mProgressBar != null) {
             mProgressBar.setMax(100);

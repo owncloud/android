@@ -177,7 +177,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             updateFileDetails(true, false);
         } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
             updateFileDetails(false, (success));
-            mProgressController.reset();
         }
     }
 

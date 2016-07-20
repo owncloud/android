@@ -235,12 +235,12 @@ public class PreviewImageActivity extends FileActivity implements
                 
             if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileDownloader.class))) {
-                Log_OC.e(TAG, "onServiceConnected, FileDownloader");
+                Log_OC.d(TAG, "onServiceConnected, FileDownloader");
                 mDownloaderBinder = (FileDownloaderBinder) service;
 
             } else if (component.equals(new ComponentName(PreviewImageActivity.this,
                     FileUploader.class))) {
-                Log_OC.e(TAG, "onServiceConnected, FileUploader");
+                Log_OC.d(TAG, "onServiceConnected, FileUploader");
                 mUploaderBinder = (FileUploaderBinder) service;
             }
 

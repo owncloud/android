@@ -259,7 +259,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
             if (success) {
                 playVideo();
             }
-            mProgressController.reset();
         }
     }
 

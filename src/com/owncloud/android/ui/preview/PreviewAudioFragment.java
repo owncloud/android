@@ -269,7 +269,6 @@ public class PreviewAudioFragment extends FileFragment {
             if (success) {
                 playAudio(true);
             }
-            mProgressController.reset();
         }
     }
 

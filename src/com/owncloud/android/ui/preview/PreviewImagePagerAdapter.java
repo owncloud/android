@@ -86,11 +86,11 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         
         mImageFiles = FileStorageUtils.sortFolder(mImageFiles);
         
-        mObsoleteFragments = new HashSet<Object>();
-        mObsoletePositions = new HashSet<Integer>();
-        mDownloadErrors = new HashSet<Integer>();
+        mObsoleteFragments = new HashSet<>();
+        mObsoletePositions = new HashSet<>();
+        mDownloadErrors = new HashSet<>();
         //mFragmentManager = fragmentManager;
-        mCachedFragments = new HashMap<Integer, FileFragment>();
+        mCachedFragments = new HashMap<>();
     }
     
     /**
@@ -110,20 +110,20 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
             fragment = PreviewImageFragment.newInstance(
                 file,
                 mAccount,
-                mObsoletePositions.contains(Integer.valueOf(i))
+                mObsoletePositions.contains(i)
             );
             
-        } else if (mDownloadErrors.contains(Integer.valueOf(i))) {
+        } else if (mDownloadErrors.contains(i)) {
             fragment = FileDownloadFragment.newInstance(file, mAccount, true);
             ((FileDownloadFragment)fragment).setError(true);
-            mDownloadErrors.remove(Integer.valueOf(i));
+            mDownloadErrors.remove(i);
             
         } else {
             fragment = FileDownloadFragment.newInstance(
-                    file, mAccount, mObsoletePositions.contains(Integer.valueOf(i))
+                    file, mAccount, mObsoletePositions.contains(i)
             );
         }
-        mObsoletePositions.remove(Integer.valueOf(i));
+        mObsoletePositions.remove(i);
         return fragment;
     }
 
@@ -143,21 +143,21 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
 
     
     private void updateFile(int position, OCFile file) {
-        FileFragment fragmentToUpdate = mCachedFragments.get(Integer.valueOf(position));
+        FileFragment fragmentToUpdate = mCachedFragments.get(position);
         if (fragmentToUpdate != null) {
             mObsoleteFragments.add(fragmentToUpdate);
         }
-        mObsoletePositions.add(Integer.valueOf(position));
+        mObsoletePositions.add(position);
         mImageFiles.set(position, file);
     }
     
     
     private void updateWithDownloadError(int position) {
-        FileFragment fragmentToUpdate = mCachedFragments.get(Integer.valueOf(position));
+        FileFragment fragmentToUpdate = mCachedFragments.get(position);
         if (fragmentToUpdate != null) {
             mObsoleteFragments.add(fragmentToUpdate);
         }
-        mDownloadErrors.add(Integer.valueOf(position));
+        mDownloadErrors.add(position);
     }
 
     public void onTransferServiceConnected() {
@@ -169,11 +169,11 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public void clearErrorAt(int position) {
-        FileFragment fragmentToUpdate = mCachedFragments.get(Integer.valueOf(position));
+        FileFragment fragmentToUpdate = mCachedFragments.get(position);
         if (fragmentToUpdate != null) {
             mObsoleteFragments.add(fragmentToUpdate);
         }
-        mDownloadErrors.remove(Integer.valueOf(position));
+        mDownloadErrors.remove(position);
     }
     
     
@@ -190,19 +190,19 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         Object fragment = super.instantiateItem(container, position);
-        mCachedFragments.put(Integer.valueOf(position), (FileFragment)fragment);
+        mCachedFragments.put(position, (FileFragment)fragment);
         return fragment;
     }
     
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-       mCachedFragments.remove(Integer.valueOf(position));
+       mCachedFragments.remove(position);
        super.destroyItem(container, position, object);
     }
 
 
     public boolean pendingErrorAt(int position) {
-        return mDownloadErrors.contains(Integer.valueOf(position));
+        return mDownloadErrors.contains(position);
     }
 
     /**
@@ -211,7 +211,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
     public void resetZoom() {
         Iterator<FileFragment> entries = mCachedFragments.values().iterator();
         while (entries.hasNext()) {
-        FileFragment fileFragment = (FileFragment) entries.next();
+        FileFragment fileFragment = entries.next();
             if (fileFragment instanceof PreviewImageFragment) {
                 ((PreviewImageFragment) fileFragment).getImageView().resetZoom();
             }
@@ -229,7 +229,13 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
                     updateWithDownloadError(position);
                 }
             }
-            notifyDataSetChanged();   // will trigger the creation of new fragments
+            FileFragment fragment = mCachedFragments.get(position);
+            if (fragment instanceof FileDownloadFragment) {
+                // trigger the creation of new PreviewImageFragment to replace current FileDownloadFragment
+                notifyDataSetChanged();
+            } else {
+                fragment.onDownloadEvent(action, file.getRemotePath(), success);
+            }
         } else {
             Log_OC.d(TAG, "Download finished, but the fragment is offscreen");
         }

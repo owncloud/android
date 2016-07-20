@@ -436,7 +436,6 @@ public class PreviewTextFragment extends FileFragment {
             if (success) {
                 loadAndShowTextPreview();
             }
-            mProgressController.reset();
         }
     }
 

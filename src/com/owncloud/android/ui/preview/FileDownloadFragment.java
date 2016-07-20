@@ -261,9 +261,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
     @Override
     public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
-        if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-            mProgressController.reset();
-        }
+        // TODO nothing
     }
 
 

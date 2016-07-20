@@ -395,7 +395,6 @@ public class PreviewImageFragment extends FileFragment {
             if (success) {
                 loadAndShowImagePreview();
             }
-            mProgressController.reset();
         }
     }
 
