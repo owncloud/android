@@ -400,7 +400,7 @@
   <string name="share_privilege_can_edit_delete">radera</string>
   <string name="edit_share_unshare">Sluta dela</string>
   <string name="edit_share_done">färdig</string>
-  <string name="action_retry_uploads">Återuppladdningsförsök misslyckades</string>
+  <string name="action_retry_uploads">Försök ladda upp igen</string>
   <string name="action_clear_failed_uploads">Rensa misslyckade</string>
   <string name="action_clear_successful_uploads">Rensa lyckade</string>
   <string name="action_clear_finished_uploads">Rensa alla färdigställda</string>
