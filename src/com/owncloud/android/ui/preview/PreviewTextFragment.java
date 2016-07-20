@@ -31,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
@@ -38,10 +39,12 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
+import com.owncloud.android.utils.DisplayUtils;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -58,6 +61,8 @@ public class PreviewTextFragment extends FileFragment {
     private static final String TAG = PreviewTextFragment.class.getSimpleName();
 
     private Account mAccount;
+    private ProgressBar mProgressBar;
+    private TransferProgressController mProgressController;
     private TextView mTextPreview;
     private TextLoadAsyncTask mTextLoadTask;
 
@@ -85,8 +90,9 @@ public class PreviewTextFragment extends FileFragment {
         Log_OC.e(TAG, "onCreateView");
 
 
-        View ret = inflater.inflate(R.layout.text_file_preview, container, false);
-
+        View ret = inflater.inflate(R.layout.preview_text_fragment, container, false);
+        mProgressBar = (ProgressBar) ret.findViewById(R.id.transferProgressBar);
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mTextPreview = (TextView) ret.findViewById(R.id.text_preview);
 
         return ret;
@@ -126,6 +132,13 @@ public class PreviewTextFragment extends FileFragment {
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedState) {
+        super.onActivityCreated(savedState);
+        mProgressController = new TransferProgressController(mContainerActivity);
+        mProgressController.setProgressBar(mProgressBar);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -141,6 +154,7 @@ public class PreviewTextFragment extends FileFragment {
         super.onStart();
         Log_OC.e(TAG, "onStart");
 
+        mProgressController.startListeningProgressFor(getFile(), mAccount);
         loadAndShowTextPreview();
     }
 
@@ -405,11 +419,14 @@ public class PreviewTextFragment extends FileFragment {
             mTextLoadTask.cancel(Boolean.TRUE);
             mTextLoadTask.dismissLoadingDialog();
         }
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
     }
 
     @Override
     public void onTransferServiceConnected() {
-        // TODO
+        if (mProgressController != null) {
+            mProgressController.startListeningProgressFor(getFile(), mAccount);
+        }
     }
 
 
