@@ -2,7 +2,7 @@
 <!--
   ownCloud Android client application
 
-  Copyright (C) 2015 ownCloud Inc.
+  Copyright (C) 2016 ownCloud Inc.
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -26,19 +26,6 @@
     android:background="@color/background_color"
     android:gravity="center"
     tools:context=".ui.preview.PreviewAudioFragment">
-
-	<ProgressBar
-		android:id="@+id/transferProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:padding="0dp"
-        android:layout_margin="0dp"
-        android:layout_alignParentTop="true"
-        style="@style/Widget.ownCloud.TopProgressBar"
-        android:indeterminate="false"
-        android:indeterminateOnly="false"
-        android:visibility="visible"
-        />
 
 	<FrameLayout
         android:id="@+id/visual_area"
@@ -66,5 +53,18 @@
    	    android:layout_alignParentBottom="true"
 		android:layout_margin="16dp"
    	    />
+
+    <ProgressBar
+        android:id="@+id/transferProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:layout_alignParentTop="true"
+        style="@style/Widget.ownCloud.TopProgressBar"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        android:visibility="visible"
+        />
 
 </RelativeLayout>

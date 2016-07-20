@@ -2,7 +2,7 @@
 <!--
   ownCloud Android client application
 
-  Copyright (C) 2015  ownCloud Inc.
+  Copyright (C) 2016  ownCloud Inc.
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -35,19 +35,6 @@
     tools:context=".ui.preview.PreviewImageFragment" >
 
     <ProgressBar
-        android:id="@+id/transferProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:padding="0dp"
-        android:layout_margin="0dp"
-        android:layout_alignParentTop="true"
-        style="@style/Widget.ownCloud.TopProgressBar"
-        android:indeterminate="false"
-        android:indeterminateOnly="false"
-        android:visibility="visible"
-        />
-
-    <ProgressBar
         android:id="@+id/progressWheel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +47,6 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/transferProgressBar"
         android:layout_margin="0dp"
         android:layout_centerInParent="true"
         android:contentDescription="@string/preview_image_description"
@@ -76,5 +62,20 @@
         android:text="@string/placeholder_sentence"
         android:textColor="@color/owncloud_blue_bright"
         />
+
+    <!-- last to draw, will be top in Z axis -->
+    <ProgressBar
+        android:id="@+id/transferProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:layout_alignParentTop="true"
+        style="@style/Widget.ownCloud.TopProgressBar"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        android:visibility="visible"
+        />
+
 
 </RelativeLayout>

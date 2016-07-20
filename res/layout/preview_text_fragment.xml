@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2012-2013  ownCloud Inc.
+  Copyright (C) 2016  ownCloud Inc.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -25,23 +25,10 @@
                 android:gravity="center"
                 tools:context=".ui.preview.PreviewAudioFragment">
 
-    <ProgressBar
-        android:id="@+id/transferProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:padding="0dp"
-        android:layout_margin="0dp"
-        android:layout_alignParentTop="true"
-        style="@style/Widget.ownCloud.TopProgressBar"
-        android:indeterminate="false"
-        android:indeterminateOnly="false"
-        android:visibility="visible"
-        />
-
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/transferProgressBar"
+                android:layout_alignParentTop="true"
                 android:fillViewport="true">
 
         <TextView
@@ -54,5 +41,19 @@
             android:layout_marginStart="8dp"
             android:visibility="gone"/>
     </ScrollView>
+
+    <!-- last to draw, will be top in Z axis -->
+    <ProgressBar
+        android:id="@+id/transferProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:layout_alignParentTop="true"
+        style="@style/Widget.ownCloud.TopProgressBar"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        android:visibility="visible"
+        />
 
 </RelativeLayout>
