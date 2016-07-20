@@ -19,10 +19,9 @@
  */
 package com.owncloud.android.ui.preview;
 
-import java.lang.ref.WeakReference;
-
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.fragment.FileFragment;
 
 import android.accounts.Account;
@@ -36,7 +35,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 
@@ -46,6 +44,8 @@ import com.owncloud.android.utils.DisplayUtils;
  */
 public class FileDownloadFragment extends FileFragment implements OnClickListener {
 
+    private static final String TAG = FileDownloadFragment.class.getSimpleName();
+
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     private static final String EXTRA_ERROR = "ERROR";
@@ -54,16 +54,13 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     private static final String ARG_IGNORE_FIRST = "IGNORE_FIRST";
     private static final String ARG_ACCOUNT = "ACCOUNT" ;
 
-    private View mView;
     private Account mAccount;
 
-    public ProgressListener mProgressListener;
-    private boolean mListening;
-
-    private static final String TAG = FileDownloadFragment.class.getSimpleName();
+    public TransferProgressController mProgressController;
 
     private boolean mIgnoreFirstSavedState;
     private boolean mError;
+    private ProgressBar mProgressBar;
 
 
     /**
@@ -101,8 +98,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     public FileDownloadFragment() {
         super();
         mAccount = null;
-        mProgressListener = null;
-        mListening = false;
+        mProgressController = null;
         mIgnoreFirstSavedState = false;
         mError = false;
     }
@@ -136,15 +132,14 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
             }
         }
 
-        mView = inflater.inflate(R.layout.file_download_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.file_download_fragment, container, false);
         
-        ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.progressBar);
-        DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
-        mProgressListener = new ProgressListener(progressBar);
+        mProgressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
-        (mView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
+        (rootView.findViewById(R.id.cancelBtn)).setOnClickListener(this);
         
-        (mView.findViewById(R.id.fileDownloadLL)).setOnClickListener(new OnClickListener() {
+        (rootView.findViewById(R.id.fileDownloadLL)).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((PreviewImageActivity) getActivity()).toggleFullScreen();
@@ -152,13 +147,20 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
         });
 
         if (mError) {
-            setButtonsForRemote();
+            setButtonsForRemote(rootView);
         }
         else {
-            setButtonsForTransferring();
+            setButtonsForTransferring(rootView);
         }
 
-        return mView;
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedState) {
+        super.onActivityCreated(savedState);
+        mProgressController = new TransferProgressController(mContainerActivity);
+        mProgressController.setProgressBar(mProgressBar);
     }
 
 
@@ -201,15 +203,6 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
 
     @Override
-    public View getView() {
-        if (!mListening) {
-            listenForTransferProgress();
-        }
-        return super.getView() == null ? mView : super.getView();
-    }
-
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cancelBtn: {
@@ -226,37 +219,18 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
     /**
      * Enables or disables buttons for a file being downloaded
      */
-    private void setButtonsForTransferring() {
-        getView().findViewById(R.id.cancelBtn).setVisibility(View.VISIBLE);
+    private void setButtonsForTransferring(View rootView) {
+        rootView.findViewById(R.id.cancelBtn).setVisibility(View.VISIBLE);
 
         // show the progress bar for the transfer
-        getView().findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-        TextView progressText = (TextView) getView().findViewById(R.id.progressText);
+        rootView.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        TextView progressText = (TextView) rootView.findViewById(R.id.progressText);
         progressText.setText(R.string.downloader_download_in_progress_ticker);
         progressText.setVisibility(View.VISIBLE);
 
         // hides the error icon
-        getView().findViewById(R.id.errorText).setVisibility(View.GONE);
-        getView().findViewById(R.id.error_image).setVisibility(View.GONE);
-    }
-
-    /**
-     * Enables or disables buttons for a file locally available
-     */
-    private void setButtonsForDown() {
-        getView().findViewById(R.id.cancelBtn).setVisibility(View.GONE);
-
-        // hides the progress bar
-        getView().findViewById(R.id.progressBar).setVisibility(View.GONE);
-
-        // updates the text message
-        TextView progressText = (TextView) getView().findViewById(R.id.progressText);
-        progressText.setText(R.string.common_loading);
-        progressText.setVisibility(View.VISIBLE);
-
-        // hides the error icon
-        getView().findViewById(R.id.errorText).setVisibility(View.GONE);
-        getView().findViewById(R.id.error_image).setVisibility(View.GONE);
+        rootView.findViewById(R.id.errorText).setVisibility(View.GONE);
+        rootView.findViewById(R.id.error_image).setVisibility(View.GONE);
     }
 
 
@@ -265,16 +239,16 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
      * <p/>
      * Currently, this is only used when a download was failed
      */
-    private void setButtonsForRemote() {
-        getView().findViewById(R.id.cancelBtn).setVisibility(View.GONE);
+    private void setButtonsForRemote(View rootView) {
+        rootView.findViewById(R.id.cancelBtn).setVisibility(View.GONE);
 
         // hides the progress bar and message
-        getView().findViewById(R.id.progressBar).setVisibility(View.GONE);
-        getView().findViewById(R.id.progressText).setVisibility(View.GONE);
+        rootView.findViewById(R.id.progressBar).setVisibility(View.GONE);
+        rootView.findViewById(R.id.progressText).setVisibility(View.GONE);
 
         // shows the error icon and message
-        getView().findViewById(R.id.errorText).setVisibility(View.VISIBLE);
-        getView().findViewById(R.id.error_image).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.errorText).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.error_image).setVisibility(View.VISIBLE);
     }
 
 
@@ -285,64 +259,24 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
 
     private void listenForTransferProgress() {
-        if (mProgressListener != null && !mListening) {
-            if (mContainerActivity.getFileDownloaderBinder() != null) {
-                mContainerActivity.getFileDownloaderBinder().addDatatransferProgressListener(
-                        mProgressListener, mAccount, getFile()
-                );
-                mListening = true;
-                setButtonsForTransferring();
+        if (mProgressController != null) {
+            mProgressController.startListeningProgressFor(getFile(), mAccount);
+            if (getView() != null) {
+                setButtonsForTransferring(getView());
             }
         }
     }
 
 
     private void leaveTransferProgress() {
-        if (mProgressListener != null) {
-            if (mContainerActivity.getFileDownloaderBinder() != null) {
-                mContainerActivity.getFileDownloaderBinder().removeDatatransferProgressListener(
-                        mProgressListener, mAccount, getFile()
-                );
-                mListening = false;
-            }
+        if (mProgressController != null) {
+            mProgressController.stopListeningProgressFor(getFile(), mAccount);
         }
-    }
-
-
-    /**
-     * Helper class responsible for updating the progress bar shown for file uploading or downloading
-     */
-    private class ProgressListener implements OnDatatransferProgressListener {
-        int mLastPercent = 0;
-        WeakReference<ProgressBar> mProgressBar = null;
-
-        ProgressListener(ProgressBar progressBar) {
-            mProgressBar = new WeakReference<ProgressBar>(progressBar);
-        }
-
-        @Override
-        public void onTransferProgress(
-                long progressRate, long totalTransferredSoFar, long totalToTransfer, String filename
-        ) {
-            int percent = (int)(100.0*((double)totalTransferredSoFar)/((double)totalToTransfer));
-            if (percent != mLastPercent) {
-                ProgressBar pb = mProgressBar.get();
-                if (pb != null) {
-                    pb.setProgress(percent);
-                    pb.postInvalidate();
-                }
-            }
-            mLastPercent = percent;
-        }
-
     }
 
 
     public void setError(boolean error) {
         mError = error;
     }
-
-    ;
-
 
 }
