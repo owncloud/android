@@ -30,13 +30,16 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 
 
+/**
+ * Controller updating a progress bar with the progress of a file transfer
+ * reported from upload or download service.
+ */
 public class TransferProgressController implements OnDatatransferProgressListener {
 
     private static final String TAG = TransferProgressController.class.getCanonicalName();
 
     private ProgressBar mProgressBar = null;
     private ComponentsGetter mComponentsGetter = null;
-
     private int mLastPercent = 0;
 
 
@@ -48,6 +51,13 @@ public class TransferProgressController implements OnDatatransferProgressListene
     }
 
 
+    /**
+     * Sets the progress bar that will updated with file transfer progress
+     *
+     * Accepts null input to stop updating any view.
+     *
+     * @param progressBar   Progress bar to update with progress transfer.
+     */
     public void setProgressBar(ProgressBar progressBar) {
         mProgressBar = progressBar;
         if (mProgressBar != null) {
@@ -55,6 +65,15 @@ public class TransferProgressController implements OnDatatransferProgressListene
         }
     }
 
+    /**
+     * Subscribes the controller to monitor transfers of the received file both in {@link FileDownloader} and
+     * {@link FileUploader} services, if available.
+     *
+     * This method may be called several times for the same file, resulting in a single subscription.
+     *
+     * @param file          File to monitor in transfer services.
+     * @param account       ownCloud account containing file.
+     */
     public void startListeningProgressFor(OCFile file, Account account) {
         FileDownloader.FileDownloaderBinder downloaderBinder = mComponentsGetter.getFileDownloaderBinder();
         FileUploader.FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
@@ -78,6 +97,12 @@ public class TransferProgressController implements OnDatatransferProgressListene
         }
     }
 
+    /**
+     * Unsubscribes the controller from {@link FileDownloader} and {@link FileUploader} services.
+     *
+     * @param file          File to stop monitoring in transfer services.
+     * @param account       ownCloud account containing file.
+     */
     public void stopListeningProgressFor(OCFile file, Account account) {
         if (mComponentsGetter.getFileDownloaderBinder() != null) {
             mComponentsGetter.getFileDownloaderBinder().
@@ -92,6 +117,15 @@ public class TransferProgressController implements OnDatatransferProgressListene
         }
     }
 
+    /**
+     * Implementation of {@link OnDatatransferProgressListener}, called from {@link FileUploader} or
+     * {@link FileDownloader} to report the trasnfer progress of a monitored file.
+     *
+     * @param progressRate              Bytes transferred from the previous call.
+     * @param totalTransferredSoFar     Total of bytes transferred so far.
+     * @param totalToTransfer           Total of bytes to transfer.
+     * @param filename                  Name of the transferred file.
+     */
     @Override
     public void onTransferProgress(
         long progressRate,
@@ -110,9 +144,13 @@ public class TransferProgressController implements OnDatatransferProgressListene
         }
     }
 
+    /**
+     * Initializes the properties of the linked progress bar, if any.
+     */
     public void reset() {
+        mLastPercent = -1;
         if (mProgressBar != null) {
-            mLastPercent = -1;
+            mProgressBar.setMax(100);
             mProgressBar.setProgress(0);
             mProgressBar.setIndeterminate(false);
         }
