@@ -716,7 +716,7 @@ public class FileActivity extends AppCompatActivity
             mCapabilities = mStorageManager.getCapability(mAccount.name);
 
         } else {
-            Log_OC.wtf(TAG, "onAccountChanged was called with NULL account associated!");
+            Log_OC.e(TAG, "onAccountChanged was called with NULL account associated!");
         }
     }
 
