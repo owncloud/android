@@ -7,10 +7,10 @@ android:
 # second 'tools' updates SDK tools 'til last version ** in remote repository number 11 ** (current last one)
   - tools
   - platform-tools
-  - build-tools-23.0.3
+  - build-tools-24.0.0
   - android-24
   - extra-android-m2repository
-  - sys-img-armeabi-v7a-android-23
+  - sys-img-armeabi-v7a-android-24
 before_install:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
   - emulator -avd test -no-skin -no-audio -no-window &
