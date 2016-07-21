@@ -1,12 +1,14 @@
 sudo: false
 language: android
+jdk:
+  - oraclejdk8
 android:
   components:
   - platform-tools
   - tools
-  - build-tools-23.0.3
-  - android-23
-  - sys-img-armeabi-v7a-android-23
+  - build-tools-24.0.0
+  - android-24
+  - sys-img-armeabi-v7a-android-24
 branches:
   only:
   - master
