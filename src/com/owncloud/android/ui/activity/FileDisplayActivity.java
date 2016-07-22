@@ -778,6 +778,7 @@ public class FileDisplayActivity extends HookActivity
             }
             if (listOfFiles != null) {  // should never be null, indeed
                 setFile(listOfFiles.getCurrentFile());
+                listOfFiles.listDirectory(false);
             }
             cleanSecondFragment();
         }
