@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,9 +41,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ComponentsGetter;
@@ -134,7 +131,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         mView = inflater.inflate(mLayout, null);
         
         if (mLayout == R.layout.file_details_fragment) {
-            mView.findViewById(R.id.fdFavorite).setOnClickListener(this);
             mView.findViewById(R.id.fdCancelBtn).setOnClickListener(this);
         }
 
@@ -334,11 +330,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fdFavorite: {
-                CheckBox cb = (CheckBox) getView().findViewById(R.id.fdFavorite);
-                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(),cb.isChecked());
-                break;
-            }
             case R.id.fdCancelBtn: {
                 ((FileDisplayActivity) mContainerActivity).cancelTransference(getFile());
                 break;
@@ -381,9 +372,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
             setTimeModified(file.getModificationTimestamp());
             
-            CheckBox cb = (CheckBox)getView().findViewById(R.id.fdFavorite);
-            cb.setChecked(file.isFavorite());
-
             // configure UI for depending upon local state of the file
             FileDownloaderBinder downloaderBinder = mContainerActivity.getFileDownloaderBinder();
             FileUploaderBinder uploaderBinder = mContainerActivity.getFileUploaderBinder();
@@ -510,9 +498,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      */
     private void setButtonsForTransferring() {
         if (!isEmpty()) {
-            // let's protect the user from himself ;)
-            getView().findViewById(R.id.fdFavorite).setEnabled(false);
-            
             // show the progress bar for the transfer
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.VISIBLE);
             TextView progressText = (TextView) getView().findViewById(R.id.fdProgressText);
@@ -536,8 +521,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      */
     private void setButtonsForDown() {
         if (!isEmpty()) {
-            getView().findViewById(R.id.fdFavorite).setEnabled(true);
-            
             // hides the progress bar
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
             TextView progressText = (TextView) getView().findViewById(R.id.fdProgressText);
@@ -550,8 +533,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      */
     private void setButtonsForRemote() {
         if (!isEmpty()) {
-            getView().findViewById(R.id.fdFavorite).setEnabled(true);
-            
             // hides the progress bar
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
             TextView progressText = (TextView) getView().findViewById(R.id.fdProgressText);

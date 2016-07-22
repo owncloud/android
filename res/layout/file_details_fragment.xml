@@ -46,9 +46,11 @@
 			    android:id="@+id/fdFilename"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/standard_half_margin"
+				android:layout_marginLeft="@dimen/standard_half_margin"
 			    android:layout_centerVertical="true"
 			    android:layout_toRightOf="@+id/fdIcon"
-			    android:text="@string/placeholder_filename"
+			    android:text="@string/placeholder_sentence"
 			    android:textAppearance="?android:attr/textAppearanceLarge" />
 			
 		</RelativeLayout>
@@ -152,71 +154,53 @@
 	
 		</RelativeLayout>
 	
-		<RelativeLayout
-			android:id="@+id/fdProgressAndControl"
+		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_below="@+id/fdDetailsContainer"
-			android:gravity="center_horizontal" 
 			android:layout_margin="@dimen/standard_margin"
-			>
-			
-			<android.support.v7.widget.AppCompatCheckBox
-				android:id="@+id/fdFavorite"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerHorizontal="true"
-				android:text="@string/favorite"
-				android:checked="false" />
+			android:layout_below="@+id/fdDetailsContainer"
+			android:orientation="vertical" >
 
-			<LinearLayout
+			<TextView
+				android:id="@+id/fdProgressText"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_below="@id/fdFavorite"
-				android:orientation="vertical" >
-				
-    			<TextView 
-    			    android:id="@+id/fdProgressText" 
-    			    android:layout_width="match_parent"
-      				android:layout_height="wrap_content" 
-      				android:text="@string/downloader_download_in_progress_ticker"
-      				/>
-    			
-			    <LinearLayout
-			        android:id="@+id/fdProgressBlock"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:gravity="center"
-					android:layout_marginTop="12dp"
-					android:layout_marginBottom="12dp"
-					android:orientation="horizontal"
-					>
-				    				
-    				<ProgressBar 
-    				    android:id="@+id/fdProgressBar"
-						android:layout_width="0dp"
-						android:layout_height="wrap_content"
-						android:layout_weight="1"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:indeterminate="false"
-						android:indeterminateOnly="false" 
-					/>
-				    								
-					<ImageButton
-						android:id="@+id/fdCancelBtn"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginLeft="12dp"
-						android:src="@drawable/ic_action_cancel_grey"
-						android:background="@android:color/transparent"
-						/>
-						
-				</LinearLayout>
-	
-			</LinearLayout>
-			
-		</RelativeLayout>
+				android:text="@string/downloader_download_in_progress_ticker"
+				/>
 
+			<LinearLayout
+				android:id="@+id/fdProgressBlock"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:layout_marginTop="12dp"
+				android:layout_marginBottom="12dp"
+				android:orientation="horizontal"
+				>
+
+				<ProgressBar
+					android:id="@+id/fdProgressBar"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					style="?android:attr/progressBarStyleHorizontal"
+					android:indeterminate="false"
+					android:indeterminateOnly="false"
+				/>
+
+				<ImageButton
+					android:id="@+id/fdCancelBtn"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="12dp"
+					android:src="@drawable/ic_action_cancel_grey"
+					android:background="@android:color/transparent"
+					/>
+
+			</LinearLayout>
+
+		</LinearLayout>
+			
 	</RelativeLayout>
 	
 </ScrollView>
