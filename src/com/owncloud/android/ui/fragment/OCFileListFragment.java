@@ -588,10 +588,12 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
             case R.id.action_favorite_file: {
                 mContainerActivity.getFileOperationsHelper().toggleFavorites(checkedFiles, true);
+                getListView().invalidateViews();
                 return true;
             }
             case R.id.action_unfavorite_file: {
                 mContainerActivity.getFileOperationsHelper().toggleFavorites(checkedFiles, false);
+                getListView().invalidateViews();
                 return true;
             }
             case R.id.action_move: {
