@@ -960,9 +960,6 @@ public class FileActivity extends AppCompatActivity
             if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
                 Log_OC.d(TAG, "Operations service connected");
                 mOperationsServiceBinder = (OperationsServiceBinder) service;
-                /*if (!mOperationsServiceBinder.isPerformingBlockingOperation()) {
-                    dismissLoadingDialog();
-                }*/
                 if (mResumed) {
                     doOnResumeAndBound();
                 }

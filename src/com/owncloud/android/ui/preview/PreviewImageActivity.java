@@ -150,18 +150,20 @@ public class PreviewImageActivity extends FileActivity implements
         mViewPager.setAdapter(mPreviewImagePagerAdapter);
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setCurrentItem(position);
-        mViewPager.post(new Runnable() {
-            // this is necessary because mViewPager.setCurrentItem(0) does not trigger
-            // a call to onPageSelected in the first layout request aftet mViewPager.setAdapter(...) ;
-            // see, for example:
-            // https://android.googlesource.com/platform/frameworks/support.git/+/android-6.0.1_r55/v4/java/android/support/v4/view/ViewPager.java#541
-            // ; or just:
-            // http://stackoverflow.com/questions/11794269/onpageselected-isnt-triggered-when-calling-setcurrentitem0
-            @Override
-            public void run() {
-                PreviewImageActivity.this.onPageSelected(mViewPager.getCurrentItem());
-            }
-        });
+        if (position == 0) {
+            mViewPager.post(new Runnable() {
+                // this is necessary because mViewPager.setCurrentItem(0) does not trigger
+                // a call to onPageSelected in the first layout request aftet mViewPager.setAdapter(...) ;
+                // see, for example:
+                // https://android.googlesource.com/platform/frameworks/support.git/+/android-6.0.1_r55/v4/java/android/support/v4/view/ViewPager.java#541
+                // ; or just:
+                // http://stackoverflow.com/questions/11794269/onpageselected-isnt-triggered-when-calling-setcurrentitem0
+                @Override
+                public void run() {
+                    PreviewImageActivity.this.onPageSelected(mViewPager.getCurrentItem());
+                }
+            });
+        }
     }
     
     
@@ -330,18 +332,31 @@ public class PreviewImageActivity extends FileActivity implements
     public void onPageSelected(int position) {
         Log_OC.d(TAG, "onPageSelected " + position);
 
-        mSavedPosition = position;
-        mHasSavedPosition = true;
+        if (getOperationsServiceBinder() != null) {
+            mSavedPosition = position;
+            mHasSavedPosition = true;
 
-        OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position);
-        getSupportActionBar().setTitle(currentFile.getFileName());
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
-        if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
-            getFileOperationsHelper().syncFile(currentFile);
+            OCFile currentFile = mPreviewImagePagerAdapter.getFileAt(position);
+            getSupportActionBar().setTitle(currentFile.getFileName());
+            mDrawerToggle.setDrawerIndicatorEnabled(false);
+            if (!mPreviewImagePagerAdapter.pendingErrorAt(position)) {
+                getFileOperationsHelper().syncFile(currentFile);
+            }
+
+            // Call to reset image zoom to initial state
+            ((PreviewImagePagerAdapter) mViewPager.getAdapter()).resetZoom();
+
+        } else {
+            // too soon! ; selection of page (first image) was faster than binding of FileOperationsService;
+            // wait a bit!
+            final int fPosition = position;
+            getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    onPageSelected(fPosition);;
+                }
+            });
         }
-
-        // Call to reset image zoom to initial state
-        ((PreviewImagePagerAdapter) mViewPager.getAdapter()).resetZoom();
     }
     
     /**
