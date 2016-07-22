@@ -353,7 +353,7 @@ public class PreviewAudioFragment extends FileFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share_file: {
-                seeShareFile();
+                mContainerActivity.getFileOperationsHelper().showShareFile(getFile());
                 return true;
             }
             case R.id.action_open_file_with: {
@@ -370,7 +370,7 @@ public class PreviewAudioFragment extends FileFragment {
                 return true;
             }
             case R.id.action_send_file: {
-                sendFile();
+                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
                 return true;
             }
             case R.id.action_sync_file: {
@@ -391,16 +391,8 @@ public class PreviewAudioFragment extends FileFragment {
     }
 
 
-    private void sendFile() {
-        mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
-    }
-
     private void seeDetails() {
         mContainerActivity.showDetails(getFile());
-    }
-
-    private void seeShareFile() {
-        mContainerActivity.getFileOperationsHelper().showShareFile(getFile());
     }
 
     @Override

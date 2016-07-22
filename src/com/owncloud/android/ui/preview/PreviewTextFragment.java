@@ -68,6 +68,26 @@ public class PreviewTextFragment extends FileFragment {
     private TextView mTextPreview;
     private TextLoadAsyncTask mTextLoadTask;
 
+
+    /**
+     * Public factory method to create new PreviewTextFragment instances.
+     *
+     * @param file                      An {@link OCFile} to preview in the fragment
+     * @param account                   ownCloud account containing file
+     * @return                          Fragment ready to be used.
+     */
+    public static PreviewVideoFragment newInstance(
+        OCFile file,
+        Account account
+    ) {
+        PreviewVideoFragment frag = new PreviewVideoFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(EXTRA_FILE, file);
+        args.putParcelable(EXTRA_ACCOUNT, account);
+        frag.setArguments(args);
+        return frag;
+    }
+
     /**
      * Creates an empty fragment for previews.
      * <p/>
@@ -363,21 +383,24 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_send_file: {
-                sendFile();
+                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
                 return true;
             }
             case R.id.action_sync_file: {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-
+            case R.id.action_favorite_file:{
+                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), true);
+                return true;
+            }
+            case R.id.action_unfavorite_file:{
+                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), false);
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void sendFile() {
-        mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
     }
 
     private void seeDetails() {

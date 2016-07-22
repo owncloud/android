@@ -351,7 +351,8 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share_file: {
-                seeShareFile();
+                stopPreview();
+                mContainerActivity.getFileOperationsHelper().showShareFile(getFile());
                 return true;
             }
             case R.id.action_open_file_with: {
@@ -368,7 +369,8 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
                 return true;
             }
             case R.id.action_send_file: {
-                sendFile();
+                stopPreview();
+                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
                 return true;
             }
             case R.id.action_sync_file: {
@@ -389,19 +391,9 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     }
 
 
-    private void sendFile() {
-        stopPreview();
-        mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
-    }
-
     private void seeDetails() {
         stopPreview();
         mContainerActivity.showDetails(getFile());
-    }
-
-    private void seeShareFile() {
-        stopPreview();
-        mContainerActivity.getFileOperationsHelper().showShareFile(getFile());
     }
 
     private void prepareVideo() {

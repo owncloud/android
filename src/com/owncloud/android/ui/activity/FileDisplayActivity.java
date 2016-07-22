@@ -352,8 +352,6 @@ public class FileDisplayActivity extends HookActivity
                 updateActionBarTitleAndHomeButton(file);
             } else {
                 cleanSecondFragment();
-                if (file.isDown() && PreviewTextFragment.canBePreviewed(file))
-                    startTextPreview(file);
             }
 
         } else {
@@ -395,7 +393,11 @@ public class FileDisplayActivity extends HookActivity
                 }
 
             } else if (PreviewTextFragment.canBePreviewed(file)) {
-                secondFragment = null;
+                secondFragment = PreviewTextFragment.newInstance(
+                    file,
+                    getAccount()
+                );
+
             } else {
                 secondFragment = FileDetailFragment.newInstance(file, getAccount());
             }
