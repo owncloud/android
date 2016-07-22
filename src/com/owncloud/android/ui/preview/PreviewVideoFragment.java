@@ -43,6 +43,7 @@ import android.widget.ProgressBar;
 import android.widget.VideoView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader;
@@ -254,12 +255,44 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     }
 
     @Override
-    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
-        if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-            if (success) {
-                playVideo();
-            }
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
         }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileMetadataChanged() {
+        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
+        if (storageManager != null) {
+            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        playVideo();
+    }
+
+    @Override
+    public void updateViewForSyncInProgress() {
+        mProgressController.showProgressBar();
+    }
+
+    @Override
+    public void updateViewForSyncOff() {
+        mProgressController.hideProgressBar();
+    }
+
+    private void playVideo() {
+        // create and prepare control panel for the user
+        mMediaController.setMediaPlayer(mVideoPreview);
+
+        // load the video file in the video player ;
+        // when done, VideoHelper#onPrepared() will be called
+        mVideoPreview.setVideoURI(getFile().getStorageUri());
     }
 
     /**
@@ -356,15 +389,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     }
 
 
-    /**
-     * Update the file of the fragment with file value
-     *
-     * @param file      Replaces the held file with a new one
-     */
-    public void updateFile(OCFile file) {
-        setFile(file);
-    }
-
     private void sendFile() {
         stopPreview();
         mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
@@ -386,15 +410,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         mVideoPreview.setOnPreparedListener(videoHelper);
         mVideoPreview.setOnCompletionListener(videoHelper);
         mVideoPreview.setOnErrorListener(videoHelper);
-    }
-
-    public void playVideo() {
-        // create and prepare control panel for the user
-        mMediaController.setMediaPlayer(mVideoPreview);
-
-        // load the video file in the video player ; 
-        // when done, VideoHelper#onPrepared() will be called
-        mVideoPreview.setVideoURI(getFile().getStorageUri());
     }
 
 
@@ -467,24 +482,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     }
 
-
-    @Override
-    public void onPause() {
-        Log_OC.v(TAG, "onPause");
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log_OC.v(TAG, "onResume");
-    }
-
-    @Override
-    public void onDestroy() {
-        Log_OC.v(TAG, "onDestroy");
-        super.onDestroy();
-    }
 
     @Override
     public void onStop() {
@@ -565,22 +562,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
      */
     private void finish() {
         getActivity().onBackPressed();
-    }
-
-
-    public int getPosition() {
-        if (mPrepared) {
-            mSavedPlaybackPosition = mVideoPreview.getCurrentPosition();
-        }
-        Log_OC.v(TAG, "getting position: " + mSavedPlaybackPosition);
-        return mSavedPlaybackPosition;
-    }
-
-    public boolean isPlaying() {
-        if (mPrepared) {
-            mAutoplay = mVideoPreview.isPlaying();
-        }
-        return mAutoplay;
     }
 
 }

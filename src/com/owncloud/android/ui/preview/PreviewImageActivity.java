@@ -447,13 +447,6 @@ public class PreviewImageActivity extends FileActivity implements
         
     }
 
-    @Override
-    public void onTransferStateChanged(OCFile file, boolean downloading, boolean uploading) {
-        // TODO Auto-generated method stub
-        
-    }
-    
-    
     @SuppressLint("InlinedApi")
 	private void hideSystemUI(View anchorView) {
         anchorView.setSystemUiVisibility(

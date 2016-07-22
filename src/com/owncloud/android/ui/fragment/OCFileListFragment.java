@@ -623,10 +623,12 @@ public class OCFileListFragment extends ExtendedListFragment {
     /**
      * Calls {@link OCFileListFragment#listDirectory(OCFile)} with a null parameter
      */
-    public void listDirectory(/*boolean onlyOnDevice*/){
-        listDirectory(null);
-        // TODO Enable when "On Device" is recovered ?
-        // listDirectory(null, onlyOnDevice);
+    public void listDirectory(boolean reloadData){
+        if (reloadData) {
+            listDirectory(null);
+        } else {
+            getListView().invalidateViews();
+        }
     }
 
     /**

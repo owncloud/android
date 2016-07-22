@@ -42,6 +42,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader;
@@ -135,7 +136,6 @@ public class PreviewImageFragment extends FileFragment {
         mAccount = null;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -223,7 +223,7 @@ public class PreviewImageFragment extends FileFragment {
         super.onStart();
         if (getFile() != null) {
             mProgressController.startListeningProgressFor(getFile(), mAccount);
-            loadAndShowImagePreview();
+            loadAndShowImage();
         }
     }
 
@@ -350,17 +350,6 @@ public class PreviewImageFragment extends FileFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onDestroy() {
         if (mBitmap != null) {
             mBitmap.recycle();
@@ -390,15 +379,38 @@ public class PreviewImageFragment extends FileFragment {
     }
 
     @Override
-    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
-        if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-            if (success) {
-                loadAndShowImagePreview();
-            }
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
         }
+        getActivity().invalidateOptionsMenu();
     }
 
-    private void loadAndShowImagePreview() {
+    @Override
+    public void onFileMetadataChanged() {
+        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
+        if (storageManager != null) {
+            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        loadAndShowImage();
+    }
+
+    @Override
+    public void updateViewForSyncInProgress() {
+        mProgressController.showProgressBar();
+    }
+
+    @Override
+    public void updateViewForSyncOff() {
+        mProgressController.hideProgressBar();
+    }
+
+    private void loadAndShowImage() {
         mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
         mLoadBitmapTask.execute(getFile());
     }

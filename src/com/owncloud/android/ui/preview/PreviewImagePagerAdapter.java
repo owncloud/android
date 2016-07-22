@@ -234,7 +234,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
                 // trigger the creation of new PreviewImageFragment to replace current FileDownloadFragment
                 notifyDataSetChanged();
             } else {
-                fragment.onDownloadEvent(action, file.getRemotePath(), success);
+                fragment.onSyncEvent(action, success, null);
             }
         } else {
             Log_OC.d(TAG, "Download finished, but the fragment is offscreen");

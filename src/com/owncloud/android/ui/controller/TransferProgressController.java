@@ -20,6 +20,8 @@
 package com.owncloud.android.ui.controller;
 
 import android.accounts.Account;
+import android.support.annotation.UiThread;
+import android.support.annotation.WorkerThread;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -66,6 +68,19 @@ public class TransferProgressController implements OnDatatransferProgressListene
         }
     }
 
+    @UiThread
+    public void showProgressBar() {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideProgressBar() {
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+
     /**
      * Subscribes the controller to monitor transfers of the received file both in {@link FileDownloader} and
      * {@link FileUploader} services, if available.
@@ -75,6 +90,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
      * @param file          File to monitor in transfer services.
      * @param account       ownCloud account containing file.
      */
+    @UiThread
     public void startListeningProgressFor(OCFile file, Account account) {
         FileDownloader.FileDownloaderBinder downloaderBinder = mComponentsGetter.getFileDownloaderBinder();
         FileUploader.FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
@@ -104,6 +120,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
      * @param file          File to stop monitoring in transfer services.
      * @param account       ownCloud account containing file.
      */
+    @UiThread
     public void stopListeningProgressFor(OCFile file, Account account) {
         if (mComponentsGetter.getFileDownloaderBinder() != null) {
             mComponentsGetter.getFileDownloaderBinder().
@@ -145,9 +162,6 @@ public class TransferProgressController implements OnDatatransferProgressListene
                             mProgressBar.setIndeterminate(false);
                             mProgressBar.setProgress(percent);
                             mProgressBar.invalidate();
-                            if (percent == mProgressBar.getMax()) {
-                                mProgressBar.setVisibility(View.GONE);
-                            }
                         }
                     }
                 );
@@ -167,4 +181,5 @@ public class TransferProgressController implements OnDatatransferProgressListene
             mProgressBar.setIndeterminate(false);
         }
     }
+
 }

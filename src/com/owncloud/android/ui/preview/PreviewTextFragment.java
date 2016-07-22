@@ -35,6 +35,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader;
@@ -205,14 +206,12 @@ public class PreviewTextFragment extends FileFragment {
                 if (exc != null) throw exc;
             } catch (IOException e) {
                 Log_OC.e(TAG, e.getMessage(), e);
-                finish();
             } finally {
                 if (inputStream != null) {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
                         Log_OC.e(TAG, e.getMessage(), e);
-                        finish();
                     }
                 }
                 if (sc != null) {
@@ -377,39 +376,12 @@ public class PreviewTextFragment extends FileFragment {
         }
     }
 
-    /**
-     * Update the file of the fragment with file value
-     *
-     * @param file The new file to set
-     */
-    public void updateFile(OCFile file) {
-        setFile(file);
-    }
-
     private void sendFile() {
         mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
     }
 
     private void seeDetails() {
         mContainerActivity.showDetails(getFile());
-    }
-
-    @Override
-    public void onPause() {
-        Log_OC.e(TAG, "onPause");
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log_OC.e(TAG, "onResume");
-    }
-
-    @Override
-    public void onDestroy() {
-        Log_OC.e(TAG, "onDestroy");
-        super.onDestroy();
     }
 
     @Override
@@ -431,12 +403,35 @@ public class PreviewTextFragment extends FileFragment {
     }
 
     @Override
-    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
-        if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-            if (success) {
-                loadAndShowTextPreview();
-            }
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
         }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileMetadataChanged() {
+        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
+        if (storageManager != null) {
+            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        loadAndShowTextPreview();
+    }
+
+    @Override
+    public void updateViewForSyncInProgress() {
+        mProgressController.showProgressBar();
+    }
+
+    @Override
+    public void updateViewForSyncOff() {
+        mProgressController.hideProgressBar();
     }
 
 
@@ -473,11 +468,6 @@ public class PreviewTextFragment extends FileFragment {
      * Finishes the preview
      */
     private void finish() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().onBackPressed();
-            }
-        });
+        getActivity().onBackPressed();
     }
 }

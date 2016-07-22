@@ -44,6 +44,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
+import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ComponentsGetter;
@@ -64,8 +65,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private int mLayout;
     private View mView;
     private Account mAccount;
-
-    public TransferProgressController mProgressController;
+    private TransferProgressController mProgressController;
 
     private static final String TAG = FileDetailFragment.class.getSimpleName();
     public static final String FTAG_CONFIRMATION = "REMOVE_CONFIRMATION_FRAGMENT";
@@ -103,7 +103,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         super();
         mAccount = null;
         mLayout = R.layout.file_details_empty;
-        //mProgressListener = null;
     }
 
     @Override
@@ -115,7 +114,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
         mProgressController.setProgressBar(progressBar);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -169,15 +167,35 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         if (mProgressController != null) {
             mProgressController.startListeningProgressFor(getFile(), mAccount);
         }
+        updateFileDetails(false, false);    // TODO - really?
     }
 
     @Override
-    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
-        if (downloadEvent.equals(FileDownloader.getDownloadAddedMessage())) {
-            updateFileDetails(true, false);
-        } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-            updateFileDetails(false, (success));
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
         }
+        updateFileDetails(false, false);
+    }
+
+    @Override
+    public void onFileMetadataChanged() {
+        updateFileDetails(false, true);
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        setFiletype(getFile());     // to update thumbnail
+    }
+
+    @Override
+    public void updateViewForSyncInProgress() {
+        updateFileDetails(true, false);
+    }
+
+    @Override
+    public void updateViewForSyncOff() {
+        updateFileDetails(false, false);
     }
 
     @Override
@@ -341,27 +359,14 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
 
     /**
-     * Use this method to signal this Activity that it shall update its view.
-     *
-     * @param file : An {@link OCFile}
-     */
-    public void updateFileDetails(OCFile file, Account ocAccount) {
-        setFile(file);
-        mAccount = ocAccount;
-        updateFileDetails(false, false);
-    }
-
-    /**
      * Updates the view with all relevant details about that file.
-     * <p/>
-     * TODO Remove parameter when the transferring state of files is kept in database.
      *
-     * @param transferring Flag signaling if the file should be considered as downloading or uploading,
+     * @param forcedTransferring Flag signaling if the file should be considered as downloading or uploading,
      *                     although {@link FileDownloaderBinder#isDownloading(Account, OCFile)}  and
      *                     {@link FileUploaderBinder#isUploading(Account, OCFile)} return false.
      * @param refresh      If 'true', try to refresh the whole file from the database
      */
-    public void updateFileDetails(boolean transferring, boolean refresh) {
+    private void updateFileDetails(boolean forcedTransferring, boolean refresh) {
         if (readyToShow()) {
             FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
             if (refresh && storageManager != null) {
@@ -382,7 +387,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             // configure UI for depending upon local state of the file
             FileDownloaderBinder downloaderBinder = mContainerActivity.getFileDownloaderBinder();
             FileUploaderBinder uploaderBinder = mContainerActivity.getFileUploaderBinder();
-            if (transferring ||
+            if (forcedTransferring ||
                     (downloaderBinder != null && downloaderBinder.isDownloading(mAccount, file)) ||
                     (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file))
                     ) {

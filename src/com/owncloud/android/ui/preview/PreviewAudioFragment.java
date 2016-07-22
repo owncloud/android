@@ -42,6 +42,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader;
@@ -264,12 +265,35 @@ public class PreviewAudioFragment extends FileFragment {
     }
 
     @Override
-    public void onDownloadEvent(String downloadEvent, String downloadedRemotePath, boolean success) {
-        if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
-            if (success) {
-                playAudio(true);
-            }
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
         }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileMetadataChanged() {
+        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
+        if (storageManager != null) {
+            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        playAudio(true);
+    }
+
+    @Override
+    public void updateViewForSyncInProgress() {
+        mProgressController.showProgressBar();
+    }
+
+    @Override
+    public void updateViewForSyncOff() {
+        mProgressController.hideProgressBar();
     }
 
 
@@ -367,15 +391,6 @@ public class PreviewAudioFragment extends FileFragment {
     }
 
 
-    /**
-     * Update the file of the fragment with file value
-     *
-     * @param file      Replaces the held file with a new one
-     */
-    public void updateFile(OCFile file) {
-        setFile(file);
-    }
-
     private void sendFile() {
         mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
     }
@@ -386,24 +401,6 @@ public class PreviewAudioFragment extends FileFragment {
 
     private void seeShareFile() {
         mContainerActivity.getFileOperationsHelper().showShareFile(getFile());
-    }
-
-    @Override
-    public void onPause() {
-        Log_OC.v(TAG, "onPause");
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log_OC.v(TAG, "onResume");
-    }
-
-    @Override
-    public void onDestroy() {
-        Log_OC.v(TAG, "onDestroy");
-        super.onDestroy();
     }
 
     @Override
@@ -423,22 +420,6 @@ public class PreviewAudioFragment extends FileFragment {
         }
 
         super.onStop();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        Log_OC.v(TAG, "onConfigurationChanged " + this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log_OC.v(TAG, "onActivityResult " + this);
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            mSavedPlaybackPosition = data.getExtras().getInt(
-                    PreviewVideoActivity.EXTRA_START_POSITION);
-            mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
-        }
     }
 
     public void playAudio(boolean restart) {
@@ -558,16 +539,5 @@ public class PreviewAudioFragment extends FileFragment {
         getActivity().onBackPressed();
     }
 
-
-    public int getPosition() {
-        /// this is only for video!
-        /*
-        if (mPrepared) {
-            mSavedPlaybackPosition = mVideoPreview.getCurrentPosition();
-        }
-        */
-        Log_OC.v(TAG, "getting position: " + mSavedPlaybackPosition);
-        return mSavedPlaybackPosition;
-    }
 
 }
