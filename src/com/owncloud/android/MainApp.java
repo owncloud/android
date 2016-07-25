@@ -132,47 +132,46 @@ public class MainApp extends Application {
         return MainApp.mContext;
     }
 
-    // Methods to obtain Strings referring app_name 
-    //   From AccountAuthenticator 
-    //   public static final String ACCOUNT_TYPE = "owncloud";    
+    /**
+     * Next methods give access in code to some constants that need to be defined in string resources to be referred
+     * in AndroidManifest.xml file or other xml resource files; or that need to be easy to modify in build time.
+     */
+
     public static String getAccountType() {
         return getAppContext().getResources().getString(R.string.account_type);
     }
 
-    //  From AccountAuthenticator 
-    //  public static final String AUTHORITY = "org.owncloud";
     public static String getAuthority() {
         return getAppContext().getResources().getString(R.string.authority);
     }
     
-    //  From AccountAuthenticator
-    //  public static final String AUTH_TOKEN_TYPE = "org.owncloud";
     public static String getAuthTokenType() {
         return getAppContext().getResources().getString(R.string.authority);
     }
-    
-    //  From ProviderMeta 
-    //  public static final String DB_FILE = "owncloud.db";
+
     public static String getDBFile() {
         return getAppContext().getResources().getString(R.string.db_file);
     }
     
-    //  From ProviderMeta
-    //  private final String mDatabaseName = "ownCloud";
     public static String getDBName() {
         return getAppContext().getResources().getString(R.string.db_name);
     }
      
-    /**
-     * name of data_folder, e.g., "owncloud"
-     */
     public static String getDataFolder() {
         return getAppContext().getResources().getString(R.string.data_folder);
     }
     
-    // log_name
     public static String getLogName() {
         return getAppContext().getResources().getString(R.string.log_name);
+    }
+
+    /**
+     * Non static on purpose; called from UsersAndGroupsSearchProvider before than MainApp#onCreate was called
+     *
+     * @return      Resource value for search suggest authority
+     */
+    public String getSearchSuggestAuthority() {
+        return getResources().getString(R.string.search_suggest_authority);
     }
 
     // TODO Enable when "On Device" is recovered ?

@@ -107,7 +107,7 @@ public class ShareActivity extends FileActivity
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log_OC.w(TAG, "Ignored Intent requesting to query for " + query);
 
-        } else if (UsersAndGroupsSearchProvider.ACTION_SHARE_WITH.equals(intent.getAction())) {
+        } else if (UsersAndGroupsSearchProvider.getIntentAction().equals(intent.getAction())) {
             Uri data = intent.getData();
             String dataString = intent.getDataString();
             String shareWith = dataString.substring(dataString.lastIndexOf('/') + 1);
