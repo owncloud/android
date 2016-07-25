@@ -64,8 +64,12 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Kurulum</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Çıkış</string>
   <string name="uploader_error_title_no_file_to_upload">Yüklenecek dosya yok</string>
+  <string name="uploader_error_message_received_piece_of_text">%1$s bir parça metini bir dosya olarak yükleyemez.</string>
   <string name="uploader_error_message_no_file_to_upload">Alınan veri hiç geçerii dosya içermiyor.</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Dosya yüklenemiyor</string>
+  <string name="uploader_error_message_read_permission_not_granted">%1$s için alınan içeriğe erişim izni yok</string>
+  <string name="uploader_error_message_source_file_not_found">Yüklenecek dosya belirtilen konumda bulunamadı. Lütfen dosyanın mevcut olup olmadığını kontrol edin.</string>
+  <string name="uploader_error_message_source_file_not_copied">Dosya geçici bir dizine kopyalanırken hata oluştu. Lütfen tekrar göndermeyi deneyin.</string>
   <string name="file_list_seconds_ago">saniyeler önce</string>
   <string name="file_list_empty">Burada hiçbir şey yok. Bir şeyler yükleyin!</string>
   <string name="file_list_loading">Yükleniyor...</string>
@@ -303,6 +307,7 @@
   <string name="activity_chooser_send_file_title">Gönder</string>
   <string name="copy_link">Bağlantıyı kopyala</string>
   <string name="clipboard_text_copied">Panoya kopyalandı</string>
+  <string name="clipboard_no_text_to_copy">Panoya kopyalanacak metin yok</string>
   <string name="clipboard_uxexpected_error">Panoya kopyalanırken beklenmeyen bir hata oluştu</string>
   <string name="clipboard_label">%1$s\'den metin kopyalandı</string>
   <string name="error_cant_bind_to_operations_service">Ciddi hata: işlem gerçekleştirilemiyor</string>
@@ -403,8 +408,15 @@
   <string name="action_switch_grid_view">Izgara görünümü</string>
   <string name="action_switch_list_view">Liste görünümü</string>
   <string name="manage_space_title">Alanı ayarla</string>
+  <string name="manage_space_description">%1$s sunucusundan ayarlar, veritabanı ve sunucu sertifikası kalıcı olarak silinecektir. \n\nİndirilen dosyalara dokunulmayacaktır.\n\nBu işlem biraz zaman alabilir.</string>
   <string name="manage_space_clear_data">Verileri temizle</string>
   <string name="manage_space_error">Bazı dosyalar silinemedi</string>
   <string name="permission_storage_access">Dosya yüklemek ve indirmek için ek izin gerekiyor.</string>
   <string name="local_file_not_found_toast">Dosya yerel dosya sisteminde bulunamadı.</string>
+  <string name="confirmation_remove_files_alert">Seçili nesneleri silmek istediğinze emin misiniz?</string>
+  <string name="confirmation_remove_folders_alert">Seçili nesneleri ve içeriklerini silmek istediğinze emin misiniz?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d seçili</item>
+    <item quantity="other">%d seçili</item>
+  </plurals>
 </resources>
