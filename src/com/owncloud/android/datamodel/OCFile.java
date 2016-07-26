@@ -565,14 +565,16 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * @return 'True' if the file contains audio
      */
     public boolean isAudio() {
-        return (mMimeType != null && mMimeType.startsWith("audio/"));
+        return ((mMimeType != null && mMimeType.startsWith("audio/")) ||
+            getMimeTypeFromName().startsWith("audio/"));
     }
 
     /**
      * @return 'True' if the file contains video
      */
     public boolean isVideo() {
-        return (mMimeType != null && mMimeType.startsWith("video/"));
+        return ((mMimeType != null && mMimeType.startsWith("video/")) ||
+            getMimeTypeFromName().startsWith("video/"));
     }
 
     /**

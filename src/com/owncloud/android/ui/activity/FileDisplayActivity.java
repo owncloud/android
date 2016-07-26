@@ -1064,6 +1064,7 @@ public class FileDisplayActivity extends HookActivity
                                 newName),
                             Toast.LENGTH_LONG);
                         msg.show();
+                        updateActionBarTitleAndHomeButton(getFile());
                     }
                 }
 
@@ -1726,14 +1727,13 @@ public class FileDisplayActivity extends HookActivity
      * @param file Text {@link OCFile} to preview.
      */
     public void startTextPreview(OCFile file) {
-        Bundle args = new Bundle();
-        args.putParcelable(EXTRA_FILE, file);
-        args.putParcelable(EXTRA_ACCOUNT, getAccount());
-        Fragment textPreviewFragment = Fragment.instantiate(getApplicationContext(),
-                PreviewTextFragment.class.getName(), args);
+        Fragment textPreviewFragment = PreviewTextFragment.newInstance(
+            file,
+            getAccount()
+        );
         setSecondFragment(textPreviewFragment);
         updateFragmentsVisibility(true);
-        //updateNavigationElementsInActionBar(file);
+        updateActionBarTitleAndHomeButton(file);
         setFile(file);
     }
 

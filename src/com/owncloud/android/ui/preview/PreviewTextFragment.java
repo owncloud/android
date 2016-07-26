@@ -38,9 +38,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
@@ -76,11 +74,11 @@ public class PreviewTextFragment extends FileFragment {
      * @param account                   ownCloud account containing file
      * @return                          Fragment ready to be used.
      */
-    public static PreviewVideoFragment newInstance(
+    public static PreviewTextFragment newInstance(
         OCFile file,
         Account account
     ) {
-        PreviewVideoFragment frag = new PreviewVideoFragment();
+        PreviewTextFragment frag = new PreviewTextFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_FILE, file);
         args.putParcelable(EXTRA_ACCOUNT, account);
@@ -126,20 +124,11 @@ public class PreviewTextFragment extends FileFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        OCFile file = getFile();
-
-        Bundle args = getArguments();
-
-        if (file == null) {
-            file = args.getParcelable(FileDisplayActivity.EXTRA_FILE);
-        }
-
-        if (mAccount == null) {
-            mAccount = args.getParcelable(FileDisplayActivity.EXTRA_ACCOUNT);
-        }
-
+        OCFile file;
         if (savedInstanceState == null) {
+            Bundle args = getArguments();
+            file = args.getParcelable(EXTRA_FILE);
+            mAccount = args.getParcelable(EXTRA_ACCOUNT);
             if (file == null) {
                 throw new IllegalStateException("Instanced with a NULL OCFile");
             }
@@ -167,8 +156,8 @@ public class PreviewTextFragment extends FileFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(PreviewTextFragment.EXTRA_FILE, getFile());
-        outState.putParcelable(PreviewTextFragment.EXTRA_ACCOUNT, mAccount);
+        outState.putParcelable(EXTRA_FILE, getFile());
+        outState.putParcelable(EXTRA_ACCOUNT, mAccount);
     }
 
     @Override
@@ -181,7 +170,7 @@ public class PreviewTextFragment extends FileFragment {
     }
 
     private void loadAndShowTextPreview() {
-        mTextLoadTask = new TextLoadAsyncTask(new WeakReference<TextView>(mTextPreview));
+        mTextLoadTask = new TextLoadAsyncTask(new WeakReference<>(mTextPreview));
         mTextLoadTask.execute(getFile().getStoragePath());
     }
 
