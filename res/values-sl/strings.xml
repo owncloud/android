@@ -58,6 +58,7 @@
   <string name="sync_string_files">Datoteke</string>
   <string name="setup_btn_connect">Poveži</string>
   <string name="uploader_btn_upload_text">Pošlji</string>
+  <string name="uploader_top_message">Izberi mapo za nalaganje</string>
   <string name="uploader_wrn_no_account_title">Uporabniškega računa ni mogoče najti</string>
   <string name="uploader_wrn_no_account_text">Za %1$s ni določenega računa. Pred nadaljevanjem ga je treba ustvariti.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Nastavi</string>
@@ -226,7 +227,7 @@
   <string name="unfavorite">Odstrani dosegljivost brez povezave</string>
   <string name="common_rename">Preimenuj</string>
   <string name="common_remove">Odstrani</string>
-  <string name="confirmation_remove_alert">Ali res želite odstraniti %1$s?</string>
+  <string name="confirmation_remove_file_alert">Ali res želite odstraniti %1$s?</string>
   <string name="confirmation_remove_folder_alert">Ali res želite odstraniti %1$s skupaj s celotno vsebino?</string>
   <string name="confirmation_remove_local">Le krajevno</string>
   <string name="remove_success_msg">Odstranitev je uspešno končana</string>
@@ -412,4 +413,12 @@
   <string name="manage_space_error">Nekaterih datotek ni mogoče izbrisati.</string>
   <string name="permission_storage_access">Za prejemanje oziroma pošiljanje datotek v oblak so zahtevana dodatna dovoljenja.</string>
   <string name="local_file_not_found_toast">Datoteke ni mogoče najti na krajevnem sistemu</string>
+  <string name="confirmation_remove_files_alert">Ali res želite odstraniti izbrane predmete?</string>
+  <string name="confirmation_remove_folders_alert">Ali res želite odstraniti izbrane predmete in njihovo vsebino?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d izbrana</item>
+    <item quantity="two">%d izbrani</item>
+    <item quantity="few">%d izbrane</item>
+    <item quantity="other">%d izbranih</item>
+  </plurals>
 </resources>

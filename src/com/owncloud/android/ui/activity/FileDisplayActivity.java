@@ -58,7 +58,6 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
@@ -93,6 +92,7 @@ import com.owncloud.android.utils.PermissionUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.owncloud.android.db.PreferenceManager.*;
 
@@ -330,6 +330,9 @@ public class FileDisplayActivity extends HookActivity
 
     private void createMinFragments() {
         OCFileListFragment listOfFiles = new OCFileListFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(OCFileListFragment.ARG_ALLOW_CONTEXTUAL_ACTIONS, true);
+        listOfFiles.setArguments(args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
         transaction.commit();
@@ -362,12 +365,12 @@ public class FileDisplayActivity extends HookActivity
             }
 
         } else {
-            Log_OC.wtf(TAG, "initFragments() called with invalid NULLs!");
+            Log_OC.e(TAG, "initFragments() called with invalid NULLs!");
             if (getAccount() == null) {
-                Log_OC.wtf(TAG, "\t account is NULL");
+                Log_OC.e(TAG, "\t account is NULL");
             }
             if (getFile() == null) {
-                Log_OC.wtf(TAG, "\t file is NULL");
+                Log_OC.e(TAG, "\t file is NULL");
             }
         }
     }
@@ -444,7 +447,7 @@ public class FileDisplayActivity extends HookActivity
         if (listOfFiles != null) {
             return (OCFileListFragment) listOfFiles;
         }
-        Log_OC.wtf(TAG, "Access to unexisting list of files fragment!!");
+        Log_OC.e(TAG, "Access to unexisting list of files fragment!!");
         return null;
     }
 
@@ -657,12 +660,11 @@ public class FileDisplayActivity extends HookActivity
 
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == RESULT_OK) {
             final Intent fData = data;
-            final int fResultCode = resultCode;
             getHandler().postDelayed(
                     new Runnable() {
                         @Override
                         public void run() {
-                            requestMoveOperation(fData, fResultCode);
+                            requestMoveOperation(fData);
                         }
                     },
                     DELAY_TO_REQUEST_OPERATIONS_LATER
@@ -676,7 +678,7 @@ public class FileDisplayActivity extends HookActivity
                     new Runnable() {
                         @Override
                         public void run() {
-                            requestCopyOperation(fData, fResultCode);
+                            requestCopyOperation(fData);
                         }
                     },
                     DELAY_TO_REQUEST_OPERATIONS_LATER
@@ -762,24 +764,22 @@ public class FileDisplayActivity extends HookActivity
      * Request the operation for moving the file/folder from one path to another
      *
      * @param data       Intent received
-     * @param resultCode Result code received
      */
-    private void requestMoveOperation(Intent data, int resultCode) {
-        OCFile folderToMoveAt = (OCFile) data.getParcelableExtra(FolderPickerActivity.EXTRA_FOLDER);
-        OCFile targetFile = (OCFile) data.getParcelableExtra(FolderPickerActivity.EXTRA_FILE);
-        getFileOperationsHelper().moveFile(folderToMoveAt, targetFile);
+    private void requestMoveOperation(Intent data) {
+        OCFile folderToMoveAt = data.getParcelableExtra(FolderPickerActivity.EXTRA_FOLDER);
+        ArrayList<OCFile> files = data.getParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES);
+        getFileOperationsHelper().moveFiles(files, folderToMoveAt);
     }
 
     /**
      * Request the operation for copying the file/folder from one path to another
      *
      * @param data       Intent received
-     * @param resultCode Result code received
      */
-    private void requestCopyOperation(Intent data, int resultCode) {
+    private void requestCopyOperation(Intent data) {
         OCFile folderToMoveAt = data.getParcelableExtra(FolderPickerActivity.EXTRA_FOLDER);
-        OCFile targetFile = data.getParcelableExtra(FolderPickerActivity.EXTRA_FILE);
-        getFileOperationsHelper().copyFile(folderToMoveAt, targetFile);
+        ArrayList<OCFile> files = data.getParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES);
+        getFileOperationsHelper().copyFiles(files, folderToMoveAt);
     }
 
     @Override
@@ -1742,6 +1742,11 @@ public class FileDisplayActivity extends HookActivity
     }
 
 
+    /**
+     * Request stopping the upload/download operation in progress over the given {@link OCFile} file.
+     *
+     * @param file {@link OCFile} file which operation are wanted to be cancel
+     */
     public void cancelTransference(OCFile file) {
         getFileOperationsHelper().cancelTransference(file);
         if (mWaitingToPreview != null &&
@@ -1753,6 +1758,17 @@ public class FileDisplayActivity extends HookActivity
             mWaitingToSend = null;
         }
         onTransferStateChanged(file, false, false);
+    }
+
+    /**
+     * Request stopping all upload/download operations in progress over the given {@link OCFile} files.
+     *
+     * @param files list of {@link OCFile} files which operations are wanted to be cancel
+     */
+    public void cancelTransference(List<OCFile> files) {
+        for(OCFile file: files) {
+            cancelTransference(file);
+        }
     }
 
     @Override
@@ -1790,7 +1806,7 @@ public class FileDisplayActivity extends HookActivity
     }
 
     private boolean isGridView() {
-        return getListOfFilesFragment().isGridView();
+        return getListOfFilesFragment().isGridEnabled();
     }
 
     public void allFilesOption() {

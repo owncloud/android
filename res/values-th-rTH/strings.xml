@@ -58,6 +58,7 @@
   <string name="sync_string_files">ไฟล์</string>
   <string name="setup_btn_connect">เชื่อมต่อ</string>
   <string name="uploader_btn_upload_text">อัพโหลด</string>
+  <string name="uploader_top_message">เลือกโฟลเดอร์ที่ต้องการอัพโหลด</string>
   <string name="uploader_wrn_no_account_title">ไม่พบบัญชีที่ต้องการ</string>
   <string name="uploader_wrn_no_account_text">ไม่มีบัญชีผู้ใช้ %1$s ในอุปกรณ์ของคุณ กรุณาตั้งค่าบัญชีผู้ใช้ก่อน</string>
   <string name="uploader_wrn_no_account_setup_btn_text">ตั้งค่า</string>
@@ -123,13 +124,16 @@
   <string name="uploads_view_upload_status_cancelled">ยกเลิกแล้ว</string>
   <string name="uploads_view_upload_status_paused">หยุดชั่วคราวแล้ว</string>
   <string name="uploads_view_upload_status_failed_connection_error">การเชื่อมต่อล้มเหลว</string>
+  <string name="uploads_view_upload_status_failed_retry">การอัพโหลดจะถูกทำซ้ำอีกครั้งในไม่ช้า</string>
   <string name="uploads_view_upload_status_failed_credentials_error">ข้อมูลประจำตัวข้อผิดพลาดของ</string>
   <string name="uploads_view_upload_status_failed_folder_error">ข้อผิดพลาดของโฟลเดอร์</string>
   <string name="uploads_view_upload_status_failed_file_error">ข้อผิดพลาดของไฟล์</string>
+  <string name="uploads_view_upload_status_failed_localfile_error">ไม่พบไฟล์ต้นทาง</string>
   <string name="uploads_view_upload_status_failed_permission_error">เกิดข้อผิดพลาดเกี่ยวกับสิทธิ์การเข้าใช้งาน</string>
-  <string name="uploads_view_upload_status_conflict">ความขัดแย้ง</string>
+  <string name="uploads_view_upload_status_conflict">ปัญหา</string>
   <string name="uploads_view_upload_status_service_interrupted">แอพฯได้ถูกยกเลิกแล้ว</string>
   <string name="uploads_view_upload_status_unknown_fail">เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
+  <string name="uploads_view_upload_status_waiting_for_wifi">กำลังรอการเชื่อมต่อ WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">กำลังรอที่จะอัพโหลด</string>
   <string name="downloader_download_in_progress_ticker">กำลังดาวน์โหลด ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% กำลังดาวน์โหลด %2$s</string>
@@ -144,10 +148,10 @@
   <string name="sync_fail_ticker_unauthorized">การผสานข้อมูลล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
   <string name="sync_fail_content">การผสานข้อมูลของ %1$s ไม่สามารถดำเนินการให้เสร็จสมบูรณฺ์ได้</string>
   <string name="sync_fail_content_unauthorized">รหัสผ่านไม่ถูกต้องสำหรับ %1$s</string>
-  <string name="sync_conflicts_in_favourites_ticker">ตรวจพบความขัดแย้ง</string>
+  <string name="sync_conflicts_in_favourites_ticker">ตรวจพบปัญหา</string>
   <string name="sync_conflicts_in_favourites_content">%1$d ไฟล์ kept-in-sync ไม่สามารถประสานข้อมูลได้</string>
   <string name="sync_fail_in_favourites_ticker">ไฟล์ Kept-in-sync ล้มเหลว</string>
-  <string name="sync_fail_in_favourites_content">เนื้อหาของไฟล์ %1$d ไม่สามารถประสานเชื่อมข้อมูลได้ (ความขัดแย้ง %2$d รายการ)</string>
+  <string name="sync_fail_in_favourites_content">เนื้อหาของไฟล์ %1$d ไม่สามารถประสานข้อมูลได้ (มี %2$d ปัญหา)</string>
   <string name="sync_foreign_files_forgotten_ticker">มีแฟ้มข้อมูลต้นทางบางแฟ้มถูกลืม</string>
   <string name="sync_foreign_files_forgotten_content">ไม่สามารถคัดลอกไฟล์ %1$d ไปยังโฟลเดอร์ %2$s</string>
   <string name="sync_foreign_files_forgotten_explanation">สำหรับรุ่น 1.3.16 ไฟล์ที่อัพโหลดจากเครื่องของคุณจะถูกคัดลอกไปสำรองไว้ที่ต้นทาง %1$s เพื่อป้องกันการสูญเสียข้อมูลเมื่อไฟล์เดียวถูกซิงค์กับบัญชีหลายบัญชี \n\n การเปลี่ยนแปลงนี้ไฟล์ทั้งหมดที่อัปโหลดในรุ่นก่อนหน้า ของ app นี้ถูกคัดลอกลงในโฟลเดอร์ %2$s แต่ก็อาจมีข้อผิดพลาดในการดำเนินการนี้ช่วงระหว่างการประสานบัญชี คุณอาจจะสูญเสียข้อมูล  เช่นเดียวกับการลบ หรือย้ายไฟล์และเชื่อมโยงไปยัง %3$s ส่วนโฟลเดอร์ %1$s จะถูกเชื่อมโยงไปยัง %4$s \n\n รายชื่อด้านล่าง เป็นแฟ้มต้นทาง และแฟ้มปลายทาง ใน %5$s มันจะถูกนำมาเชื่อมโยงกัน</string>
@@ -157,7 +161,7 @@
   <string name="foreign_files_fail">มีบางแฟ้มข้อมูลไม่สามารถย้ายได้</string>
   <string name="foreign_files_local_text">ต้นทาง: %1$s</string>
   <string name="foreign_files_remote_text">รีโมท: %1$s</string>
-  <string name="upload_query_move_foreign_files">มีพื้นที่เหลือไม่เพียงพอสำหรับคัดลอกไฟล์ที่คุณเลือกไปไว้ในโฟลเดอร์ %1$s คุณต้องการย้ายไฟล์ดังกล่าวแทนหรือไม่?</string>
+  <string name="upload_query_move_foreign_files">มีพื้นที่เหลือไม่เพียงพอสำหรับคัดลอกไฟล์ที่คุณเลือกไปไว้ในโฟลเดอร์ %1$s คุณต้องการย้ายไฟล์ดังกล่าวแทน?</string>
   <string name="pass_code_enter_pass_code">กรุณากรอกรหัสผ่านของคุณ</string>
   <string name="pass_code_configure_your_pass_code">ใส่รหัสยืนยันของคุณ</string>
   <string name="pass_code_configure_your_pass_code_explanation">จะมีการร้องขอรหัสยืนยันทุกครั้งเมื่อเริ่มต้นใช้แอพฯ</string>
@@ -218,9 +222,11 @@
   <string name="auth_fail_get_user_name">เซิร์ฟเวอร์ของคุณไม่ได้ส่งคืนรหัสผู้ใช้ที่ถูกต้อง กรุณาติดต่อผู้ดูแลระบบ!</string>
   <string name="auth_can_not_auth_against_server">ไม่สามารถตรวจสอบสิทธิ์การเข้าใช้งานกับเซิร์ฟเวอร์นี้ได้</string>
   <string name="auth_account_does_not_exist">ยังไม่มีบัญชีในอุปกรณ์นี้</string>
+  <string name="favorite">ตั้งค่าเป็นแบบออฟไลน์</string>
+  <string name="unfavorite">ยกเลิกการตั้งค่าเป็นแบบออฟไลน์</string>
   <string name="common_rename">เปลี่ยนชื่อ</string>
   <string name="common_remove">ลบออก</string>
-  <string name="confirmation_remove_alert">คุณต้องการที่จะลบ %1$s?</string>
+  <string name="confirmation_remove_file_alert">คุณต้องการที่จะลบ %1$s?</string>
   <string name="confirmation_remove_folder_alert">คุณต้องการที่จะลบ %1$s และเนื้อหาของมัน?</string>
   <string name="confirmation_remove_local">เฉพาะต้นทางเท่านั้น</string>
   <string name="remove_success_msg">ลบเรียบร้อยแล้ว</string>
@@ -235,6 +241,7 @@
   <string name="filename_forbidden_charaters_from_server">มีชื่อแฟ้มอย่างน้อยหนึ่งตัวอักษรที่ไม่ถูกต้อง</string>
   <string name="filename_empty">ต้องใส่ชื่อไฟล์</string>
   <string name="wait_a_moment">กรุณารอสักครู่</string>
+  <string name="wait_checking_credentials">กำลังตรวจสอบข้อมูลประจำตัวที่เก็บไว้</string>
   <string name="filedisplay_unexpected_bad_get_content">มีปัญหาเกิดขึ้น กรุณาเลือกไฟล์งานแอพฯอื่นๆ</string>
   <string name="filedisplay_no_file_selected">ไม่มีไฟล์ที่ถูกเลือก</string>
   <string name="activity_chooser_title">ส่งลิงค์ไปยัง ...</string>
@@ -246,7 +253,7 @@
   <string name="ssl_validator_reason_cert_expired">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์หมดอายุแล้ว</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์ยังมีอายุน้อยอยู่</string>
   <string name="ssl_validator_reason_hostname_not_verified">- URL ดังกล่าวไม่ตรงกันกับชื่อโฮสต์ที่อยู่ในใบรับรอง</string>
-  <string name="ssl_validator_question">คุณต้องการให้ความไว้วางใจในใบรับรองความปลอดภัยนี้หรือไม่?</string>
+  <string name="ssl_validator_question">คุณต้องการให้ความไว้วางใจในใบรับรองความปลอดภัยนี้?</string>
   <string name="ssl_validator_not_saved">ไม่สามารถบันทึกใบรับรองความปลอดภัยได้</string>
   <string name="ssl_validator_btn_details_see">รายละเอียด</string>
   <string name="ssl_validator_btn_details_hide">ซ๋อน</string>
@@ -277,7 +284,7 @@
   <string name="instant_upload_on_wifi">อัพโหลดรูปภาพผ่านทาง wifi เท่านั้น</string>
   <string name="instant_video_upload_on_wifi">อัพโหลดวิดีโอผ่านทาง wifi เท่านั้น</string>
   <string name="instant_upload_path">/อัพโหลดทันที</string>
-  <string name="conflict_title">ไฟล์ที่ขัดแย้ง</string>
+  <string name="conflict_title">ไฟล์ที่มีปัญหา</string>
   <string name="conflict_message">ไฟล์ใดที่คุณต้องการที่จะเก็บ? เลือกวางทับไฟล์เดิมหรือ เขียนไฟล์ใหม่จะเพิ่มตัวเลขไปยังชื่อของมัน</string>
   <string name="conflict_keep_both">เก็บไว้ทั้งสองอย่าง</string>
   <string name="conflict_use_local_version">เวอร์ชันต้นทาง</string>
@@ -298,6 +305,9 @@
   <string name="activity_chooser_send_file_title">ส่ง</string>
   <string name="copy_link">คัดลอกลิงค์</string>
   <string name="clipboard_text_copied">คัดลอกไปยังคลิปบอร์ด</string>
+  <string name="clipboard_no_text_to_copy">ไม่มีข้อความใดที่ถูกคัดลอกไปยังคลิปบอร์ด</string>
+  <string name="clipboard_uxexpected_error">เกิดข้อผิดพลาดขณะกำลังคัดลอกไปยังคลิปบอร์ด</string>
+  <string name="clipboard_label">คัดลอกข้อความจาก %1$s แล้ว</string>
   <string name="error_cant_bind_to_operations_service">ข้อผิดพลาด: ไม่สามารถดำเนินการได้</string>
   <string name="network_error_socket_exception">เกิดข้อผิดพลาดขณะกำลังเชื่อมต่อกับเซิร์ฟเวอร์</string>
   <string name="network_error_socket_timeout_exception">เกิดข้อผิดพลาดขณะที่รอการดำเนินการจากเซิร์ฟเวอร์</string>
@@ -363,6 +373,7 @@
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>
   <string name="pref_behaviour_entries_move">ถูกย้ายไปยังโฟลเดอร์แอพพลิเคชัน</string>
   <string name="share_dialog_title">แชร์ข้อมูล</string>
+  <string name="share_file">แชร์ %1$s</string>
   <string name="share_with_user_section_title">แชร์กับผู้ใช้และกลุ่ม</string>
   <string name="share_no_users">ยังไม่มีข้อมูลที่แชร์กับผู้ใช้ในตอนนี้</string>
   <string name="share_add_user_or_group">เพิ่มชื่อผู้ใช้งาน หรือชื่อกลุ่ม</string>
@@ -372,10 +383,13 @@
   <string name="share_via_link_password_title">ความปลอดภัย</string>
   <string name="share_via_link_edit_permission_label">อนุญาตให้แก้ไข</string>
   <string name="share_get_public_link_button">รับลิงค์</string>
+  <string name="share_with_title">แชร์กับ ...</string>
+  <string name="share_with_edit_title">แชร์กับ %1$s</string>
   <string name="share_search">ค้นหา</string>
   <string name="search_users_and_groups_hint">ค้นหาผู้ใช้และกลุ่ม</string>
   <string name="share_group_clarification">%1$s (กลุ่ม)</string>
   <string name="share_remote_clarification">%1$s (รีโมท)</string>
+  <string name="share_known_remote_clarification">%1$s (ที่ %2$s )</string>
   <string name="share_sharee_unavailable">ขออภัย รุ่นเซิร์ฟเวอร์ของคุณไม่อนุญาตให้แชร์กับผู้ใช้ภายในไคลเอนต์
 \nกรุณาติดต่อผู้ดูแลระบบ</string>
   <string name="share_privilege_can_share">สามารถแชร์ได้</string>
@@ -385,6 +399,16 @@
   <string name="share_privilege_can_edit_delete">ลบ</string>
   <string name="edit_share_unshare">ยกเลิกการแชร์</string>
   <string name="edit_share_done">สำเร็จ</string>
+  <string name="action_retry_uploads">ลองใหม่แล้วล้มเหลว</string>
+  <string name="action_clear_failed_uploads">ล้างข้อผิดพลาด</string>
+  <string name="action_clear_successful_uploads">ล้างสำเร็จ</string>
+  <string name="action_clear_finished_uploads">ล้างทั้งหมดเสร็จแล้ว</string>
   <string name="action_switch_grid_view">มุมมองแบบตาราง Grid</string>
   <string name="action_switch_list_view">มุมมองแบบแสดงรายการ</string>
+  <string name="manage_space_title">จัดการพื้นที่จัดการพื้นที่</string>
+  <string name="manage_space_description">การตั้งค่าใบรับรองเซิร์ฟเวอร์และฐานข้อมูลจาก %1$s จะถูกลบอย่างถาวร \n\nไฟล์ที่ดาวน์โหลดจะถูกเก็บไว้อย่างดี กระบวนการนี้ต้องใช้เวลาสักครู่</string>
+  <string name="manage_space_clear_data">ล้างข้อมูล</string>
+  <string name="manage_space_error">บางไฟล์ไม่สามารถลบได้</string>
+  <string name="permission_storage_access">กำหนดสิทธิ์เพิ่มเติมที่จำเป็นในการอัพโหลดและดาวน์โหลดไฟล์แล้ว</string>
+  <string name="local_file_not_found_toast">ไม่พบไฟล์ที่ไฟล์ระบบต้นทาง</string>
 </resources>

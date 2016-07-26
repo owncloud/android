@@ -716,7 +716,7 @@ public class FileActivity extends AppCompatActivity
             mCapabilities = mStorageManager.getCapability(mAccount.name);
 
         } else {
-            Log_OC.wtf(TAG, "onAccountChanged was called with NULL account associated!");
+            Log_OC.e(TAG, "onAccountChanged was called with NULL account associated!");
         }
     }
 
@@ -919,11 +919,15 @@ public class FileActivity extends AppCompatActivity
         // grant that only one waiting dialog is shown
         dismissLoadingDialog();
         // Construct dialog
-        LoadingDialog loading = new LoadingDialog(message);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        loading.show(ft, DIALOG_WAIT_TAG);
-
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
+        if (frag == null) {
+            Log_OC.d(TAG, "show loading dialog");
+            LoadingDialog loading = new LoadingDialog(message);
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            loading.show(ft, DIALOG_WAIT_TAG);
+            fm.executePendingTransactions();
+        }
     }
 
 
@@ -933,6 +937,7 @@ public class FileActivity extends AppCompatActivity
     public void dismissLoadingDialog() {
         Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
         if (frag != null) {
+            Log_OC.d(TAG, "dismiss loading dialog");
             LoadingDialog loading = (LoadingDialog) frag;
             loading.dismiss();
         }

@@ -227,7 +227,7 @@
   <string name="unfavorite">Definir como não disponível offline</string>
   <string name="common_rename">Renomear</string>
   <string name="common_remove">Remover</string>
-  <string name="confirmation_remove_alert">Você realmente deseja remover %1$s?</string>
+  <string name="confirmation_remove_file_alert">Você realmente deseja remover %1$s?</string>
   <string name="confirmation_remove_folder_alert">Você realmente deseja remover %1$s e seus conteúdos?</string>
   <string name="confirmation_remove_local">Somente local</string>
   <string name="remove_success_msg">Removido com sucesso</string>
@@ -413,4 +413,10 @@
   <string name="manage_space_error">Alguns arquivos não puderam ser excluído.</string>
   <string name="permission_storage_access">Permissões adicionais são necessárias para se enviar e baixar arquivos &amp; .</string>
   <string name="local_file_not_found_toast">O arquivo não foi encontrado no sistema de arquivos local</string>
+  <string name="confirmation_remove_files_alert">Você realmente deseja remover os itens selecionados?</string>
+  <string name="confirmation_remove_folders_alert">Você realmente deseja remover os itens selecionados e seus conteúdos?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d selecionado</item>
+    <item quantity="other">%d selecionados</item>
+  </plurals>
 </resources>

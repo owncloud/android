@@ -228,7 +228,7 @@
   <string name="unfavorite">Убрать доступность автономно</string>
   <string name="common_rename">Переименовать</string>
   <string name="common_remove">Удалить</string>
-  <string name="confirmation_remove_alert">Вы действительно хотите удалить %1$s?</string>
+  <string name="confirmation_remove_file_alert">Вы действительно хотите удалить %1$s?</string>
   <string name="confirmation_remove_folder_alert">Вы действительно хотите удалить %1$s и его содержимое?</string>
   <string name="confirmation_remove_local">Только локально</string>
   <string name="remove_success_msg">Удаление завершено</string>
@@ -413,4 +413,12 @@
   <string name="manage_space_error">Некоторые файлы не могут быть удалены.</string>
   <string name="permission_storage_access">Для загрузки и скачивания файлов требуются дополнительные права.</string>
   <string name="local_file_not_found_toast">Файл не был найден в локальной файловой системе</string>
+  <string name="confirmation_remove_files_alert">Вы действительно хотите удалить выбранные элементы?</string>
+  <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">Выбран %d</item>
+    <item quantity="few">Выбрано %d</item>
+    <item quantity="many">Выбрано %d</item>
+    <item quantity="other">Выбрано %d</item>
+  </plurals>
 </resources>
