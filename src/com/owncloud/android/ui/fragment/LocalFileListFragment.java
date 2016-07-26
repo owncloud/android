@@ -93,7 +93,8 @@ public class LocalFileListFragment extends ExtendedListFragment {
         Log_OC.i(TAG, "onActivityCreated() start");
         
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new LocalFileListAdapter(mContainerActivity.getInitialDirectory(), getActivity());
+        mDirectory = mContainerActivity.getInitialDirectory();
+        mAdapter = new LocalFileListAdapter(mDirectory, getActivity());
         setListAdapter(mAdapter);
         
         Log_OC.i(TAG, "onActivityCreated() stop");
