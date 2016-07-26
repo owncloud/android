@@ -1,22 +1,46 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s ਐਡਰਾਇਡ ਐਪ</string>
   <string name="about_version">ਵਰਜਨ %1$s</string>
   <string name="actionbar_sync">ਅਕਾਊਂਟ ਤਾਜ਼ਾ ਕਰੋ</string>
   <string name="actionbar_upload">ਅੱਪਲੋਡ</string>
   <string name="actionbar_upload_from_apps">ਹੋਰ ਐਪਸ ਤੋਂ ਸਮੱਗਰੀ</string>
   <string name="actionbar_upload_files">ਫਾਇਲਾਂ</string>
   <string name="actionbar_open_with">ਇਸ ਨਾਲ ਖੋਲ੍ਹੋ</string>
+  <string name="actionbar_mkdir">ਨਵਾਂ ਫੋਲਡਰ</string>
   <string name="actionbar_settings">ਸੈਟਿੰਗ</string>
   <string name="actionbar_see_details">ਵੇਰਵ</string>
   <string name="actionbar_send_file">ਭੇਜੋ</string>
+  <string name="actionbar_sort">ਛਾਂਟੋ</string>
+  <string name="actionbar_sort_title">ਦੁਆਰਾ ਕ੍ਰਮਬੱਧ</string>
   <!--TODO re-enable when server-side folder size calculation is available   
     	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">ਸਾਰੀਆਂ ਫਾਈਲਾਂ</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">ਸੈਟਿੰਗ</string>
+  <string name="drawer_item_uploads_list">ਅੱਪਲੋਡਜ਼</string>
+  <string name="drawer_close">ਬੰਦ</string>
+  <string name="drawer_open">ਖੋਲੋ</string>
   <string name="prefs_category_general">ਆਮ</string>
+  <string name="prefs_category_more">ਹੋਰ</string>
   <string name="prefs_accounts">ਅਕਾਊਂਟ</string>
+  <string name="prefs_manage_accounts">ਅਕਾਊਂਟ ਪ੍ਰਬੰਧਨ</string>
+  <string name="prefs_passcode">ਪਾਸਕੋਡ ਲਾਕ</string>
+  <string name="prefs_instant_upload">ਤੁਰੰਤ ਤਸਵੀਰ ਅੱਪਲੋਡ</string>
+  <string name="prefs_instant_upload_summary">ਕੈਮਰੇ ਨਾਲ ਦਰਜ ਤਸਵੀਰਾਂ ਤੁਰੰਤ ਅੱਪਲੋਡ ਕਰੋ</string>
+  <string name="prefs_instant_video_upload">ਤੁਰੰਤ ਵੀਡੀਓ ਅੱਪਲੋਡ</string>
+  <string name="prefs_instant_video_upload_summary">ਕੈਮਰੇ ਨਾਲ ਦਰਜ ਵੀਡੀਓ ਤੁਰੰਤ ਅੱਪਲੋਡ ਕਰੋ</string>
+  <string name="prefs_log_title">ਲਾਗ ਰੱਖਣਾ ਚਾਲੂ</string>
+  <string name="prefs_log_title_history">ਲਾਗਿੰਗ ਅਤੀਤ</string>
+  <string name="prefs_log_summary_history">ਇਹ ਦਰਜ ਲੌਗ ਵਿਖਾਉਂਦਾ ਹੈ</string>
+  <string name="prefs_log_delete_history_button">ਅਤੀਤ ਹਟਆਓ</string>
+  <string name="prefs_help">ਮਦਦ</string>
+  <string name="prefs_recommend">ਮਿੱਤਰ ਨੂੰ ਸਿਫਾਰਸ਼ ਕਰੋ</string>
+  <string name="prefs_feedback">ਸੁਝਾਅ</string>
+  <string name="prefs_imprint">ਛਾਪ</string>
   <string name="auth_username">ਯੂਜ਼ਰ-ਨਾਂ</string>
   <string name="auth_password">ਪਾਸਵਰ</string>
   <string name="auth_register">%1$s ਲਈ ਨਵੇਂ ਹੋ?</string>
@@ -50,6 +74,7 @@
   <string name="uploader_upload_succeeded_ticker">ਅੱਪਲੋਡ ਸਫ਼ਲ ਹੈ</string>
   <string name="uploader_upload_failed_ticker">ਅੱਪਲੋਡ ਫੇਲ੍ਹ ਹੈ</string>
   <string name="uploader_upload_failed_content_single">%1$s ਦੇ ਅੱਪਲੋਡ ਨੂੰ ਠੀਕ ਤਰ੍ਹਾਂ ਪੂਰਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ</string>
+  <string name="uploads_view_title">ਅੱਪਲੋਡਜ਼</string>
   <string name="uploads_view_upload_status_unknown_fail">ਅਣਜਾਣ ਗਲਤੀ</string>
   <string name="downloader_download_in_progress_ticker">... ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
   <string name="downloader_not_downloaded_yet">ਹਾਲੇ ਡਾਊਨਲੋਡ ਨਹੀਂ</string>
