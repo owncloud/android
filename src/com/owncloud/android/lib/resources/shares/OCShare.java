@@ -40,11 +40,13 @@ import com.owncloud.android.lib.resources.files.FileUtils;
  *
  */
 public class OCShare implements Parcelable, Serializable {
-	
-	/** Generated - should be refreshed every time the class changes!! */
-	private static final long serialVersionUID = 4124975224281327921L;
 
-	private static final String TAG = OCShare.class.getSimpleName();
+    /**
+     * Generated - should be refreshed every time the class changes!!
+     */
+    private static final long serialVersionUID = 4124975224281327921L;
+
+    private static final String TAG = OCShare.class.getSimpleName();
 
     public static final int DEFAULT_PERMISSION = -1;
     public static final int READ_PERMISSION_FLAG = 1;
@@ -53,18 +55,23 @@ public class OCShare implements Parcelable, Serializable {
     public static final int DELETE_PERMISSION_FLAG = 8;
     public static final int SHARE_PERMISSION_FLAG = 16;
     public static final int MAXIMUM_PERMISSIONS_FOR_FILE =
-            READ_PERMISSION_FLAG +
-            UPDATE_PERMISSION_FLAG +
-            SHARE_PERMISSION_FLAG
+        READ_PERMISSION_FLAG +
+        UPDATE_PERMISSION_FLAG +
+        SHARE_PERMISSION_FLAG
     ;
     public static final int MAXIMUM_PERMISSIONS_FOR_FOLDER =
-            MAXIMUM_PERMISSIONS_FOR_FILE +
-            CREATE_PERMISSION_FLAG +
-            DELETE_PERMISSION_FLAG
+        MAXIMUM_PERMISSIONS_FOR_FILE +
+        CREATE_PERMISSION_FLAG +
+        DELETE_PERMISSION_FLAG
     ;
-    public static final int FEDERATED_PERMISSIONS_FOR_FILE =
-            READ_PERMISSION_FLAG +
-            UPDATE_PERMISSION_FLAG
+    public static final int FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9 =
+        READ_PERMISSION_FLAG +
+        UPDATE_PERMISSION_FLAG
+    ;
+    public static final int FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9 =
+        READ_PERMISSION_FLAG +
+        UPDATE_PERMISSION_FLAG +
+        SHARE_PERMISSION_FLAG
     ;
     public static final int FEDERATED_PERMISSIONS_FOR_FOLDER =
             READ_PERMISSION_FLAG +
