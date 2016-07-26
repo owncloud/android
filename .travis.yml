@@ -39,7 +39,7 @@ env:
   - secure: ezKyZbb3q1Phcv/vJntuJe0C2req+Hp4/C+tFZIWZ3o8wRO9jVI3bnED9TWQyQOOT0SoRYjJ5zqp0UcEOGCzPeWFO6bA7RWp+zA/R9sziLNcVWMVv3WXnuClQjPBHJeXRnP7YmNjxDmSfV97a14dk5d9LgJZYliTDepH4dLsxro=
   - secure: HV8REF7bB1i6cBEe4YCZvjgTf6tGiptAPzp9qZXGUH9Lxh6yUjYMXXP8flDaIFcE2JuAakW6P4SPr7/SQ+X4f8/84cNhmU1I+6Y1nG37WvelRHQVslOUDbl1TNUnynYZ+ybkb3BtrQvggCGMdQKvGZXYiggFhN/TWuDo0c7Q2Ro=
   matrix:
-  - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
+  - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
 addons:
   coverity_scan:
     project:
