@@ -33,6 +33,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.support.v4.util.Pair;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
@@ -189,7 +190,6 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_ACCOUNT_OWNER, mAccount.name);
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.getLastSyncDateForProperties());
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.getLastSyncDateForData());
-        cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.getAvailableOfflineStatus().getValue());
         cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
@@ -424,6 +424,100 @@ public class FileDataStorageManager {
 
     }
 
+    /**
+     * Updates available-offline status of OCFile received as a parameter, with it's current value.
+     *
+     * Delegates details of the task to FileContentProvider
+     *
+     * @param   file        File which available-offline status will be updated.
+     * @return              'true' if value was updated, 'false' otherwise.
+     */
+    public boolean saveLocalAvailableOfflineStatus(OCFile file) {
+        if (!fileExists(file.getFileId())) {
+            return false;
+        }
+
+        ContentValues cv = new ContentValues();
+        /*
+        cv.put(ProviderTableMeta.FILE_PATH, file.getRemotePath());
+        cv.put(ProviderTableMeta.FILE_ACCOUNT_OWNER, mAccount.name);
+        */
+        cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.getAvailableOfflineStatus().getValue());
+
+        int updatedCount;
+        if (getContentResolver() != null) {
+            updatedCount = getContentResolver().update(
+                ProviderTableMeta.CONTENT_URI,
+                cv,
+                ProviderTableMeta._ID + "=?",
+                new String[]{String.valueOf(file.getFileId())}
+            );
+
+            // If file is a folder, all children files that were available offline must be unset
+            if (file.isFolder() && updatedCount > 0) {
+                ContentValues descendentsCv = new ContentValues();
+                descendentsCv.put(
+                    ProviderTableMeta.FILE_KEEP_IN_SYNC,
+                    OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.getValue()
+                );
+                Pair<String, String[]> selectDescendents = selectionForAllDescendentsOf(file);
+                updatedCount += getContentResolver().update(
+                    ProviderTableMeta.CONTENT_URI,
+                    descendentsCv,
+                    selectDescendents.first,
+                    selectDescendents.second
+                );
+            }
+
+        } else {
+            try {
+                updatedCount = getContentProviderClient().update(
+                    ProviderTableMeta.CONTENT_URI,
+                    cv,
+                    ProviderTableMeta._ID + "=?",
+                    new String[]{String.valueOf(file.getFileId())}
+                );
+
+                // If file is a folder, all children files that were available offline must be unset
+                if (file.isFolder() && updatedCount > 0) {
+                    ContentValues descendentsCv = new ContentValues();
+                    descendentsCv.put(
+                        ProviderTableMeta.FILE_KEEP_IN_SYNC,
+                        OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.getValue()
+                    );
+                    Pair<String, String[]> selectDescendents = selectionForAllDescendentsOf(file);
+                    updatedCount += getContentProviderClient().update(
+                        ProviderTableMeta.CONTENT_URI,
+                        descendentsCv,
+                        selectDescendents.first,
+                        selectDescendents.second
+                    );
+                }
+
+
+            } catch (RemoteException e) {
+                Log_OC.e(TAG,"Fail updating available offline status", e);
+                return false;
+            }
+        }
+
+        return (updatedCount > 0);
+    }
+
+    /*
+    private void toggleAvailableOfflineFilesInFolder(OCFile file, boolean isAvailableOffline) {
+        OCFile.AvailableOfflineStatus availableOfflineStatus = isAvailableOffline ?
+            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE : OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
+        Vector<OCFile> filesInFolder = mFileActivity.getStorageManager().getFolderContent(file);
+        for (OCFile fileInFolder: filesInFolder) {
+            fileInFolder.setAvailableOfflineStatus(availableOfflineStatus);
+            mFileActivity.getStorageManager().saveFile(fileInFolder);
+            if (fileInFolder.isFolder()) {
+                toggleAvailableOfflineFilesInFolder(fileInFolder, isAvailableOffline);
+            }
+        }
+    }
+    */
 
     public boolean removeFile(OCFile file, boolean removeDBData, boolean removeLocalCopy) {
         boolean success = true;
@@ -573,7 +667,7 @@ public class FileDataStorageManager {
                         "Parent folder of the target path does not exist!!");
             }
 
-            /// 1. get all the descendants of the moved element in a single QUERY
+            /// 1. get all the descendents of the moved element in a single QUERY
             Cursor c = null;
             if (getContentProviderClient() != null) {
                 try {
@@ -606,7 +700,7 @@ public class FileDataStorageManager {
                 );
             }
 
-            /// 2. prepare a batch of update operations to change all the descendants
+            /// 2. prepare a batch of update operations to change all the descendents
             ArrayList<ContentProviderOperation> operations =
                     new ArrayList<ContentProviderOperation>(c.getCount());
             String defaultSavePath = FileStorageUtils.getSavePath(mAccount.name);
@@ -663,7 +757,7 @@ public class FileDataStorageManager {
                 }
 
             } catch (Exception e) {
-                Log_OC.e(TAG, "Fail to update " + file.getFileId() + " and descendants in database",
+                Log_OC.e(TAG, "Fail to update " + file.getFileId() + " and descendents in database",
                         e);
             }
 
@@ -2065,4 +2159,17 @@ public class FileDataStorageManager {
         return capability;
     }
 
+    private Pair<String, String[]> selectionForAllDescendentsOf(OCFile file) {
+        String selection = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
+            ProviderTableMeta.FILE_PATH + " LIKE ? ";
+        String[] selectionArgs = new String[] {
+            mAccount.name,
+            file.getRemotePath() + "_%"     // one or more characters after remote path
+        };
+        Pair<String, String[]> result = new Pair<String, String[]>(
+            selection,
+            selectionArgs
+        );
+        return result;
+    }
 }
