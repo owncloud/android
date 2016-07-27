@@ -457,7 +457,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mModifiedTimestampAtLastSyncForData = 0;
         mLastSyncDateForProperties = 0;
         mLastSyncDateForData = 0;
-        mAvailableOfflineStatus = null;
+        mAvailableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
         mNeedsUpdating = false;
         mEtag = null;
         mShareByLink = false;
