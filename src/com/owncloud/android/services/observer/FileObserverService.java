@@ -489,6 +489,7 @@ public class FileObserverService extends Service {
                 } else {
                     Log_OC.d(TAG, "No observer for path " + downloadedFile.getAbsolutePath());
                 }
+                parentPath = new File(parentPath).getParent();
             }
         }
 
