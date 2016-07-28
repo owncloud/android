@@ -165,15 +165,6 @@ public class MainApp extends Application {
         return getAppContext().getResources().getString(R.string.log_name);
     }
 
-    /**
-     * Non static on purpose; called from UsersAndGroupsSearchProvider before than MainApp#onCreate was called
-     *
-     * @return      Resource value for search suggest authority
-     */
-    public String getSearchSuggestAuthority() {
-        return getResources().getString(R.string.search_suggest_authority);
-    }
-
     // TODO Enable when "On Device" is recovered ?
 //    public static void showOnlyFilesOnDevice(boolean state){
 //        mOnlyOnDevice = state;

@@ -44,7 +44,6 @@ import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
-import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
 import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
@@ -107,7 +106,7 @@ public class ShareActivity extends FileActivity
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log_OC.w(TAG, "Ignored Intent requesting to query for " + query);
 
-        } else if (UsersAndGroupsSearchProvider.getIntentAction().equals(intent.getAction())) {
+        } else if (UsersAndGroupsSearchProvider.getSuggestIntentAction().equals(intent.getAction())) {
             Uri data = intent.getData();
             String dataString = intent.getDataString();
             String shareWith = dataString.substring(dataString.lastIndexOf('/') + 1);
