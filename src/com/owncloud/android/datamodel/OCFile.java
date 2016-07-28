@@ -565,32 +565,39 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * @return 'True' if the file contains audio
      */
     public boolean isAudio() {
-        return ((mMimeType != null && mMimeType.startsWith("audio/")) ||
-            getMimeTypeFromName().startsWith("audio/"));
+        return isOfType("audio/");
     }
 
     /**
      * @return 'True' if the file contains video
      */
     public boolean isVideo() {
-        return ((mMimeType != null && mMimeType.startsWith("video/")) ||
-            getMimeTypeFromName().startsWith("video/"));
+        return isOfType("video/");
     }
 
     /**
      * @return 'True' if the file contains an image
      */
     public boolean isImage() {
-        return ((mMimeType != null && mMimeType.startsWith("image/")) ||
-                getMimeTypeFromName().startsWith("image/"));
+        return isOfType("image/");
     }
 
     /**
      * @return 'True' if the file is simple text (e.g. not application-dependent, like .doc or .docx)
      */
     public boolean isText() {
-        return ((mMimeType != null && mMimeType.startsWith("text/")) ||
-                getMimeTypeFromName().startsWith("text/"));
+        return isOfType("text/");
+    }
+
+    /**
+     * @param   type        Type to match in the file MIME type; it's MUST include the trailing "/"
+     * @return              'True' if the file MIME type matches the received parameter in the type part.
+     */
+    private boolean isOfType(String type) {
+        return (
+            (mMimeType != null && mMimeType.startsWith(type)) ||
+            getMimeTypeFromName().startsWith(type)
+        );
     }
 
     public String getMimeTypeFromName() {
