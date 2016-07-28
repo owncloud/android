@@ -147,7 +147,7 @@ public class ExtendedListFragment extends Fragment
 
         View v = inflater.inflate(R.layout.list_fragment, null);
 
-        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) v.findViewById(R.id.syncProgressBar);
 
         mListView = (ExtendedListView)(v.findViewById(R.id.list_root));
         mListView.setOnItemClickListener(this);
