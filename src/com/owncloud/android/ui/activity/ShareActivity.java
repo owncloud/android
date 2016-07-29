@@ -142,19 +142,28 @@ public class ShareActivity extends FileActivity
         if (getFile().isSharedWithMe()) {
             return OCShare.READ_PERMISSION_FLAG;    // minimum permissions
 
-        } else if (getFile().isFolder()) {
-            return (isFederated) ? OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER : OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER;
-
-        } else if (isFederated) {    // isFile
+        } else if (isFederated) {
             OwnCloudVersion serverVersion =
                 com.owncloud.android.authentication.AccountUtils.getServerVersion(getAccount());
             if (serverVersion != null && serverVersion.isNotReshareableFederatedSupported()) {
-                return OCShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9;
+                return (
+                    getFile().isFolder() ?
+                        OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 :
+                        OCShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
+                );
             } else {
-                return OCShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9;
+                return (
+                    getFile().isFolder() ?
+                        OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 :
+                        OCShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
+                );
             }
         } else {
-            return OCShare.MAXIMUM_PERMISSIONS_FOR_FILE;
+            return (
+                getFile().isFolder() ?
+                    OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER :
+                    OCShare.MAXIMUM_PERMISSIONS_FOR_FILE
+            );
         }
     }
 
