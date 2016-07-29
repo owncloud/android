@@ -109,6 +109,7 @@
   <string name="uploads_view_group_current_uploads">Τρέχουσα</string>
   <string name="uploads_view_group_finished_uploads">Μεταφορτώθηκε</string>
   <string name="uploads_view_upload_status_succeeded">Ολοκληρωμένες</string>
+  <string name="uploads_view_upload_status_cancelled">Ακυρώθηκε</string>
   <string name="uploads_view_upload_status_failed_credentials_error">Σφάλμα διαπιστευτηρίων</string>
   <string name="uploads_view_upload_status_failed_folder_error">Σφάλμα φακέλου</string>
   <string name="uploads_view_upload_status_failed_file_error">Σφάλμα αρχείου</string>
