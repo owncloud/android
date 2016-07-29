@@ -186,18 +186,19 @@ public class EditShareFragment extends Fragment {
             boolean canEdit = (sharePermissions & anyUpdatePermission) > 0;
             compound.setChecked(canEdit);
 
-            if (mFile.isFolder() && !isFederated) {
+            if (mFile.isFolder() && (!isFederated || isNotReshareableFederatedSupported)) {
+                /// TODO delete extra && !isFederated when iOS is ready
                 compound = (CompoundButton) editShareView.findViewById(R.id.canEditCreateCheckBox);
                 compound.setChecked((sharePermissions & OCShare.CREATE_PERMISSION_FLAG) > 0);
-                compound.setVisibility(canEdit ? View.VISIBLE : View.GONE);
+                compound.setVisibility((canEdit && !isFederated) ? View.VISIBLE : View.GONE);
 
                 compound = (CompoundButton) editShareView.findViewById(R.id.canEditChangeCheckBox);
                 compound.setChecked((sharePermissions & OCShare.UPDATE_PERMISSION_FLAG) > 0);
-                compound.setVisibility(canEdit ? View.VISIBLE : View.GONE);
+                compound.setVisibility((canEdit && !isFederated) ? View.VISIBLE : View.GONE);
 
                 compound = (CompoundButton) editShareView.findViewById(R.id.canEditDeleteCheckBox);
                 compound.setChecked((sharePermissions & OCShare.DELETE_PERMISSION_FLAG) > 0);
-                compound.setVisibility(canEdit ? View.VISIBLE : View.GONE);
+                compound.setVisibility((canEdit && !isFederated) ? View.VISIBLE : View.GONE);
             }
 
             setPermissionsListening(editShareView, true);
@@ -274,12 +275,19 @@ public class EditShareFragment extends Fragment {
                     boolean isFederated = ShareType.FEDERATED.equals(mShare.getShareType());
                     if (mFile.isFolder()) {
                         if (isChecked) {
-                            if (!isFederated) {
+                            OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
+                            boolean isNotReshareableFederatedSupported = (
+                                serverVersion != null &&
+                                    serverVersion.isNotReshareableFederatedSupported()
+                            );
+                            if (!isFederated || isNotReshareableFederatedSupported) {
                                 /// not federated shares -> enable all the subpermisions
                                 for (int i = 0; i < sSubordinateCheckBoxIds.length; i++) {
                                     //noinspection ConstantConditions, prevented in the method beginning
                                     subordinate = (CompoundButton) getView().findViewById(sSubordinateCheckBoxIds[i]);
-                                    subordinate.setVisibility(View.VISIBLE);
+                                    if (!isFederated) { // TODO delete when iOS is ready
+                                        subordinate.setVisibility(View.VISIBLE);
+                                    }
                                     if (!subordinate.isChecked() &&
                                         !mFile.isSharedWithMe()) {          // see (1)
                                         toggleDisablingListener(subordinate);
