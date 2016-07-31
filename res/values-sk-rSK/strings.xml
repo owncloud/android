@@ -84,6 +84,7 @@
   <string name="common_error_unknown">Neznáma chyba</string>
   <string name="about_title">O</string>
   <string name="change_password">Zmeniť heslo</string>
+  <string name="delete_account">Odstrániť účet</string>
   <string name="create_account">Vytvoriť účet</string>
   <string name="upload_chooser_title">Odoslať z ...</string>
   <string name="uploader_info_dirname">Názov priečinka</string>
@@ -308,6 +309,7 @@
   <string name="share_via_link_section_title">Zdieľať linku</string>
   <string name="share_via_link_expiration_date_label">Nastaviť dátum expirácie</string>
   <string name="share_via_link_password_label">Chrániť heslom</string>
+  <string name="share_via_link_password_title">Zabezpečené</string>
   <string name="share_via_link_edit_permission_label">Povoliť úpravy</string>
   <string name="share_search">Hľadať</string>
   <string name="search_users_and_groups_hint">Vyhľadať používateľov alebo skupiny</string>
