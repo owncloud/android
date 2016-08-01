@@ -307,7 +307,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     protected void refreshListOfFilesFragment() {
         OCFileListFragment fileListFragment = getListOfFilesFragment();
         if (fileListFragment != null) {
-            fileListFragment.listDirectory();
+            fileListFragment.listDirectory(true);
             // TODO Enable when "On Device" is recovered ?
             // fileListFragment.listDirectory(false);
         }
@@ -524,14 +524,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     @Override
     public void showDetails(OCFile file) {
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onTransferStateChanged(OCFile file, boolean downloading, boolean uploading) {
-            
     }
 
     @Override

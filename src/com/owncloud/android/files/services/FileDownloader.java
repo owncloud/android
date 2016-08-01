@@ -59,6 +59,7 @@ import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -238,8 +239,8 @@ public class FileDownloader extends Service
          * {@link FileDownloaderBinder}
          * instance.
          */
-        private Map<Long, OnDatatransferProgressListener> mBoundListeners =
-                new HashMap<Long, OnDatatransferProgressListener>();
+        private Map<Long, WeakReference<OnDatatransferProgressListener>> mBoundListeners =
+                new HashMap<Long, WeakReference<OnDatatransferProgressListener>>();
 
 
         /**
@@ -313,7 +314,7 @@ public class FileDownloader extends Service
                 OnDatatransferProgressListener listener, Account account, OCFile file
         ) {
             if (account == null || file == null || listener == null) return;
-            mBoundListeners.put(file.getFileId(), listener);
+            mBoundListeners.put(file.getFileId(), new WeakReference<>(listener));
         }
 
 
@@ -337,11 +338,15 @@ public class FileDownloader extends Service
         @Override
         public void onTransferProgress(long progressRate, long totalTransferredSoFar,
                                        long totalToTransfer, String fileName) {
-            OnDatatransferProgressListener boundListener =
+            WeakReference<OnDatatransferProgressListener> boundListenerRef =
                     mBoundListeners.get(mCurrentDownload.getFile().getFileId());
-            if (boundListener != null) {
-                boundListener.onTransferProgress(progressRate, totalTransferredSoFar,
-                        totalToTransfer, fileName);
+            if (boundListenerRef != null && boundListenerRef.get() != null) {
+                boundListenerRef.get().onTransferProgress(
+                    progressRate,
+                    totalTransferredSoFar,
+                    totalToTransfer,
+                    fileName
+                );
             }
         }
 

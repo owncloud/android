@@ -42,9 +42,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
@@ -65,19 +68,23 @@ import third_parties.michaelOrtiz.TouchImageViewCustom;
  */
 public class PreviewImageFragment extends FileFragment {
 
+    private static final String TAG = PreviewImageFragment.class.getSimpleName();
+
     public static final String EXTRA_FILE = "FILE";
 
     private static final String ARG_FILE = "FILE";
+    private static final String ARG_ACCOUNT = "ACCOUNT";
     private static final String ARG_IGNORE_FIRST = "IGNORE_FIRST";
 
+    private ProgressBar mProgressBar;
+    private TransferProgressController mProgressController;
     private TouchImageViewCustom mImageView;
     private TextView mMessageView;
     private ProgressBar mProgressWheel;
 
     public Bitmap mBitmap = null;
 
-    private static final String TAG = PreviewImageFragment.class.getSimpleName();
-
+    private Account mAccount = null;
     private boolean mIgnoreFirstSavedState;
 
     private LoadBitmapTask mLoadBitmapTask = null;
@@ -92,15 +99,22 @@ public class PreviewImageFragment extends FileFragment {
      *
      * This method hides to client objects the need of doing the construction in two steps.
      *
-     * @param imageFile                 An {@link OCFile} to preview as an image in the fragment
+     * @param file                      An {@link OCFile} to preview as an image in the fragment
+     * @param account                   ownCloud account containing file
      * @param ignoreFirstSavedState     Flag to work around an unexpected behaviour of
      *                                  {@link FragmentStatePagerAdapter}
      *                                  ; TODO better solution
+     * @return                          Fragment ready to be used.
      */
-    public static PreviewImageFragment newInstance(OCFile imageFile, boolean ignoreFirstSavedState){
+    public static PreviewImageFragment newInstance(
+            OCFile file,
+            Account account,
+            boolean ignoreFirstSavedState
+    ) {
         PreviewImageFragment frag = new PreviewImageFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_FILE, imageFile);
+        args.putParcelable(ARG_FILE, file);
+        args.putParcelable(ARG_ACCOUNT, account);
         args.putBoolean(ARG_IGNORE_FIRST, ignoreFirstSavedState);
         frag.setArguments(args);
         return frag;
@@ -119,8 +133,8 @@ public class PreviewImageFragment extends FileFragment {
      */
     public PreviewImageFragment() {
         mIgnoreFirstSavedState = false;
+        mAccount = null;
     }
-
 
     /**
      * {@inheritDoc}
@@ -146,6 +160,8 @@ public class PreviewImageFragment extends FileFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.preview_image_fragment, container, false);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.transferProgressBar);
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mImageView = (TouchImageViewCustom) view.findViewById(R.id.image);
         mImageView.setVisibility(View.GONE);
         mImageView.setOnClickListener(new OnClickListener() {
@@ -168,6 +184,8 @@ public class PreviewImageFragment extends FileFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mProgressController = new TransferProgressController(mContainerActivity);
+        mProgressController.setProgressBar(mProgressBar);
         if (savedInstanceState != null) {
             if (!mIgnoreFirstSavedState) {
                 OCFile file = savedInstanceState.getParcelable(PreviewImageFragment.EXTRA_FILE);
@@ -175,6 +193,11 @@ public class PreviewImageFragment extends FileFragment {
             } else {
                 mIgnoreFirstSavedState = false;
             }
+        }
+        mAccount = getArguments().getParcelable(PreviewAudioFragment.EXTRA_ACCOUNT);
+
+        if (mAccount == null) {
+            throw new IllegalStateException("Instanced with a NULL ownCloud Account");
         }
         if (getFile() == null) {
             throw new IllegalStateException("Instanced with a NULL OCFile");
@@ -199,17 +222,15 @@ public class PreviewImageFragment extends FileFragment {
     public void onStart() {
         super.onStart();
         if (getFile() != null) {
-            mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
-            //mLoadBitmapTask.execute(new String[]{getFile().getStoragePath()});
-//            mLoadBitmapTask.execute(getFile().getStoragePath());
-            mLoadBitmapTask.execute(getFile());
+            mProgressController.startListeningProgressFor(getFile(), mAccount);
+            loadAndShowImage();
         }
     }
-
 
     @Override
     public void onStop() {
         Log_OC.d(TAG, "onStop starts");
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
         if (mLoadBitmapTask != null) {
             mLoadBitmapTask.cancel(true);
             mLoadBitmapTask = null;
@@ -329,17 +350,6 @@ public class PreviewImageFragment extends FileFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onDestroy() {
         if (mBitmap != null) {
             mBitmap.recycle();
@@ -360,7 +370,51 @@ public class PreviewImageFragment extends FileFragment {
         finish();
     }
 
-    
+
+    @Override
+    public void onTransferServiceConnected() {
+        if (mProgressController != null) {
+            mProgressController.startListeningProgressFor(getFile(), mAccount);
+        }
+    }
+
+    @Override
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileMetadataChanged() {
+        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
+        if (storageManager != null) {
+            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        loadAndShowImage();
+    }
+
+    @Override
+    public void updateViewForSyncInProgress() {
+        mProgressController.showProgressBar();
+    }
+
+    @Override
+    public void updateViewForSyncOff() {
+        mProgressController.hideProgressBar();
+    }
+
+    private void loadAndShowImage() {
+        mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
+        mLoadBitmapTask.execute(getFile());
+    }
+
     private class LoadBitmapTask extends AsyncTask<OCFile, Void, LoadImage> {
 
         /**
@@ -402,9 +456,9 @@ public class PreviewImageFragment extends FileFragment {
          */
         public LoadBitmapTask(ImageViewCustom imageView, TextView messageView,
                               ProgressBar progressWheel) {
-            mImageViewRef = new WeakReference<ImageViewCustom>(imageView);
-            mMessageViewRef = new WeakReference<TextView>(messageView);
-            mProgressWheelRef = new WeakReference<ProgressBar>(progressWheel);
+            mImageViewRef = new WeakReference<>(imageView);
+            mMessageViewRef = new WeakReference<>(messageView);
+            mProgressWheelRef = new WeakReference<>(progressWheel);
         }
 
         @Override

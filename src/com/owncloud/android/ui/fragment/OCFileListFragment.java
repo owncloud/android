@@ -60,9 +60,10 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
+import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.ui.preview.PreviewMediaFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
+import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
@@ -491,21 +492,26 @@ public class OCFileListFragment extends ExtendedListFragment {
 
             } else { /// Click on a file
                 if (PreviewImageFragment.canBePreviewed(file)) {
-                    // preview image - it handles the download, if needed
-                    ((FileDisplayActivity)mContainerActivity).startImagePreview(file);
-                } else if (PreviewTextFragment.canBePreviewed(file)){
-                    ((FileDisplayActivity)mContainerActivity).startTextPreview(file);
-                } else if (file.isDown()) {
-                    if (PreviewMediaFragment.canBePreviewed(file)) {
-                        // media preview
-                        ((FileDisplayActivity) mContainerActivity).startMediaPreview(file, 0, true);
-                    } else {
-                        mContainerActivity.getFileOperationsHelper().openFile(file);
-                    }
+                    // preview image - it handles the sync, if needed
+                    ((FileDisplayActivity) mContainerActivity).startImagePreview(file);
+
+                } else if (PreviewTextFragment.canBePreviewed(file)) {
+                    ((FileDisplayActivity) mContainerActivity).startTextPreview(file);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+
+                } else if (PreviewAudioFragment.canBePreviewed(file)) {
+                    // media preview
+                    ((FileDisplayActivity) mContainerActivity).startAudioPreview(file, 0);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+
+                } else if (PreviewVideoFragment.canBePreviewed(file)) {
+                    // media preview
+                    ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
 
                 } else {
-                    // automatic download, preview on finish
-                    ((FileDisplayActivity) mContainerActivity).startDownloadForPreview(file);
+                    // sync file content, then open with external apps
+                    ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
                 }
 
             }
@@ -582,10 +588,12 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
             case R.id.action_favorite_file: {
                 mContainerActivity.getFileOperationsHelper().toggleFavorites(checkedFiles, true);
+                getListView().invalidateViews();
                 return true;
             }
             case R.id.action_unfavorite_file: {
                 mContainerActivity.getFileOperationsHelper().toggleFavorites(checkedFiles, false);
+                getListView().invalidateViews();
                 return true;
             }
             case R.id.action_move: {
@@ -617,10 +625,12 @@ public class OCFileListFragment extends ExtendedListFragment {
     /**
      * Calls {@link OCFileListFragment#listDirectory(OCFile)} with a null parameter
      */
-    public void listDirectory(/*boolean onlyOnDevice*/){
-        listDirectory(null);
-        // TODO Enable when "On Device" is recovered ?
-        // listDirectory(null, onlyOnDevice);
+    public void listDirectory(boolean reloadData){
+        if (reloadData) {
+            listDirectory(null);
+        } else {
+            getListView().invalidateViews();
+        }
     }
 
     /**

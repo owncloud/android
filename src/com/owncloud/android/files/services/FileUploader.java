@@ -56,6 +56,7 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
+import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -67,6 +68,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 
+import java.lang.ref.WeakReference;
 import java.util.AbstractList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -628,8 +630,8 @@ public class FileUploader extends Service
          * Map of listeners that will be reported about progress of uploads from a
          * {@link FileUploaderBinder} instance
          */
-        private Map<String, OnDatatransferProgressListener> mBoundListeners =
-                new HashMap<String, OnDatatransferProgressListener>();
+        private Map<String, WeakReference<OnDatatransferProgressListener>> mBoundListeners =
+                new HashMap<String, WeakReference<OnDatatransferProgressListener>>();
 
 
         /**
@@ -749,7 +751,7 @@ public class FileUploader extends Service
         ) {
             if (account == null || file == null || listener == null) return;
             String targetKey = buildRemoteName(account.name, file.getRemotePath());
-            mBoundListeners.put(targetKey, listener);
+            mBoundListeners.put(targetKey, new WeakReference<>(listener));
         }
 
 
@@ -765,7 +767,7 @@ public class FileUploader extends Service
         ) {
             if (ocUpload == null || listener == null) return;
             String targetKey = buildRemoteName(ocUpload.getAccountName(), ocUpload.getRemotePath());
-            mBoundListeners.put(targetKey, listener);
+            mBoundListeners.put(targetKey, new WeakReference<>(listener));
         }
 
 
@@ -811,9 +813,9 @@ public class FileUploader extends Service
         public void onTransferProgress(long progressRate, long totalTransferredSoFar,
                                        long totalToTransfer, String fileName) {
             String key = buildRemoteName(mCurrentUpload.getAccount().name, mCurrentUpload.getFile().getRemotePath());
-            OnDatatransferProgressListener boundListener = mBoundListeners.get(key);
-            if (boundListener != null) {
-                boundListener.onTransferProgress(progressRate, totalTransferredSoFar,
+            WeakReference<OnDatatransferProgressListener> boundListenerRef = mBoundListeners.get(key);
+            if (boundListenerRef != null && boundListenerRef.get() != null) {
+                boundListenerRef.get().onTransferProgress(progressRate, totalTransferredSoFar,
                         totalToTransfer, fileName);
             }
         }

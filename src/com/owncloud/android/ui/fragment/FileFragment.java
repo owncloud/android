@@ -20,20 +20,19 @@
 
 package com.owncloud.android.ui.fragment;
 
-import android.accounts.Account;
-import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.files.services.FileDownloader;
+import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 
 
 /**
  * Common methods for {@link Fragment}s containing {@link OCFile}s
  */
-public class FileFragment extends Fragment {
+public abstract class FileFragment extends Fragment {
     
     private OCFile mFile;
     
@@ -50,15 +49,6 @@ public class FileFragment extends Fragment {
         mFile = null;
     }
     
-    /**
-     * Creates an instance for a given {@OCFile}.
-     * 
-     * @param file
-     */
-    public FileFragment(OCFile file) {
-        mFile = file;
-    }
-
     /**
      * Getter for the hold {@link OCFile}
      * 
@@ -78,13 +68,13 @@ public class FileFragment extends Fragment {
      * {@inheritDoc}
      */
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mContainerActivity = (ContainerActivity) activity;
+            mContainerActivity = (ContainerActivity) context;
             
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement " +
+            throw new ClassCastException(context.toString() + " must implement " +
                     ContainerActivity.class.getSimpleName());
         }
     }
@@ -97,9 +87,52 @@ public class FileFragment extends Fragment {
     public void onDetach() {
         mContainerActivity = null;
         super.onDetach();
-    }    
-    
-    
+    }
+
+
+    public void onSyncEvent(String syncEvent, boolean success, OCFile updatedFile) {
+        if (syncEvent.equals(FileUploader.getUploadStartMessage())) {
+            updateViewForSyncInProgress();
+
+        } else if (syncEvent.equals(FileUploader.getUploadFinishMessage())) {
+            if (success) {
+                if (updatedFile != null) {
+                    onFileMetadataChanged(updatedFile);
+                } else {
+                    onFileMetadataChanged();
+                }
+            }
+            updateViewForSyncOff();
+
+        } else if (syncEvent.equals(FileDownloader.getDownloadAddedMessage())) {
+            updateViewForSyncInProgress();
+
+        } else if (syncEvent.equals(FileDownloader.getDownloadFinishMessage())) {
+            if (success) {
+                if (updatedFile != null) {
+                    onFileMetadataChanged(updatedFile);
+                } else {
+                    onFileMetadataChanged();
+                }
+                onFileContentChanged();
+            }
+            updateViewForSyncOff();
+        }
+    }
+
+    public abstract void updateViewForSyncInProgress();
+
+    public abstract void updateViewForSyncOff();
+
+    public abstract void onTransferServiceConnected();
+
+    public abstract void onFileMetadataChanged(OCFile updatedFile);
+
+    public abstract void onFileMetadataChanged();
+
+    public abstract void onFileContentChanged();
+
+
     /**
      * Interface to implement by any Activity that includes some instance of FileListFragment
      * Interface to implement by any Activity that includes some instance of FileFragment
@@ -123,25 +156,6 @@ public class FileFragment extends Fragment {
          * @param folder
          */
         public void onBrowsedDownTo(OCFile folder);                 
-
-        /**
-         * Callback method invoked when a the 'transfer state' of a file changes.
-         * 
-         * This happens when a download or upload is started or ended for a file.
-         * 
-         * This method is necessary by now to update the user interface of the double-pane layout
-         * in tablets because methods {@link FileDownloaderBinder#isDownloading(Account, OCFile)}
-         * and {@link FileUploaderBinder#isUploading(Account, OCFile)}
-         * won't provide the needed response before the method where this is called finishes. 
-         * 
-         * TODO Remove this when the transfer state of a file is kept in the database
-         * (other thing TODO)
-         * 
-         * @param file          OCFile which state changed.
-         * @param downloading   Flag signaling if the file is now downloading.
-         * @param uploading     Flag signaling if the file is now uploading.
-         */
-        public void onTransferStateChanged(OCFile file, boolean downloading, boolean uploading);
 
     }
 
