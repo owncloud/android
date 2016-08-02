@@ -53,17 +53,6 @@
         />
 
     <!-- last to draw, will be top in Z axis -->
-    <ProgressBar
-        android:id="@+id/transferProgressBar"
-        style="@style/Widget.ownCloud.TopProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_alignParentTop="true"
-        android:layout_margin="0dp"
-        android:indeterminate="false"
-        android:indeterminateOnly="false"
-        android:padding="0dp"
-        android:visibility="visible"
-        />
+    <include layout="@layout/top_progress_bar"/>
 
 </RelativeLayout>

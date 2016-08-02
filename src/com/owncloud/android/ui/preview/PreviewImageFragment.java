@@ -160,7 +160,7 @@ public class PreviewImageFragment extends FileFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.preview_image_fragment, container, false);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.transferProgressBar);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mImageView = (TouchImageViewCustom) view.findViewById(R.id.image);
         mImageView.setVisibility(View.GONE);

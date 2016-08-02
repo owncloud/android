@@ -138,7 +138,6 @@
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     <!-- last to draw, will be top in Z axis -->
-    <include layout="@layout/top_progress_bar"
-             android:id="@+id/syncProgressBar"/>
+    <include layout="@layout/top_progress_bar"/>
 
 </RelativeLayout>
