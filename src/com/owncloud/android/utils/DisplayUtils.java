@@ -130,7 +130,7 @@ public class DisplayUtils {
                 MainApp.getAppContext().getString(R.string.app_name).equals(OWNCLOUD_APP_NAME)) {
             return R.drawable.winter_holidays_icon;
         } else {
-            return R.drawable.icon;
+            return R.mipmap.icon;
         }
     }
     
