@@ -353,7 +353,6 @@ public class ShareXMLParser {
 				share.setSharedWithDisplayName(readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME));
 
 			} else if (name.equalsIgnoreCase(NODE_URL)) {
-				share.setShareType(ShareType.PUBLIC_LINK);
 				String value = readNode(parser, NODE_URL);
 				share.setShareLink(value);
 
