@@ -10,7 +10,7 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/workaround_app_icon"
+        android:icon="@mipmap/workaround_app_icon"
         android:label="@string/workaround_app_name"
         >
         <service
