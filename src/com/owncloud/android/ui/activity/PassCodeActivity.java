@@ -35,12 +35,14 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
@@ -87,8 +89,14 @@ public class PassCodeActivity extends AppCompatActivity {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /// protection against screen recording
+        if (!BuildConfig.DEBUG) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        } // else, let it go, or taking screenshots & testing will not be possible
+
         setContentView(R.layout.passcodelock);
-        
+
         mBCancel = (Button) findViewById(R.id.cancel);
         mPassCodeHdr = (TextView) findViewById(R.id.header);
         mPassCodeHdrExplanation = (TextView) findViewById(R.id.explanation);

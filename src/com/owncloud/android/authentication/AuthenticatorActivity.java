@@ -51,6 +51,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
@@ -62,6 +63,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.SsoWebViewClient.SsoWebViewClientListener;
@@ -209,6 +211,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         //Log_OC.e(TAG,  "onCreate init");
         super.onCreate(savedInstanceState);
 
+        /// protection against screen recording
+        if (!BuildConfig.DEBUG) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        } // else, let it go, or taking screenshots & testing will not be possible
+
         // Workaround, for fixing a problem with Android Library Suppor v7 19
         //getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         if (getSupportActionBar() != null) {
@@ -247,10 +254,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mWaitingForOpId = savedInstanceState.getLong(KEY_WAITING_FOR_OP_ID);
             mIsFirstAuthAttempt = savedInstanceState.getBoolean(KEY_AUTH_IS_FIRST_ATTEMPT_TAG);
         }
-        
+
         /// load user interface
         setContentView(R.layout.account_setup);
-        
+
         /// initialize general UI elements
         initOverallUi();
 
