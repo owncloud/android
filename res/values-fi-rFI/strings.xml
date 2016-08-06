@@ -65,6 +65,7 @@
   <string name="uploader_wrn_no_account_quit_btn_text">Lopeta</string>
   <string name="uploader_error_title_no_file_to_upload">Ei tiedostoa lähetettävänä</string>
   <string name="uploader_error_message_no_file_to_upload">Vastaanotettu data ei sisällä yhtäkään kelvollista tiedostoa.</string>
+  <string name="uploader_error_title_file_cannot_be_uploaded">Tiedostoa ei voi ladata</string>
   <string name="file_list_seconds_ago">sekuntia sitten</string>
   <string name="file_list_empty">Täällä ei ole mitään. Lähetä tänne jotakin!</string>
   <string name="file_list_loading">Ladataan…</string>
