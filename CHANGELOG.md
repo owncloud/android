@@ -1,15 +1,15 @@
 ## 2.1.0 (August 2016)
-- Sync on tap/preview 
-- Multi select
-- Documents provider
-- Added "can share" option for federated shares (OC server 9.1 required)
-- New ICON!
-- Full name shown instead of username
-- UI improvements and sorting in uploader layout
+- Select and handle multiple files
+- Sync files on tap 
+- Access files through Documents Provider
+- "Can share" option for federated shares (server 9.1+)
+- Full name shown instead of user name
+- New icon
+- Style and sorting fixes
 - Bugs fixed, including:
- + Update "available offline" icon right after set/unset
- + Trim blanks of username in login view
- + Protect password field against suggestions
+  + Icon "available offline" shown when set
+  + Trim blanks of username in login view
+  + Protect password field from suggestions
 
 ## 2.0.1 (June 2016)
 - Favorite files are now called AVAILABLE OFFLINE
