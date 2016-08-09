@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -152,7 +152,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
         View view = inflater.inflate(R.layout.preview_video_fragment, container, false);
 
-        mProgressBar = (ProgressBar) view.findViewById(R.id.transferProgressBar);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mVideoPreview = (VideoView) view.findViewById(R.id.video_preview);
         mVideoPreview.setOnTouchListener(this);

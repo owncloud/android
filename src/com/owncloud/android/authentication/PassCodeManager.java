@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -28,6 +28,7 @@ import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
+import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.ui.activity.PassCodeActivity;
 
 import java.util.HashSet;
@@ -61,11 +62,13 @@ public class PassCodeManager {
     protected PassCodeManager() {};
 
     public void onActivityCreated(Activity activity) {
-        if (passCodeIsEnabled()) {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-        } else {
-            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-        }
+        if (!BuildConfig.DEBUG) {
+            if (passCodeIsEnabled()) {
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            } else {
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            }
+        } // else, let it go, or taking screenshots & testing will not be possible
     }
 
     public void onActivityStarted(Activity activity) {

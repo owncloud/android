@@ -3,7 +3,7 @@
  *
  *   @author Bartosz Przybylski
  *   Copyright (C) 2015  Bartosz Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -54,7 +54,7 @@ public class RootCursor extends MatrixCursor {
                 .add(Root.COLUMN_DOCUMENT_ID, mainDir.getFileId())
                 .add(Root.COLUMN_SUMMARY, account.name)
                 .add(Root.COLUMN_TITLE, context.getString(R.string.app_name))
-                .add(Root.COLUMN_ICON, R.drawable.icon)
+                .add(Root.COLUMN_ICON, R.mipmap.icon)
                 .add(Root.COLUMN_FLAGS, Root.FLAG_SUPPORTS_SEARCH);
 
     }
