@@ -1,7 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -64,13 +64,18 @@ public class UpdatePublicShareTest extends RemoteTest {
 	/* File to share and update.*/
 	private static final String FILE_TO_SHARE = "/fileToShare.txt";
 	
+	/* Folder to share and update */
+	private static final String FOLDER_TO_SHARE = "/folderToShare";
+	
 	// Data for tests 
 	private static final String PASSWORD = "password";
 	private static final String PASS_SPECIAL_CHARS = "p@ssw�rd";
 	
 	private String mFullPath2FileToShare;
+	private String mFullPath2FolderToShare;
 	
 	private OCShare mShare;
+	private OCShare mFolderShare;
 	
 	String mServerUri, mUser, mPass;
 	OwnCloudClient mClient = null;
@@ -107,7 +112,7 @@ public class UpdatePublicShareTest extends RemoteTest {
 	    
 	    Log.v(LOG_TAG, "Setting up the remote fixture...");
 	    
-	    // Upload the files
+	    // Upload the file
 	    mFullPath2FileToShare = mBaseFolderPath + FILE_TO_SHARE;
 	    
 	    File textFile = getActivity().extractAsset(TestActivity.ASSETS__TEXT_FILE_NAME);
@@ -126,15 +131,39 @@ public class UpdatePublicShareTest extends RemoteTest {
 				"", 
 				false, 
 				"", 
-				1);
+				OCShare.READ_PERMISSION_FLAG);
 
 	    if (result.isSuccess()){
 	    	mShare = (OCShare) result.getData().get(0);
 	    } else{
-	    	mShare = null;
+	    	Utils.logAndThrow(LOG_TAG, result);
 	    }
 	    
-		Log.v(LOG_TAG, "Remote fixture created.");
+	    // Create the folder
+ 		mFullPath2FolderToShare = mBaseFolderPath + FOLDER_TO_SHARE;
+ 		result = getActivity().createFolder(
+ 				mFullPath2FolderToShare,
+ 				true);
+ 		if (!result.isSuccess()) {
+ 			Utils.logAndThrow(LOG_TAG, result);
+ 		}
+
+ 		// Share the folder publicly via link
+ 		result = getActivity().createShare(
+ 				mFullPath2FolderToShare,
+ 				ShareType.PUBLIC_LINK,
+ 				"",
+ 				false,
+ 				"",
+ 				OCShare.READ_PERMISSION_FLAG);
+
+ 		if (result.isSuccess()){
+ 			mFolderShare = (OCShare) result.getData().get(0);
+ 		} else{
+ 			Utils.logAndThrow(LOG_TAG, result);
+ 		}
+	    
+		Log.v(LOG_TAG, "Remote fixtures created.");
 		
 	}
 	
@@ -164,7 +193,13 @@ public class UpdatePublicShareTest extends RemoteTest {
 			updateShare.setExpirationDate(expirationDateInMillis);
 			result = updateShare.execute(mClient);
 			assertTrue(result.isSuccess());
-					
+
+			// Update the Folder Share with edit permission
+			updateShare = new UpdateRemoteShareOperation(mFolderShare.getRemoteId());
+			updateShare.setPublicUpload(true);
+			result = updateShare.execute(mClient);
+			assertTrue(result.isSuccess());
+
 			// unsuccessful test
 			// Update Share with expiration date in the past
 			updateShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
@@ -174,6 +209,12 @@ public class UpdatePublicShareTest extends RemoteTest {
 			result = updateShare.execute(mClient);
 			assertFalse(result.isSuccess());
 			
+			// Try to update the file Share with edit permission
+			updateShare = new UpdateRemoteShareOperation(mShare.getRemoteId());
+			updateShare.setPublicUpload(true);
+			result = updateShare.execute(mClient);
+			assertFalse(result.isSuccess());
+
 			// Unshare the file before the unsuccessful tests
 			RemoveRemoteShareOperation unshare = new RemoveRemoteShareOperation((int) mShare.getRemoteId());
 			result = unshare.execute(mClient);

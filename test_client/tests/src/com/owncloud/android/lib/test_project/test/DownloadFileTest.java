@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -94,9 +94,8 @@ public class DownloadFileTest extends RemoteTest {
 	 */
 	public void testDownloadFile() {
 		RemoteOperationResult result = mActivity.downloadFile(
-				new RemoteFile(mFullPath2Image), 
-				mActivity.getFilesDir().getAbsolutePath()
-				);
+			new RemoteFile(mFullPath2Image), ""
+		);
 		mDownloadedFilePath = mFullPath2Image;
 		assertTrue(result.isSuccess());
 		// TODO some checks involving the local file
@@ -107,9 +106,8 @@ public class DownloadFileTest extends RemoteTest {
 	 */
 	public void testDownloadFileSpecialChars() {
 		RemoteOperationResult result = mActivity.downloadFile(
-				new RemoteFile(mFullPath2ImageWitSpecialChars),
-				mActivity.getFilesDir().getAbsolutePath()
-				);
+			new RemoteFile(mFullPath2ImageWitSpecialChars), ""
+		);
 		mDownloadedFilePath = mFullPath2ImageWitSpecialChars;
 		assertTrue(result.isSuccess());
 		// TODO some checks involving the local file
@@ -120,9 +118,8 @@ public class DownloadFileTest extends RemoteTest {
 	 */
 	public void testDownloadFileNotFound() {
 		RemoteOperationResult result = mActivity.downloadFile(
-				new RemoteFile(mFullPath2ImageNotFound), 
-				mActivity.getFilesDir().getAbsolutePath()
-				);
+			new RemoteFile(mFullPath2ImageNotFound), ""
+		);
 		assertFalse(result.isSuccess());
 	}
 	

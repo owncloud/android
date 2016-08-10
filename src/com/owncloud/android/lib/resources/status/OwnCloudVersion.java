@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,7 +36,9 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
             0x04000000);
     public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(
             0x04050000);
-    
+
+    public static final int MINIMUN_VERSION_FOR_CHUNKED_UPLOADS = 0x04050000; // 4.5
+
     public static final int MINIMUM_VERSION_FOR_SHARING_API = 0x05001B00; // 5.0.27
 
     public static final int MINIMUM_VERSION_WITH_FORBIDDEN_CHARS = 0x08010000; // 8.1
@@ -48,9 +50,11 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public static final int VERSION_8 = 0x08000000; // 8.0
 
     public static final int MINIMUM_VERSION_CAPABILITIES_API = 0x08010000; // 8.1
-    
+
+    private static final int MINIMUM_VERSION_WITH_NOT_RESHAREABLE_FEDERATED = 0x09010000;   // 9.1
+
     private static final int MAX_DOTS = 3;
-    
+
     // format is in version
     // 0xAABBCCDD
     // for version AA.BB.CC.DD
@@ -125,8 +129,12 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     	return versionValue; 
     }
-    
-    
+
+
+    public boolean isChunkedUploadSupported() {
+        return (mVersion >= MINIMUN_VERSION_FOR_CHUNKED_UPLOADS);
+    }
+
     public boolean isSharedSupported() {
     	return (mVersion >= MINIMUM_VERSION_FOR_SHARING_API);
     }
@@ -150,6 +158,8 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     public boolean isVersionWithCapabilitiesAPI(){
         return (mVersion>= MINIMUM_VERSION_CAPABILITIES_API);
     }
-    
-    
+
+    public boolean isNotReshareableFederatedSupported() {
+        return (mVersion >= MINIMUM_VERSION_WITH_NOT_RESHAREABLE_FEDERATED);
+    }
 }

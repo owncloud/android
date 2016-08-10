@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,6 +26,7 @@
 package com.owncloud.android.lib.common.network;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
@@ -100,12 +101,9 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
     
     @Override
     public void writeRequest(final OutputStream out) throws IOException {
-        //byte[] tmp = new byte[4096];
         ByteBuffer tmp = ByteBuffer.allocate(4096);
         int readResult = 0;
         
-        // TODO(bprzybylski): each mem allocation can throw OutOfMemoryError we need to handle it
-        //                    globally in some fashionable manner
         RandomAccessFile raf = new RandomAccessFile(mFile, "r");
         FileChannel channel = raf.getChannel();
         Iterator<OnDatatransferProgressListener> it = null;
@@ -114,7 +112,12 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
         if (size == 0) size = -1;
         try {
             while ((readResult = channel.read(tmp)) >= 0) {
-                out.write(tmp.array(), 0, readResult);
+                try {
+                    out.write(tmp.array(), 0, readResult);
+                } catch (IOException io) {
+                    // work-around try catch to filter exception in writing
+                    throw new WriteException(io);
+                }
                 tmp.clear();
                 transferred += readResult;
                 synchronized (mDataTransferListeners) {
@@ -124,14 +127,39 @@ public class FileRequestEntity implements RequestEntity, ProgressiveDataTransfer
                     }
                 }
             }
-            
+
         } catch (IOException io) {
-            Log_OC.e("FileRequestException", io.getMessage());
-            throw new RuntimeException("Ugly solution to workaround the default policy of retries when the server falls while uploading ; temporal fix; really", io);   
-            
+            // any read problem will be handled as if the file is not there
+            if (io instanceof FileNotFoundException) {
+                throw io;
+            } else {
+                FileNotFoundException fnf = new FileNotFoundException("Exception reading source file");
+                fnf.initCause(io);
+                throw fnf;
+            }
+
+        } catch (WriteException we) {
+            throw we.getWrapped();
+
         } finally {
-            channel.close();
-            raf.close();
+            try {
+                channel.close();
+                raf.close();
+            } catch (IOException io) {
+                // ignore failures closing source file
+            }
+        }
+    }
+
+    protected static class WriteException extends Exception {
+        IOException mWrapped;
+
+        WriteException(IOException wrapped) {
+            mWrapped = wrapped;
+        }
+
+        public IOException getWrapped() {
+            return mWrapped;
         }
     }
 

@@ -1,7 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ package com.owncloud.android.lib.test_project.test;
 
 import java.io.File;
 import java.security.GeneralSecurityException;
-import java.util.Calendar;
 
 import junit.framework.AssertionFailedError;
 
@@ -207,8 +206,8 @@ public class UpdatePrivateShareTest extends RemoteTest {
 				UpdateRemoteShareOperation updateNoShare = new UpdateRemoteShareOperation(
 						mFileShare.getRemoteId()
 				);
-				updateShare.setPermissions(OCShare.READ_PERMISSION_FLAG);	// minimum permissions
-				result = updateShare.execute(mClient);
+				updateNoShare.setPermissions(OCShare.READ_PERMISSION_FLAG);	// minimum permissions
+				result = updateNoShare.execute(mClient);
 				assertFalse(result.isSuccess());
 			}
 				

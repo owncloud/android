@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,14 +36,13 @@ import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
-import org.apache.http.HttpStatus;
-import org.apache.http.params.CoreProtocolPNames;
 
 import android.net.Uri;
 
@@ -60,6 +59,7 @@ public class OwnCloudClient extends HttpClient {
     public static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
+    private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
     
     private static byte[] sExhaustBuffer = new byte[1024];
     
@@ -89,7 +89,7 @@ public class OwnCloudClient extends HttpClient {
         String userAgent = OwnCloudClientManagerFactory.getUserAgent();
         getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
         getParams().setParameter(
-        		CoreProtocolPNames.PROTOCOL_VERSION, 
+        		PARAM_PROTOCOL_VERSION,
         		HttpVersion.HTTP_1_1);
         
         getParams().setCookiePolicy(

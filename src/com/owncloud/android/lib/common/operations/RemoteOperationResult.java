@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.common.operations;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -108,7 +109,10 @@ public class RemoteOperationResult implements Serializable {
 		PARTIAL_MOVE_DONE,
         PARTIAL_COPY_DONE,
         SHARE_WRONG_PARAMETER,
-        WRONG_SERVER_RESPONSE, INVALID_CHARACTER_DETECT_IN_SERVER
+        WRONG_SERVER_RESPONSE,
+        INVALID_CHARACTER_DETECT_IN_SERVER,
+        DELAYED_FOR_WIFI,
+        LOCAL_FILE_NOT_FOUND
     }
 
     private boolean mSuccess = false;
@@ -179,6 +183,9 @@ public class RemoteOperationResult implements Serializable {
                     continue;
                 }
             }
+        }
+        if (isIdPRedirection()) {
+            mCode = ResultCode.UNAUTHORIZED;    // overrides default ResultCode.UNKNOWN
         }
     }
 
@@ -253,6 +260,9 @@ public class RemoteOperationResult implements Serializable {
             } else {
                 mCode = ResultCode.SSL_ERROR;
             }
+
+        } else if (e instanceof FileNotFoundException) {
+            mCode = ResultCode.LOCAL_FILE_NOT_FOUND;
 
         } else {
             mCode = ResultCode.UNKNOWN_ERROR;

@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 
@@ -227,8 +226,8 @@ public class TestActivity extends Activity {
 	public RemoteOperationResult downloadFile(RemoteFile remoteFile, String temporalFolder) {
 		// Create folder 
 		String path =  "/owncloud/tmp/" + temporalFolder;
-		File sdCard = Environment.getExternalStorageDirectory();
-		File folder = new File(sdCard.getAbsolutePath() + "/" + path);
+		File privateFolder = getFilesDir();
+		File folder = new File(privateFolder.getAbsolutePath() + "/" + path);
 		folder.mkdirs();
 		
 		DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remoteFile.getRemotePath(), folder.getAbsolutePath());

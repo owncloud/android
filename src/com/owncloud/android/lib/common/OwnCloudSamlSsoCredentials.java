@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,7 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 	@Override
 	public void applyTo(OwnCloudClient client) {
         client.getParams().setAuthenticationPreemptive(false);
+        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
         client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
         client.setFollowRedirects(false);
         

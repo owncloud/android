@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--  ownCloud Android Library is available under MIT license
-   Copyright (C) 2015 ownCloud Inc.
+   Copyright (C) 2016 ownCloud GmbH.
     
    Permission is hereby granted, free of charge, to any person obtaining a copy
    of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@
 <resources>
     <string name="build_number"></string>
     <string name="server_base_url"></string>
+    <string name="server_base_url_2"></string>
     <string name="username"></string>
     <string name="password"></string>
     <string name ="user_agent">Mozilla/5.0 (Android) ownCloud test project</string>

@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2014 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -108,8 +108,6 @@ public class CopyFileTest extends ActivityInstrumentationTestCase2<TestActivity>
     private static final String SRC_PATH_TO_FILE_5 = SRC_BASE_FOLDER + FILE5;
 
     private static final String SRC_PATH_TO_FILE_6 = SRC_BASE_FOLDER + FILE6;
-
-    private static final String SRC_PATH_TO_FILE_7 = SRC_BASE_FOLDER + FILE7;
 
     private static final String SRC_PATH_TO_NON_EXISTENT_FILE = SRC_BASE_FOLDER + NO_FILE;
 

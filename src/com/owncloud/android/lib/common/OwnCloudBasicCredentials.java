@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -47,6 +47,7 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);        
         
         client.getParams().setAuthenticationPreemptive(true);
+        client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
         client.getState().setCredentials(
         		AuthScope.ANY, 
         		new UsernamePasswordCredentials(mUsername, mPassword)

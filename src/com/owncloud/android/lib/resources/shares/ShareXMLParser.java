@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -353,7 +353,6 @@ public class ShareXMLParser {
 				share.setSharedWithDisplayName(readNode(parser, NODE_SHARE_WITH_DISPLAY_NAME));
 
 			} else if (name.equalsIgnoreCase(NODE_URL)) {
-				share.setShareType(ShareType.PUBLIC_LINK);
 				String value = readNode(parser, NODE_URL);
 				share.setShareLink(value);
 

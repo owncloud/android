@@ -2,7 +2,7 @@
  *
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -34,8 +34,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -78,7 +78,7 @@ public class GetRemoteShareesOperation extends RemoteOperation{
 
     // Arguments - constant values
     private static final String VALUE_FORMAT = "json";
-    private static final String VALUE_ITEM_TYPE = "search";         //  to get the server search for users / groups
+    private static final String VALUE_ITEM_TYPE = "file";         //  to get the server search for users / groups
 
 
     // JSON Node names
@@ -87,14 +87,11 @@ public class GetRemoteShareesOperation extends RemoteOperation{
     private static final String NODE_EXACT = "exact";
     private static final String NODE_USERS = "users";
     private static final String NODE_GROUPS = "groups";
+    private static final String NODE_REMOTES = "remotes";
     public static final String NODE_VALUE = "value";
     public static final String PROPERTY_LABEL = "label";
     public static final String PROPERTY_SHARE_TYPE = "shareType";
     public static final String PROPERTY_SHARE_WITH = "shareWith";
-
-    // Result types
-    public static final Byte USER_TYPE = 0;
-    public static final Byte GROUP_TYPE = 1;
 
     private String mSearchString;
     private int mPage;
@@ -146,17 +143,21 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                 JSONObject respExact = respData.getJSONObject(NODE_EXACT);
                 JSONArray respExactUsers = respExact.getJSONArray(NODE_USERS);
                 JSONArray respExactGroups = respExact.getJSONArray(NODE_GROUPS);
+                JSONArray respExactRemotes = respExact.getJSONArray(NODE_REMOTES);
                 JSONArray respPartialUsers = respData.getJSONArray(NODE_USERS);
                 JSONArray respPartialGroups = respData.getJSONArray(NODE_GROUPS);
+                JSONArray respPartialRemotes = respData.getJSONArray(NODE_REMOTES);
                 JSONArray[] jsonResults = {
                         respExactUsers,
                         respExactGroups,
+                        respExactRemotes,
                         respPartialUsers,
-                        respPartialGroups
+                        respPartialGroups,
+                        respPartialRemotes
                 };
 
                 ArrayList<Object> data = new ArrayList<Object>(); // For result data
-                for (int i=0; i<4; i++) {
+                for (int i=0; i<6; i++) {
                     for(int j=0; j< jsonResults[i].length(); j++){
                         JSONObject jsonResult = jsonResults[i].getJSONObject(j);
                         data.add(jsonResult);

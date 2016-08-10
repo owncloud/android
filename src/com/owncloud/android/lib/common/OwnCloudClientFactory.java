@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +53,7 @@ public class OwnCloudClientFactory {
     /** Default timeout for establishing a connection */
     public static final int DEFAULT_CONNECTION_TIMEOUT = 60000;
 
-    
+
     /**
      * Creates a OwnCloudClient setup for an ownCloud account
      * 
@@ -83,7 +83,7 @@ public class OwnCloudClientFactory {
                 am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
         OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
 
-        String username = account.name.substring(0, account.name.lastIndexOf('@'));
+        String username = AccountUtils.getUsernameForAccount(account);
         if (isOauth2) {
             String accessToken = am.blockingGetAuthToken(
             		account, 
@@ -137,7 +137,7 @@ public class OwnCloudClientFactory {
                 am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
         OwnCloudClient client = createOwnCloudClient(baseUri, appContext, !isSamlSso);
 
-        String username = account.name.substring(0, account.name.lastIndexOf('@'));
+        String username = AccountUtils.getUsernameForAccount(account);
         if (isOauth2) {    // TODO avoid a call to getUserData here
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
             		account,  

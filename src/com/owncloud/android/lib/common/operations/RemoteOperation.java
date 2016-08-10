@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -306,7 +306,8 @@ public abstract class RemoteOperation implements Runnable {
         	 * 						to trigger authentication update */
             if (mCallerActivity != null && mAccount != null && mContext != null &&
                     !result.isSuccess() &&
-                    (result.getCode() == ResultCode.UNAUTHORIZED || result.isIdPRedirection())) {
+                    ResultCode.UNAUTHORIZED.equals(result.getCode())
+                ) {
                 /// possible fail due to lack of authorization
                 // in an operation performed in foreground
                 OwnCloudCredentials cred = mClient.getCredentials();

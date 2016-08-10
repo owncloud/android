@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,8 @@ public enum ShareType {
     GROUP (1),
     PUBLIC_LINK (3),
     EMAIL (4),
-    CONTACT (5);
+    CONTACT (5),
+    FEDERATED (6);
     
     private int value;
     
@@ -72,6 +73,8 @@ public enum ShareType {
             return EMAIL;
         case 5:
             return CONTACT;
+        case 6:
+            return FEDERATED;
         }
         return null;
     }
