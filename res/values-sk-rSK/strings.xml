@@ -38,6 +38,7 @@
   <string name="prefs_instant_video_upload_summary">Okamžite nahrať video zaznamenané fotoaparátom</string>
   <string name="prefs_log_summary">Toto je použité pre logovanie problémov</string>
   <string name="prefs_log_summary_history">Toto zobrazuje zaznamenané logy</string>
+  <string name="prefs_log_delete_history_button">Vymazať históriu</string>
   <string name="prefs_help">Pomoc</string>
   <string name="prefs_recommend">Doporučiť známemu</string>
   <string name="prefs_feedback">Spätná väzba</string>
@@ -76,6 +77,7 @@
   <string name="common_yes">Áno</string>
   <string name="common_no">Nie</string>
   <string name="common_ok">OK</string>
+  <string name="common_cancel_sync">Zrušiť synchronizáciu</string>
   <string name="common_cancel">Zrušiť</string>
   <string name="common_back">Späť</string>
   <string name="common_error">Chyba</string>
@@ -93,14 +95,20 @@
   <string name="uploader_upload_succeeded_ticker">Odoslanie bolo úspešné</string>
   <string name="uploader_upload_failed_ticker">Odoslanie bolo neúspešné</string>
   <string name="uploader_upload_failed_content_single">Odoslanie %1$s nemohlo byť dokončené</string>
+  <string name="uploader_upload_failed_credentials_error">Nahrávanie zlyhalo, je potrebné sa prihlásiť ešte raz</string>
   <string name="uploads_view_title">Nahranie</string>
   <string name="uploads_view_group_current_uploads">Aktuálne</string>
   <string name="uploads_view_group_finished_uploads">Odoslané</string>
   <string name="uploads_view_upload_status_succeeded">Dokončené</string>
+  <string name="uploads_view_upload_status_cancelled">Zrušené</string>
+  <string name="uploads_view_upload_status_paused">Pozastavené</string>
+  <string name="uploads_view_upload_status_failed_connection_error">Chyba spojenia</string>
   <string name="uploads_view_upload_status_failed_credentials_error">Chybné prihlasovacie údaje</string>
   <string name="uploads_view_upload_status_failed_folder_error">Chybný priečinok</string>
   <string name="uploads_view_upload_status_failed_file_error">Chybný súbor</string>
+  <string name="uploads_view_upload_status_failed_localfile_error">Lokálny súbor nenájdený</string>
   <string name="uploads_view_upload_status_failed_permission_error">Chybné oprávnenia.</string>
+  <string name="uploads_view_upload_status_conflict">Konflikt</string>
   <string name="uploads_view_upload_status_unknown_fail">Neznáma chyba</string>
   <string name="uploads_view_later_waiting_to_upload">Čaká sa na nahratie</string>
   <string name="downloader_download_in_progress_ticker">Sťahujem ...</string>
@@ -110,6 +118,7 @@
   <string name="downloader_download_failed_content">Sťahovanie %1$s nebolo dokončené</string>
   <string name="downloader_not_downloaded_yet">Ešte nie je stiahnuté</string>
   <string name="common_choose_account">Zvoliť účet</string>
+  <string name="sync_fail_ticker">Synchronizácia zlyhala</string>
   <string name="sync_fail_content_unauthorized">Nesprávne heslo pre %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Objavené konflikty</string>
   <string name="sync_conflicts_in_favourites_content">%1$d súborov z automatickej synchronizácie nemožno synchronizovať</string>
