@@ -45,9 +45,7 @@ android {
         release.setRoot('build-types/release')
     }
 
-    android {
-        lintOptions {
-            abortOnError false
-        }
+    lintOptions {
+        abortOnError false
     }
 }
