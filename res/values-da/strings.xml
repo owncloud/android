@@ -99,6 +99,7 @@
   <string name="uploads_view_group_current_uploads">Nuværende</string>
   <string name="uploads_view_group_finished_uploads">Sendt</string>
   <string name="uploads_view_upload_status_succeeded">Fuldført</string>
+  <string name="uploads_view_upload_status_cancelled">Annulléret</string>
   <string name="uploads_view_upload_status_failed_credentials_error">Godkendelsesfejl</string>
   <string name="uploads_view_upload_status_failed_folder_error">Mappefejl</string>
   <string name="uploads_view_upload_status_failed_file_error">Filfejl</string>

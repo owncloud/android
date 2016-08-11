@@ -414,4 +414,9 @@
   <string name="manage_space_error">いくつかのファイルがクリアできませんでした。</string>
   <string name="permission_storage_access">ファイルをダウンロード &amp; アップロードする追加の権限が必要です。</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
+  <string name="confirmation_remove_files_alert">選択したものを削除してよろしいですか?</string>
+  <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
+  <plurals name="items_selected_count">
+    <item quantity="other">%d個選択中</item>
+  </plurals>
 </resources>
