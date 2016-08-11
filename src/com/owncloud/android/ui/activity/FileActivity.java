@@ -3,7 +3,7 @@
  *
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -716,7 +716,7 @@ public class FileActivity extends AppCompatActivity
             mCapabilities = mStorageManager.getCapability(mAccount.name);
 
         } else {
-            Log_OC.wtf(TAG, "onAccountChanged was called with NULL account associated!");
+            Log_OC.e(TAG, "onAccountChanged was called with NULL account associated!");
         }
     }
 
@@ -884,6 +884,7 @@ public class FileActivity extends AppCompatActivity
 
     private void onSynchronizeFileOperationFinish(SynchronizeFileOperation operation,
                                                   RemoteOperationResult result) {
+        invalidateOptionsMenu();
         OCFile syncedFile = operation.getLocalFile();
         if (!result.isSuccess()) {
             if (result.getCode() == ResultCode.SYNC_CONFLICT) {
@@ -892,14 +893,6 @@ public class FileActivity extends AppCompatActivity
                 i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, getAccount());
                 startActivity(i);
             }
-
-        } else {
-            if (!operation.transferWasRequested()) {
-                Toast msg = Toast.makeText(this, ErrorMessageAdapter.getErrorCauseMessage(result,
-                        operation, getResources()), Toast.LENGTH_LONG);
-                msg.show();
-            }
-            invalidateOptionsMenu();
         }
     }
 
@@ -919,11 +912,15 @@ public class FileActivity extends AppCompatActivity
         // grant that only one waiting dialog is shown
         dismissLoadingDialog();
         // Construct dialog
-        LoadingDialog loading = new LoadingDialog(message);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        loading.show(ft, DIALOG_WAIT_TAG);
-
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
+        if (frag == null) {
+            Log_OC.d(TAG, "show loading dialog");
+            LoadingDialog loading = new LoadingDialog(message);
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            loading.show(ft, DIALOG_WAIT_TAG);
+            fm.executePendingTransactions();
+        }
     }
 
 
@@ -933,6 +930,7 @@ public class FileActivity extends AppCompatActivity
     public void dismissLoadingDialog() {
         Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
         if (frag != null) {
+            Log_OC.d(TAG, "dismiss loading dialog");
             LoadingDialog loading = (LoadingDialog) frag;
             loading.dismiss();
         }
@@ -962,9 +960,6 @@ public class FileActivity extends AppCompatActivity
             if (component.equals(new ComponentName(FileActivity.this, OperationsService.class))) {
                 Log_OC.d(TAG, "Operations service connected");
                 mOperationsServiceBinder = (OperationsServiceBinder) service;
-                /*if (!mOperationsServiceBinder.isPerformingBlockingOperation()) {
-                    dismissLoadingDialog();
-                }*/
                 if (mResumed) {
                     doOnResumeAndBound();
                 }

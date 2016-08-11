@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author masensio
- *   Copyright (C) 2016 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -68,15 +68,16 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
+        boolean retval = true;
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
+                break;
             default:
                 Log_OC.w(TAG, "Unknown menu item triggered");
-                return false;
+                retval =  super.onOptionsItemSelected(item);
         }
+        return retval;
     }
 
     /**

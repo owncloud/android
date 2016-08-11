@@ -3,7 +3,7 @@
  *
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -93,7 +93,8 @@ public class LocalFileListFragment extends ExtendedListFragment {
         Log_OC.i(TAG, "onActivityCreated() start");
         
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new LocalFileListAdapter(mContainerActivity.getInitialDirectory(), getActivity());
+        mDirectory = mContainerActivity.getInitialDirectory();
+        mAdapter = new LocalFileListAdapter(mDirectory, getActivity());
         setListAdapter(mAdapter);
         
         Log_OC.i(TAG, "onActivityCreated() stop");

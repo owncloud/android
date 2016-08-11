@@ -230,7 +230,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="unfavorite">Instellen als niet beschikbaar offline</string>
   <string name="common_rename">Hernoemen</string>
   <string name="common_remove">Verwijderen</string>
-  <string name="confirmation_remove_alert">Wilt u %1$s werkelijk verwijderen?</string>
+  <string name="confirmation_remove_file_alert">Wilt u %1$s werkelijk verwijderen?</string>
   <string name="confirmation_remove_folder_alert">Wilt u %1$s en de inhoud ervan werkelijk verwijderen?</string>
   <string name="confirmation_remove_local">Alleen lokaal</string>
   <string name="remove_success_msg">Succesvol verwijderd</string>
@@ -416,4 +416,10 @@ Neem contact op met uw beheerder</string>
   <string name="manage_space_error">Sommige bestanden konden niet worden verwijderd</string>
   <string name="permission_storage_access">Aanvullende permssies vereist voor het uploaden en downloaden van bestanden.</string>
   <string name="local_file_not_found_toast">Het bestand is niet te vinden binnen het lokale bestandssysteem.</string>
+  <string name="confirmation_remove_files_alert">Wilt u werkelijk de geselecteerde onderwerpen verwijderen?</string>
+  <string name="confirmation_remove_folders_alert">Wilt u werkelijk de geselecteerde onderwerpen en de inhoud ervan verwijderen?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d geselecteerd</item>
+    <item quantity="other">%d geselecteerd</item>
+  </plurals>
 </resources>

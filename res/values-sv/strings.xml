@@ -227,7 +227,7 @@
   <string name="unfavorite">Ta bort som tillgänglig offline</string>
   <string name="common_rename">Byt namn</string>
   <string name="common_remove">Radera</string>
-  <string name="confirmation_remove_alert">Vill du verkligen ta bort %1$s?</string>
+  <string name="confirmation_remove_file_alert">Vill du verkligen ta bort %1$s?</string>
   <string name="confirmation_remove_folder_alert">Vill du verkligen ta bort %1$s och dess innehåll?</string>
   <string name="confirmation_remove_local">Endast lokalt</string>
   <string name="remove_success_msg">Lyckad radering</string>
@@ -400,7 +400,7 @@
   <string name="share_privilege_can_edit_delete">radera</string>
   <string name="edit_share_unshare">Sluta dela</string>
   <string name="edit_share_done">färdig</string>
-  <string name="action_retry_uploads">Återuppladdningsförsök misslyckades</string>
+  <string name="action_retry_uploads">Försök ladda upp igen</string>
   <string name="action_clear_failed_uploads">Rensa misslyckade</string>
   <string name="action_clear_successful_uploads">Rensa lyckade</string>
   <string name="action_clear_finished_uploads">Rensa alla färdigställda</string>

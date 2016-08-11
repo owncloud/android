@@ -3,7 +3,7 @@
  *
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
- * Copyright (C) 2015 ownCloud Inc.
+ * Copyright (C) 2016 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,6 +35,7 @@ import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -72,30 +74,25 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
     private static final int RESULTS_PER_PAGE = 50;
     private static final int REQUESTED_PAGE = 1;
 
-    public static final String AUTHORITY = UsersAndGroupsSearchProvider.class.getCanonicalName();
-    public static final String ACTION_SHARE_WITH = AUTHORITY + ".action.SHARE_WITH";
-
     public static final String CONTENT = "content";
 
-    public static final String DATA_USER = AUTHORITY + ".data.user";
-    public static final String DATA_GROUP = AUTHORITY + ".data.group";
-    public static final String DATA_REMOTE = AUTHORITY + ".data.remote";
+    public static final String DATA_USER_SUFFIX = ".data.user";
+    public static final String DATA_GROUP_SUFFIX = ".data.group";
+    public static final String DATA_REMOTE_SUFFIX = ".data.remote";
 
-    private UriMatcher mUriMatcher;
+    private static String sSuggestAuthority;
+    private static String sSuggestIntentAction;
+    private static Map<String, ShareType> sShareTypes = new HashMap<>();
 
-    private static HashMap<String, ShareType> sShareTypes;
-
-    static {
-        sShareTypes = new HashMap<>();
-        sShareTypes.put(DATA_USER, ShareType.USER);
-        sShareTypes.put(DATA_GROUP, ShareType.GROUP);
-        sShareTypes.put(DATA_REMOTE, ShareType.FEDERATED);
+    public static String getSuggestIntentAction() {
+        return sSuggestIntentAction;
     }
 
     public static ShareType getShareType(String authority) {
-
         return sShareTypes.get(authority);
     }
+
+    private UriMatcher mUriMatcher = null;
 
     @Nullable
     @Override
@@ -106,9 +103,33 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        mUriMatcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH);
-        return true;
+        try {
+            sSuggestAuthority = getContext().getResources().
+                getString(R.string.search_suggest_authority);
+
+            // init share types
+            sShareTypes.put(sSuggestAuthority + DATA_USER_SUFFIX, ShareType.USER);
+            sShareTypes.put(sSuggestAuthority + DATA_GROUP_SUFFIX, ShareType.GROUP);
+            sShareTypes.put(sSuggestAuthority + DATA_REMOTE_SUFFIX, ShareType.FEDERATED);
+
+            // init URI matcher
+            mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+            mUriMatcher.addURI(
+                sSuggestAuthority,
+                SearchManager.SUGGEST_URI_PATH_QUERY + "/*",
+                SEARCH
+            );
+
+            // init intent action
+            sSuggestIntentAction = getContext().getResources().
+                getString(R.string.search_suggest_intent_action);
+
+            return true;
+
+        } catch (Throwable t) {
+            Log_OC.e("TAG", "Fail creating provider", t);
+            return false;
+        }
     }
 
     /**
@@ -129,7 +150,6 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Log_OC.d(TAG, "query received in thread " + Thread.currentThread().getName());
-
         int match = mUriMatcher.match(uri);
         switch (match) {
             case SEARCH:
@@ -176,9 +196,16 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
             Uri dataUri = null;
             int count = 0;
 
-            Uri userBaseUri = new Uri.Builder().scheme(CONTENT).authority(DATA_USER).build();
-            Uri groupBaseUri = new Uri.Builder().scheme(CONTENT).authority(DATA_GROUP).build();
-            Uri remoteBaseUri = new Uri.Builder().scheme(CONTENT).authority(DATA_REMOTE).build();
+            MainApp app = (MainApp)getContext().getApplicationContext();
+            Uri userBaseUri = new Uri.Builder().scheme(CONTENT).authority(
+                sSuggestAuthority + DATA_USER_SUFFIX
+            ).build();
+            Uri groupBaseUri = new Uri.Builder().scheme(CONTENT).authority(
+                sSuggestAuthority + DATA_GROUP_SUFFIX
+            ).build();
+            Uri remoteBaseUri = new Uri.Builder().scheme(CONTENT).authority(
+                sSuggestAuthority + DATA_REMOTE_SUFFIX
+            ).build();
 
             FileDataStorageManager manager = new FileDataStorageManager(account, getContext().getContentResolver());
             boolean federatedShareAllowed = manager.getCapability(account.name).getFilesSharingFederationOutgoing()
@@ -253,7 +280,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
      *
      * @param result Result with the failure information.
      */
-    public void showErrorMessage(final RemoteOperationResult result) {
+    private void showErrorMessage(final RemoteOperationResult result) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override

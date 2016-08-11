@@ -58,10 +58,18 @@
   <string name="sync_string_files">Filer</string>
   <string name="setup_btn_connect">Koble til</string>
   <string name="uploader_btn_upload_text">Last opp</string>
+  <string name="uploader_top_message">Velg mappe for opplasting</string>
   <string name="uploader_wrn_no_account_title">Ingen konto funnet</string>
   <string name="uploader_wrn_no_account_text">Det finnes ingen %1$s-kontoer på enheten din. Sett opp en konto først.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Oppsett</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Avslutt</string>
+  <string name="uploader_error_title_no_file_to_upload">Ingen fil å laste opp</string>
+  <string name="uploader_error_message_received_piece_of_text">%1$s kan ikke laste opp et stykke tekst som en fil.</string>
+  <string name="uploader_error_message_no_file_to_upload">Mottatte data inneholder ikke noen gyldig fil.</string>
+  <string name="uploader_error_title_file_cannot_be_uploaded">Fil kan ikke lastes opp</string>
+  <string name="uploader_error_message_read_permission_not_granted">%1$s har ikke lov til å lese en mottatt fil</string>
+  <string name="uploader_error_message_source_file_not_found">Filen som skulle lastes opp fantes ikke på plassen sin. Sjekk om filen finnes.</string>
+  <string name="uploader_error_message_source_file_not_copied">Det skjedde en feil under kopiering av filen til en foreløpig mappe. Prøv å sende igjen.</string>
   <string name="file_list_seconds_ago">for få sekunder siden</string>
   <string name="file_list_empty">Ingenting her. Last opp noe!</string>
   <string name="file_list_loading">Laster...</string>
@@ -215,9 +223,11 @@
 	</string>
   <string name="auth_can_not_auth_against_server">Kan ikke autentisere mot denne serveren</string>
   <string name="auth_account_does_not_exist">Kontoen eksisterer ikke på enheten enda</string>
+  <string name="favorite">Sett som tilgjengelig frakoblet</string>
+  <string name="unfavorite">Sett som utilgjengelig frakoblet</string>
   <string name="common_rename">Endre navn</string>
   <string name="common_remove">Fjern</string>
-  <string name="confirmation_remove_alert">Vil du virkelig fjerne %1$s?</string>
+  <string name="confirmation_remove_file_alert">Vil du virkelig fjerne %1$s?</string>
   <string name="confirmation_remove_folder_alert">Vil du virkelig fjerne %1$s inkludert innholdet?</string>
   <string name="confirmation_remove_local">Kun lokalt</string>
   <string name="remove_success_msg">Fjerning var vellykket</string>
@@ -297,6 +307,9 @@
   <string name="activity_chooser_send_file_title">Send</string>
   <string name="copy_link">Kopier lenke</string>
   <string name="clipboard_text_copied">Kopiert til utklippstavlen</string>
+  <string name="clipboard_no_text_to_copy">Ingen tekst ble mottatt for kopiering til utklippstavlen</string>
+  <string name="clipboard_uxexpected_error">Uventet feil under kopiering til utklippstavlen</string>
+  <string name="clipboard_label">Tekst kopiert fra %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritisk feil: kan ikke utføre operasjonene</string>
   <string name="network_error_socket_exception">En feil oppstod ved oppretting av forbindelse til serveren.</string>
   <string name="network_error_socket_timeout_exception">En feil oppstod ved venting på svar fra serveren. Operasjonen kunne ikke utføres</string>
@@ -395,7 +408,9 @@
   <string name="action_switch_grid_view">Rutenett-visning</string>
   <string name="action_switch_list_view">Listevisning</string>
   <string name="manage_space_title">Håndter plass</string>
+  <string name="manage_space_description">Innstillinger, database og server-sertifikater fra %1$s sine data vil bli slettet permanent. \n\nNedlastede filer beholdes urørt.\n\nDenne prosessen kan ta litt tid.</string>
   <string name="manage_space_clear_data">Nullstill data</string>
   <string name="manage_space_error">Noen filer kunne ikke fjernes.</string>
   <string name="permission_storage_access">Flere tillatelser trengs for å laste opp &amp; ned filer.</string>
+  <string name="local_file_not_found_toast">Filen ble ikke funnet i det lokale filsystemet</string>
 </resources>

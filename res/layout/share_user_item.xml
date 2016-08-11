@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ownCloud Android client application
-  Copyright (C) 2015 ownCloud Inc.
+  Copyright (C) 2016 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -52,7 +52,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:id="@+id/unshareButton"
-            android:src="@drawable/ic_action_delete"
+            android:src="@drawable/ic_action_delete_grey"
             android:layout_gravity="center_vertical"
             android:padding="@dimen/standard_half_padding"/>
 

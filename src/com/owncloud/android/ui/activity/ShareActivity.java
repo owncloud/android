@@ -4,7 +4,7 @@
  * @author masensio
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
- * Copyright (C) 2015 ownCloud Inc.
+ * Copyright (C) 2016 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -38,13 +38,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CreateShareViaLinkOperation;
 import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
-import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
 import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
@@ -107,7 +107,7 @@ public class ShareActivity extends FileActivity
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log_OC.w(TAG, "Ignored Intent requesting to query for " + query);
 
-        } else if (UsersAndGroupsSearchProvider.ACTION_SHARE_WITH.equals(intent.getAction())) {
+        } else if (UsersAndGroupsSearchProvider.getSuggestIntentAction().equals(intent.getAction())) {
             Uri data = intent.getData();
             String dataString = intent.getDataString();
             String shareWith = dataString.substring(dataString.lastIndexOf('/') + 1);
@@ -117,7 +117,7 @@ public class ShareActivity extends FileActivity
             );
 
         } else {
-            Log_OC.wtf(TAG, "Unexpected intent " + intent.toString());
+            Log_OC.e(TAG, "Unexpected intent " + intent.toString());
         }
     }
 
@@ -142,11 +142,28 @@ public class ShareActivity extends FileActivity
         if (getFile().isSharedWithMe()) {
             return OCShare.READ_PERMISSION_FLAG;    // minimum permissions
 
-        } else if (getFile().isFolder()) {
-            return (isFederated) ? OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER : OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER;
-
-        } else {    // isFile
-            return (isFederated) ? OCShare.FEDERATED_PERMISSIONS_FOR_FILE : OCShare.MAXIMUM_PERMISSIONS_FOR_FILE;
+        } else if (isFederated) {
+            OwnCloudVersion serverVersion =
+                com.owncloud.android.authentication.AccountUtils.getServerVersion(getAccount());
+            if (serverVersion != null && serverVersion.isNotReshareableFederatedSupported()) {
+                return (
+                    getFile().isFolder() ?
+                        OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 :
+                        OCShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
+                );
+            } else {
+                return (
+                    getFile().isFolder() ?
+                        OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 :
+                        OCShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
+                );
+            }
+        } else {
+            return (
+                getFile().isFolder() ?
+                    OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER :
+                    OCShare.MAXIMUM_PERMISSIONS_FOR_FILE
+            );
         }
     }
 

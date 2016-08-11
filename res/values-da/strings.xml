@@ -86,6 +86,7 @@
   <string name="common_error_unknown">Ukendt fejl</string>
   <string name="about_title">Om</string>
   <string name="change_password">Skift kodeord</string>
+  <string name="delete_account">Fjern konto</string>
   <string name="create_account">Opret konto</string>
   <string name="upload_chooser_title">Upload fra ...</string>
   <string name="uploader_info_dirname">Mappenavn</string>
@@ -98,6 +99,7 @@
   <string name="uploads_view_group_current_uploads">Nuværende</string>
   <string name="uploads_view_group_finished_uploads">Sendt</string>
   <string name="uploads_view_upload_status_succeeded">Fuldført</string>
+  <string name="uploads_view_upload_status_cancelled">Annulléret</string>
   <string name="uploads_view_upload_status_failed_credentials_error">Godkendelsesfejl</string>
   <string name="uploads_view_upload_status_failed_folder_error">Mappefejl</string>
   <string name="uploads_view_upload_status_failed_file_error">Filfejl</string>
@@ -178,7 +180,7 @@
   <string name="auth_account_does_not_exist">Kontoen findes endnu ikke på enheden</string>
   <string name="common_rename">Omdøb</string>
   <string name="common_remove">Fjern</string>
-  <string name="confirmation_remove_alert">Er du sikker på at du vil fjerne %1$s ?</string>
+  <string name="confirmation_remove_file_alert">Er du sikker på at du vil fjerne %1$s ?</string>
   <string name="confirmation_remove_folder_alert">Ønsker du virkelig at slette %1$s og dets indhold?</string>
   <string name="confirmation_remove_local">Kun lokal</string>
   <string name="remove_success_msg">Vellykket fjernelse</string>

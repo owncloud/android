@@ -1,7 +1,7 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -31,17 +31,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
-import com.owncloud.android.ui.dialog.RemoveFileDialogFragment;
+import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
+import com.owncloud.android.utils.DisplayUtils;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -58,8 +61,30 @@ public class PreviewTextFragment extends FileFragment {
     private static final String TAG = PreviewTextFragment.class.getSimpleName();
 
     private Account mAccount;
+    private ProgressBar mProgressBar;
+    private TransferProgressController mProgressController;
     private TextView mTextPreview;
     private TextLoadAsyncTask mTextLoadTask;
+
+
+    /**
+     * Public factory method to create new PreviewTextFragment instances.
+     *
+     * @param file                      An {@link OCFile} to preview in the fragment
+     * @param account                   ownCloud account containing file
+     * @return                          Fragment ready to be used.
+     */
+    public static PreviewTextFragment newInstance(
+        OCFile file,
+        Account account
+    ) {
+        PreviewTextFragment frag = new PreviewTextFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(EXTRA_FILE, file);
+        args.putParcelable(EXTRA_ACCOUNT, account);
+        frag.setArguments(args);
+        return frag;
+    }
 
     /**
      * Creates an empty fragment for previews.
@@ -85,8 +110,9 @@ public class PreviewTextFragment extends FileFragment {
         Log_OC.e(TAG, "onCreateView");
 
 
-        View ret = inflater.inflate(R.layout.text_file_preview, container, false);
-
+        View ret = inflater.inflate(R.layout.preview_text_fragment, container, false);
+        mProgressBar = (ProgressBar) ret.findViewById(R.id.syncProgressBar);
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mTextPreview = (TextView) ret.findViewById(R.id.text_preview);
 
         return ret;
@@ -98,20 +124,11 @@ public class PreviewTextFragment extends FileFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        OCFile file = getFile();
-
-        Bundle args = getArguments();
-
-        if (file == null) {
-            file = args.getParcelable(FileDisplayActivity.EXTRA_FILE);
-        }
-
-        if (mAccount == null) {
-            mAccount = args.getParcelable(FileDisplayActivity.EXTRA_ACCOUNT);
-        }
-
+        OCFile file;
         if (savedInstanceState == null) {
+            Bundle args = getArguments();
+            file = args.getParcelable(EXTRA_FILE);
+            mAccount = args.getParcelable(EXTRA_ACCOUNT);
             if (file == null) {
                 throw new IllegalStateException("Instanced with a NULL OCFile");
             }
@@ -126,14 +143,21 @@ public class PreviewTextFragment extends FileFragment {
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedState) {
+        super.onActivityCreated(savedState);
+        mProgressController = new TransferProgressController(mContainerActivity);
+        mProgressController.setProgressBar(mProgressBar);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(PreviewTextFragment.EXTRA_FILE, getFile());
-        outState.putParcelable(PreviewTextFragment.EXTRA_ACCOUNT, mAccount);
+        outState.putParcelable(EXTRA_FILE, getFile());
+        outState.putParcelable(EXTRA_ACCOUNT, mAccount);
     }
 
     @Override
@@ -141,11 +165,12 @@ public class PreviewTextFragment extends FileFragment {
         super.onStart();
         Log_OC.e(TAG, "onStart");
 
+        mProgressController.startListeningProgressFor(getFile(), mAccount);
         loadAndShowTextPreview();
     }
 
     private void loadAndShowTextPreview() {
-        mTextLoadTask = new TextLoadAsyncTask(new WeakReference<TextView>(mTextPreview));
+        mTextLoadTask = new TextLoadAsyncTask(new WeakReference<>(mTextPreview));
         mTextLoadTask.execute(getFile().getStoragePath());
     }
 
@@ -190,14 +215,12 @@ public class PreviewTextFragment extends FileFragment {
                 if (exc != null) throw exc;
             } catch (IOException e) {
                 Log_OC.e(TAG, e.getMessage(), e);
-                finish();
             } finally {
                 if (inputStream != null) {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
                         Log_OC.e(TAG, e.getMessage(), e);
-                        finish();
                     }
                 }
                 if (sc != null) {
@@ -340,7 +363,7 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_remove_file: {
-                RemoveFileDialogFragment dialog = RemoveFileDialogFragment.newInstance(getFile());
+                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstance(getFile());
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
@@ -349,52 +372,28 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_send_file: {
-                sendFile();
+                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
                 return true;
             }
             case R.id.action_sync_file: {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-
+            case R.id.action_favorite_file:{
+                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), true);
+                return true;
+            }
+            case R.id.action_unfavorite_file:{
+                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), false);
+                return true;
+            }
             default:
-                return false;
+                return super.onOptionsItemSelected(item);
         }
-    }
-
-    /**
-     * Update the file of the fragment with file value
-     *
-     * @param file The new file to set
-     */
-    public void updateFile(OCFile file) {
-        setFile(file);
-    }
-
-    private void sendFile() {
-        mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
     }
 
     private void seeDetails() {
         mContainerActivity.showDetails(getFile());
-    }
-
-    @Override
-    public void onPause() {
-        Log_OC.e(TAG, "onPause");
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log_OC.e(TAG, "onResume");
-    }
-
-    @Override
-    public void onDestroy() {
-        Log_OC.e(TAG, "onDestroy");
-        super.onDestroy();
     }
 
     @Override
@@ -405,7 +404,48 @@ public class PreviewTextFragment extends FileFragment {
             mTextLoadTask.cancel(Boolean.TRUE);
             mTextLoadTask.dismissLoadingDialog();
         }
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
     }
+
+    @Override
+    public void onTransferServiceConnected() {
+        if (mProgressController != null) {
+            mProgressController.startListeningProgressFor(getFile(), mAccount);
+        }
+    }
+
+    @Override
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileMetadataChanged() {
+        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
+        if (storageManager != null) {
+            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        loadAndShowTextPreview();
+    }
+
+    @Override
+    public void updateViewForSyncInProgress() {
+        mProgressController.showProgressBar();
+    }
+
+    @Override
+    public void updateViewForSyncOff() {
+        mProgressController.hideProgressBar();
+    }
+
 
     /**
      * Opens the previewed file with an external application.
@@ -440,11 +480,6 @@ public class PreviewTextFragment extends FileFragment {
      * Finishes the preview
      */
     private void finish() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().onBackPressed();
-            }
-        });
+        getActivity().onBackPressed();
     }
 }
