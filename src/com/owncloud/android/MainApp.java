@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.content.Intent;
 
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
@@ -34,6 +35,7 @@ import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 
+import com.owncloud.android.services.observer.InstantUploadFolderObserverService;
 /**
  * Main Application of the project
  * 
@@ -62,6 +64,7 @@ public class MainApp extends Application {
         super.onCreate();
         MainApp.mContext = getApplicationContext();
         
+        
         boolean isSamlAuth = AUTH_ON.equals(getString(R.string.auth_method_saml_web_sso));
 
         OwnCloudClientManagerFactory.setUserAgent(getUserAgent());
@@ -73,6 +76,11 @@ public class MainApp extends Application {
 
         // initialise thumbnails cache on background thread
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
+        
+        Log_OC.d("InstantUploadFolderObserverService", "start Service InstantUploadFolderObserverService");
+        //startService(new Intent(MainApp.getAppContext(), InstantUploadFolderObserverService.class));
+        Intent i = new Intent(this, InstantUploadFolderObserverService.class);
+        startService(i);
         
         if (BuildConfig.DEBUG) {
 

@@ -21,11 +21,14 @@
  */
 package com.owncloud.android.ui.activity;
 
+import java.util.HashSet;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -70,6 +73,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.datamodel.InstantUploadPreference;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileOperationsHelper;
 import com.owncloud.android.files.services.FileDownloader;
@@ -77,7 +81,9 @@ import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.services.OperationsService;
+import com.owncloud.android.services.observer.InstantUploadFolderObserverService;
 import com.owncloud.android.ui.RadioButtonPreference;
+import com.owncloud.android.ui.LongClickablePreference;
 import com.owncloud.android.utils.DisplayUtils;
 
 
@@ -103,9 +109,12 @@ public class Preferences extends PreferenceActivity
     private AppCompatDelegate mDelegate;
 
     private PreferenceCategory mAccountsPrefCategory = null;
+    private PreferenceCategory mInstantUploadsCategory = null;
     private final Handler mHandler = new Handler();
     private String mAccountName;
+    private String mInstantUpload;
     private boolean mShowContextMenu = false;
+    private boolean mShowAccountContextMenu = false;
     private String mUploadPath;
     private PreferenceCategory mPrefInstantUploadCategory;
     private Preference mPrefInstantUpload;
@@ -143,7 +152,8 @@ public class Preferences extends PreferenceActivity
         }
 
         // Load the accounts category for adding the list of accounts
-        mAccountsPrefCategory = (PreferenceCategory) findPreference("accounts_category");
+        mAccountsPrefCategory =   (PreferenceCategory) findPreference("accounts_category");
+        mInstantUploadsCategory = (PreferenceCategory) findPreference("instantUploads_category");
 
         ListView listView = getListView();
         listView.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -155,6 +165,7 @@ public class Preferences extends PreferenceActivity
 
                 if (obj != null && obj instanceof RadioButtonPreference) {
                     mShowContextMenu = true;
+                    mShowAccountContextMenu = true;
                     mAccountName = ((RadioButtonPreference) obj).getKey();
 
                     String[] items = {
@@ -187,7 +198,7 @@ public class Preferences extends PreferenceActivity
                                                 AuthenticatorActivity.ACTION_UPDATE_TOKEN);
                                         startActivity(updateAccountCredentials);
                                         alertDialog.cancel();
-                                        
+
                                     } else if (position==1) {
 
                                         // Remove account
@@ -200,6 +211,16 @@ public class Preferences extends PreferenceActivity
                         }
                     });
                     alertDialog.show();
+
+                    View.OnLongClickListener longListener = (View.OnLongClickListener) obj;
+                    return longListener.onLongClick(view);
+                }
+
+                if (obj != null && obj instanceof LongClickablePreference) {
+                    mShowContextMenu = true;
+                    mInstantUpload = ((LongClickablePreference) obj).getKey();
+
+                    Preferences.this.openContextMenu(listView);
 
                     View.OnLongClickListener longListener = (View.OnLongClickListener) obj;
                     return longListener.onLongClick(view);
@@ -457,10 +478,16 @@ public class Preferences extends PreferenceActivity
                pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
        }
 
+       addInstantUploadFolders();
+
+
+
+       // mInstantUploadsCategory.setL
+
        loadInstantUploadPath();
        loadInstantUploadVideoPath();
 
-        /* ComponentsGetter */
+         /* ComponentsGetter */
         mDownloadServiceConnection = newTransferenceServiceConnection();
         if (mDownloadServiceConnection != null) {
             bindService(new Intent(this, FileDownloader.class), mDownloadServiceConnection,
@@ -474,6 +501,52 @@ public class Preferences extends PreferenceActivity
 
     }
     
+    private void addInstantUploadFolders(){
+        // Remove folders in case list is refreshing for avoiding to have duplicate items
+        if (mInstantUploadsCategory.getPreferenceCount() > 0) {
+            mInstantUploadsCategory.removeAll();
+        }
+
+        /* Instant Upload Folders */
+        for (InstantUploadPreference preference : InstantUploadFolderObserverService.getAll()) {
+            LongClickablePreference addInstantUploadPref = new LongClickablePreference(this);
+            addInstantUploadPref.setKey(preference.getId());
+            addInstantUploadPref.setTitle(preference.toString());
+            mInstantUploadsCategory.addPreference(addInstantUploadPref);
+
+            addInstantUploadPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent settingsIntent = new Intent(MainApp.getAppContext(), InstantUploadPreferencesActivity.class);
+                    settingsIntent.putExtra(InstantUploadPreferencesActivity.NUMBER, preference.getKey());
+                    startActivity(settingsIntent);
+                    return true;
+                }
+            });
+        }
+
+        LongClickablePreference addInstantUploadPref = new LongClickablePreference(this);
+        addInstantUploadPref.setTitle("Add instant upload");
+        mInstantUploadsCategory.addPreference(addInstantUploadPref);
+        addInstantUploadPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                // Create new InstantUploadPreference
+                String newValue = InstantUploadFolderObserverService.add();
+
+                Intent settingsIntent = new Intent(MainApp.getAppContext(), InstantUploadPreferencesActivity.class);
+                settingsIntent.putExtra(InstantUploadPreferencesActivity.NUMBER, newValue);
+                startActivity(settingsIntent);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
     private void toggleInstantPictureOptions(Boolean value){
         if (value){
             mPrefInstantUploadCategory.addPreference(mPrefInstantUploadPathWiFi);
@@ -505,13 +578,63 @@ public class Preferences extends PreferenceActivity
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 
+        Log_OC.d(TAG, "contextAccount: " + mShowAccountContextMenu);
+
         // Filter for only showing contextual menu when long press on the
         // accounts
         if (mShowContextMenu) {
-            getMenuInflater().inflate(R.menu.account_picker_long_click, menu);
+            if (mShowAccountContextMenu){
+                getMenuInflater().inflate(R.menu.account_picker_long_click, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.instant_upload_folder_picker_long_click, menu);
+            }
             mShowContextMenu = false;
         }
+        mShowAccountContextMenu = false;
+
         super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    /**
+     * Called when the user clicked on an item into the context menu created at
+     * {@link #onCreateContextMenu(ContextMenu, View, ContextMenuInfo)} for
+     * every ownCloud {@link Account} , containing 'secondary actions' for them.
+     * 
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean onContextItemSelected(android.view.MenuItem item) {
+        AccountManager am = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        Account accounts[] = am.getAccountsByType(MainApp.getAccountType());
+
+        // TODO Tobi needed?
+        if ((item.getItemId() == R.id.change_password) || (item.getItemId() == R.id.delete_account)) {
+            for (Account a : accounts) {
+                if (a.name.equals(mAccountName)) {
+                    if (item.getItemId() == R.id.change_password) {
+
+                        // Change account password
+                        Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
+                        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, a);
+                        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACTION,
+                                AuthenticatorActivity.ACTION_UPDATE_TOKEN);
+                        startActivity(updateAccountCredentials);
+
+                    } else if (item.getItemId() == R.id.delete_account) {
+
+                        // Remove account
+                        am.removeAccount(a, this, mHandler);
+                    }
+                }
+            }
+        }
+
+        if (item.getItemId() == R.id.delete_instant_upload) {
+            InstantUploadFolderObserverService.delete(mInstantUpload);
+            addInstantUploadFolders();
+        }
+
+        return true;
     }
 
     @Override
@@ -552,6 +675,9 @@ public class Preferences extends PreferenceActivity
 
         // Populate the accounts category with the list of accounts
         addAccountsCheckboxPreferences();
+
+        // Populate the instan upload folders category with the list of folders
+        addInstantUploadFolders();
     }
 
     @Override
