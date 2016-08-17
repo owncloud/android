@@ -4,9 +4,12 @@ jdk:
   - oraclejdk8
 android:
   components:
-  - platform-tools
+# first 'tools' updates SDK tools 'til last version ** in remote repository number 10 **
   - tools
-  - build-tools-24.0.0
+# second 'tools' updates SDK tools 'til last version ** in remote repository number 11 ** (current last one)
+  - tools
+  - platform-tools
+  - build-tools-24.0.1
   - android-24
   - sys-img-armeabi-v7a-android-24
 branches:
