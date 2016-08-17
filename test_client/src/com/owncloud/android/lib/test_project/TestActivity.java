@@ -58,7 +58,7 @@ import com.owncloud.android.lib.resources.shares.CreateRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesOperation;
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
-import com.owncloud.android.lib.resources.users.RemoteGetUserQuotaOperation;
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation;
 
 /**
  * Activity to test OC framework
@@ -334,7 +334,7 @@ public class TestActivity extends Activity {
 	}
 
     public RemoteOperationResult getQuota() {
-        RemoteGetUserQuotaOperation getUserQuotaOperation = new RemoteGetUserQuotaOperation();
+        GetRemoteUserQuotaOperation getUserQuotaOperation = new GetRemoteUserQuotaOperation();
         return getUserQuotaOperation.execute(mClient);
     }
 	

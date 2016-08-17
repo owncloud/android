@@ -26,36 +26,24 @@
 
 package com.owncloud.android.lib.test_project.test;
 
-import java.io.File;
 import java.util.*;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.users.RemoteGetUserQuotaOperation.Quota;
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation.Quota;
 import com.owncloud.android.lib.test_project.TestActivity;
-import com.owncloud.android.lib.resources.files.*;
 
 
 /**
  * Class to test Get User Quota
  *
  * @author Bartosz Przybylski
- *
+ * @author David A. Velasco
  */
 public class GetUserQuotaTest extends RemoteTest {
 
 
     private static final String LOG_TAG = GetUserQuotaTest.class.getCanonicalName();
 
-    /* Files to download. These files must exist on the account */
-    private static final String IMAGE_PATH = "/fileToDownload.png";
-    private static final String IMAGE_PATH_WITH_SPECIAL_CHARS = "/@file@download.png";
-    private static final String IMAGE_NOT_FOUND = "/fileNotFound.png";
-
-    private String mFullPath2Image;
-    private String mFullPath2ImageWitSpecialChars;
-    private String mFullPath2ImageNotFound;
-    private String mDownloadedFilePath;
     private TestActivity mActivity;
 
 

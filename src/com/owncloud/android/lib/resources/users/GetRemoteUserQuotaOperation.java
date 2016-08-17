@@ -43,7 +43,7 @@ import java.util.ArrayList;
 /**
  * @author marcello
  */
-public class RemoteGetUserQuotaOperation extends RemoteOperation {
+public class GetRemoteUserQuotaOperation extends RemoteOperation {
 
     static public class Quota {
         long mFree, mUsed, mTotal;
@@ -62,7 +62,7 @@ public class RemoteGetUserQuotaOperation extends RemoteOperation {
         public double getRelative() { return mRelative; }
     }
 
-    private static final String TAG = RemoteGetUserQuotaOperation.class.getSimpleName();
+    private static final String TAG = GetRemoteUserQuotaOperation.class.getSimpleName();
 
     private static final String NODE_OCS = "ocs";
     private static final String NODE_DATA = "data";
@@ -89,6 +89,7 @@ public class RemoteGetUserQuotaOperation extends RemoteOperation {
 
             get = new GetMethod(url);
             get.setQueryString(new NameValuePair[]{new NameValuePair("format","json")});
+            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
             status = client.executeMethod(get);
 
             if(isSuccess(status)) {
