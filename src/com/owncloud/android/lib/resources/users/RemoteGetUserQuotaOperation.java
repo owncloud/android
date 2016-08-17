@@ -27,15 +27,15 @@
 
 package com.owncloud.android.lib.resources.users;
 
-import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ public class RemoteGetUserQuotaOperation extends RemoteOperation {
 
         //Get the user
         try {
-            OwnCloudBasicCredentials credentials = (OwnCloudBasicCredentials) client.getCredentials();
+            OwnCloudCredentials credentials = client.getCredentials();
             String url = client.getBaseUri() + OCS_ROUTE + credentials.getUsername();
 
             get = new GetMethod(url);
@@ -127,7 +127,9 @@ public class RemoteGetUserQuotaOperation extends RemoteOperation {
             Log_OC.e(TAG, "Exception while getting OC user information", e);
 
         } finally {
-            get.releaseConnection();
+            if (get != null) {
+                get.releaseConnection();
+            }
         }
 
         return result;
