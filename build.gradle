@@ -7,7 +7,7 @@
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.3'
@@ -21,7 +21,7 @@ ext {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 
     flatDir {
         dirs 'libs'
@@ -68,7 +68,7 @@ tasks.withType(Test) {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
