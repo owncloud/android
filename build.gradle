@@ -129,7 +129,7 @@ android {
     }
 
     adbOptions {
-        timeOutInMs(30 * 1000)
+        timeOutInMs(20 * 60 * 1000)
     }
 
     signingConfigs {
