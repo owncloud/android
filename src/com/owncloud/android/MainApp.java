@@ -40,7 +40,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
  * Contains methods to build the "static" strings. These strings were before constants in different
  * classes
  */
-//public class MainApp extends Application {
+public class MainApp extends Application {
 
     private static final String TAG = MainApp.class.getSimpleName();
 
