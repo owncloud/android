@@ -65,17 +65,17 @@ public class Log_OC {
     }
     
     public static void wtf(String TAG, String message) {
-        Log.wtf(TAG,message);
+        Log.wtf(TAG, message);
         appendLog(TAG+" : "+ message);
     }
 
     /**
      * Start doing logging
-     * @param logPath : path of log file
+     * @param storagePath : directory for keeping logs
      */
-    public static void startLogging() {
-    	String logPath = Environment.getExternalStorageDirectory() + File.separator + 
-    					mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
+    synchronized public static void startLogging(String storagePath) {
+		String logPath = storagePath + File.separator +
+			mOwncloudDataFolderLog + File.separator + LOG_FOLDER_NAME;
         mFolder = new File(logPath);
         mLogFile = new File(mFolder + File.separator + mLogFileNames[0]);
 
@@ -111,6 +111,29 @@ public class Log_OC {
         }
     }
 
+    synchronized public static void stopLogging() {
+        try {
+			if (mBuf != null)
+                mBuf.close();
+            isEnabled = false;
+
+            mLogFile = null;
+            mFolder = null;
+            mBuf = null;
+            isMaxFileSizeReached = false;
+            isEnabled = false;
+
+        } catch (IOException e) {
+            // Because we are stopping logging, we only log to Android console.
+            Log.e("OC_Log", "Closing log file failed: ", e);
+        } catch (Exception e) {
+            // This catch should never fire because we do null check on mBuf.
+            // But just for the sake of stability let's log this odd situation.
+            // Because we are stopping logging, we only log to Android console.
+            Log.e("OC_Log", "Stopping logging failed: ", e);
+        }
+    }
+
     /**
      * Delete history logging
      */
@@ -141,7 +164,7 @@ public class Log_OC {
      * Append to the log file the info passed
      * @param text : text for adding to the log file
      */
-    private static void appendLog(String text) { 
+    synchronized private static void appendLog(String text) {
 
         if (isEnabled) {
 
