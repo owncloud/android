@@ -26,10 +26,17 @@ script:
 # run all the instrumented tests of app module - DISABLED until we get an stable setup for Espresso in Travis
 # - ./gradlew connectedDebugAndroidTest --info
 # install app, then assemble and install instrumented tests of app module
+
+# NOT WORKING with emulator for android-24; maybe due to https://android.googlesource.com/platform/tools/base/+/master/ddmlib/src/main/java/com/android/ddmlib/Device.java#90 in first call to ADB
 #  - ./gradlew :installDebug
-  - export DEBUG_APK_FILE=$(ls -t "build/outputs/apk/android"*"-debug.apk" | head -n 1)
-  - echo "Found APK $DEBUG_APK_FILE"
-  - adb install "$DEBUG_APK_FILE"
+# ALTERNATIVE 1 (works)
+#  - export DEBUG_APK_FILE=$(ls -t "build/outputs/apk/android"*"-debug.apk" | head -n 1)
+#  - echo "Found APK $DEBUG_APK_FILE"
+#  - adb install "$DEBUG_APK_FILE"
+# ALTERNATIVE 2 (testing)
+  - adb devices
+  - ./gradlew :installDebug
+
   - ./gradlew :installDebugAndroidTest
 # run sample instrumented unit test
   - adb shell am instrument -w -e debug false -e class com.owncloud.android.datamodel.OCFileUnitTest com.owncloud.android.test/android.support.test.runner.AndroidJUnitRunner
