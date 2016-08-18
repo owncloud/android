@@ -128,6 +128,10 @@ android {
         exclude 'META-INF/LICENSE.txt'
     }
 
+    adbOptions {
+        timeOutInMs(30 * 1000)
+    }
+
     signingConfigs {
         release {
             if (System.env.OC_RELEASE_KEYSTORE) {
@@ -191,3 +195,4 @@ def setOutputFileName(variant, appName, callerProject) {
     logger.info("$variant.name: newName is $newName")
     variant.outputs[0].outputFile = new File(originalFile.parent, newName)
 }
+
