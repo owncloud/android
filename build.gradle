@@ -7,10 +7,10 @@
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.1.3'
     }
 }
 
@@ -21,7 +21,7 @@ ext {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 
     flatDir {
         dirs 'libs'
@@ -67,8 +67,8 @@ tasks.withType(Test) {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -77,6 +77,11 @@ android {
         testInstrumentationRunnerArgument "TEST_USER", "\"$System.env.OCTEST_APP_USERNAME\""
         testInstrumentationRunnerArgument "TEST_PASSWORD", "\"$System.env.OCTEST_APP_PASSWORD\""
         testInstrumentationRunnerArgument "TEST_SERVER_URL", "\"$System.env.OCTEST_SERVER_BASE_URL\""
+
+        jackOptions {
+            enabled false
+        }
+
     }
 
     // adapt structure from Eclipse to Gradle/Android Studio expectations;
