@@ -339,6 +339,7 @@
   <string name="forbidden_permissions_move">за да преместиш този файл</string>
   <string name="copy_file_not_found">Невъзможно копиране. Проверете дали файлът съществува</string>
   <string name="copy_file_invalid_overwrite">Файлът вече съществува в отдалечената папка.</string>
+  <string name="forbidden_permissions_copy">да копира този файл</string>
   <string name="prefs_category_details">Подробности</string>
   <string name="shared_subject_header">споделен</string>
   <string name="with_you_subject_header">с теб</string>
@@ -355,7 +356,12 @@
   <string name="file_list__footer__files">%1$d файла</string>
   <string name="file_list__footer__files_and_folder">%1$d файла, 1 папка</string>
   <string name="file_list__footer__files_and_folders">%1$d файла, %2$d папки</string>
+  <string name="upload_copy_files">Копиране на файл</string>
+  <string name="upload_move_files">Преместване на файл</string>
+  <string name="pref_behaviour_entries_keep_file">запази в оригиналната папка</string>
+  <string name="pref_behaviour_entries_move">преместено в папка на приложението</string>
   <string name="share_dialog_title">Споделяне</string>
+  <string name="share_file">Сподели %1$s</string>
   <string name="share_via_link_section_title">Връзка за споделяне</string>
   <string name="share_via_link_expiration_date_label">Задаване на дата на изтичане</string>
   <string name="share_via_link_password_label">Защитено с парола</string>
@@ -366,4 +372,11 @@
   <string name="share_privilege_can_edit_create">създаване</string>
   <string name="share_privilege_can_edit_change">промяна</string>
   <string name="share_privilege_can_edit_delete">изтриване</string>
+  <string name="edit_share_done">готово</string>
+  <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
+  <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d избран</item>
+    <item quantity="other">%d избран</item>
+  </plurals>
 </resources>
