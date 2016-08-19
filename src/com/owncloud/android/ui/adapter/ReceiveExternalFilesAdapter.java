@@ -26,8 +26,9 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
@@ -38,36 +39,60 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncDrawable;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class UploaderAdapter extends SimpleAdapter {
-    
+public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdapter {
+
+    private List<OCFile> mFiles;
     private Context mContext;
     private Account mAccount;
     private FileDataStorageManager mStorageManager;
-    private LayoutInflater inflater;
+    private LayoutInflater mInflater;
 
-    public UploaderAdapter(Context context,
-                           List<? extends Map<String, ?>> data, int resource, String[] from,
-                           int[] to, FileDataStorageManager storageManager, Account account) {
-        super(context, data, resource, from, to);
+    public ReceiveExternalFilesAdapter(Context context,
+                                       List<OCFile> files,
+                                       FileDataStorageManager storageManager,
+                                       Account account
+    ) {
+        mFiles = files;
         mAccount = account;
         mStorageManager = storageManager;
         mContext = context;
-        inflater = (LayoutInflater) mContext
+        mInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Override
+    public int getCount() {
+        return (mFiles == null) ? 0 : mFiles.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        if (mFiles == null || position < 0 || position >= mFiles.size()) {
+            return null;
+        } else {
+            return mFiles.get(position);
+        }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        if (mFiles == null || position < 0 || position >= mFiles.size()) {
+            return -1;
+        } else {
+            return mFiles.get(position).getFileId();
+        }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        if (convertView == null)
-            vi = inflater.inflate(R.layout.uploader_list_item_layout, null);
+        if (convertView == null) {
+            vi = mInflater.inflate(R.layout.uploader_list_item_layout, parent, false);
+        }
 
-        HashMap<String, OCFile> data = (HashMap<String, OCFile>) getItem(position);
-        OCFile file = data.get("dirname");
+        OCFile file = mFiles.get(position);
 
         TextView filename = (TextView) vi.findViewById(R.id.filename);
         filename.setText(file.getFileName());
@@ -81,15 +106,10 @@ public class UploaderAdapter extends SimpleAdapter {
         TextView fileSizeV = (TextView) vi.findViewById(R.id.file_size);
         TextView fileSizeSeparatorV = (TextView) vi.findViewById(R.id.file_separator);
 
-        if(!file.isFolder()) {
-            fileSizeV.setVisibility(View.VISIBLE);
-            fileSizeSeparatorV.setVisibility(View.VISIBLE);
-            fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
-        } else {
-            fileSizeV.setVisibility(View.GONE);
-            fileSizeSeparatorV.setVisibility(View.GONE);
-        }
-        
+        fileSizeV.setVisibility(View.VISIBLE);
+        fileSizeSeparatorV.setVisibility(View.VISIBLE);
+        fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
+
         // get Thumbnail if file is image
         if (file.isImage() && file.getRemoteId() != null){
              // Thumbnail in Cache?
