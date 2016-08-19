@@ -501,6 +501,11 @@ public class FileDisplayActivity extends HookActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+
+        // Prevent tapjacking
+        View actionBarView = findViewById(R.id.action_bar);
+        actionBarView.setFilterTouchesWhenObscured(true);
+
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_create_dir).setVisible(false);
         return true;

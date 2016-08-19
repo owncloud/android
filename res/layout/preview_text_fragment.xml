@@ -16,20 +16,25 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/top"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background_color"
-                android:gravity="center"
-                tools:context=".ui.preview.PreviewAudioFragment">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:gravity="center"
+    tools:context=".ui.preview.PreviewAudioFragment"
+    android:filterTouchesWhenObscured="true"
+    >
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:fillViewport="true">
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:fillViewport="true"
+        >
 
         <TextView
             android:id="@+id/text_preview"
