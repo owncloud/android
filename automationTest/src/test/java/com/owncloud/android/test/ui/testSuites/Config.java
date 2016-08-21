@@ -39,12 +39,14 @@ public final class Config {
 
 	public static final String gmailAccount = "gmailAccountVar";
 	
-	public static final String fileWhichIsInTheServer1 ="test";
-	public static final String fileWhichIsInTheServer2 ="test";
+	public static final String fileWhichIsInTheServer1 ="ownCloudUserManual.pdf";
+	public static final String fileWhichIsInTheServer2 ="ownCloudUserManual.pdf";
 	
 	public static final String fileToTestName = "test";
 	public static final String fileToTestSendByEmailName = "test";
 	public static final String bigFileToTestName = "test";
+	
+	public static final String folderSpecialCharactersName="a%&@()ño";
 	
 	public static final String passcode1 = "passcode1";
 	public static final String passcode2 = "passcode2";
