@@ -98,6 +98,12 @@
             <version>${owncloud.version}</version>
         </dependency>
 
+         <dependency>
+	   <groupId>com.jakewharton</groupId>
+	   <artifactId>disklrucache</artifactId>
+	   <version>2.0.2</version>
+         </dependency>
+
     </dependencies>
 
     <build>
