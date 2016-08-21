@@ -33,8 +33,7 @@ import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.MoveView;
@@ -63,7 +62,7 @@ public class MoveFileTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
 		     //fileListView.getProgressCircular(), 1000);

@@ -33,8 +33,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
@@ -45,7 +44,6 @@ public class CreateFolderTestSuite{
 	AndroidDriver driver;
 	Common common;
 	private Boolean folderHasBeenCreated = false;
-	private final String FOLDER_NAME = "testCreateFolder";
 	private String CurrentCreatedFolder = "";
 	
 	@Rule public TestName name = new TestName();
@@ -58,18 +56,42 @@ public class CreateFolderTestSuite{
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testCreateNewFolder () throws Exception {
-		String NEW_FOLDER_NAME = "testCreateFolder";
+	public void testCreateFolder () throws Exception {
+		String FOLDER_NAME = "testCreateFolder";
 
 		FileListView fileListView = Actions.login(Config.URL, 
 				Config.user,Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//check if the folder already exists and if true, delete them
-		Actions.deleteElement(NEW_FOLDER_NAME, fileListView, driver);
+		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
 
 		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(NEW_FOLDER_NAME, fileListView);
+				.createFolder(FOLDER_NAME, fileListView);
+		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
+				.getWaitAMomentTextElement(), 100);
+		fileListView.scrollTillFindElement(FOLDER_NAME);
+		assertNotNull(fileListView.getFileElement());
+		assertTrue(
+			folderHasBeenCreated=fileListView.getFileElement().isDisplayed());	
+		CurrentCreatedFolder = FOLDER_NAME;
+		assertEquals(FOLDER_NAME , fileListView.getFileElement().getText());
+	}
+	
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testCreateFolderWithSpecialCharacters () throws Exception {
+		String FOLDER_NAME = Config.folderSpecialCharactersName;
+
+		FileListView fileListView = Actions.login(Config.URL, 
+				Config.user,Config.password, Config.isTrusted, driver);
+		common.assertIsInFileListView(fileListView);
+
+		//check if the folder already exists and if true, delete them
+		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
+
+		WaitAMomentPopUp waitAMomentPopUp = Actions
+				.createFolder(FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
 		fileListView.scrollTillFindElement(FOLDER_NAME);

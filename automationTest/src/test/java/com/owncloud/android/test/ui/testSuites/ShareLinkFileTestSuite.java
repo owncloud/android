@@ -30,12 +30,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.TestName;
+import org.openqa.selenium.By;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.IgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.InProgressCategory;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileListView;;
 
 public class ShareLinkFileTestSuite{
@@ -59,7 +57,7 @@ public class ShareLinkFileTestSuite{
 		AndroidElement sharedElementIndicator;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		//TODO. if the file already exists, do not upload
 		FileListView fileListViewAfterUploadFile = Actions
@@ -71,6 +69,7 @@ public class ShareLinkFileTestSuite{
 		
 		sharedElementIndicator = Actions.shareLinkElementByGmail(FILE_NAME,
 				fileListViewAfterUploadFile,driver,common);
+		
 		assertTrue(sharedElementIndicator.isDisplayed());
 	}
 	
@@ -80,7 +79,7 @@ public class ShareLinkFileTestSuite{
 		AndroidElement sharedElementIndicator;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		//TODO. if the file already exists, do not upload
 		FileListView fileListViewAfterUploadFile = Actions
@@ -101,7 +100,7 @@ public class ShareLinkFileTestSuite{
 		AndroidElement sharedElementIndicator;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		//TODO. if the file already exists, do not upload
 		FileListView fileListViewAfterUploadFile = Actions

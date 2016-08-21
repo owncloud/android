@@ -20,6 +20,9 @@
 
 package com.owncloud.android.test.ui.models;
 
+import static org.junit.Assert.assertTrue;
+
+import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.PageFactory;
 
 import io.appium.java_client.android.AndroidDriver;
@@ -46,6 +49,16 @@ final AndroidDriver driver;
 			+ ".className(\"android.widget.EditText\").index(3)")
 	private AndroidElement codeElement4;
 	
+	@CacheLookup
+	@AndroidFindBy(uiAutomator = "new UiSelector()"
+			+ ".resourceId(\"android:id/action_bar_title\")")
+	private AndroidElement titleText;
+	
+	@CacheLookup
+	@AndroidFindBy(uiAutomator = "new UiSelector()"
+			+ ".text(\"Please, insert your pass code\")")
+	private AndroidElement insertMessage;
+	
 	public PassCodeRequestView (AndroidDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
@@ -55,6 +68,14 @@ final AndroidDriver driver;
 			String codeNumber3, String codeNumber4){
 		codeElement1
 		   .sendKeys(codeNumber1 + codeNumber1 + codeNumber1 + codeNumber1);
+	}
+	
+	public AndroidElement getTitleTextElement () {
+		return titleText;
+	}
+	
+	public AndroidElement getInsertMessage () {
+		return insertMessage;
 	}
 
 }

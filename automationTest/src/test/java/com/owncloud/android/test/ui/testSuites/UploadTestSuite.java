@@ -38,10 +38,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.FailingTestCategory;
-import com.owncloud.android.test.ui.groups.InProgressCategory;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.groups.UnfinishedTestCategory;
 import com.owncloud.android.test.ui.models.FileDetailsView;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
@@ -50,7 +47,6 @@ import com.owncloud.android.test.ui.models.GmailEmailView;
 import com.owncloud.android.test.ui.models.ImageView;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.NotificationView;
-import com.owncloud.android.test.ui.models.SettingsView;
 import com.owncloud.android.test.ui.models.UploadView;
 
 
@@ -81,7 +77,7 @@ public class UploadTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(FILE_NAME, fileListView, driver);
@@ -113,7 +109,7 @@ public class UploadTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//check if the file already exists and if true, delete it
 		Actions.deleteElement(BIG_FILE_NAME, fileListView, driver);
@@ -164,6 +160,7 @@ public class UploadTestSuite{
 	public void testUploadFromGmail () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
+		common.assertIsInFileListView(fileListView);
 		driver.startActivity("com.google.android.gm",
 				".ConversationListActivityGmail");
 		GmailEmailListView gmailEmailListView = new GmailEmailListView(driver);
@@ -201,7 +198,7 @@ public class UploadTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView.getProgressCircular(), 
 				1000);
@@ -232,7 +229,7 @@ public class UploadTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView.getProgressCircular(), 
 				1000);
@@ -276,7 +273,7 @@ public class UploadTestSuite{
 			Actions.deleteElement(BIG_FILE_NAME,fileListView, driver);
 		}
 
-		//driver.removeApp("com.owncloud.android");
+		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
 

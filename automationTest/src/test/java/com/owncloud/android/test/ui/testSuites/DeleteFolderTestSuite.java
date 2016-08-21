@@ -33,8 +33,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
@@ -60,7 +59,7 @@ public class DeleteFolderTestSuite{
 	public void testDeleteFolder () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		//TODO. if the folder already exists, do no created
 		//create the folder

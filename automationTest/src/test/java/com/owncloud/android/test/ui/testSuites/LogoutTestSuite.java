@@ -32,8 +32,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.TestName;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.LoginForm;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.MenuList;
@@ -57,7 +56,7 @@ public class LogoutTestSuite{
 	public void testLogout () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		MenuList menulist = fileListView.clickOnMenuButton();
 		SettingsView settingsView = menulist.clickOnSettingsButton();
 		settingsView.tapOnAccountElement(1,1, 1000);
@@ -71,7 +70,7 @@ public class LogoutTestSuite{
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		//driver.removeApp("com.owncloud.android");
+		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
 }
