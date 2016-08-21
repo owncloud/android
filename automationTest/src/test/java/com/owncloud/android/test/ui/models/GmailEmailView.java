@@ -34,7 +34,7 @@ public class GmailEmailView {
 	final AndroidDriver driver;
 	
 	@CacheLookup
-	@AndroidFindBy(name = Config.fileToTestSendByEmailName)
+	@AndroidFindBy(name = Config.fileToTestSendByEmail)
 	private AndroidElement fileButton;
 		
 	public GmailEmailView (AndroidDriver driver) {

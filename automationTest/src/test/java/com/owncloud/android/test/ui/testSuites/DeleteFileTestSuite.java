@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,8 +36,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileListView;
 
 
@@ -45,7 +45,6 @@ public class DeleteFileTestSuite{
 	
 	AndroidDriver driver;
 	Common common;
-	private final String FILE_NAME = Config.fileToTestName;
 	
 	@Rule public TestName name = new TestName();
 	
@@ -60,21 +59,29 @@ public class DeleteFileTestSuite{
 	public void testDeleteFile () throws Exception {		
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		//TODO. if the file already exists, do not upload
 		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(FILE_NAME, fileListView);
+				.uploadFile(Config.fileToTest, fileListView);
 		
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				fileListViewAfterUploadFile.getProgressCircular(), 1000);
+		
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile.getFileElementLayout()
+				fileListViewAfterUploadFile
+				.getFileElementLayout(Config.fileToTest)
 				.findElement(By.id(FileListView.getLocalFileIndicator()))));
 		
-		Actions.deleteElement(FILE_NAME,fileListViewAfterUploadFile, driver);
-		assertFalse(fileListViewAfterUploadFile.getFileElement().isDisplayed());
+		AndroidElement file = fileListViewAfterUploadFile
+				.getFileElement(Config.fileToTest);
+		
+		assertTrue(file.isDisplayed());
+		
+		Actions.deleteElement(Config.fileToTest,fileListViewAfterUploadFile,
+				driver);
+		
+		assertFalse(file.isDisplayed());
 	}
 
 	@After

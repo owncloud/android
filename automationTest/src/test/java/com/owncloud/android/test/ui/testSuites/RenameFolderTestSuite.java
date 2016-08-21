@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,8 +34,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.NewFolderPopUp;
@@ -65,7 +65,7 @@ public class RenameFolderTestSuite{
 	public void testRenameFolder () throws Exception {
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//TODO. if the folder already exists, do no created
 		//create the folder to rename
@@ -73,10 +73,9 @@ public class RenameFolderTestSuite{
 				.createFolder(OLD_FOLDER_NAME, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(OLD_FOLDER_NAME);
 
-		assertTrue(
-			folderHasBeenCreated = fileListView.getFileElement().isDisplayed());
+		assertTrue(folderHasBeenCreated =
+				fileListView.getFileElement(OLD_FOLDER_NAME).isDisplayed());
 
 		//check if the folder with the new name already exists 
 		//and if true, delete them
@@ -91,11 +90,10 @@ public class RenameFolderTestSuite{
 		CurrentCreatedFolder = FOLDER_NAME;
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertNotNull(fileListView.getFileElement());
-		assertTrue(
-			folderHasBeenCreated = fileListView.getFileElement().isDisplayed());	
-		assertEquals(FOLDER_NAME , fileListView.getFileElement().getText());
+		AndroidElement folder = fileListView.getFileElement(FOLDER_NAME);
+		assertNotNull(folder);
+		assertTrue(folderHasBeenCreated = folder.isDisplayed());	
+		assertEquals(FOLDER_NAME , folder.getText());
 	}
 
 	@After

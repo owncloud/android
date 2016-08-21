@@ -33,8 +33,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.ElementMenuOptions;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.MoveView;
@@ -63,7 +62,7 @@ public class MoveFolderTestSuite{
 
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 
 		//Common.waitTillElementIsNotPresentWithoutTimeout(
 		     //fileListView.getProgressCircular(), 1000);
@@ -77,15 +76,13 @@ public class MoveFolderTestSuite{
 				.createFolder(FOLDER_WHERE_MOVE, fileListView);
 		Common.waitTillElementIsNotPresentWithoutTimeout(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_WHERE_MOVE);
-		assertTrue(fileListView.getFileElement().isDisplayed());
+		assertTrue(fileListView.getFileElement(FOLDER_WHERE_MOVE).isDisplayed());
 
 		//Create the folder which is going to be moved
 		waitAMomentPopUp = Actions.createFolder(FOLDER_TO_MOVE, fileListView);
 		Common.waitTillElementIsNotPresent(
 				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_TO_MOVE);
-		assertTrue(fileListView.getFileElement().isDisplayed());
+		assertTrue(fileListView.getFileElement(FOLDER_TO_MOVE).isDisplayed());
 
 		//select to move the folder
 		ElementMenuOptions menuOptions = fileListView
@@ -93,18 +90,18 @@ public class MoveFolderTestSuite{
 		MoveView moveView = menuOptions.clickOnMove();
 
 		//to move to a folder
-		moveView.scrollTillFindElement(FOLDER_WHERE_MOVE).tap(1,1);
+		moveView.tapOnElement(FOLDER_WHERE_MOVE);
 		waitAMomentPopUp = moveView.clickOnChoose();
 		Common.waitTillElementIsNotPresentWithoutTimeout(waitAMomentPopUp
 				.getWaitAMomentTextElement(), 100);
 		
 		//check that the folder moved is inside the other
-		fileListView.scrollTillFindElement(FOLDER_WHERE_MOVE).tap(1,1);
+		fileListView.tapOnElement(FOLDER_WHERE_MOVE);
 		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView.getProgressCircular(),
 				1000);
 		Thread.sleep(1000);
-		fileListView.scrollTillFindElement(FOLDER_TO_MOVE);
-		assertEquals(FOLDER_TO_MOVE , fileListView.getFileElement().getText());
+		assertEquals(FOLDER_TO_MOVE , fileListView
+				.getFileElement(FOLDER_TO_MOVE).getText());
 	}
 
 	@After

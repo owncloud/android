@@ -30,23 +30,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.TestName;
+import org.openqa.selenium.By;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.IgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.InProgressCategory;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileListView;;
 
 public class ShareLinkFileTestSuite{
-	
+
 	AndroidDriver driver;
 	Common common;
-	private final String FILE_NAME = Config.fileToTestName;
 	private Boolean fileHasBeenCreated = false;
-	
+
 	@Rule public TestName name = new TestName();
-	
+
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
@@ -59,62 +56,67 @@ public class ShareLinkFileTestSuite{
 		AndroidElement sharedElementIndicator;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-		
+		common.assertIsInFileListView(fileListView);
+
 		//TODO. if the file already exists, do not upload
 		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(FILE_NAME, fileListView);
-				
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+				.uploadFile(Config.fileToTest, fileListView);
+
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
-		
-		sharedElementIndicator = Actions.shareLinkElementByGmail(FILE_NAME,
-				fileListViewAfterUploadFile,driver,common);
-		assertTrue(sharedElementIndicator.isDisplayed());
+				.getFileElement(Config.fileToTest).isDisplayed());
+
+		sharedElementIndicator = Actions.shareLinkElementByGmail(
+				Config.fileToTest,fileListViewAfterUploadFile,driver,common);
+
+		assertTrue(fileListViewAfterUploadFile
+				.getFileElementLayout(Config.fileToTest)
+				.findElement(By.id(FileListView.getSharedElementIndicator()))
+				.isDisplayed());
+		//assertTrue(sharedElementIndicator.isDisplayed());
 	}
-	
+
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testShareLinkFileByCopyLink () throws Exception {	
 		AndroidElement sharedElementIndicator;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-		
+		common.assertIsInFileListView(fileListView);
+
 		//TODO. if the file already exists, do not upload
 		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(FILE_NAME, fileListView);
-				
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+				.uploadFile(Config.fileToTest, fileListView);
+
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
-		
-		sharedElementIndicator = Actions.shareLinkElementByCopyLink(FILE_NAME,
+				.getFileElement(Config.fileToTest).isDisplayed());
+
+		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
+				Config.fileToTest,
 				fileListViewAfterUploadFile,driver,common);
+		
 		assertTrue(sharedElementIndicator.isDisplayed());
 	}
-	
+
 	@Test
 	@Category({IgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testUnshareLinkFile () throws Exception {	
 		AndroidElement sharedElementIndicator;
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-		
+		common.assertIsInFileListView(fileListView);
+
 		//TODO. if the file already exists, do not upload
 		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(FILE_NAME, fileListView);
-				
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+				.uploadFile(Config.fileToTest, fileListView);
+
 		assertTrue(fileHasBeenCreated = fileListViewAfterUploadFile
-				.getFileElement().isDisplayed());
+				.getFileElement(Config.fileToTest).isDisplayed());
+
+		sharedElementIndicator = Actions.shareLinkElementByCopyLink(
+				Config.fileToTest,fileListViewAfterUploadFile,driver,common);
 		
-		sharedElementIndicator = Actions.shareLinkElementByCopyLink(FILE_NAME,
-				fileListViewAfterUploadFile,driver,common);
 		assertTrue(sharedElementIndicator.isDisplayed());
-		Actions.unshareLinkElement(FILE_NAME,
+		Actions.unshareLinkElement(Config.fileToTest,
 				fileListViewAfterUploadFile,driver,common);
 		assertFalse(sharedElementIndicator.isDisplayed());
 
@@ -125,7 +127,7 @@ public class ShareLinkFileTestSuite{
 		common.takeScreenShotOnFailed(name.getMethodName());
 		if (fileHasBeenCreated) {
 			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(FILE_NAME,fileListView, driver);
+			Actions.deleteElement(Config.fileToTest,fileListView, driver);
 		}
 		driver.removeApp("com.owncloud.android");
 		driver.quit();

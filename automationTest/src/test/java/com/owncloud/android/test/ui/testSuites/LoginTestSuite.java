@@ -58,18 +58,18 @@ public class LoginTestSuite{
 	public void test1LoginPortrait () throws Exception {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		
-		Actions.login(Config.URL, Config.user,
+		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 	}
 	
 	@Test
 	@Category({NoIgnoreTestCategory.class})
 	public void test2LoginLandscape () throws Exception {
 		driver.rotate(ScreenOrientation.LANDSCAPE);
-		Actions.login(Config.URL, Config.user,
+		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 	}
 	
 	@Test
@@ -79,10 +79,10 @@ public class LoginTestSuite{
 		
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
-		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer1);
-		assertTrue(fileListView.getFileElement().isDisplayed());
+		assertTrue(fileListView.getFileElement(Config.fileWhichIsInTheServer1)
+				.isDisplayed());
 	}
 	
 	
@@ -93,16 +93,16 @@ public class LoginTestSuite{
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		MenuList menu = fileListView.clickOnMenuButton();
 		SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
-		fileListView = Actions.login(Config.URL2, Config.user2,
+		Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
-		common.assertIsInSettingsView();
+		common.assertIsInSettingsView(settingsView);
 	}
 	
 	@Test
@@ -111,23 +111,23 @@ public class LoginTestSuite{
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer1);
-		assertTrue(fileListView.getFileElement().isDisplayed());
+		common.assertIsInFileListView(fileListView);
+		assertTrue(fileListView
+				.getFileElement(Config.fileWhichIsInTheServer1).isDisplayed());
 		
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		MenuList menu = fileListView.clickOnMenuButton();
 		SettingsView settingsView = menu.clickOnSettingsButton();
 		
 		settingsView.tapOnAddAccount(1, 1000);
-		fileListView = Actions.login(Config.URL2, Config.user2,
+		Actions.login(Config.URL2, Config.user2,
 				Config.password2, Config.isTrusted2, driver);
-		common.assertIsInSettingsView();
+		common.assertIsInSettingsView(settingsView);
 		settingsView.tapOnAccountElement(2,1, 100);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
-		fileListView.scrollTillFindElement(Config.fileWhichIsInTheServer2);
-		assertTrue(fileListView.getFileElement().isDisplayed());
+		assertTrue(fileListView.getFileElement(Config.fileWhichIsInTheServer2)
+				.isDisplayed());
 	}
 	
 	@Test
@@ -136,7 +136,7 @@ public class LoginTestSuite{
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		driver.rotate(ScreenOrientation.LANDSCAPE);
 		MenuList menu = fileListView.clickOnMenuButton();
@@ -157,7 +157,7 @@ public class LoginTestSuite{
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		MenuList menu = fileListView.clickOnMenuButton();
 		SettingsView settingsView = menu.clickOnSettingsButton();
 		settingsView.tapOnAccountElement(1,1, 1000);

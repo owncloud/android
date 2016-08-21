@@ -33,7 +33,7 @@ import org.junit.runners.MethodSorters;
 import org.openqa.selenium.ScreenOrientation;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
+import com.owncloud.android.test.ui.groups.*;
 import com.owncloud.android.test.ui.models.FileListView;
 import com.owncloud.android.test.ui.models.MenuList;
 import com.owncloud.android.test.ui.models.PassCodeRequestView;
@@ -59,7 +59,7 @@ public class PasscodeTestSuite {
 		driver.rotate(ScreenOrientation.PORTRAIT);
 		FileListView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
+		common.assertIsInFileListView(fileListView);
 		
 		MenuList menu = fileListView.clickOnMenuButton();
 		SettingsView settingsView = menu.clickOnSettingsButton();
@@ -68,6 +68,7 @@ public class PasscodeTestSuite {
 		PassCodeView passCodeview2 = passCodeview.enterPasscode(
 				Config.passcode1, Config.passcode2, Config.passcode3, 
 				Config.passcode4);
+		Thread.sleep(1000);
 		passCodeview2.reenterPasscode(Config.passcode1, Config.passcode2, 
 				Config.passcode3, Config.passcode4);
 		
@@ -77,14 +78,17 @@ public class PasscodeTestSuite {
 				".ui.activity.FileDisplayActivity");
 		//here we check that we are not in the fileDisplayActivity,
 		//because pincode is asked
-		common.assertIsNotInFileListView();
-		common.assertIsPasscodeRequestView();
-		
+		//common.assertIsNotInFileListView();
 		PassCodeRequestView passCodeReequestView = new 
 				PassCodeRequestView(driver);
+		
+		common.assertIsPasscodeRequestView(passCodeReequestView);
+		
+		
 		passCodeReequestView.enterPasscode(Config.passcode1, Config.passcode2,
 				Config.passcode3, Config.passcode4);
-		common.assertIsInFileListView();
+		FileListView newFileListView = new FileListView(driver);
+		common.assertIsInFileListView(newFileListView);
 	}
 	
 	
