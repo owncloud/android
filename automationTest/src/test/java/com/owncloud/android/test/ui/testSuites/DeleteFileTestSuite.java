@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,20 +36,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.groups.*;
+import com.owncloud.android.test.ui.models.FilesView;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DeleteFileTestSuite{
-	
+
 	AndroidDriver driver;
 	Common common;
-	private final String FILE_NAME = Config.fileToTestName;
-	
+
 	@Rule public TestName name = new TestName();
-	
+
 	@Before
 	public void setUp() throws Exception {
 		common=new Common();
@@ -57,25 +56,40 @@ public class DeleteFileTestSuite{
 
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
-	public void testDeleteFile () throws Exception {		
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+	public void testDeleteFileRemoteAndLocal () throws Exception {		
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-		
-		//TODO. if the file already exists, do not upload
-		FileListView fileListViewAfterUploadFile = Actions
-				.uploadFile(FILE_NAME, fileListView);
-		
-		fileListViewAfterUploadFile.scrollTillFindElement(FILE_NAME);
+		common.assertIsInFileListView(fileListView);
+
+		//if the file already exists, delete it remote
+		AndroidElement file = fileListView.getElement(Config.fileToTest);
+		if(file!=null){
+			Actions.deleteElement(Config.fileToTest,fileListView, driver);
+			assertNull(fileListView.getElement(Config.fileToTest));
+		}
+		//now we are sure that we are going to delete it remote and locally
+		fileListView = Actions.uploadFile(Config.fileToTest, fileListView);
+
 		Common.waitTillElementIsNotPresentWithoutTimeout(
-				fileListViewAfterUploadFile.getProgressCircular(), 1000);
+				fileListView.getProgressCircular(), 1000);
+
 		common.wait.until(ExpectedConditions.visibilityOf(
-				fileListViewAfterUploadFile.getFileElementLayout()
-				.findElement(By.id(FileListView.getLocalFileIndicator()))));
+				fileListView
+				.getElement(Config.fileToTest)
+				.findElement(By.id(FilesView.getLocalFileIndicator()))));
 		
-		Actions.deleteElement(FILE_NAME,fileListViewAfterUploadFile, driver);
-		assertFalse(fileListViewAfterUploadFile.getFileElement().isDisplayed());
+		file = fileListView.getElement(Config.fileToTest);
+		
+		assertTrue(file.isDisplayed());
+
+		Actions.deleteElementRemoteAndLocal(Config.fileToTest,fileListView,
+				driver);
+		
+		common.assertIsInFileListView(fileListView);
+		assertNull(fileListView.getElement(Config.fileToTest));
 	}
+	
+	//TODO. Delete local and delete remote
 
 	@After
 	public void tearDown() throws Exception {

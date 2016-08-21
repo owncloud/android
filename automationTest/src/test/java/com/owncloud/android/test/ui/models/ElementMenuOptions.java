@@ -74,9 +74,9 @@ public class ElementMenuOptions {
 		return moveView;
 	}
 
-	public NewFolderPopUp clickOnRename () {
+	public FolderPopUp clickOnRename () {
 		renameFileElement.click();
-		NewFolderPopUp newFolderPopUp = new NewFolderPopUp(driver);
+		FolderPopUp newFolderPopUp = new FolderPopUp(driver);
 		return newFolderPopUp;
 	}
 	

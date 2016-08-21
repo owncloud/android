@@ -48,20 +48,22 @@ public class UploadFilesView{
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
 	
-	public FileListView clickOnUploadButton () {
+	public FilesView clickOnUploadButton () {
 		uploadButton.click();
-		FileListView fileListView = new FileListView (driver);
+		FilesView fileListView = new FilesView (driver);
 		return fileListView;
 	}
 	
-	//change to scrollTillFindElement
-	public void scrollTillFindFile (String fileName) {
+	
+	public void clickOnElement (String elementName) {
 		fileElement = Actions
-				.scrollTillFindElement(fileName,filesLayout,driver);
+				.scrollTillFindElement(elementName,filesLayout,driver);
+		fileElement.click();
 	}
 	
-	public void clickOnFileName (String fileName) {
-		scrollTillFindFile(fileName);
-		fileElement.click();
+	public void tapOnElement (String elementName) {
+		fileElement = Actions
+				.scrollTillFindElement(elementName,filesLayout,driver);
+		fileElement.tap(1,1);
 	}
 }

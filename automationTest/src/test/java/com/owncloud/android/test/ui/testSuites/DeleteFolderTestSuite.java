@@ -22,6 +22,7 @@ package com.owncloud.android.test.ui.testSuites;
 
 import static org.junit.Assert.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,9 +34,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 import com.owncloud.android.test.ui.actions.Actions;
-import com.owncloud.android.test.ui.groups.NoIgnoreTestCategory;
-import com.owncloud.android.test.ui.groups.SmokeTestCategory;
-import com.owncloud.android.test.ui.models.FileListView;
+import com.owncloud.android.test.ui.groups.*;
+import com.owncloud.android.test.ui.models.FilesView;
 import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 
 
@@ -43,9 +43,7 @@ import com.owncloud.android.test.ui.models.WaitAMomentPopUp;
 public class DeleteFolderTestSuite{
 	AndroidDriver driver;
 	Common common;
-	private Boolean folderHasBeenCreated = false;
-	private final String FOLDER_NAME = "testCreateFolder";
-	
+
 	@Rule public TestName name = new TestName();
 
 
@@ -58,33 +56,79 @@ public class DeleteFolderTestSuite{
 	@Test
 	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
 	public void testDeleteFolder () throws Exception {
-		FileListView fileListView = Actions.login(Config.URL, Config.user,
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
 				Config.password, Config.isTrusted, driver);
-		common.assertIsInFileListView();
-		
-		//TODO. if the folder already exists, do no created
-		//create the folder
-		WaitAMomentPopUp waitAMomentPopUp = Actions
-				.createFolder(FOLDER_NAME, fileListView);
-		Common.waitTillElementIsNotPresentWithoutTimeout(
-				waitAMomentPopUp.getWaitAMomentTextElement(), 100);
-		fileListView.scrollTillFindElement(FOLDER_NAME);
-		assertTrue(
-			folderHasBeenCreated = fileListView.getFileElement().isDisplayed());
+		common.assertIsInFileListView(fileListView);
+
+		//if the folder already exists, do no created
+		AndroidElement folder = fileListView.getElement(Config.folderToCreate);
+		if(folder==null){
+			//create the folder
+			WaitAMomentPopUp waitAMomentPopUp = Actions
+					.createFolder(Config.folderToCreate, fileListView);
+			Common.waitTillElementIsNotPresentWithoutTimeout(
+					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			folder = fileListView.getElement(Config.folderToCreate);
+		}
+		assertTrue(folder.isDisplayed());
 
 		//delete the folder
-		Actions.deleteElement(FOLDER_NAME, fileListView, driver);
-		assertFalse(
-			folderHasBeenCreated =fileListView.getFileElement().isDisplayed());
+		Actions.deleteElement(Config.folderToCreate, fileListView, driver);
+		assertNull(fileListView.getElement(Config.folderToCreate));
+	}
+
+	@Test
+	@Category({NoIgnoreTestCategory.class, SmokeTestCategory.class})
+	public void testDeleteFolderWithContents () throws Exception {
+		FilesView fileListView = Actions.login(Config.URL, Config.user,
+				Config.password, Config.isTrusted, driver);
+		common.assertIsInFileListView(fileListView);
+
+		//if the folder already exists, do no created
+		AndroidElement folder = fileListView.getElement(Config.folderToCreate);
+		if(folder==null){
+			WaitAMomentPopUp waitAMomentPopUp = Actions
+					.createFolder(Config.folderToCreate, fileListView);
+			Common.waitTillElementIsNotPresentWithoutTimeout(
+					waitAMomentPopUp.getWaitAMomentTextElement(), 100);
+			folder = fileListView.getElement(Config.folderToCreate);
+		}
+		assertTrue(folder.isDisplayed());
+		fileListView.tapOnElement(Config.folderToCreate);
+
+		fileListView = Actions.uploadSeveralFile(Config.fileToTest,
+				Config.fileToTest2,Config.fileToTest3, fileListView);
+
+		assertTrue(fileListView
+				.getElement(Config.fileToTest).isDisplayed());
+		assertTrue(fileListView
+				.getElement(Config.fileToTest2).isDisplayed());
+		assertTrue(fileListView
+				.getElement(Config.fileToTest3).isDisplayed());
+
+		fileListView.clickOnBackButton();
+		folder = fileListView.getElement(Config.folderToCreate);
+		assertTrue(folder.isDisplayed());
+
+		//delete the folder
+		Actions.deleteElement(Config.folderToCreate, fileListView, driver);
+		//assertFalse(folder.isDisplayed());
+		assertNull(fileListView.getElement(Config.folderToCreate));
+
+		fileListView.pulldownToRefresh();
+
+		Common.waitTillElementIsNotPresentWithoutTimeout(fileListView
+				.getProgressCircular(), 100);
+		//assertFalse(folder.isDisplayed());
+		assertNull(fileListView.getElement(Config.folderToCreate));
+
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		common.takeScreenShotOnFailed(name.getMethodName());
-		if(folderHasBeenCreated){
-			FileListView fileListView = new FileListView(driver);
-			Actions.deleteElement(FOLDER_NAME, fileListView, driver);
-		}
+		FilesView fileListView = new FilesView(driver);
+		Actions.deleteElement(Config.folderToCreate, fileListView, driver);
 		driver.removeApp("com.owncloud.android");
 		driver.quit();
 	}
