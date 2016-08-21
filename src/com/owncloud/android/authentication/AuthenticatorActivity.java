@@ -793,7 +793,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     private void checkOcServer() {
-        String uri = mHostUrlInput.getText().toString().trim();
+        // Remove multiple "/" at the end
+        String uri = mHostUrlInput.getText().toString().trim().replaceFirst("/*$", "/");
         mServerIsValid = false;
         mServerIsChecked = false;
         mOkButton.setEnabled(false);
