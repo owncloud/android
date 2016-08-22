@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author masensio on 09/02/2015.
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -30,6 +30,7 @@ import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
+import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 
 import java.lang.ref.WeakReference;
 
@@ -44,11 +45,10 @@ public class AuthenticatorAsyncTask  extends AsyncTask<Object, Void, RemoteOpera
 
     private Context mContext;
     private final WeakReference<OnAuthenticatorTaskListener> mListener;
-    protected Activity mActivity;
 
     public AuthenticatorAsyncTask(Activity activity) {
         mContext = activity.getApplicationContext();
-        mListener = new WeakReference<OnAuthenticatorTaskListener>((OnAuthenticatorTaskListener)activity);
+        mListener = new WeakReference<>((OnAuthenticatorTaskListener)activity);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class AuthenticatorAsyncTask  extends AsyncTask<Object, Void, RemoteOpera
             OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(uri, mContext, true);
             client.setCredentials(credentials);
 
-            // Operation
+            // Operation - try credentials
             ExistenceCheckRemoteOperation operation = new ExistenceCheckRemoteOperation(
                     REMOTE_PATH,
                     mContext,
@@ -76,6 +76,12 @@ public class AuthenticatorAsyncTask  extends AsyncTask<Object, Void, RemoteOpera
                 RedirectionPath redirectionPath = operation.getRedirectionPath();
                 String permanentLocation = redirectionPath.getLastPermanentLocation();
                 result.setLastPermanentLocation(permanentLocation);
+            }
+
+            // Operation - get display name
+            if (result.isSuccess()) {
+                GetRemoteUserInfoOperation remoteUserNameOperation = new GetRemoteUserInfoOperation();
+                result = remoteUserNameOperation.execute(client);
             }
 
         } else {

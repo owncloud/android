@@ -3,7 +3,7 @@
  *
  *   @author Tobias Kaminsky
  *   @author David A. Velasco
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -24,6 +24,8 @@ package com.owncloud.android.datamodel;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -34,6 +36,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -168,8 +171,10 @@ public class ThumbnailsCacheManager {
 
             try {
                 if (mAccount != null) {
-                    OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount,
-                            MainApp.getAppContext());
+                    OwnCloudAccount ocAccount = new OwnCloudAccount(
+                            mAccount,
+                            MainApp.getAppContext()
+                    );
                     mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
                             getClientFor(ocAccount, MainApp.getAppContext());
                 }
@@ -178,8 +183,20 @@ public class ThumbnailsCacheManager {
                 
                 if (mFile instanceof OCFile) {
                     thumbnail = doOCFileInBackground();
+
+                    if (((OCFile) mFile).isVideo() && thumbnail != null){
+                        thumbnail = addVideoOverlay(thumbnail);
+                    }
                 }  else if (mFile instanceof File) {
                     thumbnail = doFileInBackground();
+
+                    String url = ((File) mFile).getAbsolutePath();
+                    FileNameMap fileNameMap = URLConnection.getFileNameMap();
+                    String mMimeType = fileNameMap.getContentTypeFor("file://" + url);
+
+                    if (mMimeType != null && mMimeType.startsWith("video/") && thumbnail != null){
+                        thumbnail = addVideoOverlay(thumbnail);
+                    }
                 //} else {  do nothing
                 }
 
@@ -278,12 +295,13 @@ public class ThumbnailsCacheManager {
                     OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
                     if (mClient != null && serverOCVersion != null) {
                         if (serverOCVersion.supportsRemoteThumbnails()) {
+                            GetMethod get = null;
                             try {
                                 String uri = mClient.getBaseUri() + "" +
                                         "/index.php/apps/files/api/v1/thumbnail/" +
                                         px + "/" + px + Uri.encode(file.getRemotePath(), "/");
                                 Log_OC.d("Thumbnail", "URI: " + uri);
-                                GetMethod get = new GetMethod(uri);
+                                get = new GetMethod(uri);
                                 int status = mClient.executeMethod(get);
                                 if (status == HttpStatus.SC_OK) {
                                     InputStream inputStream = get.getResponseBodyAsStream();
@@ -299,9 +317,15 @@ public class ThumbnailsCacheManager {
                                     if (thumbnail != null) {
                                         addBitmapToCache(imageKey, thumbnail);
                                     }
+                                } else {
+                                    mClient.exhaustResponse(get.getResponseBodyAsStream());
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                if (get != null) {
+                                    get.releaseConnection();
+                                }
                             }
                         } else {
                             Log_OC.d(TAG, "Server too old");
@@ -380,6 +404,51 @@ public class ThumbnailsCacheManager {
             }
         }
         return null;
+    }
+
+    public static Bitmap addVideoOverlay(Bitmap thumbnail){
+        Bitmap playButton = BitmapFactory.decodeResource(MainApp.getAppContext().getResources(),
+                R.drawable.view_play);
+
+        Bitmap resizedPlayButton = Bitmap.createScaledBitmap(playButton,
+                (int) (thumbnail.getWidth() * 0.3),
+                (int) (thumbnail.getHeight() * 0.3), true);
+
+        Bitmap resultBitmap = Bitmap.createBitmap(thumbnail.getWidth(),
+                thumbnail.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas c = new Canvas(resultBitmap);
+
+        // compute visual center of play button, according to resized image
+        int x1 = resizedPlayButton.getWidth();
+        int y1 = resizedPlayButton.getHeight() / 2;
+        int x2 = 0;
+        int y2 = resizedPlayButton.getWidth();
+        int x3 = 0;
+        int y3 = 0;
+
+        double ym = ( ((Math.pow(x3,2) - Math.pow(x1,2) + Math.pow(y3,2) - Math.pow(y1,2)) *
+                    (x2 - x1)) - (Math.pow(x2,2) - Math.pow(x1,2) + Math.pow(y2,2) -
+                    Math.pow(y1,2)) * (x3 - x1) )  /  (2 * ( ((y3 - y1) * (x2 - x1)) -
+                    ((y2 - y1) * (x3 - x1)) ));
+        double xm = ( (Math.pow(x2,2) - Math.pow(x1,2)) + (Math.pow(y2,2) - Math.pow(y1,2)) -
+                    (2*ym*(y2 - y1)) ) / (2*(x2 - x1));
+
+        // offset to top left
+        double ox = - xm;
+        double oy = thumbnail.getHeight() - ym;
+
+
+        c.drawBitmap(thumbnail, 0, 0, null);
+
+        Paint p = new Paint();
+        p.setAlpha(230);
+
+        c.drawBitmap(resizedPlayButton, (float) ((thumbnail.getWidth() / 2) + ox),
+                                        (float) ((thumbnail.getHeight() / 2) - ym), p);
+
+        return resultBitmap;
     }
 
     public static class AsyncDrawable extends BitmapDrawable {

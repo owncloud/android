@@ -2,7 +2,7 @@
 <!--
   ownCloud Android client application
 
-  Copyright (C) 2015 ownCloud Inc.
+  Copyright (C) 2016 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -24,15 +24,17 @@
     android:layout_alignParentLeft="true"
     android:orientation="horizontal"
     android:background="@color/background_color"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
+    android:layout_marginTop="@dimen/standard_margin"
+    android:layout_marginBottom="@dimen/standard_margin"
     android:minHeight="?android:attr/listPreferredItemHeight">
+    android:filterTouchesWhenObscured="true"
+    >
 
     <ImageView
         android:id="@+id/itemIcon"
         android:layout_width="24sp"
         android:layout_height="24sp"
-        android:layout_marginLeft="16sp"
+        android:layout_marginLeft="@dimen/standard_margin"
         android:layout_gravity="center_vertical"
         />
 
@@ -41,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="22dp"
-        android:paddingRight="16dp"
+        android:paddingRight="@dimen/standard_margin"
         android:textColor="@color/drawerMenuTextColor"
         android:text="@string/app_name"
         android:textStyle="normal"

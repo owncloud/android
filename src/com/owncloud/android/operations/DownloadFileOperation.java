@@ -3,7 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author masensio
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -27,7 +27,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -52,6 +51,7 @@ public class DownloadFileOperation extends RemoteOperation {
     private OCFile mFile;
     private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private long mModificationTimestamp = 0;
+    private String mEtag = "";
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
     
     private DownloadRemoteFileOperation mDownloadOperation;
@@ -127,11 +127,15 @@ public class DownloadFileOperation extends RemoteOperation {
                 mFile.getModificationTimestamp();
     }
 
+    public String getEtag() {
+        return mEtag;
+    }
+
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        File newFile = null;
-        boolean moved = true;
+        RemoteOperationResult result;
+        File newFile;
+        boolean moved;
         
         /// download will be performed to a temporal file, then moved to the final location
         File tmpFile = new File(getTmpPath());
@@ -154,6 +158,7 @@ public class DownloadFileOperation extends RemoteOperation {
         
         if (result.isSuccess()) {
             mModificationTimestamp = mDownloadOperation.getModificationTimestamp();
+            mEtag = mDownloadOperation.getEtag();
             newFile = new File(getSavePath());
             newFile.getParentFile().mkdirs();
             moved = tmpFile.renameTo(newFile);

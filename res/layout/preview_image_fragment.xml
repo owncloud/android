@@ -2,7 +2,7 @@
 <!--
   ownCloud Android client application
 
-  Copyright (C) 2015  ownCloud Inc.
+  Copyright (C) 2016  ownCloud GmbH.
   
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -32,9 +32,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".ui.fragment.PreviewImageFragment" >
+    tools:context=".ui.preview.PreviewImageFragment"
+    android:filterTouchesWhenObscured="true"
+    >
 
-    <ProgressBar 
+    <ProgressBar
         android:id="@+id/progressWheel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,5 +64,8 @@
         android:text="@string/placeholder_sentence"
         android:textColor="@color/owncloud_blue_bright"
         />
+
+    <!-- last to draw, will be top in Z axis -->
+    <include layout="@layout/top_progress_bar"/>
 
 </RelativeLayout>

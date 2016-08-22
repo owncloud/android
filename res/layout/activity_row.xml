@@ -2,7 +2,7 @@
 <!--
   ownCloud Android client application
 
-  Copyright (C) 2015 ownCloud Inc.
+  Copyright (C) 2016 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -21,10 +21,18 @@
     			android:id="@+id/list_item"
 				android:layout_width="match_parent"
 				android:layout_height="48dp"
+				android:paddingStart="16dip"
+				android:paddingEnd="16dip"
 				android:paddingRight="16dip"
 				android:paddingLeft="16dip"
 				android:minWidth="196dip"
+<<<<<<< f61afd89e6d873028a0e921f354676f3a8f55f02
+				android:background="?android:attr/activatedBackgroundIndicator"
     			android:orientation="vertical" >
+=======
+				android:orientation="vertical"
+				android:filterTouchesWhenObscured="true">
+>>>>>>> Add `android:filterTouchesWhenObscured`
 
 	<LinearLayout
 		android:layout_width="wrap_content"
@@ -36,6 +44,7 @@
 			android:layout_width="40dip"
 			android:layout_height="40dip"
 			android:layout_gravity="center_vertical"
+			android:layout_marginEnd="8dip"
 			android:layout_marginRight="8dip"
 			android:duplicateParentState="true" />
 
@@ -44,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
             android:duplicateParentState="true"
             android:singleLine="true"
             android:ellipsize="marquee"

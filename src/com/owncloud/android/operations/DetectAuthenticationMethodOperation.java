@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -33,6 +33,8 @@ import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 
 import android.content.Context;
 import android.net.Uri;
+
+import org.apache.commons.httpclient.HttpStatus;
 
 /**
  * Operation to find out what authentication method requires
@@ -99,7 +101,7 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
         } 
 
         // analyze response  
-        if (result.getCode() == ResultCode.UNAUTHORIZED) {
+        if (result.getHttpCode() == HttpStatus.SC_UNAUTHORIZED) {
             String authRequest = ((result.getAuthenticateHeader()).trim()).toLowerCase();
             if (authRequest.startsWith("basic")) {
                 authMethod = AuthenticationMethod.BASIC_HTTP_AUTH;

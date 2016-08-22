@@ -1,7 +1,7 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -115,15 +115,15 @@ public class LogHistoryActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
+        boolean retval = true;
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;
             default:
-                return false;
+                retval = super.onOptionsItemSelected(item);
         }
-        return true;
+        return retval;
     }
 
 

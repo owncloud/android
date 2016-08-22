@@ -3,7 +3,7 @@
  *
  *   @author David A. Velasco
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -48,7 +48,7 @@ public class BootupBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (!intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            Log_OC.wtf(TAG, "Incorrect action sent " + intent.getAction());
+            Log_OC.e(TAG, "Incorrect action sent " + intent.getAction());
             return;
         }
         Log_OC.d(TAG, "Starting file observer service...");
