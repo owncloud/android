@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.utils;
+package com.owncloud.android.services.observer;
 
 import java.io.File;
 import java.util.ArrayList;
