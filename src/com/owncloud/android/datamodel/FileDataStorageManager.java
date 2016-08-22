@@ -300,7 +300,6 @@ public class FileDataStorageManager {
             cv.put(ProviderTableMeta.FILE_CONTENT_LENGTH, file.getFileLength());
             cv.put(ProviderTableMeta.FILE_CONTENT_TYPE, file.getMimetype());
             cv.put(ProviderTableMeta.FILE_NAME, file.getFileName());
-            //cv.put(ProviderTableMeta.FILE_PARENT, file.getParentId());
             cv.put(ProviderTableMeta.FILE_PARENT, folder.getFileId());
             cv.put(ProviderTableMeta.FILE_PATH, file.getRemotePath());
             if (!file.isFolder()) {
@@ -379,7 +378,7 @@ public class FileDataStorageManager {
                 folder.getModificationTimestampAtLastSyncForData()
         );
         cv.put(ProviderTableMeta.FILE_CREATION, folder.getCreationTimestamp());
-        cv.put(ProviderTableMeta.FILE_CONTENT_LENGTH, 0);
+        cv.put(ProviderTableMeta.FILE_CONTENT_LENGTH, folder.getFileLength());
         cv.put(ProviderTableMeta.FILE_CONTENT_TYPE, folder.getMimetype());
         cv.put(ProviderTableMeta.FILE_NAME, folder.getFileName());
         cv.put(ProviderTableMeta.FILE_PARENT, folder.getParentId());

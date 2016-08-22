@@ -345,12 +345,11 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 updatedFile.setStoragePath(localFile.getStoragePath());
                 // eTag will not be updated unless file CONTENTS are synchronized
                 updatedFile.setEtag(localFile.getEtag());
-                if (updatedFile.isFolder()) {
-                    updatedFile.setFileLength(localFile.getFileLength());
-                        // TODO move operations about size of folders to FileContentProvider
-                } else if (mRemoteFolderChanged && remoteFile.isImage() &&
-                        remoteFile.getModificationTimestamp() !=
-                                localFile.getModificationTimestamp()) {
+                if (!updatedFile.isFolder() &&
+                    mRemoteFolderChanged &&
+                    remoteFile.isImage() &&
+                    remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
+
                     updatedFile.setNeedsUpdateThumbnail(true);
                     Log.d(TAG, "Image " + remoteFile.getFileName() + " updated on the server");
                 }
