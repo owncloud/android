@@ -66,7 +66,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
-import com.owncloud.android.ui.adapter.UploaderAdapter;
+import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
@@ -77,9 +77,6 @@ import com.owncloud.android.utils.ErrorMessageAdapter;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -418,21 +415,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
             Vector<OCFile> files = getStorageManager().getFolderContent(mFile/*, false*/);
             files = sortFileList(files);
 
-            List<HashMap<String, Object>> data = new LinkedList<>();
-            for (OCFile f : files) {
-                HashMap<String, Object> h = new HashMap<>();
-                h.put("dirname", f);
-                data.add(h);
-            }
-
-            UploaderAdapter sa = new UploaderAdapter(this,
-                                                data,
-                                                R.layout.uploader_list_item_layout,
-                                                new String[] {"dirname"},
-                                                new int[] {R.id.filename},
-                                                getStorageManager(), getAccount());
-
+            ReceiveExternalFilesAdapter sa = new ReceiveExternalFilesAdapter(
+                this, files, getStorageManager(), getAccount()
+            );
             mListView.setAdapter(sa);
+
             Button btnChooseFolder = (Button) findViewById(R.id.uploader_choose_folder);
             btnChooseFolder.setOnClickListener(this);
 

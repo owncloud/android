@@ -16,8 +16,19 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
 <resources>
+    <string name="empty" />
+
+    <string-array name="pref_behaviour_entries">
+        <item>@string/pref_behaviour_entries_keep_file</item>
+        <item>@string/pref_behaviour_entries_move</item>
+    </string-array>
+
+    <string-array name="pref_behaviour_entryValues">
+        <item>NOTHING</item>
+        <item>MOVE</item>
+    </string-array>
+
     <!-- Nav Drawer Menu Items -->
     <string-array name="drawer_items">
         <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
@@ -36,6 +47,13 @@
         <!--<item>@string/drawer_item_on_device</item>-->
         <item>@string/drawer_item_uploads_list</item>
         <item>@string/drawer_item_settings</item>
+    </string-array>
+
+    <!-- Entries in dialog to choose sorting criteria -->
+    <string-array name="actionbar_sort_by_options">
+        <item>@string/actionbar_sort_by_name</item>
+        <item>@string/actionbar_sort_by_date</item>
+        <item>@string/actionbar_sort_by_size</item>
     </string-array>
 
 </resources>
