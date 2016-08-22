@@ -12,12 +12,6 @@
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Máis novo - Máis antigo</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos os ficheiros</string>
@@ -254,7 +248,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="network_error_socket_timeout_exception">Produciuse un erro mentres agardaba polo servidor, a operación non se puido levar a fin</string>
   <string name="network_error_connect_timeout_exception">Produciuse un erro mentres agardaba polo servidor, a operación non se puido levar a fin</string>
   <string name="network_host_not_available">A operación non se completou, o servidor non está dispoñíbel</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Non ten permisos %s</string>
   <string name="forbidden_permissions_rename">para renomear este ficheiro</string>
   <string name="forbidden_permissions_delete">para eliminar este ficheiro</string>

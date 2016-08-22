@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">Odeslat</string>
   <string name="actionbar_sort">Seřadit</string>
   <string name="actionbar_sort_title">Seřadit podle</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Nejnovější - nejstarší</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Všechny soubory</string>
@@ -314,7 +309,6 @@ správce systému.</string>
   <string name="network_error_socket_timeout_exception">Při čekání na odpověď serveru se vyskytla chyba, operace nemohla být dokončena</string>
   <string name="network_error_connect_timeout_exception">Při čekání na odpověď serveru se vyskytla chyba, operace nemohla být dokončena</string>
   <string name="network_host_not_available">Operace nemohla být dokončena, server je nedostupný</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Nemáte oprávnění %s</string>
   <string name="forbidden_permissions_rename">přejmenovat tento soubor</string>
   <string name="forbidden_permissions_delete">smazat tento soubor</string>

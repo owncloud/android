@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">发送</string>
   <string name="actionbar_sort">排序</string>
   <string name="actionbar_sort_title">排序方式</string>
-  <string-array name="actionbar_sortby">
-    <item>A - Z</item>
-    <item>新 - 旧</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">全部文件</string>
@@ -306,7 +301,6 @@
   <string name="network_error_socket_timeout_exception">等待服务器响应时发生了一个错误，此操作无法完成</string>
   <string name="network_error_connect_timeout_exception">等待服务器响应时发生了一个错误，此操作无法完成</string>
   <string name="network_host_not_available">服务器不可用，此操作无法完成</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">你没有权限%s</string>
   <string name="forbidden_permissions_rename">重命名该文件</string>
   <string name="forbidden_permissions_delete">删除该文件</string>

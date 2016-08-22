@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Kirim</string>
   <string name="actionbar_sort">Urutkan</string>
   <string name="actionbar_sort_title">Urutan</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Terbaru - Terlawas</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Semua berkas</string>
@@ -260,7 +254,6 @@
   <string name="network_error_socket_timeout_exception">Terjadi kesalahan saat menunggu balasan server, operasi tidak dapat diselesaikan</string>
   <string name="network_error_connect_timeout_exception">Terjadi kesalahan saat menunggu balasan server, operasi tidak dapat diselesaikan</string>
   <string name="network_host_not_available">Operasi tidak dapat diselesaikan, server tidak tersedia</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Anda tidak memiliki izin %s</string>
   <string name="forbidden_permissions_rename">untuk mengubah nama berkas ini</string>
   <string name="forbidden_permissions_delete">untuk menghapus berkas ini</string>

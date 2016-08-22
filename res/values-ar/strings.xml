@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">أرسل</string>
   <string name="actionbar_sort">ترتيب</string>
   <string name="actionbar_sort_title">ترتيب بـ</string>
-  <string-array name="actionbar_sortby">
-    <item>الف باء</item>
-    <item>الأحدث إلى الاقدم</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">أ-ي</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">كل الملفات</string>
@@ -264,7 +259,6 @@
   <string name="network_error_socket_timeout_exception">حدث خطأ أثناء إنتظار الخادم، لم يكن من الممكن القيام بالعملية</string>
   <string name="network_error_connect_timeout_exception">حدث خطأ أثناء إنتظار الخادم، لم يكن من الممكن القيام بالعملية</string>
   <string name="network_host_not_available">تعذر إكمال العملية، الخادم غير متوفر</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">حسابات</string>
   <string name="actionbar_logger">سجل</string>
   <string name="saml_authentication_wrong_pass">كلمة مرور خاطئة</string>

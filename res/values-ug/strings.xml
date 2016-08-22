@@ -5,8 +5,6 @@
   <string name="actionbar_mkdir">يېڭى قىسقۇچ</string>
   <string name="actionbar_settings">تەڭشەكلەر</string>
   <string name="actionbar_send_file">يوللا</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -45,7 +43,6 @@
   <string name="common_rename">ئات ئۆزگەرت</string>
   <string name="common_remove">چىقىرىۋەت</string>
   <string name="activity_chooser_send_file_title">يوللا</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">ھېساباتلار</string>
   <string name="auth_host_address">مۇلازىمېتىر ئادرىسى</string>
   <string name="share_dialog_title">ھەمبەھىر</string>

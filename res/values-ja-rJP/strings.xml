@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">送信</string>
   <string name="actionbar_sort">ソート</string>
   <string name="actionbar_sort_title">ソート: </string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>最新 - 最古</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">すべてのファイル</string>
@@ -316,7 +310,6 @@
   <string name="network_error_socket_timeout_exception">サーバーからの応答を待っている間にエラーが発生しました。操作を完了することができません。</string>
   <string name="network_error_connect_timeout_exception">サーバーからの応答を待っている間にエラーが発生しました。操作を完了することができません。</string>
   <string name="network_host_not_available">操作を完了することができません。サーバーが利用できません。</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">権限 %s がありません</string>
   <string name="forbidden_permissions_rename">ファイル名の変更</string>
   <string name="forbidden_permissions_delete">ファイルを削除</string>

@@ -5,8 +5,6 @@
   <string name="actionbar_mkdir">Nove dossier</string>
   <string name="actionbar_settings">Configurationes</string>
   <string name="actionbar_send_file">Invia</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -41,7 +39,6 @@
   <string name="uploader_info_dirname">Nomine de dossier</string>
   <string name="uploads_view_upload_status_unknown_fail">Error Incognite</string>
   <string name="activity_chooser_send_file_title">Invia</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">Contos</string>
   <string name="saml_authentication_wrong_pass">Contrasigno errate</string>
   <string name="folder_picker_choose_button_text">Seliger</string>

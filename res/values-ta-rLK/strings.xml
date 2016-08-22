@@ -5,8 +5,6 @@
   <string name="actionbar_upload_files">கோப்புகள்</string>
   <string name="actionbar_settings">அமைப்புகள்</string>
   <string name="actionbar_see_details">விவரங்கள்</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -108,7 +106,6 @@
   <string name="ssl_validator_label_signature_algorithm">நெறிமுறை</string>
   <string name="placeholder_sentence">இது ஒரு placeholder</string>
   <string name="conflict_keep_both">இரண்டையும் வைக்க </string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">கணக்குகள்</string>
   <string name="folder_picker_choose_button_text">தெரிவுசெய்க </string>
   <string name="prefs_category_details">விவரங்கள்</string>

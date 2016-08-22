@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Mais Recente - Mais Antigo</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos os ficheiros</string>
@@ -313,7 +307,6 @@
   <string name="network_error_socket_timeout_exception">Ocorreu um erro durante a ligação ao servidor, não foi possível realizar a operação.</string>
   <string name="network_error_connect_timeout_exception">Ocorreu um erro durante a ligação ao servidor, não foi possível realizar a operação.</string>
   <string name="network_host_not_available">A operação não foi concluída, o servidor está inacessível.</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Não tem permissão %s</string>
   <string name="forbidden_permissions_rename">para renomear este ficheiro</string>
   <string name="forbidden_permissions_delete">para apagar este ficheiro</string>

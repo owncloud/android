@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">שליחה</string>
   <string name="actionbar_sort">מיון</string>
   <string name="actionbar_sort_title">מיון על בסיס</string>
-  <string-array name="actionbar_sortby">
-    <item>א-ת</item>
-    <item>חדש - ישן</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">כל הקבצים</string>
@@ -315,7 +309,6 @@
   <string name="network_error_socket_timeout_exception">שגיאה אירעה בזמן המתנה לשרת, הפעולה לא הייתה ניתנת להשלמה</string>
   <string name="network_error_connect_timeout_exception">שגיאה אירעה בזמן המתנה לשרת, הפעולה לא הייתה ניתנת להשלמה</string>
   <string name="network_host_not_available">לא ניתן להשלים את הפעולה, השרת אינו זמין</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">אין לך הרשאות %s</string>
   <string name="forbidden_permissions_rename">לשנות שם לקובץ זה</string>
   <string name="forbidden_permissions_delete">למחוק קובץ זה</string>

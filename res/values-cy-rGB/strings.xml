@@ -5,8 +5,6 @@
   <string name="actionbar_upload_files">Ffeiliau</string>
   <string name="actionbar_settings">Gosodiadau</string>
   <string name="actionbar_send_file">Anfon</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -113,7 +111,6 @@
   <string name="instant_upload_path">/LlwythoSyth</string>
   <string name="conflict_keep_both">Cadw\'r ddau</string>
   <string name="activity_chooser_send_file_title">Anfon</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">Cyfrifon</string>
   <string name="folder_picker_choose_button_text">Dewisiwch</string>
   <string name="prefs_category_details">Manylion</string>

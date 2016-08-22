@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">Αποστολή</string>
   <string name="actionbar_sort">Ταξινόμηση</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Ω</item>
-    <item>Νεότερο - Παλαιότερο</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Ω</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
@@ -312,7 +307,6 @@
   <string name="network_error_socket_timeout_exception">Ένα σφάλμα προέκυψε κατά την αναμονή για το διακομιστή, η λειτουργία δεν ήταν επιτυχής</string>
   <string name="network_error_connect_timeout_exception">Ένα σφάλμα προέκυψε κατά την αναμονή για το διακομιστή, η λειτουργία δεν ήταν επιτυχής</string>
   <string name="network_host_not_available">Η λειτουργία δεν ήταν δυνατό να ολοκληρωθεί, ο διακομιστής δεν είναι διαθέσιμος</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Δεν έχετε πρόσβαση %s</string>
   <string name="forbidden_permissions_rename">για να μετονομάσετε αυτό το αρχείο</string>
   <string name="forbidden_permissions_delete">για να διαγράψετε αυτό το αρχείο</string>

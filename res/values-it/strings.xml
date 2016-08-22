@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">Invia</string>
   <string name="actionbar_sort">Ordina</string>
   <string name="actionbar_sort_title">Ordina per</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Più recente - Più datato</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tutti i file</string>
@@ -315,7 +310,6 @@
   <string name="network_error_socket_timeout_exception">Si è verificato un errore in attesa della risposta del server, l\'operazione non è stata completata</string>
   <string name="network_error_connect_timeout_exception">Si è verificato un errore in attesa della risposta del server, l\'operazione non è stata completata</string>
   <string name="network_host_not_available">L\'operazione non è stata completata, il server non è disponibile</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Non hai i permessi %s</string>
   <string name="forbidden_permissions_rename">per rinominare questo file</string>
   <string name="forbidden_permissions_delete">per eliminare questo file</string>

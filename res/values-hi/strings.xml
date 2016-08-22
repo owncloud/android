@@ -10,8 +10,6 @@
   <string name="actionbar_settings">सेटिंग्स</string>
   <string name="actionbar_see_details">विवरण </string>
   <string name="actionbar_send_file">भेजें</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -31,7 +29,6 @@
   <string name="common_error">त्रुटि</string>
   <string name="ssl_validator_btn_details_see">विवरण </string>
   <string name="activity_chooser_send_file_title">भेजें</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">खाते </string>
   <string name="prefs_category_details">विवरण </string>
 </resources>

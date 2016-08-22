@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">보내기</string>
   <string name="actionbar_sort">정렬</string>
   <string name="actionbar_sort_title">정렬 순서</string>
-  <string-array name="actionbar_sortby">
-    <item>가나다</item>
-    <item>최신 - 이전</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">모든 파일</string>
@@ -295,7 +289,6 @@
   <string name="network_error_socket_timeout_exception">서버를 기다리는 중 오류가 발생하였습니다. 작업이 진행되지 않았을 수도 있습니다</string>
   <string name="network_error_connect_timeout_exception">서버를 기다리는 중 오류가 발생하였습니다. 작업이 진행되지 않았을 수도 있습니다</string>
   <string name="network_host_not_available">서버를 사용할 수 없어서 작업을 진행할 수 없습니다</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">%s 권한이 없습니다</string>
   <string name="forbidden_permissions_rename">이 파일의 이름을 바꿀</string>
   <string name="forbidden_permissions_delete">이 파일을 삭제할</string>

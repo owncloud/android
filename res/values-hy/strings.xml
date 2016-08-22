@@ -10,8 +10,6 @@
   <string name="actionbar_send_file">Ուղարկել</string>
   <string name="actionbar_sort">Դասակարգել</string>
   <string name="actionbar_sort_title">Դասակարգել ըստ</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Բոլոր ֆայլերը</string>
@@ -88,7 +86,6 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="activity_chooser_send_file_title">Ուղարկել</string>
   <string name="copy_link">Պատճենել հղումը</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">Հաշիվներ</string>
   <string name="actionbar_logger">Լոգեր</string>
   <string name="saml_authentication_wrong_pass">Սխալ գաղտնաբառ</string>

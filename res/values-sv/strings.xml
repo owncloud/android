@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Skicka</string>
   <string name="actionbar_sort">Sortera</string>
   <string name="actionbar_sort_title">Sortera efter</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Ö</item>
-    <item>Nyast - Äldst</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alla filer</string>
@@ -315,7 +309,6 @@
   <string name="network_error_socket_timeout_exception">Ett fel uppstod i väntan på servern, operationen kunde inte ha gjorts</string>
   <string name="network_error_connect_timeout_exception">Ett fel uppstod i väntan på servern, operationen kunde inte ha gjorts</string>
   <string name="network_host_not_available">Åtgärden kunte inte slutföras, servern är ej tillgänglig</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Du har inga rättigheter %s</string>
   <string name="forbidden_permissions_rename">att döpa om denna fil</string>
   <string name="forbidden_permissions_delete">att radera denna fil</string>

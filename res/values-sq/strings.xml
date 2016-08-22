@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">Dërgoje</string>
   <string name="actionbar_sort">Renditi</string>
   <string name="actionbar_sort_title">Renditi sipas</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Më e reja - Më e vjetra</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Krejt kartelat</string>
@@ -313,7 +308,6 @@
   <string name="network_error_socket_timeout_exception">Ndodhi një gabim teksa po pritej për shërbyesin, veprimi s\’u krye dot</string>
   <string name="network_error_connect_timeout_exception">Ndodhi një gabim teksa po pritej për shërbyesin, veprimi s\’u krye dot</string>
   <string name="network_host_not_available">Veprimi s\’u plotësua dot, shërbyesi është i pakapshëm</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Nuk keni leje %s</string>
   <string name="forbidden_permissions_rename">për riemërtim të kësaj kartele</string>
   <string name="forbidden_permissions_delete">për fshirje të kësaj kartele</string>

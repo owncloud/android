@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Siųsti</string>
   <string name="actionbar_sort">Rikiuoti</string>
   <string name="actionbar_sort_title">Rikiuoti pagal</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Naujausi - Seniausi</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Visi failai</string>
@@ -251,7 +245,6 @@
   <string name="network_error_socket_timeout_exception">Klaida prisijungiant prie serverio, operacija neįvykdyta</string>
   <string name="network_error_connect_timeout_exception">Klaida prisijungiant prie serverio, operacija neįvykdyta</string>
   <string name="network_host_not_available">Serveris nepasiekiamas, operacija negali būti atlikta</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Neturite leidimo %s</string>
   <string name="forbidden_permissions_rename">pervadinti failo</string>
   <string name="forbidden_permissions_delete">ištrinti failo</string>

@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">Send</string>
   <string name="actionbar_sort">Sorter</string>
   <string name="actionbar_sort_title">Sorter etter</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Nyeste - Eldste</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
@@ -315,7 +310,6 @@
   <string name="network_error_socket_timeout_exception">En feil oppstod ved venting på svar fra serveren. Operasjonen kunne ikke utføres</string>
   <string name="network_error_connect_timeout_exception">En feil oppstod ved venting på svar fra serveren. Operasjonen kunne ikke utføres</string>
   <string name="network_host_not_available">Operasjonen kunne ikke fullføres. Server utilgjengelig</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Du har ikke tillatelse til %s</string>
   <string name="forbidden_permissions_rename">å omdøpe denne filen</string>
   <string name="forbidden_permissions_delete">å slette denne filen</string>

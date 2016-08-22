@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Bidali</string>
   <string name="actionbar_sort">Ordenatu</string>
   <string name="actionbar_sort_title">Ordenatu honen arabera</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Berrienak - Zaharrenak</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Fitxategi guztiak</string>
@@ -231,7 +225,6 @@ Mesedez, baimendu berriz</string>
   <string name="network_error_socket_timeout_exception">Errore bat gertatu da zerbitzariaren zain egon bitartean, ezin izan da eragiketa burutu</string>
   <string name="network_error_connect_timeout_exception">Errore bat gertatu da zerbitzariaren zain egon bitartean, ezin izan da eragiketa burutu</string>
   <string name="network_host_not_available">Eragiketa ezin izan da burutu, zerbitzaria ez dago erabilgarri</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Ez daukazu baimenik %s</string>
   <string name="forbidden_permissions_rename">fitxategia berrizendatzeko</string>
   <string name="forbidden_permissions_delete">fitxategia ezabatzeko</string>

@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">Envoyer</string>
   <string name="actionbar_sort">Trier</string>
   <string name="actionbar_sort_title">Trier</string>
-  <string-array name="actionbar_sortby">
-    <item>par ordre alphabétique</item>
-    <item>du plus récent au plus ancien</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tous les fichiers</string>
@@ -319,7 +314,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="network_error_socket_timeout_exception">Une erreur est survenue pendant l\'attente du serveur. L\'opération n\'a pas pu être effectuée</string>
   <string name="network_error_connect_timeout_exception">Une erreur est survenue pendant l\'attente du serveur. L\'opération n\'a pas pu être effectuée</string>
   <string name="network_host_not_available">L\'opération n\'a pas pu être terminée, le serveur n\'est pas disponible</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Vous n\'avez pas la permission %s</string>
   <string name="forbidden_permissions_rename">de renommer ce fichier</string>
   <string name="forbidden_permissions_delete">d’effacer ce fichier</string>
