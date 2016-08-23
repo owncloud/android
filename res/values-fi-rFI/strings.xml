@@ -13,6 +13,9 @@
   <string name="actionbar_send_file">Lähetä</string>
   <string name="actionbar_sort">Lajittele</string>
   <string name="actionbar_sort_title">Lajittelujärjestys</string>
+  <string name="actionbar_sort_by_name">A-Ö</string>
+  <string name="actionbar_sort_by_date">Uusin - vanhin</string>
+  <string name="actionbar_sort_by_size">Suurin - pienin</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Kaikki tiedostot</string>
@@ -364,4 +367,10 @@
   <string name="manage_space_error">Joitain tiedostoja ei voitu poistaa.</string>
   <string name="permission_storage_access">Tiedostojen lataaminen ja lähetys vaatii lisäoikeuksia.</string>
   <string name="local_file_not_found_toast">Tiedostoa ei löytynyt paikallisesta tiedostojärjestelmästä</string>
+  <string name="confirmation_remove_files_alert">Haluatko varmasti poistaa valitut kohteet?</string>
+  <string name="confirmation_remove_folders_alert">Haluatko varmasti poistaa valitut kohteet ja niiden sisällön?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d valittu</item>
+    <item quantity="other">%d valittu</item>
+  </plurals>
 </resources>
