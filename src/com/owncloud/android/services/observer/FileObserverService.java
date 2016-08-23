@@ -38,6 +38,7 @@ import android.os.IBinder;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -60,52 +61,83 @@ import com.owncloud.android.utils.FileStorageUtils;
  */
 public class FileObserverService extends Service {
 
-    public final static String MY_NAME = FileObserverService.class.getCanonicalName();
-    public final static String ACTION_START_OBSERVE = MY_NAME + ".action.START_OBSERVATION";
-    public final static String ACTION_ADD_OBSERVED_FILE = MY_NAME + ".action.ADD_OBSERVED_FILE";
-    public final static String ACTION_DEL_OBSERVED_FILE = MY_NAME + ".action.DEL_OBSERVED_FILE";
+    private final static String MY_NAME = FileObserverService.class.getCanonicalName();
+    private final static String ACTION_START_OBSERVE =
+        MY_NAME + ".action.START_OBSERVATION";
+    private final static String ACTION_ADD_OBSERVED_FILE =
+        MY_NAME + ".action.ADD_OBSERVED_FILE";
+    private final static String ACTION_DEL_OBSERVED_FILE =
+        MY_NAME + ".action.DEL_OBSERVED_FILE";
+    private final static String ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS =
+        MY_NAME + ".action.UPDATE_AUTO_UPLOAD_OBSERVERS";
 
     private final static String ARG_FILE = "ARG_FILE";
     private final static String ARG_ACCOUNT = "ARG_ACCOUNT";
 
     private static String TAG = FileObserverService.class.getSimpleName();
 
+    /**
+     * Map of observers watching for changes in available offline files in local 'ownCloud' folder
+     */
     private Map<String, FolderObserver> mFolderObserversMap;
+
+    /**
+     * Broadcast receiver being notified about downloads new and finished downloads to pause and resume
+     * observance of available offline files when downloading
+     */
     private DownloadCompletedReceiver mDownloadReceiver;
 
     /**
-     * Factory method to create intents that allow to start an ACTION_START_OBSERVE command.
+     * Observer for camera folder
+     */
+    private InstantUploadsObserver mInstantUploadsObserver;
+
+    /**
+     * Requests an ACTION_START_OBSERVE command to (re)initialize the observer service.
      * 
      * @param context   Android context of the caller component.
-     * @return          Intent that starts a command ACTION_START_OBSERVE when
-     *                  {@link Context#startService(Intent)} is called.
      */
-    public static Intent makeInitIntent(Context context) {
+    public static void initialize(Context context) {
         Intent i = new Intent(context, FileObserverService.class);
         i.setAction(ACTION_START_OBSERVE);
-        return i;
+        context.startService(i);
     }
 
     /**
-     * Factory method to create intents that allow to start or stop the
-     * observance of a file.
+     * Requests to start or stop the observance of a given file.
      * 
      * @param context       Android context of the caller component.
      * @param file          OCFile to start or stop to watch.
      * @param account       OC account containing file.
      * @param watchIt       'True' creates an intent to watch, 'false' an intent to stop watching.
-     * @return              Intent to start or stop the observance of a file through a call
-     *                      to {@link Context#startService(Intent)}.
      */
-    public static Intent makeObservedFileIntent(
-            Context context, OCFile file, Account account, boolean watchIt) {
+    public static void observeFile(
+        Context context,
+        OCFile file,
+        Account account,
+        boolean watchIt
+    ) {
         Intent intent = new Intent(context, FileObserverService.class);
         intent.setAction(watchIt ? FileObserverService.ACTION_ADD_OBSERVED_FILE
                 : FileObserverService.ACTION_DEL_OBSERVED_FILE);
         intent.putExtra(FileObserverService.ARG_FILE, file);
         intent.putExtra(FileObserverService.ARG_ACCOUNT, account);
-        return intent;
+        context.startService(intent);
     }
+
+
+    /**
+     * Requests the update of the observers responsible to watch folders where new files
+     * should be automatically added to OC, according to changes in instant upload settings.
+     *
+     * @param context       Android context of the caller component.
+     */
+    public static void updateInstantUploadsObservers(Context context) {
+        Intent intent = new Intent(context, FileObserverService.class);
+        intent.setAction(FileObserverService.ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS);
+        context.startService(intent);
+    }
+
 
     /**
      * Initialize the service. 
@@ -121,7 +153,9 @@ public class FileObserverService extends Service {
         filter.addAction(FileDownloader.getDownloadFinishMessage());
         registerReceiver(mDownloadReceiver, filter);
 
-        mFolderObserversMap = new HashMap<String, FolderObserver>();
+        mFolderObserversMap = new HashMap<>();
+
+        mInstantUploadsObserver = null;
     }
 
     /**
@@ -139,6 +173,11 @@ public class FileObserverService extends Service {
         }
         mFolderObserversMap.clear();
         mFolderObserversMap = null;
+
+        if (mInstantUploadsObserver != null) {
+            mInstantUploadsObserver.stopWatching();
+            mInstantUploadsObserver = null;
+        }
 
         super.onDestroy();
     }
@@ -168,13 +207,16 @@ public class FileObserverService extends Service {
             return Service.START_STICKY;
 
         } else if (ACTION_ADD_OBSERVED_FILE.equals(intent.getAction())) {
-            OCFile file = (OCFile) intent.getParcelableExtra(ARG_FILE);
-            Account account = (Account) intent.getParcelableExtra(ARG_ACCOUNT);
+            OCFile file = intent.getParcelableExtra(ARG_FILE);
+            Account account = intent.getParcelableExtra(ARG_ACCOUNT);
             addObservedFile(file, account);
 
         } else if (ACTION_DEL_OBSERVED_FILE.equals(intent.getAction())) {
             removeObservedFile((OCFile) intent.getParcelableExtra(ARG_FILE),
-                    (Account) intent.getParcelableExtra(ARG_ACCOUNT));
+                (Account) intent.getParcelableExtra(ARG_ACCOUNT));
+
+        } else if (ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS.equals(intent.getAction())) {
+            updateInstantUploadsObservers();
 
         } else {
             Log_OC.e(TAG, "Unknown action recieved; ignoring it: " + intent.getAction());
@@ -183,7 +225,6 @@ public class FileObserverService extends Service {
         return Service.START_STICKY;
     }
 
-    
     /**
      * Read from the local database the list of files that must to be kept
      * synchronized and starts observers to monitor local changes on them.
@@ -206,9 +247,9 @@ public class FileObserverService extends Service {
 
             if (cursorOnKeptInSync.moveToFirst()) {
 
-                String localPath = "";
-                String accountName = "";
-                Account account = null;
+                String localPath;
+                String accountName;
+                Account account;
                 do {
                     localPath = cursorOnKeptInSync.getString(cursorOnKeptInSync
                             .getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH));
@@ -227,6 +268,9 @@ public class FileObserverService extends Service {
             }
             cursorOnKeptInSync.close();
         }
+
+        // watch for instant uploads
+        updateInstantUploadsObservers();
 
         // service does not stopSelf() ; that way it tries to be alive forever
 
@@ -338,7 +382,46 @@ public class FileObserverService extends Service {
         }
     }
 
-    
+    /**
+     * Requests the update of the observers responsible to watch folders where new files
+     * should be automatically added to OC, according to changes in instant upload settings.
+     */
+    private void updateInstantUploadsObservers() {
+        PreferenceManager.InstantUploadsConfiguration config =
+            PreferenceManager.getInstantUploadsConfiguration(this);
+
+        if ((   config.isEnabledForPictures() || config.isEnabledForVideos()) &&
+                mInstantUploadsObserver == null
+            )  {
+            // no current observer -> create it
+            mInstantUploadsObserver = new InstantUploadsObserver(config, getApplicationContext());
+            mInstantUploadsObserver.startWatching();
+
+        } else if ( !config.isEnabledForPictures() && !config.isEnabledForVideos() &&
+                    mInstantUploadsObserver != null
+            ) {
+            // nothing ot observe -> stop current observer
+            mInstantUploadsObserver.stopWatching();
+            mInstantUploadsObserver = null;
+
+        } else if ( mInstantUploadsObserver != null &&
+                    !mInstantUploadsObserver.getSourcePath().equals(config.getSourcePath())
+            ) {
+            // source path to watch was changed -> stop current observer, create a new one
+            mInstantUploadsObserver.stopWatching();
+            mInstantUploadsObserver = new InstantUploadsObserver(config, getApplicationContext());
+            mInstantUploadsObserver.startWatching();
+
+        } else if ( mInstantUploadsObserver != null) {
+            // observer exists and can handle changes in configuration -> update observer
+            mInstantUploadsObserver.updateConfiguration(config);
+
+        } else {
+            Log_OC.w(TAG, "No current observer for instant uploads, nothing to observe in configuration");
+            // this should not happen, but it's not dangerous
+        }
+    }
+
     /**
      * Private receiver listening to events broadcasted by the {@link FileDownloader} service.
      * 

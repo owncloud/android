@@ -21,7 +21,11 @@ package com.owncloud.android.db;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 
+import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.utils.FileStorageUtils;
 
 /**
@@ -35,25 +39,83 @@ public abstract class PreferenceManager {
     private static final String AUTO_PREF__LAST_UPLOAD_PATH = "last_upload_path";
     private static final String AUTO_PREF__SORT_ORDER = "sortOrder";
     private static final String AUTO_PREF__SORT_ASCENDING = "sortAscending";
-    private static final String PREF__INSTANT_UPLOADING = "instant_uploading";
-    private static final String PREF__INSTANT_VIDEO_UPLOADING = "instant_video_uploading";
-    private static final String PREF__INSTANT_UPLOAD_ON_WIFI = "instant_upload_on_wifi";
-    private static final String PREF__INSTANT_VIDEO_UPLOAD_ON_WIFI = "instant_video_upload_on_wifi";
+
+    private static final String PREF__INSTANT_PICTURE_ENABLED = "instant_uploading";
+    private static final String PREF__INSTANT_VIDEO_ENABLED = "instant_video_uploading";
+    private static final String PREF__INSTANT_PICTURE_WIFI_ONLY = "instant_upload_on_wifi";
+    private static final String PREF__INSTANT_VIDEO_WIFI_ONLY = "instant_video_upload_on_wifi";
+    private static final String PREF__INSTANT_UPLOAD_ACCOUNT_NAME = "instant_upload_account_name";  // NEW - not saved yet
+    private static final String PREF__INSTANT_PICTURE_UPLOAD_PATH = "instant_upload_path";
+    private static final String PREF__INSTANT_VIDEO_UPLOAD_PATH = "instant_video_upload_path";
+    private static final String PREF__INSTANT_UPLOAD_BEHAVIOUR = "prefs_instant_behaviour";
+    private static final String PREF__INSTANT_UPLOAD_SOURCE = "instant_upload_source_path";   // NEW - not saved yet
+
+    private static final String PREF__INSTANT_UPLOAD_SOURCE_DEFAULT_FOLDER = "/Camera";
 
     public static boolean instantPictureUploadEnabled(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_UPLOADING, false);
+        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_PICTURE_ENABLED, false);
     }
 
     public static boolean instantVideoUploadEnabled(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_VIDEO_UPLOADING, false);
+        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_VIDEO_ENABLED, false);
     }
 
     public static boolean instantPictureUploadViaWiFiOnly(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_UPLOAD_ON_WIFI, false);
+        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_PICTURE_WIFI_ONLY, false);
     }
 
     public static boolean instantVideoUploadViaWiFiOnly(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_VIDEO_UPLOAD_ON_WIFI, false);
+        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_VIDEO_WIFI_ONLY, false);
+    }
+
+    public static InstantUploadsConfiguration getInstantUploadsConfiguration(Context context) {
+        InstantUploadsConfiguration result = new InstantUploadsConfiguration();
+        SharedPreferences prefs = getDefaultSharedPreferences(context);
+        result.setEnabledForPictures(
+            prefs.getBoolean(PREF__INSTANT_PICTURE_ENABLED, false)
+        );
+        result.setEnabledForVideos(
+            prefs.getBoolean(PREF__INSTANT_VIDEO_ENABLED, false)
+        );
+        result.setWifiOnlyForPictures(
+            prefs.getBoolean(PREF__INSTANT_PICTURE_WIFI_ONLY, false)
+        );
+        result.setWifiOnlyForVideos(
+            prefs.getBoolean(PREF__INSTANT_VIDEO_WIFI_ONLY, false)
+        );
+        result.setUploadAccountName(
+            prefs.getString(
+                PREF__INSTANT_UPLOAD_ACCOUNT_NAME,
+                AccountUtils.getCurrentOwnCloudAccount(context).name
+            )
+        );
+        result.setUploadPathForPictures(
+            prefs.getString(
+                PREF__INSTANT_PICTURE_UPLOAD_PATH,
+                context.getString(R.string.instant_upload_path)
+            )
+        );
+        result.setUploadPathForVideos(
+            prefs.getString(
+                PREF__INSTANT_VIDEO_UPLOAD_PATH,
+                context.getString(R.string.instant_upload_path)
+            )
+        );
+        result.setBehaviourAfterUpload(
+            prefs.getString(
+                PREF__INSTANT_UPLOAD_BEHAVIOUR,
+                context.getResources().getStringArray(R.array.pref_behaviour_entryValues)[0]
+            )
+        );
+        result.setSourcePath(
+            prefs.getString(
+                PREF__INSTANT_UPLOAD_SOURCE,
+                Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DCIM
+                ).getAbsolutePath() + PREF__INSTANT_UPLOAD_SOURCE_DEFAULT_FOLDER
+            )
+        );
+        return result;
     }
 
     /**
@@ -137,5 +199,97 @@ public abstract class PreferenceManager {
 
     private static SharedPreferences getDefaultSharedPreferences(Context context) {
         return android.preference.PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+    }
+
+    /**
+     * Aggregates preferences related to instant uploads in a single object.
+     */
+    public static class InstantUploadsConfiguration {
+
+        private boolean mEnabledForPictures;
+        private boolean mEnabledForVideos;
+        private boolean mWifiOnlyForPictures;
+        private boolean mWifiOnlyForVideos;
+        private String mUploadAccountName;      // same for both audio & video
+        private String mUploadPathForPictures;
+        private String mUploadPathForVideos;
+        private String mBehaviourAfterUpload;
+        private String mSourcePath;             // same for both audio & video
+
+        public boolean isEnabledForPictures() {
+            return mEnabledForPictures;
+        }
+
+        public void setEnabledForPictures(boolean uploadPictures) {
+            mEnabledForPictures = uploadPictures;
+        }
+
+        public boolean isEnabledForVideos() {
+            return mEnabledForVideos;
+        }
+
+        public void setEnabledForVideos(boolean uploadVideos) {
+            mEnabledForVideos = uploadVideos;
+        }
+
+        public boolean isWifiOnlyForPictures() {
+            return mWifiOnlyForPictures;
+        }
+
+        public void setWifiOnlyForPictures(boolean wifiOnlyForPictures) {
+            mWifiOnlyForPictures = wifiOnlyForPictures;
+        }
+
+        public boolean isWifiOnlyForVideos() {
+            return mWifiOnlyForVideos;
+        }
+
+        public void setWifiOnlyForVideos(boolean wifiOnlyForVideos) {
+            mWifiOnlyForVideos = wifiOnlyForVideos;
+        }
+
+        public String getUploadAccountName() {
+            return mUploadAccountName;
+        }
+
+        public void setUploadAccountName(String uploadAccountName) {
+            mUploadAccountName = uploadAccountName;
+        }
+
+        public String getUploadPathForPictures() {
+            return mUploadPathForPictures;
+        }
+
+        public void setUploadPathForPictures(String uploadPathForPictures) {
+            mUploadPathForPictures = uploadPathForPictures;
+        }
+
+        public String getUploadPathForVideos() {
+            return mUploadPathForVideos;
+        }
+
+        public void setUploadPathForVideos(String uploadPathForVideos) {
+            mUploadPathForVideos = uploadPathForVideos;
+        }
+
+        public int getBehaviourAfterUpload() {
+            if (mBehaviourAfterUpload.equalsIgnoreCase("MOVE")) {
+                return FileUploader.LOCAL_BEHAVIOUR_MOVE;
+            }
+            return FileUploader.LOCAL_BEHAVIOUR_FORGET; // "NOTHING
+        }
+
+        public void setBehaviourAfterUpload(String behaviourAfterUpload) {
+            mBehaviourAfterUpload = behaviourAfterUpload;
+        }
+
+        public String getSourcePath() {
+            return mSourcePath;
+        }
+
+        public void setSourcePath(String sourcePath) {
+            mSourcePath = sourcePath;
+        }
+
     }
 }

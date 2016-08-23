@@ -77,6 +77,7 @@ import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.services.OperationsService;
+import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.ui.RadioButtonPreference;
 import com.owncloud.android.utils.DisplayUtils;
 
@@ -403,10 +404,12 @@ public class Preferences extends PreferenceActivity
             
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                toggleInstantPictureOptions((Boolean) newValue);
+                boolean enableInstantPicture = (Boolean) newValue;
+                toggleInstantPictureOptions(enableInstantPicture);
                 toggleInstantUploadBehaviour(
                         ((CheckBoxPreference)mPrefInstantVideoUpload).isChecked(),
-                        (Boolean) newValue);
+                        enableInstantPicture
+                );
                 return true;
             }
         });
@@ -708,6 +711,8 @@ public class Preferences extends PreferenceActivity
 
     @Override
     protected void onStop() {
+        // let the observer service applies any change in instant upload configuration
+        FileObserverService.updateInstantUploadsObservers(Preferences.this);
         super.onStop();
         getDelegate().onStop();
     }
