@@ -64,9 +64,7 @@
         android:manageSpaceActivity=".ui.activity.ManageSpaceActivity"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false" >
-        <activity
-            android:name=".ui.activity.FileDisplayActivity"
-            android:label="@string/app_name" >
+        <activity android:name=".ui.activity.FileDisplayActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -100,10 +98,8 @@
         <activity
             android:name=".ui.preview.PreviewImageActivity"
             android:theme="@style/Theme.ownCloud.Overlay" />
-        <activity
-            android:name=".ui.preview.PreviewVideoActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ownCloud.Fullscreen" />
+        <activity android:name=".ui.preview.PreviewVideoActivity"
+                  android:theme="@style/Theme.ownCloud.Fullscreen" />
 
         <service
             android:name=".authentication.AccountAuthenticatorService"
@@ -209,12 +205,9 @@
             android:name=".ui.activity.CopyToClipboardActivity"
             android:icon="@drawable/copy_link"
             android:label="@string/copy_link" />
-        <activity
-            android:name=".ui.activity.FolderPickerActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".ui.activity.UploadPathActivity"
-            android:label="@string/app_name" />
+        <activity android:name=".ui.activity.FolderPickerActivity" />
+        <activity android:name=".ui.activity.LocalFolderPickerActivity" />
+        <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
             android:name=".ui.activity.ShareActivity"
             android:label="@string/share_dialog_title"

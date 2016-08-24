@@ -61,6 +61,8 @@ public class ExtendedListFragment extends Fragment
     private static final String KEY_EMPTY_LIST_MESSAGE = "EMPTY_LIST_MESSAGE";
     private static final String KEY_IS_GRID_VISIBLE = "IS_GRID_VISIBLE";
 
+    protected static final String ARG_JUST_FOLDERS = ExtendedListFragment.class.getCanonicalName() + ".JUST_FOLDERS";
+
     private ProgressBar mProgressBar;
 
     protected SwipeRefreshLayout mRefreshListLayout;
@@ -451,5 +453,10 @@ public class ExtendedListFragment extends Fragment
         Log_OC.d(TAG, "Setting progress visibility to " + indeterminate);
         mProgressBar.setIndeterminate(indeterminate);
         mProgressBar.postInvalidate();
+    }
+
+    protected boolean isShowingJustFolders() {
+        Bundle args = getArguments();
+        return ((args != null) && args.getBoolean(ARG_JUST_FOLDERS, false));
     }
 }

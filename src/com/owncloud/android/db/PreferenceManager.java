@@ -50,8 +50,6 @@ public abstract class PreferenceManager {
     private static final String PREF__INSTANT_UPLOAD_BEHAVIOUR = "prefs_instant_behaviour";
     private static final String PREF__INSTANT_UPLOAD_SOURCE = "instant_upload_source_path";   // NEW - not saved yet
 
-    private static final String PREF__INSTANT_UPLOAD_SOURCE_DEFAULT_FOLDER = "/Camera";
-
     public static boolean instantPictureUploadEnabled(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_PICTURE_ENABLED, false);
     }
@@ -110,9 +108,7 @@ public abstract class PreferenceManager {
         result.setSourcePath(
             prefs.getString(
                 PREF__INSTANT_UPLOAD_SOURCE,
-                Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DCIM
-                ).getAbsolutePath() + PREF__INSTANT_UPLOAD_SOURCE_DEFAULT_FOLDER
+                InstantUploadsConfiguration.DEFAULT_SOURCE_PATH
             )
         );
         return result;
@@ -205,6 +201,10 @@ public abstract class PreferenceManager {
      * Aggregates preferences related to instant uploads in a single object.
      */
     public static class InstantUploadsConfiguration {
+
+        public static final String DEFAULT_SOURCE_PATH = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_DCIM
+        ).getAbsolutePath() + "/Camera";
 
         private boolean mEnabledForPictures;
         private boolean mEnabledForVideos;

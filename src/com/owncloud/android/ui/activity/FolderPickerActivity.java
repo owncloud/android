@@ -65,12 +65,11 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     public static final String EXTRA_FILES = FolderPickerActivity.class.getCanonicalName()
             + ".EXTRA_FILES";
 
-    private SyncBroadcastReceiver mSyncBroadcastReceiver;
-
     private static final String TAG = FolderPickerActivity.class.getSimpleName();
     
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
-       
+
+    private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private boolean mSyncInProgress = false;
 
     protected Button mCancelBtn;
@@ -84,7 +83,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         super.onCreate(savedInstanceState); 
 
-        setContentView(R.layout.files_folder_picker);
+        setContentView(R.layout.files_folder_picker);     // beware - inflated in other activities too
         
         if (savedInstanceState == null) {
             createFragments();
@@ -145,11 +144,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void createFragments() {
-        OCFileListFragment listOfFiles = new OCFileListFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(OCFileListFragment.ARG_JUST_FOLDERS, true);
-        args.putBoolean(OCFileListFragment.ARG_HIDE_FAB, true);
-        listOfFiles.setArguments(args);
+        OCFileListFragment listOfFiles =  OCFileListFragment.newInstance(true, true, false);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, listOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();
