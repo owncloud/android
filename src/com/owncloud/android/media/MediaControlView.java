@@ -194,6 +194,7 @@ public class MediaControlView extends FrameLayout /* implements OnLayoutChangeLi
     
     
     public void setMediaPlayer(MediaPlayerControl player) {
+        System.out.print("Testing for the stuff"); 
         mPlayer = player;
         mHandler.sendEmptyMessage(SHOW_PROGRESS);
         updatePausePlay();
