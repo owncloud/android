@@ -102,7 +102,6 @@ public class LocalFolderPickerActivity extends AppCompatActivity implements Loca
        }
 
         // set input controllers
-        //mCancelBtn = (Button) findViewById(R.id.upload_files_btn_cancel);
         mCancelBtn = (Button) findViewById(R.id.folder_picker_btn_cancel);
         mCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +110,6 @@ public class LocalFolderPickerActivity extends AppCompatActivity implements Loca
                 finish();
             }
         });
-        //mChooseBtn = (Button) findViewById(R.id.upload_files_btn_choose);
         mChooseBtn = (Button) findViewById(R.id.folder_picker_btn_choose);
         mChooseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
