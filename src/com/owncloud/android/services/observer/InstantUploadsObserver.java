@@ -34,8 +34,7 @@ import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 /**
  * Observer watching a folder to request the upload of new pictures or videos inside it.
@@ -45,11 +44,12 @@ public class InstantUploadsObserver extends FileObserver {
     private static String TAG = InstantUploadsObserver.class.getSimpleName();
 
     private static int UPDATE_MASK = (
-            FileObserver.CREATE | FileObserver.MOVED_TO | FileObserver.CLOSE_WRITE
+            FileObserver.CREATE | FileObserver.MODIFY | FileObserver.CLOSE_WRITE |
+            FileObserver.MOVED_TO
     );
 
     /*
-    private static int ALL_EVENTS_EVEN_THOSE_NOT_DOCUMENTED = 0x7fffffff;   // NEVER use 0xffffffff
+    private final static int ALL_EVENTS_EVEN_THOSE_NOT_DOCUMENTED = 0x7fffffff;   // NEVER use 0xffffffff
     */
     private final static int IN_IGNORE = 32768;
 
@@ -57,7 +57,7 @@ public class InstantUploadsObserver extends FileObserver {
 
     private InstantUploadsConfiguration mConfiguration;
     private Context mContext;
-    private Set<String> mChildrenInCreation;
+    private HashMap<String, Boolean> mObservedChildren;
 
 
     /**
@@ -81,7 +81,7 @@ public class InstantUploadsObserver extends FileObserver {
 
         mConfiguration = configuration;
         mContext = context;
-        mChildrenInCreation = new HashSet<>();
+        mObservedChildren = new HashMap<>();
     }
 
     /**
@@ -102,20 +102,30 @@ public class InstantUploadsObserver extends FileObserver {
 
         if (path != null && path.length() > 0) {
             synchronized (mLock) {
-                if (((event & FileObserver.CREATE) != 0)) {
-                    mChildrenInCreation.add(path);
+                if ((event & FileObserver.CREATE) != 0) {
+                    // new file created, let's watch it; false -> not modified yet
+                    mObservedChildren.put(path, false);
                 }
-                if (
-                    ((event & FileObserver.CLOSE_WRITE) != 0 &&
-                    mChildrenInCreation.remove(path)
-                        // a file that was previously created has been saved & closed
-                    ) || (
-                        (event & FileObserver.MOVED_TO) != 0
-                        // a files has been moved into the observer folder (will not be any CLOSE_WRITE)
-                    )
-                ) {
-                    // at this point we know a new file has been created -> saved -> closed;
-                    // or moved into the folder (for instance: videos recorded with Google Camera)
+                if ((   (event & FileObserver.MODIFY) != 0) &&
+                        mObservedChildren.containsKey(path) &&
+                        !mObservedChildren.get(path)
+                    ) {
+                    // watched file was written for the first time after creation
+                    mObservedChildren.put(path, true);
+                }
+                if (   (event & FileObserver.CLOSE_WRITE) != 0 &&
+                        mObservedChildren.containsKey(path)    &&
+                        mObservedChildren.get(path)
+                    ) {
+                    // a file that was previously created and written has been closed;
+                    // testing for FileObserver.MODIFY is needed because some apps close the video file
+                    // right after creating it when the recording is started, and reopen it to write with
+                    // the first chunk of video to save; for instance, Camera MX does so.
+                    handleNewFile(path);
+                }
+                if ((event & FileObserver.MOVED_TO) != 0) {
+                    // a file has been moved or renamed into the folder;
+                    // for instance, Google Camera does so right after saving a video recording
                     handleNewFile(path);
                 }
             }
@@ -166,12 +176,13 @@ public class InstantUploadsObserver extends FileObserver {
             return;
         }
 
-        /// check the file is really there and really has something inside (*)
+        /// check the file is **still** there and really has something inside (*)
         String localPath = mConfiguration.getSourcePath() + File.separator + fileName;
         File localFile = new File(localPath);
         if (!localFile.exists() || localFile.length() <= 0) {
             Log_OC.w(TAG, "Camera app saved an empty or temporary file, ignoring " + fileName);
-            // Google Camera, I'm thinking in you >(
+            // Google Camera renames video files right after stop and save the recording; video
+            // upload with the original named will fail;  here we try to avoid it
             return;
         }
 
