@@ -161,6 +161,7 @@ public class InstantUploadsObserver extends FileObserver {
 
         if (!isImage && !isVideo) {
             Log_OC.d(TAG, "Ignoring " + fileName);
+            return;
         }
 
         if (isImage && !mConfiguration.isEnabledForPictures()) {
