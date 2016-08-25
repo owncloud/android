@@ -126,6 +126,7 @@ public class InstantUploadsObserver extends FileObserver {
                     // close the video file right after creating it when the recording
                     // is started, and reopen it to write with the first chunk of video
                     // to save; for instance, Camera MX does so.
+                    mObservedChildren.remove(path);
                     handleNewFile(path);
                 }
                 if ((event & FileObserver.MOVED_TO) != 0) {
