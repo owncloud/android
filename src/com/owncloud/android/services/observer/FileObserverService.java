@@ -417,8 +417,7 @@ public class FileObserverService extends Service {
             mInstantUploadsObserver.updateConfiguration(config);
 
         } else {
-            Log_OC.w(TAG, "No current observer for instant uploads, nothing to observe in configuration");
-            // this should not happen, but it's not dangerous
+            Log_OC.i(TAG, "Instant uploads are disabled, no current observer -> nothing to do");
         }
     }
 

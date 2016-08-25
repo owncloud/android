@@ -19,6 +19,7 @@
 
 package com.owncloud.android.db;
 
+import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
@@ -48,7 +49,7 @@ public abstract class PreferenceManager {
     private static final String PREF__INSTANT_PICTURE_UPLOAD_PATH = "instant_upload_path";
     private static final String PREF__INSTANT_VIDEO_UPLOAD_PATH = "instant_video_upload_path";
     private static final String PREF__INSTANT_UPLOAD_BEHAVIOUR = "prefs_instant_behaviour";
-    private static final String PREF__INSTANT_UPLOAD_SOURCE = "instant_upload_source_path";   // NEW - not saved yet
+    private static final String PREF__INSTANT_UPLOAD_SOURCE = "instant_upload_source_path";
 
     public static boolean instantPictureUploadEnabled(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_PICTURE_ENABLED, false);
@@ -81,10 +82,11 @@ public abstract class PreferenceManager {
         result.setWifiOnlyForVideos(
             prefs.getBoolean(PREF__INSTANT_VIDEO_WIFI_ONLY, false)
         );
+        Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(context);
         result.setUploadAccountName(
             prefs.getString(
                 PREF__INSTANT_UPLOAD_ACCOUNT_NAME,
-                AccountUtils.getCurrentOwnCloudAccount(context).name
+                (currentAccount == null) ? "" : currentAccount.name
             )
         );
         result.setUploadPathForPictures(

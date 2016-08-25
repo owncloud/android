@@ -44,7 +44,6 @@ public class InstantUploadsObserver extends FileObserver {
 
     private static String TAG = InstantUploadsObserver.class.getSimpleName();
 
-    // TODO calculate CORRECT mask
     private static int UPDATE_MASK = (
             FileObserver.CREATE | FileObserver.MOVED_TO | FileObserver.CLOSE_WRITE
     );
