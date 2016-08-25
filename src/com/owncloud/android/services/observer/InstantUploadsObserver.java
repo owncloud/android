@@ -35,30 +35,34 @@ import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Observer watching a folder to request the upload of new pictures or videos inside it.
  */
 public class InstantUploadsObserver extends FileObserver {
 
-    private static String TAG = InstantUploadsObserver.class.getSimpleName();
+    private static final String TAG = InstantUploadsObserver.class.getSimpleName();
 
-    private static int UPDATE_MASK = (
+    private static final int UPDATE_MASK = (
             FileObserver.CREATE | FileObserver.MODIFY | FileObserver.CLOSE_WRITE |
             FileObserver.MOVED_TO
     );
 
     /*
-    private final static int ALL_EVENTS_EVEN_THOSE_NOT_DOCUMENTED = 0x7fffffff;   // NEVER use 0xffffffff
+    private static final int ALL_EVENTS_EVEN_THOSE_NOT_DOCUMENTED = 0x7fffffff;   // NEVER use 0xffffffff
     */
-    private final static int IN_IGNORE = 32768;
+    private static final int IN_IGNORE = 32768;
+
+    private static final ScheduledThreadPoolExecutor mDelayerExecutor = new ScheduledThreadPoolExecutor(1);
+
 
     private final Object mLock = new Object();  // to sync mConfiguration, mainly
 
     private InstantUploadsConfiguration mConfiguration;
     private Context mContext;
     private HashMap<String, Boolean> mObservedChildren;
-
 
     /**
      * Constructor.
@@ -118,14 +122,16 @@ public class InstantUploadsObserver extends FileObserver {
                         mObservedChildren.get(path)
                     ) {
                     // a file that was previously created and written has been closed;
-                    // testing for FileObserver.MODIFY is needed because some apps close the video file
-                    // right after creating it when the recording is started, and reopen it to write with
-                    // the first chunk of video to save; for instance, Camera MX does so.
+                    // testing for FileObserver.MODIFY is needed because some apps
+                    // close the video file right after creating it when the recording
+                    // is started, and reopen it to write with the first chunk of video
+                    // to save; for instance, Camera MX does so.
                     handleNewFile(path);
                 }
                 if ((event & FileObserver.MOVED_TO) != 0) {
                     // a file has been moved or renamed into the folder;
-                    // for instance, Google Camera does so right after saving a video recording
+                    // for instance, Google Camera does so right after
+                    // saving a video recording
                     handleNewFile(path);
                 }
             }
@@ -144,13 +150,13 @@ public class InstantUploadsObserver extends FileObserver {
      *
      * @param fileName      Name of the file just created
      */
-    private void handleNewFile(String fileName) {
+    private void handleNewFile(final String fileName) {
         Log_OC.d(TAG, "New file " + fileName);
 
         /// check file type
-        String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
-        boolean isImage = mimeType.startsWith("image/");
-        boolean isVideo = mimeType.startsWith("video/");
+        final String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
+        final boolean isImage = mimeType.startsWith("image/");
+        final boolean isVideo = mimeType.startsWith("video/");
 
         if (!isImage && !isVideo) {
             Log_OC.d(TAG, "Ignoring " + fileName);
@@ -176,55 +182,76 @@ public class InstantUploadsObserver extends FileObserver {
             return;
         }
 
-        /// check the file is **still** there and really has something inside (*)
-        String localPath = mConfiguration.getSourcePath() + File.separator + fileName;
-        File localFile = new File(localPath);
-        if (!localFile.exists() || localFile.length() <= 0) {
-            Log_OC.w(TAG, "Camera app saved an empty or temporary file, ignoring " + fileName);
-            // Google Camera renames video files right after stop and save the recording; video
-            // upload with the original named will fail;  here we try to avoid it
-            return;
-        }
+        /// delay a bit final checks and upload request
+        mDelayerExecutor.schedule(
+            new Runnable() {
+                @Override
+                public void run() {
+                    /// check the file is **still** there and really has something inside (*)
+                    String localPath = mConfiguration.getSourcePath() + File.separator + fileName;
+                    File localFile = new File(localPath);
+                    if (!localFile.exists() || localFile.length() <= 0) {
+                        Log_OC.w(
+                            TAG,
+                            "Camera app saved an empty or temporary file, ignoring " + fileName
+                        );
+                        // Google Camera renames video files right after stop and save
+                        // the recording; uploading the video upload with the original
+                        // name would fail; this prevents it
+                        return;
+                    }
 
-        /// check existence of target account
-        Account account = AccountUtils.getOwnCloudAccountByName(
-            mContext,
-            mConfiguration.getUploadAccountName()
-        );
-        if (account == null) {
-            Log_OC.w(TAG, "No account found for instant upload, aborting upload");
-            return;
-        }
+                    /// check existence of target account
+                    Account account = AccountUtils.getOwnCloudAccountByName(
+                        mContext,
+                        mConfiguration.getUploadAccountName()
+                    );
+                    if (account == null) {
+                        Log_OC.w(TAG, "No account found for instant upload, aborting upload");
+                        return;
+                    }
 
-        /// upload!
-        String remotePath =
-            (isImage ?
-                mConfiguration.getUploadPathForPictures() :
-                mConfiguration.getUploadPathForVideos()
-            ) +
-            File.separator + fileName
-        ;
-        int createdBy =
-            isImage ?
-                UploadFileOperation.CREATED_AS_INSTANT_PICTURE :
-                UploadFileOperation.CREATED_AS_INSTANT_VIDEO
-        ;
+                    /// upload!
+                    String remotePath =
+                        (isImage ?
+                            mConfiguration.getUploadPathForPictures() :
+                            mConfiguration.getUploadPathForVideos()
+                        ) +
+                            File.separator + fileName
+                        ;
+                    int createdBy =
+                        isImage ?
+                            UploadFileOperation.CREATED_AS_INSTANT_PICTURE :
+                            UploadFileOperation.CREATED_AS_INSTANT_VIDEO
+                        ;
 
-        FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
-        requester.uploadNewFile(
-            mContext,
-            account,
-            localPath,
-            remotePath,
-            mConfiguration.getBehaviourAfterUpload(),
-            mimeType,
-            true,           // create parent folder if not existent
-            createdBy
+                    FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+                    requester.uploadNewFile(
+                        mContext,
+                        account,
+                        localPath,
+                        remotePath,
+                        mConfiguration.getBehaviourAfterUpload(),
+                        mimeType,
+                        true,           // create parent folder if not existent
+                        createdBy
+                    );
+                    Log_OC.i(
+                        TAG,
+                        String.format(
+                            "Requested upload of %1s to %2s in %3s",
+                            localPath,
+                            remotePath,
+                            account.name
+                        )
+                    );
+                }
+            },
+
+            200,
+            TimeUnit.MILLISECONDS
         );
-        Log_OC.i(
-            TAG,
-            String.format("Requested upload of %1s to %2s in %3s", localPath, remotePath,  account.name)
-        );
+
     }
 
     /**
