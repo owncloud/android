@@ -29,7 +29,10 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
+import com.owncloud.android.MainApp;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -160,18 +163,27 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
                 (PreferenceManager.instantVideoUploadEnabled(context) &&
                         PreferenceManager.instantVideoUploadViaWiFiOnly(context))
                 ) {
-            Log_OC.d(TAG, "Requesting retry of instant uploads (& friends)");
-            FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
-            requester.retryFailedUploads(
-                context,
-                null,
-                UploadResult.NETWORK_CONNECTION     // for the interrupted when Wifi fell, if any
-                // (side effect: any upload failed due to network error will be retried too, instant or not)
-            );
-            requester.retryFailedUploads(
-                context,
-                null,
-                UploadResult.DELAYED_FOR_WIFI       // for the rest of enqueued when Wifi fell
+
+            Handler h = new Handler(Looper.getMainLooper());
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log_OC.d(TAG, "Requesting retry of instant uploads (& friends)");
+                    FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+                    requester.retryFailedUploads(
+                        MainApp.getAppContext(),
+                        null,
+                        UploadResult.NETWORK_CONNECTION     // for the interrupted when Wifi fell, if any
+                        // (side effect: any upload failed due to network error will be retried too, instant or not)
+                    );
+                    requester.retryFailedUploads(
+                        MainApp.getAppContext(),
+                        null,
+                        UploadResult.DELAYED_FOR_WIFI       // for the rest of enqueued when Wifi fell
+                    );
+                }
+            },
+                500
             );
         }
     }
