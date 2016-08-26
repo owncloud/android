@@ -885,7 +885,9 @@ public class Preferences extends PreferenceActivity
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mUploadPath = appPrefs.getString("instant_upload_path", getString(R.string.instant_upload_path));
-        mPrefInstantUploadPath.setSummary(mUploadPath);
+        mPrefInstantUploadPath.setSummary(
+            DisplayUtils.getPathWithoutLastSlash(mUploadPath)
+        );
     }
 
     /**
@@ -906,7 +908,9 @@ public class Preferences extends PreferenceActivity
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mUploadVideoPath = appPrefs.getString("instant_video_upload_path", getString(R.string.instant_upload_path));
-        mPrefInstantVideoUploadPath.setSummary(mUploadVideoPath);
+        mPrefInstantVideoUploadPath.setSummary(
+            DisplayUtils.getPathWithoutLastSlash(mUploadVideoPath)
+        );
     }
 
     /**
@@ -927,7 +931,9 @@ public class Preferences extends PreferenceActivity
         SharedPreferences appPrefs =
             PreferenceManager.getDefaultSharedPreferences(this);
         mSourcePath = appPrefs.getString("instant_upload_source_path", InstantUploadsConfiguration.DEFAULT_SOURCE_PATH);
-        mPrefInstantUploadSourcePath.setSummary(mSourcePath);
+        mPrefInstantUploadSourcePath.setSummary(
+            DisplayUtils.getPathWithoutLastSlash(mSourcePath)
+        );
     }
 
     /**

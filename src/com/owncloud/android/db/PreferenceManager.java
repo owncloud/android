@@ -26,6 +26,7 @@ import android.os.Environment;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.utils.FileStorageUtils;
 
@@ -92,13 +93,13 @@ public abstract class PreferenceManager {
         result.setUploadPathForPictures(
             prefs.getString(
                 PREF__INSTANT_PICTURE_UPLOAD_PATH,
-                context.getString(R.string.instant_upload_path)
+                context.getString(R.string.instant_upload_path) + OCFile.PATH_SEPARATOR
             )
         );
         result.setUploadPathForVideos(
             prefs.getString(
                 PREF__INSTANT_VIDEO_UPLOAD_PATH,
-                context.getString(R.string.instant_upload_path)
+                context.getString(R.string.instant_upload_path) + OCFile.PATH_SEPARATOR
             )
         );
         result.setBehaviourAfterUpload(

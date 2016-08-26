@@ -50,9 +50,7 @@ public class InstantUploadsObserver extends FileObserver {
             FileObserver.MOVED_TO
     );
 
-    /*
     private static final int ALL_EVENTS_EVEN_THOSE_NOT_DOCUMENTED = 0x7fffffff;   // NEVER use 0xffffffff
-    */
     private static final int IN_IGNORE = 32768;
 
     private static final ScheduledThreadPoolExecutor mDelayerExecutor = new ScheduledThreadPoolExecutor(1);
@@ -75,7 +73,7 @@ public class InstantUploadsObserver extends FileObserver {
      * @param context           Used to start an operation to upload a file, when needed.
      */
     public InstantUploadsObserver(InstantUploadsConfiguration configuration, Context context) {
-        super(configuration.getSourcePath(), UPDATE_MASK);
+        super(configuration.getSourcePath(), ALL_EVENTS_EVEN_THOSE_NOT_DOCUMENTED);
 
         if (context == null) {
             throw new IllegalArgumentException("NULL context argument received");
@@ -219,7 +217,7 @@ public class InstantUploadsObserver extends FileObserver {
                             mConfiguration.getUploadPathForPictures() :
                             mConfiguration.getUploadPathForVideos()
                         ) +
-                            File.separator + fileName
+                            fileName
                         ;
                     int createdBy =
                         isImage ?
