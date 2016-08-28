@@ -14,6 +14,8 @@
   <string name="actionbar_sort">ソート</string>
   <string name="actionbar_sort_title">ソート: </string>
   <string name="actionbar_sort_by_name">名前順</string>
+  <string name="actionbar_sort_by_date">新しい順</string>
+  <string name="actionbar_sort_by_size">大きい順</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">すべてのファイル</string>
