@@ -1,0 +1,5 @@
+Version Compatibility
+
+Minimum SDK Version: API 23
+
+Minimum Android 6.0 and above.
