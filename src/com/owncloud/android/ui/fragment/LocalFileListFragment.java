@@ -23,7 +23,7 @@ package com.owncloud.android.ui.fragment;
 import java.io.File;
 import java.util.ArrayList;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.SparseBooleanArray;
@@ -43,8 +43,9 @@ import com.owncloud.android.ui.adapter.LocalFileListAdapter;
  * A Fragment that lists all files and folders in a given LOCAL path.
  */
 public class LocalFileListFragment extends ExtendedListFragment {
-    private static final String TAG = "LocalFileListFragment";
-    
+
+    private static final String TAG = LocalFileListFragment.class.getName();
+
     /** Reference to the Activity which this fragment is attached to. For callbacks */
     private LocalFileListFragment.ContainerActivity mContainerActivity;
     
@@ -54,16 +55,32 @@ public class LocalFileListFragment extends ExtendedListFragment {
     /** Adapter to connect the data from the directory with the View object */
     private LocalFileListAdapter mAdapter = null;
 
+
+    /**
+     * Public factory method to create new {@link LocalFileListFragment} instances.
+     *
+     * @param   justFolders     When 'true', only folders will be shown to the user, not files
+     * @return                  New fragment with arguments set
+     */
+    public static LocalFileListFragment newInstance(boolean justFolders) {
+        LocalFileListFragment frag = new LocalFileListFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_JUST_FOLDERS, justFolders);
+        frag.setArguments(args);
+        return frag;
+    }
+
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mContainerActivity = (ContainerActivity) activity;
+            mContainerActivity = (ContainerActivity) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement " +
+            throw new ClassCastException(context.toString() + " must implement " +
                     LocalFileListFragment.ContainerActivity.class.getSimpleName());
         }
     }
@@ -79,7 +96,11 @@ public class LocalFileListFragment extends ExtendedListFragment {
         setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         setSwipeEnabled(false); // Disable pull-to-refresh
         setFabEnabled(false); // Disable FAB
-        setMessageForEmptyList(getString(R.string.local_file_list_empty));
+        setMessageForEmptyList(
+            isShowingJustFolders() ?
+                getString(R.string.local_file_list_empty_just_folders):
+                getString(R.string.local_file_list_empty)
+        );
         Log_OC.i(TAG, "onCreateView() end");
         return v;
     }
@@ -93,13 +114,21 @@ public class LocalFileListFragment extends ExtendedListFragment {
         Log_OC.i(TAG, "onActivityCreated() start");
         
         super.onActivityCreated(savedInstanceState);
-        mDirectory = mContainerActivity.getInitialDirectory();
-        mAdapter = new LocalFileListAdapter(mDirectory, getActivity());
+        mDirectory = mContainerActivity.getCurrentFolder();
+        mAdapter = new LocalFileListAdapter(mDirectory, isShowingJustFolders(), getActivity());
         setListAdapter(mAdapter);
         
         Log_OC.i(TAG, "onActivityCreated() stop");
     }
-    
+
+    @Override
+    public void onResume() {
+        Log_OC.d(TAG, "onResume() start");
+        super.onResume();
+        listFolder();
+        Log_OC.d(TAG, "onResume() end");
+    }
+
     /**
      * Checks the file clicked over. Browses inside if it is a directory.
      * Notifies the container activity in any case.
@@ -111,23 +140,23 @@ public class LocalFileListFragment extends ExtendedListFragment {
             /// Click on a directory
             if (file.isDirectory()) {
                 // just local updates
-                listDirectory(file);
+                listFolder(file);
                 // notify the click to container Activity
-                mContainerActivity.onDirectoryClick(file);
+                mContainerActivity.onFolderClicked(file);
                 // save index and top position
                 saveIndexAndTopPosition(position);
             
             } else {    /// Click on a file
                 ImageView checkBoxV = (ImageView) v.findViewById(R.id.custom_checkbox);
                 if (checkBoxV != null) {
-                    if (((ListView)getListView()).isItemChecked(position)) {
+                    if (getListView().isItemChecked(position)) {
                         checkBoxV.setImageResource(R.drawable.ic_checkbox_marked);
                     } else {
                         checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline);
                     }
                 }
                 // notify the change to the container Activity
-                mContainerActivity.onFileClick(file);
+                mContainerActivity.onFileClicked(file);
             }
             
         } else {
@@ -137,14 +166,14 @@ public class LocalFileListFragment extends ExtendedListFragment {
 
     
     /**
-     * Call this, when the user presses the up button
+     * Browse up to the parent folder of the current one.
      */
-    public void onNavigateUp() {
+    public void browseUp() {
         File parentDir = null;
         if(mDirectory != null) {
             parentDir = mDirectory.getParentFile();  // can be null
         }
-        listDirectory(parentDir);
+        listFolder(parentDir);
 
         // restore index and top position
         restoreIndexAndTopPosition();
@@ -157,17 +186,17 @@ public class LocalFileListFragment extends ExtendedListFragment {
      * 
      * @return File     The currently displayed directory
      */
-    public File getCurrentDirectory(){
+    public File getCurrentFolder(){
         return mDirectory;
     }
     
     
     /**
-     * Calls {@link LocalFileListFragment#listDirectory(File)} with a null parameter
+     * Calls {@link LocalFileListFragment#listFolder(File)} with a null parameter
      * to refresh the current directory.
      */
-    public void listDirectory(){
-        listDirectory(null);
+    public void listFolder(){
+        listFolder(null);
     }
     
     
@@ -178,7 +207,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
      * 
      * @param directory     Directory to be listed
      */
-    public void listDirectory(File directory) {
+    public void listFolder(File directory) {
         
         // Check input parameters for null
         if(directory == null) {
@@ -199,7 +228,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
         }
 
         // by now, only files in the same directory will be kept as selected
-        ((ListView)mCurrentListView).clearChoices();
+        mCurrentListView.clearChoices();
         mAdapter.swapDirectory(directory);
         if (mDirectory == null || !mDirectory.equals(directory)) {
             mCurrentListView.setSelection(0);
@@ -214,11 +243,11 @@ public class LocalFileListFragment extends ExtendedListFragment {
      * @return      File paths to the files checked by the user.
      */
     public String[] getCheckedFilePaths() {
-        ArrayList<String> result = new ArrayList<String>();
-        SparseBooleanArray positions = ((ListView)mCurrentListView).getCheckedItemPositions();
+        ArrayList<String> result = new ArrayList<>();
+        SparseBooleanArray positions = mCurrentListView.getCheckedItemPositions();
         if (positions.size() > 0) {
             for (int i = 0; i < positions.size(); i++) {
-                if (positions.get(positions.keyAt(i)) == true) {
+                if (positions.get(positions.keyAt(i))) {
                     result.add(((File) mCurrentListView.getItemAtPosition(
                             positions.keyAt(i))).getAbsolutePath());
                 }
@@ -238,17 +267,17 @@ public class LocalFileListFragment extends ExtendedListFragment {
         /**
          * Callback method invoked when a directory is clicked by the user on the files list
          *  
-         * @param directory
+         * @param folder    Folder shown in the item clicked by the user
          */
-        public void onDirectoryClick(File directory);
+        void onFolderClicked(File folder);
         
         /**
          * Callback method invoked when a file (non directory)
          * is clicked by the user on the files list
          *  
-         * @param file
+         * @param file      File shown in the item clicked by the user
          */
-        public void onFileClick(File file);
+        void onFileClicked(File file);
         
         
         /**
@@ -257,7 +286,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
          * 
          * @return  Directory to list firstly. Can be NULL.
          */
-        public File getInitialDirectory();
+        File getCurrentFolder();
 
     }
 

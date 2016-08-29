@@ -64,9 +64,7 @@
         android:manageSpaceActivity=".ui.activity.ManageSpaceActivity"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false" >
-        <activity
-            android:name=".ui.activity.FileDisplayActivity"
-            android:label="@string/app_name" >
+        <activity android:name=".ui.activity.FileDisplayActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -100,10 +98,8 @@
         <activity
             android:name=".ui.preview.PreviewImageActivity"
             android:theme="@style/Theme.ownCloud.Overlay" />
-        <activity
-            android:name=".ui.preview.PreviewVideoActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ownCloud.Fullscreen" />
+        <activity android:name=".ui.preview.PreviewVideoActivity"
+                  android:theme="@style/Theme.ownCloud.Fullscreen" />
 
         <service
             android:name=".authentication.AccountAuthenticatorService"
@@ -197,22 +193,6 @@
 		        <action android:name="android.net.wifi.STATE_CHANGE"/>
 		    </intent-filter>
 		</receiver>
-		<receiver android:name=".files.InstantUploadBroadcastReceiver">
-            <intent-filter>
-
-                <!-- unofficially supported by many Android phones but not by HTC devices: -->
-                <action android:name="com.android.camera.NEW_PICTURE" />
-                <!-- officially supported since Android 4.0 (SDK 14, works even for HTC devices): -->
-                <action android:name="android.hardware.action.NEW_PICTURE" />
-
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.hardware.action.NEW_VIDEO" />
-
-                <data android:mimeType="video/*" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".files.BootupBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -225,12 +205,9 @@
             android:name=".ui.activity.CopyToClipboardActivity"
             android:icon="@drawable/copy_link"
             android:label="@string/copy_link" />
-        <activity
-            android:name=".ui.activity.FolderPickerActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".ui.activity.UploadPathActivity"
-            android:label="@string/app_name" />
+        <activity android:name=".ui.activity.FolderPickerActivity" />
+        <activity android:name=".ui.activity.LocalFolderPickerActivity" />
+        <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
             android:name=".ui.activity.ShareActivity"
             android:label="@string/share_dialog_title"

@@ -146,8 +146,7 @@ public class FileDisplayActivity extends HookActivity
 
         /// grant that FileObserverService is watching favorite files
         if (savedInstanceState == null) {
-            Intent initObserversIntent = FileObserverService.makeInitIntent(this);
-            startService(initObserversIntent);
+            FileObserverService.initialize(this);
         }
 
         /// Load of saved instance state
@@ -321,10 +320,7 @@ public class FileDisplayActivity extends HookActivity
     }
 
     private void createMinFragments() {
-        OCFileListFragment listOfFiles = new OCFileListFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(OCFileListFragment.ARG_ALLOW_CONTEXTUAL_ACTIONS, true);
-        listOfFiles.setArguments(args);
+        OCFileListFragment listOfFiles = OCFileListFragment.newInstance(false, false, true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, listOfFiles, TAG_LIST_OF_FILES);
         transaction.commit();

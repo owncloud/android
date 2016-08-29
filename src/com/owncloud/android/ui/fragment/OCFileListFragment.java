@@ -82,9 +82,8 @@ public class OCFileListFragment extends ExtendedListFragment {
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
 
-    public final static String ARG_JUST_FOLDERS = MY_PACKAGE + ".JUST_FOLDERS";
-    public final static String ARG_ALLOW_CONTEXTUAL_ACTIONS = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
-    public final static String ARG_HIDE_FAB = MY_PACKAGE + ".HIDE_FAB";
+    protected final static String ARG_ALLOW_CONTEXTUAL_MODE = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
+    protected final static String ARG_HIDE_FAB = MY_PACKAGE + ".HIDE_FAB";
 
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
     private static final String KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED";
@@ -97,7 +96,6 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
-    private boolean mJustFolders;
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -105,6 +103,30 @@ public class OCFileListFragment extends ExtendedListFragment {
     private boolean mHideFab = true;
     private boolean miniFabClicked = false;
     private ActionMode mActiveActionMode;
+
+
+    /**
+     * Public factory method to create new {@link OCFileListFragment} instances.
+     *
+     * @param justFolders               When 'true', only folders will be shown to the user, not files.
+     * @param hideFAB                   When 'true', floating action button is hidden.
+     * @param allowContextualMode       When 'true', contextual action mode is enabled long-pressing an item.
+     * @return                          New fragment with arguments set.
+     */
+    public static OCFileListFragment newInstance(
+        boolean justFolders,
+        boolean hideFAB,
+        boolean allowContextualMode
+    ) {
+        OCFileListFragment frag = new OCFileListFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_JUST_FOLDERS, justFolders);
+        args.putBoolean(ARG_HIDE_FAB, hideFAB);
+        args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
+        frag.setArguments(args);
+        return frag;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,7 +166,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         Log_OC.i(TAG, "onCreateView() start");
         View v = super.onCreateView(inflater, container, savedInstanceState);
         Bundle args = getArguments();
-        boolean allowContextualActions = (args != null) && args.getBoolean(ARG_ALLOW_CONTEXTUAL_ACTIONS, false);
+        boolean allowContextualActions = (args != null) && args.getBoolean(ARG_ALLOW_CONTEXTUAL_MODE, false);
         if (allowContextualActions) {
             setChoiceModeAsMultipleModal();
         }
@@ -172,21 +194,17 @@ public class OCFileListFragment extends ExtendedListFragment {
             mFile = savedInstanceState.getParcelable(KEY_FILE);
         }
 
-        if (mJustFolders) {
-            setFooterEnabled(false);
-        } else {
-            setFooterEnabled(true);
-        }
+        boolean justFolders = isShowingJustFolders();
+        setFooterEnabled(!justFolders);
 
-        Bundle args = getArguments();
-        mJustFolders = (args != null) && args.getBoolean(ARG_JUST_FOLDERS, false);
         mAdapter = new FileListListAdapter(
-                mJustFolders,
+                justFolders,
                 getActivity(),
                 mContainerActivity
         );
         setListAdapter(mAdapter);
 
+        Bundle args = getArguments();
         mHideFab = (args != null) && args.getBoolean(ARG_HIDE_FAB, false);
         if (mHideFab) {
             setFabEnabled(false);
@@ -674,7 +692,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     private void updateLayout() {
-        if (!mJustFolders) {
+        if (!isShowingJustFolders()) {
             int filesCount = 0, foldersCount = 0;
             int count = mAdapter.getCount();
             OCFile file;

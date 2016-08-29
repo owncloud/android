@@ -59,7 +59,21 @@ import java.io.File;
 public class UploadFilesActivity extends FileActivity implements
     LocalFileListFragment.ContainerActivity, ActionBar.OnNavigationListener,
         OnClickListener, ConfirmationDialogFragmentListener {
+
+    private static final String TAG = UploadFilesActivity.class.getName();
+
+    public static final String EXTRA_CHOSEN_FILES =
+            UploadFilesActivity.class.getCanonicalName() + ".EXTRA_CHOSEN_FILES";
+
+    public static final int RESULT_OK_AND_MOVE = RESULT_FIRST_USER; 
     
+    private static final String KEY_DIRECTORY_PATH =
+            UploadFilesActivity.class.getCanonicalName() + ".KEY_DIRECTORY_PATH"
+    ;
+
+    private static final String WAIT_DIALOG_TAG = "WAIT";
+    private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
+
     private ArrayAdapter<String> mDirectories;
     private File mCurrentDir = null;
     private LocalFileListFragment mFileListFragment;
@@ -67,17 +81,7 @@ public class UploadFilesActivity extends FileActivity implements
     private Button mUploadBtn;
     private Account mAccountOnCreation;
     private DialogFragment mCurrentDialog;
-    
-    public static final String EXTRA_CHOSEN_FILES =
-            UploadFilesActivity.class.getCanonicalName() + ".EXTRA_CHOSEN_FILES";
 
-    public static final int RESULT_OK_AND_MOVE = RESULT_FIRST_USER; 
-    
-    private static final String KEY_DIRECTORY_PATH =
-            UploadFilesActivity.class.getCanonicalName() + ".KEY_DIRECTORY_PATH";
-    private static final String TAG = "UploadFilesActivity";
-    private static final String WAIT_DIALOG_TAG = "WAIT";
-    private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
     private RadioButton mRadioBtnCopyFiles;
     private RadioButton mRadioBtnMoveFiles;
 
@@ -207,8 +211,8 @@ public class UploadFilesActivity extends FileActivity implements
             return;
         }
         popDirname();
-        mFileListFragment.onNavigateUp();
-        mCurrentDir = mFileListFragment.getCurrentDirectory();
+        mFileListFragment.browseUp();
+        mCurrentDir = mFileListFragment.getCurrentFolder();
         
         if(mCurrentDir.getParentFile() == null){
             ActionBar actionBar = getSupportActionBar(); 
@@ -282,7 +286,7 @@ public class UploadFilesActivity extends FileActivity implements
      * {@inheritDoc}
      */
     @Override
-    public void onDirectoryClick(File directory) {
+    public void onFolderClicked(File directory) {
         pushDirname(directory);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -293,7 +297,7 @@ public class UploadFilesActivity extends FileActivity implements
      * {@inheritDoc}
      */
     @Override
-    public void onFileClick(File file) {
+    public void onFileClicked(File file) {
         // nothing to do
     }
     
@@ -301,7 +305,7 @@ public class UploadFilesActivity extends FileActivity implements
      * {@inheritDoc}
      */
     @Override
-    public File getInitialDirectory() {
+    public File getCurrentFolder() {
         return mCurrentDir;
     }
 

@@ -52,8 +52,7 @@ public class BootupBroadcastReceiver extends BroadcastReceiver {
             return;
         }
         Log_OC.d(TAG, "Starting file observer service...");
-        Intent initObservers = FileObserverService.makeInitIntent(context);
-        context.startService(initObservers);
+        FileObserverService.initialize(context);
     }
 
 }
