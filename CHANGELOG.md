@@ -1,3 +1,11 @@
+## 2.1.1 (September 2016)
+- Instant uploads work in Android 7.
+- Select your camera folder to upload pictures or videos from any
+ camera app.
+- Multi-Window support for Android 7.
+- Size of folders shown in list of files.
+- Sort by size your list of files.
+ 
 ## 2.1.0 (August 2016)
 - Select and handle multiple files
 - Sync files on tap 
