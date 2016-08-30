@@ -72,6 +72,7 @@
   <string name="file_list_loading">Poteka nalaganje ...</string>
   <string name="file_list_no_app_for_file_type">Ni programa za prikaz te vrste datoteke!</string>
   <string name="local_file_list_empty">V tej mapi ni datotek.</string>
+  <string name="local_file_list_empty_just_folders">V tej mapi ni drugih map.</string>
   <string name="upload_list_empty">Ni posodobitev</string>
   <string name="file_list_folder">mapa</string>
   <string name="file_list_folders">mape</string>
