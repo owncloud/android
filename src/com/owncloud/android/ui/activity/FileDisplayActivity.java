@@ -1600,43 +1600,41 @@ public class FileDisplayActivity extends HookActivity
         // the execution is slightly delayed to allow the activity get the window focus if it's being started
         // or if the method is called from a dialog that is being dismissed
         getHandler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        if (hasWindowFocus()) {
-                            long currentSyncTime = System.currentTimeMillis();
-                            mSyncInProgress = true;
+            new Runnable() {
+                @Override
+                public void run() {
+                    if (hasWindowFocus()) {
+                        long currentSyncTime = System.currentTimeMillis();
+                        mSyncInProgress = true;
 
-                            // perform folder synchronization
-                            RemoteOperation synchFolderOp = new RefreshFolderOperation(folder,
-                                    currentSyncTime,
-                                    false,
-                                    getFileOperationsHelper().isSharedSupported(),
-                                    ignoreETag,
-                                    getStorageManager(),
-                                    getAccount(),
-                                    getApplicationContext()
-                            );
-                            synchFolderOp.execute(
-                                    getAccount(),
-                                    MainApp.getAppContext(),
-                                    FileDisplayActivity.this,
-                                    null,
-                                    null
-                            );
+                        // perform folder synchronization
+                        RemoteOperation synchFolderOp = new RefreshFolderOperation(folder,
+                            currentSyncTime,
+                            false,
+                            getFileOperationsHelper().isSharedSupported(),
+                            ignoreETag,
+                            getStorageManager(),
+                            getAccount(),
+                            getApplicationContext()
+                        );
+                        synchFolderOp.execute(
+                            getAccount(),
+                            MainApp.getAppContext(),
+                            null,   // unneeded, handling via SyncBroadcastReceiver
+                            null
+                        );
 
-                            OCFileListFragment fileListFragment = getListOfFilesFragment();
-                            if (fileListFragment != null) {
-                                fileListFragment.setProgressBarAsIndeterminate(true);
-                            }
+                        OCFileListFragment fileListFragment = getListOfFilesFragment();
+                        if (fileListFragment != null) {
+                            fileListFragment.setProgressBarAsIndeterminate(true);
+                        }
 
-                            setBackgroundText();
-
-                        }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
+                        setBackgroundText();
+                    }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
                         // another window floating over
-                    }
-                },
-                DELAY_TO_REQUEST_OPERATIONS_LATER + 350
+                }
+            },
+            DELAY_TO_REQUEST_OPERATIONS_LATER + 350
         );
 
     }
