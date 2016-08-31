@@ -72,7 +72,7 @@ import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.InstantUploadsConfiguration;
-import com.owncloud.android.files.FileOperationsHelper;
+import com.owncloud.android.ui.helpers.FileOperationsHelper;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudAccount;
