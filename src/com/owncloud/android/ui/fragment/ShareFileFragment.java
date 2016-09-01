@@ -210,7 +210,7 @@ public class ShareFileFragment extends Fragment
         if (mFile.isFolder()) {
             size.setVisibility(View.GONE);
         } else {
-            size.setText(DisplayUtils.bytesToHumanReadable(mFile.getFileLength()));
+            size.setText(DisplayUtils.bytesToHumanReadable(mFile.getFileLength(), getActivity()));
         }
 
         //  Add User Button

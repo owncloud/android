@@ -227,7 +227,12 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
 
             // file size
             TextView fileSizeTextView = (TextView) view.findViewById(R.id.upload_file_size);
-            fileSizeTextView.setText(DisplayUtils.bytesToHumanReadable(upload.getFileSize()) + ", ");
+            fileSizeTextView.setText(
+                DisplayUtils.bytesToHumanReadable(
+                    upload.getFileSize(),
+                    mParentActivity
+                ) + ", "
+            );
 
             //* upload date
             TextView uploadDateTextView = (TextView) view.findViewById(R.id.upload_date);
