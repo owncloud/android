@@ -477,7 +477,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setFilesize(long filesize) {
         TextView tv = (TextView) getView().findViewById(R.id.fdSize);
         if (tv != null) {
-            tv.setText(DisplayUtils.bytesToHumanReadable(filesize));
+            tv.setText(DisplayUtils.bytesToHumanReadable(filesize, getActivity()));
         }
     }
 

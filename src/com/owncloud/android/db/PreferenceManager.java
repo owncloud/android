@@ -30,6 +30,8 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.utils.FileStorageUtils;
 
+import java.io.File;
+
 /**
  * Helper to simplify reading of Preferences all around the app
  */
@@ -90,17 +92,19 @@ public abstract class PreferenceManager {
                 (currentAccount == null) ? "" : currentAccount.name
             )
         );
+        String uploadPath = prefs.getString(
+            PREF__INSTANT_PICTURE_UPLOAD_PATH,
+            context.getString(R.string.instant_upload_path) + OCFile.PATH_SEPARATOR
+        );
         result.setUploadPathForPictures(
-            prefs.getString(
-                PREF__INSTANT_PICTURE_UPLOAD_PATH,
-                context.getString(R.string.instant_upload_path) + OCFile.PATH_SEPARATOR
-            )
+            uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
+        );
+        uploadPath = prefs.getString(
+            PREF__INSTANT_VIDEO_UPLOAD_PATH,
+            context.getString(R.string.instant_upload_path) + OCFile.PATH_SEPARATOR
         );
         result.setUploadPathForVideos(
-            prefs.getString(
-                PREF__INSTANT_VIDEO_UPLOAD_PATH,
-                context.getString(R.string.instant_upload_path) + OCFile.PATH_SEPARATOR
-            )
+            uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
         );
         result.setBehaviourAfterUpload(
             prefs.getString(

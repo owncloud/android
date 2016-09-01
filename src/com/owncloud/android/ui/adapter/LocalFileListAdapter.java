@@ -133,7 +133,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             if (!file.isDirectory()) {
                 fileSizeSeparatorV.setVisibility(View.VISIBLE);
                 fileSizeV.setVisibility(View.VISIBLE);
-                fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length()));
+                fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length(), mContext));
 
                 ListView parentList = (ListView) parent;
                 if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) { 

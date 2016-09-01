@@ -193,7 +193,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                     fileSizeSeparatorV.setVisibility(View.VISIBLE);
                     fileSizeV.setVisibility(View.VISIBLE);
-                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
+                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
+                        file.getFileLength(), mContext
+                    ));
 
 
                 case GRID_ITEM:
