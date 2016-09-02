@@ -41,6 +41,7 @@
   <string name="common_cancel">გაუქმება</string>
   <string name="common_error">შეცდომა</string>
   <string name="common_error_unknown">უცნობი შეცდომა</string>
+  <string name="common_pending">მოცდის რეჟიმში</string>
   <string name="about_title">ჩვენს შესახებ</string>
   <string name="change_password">პაროლის შეცვლა</string>
   <string name="create_account">ანგარიშის შექმნა</string>

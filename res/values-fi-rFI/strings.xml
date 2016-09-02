@@ -93,6 +93,7 @@
   <string name="common_loading">Ladataan…</string>
   <string name="common_unknown">tuntematon</string>
   <string name="common_error_unknown">Tuntematon virhe</string>
+  <string name="common_pending">Odottaa</string>
   <string name="about_title">Tietoja</string>
   <string name="change_password">Vaihda salasana</string>
   <string name="delete_account">Poista tili</string>

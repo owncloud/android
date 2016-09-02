@@ -77,6 +77,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="common_loading">Cargando ...</string>
   <string name="common_unknown">descoñecido</string>
   <string name="common_error_unknown">Produciuse un erro descoñecido</string>
+  <string name="common_pending">Pendentes</string>
   <string name="about_title">Sobre</string>
   <string name="change_password">Cambiar o contrasinal</string>
   <string name="create_account">Crear unha conta</string>

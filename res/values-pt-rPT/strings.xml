@@ -98,6 +98,7 @@
   <string name="common_loading">A carregar...</string>
   <string name="common_unknown">desconhecido</string>
   <string name="common_error_unknown">Erro desconhecido</string>
+  <string name="common_pending">Pendente</string>
   <string name="about_title">Sobre</string>
   <string name="change_password">Alterar palavra-passe</string>
   <string name="delete_account">Remover conta</string>

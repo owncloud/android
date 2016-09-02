@@ -101,6 +101,7 @@
   <string name="common_loading">Nalaganje ...</string>
   <string name="common_unknown">neznano</string>
   <string name="common_error_unknown">Neznana napaka</string>
+  <string name="common_pending">V čakanju ...</string>
   <string name="about_title">O oblaku %1$s</string>
   <string name="change_password">Spremeni geslo</string>
   <string name="delete_account">Odstrani račun</string>

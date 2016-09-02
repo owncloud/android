@@ -59,6 +59,7 @@
   <string name="common_error">Lỗi</string>
   <string name="common_loading">Đang tải...</string>
   <string name="common_error_unknown">Lỗi chưa biết</string>
+  <string name="common_pending">Đang chờ</string>
   <string name="about_title">Giới thiệu</string>
   <string name="change_password">Đổi mật khẩu</string>
   <string name="create_account">Tạo tài khoản</string>

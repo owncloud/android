@@ -76,6 +76,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="common_error">Error</string>
   <string name="common_loading">Cargament…</string>
   <string name="common_error_unknown">Error desconeguda </string>
+  <string name="common_pending">En espèra</string>
   <string name="about_title">A prepaus de</string>
   <string name="change_password">Cambiar de senhal</string>
   <string name="create_account">Crear un compte</string>

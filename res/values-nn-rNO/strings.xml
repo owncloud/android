@@ -72,6 +72,7 @@
   <string name="common_back">Tilbake</string>
   <string name="common_error">Feil</string>
   <string name="common_error_unknown">Ukjend feil</string>
+  <string name="common_pending">Under vegs</string>
   <string name="about_title">Om</string>
   <string name="change_password">Endra passord</string>
   <string name="create_account">Opprett konto</string>

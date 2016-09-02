@@ -36,6 +36,7 @@
   <string name="common_cancel">ۋاز كەچ</string>
   <string name="common_error">خاتالىق</string>
   <string name="common_error_unknown">يوچۇن خاتالىق</string>
+  <string name="common_pending">كۈتۈۋاتىدۇ</string>
   <string name="change_password">ئىم ئۆزگەرت</string>
   <string name="uploader_info_dirname">قىسقۇچ ئاتى</string>
   <string name="uploads_view_upload_status_unknown_fail">يوچۇن خاتالىق</string>

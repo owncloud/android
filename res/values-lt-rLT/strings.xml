@@ -78,6 +78,7 @@
   <string name="common_loading">Įkeliama...</string>
   <string name="common_unknown">nežinomas</string>
   <string name="common_error_unknown">Neatpažinta klaida</string>
+  <string name="common_pending">Laukiantis</string>
   <string name="about_title">Apie</string>
   <string name="change_password">Pakeisti slaptažodį</string>
   <string name="create_account">Sukurti paskyrą</string>

@@ -71,6 +71,7 @@
   <string name="common_error">Грешка</string>
   <string name="common_loading">Вчитувам ...</string>
   <string name="common_error_unknown">Непозната грешка</string>
+  <string name="common_pending">Чека</string>
   <string name="about_title">За</string>
   <string name="change_password">Смени лозинка</string>
   <string name="create_account">Креирај сметка</string>

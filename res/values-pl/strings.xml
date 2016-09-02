@@ -98,6 +98,7 @@
   <string name="common_loading">Wczytuję ...</string>
   <string name="common_unknown">nieznane</string>
   <string name="common_error_unknown">Nieznany błąd</string>
+  <string name="common_pending">Oczekujące</string>
   <string name="about_title">O aplikacji</string>
   <string name="change_password">Zmień hasło</string>
   <string name="delete_account">Usuń konto</string>

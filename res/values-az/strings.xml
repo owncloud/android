@@ -66,6 +66,7 @@
   <string name="common_error">Səhv</string>
   <string name="common_loading">Yüklənir...</string>
   <string name="common_error_unknown">Bəlli olmayan səhv baş verdi</string>
+  <string name="common_pending">Gözləmə</string>
   <string name="about_title">Haqqında</string>
   <string name="change_password">Şifrəni dəyiş</string>
   <string name="create_account">Hesab yarat</string>

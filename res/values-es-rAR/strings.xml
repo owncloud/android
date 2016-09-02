@@ -69,6 +69,7 @@
   <string name="common_error">Error</string>
   <string name="common_loading">Cargando ...</string>
   <string name="common_error_unknown">Error desconocido</string>
+  <string name="common_pending">Pendientes</string>
   <string name="about_title">Acerca de</string>
   <string name="change_password">Cambiar contraseña</string>
   <string name="create_account">Crear cuenta</string>

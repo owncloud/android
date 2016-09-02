@@ -101,6 +101,7 @@
   <string name="common_loading">Po ngarkohet …</string>
   <string name="common_unknown">panjohur</string>
   <string name="common_error_unknown">Gabim i panjohur</string>
+  <string name="common_pending">Në pritje</string>
   <string name="about_title">Rreth</string>
   <string name="change_password">Ndryshoni fjalëkalimin</string>
   <string name="delete_account">Hiqe llogarinë</string>

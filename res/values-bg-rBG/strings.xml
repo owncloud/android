@@ -96,6 +96,7 @@
   <string name="common_loading">Зареждане...</string>
   <string name="common_unknown">несяна</string>
   <string name="common_error_unknown">Непозната грешка</string>
+  <string name="common_pending">Чакащо</string>
   <string name="about_title">Относно</string>
   <string name="change_password">Промяна на парола</string>
   <string name="delete_account">Премахни потребителя</string>

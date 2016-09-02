@@ -85,6 +85,7 @@
   <string name="common_error">Грешка</string>
   <string name="common_loading">Учитавам...</string>
   <string name="common_error_unknown">Непозната грешка</string>
+  <string name="common_pending">На чекању</string>
   <string name="about_title">О програму</string>
   <string name="change_password">Измени лозинку</string>
   <string name="delete_account">Уклони налог</string>

@@ -74,6 +74,7 @@
   <string name="common_loading">Kargatzen ...</string>
   <string name="common_unknown">ezezaguna</string>
   <string name="common_error_unknown">Errore ezezaguna</string>
+  <string name="common_pending">Zain</string>
   <string name="about_title">Honi buruz</string>
   <string name="change_password">Aldatu pasahitza</string>
   <string name="create_account">Sortu kontua</string>

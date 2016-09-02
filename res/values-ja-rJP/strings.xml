@@ -101,6 +101,7 @@
   <string name="common_loading">読込中...</string>
   <string name="common_unknown">不明</string>
   <string name="common_error_unknown">不明なエラー</string>
+  <string name="common_pending">中断</string>
   <string name="about_title">について</string>
   <string name="change_password">パスワードを変更</string>
   <string name="delete_account">アカウント削除</string>

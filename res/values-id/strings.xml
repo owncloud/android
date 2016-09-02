@@ -79,6 +79,7 @@
   <string name="common_error">Kesalahan</string>
   <string name="common_loading">Memuat ...</string>
   <string name="common_error_unknown">Kesalahan tidak diketahui</string>
+  <string name="common_pending">Tertunda</string>
   <string name="about_title">Tentang</string>
   <string name="change_password">Ubah sandi</string>
   <string name="delete_account">Hapus akun</string>

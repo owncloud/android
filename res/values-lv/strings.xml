@@ -64,6 +64,7 @@
   <string name="common_error">Kļūda</string>
   <string name="common_loading">Ielādē</string>
   <string name="common_error_unknown">Nezināma kļūda</string>
+  <string name="common_pending">Gaida savu kārtu</string>
   <string name="about_title">Par</string>
   <string name="change_password">Mainīt paroli</string>
   <string name="create_account">Izveidot kontu</string>

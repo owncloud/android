@@ -69,6 +69,7 @@
   <string name="common_loading">Ŝargante...</string>
   <string name="common_unknown">nekonata</string>
   <string name="common_error_unknown">Nekonata eraro</string>
+  <string name="common_pending">Traktotaj</string>
   <string name="about_title">Pri</string>
   <string name="change_password">Ŝanĝi la pasvorton</string>
   <string name="delete_account">Forigi konton</string>

@@ -32,6 +32,7 @@
   <string name="common_cancel">Otkaži</string>
   <string name="common_error">Greška</string>
   <string name="common_error_unknown">Nepoznata greška</string>
+  <string name="common_pending">Na čekanju</string>
   <string name="about_title">O programu</string>
   <string name="change_password">Izmeni lozinku</string>
   <string name="create_account">Novi nalog</string>

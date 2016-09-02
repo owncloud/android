@@ -102,6 +102,7 @@ Download hier: %2$s</string>
   <string name="common_loading">Laden...</string>
   <string name="common_unknown">onbekend</string>
   <string name="common_error_unknown">Onbekende fout</string>
+  <string name="common_pending">In behandeling</string>
   <string name="about_title">Over</string>
   <string name="change_password">Wijzig wachtwoord</string>
   <string name="delete_account">Verwijder account</string>

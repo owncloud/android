@@ -101,6 +101,7 @@
   <string name="common_loading">Yükleniyor...</string>
   <string name="common_unknown">bilinmiyor</string>
   <string name="common_error_unknown">Bilinmeyen hata</string>
+  <string name="common_pending">Bekliyor</string>
   <string name="about_title">Hakkında</string>
   <string name="change_password">Parola değiştir</string>
   <string name="delete_account">Hesabı kaldır</string>
