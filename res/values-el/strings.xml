@@ -14,6 +14,8 @@
   <string name="actionbar_sort">Ταξινόμηση</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
   <string name="actionbar_sort_by_name">A-Ω</string>
+  <string name="actionbar_sort_by_date">Νεότερο - Παλαιότερο</string>
+  <string name="actionbar_sort_by_size">Μεγαλύτερο - Μικρότερο</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
