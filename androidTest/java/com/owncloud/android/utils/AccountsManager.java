@@ -47,8 +47,7 @@ public class AccountsManager {
     private static String version = "";
     private static int WAIT_UNTIL_ACCOUNT_CREATED = 1000;
 
-    public static void addAccount(Context context, String baseUrl, String username, String password)
-            throws AuthenticatorException {
+    public static void addAccount(Context context, String baseUrl, String username, String password) {
 
         // obtaining an AccountManager instance
         AccountManager accountManager = AccountManager.get(context);
@@ -80,13 +79,14 @@ public class AccountsManager {
 
     }
 
-    //
+    //Remove an account from the device
     public static void deleteAccount(Context context, String accountDel) {
         AccountManager accountManager = AccountManager.get(context);
         Account account = new Account(accountDel, accountType);
         accountManager.removeAccount(account,null,null);
     }
 
+    //Remove all accounts from the device
     public static void deleteAllAccounts(Context context) {
         AccountManager accountManager = AccountManager.get(context);
         Account[] accounts = accountManager.getAccounts();

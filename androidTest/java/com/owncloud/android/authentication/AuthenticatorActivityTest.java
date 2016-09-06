@@ -39,6 +39,7 @@ import static org.junit.Assert.assertTrue;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.AccountsManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.authentication.AccountAuthenticator.AuthenticatorException;
 
 import org.junit.Before;
 import org.junit.After;
@@ -76,7 +77,7 @@ public class AuthenticatorActivityTest {
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
     private static final int WAIT_LOGIN = 2000;
-    private static final int WAIT_CONNECTION = 1500;
+    private static final int WAIT_CONNECTION = 2500;
 
     private static final String ERROR_MESSAGE = "Activity not finished";
     private static final String ALREADY_EXISTING_ACCOUNT_ERROR =
@@ -90,6 +91,15 @@ public class AuthenticatorActivityTest {
     private static final String LOG_TAG = "LoginSuite";
 
     private Context targetContext = null;
+
+    private String testUser = null;
+    private String testUser2 = null;
+    private String testPassword = null;
+    private String testPassword2 = null;
+    private String testServerURL = null;
+    private String testServerPort = null;
+    private String testServerPortSecure = null;
+    int trusted = 0;
 
     @Rule
     public ActivityTestRule<AuthenticatorActivity> mActivityRule = new ActivityTestRule<AuthenticatorActivity>(
@@ -108,6 +118,17 @@ public class AuthenticatorActivityTest {
 
     @Before
     public void init() {
+        Bundle arguments = InstrumentationRegistry.getArguments();
+
+        testUser = arguments.getString("TEST_USER");
+        testUser2 = arguments.getString("TEST_USER2");
+        testPassword = arguments.getString("TEST_PASSWORD");
+        testPassword2 = arguments.getString("TEST_PASSWORD2");
+        testServerURL = arguments.getString("TEST_SERVER_URL");
+        testServerPort = arguments.getString("TEST_SERVER_PORT");
+        testServerPortSecure = arguments.getString("TEST_SERVER_PORT_SECURE");
+        trusted = arguments.getInt("TRUSTED");
+
         UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         /*Point[] coordinates = new Point[4];
         coordinates[0] = new Point(248, 1020);
@@ -127,15 +148,8 @@ public class AuthenticatorActivityTest {
     @Test
     public void test1_check_login()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Bundle arguments = InstrumentationRegistry.getArguments();
 
         Log_OC.i(LOG_TAG, "Test Check Login Correct Start");
-
-        // Get values passed
-        String testUser = arguments.getString("TEST_USER");
-        String testPassword = arguments.getString("TEST_PASSWORD");
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT");
 
         String connectionString = getConnectionString(testServerURL, testServerPort);
 
@@ -146,7 +160,6 @@ public class AuthenticatorActivityTest {
         setFields(connectionString, testUser, testPassword);
 
         // Check that the Activity ends after clicking
-
         Thread.sleep(WAIT_LOGIN);
         Field f = Activity.class.getDeclaredField(RESULT_CODE);
         f.setAccessible(true);
@@ -161,15 +174,8 @@ public class AuthenticatorActivityTest {
     @Test
     public void test2_check_login_special_characters()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Bundle arguments = InstrumentationRegistry.getArguments();
 
         Log_OC.i(LOG_TAG, "Test Check Login Special Characters Start");
-
-        // Get values passed
-        String testUser = arguments.getString("TEST_USER2");
-        String testPassword = arguments.getString("TEST_PASSWORD2");
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT");
 
         String connectionString = getConnectionString(testServerURL, testServerPort);
 
@@ -177,10 +183,9 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.buttonOK))
                 .check(matches(not(isEnabled())));
 
-        setFields(connectionString, testUser, testPassword);
+        setFields(connectionString, testUser2, testPassword2);
 
         // Check that the Activity ends after clicking
-
         Thread.sleep(WAIT_LOGIN);
         Field f = Activity.class.getDeclaredField(RESULT_CODE);
         f.setAccessible(true);
@@ -196,15 +201,7 @@ public class AuthenticatorActivityTest {
     public void test3_check_login_incorrect()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Bundle arguments = InstrumentationRegistry.getArguments();
-
         Log_OC.i(LOG_TAG, "Test Check Login Incorrect Start");
-
-        // Get values passed
-        String testUser = arguments.getString("TEST_USER") + arguments.getString("TEST_USER");
-        String testPassword = arguments.getString("TEST_PASSWORD");
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT");
 
         String connectionString = getConnectionString(testServerURL, testServerPort);
 
@@ -212,7 +209,7 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.buttonOK))
                 .check(matches(not(isEnabled())));
 
-        setFields(connectionString, testUser, testPassword);
+        setFields(connectionString, "userInexistent", testPassword);
 
         //check that the credentials are not correct
         onView(withId(R.id.auth_status_text)).check(matches(withText(WRONG_ACCOUNT_ERROR)));
@@ -226,17 +223,12 @@ public class AuthenticatorActivityTest {
     public void test4_check_existing_account()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Bundle arguments = InstrumentationRegistry.getArguments();
-
         Log_OC.i(LOG_TAG, "Test Check Existing Account Start");
 
-        // Get values passed
-        String testUser = arguments.getString("TEST_USER");
-        String testPassword = arguments.getString("TEST_PASSWORD");
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT");
-
         String connectionString = getConnectionString(testServerURL, testServerPort);
+
+        //Add an account to the device
+        AccountsManager.addAccount(targetContext, connectionString, testUser, testPassword);
 
         // Check that login button is disabled
         onView(withId(R.id.buttonOK))
@@ -256,18 +248,7 @@ public class AuthenticatorActivityTest {
     public void test5_check_login_blanks()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Bundle arguments = InstrumentationRegistry.getArguments();
-
-        //At this point, we can clean all the existing accounts
-        AccountsManager.deleteAllAccounts(targetContext);
-
         Log_OC.i(LOG_TAG, "Test Check Blanks Login Start");
-
-        // Get values passed
-        String testUser = "";
-        String testPassword = "";
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT");
 
         String connectionString = getConnectionString(testServerURL, testServerPort);
 
@@ -275,7 +256,7 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.buttonOK))
                 .check(matches(not(isEnabled())));
 
-        setFields(connectionString, testUser, testPassword);
+        setFields(connectionString, "", "");
 
         //check that the credentials are not correct
         onView(withId(R.id.auth_status_text)).check(matches(withText(WRONG_ACCOUNT_ERROR)));
@@ -288,23 +269,16 @@ public class AuthenticatorActivityTest {
     public void test6_check_login_trimmed_blanks()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Bundle arguments = InstrumentationRegistry.getArguments();
-
         Log_OC.i(LOG_TAG, "Test Check Trimmed Blanks Start");
 
-        // Get values passed
-        String testUser = "    " + arguments.getString("TEST_USER") + "         ";
-        String testPassword = arguments.getString("TEST_PASSWORD");
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT");
-
+        String UserBlanks = "    " + testUser + "         ";
         String connectionString = getConnectionString(testServerURL, testServerPort);
 
         // Check that login button is disabled
         onView(withId(R.id.buttonOK))
                 .check(matches(not(isEnabled())));
 
-        setFields(connectionString, testUser, testPassword);
+        setFields(connectionString, UserBlanks, testPassword);
 
         // Check that the Activity ends after clicking
         Thread.sleep(WAIT_LOGIN);
@@ -322,15 +296,7 @@ public class AuthenticatorActivityTest {
     public void test7_check_url_from_browser()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Bundle arguments = InstrumentationRegistry.getArguments();
-
         Log_OC.i(LOG_TAG, "Test Check URL Browser Start");
-
-        // Get values passed
-        String testUser = arguments.getString("TEST_USER2");
-        String testPassword = arguments.getString("TEST_PASSWORD2");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT");
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
 
         String connectionString = getConnectionString(testServerURL, testServerPort);
 
@@ -340,7 +306,7 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.buttonOK))
                 .check(matches(not(isEnabled())));
 
-        setFields(connectionString, testUser, testPassword);
+        setFields(connectionString, testUser2, testPassword2);
 
         // Check that the Activity ends after clicking
 
@@ -353,29 +319,17 @@ public class AuthenticatorActivityTest {
 
         Log_OC.i(LOG_TAG, "Test Check URL Browser Passed");
 
-        //At this point, we can clean all the existing accounts
-        AccountsManager.deleteAllAccounts(targetContext);
-
     }
 
     @Test
     public void test8_check_certif_not_secure_no_accept()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Bundle arguments = InstrumentationRegistry.getArguments();
-
         Log_OC.i(LOG_TAG, "Test not accept not secure start");
 
-        // Get values passed
-        String testUser = arguments.getString("TEST_USER2");
-        String testPassword = arguments.getString("TEST_PASSWORD2");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT_SECURE");
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
-        int trusted = arguments.getInt("TRUSTED");
+        if (testServerPortSecure != null && trusted == 0) {
 
-        if (testServerPort != null && trusted == 0) {
-
-            String connectionString = getConnectionString(testServerURL, testServerPort);
+            String connectionString = getConnectionString(testServerURL, testServerPortSecure);
 
             // Check that login button is disabled
             onView(withId(R.id.buttonOK))
@@ -413,22 +367,13 @@ public class AuthenticatorActivityTest {
     public void test9_check_certif_not_secure()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Bundle arguments = InstrumentationRegistry.getArguments();
-
         Log_OC.i(LOG_TAG, "Test accept not secure start");
 
         // Get values passed
 
-        String testUser = arguments.getString("TEST_USER");
-        String testPassword = arguments.getString("TEST_PASSWORD");
-        String testServerPort = arguments.getString("TEST_SERVER_PORT_SECURE");
-        String testServerURL = arguments.getString("TEST_SERVER_URL");
-        int trusted = arguments.getInt("TRUSTED");
-
         if (testServerPort != null && trusted == 0) {
 
-            String connectionString = getConnectionString(testServerURL, testServerPort);
-
+            String connectionString = getConnectionString(testServerURL, testServerPortSecure);
 
             // Check that login button is disabled
             onView(withId(R.id.buttonOK))
@@ -509,5 +454,6 @@ public class AuthenticatorActivityTest {
     @After
     public void tearDown() throws Exception {
 
+        AccountsManager.deleteAllAccounts(targetContext);
     }
 }
