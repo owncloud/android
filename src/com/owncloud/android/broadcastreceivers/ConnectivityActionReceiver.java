@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.files.services;
+package com.owncloud.android.broadcastreceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -35,6 +35,7 @@ import android.os.Looper;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**

@@ -20,20 +20,12 @@
 
 package com.owncloud.android.services.observer;
 
-import android.Manifest;
-import android.accounts.Account;
 import android.content.Context;
 import android.os.FileObserver;
-import android.support.v4.content.ContextCompat;
 
-import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.PreferenceManager.InstantUploadsConfiguration;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.operations.UploadFileOperation;
-import com.owncloud.android.utils.MimetypeIconUtil;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +37,7 @@ public class InstantUploadsObserver extends FileObserver {
 
     private static final String TAG = InstantUploadsObserver.class.getSimpleName();
 
-    private static final int UPDATE_MASK = (
+    private static final int CREATE_MASK = (
             FileObserver.CREATE | FileObserver.MODIFY | FileObserver.CLOSE_WRITE |
             FileObserver.MOVED_TO
     );
@@ -61,6 +53,7 @@ public class InstantUploadsObserver extends FileObserver {
     private InstantUploadsConfiguration mConfiguration;
     private Context mContext;
     private HashMap<String, Boolean> mObservedChildren;
+    private InstantUploadsHandler mInstantUploadsHandler;
 
     /**
      * Constructor.
@@ -73,7 +66,7 @@ public class InstantUploadsObserver extends FileObserver {
      * @param context           Used to start an operation to upload a file, when needed.
      */
     public InstantUploadsObserver(InstantUploadsConfiguration configuration, Context context) {
-        super(configuration.getSourcePath(), ALL_EVENTS_EVEN_THOSE_NOT_DOCUMENTED);
+        super(configuration.getSourcePath(), CREATE_MASK);
 
         if (context == null) {
             throw new IllegalArgumentException("NULL context argument received");
@@ -84,6 +77,7 @@ public class InstantUploadsObserver extends FileObserver {
         mConfiguration = configuration;
         mContext = context;
         mObservedChildren = new HashMap<>();
+        mInstantUploadsHandler = new InstantUploadsHandler();
     }
 
     /**
@@ -150,108 +144,18 @@ public class InstantUploadsObserver extends FileObserver {
      * @param fileName      Name of the file just created
      */
     private void handleNewFile(final String fileName) {
-        Log_OC.d(TAG, "New file " + fileName);
 
-        /// check file type
-        final String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
-        final boolean isImage = mimeType.startsWith("image/");
-        final boolean isVideo = mimeType.startsWith("video/");
-
-        if (!isImage && !isVideo) {
-            Log_OC.d(TAG, "Ignoring " + fileName);
-            return;
-        }
-
-        if (isImage && !mConfiguration.isEnabledForPictures()) {
-            Log_OC.d(TAG, "Instant upload disabled for images, ignoring " + fileName);
-            return;
-        }
-
-        if (isVideo && !mConfiguration.isEnabledForVideos()) {
-            Log_OC.d(TAG, "Instant upload disabled for videos, ignoring " + fileName);
-            return;
-        }
-
-        /// check permission to read
-        int permissionCheck = ContextCompat.checkSelfPermission(
-            mContext,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        );
-        if (android.content.pm.PackageManager.PERMISSION_GRANTED != permissionCheck) {
-            Log_OC.w(TAG, "Read external storage permission isn't granted, aborting");
-            return;
-        }
-
-        /// delay a bit final checks and upload request
+        /// delay a bit the execution to deal with possible renames of files (for instance: Google Camera)
         mDelayerExecutor.schedule(
             new Runnable() {
                 @Override
                 public void run() {
-                    /// check the file is **still** there and really has something inside (*)
-                    String localPath = mConfiguration.getSourcePath() + File.separator + fileName;
-                    File localFile = new File(localPath);
-                    if (!localFile.exists() || localFile.length() <= 0) {
-                        Log_OC.w(
-                            TAG,
-                            "Camera app saved an empty or temporary file, ignoring " + fileName
-                        );
-                        // Google Camera renames video files right after stop and save
-                        // the recording; uploading the video upload with the original
-                        // name would fail; this prevents it
-                        return;
-                    }
-
-                    /// check existence of target account
-                    Account account = AccountUtils.getOwnCloudAccountByName(
-                        mContext,
-                        mConfiguration.getUploadAccountName()
-                    );
-                    if (account == null) {
-                        Log_OC.w(TAG, "No account found for instant upload, aborting upload");
-                        return;
-                    }
-
-                    /// upload!
-                    String remotePath =
-                        (isImage ?
-                            mConfiguration.getUploadPathForPictures() :
-                            mConfiguration.getUploadPathForVideos()
-                        ) +
-                            fileName
-                        ;
-                    int createdBy =
-                        isImage ?
-                            UploadFileOperation.CREATED_AS_INSTANT_PICTURE :
-                            UploadFileOperation.CREATED_AS_INSTANT_VIDEO
-                        ;
-
-                    FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
-                    requester.uploadNewFile(
-                        mContext,
-                        account,
-                        localPath,
-                        remotePath,
-                        mConfiguration.getBehaviourAfterUpload(),
-                        mimeType,
-                        true,           // create parent folder if not existent
-                        createdBy
-                    );
-                    Log_OC.i(
-                        TAG,
-                        String.format(
-                            "Requested upload of %1s to %2s in %3s",
-                            localPath,
-                            remotePath,
-                            account.name
-                        )
-                    );
+                    mInstantUploadsHandler.handleNewFile(fileName, mConfiguration, mContext);
                 }
             },
-
             200,
             TimeUnit.MILLISECONDS
         );
-
     }
 
     /**

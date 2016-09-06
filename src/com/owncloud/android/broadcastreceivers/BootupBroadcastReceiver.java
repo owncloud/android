@@ -19,7 +19,7 @@
  *
  */
 
-package com.owncloud.android.files;
+package com.owncloud.android.broadcastreceivers;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.services.observer.FileObserverService;
