@@ -45,6 +45,27 @@ public class InstantUploadsHandler {
 
     private static String TAG = InstantUploadsHandler.class.getName();
 
+    /**
+     * Because new pictures or videos are detected both from NEW_xxx_ACTION broadcast intents and
+     * from a FileObserver watching the camera folder, a single picture or video might produce two
+     * calls to a handleXXX method in two different instances of {@link InstantUploadsHandler}.
+     *
+     * {@link FileUploader} filters upload requests that are already in the queue of files to be uploaded.
+     * This is enough to prevent duplications of instant uploads when network is available, since the first
+     * upload request will be still in the queue or being uploaded when the second one arrives.
+     *
+     * Nevertheless, when network is not available, the first upload request might be retired from the
+     * queue and archived as failed/delayed before the second upload request arrives to the service.
+     * That will lead to two failed uploads for the same file, and this will be uploaded twice when
+     * the network is recovered.
+     *
+     * Readl case detected in https://github.com/owncloud/android/issues/1795#issuecomment-245263247.
+     *
+     * To prevent this happens, next static field allows to filter duplicated detections for the same
+     * file. Must not be null!
+     */
+    private static String sLastUploadedFilePath = "";
+
 
     public boolean handleNewPictureAction(
         Intent intent,
@@ -180,6 +201,12 @@ public class InstantUploadsHandler {
         Context context
     ) {
 
+        /// check duplicated detection
+        if (sLastUploadedFilePath.equals(localPath)) {
+            Log_OC.i(TAG, "Duplicate detection of " + localPath + ", ignoring");
+            return false;
+        }
+
         /// check permission to read
         int permissionCheck = ContextCompat.checkSelfPermission(
             context,
@@ -238,6 +265,9 @@ public class InstantUploadsHandler {
             true,           // create parent folder if not existent
             createdBy
         );
+
+        sLastUploadedFilePath = localPath;
+
         Log_OC.i(
             TAG,
             String.format(
