@@ -36,6 +36,8 @@ import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Request the upload of a possible new picture or video taken by the camera app
@@ -57,14 +59,20 @@ public class InstantUploadsHandler {
      * Nevertheless, when network is not available, the first upload request might be retired from the
      * queue and archived as failed/delayed before the second upload request arrives to the service.
      * That will lead to two failed uploads for the same file, and this will be uploaded twice when
-     * the network is recovered.
+     * the network is recovered. Real case detected in
+     * https://github.com/owncloud/android/issues/1795#issuecomment-245263247.
      *
-     * Readl case detected in https://github.com/owncloud/android/issues/1795#issuecomment-245263247.
+     * Even worse: due to multithreading scheduling, it's not granted that the two events corresponding
+     * to a single picture/video are received one after the other. If some pictures/videos are taken in a row,
+     * FileObserver thread can call 'handleNewMediaFile(...)' action for some of them before than
+     * InstantUploadsBroadcastReceiver calls 'handleNewXXXAction(...)' for the first of them. Real case
+     * detected while fixing https://github.com/owncloud/android/issues/1795#issuecomment-245263247.
      *
-     * To prevent this happens, next static field allows to filter duplicated detections for the same
-     * file. Must not be null!
+     * Due to that, remembering just the last file detected is not enough to correctly filter out duplicated
+     * detections. Next static field saves last recent requests to filter duplicated detections for a while.
      */
-    private static String sLastUploadedFilePath = "";
+    private static int MAX_RECENTS = 30;
+    private static Set<String> sRecentlyUploadedFilePaths = new HashSet<>(MAX_RECENTS);
 
 
     public boolean handleNewPictureAction(
@@ -192,7 +200,7 @@ public class InstantUploadsHandler {
      * @param context           Valid Context, used to request to uploads service.
      * @return                  'True' if an upload was requested, 'false' otherwise.
      */
-    private boolean handleNewMediaFile(
+    private synchronized boolean handleNewMediaFile(
         String fileName,
         String localPath,
         String mimeType,
@@ -202,7 +210,7 @@ public class InstantUploadsHandler {
     ) {
 
         /// check duplicated detection
-        if (sLastUploadedFilePath.equals(localPath)) {
+        if (sRecentlyUploadedFilePaths.contains(localPath)) {
             Log_OC.i(TAG, "Duplicate detection of " + localPath + ", ignoring");
             return false;
         }
@@ -266,7 +274,11 @@ public class InstantUploadsHandler {
             createdBy
         );
 
-        sLastUploadedFilePath = localPath;
+        if (sRecentlyUploadedFilePaths.size() >= MAX_RECENTS) {
+            // remove first path inserted
+            sRecentlyUploadedFilePaths.remove(sRecentlyUploadedFilePaths.iterator().next());
+        }
+        sRecentlyUploadedFilePaths.add(localPath);
 
         Log_OC.i(
             TAG,
