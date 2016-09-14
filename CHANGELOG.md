@@ -1,3 +1,6 @@
+## 2.1.2 (September 2016)
+- Instant uploads fixed in Android 6.
+
 ## 2.1.1 (September 2016)
 - Instant uploads work in Android 7.
 - Select your camera folder to upload pictures or videos from any

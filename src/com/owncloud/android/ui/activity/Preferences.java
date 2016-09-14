@@ -34,6 +34,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -930,10 +931,24 @@ public class Preferences extends PreferenceActivity
     private void loadInstantUploadSourcePath() {
         SharedPreferences appPrefs =
             PreferenceManager.getDefaultSharedPreferences(this);
-        mSourcePath = appPrefs.getString("instant_upload_source_path", InstantUploadsConfiguration.DEFAULT_SOURCE_PATH);
-        mPrefInstantUploadSourcePath.setSummary(
-            DisplayUtils.getPathWithoutLastSlash(mSourcePath)
+        mSourcePath = appPrefs.getString(
+            "instant_upload_source_path",
+            InstantUploadsConfiguration.DEFAULT_SOURCE_PATH
         );
+        if (mPrefInstantUploadSourcePath != null) {
+            mPrefInstantUploadSourcePath.setSummary(
+                DisplayUtils.getPathWithoutLastSlash(mSourcePath)
+            );
+            String comment;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                comment = getString(R.string.prefs_instant_upload_source_path_title_optional);
+            } else {
+                comment = getString(R.string.prefs_instant_upload_source_path_title_required);
+            }
+            mPrefInstantUploadSourcePath.setTitle(
+                String.format(mPrefInstantUploadSourcePath.getTitle().toString(), comment)
+            );
+        }
     }
 
     /**
