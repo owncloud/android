@@ -43,7 +43,9 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation {
-    
+
+    private static final int LAST_CHUNK_TIMEOUT = 900000; //15 mins.
+
     public static final long CHUNK_SIZE = 1024000;
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
     private static final String OC_CHUNK_SIZE_HEADER = "OC-Chunk-Size";
@@ -103,6 +105,14 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                     mPutMethod.abort();
                     // next method will throw an exception
                 }
+
+                if (chunkIndex == chunkCount - 1) {
+                    // Added a high timeout to the last chunk due to when the last chunk
+                    // arrives to the server with the last PUT, all chunks get assembled
+                    // within that PHP request, so last one takes longer.
+                    mPutMethod.getParams().setSoTimeout(LAST_CHUNK_TIMEOUT);
+                }
+
                 status = client.executeMethod(mPutMethod);
 
                 if (status == 400) {
