@@ -13,6 +13,9 @@
   <string name="actionbar_send_file">寄出</string>
   <string name="actionbar_sort">排序</string>
   <string name="actionbar_sort_title">排序依照</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">最新 - 最舊</string>
+  <string name="actionbar_sort_by_size">最大 - 最小</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">所有檔案</string>
@@ -52,6 +55,7 @@
   <string name="sync_string_files">檔案</string>
   <string name="setup_btn_connect">連線</string>
   <string name="uploader_btn_upload_text">上傳</string>
+  <string name="uploader_top_message">選擇上傳的資料夾</string>
   <string name="uploader_wrn_no_account_title">找不到帳號</string>
   <string name="uploader_wrn_no_account_text">無%1$s帳號，請先建立帳號。</string>
   <string name="uploader_wrn_no_account_setup_btn_text">設定</string>
@@ -68,6 +72,7 @@
   <string name="file_list_loading">載入中…</string>
   <string name="file_list_no_app_for_file_type">檔案格式無對應的應用程式可開啟</string>
   <string name="local_file_list_empty">這個資料夾中沒有任何檔案.</string>
+  <string name="local_file_list_empty_just_folders">這個資料夾中沒有任何資料夾.</string>
   <string name="upload_list_empty">無上傳</string>
   <string name="file_list_folder">資料夾</string>
   <string name="file_list_folders">資料夾</string>
@@ -361,6 +366,9 @@
   <string name="file_list__footer__files">%1$d 個檔案</string>
   <string name="file_list__footer__files_and_folder">%1$d 個檔案, 1 個資料夾</string>
   <string name="file_list__footer__files_and_folders">%1$d 個檔案, %2$d 個資料夾</string>
+  <string name="prefs_instant_upload_source_path_title">相機資料夾 (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">必填</string>
+  <string name="prefs_instant_upload_source_path_title_optional">選填</string>
   <string name="prefs_instant_behaviour_dialogTitle">原始的檔案將會...</string>
   <string name="prefs_instant_behaviour_title">原始的檔案將會...</string>
   <string name="upload_copy_files">複製檔案</string>
@@ -406,4 +414,9 @@
   <string name="manage_space_error">某些檔案無法被刪除.</string>
   <string name="permission_storage_access">需要額外的權限來上傳或下傳檔案.</string>
   <string name="local_file_not_found_toast">在本地的檔案系統中找不到這個檔案</string>
+  <string name="confirmation_remove_files_alert">您真的要移除所選取的項目?</string>
+  <string name="confirmation_remove_folders_alert">您真的要移除所選取的項目與裡面的文件?</string>
+  <plurals name="items_selected_count">
+    <item quantity="other">%d 已選取</item>
+  </plurals>
 </resources>

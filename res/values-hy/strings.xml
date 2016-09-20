@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="about_version">տարբերակ %1$s</string>
+  <string name="actionbar_sync">Թարմացնել հաշիվը</string>
   <string name="actionbar_upload">Բեռնել</string>
   <string name="actionbar_upload_files">Ֆայլեր</string>
   <string name="actionbar_open_with">Բացել միջոցով</string>
@@ -10,12 +11,16 @@
   <string name="actionbar_send_file">Ուղարկել</string>
   <string name="actionbar_sort">Դասակարգել</string>
   <string name="actionbar_sort_title">Դասակարգել ըստ</string>
+  <string name="actionbar_sort_by_name">Ա-Ֆ</string>
+  <string name="actionbar_sort_by_date">Նորից հին</string>
+  <string name="actionbar_sort_by_size">Մեծից փոքր</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Բոլոր ֆայլերը</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Կարգավորումներ</string>
+  <string name="drawer_item_uploads_list">Բեռնումներ</string>
   <string name="drawer_close">Փակել</string>
   <string name="drawer_open">Բացել</string>
   <string name="prefs_category_general">Ընդհանուր</string>
@@ -24,14 +29,21 @@
   <string name="prefs_log_delete_history_button">Ջնջել պատմությունը</string>
   <string name="prefs_help">Օգնություն</string>
   <string name="prefs_feedback">Արձագանք</string>
+  <string name="auth_check_server">Ստուգել սերվերը</string>
+  <string name="auth_host_url">Սերվերի հասցե https://…</string>
   <string name="auth_username">Օգտանուն</string>
   <string name="auth_password">Գաղտնաբառ</string>
   <string name="sync_string_files">Ֆայլեր</string>
   <string name="setup_btn_connect">Միանալ</string>
   <string name="uploader_btn_upload_text">Բեռնել</string>
+  <string name="uploader_wrn_no_account_title">Հաշիվ չգտնվեց</string>
   <string name="file_list_seconds_ago">վրկ. առաջ</string>
+  <string name="local_file_list_empty">Այս պանակում ֆայլեր չկան:</string>
+  <string name="local_file_list_empty_just_folders">Այս պանակում պանակներ չկան:</string>
   <string name="file_list_folder">պանակ</string>
+  <string name="file_list_folders">պանակներ</string>
   <string name="file_list_file">ֆայլ</string>
+  <string name="file_list_files">ֆայլեր</string>
   <string name="filedetails_size">Չափս.</string>
   <string name="filedetails_type">Տիպ.</string>
   <string name="filedetails_created">Ստեղծված.</string>
@@ -44,8 +56,11 @@
   <string name="common_cancel">Չեղարկել</string>
   <string name="common_back">Հետ</string>
   <string name="common_error">Սխալ</string>
+  <string name="common_unknown">անհայտ</string>
+  <string name="common_error_unknown">Անհայտ սխալ</string>
   <string name="about_title">Մասին</string>
   <string name="change_password">Փոխել գաղտնաբառը</string>
+  <string name="delete_account">Ջնջել հաշիվը</string>
   <string name="create_account">Ստեղծել հաշիվ</string>
   <string name="upload_chooser_title">Բեռնել...</string>
   <string name="uploader_info_dirname">Պանակի անուն</string>
@@ -56,7 +71,18 @@
   <string name="uploader_upload_failed_ticker">Բեռնումն ձախողվեց</string>
   <string name="uploader_upload_failed_content_single">%1$sի բեռնումը չի կարող ավարտվել</string>
   <string name="uploader_upload_failed_credentials_error">Բեռնումը ձախողվեց, պետք է կրկին մուտք գործես</string>
+  <string name="uploads_view_title">Բեռնումներ</string>
+  <string name="uploads_view_group_current_uploads">Ընթացիկ</string>
+  <string name="uploads_view_group_finished_uploads">Բեռնվեց</string>
+  <string name="uploads_view_upload_status_succeeded">Ավարտվեց</string>
   <string name="uploads_view_upload_status_cancelled">Չեղարկված</string>
+  <string name="uploads_view_upload_status_failed_connection_error">Միացման սխալ</string>
+  <string name="uploads_view_upload_status_failed_folder_error">Պանակի սխալ</string>
+  <string name="uploads_view_upload_status_failed_file_error">Ֆայլի սխալ</string>
+  <string name="uploads_view_upload_status_failed_localfile_error">Լոկալ ֆայլը չգտնվեց</string>
+  <string name="uploads_view_upload_status_failed_permission_error">Թույլատվության սխալ</string>
+  <string name="uploads_view_upload_status_conflict">Հակասություն</string>
+  <string name="uploads_view_upload_status_unknown_fail">Անհայտ սխալ</string>
   <string name="downloader_download_in_progress_ticker">Ներբեռնում եմ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Ներբեռնում եմ %2$s</string>
   <string name="downloader_download_succeeded_ticker">Բեռնումն հաջողվեց</string>
@@ -66,7 +92,18 @@
   <string name="downloader_not_downloaded_yet">Չի բեռնվել</string>
   <string name="downloader_download_failed_credentials_error">Ներբեռնումը ձախողվեց, պետք է կրկին մուտք գործես</string>
   <string name="common_choose_account">Ընտրիր հաշիվը</string>
+  <string name="sync_fail_content_unauthorized">Անվավեր գաղտնաբառ %1$sի համար</string>
+  <string name="sync_conflicts_in_favourites_ticker">Հակասություն գտնվեց</string>
+  <string name="foreign_files_move">Տեղափոխել բոլորը</string>
+  <string name="foreign_files_success">Բոլոր ֆայլերը տեղափոխվեցին</string>
+  <string name="foreign_files_fail">Որոշ ֆայլեր չեն կարող տեղափոխվել</string>
+  <string name="pass_code_enter_pass_code">Ներմուծիր քո անցաբառը</string>
   <string name="pass_code_configure_your_pass_code">Ներմուծիր քո անցաբառը</string>
+  <string name="pass_code_remove_your_pass_code">Ջնջել քո անցաբառը</string>
+  <string name="pass_code_mismatch">Անցաբառերը նույնը չեն</string>
+  <string name="pass_code_wrong">Սխալ անցաբառ</string>
+  <string name="pass_code_removed">Անցաբառը ջնջվեց</string>
+  <string name="pass_code_stored">Անցաբառը պահվեց</string>
   <string name="common_rename">Վերանվանել</string>
   <string name="common_remove">Ջնջել</string>
   <string name="rename_dialog_title">Ներմուծիր նոր անուն</string>
@@ -84,13 +121,33 @@
   <string name="ssl_validator_label_validity_to">Ում.</string>
   <string name="placeholder_filesize">389 ԿԲ</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
+  <string name="placeholder_media_time">12:23:45</string>
+  <string name="conflict_title">Ֆայլի հակասություն</string>
   <string name="activity_chooser_send_file_title">Ուղարկել</string>
   <string name="copy_link">Պատճենել հղումը</string>
+  <string name="forbidden_permissions_rename">այս ֆայլը վերանվանելու համար</string>
+  <string name="forbidden_permissions_delete">այս ֆայլը ջնջելու համար</string>
+  <string name="share_link_forbidden_permissions">այս ֆայլով կիսվելու համար</string>
+  <string name="unshare_link_forbidden_permissions">այս ֆայլով կիսվելը չեղարկելու համար</string>
+  <string name="update_link_forbidden_permissions">այս ֆայլի կիսվելը թարմացնելու համար</string>
+  <string name="forbidden_permissions_create">այս ֆայլը ստեղծելու համար</string>
+  <string name="uploader_upload_forbidden_permissions">այս պանակ բեռնելու համար</string>
   <string name="prefs_category_accounts">Հաշիվներ</string>
   <string name="actionbar_logger">Լոգեր</string>
   <string name="saml_authentication_wrong_pass">Սխալ գաղտնաբառ</string>
+  <string name="actionbar_move">Տեղափոխել</string>
+  <string name="file_list_empty_moving">Ոչինչ չկա: Կարող ես պանակ ավելացնել:</string>
   <string name="folder_picker_choose_button_text">Ընտրել</string>
+  <string name="forbidden_permissions_move">այս ֆայլը տեղափոխելու համար</string>
+  <string name="forbidden_permissions_copy">այս ֆայլը պատճենելու համար</string>
   <string name="prefs_category_details">Մանրամասներ</string>
+  <string name="shared_subject_header">կիսված</string>
+  <string name="with_you_subject_header">քո հետ</string>
+  <string name="subject_user_shared_with_you">%1$s կիսվեց \"%2$s\"ով քո հետ</string>
+  <string name="subject_shared_with_you">\"%1$s\" կիսվում է քո հետ</string>
+  <string name="auth_refresh_button">Թարմացնել կապը</string>
+  <string name="auth_host_address">Սերվերի հասցե</string>
+  <string name="common_error_out_memory">Ոչ բավարար հիշողություն</string>
   <string name="username">Օգտանուն</string>
   <string name="file_list__footer__folder">1 պանակ</string>
   <string name="file_list__footer__folders">%1$d պանակ</string>
@@ -109,4 +166,8 @@
   <string name="share_privilege_can_edit_create">ստեղծել</string>
   <string name="share_privilege_can_edit_change">փոխել</string>
   <string name="share_privilege_can_edit_delete">ջնջել</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d նշված</item>
+    <item quantity="other">%d նշված</item>
+  </plurals>
 </resources>
