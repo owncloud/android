@@ -69,6 +69,7 @@
   <string name="file_list_loading">Φόρτωση...</string>
   <string name="file_list_no_app_for_file_type">Δεν βρέθηκε εφαρμογή για τον τύπο αρχείου!</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
+  <string name="local_file_list_empty_just_folders">Δεν υπάρχουν φάκελοι σε αυτόν τον φάκελο.</string>
   <string name="upload_list_empty">Δεν υπάρχουν διαθέσιμα προς μεταφόρτωση αρχεία.</string>
   <string name="file_list_folder">φάκελος</string>
   <string name="file_list_folders">φάκελοι</string>
@@ -409,4 +410,8 @@
   <string name="local_file_not_found_toast">Δεν βρέθηκε το αρχείο στο τοπικό σύστημα</string>
   <string name="confirmation_remove_files_alert">Επιβεβαιώστε ότι θέλετε να διαγράψετε τα επιλεγμένα αρχεία</string>
   <string name="confirmation_remove_folders_alert">Επιβεβαιώστε ότι θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα και το περιεχόμενό τους</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d επιλέχτηκε</item>
+    <item quantity="other">%d επιλέχτηκαν</item>
+  </plurals>
 </resources>

@@ -13,6 +13,9 @@
   <string name="actionbar_send_file">Skicka</string>
   <string name="actionbar_sort">Sortera</string>
   <string name="actionbar_sort_title">Sortera efter</string>
+  <string name="actionbar_sort_by_name">A-Ö</string>
+  <string name="actionbar_sort_by_date">Nyast - Äldst</string>
+  <string name="actionbar_sort_by_size">Störst - Minst</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alla filer</string>
@@ -69,6 +72,7 @@
   <string name="file_list_loading">Laddar...</string>
   <string name="file_list_no_app_for_file_type">Inget program kan hantera denna filtyp</string>
   <string name="local_file_list_empty">Det finns inga filer i den här mappen.</string>
+  <string name="local_file_list_empty_just_folders">Det finns inga mappar i den här mappen.</string>
   <string name="upload_list_empty">Inga uppladdningar tillgängliga.</string>
   <string name="file_list_folder">mapp</string>
   <string name="file_list_folders">mappar</string>
@@ -406,4 +410,10 @@
   <string name="manage_space_error">Vissa filer kunde inte raderas.</string>
   <string name="permission_storage_access">Ytterligare rättigheter krävs för att ladda upp &amp; ner filer.</string>
   <string name="local_file_not_found_toast">Filen hittades inte i det lokala filsystemet</string>
+  <string name="confirmation_remove_files_alert">Vill du verkligen ta bort de markerade objekten?</string>
+  <string name="confirmation_remove_folders_alert">Vill du verkligen ta bort de markerade objekten och deras innehåll?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d vald</item>
+    <item quantity="other">%d valda</item>
+  </plurals>
 </resources>

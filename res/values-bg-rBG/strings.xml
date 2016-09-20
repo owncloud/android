@@ -366,6 +366,7 @@
   <string name="share_privilege_can_edit_create">създаване</string>
   <string name="share_privilege_can_edit_change">промяна</string>
   <string name="share_privilege_can_edit_delete">изтриване</string>
+  <string name="edit_share_unshare">Спри споделянето</string>
   <string name="edit_share_done">готово</string>
   <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
