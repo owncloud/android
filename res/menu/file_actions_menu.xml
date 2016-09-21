@@ -65,6 +65,7 @@
     <item
         android:id="@+id/action_send_file"
         android:title="@string/actionbar_send_file"
+        android:icon="@drawable/ic_send_white"
         app:showAsAction="never"
         android:orderInCategory="1" />
     <item
@@ -88,6 +89,7 @@
     <item
         android:id="@+id/action_see_details"
         android:title="@string/actionbar_see_details"
+        android:icon="@drawable/ic_info_white"
         app:showAsAction="never"
         android:orderInCategory="1" />
     <item
