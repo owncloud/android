@@ -45,41 +45,6 @@
         app:showAsAction="ifRoom"
         android:orderInCategory="1" />
     <item
-        android:id="@+id/action_remove_file"
-        android:title="@string/common_remove"
-        android:icon="@drawable/ic_action_delete_white"
-        app:showAsAction="ifRoom"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_copy"
-        android:title="@android:string/copy"
-        android:icon="@drawable/ic_action_copy"
-        app:showAsAction="ifRoom"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_move"
-        android:title="@string/actionbar_move"
-        android:icon="@drawable/ic_action_move"
-        app:showAsAction="ifRoom"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_open_file_with"
-        android:title="@string/actionbar_open_with"
-        android:icon="@drawable/ic_open_in_app"
-        app:showAsAction="never"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_rename_file"
-        android:title="@string/common_rename"
-        android:icon="@drawable/ic_pencil"
-        app:showAsAction="never"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_send_file"
-        android:title="@string/actionbar_send_file"
-        app:showAsAction="never"
-        android:orderInCategory="1" />
-    <item
         android:id="@+id/action_favorite_file"
         android:title="@string/favorite"
         app:showAsAction="never"
@@ -92,9 +57,46 @@
         android:icon="@drawable/ic_action_unset_available_offline"
         android:orderInCategory="1" />
     <item
+        android:id="@+id/action_open_file_with"
+        android:title="@string/actionbar_open_with"
+        android:icon="@drawable/ic_open_in_app"
+        app:showAsAction="never"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_send_file"
+        android:title="@string/actionbar_send_file"
+        android:icon="@drawable/ic_send_white"
+        app:showAsAction="never"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_move"
+        android:title="@string/actionbar_move"
+        android:icon="@drawable/ic_action_move"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_copy"
+        android:title="@android:string/copy"
+        android:icon="@drawable/ic_action_copy"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_rename_file"
+        android:title="@string/common_rename"
+        android:icon="@drawable/ic_pencil"
+        app:showAsAction="never"
+        android:orderInCategory="1" />
+    <item
         android:id="@+id/action_see_details"
         android:title="@string/actionbar_see_details"
+        android:icon="@drawable/ic_info_white"
         app:showAsAction="never"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_remove_file"
+        android:title="@string/common_remove"
+        android:icon="@drawable/ic_action_delete_white"
+        app:showAsAction="ifRoom"
         android:orderInCategory="1" />
 
 </menu>
