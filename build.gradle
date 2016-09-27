@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.jackrabbit:jackrabbit-webdav:2.12.2'
+    compile 'org.apache.jackrabbit:jackrabbit-webdav:2.12.4'
 }
 
 android {
