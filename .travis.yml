@@ -18,7 +18,7 @@ branches:
 before_install:
 - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   -c 20M
-- emulator -avd test -no-skin -no-audio -no-window &
+- emulator -avd test -no-window &
 - rm pom.xml
 - android update project -p .
 - chmod +x ./wait_for_emulator.sh
