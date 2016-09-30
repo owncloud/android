@@ -197,7 +197,8 @@
         <activity android:name=".ui.activity.LogHistoryActivity"/>
 
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
-        <activity android:name=".ui.activity.UploadListActivity" />
+        <activity android:name=".ui.activity.UploadListActivity"
+                  android:theme="@style/Theme.ownCloud.Toolbar.Drawer"/>
         
         <receiver android:name=".broadcastreceivers.ConnectivityActionReceiver"
             android:enabled="true" android:label="ConnectivityActionReceiver">
