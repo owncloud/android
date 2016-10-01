@@ -18,16 +18,16 @@
 -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Extends Theme.ownCloud to remove legacy ActionBar and add, later, a Toolbar -->
+    <!-- Extends Theme.ownCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->
     <style name="Theme.ownCloud.Toolbar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
 
         <!-- (status/nav)BarColor are set by the Activity, not the system -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-
     </style>
 
+    <!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawwer -->
     <style name="Theme.ownCloud.Toolbar.Drawer">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>

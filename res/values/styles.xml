@@ -22,34 +22,28 @@
 
 	<!-- General ownCloud app style -->
 	<style name="Theme.ownCloud" parent="Theme.AppCompat.Light.DarkActionBar">
-    	<item name="android:actionBarStyle">@style/Theme.ownCloud.Widget.ActionBar</item>
-    	<item name="actionBarStyle">@style/Theme.ownCloud.Widget.ActionBar</item>
-		<item name="actionModeBackground">@color/action_mode_background</item>
+		<item name="android:windowBackground">@color/background_color</item>
+
 		<item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+		<item name="actionModeBackground">@color/action_mode_background</item>
+
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorAccent">@color/color_accent</item>
+
 		<item name="android:alertDialogTheme">@style/Theme.ownCloud.Dialog</item>
 		<item name="alertDialogTheme">@style/ownCloud.AlertDialog</item>
-		<item name="android:windowBackground">@color/background_color</item>
 		<item name="searchViewStyle">@style/ownCloud.SearchView</item>
 	</style>
 
-	<!-- seperate action bar style for activities without an action bar -->
-	<style name="Theme.ownCloud.Toolbar" parent="Theme.AppCompat.Light.NoActionBar">
+	<!-- Extends Theme.ownCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->
+	<style name="Theme.ownCloud.Toolbar">
 		<item name="windowNoTitle">true</item>
 		<item name="windowActionBar">false</item>
-		<item name="colorPrimary">@color/primary</item>
-		<item name="colorPrimaryDark">@color/primary_dark</item>
-		<item name="colorAccent">@color/color_accent</item>
-		<item name="android:alertDialogTheme">@style/Theme.ownCloud.Dialog</item>
-		<item name="alertDialogTheme">@style/ownCloud.AlertDialog</item>
-		<item name="android:windowBackground">@color/background_color</item>
-		<item name="searchViewStyle">@style/ownCloud.SearchView</item>
-    </style>
+	</style>
 
-	<!-- separate style for Drawer activities needed for v21+ theming -->
-	<style name="Theme.ownCloud.Toolbar.Drawer" parent="Theme.ownCloud.Toolbar">
+	<!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawwer; needed for v21+ theming -->
+	<style name="Theme.ownCloud.Toolbar.Drawer">
 	</style>
 
 	<style name="Theme.ownCloud.noActionBar.Login" parent="Theme.ownCloud.Toolbar">
@@ -127,21 +121,10 @@
 	</style>
 
 	<style name="Theme.ownCloud.Fullscreen" parent="style/Theme.AppCompat">
-        <item name="android:windowFullscreen">true</item>
+		<item name="android:windowFullscreen">true</item>
 		<item name="colorAccent">@color/color_accent</item>
     </style>
 	
-	
-	<style name="Theme.ownCloud.Widget.ActionBar"
-		parent="style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-    	<item name="android:background">@color/owncloud_blue</item>
-    	<item name="background">@drawable/main_header_bg</item>
-    	<item name="android:textColor">#ffffff</item>
-    	<item name="android:shadowColor">#222222</item>
-    	<item name="android:shadowRadius">1</item>
-    	<item name="android:shadowDy">1</item>
-    	<item name="android:backgroundSplit">@drawable/split_action_bg</item>
-	</style>
 
 	<!-- Dialogs -->
 	<style name="Theme.ownCloud.Dialog" parent="style/Theme.AppCompat.Light.Dialog.Alert">
@@ -186,7 +169,7 @@
 
 	<style name="Theme.ownCloud.Dialog.ButtonBar.Button" parent="style/Widget.AppCompat.Button.Borderless.Colored">
 		<!-- Setting the weight as follows should result in equally wide buttons filling the alert dialog width,
-            but instead they span further out of the dialog, breaking in multiple lines though -->
+			but instead they span further out of the dialog, breaking in multiple lines though -->
 		<item name="android:layout_width">0dp</item>
 		<item name="android:layout_weight">1</item>
 		<!-- setting a fixed width as follows results in narrow buttons with line breaks, but of course this is not a solution -->
@@ -240,18 +223,17 @@
 	</style>
 	
 	<style name="PassCodeStyle">
-        <item name="android:layout_width">50dp</item>
-        <item name="android:layout_height">50dp</item>
-  		<item name="android:gravity">center</item>
-  		<item name="android:layout_margin">10dp</item>
-  		<item name="android:inputType">numberDecimal</item>
-  		<item name="android:numeric">decimal</item>
+		<item name="android:layout_width">50dp</item>
+		<item name="android:layout_height">50dp</item>
+		<item name="android:gravity">center</item>
+		<item name="android:layout_margin">10dp</item>
+		<item name="android:inputType">numberDecimal</item>
+		<item name="android:numeric">decimal</item>
 		<item name="android:digits">1234567890</item>
 		<item name="android:maxLength">1</item>
 		<item name="android:password">true</item>
 		<item name="android:singleLine">true</item>
-  		    
-    </style>
+	</style>
 	
 	<style name="OAuthDialog" parent="style/Theme.AppCompat.Light.Dialog.Alert">
 		<item name="windowNoTitle">false</item>
@@ -260,10 +242,10 @@
 		
 	<color name="setup_text_hint">#777777</color>
 	<color name="setup_text_typed">#000000</color>
-    <style name="Theme.ownCloud.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.ownCloud.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="Theme.ownCloud.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+	<style name="Theme.ownCloud.NoActionBar">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
+	<style name="Theme.ownCloud.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+	<style name="Theme.ownCloud.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
