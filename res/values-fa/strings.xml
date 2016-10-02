@@ -13,6 +13,9 @@
   <string name="actionbar_send_file">فرستادن</string>
   <string name="actionbar_sort">چینش</string>
   <string name="actionbar_sort_title">چینش بر اساس</string>
+  <string name="actionbar_sort_by_name">حروف الفبا</string>
+  <string name="actionbar_sort_by_date">جدیدترین - قدیمی ترین</string>
+  <string name="actionbar_sort_by_size">بزرگترین - کوچکترین</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">تمام پرونده‌ها</string>
@@ -69,6 +72,7 @@
   <string name="file_list_loading">در حال بار کردن…</string>
   <string name="file_list_no_app_for_file_type">هیچ کاره‌ای برای این گونهٔ پرونده پیدا نشد!</string>
   <string name="local_file_list_empty">هیچ پرونده‌ای در این پوشه نیست.</string>
+  <string name="local_file_list_empty_just_folders">هیچ پوشه ای در این پوشه وجود ندارد.</string>
   <string name="upload_list_empty">هیچ بارگذاری‌ای موجود نیست.</string>
   <string name="file_list_folder">پوشه</string>
   <string name="file_list_folders">پوشه</string>
@@ -139,6 +143,7 @@
   <string name="downloader_not_downloaded_yet">هنوزبارگیری نشده</string>
   <string name="downloader_download_failed_credentials_error">بارگیری شکست خورد. لازم است دوباره وارد شوید</string>
   <string name="common_choose_account">حساب را برگزینید</string>
+  <string name="sync_fail_ticker">همگامسازی انجام نشد.</string>
   <string name="sync_fail_content_unauthorized">رمز عبور نامعتبر برای %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">ناسازگاری ها یافت شدند</string>
   <string name="sync_conflicts_in_favourites_content">%1$d پرونده ها نمیتوانند همگام سازی شوند.</string>
@@ -152,7 +157,10 @@
   <string name="foreign_files_fail">بعضی از فایل ها نمی توانند انتقال یابند</string>
   <string name="foreign_files_local_text">محلی: %1$s</string>
   <string name="foreign_files_remote_text">دور از دسترس:  %1$s</string>
+  <string name="pass_code_enter_pass_code">لطفا رمز عبور خود را وارد کنید.</string>
   <string name="pass_code_configure_your_pass_code">رمز خود را وارد کنید</string>
+  <string name="pass_code_configure_your_pass_code_explanation">با هر بار اجرای برنامه رمز عبور خواسته شود .</string>
+  <string name="pass_code_reenter_your_pass_code">لطفا رمز عبور خود را دوباره وارد کنید .</string>
   <string name="pass_code_remove_your_pass_code">رمز خود را حذف کنید</string>
   <string name="pass_code_mismatch">رمزهای وارد شده یکسان نیستند</string>
   <string name="pass_code_wrong">رمز نادرست</string>
@@ -177,6 +185,8 @@
   <string name="media_rewind_description">دکمه عقبگرد</string>
   <string name="media_play_pause_description">دکمه پخش یا توقف</string>
   <string name="media_forward_description">دکمه رو به جلو سریع</string>
+  <string name="auth_getting_authorization">گرفتن مجوز ...</string>
+  <string name="auth_trying_to_login">تلاش برای ورود ...</string>
   <string name="auth_no_net_conn_title">هیچ ارتباطی به شبکه موجود نیست</string>
   <string name="auth_nossl_plain_ok_title">اتصال امن در دسترس نیست</string>
   <string name="auth_connection_established">اتصال برقرار شد</string>
@@ -188,6 +198,7 @@
   <string name="auth_unknown_host_title">میزبان را نمیتواند پیدا نماید.</string>
   <string name="auth_incorrect_path_title">نمونه ی سرور یافت نشد</string>
   <string name="auth_timeout_title">زمان زیادی برای پاسخ سرور صورت گرفت.</string>
+  <string name="auth_incorrect_address_title">فرمت آدرس سرور اشتباه است.</string>
   <string name="auth_ssl_general_error_title">مقداردهی SSL ناموفق بود.</string>
   <string name="auth_ssl_unverified_server_title">نمی‌توان اصالت SSL سرور را احراز نمود</string>
   <string name="auth_bad_oc_version_title">نسخه ی سرور ناشناخته</string>
