@@ -24,7 +24,9 @@
 	<style name="Theme.ownCloud" parent="Theme.AppCompat.Light.DarkActionBar">
 		<item name="android:windowBackground">@color/background_color</item>
 
-		<item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+		<!-- theme for the app bar (both for old actionbar and new toolbar) -->
+		<item name="actionBarTheme">@style/ownCloud.Appbar</item>
+
 		<item name="actionModeBackground">@color/action_mode_background</item>
 
 		<item name="colorPrimary">@color/primary</item>
@@ -48,6 +50,16 @@
 
 	<style name="Theme.ownCloud.noActionBar.Login" parent="Theme.ownCloud.Toolbar">
 
+	</style>
+
+
+
+	<!-- Style for the app bar (both for old actionbar and new toolbar);
+	 	overrides colorPrimary to allow customization of the app bar color,
+	 	independent of Material Design guidelines, if desired
+	-->
+	<style name="ownCloud.Appbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+		<item name="colorPrimary">@color/actionbar_start_color</item>
 	</style>
 
 	<style name="ownCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -114,9 +126,11 @@
 		<item name="windowActionBarOverlay">true</item>
 	</style>
 
-	<!-- Progress bar -->
+	<!-- Style for top progress bar -->
 	<style name="Widget.ownCloud.TopProgressBar" parent="style/Widget.AppCompat.ProgressBar.Horizontal">
-		<item name="android:background">@color/primary</item>
+		<!-- for a custom color independent of @color/primary,
+		change value of actionbar_start_color in setup.xml, don't modify here -->
+		<item name="android:background">@color/actionbar_start_color</item>
 		<item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
 		<item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
 	</style>

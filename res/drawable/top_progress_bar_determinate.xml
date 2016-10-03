@@ -7,12 +7,12 @@
         android:drawable="@color/background_color" />
     <item android:id="@android:id/secondaryProgress">
         <scale
-            android:drawable="@color/primary"
+            android:drawable="@color/actionbar_start_color"
             android:scaleWidth="100%" />
     </item>
     <item android:id="@android:id/progress">
         <scale
-            android:drawable="@color/primary"
+            android:drawable="@color/actionbar_start_color"
             android:scaleWidth="100%" />
     </item>
 
