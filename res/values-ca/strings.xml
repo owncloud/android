@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Envia</string>
   <string name="actionbar_sort">Ordena</string>
   <string name="actionbar_sort_title">Ordena per</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Més nou - Més antic</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tots els fitxers</string>
@@ -102,6 +96,7 @@
   <string name="common_loading">Carregant...</string>
   <string name="common_unknown">desconegut</string>
   <string name="common_error_unknown">Error desconegut</string>
+  <string name="common_pending">Pendent</string>
   <string name="about_title">Quant a</string>
   <string name="change_password">Canvia la contrasenya</string>
   <string name="delete_account">Elimina el compte</string>
@@ -306,7 +301,6 @@
   <string name="network_error_socket_timeout_exception">Hi ha hagut un error esperant al servidor, l\'operació no s\'ha pogut realitzar</string>
   <string name="network_error_connect_timeout_exception">Hi ha hagut un error esperant el servidor, l\'operació no s\'ha pogut realitzar</string>
   <string name="network_host_not_available">La operació no s\'ha pogut completar, no es pot accedir al servidor</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">No teniu permisos %s</string>
   <string name="forbidden_permissions_rename">per canviar el nom d\'aquest fitxer</string>
   <string name="forbidden_permissions_delete">per eliminar aquest fitxer</string>

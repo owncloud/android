@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">Pošlji</string>
   <string name="actionbar_sort">Razvrsti</string>
   <string name="actionbar_sort_title">Razvrsti ...</string>
-  <string-array name="actionbar_sortby">
-    <item>naraščajoče od A – Z</item>
-    <item>najprej novejše nato starejše</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Novejše – Starejše</string>
+  <string name="actionbar_sort_by_size">Največje – Najmanjše</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Vse datoteke</string>
@@ -48,7 +45,7 @@
   <string name="prefs_imprint">Natis</string>
   <string name="prefs_remember_last_share_location">Zapomni si mesto souporabe</string>
   <string name="prefs_remember_last_upload_location_summary">Zapomni si zadnje mesto za pošiljanje v oblak</string>
-  <string name="recommend_subject">Preizkusi %1$s na pametnem telefonu!</string>
+  <string name="recommend_subject">Poskusite z uporabo %1$s na pametnem telefonu!</string>
   <string name="recommend_text">Želim ti predstaviti %1$s na pametnem telefonu!\nPrejmeš ga lahko na: %2$s</string>
   <string name="auth_check_server">Preveri strežnik</string>
   <string name="auth_host_url">Naslov strežnika https://…</string>
@@ -58,7 +55,7 @@
   <string name="sync_string_files">Datoteke</string>
   <string name="setup_btn_connect">Poveži</string>
   <string name="uploader_btn_upload_text">Pošlji</string>
-  <string name="uploader_top_message">Izberi mapo za nalaganje</string>
+  <string name="uploader_top_message">Izbor mape za pošiljanje</string>
   <string name="uploader_wrn_no_account_title">Uporabniškega računa ni mogoče najti</string>
   <string name="uploader_wrn_no_account_text">Za %1$s ni določenega računa. Pred nadaljevanjem ga je treba ustvariti.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Nastavi</string>
@@ -75,6 +72,7 @@
   <string name="file_list_loading">Poteka nalaganje ...</string>
   <string name="file_list_no_app_for_file_type">Ni programa za prikaz te vrste datoteke!</string>
   <string name="local_file_list_empty">V tej mapi ni datotek.</string>
+  <string name="local_file_list_empty_just_folders">V tej mapi ni drugih map.</string>
   <string name="upload_list_empty">Ni posodobitev</string>
   <string name="file_list_folder">mapa</string>
   <string name="file_list_folders">mape</string>
@@ -103,6 +101,7 @@
   <string name="common_loading">Nalaganje ...</string>
   <string name="common_unknown">neznano</string>
   <string name="common_error_unknown">Neznana napaka</string>
+  <string name="common_pending">V čakanju ...</string>
   <string name="about_title">O oblaku %1$s</string>
   <string name="change_password">Spremeni geslo</string>
   <string name="delete_account">Odstrani račun</string>
@@ -315,7 +314,6 @@
   <string name="network_error_socket_timeout_exception">Med čakanjem na vzpostavitev povezave s strežnikom je prišlo do napake. Zahtevanega dejanja ni mogoče izvesti.</string>
   <string name="network_error_connect_timeout_exception">Med čakanjem na vzpostavitev povezave s strežnikom je prišlo do napake. Zahtevanega dejanja ni bilo mogoče končati.</string>
   <string name="network_host_not_available">Zahtevanega dejanja ni bilo mogoče končati. Strežnik ni dosegljiv.</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Ni ustreznega dovoljenja %s</string>
   <string name="forbidden_permissions_rename">za preimenovanje datoteke.</string>
   <string name="forbidden_permissions_delete">za izbris datoteke.</string>
@@ -368,6 +366,9 @@
   <string name="file_list__footer__files">%1$d datotek</string>
   <string name="file_list__footer__files_and_folder">%1$d datotek, 1 mapa</string>
   <string name="file_list__footer__files_and_folders">%1$d datotek, %2$d map</string>
+  <string name="prefs_instant_upload_source_path_title">Mapa kamere (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">zahtevano</string>
+  <string name="prefs_instant_upload_source_path_title_optional">izbirno</string>
   <string name="prefs_instant_behaviour_dialogTitle">Izvorno datoteko ...</string>
   <string name="prefs_instant_behaviour_title">Izvorno datoteko ...</string>
   <string name="upload_copy_files">Kopiraj datoteko</string>

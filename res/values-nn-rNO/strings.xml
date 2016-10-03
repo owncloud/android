@@ -12,8 +12,6 @@
   <string name="actionbar_send_file">Send</string>
   <string name="actionbar_sort">Sorter</string>
   <string name="actionbar_sort_title">Sorter etter</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>
@@ -74,6 +72,7 @@
   <string name="common_back">Tilbake</string>
   <string name="common_error">Feil</string>
   <string name="common_error_unknown">Ukjend feil</string>
+  <string name="common_pending">Under vegs</string>
   <string name="about_title">Om</string>
   <string name="change_password">Endra passord</string>
   <string name="create_account">Opprett konto</string>
@@ -126,7 +125,6 @@
   <string name="ssl_validator_not_saved">Klarte ikkje å lagra sertifikatet</string>
   <string name="ssl_validator_btn_details_see">Detaljar</string>
   <string name="activity_chooser_send_file_title">Send</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">Kontoar</string>
   <string name="actionbar_logger">Loggar</string>
   <string name="saml_authentication_wrong_pass">Feil passord</string>

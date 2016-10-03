@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Надіслати</string>
   <string name="actionbar_sort">Сортувати</string>
   <string name="actionbar_sort_title">Сортувати за</string>
-  <string-array name="actionbar_sortby">
-    <item>А-Я</item>
-    <item>Новіші-Старіші</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Усі файли</string>
@@ -86,6 +80,7 @@
   <string name="common_error">Помилка</string>
   <string name="common_loading">Завантаження...</string>
   <string name="common_error_unknown">Невідома помилка</string>
+  <string name="common_pending">Очікування</string>
   <string name="about_title">Про</string>
   <string name="change_password">Змінити пароль</string>
   <string name="delete_account">Видалити обліковий запис</string>
@@ -265,7 +260,6 @@
   <string name="network_error_socket_timeout_exception">Під час очікування на сервер виникла помилка, операцію неможливо завершити</string>
   <string name="network_error_connect_timeout_exception">Під час очікування на сервер виникла помилка, операцію неможливо завершити</string>
   <string name="network_host_not_available">Неможливо завершити операцію, сервер недоступний</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">У вас немає повноважень %s</string>
   <string name="forbidden_permissions_rename">на перейменування цього файла</string>
   <string name="forbidden_permissions_delete">на видалення цього файла</string>

@@ -9,12 +9,6 @@
   <string name="actionbar_send_file">Senden</string>
   <string name="actionbar_sort">Sortieren</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Neueste - Älteste</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -90,7 +84,6 @@
   <string name="common_rename">Umbenennen</string>
   <string name="ssl_validator_btn_details_see">Details</string>
   <string name="activity_chooser_send_file_title">Senden</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">Konten</string>
   <string name="folder_picker_choose_button_text">Auswählen</string>
   <string name="prefs_category_details">Details</string>

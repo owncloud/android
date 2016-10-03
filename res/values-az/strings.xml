@@ -12,12 +12,6 @@
   <string name="actionbar_send_file">Göndər</string>
   <string name="actionbar_sort">Çeşidləmək</string>
   <string name="actionbar_sort_title">Təyinata görə çeşidləmək </string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Yenisi - Köhnəsi</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -72,6 +66,7 @@
   <string name="common_error">Səhv</string>
   <string name="common_loading">Yüklənir...</string>
   <string name="common_error_unknown">Bəlli olmayan səhv baş verdi</string>
+  <string name="common_pending">Gözləmə</string>
   <string name="about_title">Haqqında</string>
   <string name="change_password">Şifrəni dəyiş</string>
   <string name="create_account">Hesab yarat</string>
@@ -226,7 +221,6 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="network_error_socket_timeout_exception">Serveri gözlədiyimiz müddətdə səhv baş verdi, əməliyyat bitə bilməz</string>
   <string name="network_error_connect_timeout_exception">Serveri gözlədiyimiz müddətdə səhv baş verdi, əməliyyat bitə bilməz</string>
   <string name="network_host_not_available">Əməliyyat bitə bilməz, serverə çatmaq mümkün deyil </string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Sizin yetkiniz yoxdur %s</string>
   <string name="forbidden_permissions_rename">faylın adını dəyişmək</string>
   <string name="forbidden_permissions_delete">bu faylı silmək üçün</string>

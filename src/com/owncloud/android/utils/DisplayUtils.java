@@ -4,7 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -86,16 +86,22 @@ public class DisplayUtils {
      * @param bytes Input file size
      * @return Like something readable like "12 MB"
      */
-    public static String bytesToHumanReadable(long bytes) {
-        double result = bytes;
-        int attachedSuff = 0;
-        while (result > 1024 && attachedSuff < sizeSuffixes.length) {
-            result /= 1024.;
-            attachedSuff++;
-        }
+    public static String bytesToHumanReadable(long bytes, Context context) {
+        if (bytes < 0) {
+            return context.getString(R.string.common_pending);
 
-        return new BigDecimal(result).setScale(
-                sizeScales[attachedSuff], BigDecimal.ROUND_HALF_UP) + " " + sizeSuffixes[attachedSuff];
+        } else {
+            double result = bytes;
+            int attachedSuff = 0;
+            while (result > 1024 && attachedSuff < sizeSuffixes.length) {
+                result /= 1024.;
+                attachedSuff++;
+            }
+
+            return new BigDecimal(result).setScale(
+                sizeScales[attachedSuff], BigDecimal.ROUND_HALF_UP
+            ) + " " + sizeSuffixes[attachedSuff];
+        }
     }
 
     /**
@@ -130,7 +136,7 @@ public class DisplayUtils {
                 MainApp.getAppContext().getString(R.string.app_name).equals(OWNCLOUD_APP_NAME)) {
             return R.drawable.winter_holidays_icon;
         } else {
-            return R.drawable.icon;
+            return R.mipmap.icon;
         }
     }
     

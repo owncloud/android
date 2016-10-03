@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Sendi</string>
   <string name="actionbar_sort">Ordigi</string>
   <string name="actionbar_sort_title">Ordigi laŭ</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Plej nova – Plej malnova</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Ĉiuj dosieroj</string>
@@ -75,6 +69,7 @@
   <string name="common_loading">Ŝargante...</string>
   <string name="common_unknown">nekonata</string>
   <string name="common_error_unknown">Nekonata eraro</string>
+  <string name="common_pending">Traktotaj</string>
   <string name="about_title">Pri</string>
   <string name="change_password">Ŝanĝi la pasvorton</string>
   <string name="delete_account">Forigi konton</string>
@@ -207,7 +202,6 @@
   <string name="copy_link">Kopii ligilon</string>
   <string name="clipboard_text_copied">Kopiita en la tondejon</string>
   <string name="network_error_socket_exception">Eraro okazis dum konekto al la servilo.</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Vi ne permesatas %s</string>
   <string name="forbidden_permissions_rename">por alinomigi ĉi tiun dosieron</string>
   <string name="forbidden_permissions_delete">por forigi ĉi tiun dosieron</string>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.owncloud.android.workaround.accounts"
-    android:versionCode="0100029"
-    android:versionName="1.0.29" >
+    android:versionCode="0100032"
+    android:versionName="1.0.32" >
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="23" />
+        android:targetSdkVersion="24" />
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/workaround_app_icon"
+        android:icon="@mipmap/workaround_app_icon"
         android:label="@string/workaround_app_name"
         >
         <service

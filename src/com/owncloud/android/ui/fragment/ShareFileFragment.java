@@ -4,7 +4,7 @@
  * @author masensio
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
- * Copyright (C) 2015 ownCloud Inc.
+ * Copyright (C) 2016 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -210,7 +210,7 @@ public class ShareFileFragment extends Fragment
         if (mFile.isFolder()) {
             size.setVisibility(View.GONE);
         } else {
-            size.setText(DisplayUtils.bytesToHumanReadable(mFile.getFileLength()));
+            size.setText(DisplayUtils.bytesToHumanReadable(mFile.getFileLength(), getActivity()));
         }
 
         //  Add User Button

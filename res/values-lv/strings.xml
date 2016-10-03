@@ -12,12 +12,6 @@
   <string name="actionbar_send_file">Sūtīt</string>
   <string name="actionbar_sort">Kārtot</string>
   <string name="actionbar_sort_title">Kārtot pēc</string>
-  <string-array name="actionbar_sortby">
-    <item>Alfabēta: A-Z</item>
-    <item>Jaunākie - vecākie</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Visas datnes</string>
@@ -70,6 +64,7 @@
   <string name="common_error">Kļūda</string>
   <string name="common_loading">Ielādē</string>
   <string name="common_error_unknown">Nezināma kļūda</string>
+  <string name="common_pending">Gaida savu kārtu</string>
   <string name="about_title">Par</string>
   <string name="change_password">Mainīt paroli</string>
   <string name="create_account">Izveidot kontu</string>
@@ -82,6 +77,7 @@
   <string name="uploader_upload_failed_content_single">Nevarēja pabeigt %1$s augšupielādēšanu</string>
   <string name="uploads_view_group_current_uploads">Pašreizējais</string>
   <string name="uploads_view_upload_status_succeeded">Pabeigts</string>
+  <string name="uploads_view_upload_status_cancelled">Atcelts</string>
   <string name="uploads_view_upload_status_unknown_fail">Nezināma kļūda</string>
   <string name="downloader_download_in_progress_ticker">Lejupielādē ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% lejupielādē %2$s</string>
@@ -149,7 +145,6 @@
   <string name="share_link_empty_password">Jums ir jāievada paroli</string>
   <string name="activity_chooser_send_file_title">Sūtīt</string>
   <string name="copy_link">Kopēt saiti</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions_rename">lai pārsauktu šo datni</string>
   <string name="forbidden_permissions_delete">lai dzēstu šo datni</string>
   <string name="share_link_forbidden_permissions">lai dalītu šo datni</string>

@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Küldjük el</string>
   <string name="actionbar_sort">Rendezés</string>
   <string name="actionbar_sort_title">Rendezés elve</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Újabb - régebbi</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Összes fájl</string>
@@ -90,6 +84,7 @@
   <string name="common_loading">Betöltés ...</string>
   <string name="common_unknown">ismeretlen</string>
   <string name="common_error_unknown">Ismeretlen hiba</string>
+  <string name="common_pending">Folyamatban</string>
   <string name="about_title">Rólunk</string>
   <string name="change_password">A jelszó megváltoztatása</string>
   <string name="delete_account">Fiók eltávolítása</string>
@@ -245,7 +240,6 @@
   <string name="activity_chooser_send_file_title">Küldjük el</string>
   <string name="copy_link">Link másolása</string>
   <string name="clipboard_text_copied">Bemásolva a vágólapra</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions_rename">átnevezni ezt a fájlt</string>
   <string name="forbidden_permissions_delete">törölni ezt a fájlt</string>
   <string name="share_link_forbidden_permissions">megosztani ezt a fájlt</string>

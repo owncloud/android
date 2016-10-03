@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">Odeslat</string>
   <string name="actionbar_sort">Seřadit</string>
   <string name="actionbar_sort_title">Seřadit podle</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Nejnovější - nejstarší</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Od nejnovějšího</string>
+  <string name="actionbar_sort_by_size">Od největšího</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Všechny soubory</string>
@@ -75,6 +72,7 @@
   <string name="file_list_loading">Načítání...</string>
   <string name="file_list_no_app_for_file_type">Pro tento typ souboru nebyla nalezena aplikace!</string>
   <string name="local_file_list_empty">V tomto adresáři nejsou žádné soubory.</string>
+  <string name="local_file_list_empty_just_folders">V tomto adresáři nejsou žádné podadresáře.</string>
   <string name="upload_list_empty">Nahraná data nejsou dostupná.</string>
   <string name="file_list_folder">adresář</string>
   <string name="file_list_folders">adresářů</string>
@@ -103,6 +101,7 @@
   <string name="common_loading">Načítání ...</string>
   <string name="common_unknown">neznámý</string>
   <string name="common_error_unknown">Neznámá chyba</string>
+  <string name="common_pending">Nevyřízené</string>
   <string name="about_title">O aplikaci</string>
   <string name="change_password">Změnit heslo</string>
   <string name="delete_account">Odebrat účet</string>
@@ -314,7 +313,6 @@ správce systému.</string>
   <string name="network_error_socket_timeout_exception">Při čekání na odpověď serveru se vyskytla chyba, operace nemohla být dokončena</string>
   <string name="network_error_connect_timeout_exception">Při čekání na odpověď serveru se vyskytla chyba, operace nemohla být dokončena</string>
   <string name="network_host_not_available">Operace nemohla být dokončena, server je nedostupný</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Nemáte oprávnění %s</string>
   <string name="forbidden_permissions_rename">přejmenovat tento soubor</string>
   <string name="forbidden_permissions_delete">smazat tento soubor</string>
@@ -367,6 +365,9 @@ správce systému.</string>
   <string name="file_list__footer__files">%1$d soubory(ů)</string>
   <string name="file_list__footer__files_and_folder">%1$d soubory(ů), 1 adresář</string>
   <string name="file_list__footer__files_and_folders">%1$d soubory(ů), %2$d adresáře(ů)</string>
+  <string name="prefs_instant_upload_source_path_title">Adresář fotoaparátu (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">vyžadován</string>
+  <string name="prefs_instant_upload_source_path_title_optional">nepovinný</string>
   <string name="prefs_instant_behaviour_dialogTitle">Originální soubor bude...</string>
   <string name="prefs_instant_behaviour_title">Originální soubor bude...</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
@@ -412,4 +413,11 @@ správce systému.</string>
   <string name="manage_space_error">Některé soubory nebylo možno smazat.</string>
   <string name="permission_storage_access">Vyžadována dodatečná oprávnění pro nahrávání &amp; stahování souborů.</string>
   <string name="local_file_not_found_toast">Soubor nebyl nalezen v místním souborovém systému</string>
+  <string name="confirmation_remove_files_alert">Opravdu chcete odstranit vybrané položky?</string>
+  <string name="confirmation_remove_folders_alert">Opravdu chcete odstranit vybrané položky a jejich obsah?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d vybrán</item>
+    <item quantity="few">%d vybrány</item>
+    <item quantity="other">%d vybráno</item>
+  </plurals>
 </resources>

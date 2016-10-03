@@ -4,7 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,16 +43,15 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
-
-import java.lang.ref.WeakReference;
 
 
 /**
@@ -64,8 +62,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private int mLayout;
     private View mView;
     private Account mAccount;
-
-    public ProgressListener mProgressListener;
+    private TransferProgressController mProgressController;
 
     private static final String TAG = FileDetailFragment.class.getSimpleName();
     public static final String FTAG_CONFIRMATION = "REMOVE_CONFIRMATION_FRAGMENT";
@@ -103,16 +100,17 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         super();
         mAccount = null;
         mLayout = R.layout.file_details_empty;
-        mProgressListener = null;
     }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mProgressController = new TransferProgressController((ComponentsGetter) getActivity());
+        ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.fdProgressBar);
+        DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
+        mProgressController.setProgressBar(progressBar);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -133,10 +131,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         mView = inflater.inflate(mLayout, null);
         
         if (mLayout == R.layout.file_details_fragment) {
-            mView.findViewById(R.id.fdFavorite).setOnClickListener(this);
-            ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.fdProgressBar);
-            DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
-            mProgressListener = new ProgressListener(progressBar);
             mView.findViewById(R.id.fdCancelBtn).setOnClickListener(this);
         }
 
@@ -154,15 +148,51 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     @Override
     public void onStart() {
         super.onStart();
-        listenForTransferProgress();
+        mProgressController.startListeningProgressFor(getFile(), mAccount);
     }
 
     @Override
     public void onStop() {
-        leaveTransferProgress();
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
         super.onStop();
     }
 
+
+    @Override
+    public void onTransferServiceConnected() {
+        if (mProgressController != null) {
+            mProgressController.startListeningProgressFor(getFile(), mAccount);
+        }
+        updateFileDetails(false, false);    // TODO - really?
+    }
+
+    @Override
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
+        }
+        updateFileDetails(false, false);
+    }
+
+    @Override
+    public void onFileMetadataChanged() {
+        updateFileDetails(false, true);
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        setFiletype(getFile());     // to update thumbnail
+    }
+
+    @Override
+    public void updateViewForSyncInProgress() {
+        updateFileDetails(true, false);
+    }
+
+    @Override
+    public void updateViewForSyncOff() {
+        updateFileDetails(false, false);
+    }
 
     @Override
     public View getView() {
@@ -300,11 +330,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fdFavorite: {
-                CheckBox cb = (CheckBox) getView().findViewById(R.id.fdFavorite);
-                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(),cb.isChecked());
-                break;
-            }
             case R.id.fdCancelBtn: {
                 ((FileDisplayActivity) mContainerActivity).cancelTransference(getFile());
                 break;
@@ -325,27 +350,14 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
 
     /**
-     * Use this method to signal this Activity that it shall update its view.
-     *
-     * @param file : An {@link OCFile}
-     */
-    public void updateFileDetails(OCFile file, Account ocAccount) {
-        setFile(file);
-        mAccount = ocAccount;
-        updateFileDetails(false, false);
-    }
-
-    /**
      * Updates the view with all relevant details about that file.
-     * <p/>
-     * TODO Remove parameter when the transferring state of files is kept in database.
      *
-     * @param transferring Flag signaling if the file should be considered as downloading or uploading,
+     * @param forcedTransferring Flag signaling if the file should be considered as downloading or uploading,
      *                     although {@link FileDownloaderBinder#isDownloading(Account, OCFile)}  and
      *                     {@link FileUploaderBinder#isUploading(Account, OCFile)} return false.
      * @param refresh      If 'true', try to refresh the whole file from the database
      */
-    public void updateFileDetails(boolean transferring, boolean refresh) {
+    private void updateFileDetails(boolean forcedTransferring, boolean refresh) {
         if (readyToShow()) {
             FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
             if (refresh && storageManager != null) {
@@ -360,13 +372,10 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
             setTimeModified(file.getModificationTimestamp());
             
-            CheckBox cb = (CheckBox)getView().findViewById(R.id.fdFavorite);
-            cb.setChecked(file.isFavorite());
-
             // configure UI for depending upon local state of the file
             FileDownloaderBinder downloaderBinder = mContainerActivity.getFileDownloaderBinder();
             FileUploaderBinder uploaderBinder = mContainerActivity.getFileUploaderBinder();
-            if (transferring ||
+            if (forcedTransferring ||
                     (downloaderBinder != null && downloaderBinder.isDownloading(mAccount, file)) ||
                     (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file))
                     ) {
@@ -468,7 +477,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setFilesize(long filesize) {
         TextView tv = (TextView) getView().findViewById(R.id.fdSize);
         if (tv != null) {
-            tv.setText(DisplayUtils.bytesToHumanReadable(filesize));
+            tv.setText(DisplayUtils.bytesToHumanReadable(filesize, getActivity()));
         }
     }
 
@@ -489,9 +498,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      */
     private void setButtonsForTransferring() {
         if (!isEmpty()) {
-            // let's protect the user from himself ;)
-            getView().findViewById(R.id.fdFavorite).setEnabled(false);
-            
             // show the progress bar for the transfer
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.VISIBLE);
             TextView progressText = (TextView) getView().findViewById(R.id.fdProgressText);
@@ -515,8 +521,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      */
     private void setButtonsForDown() {
         if (!isEmpty()) {
-            getView().findViewById(R.id.fdFavorite).setEnabled(true);
-            
             // hides the progress bar
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
             TextView progressText = (TextView) getView().findViewById(R.id.fdProgressText);
@@ -529,72 +533,11 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
      */
     private void setButtonsForRemote() {
         if (!isEmpty()) {
-            getView().findViewById(R.id.fdFavorite).setEnabled(true);
-            
             // hides the progress bar
             getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
             TextView progressText = (TextView) getView().findViewById(R.id.fdProgressText);
             progressText.setVisibility(View.GONE);
         }
-    }
-
-
-    public void listenForTransferProgress() {
-        if (mProgressListener != null) {
-            if (mContainerActivity.getFileDownloaderBinder() != null) {
-                mContainerActivity.getFileDownloaderBinder().
-                        addDatatransferProgressListener(mProgressListener, mAccount, getFile());
-            }
-            if (mContainerActivity.getFileUploaderBinder() != null) {
-                mContainerActivity.getFileUploaderBinder().
-                        addDatatransferProgressListener(mProgressListener, mAccount, getFile());
-            }
-        } else {
-            Log_OC.d(TAG, "mProgressListener == null");
-        }
-    }
-
-
-    public void leaveTransferProgress() {
-        if (mProgressListener != null) {
-            if (mContainerActivity.getFileDownloaderBinder() != null) {
-                mContainerActivity.getFileDownloaderBinder().
-                        removeDatatransferProgressListener(mProgressListener, mAccount, getFile());
-            }
-            if (mContainerActivity.getFileUploaderBinder() != null) {
-                mContainerActivity.getFileUploaderBinder().
-                        removeDatatransferProgressListener(mProgressListener, mAccount, getFile());
-            }
-        }
-    }
-
-
-    /**
-     * Helper class responsible for updating the progress bar shown for file uploading or
-     * downloading
-     */
-    private class ProgressListener implements OnDatatransferProgressListener {
-        int mLastPercent = 0;
-        WeakReference<ProgressBar> mProgressBar = null;
-
-        ProgressListener(ProgressBar progressBar) {
-            mProgressBar = new WeakReference<ProgressBar>(progressBar);
-        }
-
-        @Override
-        public void onTransferProgress(long progressRate, long totalTransferredSoFar,
-                                       long totalToTransfer, String filename) {
-            int percent = (int)(100.0*((double)totalTransferredSoFar)/((double)totalToTransfer));
-            if (percent != mLastPercent) {
-                ProgressBar pb = mProgressBar.get();
-                if (pb != null) {
-                    pb.setProgress(percent);
-                    pb.postInvalidate();
-                }
-            }
-            mLastPercent = percent;
-        }
-
     }
 
 }

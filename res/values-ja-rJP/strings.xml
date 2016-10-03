@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">送信</string>
   <string name="actionbar_sort">ソート</string>
   <string name="actionbar_sort_title">ソート: </string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>最新 - 最古</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">名前順</string>
+  <string name="actionbar_sort_by_date">新しい順</string>
+  <string name="actionbar_sort_by_size">大きい順</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">すべてのファイル</string>
@@ -104,6 +101,7 @@
   <string name="common_loading">読込中...</string>
   <string name="common_unknown">不明</string>
   <string name="common_error_unknown">不明なエラー</string>
+  <string name="common_pending">中断</string>
   <string name="about_title">について</string>
   <string name="change_password">パスワードを変更</string>
   <string name="delete_account">アカウント削除</string>
@@ -162,7 +160,7 @@
   <string name="foreign_files_fail">一部のファイルは移動できませんでした</string>
   <string name="foreign_files_local_text">ローカル: %1$s</string>
   <string name="foreign_files_remote_text">リモート: %1$s</string>
-  <string name="upload_query_move_foreign_files">%1$s フォルダに選択されたファイルをコピーするのに十分な空き領域がありません。コピーする代わりに移動にしますか？</string>
+  <string name="upload_query_move_foreign_files">選択されたファイルを %1$s フォルダーにコピーするのに十分な空き領域がありません。代わりにファイルを移動させますか？</string>
   <string name="pass_code_enter_pass_code">パスコードを入力してください</string>
   <string name="pass_code_configure_your_pass_code">パスコードを入力</string>
   <string name="pass_code_configure_your_pass_code_explanation">アプリ開始時には毎回パスコードが要求されます</string>
@@ -316,7 +314,6 @@
   <string name="network_error_socket_timeout_exception">サーバーからの応答を待っている間にエラーが発生しました。操作を完了することができません。</string>
   <string name="network_error_connect_timeout_exception">サーバーからの応答を待っている間にエラーが発生しました。操作を完了することができません。</string>
   <string name="network_host_not_available">操作を完了することができません。サーバーが利用できません。</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">権限 %s がありません</string>
   <string name="forbidden_permissions_rename">ファイル名の変更</string>
   <string name="forbidden_permissions_delete">ファイルを削除</string>
@@ -373,8 +370,8 @@
   <string name="prefs_instant_behaviour_title">オリジナルファイルは、... になります。</string>
   <string name="upload_copy_files">ファイルをコピー</string>
   <string name="upload_move_files">ファイルを移動</string>
-  <string name="pref_behaviour_entries_keep_file">元のフォルダに保持</string>
-  <string name="pref_behaviour_entries_move">アプリフォルダに移動</string>
+  <string name="pref_behaviour_entries_keep_file">元のフォルダーに保持</string>
+  <string name="pref_behaviour_entries_move">アプリフォルダーに移動</string>
   <string name="share_dialog_title">共有</string>
   <string name="share_file">%1$s を共有</string>
   <string name="share_with_user_section_title">ユーザーとグループで共有</string>
@@ -414,4 +411,9 @@
   <string name="manage_space_error">いくつかのファイルがクリアできませんでした。</string>
   <string name="permission_storage_access">ファイルをダウンロード &amp; アップロードする追加の権限が必要です。</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
+  <string name="confirmation_remove_files_alert">選択したものを削除してよろしいですか?</string>
+  <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
+  <plurals name="items_selected_count">
+    <item quantity="other">%d個選択中</item>
+  </plurals>
 </resources>

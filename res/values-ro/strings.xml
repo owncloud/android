@@ -13,12 +13,7 @@
   <string name="actionbar_send_file">Expediază</string>
   <string name="actionbar_sort">Sortare</string>
   <string name="actionbar_sort_title">Sortare după</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Nou - Vechi</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Toate fișierele</string>
@@ -97,6 +92,7 @@
   <string name="common_loading">Se încarcă...</string>
   <string name="common_unknown">necunoscut</string>
   <string name="common_error_unknown">Eroare necunoscută</string>
+  <string name="common_pending">În așteptare</string>
   <string name="about_title">Despre</string>
   <string name="change_password">Schimbă parola</string>
   <string name="delete_account">Sterge contul</string>
@@ -282,7 +278,6 @@
   <string name="network_error_socket_timeout_exception">A apărut o eroare în timp ce se aștepta pentru server, operațiunea nu s-a executat</string>
   <string name="network_error_connect_timeout_exception">A apărut o eroare în timp ce se aștepta pentru server, operațiunea nu s-a executat</string>
   <string name="network_host_not_available">Operațiunea nu a putut fi finalizată, serverul este indisponibil</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Nu aveți permisiune %s</string>
   <string name="forbidden_permissions_rename">pentru a redenumi acest fișier</string>
   <string name="forbidden_permissions_delete">pentru a șterge acest fișier</string>

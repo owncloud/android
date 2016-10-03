@@ -5,7 +5,7 @@
  *   @author masensio
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -60,9 +60,10 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
+import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.ui.preview.PreviewMediaFragment;
 import com.owncloud.android.ui.preview.PreviewTextFragment;
+import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
@@ -81,9 +82,8 @@ public class OCFileListFragment extends ExtendedListFragment {
     private static final String MY_PACKAGE = OCFileListFragment.class.getPackage() != null ?
             OCFileListFragment.class.getPackage().getName() : "com.owncloud.android.ui.fragment";
 
-    public final static String ARG_JUST_FOLDERS = MY_PACKAGE + ".JUST_FOLDERS";
-    public final static String ARG_ALLOW_CONTEXTUAL_ACTIONS = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
-    public final static String ARG_HIDE_FAB = MY_PACKAGE + ".HIDE_FAB";
+    protected final static String ARG_ALLOW_CONTEXTUAL_MODE = MY_PACKAGE + ".ALLOW_CONTEXTUAL";
+    protected final static String ARG_HIDE_FAB = MY_PACKAGE + ".HIDE_FAB";
 
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
     private static final String KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED";
@@ -96,7 +96,6 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
-    private boolean mJustFolders;
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -104,6 +103,30 @@ public class OCFileListFragment extends ExtendedListFragment {
     private boolean mHideFab = true;
     private boolean miniFabClicked = false;
     private ActionMode mActiveActionMode;
+
+
+    /**
+     * Public factory method to create new {@link OCFileListFragment} instances.
+     *
+     * @param justFolders               When 'true', only folders will be shown to the user, not files.
+     * @param hideFAB                   When 'true', floating action button is hidden.
+     * @param allowContextualMode       When 'true', contextual action mode is enabled long-pressing an item.
+     * @return                          New fragment with arguments set.
+     */
+    public static OCFileListFragment newInstance(
+        boolean justFolders,
+        boolean hideFAB,
+        boolean allowContextualMode
+    ) {
+        OCFileListFragment frag = new OCFileListFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_JUST_FOLDERS, justFolders);
+        args.putBoolean(ARG_HIDE_FAB, hideFAB);
+        args.putBoolean(ARG_ALLOW_CONTEXTUAL_MODE, allowContextualMode);
+        frag.setArguments(args);
+        return frag;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,7 +166,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         Log_OC.i(TAG, "onCreateView() start");
         View v = super.onCreateView(inflater, container, savedInstanceState);
         Bundle args = getArguments();
-        boolean allowContextualActions = (args != null) && args.getBoolean(ARG_ALLOW_CONTEXTUAL_ACTIONS, false);
+        boolean allowContextualActions = (args != null) && args.getBoolean(ARG_ALLOW_CONTEXTUAL_MODE, false);
         if (allowContextualActions) {
             setChoiceModeAsMultipleModal();
         }
@@ -171,21 +194,17 @@ public class OCFileListFragment extends ExtendedListFragment {
             mFile = savedInstanceState.getParcelable(KEY_FILE);
         }
 
-        if (mJustFolders) {
-            setFooterEnabled(false);
-        } else {
-            setFooterEnabled(true);
-        }
+        boolean justFolders = isShowingJustFolders();
+        setFooterEnabled(!justFolders);
 
-        Bundle args = getArguments();
-        mJustFolders = (args != null) && args.getBoolean(ARG_JUST_FOLDERS, false);
         mAdapter = new FileListListAdapter(
-                mJustFolders,
+                justFolders,
                 getActivity(),
                 mContainerActivity
         );
         setListAdapter(mAdapter);
 
+        Bundle args = getArguments();
         mHideFab = (args != null) && args.getBoolean(ARG_HIDE_FAB, false);
         if (mHideFab) {
             setFabEnabled(false);
@@ -491,21 +510,26 @@ public class OCFileListFragment extends ExtendedListFragment {
 
             } else { /// Click on a file
                 if (PreviewImageFragment.canBePreviewed(file)) {
-                    // preview image - it handles the download, if needed
-                    ((FileDisplayActivity)mContainerActivity).startImagePreview(file);
-                } else if (PreviewTextFragment.canBePreviewed(file)){
-                    ((FileDisplayActivity)mContainerActivity).startTextPreview(file);
-                } else if (file.isDown()) {
-                    if (PreviewMediaFragment.canBePreviewed(file)) {
-                        // media preview
-                        ((FileDisplayActivity) mContainerActivity).startMediaPreview(file, 0, true);
-                    } else {
-                        mContainerActivity.getFileOperationsHelper().openFile(file);
-                    }
+                    // preview image - it handles the sync, if needed
+                    ((FileDisplayActivity) mContainerActivity).startImagePreview(file);
+
+                } else if (PreviewTextFragment.canBePreviewed(file)) {
+                    ((FileDisplayActivity) mContainerActivity).startTextPreview(file);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+
+                } else if (PreviewAudioFragment.canBePreviewed(file)) {
+                    // media preview
+                    ((FileDisplayActivity) mContainerActivity).startAudioPreview(file, 0);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+
+                } else if (PreviewVideoFragment.canBePreviewed(file)) {
+                    // media preview
+                    ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
+                    mContainerActivity.getFileOperationsHelper().syncFile(file);
 
                 } else {
-                    // automatic download, preview on finish
-                    ((FileDisplayActivity) mContainerActivity).startDownloadForPreview(file);
+                    // sync file content, then open with external apps
+                    ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
                 }
 
             }
@@ -582,10 +606,12 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
             case R.id.action_favorite_file: {
                 mContainerActivity.getFileOperationsHelper().toggleFavorites(checkedFiles, true);
+                getListView().invalidateViews();
                 return true;
             }
             case R.id.action_unfavorite_file: {
                 mContainerActivity.getFileOperationsHelper().toggleFavorites(checkedFiles, false);
+                getListView().invalidateViews();
                 return true;
             }
             case R.id.action_move: {
@@ -617,10 +643,12 @@ public class OCFileListFragment extends ExtendedListFragment {
     /**
      * Calls {@link OCFileListFragment#listDirectory(OCFile)} with a null parameter
      */
-    public void listDirectory(/*boolean onlyOnDevice*/){
-        listDirectory(null);
-        // TODO Enable when "On Device" is recovered ?
-        // listDirectory(null, onlyOnDevice);
+    public void listDirectory(boolean reloadData){
+        if (reloadData) {
+            listDirectory(null);
+        } else {
+            getListView().invalidateViews();
+        }
     }
 
     /**
@@ -664,7 +692,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     private void updateLayout() {
-        if (!mJustFolders) {
+        if (!isShowingJustFolders()) {
             int filesCount = 0, foldersCount = 0;
             int count = mAdapter.getCount();
             OCFile file;

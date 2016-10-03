@@ -3,7 +3,7 @@
  *
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -21,6 +21,7 @@
 package com.owncloud.android.ui.adapter;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -51,11 +52,13 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
     private static final String TAG = LocalFileListAdapter.class.getSimpleName();
 
     private Context mContext;
-    private File mDirectory;
+    private File mFolder;
     private File[] mFiles = null;
+    private boolean mJustFolders;
     
-    public LocalFileListAdapter(File directory, Context context) {
+    public LocalFileListAdapter(File directory, boolean justFolders, Context context) {
         mContext = context;
+        mJustFolders = justFolders;
         swapDirectory(directory);
     }
 
@@ -130,7 +133,7 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             if (!file.isDirectory()) {
                 fileSizeSeparatorV.setVisibility(View.VISIBLE);
                 fileSizeV.setVisibility(View.VISIBLE);
-                fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length()));
+                fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.length(), mContext));
 
                 ListView parentList = (ListView) parent;
                 if (parentList.getChoiceMode() == ListView.CHOICE_MODE_NONE) { 
@@ -158,15 +161,13 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
                         if (allowedToCreateNewThumbnail) {
                             final ThumbnailsCacheManager.ThumbnailGenerationTask task =
                                     new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon);
-                            if (thumbnail == null) {
-                                thumbnail = ThumbnailsCacheManager.mDefaultImg;
-                            }
+                            thumbnail = ThumbnailsCacheManager.mDefaultImg;
                             final ThumbnailsCacheManager.AsyncDrawable asyncDrawable =
-                        		new ThumbnailsCacheManager.AsyncDrawable(
+                                new ThumbnailsCacheManager.AsyncDrawable(
                                     mContext.getResources(), 
                                     thumbnail, 
                                     task
-                		        );
+                                );
                             fileIcon.setImageDrawable(asyncDrawable);
                             task.execute(file);
                             Log_OC.v(TAG, "Executing task to generate a new thumbnail");
@@ -213,8 +214,17 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
      * @param directory     New file to adapt. Can be NULL, meaning "no content to adapt".
      */
     public void swapDirectory(File directory) {
-        mDirectory = directory;
-        mFiles = (mDirectory != null ? mDirectory.listFiles() : null);
+        if (directory == null) {
+            Log_OC.e(TAG, "Null received as directory to swap; ignoring");
+            return;
+        }
+        mFolder = directory;
+        mFiles = mFolder.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return (file.exists() && (!mJustFolders || file.isDirectory()));
+            }
+        });
         if (mFiles != null) {
             Arrays.sort(mFiles, new Comparator<File>() {
                 @Override

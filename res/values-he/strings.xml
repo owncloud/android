@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">שליחה</string>
   <string name="actionbar_sort">מיון</string>
   <string name="actionbar_sort_title">מיון על בסיס</string>
-  <string-array name="actionbar_sortby">
-    <item>א-ת</item>
-    <item>חדש - ישן</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">א-ת</string>
+  <string name="actionbar_sort_by_date">חדש ביותר - ישן ביותר</string>
+  <string name="actionbar_sort_by_size">גדול ביותר - קטן ביותר</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">כל הקבצים</string>
@@ -75,6 +72,7 @@
   <string name="file_list_loading">בטעינה …</string>
   <string name="file_list_no_app_for_file_type">לא נמצא יישום עבור סוג זה!</string>
   <string name="local_file_list_empty">אין קבצים בתיקייה זו:</string>
+  <string name="local_file_list_empty_just_folders">אין תיקיות משנה בתיקייה זו.</string>
   <string name="upload_list_empty">אין העלאות זמינות.</string>
   <string name="file_list_folder">תקיה</string>
   <string name="file_list_folders">תקיות</string>
@@ -103,6 +101,7 @@
   <string name="common_loading">בטעינה …</string>
   <string name="common_unknown">לא ידוע</string>
   <string name="common_error_unknown">שגיאה בלתי ידועה</string>
+  <string name="common_pending">ממתין</string>
   <string name="about_title">על אודות</string>
   <string name="change_password">שינוי ססמה</string>
   <string name="delete_account">הסרת חשבון</string>
@@ -315,7 +314,6 @@
   <string name="network_error_socket_timeout_exception">שגיאה אירעה בזמן המתנה לשרת, הפעולה לא הייתה ניתנת להשלמה</string>
   <string name="network_error_connect_timeout_exception">שגיאה אירעה בזמן המתנה לשרת, הפעולה לא הייתה ניתנת להשלמה</string>
   <string name="network_host_not_available">לא ניתן להשלים את הפעולה, השרת אינו זמין</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">אין לך הרשאות %s</string>
   <string name="forbidden_permissions_rename">לשנות שם לקובץ זה</string>
   <string name="forbidden_permissions_delete">למחוק קובץ זה</string>
@@ -368,6 +366,9 @@
   <string name="file_list__footer__files">%1$d קבצים</string>
   <string name="file_list__footer__files_and_folder">%1$d קבצים, 1 תיקייה</string>
   <string name="file_list__footer__files_and_folders">%1$d קבצים, %2$d תיקיות</string>
+  <string name="prefs_instant_upload_source_path_title">תיקיית מצלמה (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">נדרש</string>
+  <string name="prefs_instant_upload_source_path_title_optional">אופציונלי</string>
   <string name="prefs_instant_behaviour_dialogTitle">קובץ מקורי יהיה...</string>
   <string name="prefs_instant_behaviour_title">תיקייה מקורית תהיה...</string>
   <string name="upload_copy_files">העתקת קובץ</string>

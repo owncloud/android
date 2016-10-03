@@ -5,8 +5,6 @@
   <string name="actionbar_upload_files">கோப்புகள்</string>
   <string name="actionbar_settings">அமைப்புகள்</string>
   <string name="actionbar_see_details">விவரங்கள்</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -41,6 +39,7 @@
   <string name="common_cancel">இரத்து செய்க</string>
   <string name="common_back">பின்னுக்கு</string>
   <string name="common_error">வழு</string>
+  <string name="common_pending">நிலுவையிலுள்ள</string>
   <string name="about_title">பற்றி</string>
   <string name="change_password">கடவுச்சொல்லை மாற்றுக</string>
   <string name="create_account">கணக்கை உருவாக்குக</string>
@@ -108,7 +107,6 @@
   <string name="ssl_validator_label_signature_algorithm">நெறிமுறை</string>
   <string name="placeholder_sentence">இது ஒரு placeholder</string>
   <string name="conflict_keep_both">இரண்டையும் வைக்க </string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">கணக்குகள்</string>
   <string name="folder_picker_choose_button_text">தெரிவுசெய்க </string>
   <string name="prefs_category_details">விவரங்கள்</string>

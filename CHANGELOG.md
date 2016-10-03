@@ -1,3 +1,27 @@
+## 2.1.2 (September 2016)
+- Instant uploads fixed in Android 6.
+
+## 2.1.1 (September 2016)
+- Instant uploads work in Android 7.
+- Select your camera folder to upload pictures or videos from any
+ camera app.
+- Multi-Window support for Android 7.
+- Size of folders shown in list of files.
+- Sort by size your list of files.
+ 
+## 2.1.0 (August 2016)
+- Select and handle multiple files
+- Sync files on tap 
+- Access files through Documents Provider
+- "Can share" option for federated shares (server 9.1+)
+- Full name shown instead of user name
+- New icon
+- Style and sorting fixes
+- Bugs fixed, including:
+  + Icon "available offline" shown when set
+  + Trim blanks of username in login view
+  + Protect password field from suggestions
+
 ## 2.0.1 (June 2016)
 - Favorite files are now called AVAILABLE OFFLINE
 - New overlay icons
@@ -6,7 +30,7 @@
  + Passwords with non-alphanumeric characters work fine
  + Sending files from other apps does not duplicate them
  + Favorite setting is not lost after uploading
- + Instant uploads waiting for Wi-Fi are not shown as failed				
+ + Instant uploads waiting for Wi-Fi are not shown as failed
 
 ## 2.0.0 (April 2016)
 - Uploads view: track the progress of your uploads and handle failures

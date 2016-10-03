@@ -13,12 +13,6 @@
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Más nuevo - Más viejo</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>
@@ -103,6 +97,7 @@
   <string name="common_loading">Cargando...</string>
   <string name="common_unknown">desconocido</string>
   <string name="common_error_unknown">Error desconocido</string>
+  <string name="common_pending">Pendiente</string>
   <string name="about_title">Acerca de</string>
   <string name="change_password">Cambiar contraseña</string>
   <string name="delete_account">Eliminar cuenta</string>
@@ -315,7 +310,6 @@
   <string name="network_error_socket_timeout_exception">Ocurrió un error al esperar la respuesta del servidor, la operación no se pudo realizar</string>
   <string name="network_error_connect_timeout_exception">Ocurrió un error al esperar la respuesta del servidor, la operación no se pudo realizar</string>
   <string name="network_host_not_available">La operación no se pudo completar; el servidor no está disponible</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">No tiene permiso %s</string>
   <string name="forbidden_permissions_rename">para renombrar este archivo</string>
   <string name="forbidden_permissions_delete">para eliminar este archivo</string>

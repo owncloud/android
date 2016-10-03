@@ -3,8 +3,6 @@
   <string name="actionbar_upload">උඩුගත කිරීම</string>
   <string name="actionbar_upload_files">ගොනු</string>
   <string name="actionbar_settings">සිටුවම්</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -73,7 +71,6 @@
   <string name="filedisplay_unexpected_bad_get_content">නොසිතු ප්‍රශ්ණයක්; කරුණාකර වෙනත් යෙදුමක් භාවිතා කර ගොනුව තෝරන්න</string>
   <string name="filedisplay_no_file_selected">ගොනුවක් තෝරා නැත</string>
   <string name="ssl_validator_btn_details_hide">සඟවන්න</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">ගිණුම්</string>
   <string name="folder_picker_choose_button_text">තෝරන්න</string>
   <string name="auth_host_address">සේවාදායකයේ ලිපිනය</string>

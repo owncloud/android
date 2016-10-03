@@ -12,12 +12,6 @@
   <string name="actionbar_send_file">Mandar</string>
   <string name="actionbar_sort">Triar</string>
   <string name="actionbar_sort_title">Triar</string>
-  <string-array name="actionbar_sortby">
-    <item>per òrdre alfabetic</item>
-    <item>del mai recent al pus ancian</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Totes los fichièrs</string>
@@ -82,6 +76,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="common_error">Error</string>
   <string name="common_loading">Cargament…</string>
   <string name="common_error_unknown">Error desconeguda </string>
+  <string name="common_pending">En espèra</string>
   <string name="about_title">A prepaus de</string>
   <string name="change_password">Cambiar de senhal</string>
   <string name="create_account">Crear un compte</string>
@@ -256,7 +251,6 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="network_error_socket_timeout_exception">Una error s\'es produsida pendent l\'espèra del servidor. L\'operacion a pas pogut èsser efectuada</string>
   <string name="network_error_connect_timeout_exception">Una error s\'es produsida pendent l\'espèra del servidor. L\'operacion a pas pogut èsser efectuada</string>
   <string name="network_host_not_available">L\'operacion a pas pogut èsser acabada, lo servidor es pas disponible</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Avètz pas la permission %s</string>
   <string name="forbidden_permissions_rename">de renomenar aqueste fichièr</string>
   <string name="forbidden_permissions_delete">d’escafar aqueste fichièr</string>

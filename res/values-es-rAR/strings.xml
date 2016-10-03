@@ -12,12 +12,6 @@
   <string name="actionbar_send_file">Mandar</string>
   <string name="actionbar_sort">Orden</string>
   <string name="actionbar_sort_title">Ordenar por</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Nuevos - Viejos</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>
@@ -75,6 +69,7 @@
   <string name="common_error">Error</string>
   <string name="common_loading">Cargando ...</string>
   <string name="common_error_unknown">Error desconocido</string>
+  <string name="common_pending">Pendientes</string>
   <string name="about_title">Acerca de</string>
   <string name="change_password">Cambiar contraseña</string>
   <string name="create_account">Crear cuenta</string>
@@ -220,7 +215,6 @@
   <string name="network_error_socket_timeout_exception">Un error ocurrió mientras se conectaba con el Servidor. La operación no se realizó </string>
   <string name="network_error_connect_timeout_exception">Un error ocurrió esperando al Servidor, la operación no se realizó</string>
   <string name="network_host_not_available">Operación no completada, Servidor no disponible.</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Tu no tienes permiso %s</string>
   <string name="forbidden_permissions_rename">para renombrar este archivo</string>
   <string name="forbidden_permissions_delete">para borrar este archivo</string>

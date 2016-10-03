@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">Senden</string>
   <string name="actionbar_sort">Sortieren</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Neueste - Älteste</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Neueste - Älteste</string>
+  <string name="actionbar_sort_by_size">Größte - Kleinste</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle Dateien</string>
@@ -75,6 +72,7 @@
   <string name="file_list_loading">Lade…</string>
   <string name="file_list_no_app_for_file_type">Es wurde keine App für diesen Dateityp gefunden!</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
+  <string name="local_file_list_empty_just_folders">Es befinden sich keine Ordner in diesem Ordner.</string>
   <string name="upload_list_empty">Es</string>
   <string name="file_list_folder">Ordner</string>
   <string name="file_list_folders">Ordner</string>
@@ -103,6 +101,7 @@
   <string name="common_loading">Lade…</string>
   <string name="common_unknown">unbekannt</string>
   <string name="common_error_unknown">Unbekannter Fehler</string>
+  <string name="common_pending">Ausstehend</string>
   <string name="about_title">Über</string>
   <string name="change_password">Passwort ändern</string>
   <string name="delete_account">Benutzerkonto löschen</string>
@@ -315,7 +314,6 @@
   <string name="network_error_socket_timeout_exception">Es ist ein Fehler beim Warten auf den Server aufgetreten, die Operation kann nicht ausgeführt werden</string>
   <string name="network_error_connect_timeout_exception">Es ist ein Fehler beim Warten auf den Server aufgetreten, die Operation kann nicht ausgeführt werden</string>
   <string name="network_host_not_available">Die Operation kann nicht abgeschlossen werden, der Server ist nicht erreichbar</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Du hast keine Berechtigung %s</string>
   <string name="forbidden_permissions_rename">diese Datei umzubenennen</string>
   <string name="forbidden_permissions_delete">diese Datei zu löschen</string>
@@ -368,6 +366,9 @@
   <string name="file_list__footer__files">%1$d Dateien</string>
   <string name="file_list__footer__files_and_folder">%1$d Dateien, 1 Ordner</string>
   <string name="file_list__footer__files_and_folders">%1$d Dateien, %2$d Ordner</string>
+  <string name="prefs_instant_upload_source_path_title">Kamera-Ordner (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">Benötigt</string>
+  <string name="prefs_instant_upload_source_path_title_optional">Optional</string>
   <string name="prefs_instant_behaviour_dialogTitle">Originaldatei wird...</string>
   <string name="prefs_instant_behaviour_title">Originaldatei wird...</string>
   <string name="upload_copy_files">kopiere Datei</string>

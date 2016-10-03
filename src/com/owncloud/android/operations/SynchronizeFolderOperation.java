@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -142,8 +142,21 @@ public class SynchronizeFolderOperation extends SyncOperation {
         
         try {
             // get locally cached information about folder 
-            mLocalFolder = getStorageManager().getFileByPath(mRemotePath);   
-            
+            mLocalFolder = getStorageManager().getFileByPath(mRemotePath);
+
+            /**
+             * This is not working fine, the way ETag is handled is not safe. If the folder parent of 'mRemotePath'
+             * is refreshed before this synchronization, but after any file inside 'mRemotePath' was changed,
+             * this test will result in 'no change in remote', and if there are also local changes for the same
+             * file, the local copy will override the remote one, ignoring its changes.
+             *
+             * This could mean data loss. We can't allow it.
+             *
+             * We'll review the algorithm to make it work. Meanwhile, the flow needs to go through the heavy
+             * path, and act as if there could be changes in any point of the subtree, no matter what are the values
+             * of the ETags of folders
+             */
+            /*
             result = checkForChanges(client);
     
             if (result.isSuccess()) {
@@ -158,6 +171,11 @@ public class SynchronizeFolderOperation extends SyncOperation {
                     syncContents(client);
                 }
 
+            }*/
+
+            result = fetchAndSyncRemoteFolder(client);
+            if (result.isSuccess()) {
+                syncContents(client);
             }
             
             if (mCancellationRequested.get()) {
@@ -327,12 +345,11 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 updatedFile.setStoragePath(localFile.getStoragePath());
                 // eTag will not be updated unless file CONTENTS are synchronized
                 updatedFile.setEtag(localFile.getEtag());
-                if (updatedFile.isFolder()) {
-                    updatedFile.setFileLength(localFile.getFileLength());
-                        // TODO move operations about size of folders to FileContentProvider
-                } else if (mRemoteFolderChanged && remoteFile.isImage() &&
-                        remoteFile.getModificationTimestamp() !=
-                                localFile.getModificationTimestamp()) {
+                if (!updatedFile.isFolder() &&
+                    mRemoteFolderChanged &&
+                    remoteFile.isImage() &&
+                    remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
+
                     updatedFile.setNeedsUpdateThumbnail(true);
                     Log.d(TAG, "Image " + remoteFile.getFileName() + " updated on the server");
                 }

@@ -3,7 +3,7 @@
  *
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
@@ -81,7 +82,7 @@ public class MainApp extends Application {
             // Set folder for store logs
             Log_OC.setLogDataFolder(dataFolder);
 
-            Log_OC.startLogging();
+            Log_OC.startLogging(Environment.getExternalStorageDirectory().getAbsolutePath());
             Log_OC.d("Debug", "start logging");
         }
 
@@ -132,45 +133,35 @@ public class MainApp extends Application {
         return MainApp.mContext;
     }
 
-    // Methods to obtain Strings referring app_name 
-    //   From AccountAuthenticator 
-    //   public static final String ACCOUNT_TYPE = "owncloud";    
+    /**
+     * Next methods give access in code to some constants that need to be defined in string resources to be referred
+     * in AndroidManifest.xml file or other xml resource files; or that need to be easy to modify in build time.
+     */
+
     public static String getAccountType() {
         return getAppContext().getResources().getString(R.string.account_type);
     }
 
-    //  From AccountAuthenticator 
-    //  public static final String AUTHORITY = "org.owncloud";
     public static String getAuthority() {
         return getAppContext().getResources().getString(R.string.authority);
     }
     
-    //  From AccountAuthenticator
-    //  public static final String AUTH_TOKEN_TYPE = "org.owncloud";
     public static String getAuthTokenType() {
         return getAppContext().getResources().getString(R.string.authority);
     }
-    
-    //  From ProviderMeta 
-    //  public static final String DB_FILE = "owncloud.db";
+
     public static String getDBFile() {
         return getAppContext().getResources().getString(R.string.db_file);
     }
     
-    //  From ProviderMeta
-    //  private final String mDatabaseName = "ownCloud";
     public static String getDBName() {
         return getAppContext().getResources().getString(R.string.db_name);
     }
      
-    /**
-     * name of data_folder, e.g., "owncloud"
-     */
     public static String getDataFolder() {
         return getAppContext().getResources().getString(R.string.data_folder);
     }
     
-    // log_name
     public static String getLogName() {
         return getAppContext().getResources().getString(R.string.log_name);
     }

@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">ส่ง</string>
   <string name="actionbar_sort">จัดเรียง</string>
   <string name="actionbar_sort_title">เรียงตาม</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>ใหม่ที่สุด - เก่าที่สุด</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">ใหม่ที่สุด - เก่าที่สุด</string>
+  <string name="actionbar_sort_by_size">ใหญ่ที่สุด - เล็กที่สุด</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>
@@ -75,6 +72,7 @@
   <string name="file_list_loading">กำลังโหลด...</string>
   <string name="file_list_no_app_for_file_type">ไม่พบแอพสำหรับชนิดของไฟล์</string>
   <string name="local_file_list_empty">ยังไม่มีไฟล์ในโฟลเดอร์นี้</string>
+  <string name="local_file_list_empty_just_folders">ไม่มีโฟลเดอร์ในโฟลเดอร์นี้</string>
   <string name="upload_list_empty">ไม่พบการอัพโหลดใดๆ</string>
   <string name="file_list_folder">โฟลเดอร์</string>
   <string name="file_list_folders">โฟลเดอร์</string>
@@ -103,6 +101,7 @@
   <string name="common_loading">กำลังโหลด ...</string>
   <string name="common_unknown">ไม่รู้จัก</string>
   <string name="common_error_unknown">ข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
+  <string name="common_pending">อยู่ระหว่างดำเนินการ</string>
   <string name="about_title">เกี่ยวกับเรา</string>
   <string name="change_password">เปลี่ยนรหัสผ่าน</string>
   <string name="delete_account">ลบบัญชี</string>
@@ -313,7 +312,6 @@
   <string name="network_error_socket_timeout_exception">เกิดข้อผิดพลาดขณะที่รอการดำเนินการจากเซิร์ฟเวอร์</string>
   <string name="network_error_connect_timeout_exception">เกิดข้อผิดพลาดขณะที่รอการดำเนินการจากเซิร์ฟเวอร์</string>
   <string name="network_host_not_available">การดำเนินการอาจยังไม่เสร็จสมบูรณ์ เซิร์ฟเวอร์ไม่สามารถใช้งานได้</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">คุณไม่ได้รับสิทธิ์ %s</string>
   <string name="forbidden_permissions_rename">เพื่อเปลี่ยนชื่อไฟล์นี้</string>
   <string name="forbidden_permissions_delete">เพื่อลบไฟล์นี้</string>
@@ -411,4 +409,9 @@
   <string name="manage_space_error">บางไฟล์ไม่สามารถลบได้</string>
   <string name="permission_storage_access">กำหนดสิทธิ์เพิ่มเติมที่จำเป็นในการอัพโหลดและดาวน์โหลดไฟล์แล้ว</string>
   <string name="local_file_not_found_toast">ไม่พบไฟล์ที่ไฟล์ระบบต้นทาง</string>
+  <string name="confirmation_remove_files_alert">คุณมั่นใจว่าต้องการลบรายการที่เลือก?</string>
+  <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>
+  <plurals name="items_selected_count">
+    <item quantity="other">%d รายการที่ถูกเลือก</item>
+  </plurals>
 </resources>

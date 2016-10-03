@@ -6,7 +6,7 @@
  * @author David A. Velasco
  * @author masensio
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2016 ownCloud Inc.
+ * Copyright (C) 2016 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -193,12 +193,10 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                     fileSizeSeparatorV.setVisibility(View.VISIBLE);
                     fileSizeV.setVisibility(View.VISIBLE);
-                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getFileLength()));
+                    fileSizeV.setText(DisplayUtils.bytesToHumanReadable(
+                        file.getFileLength(), mContext
+                    ));
 
-                    if (file.isFolder()) {
-                        fileSizeSeparatorV.setVisibility(View.GONE);
-                        fileSizeV.setVisibility(View.GONE);
-                    }
 
                 case GRID_ITEM:
                     // filename

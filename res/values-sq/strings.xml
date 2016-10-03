@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">Dërgoje</string>
   <string name="actionbar_sort">Renditi</string>
   <string name="actionbar_sort_title">Renditi sipas</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Z</item>
-    <item>Më e reja - Më e vjetra</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Më e reja - Më e vjetra</string>
+  <string name="actionbar_sort_by_size">Më e madhja - Më e vogla</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Krejt kartelat</string>
@@ -75,6 +72,7 @@
   <string name="file_list_loading">Po ngarkohet…</string>
   <string name="file_list_no_app_for_file_type">S’u gjet aplikacion për llojin e kartelës!</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
+  <string name="local_file_list_empty_just_folders">S’ka dosje brenda kësaj dosjeje.</string>
   <string name="upload_list_empty">S’ka ngarkime gati.</string>
   <string name="file_list_folder">dosje</string>
   <string name="file_list_folders">dosje</string>
@@ -103,6 +101,7 @@
   <string name="common_loading">Po ngarkohet …</string>
   <string name="common_unknown">panjohur</string>
   <string name="common_error_unknown">Gabim i panjohur</string>
+  <string name="common_pending">Në pritje</string>
   <string name="about_title">Rreth</string>
   <string name="change_password">Ndryshoni fjalëkalimin</string>
   <string name="delete_account">Hiqe llogarinë</string>
@@ -313,7 +312,6 @@
   <string name="network_error_socket_timeout_exception">Ndodhi një gabim teksa po pritej për shërbyesin, veprimi s\’u krye dot</string>
   <string name="network_error_connect_timeout_exception">Ndodhi një gabim teksa po pritej për shërbyesin, veprimi s\’u krye dot</string>
   <string name="network_host_not_available">Veprimi s\’u plotësua dot, shërbyesi është i pakapshëm</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Nuk keni leje %s</string>
   <string name="forbidden_permissions_rename">për riemërtim të kësaj kartele</string>
   <string name="forbidden_permissions_delete">për fshirje të kësaj kartele</string>
@@ -366,6 +364,9 @@
   <string name="file_list__footer__files">%1$d kartelë</string>
   <string name="file_list__footer__files_and_folder">%1$d kartela, 1 dosje</string>
   <string name="file_list__footer__files_and_folders">%1$d kartela, %2$d dosje</string>
+  <string name="prefs_instant_upload_source_path_title">Dosje kamere (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">e domosdoshme</string>
+  <string name="prefs_instant_upload_source_path_title_optional">opsionale</string>
   <string name="prefs_instant_behaviour_dialogTitle">Kartela origjinale do të jetë...</string>
   <string name="prefs_instant_behaviour_title">Kartela origjinale do të jetë...</string>
   <string name="upload_copy_files">Kopjoje kartelën</string>

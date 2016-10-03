@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">Skicka</string>
   <string name="actionbar_sort">Sortera</string>
   <string name="actionbar_sort_title">Sortera efter</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Ö</item>
-    <item>Nyast - Äldst</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Ö</string>
+  <string name="actionbar_sort_by_date">Nyast - Äldst</string>
+  <string name="actionbar_sort_by_size">Störst - Minst</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alla filer</string>
@@ -75,6 +72,7 @@
   <string name="file_list_loading">Laddar...</string>
   <string name="file_list_no_app_for_file_type">Inget program kan hantera denna filtyp</string>
   <string name="local_file_list_empty">Det finns inga filer i den här mappen.</string>
+  <string name="local_file_list_empty_just_folders">Det finns inga mappar i den här mappen.</string>
   <string name="upload_list_empty">Inga uppladdningar tillgängliga.</string>
   <string name="file_list_folder">mapp</string>
   <string name="file_list_folders">mappar</string>
@@ -103,6 +101,7 @@
   <string name="common_loading">Laddar...</string>
   <string name="common_unknown">okänt</string>
   <string name="common_error_unknown">Okänt fel</string>
+  <string name="common_pending">Väntar</string>
   <string name="about_title">Om</string>
   <string name="change_password">Ändra lösenord</string>
   <string name="delete_account">Radera konto</string>
@@ -315,7 +314,6 @@
   <string name="network_error_socket_timeout_exception">Ett fel uppstod i väntan på servern, operationen kunde inte ha gjorts</string>
   <string name="network_error_connect_timeout_exception">Ett fel uppstod i väntan på servern, operationen kunde inte ha gjorts</string>
   <string name="network_host_not_available">Åtgärden kunte inte slutföras, servern är ej tillgänglig</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Du har inga rättigheter %s</string>
   <string name="forbidden_permissions_rename">att döpa om denna fil</string>
   <string name="forbidden_permissions_delete">att radera denna fil</string>
@@ -412,4 +410,10 @@
   <string name="manage_space_error">Vissa filer kunde inte raderas.</string>
   <string name="permission_storage_access">Ytterligare rättigheter krävs för att ladda upp &amp; ner filer.</string>
   <string name="local_file_not_found_toast">Filen hittades inte i det lokala filsystemet</string>
+  <string name="confirmation_remove_files_alert">Vill du verkligen ta bort de markerade objekten?</string>
+  <string name="confirmation_remove_folders_alert">Vill du verkligen ta bort de markerade objekten och deras innehåll?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d vald</item>
+    <item quantity="other">%d valda</item>
+  </plurals>
 </resources>

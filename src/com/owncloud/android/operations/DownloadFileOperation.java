@@ -3,7 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author masensio
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -159,12 +159,24 @@ public class DownloadFileOperation extends RemoteOperation {
         if (result.isSuccess()) {
             mModificationTimestamp = mDownloadOperation.getModificationTimestamp();
             mEtag = mDownloadOperation.getEtag();
+            if (FileStorageUtils.getUsableSpace(mAccount.name) < tmpFile.length()) {
+                Log_OC.w(TAG, "Not enough space to copy " + tmpFile.getAbsolutePath());
+            }
             newFile = new File(getSavePath());
-            newFile.getParentFile().mkdirs();
+            Log_OC.d(TAG, "Save path: " + newFile.getAbsolutePath());
+            File parent = newFile.getParentFile();
+            boolean created = parent.mkdirs();
+            Log_OC.d(TAG, "Creation of parent folder " + parent.getAbsolutePath() + " succeeded: " + created);
+            Log_OC.d(TAG, "Parent folder " + parent.getAbsolutePath() + " exists: " + parent.exists());
+            Log_OC.d(TAG, "Parent folder " + parent.getAbsolutePath() + " is directory: " + parent.isDirectory());
             moved = tmpFile.renameTo(newFile);
-            if (!moved)
+            Log_OC.d(TAG, "New file " + newFile.getAbsolutePath() + " exists: " + newFile.exists());
+            Log_OC.d(TAG, "New file " + newFile.getAbsolutePath() + " is directory: " + newFile.isDirectory());
+            if (!moved) {
                 result = new RemoteOperationResult(
-                        RemoteOperationResult.ResultCode.LOCAL_STORAGE_NOT_MOVED);
+                    RemoteOperationResult.ResultCode.LOCAL_STORAGE_NOT_MOVED
+                );
+            }
         }
         Log_OC.i(TAG, "Download of " + mFile.getRemotePath() + " to " + getSavePath() + ": " +
                 result.getLogMessage());

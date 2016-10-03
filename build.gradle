@@ -7,7 +7,7 @@
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.0'
@@ -21,7 +21,7 @@ ext {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 
     flatDir {
         dirs 'libs'
@@ -68,7 +68,7 @@ tasks.withType(Test) {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -79,7 +79,7 @@ android {
         testInstrumentationRunnerArgument "TEST_SERVER_URL", "\"$System.env.OCTEST_SERVER_BASE_URL\""
 
         jackOptions {
-            enabled true
+            enabled false
         }
 
     }
@@ -116,8 +116,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     lintOptions {
@@ -126,6 +126,10 @@ android {
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
+    }
+
+    adbOptions {
+        timeOutInMs(20 * 60 * 1000)
     }
 
     signingConfigs {
@@ -191,3 +195,4 @@ def setOutputFileName(variant, appName, callerProject) {
     logger.info("$variant.name: newName is $newName")
     variant.outputs[0].outputFile = new File(originalFile.parent, newName)
 }
+

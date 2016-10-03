@@ -10,8 +10,6 @@
   <string name="actionbar_settings">Cài đặt</string>
   <string name="actionbar_see_details">Chi tiết</string>
   <string name="actionbar_send_file">Gởi</string>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tất cả tệp tin</string>
@@ -61,6 +59,7 @@
   <string name="common_error">Lỗi</string>
   <string name="common_loading">Đang tải...</string>
   <string name="common_error_unknown">Lỗi chưa biết</string>
+  <string name="common_pending">Đang chờ</string>
   <string name="about_title">Giới thiệu</string>
   <string name="change_password">Đổi mật khẩu</string>
   <string name="create_account">Tạo tài khoản</string>
@@ -187,7 +186,6 @@
   <string name="share_link_file_error">Một lỗi đã xảy ra khi thử chia sẻ file hoặc thư mục này</string>
   <string name="unshare_link_file_error">Một lỗi đã xảy ra khi thử gỡ chia sẻ file hoặc thư mục này</string>
   <string name="activity_chooser_send_file_title">Gởi</string>
-  <string name="empty"></string>
   <string name="prefs_category_accounts">Tài khoản</string>
   <string name="folder_picker_choose_button_text">Chọn</string>
   <string name="prefs_category_details">Chi tiết</string>

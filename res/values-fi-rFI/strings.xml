@@ -13,12 +13,9 @@
   <string name="actionbar_send_file">Lähetä</string>
   <string name="actionbar_sort">Lajittele</string>
   <string name="actionbar_sort_title">Lajittelujärjestys</string>
-  <string-array name="actionbar_sortby">
-    <item>A-Ö</item>
-    <item>Uusimmasta vanhimpaan</item>
-  </string-array>
-  <!--TODO re-enable when server-side folder size calculation is available   
-    	<item>Biggest - Smallest</item>-->
+  <string name="actionbar_sort_by_name">A-Ö</string>
+  <string name="actionbar_sort_by_date">Uusin - vanhin</string>
+  <string name="actionbar_sort_by_size">Suurin - pienin</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Kaikki tiedostot</string>
@@ -58,11 +55,14 @@
   <string name="sync_string_files">Tiedostot</string>
   <string name="setup_btn_connect">Yhdistä</string>
   <string name="uploader_btn_upload_text">Lähetä</string>
+  <string name="uploader_top_message">Valitse lähetyskansio:</string>
   <string name="uploader_wrn_no_account_title">Tiliä ei löytynyt</string>
   <string name="uploader_wrn_no_account_text">Laitteellasi ei ole %1$s-tilejä. Määritä tilin asetukset ensin.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Asetukset</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Lopeta</string>
+  <string name="uploader_error_title_no_file_to_upload">Ei tiedostoa lähetettävänä</string>
   <string name="uploader_error_message_no_file_to_upload">Vastaanotettu data ei sisällä yhtäkään kelvollista tiedostoa.</string>
+  <string name="uploader_error_title_file_cannot_be_uploaded">Tiedostoa ei voi ladata</string>
   <string name="file_list_seconds_ago">sekuntia sitten</string>
   <string name="file_list_empty">Täällä ei ole mitään. Lähetä tänne jotakin!</string>
   <string name="file_list_loading">Ladataan…</string>
@@ -93,6 +93,7 @@
   <string name="common_loading">Ladataan…</string>
   <string name="common_unknown">tuntematon</string>
   <string name="common_error_unknown">Tuntematon virhe</string>
+  <string name="common_pending">Odottaa</string>
   <string name="about_title">Tietoja</string>
   <string name="change_password">Vaihda salasana</string>
   <string name="delete_account">Poista tili</string>
@@ -282,7 +283,6 @@
   <string name="network_error_socket_timeout_exception">Virhe palvelimen vastausta odottaessa, toimintoa ei voitu suorittaa</string>
   <string name="network_error_connect_timeout_exception">Virhe palvelimen vastausta odottaessa, toimintoa ei voitu suorittaa</string>
   <string name="network_host_not_available">Toimintoa ei voi suorittaa loppuun, palvelin ei ole käytettävissä</string>
-  <string name="empty"></string>
   <string name="forbidden_permissions">Sinulla ei ole oikeutta %s</string>
   <string name="forbidden_permissions_rename">nimetä tiedostoa uudelleen</string>
   <string name="forbidden_permissions_delete">poistaa tiedostoa</string>
@@ -368,4 +368,10 @@
   <string name="manage_space_error">Joitain tiedostoja ei voitu poistaa.</string>
   <string name="permission_storage_access">Tiedostojen lataaminen ja lähetys vaatii lisäoikeuksia.</string>
   <string name="local_file_not_found_toast">Tiedostoa ei löytynyt paikallisesta tiedostojärjestelmästä</string>
+  <string name="confirmation_remove_files_alert">Haluatko varmasti poistaa valitut kohteet?</string>
+  <string name="confirmation_remove_folders_alert">Haluatko varmasti poistaa valitut kohteet ja niiden sisällön?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d valittu</item>
+    <item quantity="other">%d valittu</item>
+  </plurals>
 </resources>
