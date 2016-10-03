@@ -20,21 +20,29 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<style name="Animations" />
 
-	<!-- General ownCloud app style -->
+	<!-- General ownCloud app style.
+		 To apply directly only on Activities that cannot extend ToolbarActivity;
+		 otherwise, prefer Theme.ownCloud.Toolbar -->
 	<style name="Theme.ownCloud" parent="Theme.AppCompat.Light.DarkActionBar">
 		<item name="android:windowBackground">@color/background_color</item>
 
 		<!-- theme for the app bar (both for old actionbar and new toolbar) -->
 		<item name="actionBarTheme">@style/ownCloud.Appbar</item>
 
+		<!-- properties for action mode -->
+		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">@color/action_mode_background</item>
 
+		<!-- colors, Material Design way -->
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorAccent">@color/color_accent</item>
 
+		<!-- themes for dialogs -->
 		<item name="android:alertDialogTheme">@style/Theme.ownCloud.Dialog</item>
 		<item name="alertDialogTheme">@style/ownCloud.AlertDialog</item>
+
+		<!-- style for search view -->
 		<item name="searchViewStyle">@style/ownCloud.SearchView</item>
 	</style>
 
