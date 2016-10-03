@@ -227,9 +227,6 @@ public class FileDisplayActivity extends HookActivity
             createMinFragments();
         }
 
-        setIndeterminate(mSyncInProgress);
-        // always AFTER setContentView(...) in onCreate(); to work around bug in its implementation
-
         setBackgroundText();
     }
 
@@ -980,7 +977,6 @@ public class FileDisplayActivity extends HookActivity
                         fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
                     }
                     Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
-                    setIndeterminate(mSyncInProgress);
 
                     setBackgroundText();
                 }
@@ -1074,8 +1070,6 @@ public class FileDisplayActivity extends HookActivity
                         updateActionBarTitleAndHomeButton(getFile());
                     }
                 }
-
-                setIndeterminate(false);
 
             } finally {
                 if (intent != null) {
@@ -1637,7 +1631,6 @@ public class FileDisplayActivity extends HookActivity
                         if (fileListFragment != null) {
                             fileListFragment.setProgressBarAsIndeterminate(true);
                         }
-                        setIndeterminate(true);
 
                         setBackgroundText();
                     }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is

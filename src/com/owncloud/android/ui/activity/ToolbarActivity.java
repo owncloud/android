@@ -19,14 +19,10 @@
 
 package com.owncloud.android.ui.activity;
 
-import android.accounts.AccountManagerFuture;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -36,7 +32,6 @@ import com.owncloud.android.datamodel.OCFile;
  * Base class providing toolbar registration functionality, see {@link #setupToolbar()}.
  */
 public abstract class ToolbarActivity extends BaseActivity {
-    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +45,6 @@ public abstract class ToolbarActivity extends BaseActivity {
     protected void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mProgressBar.setIndeterminateDrawable(
-                ContextCompat.getDrawable(this, R.drawable.actionbar_progress_indeterminate_horizontal));
     }
 
     /**
@@ -114,12 +105,4 @@ public abstract class ToolbarActivity extends BaseActivity {
                 (file.isFolder() && file.getParentId() == FileDataStorageManager.ROOT_PARENT_ID);
     }
 
-    /**
-     * Change the indeterminate mode for the toolbar's progress bar.
-     *
-     * @param indeterminate <code>true</code> to enable the indeterminate mode
-     */
-    public void setIndeterminate(boolean indeterminate) {
-        mProgressBar.setIndeterminate(indeterminate);
-    }
 }

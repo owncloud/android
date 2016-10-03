@@ -116,8 +116,9 @@
 
 	<!-- Progress bar -->
 	<style name="Widget.ownCloud.TopProgressBar" parent="style/Widget.AppCompat.ProgressBar.Horizontal">
-		<item name="android:progressDrawable">@drawable/actionbar_progress_horizontal</item>
-		<item name="android:indeterminateDrawable">@drawable/actionbar_progress_indeterminate_horizontal</item>
+		<item name="android:background">@color/primary</item>
+		<item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
+		<item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
 	</style>
 
 	<style name="Theme.ownCloud.Fullscreen" parent="style/Theme.AppCompat">

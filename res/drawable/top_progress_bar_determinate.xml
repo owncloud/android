@@ -4,10 +4,7 @@
 
     <item
         android:id="@android:id/background"
-        android:drawable="@color/primary" />
-    <!-- item
-        android:id="@android:id/background"
-        android:drawable="@color/transparent" /-->
+        android:drawable="@color/background_color" />
     <item android:id="@android:id/secondaryProgress">
         <scale
             android:drawable="@color/primary"

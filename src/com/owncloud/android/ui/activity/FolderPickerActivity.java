@@ -38,7 +38,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
@@ -94,9 +93,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         setupToolbar();
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
-        setIndeterminate(mSyncInProgress);
-        // always AFTER setContentView(...) ; to work around bug in its implementation
-        
         // sets message for empty list of folders
         setBackgroundText();
 
@@ -207,7 +203,10 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                                                                       );
         synchFolderOp.execute(getAccount(), this, null, null);
 
-        setIndeterminate(true);
+        OCFileListFragment fileListFragment = getListOfFilesFragment();
+        if (fileListFragment != null) {
+            fileListFragment.setProgressBarAsIndeterminate(true);
+        }
 
         setBackgroundText();
     }
@@ -488,7 +487,10 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                     removeStickyBroadcast(intent);
                     Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
 
-                    setIndeterminate(mSyncInProgress);
+                    OCFileListFragment fileListFragment = getListOfFilesFragment();
+                    if (fileListFragment != null) {
+                        fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
+                    }
 
                     setBackgroundText();
                 }
