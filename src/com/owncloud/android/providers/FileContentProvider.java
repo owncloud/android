@@ -96,20 +96,26 @@ public class FileContentProvider extends ContentProvider {
         switch (mUriMatcher.match(uri)) {
             case SINGLE_FILE:
                 Cursor c = query(db, uri, null, where, whereArgs, null);
-                String remoteId = "";
-                if (c != null && c.moveToFirst()) {
-                    remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID));
-                    //ThumbnailsCacheManager.removeFileFromCache(remoteId);
+                try {
+                    String remoteId = "";
+                    if (c != null && c.moveToFirst()) {
+                        remoteId = c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID));
+                        //ThumbnailsCacheManager.removeFileFromCache(remoteId);
+                        c.close();
+                    }
+                    Log_OC.d(TAG, "Removing FILE " + remoteId);
+
+                    count = db.delete(ProviderTableMeta.FILE_TABLE_NAME,
+                            ProviderTableMeta._ID
+                                    + "="
+                                    + uri.getPathSegments().get(1)
+                                    + (!TextUtils.isEmpty(where) ? " AND (" + where
+                                    + ")" : ""), whereArgs);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }finally {
                     c.close();
                 }
-                Log_OC.d(TAG, "Removing FILE " + remoteId);
-
-                count = db.delete(ProviderTableMeta.FILE_TABLE_NAME,
-                        ProviderTableMeta._ID
-                                + "="
-                                + uri.getPathSegments().get(1)
-                                + (!TextUtils.isEmpty(where) ? " AND (" + where
-                                + ")" : ""), whereArgs);
                 break;
             case DIRECTORY:
                 // deletion of folder is recursive
