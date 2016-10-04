@@ -64,7 +64,18 @@
 		<item name="actionBarTheme">@style/ownCloud.Appbar.Transparent</item>
 	</style>
 
+    <!-- Extends Theme.ownCloud for video in full screen mode -->
+    <style name="Theme.ownCloud.Fullscreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowBackground">@android:color/background_dark</item>
+    </style>
+
+
+
 	<style name="Theme.ownCloud.noActionBar.Login" parent="Theme.ownCloud.Toolbar">
+
 	</style>
 
 
@@ -140,12 +151,6 @@
 		<item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
 		<item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
 	</style>
-
-	<style name="Theme.ownCloud.Fullscreen" parent="style/Theme.AppCompat">
-		<item name="android:windowFullscreen">true</item>
-		<item name="colorAccent">@color/color_accent</item>
-    </style>
-	
 
 	<!-- Dialogs -->
 	<style name="Theme.ownCloud.Dialog" parent="style/Theme.AppCompat.Light.Dialog.Alert">

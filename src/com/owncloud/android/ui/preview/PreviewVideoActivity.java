@@ -122,6 +122,7 @@ public class PreviewVideoActivity extends FileActivity implements OnCompletionLi
         i.putExtra(EXTRA_AUTOPLAY, mVideoPlayer.isPlaying());
         i.putExtra(EXTRA_START_POSITION, mVideoPlayer.getCurrentPosition());
         setResult(RESULT_OK, i);
+        mVideoPlayer.stopPlayback();
         super.onBackPressed();
     }
 

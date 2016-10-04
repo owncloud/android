@@ -501,8 +501,8 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         i.putExtra(FileActivity.EXTRA_ACCOUNT, mAccount);
         i.putExtra(FileActivity.EXTRA_FILE, getFile());
         i.putExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, mVideoPreview.isPlaying());
-        mVideoPreview.pause();
         i.putExtra(PreviewVideoActivity.EXTRA_START_POSITION, mVideoPreview.getCurrentPosition());
+        mVideoPreview.stopPlayback();
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
     }
 
