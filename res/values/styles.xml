@@ -20,6 +20,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<style name="Animations" />
 
+	<!-- THEMES: App / Activity styles -->
+
 	<!-- General ownCloud app style.
 		 To apply directly only on Activities that cannot extend ToolbarActivity;
 		 otherwise, prefer Theme.ownCloud.Toolbar -->
@@ -56,19 +58,33 @@
 	<style name="Theme.ownCloud.Toolbar.Drawer">
 	</style>
 
-	<style name="Theme.ownCloud.noActionBar.Login" parent="Theme.ownCloud.Toolbar">
+	<!-- Extends Theme.ownCloud to make LEGACY ActionBar both OVERLAY and TRANSPARENT -->
+	<style name="Theme.ownCloud.Overlay" >
+		<item name="windowActionBarOverlay">true</item>
+		<item name="actionBarTheme">@style/ownCloud.Appbar.Transparent</item>
+	</style>
 
+	<style name="Theme.ownCloud.noActionBar.Login" parent="Theme.ownCloud.Toolbar">
 	</style>
 
 
+	<!-- APP BAR level styles -->
 
-	<!-- Style for the app bar (both for old actionbar and new toolbar);
+	<!-- Regular style for the app bar (both for old actionbar and new toolbar);
 	 	overrides colorPrimary to allow customization of the app bar color,
 	 	independent of Material Design guidelines, if desired
 	-->
 	<style name="ownCloud.Appbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 		<item name="colorPrimary">@color/actionbar_start_color</item>
 	</style>
+
+	<!-- Transparent style for the app bar -->
+	<style name="ownCloud.Appbar.Transparent" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+		<item name="colorPrimary">@color/owncloud_blue_transparent</item>
+	</style>
+
+
+	<!-- MORE styles -->
 
 	<style name="ownCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
 		<item name="colorAccent">@color/color_accent</item>
@@ -114,24 +130,6 @@
 
 	<style name="Button.Borderless" parent="Base.Widget.AppCompat.Button.Borderless">
 		<item name="android:textColor">@color/color_accent</item>
-	</style>
-
-	<!-- separat translucent action bar style -->
-	<style name="Theme.ownCloud.Overlay" parent="style/Theme.ownCloud">
-		<item name="android:actionBarStyle">@style/Theme.ownCloud.Overlay.ActionBar</item>
-		<item name="windowActionBarOverlay">true</item>
-		<!-- Support library compatibility -->
-		<item name="actionBarStyle">@style/Theme.ownCloud.Overlay.ActionBar</item>
-	</style>
-
-	<!-- ACTION BAR STYLES -->
-	<style name="Theme.ownCloud.Overlay.ActionBar" parent="@style/Widget.AppCompat.ActionBar">
-		<item name="android:background">@color/owncloud_blue_transparent</item>
-		<item name="android:windowActionBarOverlay">true</item>
-
-		<!-- Support library compatibility -->
-		<item name="background">@color/owncloud_blue_transparent</item>
-		<item name="windowActionBarOverlay">true</item>
 	</style>
 
 	<!-- Style for top progress bar -->

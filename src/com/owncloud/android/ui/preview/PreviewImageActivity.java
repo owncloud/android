@@ -88,9 +88,6 @@ public class PreviewImageActivity extends FileActivity implements
 
         setContentView(R.layout.preview_image_activity);
 
-        // Navigation Drawer
-        setupDrawer();
-
         // ActionBar
         ActionBar actionBar = getSupportActionBar();
         updateActionBarTitleAndHomeButton(null);
@@ -488,4 +485,5 @@ public class PreviewImageActivity extends FileActivity implements
         backToDisplayActivity();
         super.allFilesOption();
     }
+
 }
