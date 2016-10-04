@@ -112,7 +112,7 @@ public class FileContentProvider extends ContentProvider {
                                     + (!TextUtils.isEmpty(where) ? " AND (" + where
                                     + ")" : ""), whereArgs);
                 }catch (Exception e){
-                    e.printStackTrace();
+                    Log_OC.d(TAG, "Datebase Error " + e);
                 }finally {
                     c.close();
                 }
