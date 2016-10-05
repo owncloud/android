@@ -2,7 +2,7 @@
 <!-- 
   ownCloud Android client application
 
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2015 ownCloud Inc.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -49,17 +49,16 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <android.support.v7.widget.AppCompatButton
+        <!-- 'OK' / 'CANCEL' BUTTONS CHANGE THEIR ORDER FROM ANDROID 4.0 ; THANKS, GOOGLE -->
+        <Button
             android:id="@+id/cancel"
-            android:theme="@style/Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/common_cancel" />
 
-        <android.support.v7.widget.AppCompatButton
+		<Button
 		    android:id="@+id/ok"
-            android:theme="@style/Button.Primary"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_weight="1"

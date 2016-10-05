@@ -72,11 +72,6 @@
     </style>
 
 
-	<style name="Theme.ownCloud.Toolbar.Login">
-
-	</style>
-
-
     <!-- DIALOG THEMES: styles for DIALOGs -->
 
     <!-- DEFAULT (via Theme.ownCloud), and explicitly used ONCE, in Preference "behaviour" for instant uploads - NO MORE, not needed, it's default -->
@@ -239,13 +234,17 @@
 		<item name="android:password">true</item>
 		<item name="android:singleLine">true</item>
 	</style>
-	
-	<color name="setup_text_hint">#777777</color>
-	<color name="setup_text_typed">#000000</color>
-	<style name="Theme.ownCloud.NoActionBar">
-		<item name="windowActionBar">false</item>
-		<item name="windowNoTitle">true</item>
-	</style>
-	<style name="Theme.ownCloud.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-	<style name="Theme.ownCloud.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Notifications -->
+    <style 	name="Theme.ownCloud.NotificationText.Title"
+              parent="@android:style/TextAppearance.StatusBar.EventContent.Title" >
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style 	name="Theme.ownCloud.NotificationText.Content"
+              parent="@android:style/TextAppearance.StatusBar.EventContent"	>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
