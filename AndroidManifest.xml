@@ -167,7 +167,7 @@
             android:name=".authentication.AuthenticatorActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.ownCloud.Toolbar" >
+            >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -188,10 +188,13 @@
         <service android:name=".files.services.FileUploader" />
         <service android:name=".media.MediaService" />
 
-        <activity android:name=".ui.activity.PassCodeActivity" />
-        <activity android:name=".ui.activity.ConflictsResolveActivity"/>
+        <activity android:name=".ui.activity.PassCodeActivity"
+            android:theme="@style/Theme.ownCloud"/>
+        <activity android:name=".ui.activity.ConflictsResolveActivity"
+            android:theme="@style/Theme.ownCloud"/>
         <activity android:name=".ui.activity.GenericExplanationActivity"/>
-        <activity android:name=".ui.activity.ErrorsWhileCopyingHandlerActivity"/>
+        <activity android:name=".ui.activity.ErrorsWhileCopyingHandlerActivity"
+            android:theme="@style/Theme.ownCloud"/>
         
         <activity android:name=".ui.activity.LogHistoryActivity"/>
 
