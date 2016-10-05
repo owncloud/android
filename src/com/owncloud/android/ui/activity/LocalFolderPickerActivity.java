@@ -43,7 +43,7 @@ import java.io.File;
  * Displays local folders and let the user choose one of them, which path is set as result.
  */
 
-public class LocalFolderPickerActivity extends AppCompatActivity implements LocalFileListFragment.ContainerActivity {
+public class LocalFolderPickerActivity extends ToolbarActivity implements LocalFileListFragment.ContainerActivity {
 
     private static final String TAG = LocalFolderPickerActivity.class.getName();
 
@@ -122,6 +122,8 @@ public class LocalFolderPickerActivity extends AppCompatActivity implements Loca
             }
         });
 
+        // init toolbar
+        setupToolbar();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
