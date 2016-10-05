@@ -177,8 +177,7 @@ public class UriUploader {
      */
     private void copyThenUpload(Uri[] sourceUris, String[] remotePaths) {
         if (mShowWaitingDialog) {
-            mActivity.showLoadingDialog(mActivity.getResources().
-                    getString(R.string.wait_for_tmp_copy_from_private_storage));
+            mActivity.showLoadingDialog(R.string.wait_for_tmp_copy_from_private_storage);
         }
 
         CopyAndUploadContentUrisTask copyTask = new CopyAndUploadContentUrisTask

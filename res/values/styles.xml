@@ -20,7 +20,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<style name="Animations" />
 
-	<!-- THEMES: App / Activity styles -->
+	<!-- THEMES: styles for whole APP or individual ACTIVITIES -->
 
 	<!-- General ownCloud app style.
 		 To apply directly only on Activities that cannot extend ToolbarActivity;
@@ -40,9 +40,8 @@
 		<item name="colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorAccent">@color/color_accent</item>
 
-		<!-- themes for dialogs -->
-		<item name="android:alertDialogTheme">@style/Theme.ownCloud.Dialog</item>
-		<item name="alertDialogTheme">@style/ownCloud.AlertDialog</item>
+		<!-- default theme for alert dialogs -->
+		<item name="alertDialogTheme">@style/Theme.ownCloud.AlertDialog</item>
 
 		<!-- style for search view -->
 		<item name="searchViewStyle">@style/ownCloud.SearchView</item>
@@ -73,13 +72,29 @@
     </style>
 
 
-
-	<style name="Theme.ownCloud.noActionBar.Login" parent="Theme.ownCloud.Toolbar">
+	<style name="Theme.ownCloud.Toolbar.Login">
 
 	</style>
 
 
-	<!-- APP BAR level styles -->
+    <!-- DIALOG THEMES: styles for DIALOGs -->
+
+    <!-- DEFAULT (via Theme.ownCloud), and explicitly used ONCE, in Preference "behaviour" for instant uploads - NO MORE, not needed, it's default -->
+    <style name="Theme.ownCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="android:textColorPrimary">@color/primary</item>
+        <item name="searchViewStyle">@style/ownCloud.SearchView</item>
+        <item name="buttonBarButtonStyle">@style/Theme.ownCloud.Dialog.ButtonBar.Button</item>
+        <item name="buttonBarStyle">@style/Theme.ownCloud.Dialog.ButtonBar</item>
+    </style>
+
+    <!-- USED IN SHAREACTIVITY!! !! -->
+    <style name="Theme.ownCloud.AlertDialog.NoTitle" >
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+    <!-- APP BAR styles -->
 
 	<!-- Regular style for the app bar (both for old actionbar and new toolbar);
 	 	overrides colorPrimary to allow customization of the app bar color,
@@ -95,28 +110,9 @@
 	</style>
 
 
-	<!-- MORE styles -->
+    <!-- MORE styles -->
 
-	<style name="ownCloud.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-		<item name="colorAccent">@color/color_accent</item>
-		<item name="android:textColorPrimary">@color/primary</item>
-		<item name="searchViewStyle">@style/ownCloud.SearchView</item>
-	</style>
-
-	<style name="ownCloud.Dialog" parent="Theme.AppCompat.Light.Dialog">
-		<item name="colorAccent">@color/color_accent</item>
-		<item name="searchViewStyle">@style/ownCloud.SearchView</item>
-	</style>
-
-	<style name="ProgressDialogTheme" parent="ownCloud.Dialog">
-		<item name="colorAccent">@color/color_accent</item>
-		<item name="android:textColorPrimary">@color/primary</item>
-		<item name="android:windowFrame">@color/transparent</item>
-		<item name="android:windowBackground">@color/transparent</item>
-		<item name="android:windowTitleBackgroundStyle">@drawable/process_dialog_background</item>
-	</style>
-
-	<style name="ownCloud.SearchView" parent="Widget.AppCompat.SearchView">
+    <style name="ownCloud.SearchView" parent="Widget.AppCompat.SearchView">
 		<!-- Close button icon -->
 		<item name="closeIcon">@drawable/ic_close</item>
 		<!-- Search button icon -->
@@ -153,23 +149,6 @@
 	</style>
 
 	<!-- Dialogs -->
-	<style name="Theme.ownCloud.Dialog" parent="style/Theme.AppCompat.Light.Dialog.Alert">
-		<item name="windowNoTitle">false</item>
-		<item name="colorAccent">@color/owncloud_blue_accent</item>
-		<item name="buttonBarButtonStyle">@style/Theme.ownCloud.Dialog.ButtonBar.Button</item>
-		<item name="buttonBarStyle">@style/Theme.ownCloud.Dialog.ButtonBar</item>
-	</style>
-
-	<style name="Theme.ownCloud.Dialog.NoTitle" parent="style/Theme.ownCloud.Dialog">
-		<item name="windowNoTitle">true</item>
-		<item name="colorAccent">@color/owncloud_blue_accent</item>
-	</style>
-
-	<style name="Theme.ownCloud.Dialog.NoButtonBarStyle" parent="style/Theme.AppCompat.Light.Dialog.Alert">
-		<item name="windowNoTitle">false</item>
-		<item name="colorAccent">@color/owncloud_blue_accent</item>
-	</style>
-
 	<style name="menu_labels_style">
 		<item name="android:background">@drawable/fab_label_background</item>
 		<item name="android:textColor">@color/fab_white</item>
@@ -185,7 +164,7 @@
 	fix see:
 		http://stackoverflow.com/questions/27187353/dialog-buttons-with-long-text-not-wrapping-squeezed-out-material-theme-on-an
 	 -->
-	<style name="Theme.ownCloud.Dialog.ButtonBar" parent="style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
+	<style name="Theme.ownCloud.Dialog.ButtonBar" parent="style/Widget.AppCompat.ButtonBar.AlertDialog">
 		<!-- Making sure, the button bar uses parent width and is not restricted in height -->
 		<item name="android:layout_width">match_parent</item>
 		<item name="android:layout_height">wrap_content</item>
@@ -261,11 +240,6 @@
 		<item name="android:singleLine">true</item>
 	</style>
 	
-	<style name="OAuthDialog" parent="style/Theme.AppCompat.Light.Dialog.Alert">
-		<item name="windowNoTitle">false</item>
-		<item name="colorAccent">@color/owncloud_blue_accent</item>
-	</style>    
-		
 	<color name="setup_text_hint">#777777</color>
 	<color name="setup_text_typed">#000000</color>
 	<style name="Theme.ownCloud.NoActionBar">

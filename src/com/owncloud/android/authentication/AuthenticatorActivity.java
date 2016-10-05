@@ -89,7 +89,7 @@ import com.owncloud.android.operations.OAuth2GetAccessToken;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.CredentialsDialogFragment;
-import com.owncloud.android.ui.dialog.IndeterminateProgressDialog;
+import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SamlWebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
@@ -750,8 +750,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mNewCapturedUriFromOAuth2Redirection = null;
 
         /// Showing the dialog with instructions for the user.
-        IndeterminateProgressDialog dialog = 
-                IndeterminateProgressDialog.newInstance(R.string.auth_getting_authorization, true);
+        LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
         dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
 
         /// GET ACCESS TOKEN to the oAuth server
@@ -959,8 +958,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String password = mPasswordInput.getText().toString();
 
         /// be gentle with the user
-        IndeterminateProgressDialog dialog = 
-                IndeterminateProgressDialog.newInstance(R.string.auth_trying_to_login, true);
+        LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_trying_to_login, true);
         dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
 
         /// validate credentials accessing the root folder
@@ -1381,8 +1379,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         if (result.isSuccess()) {
             /// be gentle with the user
-            IndeterminateProgressDialog dialog = 
-                    IndeterminateProgressDialog.newInstance(R.string.auth_trying_to_login, true);
+            LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_trying_to_login, true);
             dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
 
             /// time to test the retrieved access token on the ownCloud server

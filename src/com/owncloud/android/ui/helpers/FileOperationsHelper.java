@@ -153,10 +153,7 @@ public class FileOperationsHelper {
     public void shareFileViaLink(OCFile file, String password) {
         if (isSharedSupported()) {
             if (file != null) {
-                mFileActivity.showLoadingDialog(
-                        mFileActivity.getApplicationContext().
-                                getString(R.string.wait_a_moment)
-                );
+                mFileActivity.showLoadingDialog(R.string.wait_a_moment);
                 Intent service = new Intent(mFileActivity, OperationsService.class);
                 service.setAction(OperationsService.ACTION_CREATE_SHARE_VIA_LINK);
                 service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
@@ -184,8 +181,7 @@ public class FileOperationsHelper {
     public void getFileWithLink(OCFile file){
         if (isSharedSupported()) {
             if (file != null) {
-                mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                        getString(R.string.wait_a_moment));
+                mFileActivity.showLoadingDialog(R.string.wait_a_moment);
 
                 Intent service = new Intent(mFileActivity, OperationsService.class);
                 service.setAction(OperationsService.ACTION_CREATE_SHARE_VIA_LINK);
@@ -217,8 +213,7 @@ public class FileOperationsHelper {
     public void shareFileWithSharee(OCFile file, String shareeName, ShareType shareType, int permissions) {
         if (file != null) {
             // TODO check capability?
-            mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                getString(R.string.wait_a_moment));
+            mFileActivity.showLoadingDialog(R.string.wait_a_moment);
 
             Intent service = new Intent(mFileActivity, OperationsService.class);
             service.setAction(OperationsService.ACTION_CREATE_SHARE_WITH_SHAREE);
@@ -286,8 +281,7 @@ public class FileOperationsHelper {
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().
                     queueNewOperation(shareIntent);
 
-            mFileActivity.showLoadingDialog(mFileActivity.getApplicationContext().
-                    getString(R.string.wait_a_moment));
+            mFileActivity.showLoadingDialog(R.string.wait_a_moment);
 
         } else {
             // Show a Message
@@ -492,7 +486,7 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_NEWNAME, newFilename);
         mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         
-        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
+        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
 
@@ -514,7 +508,7 @@ public class FileOperationsHelper {
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         }
         
-        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
+        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
 
@@ -527,7 +521,7 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_CREATE_FULL_PATH, createFullPath);
         mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         
-        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
+        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
     /**
@@ -570,7 +564,7 @@ public class FileOperationsHelper {
             service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         }
-        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
+        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
     /**
@@ -588,7 +582,7 @@ public class FileOperationsHelper {
             service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         }
-        mFileActivity.showLoadingDialog(mFileActivity.getString(R.string.wait_a_moment));
+        mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
     public long getOpIdWaitingFor() {
@@ -623,8 +617,6 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_ACCOUNT, account);
         mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
 
-        mFileActivity.showLoadingDialog(
-            mFileActivity.getString(R.string.wait_checking_credentials)
-        );
+        mFileActivity.showLoadingDialog(R.string.wait_checking_credentials);
     }
 }

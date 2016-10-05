@@ -448,14 +448,14 @@ public class FileActivity extends DrawerActivity
     /**
      * Show loading dialog
      */
-    public void showLoadingDialog(String message) {
+    public void showLoadingDialog(int messageId) {
         // grant that only one waiting dialog is shown
         dismissLoadingDialog();
         // Construct dialog
         Fragment frag = getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
         if (frag == null) {
             Log_OC.d(TAG, "show loading dialog");
-            LoadingDialog loading = new LoadingDialog(message);
+            LoadingDialog loading = LoadingDialog.newInstance(messageId, false);
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             loading.show(ft, DIALOG_WAIT_TAG);

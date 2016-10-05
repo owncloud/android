@@ -251,7 +251,7 @@ public class PreviewTextFragment extends FileFragment {
             LoadingDialog loading = null;
             if (frag == null) {
                 // Construct dialog
-                loading = new LoadingDialog(getResources().getString(R.string.wait_a_moment));
+                loading = LoadingDialog.newInstance(R.string.wait_a_moment, false);
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 loading.show(ft, DIALOG_WAIT_TAG);
