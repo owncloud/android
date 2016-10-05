@@ -27,14 +27,20 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
+import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertTrue;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.AccountsManager;
@@ -76,8 +82,8 @@ public class AuthenticatorActivityTest {
     public static final String EXTRA_ACTION = "ACTION";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
-    private static final int WAIT_LOGIN = 2000;
-    private static final int WAIT_CONNECTION = 2500;
+    private static final int WAIT_LOGIN = 1500;
+    private static final int WAIT_CONNECTION = 2000;
 
     private static final String ERROR_MESSAGE = "Activity not finished";
     private static final String ALREADY_EXISTING_ACCOUNT_ERROR =
@@ -99,7 +105,13 @@ public class AuthenticatorActivityTest {
     private String testServerURL = null;
     private String testServerPort = null;
     private String testServerPortSecure = null;
-    int trusted = 0;
+    int trusted = -1;
+
+    private String testServerURLRedirect = null;
+    private String testServerPortRedirect = null;
+    private String testUserRedirect = null;
+    private String testPasswordRedirect = null;
+    int trusted_redirect = -1;
 
     @Rule
     public ActivityTestRule<AuthenticatorActivity> mActivityRule = new ActivityTestRule<AuthenticatorActivity>(
@@ -129,6 +141,13 @@ public class AuthenticatorActivityTest {
         testServerPortSecure = arguments.getString("TEST_SERVER_PORT_SECURE");
         trusted = arguments.getInt("TRUSTED");
 
+
+        testServerURLRedirect = arguments.getString("TEST_SERVER_URL_REDIRECT");
+        testServerPortRedirect = arguments.getString("TEST_SERVER_PORT_REDIRECT");
+        testUserRedirect = arguments.getString("TEST_SERVER_USER_REDIRECT");
+        testPasswordRedirect = arguments.getString("TEST_SERVER_PASSWORD_REDIRECT");
+        trusted_redirect = arguments.getInt("TRUSTED_REDIRECT");
+
         UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         /*Point[] coordinates = new Point[4];
         coordinates[0] = new Point(248, 1020);
@@ -153,6 +172,9 @@ public class AuthenticatorActivityTest {
 
         String connectionString = getConnectionString(testServerURL, testServerPort);
 
+        //To avoid the little delay when the activity starts
+        SystemClock.sleep(500);
+
         // Check that login button is disabled
         onView(withId(R.id.buttonOK))
                 .check(matches(not(isEnabled())));
@@ -160,11 +182,10 @@ public class AuthenticatorActivityTest {
         setFields(connectionString, testUser, testPassword);
 
         // Check that the Activity ends after clicking
-        Thread.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN);
         Field f = Activity.class.getDeclaredField(RESULT_CODE);
         f.setAccessible(true);
         int mResultCode = f.getInt(mActivityRule.getActivity());
-
         assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
 
         Log_OC.i(LOG_TAG, "Test Check Login Correct Passed");
@@ -172,7 +193,50 @@ public class AuthenticatorActivityTest {
     }
 
     @Test
-    public void test2_check_login_special_characters()
+    public void test2_login_landscape()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test Check Login Landscape Start");
+
+        String connectionString = getConnectionString(testServerURL, testServerPort);
+
+        //Set landscape
+        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        onView(withId(R.id.hostUrlInput))
+                .perform(closeSoftKeyboard());
+
+        onView(withId(R.id.hostUrlInput))
+                .perform(replaceText(connectionString), closeSoftKeyboard());
+
+        onView(withId(R.id.hostUrlInput))
+                .perform(pressImeActionButton());
+
+        onView(withId(R.id.account_username))
+                .perform(replaceText(testUser), closeSoftKeyboard());
+
+        onView(withId(R.id.account_username))
+                .perform(pressImeActionButton());
+
+        onView(withId(R.id.account_password))
+                .perform(replaceText(testPassword), closeSoftKeyboard());
+
+        //Set portrait to next test cases
+        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        onView(withId(R.id.buttonOK)).perform(click());
+
+
+        // Check that the Activity ends after clicking
+        SystemClock.sleep(WAIT_LOGIN);
+        Field f = Activity.class.getDeclaredField(RESULT_CODE);
+        f.setAccessible(true);
+        int mResultCode = f.getInt(mActivityRule.getActivity());
+
+        assertTrue(ERROR_MESSAGE, mResultCode != Activity.RESULT_OK);
+    }
+
+    @Test
+    public void test3_check_login_special_characters()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Special Characters Start");
@@ -186,7 +250,7 @@ public class AuthenticatorActivityTest {
         setFields(connectionString, testUser2, testPassword2);
 
         // Check that the Activity ends after clicking
-        Thread.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN);
         Field f = Activity.class.getDeclaredField(RESULT_CODE);
         f.setAccessible(true);
         int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -198,7 +262,7 @@ public class AuthenticatorActivityTest {
     }
 
     @Test
-    public void test3_check_login_incorrect()
+    public void test4_check_login_incorrect()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Incorrect Start");
@@ -220,7 +284,7 @@ public class AuthenticatorActivityTest {
     }
 
     @Test
-    public void test4_check_existing_account()
+    public void test5_check_existing_account()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Existing Account Start");
@@ -245,7 +309,7 @@ public class AuthenticatorActivityTest {
     }
 
     @Test
-    public void test5_check_login_blanks()
+    public void test6_check_login_blanks()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Blanks Login Start");
@@ -266,7 +330,7 @@ public class AuthenticatorActivityTest {
     }
 
     @Test
-    public void test6_check_login_trimmed_blanks()
+    public void test7_check_login_trimmed_blanks()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Trimmed Blanks Start");
@@ -281,7 +345,7 @@ public class AuthenticatorActivityTest {
         setFields(connectionString, UserBlanks, testPassword);
 
         // Check that the Activity ends after clicking
-        Thread.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN);
         Field f = Activity.class.getDeclaredField(RESULT_CODE);
         f.setAccessible(true);
         int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -293,7 +357,7 @@ public class AuthenticatorActivityTest {
     }
 
     @Test
-    public void test7_check_url_from_browser()
+    public void test8_check_url_from_browser()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check URL Browser Start");
@@ -310,7 +374,7 @@ public class AuthenticatorActivityTest {
 
         // Check that the Activity ends after clicking
 
-        Thread.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN);
         Field f = Activity.class.getDeclaredField(RESULT_CODE);
         f.setAccessible(true);
         int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -322,7 +386,7 @@ public class AuthenticatorActivityTest {
     }
 
     @Test
-    public void test8_check_certif_not_secure_no_accept()
+    public void test9_check_certif_not_secure_no_accept()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test not accept not secure start");
@@ -351,7 +415,7 @@ public class AuthenticatorActivityTest {
             onView(withId(R.id.buttonOK))
                     .check(matches(not(isEnabled())));
 
-            // Check that login button keeps on being disabled
+            // Check that SSL server is not trusted
             onView(withId(R.id.server_status_text))
                     .check(matches(withText(SECURE_CONNECTION_DISMISSED)));
 
@@ -364,7 +428,7 @@ public class AuthenticatorActivityTest {
     }
 
     @Test
-    public void test9_check_certif_not_secure()
+    public void test_10_check_certif_not_secure()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test accept not secure start");
@@ -400,7 +464,6 @@ public class AuthenticatorActivityTest {
             onView(withId(R.id.ok)).perform(click());
 
             SystemClock.sleep(WAIT_CONNECTION);
-
             //Check correct connection message
             onView(withId(R.id.server_status_text))
                     .check(matches(withText(SECURE_CONNECTION_ESTABLISHED)));
@@ -415,7 +478,7 @@ public class AuthenticatorActivityTest {
             onView(withId(R.id.buttonOK)).perform(click());
 
             // Check that the Activity ends after clicking
-            Thread.sleep(WAIT_LOGIN);
+            SystemClock.sleep(WAIT_LOGIN);
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -429,9 +492,65 @@ public class AuthenticatorActivityTest {
     }
 
 
+    @Test
+    public void test_11_redirected_server()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        if (testServerURLRedirect != null) {
+
+            Log_OC.i(LOG_TAG, "Test Check Redirection Start");
+
+            String connectionString = testServerURLRedirect;
+
+            // Check that login button is disabled
+            onView(withId(R.id.buttonOK))
+                    .check(matches(not(isEnabled())));
+
+            // Type server url
+            onView(withId(R.id.hostUrlInput))
+                    .perform(typeText(connectionString), closeSoftKeyboard());
+            onView(withId(R.id.account_username)).perform(click());
+
+            SystemClock.sleep(WAIT_CONNECTION);
+
+            if (trusted_redirect == 0) {
+
+                //Closing the view
+                onView(withId(R.id.ok)).perform(click());
+
+                SystemClock.sleep(WAIT_CONNECTION);
+            }
+
+            // Type user
+            onView(withId(R.id.account_username))
+                    .perform(typeText(testUserRedirect), closeSoftKeyboard());
+
+            // Type user pass
+            onView(withId(R.id.account_password))
+                    .perform(typeText(testPasswordRedirect), closeSoftKeyboard());
+            onView(withId(R.id.buttonOK)).perform(click());
+
+            // Check that the Activity ends after clicking
+            SystemClock.sleep(WAIT_LOGIN);
+            Field f = Activity.class.getDeclaredField(RESULT_CODE);
+            f.setAccessible(true);
+            int mResultCode = f.getInt(mActivityRule.getActivity());
+
+            assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
+
+            Log_OC.i(LOG_TAG, "Test Check Redirection Passed");
+
+        }
+
+    }
+
+
     private String getConnectionString (String url, String port){
 
-        return url+":"+port;
+        if (port != null)
+            return url+":"+port;
+        else
+            return url;
     }
 
     private void setFields (String connectionString, String username, String password){
@@ -440,6 +559,8 @@ public class AuthenticatorActivityTest {
         onView(withId(R.id.hostUrlInput))
                 .perform(typeText(connectionString), closeSoftKeyboard());
         onView(withId(R.id.account_username)).perform(click());
+
+        SystemClock.sleep(WAIT_CONNECTION);
 
         // Type user
         onView(withId(R.id.account_username))
@@ -453,7 +574,6 @@ public class AuthenticatorActivityTest {
 
     @After
     public void tearDown() throws Exception {
-
         AccountsManager.deleteAllAccounts(targetContext);
     }
 }
