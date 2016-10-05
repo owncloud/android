@@ -283,7 +283,8 @@ public class BitmapUtils {
      * @throws UnsupportedEncodingException if the charset is not supported
      * @throws NoSuchAlgorithmException if the specified algorithm is not available
      */
-    public static int[] calculateRGB(String accountName) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public static int[] calculateAvatarBackgroundRGB(String accountName)
+        throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // using adapted algorithm from /core/js/placeholder.js:50
         String username = AccountUtils.getUsernameOfAccount(accountName);
         byte[] seed = username.getBytes("UTF-8");

@@ -67,8 +67,8 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
             convertView = inflater.inflate(R.layout.account_item, parent, false);
 
             viewHolder = new AccountViewHolderItem();
-            viewHolder.textViewItem = (TextView) convertView.findViewById(R.id.user_name);
-            viewHolder.imageViewItem = (ImageView) convertView.findViewById(R.id.user_icon);
+            viewHolder.textViewItem = (TextView) convertView.findViewById(R.id.action_name);
+            viewHolder.imageViewItem = (ImageView) convertView.findViewById(R.id.action_icon);
             viewHolder.passwordButtonItem = (ImageView) convertView.findViewById(R.id.passwordButton);
             viewHolder.removeButtonItem = (ImageView) convertView.findViewById(R.id.removeButton);
 
@@ -133,8 +133,8 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
             else if (AccountListItem.TYPE_ACTION_ADD == accountListItem.getType()) {
                 LayoutInflater inflater = ((ManageAccountsActivity) mContext).getLayoutInflater();
                 View actionView = inflater.inflate(R.layout.account_action, parent, false);
-                ((TextView) actionView.findViewById(R.id.user_name)).setText(R.string.prefs_add_account);
-                ((ImageView) actionView.findViewById(R.id.user_icon)).setImageResource(R.drawable.ic_account_plus);
+                ((TextView) actionView.findViewById(R.id.action_name)).setText(R.string.prefs_add_account);
+                ((ImageView) actionView.findViewById(R.id.action_icon)).setImageResource(R.drawable.ic_account_plus);
 
                 // bind action listener
                 actionView.setOnClickListener(new View.OnClickListener() {

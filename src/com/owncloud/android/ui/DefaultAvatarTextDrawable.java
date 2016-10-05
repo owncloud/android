@@ -95,7 +95,7 @@ public class DefaultAvatarTextDrawable extends Drawable {
     @NonNull
     public static DefaultAvatarTextDrawable createAvatar(String accountName, float radiusInDp) throws
             UnsupportedEncodingException, NoSuchAlgorithmException {
-        int[] rgb = BitmapUtils.calculateRGB(accountName);
+        int[] rgb = BitmapUtils.calculateAvatarBackgroundRGB(accountName);
         DefaultAvatarTextDrawable avatar = new DefaultAvatarTextDrawable(
                 accountName.substring(0, 1).toUpperCase(), rgb[0], rgb[1], rgb[2], radiusInDp);
         return avatar;

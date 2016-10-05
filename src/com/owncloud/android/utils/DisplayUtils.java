@@ -321,7 +321,9 @@ public class DisplayUtils {
 
             if (thumbnail != null) {
                 userIcon.setImageDrawable(
-                        BitmapUtils.bitmapToCircularBitmapDrawable(MainApp.getAppContext().getResources(), thumbnail)
+                        BitmapUtils.bitmapToCircularBitmapDrawable(
+                            MainApp.getAppContext().getResources(), thumbnail
+                        )
                 );
             } else {
                 // generate new avatar
@@ -330,7 +332,9 @@ public class DisplayUtils {
                             new ThumbnailsCacheManager.AvatarGenerationTask(userIcon, storageManager, account);
                     if (thumbnail == null) {
                         try {
-                            userIcon.setImageDrawable(DefaultAvatarTextDrawable.createAvatar(account.name, avatarRadius));
+                            userIcon.setImageDrawable(
+                                DefaultAvatarTextDrawable.createAvatar(account.name, avatarRadius)
+                            );
                         } catch (Exception e) {
                             Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
                             userIcon.setImageResource(R.drawable.ic_account_circle);

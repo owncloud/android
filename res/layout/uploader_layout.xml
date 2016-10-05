@@ -20,8 +20,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/upload_files_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:filterTouchesWhenObscured="true"
     android:orientation="vertical" >
 
@@ -31,7 +31,7 @@
     <FrameLayout
         android:id="@+id/upload_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         >
 
@@ -46,17 +46,10 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:src="@drawable/uploader_list_separator"/>
-
-    </LinearLayout>
+        android:layout_height="1dp"
+        android:src="@drawable/uploader_list_separator"/>
 
     <LinearLayout
         android:id="@+id/upload_actions"

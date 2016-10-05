@@ -18,7 +18,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OCCapability;
 
 /**
- * Base ctivity with common behaviour for activities dealing with ownCloud {@link Account}s .
+ * Base Activity with common behaviour for activities dealing with ownCloud {@link Account}s .
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private OCCapability mCapabilities;
 
     /**
-     * Flag to signal that the activity will is finishing to enforce the creation of an ownCloud {@link Account}.
+     * Flag to signal that the activity is finishing to enforce the creation of an ownCloud {@link Account}.
      */
     private boolean mRedirectingToSetupAccount = false;
 

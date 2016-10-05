@@ -38,7 +38,7 @@
             android:orderInCategory="0"
             android:id="@+id/nav_uploads"
             android:icon="@drawable/ic_uploads"
-            android:title="Uploads"/>
+            android:title="@string/drawer_item_uploads_list"/>
     </group>
 
     <!--
