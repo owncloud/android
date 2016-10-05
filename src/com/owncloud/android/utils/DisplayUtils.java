@@ -35,11 +35,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateUtils;
 import android.view.Display;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -47,7 +45,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.TextDrawable;
+import com.owncloud.android.ui.DefaultAvatarTextDrawable;
 
 import java.math.BigDecimal;
 import java.net.IDN;
@@ -332,7 +330,7 @@ public class DisplayUtils {
                             new ThumbnailsCacheManager.AvatarGenerationTask(userIcon, storageManager, account);
                     if (thumbnail == null) {
                         try {
-                            userIcon.setImageDrawable(TextDrawable.createAvatar(account.name, avatarRadius));
+                            userIcon.setImageDrawable(DefaultAvatarTextDrawable.createAvatar(account.name, avatarRadius));
                         } catch (Exception e) {
                             Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
                             userIcon.setImageResource(R.drawable.ic_account_circle);

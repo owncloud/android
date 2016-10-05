@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author Andy Scherzinger
- *   Copyright (C) 2016 ownCloud Inc.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -28,8 +28,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -46,7 +44,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.TextDrawable;
+import com.owncloud.android.ui.DefaultAvatarTextDrawable;
 import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
 
@@ -386,7 +384,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         Menu.NONE,
                         MENU_ORDER_ACCOUNT,
                         accounts[i].name)
-                        .setIcon(TextDrawable.createAvatar(
+                        .setIcon(DefaultAvatarTextDrawable.createAvatar(
                                 accounts[i].name,
                                 mMenuAccountAvatarRadiusDimension)
                         );
@@ -485,7 +483,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                     if (thumbnail == null) {
                         try {
                                 menuItem.setIcon(
-                                        TextDrawable.createAvatar(
+                                        DefaultAvatarTextDrawable.createAvatar(
                                                 account.name,
                                                 mMenuAccountAvatarRadiusDimension
                                         )

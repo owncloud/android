@@ -3,7 +3,7 @@
  *
  * @author Andy Scherzinger
  * @author Tobias Kaminsiky
- * Copyright (C) 2016 ownCloud Inc.
+ * Copyright (C) 2016 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,7 +36,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * A Drawable object that draws text (1 character) on top of a circular/filled background.
  */
-public class TextDrawable extends Drawable {
+public class DefaultAvatarTextDrawable extends Drawable {
     /**
      * the text to be rendered.
      */
@@ -58,7 +58,7 @@ public class TextDrawable extends Drawable {
     private float mRadius;
 
     /**
-     * Create a TextDrawable with the given radius.
+     * Create a DefaultAvatarTextDrawable with the given radius.
      *
      * @param text   the text to be rendered
      * @param r      rgb red value
@@ -66,7 +66,7 @@ public class TextDrawable extends Drawable {
      * @param b      rgb blue value
      * @param radius circle radius
      */
-    public TextDrawable(String text, int r, int g, int b, float radius) {
+    public DefaultAvatarTextDrawable(String text, int r, int g, int b, float radius) {
         mRadius = radius;
         mText = text;
 
@@ -83,20 +83,20 @@ public class TextDrawable extends Drawable {
     }
 
     /**
-     * creates an avatar in form of  a TextDrawable with the first letter of the account name in a circle with the
+     * creates an avatar in form of  a DefaultAvatarTextDrawable with the first letter of the account name in a circle with the
      * given radius.
      *
      * @param accountName the account name
      * @param radiusInDp  the circle's radius
-     * @return the avatar as a TextDrawable
+     * @return the avatar as a DefaultAvatarTextDrawable
      * @throws UnsupportedEncodingException if the charset is not supported when calculating the color values
      * @throws NoSuchAlgorithmException if the specified algorithm is not available when calculating the color values
      */
     @NonNull
-    public static TextDrawable createAvatar(String accountName, float radiusInDp) throws
+    public static DefaultAvatarTextDrawable createAvatar(String accountName, float radiusInDp) throws
             UnsupportedEncodingException, NoSuchAlgorithmException {
         int[] rgb = BitmapUtils.calculateRGB(accountName);
-        TextDrawable avatar = new TextDrawable(
+        DefaultAvatarTextDrawable avatar = new DefaultAvatarTextDrawable(
                 accountName.substring(0, 1).toUpperCase(), rgb[0], rgb[1], rgb[2], radiusInDp);
         return avatar;
     }
