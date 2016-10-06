@@ -378,25 +378,32 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         // add all accounts to list
         for (int i = 0; i < accounts.length; i++) {
+            MenuItem accountMenuItem = mNavigationView.getMenu().add(
+                R.id.drawer_menu_accounts,
+                Menu.NONE,
+                MENU_ORDER_ACCOUNT,
+                accounts[i].name
+            );
             try {
-                MenuItem accountMenuItem = mNavigationView.getMenu().add(
-                        R.id.drawer_menu_accounts,
-                        Menu.NONE,
-                        MENU_ORDER_ACCOUNT,
-                        accounts[i].name)
-                        .setIcon(DefaultAvatarTextDrawable.createAvatar(
-                                accounts[i].name,
-                                mMenuAccountAvatarRadiusDimension)
-                        );
                 setAvatar(accounts[i], accountMenuItem);
-            } catch (Exception e) {
-                Log_OC.e(TAG, "Error calculating RGB value for account menu item.", e);
-                mNavigationView.getMenu().add(
-                        R.id.drawer_menu_accounts,
-                        Menu.NONE,
-                        MENU_ORDER_ACCOUNT,
-                        accounts[i].name)
-                        .setIcon(R.drawable.ic_user);
+
+            } catch (Exception e1) {
+                Log_OC.w(TAG, "Error retrieving avatar, generating colored letter instead");
+                try {
+                    accountMenuItem.setIcon(
+                        DefaultAvatarTextDrawable.createAvatar(
+                            accounts[i].name,
+                            mMenuAccountAvatarRadiusDimension
+                        )
+                    );
+
+                } catch (Exception e2) {
+                    Log_OC.w(
+                        TAG,
+                        "Error calculating color for account icon, using static icon instead"
+                    );
+                    accountMenuItem.setIcon(R.drawable.ic_user);
+                }
             }
         }
 
