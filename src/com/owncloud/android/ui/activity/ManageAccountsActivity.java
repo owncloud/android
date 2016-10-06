@@ -89,11 +89,14 @@ public class ManageAccountsActivity extends FileActivity
         setAccount(AccountUtils.getCurrentOwnCloudAccount(this));
         onAccountSet(false);
 
-        mAccountListAdapter = new AccountListAdapter(this, getAccountListItems());
-
-        mListView.setAdapter(mAccountListAdapter);
-
         initializeComponentGetters();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAccountListAdapter = new AccountListAdapter(this, getAccountListItems());
+        mListView.setAdapter(mAccountListAdapter);
     }
 
     /**
@@ -138,8 +141,8 @@ public class ManageAccountsActivity extends FileActivity
      * @return <code>true</code> if aacount list has changed, <code>false</code> if not
      */
     private boolean hasCurrentAccountChanged() {
-        String currentAccount = AccountUtils.getCurrentOwnCloudAccount(this).name;
-        return !mOriginalCurrentAccount.equals(currentAccount);
+        Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(this);
+        return (currentAccount != null && !mOriginalCurrentAccount.equals(currentAccount.name));
     }
 
     /**
@@ -243,10 +246,14 @@ public class ManageAccountsActivity extends FileActivity
                 }, mHandler);
     }
 
+    /**
+     * Callback executed after the {@link AccountManager} removed an account
+     *
+     * @param future    Result of the removal; future.getResult() is true if account was removed correctly.
+     */
     @Override
     public void run(AccountManagerFuture<Boolean> future) {
-        if (future.isDone()) {
-            // after remove account
+        if (future != null && future.isDone()) {
             Account account = new Account(mAccountName, MainApp.getAccountType());
             if (!AccountUtils.exists(account, MainApp.getAppContext())) {
                 // Cancel transfers of the removed account
@@ -257,18 +264,31 @@ public class ManageAccountsActivity extends FileActivity
                     mDownloaderBinder.cancel(account);
                 }
             }
-            
-            if (AccountUtils.getCurrentOwnCloudAccount(this) == null) {
-                String accountName = "";
-                Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
-                if (accounts.length != 0) {
-                    accountName = accounts[0].name;
-                }
-                AccountUtils.setCurrentOwnCloudAccount(this, accountName);
-            }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems());
             mAccountListAdapter.notifyDataSetChanged();
+
+            AccountManager am = AccountManager.get(this);
+            if (am.getAccountsByType(MainApp.getAccountType()).length == 0) {
+                // Show create account screen if there isn't any account
+                am.addAccount(
+                    MainApp.getAccountType(),
+                    null, null, null,
+                    this,
+                    null, null
+                );
+            } else {    // at least one account left
+                if (AccountUtils.getCurrentOwnCloudAccount(this) == null) {
+                    // current account was removed - set another as current
+                    String accountName = "";
+                    Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
+                    if (accounts.length != 0) {
+                        accountName = accounts[0].name;
+                    }
+                    AccountUtils.setCurrentOwnCloudAccount(this, accountName);
+                }
+            }
+
         }
     }
 
