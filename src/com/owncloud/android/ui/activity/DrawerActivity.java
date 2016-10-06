@@ -378,31 +378,34 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         // add all accounts to list
         for (int i = 0; i < accounts.length; i++) {
-            MenuItem accountMenuItem = mNavigationView.getMenu().add(
-                R.id.drawer_menu_accounts,
-                Menu.NONE,
-                MENU_ORDER_ACCOUNT,
-                accounts[i].name
-            );
-            try {
-                setAvatar(accounts[i], accountMenuItem);
+            if (!getAccount().name.equals(accounts[i].name)) {
 
-            } catch (Exception e1) {
-                Log_OC.w(TAG, "Error retrieving avatar, generating colored letter instead");
+                MenuItem accountMenuItem = mNavigationView.getMenu().add(
+                        R.id.drawer_menu_accounts,
+                        Menu.NONE,
+                        MENU_ORDER_ACCOUNT,
+                        accounts[i].name
+                );
                 try {
-                    accountMenuItem.setIcon(
-                        DefaultAvatarTextDrawable.createAvatar(
-                            accounts[i].name,
-                            mMenuAccountAvatarRadiusDimension
-                        )
-                    );
+                    setAvatar(accounts[i], accountMenuItem);
 
-                } catch (Exception e2) {
-                    Log_OC.w(
-                        TAG,
-                        "Error calculating color for account icon, using static icon instead"
-                    );
-                    accountMenuItem.setIcon(R.drawable.ic_user);
+                } catch (Exception e1) {
+                    Log_OC.w(TAG, "Error retrieving avatar, generating colored letter instead");
+                    try {
+                        accountMenuItem.setIcon(
+                                DefaultAvatarTextDrawable.createAvatar(
+                                        accounts[i].name,
+                                        mMenuAccountAvatarRadiusDimension
+                                )
+                        );
+
+                    } catch (Exception e2) {
+                        Log_OC.w(
+                                TAG,
+                                "Error calculating color for account icon, using static icon instead"
+                        );
+                        accountMenuItem.setIcon(R.drawable.ic_user);
+                    }
                 }
             }
         }
