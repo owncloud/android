@@ -16,41 +16,93 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:orientation="horizontal"
-    android:weightSum="1">
+    android:layout_height="80dp"
+    >
 
     <ImageView
-        android:id="@+id/action_icon"
+        android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center_vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/standard_margin"
         android:layout_marginStart="@dimen/standard_margin"
         android:src="@drawable/ic_menu_archive"/>
 
+    <!--TextView
+        android:paddingRight="@dimen/standard_half_padding"
+        android:paddingEnd="@dimen/standard_half_padding"
+        android:maxLines="1"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        />
+
     <TextView
-        android:id="@+id/action_name"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:paddingRight="@dimen/standard_half_padding"
+        android:paddingEnd="@dimen/standard_half_padding"
+        android:maxLines="1"
+        android:textSize="12sp"
+        /-->
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
         android:layout_marginLeft="@dimen/standard_margin"
         android:layout_marginStart="@dimen/standard_margin"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
+        android:layout_marginRight="@dimen/standard_half_margin"
+        android:layout_marginEnd="@dimen/standard_half_margin"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/icon"
+        android:layout_toEndOf="@id/icon"
+        android:layout_toLeftOf="@+id/passwordButton"
+        android:layout_toStartOf="@id/passwordButton"
+        android:layout_alignParentTop="true"
+        android:gravity="bottom"
         android:paddingRight="@dimen/standard_padding"
         android:paddingEnd="@dimen/standard_padding"
         android:text="@string/placeholder_filename"
         android:textColor="@color/textColor"
-        android:textSize="@dimen/two_line_primary_text_size"/>
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/account"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginRight="@dimen/standard_half_margin"
+        android:layout_marginEnd="@dimen/standard_half_margin"
+        android:layout_marginBottom="4dp"
+        android:layout_toRightOf="@id/icon"
+        android:layout_toEndOf="@id/icon"
+        android:layout_toLeftOf="@id/passwordButton"
+        android:layout_toStartOf="@id/passwordButton"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/name"
+        android:gravity="top"
+        android:text="@string/placeholder_sentence"
+        android:textColor="@color/textColor"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:ellipsize="end"/>
 
     <ImageView
-        android:id="@+id/passwordButton"
+        android:id="@id/passwordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_toLeftOf="@+id/removeButton"
+        android:layout_toStartOf="@id/removeButton"
+        android:layout_centerInParent="true"
         android:paddingLeft="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
         android:paddingBottom="@dimen/standard_padding"
@@ -58,10 +110,13 @@
         android:src="@drawable/ic_key"/>
 
     <ImageView
-        android:id="@+id/removeButton"
+        android:id="@id/removeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
         android:paddingLeft="@dimen/standard_half_padding"
         android:paddingStart="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
@@ -70,4 +125,4 @@
         android:paddingEnd="@dimen/standard_padding"
         android:src="@drawable/ic_action_delete_grey"/>
 
-</LinearLayout>         
+</RelativeLayout>

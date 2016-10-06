@@ -28,10 +28,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.BaseActivity;
-import com.owncloud.android.ui.activity.ManageAccountsActivity;
 import com.owncloud.android.utils.DisplayUtils;
 
 import java.util.List;
@@ -67,8 +67,9 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
             convertView = inflater.inflate(R.layout.account_item, parent, false);
 
             viewHolder = new AccountViewHolderItem();
-            viewHolder.textViewItem = (TextView) convertView.findViewById(R.id.action_name);
-            viewHolder.imageViewItem = (ImageView) convertView.findViewById(R.id.action_icon);
+            viewHolder.nameViewItem = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.accountViewItem = (TextView) convertView.findViewById(R.id.account);
+            viewHolder.imageViewItem = (ImageView) convertView.findViewById(R.id.icon);
             viewHolder.passwordButtonItem = (ImageView) convertView.findViewById(R.id.passwordButton);
             viewHolder.removeButtonItem = (ImageView) convertView.findViewById(R.id.removeButton);
 
@@ -86,22 +87,21 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                 Account account = accountListItem.getAccount();
                 try {
                     OwnCloudAccount oca = new OwnCloudAccount(account, mContext);
-                    viewHolder.textViewItem.setText(
-                        oca.getDisplayName() + " @ " +
-                            DisplayUtils.convertIdn(
-                                account.name.substring(account.name.lastIndexOf("@") + 1),
-                                false
-                            )
-                    );
+                    viewHolder.nameViewItem.setText(oca.getDisplayName());
                 } catch (Exception e) {
                     Log_OC.w(
                         TAG,
                         "Account not found right after being read :\\ ; using account name instead of display name"
                     );
-                    // Handle internationalized domain names
-                    viewHolder.textViewItem.setText(DisplayUtils.convertIdn(account.name, false));
+                    viewHolder.nameViewItem.setText(
+                        AccountUtils.getUsernameOfAccount(account.name)
+                    );
                 }
-                viewHolder.textViewItem.setTag(account.name);
+                viewHolder.nameViewItem.setTag(account.name);
+
+                viewHolder.accountViewItem.setText(
+                    DisplayUtils.convertIdn(account.name, false)
+                );
 
                 try {
                     DisplayUtils.setAvatar(account, viewHolder.imageViewItem, mAccountAvatarRadiusDimension,
@@ -131,10 +131,10 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                 });
             } // create add account action item
             else if (AccountListItem.TYPE_ACTION_ADD == accountListItem.getType()) {
-                LayoutInflater inflater = ((ManageAccountsActivity) mContext).getLayoutInflater();
+                LayoutInflater inflater = mContext.getLayoutInflater();
                 View actionView = inflater.inflate(R.layout.account_action, parent, false);
-                ((TextView) actionView.findViewById(R.id.action_name)).setText(R.string.prefs_add_account);
-                ((ImageView) actionView.findViewById(R.id.action_icon)).setImageResource(R.drawable.ic_account_plus);
+                ((TextView) actionView.findViewById(R.id.name)).setText(R.string.prefs_add_account);
+                ((ImageView) actionView.findViewById(R.id.icon)).setImageResource(R.drawable.ic_account_plus);
 
                 // bind action listener
                 actionView.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +166,8 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
      * Account ViewHolderItem to get smooth scrolling.
      */
     static class AccountViewHolderItem {
-        TextView textViewItem;
+        TextView nameViewItem;
+        TextView accountViewItem;
         ImageView imageViewItem;
 
         ImageView passwordButtonItem;
