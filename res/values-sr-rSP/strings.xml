@@ -1,27 +1,45 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="actionbar_sync">Osveži account</string>
   <string name="actionbar_upload">Pošalji</string>
   <string name="actionbar_upload_files">Fajlovi</string>
+  <string name="actionbar_open_with">Otvori sa</string>
   <string name="actionbar_mkdir">Novi direktorijum</string>
   <string name="actionbar_settings">Podešavanja</string>
   <string name="actionbar_see_details">Detaljnije</string>
   <string name="actionbar_send_file">Pošalji</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Svi fajlovi</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">Podešavanja</string>
+  <string name="drawer_close">Zatvori</string>
   <string name="drawer_open">Otvori</string>
   <string name="prefs_category_general">Opšte</string>
+  <string name="prefs_category_more">Vise</string>
   <string name="prefs_accounts">Nalozi</string>
+  <string name="prefs_manage_accounts">Upravljaj nalozima</string>
+  <string name="prefs_log_delete_history_button">Obriši historiju</string>
   <string name="prefs_help">Pomoć</string>
   <string name="prefs_imprint">Žig</string>
+  <string name="auth_check_server">Proveri server</string>
+  <string name="auth_host_url">Server adresa https://...</string>
   <string name="auth_username">Korisničko ime</string>
   <string name="auth_password">Lozinka</string>
   <string name="sync_string_files">Fajlovi</string>
+  <string name="setup_btn_connect">Poveži</string>
   <string name="uploader_btn_upload_text">Pošalji</string>
   <string name="uploader_wrn_no_account_title">Nalog nije nađen</string>
+  <string name="uploader_wrn_no_account_quit_btn_text">Napusti</string>
   <string name="file_list_seconds_ago">Pre par sekundi</string>
   <string name="file_list_empty">Ovde nema ničeg. Pošaljite nešto!</string>
+  <string name="file_list_loading">Učitavanje...</string>
+  <string name="file_list_folder">fascikla</string>
+  <string name="file_list_folders">fascikle</string>
+  <string name="file_list_file">fajl</string>
+  <string name="file_list_files">fajlovi</string>
   <string name="filedetails_size">Veličina:</string>
   <string name="filedetails_type">Tip:</string>
   <string name="filedetails_download">Preuzmi</string>

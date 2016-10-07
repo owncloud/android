@@ -38,7 +38,9 @@
   <string name="change_password">Cambiar contrasigno</string>
   <string name="uploader_info_dirname">Nomine de dossier</string>
   <string name="uploads_view_upload_status_unknown_fail">Error Incognite</string>
+  <string name="common_remove">Remove</string>
   <string name="activity_chooser_send_file_title">Invia</string>
+  <string name="clipboard_text_copied">Copiate in le area de transferentia</string>
   <string name="prefs_category_accounts">Contos</string>
   <string name="saml_authentication_wrong_pass">Contrasigno errate</string>
   <string name="folder_picker_choose_button_text">Seliger</string>
