@@ -45,6 +45,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
+import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
 
 import java.util.ArrayList;
@@ -55,7 +56,11 @@ import java.util.Set;
  * An Activity that allows the user to manage accounts.
  */
 public class ManageAccountsActivity extends FileActivity
-        implements AccountListAdapter.AccountListAdapterListener, AccountManagerCallback<Boolean>, ComponentsGetter {
+    implements
+        AccountListAdapter.AccountListAdapterListener,
+        AccountManagerCallback<Boolean>,
+        ComponentsGetter {
+
     private static final String TAG = ManageAccountsActivity.class.getSimpleName();
     public static final String KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED";
     public static final String KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED";
@@ -196,10 +201,11 @@ public class ManageAccountsActivity extends FileActivity
 
     @Override
     public void removeAccount(Account account) {
-        AccountManager am = (AccountManager) this.getSystemService(ACCOUNT_SERVICE);
         mAccountName = account.name;
-        am.removeAccount(account, ManageAccountsActivity.this, mHandler);
-        Log_OC.d(TAG, "Remove an account " + account.name);
+        RemoveAccountDialogFragment dialog = RemoveAccountDialogFragment.newInstance(
+            account
+        );
+        dialog.show(getSupportFragmentManager(), RemoveAccountDialogFragment.FTAG_CONFIRMATION);
     }
 
     @Override
@@ -266,7 +272,7 @@ public class ManageAccountsActivity extends FileActivity
             }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems());
-            mAccountListAdapter.notifyDataSetChanged();
+            mListView.setAdapter(mAccountListAdapter);
 
             AccountManager am = AccountManager.get(this);
             if (am.getAccountsByType(MainApp.getAccountType()).length == 0) {

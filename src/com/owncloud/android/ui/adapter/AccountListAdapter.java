@@ -54,10 +54,6 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
         this.mAccountAvatarRadiusDimension = context.getResources().getDimension(R.dimen.list_item_avatar_icon_radius);
     }
 
-    public void setAccountList(List<AccountListItem> values) {
-        this.mValues = values;
-    }
-
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         AccountViewHolderItem viewHolder;
@@ -125,8 +121,6 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                     @Override
                     public void onClick(View v) {
                         mListener.removeAccount(mValues.get(position).getAccount());
-                        mValues.remove(position);
-                        AccountListAdapter.this.notifyDataSetChanged();
                     }
                 });
             } // create add account action item
