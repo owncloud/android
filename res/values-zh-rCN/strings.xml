@@ -14,6 +14,8 @@
   <string name="actionbar_sort">排序</string>
   <string name="actionbar_sort_title">排序方式</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">最新 - 最早</string>
+  <string name="actionbar_sort_by_size">最大 - 最小</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">全部文件</string>
@@ -70,6 +72,7 @@
   <string name="file_list_loading">加载中...</string>
   <string name="file_list_no_app_for_file_type">没有找到程序打开文件格式！</string>
   <string name="local_file_list_empty">在该文件夹中不存在文件。</string>
+  <string name="local_file_list_empty_just_folders">在该文件夹中不存在其它文件夹。</string>
   <string name="upload_list_empty">没有可用的上传任务。</string>
   <string name="file_list_folder">文件夹</string>
   <string name="file_list_folders">文件夹</string>
@@ -120,12 +123,14 @@
   <string name="uploads_view_upload_status_cancelled">已取消</string>
   <string name="uploads_view_upload_status_paused">已暂停</string>
   <string name="uploads_view_upload_status_failed_connection_error">连接错误</string>
+  <string name="uploads_view_upload_status_failed_retry">很快将重试上传</string>
   <string name="uploads_view_upload_status_failed_credentials_error">凭证错误</string>
   <string name="uploads_view_upload_status_failed_folder_error">文件夹错误</string>
   <string name="uploads_view_upload_status_failed_file_error">文件错误</string>
   <string name="uploads_view_upload_status_failed_localfile_error">本地文件未找到</string>
   <string name="uploads_view_upload_status_failed_permission_error">权限错误</string>
   <string name="uploads_view_upload_status_conflict">冲突</string>
+  <string name="uploads_view_upload_status_service_interrupted">应用已被终止</string>
   <string name="uploads_view_upload_status_unknown_fail">未知错误</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">等待WiFi连接</string>
   <string name="uploads_view_later_waiting_to_upload">等待上传...</string>
@@ -234,6 +239,7 @@
   <string name="filename_forbidden_charaters_from_server">文件名中存在至少一个非法字符</string>
   <string name="filename_empty">文件名不能为空</string>
   <string name="wait_a_moment">请稍候</string>
+  <string name="wait_checking_credentials">正在检查已保存的凭据</string>
   <string name="filedisplay_unexpected_bad_get_content">未知问题；请试试用其他程序选择此文件</string>
   <string name="filedisplay_no_file_selected">未选择文件</string>
   <string name="activity_chooser_title">发送链接给 …</string>
@@ -297,6 +303,7 @@
   <string name="activity_chooser_send_file_title">发送</string>
   <string name="copy_link">复制链接</string>
   <string name="clipboard_text_copied">复制到剪贴板</string>
+  <string name="clipboard_label">文本拷贝至 %1$s</string>
   <string name="error_cant_bind_to_operations_service">严重错误：无法执行操作</string>
   <string name="network_error_socket_exception">连接到服务器时发生了一个错误。</string>
   <string name="network_error_socket_timeout_exception">等待服务器响应时发生了一个错误，此操作无法完成</string>
@@ -354,6 +361,9 @@
   <string name="file_list__footer__files">%1$d 个文件</string>
   <string name="file_list__footer__files_and_folder">%1$d 个文件，1 个文件夹</string>
   <string name="file_list__footer__files_and_folders">%1$d 个文件，%2$d 个文件夹</string>
+  <string name="prefs_instant_upload_source_path_title">相机文件夹 (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">必需</string>
+  <string name="prefs_instant_upload_source_path_title_optional">可选</string>
   <string name="prefs_instant_behaviour_dialogTitle">原始文件将会...</string>
   <string name="prefs_instant_behaviour_title">原始文件将会...</string>
   <string name="upload_copy_files">复制文件</string>
@@ -395,4 +405,7 @@
   <string name="manage_space_clear_data">清除数据</string>
   <string name="manage_space_error">某些文件无法删除。</string>
   <string name="permission_storage_access">没有权限上传和下载文件。</string>
+  <plurals name="items_selected_count">
+    <item quantity="other">%d 已选择</item>
+  </plurals>
 </resources>
