@@ -14,6 +14,8 @@
   <string name="actionbar_sort">Sortuj</string>
   <string name="actionbar_sort_title">Sortuj według</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Najnowsze - Najstarsze</string>
+  <string name="actionbar_sort_by_size">Największe - Najmniejsze</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Wszystkie pliki</string>
@@ -70,6 +72,7 @@
   <string name="file_list_loading">Wczytywanie...</string>
   <string name="file_list_no_app_for_file_type">Brak aplikacji dla tego typu plików!</string>
   <string name="local_file_list_empty">Nie ma plików w tym folderze.</string>
+  <string name="local_file_list_empty_just_folders">W tym folderze nie ma żadnych folderów.</string>
   <string name="upload_list_empty">Brak przesłanych plików.</string>
   <string name="file_list_folder">folder</string>
   <string name="file_list_folders">foldery</string>
@@ -363,6 +366,9 @@
   <string name="file_list__footer__files">%1$d plików</string>
   <string name="file_list__footer__files_and_folder">%1$d plików, 1 folder</string>
   <string name="file_list__footer__files_and_folders">%1$d plików, %2$d folderów</string>
+  <string name="prefs_instant_upload_source_path_title">Folder aparatu (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">wymagane</string>
+  <string name="prefs_instant_upload_source_path_title_optional">opcjonalne</string>
   <string name="prefs_instant_behaviour_dialogTitle">Oryginalny plik zostanie...</string>
   <string name="prefs_instant_behaviour_title">Oryginalny plik zostanie...</string>
   <string name="upload_copy_files">Kopiuj plik</string>
