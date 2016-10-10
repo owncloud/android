@@ -1,4 +1,16 @@
-O projecto “ownCloud” corresponde a uma aplicação para a plataforma Android que guarda ficheiros e permite partilhá-los com outros utilizadores ou grupos de utilizadores, definir datas de expiração da partilha, proteger a partilha com palavra-chave  e permitir ou não editar. A aplicação permite usar várias contas e trocar entre elas, só uma conta pode estar a uso de cada vez. Duas aplicações familiares a todos e que são bastante parecidas com esta são o “Google Drive” e o “OneDrive”.
+O projecto “ownCloud” corresponde a uma aplicação para a plataforma Android que guarda ficheiros na nuvem.
+
+A aplicação permite:
+* Partilhar os ficheiros com outros utilizadores ou grupos de utilizadores
+* Definir datas de expiração da partilha
+* Proteger a partilha com palavra-chave
+* Permitir ou não editar
+* Upload direto de um dispositivo móvel
+* Sincroniczação automática
+
+A aplicação permite usar várias contas e trocar entre elas mas só uma conta pode estar a uso de cada vez.
+Estas contas são
+Duas aplicações familiares a todos e que são bastante parecidas com esta são o “Google Drive” e o “OneDrive”.
 
 Processo: Test-Driven Development?
 
