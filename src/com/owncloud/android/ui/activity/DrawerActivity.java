@@ -186,7 +186,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
         };
 
         // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -697,6 +697,19 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 mAvatars[i] = accountsAll[j];
                 i++;
             }
+        }
+    }
+
+    /**
+     * Adds other listeners to react on changes of the drawer layout.
+     *
+     * @param listener      Object interested in changes of the drawer layout.
+     */
+    public void addDrawerListener(DrawerLayout.DrawerListener listener) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.addDrawerListener(listener);
+        } else {
+            Log_OC.e(TAG, "Drawer layout not ready to add drawer listener");
         }
     }
 }
