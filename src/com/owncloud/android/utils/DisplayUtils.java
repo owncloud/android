@@ -41,7 +41,6 @@ import android.widget.SeekBar;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -308,10 +307,8 @@ public class DisplayUtils {
      * @param userIcon       the image view to set the avatar on
      * @param avatarRadius   the avatar radius
      * @param resources      reference for density information
-     * @param storageManager reference for caching purposes
      */
-    public static void setAvatar(Account account, ImageView userIcon, float avatarRadius, Resources resources,
-                           FileDataStorageManager storageManager) {
+    public static void setAvatar(Account account, ImageView userIcon, float avatarRadius, Resources resources) {
         if (account != null) {
 
             userIcon.setContentDescription(account.name);
@@ -329,7 +326,7 @@ public class DisplayUtils {
                 // generate new avatar
                 if (ThumbnailsCacheManager.cancelPotentialAvatarWork(account.name, userIcon)) {
                     final ThumbnailsCacheManager.AvatarGenerationTask task =
-                            new ThumbnailsCacheManager.AvatarGenerationTask(userIcon, storageManager, account);
+                            new ThumbnailsCacheManager.AvatarGenerationTask(userIcon, account);
                     if (thumbnail == null) {
                         try {
                             userIcon.setImageDrawable(

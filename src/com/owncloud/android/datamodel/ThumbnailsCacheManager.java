@@ -32,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -149,7 +150,7 @@ public class ThumbnailsCacheManager {
         public ThumbnailGenerationTask(ImageView imageView, FileDataStorageManager storageManager,
                                        Account account) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
-            mImageViewReference = new WeakReference<ImageView>(imageView);
+            mImageViewReference = new WeakReference<>(imageView);
             if (storageManager == null)
                 throw new IllegalArgumentException("storageManager must not be NULL");
             mStorageManager = storageManager;
@@ -158,7 +159,7 @@ public class ThumbnailsCacheManager {
 
         public ThumbnailGenerationTask(ImageView imageView) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
-            mImageViewReference = new WeakReference<ImageView>(imageView);
+            mImageViewReference = new WeakReference<>(imageView);
         }
 
         @Override
@@ -328,8 +329,7 @@ public class ThumbnailsCacheManager {
                     Bitmap.Config.ARGB_8888);
             Canvas c = new Canvas(resultBitmap);
 
-            c.drawColor(MainApp.getAppContext().getResources().
-                    getColor(R.color.background_color));
+            c.drawColor(ContextCompat.getColor(MainApp.getAppContext(), R.color.background_color));
             c.drawBitmap(bitmap, 0, 0, null);
 
             return resultBitmap;
@@ -363,37 +363,26 @@ public class ThumbnailsCacheManager {
     public static class AvatarGenerationTask extends AsyncTask<Object, Void, Bitmap> {
         private final WeakReference<ImageView> mImageViewReference;
         private final WeakReference<MenuItem> mMenuItemReference;
-        private static Account mAccount;
-        private Object mUsername;
-        private FileDataStorageManager mStorageManager;
+        private Account mAccount;
+        private String mUsername;
+        private OwnCloudClient mClient;
 
-
-        public AvatarGenerationTask(ImageView imageView, FileDataStorageManager storageManager,
-                                       Account account) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
+        public AvatarGenerationTask(ImageView imageView, Account account) {
+            if (account == null) {
+                throw new IllegalArgumentException("Received NULL account");
+            }
             mMenuItemReference = null;
-            mImageViewReference = new WeakReference<ImageView>(imageView);
-            if (storageManager == null)
-                throw new IllegalArgumentException("storageManager must not be NULL");
-            mStorageManager = storageManager;
+            mImageViewReference = new WeakReference<>(imageView);
             mAccount = account;
         }
 
-        public AvatarGenerationTask(MenuItem menuItem, FileDataStorageManager storageManager,
-                                    Account account) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
+        public AvatarGenerationTask(MenuItem menuItem, Account account) {
+            if (account == null) {
+                throw new IllegalArgumentException("Received NULL account");
+            }
             mImageViewReference = null;
-            mMenuItemReference = new WeakReference<MenuItem>(menuItem);
-            if (storageManager == null)
-                throw new IllegalArgumentException("storageManager must not be NULL");
-            mStorageManager = storageManager;
+            mMenuItemReference = new WeakReference<>(menuItem);
             mAccount = account;
-        }
-
-        public AvatarGenerationTask(ImageView imageView) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
-            mMenuItemReference = null;
-            mImageViewReference = new WeakReference<ImageView>(imageView);
         }
 
         @Override
@@ -401,18 +390,13 @@ public class ThumbnailsCacheManager {
             Bitmap thumbnail = null;
 
             try {
-                if (mAccount != null) {
-                    OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount,
-                            MainApp.getAppContext());
-                    mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                            getClientFor(ocAccount, MainApp.getAppContext());
-                }
+                OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount,
+                        MainApp.getAppContext());
+                mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                        getClientFor(ocAccount, MainApp.getAppContext());
 
-                mUsername = params[0];
-
-                if (mUsername instanceof String) {
-                    thumbnail = doAvatarInBackground();
-                }
+                mUsername = mAccount.name;
+                thumbnail = doAvatarInBackground();
 
             } catch(Throwable t){
                 // the app should never break due to a problem with avatars
@@ -431,50 +415,21 @@ public class ThumbnailsCacheManager {
                     ImageView imageView = mImageViewReference.get();
                     AvatarGenerationTask avatarWorkerTask = getAvatarWorkerTask(imageView);
                     if (this == avatarWorkerTask) {
-                        String tagId = "";
-                        if (mUsername instanceof String) {
-                            tagId = (String) mUsername;
-                            if (String.valueOf(imageView.getTag()).equals(tagId)) {
-                                imageView.setImageBitmap(bitmap);
-                            }
+                        if (String.valueOf(imageView.getTag()).equals(mUsername)) {
+                            imageView.setImageBitmap(bitmap);
                         }
                     }
-                } else {
+                } else if (mMenuItemReference != null) {
                     MenuItem menuItem = mMenuItemReference.get();
                     AvatarGenerationTask avatarWorkerTask = getAvatarWorkerTask(menuItem);
                     if (this == avatarWorkerTask) {
-                        String tagId = "";
-                        if (mUsername instanceof String) {
-                            tagId = (String) mUsername;
-                            if (String.valueOf(menuItem.getTitle()).equals(tagId)) {
-                                menuItem.setIcon(new BitmapDrawable(MainApp.getAppContext().getResources(),
-                                        bitmap));
-                            }
+                        if (String.valueOf(menuItem.getTitle()).equals(mUsername)) {
+                            menuItem.setIcon(new BitmapDrawable(MainApp.getAppContext().getResources(),
+                                    bitmap));
                         }
                     }
                 }
             }
-        }
-
-        /**
-         * Add thumbnail to cache
-         * @param imageKey: thumb key
-         * @param bitmap:   image for extracting thumbnail
-         * @param path:     image path
-         * @param px:       thumbnail dp
-         * @return Bitmap
-         */
-        private Bitmap addThumbnailToCache(String imageKey, Bitmap bitmap, String path, int px){
-
-            Bitmap thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
-
-            // Rotate image, obeying exif tag
-            thumbnail = BitmapUtils.rotateImage(thumbnail,path);
-
-            // Add thumbnail to cache
-            addBitmapToCache(imageKey, thumbnail);
-
-            return thumbnail;
         }
 
         /**
@@ -488,9 +443,8 @@ public class ThumbnailsCacheManager {
         }
 
         private Bitmap doAvatarInBackground() {
-            String username = (String) mUsername;
 
-            final String imageKey = "a_" + username;
+            final String imageKey = "a_" + mUsername;
 
             // Check disk cache in background thread
             Bitmap avatar = getBitmapFromDiskCache(imageKey);
@@ -507,7 +461,7 @@ public class ThumbnailsCacheManager {
                         GetMethod get = null;
                         try {
                             String uri = mClient.getBaseUri() + "" +
-                                    "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(username) + "/" + px;
+                                    "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
                             Log_OC.d("Avatar", "URI: " + uri);
                             get = new GetMethod(uri);
                             int status = mClient.executeMethod(get);
@@ -536,42 +490,6 @@ public class ThumbnailsCacheManager {
                 }
             }
             return avatar;
-        }
-
-        private Bitmap handlePNG(Bitmap bitmap, int px){
-            Bitmap resultBitmap = Bitmap.createBitmap(px,
-                    px,
-                    Bitmap.Config.ARGB_8888);
-            Canvas c = new Canvas(resultBitmap);
-
-            c.drawColor(MainApp.getAppContext().getResources().
-                    getColor(R.color.background_color));
-            c.drawBitmap(bitmap, 0, 0, null);
-
-            return resultBitmap;
-        }
-
-        private Bitmap doFileInBackground() {
-            File file = (File) mUsername;
-
-            final String imageKey = String.valueOf(file.hashCode());
-
-            // Check disk cache in background thread
-            Bitmap thumbnail = getBitmapFromDiskCache(imageKey);
-
-            // Not found in disk cache
-            if (thumbnail == null) {
-
-                int px = getAvatarDimension();
-
-                Bitmap bitmap = BitmapUtils.decodeSampledBitmapFromFile(
-                        file.getAbsolutePath(), px, px);
-
-                if (bitmap != null) {
-                    thumbnail = addThumbnailToCache(imageKey, bitmap, file.getPath(), px);
-                }
-            }
-            return thumbnail;
         }
 
     }
@@ -633,7 +551,7 @@ public class ThumbnailsCacheManager {
         return true;
     }
 
-    public static ThumbnailGenerationTask getBitmapWorkerTask(ImageView imageView) {
+    private static ThumbnailGenerationTask getBitmapWorkerTask(ImageView imageView) {
         if (imageView != null) {
             final Drawable drawable = imageView.getDrawable();
             if (drawable instanceof AsyncThumbnailDrawable) {
@@ -644,21 +562,21 @@ public class ThumbnailsCacheManager {
         return null;
     }
 
-    public static AvatarGenerationTask getAvatarWorkerTask(ImageView imageView) {
+    private static AvatarGenerationTask getAvatarWorkerTask(ImageView imageView) {
         if (imageView != null) {
             return getAvatarWorkerTask(imageView.getDrawable());
         }
         return null;
     }
 
-    public static AvatarGenerationTask getAvatarWorkerTask(MenuItem menuItem) {
+    private static AvatarGenerationTask getAvatarWorkerTask(MenuItem menuItem) {
         if (menuItem != null) {
             return getAvatarWorkerTask(menuItem.getIcon());
         }
         return null;
     }
 
-    public static AvatarGenerationTask getAvatarWorkerTask(Drawable drawable) {
+    private static AvatarGenerationTask getAvatarWorkerTask(Drawable drawable) {
         if (drawable instanceof AsyncAvatarDrawable) {
             final AsyncAvatarDrawable asyncDrawable = (AsyncAvatarDrawable) drawable;
             return asyncDrawable.getAvatarWorkerTask();

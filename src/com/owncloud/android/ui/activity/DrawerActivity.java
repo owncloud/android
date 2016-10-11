@@ -345,7 +345,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 if (mAvatars[1] != null) {
                     DisplayUtils.setAvatar(mAvatars[1],
                             (ImageView) findNavigationViewChildById(R.id.drawer_account_end),
-                            mOtherAccountAvatarRadiusDimension, getResources(), getStorageManager());
+                            mOtherAccountAvatarRadiusDimension, getResources());
                     mAccountEndAccountAvatar.setVisibility(View.VISIBLE);
                 } else {
                     mAccountEndAccountAvatar.setVisibility(View.GONE);
@@ -355,7 +355,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 if (mAvatars[2] != null) {
                     DisplayUtils.setAvatar(mAvatars[2],
                             (ImageView) findNavigationViewChildById(R.id.drawer_account_middle),
-                            mOtherAccountAvatarRadiusDimension, getResources(), getStorageManager());
+                            mOtherAccountAvatarRadiusDimension, getResources());
                     mAccountMiddleAccountAvatar.setVisibility(View.VISIBLE);
                 } else {
                     mAccountMiddleAccountAvatar.setVisibility(View.GONE);
@@ -463,7 +463,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             }
 
             DisplayUtils.setAvatar(account, (ImageView) findNavigationViewChildById(R.id.drawer_current_account),
-                    mCurrentAccountAvatarRadiusDimension, getResources(), getStorageManager());
+                    mCurrentAccountAvatarRadiusDimension, getResources());
         }
     }
 
@@ -488,7 +488,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 if (ThumbnailsCacheManager.cancelPotentialAvatarWork(account.name, menuItem)) {
                     final ThumbnailsCacheManager.AvatarGenerationTask task =
                             new ThumbnailsCacheManager.AvatarGenerationTask(
-                                    menuItem, getStorageManager(), account
+                                    menuItem, account
                             );
                     if (thumbnail == null) {
                         try {
