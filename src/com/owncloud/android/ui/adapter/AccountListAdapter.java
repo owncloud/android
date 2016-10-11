@@ -20,6 +20,7 @@
 package com.owncloud.android.ui.adapter;
 
 import android.accounts.Account;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,13 +46,15 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
     private final BaseActivity mContext;
     private List<AccountListItem> mValues;
     private AccountListAdapterListener mListener;
+    private Drawable mTintedCheck;
 
-    public AccountListAdapter(BaseActivity context, List<AccountListItem> values) {
+    public AccountListAdapter(BaseActivity context, List<AccountListItem> values, Drawable tintedCheck) {
         super(context, -1, values);
         this.mContext = context;
         this.mValues = values;
         this.mListener = (AccountListAdapterListener) context;
         this.mAccountAvatarRadiusDimension = context.getResources().getDimension(R.dimen.list_item_avatar_icon_radius);
+        this.mTintedCheck = tintedCheck;
     }
 
     @Override
@@ -63,9 +66,11 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
             convertView = inflater.inflate(R.layout.account_item, parent, false);
 
             viewHolder = new AccountViewHolderItem();
+            viewHolder.imageViewItem = (ImageView) convertView.findViewById(R.id.icon);
+            viewHolder.checkViewItem = (ImageView) convertView.findViewById(R.id.ticker);
+            viewHolder.checkViewItem.setImageDrawable(mTintedCheck);
             viewHolder.nameViewItem = (TextView) convertView.findViewById(R.id.name);
             viewHolder.accountViewItem = (TextView) convertView.findViewById(R.id.account);
-            viewHolder.imageViewItem = (ImageView) convertView.findViewById(R.id.icon);
             viewHolder.passwordButtonItem = (ImageView) convertView.findViewById(R.id.passwordButton);
             viewHolder.removeButtonItem = (ImageView) convertView.findViewById(R.id.removeButton);
 
@@ -106,6 +111,12 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                     Log_OC.e(TAG, "Error calculating RGB value for account list item.", e);
                     // use user icon as a fallback
                     viewHolder.imageViewItem.setImageResource(R.drawable.ic_user);
+                }
+
+                if (AccountUtils.getCurrentOwnCloudAccount(getContext()).name.equals(account.name)) {
+                    viewHolder.checkViewItem.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.checkViewItem.setVisibility(View.INVISIBLE);
                 }
 
                 /// bind listener to change password
@@ -160,9 +171,11 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
      * Account ViewHolderItem to get smooth scrolling.
      */
     static class AccountViewHolderItem {
+        ImageView imageViewItem;
+        ImageView checkViewItem;
+
         TextView nameViewItem;
         TextView accountViewItem;
-        ImageView imageViewItem;
 
         ImageView passwordButtonItem;
         ImageView removeButtonItem;

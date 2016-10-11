@@ -28,9 +28,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -76,10 +79,16 @@ public class ManageAccountsActivity extends FileActivity
     private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
     Set<String> mOriginalAccounts;
     String mOriginalCurrentAccount;
+    private Drawable mTintedCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mTintedCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white);
+        mTintedCheck = DrawableCompat.wrap(mTintedCheck);
+        int tint = ContextCompat.getColor(this, R.color.actionbar_start_color);
+        DrawableCompat.setTint(mTintedCheck, tint);
 
         setContentView(R.layout.accounts_layout);
 
@@ -110,7 +119,7 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     protected void onStart() {
         super.onStart();
-        mAccountListAdapter = new AccountListAdapter(this, getAccountListItems());
+        mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
         mListView.setAdapter(mAccountListAdapter);
     }
 
@@ -243,8 +252,11 @@ public class ManageAccountsActivity extends FileActivity
                                 Bundle result = future.getResult();
                                 String name = result.getString(AccountManager.KEY_ACCOUNT_NAME);
                                 AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), name);
-                                mAccountListAdapter = new AccountListAdapter(ManageAccountsActivity
-                                        .this, getAccountListItems());
+                                mAccountListAdapter = new AccountListAdapter(
+                                    ManageAccountsActivity.this,
+                                    getAccountListItems(),
+                                    mTintedCheck
+                                );
                                 mListView.setAdapter(mAccountListAdapter);
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -281,7 +293,7 @@ public class ManageAccountsActivity extends FileActivity
                 }
             }
 
-            mAccountListAdapter = new AccountListAdapter(this, getAccountListItems());
+            mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
             mListView.setAdapter(mAccountListAdapter);
 
             AccountManager am = AccountManager.get(this);
