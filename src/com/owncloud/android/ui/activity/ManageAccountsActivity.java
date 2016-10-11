@@ -32,6 +32,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.owncloud.android.MainApp;
@@ -67,7 +69,7 @@ public class ManageAccountsActivity extends FileActivity
 
     private ListView mListView;
     private final Handler mHandler = new Handler();
-    private String mAccountName;
+    private String mAccountBeingRemoved;
     private AccountListAdapter mAccountListAdapter;
     protected FileUploader.FileUploaderBinder mUploaderBinder = null;
     protected FileDownloader.FileDownloaderBinder mDownloaderBinder = null;
@@ -95,6 +97,14 @@ public class ManageAccountsActivity extends FileActivity
         onAccountSet(false);
 
         initializeComponentGetters();
+
+        // added click listener to switch account
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switchAccount(position);
+            }
+        });
     }
 
     @Override
@@ -201,7 +211,7 @@ public class ManageAccountsActivity extends FileActivity
 
     @Override
     public void removeAccount(Account account) {
-        mAccountName = account.name;
+        mAccountBeingRemoved = account.name;
         RemoveAccountDialogFragment dialog = RemoveAccountDialogFragment.newInstance(
             account
         );
@@ -260,7 +270,7 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void run(AccountManagerFuture<Boolean> future) {
         if (future != null && future.isDone()) {
-            Account account = new Account(mAccountName, MainApp.getAccountType());
+            Account account = new Account(mAccountBeingRemoved, MainApp.getAccountType());
             if (!AccountUtils.exists(account, MainApp.getAppContext())) {
                 // Cancel transfers of the removed account
                 if (mUploaderBinder != null) {
@@ -297,6 +307,34 @@ public class ManageAccountsActivity extends FileActivity
 
         }
     }
+
+    /**
+     * Switch current account to that contained in the received position of the list adapter.
+     *
+     * @param position  A position of the account adapter containing an account.
+     */
+    private void switchAccount(int position) {
+        Account clickedAccount = mAccountListAdapter.getItem(position).getAccount();
+        if (getAccount().name.equals(clickedAccount.name)) {
+            // current account selected, just go back
+            finish();
+        } else {
+            // restart list of files with new account
+            AccountUtils.setCurrentOwnCloudAccount(
+                ManageAccountsActivity.this,
+                clickedAccount.name
+            );
+            Intent i = new Intent(
+                ManageAccountsActivity.this,
+                FileDisplayActivity.class
+            );
+            i.putExtra(FileActivity.EXTRA_ACCOUNT, clickedAccount);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        }
+
+    }
+
 
     @Override
     protected void onDestroy() {
