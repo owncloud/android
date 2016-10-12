@@ -37,8 +37,9 @@ Existem 2 versões planeadas para serem lançadas. A primeira versão encontra-s
 
 ### Opiniões, Críticas e Alternativas
 
-Ao adotar este processo de desenvolvimento, os desenvolvedores deixam muitos *issues* em aberto que não são resolvidos e acabam no "backlog" para futura resolução. O "backlog" não tem tanta atividade como a versão atual. 
+Na opinião do grupo, o processo de desenvolvimento usado é uma boa opção, pois torna-se fácil de criar novos objetivos/funcionalidades com base na complexidade necessária para criar os testes. As funções em desenvolvimento não precisam de funcionar perfeitamente, bastanto que passem nos testes. Deste modo, é possível avançar nos objetivos, colocando estas funções como *issue*, de forma a que sejam melhoradas posteriormente. No entanto, este método cria *issues* em demasia, que com um pouco mais de trabalho seriam desnecessárias. Ao adotar este processo de desenvolvimento, os desenvolvedores deixam muitos *issues* em aberto que não são resolvidos.
 
+Outros processos de desenvolvimento também aplicáveis seriam *Software prototyping* e *Incremental development and delivery*.
 
 
 Ver: android/user_manual/android_app.rst (diretório no repositório do GitHub)
