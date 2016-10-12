@@ -41,7 +41,9 @@ Na opinião do grupo, o processo de desenvolvimento usado é uma boa opção, po
 
 Outros processos de desenvolvimento também aplicáveis seriam *Software prototyping* e *Incremental development and delivery*.
 
-Ao utilizar *Software prototyping*, os desenvolvedores conseguiriam criar versões incompletas da aplicação que posteriormente seriam completadas. Desta forma, conseguiriam obter *feedback* dos utilizadores aos quais fariam chegar essa versão, fazendo desde cedo alterações que poderiam levar a erros com o desenrolar do projeto, assim como ajustes que levariam a uma melhor aceitação por parte da comunidade.  
+Ao utilizar *Software prototyping*, os desenvolvedores conseguiriam criar versões incompletas da aplicação que posteriormente seriam completadas. Desta forma, conseguiriam obter *feedback* dos utilizadores aos quais fariam chegar essa versão, fazendo desde cedo alterações que poderiam levar a erros com o desenrolar do projeto, assim como ajustes que levariam a uma melhor aceitação por parte da comunidade.
+
+O processo "Incremental development and delivery" seria uma boa alternativa, pois permite desenvolver funcionalidades, lançá-las e analisar a resposta do público/cliente, de forma a melhorar a funcionalidade ou eliminá-la sem ter sido necessário nem um grande esforço nem muitos recursos para desenvolvê-la. Este processo reduz o risco de se desenvolver um grande projecto que não serve as necessidades do público-alvo. Por outro lado, com cada incremento, torna-se mais difícil estruturar correctamente o código, podendo ser necessário criar um projecto novo quando se chegar a um ponto de rotura.
 
 
 Ver: android/user_manual/android_app.rst (diretório no repositório do GitHub)
