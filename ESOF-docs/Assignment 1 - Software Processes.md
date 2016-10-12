@@ -23,8 +23,7 @@ Duas aplicações familiares a todos e que são bastante parecidas com esta são
 
 ### Descrição do processo de desenvolvimento
 
-O processo de desenvolvimento adotado pelos programadores foi o "Test-Driven Development". 
-O projeto tem uma lista de objetivos planeados e cada novo contribuidor cria a lista de testes a serem cumpridos. Depois o contribuidor desenvolve o código de maneira a passar nesses novos testes. Caso não passe em todos os nos novos testes e não seja fundamental ao bom funcionamento do programa, pode adicionar uma nova issue a pedir contribuições à comunidade para resolover o problema. Se passar pode também ser gerado uma nova issue com o intuito de melhorar o código, ou com a ideia de uma nova funcionalidade complementar.
+O processo de desenvolvimento adotado pelos programadores foi o "Open Planning Process". Neste tipo de processo, cada pessoa pensa numa funcionalidade que gostaria de ver implementada e, se souber, implementa, senão pede para implementar. Desta forma, o projeto tem uma lista de objetivos planeados e cada contribuidor segue o processo de desenvolvimento que desejar. De acordo com os diferentes ficheiros de código presentes no projecto, os contribuidores usam, maioritariamente, "Incremental Development and Delivery".
 
 #### Atividade
 
@@ -44,6 +43,8 @@ Outros processos de desenvolvimento também aplicáveis seriam *Software prototy
 Ao utilizar *Software prototyping*, os desenvolvedores conseguiriam criar versões incompletas da aplicação que posteriormente seriam completadas. Desta forma, conseguiriam obter *feedback* dos utilizadores aos quais fariam chegar essa versão, fazendo desde cedo alterações que poderiam evitar erros que se propagariam com o desenrolar do projeto, assim como ajustes que levariam a uma melhor aceitação por parte da comunidade.
 
 O processo *Incremental development and delivery* seria uma boa alternativa, pois permite desenvolver funcionalidades, lançá-las e analisar a resposta do público/cliente, de forma a melhorar a funcionalidade ou eliminá-la sem ter sido necessário nem um grande esforço nem muitos recursos para desenvolvê-la. Este processo reduz o risco de se desenvolver um grande projecto que não serve as necessidades do público-alvo. Por outro lado, com cada incremento, torna-se mais difícil estruturar correctamente o código, podendo ser necessário criar um projecto novo quando se chegar a um ponto de rotura.
+
+O processo "Test-Driven Development" permitiria que o projeto tivesse uma lista de objetivos planeados e que cada novo contribuidor criasse a lista de testes a serem cumpridos. Depois o contribuidor desenvolveria o código de maneira a passar nesses novos testes.
 
 
 Ver: android/user_manual/android_app.rst (diretório no repositório do GitHub)
