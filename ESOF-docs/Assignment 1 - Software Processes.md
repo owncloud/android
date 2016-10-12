@@ -2,7 +2,7 @@
 
 ## Descrição do projeto
 
-O projecto [**“ownCloud”**](https://owncloud.org/), desenvolvido de uma forma transparente pela comunidade *open source*, corresponde a uma [**aplicação**](https://play.google.com/store/apps/details?id=com.owncloud.android) para a plataforma Android que guarda ficheiros na nuvem.
+O projeto [**“ownCloud”**](https://owncloud.org/), desenvolvido de uma forma transparente pela comunidade *open source*, corresponde a uma [**aplicação**](https://play.google.com/store/apps/details?id=com.owncloud.android) para a plataforma Android que guarda ficheiros na nuvem.
 
 ![owncloud](/ESOF-docs/resources/ownCloud2.png)
 
@@ -27,4 +27,13 @@ Test-Driven Development?
 
 ### Opiniões, Críticas e Alternativas
 
-Ver: android/user_manual/android_app.rst (directório no repositório do GitHub)
+#### Atividade
+
+O projeto encontra-se ativo com uma média de 20 commits por semana, no último ano.
+No momento em que redigimos o relatório, existiam 306 *issues*. Em relação aos *pull requests*, existiam 46 pedidos em aberto, o que demonstra que este projeto se encontra bastante ativo, com cerca de 50 contribuidores.
+
+#### Objetivos
+
+Existem 2 versões planeadas para serem lançadas. A primeira versão encontra-se 23% completa, sendo atualizada com bastante regularidade. No que diz respeito à segunda versão, ainda não se encontra a ser implementada.
+
+Ver: android/user_manual/android_app.rst (diretório no repositório do GitHub)
