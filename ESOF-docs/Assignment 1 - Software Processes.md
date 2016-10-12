@@ -36,9 +36,9 @@ Existem 2 versões planeadas para serem lançadas. A primeira versão encontra-s
 
 ### Opiniões, Críticas e Alternativas
 
-Na opinião do grupo, o processo de desenvolvimento usado é uma boa opção, pois torna-se fácil de criar novos objetivos/funcionalidades com base na complexidade necessária para criar os testes. As funções em desenvolvimento não precisam de funcionar perfeitamente, bastanto que passem nos testes. Deste modo, é possível avançar nos objetivos, colocando estas funções como *issue*, de forma a que sejam melhoradas posteriormente. No entanto, este método cria *issues* em demasia, que com um pouco mais de trabalho seriam desnecessárias. Ao adotar este processo de desenvolvimento, os desenvolvedores deixam muitos *issues* em aberto que não são resolvidos.
+Na opinião do grupo, o processo de desenvolvimento usado é uma boa opção no sentido em que qualquer pessoa consegue contribuir com facilidade. Por outro lado, essa facilidade de contribuição leva a que cada contribuidor possa usar um processo de desenvolvimento pessoal, tornando-se mais difícil para um novo contribuidor entender a estrutura do projeto e, dessa forma, contribuir para ele sem interferir com o código de outros contribuidores.
 
-Outros processos de desenvolvimento também aplicáveis seriam *Software prototyping* e *Incremental development and delivery*.
+Outros processos de desenvolvimento também aplicáveis seriam *Software prototyping*, *Incremental development and delivery* e *Test-Driven Development*.
 
 Ao utilizar *Software prototyping*, os desenvolvedores conseguiriam criar versões incompletas da aplicação que posteriormente seriam completadas. Desta forma, conseguiriam obter *feedback* dos utilizadores aos quais fariam chegar essa versão, fazendo desde cedo alterações que poderiam evitar erros que se propagariam com o desenrolar do projeto, assim como ajustes que levariam a uma melhor aceitação por parte da comunidade.
 
@@ -46,5 +46,15 @@ O processo *Incremental development and delivery* seria uma boa alternativa, poi
 
 O processo "Test-Driven Development" permitiria que o projeto tivesse uma lista de objetivos planeados e que cada novo contribuidor criasse a lista de testes a serem cumpridos. Depois o contribuidor desenvolveria o código de maneira a passar nesses novos testes.
 
+
+## Contribuições:
+
+Diogo Cruz - up201105483 - 25%
+
+Luís Barbosa - up201405729 - 25%
+
+Paulo Santos - up201403745 - 25%
+
+Sérgio Ferreira - up201403074 - 25%
 
 Ver: android/user_manual/android_app.rst (diretório no repositório do GitHub)
