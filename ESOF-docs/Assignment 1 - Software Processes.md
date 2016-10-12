@@ -17,13 +17,21 @@ Posto isto, tanto utilizadores particulares que usem um [**servidor gratuito**](
 
 A aplicação permite usar várias contas e trocar entre elas, mas só uma conta pode estar a uso de cada vez. Fornece algumas vantagens relativamente à interface Web, uma vez que permite uma sincronização automática dos ficheiros, assim como adicionar ficheiros diretamente do armazenamento do dispositivo.
 
-Duas aplicações familiares a todos e que são bastante parecidas com esta são o “Google Drive” e o “OneDrive”.
+Duas aplicações familiares a todos e que são bastante parecidas com esta são o *Google Drive* e o *OneDrive*.
 
 ## Processos de desenvolvimento
 
 ### Descrição do processo de desenvolvimento
 
-O processo de desenvolvimento adotado pelos programadores foi o "Open Planning Process". Neste tipo de processo, cada pessoa pensa numa funcionalidade que gostaria de ver implementada e, se souber, implementa, senão pede para implementar. Desta forma, o projeto tem uma lista de objetivos planeados e cada contribuidor segue o processo de desenvolvimento que desejar. De acordo com os diferentes ficheiros de código presentes no projecto, os contribuidores usam, maioritariamente, "Incremental Development and Delivery".
+O processo de desenvolvimento adotado pelos programadores foi o [*Open Planning Process*](https://owncloud.org/blog/open-planning-process/), introduzido no ownCloud por Matt Richards. Neste tipo de processo, cada pessoa pensa numa funcionalidade que gostaria de ver implementada e, se souber, implementa, senão pede para implementar. Isto permite e encoraja a colaboração, participação e apreciação do *feedback* dos utilizadores. Desta forma, o projeto tem uma lista de objetivos planeados, recolhidos das ideias e sugestões dadas, sendo estes prioritizados (através do número de *likes* que recebem) e divididos em pacotes para serem tratados pelos contribuidores. Com isto, conectam-se as pessoas, fazendo com que este processo leve a um plano de desenvolvimento partilhado, visível, transparente e democrático.
+Para sugerir uma nova funcionalidade, o interessado deve:
+* Criar um tópico em ownCloud Central;
+* Descrever a funcionalidade que pretende que seja implementada;
+* Colecionar *likes* na sua proposta;
+* Discutir a implementação/design com a comunidade e organizar o desenvolvimento;
+* Esperar que a sua feature seja incluída numa próxima *release*.
+
+De acordo com os diferentes ficheiros de código presentes no projecto, os contribuidores usam, maioritariamente, *Incremental Development and Delivery*.
 
 #### Atividade
 
@@ -33,6 +41,10 @@ No momento em que redigimos o relatório, existiam 306 *issues*. Em relação ao
 #### Objetivos
 
 Existem 2 versões planeadas para serem lançadas. A primeira versão encontra-se 23% completa, sendo atualizada com bastante regularidade. No que diz respeito à segunda versão, ainda não se encontra a ser implementada.
+As principais funcionalidades que pretendem implementar são:
+* Autenticação baseada em *token*
+* Favoritos
+* Melhor sincronização
 
 ### Opiniões, Críticas e Alternativas
 
@@ -44,17 +56,23 @@ Ao utilizar *Software prototyping*, os desenvolvedores conseguiriam criar versõ
 
 O processo *Incremental development and delivery* seria uma boa alternativa, pois permite desenvolver funcionalidades, lançá-las e analisar a resposta do público/cliente, de forma a melhorar a funcionalidade ou eliminá-la sem ter sido necessário nem um grande esforço nem muitos recursos para desenvolvê-la. Este processo reduz o risco de se desenvolver um grande projecto que não serve as necessidades do público-alvo. Por outro lado, com cada incremento, torna-se mais difícil estruturar correctamente o código, podendo ser necessário criar um projecto novo quando se chegar a um ponto de rotura.
 
-O processo "Test-Driven Development" permitiria que o projeto tivesse uma lista de objetivos planeados e que cada novo contribuidor criasse a lista de testes a serem cumpridos. Depois o contribuidor desenvolveria o código de maneira a passar nesses novos testes.
+O processo *Test-Driven Development* permitiria que o projeto tivesse uma lista de objetivos planeados e que cada novo contribuidor criasse a lista de testes a serem cumpridos. Depois o contribuidor desenvolveria o código de maneira a passar nesses novos testes.
 
 
-## Contribuições:
+## Contribuições
 
-Diogo Cruz - up201105483 - 25%
+Diogo Cruz - up201105483@fe.up.pt - 25%
 
-Luís Barbosa - up201405729 - 25%
+Luís Barbosa - up201405729@fe.up.pt - 25%
 
-Paulo Santos - up201403745 - 25%
+Paulo Santos - up201403745@fe.up.pt - 25%
 
-Sérgio Ferreira - up201403074 - 25%
+Sérgio Ferreira - up201403074@fe.up.pt - 25%
 
-Ver: android/user_manual/android_app.rst (diretório no repositório do GitHub)
+## Bibliografia
+
+* android/user_manual/android_app.rst (diretório no repositório do GitHub)
+* [ownCloud Forum](https://central.owncloud.org/t/what-is-owncloud-development-process/3239)
+* [GitHub Issue](https://github.com/owncloud/android/issues/1822)
+* [Patrick Maier: Open Planning Process @ ownClouders' YouTube account](https://www.youtube.com/watch?v=276KkF0AzVU)
+* [David A. Velasco: Meanwhile, on the Android side... @ ownClouders' YouTube account](https://www.youtube.com/watch?v=NTVVGphd4As) 
