@@ -23,9 +23,12 @@ Duas aplicações familiares a todos e que são bastante parecidas com esta são
 
 ### Descrição
 
-Test-Driven Development?
+O processo de desenvolvimento adotado pelos programadores foi o "Test-Driven Development". 
+O projeto tem uma lista de objetivos planeados e cada novo contribuidor cria a lista de testes a serem cumpridos. Depois o contribuidor desenvolve o código de maneira a passar nesses novos testes. Caso não passe em todos os nos novos testes e não seja fundamental ao bom funcionamento do programa, pode adicionar uma nova issue a pedir contribuições à comunidade para resolover o problema. Se passar pode também ser gerado uma nova issue com o intuito de melhorar o código, ou com a ideia de uma nova funcionalidade complementar.
 
 ### Opiniões, Críticas e Alternativas
+
+
 
 #### Atividade
 
