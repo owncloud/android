@@ -63,11 +63,15 @@
   <string name="uploader_error_title_no_file_to_upload">Ei tiedostoa lähetettävänä</string>
   <string name="uploader_error_message_no_file_to_upload">Vastaanotettu data ei sisällä yhtäkään kelvollista tiedostoa.</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Tiedostoa ei voi ladata</string>
+  <string name="uploader_error_message_source_file_not_found">Lähetettävä tiedosto ei löytynyt sijainnistaan. Varmista, onko tiedosto olemassa.</string>
+  <string name="uploader_error_message_source_file_not_copied">Virhe yritettäessä siirtää tiedostoa väliaikaiskansioon. Yritä lähettää se uudestaan.</string>
   <string name="file_list_seconds_ago">sekuntia sitten</string>
   <string name="file_list_empty">Täällä ei ole mitään. Lähetä tänne jotakin!</string>
   <string name="file_list_loading">Ladataan…</string>
   <string name="file_list_no_app_for_file_type">Tälle tiedostotyypille ei löytynyt sovellusta!</string>
   <string name="local_file_list_empty">Tässä kansiossa ei ole tiedostoja</string>
+  <string name="local_file_list_empty_just_folders">Tässä kansiossa ei ole kansioita.</string>
+  <string name="upload_list_empty">Ei lähetyksiä saatavilla.</string>
   <string name="file_list_folder">kansio</string>
   <string name="file_list_folders">kansiot</string>
   <string name="file_list_file">tiedosto</string>
@@ -85,6 +89,8 @@
   <string name="common_yes">Kyllä</string>
   <string name="common_no">Ei</string>
   <string name="common_ok">OK</string>
+  <string name="common_remove_upload">Poista lähetys</string>
+  <string name="common_retry_upload">Yritä lähettämistä uudelleen</string>
   <string name="common_cancel_sync">Peru synkronointi</string>
   <string name="common_cancel">Peru</string>
   <string name="common_back">Takaisin</string>
@@ -109,11 +115,13 @@
   <string name="uploader_upload_failed_credentials_error">Lähetys epäonnistui, kirjaudu sisään uudelleen</string>
   <string name="uploads_view_title">Lataukset</string>
   <string name="uploads_view_group_current_uploads">Nykyiset</string>
+  <string name="uploads_view_group_failed_uploads">Epäonnistui (kosketa yrittääksesi uudelleen)</string>
   <string name="uploads_view_group_finished_uploads">Lähetetty</string>
   <string name="uploads_view_upload_status_succeeded">Valmiina</string>
   <string name="uploads_view_upload_status_cancelled">Peruttu</string>
   <string name="uploads_view_upload_status_paused">Keskeytetty</string>
   <string name="uploads_view_upload_status_failed_connection_error">Yhteysvirhe</string>
+  <string name="uploads_view_upload_status_failed_retry">Lähetystä yritetään uudelleen pian</string>
   <string name="uploads_view_upload_status_failed_credentials_error">Valtuutusvirhe</string>
   <string name="uploads_view_upload_status_failed_folder_error">Kansiovirhe</string>
   <string name="uploads_view_upload_status_failed_file_error">Tiedostovirhe</string>
@@ -140,6 +148,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d \"pidä synkronoituna\" tiedostoja ei voitu synkronoida</string>
   <string name="sync_fail_in_favourites_ticker">\"Pidä synkronoituna\" epäonnistui</string>
   <string name="sync_fail_in_favourites_content">Hakemiston %1$d tiedostoja ei voitu synkronoida (%2$d konfliktia)</string>
+  <string name="sync_foreign_files_forgotten_ticker">Osa paikallisista tiedostoista oli unohtunut</string>
   <string name="sync_current_folder_was_removed">Kansiota %1$s ei ole enää olemassa</string>
   <string name="foreign_files_move">Siirrä kaikki</string>
   <string name="foreign_files_success">Kaikki tiedostot siirrettiin</string>
@@ -200,6 +209,8 @@
   <string name="auth_connecting_auth_server">Yhdistetään tunnistautumispalvelimeen…</string>
   <string name="auth_unsupported_auth_method">Palvelin ei tue tätä tunnistautumistapaa</string>
   <string name="auth_unsupported_multiaccount">%1$s ei tue useita tilejä</string>
+  <string name="auth_fail_get_user_name">Palvelimesi ei palauta oikeaa käyttäjä-ID:tä, ota yhteyttä järjestelmänvalvojaan
+	</string>
   <string name="auth_can_not_auth_against_server">Tälle palvelimelle ei voi tunnistautua</string>
   <string name="auth_account_does_not_exist">Tiliä ei ole olemassa vielä laitteella</string>
   <string name="common_rename">Nimeä uudelleen</string>
@@ -252,8 +263,11 @@
   <string name="certificate_load_problem">Varmennetta ladatessa ilmeni ongelmia.</string>
   <string name="ssl_validator_null_cert">Varmennetta ei voi näyttää.</string>
   <string name="ssl_validator_no_info_about_error">- Ei lisätietoja virheestä</string>
+  <string name="placeholder_sentence">Tämä on paikkavaraus</string>
+  <string name="placeholder_filename">placeholder.txt</string>
   <string name="placeholder_filetype">PNG-kuva</string>
   <string name="placeholder_filesize">389 kt</string>
+  <string name="placeholder_timestamp">18.5.2012 12.23</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="instant_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
   <string name="instant_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
@@ -265,6 +279,7 @@
   <string name="conflict_use_server_version">palvelimen versio</string>
   <string name="preview_image_description">Kuvan esikatselu</string>
   <string name="preview_image_error_unknown_format">Tätä kuvaa ei voi näyttää</string>
+  <string name="prefs_instant_upload_path_title">Lähetyspolku</string>
   <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys
 		ylläpitäjään.</string>
   <string name="share_link_file_no_exist">Jakaminen epäonnistui. Varmista, että tiedosto on olemassa</string>
@@ -278,6 +293,8 @@
   <string name="activity_chooser_send_file_title">Lähetä</string>
   <string name="copy_link">Kopioi linkki</string>
   <string name="clipboard_text_copied">Kopioitu leikepöydälle</string>
+  <string name="clipboard_uxexpected_error">Odottamaton virhe kopioitaessa leikepöydälle.</string>
+  <string name="clipboard_label">Teksti koioitiin kohteesta %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kriittinen virhe: toimintoja ei voi suorittaa</string>
   <string name="network_error_socket_exception">Virhe palvelimeen yhdistäessä</string>
   <string name="network_error_socket_timeout_exception">Virhe palvelimen vastausta odottaessa, toimintoa ei voitu suorittaa</string>
@@ -310,7 +327,9 @@
   <string name="copy_file_not_found">Kopiointi epäonnistui. Tarkista onko tiedostoa olemassa</string>
   <string name="copy_file_invalid_overwrite">Tiedosto on jo kohdekansiossa.</string>
   <string name="copy_file_error">Tätä tiedostoa tai kansiota kopioitaessa tapahtui virhe</string>
+  <string name="prefs_category_instant_uploading">Välittömät lähetykset</string>
   <string name="prefs_category_details">Tiedot</string>
+  <string name="prefs_instant_video_upload_path_title">Videoiden lähetyspolku</string>
   <string name="sync_folder_failed_content">Kansion %1$s synkronointia ei voitu suorittaa kokonaan</string>
   <string name="shared_subject_header">jaettu</string>
   <string name="with_you_subject_header">kanssasi</string>
@@ -328,6 +347,9 @@
   <string name="file_list__footer__files">%1$d tiedostoa</string>
   <string name="file_list__footer__files_and_folder">%1$d tiedostoa, 1 kansio</string>
   <string name="file_list__footer__files_and_folders">%1$d tiedostoa, %2$d kansiota</string>
+  <string name="prefs_instant_upload_source_path_title">Kamerakansio (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">vaadittu</string>
+  <string name="prefs_instant_upload_source_path_title_optional">valinnainen</string>
   <string name="prefs_instant_behaviour_dialogTitle">Alkuperäinen tiedosto...</string>
   <string name="prefs_instant_behaviour_title">Alkuperäinen tiedosto...</string>
   <string name="upload_copy_files">Kopioi tiedosto</string>
