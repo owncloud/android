@@ -2,7 +2,11 @@
 
 ## Descrição do projeto
 
-O projeto [**“ownCloud”**](https://owncloud.org/), desenvolvido de uma forma transparente pela comunidade *open source*, corresponde a uma [**aplicação**](https://play.google.com/store/apps/details?id=com.owncloud.android) para a plataforma Android que guarda ficheiros na nuvem.
+O projeto [**“ownCloud”**](https://owncloud.org/), desenvolvido de uma forma transparente pela comunidade *open source*, corresponde a um *software* de cliente-servidor para guardar ficheiros na nuvem.
+
+Estão desenvolvidas aplicações tanto para *desktop* como para *mobile*, sendo que para *desktop* existem versões para Windows, Mac e Linux, e para *mobile* versões para Android, BlackBerry e iOS.
+
+O projeto do nosso grupo focar-se-á no desenvolvimento do projeto [**Android**](https://play.google.com/store/apps/details?id=com.owncloud.android).
 
 ![owncloud](/ESOF-docs/resources/ownCloud2.png)
 
