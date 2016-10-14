@@ -44,6 +44,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.ui.DefaultAvatarTextDrawable;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
 import com.owncloud.android.utils.BitmapUtils;
 
@@ -78,7 +79,7 @@ public class ThumbnailsCacheManager {
                     R.drawable.file_image
             );
 
-    
+
     public static class InitDiskCacheTask extends AsyncTask<File, Void, Void> {
 
         @Override
@@ -118,6 +119,14 @@ public class ThumbnailsCacheManager {
         synchronized (mThumbnailsDiskCacheLock) {
             if (mThumbnailCache != null) {
                 mThumbnailCache.put(key, bitmap);
+            }
+        }
+    }
+
+    public static void removeBitmapFromCache(String key) {
+        synchronized (mThumbnailsDiskCacheLock) {
+            if (mThumbnailCache != null) {
+                mThumbnailCache.removeKey(key);
             }
         }
     }
@@ -360,34 +369,72 @@ public class ThumbnailsCacheManager {
 
     }
 
-    public static class AvatarGenerationTask extends AsyncTask<Object, Void, Bitmap> {
+    /**
+     * Show the avatar corresponding to the received account in an {@link ImageView} ir {@link MenuItem}.
+     *
+     * The avatar is loaded if available in the cache and bound to the received UI element. The avatar is not
+     * fetched from the server if not available, unless the parameter 'fetchFromServer' is set to 'true'.
+     *
+     * If there is no avatar stored and cannot be fetched, a colored icon is generated with the first
+     * letter of the account username.
+     *
+     * If this is not possible either, a predefined user icon is bound instead.
+     */
+    public static class GetAvatarTask extends AsyncTask<Object, Void, Drawable> {
         private final WeakReference<ImageView> mImageViewReference;
         private final WeakReference<MenuItem> mMenuItemReference;
         private Account mAccount;
+        private float mDisplayRadius;
+        private boolean mFetchFromServer;
+
         private String mUsername;
         private OwnCloudClient mClient;
 
-        public AvatarGenerationTask(ImageView imageView, Account account) {
+        /**
+         * Builds an instance to show the avatar corresponding to the received account in an {@link ImageView}.
+         *
+         * @param imageView         The {@link ImageView} to bind the avatar to.
+         * @param account           OC account which avatar will be shown.
+         * @param displayRadius     The radius of the circle where the avatar will be clipped into.
+         * @param fetchFromServer   When 'true', if there is no avatar stored in the cache, it's fetched from
+         *                          the server. When 'false', server is not accessed, the fallback avatar is
+         *                          generated instead. USE WITH CARE, probably to be removed in the future.
+         */
+        public GetAvatarTask(ImageView imageView, Account account, float displayRadius, boolean fetchFromServer){
             if (account == null) {
                 throw new IllegalArgumentException("Received NULL account");
             }
             mMenuItemReference = null;
             mImageViewReference = new WeakReference<>(imageView);
             mAccount = account;
+            mDisplayRadius = displayRadius;
+            mFetchFromServer = fetchFromServer;
         }
 
-        public AvatarGenerationTask(MenuItem menuItem, Account account) {
+        /**
+         * Builds an instance to show the avatar corresponding to the received account in an {@link MenuItem}.
+         *
+         * @param menuItem         The {@ImageView} to bind the avatar to.
+         * @param account           OC account which avatar will be shown.
+         * @param displayRadius     The radius of the circle where the avatar will be clipped into.
+         * @param fetchFromServer   When 'true', if there is no avatar stored in the cache, it's fetched from
+         *                          the server. When 'false', server is not accessed, the fallback avatar is
+         *                          generated instead. USE WITH CARE, probably to be removed in the future.
+         */
+        public GetAvatarTask(MenuItem menuItem, Account account, float displayRadius, boolean fetchFromServer) {
             if (account == null) {
                 throw new IllegalArgumentException("Received NULL account");
             }
             mImageViewReference = null;
             mMenuItemReference = new WeakReference<>(menuItem);
             mAccount = account;
+            mDisplayRadius = displayRadius;
+            mFetchFromServer = fetchFromServer;
         }
 
         @Override
-        protected Bitmap doInBackground(Object... params) {
-            Bitmap thumbnail = null;
+        protected Drawable doInBackground(Object... params) {
+            Drawable thumbnail = null;
 
             try {
                 OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount,
@@ -409,24 +456,30 @@ public class ThumbnailsCacheManager {
             return thumbnail;
         }
 
-        protected void onPostExecute(Bitmap bitmap) {
-            if (bitmap != null) {
-                if (mImageViewReference != null) {
-                    ImageView imageView = mImageViewReference.get();
-                    AvatarGenerationTask avatarWorkerTask = getAvatarWorkerTask(imageView);
-                    if (this == avatarWorkerTask) {
-                        if (String.valueOf(imageView.getTag()).equals(mUsername)) {
-                            imageView.setImageBitmap(bitmap);
-                        }
+        @Override
+        protected void onPostExecute(Drawable avatar) {
+            if (mImageViewReference != null) {
+                ImageView imageView = mImageViewReference.get();
+                if (imageView != null) {
+                    if (avatar != null) {
+                        imageView.setImageDrawable(avatar);
+                    } else {
+                        // really needed?
+                        imageView.setImageResource(
+                            R.drawable.ic_account_circle
+                        );
                     }
-                } else if (mMenuItemReference != null) {
-                    MenuItem menuItem = mMenuItemReference.get();
-                    AvatarGenerationTask avatarWorkerTask = getAvatarWorkerTask(menuItem);
-                    if (this == avatarWorkerTask) {
-                        if (String.valueOf(menuItem.getTitle()).equals(mUsername)) {
-                            menuItem.setIcon(new BitmapDrawable(MainApp.getAppContext().getResources(),
-                                    bitmap));
-                        }
+                }
+            } else if (mMenuItemReference != null) {
+                MenuItem menuItem = mMenuItemReference.get();
+                if (menuItem != null) {
+                    if (avatar != null) {
+                        menuItem.setIcon(avatar);
+                    } else {
+                        // really needed
+                        menuItem.setIcon(
+                            R.drawable.ic_account_circle
+                        );
                     }
                 }
             }
@@ -442,56 +495,98 @@ public class ThumbnailsCacheManager {
             return Math.round(r.getDimension(R.dimen.file_avatar_size));
         }
 
-        private Bitmap doAvatarInBackground() {
+        private Drawable doAvatarInBackground() {
+
+            Drawable avatarDrawable = null;
 
             final String imageKey = "a_" + mUsername;
 
             // Check disk cache in background thread
-            Bitmap avatar = getBitmapFromDiskCache(imageKey);
+            Bitmap avatarBitmap = getBitmapFromDiskCache(imageKey);
 
-            // Not found in disk cache
-            if (avatar == null) {
+            if (avatarBitmap != null) {
+                avatarDrawable =  BitmapUtils.bitmapToCircularBitmapDrawable(
+                    MainApp.getAppContext().getResources(),
+                    avatarBitmap
+                );
 
-                int px = getAvatarDimension();
+            } else {
+                // Not found in disk cache
+                if (mFetchFromServer) {
+                    int px = getAvatarDimension();
 
-                // Download avatar from server
-                OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
-                if (mClient != null && serverOCVersion != null) {
-                    if (serverOCVersion.supportsRemoteThumbnails()) {
-                        GetMethod get = null;
-                        try {
-                            String uri = mClient.getBaseUri() + "" +
+                    // Download avatar from server
+                    OwnCloudVersion serverOCVersion = AccountUtils.getServerVersion(mAccount);
+                    if (mClient != null && serverOCVersion != null) {
+                        if (serverOCVersion.supportsRemoteThumbnails()) {
+                            GetMethod get = null;
+                            try {
+                                String uri = mClient.getBaseUri() + "" +
                                     "/index.php/avatar/" + AccountUtils.getUsernameOfAccount(mUsername) + "/" + px;
-                            Log_OC.d("Avatar", "URI: " + uri);
-                            get = new GetMethod(uri);
-                            int status = mClient.executeMethod(get);
-                            if (status == HttpStatus.SC_OK) {
-                                InputStream inputStream = get.getResponseBodyAsStream();
-                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                avatar = ThumbnailUtils.extractThumbnail(bitmap, px, px);
+                                Log_OC.d("Avatar", "URI: " + uri);
+                                get = new GetMethod(uri);
+                                int status = mClient.executeMethod(get);
+                                if (status == HttpStatus.SC_OK) {
+                                    InputStream inputStream = get.getResponseBodyAsStream();
+                                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                    avatarBitmap = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
-                                // Add avatar to cache
-                                if (avatar != null) {
-                                    addBitmapToCache(imageKey, avatar);
+                                    // Add avatar to cache
+                                    if (avatarBitmap != null) {
+                                        addBitmapToCache(imageKey, avatarBitmap);
+                                    }
+                                } else {
+                                    mClient.exhaustResponse(get.getResponseBodyAsStream());
                                 }
-                            } else {
-                                mClient.exhaustResponse(get.getResponseBodyAsStream());
+                            } catch (Exception e) {
+                                Log_OC.e(TAG, "Error downloading avatar", e);
+                            } finally {
+                                if (get != null) {
+                                    get.releaseConnection();
+                                }
                             }
-                        } catch (Exception e) {
-                            Log_OC.e(TAG, "Error downloading avatar", e);
-                        } finally {
-                            if (get != null) {
-                                get.releaseConnection();
-                            }
+                        } else {
+                            Log_OC.d(TAG, "Server too old");
                         }
-                    } else {
-                        Log_OC.d(TAG, "Server too old");
+                    }
+                }
+                if (avatarBitmap != null) {
+                    avatarDrawable = BitmapUtils.bitmapToCircularBitmapDrawable(
+                        MainApp.getAppContext().getResources(),
+                        avatarBitmap
+                    );
+
+                } else {
+                    // generate placeholder from user name
+                    try {
+                        avatarDrawable = DefaultAvatarTextDrawable.createAvatar(mUsername, mDisplayRadius);
+
+                    } catch (Exception e) {
+                        // nothing to do, return null to apply default icon
+                        Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
                     }
                 }
             }
-            return avatar;
+            return avatarDrawable;
         }
 
+    }
+
+    public static String addAvatarToCache(String accountName, byte[] avatarData, int dimension) {
+        final String imageKey = "a_" + accountName;
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(avatarData, 0, avatarData.length);
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension);
+        // Add avatar to cache
+        if (bitmap != null) {
+            addBitmapToCache(imageKey, bitmap);
+        }
+        return imageKey;
+    }
+
+    public static void removeAvatarFromCache(String accountName) {
+        final String imageKey = "a_" + accountName;
+        removeBitmapFromCache(imageKey);
     }
 
     public static boolean cancelPotentialThumbnailWork(Object file, ImageView imageView) {
@@ -514,7 +609,7 @@ public class ThumbnailsCacheManager {
     }
 
     public static boolean cancelPotentialAvatarWork(Object file, ImageView imageView) {
-        final AvatarGenerationTask avatarWorkerTask = getAvatarWorkerTask(imageView);
+        final GetAvatarTask avatarWorkerTask = getAvatarWorkerTask(imageView);
 
         if (avatarWorkerTask != null) {
             final Object usernameData = avatarWorkerTask.mUsername;
@@ -533,7 +628,7 @@ public class ThumbnailsCacheManager {
     }
 
     public static boolean cancelPotentialAvatarWork(Object file, MenuItem menuItem) {
-        final AvatarGenerationTask avatarWorkerTask = getAvatarWorkerTask(menuItem);
+        final GetAvatarTask avatarWorkerTask = getAvatarWorkerTask(menuItem);
 
         if (avatarWorkerTask != null) {
             final Object usernameData = avatarWorkerTask.mUsername;
@@ -562,21 +657,21 @@ public class ThumbnailsCacheManager {
         return null;
     }
 
-    private static AvatarGenerationTask getAvatarWorkerTask(ImageView imageView) {
+    private static GetAvatarTask getAvatarWorkerTask(ImageView imageView) {
         if (imageView != null) {
             return getAvatarWorkerTask(imageView.getDrawable());
         }
         return null;
     }
 
-    private static AvatarGenerationTask getAvatarWorkerTask(MenuItem menuItem) {
+    private static GetAvatarTask getAvatarWorkerTask(MenuItem menuItem) {
         if (menuItem != null) {
             return getAvatarWorkerTask(menuItem.getIcon());
         }
         return null;
     }
 
-    private static AvatarGenerationTask getAvatarWorkerTask(Drawable drawable) {
+    private static GetAvatarTask getAvatarWorkerTask(Drawable drawable) {
         if (drawable instanceof AsyncAvatarDrawable) {
             final AsyncAvatarDrawable asyncDrawable = (AsyncAvatarDrawable) drawable;
             return asyncDrawable.getAvatarWorkerTask();
@@ -602,18 +697,18 @@ public class ThumbnailsCacheManager {
     }
 
     public static class AsyncAvatarDrawable extends BitmapDrawable {
-        private final WeakReference<AvatarGenerationTask> avatarWorkerTaskReference;
+        private final WeakReference<GetAvatarTask> avatarWorkerTaskReference;
 
         public AsyncAvatarDrawable(
-                Resources res, Bitmap bitmap, AvatarGenerationTask avatarWorkerTask
+                Resources res, Bitmap bitmap, GetAvatarTask avatarWorkerTask
         ) {
 
             super(res, bitmap);
             avatarWorkerTaskReference =
-                    new WeakReference<AvatarGenerationTask>(avatarWorkerTask);
+                    new WeakReference<GetAvatarTask>(avatarWorkerTask);
         }
 
-        public AvatarGenerationTask getAvatarWorkerTask() {
+        public GetAvatarTask getAvatarWorkerTask() {
             return avatarWorkerTaskReference.get();
         }
     }

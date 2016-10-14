@@ -105,8 +105,12 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
                 );
 
                 try {
-                    DisplayUtils.setAvatar(account, viewHolder.imageViewItem, mAccountAvatarRadiusDimension,
-                            mContext.getResources());
+                    DisplayUtils.showAccountAvatar(
+                        account,
+                        viewHolder.imageViewItem,
+                        mAccountAvatarRadiusDimension,
+                        true
+                    );
                 } catch (Exception e) {
                     Log_OC.e(TAG, "Error calculating RGB value for account list item.", e);
                     // use user icon as a fallback

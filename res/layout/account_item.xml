@@ -18,6 +18,7 @@
 -->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     >
@@ -31,7 +32,7 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/standard_margin"
         android:layout_marginStart="@dimen/standard_margin"
-        android:src="@drawable/ic_menu_archive"
+        android:src="@drawable/ic_account_plus"
         />
 
     <ImageView

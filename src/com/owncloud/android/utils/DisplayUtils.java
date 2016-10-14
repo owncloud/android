@@ -301,52 +301,38 @@ public class DisplayUtils {
     }
 
     /**
-     * fetches and sets the avatar of the current account in the drawer in case the drawer is available.
+     * Show the avatar corresponding to the received account in an {@ImageView}.
      *
-     * @param account        the account to be set in the drawer
-     * @param userIcon       the image view to set the avatar on
-     * @param avatarRadius   the avatar radius
-     * @param resources      reference for density information
+     * The avatar is shown if available locally in {@link ThumbnailsCacheManager}. The avatar is not
+     * fetched from the server if not available.
+     *
+     * If there is no avatar stored, a colored icon is generated with the first letter of the account username.
+     *
+     * If this is not possible either, a predefined user icon is shown instead.
+     *
+     * @param account           OC account which avatar will be shown.
+     * @param displayView       The image view to set the avatar on.
+     * @param displayRadius     The radius of the circle where the avatar will be clipped into.
+     * @param fetchFromServer   When 'true', if there is no avatar stored in the cache, it's fetched from
+     *                          the server. When 'false', server is not accessed, the fallback avatar is
+     *                          generated instead. USE WITH CARE, probably to be removed in the future.
+     *
      */
-    public static void setAvatar(Account account, ImageView userIcon, float avatarRadius, Resources resources) {
+    public static void showAccountAvatar(
+        Account account,
+        ImageView displayView,
+        float displayRadius,
+        boolean fetchFromServer
+    ) {
         if (account != null) {
+            // not just accessibility support, used to know what account is bound to each imageView
+            displayView.setContentDescription(account.name);
 
-            userIcon.setContentDescription(account.name);
-
-            // Thumbnail in Cache?
-            Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache("a_" + account.name);
-
-            if (thumbnail != null) {
-                userIcon.setImageDrawable(
-                        BitmapUtils.bitmapToCircularBitmapDrawable(
-                            MainApp.getAppContext().getResources(), thumbnail
-                        )
+            final ThumbnailsCacheManager.GetAvatarTask task =
+                new ThumbnailsCacheManager.GetAvatarTask(
+                    displayView, account, displayRadius, fetchFromServer
                 );
-            } else {
-                // generate new avatar
-                if (ThumbnailsCacheManager.cancelPotentialAvatarWork(account.name, userIcon)) {
-                    final ThumbnailsCacheManager.AvatarGenerationTask task =
-                            new ThumbnailsCacheManager.AvatarGenerationTask(userIcon, account);
-                    if (thumbnail == null) {
-                        try {
-                            userIcon.setImageDrawable(
-                                DefaultAvatarTextDrawable.createAvatar(account.name, avatarRadius)
-                            );
-                        } catch (Exception e) {
-                            Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
-                            userIcon.setImageResource(R.drawable.ic_account_circle);
-                        }
-                    } else {
-                        final ThumbnailsCacheManager.AsyncAvatarDrawable asyncDrawable =
-                                new ThumbnailsCacheManager.AsyncAvatarDrawable(resources, thumbnail, task);
-                        userIcon.setImageDrawable(
-                                BitmapUtils.bitmapToCircularBitmapDrawable(
-                                        MainApp.getAppContext().getResources(), asyncDrawable.getBitmap())
-                        );
-                    }
-                    task.execute(account.name);
-                }
-            }
+            task.execute();
         }
     }
 }

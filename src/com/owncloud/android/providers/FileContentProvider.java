@@ -534,6 +534,8 @@ public class FileContentProvider extends ContentProvider {
             // Create uploads table
             createUploadsTable(db);
 
+            // Create user profiles table
+            createUserProfilesTable(db);
         }
 
         @Override
@@ -763,6 +765,19 @@ public class FileContentProvider extends ContentProvider {
                 }
             }
 
+            if (oldVersion < 15 && newVersion >= 15) {
+                Log_OC.i("SQL", "Entering in the #15 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    // Create user profiles table
+                    createUserProfilesTable(db);
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+
             if (!upgraded)
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                         ", newVersion == " + newVersion);
@@ -863,17 +878,19 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.UPLOADS_LAST_RESULT + " INTEGER, "     // Upload LastResult
                 + ProviderTableMeta.UPLOADS_CREATED_BY + " INTEGER );"    // Upload createdBy
         );
-
-
-        /* before:
-        // PRIMARY KEY should always imply NOT NULL. Unfortunately, due to a
-        // bug in some early versions, this is not the case in SQLite.
-        //db.execSQL("CREATE TABLE " + TABLE_UPLOAD + " (" + " path TEXT PRIMARY KEY NOT NULL UNIQUE,"
-        //        + " uploadStatus INTEGER NOT NULL, uploadObject TEXT NOT NULL);");
-        // uploadStatus is used to easy filtering, it has precedence over
-        // uploadObject.getUploadStatus()
-        */
     }
+
+    private void createUserProfilesTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + ProviderTableMeta.USER_AVATARS__TABLE_NAME + "("
+            + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
+            + ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + " TEXT, "
+            + ProviderTableMeta.USER_AVATARS__CACHE_KEY + " TEXT, "
+            + ProviderTableMeta.USER_AVATARS__MIME_TYPE + " TEXT, "
+            + ProviderTableMeta.USER_AVATARS__ETAG + " TEXT );"
+        );
+    }
+
+
 
     /**
      * Version 10 of database does not modify its scheme. It coincides with the upgrade of the ownCloud account names

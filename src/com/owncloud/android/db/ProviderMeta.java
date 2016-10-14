@@ -33,7 +33,7 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
-    public static final int DB_VERSION = 14;
+    public static final int DB_VERSION = 15;
 
     private ProviderMeta() {
     }
@@ -43,6 +43,8 @@ public class ProviderMeta {
         public static final String OCSHARES_TABLE_NAME = "ocshares";
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
         public static final String UPLOADS_TABLE_NAME = "list_of_uploads";
+        public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
+
         public static final Uri CONTENT_URI = Uri.parse("content://"
                 + MainApp.getAuthority() + "/");
         public static final Uri CONTENT_URI_FILE = Uri.parse("content://"
@@ -151,5 +153,11 @@ public class ProviderMeta {
 
         public static final String UPLOADS_DEFAULT_SORT_ORDER = ProviderTableMeta._ID  + " collate nocase desc";
 
+
+        // Columns of user_avatars table
+        public static final String USER_AVATARS__ACCOUNT_NAME = "account_name";
+        public static final String USER_AVATARS__CACHE_KEY = "cache_key";
+        public static final String USER_AVATARS__ETAG = "etag";
+        public static final String USER_AVATARS__MIME_TYPE = "mime_type";
     }
 }

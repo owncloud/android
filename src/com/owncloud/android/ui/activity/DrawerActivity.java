@@ -24,7 +24,6 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -44,8 +43,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.DefaultAvatarTextDrawable;
-import com.owncloud.android.utils.BitmapUtils;
 import com.owncloud.android.utils.DisplayUtils;
 
 /**
@@ -119,7 +116,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     /**
      * accounts for the (max) three displayed accounts in the drawer header.
      */
-    private Account[] mAvatars = new Account[3];
+    private Account[] mAccountsWithAvatars = new Account[3];
 
     /**
      * Initializes the drawer, its content and highlights the menu item with the given id.
@@ -342,20 +339,26 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 populateDrawerOwnCloudAccounts();
 
                 // activate second/end account avatar
-                if (mAvatars[1] != null) {
-                    DisplayUtils.setAvatar(mAvatars[1],
-                            (ImageView) findNavigationViewChildById(R.id.drawer_account_end),
-                            mOtherAccountAvatarRadiusDimension, getResources());
+                if (mAccountsWithAvatars[1] != null) {
+                    DisplayUtils.showAccountAvatar(
+                        mAccountsWithAvatars[1],
+                        (ImageView) findNavigationViewChildById(R.id.drawer_account_end),
+                        mOtherAccountAvatarRadiusDimension,
+                        false
+                    );
                     mAccountEndAccountAvatar.setVisibility(View.VISIBLE);
                 } else {
                     mAccountEndAccountAvatar.setVisibility(View.GONE);
                 }
 
                 // activate third/middle account avatar
-                if (mAvatars[2] != null) {
-                    DisplayUtils.setAvatar(mAvatars[2],
-                            (ImageView) findNavigationViewChildById(R.id.drawer_account_middle),
-                            mOtherAccountAvatarRadiusDimension, getResources());
+                if (mAccountsWithAvatars[2] != null) {
+                    DisplayUtils.showAccountAvatar(
+                        mAccountsWithAvatars[2],
+                        (ImageView) findNavigationViewChildById(R.id.drawer_account_middle),
+                        mOtherAccountAvatarRadiusDimension,
+                        false
+                    );
                     mAccountMiddleAccountAvatar.setVisibility(View.VISIBLE);
                 } else {
                     mAccountMiddleAccountAvatar.setVisibility(View.GONE);
@@ -386,27 +389,14 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         MENU_ORDER_ACCOUNT,
                         accounts[i].name
                 );
-                try {
-                    setAvatar(accounts[i], accountMenuItem);
-
-                } catch (Exception e1) {
-                    Log_OC.w(TAG, "Error retrieving avatar, generating colored letter instead");
-                    try {
-                        accountMenuItem.setIcon(
-                                DefaultAvatarTextDrawable.createAvatar(
-                                        accounts[i].name,
-                                        mMenuAccountAvatarRadiusDimension
-                                )
-                        );
-
-                    } catch (Exception e2) {
-                        Log_OC.w(
-                                TAG,
-                                "Error calculating color for account icon, using static icon instead"
-                        );
-                        accountMenuItem.setIcon(R.drawable.ic_user);
-                    }
-                }
+                ThumbnailsCacheManager.GetAvatarTask task =
+                    new ThumbnailsCacheManager.GetAvatarTask(
+                        accountMenuItem,
+                        accounts[i],
+                        mMenuAccountAvatarRadiusDimension,
+                        false
+                    );
+                task.execute();
             }
         }
 
@@ -462,61 +452,12 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 username.setText(AccountUtils.getUsernameOfAccount(account.name));
             }
 
-            DisplayUtils.setAvatar(account, (ImageView) findNavigationViewChildById(R.id.drawer_current_account),
-                    mCurrentAccountAvatarRadiusDimension, getResources());
-        }
-    }
-
-    /**
-     * fetches and sets the avatar of the current account in the drawer in case the drawer is available.
-     *
-     * @param account        the account to be set in the drawer
-     * @param menuItem       the menuItem to set the avatar on
-     */
-    private void setAvatar(Account account, MenuItem menuItem) {
-        if (mDrawerLayout != null && account != null) {
-
-            // Thumbnail in Cache?
-            Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache("a_" + account.name);
-
-            if (thumbnail != null) {
-                menuItem.setIcon(
-                        BitmapUtils.bitmapToCircularBitmapDrawable(MainApp.getAppContext().getResources(), thumbnail)
-                );
-            } else {
-                // generate new avatar
-                if (ThumbnailsCacheManager.cancelPotentialAvatarWork(account.name, menuItem)) {
-                    final ThumbnailsCacheManager.AvatarGenerationTask task =
-                            new ThumbnailsCacheManager.AvatarGenerationTask(
-                                    menuItem, account
-                            );
-                    if (thumbnail == null) {
-                        try {
-                                menuItem.setIcon(
-                                        DefaultAvatarTextDrawable.createAvatar(
-                                                account.name,
-                                                mMenuAccountAvatarRadiusDimension
-                                        )
-                                );
-                        } catch (Exception e) {
-                            Log_OC.e(TAG, "Error calculating RGB value for active account icon.", e);
-                            menuItem.setIcon(R.drawable.ic_account_circle);
-                        }
-                    } else {
-                        final ThumbnailsCacheManager.AsyncAvatarDrawable asyncDrawable =
-                                new ThumbnailsCacheManager.AsyncAvatarDrawable(
-                                        getResources(),
-                                        thumbnail,
-                                        task
-                                );
-                        menuItem.setIcon(
-                                BitmapUtils.bitmapToCircularBitmapDrawable(
-                                        MainApp.getAppContext().getResources(), asyncDrawable.getBitmap())
-                        );
-                    }
-                    task.execute(account.name);
-                }
-            }
+            DisplayUtils.showAccountAvatar(
+                account,
+                (ImageView) findNavigationViewChildById(R.id.drawer_current_account),
+                mCurrentAccountAvatarRadiusDimension,
+                false
+            );
         }
     }
 
@@ -685,16 +626,16 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * always the current account.
      */
     private void populateDrawerOwnCloudAccounts() {
-        mAvatars = new Account[3];
+        mAccountsWithAvatars = new Account[3];
         Account[] accountsAll = AccountManager.get(this).getAccountsByType
                 (MainApp.getAccountType());
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(this);
 
-        mAvatars[0] = currentAccount;
+        mAccountsWithAvatars[0] = currentAccount;
         int j = 0;
         for (int i = 1; i <= 2 && i < accountsAll.length && j < accountsAll.length; j++) {
             if (!currentAccount.equals(accountsAll[j])) {
-                mAvatars[i] = accountsAll[j];
+                mAccountsWithAvatars[i] = accountsAll[j];
                 i++;
             }
         }
