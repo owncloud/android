@@ -59,6 +59,7 @@ import com.owncloud.android.lib.resources.shares.GetRemoteSharesOperation;
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation;
+import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
 
 /**
  * Activity to test OC framework
@@ -337,7 +338,12 @@ public class TestActivity extends Activity {
         GetRemoteUserQuotaOperation getUserQuotaOperation = new GetRemoteUserQuotaOperation();
         return getUserQuotaOperation.execute(mClient);
     }
-	
+
+
+	public RemoteOperationResult getUserAvatar(int dimension, String etag) {
+		GetRemoteUserAvatarOperation getUserAvatarOperation = new GetRemoteUserAvatarOperation(dimension, etag);
+		return getUserAvatarOperation.execute(mClient);
+	}
 	
 	/**
 	 * Extracts file from AssetManager to cache folder.
