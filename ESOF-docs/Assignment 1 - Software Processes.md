@@ -35,6 +35,8 @@ Para sugerir uma nova funcionalidade, o interessado deve:
 * Discutir a implementação/design com a comunidade e organizar o desenvolvimento;
 * Esperar que a sua funcionalidade seja incluída numa próxima *release*.
 
+De acordo com David Velasco, existem três equipas, apesar dessa divisão não ser formal. As equipas são a equipa do servidor, a equipa do *desktop* e a equipa *mobile*. David Velasco pertence à última. A equipa *mobile* é responsável pelas aplicações para iOS e Android, abrangendo tanto o design, como o desenvolvimento, a garantia de qualidade e a distribuição. Esta equipa inclui um engenheiro de *Q&A* para ambas as plataformas, um engenheiro de *software* para Android (David Velasco), outro para iOS e um mestre de *SCRUM* para ambas as aplicações. Esta equipa usa *SCRUM*, mas as outras equipas trabalham de formas diferentes. O processo à volta dos contribuidores voluntários é mais aberto. A equipa mantém-se atenta a novos *pull requests* e tenta avaliar o seu valor para o produto, de forma a prioritarizá-los. Isso, geralmente, necessita de alguns testes mínimos para se entender como funciona o código e uma primeira revisão ao código. Após isso, os engenheiros de *software* na equipa recomendam, dos novos *pull requests*, alguns para movê-los para o topo do “backlog”, e, eventualmente, movê-los para um *sprint*. Assim que fizerem parte de um *sprint*, os contribuidores recebem questões e respostas formais (*Q&A*) e a equipa colabora com os contribuidores para corrigir *bugs* encontrados e redesenhar partes do código.
+
 De acordo com os diferentes ficheiros de código presentes no projecto, os contribuidores usam, maioritariamente, *Incremental Development and Delivery*.
 
 #### Atividade
