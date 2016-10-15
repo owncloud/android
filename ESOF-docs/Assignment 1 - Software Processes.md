@@ -19,7 +19,7 @@ A aplicação permite:
 
 Posto isto, tanto utilizadores particulares que usem um [**servidor gratuito**](https://owncloud.org/providers/), assim como grandes empresas que utilizem uma [**subscrição empresarial**](https://owncloud.com/), podem ter os seus ficheiros sincronizados de uma forma segura e descomplicada em todos os seus dispositivos, uma vez que são estes que controlam os servidores.
 
-A aplicação permite usar várias contas e trocar entre elas, mas só uma conta pode estar a uso de cada vez. Fornece algumas vantagens relativamente à interface Web, uma vez que permite uma sincronização automática dos ficheiros, assim como adicionar ficheiros diretamente do armazenamento do dispositivo.
+A aplicação permite usar várias contas e trocar entre elas, mas só uma conta pode estar a uso de cada vez. Ests fornece algumas vantagens relativamente à interface Web, uma vez que permite uma sincronização automática dos ficheiros, assim como adicionar ficheiros diretamente do armazenamento do dispositivo.
 
 Duas aplicações familiares a todos e que são bastante parecidas com esta são o *Google Drive* e o *OneDrive*.
 
@@ -27,13 +27,13 @@ Duas aplicações familiares a todos e que são bastante parecidas com esta são
 
 ### Descrição do processo de desenvolvimento
 
-O processo de desenvolvimento adotado pelos programadores foi o [*Open Planning Process*](https://owncloud.org/blog/open-planning-process/), introduzido no ownCloud por Matt Richards. Neste tipo de processo, cada pessoa pensa numa funcionalidade que gostaria de ver implementada e, se souber, implementa, senão pede para implementar. Isto permite e encoraja a colaboração, participação e apreciação do *feedback* dos utilizadores. Desta forma, o projeto tem uma lista de objetivos planeados, recolhidos das ideias e sugestões dadas, sendo estes prioritizados (através do número de *likes* que recebem) e divididos em pacotes para serem tratados pelos contribuidores. Com isto, conectam-se as pessoas, fazendo com que este processo leve a um plano de desenvolvimento partilhado, visível, transparente e democrático.
+O processo de desenvolvimento adotado pelos programadores foi o [*Open Planning Process*](https://owncloud.org/blog/open-planning-process/), introduzido no ownCloud por Matt Richards. Neste tipo de processo, cada pessoa pensa numa funcionalidade que gostaria de ver implementada e, se souber, implementa, senão pede para implementar. Isto permite e encoraja a colaboração, participação e apreciação do *feedback* dos utilizadores. Desta forma, o projeto tem uma lista de objetivos planeados, recolhidos das ideias e sugestões dadas, sendo estes prioritarizados (através do número de *likes* que recebem) e divididos em pacotes para serem tratados pelos contribuidores. Com isto, conectam-se as pessoas, fazendo com que este processo leve a um plano de desenvolvimento partilhado, visível, transparente e democrático.
 Para sugerir uma nova funcionalidade, o interessado deve:
 * Criar um tópico em ownCloud Central;
 * Descrever a funcionalidade que pretende que seja implementada;
 * Colecionar *likes* na sua proposta;
 * Discutir a implementação/design com a comunidade e organizar o desenvolvimento;
-* Esperar que a sua feature seja incluída numa próxima *release*.
+* Esperar que a sua funcionalidade seja incluída numa próxima *release*.
 
 De acordo com os diferentes ficheiros de código presentes no projecto, os contribuidores usam, maioritariamente, *Incremental Development and Delivery*.
 
@@ -56,9 +56,9 @@ Na opinião do grupo, o processo de desenvolvimento usado é uma boa opção no 
 
 Outros processos de desenvolvimento também aplicáveis seriam *Software prototyping*, *Incremental development and delivery* e *Test-Driven Development*.
 
-Ao utilizar *Software prototyping*, os desenvolvedores conseguiriam criar versões incompletas da aplicação que posteriormente seriam completadas. Desta forma, conseguiriam obter *feedback* dos utilizadores aos quais fariam chegar essa versão, fazendo desde cedo alterações que poderiam evitar erros que se propagariam com o desenrolar do projeto, assim como ajustes que levariam a uma melhor aceitação por parte da comunidade.
+Ao utilizar *Software prototyping*, os desenvolvedores poderiam criar versões incompletas da aplicação que posteriormente seriam completadas. Desta forma, conseguiriam obter *feedback* dos utilizadores aos quais fariam chegar essa versão, fazendo desde cedo alterações que poderiam evitar erros que se propagariam com o desenrolar do projeto, assim como ajustes que levariam a uma melhor aceitação por parte da comunidade.
 
-O processo *Incremental development and delivery* seria uma boa alternativa, pois permite desenvolver funcionalidades, lançá-las e analisar a resposta do público/cliente, de forma a melhorar a funcionalidade ou eliminá-la sem ter sido necessário nem um grande esforço nem muitos recursos para desenvolvê-la. Este processo reduz o risco de se desenvolver um grande projecto que não serve as necessidades do público-alvo. Por outro lado, com cada incremento, torna-se mais difícil estruturar correctamente o código, podendo ser necessário criar um projecto novo quando se chegar a um ponto de rotura.
+O processo *Incremental development and delivery* seria uma boa alternativa, pois permite desenvolver funcionalidades, lançá-las e analisar a resposta do público/cliente, de forma a melhorar a funcionalidade ou a eliminá-la sem ter sido necessário nem um grande esforço nem muitos recursos para desenvolvê-la. Este processo reduz o risco de se desenvolver um grande projecto que não serve as necessidades do público-alvo. Por outro lado, com cada incremento, tornar-se-ia mais difícil estruturar correctamente o código, podendo ser necessário criar um projecto novo quando se chegasse a um ponto de rotura.
 
 O processo *Test-Driven Development* permitiria que o projeto tivesse uma lista de objetivos planeados e que cada novo contribuidor criasse a lista de testes a serem cumpridos. Depois o contribuidor desenvolveria o código de maneira a passar nesses novos testes.
 
