@@ -16,14 +16,15 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_radiobutton"
-    android:layout_width="fill_parent"
-    android:layout_height="56dp"
-    android:gravity="center_vertical"
-    android:paddingLeft="@dimen/standard_padding"
-    android:paddingRight="@dimen/standard_padding"
-    android:textColor="@color/black"
-    android:textSize="18dp"
-    android:filterTouchesWhenObscured="true"
-    />
+
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary"
+    android:theme="?attr/actionBarTheme"
+    app:popupTheme="?attr/actionBarPopupTheme"
+/>
+

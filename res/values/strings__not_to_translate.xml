@@ -29,26 +29,6 @@
         <item>MOVE</item>
     </string-array>
 
-    <!-- Nav Drawer Menu Items -->
-    <string-array name="drawer_items">
-        <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
-        <!--<item>@string/prefs_accounts</item>-->
-        <item>@string/drawer_item_all_files</item>
-        <!--<item>@string/drawer_item_on_device</item>-->
-        <item>@string/drawer_item_uploads_list</item>
-        <item>@string/actionbar_settings</item>
-    </string-array>
-
-    <!-- Nav Drawer Content Descriptions -->
-    <string-array name="drawer_content_descriptions">
-        <!-- TODO re-enable when "Accounts" is available in Navigation Drawer-->
-        <!--<item>@string/drawer_item_accounts</item>-->
-        <item>@string/drawer_item_all_files</item>
-        <!--<item>@string/drawer_item_on_device</item>-->
-        <item>@string/drawer_item_uploads_list</item>
-        <item>@string/drawer_item_settings</item>
-    </string-array>
-
     <!-- Entries in dialog to choose sorting criteria -->
     <string-array name="actionbar_sort_by_options">
         <item>@string/actionbar_sort_by_name</item>

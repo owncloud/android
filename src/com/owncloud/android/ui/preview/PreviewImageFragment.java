@@ -186,6 +186,7 @@ public class PreviewImageFragment extends FileFragment {
         super.onActivityCreated(savedInstanceState);
         mProgressController = new TransferProgressController(mContainerActivity);
         mProgressController.setProgressBar(mProgressBar);
+        mProgressController.hideProgressBar();
         if (savedInstanceState != null) {
             if (!mIgnoreFirstSavedState) {
                 OCFile file = savedInstanceState.getParcelable(PreviewImageFragment.EXTRA_FILE);

@@ -17,12 +17,18 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-	<style name="ProgressDialogTheme" parent="ownCloud.Dialog">
-	</style>
-    <style name="Theme.ownCloud.NoActionBar">
-        <item name="windowActionBar">false</item>
+
+    <!-- Extends Theme.ownCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->
+    <style name="Theme.ownCloud.Toolbar">
         <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+        <!-- (status/nav)BarColor are set by the Activity, not the system -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawwer -->
+    <style name="Theme.ownCloud.Toolbar.Drawer">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

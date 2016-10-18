@@ -97,7 +97,7 @@ public class ConfirmationDialogFragment extends DialogFragment {
             messageArguments = new String[]{};
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_ownCloud_Dialog)
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
             .setIcon(R.drawable.ic_warning)
             .setIconAttribute(android.R.attr.alertDialogIcon)
             .setMessage(String.format(getString(messageId), messageArguments));

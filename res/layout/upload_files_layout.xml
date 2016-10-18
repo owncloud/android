@@ -17,12 +17,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/upload_files_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/background_color"
-    android:orientation="vertical"
-    android:filterTouchesWhenObscured="true" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:filterTouchesWhenObscured="true"
+    android:orientation="vertical" >
+
+    <include
+        layout="@layout/toolbar_standard" />
 
     <fragment
         android:id="@+id/local_files_list"
@@ -53,7 +56,7 @@
 
         <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/drawer_radio_group"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">

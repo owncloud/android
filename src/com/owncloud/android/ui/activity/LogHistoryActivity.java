@@ -50,7 +50,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 
 
-public class LogHistoryActivity extends AppCompatActivity {
+public class LogHistoryActivity extends ToolbarActivity {
 
     private static final String MAIL_ATTACHMENT_TYPE = "text/plain";
 
@@ -70,6 +70,8 @@ public class LogHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.log_send_file);
+        setupToolbar();
+
         setTitle(getText(R.string.actionbar_logger));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Button deleteHistoryButton = (Button) findViewById(R.id.deleteLogHistoryButton);
@@ -252,9 +254,7 @@ public class LogHistoryActivity extends AppCompatActivity {
      */
     public void showLoadingDialog() {
         // Construct dialog
-        LoadingDialog loading = new LoadingDialog(
-                getResources().getString(R.string.log_progress_dialog_text)
-        );
+        LoadingDialog loading = LoadingDialog.newInstance(R.string.log_progress_dialog_text, false);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         loading.show(ft, DIALOG_WAIT_TAG);
