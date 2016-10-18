@@ -35,12 +35,6 @@ env:
   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
   #   via the "travis encrypt" command using the project repo's public key
   - secure: epTZ0zZGDbHL3o6vSC9uNkZsi5j5SA6O/tvQBH7QW/dluuzIJxIjfhNbZHDyBReYDleirLzUFQpdWAUdvulCMLs/qZdIzFGlYXZSpxEnvPYMGQcilwADdJcxLw8L+3+ET5hSexxhjrTGw427IljkqGUpqQTxaLwFdFu98lDWSbc=
-  # The next 3 declarations are the variables needed to access the test server,
-  #   added via "travis encrypt", using the repo public key
-  - secure: gPCBnpGLA2sdSMtfhT+/InThmXNEU8XrrS54uuIP8iXBLvVe0yZrNl76GbMosV0ry3YtDngsmsbHwRjPPb0+3mTTdAqZ60HHzGaNPgEm6b5t0t4bpJ3LW9osLZsuf9jRsI2LD66zxblaMrK2+8hN/dUrj707ijsZHp3SPSQJ6g8=
-  - secure: AnxLVarfwM7IhJ7Sca35USyRlFHFvlcBhWTt2TVDcyQ+ldDyb+U6IWXFK0Yy82QP0ZH/RCLu7FnmHK/rKG0BHNRt1Ymco1VkTQql0MZcHXP+4IKgEvgJyUn1TqYj+hSVmM6lgTA+QUjZYGSfwU8mhUFiU7644ZTdTe6ALdqa+v8=
-  - secure: ezKyZbb3q1Phcv/vJntuJe0C2req+Hp4/C+tFZIWZ3o8wRO9jVI3bnED9TWQyQOOT0SoRYjJ5zqp0UcEOGCzPeWFO6bA7RWp+zA/R9sziLNcVWMVv3WXnuClQjPBHJeXRnP7YmNjxDmSfV97a14dk5d9LgJZYliTDepH4dLsxro=
-  - secure: HV8REF7bB1i6cBEe4YCZvjgTf6tGiptAPzp9qZXGUH9Lxh6yUjYMXXP8flDaIFcE2JuAakW6P4SPr7/SQ+X4f8/84cNhmU1I+6Y1nG37WvelRHQVslOUDbl1TNUnynYZ+ybkb3BtrQvggCGMdQKvGZXYiggFhN/TWuDo0c7Q2Ro=
   matrix:
   - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
 addons:

@@ -73,7 +73,7 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
             status = client.executeMethod(get);
             if (isSuccess(status)) {
                 String response = get.getResponseBodyAsString();
-                Log_OC.d(TAG, "Successful response: " + response);
+                Log_OC.d(TAG, "Successful response");
 
                 // Parse the response
                 JSONObject respJSON = new JSONObject(response);
