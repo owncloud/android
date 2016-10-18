@@ -72,6 +72,7 @@
   <string name="filedisplay_no_file_selected">ගොනුවක් තෝරා නැත</string>
   <string name="ssl_validator_btn_details_hide">සඟවන්න</string>
   <string name="prefs_category_accounts">ගිණුම්</string>
+  <string name="drawer_manage_accounts">ගිණුම් කළමනාකරනය</string>
   <string name="folder_picker_choose_button_text">තෝරන්න</string>
   <string name="auth_host_address">සේවාදායකයේ ලිපිනය</string>
   <string name="share_dialog_title">හුවමාරු කිරීම</string>

@@ -290,6 +290,7 @@
   <string name="downloader_download_file_not_found">این فایل دیگر روی سرور وجود ندارد</string>
   <string name="prefs_category_accounts">حساب‌ها</string>
   <string name="prefs_add_account">ایحاد حساب کاربری</string>
+  <string name="drawer_manage_accounts">مدیریت حساب‌ها</string>
   <string name="actionbar_logger">لاگ‌ها</string>
   <string name="saml_authentication_required_text">احراز هویت مورد نیاز است</string>
   <string name="saml_authentication_wrong_pass">رمز عبور اشتباه است</string>

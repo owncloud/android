@@ -322,6 +322,7 @@
   <string name="downloader_download_file_not_found">O ficheiro não está mais disponível no servidor</string>
   <string name="prefs_category_accounts">Contas</string>
   <string name="prefs_add_account">Adicionar conta</string>
+  <string name="drawer_manage_accounts">Gerir contas</string>
   <string name="auth_redirect_non_secure_connection_title">Uma ligação segura foi redireccionada por uma rota insegura.</string>
   <string name="actionbar_logger">Registos de Alterações</string>
   <string name="log_send_history_button">Histórico de envio</string>

@@ -325,6 +325,7 @@
   <string name="downloader_download_file_not_found">這個檔案已經不存在於伺服器中</string>
   <string name="prefs_category_accounts">帳號</string>
   <string name="prefs_add_account">新增帳號</string>
+  <string name="drawer_manage_accounts">管理帳號</string>
   <string name="auth_redirect_non_secure_connection_title">加密的連線是由一個未加密的連線轉向過來的.</string>
   <string name="actionbar_logger">紀錄</string>
   <string name="log_send_history_button">傳送歷史</string>

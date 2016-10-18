@@ -213,6 +213,7 @@
   <string name="downloader_download_file_not_found">La dosiero ne plu disponeblas en la servilo</string>
   <string name="prefs_category_accounts">Kontoj</string>
   <string name="prefs_add_account">Aldoni konton</string>
+  <string name="drawer_manage_accounts">Administri kontojn</string>
   <string name="actionbar_logger">Protokoloj</string>
   <string name="log_send_history_button">Sendi historion</string>
   <string name="log_send_no_mail_app">Neniu aplikaĵo por sendi protokolojn troviĝas. Bonvolu instali retpoŝtaplikaĵon.</string>

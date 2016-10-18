@@ -307,6 +307,7 @@
   <string name="downloader_download_file_not_found">De Fichier ass net méi um Server disponibel</string>
   <string name="prefs_category_accounts">Konten</string>
   <string name="prefs_add_account">Kont dobäisetzen</string>
+  <string name="drawer_manage_accounts">Konte geréieren</string>
   <string name="actionbar_logger">Protokoller</string>
   <string name="log_send_history_button">Historique schécken</string>
   <string name="log_send_mail_subject">Protokoller vun der %1$s-Android-App</string>

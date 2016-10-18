@@ -323,6 +323,7 @@
   <string name="downloader_download_file_not_found">Kartela s\’gjendet më te shërbyesi</string>
   <string name="prefs_category_accounts">Llogari</string>
   <string name="prefs_add_account">Shtoni llogari</string>
+  <string name="drawer_manage_accounts">Administroni llogari</string>
   <string name="auth_redirect_non_secure_connection_title">Lidhja e sigurt është ridrejtuar përmes një rruge të pasigurt.</string>
   <string name="actionbar_logger">Regjistra</string>
   <string name="log_send_history_button">Historik dërgimesh</string>

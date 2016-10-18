@@ -236,6 +236,7 @@ Mesedez, baimendu berriz</string>
   <string name="downloader_download_file_not_found">Fitxategia jadanik ez dago eskuragarri zerbitzarian</string>
   <string name="prefs_category_accounts">Kontuak</string>
   <string name="prefs_add_account">Gehitu kontua</string>
+  <string name="drawer_manage_accounts">Kontuak kudeatu</string>
   <string name="auth_redirect_non_secure_connection_title">Konexio segurua birbideratu da segurua ez den bide batetik.</string>
   <string name="actionbar_logger">Egunkariak</string>
   <string name="log_send_mail_subject">%1$s Android aplikazioaren egunerokoak</string>

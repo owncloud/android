@@ -261,6 +261,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="downloader_download_file_not_found">Aqueste fichièr es pas mai disponible sul servidor</string>
   <string name="prefs_category_accounts">Comptes</string>
   <string name="prefs_add_account">Apondre un compte</string>
+  <string name="drawer_manage_accounts">Maneja comptes</string>
   <string name="auth_redirect_non_secure_connection_title">La connexion securizada es redirigida cap a una rota non-securizada.</string>
   <string name="actionbar_logger">Jornals</string>
   <string name="log_send_mail_subject">Jornals de l\'aplicacion Android %1$s</string>

@@ -257,6 +257,7 @@
   <string name="downloader_download_file_not_found">Failas neegzistuoja serveryje</string>
   <string name="prefs_category_accounts">Paskyros</string>
   <string name="prefs_add_account">Pridėti paskyrą</string>
+  <string name="drawer_manage_accounts">Tvarkyti paskyras</string>
   <string name="auth_redirect_non_secure_connection_title">Saugus sujungimas nukreiptas per nesaugų kelią</string>
   <string name="actionbar_logger">Žurnalai</string>
   <string name="log_send_mail_subject">%1$s Android žurnalai</string>

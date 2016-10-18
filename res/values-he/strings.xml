@@ -325,6 +325,7 @@
   <string name="downloader_download_file_not_found">הקובץ אינו זמין יותר על השרת</string>
   <string name="prefs_category_accounts">חשבונות</string>
   <string name="prefs_add_account">הוספת חשבון</string>
+  <string name="drawer_manage_accounts">ניהול חשבונות</string>
   <string name="auth_redirect_non_secure_connection_title">חיבור מאובטח מנותב דרך נתיב לא מאובטח</string>
   <string name="actionbar_logger">לוגים</string>
   <string name="log_send_history_button">הסטורית שליחה</string>

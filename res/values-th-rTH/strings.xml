@@ -323,6 +323,7 @@
   <string name="downloader_download_file_not_found">ไฟล์ไม่พร้อมใช้งานบนเซิร์ฟเวอร์</string>
   <string name="prefs_category_accounts">บัญชี</string>
   <string name="prefs_add_account">เพิ่มบัญชี</string>
+  <string name="drawer_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="auth_redirect_non_secure_connection_title">เชื่อมต่อที่ปลอดภัยถูกเปลี่ยนเส้นทางผ่านเราเตอร์ที่ไม่ปลอดภัย</string>
   <string name="actionbar_logger">บันทึก</string>
   <string name="log_send_history_button">ส่งประวัติการใช้งานย้อนหลัง</string>

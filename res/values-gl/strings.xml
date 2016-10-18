@@ -259,6 +259,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="downloader_download_file_not_found">O ficheiro xa non está dispoñíbel no servidor</string>
   <string name="prefs_category_accounts">Contas</string>
   <string name="prefs_add_account">Engadir unha conta</string>
+  <string name="drawer_manage_accounts">Xestionar as contas</string>
   <string name="auth_redirect_non_secure_connection_title">A conexión segura está a ser redirixida a través dunha ruta non segura.</string>
   <string name="actionbar_logger">Rexistros</string>
   <string name="log_send_mail_subject">Rexistros da aplicación %1$s Android</string>
