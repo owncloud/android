@@ -283,13 +283,8 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
     private void processStopFileRequest(Intent intent) {
         OCFile file = intent.getExtras().getParcelable(EXTRA_FILE);
-        try {
-            if(file.equals(mFile)) {
-                processStopRequest(true);
-            }
-        }
-        catch (NullPointerException e) {
-            Log_OC.e(TAG, "NullPointerException while stopping on OCFile ", e);
+        if(file != null && file.equals(mFile)) {
+            processStopRequest(true);
         }
     }
 
