@@ -21,6 +21,8 @@
 package com.owncloud.android.media;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.OnAccountsUpdateListener;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -40,6 +42,7 @@ import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -92,6 +95,9 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     
     /** Reference to the system AudioManager */
     private AudioManager mAudioManager = null;
+
+    /** Reference to the system AccountManager */
+    private AccountManager mAccountManager;
 
 
     /** Values to indicate the state of the service */
@@ -240,6 +246,18 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         mNotificationBuilder.setColor(this.getResources().getColor(R.color.primary));
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mBinder = new MediaServiceBinder(this);
+
+        // add AccountsUpdatedListener
+        mAccountManager = AccountManager.get(this);
+        mAccountManager.addOnAccountsUpdatedListener(new OnAccountsUpdateListener() {
+            @Override
+            public void onAccountsUpdated(Account[] accounts) {
+                // stop playback if account of the played media files was removed
+                if (mAccount != null && !AccountUtils.exists(mAccount, MediaService.this)) {
+                    processStopRequest(false);
+                }
+            }
+        }, null, false);
     }
 
     
