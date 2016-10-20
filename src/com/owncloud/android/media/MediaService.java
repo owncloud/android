@@ -33,6 +33,7 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
+import android.os.FileObserver;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v7.app.NotificationCompat;
@@ -44,6 +45,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -91,7 +93,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     /** Reference to the system AudioManager */
     private AudioManager mAudioManager = null;
 
-    
+
     /** Values to indicate the state of the service */
     enum State {
         STOPPED,
@@ -128,7 +130,10 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
     /** File being played */
     private OCFile mFile;
-    
+
+    /** Observer being notified if played file is deleted */
+    private MediaFileObserver mFileObserver = null;
+
     /** Account holding the file being played */
     private Account mAccount;
 
@@ -354,6 +359,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         if (mState != State.PREPARING || force) {
             mState = State.STOPPED;
             mFile = null;
+            stopFileObserver();
             mAccount = null;
             releaseResources(true);
             giveUpAudioFocus();
@@ -464,6 +470,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             createMediaPlayerIfNeeded();
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             String url = mFile.getStoragePath();
+            updateFileObserver(url);
             /* Streaming is not possible right now
             if (url == null || url.length() <= 0) {
                 url = AccountUtils.constructFullURLForAccount(this, mAccount) + mFile.getRemotePath();
@@ -513,7 +520,19 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         }
     }
 
-    
+    private void updateFileObserver(String url) {
+        stopFileObserver();
+        mFileObserver = new MediaFileObserver(url);
+        mFileObserver.startWatching();
+    }
+
+    private void stopFileObserver() {
+        if (mFileObserver != null) {
+            mFileObserver.stopWatching();
+        }
+    }
+
+
     /** Called when media player is done playing current song. */
     public void onCompletion(MediaPlayer player) {
         Toast.makeText(this, String.format(getString(R.string.media_event_done, mFile.getFileName())), Toast.LENGTH_LONG).show();
@@ -726,6 +745,25 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
 
     protected MediaControlView getMediaController() {
         return mMediaController;
+    }
+
+    /**
+     * Observer monitoring the media file currently played and stopping the playback in case
+     * that it's deleted or moved away from its storage location.
+     */
+    private class MediaFileObserver extends FileObserver {
+
+        public MediaFileObserver(String path) {
+            super((new File(path)).getParent(), FileObserver.DELETE | FileObserver.MOVED_FROM);
+        }
+
+        @Override
+        public void onEvent(int event, String path) {
+            if (path != null && path.equals(mFile.getFileName())) {
+                Log_OC.d(TAG, "Media file deleted or moved out of sight, stopping playback");
+                processStopRequest(true);
+            }
+        }
     }
 
 }
