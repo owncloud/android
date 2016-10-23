@@ -230,6 +230,7 @@
   <string name="confirmation_remove_file_alert">Вы действительно хотите удалить %1$s?</string>
   <string name="confirmation_remove_folder_alert">Вы действительно хотите удалить %1$s и его содержимое?</string>
   <string name="confirmation_remove_local">Только локально</string>
+  <string name="confirmation_remove_account_alert">Вы действительно хотите удалить аккаунт %1$s?</string>
   <string name="remove_success_msg">Удаление завершено</string>
   <string name="remove_fail_msg">Ошибка удаления</string>
   <string name="rename_dialog_title">Введите новое имя</string>
