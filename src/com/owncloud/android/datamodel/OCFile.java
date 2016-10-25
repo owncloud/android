@@ -73,7 +73,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         AVAILABLE_OFFLINE(1),
 
         /**
-         * File belongs to any available offline folder
+         * File belongs to an available offline folder
          */
         AVAILABLE_OFFLINE_PARENT(2);
 
