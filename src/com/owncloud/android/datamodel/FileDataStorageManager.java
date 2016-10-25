@@ -36,6 +36,7 @@ import android.provider.MediaStore;
 import android.support.v4.util.Pair;
 
 import com.owncloud.android.MainApp;
+import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
@@ -549,21 +550,6 @@ public class FileDataStorageManager {
         return (updatedCount > 0);
     }
 
-    /*
-    private void toggleAvailableOfflineFilesInFolder(OCFile file, boolean isAvailableOffline) {
-        OCFile.AvailableOfflineStatus availableOfflineStatus = isAvailableOffline ?
-            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE : OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
-        Vector<OCFile> filesInFolder = mFileActivity.getStorageManager().getFolderContent(file);
-        for (OCFile fileInFolder: filesInFolder) {
-            fileInFolder.setAvailableOfflineStatus(availableOfflineStatus);
-            mFileActivity.getStorageManager().saveFile(fileInFolder);
-            if (fileInFolder.isFolder()) {
-                toggleAvailableOfflineFilesInFolder(fileInFolder, isAvailableOffline);
-            }
-        }
-    }
-    */
-
     public boolean removeFile(OCFile file, boolean removeDBData, boolean removeLocalCopy) {
         boolean success = true;
         if (file != null) {
@@ -572,8 +558,6 @@ public class FileDataStorageManager {
 
             } else {
                 if (removeDBData) {
-                    //Uri file_uri = Uri.withAppendedPath(ProviderTableMeta.CONTENT_URI_FILE,
-                    // ""+file.getFileId());
                     Uri file_uri = ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE,
                             file.getFileId());
                     String where = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=?" + " AND " +
@@ -2214,6 +2198,53 @@ public class FileDataStorageManager {
             selection,
             selectionArgs
         );
+        return result;
+    }
+
+    /**
+     * Get a collection with all the files set by the user as available offline, from all the accounts
+     * in the device.
+     *
+     * This is the only method working with a NULL account in {@link #mAccount}. Not something to do often.
+     *
+     * @return      List with all the files set by the user as available offline.
+     */
+    public List<Pair<OCFile, String>> getAvailableOfflineFilesFromEveryAccount() {
+        List<Pair<OCFile, String>> result = new ArrayList<>();
+
+        Cursor cursorOnKeptInSync = null;
+        try {
+            // query for any favorite file in any OC account
+            cursorOnKeptInSync = getContentResolver().query(
+                ProviderTableMeta.CONTENT_URI,
+                null,
+                ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
+                new String[] { String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) },
+                // do NOT get also AVAILABLE_OFFLINE_PARENT: only those SET BY THE USER (files or folders)
+                null
+            );
+
+            if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
+                OCFile file;
+                String accountName;
+                do {
+                    file = createFileInstance(cursorOnKeptInSync);
+                    accountName = cursorOnKeptInSync.getString(
+                        cursorOnKeptInSync.getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER)
+                    );
+                    result.add(new Pair<>(file, accountName));
+                } while (cursorOnKeptInSync.moveToNext());
+            }
+
+        } catch (Exception e) {
+            Log_OC.e(TAG, "Exception retrieving all the available offline files", e);
+
+        } finally {
+            if (cursorOnKeptInSync != null) {
+                cursorOnKeptInSync.close();
+            }
+        }
+
         return result;
     }
 }

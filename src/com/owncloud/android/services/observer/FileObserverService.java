@@ -24,6 +24,7 @@ package com.owncloud.android.services.observer;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import android.accounts.Account;
@@ -32,15 +33,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.v4.util.Pair;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager;
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.SynchronizeFileOperation;
@@ -48,7 +49,7 @@ import com.owncloud.android.utils.FileStorageUtils;
 
 
 /**
- * Service keeping a list of {@link FolderObserver} instances that watch for local
+ * Service keeping a list of {@link AvailableOfflineObserver} instances that watch for local
  * changes in favorite files (formerly known as kept-in-sync files) and try to
  * synchronize them with the OC server as soon as possible.
  * 
@@ -80,8 +81,7 @@ public class FileObserverService extends Service {
     /**
      * Map of observers watching for changes in available offline files in local 'ownCloud' folder
      */
-    //private Map<String, FolderObserver> mFolderObserversMap;
-    private Map<String, AvailableOfflineObserver> mObserversMap;
+    private Map<String, AvailableOfflineObserver> mAvailableOfflineObserversMap;
 
 
     /**
@@ -159,7 +159,7 @@ public class FileObserverService extends Service {
         mInstantUploadsObserver = null;
 
         //mFolderObserversMap = new HashMap<>();
-        mObserversMap = new HashMap<>();
+        mAvailableOfflineObserversMap = new HashMap<>();
     }
 
     /**
@@ -171,12 +171,12 @@ public class FileObserverService extends Service {
 
         unregisterReceiver(mDownloadReceiver);
 
-        Iterator<AvailableOfflineObserver> itOCFolder = mObserversMap.values().iterator();
+        Iterator<AvailableOfflineObserver> itOCFolder = mAvailableOfflineObserversMap.values().iterator();
         while (itOCFolder.hasNext()) {
             itOCFolder.next().stopWatching();
         }
-        mObserversMap.clear();
-        mObserversMap = null;
+        mAvailableOfflineObserversMap.clear();
+        mAvailableOfflineObserversMap = null;
 
         if (mInstantUploadsObserver != null) {
             mInstantUploadsObserver.stopWatching();
@@ -238,60 +238,41 @@ public class FileObserverService extends Service {
      * Updates the list of currently observed files if called multiple times.
      */
     private void startObservation() {
-        Log_OC.d(TAG, "Loading all kept-in-sync files from database to start watching them");
-
-        // query for any favorite file in any OC account
-        Cursor cursorOnKeptInSync = getContentResolver().query(
-                ProviderTableMeta.CONTENT_URI, 
-                null,
-                ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?", 
-                new String[] { String.valueOf(1) }, 
-                null
+        Log_OC.d(TAG, "Loading all available offline files from database to start watching them");
+        FileDataStorageManager fds = new FileDataStorageManager(
+            null,   // this is dangerous - handle with care
+            getContentResolver()
         );
 
-        if (cursorOnKeptInSync != null) {
-
-            if (cursorOnKeptInSync.moveToFirst()) {
-
-                String localPath;
-                String accountName;
-                Account account;
-                do {
-                    localPath = cursorOnKeptInSync.getString(cursorOnKeptInSync
-                            .getColumnIndex(ProviderTableMeta.FILE_STORAGE_PATH));
-                    accountName = cursorOnKeptInSync.getString(cursorOnKeptInSync
-                            .getColumnIndex(ProviderTableMeta.FILE_ACCOUNT_OWNER));
-
-                    account = new Account(accountName, MainApp.getAccountType());
-                    if (!AccountUtils.exists(account, this) || localPath == null || localPath.length() <= 0) {
-                        continue;
-                    }
-                    
-                    addObservedFile(localPath, account);
-
-                } while (cursorOnKeptInSync.moveToNext());
-
+        List<Pair<OCFile, String>> availableOfflineFiles = fds.getAvailableOfflineFilesFromEveryAccount();
+        OCFile file;
+        String accountName;
+        Account account;
+        for (Pair<OCFile, String> pair : availableOfflineFiles) {
+            file = pair.first;
+            accountName = pair.second;
+            account = new Account(accountName, MainApp.getAccountType());
+            if (!AccountUtils.exists(account, this)) {
+                continue;
             }
-            cursorOnKeptInSync.close();
+            addObservedFile(file, account);
         }
 
         // watch for instant uploads
         updateInstantUploadsObservers();
 
         // service does not stopSelf() ; that way it tries to be alive forever
-
     }
 
     
     /**
-     * Registers the local copy of a remote file to be observed for local
-     * changes, an automatically updated in the ownCloud server.
+     * Registers the local copy of a file to be observed for local changes.
      * 
      * This method does NOT perform a {@link SynchronizeFileOperation} over the
      * file.
      * 
      * @param file      Object representing a remote file which local copy must be observed.
-     * @param account   OwnCloud account containing file.
+     * @param account   ownCloud account containing file.
      */
     private void addObservedFile(OCFile file, Account account) {
         Log_OC.v(TAG, "Adding a file to be watched");
@@ -300,6 +281,9 @@ public class FileObserverService extends Service {
             Log_OC.e(TAG, "Trying to add a NULL file to observer");
             return;
         }
+        if (file.getFileId() < 0) {
+            Log_OC.e(TAG, "Trying to add an invalid file to observer");
+        }
         if (account == null) {
             Log_OC.e(TAG, "Trying to add a file with a NULL account to observer");
             return;
@@ -307,47 +291,31 @@ public class FileObserverService extends Service {
 
         String localPath = file.getStoragePath();
         if (localPath == null || localPath.length() <= 0) {
-            // file downloading or to be downloaded for the first time
+            // file downloading or to be downloaded for the first time, or a folder
             localPath = FileStorageUtils.getDefaultSavePathFor(account.name, file);
         }
 
-        addObservedFile(localPath, account);
+        File localFile = new File(localPath);
+        String observerPath;
+        if (file.isFolder()) {
+            observerPath = localPath;
+        } else {
+            observerPath = localFile.getParent();
+        }
 
-    }
+        AvailableOfflineObserver observer = mAvailableOfflineObserversMap.get(observerPath);
+        if (observer == null) {
+            observer = new AvailableOfflineObserver(observerPath, account, getApplicationContext());
+            mAvailableOfflineObserversMap.put(observerPath, observer);
+            Log_OC.d(TAG, "Observer added for folder " + observerPath + "/");
+        }
 
-    
-    
-    
-    /**
-     * Registers a local file to be observed for changes.
-     * 
-     * @param localPath     Absolute path in the local file system to the file to be observed.
-     * @param account       OwnCloud account associated to the local file.
-     */
-    private void addObservedFile(String localPath, Account account) {
-        File file = new File(localPath);
-
-        if(file.isDirectory()) {
-            AvailableOfflineObserver observer = mObserversMap.get(localPath);
-            if (observer == null) {
-                observer = new AvailableOfflineRecursiveObserver(localPath, account, getApplicationContext());
-                mObserversMap.put(localPath, observer);
-                Log_OC.d(TAG, "Recursive observer added for folder " + localPath + "/");
-            }
-
-            observer.startWatching();
+        if(file.isFolder()) {
+            observer.startWatching();   // meaning: watch it all! ; parent fileId? ; OCFile ¿?
             Log_OC.d(TAG, "Started recursive observation of folders");
 
         } else {
-            String parentPath = file.getParent();
-            AvailableOfflineObserver observer = mObserversMap.get(parentPath);
-            if (observer == null) {
-                observer = new AvailableOfflineNonRecursiveObserver(parentPath, account, getApplicationContext());
-                mObserversMap.put(parentPath, observer);
-                Log_OC.d(TAG, "Observer added for parent folder " + parentPath + "/");
-            }
-
-            observer.startWatching(file.getName());
+            observer.startWatching(localFile.getName()); // fileId too ¿? ; OCFile ¿?
             Log_OC.d(TAG, "Added " + localPath + " to list of observed children");
         }
     }
@@ -390,7 +358,7 @@ public class FileObserverService extends Service {
         File file = new File(localPath);
 
         if(file.isDirectory()) {
-            AvailableOfflineObserver observer = mObserversMap.get(localPath);
+            AvailableOfflineObserver observer = mAvailableOfflineObserversMap.get(localPath);
             if (observer != null) {
                 observer.stopWatching();
                 Log_OC.d(TAG, "Recursive observer removed for folder ");
@@ -402,11 +370,11 @@ public class FileObserverService extends Service {
 
         } else {
             String parentPath = file.getParent();
-            AvailableOfflineObserver observer = mObserversMap.get(parentPath);
+            AvailableOfflineObserver observer = mAvailableOfflineObserversMap.get(parentPath);
             if (observer != null) {
                 observer.stopWatching(file.getName());
                 if (observer.isEmpty()) {
-                    mObserversMap.remove(parentPath);
+                    mAvailableOfflineObserversMap.remove(parentPath);
                     Log_OC.d(TAG, "Observer removed for parent folder " + parentPath + "/");
                 }
 
@@ -472,7 +440,7 @@ public class FileObserverService extends Service {
             String topPath = Environment.getExternalStorageDirectory().getPath();   // ugly as hell
             AvailableOfflineObserver observer;
             while (!parentPath.equals(topPath)) {
-                observer = mObserversMap.get(parentPath);
+                observer = mAvailableOfflineObserversMap.get(parentPath);
                 if (observer != null) {
                     if (intent.getAction().equals(FileDownloader.getDownloadFinishMessage())
                         && downloadedFile.exists()) {
