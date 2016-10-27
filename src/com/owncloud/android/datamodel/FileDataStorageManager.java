@@ -922,7 +922,7 @@ public class FileDataStorageManager {
     private boolean isAnyAncestorAvailableOfflineFolder(long parentId) {
         boolean isFavorite = false;
         OCFile file = getFileById(parentId);
-        if (file.isFolder()) {
+        if (file != null && file.isFolder()) {  // file is null for the parent of the root folder
             if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
                 isFavorite = true;
             } else if (!file.getFileName().equals(OCFile.ROOT_PATH)) {
