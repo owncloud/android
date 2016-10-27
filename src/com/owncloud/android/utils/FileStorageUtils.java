@@ -54,6 +54,14 @@ public class FileStorageUtils {
     public static Boolean mSortAscending = true;
 
     /**
+     * Get local storage path for all data of the app in public storages.
+     */
+    public static String getDataFolder() {
+        File sdCard = Environment.getExternalStorageDirectory();
+        return sdCard.getAbsolutePath() + "/" + MainApp.getDataFolder();
+    }
+
+    /**
      * Get local owncloud storage path for accountName.
      */
     public static String getSavePath(String accountName) {

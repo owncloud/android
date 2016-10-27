@@ -33,7 +33,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.util.Pair;
 
@@ -158,7 +157,6 @@ public class FileObserverService extends Service {
 
         mInstantUploadsObserver = null;
 
-        //mFolderObserversMap = new HashMap<>();
         mAvailableOfflineObserversMap = new HashMap<>();
     }
 
@@ -225,7 +223,7 @@ public class FileObserverService extends Service {
             updateInstantUploadsObservers();
 
         } else {
-            Log_OC.e(TAG, "Unknown action recieved; ignoring it: " + intent.getAction());
+            Log_OC.e(TAG, "Unknown action received; ignoring it: " + intent.getAction());
         }
 
         return Service.START_STICKY;
@@ -271,7 +269,7 @@ public class FileObserverService extends Service {
      * This method does NOT perform a {@link SynchronizeFileOperation} over the
      * file.
      * 
-     * @param file      Object representing a remote file which local copy must be observed.
+     * @param file      File which local copy must be observed.
      * @param account   ownCloud account containing file.
      */
     private void addObservedFile(OCFile file, Account account) {
@@ -307,26 +305,29 @@ public class FileObserverService extends Service {
         if (observer == null) {
             observer = new AvailableOfflineObserver(observerPath, account, getApplicationContext());
             mAvailableOfflineObserversMap.put(observerPath, observer);
-            Log_OC.d(TAG, "Observer added for folder " + observerPath + "/");
+            Log_OC.d(TAG, "Observer added for folder " + observerPath);
         }
 
         if(file.isFolder()) {
-            observer.startWatching();   // meaning: watch it all! ; parent fileId? ; OCFile ¿?
+            // remove any observer that will be overlapped by the new one
+            removeOverlappedObservers(observerPath);
+            // watch every file and folder below in a single observer
+            observer.startWatchingAll();
             Log_OC.d(TAG, "Started recursive observation of folders");
-
         } else {
+            // add a file to watch; it's ADDITIVE; if the observer is already watching ALL, WILL KEEP ON
+            // WATCHING ALL; but it doesn't go in depth, if the observer is NOT WATCHING ALL, localFile
+            // needs to be a child of the observed folder, not a descendant deeper in the tree
             observer.startWatching(localFile.getName()); // fileId too ¿? ; OCFile ¿?
             Log_OC.d(TAG, "Added " + localPath + " to list of observed children");
         }
     }
 
-    
     /**
-     * Unregisters the local copy of a remote file to be observed for local changes.
+     * Unregisters the local copy of a file to be observed for local changes.
      * 
-     * @param file      Object representing a remote file which local copy must be not 
-     *                  observed longer.
-     * @param account   OwnCloud account containing file.
+     * @param file      File which local copy must be not observed longer.
+     * @param account   ownCloud account containing file.
      */
     private void removeObservedFile(OCFile file, Account account) {
         Log_OC.v(TAG, "Removing a file from being watched");
@@ -345,44 +346,53 @@ public class FileObserverService extends Service {
             localPath = FileStorageUtils.getDefaultSavePathFor(account.name, file);
         }
 
-        removeObservedFile(localPath);
-    }
+        File localFile = new File(localPath);
+        String observerPath;
+        if (file.isFolder()) {
+            observerPath = localPath;
+        } else {
+            observerPath = localFile.getParent();
+        }
 
-    
-    /**
-     * Unregisters a local file from being observed for changes.
-     * 
-     * @param localPath     Absolute path in the local file system to the target file.
-     */
-    private void removeObservedFile(String localPath) {
-        File file = new File(localPath);
-
-        if(file.isDirectory()) {
-            AvailableOfflineObserver observer = mAvailableOfflineObserversMap.get(localPath);
-            if (observer != null) {
-                observer.stopWatching();
-                Log_OC.d(TAG, "Recursive observer removed for folder ");
-
+        AvailableOfflineObserver observer = mAvailableOfflineObserversMap.get(observerPath);
+        if (observer != null) {
+            if(file.isFolder()) {
+                observer.stopWatchingAll();
+                mAvailableOfflineObserversMap.remove(observerPath);
+                Log_OC.d(TAG, "Recursive observer removed for folder " + observerPath);
             } else {
-                Log_OC.d(TAG, "No observer to remove for path " + localPath);
+                observer.stopWatching(localFile.getName());
+                if (observer.isEmpty()) {
+                    mAvailableOfflineObserversMap.remove(observerPath);
+                    Log_OC.d(TAG, "Observer removed for parent folder " + observerPath);
+                } // else keep watching the rest of av-off files
             }
 
-
         } else {
-            String parentPath = file.getParent();
-            AvailableOfflineObserver observer = mAvailableOfflineObserversMap.get(parentPath);
-            if (observer != null) {
-                observer.stopWatching(file.getName());
-                if (observer.isEmpty()) {
-                    mAvailableOfflineObserversMap.remove(parentPath);
-                    Log_OC.d(TAG, "Observer removed for parent folder " + parentPath + "/");
-                }
+            Log_OC.d(TAG, "No observer to remove for path " + observerPath);
+        }
+    }
 
-            } else {
-                Log_OC.d(TAG, "No observer to remove for path " + localPath);
+    /**
+     * Stops and removes all the observers watching a folder hanging below the given path.
+     *
+     * @param ancestorPath      Path to remove any observer watching below.
+     */
+    private void removeOverlappedObservers(String ancestorPath) {
+        Iterator<Map.Entry<String, AvailableOfflineObserver>> iterator =
+            mAvailableOfflineObserversMap.entrySet().iterator();
+        Log_OC.e(TAG, "ESE SEPARATOR!, sí o no:  " + ancestorPath);
+        Map.Entry<String, AvailableOfflineObserver> entry;
+        while (iterator.hasNext()) {
+            entry = iterator.next();
+            if (entry.getKey().startsWith(ancestorPath) && !entry.getKey().equals(ancestorPath)) {
+                Log_OC.e(TAG, "Parando overlapped: " + entry.getKey());
+                entry.getValue().stopWatching();
+                iterator.remove();
             }
         }
     }
+
 
     /**
      * Requests the update of the observers responsible to watch folders where new files
@@ -437,9 +447,9 @@ public class FileObserverService extends Service {
 
             File downloadedFile = new File(intent.getStringExtra(FileDownloader.EXTRA_FILE_PATH));
             String parentPath = downloadedFile.getParent();
-            String topPath = Environment.getExternalStorageDirectory().getPath();   // ugly as hell
+            String topPath = FileStorageUtils.getDataFolder();
             AvailableOfflineObserver observer;
-            while (!parentPath.equals(topPath)) {
+            while (parentPath != null && !parentPath.equals(topPath)) {
                 observer = mAvailableOfflineObserversMap.get(parentPath);
                 if (observer != null) {
                     if (intent.getAction().equals(FileDownloader.getDownloadFinishMessage())

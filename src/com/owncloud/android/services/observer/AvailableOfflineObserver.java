@@ -34,8 +34,13 @@ import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.ui.activity.ConflictsResolveActivity;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * Observer watching a folder to request the synchronization of kept-in-sync files
@@ -43,14 +48,14 @@ import java.util.Map;
  * 
  * Takes into account two possible update cases:
  *  - an editor directly updates the file;
- *  - an editor works on a temporary file, and later replaces the kept-in-sync file with the
- *  former.
+ *  - an editor works on a temporary file, and later replaces the kept-in-sync
+ *  file with the former.
  *  
  *  The second case requires to monitor the folder parent of the files, since a direct 
  *  {@link FileObserver} on it will not receive more events after the file is deleted to
  *  be replaced.
  */
-public class AvailableOfflineObserver {
+public class AvailableOfflineObserver extends FileObserver {
 
     private static String TAG = AvailableOfflineObserver.class.getSimpleName();
 
@@ -67,8 +72,13 @@ public class AvailableOfflineObserver {
     private String mPath;
     private Account mAccount;
     private Context mContext;
-    private Map<String, Boolean> mObservedChildren;
-    private FileObserver mWrappedObserver;
+    private boolean mRecursiveWatch;
+
+    private final Object mIncludedLock = new Object();
+    private Map<String, Boolean> mIncludedChildren;
+    private Set<String> mExcludedChildren;
+
+    private List<SubfolderObserver> mFolderTreeObservers;
 
     /**
      * Constructor.
@@ -81,6 +91,8 @@ public class AvailableOfflineObserver {
      * @param context       Used to start an operation to synchronize the file, when needed.
      */
     public AvailableOfflineObserver(String path, Account account, Context context) {
+        super(path, UPDATE_MASK);
+
         if (path == null)
             throw new IllegalArgumentException("NULL path argument received");
         if (account == null)
@@ -91,90 +103,142 @@ public class AvailableOfflineObserver {
         mPath = path;
         mAccount = account;
         mContext = context;
-        mObservedChildren = new HashMap<String, Boolean>();
+        mRecursiveWatch = false;
+        mIncludedChildren = new HashMap<>();
+        mExcludedChildren = Collections.newSetFromMap(new HashMap<String, Boolean>());
 
-        //mWrappedObserver = new FileObserver(mPath, UPDATE_MASK) {
-        mWrappedObserver = new RecursiveFileObserver(mPath, UPDATE_MASK) {
-
-            /**
-             * Receives and processes events about updates of the monitored folder and its children files.
-             *
-             * @param event     Kind of event occurred.
-             * @param path      Relative path of the file referred by the event.
-             */
-            @Override
-            public void onEvent(int event, String path) {
-                Log_OC.d(TAG, "Got event " + event + " on FOLDER " + mPath + " about "
-                    + ((path != null) ? path : ""));
-
-                boolean shouldSynchronize = false;
-                synchronized(mObservedChildren) {
-                    if (path != null && path.length() > 0 && mObservedChildren.containsKey(path)) {
-
-                        if (    ((event & FileObserver.MODIFY) != 0) ||
-                            ((event & FileObserver.ATTRIB) != 0) ||
-                            ((event & FileObserver.MOVED_TO) != 0) ) {
-
-                            if (mObservedChildren.get(path) != true) {
-                                mObservedChildren.put(path, Boolean.valueOf(true));
-                            }
-                        }
-
-                        if ((event & FileObserver.CLOSE_WRITE) != 0 && mObservedChildren.get(path)) {
-                            mObservedChildren.put(path, Boolean.valueOf(false));
-                            shouldSynchronize = true;
-                        }
-                    }
-                }
-                if (shouldSynchronize) {
-                    startSyncOperation(path);
-                }
-
-                if ((event & IN_IGNORE) != 0 &&
-                    (path == null || path.length() == 0)) {
-                    Log_OC.d(TAG, "Stopping the observance on " + mPath);
-                }
-
-            }
-        };
-    }
-
-    public void stopWatching() {
-        mWrappedObserver.stopWatching();
+        mFolderTreeObservers = new ArrayList<>();
     }
 
     /**
      * Adds a child file to the list of files observed by the folder observer.
-     * 
-     * @param fileName         Name of a file inside the observed folder. 
+     *
+     * If {@link AvailableOfflineObserver#stopWatchingAll()} was never called,
+     * the received file will start to be watched only if it's a direct child of the observed
+     * folder. If the path received as a parameter points to a descendant of the current
+     * folder that is not a direct child, the observation will not work.
+     *
+     * It's additive. If {@link AvailableOfflineObserver#stopWatchingAll()} was called before,
+     * the observer will keep on doing so after, the observer will not get out of full-tree
+     * observance mode calling this method.
+     *
+     * @param relativePath         Name of a file inside the observed folder.
      */
-    public void startWatching(String fileName) {
-        synchronized (mObservedChildren) {
-            if (!mObservedChildren.containsKey(fileName)) {
-                mObservedChildren.put(fileName, Boolean.valueOf(false));
+    public void startWatching(String relativePath) {
+        if (!mRecursiveWatch) {
+            // selective mode - add a new file to care about
+            synchronized (mIncludedLock) {
+                if (!mIncludedChildren.containsKey(relativePath)) {
+                    mIncludedChildren.put(relativePath, false);
+                }
+            }
+            if (new File(mPath).exists()) {
+                startWatching();
+                Log_OC.d(TAG, "Watching folder " + mPath + " for changes in " + relativePath);
+            } else {
+                Log_OC.w(
+                    TAG,
+                    "Observance of " + relativePath + " could not start, parent " + mPath + " does not exist"
+                );
+            }
+
+        } else {
+            // recursive mode - out of exclusions, if there
+            boolean removed = mExcludedChildren.remove(relativePath);
+            if (!removed && relativePath.contains(File.separator)) {
+                Log_OC.w(
+                    TAG,
+                    "Watching a file deep-down the tree out of recursive mode; ignored: "
+                        + relativePath
+                );
             }
         }
-        
-        if (new File(mPath).exists()) {
-            mWrappedObserver.startWatching();
-            Log_OC.d(TAG, "Started watching parent folder " + mPath + "/");
-        }
-        // else - the observance can't be started on a file not existing;
     }
 
-    
     /**
      * Removes a child file from the list of files observed by the folder observer.
      * 
      * @param relativePath         Name of a file inside the observed folder.
      */
     public void stopWatching(String relativePath) {
-        synchronized (mObservedChildren) {
-            mObservedChildren.remove(relativePath);
-            if (mObservedChildren.isEmpty()) {
-                mWrappedObserver.stopWatching();
-                Log_OC.d(TAG, "Stopped watching parent folder " + mPath + "/");
+        if (!mRecursiveWatch) {
+            // selective mode
+            synchronized (mIncludedLock) {
+                mIncludedChildren.remove(relativePath);
+                if (mIncludedChildren.isEmpty()) {
+                    super.stopWatching();
+                    Log_OC.d(TAG, "Stopped watching " + mPath + " for changes in selected children");
+                }
             }
+        } else {
+            // recursive mode
+            mExcludedChildren.add(relativePath);
+        }
+    }
+
+
+    /**
+     * Scans and starts watching.
+     *
+     * Watch every file and folder below, going down through the full tree.
+     *
+     * Recursive mode will continue enabled until {@link #stopWatchingAll()} is called.
+     */
+    public void startWatchingAll() {
+        if (!mRecursiveWatch) {
+            // TODO - should do this?
+            synchronized (mIncludedLock) {
+                super.stopWatching();
+                mIncludedChildren.clear();
+                Log_OC.d(TAG, "Stopped watching " + mPath + " for changes in selected children");
+            }
+            mRecursiveWatch = true;
+        }
+
+        mExcludedChildren.clear();
+
+        if (mFolderTreeObservers.isEmpty()) {  // TODO - sure? why? will the method be called several times?
+            Stack<String> stack = new Stack<>();
+            stack.push(mPath);
+            // scan file tree and create subordinate observers
+            while (!stack.empty()) {
+                String parent = stack.pop();
+                File path = new File(parent);
+                File[] files = path.listFiles();
+                if (files == null) continue;
+                for (File file : files) {
+                    if (file.isDirectory()
+                        && !".".equals(file.getName())
+                        && !"..".equals(file.getName())
+                    ) {
+                        mFolderTreeObservers.add(new SubfolderObserver(parent, UPDATE_MASK));
+                        Log_OC.d(TAG, "Adding observer for all files in " + parent);
+                        stack.push(file.getPath());
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < mFolderTreeObservers.size(); i++) {
+            mFolderTreeObservers.get(i).startWatching();
+        }
+        Log_OC.d(TAG, "Watching folder tree hanging from " + mPath);
+    }
+
+    public void stopWatchingAll() {
+        for (int i = 0; i < mFolderTreeObservers.size(); ++i) {
+            mFolderTreeObservers.get(i).stopWatching();
+        }
+        mFolderTreeObservers.clear();
+        Log_OC.d(TAG, "Stopped watching folder tree hanging from " + mPath);
+        mExcludedChildren.clear();
+    }
+
+    @Override
+    public void stopWatching() {
+        if (mRecursiveWatch) {
+            stopWatchingAll();
+        } else {
+            super.stopWatching();
         }
     }
 
@@ -182,15 +246,67 @@ public class AvailableOfflineObserver {
      * @return      'True' when the folder is not watching any file inside.
      */
     public boolean isEmpty() {
-        synchronized (mObservedChildren) {
-            return mObservedChildren.isEmpty();
+        synchronized (mIncludedLock) {
+            return mIncludedChildren.isEmpty();
         }
     }
 
-    public void startWatching() {
-        mWrappedObserver.startWatching();
-    }
+    /**
+     * Receives and processes events about updates of the monitored folder and its children files.
+     *
+     * @param event     Kind of event occurred.
+     * @param path      Relative path of the file referred by the event.
+     */
+    @Override
+    public void onEvent(int event, String path) {
+        Log_OC.v(TAG, "Got event " + event + " on FOLDER " + mPath + " about "
+            + ((path != null) ? path : ""));
 
+        boolean shouldSynchronize = false;
+        if (path != null && path.length() > 0) {
+            synchronized (mIncludedLock) {
+                if (mRecursiveWatch && !mExcludedChildren.contains(path)) {
+                    /// recursive mode
+                    if (((event & FileObserver.MODIFY) != 0) ||
+                        ((event & FileObserver.ATTRIB) != 0) ||
+                        ((event & FileObserver.MOVED_TO) != 0)) {
+
+                        mIncludedChildren.put(path, Boolean.valueOf(true));
+                    }
+
+                    if ((event & FileObserver.CLOSE_WRITE) != 0 && mIncludedChildren.containsKey(path)) {
+                        mIncludedChildren.remove(path);
+                        shouldSynchronize = true;
+                    }
+
+                } else if (mIncludedChildren.containsKey(path)) {
+                    // selective mode
+                    if (((event & FileObserver.MODIFY) != 0) ||
+                        ((event & FileObserver.ATTRIB) != 0) ||
+                        ((event & FileObserver.MOVED_TO) != 0)) {
+
+                        if (mIncludedChildren.get(path) != true) {
+                            mIncludedChildren.put(path, Boolean.valueOf(true));
+                        }
+                    }
+
+                    if ((event & FileObserver.CLOSE_WRITE) != 0 && mIncludedChildren.get(path)) {
+                        mIncludedChildren.put(path, Boolean.valueOf(false));
+                        shouldSynchronize = true;
+                    }
+                }
+            }
+        }
+        if (shouldSynchronize) {
+            startSyncOperation(path);
+        }
+
+        if ((event & IN_IGNORE) != 0 &&
+            (path == null || path.length() == 0)) {
+            Log_OC.d(TAG, "Stopping the observance on " + mPath);
+        }
+
+    }
 
     /**
      * Triggers an operation to synchronize the contents of a file inside the observed folder with
@@ -217,9 +333,23 @@ public class AvailableOfflineObserver {
             i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
             mContext.startActivity(i);
         }
-        // TODO save other errors in some point where the user can inspect them later;
-        // or maybe just toast them;
-        // or nothing, very strange fails
+    }
+
+
+    private class SubfolderObserver extends FileObserver {
+        private String mPath;
+
+        SubfolderObserver(String path, int mask) {
+            super(path, mask);
+            mPath = path;
+        }
+
+        @Override
+        public void onEvent(int event, String path) {
+            String newPath = mPath + File.separator + path;
+            AvailableOfflineObserver.this.onEvent(event, newPath);
+        }
+
     }
 
 }

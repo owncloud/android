@@ -27,7 +27,7 @@ import java.util.Stack;
 
 import android.os.FileObserver;
 
-public abstract class RecursiveFileObserver extends FileObserver {
+public abstract class RecursiveFolderObserver extends FileObserver {
 
     public static int CHANGES_ONLY = CLOSE_WRITE | MOVE_SELF | MOVED_FROM;
 
@@ -35,11 +35,11 @@ public abstract class RecursiveFileObserver extends FileObserver {
     String mPath;
     int mMask;
 
-    public RecursiveFileObserver(String path) {
+    public RecursiveFolderObserver(String path) {
         this(path, ALL_EVENTS);
     }
 
-    public RecursiveFileObserver(String path, int mask) {
+    public RecursiveFolderObserver(String path, int mask) {
         super(path, mask);
         mPath = path;
         mMask = mask;
@@ -91,7 +91,7 @@ public abstract class RecursiveFileObserver extends FileObserver {
         @Override
         public void onEvent(int event, String path) {
             String newPath = mPath + "/" + path;
-            RecursiveFileObserver.this.onEvent(event, newPath);
+            RecursiveFolderObserver.this.onEvent(event, newPath);
         }
 
     }
