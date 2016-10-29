@@ -1,6 +1,6 @@
 # Relatório 2 - *Requirements Elicitation*
 
-## Requerimentos
+## Requesitos
 
 Como foi referido no relatório anterior, o processo de desenvolvimento, uma vez que é *Open Planning Process*, é bastante simples e
 informal no que diz respeito a requisitos, pois *SCRUM* e outros métodos *agile* não dão muita importância a esse tipo de formalismo.
@@ -26,7 +26,9 @@ Na revisão da *sprint*, a demonstração é uma forma de validar os critérios 
 Por fim, é da responsabilidade da equipa (especialmente dos engenheiros Q&A) garantir que os critérios de aceitação estão reunidos e
 demonstrar apenas *user stories* que estejam realmente concluídas.
 
-## Requerimentos específicos e funcionalidades (Requerimentos funcionais e não funcionais)
+## Requesitos específicos e funcionalidades (Requesitos funcionais e não funcionais)
+Ao iniciar a aplicação é pedido o endereço de um servidor da *OwnCloud*, um nome de utilizador e palavra-chave. Após iniciar-se sessão, são apresentados os ficheiros e pastas guardados no sistema. Portanto, é necessário um telemóvel com sistema operativo *Android* ou *iOS* para se poder instalar a aplicação da *OwnCloud* e uma conta no sistema para iniciar sessão.
+A aplicação permite ver o nome do utilizador, seleccionar a vista que mostra todos os ficheiros, seleccionar a vista que mostra os ficheiros carregados e aceder às definições. Na vista "Todos os ficheiros" é possível actualizar a conta, ordenar os ficheiros de diferentes formas e mudar a forma como são vistos os ficheiros (grelha ou lista). Na vista "Carregamentos" existe uma opção chamada "A tentativa falhou", para seleccionar os carregamentos cuja tentativa falhou. Para além dessa opção é possível limpar os carregamentos que falharam, que foram carregados com sucesso ou os concluídos. Por fim, nas definições, é possível adicionar mais contas e transitar entre elas, definir se os carregamentos de imagens e/ou vídeos podem ser instantâneos e proteger a aplicação por código. Na mesma nas definições, há mais algumas opções pouco importantes que são: "Ajuda" (hiperligação para o sítio online da aplicação), "Recomendar a um amigo" (por e-mail), "Opinião" (para enviar um e-mail aos desenvolvedores), "Registo de Alterações" (corresponde ao histórico de alterações) e a versão da aplicação.
 
 ## Casos de uso
 
