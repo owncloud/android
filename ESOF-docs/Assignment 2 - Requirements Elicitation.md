@@ -32,6 +32,8 @@ A aplicação permite ver o nome do utilizador, seleccionar a vista que mostra t
 
 ## Casos de uso
 
+![UseCases](/ESOF-docs/resources/usecases.png)
+
 ## Modelo de domínio
 
 ## Contribuições
