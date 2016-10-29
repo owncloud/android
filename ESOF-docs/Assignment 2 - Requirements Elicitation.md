@@ -2,33 +2,32 @@
 
 ## Requesitos
 
-Como foi referido no relatório anterior, o processo de desenvolvimento, uma vez que é *Open Planning Process*, é bastante simples e
-informal no que diz respeito a requisitos, pois *SCRUM* e outros métodos *agile* não dão muita importância a esse tipo de formalismo.
+Como foi referido no relatório anterior, o processo de desenvolvimento, uma vez que é *Open Planning Process*, é bastante simples e informal no que diz respeito a requisitos, pois *SCRUM* e outros métodos *agile* iriam despender muito tempo a alterar documentos que estariam em permanente mudança. Em vez de estar delineado o plano por escrito, a equipa reune-se para organizar a próxima *sprint*, onde decide quais novas funcionalidades vai implementar a curto prazo. Estas funcionalidades são escolhidas a partir de uma lista de *user stories* armazenadas por ordem de prioridade na *product backlog*.
 
-Um pedido de implementação de uma funcionalidade é caracterizado como uma *user storie*. Estes são, inicialmente, uma breve descrição
-acerca do que o utilizador pretende que seja implementado, com uma sintaxe idêntica a: 
+Uma *user story* é um pedido de implementação de uma funcionalidade. Estas são, inicialmente, uma breve descrição acerca do que o utilizador pretende que seja implementado, com uma sintaxe idêntica a: 
 "Sendo um [tipo_de_utilizador], quero [fazer_algo] para [obter_algo]." 
-Por exemplo, "Sendo um utilizador da aplicação móvel eu quero mover os meus ficheiros para outra pasta de forma a conseguir manter a minha
-conta ordenada."
+Por exemplo, "Sendo um utilizador da aplicação móvel eu quero mover os meus ficheiros para outra pasta de forma a conseguir manter a minha conta ordenada."
 
-Partindo desta descrição inicial, em qualquer momento antes da *user storie* ser passada para uma *sprint*, o responsável pela decisão
-de prioridades (*product owner*) pode acrescentar critérios de aceitação. Desta forma, serão pedidas informações relevantes
-para a implementação, como por exemplo detalhes acerca da interface e restrições que se considerem importantes. 
+Partindo desta descrição inicial, em qualquer momento antes da *user story* ser passada para uma *sprint*, o responsável pela decisão de prioridades, o *product owner*, pode acrescentar critérios de aceitação. 
+Desta forma, serão pedidas informações relevantes para a implementação, como por exemplo detalhes acerca da interface e restrições que se considerem importantes.
 
-Durante o planeamento da *sprint*, a equipa responsável pelo desenvolvimento da funcionalidade tem uma reunião com o responsável para obter todas as informações
-e esclarecer possíveis dúvidas, assegurando que todos estejam no mesmo caminho. Pode ser necessário acrescentar mais critérios, ou alterar os existentes.
-No final desta reunião, a equipa estima o esforço necessário para implementar a *user storie* e, se necessário, subdivide-a em outras mais pequenas que possam ir sendo implementadas ao longo das *sprints* seguintes.
+Durante o planeamento da *sprint*, a equipa responsável pelo desenvolvimento da funcionalidade tem uma reunião com o *scrum master* para obter todas as informações e esclarecer possíveis dúvidas, assegurando assim que todos estão no mesmo caminho e sincronizados. Depois o *scrum master* reúne-se com o *product owner* para esclarecer as dúvidas da equipa. Pode ser necessário acrescentar mais critérios, ou alterar os existentes. Depois de delineado o trabalho a desenvolver nessa sprint, as *user stories* que serão tratadas são movidas da *backlog* para a *sprint backlog*.
+No final desta reunião, a equipa estima o esforço necessário para implementar as *user stories* e, se necessário, divide-as em novas *user stories* mais pequenas que possam ser implementadas ao longo das próximas *sprints*.
 
-Uma vez que a *sprint* começou, os critérios não devem ser alterados. É normal que surjam questões e pode-se consultar o responsável 
-para as esclarecer, assim como deixar a equipa tomar decisões, restrigindo-se aos critérios já existentes. 
-Na revisão da *sprint*, a demonstração é uma forma de validar os critérios de aceitação com o responsável pela *user storie*, embora, por vezes, as funcionalidades sejam demasiado complexas para serem demonstradas. 
+Uma vez iniciada a *sprint*, os critérios não devem ser alterados. É normal que surjam questões e pode-se consultar o responsável para as esclarecer, assim como deixar a equipa tomar decisões, restrigindo-se aos critérios já existentes. 
 
-Por fim, é da responsabilidade da equipa (especialmente dos engenheiros Q&A) garantir que os critérios de aceitação estão reunidos e
-demonstrar apenas *user stories* que estejam realmente concluídas.
+No final da *sprint* é feita a *sprint review*. Nesta fase, a equipa mostra o trabalho ao *product owner*, que decide se as questões foram bem resolvidas ou se a *user story* não pode ser declarada como concluída, e analisa a *product backlog* para preparar a próxima *sprint*. A *product backlog* é alterada no github tanto por utilizadores como por clientes, como tal é necessário reavaliar as prioridades e decidir quais as funcionalidades mais importantes de acordo com o *feedback* que vem da comunidade.
 
 ## Requesitos específicos e funcionalidades (Requesitos funcionais e não funcionais)
-Ao iniciar a aplicação é pedido o endereço de um servidor da *OwnCloud*, um nome de utilizador e palavra-chave. Após iniciar-se sessão, são apresentados os ficheiros e pastas guardados no sistema. Portanto, é necessário um telemóvel com sistema operativo *Android* ou *iOS* para se poder instalar a aplicação da *OwnCloud* e uma conta no sistema para iniciar sessão.
-A aplicação permite ver o nome do utilizador, seleccionar a vista que mostra todos os ficheiros, seleccionar a vista que mostra os ficheiros carregados e aceder às definições. Na vista "Todos os ficheiros" é possível actualizar a conta, ordenar os ficheiros de diferentes formas e mudar a forma como são vistos os ficheiros (grelha ou lista). Na vista "Carregamentos" existe uma opção chamada "A tentativa falhou", para seleccionar os carregamentos cuja tentativa falhou. Para além dessa opção é possível limpar os carregamentos que falharam, que foram carregados com sucesso ou os concluídos. Por fim, nas definições, é possível adicionar mais contas e transitar entre elas, definir se os carregamentos de imagens e/ou vídeos podem ser instantâneos e proteger a aplicação por código. Na mesma nas definições, há mais algumas opções pouco importantes que são: "Ajuda" (hiperligação para o sítio online da aplicação), "Recomendar a um amigo" (por e-mail), "Opinião" (para enviar um e-mail aos desenvolvedores), "Registo de Alterações" (corresponde ao histórico de alterações) e a versão da aplicação.
+Ao iniciar a aplicação é pedido o endereço de um servidor da *OwnCloud*, um nome de utilizador e palavra-chave. Após iniciar-se sessão, são apresentados os ficheiros e pastas guardados no sistema. Portanto, é necessário um telemóvel com sistema operativo *Android*, *iOS* ou *BlackBerry* para se poder instalar a aplicação *OwnCloud* e uma conta no sistema para iniciar sessão.
+
+A aplicação permite ver o nome do utilizador, seleccionar a vista que mostra todos os ficheiros, seleccionar a vista que mostra os ficheiros carregados e aceder às definições.
+
+Na vista "Todos os ficheiros" é possível actualizar a conta, ordenar os ficheiros de diferentes formas e mudar a forma como são vistos os ficheiros (grelha ou lista). 
+
+Na vista "Carregamentos" existe uma opção chamada "A tentativa falhou", para seleccionar os carregamentos cuja tentativa falhou. Para além dessa opção é possível limpar os carregamentos que falharam, que foram carregados com sucesso ou os concluídos. 
+
+Por fim, nas definições, é possível adicionar mais contas e transitar entre elas, definir se os carregamentos de imagens e/ou vídeos podem ser instantâneos e proteger a aplicação por código. Ainda nas definições, há mais algumas opções que são: "Ajuda" (hiperligação para o sítio online da aplicação), "Recomendar a um amigo" (por e-mail), "Opinião" (para enviar um e-mail aos desenvolvedores), "Registo de Alterações" (corresponde ao histórico de alterações) e a versão da aplicação.
 
 ## Casos de uso
 
