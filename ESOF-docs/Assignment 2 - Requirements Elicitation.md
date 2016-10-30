@@ -42,7 +42,7 @@ O diagrama que se segue pretende demonstrar as sequências de transações poss�
 
 ## Modelo de domínio
 
-Analisando o código fonte da aplicação, construiu-se o seguinte diagrama que pretende representar as classes de uma forma conceptual.
+Analisando o código fonte da aplicação, construiu-se o seguinte diagrama que pretende representar classes conceptuais baseadas nessa análise.
 
 ![DomainModel](/ESOF-docs/resources/domainmodel.png)
 
