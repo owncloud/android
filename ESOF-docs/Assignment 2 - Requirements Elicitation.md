@@ -2,7 +2,7 @@
 
 ## Requisitos
 
-Como foi referido no relatório anterior, o processo de desenvolvimento, uma vez que é *Open Planning Process*, é bastante simples e informal no que diz respeito a requisitos, pois *SCRUM* e outros métodos *agile* iriam despender muito tempo a alterar documentos que estariam em permanente mudança. Em vez de estar delineado o plano por escrito, a equipa reúne-se para organizar a próxima *sprint*, onde decide quais as novas funcionalidades que vai implementar a curto prazo. Estas funcionalidades são escolhidas a partir de uma lista de *user stories* armazenadas por ordem de prioridade na *product backlog*.
+Como foi referido no [**relatório anterior**](https://github.com/PauloSantos13/android/blob/master/ESOF-docs/Assignment%201%20-%20Software%20Processes.md#descrição-do-processo-de-desenvolvimento), o processo de desenvolvimento, uma vez que é *Open Planning Process*, é bastante simples e informal no que diz respeito a requisitos, pois *SCRUM* e outros métodos *agile* iriam despender muito tempo a alterar documentos que estariam em permanente mudança. Em vez de estar delineado o plano por escrito, a equipa reúne-se para organizar a próxima *sprint*, onde decide quais as novas funcionalidades que vai implementar a curto prazo. Estas funcionalidades são escolhidas a partir de uma lista de *user stories* armazenadas por ordem de prioridade na [*product backlog*](https://github.com/owncloud/android/milestone/17).
 
 Uma *user story* é um pedido de implementação de uma funcionalidade. Estas são, inicialmente, uma breve descrição acerca do que o utilizador pretende que seja implementado, com uma sintaxe idêntica a: 
 "Sendo um [tipo_de_utilizador], quero [algo_implementado] para [conseguir_realizar_algo]." 
@@ -20,7 +20,7 @@ No final da *sprint* é feita a *sprint review*. Nesta fase, a equipa mostra o t
 
 ## Requisitos específicos e funcionalidades (Requisitos funcionais e não funcionais)
 
-Ao iniciar a aplicação é pedido o endereço de um servidor da *OwnCloud*, um nome de utilizador e uma palavra-chave. Após iniciar-se a sessão, são apresentados os ficheiros e pastas guardados no sistema. Portanto, é necessário um telemóvel com sistema operativo *Android*, *iOS* ou *BlackBerry* para se poder instalar a aplicação *OwnCloud* e uma conta no sistema para iniciar sessão.
+Ao iniciar a aplicação é pedido o endereço de um [**servidor suportado**](https://owncloud.org/providers/) pela *OwnCloud*, um nome de utilizador e uma palavra-chave. Após iniciar-se a sessão, são apresentados os ficheiros e pastas guardados no sistema. Portanto, é necessário um telemóvel com sistema operativo *Android*, *iOS* ou *BlackBerry* para se poder instalar a aplicação *OwnCloud* e uma conta no sistema para iniciar sessão.
 
 A aplicação permite ver o nome do utilizador, seleccionar a vista que mostra todos os ficheiros, seleccionar a vista que mostra os ficheiros carregados e aceder às definições.
 
@@ -41,6 +41,8 @@ O diagrama que se segue pretende demonstrar as sequências de transações poss�
 ![UseCases](/ESOF-docs/resources/usecases.PNG)
 
 ## Modelo de domínio
+
+Analisando o código fonte da aplicação, construiu-se o seguinte diagrama que pretende representar as classes de uma forma conceptual.
 
 ![DomainModel](/ESOF-docs/resources/domainmodel.png)
 
