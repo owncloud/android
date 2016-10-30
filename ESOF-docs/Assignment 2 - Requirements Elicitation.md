@@ -6,17 +6,17 @@ Como foi referido no [**relatório anterior**](https://github.com/PauloSantos13/
 
 Uma *user story* é um pedido de implementação de uma funcionalidade. Estas são, inicialmente, uma breve descrição acerca do que o utilizador pretende que seja implementado, com uma sintaxe idêntica a: 
 "Sendo um [tipo_de_utilizador], quero [algo_implementado] para [conseguir_realizar_algo]." 
-Por exemplo, "Sendo um utilizador da aplicação móvel eu quero mover os meus ficheiros para outra pasta de forma a conseguir manter a minha conta ordenada."
+Por exemplo, "Sendo um utilizador da aplicação móvel, quero mover os meus ficheiros para outra pasta de forma a conseguir manter a minha conta ordenada."
 
 Partindo desta descrição inicial, em qualquer momento antes da *user story* ser passada para uma *sprint*, o responsável pela decisão de prioridades, o *product owner*, pode acrescentar critérios de aceitação. 
-Desta forma, serão pedidas informações relevantes para a implementação, como por exemplo detalhes acerca da interface e restrições que se considerem importantes.
+Desta forma, serão pedidas informações relevantes para a implementação como, por exemplo, detalhes acerca da interface e restrições que se considerem importantes.
 
 Durante o planeamento da *sprint*, a equipa responsável pelo desenvolvimento da funcionalidade tem uma reunião com o *scrum master* para obter todas as informações e esclarecer possíveis dúvidas, assegurando assim que todos estão no mesmo caminho e sincronizados. Depois o *scrum master* reúne-se com o *product owner* para esclarecer as dúvidas da equipa. Pode ser necessário acrescentar mais critérios, ou alterar os existentes. Depois de delineado o trabalho a desenvolver nessa *sprint*, as *user stories* que serão tratadas são movidas da *backlog* para a *sprint backlog*.
 No final desta reunião, a equipa estima o esforço necessário para implementar as *user stories* e, se necessário, divide-as em novas *user stories* mais pequenas que possam ser implementadas ao longo das próximas *sprints*.
 
 Uma vez iniciada a *sprint*, os critérios não devem ser alterados. É normal que surjam questões e pode consultar-se o responsável para as esclarecer, assim como deixar a equipa tomar decisões, restrigindo-se aos critérios já existentes. 
 
-No final da *sprint* é feita a *sprint review*. Nesta fase, a equipa mostra o trabalho ao *product owner*, que decide se as questões foram bem resolvidas ou se a *user story* não pode ser declarada como concluída, e analisa a *product backlog* para preparar a próxima *sprint*. A *product backlog* é alterada no *GitHub* tanto por utilizadores como por clientes e, como tal, é necessário reavaliar as prioridades e decidir quais as funcionalidades mais importantes de acordo com o *feedback* que vem da comunidade.
+No final da *sprint* é feita a *sprint review*. Nesta fase, a equipa mostra o trabalho ao *product owner*, que decide se as questões foram bem resolvidas ou se a *user story* não pode ser declarada como concluída, e analisa a *product backlog* para preparar a próxima *sprint*. A *product backlog* é alterada no *GitHub* tanto por desenvolvedores como por clientes e, como tal, é necessário reavaliar as prioridades e decidir quais as funcionalidades mais importantes de acordo com o *feedback* que vem da comunidade.
 
 ## Requisitos específicos e funcionalidades (Requisitos funcionais e não funcionais)
 
@@ -36,7 +36,7 @@ O projecto foi desenvolvido em Java.
 
 ## Casos de uso
 
-O diagrama que se segue pretende demonstrar as sequências de transações possíveis na aplicação, do ponto de vista do utilizador. 
+O diagrama que se segue pretende demonstrar as sequências de transições possíveis na aplicação, do ponto de vista do utilizador. 
 
 ![UseCases](/ESOF-docs/resources/usecases.PNG)
 
