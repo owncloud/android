@@ -27,7 +27,11 @@ Na vista "Todos os ficheiros" é possível actualizar a conta, ordenar os fichei
 
 Na vista "Carregamentos" existe uma opção chamada "A tentativa falhou", para seleccionar os carregamentos cuja tentativa falhou. Para além dessa opção é possível limpar os carregamentos que falharam, que foram carregados com sucesso ou os concluídos. 
 
-Por fim, nas definições, é possível adicionar mais contas e transitar entre elas, definir se os carregamentos de imagens e/ou vídeos podem ser instantâneos e proteger a aplicação por código. Ainda nas definições, há mais algumas opções que são: "Ajuda" (hiperligação para o sítio online da aplicação), "Recomendar a um amigo" (por e-mail), "Opinião" (para enviar um e-mail aos desenvolvedores), "Registo de Alterações" (corresponde ao histórico de alterações) e a versão da aplicação.
+Nas definições, é possível adicionar mais contas e transitar entre elas, definir se os carregamentos de imagens e/ou vídeos podem ser instantâneos e proteger a aplicação por código. Ainda nas definições, há mais algumas opções que são: "Ajuda" (hiperligação para o sítio online da aplicação), "Recomendar a um amigo" (por e-mail), "Opinião" (para enviar um e-mail aos desenvolvedores), "Registo de Alterações" (corresponde ao histórico de alterações) e a versão da aplicação.
+
+Para além destas opções existe um botão, no ecrã principal, que permite carregar ficheiros, carregar conteúdo de outras aplicações e criar pastas. Para cada ficheiro é possível definir como disponível *offline*, abrir com alguma aplicação externa, enviar para outra aplicação, mover, copiar, renomear, ver as propriedades e apagar. Para cada pasta é possível mover, copiar, renomear e apagar. Tanto ficheiros como pastas podem ser sincronizados e partilhados com outros utilizadores, grupos de utilizadores ou por hiperligação.
+
+O projecto foi desenvolvido em Java.
 
 ## Casos de uso
 
