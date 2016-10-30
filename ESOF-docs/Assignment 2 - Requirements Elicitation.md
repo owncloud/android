@@ -1,11 +1,11 @@
 # Relatório 2 - *Requirements Elicitation*
 
-## Requesitos
+## Requisitos
 
-Como foi referido no relatório anterior, o processo de desenvolvimento, uma vez que é *Open Planning Process*, é bastante simples e informal no que diz respeito a requisitos, pois *SCRUM* e outros métodos *agile* iriam despender muito tempo a alterar documentos que estariam em permanente mudança. Em vez de estar delineado o plano por escrito, a equipa reune-se para organizar a próxima *sprint*, onde decide quais novas funcionalidades vai implementar a curto prazo. Estas funcionalidades são escolhidas a partir de uma lista de *user stories* armazenadas por ordem de prioridade na *product backlog*.
+Como foi referido no relatório anterior, o processo de desenvolvimento, uma vez que é *Open Planning Process*, é bastante simples e informal no que diz respeito a requisitos, pois *SCRUM* e outros métodos *agile* iriam despender muito tempo a alterar documentos que estariam em permanente mudança. Em vez de estar delineado o plano por escrito, a equipa reúne-se para organizar a próxima *sprint*, onde decide quais novas funcionalidades vai implementar a curto prazo. Estas funcionalidades são escolhidas a partir de uma lista de *user stories* armazenadas por ordem de prioridade na *product backlog*.
 
 Uma *user story* é um pedido de implementação de uma funcionalidade. Estas são, inicialmente, uma breve descrição acerca do que o utilizador pretende que seja implementado, com uma sintaxe idêntica a: 
-"Sendo um [tipo_de_utilizador], quero [fazer_algo] para [obter_algo]." 
+"Sendo um [tipo_de_utilizador], quero [algo_implementado] para [conseguir_realizar_algo]." 
 Por exemplo, "Sendo um utilizador da aplicação móvel eu quero mover os meus ficheiros para outra pasta de forma a conseguir manter a minha conta ordenada."
 
 Partindo desta descrição inicial, em qualquer momento antes da *user story* ser passada para uma *sprint*, o responsável pela decisão de prioridades, o *product owner*, pode acrescentar critérios de aceitação. 
@@ -16,9 +16,10 @@ No final desta reunião, a equipa estima o esforço necessário para implementar
 
 Uma vez iniciada a *sprint*, os critérios não devem ser alterados. É normal que surjam questões e pode-se consultar o responsável para as esclarecer, assim como deixar a equipa tomar decisões, restrigindo-se aos critérios já existentes. 
 
-No final da *sprint* é feita a *sprint review*. Nesta fase, a equipa mostra o trabalho ao *product owner*, que decide se as questões foram bem resolvidas ou se a *user story* não pode ser declarada como concluída, e analisa a *product backlog* para preparar a próxima *sprint*. A *product backlog* é alterada no github tanto por utilizadores como por clientes, como tal é necessário reavaliar as prioridades e decidir quais as funcionalidades mais importantes de acordo com o *feedback* que vem da comunidade.
+No final da *sprint* é feita a *sprint review*. Nesta fase, a equipa mostra o trabalho ao *product owner*, que decide se as questões foram bem resolvidas ou se a *user story* não pode ser declarada como concluída, e analisa a *product backlog* para preparar a próxima *sprint*. A *product backlog* é alterada no github tanto por utilizadores como por clientes, e como tal é necessário reavaliar as prioridades e decidir quais as funcionalidades mais importantes de acordo com o *feedback* que vem da comunidade.
 
-## Requesitos específicos e funcionalidades (Requesitos funcionais e não funcionais)
+## Requisitos específicos e funcionalidades (Requisitos funcionais e não funcionais)
+
 Ao iniciar a aplicação é pedido o endereço de um servidor da *OwnCloud*, um nome de utilizador e palavra-chave. Após iniciar-se sessão, são apresentados os ficheiros e pastas guardados no sistema. Portanto, é necessário um telemóvel com sistema operativo *Android*, *iOS* ou *BlackBerry* para se poder instalar a aplicação *OwnCloud* e uma conta no sistema para iniciar sessão.
 
 A aplicação permite ver o nome do utilizador, seleccionar a vista que mostra todos os ficheiros, seleccionar a vista que mostra os ficheiros carregados e aceder às definições.
@@ -35,8 +36,23 @@ O projecto foi desenvolvido em Java.
 
 ## Casos de uso
 
-![UseCases](/ESOF-docs/resources/usecases.png)
+O diagrama que se segue pretende demonstrar as sequências de transações possíveis na aplicação, do ponto de vista do utilizador. 
+
+![UseCases](/ESOF-docs/resources/usecases.PNG)
 
 ## Modelo de domínio
 
 ## Contribuições
+
+Diogo Cruz - up201105483@fe.up.pt - 25%
+
+Luís Barbosa - up201405729@fe.up.pt - 25%
+
+Paulo Santos - up201403745@fe.up.pt - 25%
+
+Sérgio Ferreira - up201403074@fe.up.pt - 25%
+
+## Bibliografia
+
+* Slides teóricos moodle
+* Emails trocados com [**David Velasco**](https://github.com/davivel)
