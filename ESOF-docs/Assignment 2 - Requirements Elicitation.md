@@ -42,6 +42,8 @@ O diagrama que se segue pretende demonstrar as sequências de transações poss�
 
 ## Modelo de domínio
 
+![DomainModel](/ESOF-docs/resources/domainmodel.png)
+
 ## Contribuições
 
 Diogo Cruz - up201105483@fe.up.pt - 25%
