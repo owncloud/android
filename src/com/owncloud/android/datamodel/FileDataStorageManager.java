@@ -2219,7 +2219,7 @@ public class FileDataStorageManager {
                 ProviderTableMeta.CONTENT_URI,
                 null,
                 ProviderTableMeta.FILE_KEEP_IN_SYNC + " = ?",
-                new String[] { String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) },
+                new String[] { String.valueOf(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE.getValue()) },
                 // do NOT get also AVAILABLE_OFFLINE_PARENT: only those SET BY THE USER (files or folders)
                 null
             );

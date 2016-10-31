@@ -169,9 +169,8 @@ public class FileObserverService extends Service {
 
         unregisterReceiver(mDownloadReceiver);
 
-        Iterator<AvailableOfflineObserver> itOCFolder = mAvailableOfflineObserversMap.values().iterator();
-        while (itOCFolder.hasNext()) {
-            itOCFolder.next().stopWatching();
+        for (AvailableOfflineObserver availableOfflineObserver : mAvailableOfflineObserversMap.values()) {
+            availableOfflineObserver.stopWatching();
         }
         mAvailableOfflineObserversMap.clear();
         mAvailableOfflineObserversMap = null;
@@ -296,7 +295,10 @@ public class FileObserverService extends Service {
         File localFile = new File(localPath);
         String observerPath;
         if (file.isFolder()) {
-            observerPath = localPath;
+            observerPath = localPath.endsWith(File.separator) ?
+                localPath.substring(0, localPath.length()-1) :
+                localPath
+            ;
         } else {
             observerPath = localFile.getParent();
         }
@@ -381,7 +383,6 @@ public class FileObserverService extends Service {
     private void removeOverlappedObservers(String ancestorPath) {
         Iterator<Map.Entry<String, AvailableOfflineObserver>> iterator =
             mAvailableOfflineObserversMap.entrySet().iterator();
-        Log_OC.e(TAG, "ESE SEPARATOR!, sí o no:  " + ancestorPath);
         Map.Entry<String, AvailableOfflineObserver> entry;
         while (iterator.hasNext()) {
             entry = iterator.next();

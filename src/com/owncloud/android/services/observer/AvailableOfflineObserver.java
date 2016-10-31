@@ -203,6 +203,7 @@ public class AvailableOfflineObserver extends FileObserver {
             // scan file tree and create subordinate observers
             while (!stack.empty()) {
                 String parent = stack.pop();
+                mFolderTreeObservers.add(new SubfolderObserver(parent, UPDATE_MASK));
                 File path = new File(parent);
                 File[] files = path.listFiles();
                 if (files == null) continue;
@@ -211,7 +212,6 @@ public class AvailableOfflineObserver extends FileObserver {
                         && !".".equals(file.getName())
                         && !"..".equals(file.getName())
                     ) {
-                        mFolderTreeObservers.add(new SubfolderObserver(parent, UPDATE_MASK));
                         Log_OC.d(TAG, "Adding observer for all files in " + parent);
                         stack.push(file.getPath());
                     }
@@ -260,7 +260,7 @@ public class AvailableOfflineObserver extends FileObserver {
     @Override
     public void onEvent(int event, String path) {
         Log_OC.v(TAG, "Got event " + event + " on FOLDER " + mPath + " about "
-            + ((path != null) ? path : ""));
+            + ((path != null) ? path : "") + " in THREAD " + Thread.currentThread().getName() + ", " + Thread.currentThread().getId());
 
         boolean shouldSynchronize = false;
         if (path != null && path.length() > 0) {
@@ -321,32 +321,39 @@ public class AvailableOfflineObserver extends FileObserver {
         // since it was registered to observe again, assuming that local files
         // are linked to a remote file AT MOST, SOMETHING TO BE DONE;
         OCFile file = storageManager.getFileByLocalPath(mPath + File.separator + fileName);
-        SynchronizeFileOperation sfo = 
+        if (file == null) {
+            Log_OC.w(TAG, "Could not find OC file for observed " + mPath + File.separator + fileName);
+        } else {
+            SynchronizeFileOperation sfo =
                 new SynchronizeFileOperation(file, null, mAccount, true, mContext);
-        RemoteOperationResult result = sfo.execute(storageManager, mContext);
-        if (result.getCode() == ResultCode.SYNC_CONFLICT) {
-            // ISSUE 5: if the user is not running the app (this is a service!),
-            // this can be very intrusive; a notification should be preferred
-            Intent i = new Intent(mContext, ConflictsResolveActivity.class);
-            i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra(ConflictsResolveActivity.EXTRA_FILE, file);
-            i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
-            mContext.startActivity(i);
+            RemoteOperationResult result = sfo.execute(storageManager, mContext);
+            if (result.getCode() == ResultCode.SYNC_CONFLICT) {
+                // ISSUE 5: if the user is not running the app (this is a service!),
+                // this can be very intrusive; a notification should be preferred
+                Intent i = new Intent(mContext, ConflictsResolveActivity.class);
+                i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra(ConflictsResolveActivity.EXTRA_FILE, file);
+                i.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, mAccount);
+                mContext.startActivity(i);
+            }
         }
     }
 
 
     private class SubfolderObserver extends FileObserver {
-        private String mPath;
+        private String mRelativePath;
 
         SubfolderObserver(String path, int mask) {
             super(path, mask);
-            mPath = path;
+            mRelativePath = path.replace(AvailableOfflineObserver.this.mPath, "");
+            if (mRelativePath.startsWith(File.separator)) {
+                mRelativePath = mRelativePath.substring(1);
+            }
         }
 
         @Override
         public void onEvent(int event, String path) {
-            String newPath = mPath + File.separator + path;
+            String newPath = (mRelativePath.length() > 0) ? mRelativePath + File.separator + path : path;
             AvailableOfflineObserver.this.onEvent(event, newPath);
         }
 

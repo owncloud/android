@@ -54,14 +54,14 @@ public abstract class RecursiveFolderObserver extends FileObserver {
 
         while (!stack.empty()) {
             String parent = stack.pop();
+            mObservers.add(new SingleFolderObserver(parent, mMask));
             File path = new File(parent);
             File[] files = path.listFiles();
             if (files == null) continue;
-            for (int i = 0; i < files.length; ++i) {
-                if (files[i].isDirectory() && !files[i].getName().equals(".")
-                    && !files[i].getName().equals("..")) {
-                    mObservers.add(new SingleFolderObserver(parent, mMask));
-                    stack.push(files[i].getPath());
+            for (File file : files) {
+                if (file.isDirectory() && !file.getName().equals(".")
+                    && !file.getName().equals("..")) {
+                    stack.push(file.getPath());
                 }
             }
         }
