@@ -60,9 +60,12 @@ public class AvailableOfflineObserver extends FileObserver {
     private static String TAG = AvailableOfflineObserver.class.getSimpleName();
 
     private static int UPDATE_MASK = (
-            FileObserver.ATTRIB | FileObserver.MODIFY |
-            FileObserver.MOVED_TO | FileObserver.CLOSE_WRITE
+        FileObserver.ATTRIB | FileObserver.MODIFY |
+        FileObserver.MOVED_TO | FileObserver.CLOSE_WRITE |
+        FileObserver.CREATE     // to detect new subfolders in recursive mode
     );
+
+    private static int IN_ISDIR = 0x40000000;
 
     private static int IN_IGNORE = 32768;
     /*
@@ -193,31 +196,31 @@ public class AvailableOfflineObserver extends FileObserver {
                 Log_OC.d(TAG, "Stopped watching " + mPath + " for changes in selected children");
             }
             mRecursiveWatch = true;
+        } else {
+            stopWatchingAll();  // stop & clean to rescan folder tree below
         }
 
         mExcludedChildren.clear();
-
-        if (mFolderTreeObservers.isEmpty()) {  // TODO - sure? why? will the method be called several times?
-            Stack<String> stack = new Stack<>();
-            stack.push(mPath);
-            // scan file tree and create subordinate observers
-            while (!stack.empty()) {
-                String parent = stack.pop();
-                mFolderTreeObservers.add(new SubfolderObserver(parent, UPDATE_MASK));
-                File path = new File(parent);
-                File[] files = path.listFiles();
-                if (files == null) continue;
-                for (File file : files) {
-                    if (file.isDirectory()
-                        && !".".equals(file.getName())
-                        && !"..".equals(file.getName())
-                    ) {
-                        Log_OC.d(TAG, "Adding observer for all files in " + parent);
-                        stack.push(file.getPath());
-                    }
+        Stack<String> stack = new Stack<>();
+        stack.push(mPath);
+        // scan file tree and create subordinate observers
+        while (!stack.empty()) {
+            String parent = stack.pop();
+            mFolderTreeObservers.add(new SubfolderObserver(parent, UPDATE_MASK));
+            File path = new File(parent);
+            File[] files = path.listFiles();
+            if (files == null) continue;
+            for (File file : files) {
+                if (file.isDirectory()
+                    && !".".equals(file.getName())
+                    && !"..".equals(file.getName())
+                ) {
+                    Log_OC.d(TAG, "Adding observer for all files in " + parent);
+                    stack.push(file.getPath());
                 }
             }
         }
+
         for (int i = 0; i < mFolderTreeObservers.size(); i++) {
             mFolderTreeObservers.get(i).startWatching();
         }
@@ -267,20 +270,29 @@ public class AvailableOfflineObserver extends FileObserver {
             synchronized (mIncludedLock) {
                 if (mRecursiveWatch && !mExcludedChildren.contains(path)) {
                     /// recursive mode
-                    if (((event & FileObserver.MODIFY) != 0) ||
-                        ((event & FileObserver.ATTRIB) != 0) ||
-                        ((event & FileObserver.MOVED_TO) != 0)) {
-
+                    if ((event & FileObserver.MODIFY) != 0 ||
+                        (event & FileObserver.ATTRIB) != 0 ||
+                        (event & FileObserver.MOVED_TO) != 0) {
                         mIncludedChildren.put(path, Boolean.valueOf(true));
                     }
 
-                    if ((event & FileObserver.CLOSE_WRITE) != 0 && mIncludedChildren.containsKey(path)) {
+                    if ((event & FileObserver.CLOSE_WRITE) != 0 &&
+                        mIncludedChildren.containsKey(path)) {
                         mIncludedChildren.remove(path);
                         shouldSynchronize = true;
                     }
 
+                    if ((event & FileObserver.CREATE) != 0 &&
+                        (event & IN_ISDIR) != 0) {
+                        SubfolderObserver newObserver = new SubfolderObserver(
+                            mPath + File.separator + path, UPDATE_MASK
+                        );
+                        mFolderTreeObservers.add(newObserver);
+                        newObserver.startWatching();
+                    }
+
                 } else if (mIncludedChildren.containsKey(path)) {
-                    // selective mode
+                    /// selective mode
                     if (((event & FileObserver.MODIFY) != 0) ||
                         ((event & FileObserver.ATTRIB) != 0) ||
                         ((event & FileObserver.MOVED_TO) != 0)) {
@@ -290,7 +302,8 @@ public class AvailableOfflineObserver extends FileObserver {
                         }
                     }
 
-                    if ((event & FileObserver.CLOSE_WRITE) != 0 && mIncludedChildren.get(path)) {
+                    if ((event & FileObserver.CLOSE_WRITE) != 0 &&
+                        mIncludedChildren.get(path)) {
                         mIncludedChildren.put(path, Boolean.valueOf(false));
                         shouldSynchronize = true;
                     }
