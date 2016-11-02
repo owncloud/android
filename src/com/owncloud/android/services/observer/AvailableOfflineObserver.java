@@ -62,7 +62,8 @@ public class AvailableOfflineObserver extends FileObserver {
     private static int UPDATE_MASK = (
         FileObserver.ATTRIB | FileObserver.MODIFY |
         FileObserver.MOVED_TO | FileObserver.CLOSE_WRITE |
-        FileObserver.CREATE     // to detect new subfolders in recursive mode
+        FileObserver.CREATE |   // to detect new subfolders in recursive mode
+        FileObserver.MOVED_TO   // to detect renamed subfolders in recursive mode
     );
 
     private static int IN_ISDIR = 0x40000000;
@@ -282,13 +283,19 @@ public class AvailableOfflineObserver extends FileObserver {
                         shouldSynchronize = true;
                     }
 
-                    if ((event & FileObserver.CREATE) != 0 &&
-                        (event & IN_ISDIR) != 0) {
-                        SubfolderObserver newObserver = new SubfolderObserver(
-                            mPath + File.separator + path, UPDATE_MASK
-                        );
-                        mFolderTreeObservers.add(newObserver);
-                        newObserver.startWatching();
+                    if ((event & IN_ISDIR) != 0) {
+                        // event on a subfolder
+
+                        if ((event & FileObserver.CREATE) != 0 ||
+                            (event & FileObserver.MOVED_TO) != 0
+                            ) {
+                            SubfolderObserver newObserver = new SubfolderObserver(
+                                mPath + File.separator + path, UPDATE_MASK
+                            );
+                            mFolderTreeObservers.add(newObserver);
+                            newObserver.startWatching();
+                        }
+
                     }
 
                 } else if (mIncludedChildren.containsKey(path)) {

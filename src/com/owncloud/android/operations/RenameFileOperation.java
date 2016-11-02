@@ -32,6 +32,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.utils.FileStorageUtils;
 
 
@@ -103,8 +104,7 @@ public class RenameFileOperation extends SyncOperation {
 
             if (result.isSuccess()) {
                 if (mFile.isFolder()) {
-                    getStorageManager().moveLocalFile(mFile, mNewRemotePath, parent);
-                    //saveLocalDirectory();
+                    saveLocalDirectory(parent);
 
                 } else {
                     saveLocalFile();
@@ -120,11 +120,39 @@ public class RenameFileOperation extends SyncOperation {
         return result;
     }
 
+    private void saveLocalDirectory(String parent) {
+        // stop observing changes if available offline
+        boolean isAvailableOffline = mFile.getAvailableOfflineStatus().equals(
+            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
+        );
+        // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
+        if (isAvailableOffline) {
+            pauseObservation();
+        }
+
+        getStorageManager().moveLocalFile(mFile, mNewRemotePath, parent);
+        mFile.setFileName(mNewName);
+
+        // resume observation of file after rename
+        if (isAvailableOffline) {
+            resumeObservation();
+        }
+    }
+
     private void saveLocalFile() {
         mFile.setFileName(mNewName);
 
-        // try to rename the local copy of the file
         if (mFile.isDown()) {
+            // stop observing changes if available offline
+            boolean isAvailableOffline = mFile.getAvailableOfflineStatus().equals(
+                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
+            );
+                // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
+            if (isAvailableOffline) {
+                pauseObservation();
+            }
+
+            // rename the local copy of the file
             String oldPath = mFile.getStoragePath();
             File f = new File(oldPath);
             String parentStoragePath = f.getParent();
@@ -133,6 +161,11 @@ public class RenameFileOperation extends SyncOperation {
             if (f.renameTo(new File(parentStoragePath + mNewName))) {
                 String newPath = parentStoragePath + mNewName;
                 mFile.setStoragePath(newPath);
+
+                // resume observation of file after rename
+                if (isAvailableOffline) {
+                    resumeObservation();
+                }
 
                 // notify MediaScanner about removed file
                 getStorageManager().deleteFileInMediaScan(oldPath);
@@ -145,6 +178,24 @@ public class RenameFileOperation extends SyncOperation {
         }
         
         getStorageManager().saveFile(mFile);
+    }
+
+    private void pauseObservation() {
+        FileObserverService.observeFile(
+            MainApp.getAppContext(),
+            mFile,
+            getStorageManager().getAccount(),
+            false
+        );
+    }
+
+    private void resumeObservation() {
+        FileObserverService.observeFile(
+            MainApp.getAppContext(),
+            mFile,
+            getStorageManager().getAccount(),
+            true
+        );
     }
 
     /**

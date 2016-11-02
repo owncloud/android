@@ -351,7 +351,10 @@ public class FileObserverService extends Service {
         File localFile = new File(localPath);
         String observerPath;
         if (file.isFolder()) {
-            observerPath = localPath;
+            observerPath = localPath.endsWith(File.separator) ?
+                localPath.substring(0, localPath.length()-1) :
+                localPath
+            ;
         } else {
             observerPath = localFile.getParent();
         }
