@@ -125,7 +125,7 @@ public class RenameFileOperation extends SyncOperation {
         boolean isAvailableOffline = mFile.getAvailableOfflineStatus().equals(
             OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
         );
-        // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
+            // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
         if (isAvailableOffline) {
             pauseObservation();
         }
