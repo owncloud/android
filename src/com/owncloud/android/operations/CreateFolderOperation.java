@@ -32,12 +32,14 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.FileStorageUtils;
 
+import java.io.File;
+
 
 /**
  * Access to remote operation performing the creation of a new folder in the ownCloud server.
  * Save the new folder in Database
  */
-public class CreateFolderOperation extends SyncOperation implements OnRemoteOperationListener{
+public class CreateFolderOperation extends SyncOperation {
     
     private static final String TAG = CreateFolderOperation.class.getSimpleName();
     
@@ -64,7 +66,15 @@ public class CreateFolderOperation extends SyncOperation implements OnRemoteOper
         RemoteOperationResult result =  operation.execute(client);
         
         if (result.isSuccess()) {
-            saveFolderInDB();
+            OCFile newDir = saveFolderInDB();
+            String localPath = FileStorageUtils.getDefaultSavePathFor(
+                getStorageManager().getAccount().name, newDir
+            );
+            File localFile = new File(localPath);
+            boolean created = localFile.mkdirs();
+            if (!created) {
+                Log_OC.w(TAG, "Local folder " + localPath + " was not fully created");
+            }
         } else {
             Log_OC.e(TAG, mRemotePath + "hasn't been created");
         }
@@ -72,27 +82,13 @@ public class CreateFolderOperation extends SyncOperation implements OnRemoteOper
         return result;
     }
 
-    @Override
-    public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
-        if (operation instanceof CreateRemoteFolderOperation) {
-            onCreateRemoteFolderOperationFinish((CreateRemoteFolderOperation)operation, result);
-        }
-    }
-    
-    
-    private void onCreateRemoteFolderOperationFinish(CreateRemoteFolderOperation operation,
-                                                     RemoteOperationResult result) {
-       if (result.isSuccess()) {
-           saveFolderInDB();
-       } else {
-           Log_OC.e(TAG, mRemotePath + "hasn't been created");
-       }
-    }
-
     /**
      * Save new directory in local database
+     *
+     * @return      Instance of {@link OCFile} just created
      */
-    public void saveFolderInDB() {
+    private OCFile saveFolderInDB() {
+        OCFile newDir = null;
         if (mCreateFullPath && getStorageManager().
                 getFileByPath(FileStorageUtils.getParentPath(mRemotePath)) == null){// When parent
                                                                                     // of remote path
@@ -100,17 +96,16 @@ public class CreateFolderOperation extends SyncOperation implements OnRemoteOper
             String[] subFolders = mRemotePath.split("/");
             String composedRemotePath = "/";
 
-            // For each antecesor folders create them recursively
-            for (int i=0; i<subFolders.length; i++) {
-                String subFolder =  subFolders[i];
+            // Create all the ancestors
+            for (String subFolder : subFolders) {
                 if (!subFolder.isEmpty()) {
                     composedRemotePath = composedRemotePath + subFolder + "/";
                     mRemotePath = composedRemotePath;
-                    saveFolderInDB();
+                    newDir = saveFolderInDB();
                 }
             }
         } else { // Create directory on DB
-            OCFile newDir = new OCFile(mRemotePath);
+            newDir = new OCFile(mRemotePath);
             newDir.setMimetype("DIR");
             long parentId = getStorageManager().
                     getFileByPath(FileStorageUtils.getParentPath(mRemotePath)).getFileId();
@@ -120,5 +115,6 @@ public class CreateFolderOperation extends SyncOperation implements OnRemoteOper
 
             Log_OC.d(TAG, "Create directory " + mRemotePath + " in Database");
         }
+        return newDir;
     }
 }

@@ -207,6 +207,7 @@ public class AvailableOfflineObserver extends FileObserver {
         // scan file tree and create subordinate observers
         while (!stack.empty()) {
             String parent = stack.pop();
+            Log_OC.d(TAG, "Adding observer for all files in " + parent);
             mFolderTreeObservers.add(new SubfolderObserver(parent, UPDATE_MASK));
             File path = new File(parent);
             File[] files = path.listFiles();
@@ -216,7 +217,6 @@ public class AvailableOfflineObserver extends FileObserver {
                     && !".".equals(file.getName())
                     && !"..".equals(file.getName())
                 ) {
-                    Log_OC.d(TAG, "Adding observer for all files in " + parent);
                     stack.push(file.getPath());
                 }
             }

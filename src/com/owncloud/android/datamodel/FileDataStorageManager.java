@@ -440,7 +440,7 @@ public class FileDataStorageManager {
      */
     private void setInitialAvailableOfflineStatus(OCFile file, ContentValues cv) {
         // set appropriate av-off folder depending on ancestor
-        boolean inFolderAvailableOffline = isAnyAncestorAvailableOfflineFolder(file.getParentId());
+        boolean inFolderAvailableOffline = isAnyAncestorAvailableOfflineFolder(file);
         if (inFolderAvailableOffline) {
             cv.put(
                 ProviderTableMeta.FILE_KEEP_IN_SYNC,
@@ -757,10 +757,29 @@ public class FileDataStorageManager {
                         newPathsToTriggerMediaScan.add(targetLocalPath);
 
                     }
+                    if (targetParent.getAvailableOfflineStatus() !=
+                        OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
+                        // moving to an available offline subfolder
+                        cv.put(
+                            ProviderTableMeta.FILE_KEEP_IN_SYNC,
+                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.getValue()
+                        );
+
+                    } else {
+                        // moving to a not available offline subfolder - with care
+                        if (file.getAvailableOfflineStatus() ==
+                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT) {
+                            cv.put(
+                                ProviderTableMeta.FILE_KEEP_IN_SYNC,
+                                OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.getValue()
+                            );
+                        }
+                    }
+
                     if (child.getRemotePath().equals(file.getRemotePath())) {
                         cv.put(
-                                ProviderTableMeta.FILE_PARENT,
-                                targetParent.getFileId()
+                            ProviderTableMeta.FILE_PARENT,
+                            targetParent.getFileId()
                         );
                     }
                     operations.add(
@@ -790,7 +809,7 @@ public class FileDataStorageManager {
                         e);
             }
 
-            /// 4. move in local file system 
+            /// 4. move in local file system
             String originalLocalPath = FileStorageUtils.getDefaultSavePathFor(mAccount.name, file);
             String targetLocalPath = defaultSavePath + targetPath;
             File localFile = new File(originalLocalPath);
@@ -915,22 +934,35 @@ public class FileDataStorageManager {
     }
 
     /**
-    * Checks if it is favorite or it is inside a favorite folder
-    * @param parentId
-    * @return true/false
-    */
-    private boolean isAnyAncestorAvailableOfflineFolder(long parentId) {
-        boolean isFavorite = false;
-        OCFile file = getFileById(parentId);
-        if (file != null && file.isFolder()) {  // file is null for the parent of the root folder
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
-                isFavorite = true;
-            } else if (!file.getFileName().equals(OCFile.ROOT_PATH)) {
-                isFavorite = isAnyAncestorAvailableOfflineFolder(file.getParentId());
+     * Checks if it is favorite or it is inside a favorite folder
+     *
+     * @param file              {@link OCFile} which ancestors will be searched.
+     * @return                  true/false
+     */
+    private boolean isAnyAncestorAvailableOfflineFolder(OCFile file) {
+        return (getAvailableOfflineAncestorOf(file) != null);
+    }
+
+    /**
+     * Returns ancestor folder with available offline status AVAILABLE_OFFLINE.
+     *
+     * @param file              {@link OCFile} which ancestors will be searched.
+     * @return                  Ancestor folder with available offline status AVAILABLE_OFFLINE, or null if
+     *                          does not exist.
+     */
+    public OCFile getAvailableOfflineAncestorOf(OCFile file) {
+        OCFile avOffAncestor = null;
+        OCFile parent = getFileById(file.getParentId());
+        if (parent != null && parent.isFolder()) {  // file is null for the parent of the root folder
+            if (parent.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+                avOffAncestor = parent;
+            } else if (!parent.getFileName().equals(OCFile.ROOT_PATH)) {
+                avOffAncestor = getAvailableOfflineAncestorOf(parent);
             }
         }
-        return isFavorite;
+        return avOffAncestor;
     }
+
 
     private OCFile createRootDir() {
         OCFile file = new OCFile(OCFile.ROOT_PATH);
@@ -2247,4 +2279,5 @@ public class FileDataStorageManager {
 
         return result;
     }
+
 }

@@ -25,7 +25,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.observer.FileObserverService;
@@ -101,25 +100,37 @@ public class MoveFileOperation extends SyncOperation {
             boolean isAvailableOffline = mFile.getAvailableOfflineStatus().equals(
                 OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
             );
-            // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
+                // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
             if (isAvailableOffline) {
-                pauseObservation();
+                stopObservation();
             }
 
             getStorageManager().moveLocalFile(mFile, targetPath, mTargetParentPath);
 
-            // resume observation of file after rename
-            if (isAvailableOffline) {
+            // adjust available offline status after move resume observation of file after rename
+            OCFile updatedFile = getStorageManager().getFileById(mFile.getFileId());
+            OCFile.AvailableOfflineStatus updatedAvOffStatus = updatedFile.getAvailableOfflineStatus();
+            if (updatedAvOffStatus == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
                 resumeObservation(targetPath);
+
+            } else if (updatedAvOffStatus == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT) {
+                // enforce ancestor to rescan subfolders for immediate observation
+                OCFile ancestor = getStorageManager().getAvailableOfflineAncestorOf(updatedFile);
+                FileObserverService.observeFile(
+                    MainApp.getAppContext(),
+                    ancestor,
+                    getStorageManager().getAccount(),
+                    true
+                );
             }
+
         }
         // TODO handle ResultCode.PARTIAL_MOVE_DONE in client Activity, for the moment
         
         return result;
     }
 
-
-    private void pauseObservation() {
+    private void stopObservation() {
         FileObserverService.observeFile(
             MainApp.getAppContext(),
             mFile,
