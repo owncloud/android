@@ -229,6 +229,7 @@
   <string name="confirmation_remove_file_alert">Наистина ли искате да изтриете %1$s ?</string>
   <string name="confirmation_remove_folder_alert">Наистина ли искате да премахнете %1$s и съдържанието му?</string>
   <string name="confirmation_remove_local">Само локално</string>
+  <string name="confirmation_remove_account_alert">Сигурни ли сте, че желаете да премахните профила %1$s?</string>
   <string name="remove_success_msg">Премахването успешно.</string>
   <string name="remove_fail_msg">Неуспешно прехамхване.</string>
   <string name="rename_dialog_title">Въведете ново име</string>
@@ -367,7 +368,11 @@
   <string name="file_list__footer__files">%1$d файла</string>
   <string name="file_list__footer__files_and_folder">%1$d файла, 1 папка</string>
   <string name="file_list__footer__files_and_folders">%1$d файла, %2$d папки</string>
+  <string name="prefs_instant_upload_source_path_title">Папка за камерата (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">задължителен</string>
   <string name="prefs_instant_upload_source_path_title_optional">по избор</string>
+  <string name="prefs_instant_behaviour_dialogTitle">Оригиналният файл ще бъде...</string>
+  <string name="prefs_instant_behaviour_title">Оригиналният файл ще бъде...</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">запази в оригиналната папка</string>
@@ -380,7 +385,9 @@
   <string name="share_via_link_section_title">Връзка за споделяне</string>
   <string name="share_via_link_expiration_date_label">Задаване на дата на изтичане</string>
   <string name="share_via_link_password_label">Защитено с парола</string>
+  <string name="share_via_link_password_title">Подсигурен</string>
   <string name="share_via_link_edit_permission_label">Позволяване на редактиране</string>
+  <string name="share_get_public_link_button">Получаване на връзка</string>
   <string name="share_with_title">Споделено с ...</string>
   <string name="share_with_edit_title">Сподели с %1$s</string>
   <string name="share_search">Търсене</string>
