@@ -354,7 +354,7 @@
   <string name="sync_folder_failed_content">Usklajevanja mape %1$s ni mogoče zaključiti</string>
   <string name="shared_subject_header">v souporabi</string>
   <string name="with_you_subject_header">z vami</string>
-  <string name="subject_user_shared_with_you">Uporabnik %1$s je omogočil souporabo \"%2$s\"</string>
+  <string name="subject_user_shared_with_you">Uporabnik %1$s je omogočil souporabo »%2$s«</string>
   <string name="subject_shared_with_you">\"%1$s\" vam je oddan v souporabo</string>
   <string name="auth_refresh_button">Osveži povezavo</string>
   <string name="auth_host_address">Naslov strežnika</string>
