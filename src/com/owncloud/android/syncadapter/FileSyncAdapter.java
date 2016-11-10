@@ -266,15 +266,16 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             return;
         
         // folder synchronization
-        RefreshFolderOperation synchFolderOp = new RefreshFolderOperation( folder,
-                                                                                   mCurrentSyncTime,
-                                                                                   true,
-                                                                                   mIsShareSupported,
-                                                                                   false,
-                                                                                   getStorageManager(),
-                                                                                   getAccount(),
-                                                                                   getContext()
-                                                                                  );
+        RefreshFolderOperation synchFolderOp = new RefreshFolderOperation(
+            folder,
+            mCurrentSyncTime,
+            true,
+            mIsShareSupported,
+            false,
+            getStorageManager(),
+            getAccount(),
+            getContext()
+        );
         RemoteOperationResult result = synchFolderOp.execute(getClient());
         
         
@@ -367,7 +368,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * 
      * @param event             Event in the process of synchronization to be notified.   
      * @param dirRemotePath     Remote path of the folder target of the event occurred.
-     * @param result            Result of an individual {@ SynchronizeFolderOperation},
+     * @param result            Result of an individual folder synchronization,
      *                          if completed; may be null.
      */
     private void sendLocalBroadcast(String event, String dirRemotePath,
@@ -479,8 +480,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         /// includes a pending intent in the notification showing a more detailed explanation
         Intent explanationIntent = new Intent(getContext(), ErrorsWhileCopyingHandlerActivity.class);
         explanationIntent.putExtra(ErrorsWhileCopyingHandlerActivity.EXTRA_ACCOUNT, getAccount());
-        ArrayList<String> remotePaths = new ArrayList<String>();
-        ArrayList<String> localPaths = new ArrayList<String>();
+        ArrayList<String> remotePaths = new ArrayList<>();
+        ArrayList<String> localPaths = new ArrayList<>();
         remotePaths.addAll(mForgottenLocalFiles.keySet());
         localPaths.addAll(mForgottenLocalFiles.values());
         explanationIntent.putExtra(ErrorsWhileCopyingHandlerActivity.EXTRA_LOCAL_PATHS, localPaths);

@@ -115,8 +115,8 @@ public class SynchronizeFolderOperation extends SyncOperation {
         mAccount = account;
         mContext = context;
         mRemoteFolderChanged = false;
-        mFilesForDirectDownload = new Vector<OCFile>();
-        mFilesToSyncContents = new Vector<SyncOperation>();
+        mFilesForDirectDownload = new Vector<>();
+        mFilesToSyncContents = new Vector<>();
         mCancellationRequested = new AtomicBoolean(false);
     }
 
@@ -175,7 +175,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
             result = fetchAndSyncRemoteFolder(client);
             if (result.isSuccess()) {
-                syncContents(client);
+                syncContents();
             }
             
             if (mCancellationRequested.get()) {
@@ -301,7 +301,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         Log_OC.d(TAG, "Remote folder " + mLocalFolder.getRemotePath()
                 + " changed - starting update of local data ");
 
-        List<OCFile> updatedFiles = new Vector<OCFile>(folderAndFiles.size() - 1);
+        List<OCFile> updatedFiles = new Vector<>(folderAndFiles.size() - 1);
         mFilesForDirectDownload.clear();
         mFilesToSyncContents.clear();
 
@@ -312,7 +312,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         // get current data about local contents of the folder to synchronize
         // TODO Enable when "On Device" is recovered ?
         List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder/*, false*/);
-        Map<String, OCFile> localFilesMap = new HashMap<String, OCFile>(localFiles.size());
+        Map<String, OCFile> localFilesMap = new HashMap<>(localFiles.size());
         for (OCFile file : localFiles) {
             localFilesMap.put(file.getRemotePath(), file);
         }
@@ -434,9 +434,9 @@ public class SynchronizeFolderOperation extends SyncOperation {
     }
 
 
-    private void syncContents(OwnCloudClient client) throws OperationCancelledException {
+    private void syncContents() throws OperationCancelledException {
         startDirectDownloads();
-        startContentSynchronizations(mFilesToSyncContents, client);
+        startContentSynchronizations(mFilesToSyncContents);
     }
 
     
@@ -462,10 +462,8 @@ public class SynchronizeFolderOperation extends SyncOperation {
      * on.
      *
      * @param filesToSyncContents       Synchronization operations to execute.
-     * @param client                    Interface to the remote ownCloud server.
      */
-    private void startContentSynchronizations(List<SyncOperation> filesToSyncContents,
-                                              OwnCloudClient client)
+    private void startContentSynchronizations(List<SyncOperation> filesToSyncContents)
             throws OperationCancelledException {
 
         Log_OC.v(TAG, "Starting content synchronization... ");
