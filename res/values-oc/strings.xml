@@ -91,6 +91,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="uploads_view_group_current_uploads">En cors</string>
   <string name="uploads_view_group_finished_uploads">Mandat</string>
   <string name="uploads_view_upload_status_succeeded">Acabat</string>
+  <string name="uploads_view_upload_status_cancelled">Anullat</string>
   <string name="uploads_view_upload_status_failed_credentials_error">Error d\'identificants</string>
   <string name="uploads_view_upload_status_failed_folder_error">Error dorsièr</string>
   <string name="uploads_view_upload_status_failed_file_error">Error fichièr</string>

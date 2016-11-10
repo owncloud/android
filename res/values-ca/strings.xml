@@ -13,6 +13,7 @@
   <string name="actionbar_send_file">Envia</string>
   <string name="actionbar_sort">Ordena</string>
   <string name="actionbar_sort_title">Ordena per</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tots els fitxers</string>
@@ -358,6 +359,7 @@
   <string name="share_privilege_can_edit_delete">elimina</string>
   <string name="edit_share_unshare">Deixar de compartir</string>
   <string name="edit_share_done">Fet</string>
+  <string name="action_clear_successful_uploads">Neteja exitosa</string>
   <string name="action_switch_grid_view">Vista de graella</string>
   <string name="action_switch_list_view">Vista de Llista</string>
   <string name="manage_space_title">Gestió d\'espai</string>
