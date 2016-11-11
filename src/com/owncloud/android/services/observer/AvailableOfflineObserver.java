@@ -345,7 +345,7 @@ public class AvailableOfflineObserver extends FileObserver {
             Log_OC.w(TAG, "Could not find OC file for observed " + mPath + File.separator + fileName);
         } else {
             SynchronizeFileOperation sfo =
-                new SynchronizeFileOperation(file, null, mAccount, true, mContext);
+                new SynchronizeFileOperation(file, null, mAccount, false, mContext);
             RemoteOperationResult result = sfo.execute(storageManager, mContext);
             if (result.getCode() == ResultCode.SYNC_CONFLICT) {
                 // ISSUE 5: if the user is not running the app (this is a service!),

@@ -30,8 +30,8 @@ import java.util.Vector;
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
-
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -41,7 +41,6 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -89,16 +88,20 @@ public class SynchronizeFolderOperation extends SyncOperation {
     /** Counter of failed operations in synchronization of kept-in-sync files */
     private int mFailsInFileSyncsFound;
 
-    /** 'True' means that the remote folder changed and should be fetched */
-    private boolean mRemoteFolderChanged;
-
     private List<OCFile> mFilesForDirectDownload;
         // to avoid extra PROPFINDs when there was no change in the folder
     
     private List<SyncOperation> mFilesToSyncContents;
-        // this will be used for every file when 'folder synchronization' replaces 'folder download' 
+
+    private List<Intent> mFoldersToSyncContents;
 
     private final AtomicBoolean mCancellationRequested;
+
+    /**
+     * When 'true', will assume that folder did not change in the server and
+     * will focus only in push any local change to the server (carefully).
+     */
+    private boolean mPushOnly;
 
     /**
      * Creates a new instance of {@link SynchronizeFolderOperation}.
@@ -107,17 +110,25 @@ public class SynchronizeFolderOperation extends SyncOperation {
      * @param   remotePath              Path to synchronize.
      * @param   account                 ownCloud account where the folder is located.
      * @param   currentSyncTime         Time stamp for the synchronization process in progress.
+     * @param   pushOnly                When 'true', will assume that folder did not change in the server and
+     *                                  will focus only in push any local change to the server (carefully).
      */
-    public SynchronizeFolderOperation(Context context, String remotePath, Account account,
-                                      long currentSyncTime){
+    public SynchronizeFolderOperation(
+        Context context,
+        String remotePath,
+        Account account,
+        long currentSyncTime,
+        boolean pushOnly
+    ) {
         mRemotePath = remotePath;
         mCurrentSyncTime = currentSyncTime;
         mAccount = account;
         mContext = context;
-        mRemoteFolderChanged = false;
         mFilesForDirectDownload = new Vector<>();
         mFilesToSyncContents = new Vector<>();
+        mFoldersToSyncContents = new Vector<>();
         mCancellationRequested = new AtomicBoolean(false);
+        mPushOnly = pushOnly;
     }
 
 
@@ -141,47 +152,45 @@ public class SynchronizeFolderOperation extends SyncOperation {
         mConflictsFound = 0;
         
         try {
-            // get locally cached information about folder 
+            // get locally cached information about folder
             mLocalFolder = getStorageManager().getFileByPath(mRemotePath);
 
-            /**
-             * This is not working fine, the way ETag is handled is not safe. If the folder parent of 'mRemotePath'
-             * is refreshed before this synchronization, but after any file inside 'mRemotePath' was changed,
-             * this test will result in 'no change in remote', and if there are also local changes for the same
-             * file, the local copy will override the remote one, ignoring its changes.
-             *
-             * This could mean data loss. We can't allow it.
-             *
-             * We'll review the algorithm to make it work. Meanwhile, the flow needs to go through the heavy
-             * path, and act as if there could be changes in any point of the subtree, no matter what are the values
-             * of the ETags of folders
-             */
-            /*
-            result = checkForChanges(client);
-    
-            if (result.isSuccess()) {
-                if (mRemoteFolderChanged) {
-                    result = fetchAndSyncRemoteFolder(client);
-                    
-                } else {
-                    prepareOpsFromLocalKnowledge();
-                }
-                
-                if (result.isSuccess()) {
-                    syncContents(client);
-                }
+            if (!mPushOnly) {
+                // get list of files in folder from remote server
+                result = fetchRemoteFolder(client);
+            }
 
-            }*/
+            if (result != null && result.isSuccess()) {
+                // folder was updated in the server side
+                Log_OC.i(TAG, "Checked " + mAccount.name + mRemotePath + " : changed");
 
-            result = fetchAndSyncRemoteFolder(client);
-            if (result.isSuccess()) {
+                mergeRemoteFolder(result.getData());
                 syncContents();
+
+            } else if (mPushOnly || result.getCode() == ResultCode.NOT_MODIFIED) {
+                // no update in the server side, still need to handle local changes
+
+                Log_OC.i(TAG, "Checked " + mAccount.name + mRemotePath + " : not changed");
+
+                preparePushOfLocalChanges();
+                syncContents();
+
+                result = new RemoteOperationResult(ResultCode.OK);
+
+            } else {
+                // fail fetching the server
+                if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                    removeLocalFolder();
+                }
+                if (result.isException()) {
+                    Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath  + " : " +
+                        result.getLogMessage(), result.getException());
+                } else {
+                    Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
+                        result.getLogMessage());
+                }
             }
-            
-            if (mCancellationRequested.get()) {
-                throw new OperationCancelledException();
-            }
-            
+
         } catch (OperationCancelledException e) {
             result = new RemoteOperationResult(e);
         }
@@ -190,74 +199,29 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
     }
 
-    private RemoteOperationResult checkForChanges(OwnCloudClient client)
-            throws OperationCancelledException {
-        Log_OC.d(TAG, "Checking changes in " + mAccount.name + mRemotePath);
+    /**
+     * Get list of files in folder from remote server, only if there were changes from the last time.
+     *
+     * Stored ETag of folder is used to determine if there were changes in the server from the last sync.
+     *
+     * @param client                            {@link OwnCloudClient} instance used to access the server.
+     * @return                                  Result of the fetch, including list of remote files in the
+     *                                          sync'ed folder, if changed from the last time.
+     * @throws OperationCancelledException
+     */
+    @NonNull
+    private RemoteOperationResult fetchRemoteFolder(OwnCloudClient client) throws OperationCancelledException {
+        Log_OC.d(TAG, "Fetching list of files in  " + mAccount.name + mRemotePath + ", if changed");
 
-        mRemoteFolderChanged = true;
-        RemoteOperationResult result = null;
-        
         if (mCancellationRequested.get()) {
             throw new OperationCancelledException();
         }
-        
-        // remote request
-        ReadRemoteFileOperation operation = new ReadRemoteFileOperation(mRemotePath);
-        result = operation.execute(client);
-        if (result.isSuccess()){
-            OCFile remoteFolder = FileStorageUtils.fillOCFile((RemoteFile) result.getData().get(0));
 
-            // check if remote and local folder are different
-            mRemoteFolderChanged =
-                        !(remoteFolder.getEtag().equalsIgnoreCase(mLocalFolder.getEtag()));
-
-            result = new RemoteOperationResult(ResultCode.OK);
-
-            Log_OC.i(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
-                    (mRemoteFolderChanged ? "changed" : "not changed"));
-
-        } else {
-            // check failed
-            if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
-                removeLocalFolder();
-            }
-            if (result.isException()) {
-                Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath  + " : " +
-                        result.getLogMessage(), result.getException());
-            } else {
-                Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
-                        result.getLogMessage());
-            }
-
-        }
-
-        return result;
-    }
-
-
-    private RemoteOperationResult fetchAndSyncRemoteFolder(OwnCloudClient client)
-            throws OperationCancelledException {
-        if (mCancellationRequested.get()) {
-            throw new OperationCancelledException();
-        }
-        
-        ReadRemoteFolderOperation operation = new ReadRemoteFolderOperation(mRemotePath);
-        RemoteOperationResult result = operation.execute(client);
-        Log_OC.d(TAG, "Synchronizing " + mAccount.name + mRemotePath);
-
-        if (result.isSuccess()) {
-            synchronizeData(result.getData(), client);
-            if (mConflictsFound > 0  || mFailsInFileSyncsFound > 0) {
-                result = new RemoteOperationResult(ResultCode.SYNC_CONFLICT);
-                    // should be a different result code, but will do the job
-            }
-        } else {
-            if (result.getCode() == ResultCode.FILE_NOT_FOUND)
-                removeLocalFolder();
-        }
-        
-
-        return result;
+        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(
+            mRemotePath,
+            mLocalFolder.getEtag()
+        );
+        return readFolderOperation.execute(client);
     }
 
 
@@ -268,9 +232,8 @@ public class SynchronizeFolderOperation extends SyncOperation {
             storageManager.removeFolder(
                     mLocalFolder,
                     true,
-                    (   mLocalFolder.isDown() &&        // TODO: debug, I think this is
-                                                        // always false for folders
-                            mLocalFolder.getStoragePath().startsWith(currentSavePath)
+                    (   mLocalFolder.isDown() &&
+                        mLocalFolder.getStoragePath().startsWith(currentSavePath)
                     )
             );
         }
@@ -281,16 +244,12 @@ public class SynchronizeFolderOperation extends SyncOperation {
      *  Synchronizes the data retrieved from the server about the contents of the target folder
      *  with the current data in the local database.
      *
-     *  Grants that mChildren is updated with fresh data after execution.
-     *
      *  @param folderAndFiles   Remote folder and children files in Folder
-     *
-     *  @param client           Client instance to the remote server where the data were
-     *                          retrieved.
-     *  @return                 'True' when any change was made in the local data, 'false' otherwise
      */
-    private void synchronizeData(ArrayList<Object> folderAndFiles, OwnCloudClient client)
+    private void mergeRemoteFolder(ArrayList<Object> folderAndFiles)
             throws OperationCancelledException {
+        Log_OC.d(TAG, "Synchronizing " + mAccount.name + mRemotePath);
+
         FileDataStorageManager storageManager = getStorageManager();
         
         // parse data from remote folder
@@ -310,15 +269,14 @@ public class SynchronizeFolderOperation extends SyncOperation {
         }
 
         // get current data about local contents of the folder to synchronize
-        // TODO Enable when "On Device" is recovered ?
-        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder/*, false*/);
+        List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder);
         Map<String, OCFile> localFilesMap = new HashMap<>(localFiles.size());
         for (OCFile file : localFiles) {
             localFilesMap.put(file.getRemotePath(), file);
         }
 
         // loop to synchronize every child
-        OCFile remoteFile = null, localFile = null, updatedFile = null;
+        OCFile remoteFile, localFile, updatedLocalFile;
         RemoteFile r;
         for (int i=1; i<folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
@@ -326,69 +284,47 @@ public class SynchronizeFolderOperation extends SyncOperation {
             remoteFile = FileStorageUtils.fillOCFile(r);
 
             /// new OCFile instance to merge fresh data from server with local state
-            updatedFile = FileStorageUtils.fillOCFile(r);
-            updatedFile.setParentId(mLocalFolder.getFileId());
+            updatedLocalFile = FileStorageUtils.fillOCFile(r);
+            updatedLocalFile.setParentId(mLocalFolder.getFileId());
 
             /// retrieve local data for the read file
-            //  localFile = mStorageManager.getFileByPath(remoteFile.getRemotePath());
             localFile = localFilesMap.remove(remoteFile.getRemotePath());
 
             /// add to updatedFile data about LOCAL STATE (not existing in server)
-            updatedFile.setLastSyncDateForProperties(mCurrentSyncTime);
+            updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
             if (localFile != null) {
-                updatedFile.setFileId(localFile.getFileId());
-                updatedFile.setAvailableOfflineStatus(localFile.getAvailableOfflineStatus());
-                updatedFile.setLastSyncDateForData(localFile.getLastSyncDateForData());
-                updatedFile.setModificationTimestampAtLastSyncForData(
+                updatedLocalFile.setFileId(localFile.getFileId());
+                updatedLocalFile.setAvailableOfflineStatus(localFile.getAvailableOfflineStatus());
+                updatedLocalFile.setLastSyncDateForData(localFile.getLastSyncDateForData());
+                updatedLocalFile.setModificationTimestampAtLastSyncForData(
                         localFile.getModificationTimestampAtLastSyncForData()
                 );
-                updatedFile.setStoragePath(localFile.getStoragePath());
+                updatedLocalFile.setStoragePath(localFile.getStoragePath());
                 // eTag will not be updated unless file CONTENTS are synchronized
-                updatedFile.setEtag(localFile.getEtag());
-                if (!updatedFile.isFolder() &&
-                    mRemoteFolderChanged &&
+                updatedLocalFile.setEtag(localFile.getEtag());
+                if (!updatedLocalFile.isFolder() &&
                     remoteFile.isImage() &&
                     remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
 
-                    updatedFile.setNeedsUpdateThumbnail(true);
+                    updatedLocalFile.setNeedsUpdateThumbnail(true);
                     Log.d(TAG, "Image " + remoteFile.getFileName() + " updated on the server");
                 }
-                updatedFile.setPublicLink(localFile.getPublicLink());
-                updatedFile.setShareViaLink(localFile.isSharedViaLink());
-                updatedFile.setShareWithSharee(localFile.isSharedWithSharee());
-                updatedFile.setEtagInConflict(localFile.getEtagInConflict());
+                updatedLocalFile.setPublicLink(localFile.getPublicLink());
+                updatedLocalFile.setShareViaLink(localFile.isSharedViaLink());
+                updatedLocalFile.setShareWithSharee(localFile.isSharedWithSharee());
+                updatedLocalFile.setEtagInConflict(localFile.getEtagInConflict());
             } else {
                 // remote eTag will not be updated unless file CONTENTS are synchronized
-                updatedFile.setEtag("");
+                updatedLocalFile.setEtag("");
             }
 
             /// check and fix, if needed, local storage path
-            searchForLocalFileInDefaultPath(updatedFile);
+            searchForLocalFileInDefaultPath(updatedLocalFile);
             
             /// classify file to sync/download contents later
-            if (remoteFile.isFolder()) {
-                /// to download children files recursively
-                synchronized (mCancellationRequested) {
-                    if (mCancellationRequested.get()) {
-                        throw new OperationCancelledException();
-                    }
-                    startSyncFolderOperation(remoteFile.getRemotePath());
-                }
+            addToSyncContents(updatedLocalFile, remoteFile, false);
 
-            } else {
-                /// prepare content synchronization for files (any file, not just favorites)
-                SynchronizeFileOperation operation = new SynchronizeFileOperation(
-                        localFile,
-                        remoteFile,
-                        mAccount,
-                        true,
-                        mContext
-                    );
-                mFilesToSyncContents.add(operation);
-                
-            }
-
-            updatedFiles.add(updatedFile);
+            updatedFiles.add(updatedLocalFile);
         }
 
         // save updated contents in local database
@@ -397,39 +333,52 @@ public class SynchronizeFolderOperation extends SyncOperation {
     }
     
     
-    private void prepareOpsFromLocalKnowledge() throws OperationCancelledException {
-        // TODO Enable when "On Device" is recovered ?
-        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder/*, false*/);
+    private void preparePushOfLocalChanges() throws OperationCancelledException {
+        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
         for (OCFile child : children) {
-            /// classify file to sync/download contents later
-            if (child.isFolder()) {
-                /// to download children files recursively
-                synchronized(mCancellationRequested) {
-                    if (mCancellationRequested.get()) {
-                        throw new OperationCancelledException();
-                    }
-                    startSyncFolderOperation(child.getRemotePath());
-                }
+            addToSyncContents(
+                child,
+                null,
+                true
+            );
+        }
+    }
 
-            } else {
-                /// synchronization for regular files
-                if (!child.isDown()) {
-                    mFilesForDirectDownload.add(child);
 
-                } else {
-                    /// this should result in direct upload of files that were locally modified
-                    SynchronizeFileOperation operation = new SynchronizeFileOperation(
-                            child,
-                            (child.getEtagInConflict() != null ? child : null),
-                            mAccount,
-                            true,
-                            mContext
-                    );
-                    mFilesToSyncContents.add(operation);
+    /**
+     * Generates the appropriate operations to later sync the contents of localFile with the server, if
+     * it's an available offline file or folder.
+     *
+     * Stores the operations in mFoldersToSyncContents and mFilesToSyncContents.
+     *
+     * @param localFile         Local information about the file which contents might be sync'ed.
+     * @param remoteFile        Server information of the file.
+     * @param serverUnchanged   When 'true', will assume that folder didn't change in server side, so that
+     *                          synchronizations of subfolders will not check for changes again.
+     */
+    private void addToSyncContents(OCFile localFile, OCFile remoteFile, boolean serverUnchanged) {
+        if (localFile.isFolder()) {
+            /// to sync descendants
+            Intent intent = new Intent(mContext, OperationsService.class);
+            intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
+            intent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
+            intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, localFile.getRemotePath());
+            intent.putExtra(OperationsService.EXTRA_PUSH_ONLY, serverUnchanged);
+            mFoldersToSyncContents.add(intent);
 
-                }
+        } else if (!localFile.isDown()) {
+            mFilesForDirectDownload.add(localFile);
 
-            }
+        } else if (!localFile.isInConflict()) {
+            /// synchronization for regular files
+            SynchronizeFileOperation operation = new SynchronizeFileOperation(
+                localFile,
+                remoteFile,
+                mAccount,
+                serverUnchanged,
+                mContext
+            );
+            mFilesToSyncContents.add(operation);
         }
     }
 
@@ -467,7 +416,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
             throws OperationCancelledException {
 
         Log_OC.v(TAG, "Starting content synchronization... ");
-        RemoteOperationResult contentsResult = null;
+        RemoteOperationResult contentsResult;
         for (SyncOperation op: filesToSyncContents) {
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
@@ -480,29 +429,21 @@ public class SynchronizeFolderOperation extends SyncOperation {
                     mFailsInFileSyncsFound++;
                     if (contentsResult.getException() != null) {
                         Log_OC.e(TAG, "Error while synchronizing file : "
-                                +  contentsResult.getLogMessage(), contentsResult.getException());
+                            + contentsResult.getLogMessage(), contentsResult.getException());
                     } else {
                         Log_OC.e(TAG, "Error while synchronizing file : "
-                                + contentsResult.getLogMessage());
+                            + contentsResult.getLogMessage());
                     }
                 }
-                // TODO - use the errors count in notifications
             }   // won't let these fails break the synchronization process
         }
+        for (Intent intent: mFoldersToSyncContents) {
+            if (mCancellationRequested.get()) {
+                throw new OperationCancelledException();
+            }
+            mContext.startService(intent);
+        }
     }
-
-    
-    /**
-     * Creates and populates a new {@link com.owncloud.android.datamodel.OCFile}
-     * object with the data read from the server.
-     *
-     * @param remote    remote file read from the server (remote file or folder).
-     * @return          New OCFile instance representing the remote resource described by we.
-     */
-    private OCFile fillOCFile(RemoteFile remote) {
-        return FileStorageUtils.fillOCFile(remote);
-    }
-
 
     /**
      * Scans the default location for saving local copies of files searching for
@@ -535,14 +476,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
             return path;
         }
         return FileStorageUtils.getDefaultSavePathFor(mAccount.name, mLocalFolder);
-    }
-
-    private void startSyncFolderOperation(String path){
-        Intent intent = new Intent(mContext, OperationsService.class);
-        intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
-        intent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
-        intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, path);
-        mContext.startService(intent);
     }
 
     public String getRemotePath() {

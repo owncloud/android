@@ -71,7 +71,6 @@ import com.owncloud.android.operations.common.SyncOperation;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -87,7 +86,6 @@ public class OperationsService extends Service {
     public static final String EXTRA_NEWNAME = "NEWNAME";
     public static final String EXTRA_REMOVE_ONLY_LOCAL = "REMOVE_LOCAL_COPY";
     public static final String EXTRA_CREATE_FULL_PATH = "CREATE_FULL_PATH";
-    public static final String EXTRA_SYNC_FILE_CONTENTS = "SYNC_FILE_CONTENTS";
     public static final String EXTRA_RESULT = "RESULT";
     public static final String EXTRA_NEW_PARENT_PATH = "NEW_PARENT_PATH";
     public static final String EXTRA_FILE = "FILE";
@@ -98,6 +96,7 @@ public class OperationsService extends Service {
     public static final String EXTRA_SHARE_PERMISSIONS = "SHARE_PERMISSIONS";
     public static final String EXTRA_SHARE_PUBLIC_UPLOAD = "SHARE_PUBLIC_UPLOAD";
     public static final String EXTRA_SHARE_ID = "SHARE_ID";
+    public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
@@ -669,20 +668,20 @@ public class OperationsService extends Service {
                 } else if (action.equals(ACTION_SYNC_FILE)) {
                     // Sync file
                     String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    boolean syncFileContents =
-                            operationIntent.getBooleanExtra(EXTRA_SYNC_FILE_CONTENTS, true);
                     operation = new SynchronizeFileOperation(
-                            remotePath, account, syncFileContents, getApplicationContext()
+                            remotePath, account, getApplicationContext()
                     );
                     
                 } else if (action.equals(ACTION_SYNC_FOLDER)) {
                     // Sync folder (all its descendant files are sync'ed)
                     String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                    boolean pushOnly = operationIntent.getBooleanExtra(EXTRA_PUSH_ONLY, false);
                     operation = new SynchronizeFolderOperation(
                             this,                       // TODO remove this dependency from construction time
                             remotePath,
                             account, 
-                            System.currentTimeMillis()  // TODO remove this dependency from construction time
+                            System.currentTimeMillis(),  // TODO remove this dependency from construction time
+                            pushOnly
                     );
 
                 } else if (action.equals(ACTION_MOVE_FILE)) {
@@ -797,4 +796,5 @@ public class OperationsService extends Service {
         }
         Log_OC.d(TAG, "Called " + count + " listeners");
     }
+
 }
