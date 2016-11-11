@@ -47,28 +47,42 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class ReadRemoteFolderOperation extends RemoteOperation {
 
-	private static final String TAG = ReadRemoteFolderOperation.class.getSimpleName();
+    private static final String TAG = ReadRemoteFolderOperation.class.getSimpleName();
 
-	private String mRemotePath;
-	private ArrayList<Object> mFolderAndFiles;
-	
-	/**
+    private static final String IF_NONE_MATCH_HEADER = "If-None-Match";
+
+    private String mRemotePath;
+    private String mETagToNotMatch;
+    private ArrayList<Object> mFolderAndFiles;
+
+    /**
      * Constructor
      * 
      * @param remotePath		Remote path of the file. 
      */
-	public ReadRemoteFolderOperation(String remotePath) {
-		mRemotePath = remotePath;
-	}
+    public ReadRemoteFolderOperation(String remotePath) {
+        mRemotePath = remotePath;
+        mETagToNotMatch = "";
+    }
 
-	/**
+    /**
+     * Constructor
+     *
+     * @param remotePath		Remote path of the file.
+     */
+    public ReadRemoteFolderOperation(String remotePath, String eTagToNotMatch) {
+        mRemotePath = remotePath;
+        mETagToNotMatch = (eTagToNotMatch == null) ? "" : eTagToNotMatch;
+    }
+
+    /**
      * Performs the read operation.
      * 
      * @param   client      Client object to communicate with the remote ownCloud server.
      */
-	@Override
-	protected RemoteOperationResult run(OwnCloudClient client) {
-		RemoteOperationResult result = null;
+    @Override
+    protected RemoteOperationResult run(OwnCloudClient client) {
+        RemoteOperationResult result = null;
         PropFindMethod query = null;
         
         try {
@@ -76,13 +90,17 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
                     WebdavUtils.getAllPropSet(),    // PropFind Properties
                     DavConstants.DEPTH_1);
+            if (mETagToNotMatch.length() > 0) {
+                query.addRequestHeader(IF_NONE_MATCH_HEADER, "\"" + mETagToNotMatch + "\"");
+            }
+
             int status = client.executeMethod(query);
 
             // check and process response
             boolean isSuccess = (
                     status == HttpStatus.SC_MULTI_STATUS ||
                     status == HttpStatus.SC_OK
-		            );
+                    );
             if (isSuccess) {
             	// get data from remote folder 
             	MultiStatus dataInServer = query.getResponseBodyAsMultiStatus();
@@ -95,7 +113,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             		result.setData(mFolderAndFiles);
             	}
             } else {
-                // synchronization failed
+                // synchronization failed, or no change in folder (mETagToNotMatch matched)
                 client.exhaustResponse(query.getResponseBodyAsStream());
                 result = new RemoteOperationResult(false, status, query.getResponseHeaders());
             }
@@ -120,10 +138,6 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             
         }
         return result;
-	}
-
-    public boolean isMultiStatus(int status) {
-        return (status == HttpStatus.SC_MULTI_STATUS); 
     }
 
     /**

@@ -61,8 +61,8 @@ import javax.net.ssl.SSLException;
  */
 public class RemoteOperationResult implements Serializable {
 
-	/** Generated - should be refreshed every time the class changes!! */;
-    private static final long serialVersionUID = 1129130415603799707L;
+    /** Generated - should be refreshed every time the class changes!! */;
+    private static final long serialVersionUID = -1909603208238358633L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
 
@@ -100,19 +100,20 @@ public class RemoteOperationResult implements Serializable {
         ACCOUNT_NOT_THE_SAME,
         INVALID_CHARACTER_IN_NAME,
         SHARE_NOT_FOUND,
-		LOCAL_STORAGE_NOT_REMOVED,
-		FORBIDDEN,
-		SHARE_FORBIDDEN,
-		OK_REDIRECT_TO_NON_SECURE_CONNECTION, 
-		INVALID_MOVE_INTO_DESCENDANT,
+        LOCAL_STORAGE_NOT_REMOVED,
+        FORBIDDEN,
+        SHARE_FORBIDDEN,
+        OK_REDIRECT_TO_NON_SECURE_CONNECTION,
+        INVALID_MOVE_INTO_DESCENDANT,
         INVALID_COPY_INTO_DESCENDANT,
-		PARTIAL_MOVE_DONE,
+        PARTIAL_MOVE_DONE,
         PARTIAL_COPY_DONE,
         SHARE_WRONG_PARAMETER,
         WRONG_SERVER_RESPONSE,
         INVALID_CHARACTER_DETECT_IN_SERVER,
         DELAYED_FOR_WIFI,
-        LOCAL_FILE_NOT_FOUND
+        LOCAL_FILE_NOT_FOUND,
+        NOT_MODIFIED
     }
 
     private boolean mSuccess = false;
@@ -127,7 +128,7 @@ public class RemoteOperationResult implements Serializable {
 
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
-		mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL ||
+        mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL ||
                 code == ResultCode.OK_NO_SSL ||
                 code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
         mData = null;
@@ -157,9 +158,11 @@ public class RemoteOperationResult implements Serializable {
             case HttpStatus.SC_INSUFFICIENT_STORAGE:
                 mCode = ResultCode.QUOTA_EXCEEDED;
                 break;
-			case HttpStatus.SC_FORBIDDEN:
-				mCode = ResultCode.FORBIDDEN;
+            case HttpStatus.SC_FORBIDDEN:
+                mCode = ResultCode.FORBIDDEN;
                 break;
+            case HttpStatus.SC_NOT_MODIFIED:
+                mCode = ResultCode.NOT_MODIFIED;
             default:
                 mCode = ResultCode.UNHANDLED_HTTP_CODE;
                 Log_OC.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
@@ -406,10 +409,13 @@ public class RemoteOperationResult implements Serializable {
                 return "The file name contains an forbidden character";
 
         } else if (mCode == ResultCode.FILE_NOT_FOUND) {
-	  	    return "Local file does not exist";
+           return "Local file does not exist";
 
- 	    } else if (mCode == ResultCode.SYNC_CONFLICT) {
+        } else if (mCode == ResultCode.SYNC_CONFLICT) {
             return "Synchronization conflict";
+
+        } else if (mCode == ResultCode.NOT_MODIFIED) {
+            return "Resource in server was not modified";
         }
 
         return "Operation finished with HTTP status code " + mHttpCode + " (" +
