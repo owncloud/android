@@ -65,6 +65,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.RefreshFolderOperation;
+import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -442,16 +443,16 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mSyncInProgress = true;
 
         // perform folder synchronization
-        RemoteOperation synchFolderOp = new RefreshFolderOperation( folder,
-                                                                        currentSyncTime,
-                                                                        false,
-                                                                        false,
-                                                                        false,
-                                                                        getStorageManager(),
-                                                                        getAccount(),
-                                                                        getApplicationContext()
-                                                                      );
-        synchFolderOp.execute(getAccount(), this, null, null);
+        SyncOperation synchFolderOp = new RefreshFolderOperation(
+            folder,
+            currentSyncTime,
+            false,
+            false,
+            false,
+            getAccount(),
+            getApplicationContext()
+        );
+        synchFolderOp.execute(getStorageManager(), this, null, null);
     }
 
     private Vector<OCFile> sortFileList(Vector<OCFile> files) {

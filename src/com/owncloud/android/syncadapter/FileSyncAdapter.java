@@ -272,12 +272,11 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             true,
             mIsShareSupported,
             false,
-            getStorageManager(),
             getAccount(),
             getContext()
         );
-        RemoteOperationResult result = synchFolderOp.execute(getClient());
-        
+        RemoteOperationResult result = synchFolderOp.execute(getClient(), getStorageManager());
+
         
         // synchronized folder -> notice to UI - ALWAYS, although !result.isSuccess
         sendLocalBroadcast(EVENT_FULL_SYNC_FOLDER_CONTENTS_SYNCED, folder.getRemotePath(), result);

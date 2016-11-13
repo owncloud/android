@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
- *  Remote operation performing the synchronization of the list of files contained 
+ *  Operation performing the synchronization of the list of files contained
  *  in a folder identified with its remote path.
  *  
  *  Fetches the list and properties of the files contained in the given folder, including their 

@@ -77,6 +77,7 @@ import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.UploadFileOperation;
+import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.fragment.FileDetailFragment;
@@ -1610,17 +1611,17 @@ public class FileDisplayActivity extends HookActivity
                         mSyncInProgress = true;
 
                         // perform folder synchronization
-                        RemoteOperation synchFolderOp = new RefreshFolderOperation(folder,
+                        SyncOperation synchFolderOp = new RefreshFolderOperation(
+                            folder,
                             currentSyncTime,
                             false,
                             getFileOperationsHelper().isSharedSupported(),
                             ignoreETag,
-                            getStorageManager(),
                             getAccount(),
                             getApplicationContext()
                         );
                         synchFolderOp.execute(
-                            getAccount(),
+                            getStorageManager(),
                             MainApp.getAppContext(),
                             null,   // unneeded, handling via SyncBroadcastReceiver
                             null
