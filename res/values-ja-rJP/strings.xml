@@ -73,6 +73,7 @@
   <string name="file_list_loading">読込中...</string>
   <string name="file_list_no_app_for_file_type">ファイルタイプ に対応するアプリはありません！</string>
   <string name="local_file_list_empty">このフォルダーにはファイルがありません。</string>
+  <string name="local_file_list_empty_just_folders">このフォルダにはフォルダがありません。</string>
   <string name="upload_list_empty">ファイルがありません。</string>
   <string name="file_list_folder">フォルダー</string>
   <string name="file_list_folders">フォルダー</string>
@@ -229,6 +230,7 @@
   <string name="confirmation_remove_file_alert">本当に %1$s を削除しますか？</string>
   <string name="confirmation_remove_folder_alert">本当に %1$s およびそのコンテンツを削除してもよろしいですか？</string>
   <string name="confirmation_remove_local">ローカルのみ</string>
+  <string name="confirmation_remove_account_alert">本当にアカウント %1$s を削除しますか？</string>
   <string name="remove_success_msg">削除に成功しました</string>
   <string name="remove_fail_msg">削除を完了できませんでした</string>
   <string name="rename_dialog_title">新しい名前を入力</string>
@@ -367,6 +369,9 @@
   <string name="file_list__footer__files">%1$d ファイル</string>
   <string name="file_list__footer__files_and_folder">%1$d ファイル、1 フォルダー</string>
   <string name="file_list__footer__files_and_folders">%1$d ファイル、%2$d フォルダー</string>
+  <string name="prefs_instant_upload_source_path_title">カメラフォルダ (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">必須</string>
+  <string name="prefs_instant_upload_source_path_title_optional">任意</string>
   <string name="prefs_instant_behaviour_dialogTitle">オリジナルファイルについて</string>
   <string name="prefs_instant_behaviour_title">オリジナルファイルは、... になります。</string>
   <string name="upload_copy_files">ファイルをコピー</string>
