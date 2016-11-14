@@ -122,9 +122,8 @@ public class RenameFileOperation extends SyncOperation {
 
     private void saveLocalDirectory(String parent) {
         // stop observing changes if available offline
-        boolean isAvailableOffline = mFile.getAvailableOfflineStatus().equals(
-            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
-        );
+        boolean isAvailableOffline =
+            (mFile.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE);
             // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
         if (isAvailableOffline) {
             pauseObservation();
@@ -144,9 +143,8 @@ public class RenameFileOperation extends SyncOperation {
 
         if (mFile.isDown()) {
             // stop observing changes if available offline
-            boolean isAvailableOffline = mFile.getAvailableOfflineStatus().equals(
-                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
-            );
+            boolean isAvailableOffline =
+                mFile.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE;
                 // OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT requires no action
             if (isAvailableOffline) {
                 pauseObservation();

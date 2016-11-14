@@ -56,12 +56,12 @@ implements ConfirmationDialogFragmentListener {
 
         boolean containsFolder = false;
         boolean containsDown = false;
-        boolean containsFavorite = false;
+        boolean containsAvailableOffline = false;
         for (OCFile file: files) {
             if (file.isFolder()) containsFolder = true;
             if (file.isDown()) containsDown = true;
             if (file.getAvailableOfflineStatus() != OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
-                containsFavorite = true;
+                containsAvailableOffline = true;
             }
         }
 
@@ -81,7 +81,7 @@ implements ConfirmationDialogFragmentListener {
 
         }
 
-        int localRemoveButton = (!containsFavorite && (containsFolder || containsDown)) ?
+        int localRemoveButton = (!containsAvailableOffline && (containsFolder || containsDown)) ?
             R.string.confirmation_remove_local :
             -1;
 
