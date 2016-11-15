@@ -290,8 +290,8 @@ public class RefreshFolderOperation extends SyncOperation {
         Log_OC.d(TAG, "Fetching list of files in  " + mAccount.name + mLocalFolder.getRemotePath() + ", if changed");
 
         ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(
-            mIgnoreETag ? "" : mLocalFolder.getRemotePath(),
-            mLocalFolder.getEtag()
+            mLocalFolder.getRemotePath(),
+            mIgnoreETag ? "" : mLocalFolder.getEtag()
         );
         return readFolderOperation.execute(client);
     }
