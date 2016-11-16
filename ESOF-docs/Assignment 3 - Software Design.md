@@ -4,6 +4,8 @@
 
 ## *Logical View*
 
+![LogicalView](/ESOF-docs/resources/logicalview.png)
+
 ## *Development View*
 
 ## *Deployment View*
