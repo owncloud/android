@@ -3,7 +3,7 @@
 ## Introdução
 
 O modelo de vistas 4+1 de Arquitetura de *Software* permite reunir os vários pontos de vista sobre o mesmo *software* para dar uma perspectiva completa acerca deste. Este modelo baseia-se em quatro componentes, mais concretamente: vista lógica, representada pelo diagrama de pacotes do projeto; vista de implementação, representada pelo diagrama de componentes, vista de processo, representada pelos diagrama de atividades e de sequência, e a vista de *deployment*, representada pelo diagrama de *deployment*.
-Quanto ao padrão arquitectural seguido pelo projecto, não recebemos resposta do nosso contacto, no entanto, consideramos que seja ou, pelo menos, aproxima-se do padrão *Client-server and N-tier systems*, pois os dados encontram-se tanto no dispositivo *Android* como no servidor, não seguindo o padrão *Repositories*, e é possível ter *n* dispositivos a sincronizar informação com o servidor.
+Quanto ao padrão arquitectural seguido pelo projecto, não recebemos resposta do nosso contacto. Estivemos a analisar os padrões possíveis e pensamos que sejam o *Client-server and N-tier systems* e o *Repositories*,  pois os dados encontram-se tanto nos dispositivos *Android* (ou outro SO) como no servidor e o servidor fornece ficheiros aos dispositivos, tal como os dispositivos fornecem ficheiros ao servidor. No entanto, existe uma componente *data centric*, já que o servidor é quem “manda” (fornece os dados) e é actualizado pelos clientes, quando necessário (recebendo dados novos), podendo ser mais correcto o padrão *Repositories*.
 
 ## *Logical View*
 
