@@ -13,6 +13,9 @@
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_sort_title">Ordenar por</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Mas nuevo - Mas antiguo</string>
+  <string name="actionbar_sort_by_size">Mas grande - Mas pequeño</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>
@@ -69,6 +72,7 @@
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">¡Aplicación no encontrada para el tipo de archivo!</string>
   <string name="local_file_list_empty">No hay archivos en esta carpeta.</string>
+  <string name="local_file_list_empty_just_folders">No hay archivos en esta carpeta</string>
   <string name="upload_list_empty">Sin datos para subir.</string>
   <string name="file_list_folder">carpeta</string>
   <string name="file_list_folders">carpetas</string>
@@ -225,6 +229,7 @@
   <string name="confirmation_remove_file_alert">¿Realmente desea eliminar %1$s?</string>
   <string name="confirmation_remove_folder_alert">¿Realmente desea eliminar %1$s y todo su contenido?</string>
   <string name="confirmation_remove_local">Sólo local</string>
+  <string name="confirmation_remove_account_alert">Realmente quiere eliminar la cuenta %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -363,6 +368,9 @@
   <string name="file_list__footer__files">%1$d archivos</string>
   <string name="file_list__footer__files_and_folder">%1$d archivos, 1 carpeta</string>
   <string name="file_list__footer__files_and_folders">%1$d archivos, %2$d carpetas</string>
+  <string name="prefs_instant_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">requerido</string>
+  <string name="prefs_instant_upload_source_path_title_optional">opcional</string>
   <string name="prefs_instant_behaviour_dialogTitle">El archivo original será...</string>
   <string name="prefs_instant_behaviour_title">El archivo original será...</string>
   <string name="upload_copy_files">Copiar archivo</string>
@@ -409,4 +417,8 @@
   <string name="local_file_not_found_toast">El archivo no se encuentra en el servidor local de archivos.</string>
   <string name="confirmation_remove_files_alert">¿Realmente deseas eliminar los elementos seleccionados?</string>
   <string name="confirmation_remove_folders_alert">¿Realmente deseas eliminar los elementos seleccionados y su contenido?</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">%d seleccionado</item>
+    <item quantity="other">%d seleccionados</item>
+  </plurals>
 </resources>
