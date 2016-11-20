@@ -13,9 +13,9 @@ Após uma análise à estrutura e ao código do projeto, elaboramos um diagrama,
 
 ## *Development View*
 
-Na *Development View*, também conhecido como *UML component diagram*, é suposto mostrar neste caso os acordos estabelecidos na aplicação e entre a aplicação e as ligações exteriores. 
-A aplicação Owncloud é toda construída em *Java* para *Android* tendo portanto as interfaces internas do *Android* e como é uma aplicação de nuvem que permite armazenar qualquer tipo de ficheiro, torna o diagrama mais simples, havendo apenas um caso fundamental que é a ligação *Client-server*.
-O pedido para sincronizar é feito do dispositivo para o servidor, esta informação é comunicada por meio de uma interface ao servidor que trata deste processo e atualiza os ficheiros se aceitar as credenciais.
+O diagrama de *components*, também conhecido como *UML component diagram*, mostra as relações estabelecidas entre os componentes da aplicação, assim como entre a aplicação e os componentes externos. 
+Como é uma aplicação que permite armazenar qualquer tipo de ficheiro na *cloud*, torna o diagrama mais simples, havendo apenas um caso fundamental que é a ligação *Client-server*.
+O pedido para a sincronização é feito do dispositivo para o servidor, sendo a informação comunicada por meio de uma interface ao servidor que trata deste processo e atualiza os ficheiros, caso as credenciais de acesso sejam aceites.
 
 ![DevelopmentView](/ESOF-docs/resources/componentview.png)
 
