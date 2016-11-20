@@ -31,3 +31,17 @@ A vista de processo pode ser representada através de um diagrama de actividades
 ![ProcessView](/ESOF-docs/resources/activitydiagram.png)
 
 ![ProcessView](/ESOF-docs/resources/sequencediagram.png)
+
+## Contribuições
+
+Diogo Cruz - up201105483@fe.up.pt - 25%
+
+Luís Barbosa - up201405729@fe.up.pt - 25%
+
+Paulo Santos - up201403745@fe.up.pt - 25%
+
+Sérgio Ferreira - up201403074@fe.up.pt - 25%
+
+## Bibliografia
+
+* Slides teóricos moodle
