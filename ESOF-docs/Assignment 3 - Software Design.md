@@ -19,3 +19,4 @@ O diagrama de *deployment*, também conhecido como *UML deployment diagram*, per
 ![DeploymentView](/ESOF-docs/resources/deploymentview.PNG)
 
 ## *Process View*
+A vista de processo pode ser representada através de um diagrama de actividades ou através de um diagrama de sequência, também conhecidos como *UML activity diagram* e *UML sequence diagram*, respectivamente. Esta vista permite apresentar a forma como o sistema ou partes dos sistema funcionam. De seguida, vamos apresentar um diagrama de actividades, com um elevado nível de abstração, indicativo da forma como o sistema processa a sincronização de ficheiros. Para além desse diagrama, vamos apresentar um diagrama de sequência, com um nível de abstração consideravelmente menor, indicativo da forma como o sistema move um ficheiro, movimento o qual é feito no cliente e no servidor.
