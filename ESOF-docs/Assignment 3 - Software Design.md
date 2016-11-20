@@ -11,8 +11,6 @@ Após uma análise à estrutura e ao código do projeto, elaboramos um diagrama,
 
 ![LogicalView](/ESOF-docs/resources/logicalview.png)
 
-## *Development View*
-
 ## *Deployment View*
 
 O diagrama de *deployment*, também conhecido como *UML deployment diagram*, permite mostrar de que forma é que os artefactos de um sistema são distribuídos em nós de *hardware*. Os artefactos de um sistema são manifestações físicas dos seus componentes de *software*, e relacionam-se com determinados componentes de *hardware*.
