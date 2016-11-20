@@ -11,6 +11,10 @@ Após uma análise à estrutura e ao código do projeto, elaboramos um diagrama,
 
 ![LogicalView](/ESOF-docs/resources/logicalview.png)
 
+## *Development View*
+
+![DevelopmentView](/ESOF-docs/resources/componentview.png)
+
 ## *Deployment View*
 
 O diagrama de *deployment*, também conhecido como *UML deployment diagram*, permite mostrar de que forma é que os artefactos de um sistema são distribuídos em nós de *hardware*. Os artefactos de um sistema são manifestações físicas dos seus componentes de *software*, e relacionam-se com determinados componentes de *hardware*.
@@ -20,6 +24,6 @@ O diagrama de *deployment*, também conhecido como *UML deployment diagram*, per
 ## *Process View*
 A vista de processo pode ser representada através de um diagrama de actividades ou através de um diagrama de sequência, também conhecidos como *UML activity diagram* e *UML sequence diagram*, respectivamente. Esta vista permite apresentar a forma como o sistema ou partes dos sistema funcionam. De seguida, vamos apresentar um diagrama de actividades, com um elevado nível de abstração, indicativo da forma como o sistema processa a sincronização de ficheiros. Para além desse diagrama, vamos apresentar um diagrama de sequência, com um nível de abstração consideravelmente menor, indicativo da forma como o sistema move um ficheiro, movimento o qual é feito no cliente e no servidor.
 
-![Process View](/ESOF-docs/resources/activitydiagram.png)
+![ProcessView](/ESOF-docs/resources/activitydiagram.png)
 
-![Process View](/ESOF-docs/resources/sequencediagram.png)
+![ProcessView](/ESOF-docs/resources/sequencediagram.png)
