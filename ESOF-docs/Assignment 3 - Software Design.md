@@ -7,7 +7,7 @@ Quanto ao padrão arquitectural seguido pelo projecto, não recebemos resposta d
 
 ## *Logical View*
 
-Após uma análise à estrutura e ao código do projeto, elaboramos um diagrama, também conhecido como *UML packages diagram*, que demonstra como o sistema está estruturado, incluindo os principais *packages* e suas relações. 
+Após uma análise à estrutura e ao código do projeto, elaboramos um diagrama, também conhecido como *UML packages diagram*, que demonstra como o sistema está estruturado, incluindo os principais *packages* e suas relações.
 
 ![LogicalView](/ESOF-docs/resources/logicalview.png)
 
@@ -21,3 +21,7 @@ O diagrama de *deployment*, também conhecido como *UML deployment diagram*, per
 
 ## *Process View*
 A vista de processo pode ser representada através de um diagrama de actividades ou através de um diagrama de sequência, também conhecidos como *UML activity diagram* e *UML sequence diagram*, respectivamente. Esta vista permite apresentar a forma como o sistema ou partes dos sistema funcionam. De seguida, vamos apresentar um diagrama de actividades, com um elevado nível de abstração, indicativo da forma como o sistema processa a sincronização de ficheiros. Para além desse diagrama, vamos apresentar um diagrama de sequência, com um nível de abstração consideravelmente menor, indicativo da forma como o sistema move um ficheiro, movimento o qual é feito no cliente e no servidor.
+
+![Process View](/ESOF-docs/resources/activitydiagram.png)
+
+![Process View](/ESOF-docs/resources/sequencediagram.png)
