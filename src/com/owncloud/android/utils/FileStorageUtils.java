@@ -146,7 +146,7 @@ public class FileStorageUtils {
      * @param remote    remote file read from the server (remote file or folder).
      * @return          New OCFile instance representing the remote resource described by remote.
      */
-    public static OCFile fillOCFile(RemoteFile remote) {
+    public static OCFile createOCFileFrom(RemoteFile remote) {
         OCFile file = new OCFile(remote.getRemotePath());
         file.setCreationTimestamp(remote.getCreationTimestamp());
         if (remote.getMimeType().equalsIgnoreCase("DIR")){

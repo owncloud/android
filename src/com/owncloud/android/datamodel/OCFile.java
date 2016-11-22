@@ -759,4 +759,19 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         return (permissions != null && permissions.contains(PERMISSION_SHARED_WITH_ME));
     }
 
+    public void copyLocalPropertiesFrom(OCFile sourceFile) {
+        setParentId(sourceFile.getParentId());
+        setFileId(sourceFile.getFileId());
+        setAvailableOfflineStatus(sourceFile.getAvailableOfflineStatus());
+        setLastSyncDateForData(sourceFile.getLastSyncDateForData());
+        setModificationTimestampAtLastSyncForData(
+            sourceFile.getModificationTimestampAtLastSyncForData()
+        );
+        setStoragePath(sourceFile.getStoragePath());
+        setPublicLink(sourceFile.getPublicLink());
+        setShareViaLink(sourceFile.isSharedViaLink());
+        setShareWithSharee(sourceFile.isSharedWithSharee());
+        setEtagInConflict(sourceFile.getEtagInConflict());
+    }
+
 }

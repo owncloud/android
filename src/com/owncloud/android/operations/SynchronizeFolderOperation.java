@@ -31,7 +31,6 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -253,9 +252,10 @@ public class SynchronizeFolderOperation extends SyncOperation {
         FileDataStorageManager storageManager = getStorageManager();
         
         // parse data from remote folder
-        OCFile remoteFolder = FileStorageUtils.fillOCFile((RemoteFile) folderAndFiles.get(0));
-        remoteFolder.setParentId(mLocalFolder.getParentId());
-        remoteFolder.setFileId(mLocalFolder.getFileId());
+        OCFile remoteFolder = FileStorageUtils.createOCFileFrom(
+            (RemoteFile) folderAndFiles.get(0)
+        );
+        remoteFolder.copyLocalPropertiesFrom(mLocalFolder);
 
         Log_OC.d(TAG, "Remote folder " + mLocalFolder.getRemotePath()
                 + " changed - starting update of local data ");
@@ -281,11 +281,10 @@ public class SynchronizeFolderOperation extends SyncOperation {
         for (int i=1; i<folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
             r = (RemoteFile) folderAndFiles.get(i);
-            remoteFile = FileStorageUtils.fillOCFile(r);
+            remoteFile = FileStorageUtils.createOCFileFrom(r);
 
             /// new OCFile instance to merge fresh data from server with local state
-            updatedLocalFile = FileStorageUtils.fillOCFile(r);
-            updatedLocalFile.setParentId(mLocalFolder.getFileId());
+            updatedLocalFile = FileStorageUtils.createOCFileFrom(r);
 
             /// retrieve local data for the read file
             localFile = localFilesMap.remove(remoteFile.getRemotePath());
@@ -293,28 +292,18 @@ public class SynchronizeFolderOperation extends SyncOperation {
             /// add to updatedFile data about LOCAL STATE (not existing in server)
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
             if (localFile != null) {
-                updatedLocalFile.setFileId(localFile.getFileId());
-                updatedLocalFile.setAvailableOfflineStatus(localFile.getAvailableOfflineStatus());
-                updatedLocalFile.setLastSyncDateForData(localFile.getLastSyncDateForData());
-                updatedLocalFile.setModificationTimestampAtLastSyncForData(
-                        localFile.getModificationTimestampAtLastSyncForData()
-                );
-                updatedLocalFile.setStoragePath(localFile.getStoragePath());
-                // eTag will not be updated unless file CONTENTS are synchronized
+                updatedLocalFile.copyLocalPropertiesFrom(localFile);
+                // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag(localFile.getEtag());
                 if (!updatedLocalFile.isFolder() &&
                     remoteFile.isImage() &&
                     remoteFile.getModificationTimestamp() != localFile.getModificationTimestamp()) {
-
                     updatedLocalFile.setNeedsUpdateThumbnail(true);
-                    Log.d(TAG, "Image " + remoteFile.getFileName() + " updated on the server");
                 }
-                updatedLocalFile.setPublicLink(localFile.getPublicLink());
-                updatedLocalFile.setShareViaLink(localFile.isSharedViaLink());
-                updatedLocalFile.setShareWithSharee(localFile.isSharedWithSharee());
-                updatedLocalFile.setEtagInConflict(localFile.getEtagInConflict());
+
             } else {
-                // remote eTag will not be updated unless file CONTENTS are synchronized
+                updatedLocalFile.setParentId(mLocalFolder.getFileId());
+                // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag("");
             }
 
