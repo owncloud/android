@@ -293,6 +293,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         // loop to synchronize every child
         OCFile remoteFile, localFile, updatedLocalFile;
         RemoteFile r;
+        boolean serverUnchanged = false;
         for (int i=1; i<folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
             r = (RemoteFile) folderAndFiles.get(i);
@@ -326,7 +327,8 @@ public class SynchronizeFolderOperation extends SyncOperation {
             searchForLocalFileInDefaultPath(updatedLocalFile);
             
             /// classify file to sync/download contents later
-            addToSyncContents(updatedLocalFile, remoteFile, false);
+            serverUnchanged = updatedLocalFile.getEtag().equals(remoteFile.getEtag());
+            addToSyncContents(updatedLocalFile, remoteFile, serverUnchanged);
 
             updatedFiles.add(updatedLocalFile);
         }

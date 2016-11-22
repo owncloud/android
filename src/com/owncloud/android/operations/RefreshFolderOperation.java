@@ -277,7 +277,7 @@ public class RefreshFolderOperation extends SyncOperation {
 
     private void updateCapabilities(){
         GetCapabilitiesOperarion getCapabilities = new GetCapabilitiesOperarion();
-        RemoteOperationResult  result = getCapabilities.execute(getStorageManager(),mContext);
+        RemoteOperationResult  result = getCapabilities.execute(getStorageManager(), mContext);
         if (!result.isSuccess()){
             Log_OC.w(TAG, "Update Capabilities unsuccessfully");
         }
@@ -367,6 +367,7 @@ public class RefreshFolderOperation extends SyncOperation {
         // loop to update every child
         OCFile remoteFile, localFile, updatedLocalFile;
         RemoteFile r;
+        boolean serverUnchanged = false;
         for (int i=1; i<folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
             r = (RemoteFile) folderAndFiles.get(i);
@@ -400,7 +401,8 @@ public class RefreshFolderOperation extends SyncOperation {
             FileStorageUtils.searchForLocalFileInDefaultPath(updatedLocalFile, mAccount);
 
             /// prepare content synchronization for kept-in-sync files
-            addToSyncContentsIfAvailableOffline(updatedLocalFile, remoteFile, false);
+            serverUnchanged = updatedLocalFile.getEtag().equals(remoteFile.getEtag());
+            addToSyncContentsIfAvailableOffline(updatedLocalFile, remoteFile, serverUnchanged);
 
             updatedFiles.add(updatedLocalFile);
         }
