@@ -192,20 +192,29 @@ public class RefreshFolderOperation extends SyncOperation {
         result = fetchRemoteFolder(client);
 
         if (result.isSuccess()) {
-            // folder was updated in the server side
-            Log_OC.i(TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + " : changed");
-            mergeRemoteFolder(result.getData());
-            // request for the synchronization of KEPT-IN-SYNC file and folder contents
-            syncContents();
+            if (mIgnoreETag || folderChanged((RemoteFile)result.getData().get(0))) {
+                if (!mIgnoreETag) {
+                    // folder was updated in the server side
+                    Log_OC.i(
+                        TAG,
+                        "Checked " + mAccount.name + mLocalFolder.getRemotePath() + ", changed"
+                    );
+                } else {
+                    Log_OC.i(TAG, "Forced merge from server");
+                }
+                mergeRemoteFolder(result.getData());
+                syncContents(); // for available offline files
 
-        } else if (result.getCode() == ResultCode.NOT_MODIFIED) {
-            // no update in the server side, still need to handle local changes
-            Log_OC.i(TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + " : not changed");
-            preparePushOfLocalChangesForAvailableOfflineFiles();
-            mChildren = getStorageManager().getFolderContent(mLocalFolder);
-            // request for the synchronization of KEPT-IN-SYNC file and folder contents
-            syncContents();
-            result = new RemoteOperationResult(ResultCode.OK);
+            } else {
+                // folder was not updated in the server side
+                Log_OC.i(
+                    TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + ", not changed"
+                );
+                preparePushOfLocalChangesForAvailableOfflineFiles();
+                mChildren = getStorageManager().getFolderContent(mLocalFolder);
+                // request for the synchronization of KEPT-IN-SYNC file and folder contents
+                syncContents();
+            }
 
         } else {
             // fail fetching the server
@@ -286,13 +295,27 @@ public class RefreshFolderOperation extends SyncOperation {
      */
     @NonNull
     private RemoteOperationResult fetchRemoteFolder(OwnCloudClient client) {
-        Log_OC.d(TAG, "Fetching list of files in  " + mAccount.name + mLocalFolder.getRemotePath() + ", if changed");
+        Log_OC.d(
+            TAG,
+            "Fetching list of files in  " + mAccount.name + mLocalFolder.getRemotePath() + ", if changed"
+        );
 
         ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(
-            mLocalFolder.getRemotePath(),
-            mIgnoreETag ? "" : mLocalFolder.getEtag()
+            mLocalFolder.getRemotePath()
         );
         return readFolderOperation.execute(client);
+    }
+
+
+    /**
+     * Compares stored ETag of folder being synchronized to determine if there were changes in the server
+     * from the last sync.
+     *
+     * @param remoteFolder      Properties of the remote copy of the folder
+     * @return                  'true' if ETag of local and remote folder do not match.
+     */
+    private boolean folderChanged(RemoteFile remoteFolder) {
+        return (!mLocalFolder.getEtag().equals(remoteFolder.getEtag()));
     }
 
 

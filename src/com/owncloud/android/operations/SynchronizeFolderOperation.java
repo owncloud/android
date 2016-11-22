@@ -146,7 +146,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
         
@@ -154,39 +154,47 @@ public class SynchronizeFolderOperation extends SyncOperation {
             // get locally cached information about folder
             mLocalFolder = getStorageManager().getFileByPath(mRemotePath);
 
-            if (!mPushOnly) {
-                // get list of files in folder from remote server
-                result = fetchRemoteFolder(client);
-            }
-
-            if (result != null && result.isSuccess()) {
-                // folder was updated in the server side
-                Log_OC.i(TAG, "Checked " + mAccount.name + mRemotePath + " : changed");
-
-                mergeRemoteFolder(result.getData());
-                syncContents();
-
-            } else if (mPushOnly || result.getCode() == ResultCode.NOT_MODIFIED) {
-                // no update in the server side, still need to handle local changes
-
-                Log_OC.i(TAG, "Checked " + mAccount.name + mRemotePath + " : not changed");
-
+            if (mPushOnly) {
+                // assuming there is no update in the server side, still need to handle local changes
+                Log_OC.i(TAG, "Push only sync of " + mAccount.name + mRemotePath);
                 preparePushOfLocalChanges();
                 syncContents();
-
                 result = new RemoteOperationResult(ResultCode.OK);
 
             } else {
-                // fail fetching the server
-                if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
-                    removeLocalFolder();
-                }
-                if (result.isException()) {
-                    Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath  + " : " +
-                        result.getLogMessage(), result.getException());
+                // get list of files in folder from remote server
+                result = fetchRemoteFolder(client);
+
+                if (result.isSuccess()) {
+                    if (folderChanged((RemoteFile)result.getData().get(0))) {
+                        // folder was updated in the server side
+                        Log_OC.i(
+                            TAG, "Checked " + mAccount.name + mRemotePath + ", changed"
+                        );
+                        mergeRemoteFolder(result.getData());
+                        syncContents();
+
+                    } else {
+                        // folder was not updated in the server side
+                        Log_OC.i(
+                            TAG, "Checked " + mAccount.name + mRemotePath + ", not changed"
+                        );
+                        preparePushOfLocalChanges();
+                        syncContents();
+                    }
+
                 } else {
-                    Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
-                        result.getLogMessage());
+                    // fail fetching the server
+                    if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                        removeLocalFolder();
+                    }
+                    if (result.isException()) {
+                        Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath  + " : " +
+                            result.getLogMessage(), result.getException());
+                    } else {
+                        Log_OC.e(TAG, "Checked " + mAccount.name + mRemotePath + " : " +
+                            result.getLogMessage());
+                    }
                 }
             }
 
@@ -198,14 +206,12 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
     }
 
+
     /**
-     * Get list of files in folder from remote server, only if there were changes from the last time.
+     * Get list of files in folder from remote server.
      *
-     * Stored ETag of folder is used to determine if there were changes in the server from the last sync.
-     *
-     * @param client                            {@link OwnCloudClient} instance used to access the server.
-     * @return                                  Result of the fetch, including list of remote files in the
-     *                                          sync'ed folder, if changed from the last time.
+     * @param client      {@link OwnCloudClient} instance used to access the server.
+     * @return            Result of the fetch, including list of remote files in the sync'ed folder.
      * @throws OperationCancelledException
      */
     @NonNull
@@ -216,11 +222,20 @@ public class SynchronizeFolderOperation extends SyncOperation {
             throw new OperationCancelledException();
         }
 
-        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(
-            mRemotePath,
-            mLocalFolder.getEtag()
-        );
+        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
         return readFolderOperation.execute(client);
+    }
+
+
+    /**
+     * Compares stored ETag of folder being synchronized to determine if there were changes in the server
+     * from the last sync.
+     *
+     * @param remoteFolder      Properties of the remote copy of the folder
+     * @return                  'true' if ETag of local and remote folder do not match.
+     */
+    private boolean folderChanged(RemoteFile remoteFolder) {
+        return (!mLocalFolder.getEtag().equals(remoteFolder.getEtag()));
     }
 
 
