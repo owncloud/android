@@ -30,6 +30,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import com.owncloud.android.datamodel.OCFile;
 
@@ -84,7 +85,7 @@ public class RefreshFolderOperation extends SyncOperation {
     private Context mContext;
     
     /** Files and folders contained in the synchronized folder after a successful operation */
-    private List<OCFile> mChildren;
+    private List<Pair<OCFile, Boolean>> mChildrenToVisit;
 
     /** Counter of conflicts found between local and remote files */
     private int mConflictsFound;
@@ -107,6 +108,8 @@ public class RefreshFolderOperation extends SyncOperation {
     /** 'True' means that Etag will be ignored */
     private boolean mIgnoreETag;
 
+    private boolean mPushOnly;
+
     private List<SynchronizeFileOperation> mFilesToSyncContents;
 
     private List<Intent> mFoldersToSyncContents;
@@ -125,6 +128,10 @@ public class RefreshFolderOperation extends SyncOperation {
      *                                  change.  
      * @param   account                 ownCloud account where the folder is located.
      * @param   context                 Application context.
+     * @param   pushOnly                When 'true', it's assumed that the folder did not change in the
+     *                                  server, so data will not be fetched. Only local changes of
+     *                                  available offline files will be pushed. Only affects sync of files,
+     *                                  no other part of the operation (shares, capabilities...)
      */
     public RefreshFolderOperation(OCFile folder,
                                   long currentSyncTime,
@@ -132,7 +139,8 @@ public class RefreshFolderOperation extends SyncOperation {
                                   boolean isShareSupported,
                                   boolean ignoreETag,
                                   Account account,
-                                  Context context) {
+                                  Context context,
+                                  boolean pushOnly) {
         mLocalFolder = folder;
         mCurrentSyncTime = currentSyncTime;
         mSyncFullAccount = syncFullAccount;
@@ -143,6 +151,7 @@ public class RefreshFolderOperation extends SyncOperation {
         mIgnoreETag = ignoreETag;
         mFilesToSyncContents = new Vector<>();
         mFoldersToSyncContents = new Vector<>();
+        mPushOnly = pushOnly;
     }
     
     
@@ -159,13 +168,17 @@ public class RefreshFolderOperation extends SyncOperation {
     }
     
     /**
-     * Returns the list of files and folders contained in the synchronized folder, 
-     * if called after synchronization is complete.
-     * 
-     * @return  List of files and folders contained in the synchronized folder.
+     * Returns the list of children of the folder after the refresh, in a {@link Pair} with a boolean
+     * indicating if was detected as changed in the server or not.
+     *
+     * TODO persist in database remote ETag + local ETag per file, so that returning a collection of
+     * {@link OCFile}s is good enough.
+     *
+     * @return  List of pairs of child files and boolean flags set to 'true' if there are pending changes
+     *          in the server side.
      */
-    public List<OCFile> getChildren() {
-        return mChildren;
+    public List<Pair<OCFile, Boolean>> getChildrenToVisit() {
+        return mChildrenToVisit;
     }
     
     /**
@@ -188,45 +201,50 @@ public class RefreshFolderOperation extends SyncOperation {
             updateUserProfile();
         }
 
-        // get list of files in folder from remote server
-        result = fetchRemoteFolder(client);
-
-        if (result.isSuccess()) {
-            if (mIgnoreETag || folderChanged((RemoteFile)result.getData().get(0))) {
-                if (!mIgnoreETag) {
-                    // folder was updated in the server side
-                    Log_OC.i(
-                        TAG,
-                        "Checked " + mAccount.name + mLocalFolder.getRemotePath() + ", changed"
-                    );
-                } else {
-                    Log_OC.i(TAG, "Forced merge from server");
-                }
-                mergeRemoteFolder(result.getData());
-                syncContents(); // for available offline files
-
-            } else {
-                // folder was not updated in the server side
-                Log_OC.i(
-                    TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + ", not changed"
-                );
-                preparePushOfLocalChangesForAvailableOfflineFiles();
-                mChildren = getStorageManager().getFolderContent(mLocalFolder);
-                // request for the synchronization of KEPT-IN-SYNC file and folder contents
-                syncContents();
-            }
+        if (mPushOnly) {
+            // assuming there is no update in the server side, still need to handle local changes
+            Log_OC.i(TAG, "Push only refresh of " + mAccount.name + mLocalFolder.getRemotePath());
+            pushOnlySync();
+            result = new RemoteOperationResult(ResultCode.OK);
 
         } else {
-            // fail fetching the server
-            if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
-                removeLocalFolder();
-            }
-            if (result.isException()) {
-                Log_OC.e(TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + " : " +
-                    result.getLogMessage(), result.getException());
+            // get list of files in folder from remote server
+            result = fetchRemoteFolder(client);
+
+            if (result.isSuccess()) {
+                if (mIgnoreETag || folderChanged((RemoteFile) result.getData().get(0))) {
+                    if (!mIgnoreETag) {
+                        // folder was updated in the server side
+                        Log_OC.i(
+                            TAG,
+                            "Checked " + mAccount.name + mLocalFolder.getRemotePath() + ", changed"
+                        );
+                    } else {
+                        Log_OC.i(TAG, "Forced merge from server");
+                    }
+                    mergeRemoteFolder(result.getData());
+                    syncContents(); // for available offline files
+
+                } else {
+                    // folder was not updated in the server side
+                    Log_OC.i(
+                        TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + ", not changed"
+                    );
+                    pushOnlySync();
+                }
+
             } else {
-                Log_OC.e(TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + " : " +
-                    result.getLogMessage());
+                // fail fetching the server
+                if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                    removeLocalFolder();
+                }
+                if (result.isException()) {
+                    Log_OC.e(TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + " : " +
+                        result.getLogMessage(), result.getException());
+                } else {
+                    Log_OC.e(TAG, "Checked " + mAccount.name + mLocalFolder.getRemotePath() + " : " +
+                        result.getLogMessage());
+                }
             }
         }
 
@@ -283,6 +301,17 @@ public class RefreshFolderOperation extends SyncOperation {
         }
     }
 
+    private void pushOnlySync() {
+        preparePushOfLocalChangesForAvailableOfflineFiles();
+        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
+        mChildrenToVisit = new Vector<>(children.size());
+        for (OCFile child: children) {
+            mChildrenToVisit.add(new Pair<>(child, false));
+        }
+        // request for the synchronization of KEPT-IN-SYNC file and folder contents
+        syncContents();
+    }
+
     /**
      * Get list of files in folder from remote server, only if there were changes from the last time OR
      * if {@link #mIgnoreETag} is true.
@@ -337,7 +366,7 @@ public class RefreshFolderOperation extends SyncOperation {
      *  Synchronizes the data retrieved from the server about the contents of the target folder 
      *  with the current data in the local database.
      *  
-     *  Grants that mChildren is updated with fresh data after execution.
+     *  Grants that mChildrenToVisit is updated with fresh data after execution.
      *  
      *  @param folderAndFiles   Remote folder and children files in Folder 
      */
@@ -355,6 +384,7 @@ public class RefreshFolderOperation extends SyncOperation {
                 + " changed - starting update of local data ");
         
         List<OCFile> updatedFiles = new Vector<>(folderAndFiles.size() - 1);
+        mChildrenToVisit = new Vector<>(folderAndFiles.size() - 1);
         mFilesToSyncContents.clear();
 
         // get current data about local contents of the folder to synchronize
@@ -405,12 +435,12 @@ public class RefreshFolderOperation extends SyncOperation {
             addToSyncContentsIfAvailableOffline(updatedLocalFile, remoteFile, serverUnchanged);
 
             updatedFiles.add(updatedLocalFile);
+            mChildrenToVisit.add(new Pair<>(updatedLocalFile, !serverUnchanged));
         }
 
         // save updated contents in local database
         getStorageManager().saveFolder(remoteFolder, updatedFiles, localFilesMap.values());
 
-        mChildren = updatedFiles;
     }
 
     /**

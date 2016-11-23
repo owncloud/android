@@ -53,6 +53,7 @@ import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.util.Pair;
 
 /**
  * Implementation of {@link AbstractThreadedSyncAdapter} responsible for synchronizing 
@@ -184,7 +185,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             updateOCVersion();
             mCurrentSyncTime = System.currentTimeMillis();
             if (!mCancellation) {
-                synchronizeFolder(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
+                synchronizeFolder(getStorageManager().getFileByPath(OCFile.ROOT_PATH), false);
                 
             } else {
                 Log_OC.d(TAG, "Leaving synchronization before synchronizing the root folder " +
@@ -225,7 +226,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * locally saved. 
      * 
      * See {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}
-     * and {@link #synchronizeFolder(OCFile)}.
+     * and {@link #synchronizeFolder(OCFile, boolean)}.
      */
     @Override
     public void onSyncCanceled() {
@@ -259,8 +260,11 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      *  depth first strategy. 
      * 
      *  @param folder                   Folder to synchronize.
+     *  @param pushOnly                 When 'true', it's assumed that the folder did not change in the
+     *                                  server, so data will not be fetched. Only local changes of
+     *                                  available offline files will be pushed.
      */
-    private void synchronizeFolder(OCFile folder) {
+    private void synchronizeFolder(OCFile folder, boolean pushOnly) {
         
         if (mFailedResultsCounter > MAX_FAILED_RESULTS || isFinisher(mLastFailedResult))
             return;
@@ -273,7 +277,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             mIsShareSupported,
             false,
             getAccount(),
-            getContext()
+            getContext(),
+            pushOnly
         );
         RemoteOperationResult result = synchFolderOp.execute(getClient(), getStorageManager());
 
@@ -293,7 +298,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             }
             if (result.isSuccess()) {
                 // synchronize children folders 
-                List<OCFile> children = synchFolderOp.getChildren();
+                List<Pair<OCFile, Boolean>> children = synchFolderOp.getChildrenToVisit();
                 // beware of the 'hidden' recursion here!
                 syncChildren(children);
             }
@@ -340,24 +345,32 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Triggers the synchronization of any folder contained in the list of received files.
      *
-     * No consideration of etag here because it MUST walk down anyway, in case that kept-in-sync files
-     * have local changes.
-     * 
-     * @param files         Files to recursively synchronize.
+     * Every file comes with a boolean flag, set to true if the previous sync operation detected
+     * that there are pending changes in the file.
+     *
+     * Only folders that have pending changes in the server will be sync'd here.
+     *
+     * @param files         Files to recursively synchronize, with boolean value signaling if there are pending
+     *                      changes to sync in the server.
      */
-    private void syncChildren(List<OCFile> files) {
+    private void syncChildren(List<Pair<OCFile, Boolean>> files) {
         int i;
-        OCFile newFile;
+        Pair<OCFile, Boolean> pair;
         for (i=0; i < files.size() && !mCancellation; i++) {
-            newFile = files.get(i);
-            if (newFile.isFolder()) {
-                synchronizeFolder(newFile);
+            pair = files.get(i);
+            if (pair.first.isFolder()) {
+                synchronizeFolder(pair.first, !pair.second);
             }
         }
        
-        if (mCancellation && i <files.size()) Log_OC.d(TAG,
-                "Leaving synchronization before synchronizing " + files.get(i).getRemotePath() +
-                        " due to cancelation request");
+        if (mCancellation && i <files.size()) {
+            Log_OC.d(
+                TAG,
+                "Leaving synchronization before synchronizing " +
+                    files.get(i).first.getRemotePath() +
+                    " due to cancelation request"
+            );
+        }
     }
 
     

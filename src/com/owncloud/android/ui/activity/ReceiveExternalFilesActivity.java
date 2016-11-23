@@ -450,7 +450,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
             false,
             false,
             getAccount(),
-            getApplicationContext()
+            getApplicationContext(),
+            false
         );
         synchFolderOp.execute(getStorageManager(), this, null, null);
     }

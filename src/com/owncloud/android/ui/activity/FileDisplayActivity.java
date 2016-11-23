@@ -1618,7 +1618,8 @@ public class FileDisplayActivity extends HookActivity
                             getFileOperationsHelper().isSharedSupported(),
                             ignoreETag,
                             getAccount(),
-                            getApplicationContext()
+                            getApplicationContext(),
+                            false
                         );
                         synchFolderOp.execute(
                             getStorageManager(),

@@ -200,7 +200,8 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             getFileOperationsHelper().isSharedSupported(),
             ignoreETag,
             getAccount(),
-            getApplicationContext()
+            getApplicationContext(),
+            false
         );
         synchFolderOp.execute(getStorageManager(), this, null, null);
 
