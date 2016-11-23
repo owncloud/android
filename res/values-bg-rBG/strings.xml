@@ -13,6 +13,9 @@
   <string name="actionbar_send_file">Изпращане</string>
   <string name="actionbar_sort">Сортиране</string>
   <string name="actionbar_sort_title">Сортирай по</string>
+  <string name="actionbar_sort_by_name">А - Я</string>
+  <string name="actionbar_sort_by_date">Нови - Стари</string>
+  <string name="actionbar_sort_by_size">Големи - Малки</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Всички файлове</string>
@@ -52,6 +55,7 @@
   <string name="sync_string_files">Файлове</string>
   <string name="setup_btn_connect">Свързване</string>
   <string name="uploader_btn_upload_text">Качване</string>
+  <string name="uploader_top_message">Избери папка за качване</string>
   <string name="uploader_wrn_no_account_title">Няма открит профил</string>
   <string name="uploader_wrn_no_account_text">Все още няма %1$s създаден профила на устройството. Моля да се създаде такъв.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Настройка</string>
@@ -68,6 +72,7 @@
   <string name="file_list_loading">Зарежда…</string>
   <string name="file_list_no_app_for_file_type">Няма намерени приложения за типа фаил</string>
   <string name="local_file_list_empty">Няма файлове в тази папка.</string>
+  <string name="local_file_list_empty_just_folders">Няма папки в тази папка.</string>
   <string name="upload_list_empty">Няма налични актуализации.</string>
   <string name="file_list_folder">папка</string>
   <string name="file_list_folders">папки</string>
@@ -112,6 +117,7 @@
   <string name="uploader_upload_failed_credentials_error">Неуспешно качване, нужно е да влезете отново</string>
   <string name="uploads_view_title">Качено</string>
   <string name="uploads_view_group_current_uploads">Текущ</string>
+  <string name="uploads_view_group_failed_uploads">Неуспешно (натисни за нов опит)</string>
   <string name="uploads_view_group_finished_uploads">Качени</string>
   <string name="uploads_view_upload_status_succeeded">Завършено</string>
   <string name="uploads_view_upload_status_cancelled">Отказано</string>
@@ -154,6 +160,7 @@
   <string name="foreign_files_fail">Неуспешно преместване на някои файлове.</string>
   <string name="foreign_files_local_text">Локален: %1$s</string>
   <string name="foreign_files_remote_text">Отдалечен: %1$s</string>
+  <string name="upload_query_move_foreign_files">Няма достатъчно място за копиране на избраните файлове в папка %1$s. Искаш ли да бъдат преместени там?</string>
   <string name="pass_code_enter_pass_code">Моля, въведи парола за достъп</string>
   <string name="pass_code_configure_your_pass_code">Въведи парола за достъп</string>
   <string name="pass_code_configure_your_pass_code_explanation">Паролата ще се изисква при всяко стартиране на приложението</string>
@@ -215,11 +222,14 @@
 Моля, свържете се с администратора.</string>
   <string name="auth_can_not_auth_against_server">Неуспешно аутентикиране към този сървър</string>
   <string name="auth_account_does_not_exist">Профила не съществува на устройството все още</string>
+  <string name="favorite">Маркирай като налични когато няма мрежа</string>
+  <string name="unfavorite">Отмаркирай като налични когато няма мрежа</string>
   <string name="common_rename">Преименуване</string>
   <string name="common_remove">Премахване</string>
   <string name="confirmation_remove_file_alert">Наистина ли искате да изтриете %1$s ?</string>
   <string name="confirmation_remove_folder_alert">Наистина ли искате да премахнете %1$s и съдържанието му?</string>
   <string name="confirmation_remove_local">Само локално</string>
+  <string name="confirmation_remove_account_alert">Сигурни ли сте, че желаете да премахните профила %1$s?</string>
   <string name="remove_success_msg">Премахването успешно.</string>
   <string name="remove_fail_msg">Неуспешно прехамхване.</string>
   <string name="rename_dialog_title">Въведете ново име</string>
@@ -276,6 +286,7 @@
   <string name="instant_video_upload_on_wifi">Качване на видео само през WiFi</string>
   <string name="instant_upload_path">/InstantUpload</string>
   <string name="conflict_title">Файлов конфликт</string>
+  <string name="conflict_message">Кои файлове искаш за да запазиш? Ако избереш и двете версии, локалния файл ще има цифри добавени към името си.</string>
   <string name="conflict_keep_both">Запазване и на двата</string>
   <string name="conflict_use_local_version">Локална версия</string>
   <string name="conflict_use_server_version">Сървърна версия</string>
@@ -315,6 +326,7 @@
   <string name="downloader_download_file_not_found">Файлът вече не се намира на този сървър</string>
   <string name="prefs_category_accounts">Профили</string>
   <string name="prefs_add_account">Добавяне на профил</string>
+  <string name="drawer_manage_accounts">Управление на профилите</string>
   <string name="auth_redirect_non_secure_connection_title">Сигурна връзка е пренасочена по несигурен път.</string>
   <string name="actionbar_logger">Доклади</string>
   <string name="log_send_history_button">Изпрати историята</string>
@@ -332,12 +344,18 @@
   <string name="move_file_error">Настъпи грешка при опита за преместване на този файл или папка.</string>
   <string name="forbidden_permissions_move">за да преместиш този файл</string>
   <string name="copy_file_not_found">Невъзможно копиране. Проверете дали файлът съществува</string>
+  <string name="copy_file_invalid_into_descendent">Не е възможно да копираш папка в нейна под папка</string>
   <string name="copy_file_invalid_overwrite">Файлът вече съществува в отдалечената папка.</string>
+  <string name="copy_file_error">Настъпи грешка при опита за копиране на този файл или папка.</string>
   <string name="forbidden_permissions_copy">да копира този файл</string>
+  <string name="prefs_category_instant_uploading">Незабавно качване</string>
   <string name="prefs_category_details">Подробности</string>
+  <string name="prefs_instant_video_upload_path_title">Път за качване на видеа</string>
+  <string name="sync_folder_failed_content">Синхронизацията на папка %1$s не може да бъде завършена.</string>
   <string name="shared_subject_header">споделен</string>
   <string name="with_you_subject_header">с теб</string>
   <string name="subject_user_shared_with_you">%1$s споделен \"%2$s\" с теб</string>
+  <string name="subject_shared_with_you">\"%1$s\" е споделено с теб</string>
   <string name="auth_refresh_button">Обнови връзката</string>
   <string name="auth_host_address">Адрес на сървъра</string>
   <string name="common_error_out_memory">Няма достатъчно памет</string>
@@ -350,17 +368,35 @@
   <string name="file_list__footer__files">%1$d файла</string>
   <string name="file_list__footer__files_and_folder">%1$d файла, 1 папка</string>
   <string name="file_list__footer__files_and_folders">%1$d файла, %2$d папки</string>
+  <string name="prefs_instant_upload_source_path_title">Папка за камерата (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">задължителен</string>
+  <string name="prefs_instant_upload_source_path_title_optional">по избор</string>
+  <string name="prefs_instant_behaviour_dialogTitle">Оригиналният файл ще бъде...</string>
+  <string name="prefs_instant_behaviour_title">Оригиналният файл ще бъде...</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">запази в оригиналната папка</string>
   <string name="pref_behaviour_entries_move">преместено в папка на приложението</string>
   <string name="share_dialog_title">Споделяне</string>
   <string name="share_file">Сподели %1$s</string>
+  <string name="share_with_user_section_title">Споделяне с потребители и групаи</string>
+  <string name="share_no_users">Все още няма споделени с потребители данни </string>
+  <string name="share_add_user_or_group">Добави потребител или група</string>
   <string name="share_via_link_section_title">Връзка за споделяне</string>
   <string name="share_via_link_expiration_date_label">Задаване на дата на изтичане</string>
   <string name="share_via_link_password_label">Защитено с парола</string>
+  <string name="share_via_link_password_title">Подсигурен</string>
   <string name="share_via_link_edit_permission_label">Позволяване на редактиране</string>
+  <string name="share_get_public_link_button">Получаване на връзка</string>
+  <string name="share_with_title">Споделено с ...</string>
+  <string name="share_with_edit_title">Сподели с %1$s</string>
   <string name="share_search">Търсене</string>
+  <string name="search_users_and_groups_hint">Търси потребители и групи</string>
+  <string name="share_group_clarification">%1$s (група)</string>
+  <string name="share_remote_clarification">%1$s (отдалечен)</string>
+  <string name="share_known_remote_clarification">%1$s ( на %2$s )</string>
+  <string name="share_sharee_unavailable">За съжаление, версията на твоя сървър не позволява споделяне с потребители от клиенти.
+\nМоля, свържи се с администратора ти.</string>
   <string name="share_privilege_can_share">може да споделя</string>
   <string name="share_privilege_can_edit">може да променя</string>
   <string name="share_privilege_can_edit_create">създаване</string>
@@ -368,6 +404,20 @@
   <string name="share_privilege_can_edit_delete">изтриване</string>
   <string name="edit_share_unshare">Спри споделянето</string>
   <string name="edit_share_done">готово</string>
+  <string name="action_retry_uploads">Неуспешен опит</string>
+  <string name="action_clear_failed_uploads">Неуспешно изчистване</string>
+  <string name="action_clear_successful_uploads">Успешно изчистване</string>
+  <string name="action_clear_finished_uploads">Изчистването на всичко приключи</string>
+  <string name="action_switch_grid_view">Изглед решетка</string>
+  <string name="action_switch_list_view">Изглед списък</string>
+  <string name="manage_space_title">Управление на пространството</string>
+  <string name="manage_space_description">Настройки, като сертификатите на сървъра и базата данни от данните на %1$s ще бъдат безвъзвратно изтрити.
+\n\nИзтеглените файлове ще бъдат запазени непроменени.
+\n\nТова може да отнеме малко време.</string>
+  <string name="manage_space_clear_data">Изчисти данните</string>
+  <string name="manage_space_error">Някой файлове не могат да бъдат изтрити.</string>
+  <string name="permission_storage_access">Необходими са допълнителни права за качване &amp; сваляне на файлове</string>
+  <string name="local_file_not_found_toast">Файла не беше намерен на локалната файлова система</string>
   <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
   <plurals name="items_selected_count">

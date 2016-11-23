@@ -300,6 +300,7 @@
   <string name="downloader_download_file_not_found">이 파일을 서버에서 더 이상 사용할 수 없습니다</string>
   <string name="prefs_category_accounts">계정</string>
   <string name="prefs_add_account">계정 추가</string>
+  <string name="drawer_manage_accounts">계정 관리</string>
   <string name="auth_redirect_non_secure_connection_title">보안 연결이 보안되지 않는 연결로 전환되었습니다.</string>
   <string name="actionbar_logger">로그</string>
   <string name="log_send_mail_subject">%1$s Android 앱 로그</string>

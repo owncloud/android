@@ -21,9 +21,12 @@ package com.owncloud.android.ui.dialog;
 import com.owncloud.android.R;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +36,9 @@ import android.widget.TextView;
 
 public class LoadingDialog extends DialogFragment {
 
-    private String mMessage;
-    
-    public LoadingDialog() {
-        super();
-    }
-    
+    private static final String ARG_MESSAGE_ID = LoadingDialog.class.getCanonicalName() + ".ARG_MESSAGE_ID";
+    private static final String ARG_CANCELABLE = LoadingDialog.class.getCanonicalName() + ".ARG_CANCELABLE";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +46,20 @@ public class LoadingDialog extends DialogFragment {
         setCancelable(false);
     }
 
-    public LoadingDialog(String message) {
-        this.mMessage = message;
+    /**
+     * Public factory method to get dialog instances.
+     *
+     * @param messageId     Resource id for a message to show in the dialog.
+     * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
+     * @return              New dialog instance, ready to show.
+     */
+    public static LoadingDialog newInstance(int messageId, boolean cancelable) {
+        LoadingDialog fragment = new LoadingDialog();
+        Bundle args = new Bundle();
+        args.putInt(ARG_MESSAGE_ID, messageId);
+        args.putBoolean(ARG_CANCELABLE, cancelable);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -55,14 +67,17 @@ public class LoadingDialog extends DialogFragment {
         // Create a view by inflating desired layout
         View v = inflater.inflate(R.layout.loading_dialog, container,  false);
         
-        // set value
+        // set message
         TextView tv  = (TextView) v.findViewById(R.id.loadingText);
-        tv.setText(mMessage);
+        int messageId = getArguments().getInt(ARG_MESSAGE_ID, R.string.placeholder_sentence);
+        tv.setText(messageId);
 
         // set progress wheel color
         ProgressBar progressBar  = (ProgressBar) v.findViewById(R.id.loadingBar);
         progressBar.getIndeterminateDrawable().setColorFilter(
-                getResources().getColor(R.color.color_accent), PorterDuff.Mode.SRC_IN);
+            ContextCompat.getColor(getActivity(), R.color.color_accent),
+            PorterDuff.Mode.SRC_IN
+        );
         
         return v;
     }
@@ -71,6 +86,25 @@ public class LoadingDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        /// set cancellation behavior
+        boolean cancelable = getArguments().getBoolean(ARG_CANCELABLE, false);
+        dialog.setCancelable(cancelable);
+        if (!cancelable) {
+            // disable the back button
+            DialogInterface.OnKeyListener keyListener = new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialog, int keyCode,
+                                     KeyEvent event) {
+
+                    if( keyCode == KeyEvent.KEYCODE_BACK) {
+                        return true;
+                    }
+                    return false;
+                }
+            };
+            dialog.setOnKeyListener(keyListener);
+        }
         return dialog;
     }
 

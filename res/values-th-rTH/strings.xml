@@ -34,10 +34,10 @@
   <string name="prefs_instant_upload_summary">อัพโหลดรูปภาพที่ถ่ายโดยกล้องทันที</string>
   <string name="prefs_instant_video_upload">อัพโหลดวิดีโอทันที</string>
   <string name="prefs_instant_video_upload_summary">อัพโหลดวิดีโอที่บันทึกโดยกล้องทันที</string>
-  <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูลการใช้งาน</string>
+  <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูล</string>
   <string name="prefs_log_summary">นี้จะใช้เพื่อบันทึกปัญหาที่เกิดขึ้น</string>
   <string name="prefs_log_title_history">ประวัติย้อนหลังการเข้าใช้งาน</string>
-  <string name="prefs_log_summary_history">สิ่งนี้จะแสดงข้อมูลที่ถูกบันทึกไว้</string>
+  <string name="prefs_log_summary_history">สิ่งนี้จะแสดง log ที่ถูกบันทึกไว้</string>
   <string name="prefs_log_delete_history_button">ลบประวัติย้อนหลัง</string>
   <string name="prefs_help">ช่วยเหลือ</string>
   <string name="prefs_recommend">แนะนำให้เพื่อน</string>
@@ -228,6 +228,7 @@
   <string name="confirmation_remove_file_alert">คุณต้องการที่จะลบ %1$s?</string>
   <string name="confirmation_remove_folder_alert">คุณต้องการที่จะลบ %1$s และเนื้อหาของมัน?</string>
   <string name="confirmation_remove_local">เฉพาะต้นทางเท่านั้น</string>
+  <string name="confirmation_remove_account_alert">คุณต้องการลบบัญชี %1$s?</string>
   <string name="remove_success_msg">ลบเรียบร้อยแล้ว</string>
   <string name="remove_fail_msg">ไม่สามารถลบได้</string>
   <string name="rename_dialog_title">กรอกชื่อใหม่</string>
@@ -323,11 +324,12 @@
   <string name="downloader_download_file_not_found">ไฟล์ไม่พร้อมใช้งานบนเซิร์ฟเวอร์</string>
   <string name="prefs_category_accounts">บัญชี</string>
   <string name="prefs_add_account">เพิ่มบัญชี</string>
+  <string name="drawer_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="auth_redirect_non_secure_connection_title">เชื่อมต่อที่ปลอดภัยถูกเปลี่ยนเส้นทางผ่านเราเตอร์ที่ไม่ปลอดภัย</string>
-  <string name="actionbar_logger">บันทึก</string>
+  <string name="actionbar_logger">ไฟล์ Logs</string>
   <string name="log_send_history_button">ส่งประวัติการใช้งานย้อนหลัง</string>
-  <string name="log_send_no_mail_app">ไม่พบแอพสำหรับส่งบันทึกการใช้งาน กรุณาติดตั้งแอพสำหรับส่งเมล</string>
-  <string name="log_send_mail_subject">%1$s บันทึกแอพแอนดรอยด์</string>
+  <string name="log_send_no_mail_app">ไม่พบแอพสำหรับส่งข้อมูล log กรุณาติดตั้งแอพสำหรับส่งเมล</string>
+  <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอพแอนดรอยด์</string>
   <string name="log_progress_dialog_text">กำลังโหลดข้อมูล ...</string>
   <string name="saml_authentication_required_text">จำเป็นต้องยืนยันตัวตน</string>
   <string name="saml_authentication_wrong_pass">รหัสผ่านไม่ถูกต้อง</string>
@@ -364,6 +366,9 @@
   <string name="file_list__footer__files">%1$d ไฟล์</string>
   <string name="file_list__footer__files_and_folder">%1$d ไฟล์, 1 โฟลเดอร์</string>
   <string name="file_list__footer__files_and_folders">%1$d ไฟล์, %2$d โฟลเดอร์</string>
+  <string name="prefs_instant_upload_source_path_title">โฟลเดอร์ของกล้อง (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">สิ่งจำเป็นต้องใช้</string>
+  <string name="prefs_instant_upload_source_path_title_optional">ตัวเลือก</string>
   <string name="prefs_instant_behaviour_dialogTitle">ไฟล์ต้นฉบับ...</string>
   <string name="prefs_instant_behaviour_title">ไฟล์ต้นฉบับ...</string>
   <string name="upload_copy_files">คัดลอกไฟล์</string>

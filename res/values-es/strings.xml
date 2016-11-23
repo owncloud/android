@@ -229,6 +229,7 @@
   <string name="confirmation_remove_file_alert">¿Realmente desea eliminar %1$s?</string>
   <string name="confirmation_remove_folder_alert">¿Realmente desea eliminar %1$s y todo su contenido?</string>
   <string name="confirmation_remove_local">Sólo local</string>
+  <string name="confirmation_remove_account_alert">¿Desea realmente eliminar la cuenta de %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -325,6 +326,7 @@
   <string name="downloader_download_file_not_found">Este archivo ya no se encuentra en el servidor</string>
   <string name="prefs_category_accounts">Cuentas</string>
   <string name="prefs_add_account">Agregar cuenta</string>
+  <string name="drawer_manage_accounts">Gestionar cuentas</string>
   <string name="auth_redirect_non_secure_connection_title">La conexión segura está siendo redirigida por una ruta insegura.</string>
   <string name="actionbar_logger">Registros</string>
   <string name="log_send_history_button">Mandar historial.</string>
@@ -408,7 +410,7 @@
   <string name="action_switch_grid_view">Vista de rejilla</string>
   <string name="action_switch_list_view">Ver lista</string>
   <string name="manage_space_title">Gestionar espacio</string>
-  <string name="manage_space_description">Las opciones, certificados y Bases de Datos de %1$s\'s serán borrados permanentemente. \n\nLos archibos bajados no serán tocados. .\n\nEste proceso tardará algún tiempo.</string>
+  <string name="manage_space_description">Los ajustes, bases de datos y certificados de servidor de %1$s serán borrados permanentemente. \n\nLos archivos descargados se mantendrán intactos. .\n\nEste proceso puede tardar algún tiempo.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
   <string name="manage_space_error">No se han podido eliminar algunos archivos</string>
   <string name="permission_storage_access">Se requieren permisos adicionales para subir &amp; y descargar archivos.</string>

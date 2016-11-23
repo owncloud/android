@@ -228,6 +228,7 @@
   <string name="confirmation_remove_file_alert">Er du sikker på at du vil fjerne %1$s ?</string>
   <string name="confirmation_remove_folder_alert">Ønsker du virkelig at slette %1$s og dets indhold?</string>
   <string name="confirmation_remove_local">Kun lokal</string>
+  <string name="confirmation_remove_account_alert">Er du sikker på at du vil fjerne kontoen %1$s ?</string>
   <string name="remove_success_msg">Vellykket fjernelse</string>
   <string name="remove_fail_msg">Fjernelse kunne ikke fuldføres</string>
   <string name="rename_dialog_title">Indtast et nyt navn</string>
@@ -324,6 +325,7 @@
   <string name="downloader_download_file_not_found">Filen er ikke længere tilgængelig på serveren</string>
   <string name="prefs_category_accounts">Konti</string>
   <string name="prefs_add_account">Tilføj konto</string>
+  <string name="drawer_manage_accounts">Administrer konti</string>
   <string name="auth_redirect_non_secure_connection_title">Sikker forbindelse videredirigeres gennem en usikker rute.</string>
   <string name="actionbar_logger">Logge</string>
   <string name="log_send_history_button">Afsend historik</string>
@@ -365,6 +367,7 @@
   <string name="file_list__footer__files">%1$d filer</string>
   <string name="file_list__footer__files_and_folder">%1$d filer, 1 mape</string>
   <string name="file_list__footer__files_and_folders">%1$d filer, %2$d mapper</string>
+  <string name="prefs_instant_upload_source_path_title">Kamera mappe (%1$s)</string>
   <string name="prefs_instant_upload_source_path_title_required">Krævet</string>
   <string name="prefs_instant_upload_source_path_title_optional">Valgfri</string>
   <string name="prefs_instant_behaviour_dialogTitle">Original fil bliver...</string>

@@ -293,6 +293,7 @@
   <string name="downloader_download_file_not_found">Фајл није више доступан на серверу</string>
   <string name="prefs_category_accounts">Налози</string>
   <string name="prefs_add_account">Додај налог</string>
+  <string name="drawer_manage_accounts">Управљање налозима</string>
   <string name="auth_redirect_non_secure_connection_title">Безбедна веза је преусмерена кроз небезбедну руту.</string>
   <string name="actionbar_logger">Записници</string>
   <string name="log_send_history_button">Пошаљи историјат</string>

@@ -125,7 +125,7 @@ public class SamlWebViewDialog extends DialogFragment {
             mTargetUrl = savedInstanceState.getString(ARG_TARGET_URL);
         }
         
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_ownCloud_Dialog);
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
     
     @SuppressWarnings("deprecation")

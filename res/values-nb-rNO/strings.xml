@@ -322,6 +322,7 @@
   <string name="downloader_download_file_not_found">Filen finnes ikke på serveren lenger</string>
   <string name="prefs_category_accounts">Kontoer</string>
   <string name="prefs_add_account">Legg til en konto</string>
+  <string name="drawer_manage_accounts">Håndter kontoer</string>
   <string name="auth_redirect_non_secure_connection_title">Sikker tilkobling videresendes gjennom en usikker rute.</string>
   <string name="actionbar_logger">Logger</string>
   <string name="log_send_history_button">Send historik</string>

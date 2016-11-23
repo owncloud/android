@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ownCloud Android client application
+
+  Copyright (C) 2016 ownCloud GmbH.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:src="@drawable/ic_account_plus"
+        />
+
+    <ImageView
+        android:id="@+id/ticker"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignRight="@id/icon"
+        android:layout_alignEnd="@id/icon"
+        android:layout_alignTop="@id/icon"
+        android:layout_marginRight="-8dp"
+        android:layout_marginEnd="-8dp"
+        android:layout_marginTop="-8dp"
+        android:src="@drawable/ic_current"
+        />
+        <!-- drawable will be replaced by ic_current_white + tint in runtime;
+        ic_current here as a placeholder -->
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginRight="@dimen/standard_half_margin"
+        android:layout_marginEnd="@dimen/standard_half_margin"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/icon"
+        android:layout_toEndOf="@id/icon"
+        android:layout_toLeftOf="@+id/passwordButton"
+        android:layout_toStartOf="@id/passwordButton"
+        android:layout_alignParentTop="true"
+        android:gravity="bottom"
+        android:text="@string/placeholder_filename"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/account"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginRight="@dimen/standard_half_margin"
+        android:layout_marginEnd="@dimen/standard_half_margin"
+        android:layout_marginBottom="4dp"
+        android:layout_toRightOf="@id/icon"
+        android:layout_toEndOf="@id/icon"
+        android:layout_toLeftOf="@id/passwordButton"
+        android:layout_toStartOf="@id/passwordButton"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/name"
+        android:gravity="top"
+        android:text="@string/placeholder_sentence"
+        android:textColor="@color/textColor"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+
+    <ImageView
+        android:id="@id/passwordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_toLeftOf="@+id/removeButton"
+        android:layout_toStartOf="@id/removeButton"
+        android:layout_centerInParent="true"
+        android:paddingLeft="@dimen/standard_half_padding"
+        android:paddingTop="@dimen/standard_padding"
+        android:paddingBottom="@dimen/standard_padding"
+        android:paddingRight="@dimen/standard_half_padding"
+        android:src="@drawable/ic_key"/>
+
+    <ImageView
+        android:id="@id/removeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:paddingLeft="@dimen/standard_half_padding"
+        android:paddingStart="@dimen/standard_half_padding"
+        android:paddingTop="@dimen/standard_padding"
+        android:paddingBottom="@dimen/standard_padding"
+        android:paddingRight="@dimen/standard_padding"
+        android:paddingEnd="@dimen/standard_padding"
+        android:src="@drawable/ic_action_delete_grey"/>
+
+</RelativeLayout>

@@ -229,6 +229,7 @@
   <string name="confirmation_remove_file_alert">Vill du verkligen ta bort %1$s?</string>
   <string name="confirmation_remove_folder_alert">Vill du verkligen ta bort %1$s och dess innehåll?</string>
   <string name="confirmation_remove_local">Endast lokalt</string>
+  <string name="confirmation_remove_account_alert">Vll du verkligen ta bort kontot %1$s?</string>
   <string name="remove_success_msg">Lyckad radering</string>
   <string name="remove_fail_msg">Radering kunde inte slutföras</string>
   <string name="rename_dialog_title">Ange ett nytt namn</string>
@@ -325,6 +326,7 @@
   <string name="downloader_download_file_not_found">Filen är inte längre tillgänglig på servern</string>
   <string name="prefs_category_accounts">Konton</string>
   <string name="prefs_add_account">Lägg till konto</string>
+  <string name="drawer_manage_accounts">Hantera konton</string>
   <string name="auth_redirect_non_secure_connection_title">Den säkra kopplingen omdirigeras via en osäker rutt.</string>
   <string name="actionbar_logger">Loggar</string>
   <string name="log_send_history_button">Historik skickat</string>
@@ -366,6 +368,9 @@
   <string name="file_list__footer__files">%1$d filer</string>
   <string name="file_list__footer__files_and_folder">%1$d filer, 1 mapp</string>
   <string name="file_list__footer__files_and_folders">%1$d filer, %2$d mappar</string>
+  <string name="prefs_instant_upload_source_path_title">Kameramapp (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">krävs</string>
+  <string name="prefs_instant_upload_source_path_title_optional">valfritt</string>
   <string name="prefs_instant_behaviour_dialogTitle">Originalfilen kommer att...</string>
   <string name="prefs_instant_behaviour_title">Originalfilen kommer att...</string>
   <string name="upload_copy_files">Kopiera fil</string>

@@ -201,7 +201,7 @@ public class ShareActivity extends FileActivity
     @Override
     public void refreshUsersOrGroupsListFromServer() {
         // Show loading
-        showLoadingDialog(getString(R.string.common_loading));
+        showLoadingDialog(R.string.common_loading);
         // Get Users and Groups
         GetShareWithUsersAsyncTask getTask = new GetShareWithUsersAsyncTask(this);
         Object[] params = {getFile(), getAccount(), getStorageManager()};

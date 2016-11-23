@@ -13,6 +13,7 @@
   <string name="actionbar_send_file">Envia</string>
   <string name="actionbar_sort">Ordena</string>
   <string name="actionbar_sort_title">Ordena per</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tots els fitxers</string>
@@ -312,6 +313,7 @@
   <string name="downloader_download_file_not_found">El fitxer ja no està disponible en el servidor</string>
   <string name="prefs_category_accounts">Comptes</string>
   <string name="prefs_add_account">Afegeix compte</string>
+  <string name="drawer_manage_accounts">Gestió de comptes</string>
   <string name="auth_redirect_non_secure_connection_title">La connexió segura està essent redirigida a través d\'una ruta insegura</string>
   <string name="actionbar_logger">Registre</string>
   <string name="log_send_history_button">Enviar història</string>
@@ -357,6 +359,7 @@
   <string name="share_privilege_can_edit_delete">elimina</string>
   <string name="edit_share_unshare">Deixar de compartir</string>
   <string name="edit_share_done">Fet</string>
+  <string name="action_clear_successful_uploads">Neteja exitosa</string>
   <string name="action_switch_grid_view">Vista de graella</string>
   <string name="action_switch_list_view">Vista de Llista</string>
   <string name="manage_space_title">Gestió d\'espai</string>

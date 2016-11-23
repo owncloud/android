@@ -229,6 +229,7 @@
   <string name="confirmation_remove_file_alert">Vuoi davvero rimuovere %1$s?</string>
   <string name="confirmation_remove_folder_alert">Vuoi davvero rimuovere %1$s e il suo contenuto?</string>
   <string name="confirmation_remove_local">Solo localmente</string>
+  <string name="confirmation_remove_account_alert">Vuoi davvero rimuovere l\'account %1$s?</string>
   <string name="remove_success_msg">Rimozione effettuata con successo</string>
   <string name="remove_fail_msg">La rimozione non può essere completata</string>
   <string name="rename_dialog_title">Digita un nuovo nome</string>
@@ -325,6 +326,7 @@
   <string name="downloader_download_file_not_found">Il file non è più disponibile sul server</string>
   <string name="prefs_category_accounts">Account</string>
   <string name="prefs_add_account">Aggiungi account</string>
+  <string name="drawer_manage_accounts">Gestisci account</string>
   <string name="auth_redirect_non_secure_connection_title">La connessione sicura è rediretta attraverso un percorso non sicuro.</string>
   <string name="actionbar_logger">Registri</string>
   <string name="log_send_history_button">Cronologia invii</string>

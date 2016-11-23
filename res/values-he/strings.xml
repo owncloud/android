@@ -229,6 +229,7 @@
   <string name="confirmation_remove_file_alert">האם באמת להסיר %1$s?</string>
   <string name="confirmation_remove_folder_alert">האם באמת להסיר %1$s ואת כל התכולה?</string>
   <string name="confirmation_remove_local">מקומי בלבד</string>
+  <string name="confirmation_remove_account_alert">האם באמת להסיר את החשבון %1$s?</string>
   <string name="remove_success_msg">ההסרה הצליחה</string>
   <string name="remove_fail_msg">ההסרה נכשלה</string>
   <string name="rename_dialog_title">נא להזין שם חדש</string>
@@ -325,6 +326,7 @@
   <string name="downloader_download_file_not_found">הקובץ אינו זמין יותר על השרת</string>
   <string name="prefs_category_accounts">חשבונות</string>
   <string name="prefs_add_account">הוספת חשבון</string>
+  <string name="drawer_manage_accounts">ניהול חשבונות</string>
   <string name="auth_redirect_non_secure_connection_title">חיבור מאובטח מנותב דרך נתיב לא מאובטח</string>
   <string name="actionbar_logger">לוגים</string>
   <string name="log_send_history_button">הסטורית שליחה</string>

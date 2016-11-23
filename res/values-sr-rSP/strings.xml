@@ -84,6 +84,7 @@
   <string name="activity_chooser_send_file_title">Pošalji</string>
   <string name="clipboard_text_copied">Kopirano u klipbord</string>
   <string name="prefs_category_accounts">Nalozi</string>
+  <string name="drawer_manage_accounts">Upravljaj nalozima</string>
   <string name="folder_picker_choose_button_text">Izaberi</string>
   <string name="prefs_category_details">Detaljnije</string>
   <string name="share_via_link_section_title">Veza deljenja</string>

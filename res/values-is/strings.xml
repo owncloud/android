@@ -278,6 +278,7 @@
   <string name="downloader_download_file_not_found">Skráin er ekki lengur tiltæk á þjóninum</string>
   <string name="prefs_category_accounts">Notandaaðgangar</string>
   <string name="prefs_add_account">Bæta við notandaaðgangi</string>
+  <string name="drawer_manage_accounts">Sýsla með notandaaðganga</string>
   <string name="auth_redirect_non_secure_connection_title">Öruggri tengingu er endurbeint í gegnum óörugga leið.</string>
   <string name="actionbar_logger">Annálar</string>
   <string name="log_send_history_button">Ferill sendinga</string>

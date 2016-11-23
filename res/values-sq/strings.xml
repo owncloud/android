@@ -228,6 +228,7 @@
   <string name="confirmation_remove_file_alert">Doni vërtet të hiqet %1$s?</string>
   <string name="confirmation_remove_folder_alert">Doni vërtet të hiqet %1$s dhe lënda e tij?</string>
   <string name="confirmation_remove_local">Vetëm vendorja</string>
+  <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
   <string name="rename_dialog_title">Jepni një emër të ri</string>
@@ -323,6 +324,7 @@
   <string name="downloader_download_file_not_found">Kartela s\’gjendet më te shërbyesi</string>
   <string name="prefs_category_accounts">Llogari</string>
   <string name="prefs_add_account">Shtoni llogari</string>
+  <string name="drawer_manage_accounts">Administroni llogari</string>
   <string name="auth_redirect_non_secure_connection_title">Lidhja e sigurt është ridrejtuar përmes një rruge të pasigurt.</string>
   <string name="actionbar_logger">Regjistra</string>
   <string name="log_send_history_button">Historik dërgimesh</string>

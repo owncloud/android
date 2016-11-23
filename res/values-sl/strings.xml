@@ -229,6 +229,7 @@
   <string name="confirmation_remove_file_alert">Ali res želite odstraniti %1$s?</string>
   <string name="confirmation_remove_folder_alert">Ali res želite odstraniti %1$s skupaj s celotno vsebino?</string>
   <string name="confirmation_remove_local">Le krajevno</string>
+  <string name="confirmation_remove_account_alert">Ali zares želite odstraniti račun %1$s?</string>
   <string name="remove_success_msg">Odstranitev je uspešno končana</string>
   <string name="remove_fail_msg">Odstranjevanje je spodletelo</string>
   <string name="rename_dialog_title">Vnesite novo ime</string>
@@ -325,6 +326,7 @@
   <string name="downloader_download_file_not_found">Datoteka na strežniku ni več na voljo.</string>
   <string name="prefs_category_accounts">Računi</string>
   <string name="prefs_add_account">Dodaj račun</string>
+  <string name="drawer_manage_accounts">Upravljanje z računi</string>
   <string name="auth_redirect_non_secure_connection_title">Varna povezava je preusmerjena prek nevarovane poti.</string>
   <string name="actionbar_logger">Dnevnik</string>
   <string name="log_send_history_button">Pošlji zgodovino</string>
@@ -352,7 +354,7 @@
   <string name="sync_folder_failed_content">Usklajevanja mape %1$s ni mogoče zaključiti</string>
   <string name="shared_subject_header">v souporabi</string>
   <string name="with_you_subject_header">z vami</string>
-  <string name="subject_user_shared_with_you">Uporabnik %1$s je omogočil souporabo \"%2$s\"</string>
+  <string name="subject_user_shared_with_you">Uporabnik %1$s je omogočil souporabo »%2$s«</string>
   <string name="subject_shared_with_you">\"%1$s\" vam je oddan v souporabo</string>
   <string name="auth_refresh_button">Osveži povezavo</string>
   <string name="auth_host_address">Naslov strežnika</string>

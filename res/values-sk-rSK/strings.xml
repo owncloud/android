@@ -278,6 +278,7 @@
   <string name="downloader_download_file_not_found">Súbor už na serveri nie je dostupný</string>
   <string name="prefs_category_accounts">Účty</string>
   <string name="prefs_add_account">Pridať účet</string>
+  <string name="drawer_manage_accounts">Správa účtov</string>
   <string name="auth_redirect_non_secure_connection_title">Zabezpečené spojenie je presmerované nezabezpečenou cestou.</string>
   <string name="actionbar_logger">Logy</string>
   <string name="log_send_mail_subject">%1$s Android app logs</string>

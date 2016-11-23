@@ -245,6 +245,7 @@
   <string name="share_link_forbidden_permissions">megosztani ezt a fájlt</string>
   <string name="prefs_category_accounts">Fiókok</string>
   <string name="prefs_add_account">Fiók hozzáadása</string>
+  <string name="drawer_manage_accounts">Fiókok kezelése</string>
   <string name="actionbar_logger">Naplók</string>
   <string name="log_progress_dialog_text">Adatok betöltése ...</string>
   <string name="saml_authentication_required_text">Felhasználóazonosítás szükséges</string>

@@ -144,10 +144,10 @@ public class RefreshFolderOperation extends RemoteOperation {
         mStorageManager = dataStorageManager;
         mAccount = account;
         mContext = context;
-        mForgottenLocalFiles = new HashMap<String, String>();
+        mForgottenLocalFiles = new HashMap<>();
         mRemoteFolderChanged = false;
         mIgnoreETag = ignoreETag;
-        mFilesToSyncContents = new Vector<SynchronizeFileOperation>();
+        mFilesToSyncContents = new Vector<>();
     }
     
     
@@ -180,7 +180,7 @@ public class RefreshFolderOperation extends RemoteOperation {
      */
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         mFailsInFavouritesFound = 0;
         mConflictsFound = 0;
         mForgottenLocalFiles.clear();
@@ -247,7 +247,7 @@ public class RefreshFolderOperation extends RemoteOperation {
         if (!result.isSuccess()) {
             Log_OC.w(TAG, "Couldn't update user profile from server");
         } else {
-            Log_OC.i(TAG, "Got display name: " + result.getData().get(0));
+            Log_OC.i(TAG, "Got user profile");
         }
     }
 
@@ -261,7 +261,7 @@ public class RefreshFolderOperation extends RemoteOperation {
 
     private RemoteOperationResult checkForChanges(OwnCloudClient client) {
         mRemoteFolderChanged = true;
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         String remotePath = mLocalFolder.getRemotePath();
 
         Log_OC.d(TAG, "Checking changes in " + mAccount.name + remotePath);
@@ -459,7 +459,7 @@ public class RefreshFolderOperation extends RemoteOperation {
     private void startContentSynchronizations(
             List<SynchronizeFileOperation> filesToSyncContents, OwnCloudClient client
         ) {
-        RemoteOperationResult contentsResult = null;
+        RemoteOperationResult contentsResult;
         for (SynchronizeFileOperation op: filesToSyncContents) {
             contentsResult = op.execute(mStorageManager, mContext);   // async
             if (!contentsResult.isSuccess()) {
@@ -488,7 +488,7 @@ public class RefreshFolderOperation extends RemoteOperation {
      *                  the operation.
      */
     private RemoteOperationResult refreshSharesForFolder(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         
         // remote request 
         GetRemoteSharesForFileOperation operation = 
@@ -497,7 +497,7 @@ public class RefreshFolderOperation extends RemoteOperation {
         
         if (result.isSuccess()) {
             // update local database
-            ArrayList<OCShare> shares = new ArrayList<OCShare>();
+            ArrayList<OCShare> shares = new ArrayList<>();
             for(Object obj: result.getData()) {
                 shares.add((OCShare) obj);
             }
@@ -515,7 +515,6 @@ public class RefreshFolderOperation extends RemoteOperation {
      * @param event
      * @param dirRemotePath     Remote path of a folder that was just synchronized 
      *                          (with or without success)
-     * @param result
      */
     private void sendLocalBroadcast(
             String event, String dirRemotePath, RemoteOperationResult result
