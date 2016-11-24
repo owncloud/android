@@ -577,7 +577,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     /**
      * @return      'True' when
      */
-    public boolean isAvailableOfflineStatus() {
+    public boolean isAvailableOffline() {
         return (mAvailableOfflineStatus != AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE);
     }
 

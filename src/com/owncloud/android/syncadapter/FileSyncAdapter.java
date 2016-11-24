@@ -35,7 +35,7 @@ import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.operations.RefreshFolderOperation;
+import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.UpdateOCVersionOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -114,10 +114,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /** {@link SyncResult} instance to return to the system when the synchronization finish */
     private SyncResult mSyncResult;
 
-    /** 'True' means that the server supports the share API */
-    private boolean mIsShareSupported;
-    
-    
+
     /**
      * Creates a {@link FileSyncAdapter}
      *
@@ -152,7 +149,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         mLastFailedResult = null;
         mConflictsFound = 0;
         mFailsInFavouritesFound = 0;
-        mForgottenLocalFiles = new HashMap<String, String>();
+        mForgottenLocalFiles = new HashMap<>();
         mSyncResult = syncResult;
         mSyncResult.fullSyncRequested = false;
         mSyncResult.delayUntil = (System.currentTimeMillis()/1000) + 3*60*60; // avoid too many automatic synchronizations
@@ -244,8 +241,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         RemoteOperationResult result = update.execute(getClient());
         if (!result.isSuccess()) {
             mLastFailedResult = result; 
-        } else {
-            mIsShareSupported = update.getOCVersion().isSharedSupported();
         }
     }
     
@@ -270,19 +265,18 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             return;
         
         // folder synchronization
-        RefreshFolderOperation synchFolderOp = new RefreshFolderOperation(
-            folder,
-            mCurrentSyncTime,
-            true,
-            mIsShareSupported,
-            false,
-            getAccount(),
+        SynchronizeFolderOperation synchFolderOp = new SynchronizeFolderOperation(
             getContext(),
-            pushOnly
+            folder.getRemotePath(),
+            getAccount(),
+            mCurrentSyncTime,
+            pushOnly,
+            false,      // do not ignore ETag
+            true,       // sync full account
+            false       // only sync contents of available offline files
         );
         RemoteOperationResult result = synchFolderOp.execute(getClient(), getStorageManager());
 
-        
         // synchronized folder -> notice to UI - ALWAYS, although !result.isSuccess
         sendLocalBroadcast(EVENT_FULL_SYNC_FOLDER_CONTENTS_SYNCED, folder.getRemotePath(), result);
         
@@ -291,7 +285,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             
             if (result.getCode() == ResultCode.SYNC_CONFLICT) {
                 mConflictsFound += synchFolderOp.getConflictsFound();
-                mFailsInFavouritesFound += synchFolderOp.getFailsInFavouritesFound();
+                mFailsInFavouritesFound += synchFolderOp.getFailsInFileSyncsFound();
             }
             if (synchFolderOp.getForgottenLocalFiles().size() > 0) {
                 mForgottenLocalFiles.putAll(synchFolderOp.getForgottenLocalFiles());
@@ -514,7 +508,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Creates a notification builder with some commonly used settings
      * 
-     * @return
+     * @return a notification builder with some commonly used settings.
      */
     private NotificationCompat.Builder createNotificationBuilder() {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext());
@@ -526,8 +520,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Builds and shows the notification
      * 
-     * @param id
-     * @param builder
+     * @param id            Id for the notification to build.
+     * @param builder       Notification builder, already set up.
      */
     private void showNotification(int id, NotificationCompat.Builder builder) {
         ((NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE))
@@ -536,8 +530,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Shorthand translation
      * 
-     * @param key
-     * @param args
+     * @param key       String key.
+     * @param args      Arguments to replace in a formatted string.
      * @return
      */
     private String i18n(int key, Object... args) {

@@ -41,16 +41,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -1607,19 +1603,15 @@ public class FileDisplayActivity extends HookActivity
                 @Override
                 public void run() {
                     if (hasWindowFocus()) {
-                        long currentSyncTime = System.currentTimeMillis();
                         mSyncInProgress = true;
 
                         // perform folder synchronization
                         SyncOperation synchFolderOp = new RefreshFolderOperation(
                             folder,
-                            currentSyncTime,
-                            false,
                             getFileOperationsHelper().isSharedSupported(),
                             ignoreETag,
                             getAccount(),
-                            getApplicationContext(),
-                            false
+                            getApplicationContext()
                         );
                         synchFolderOp.execute(
                             getStorageManager(),

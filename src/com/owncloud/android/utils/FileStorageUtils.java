@@ -309,32 +309,4 @@ public class FileStorageUtils {
         return (result != null) ? result : "";
     }
 
-    /**
-     * Scans the default location for saving local copies of files searching for
-     * a 'lost' file with the same full name as the {@link OCFile} received as
-     * parameter.
-     *
-     * This method helps to keep linked local copies of the files when the app is uninstalled, and then
-     * reinstalled in the device. OR after the cache of the app was deleted in system settings.
-     *
-     * The method is assuming that all the local changes in the file where synchronized in the past. This is dangerous,
-     * but assuming the contrary could lead to massive unnecessary synchronizations of downloaded file after deleting
-     * the app cache.
-     *
-     * This should be changed in the near future to avoid any chance of data loss, but we need to add some options
-     * to limit hard automatic synchronizations to wifi, unless the user wants otherwise.
-     *
-     * @param file      File to associate a possible 'lost' local file.
-     * @param account   Account holding file.
-     */
-    public static void searchForLocalFileInDefaultPath(OCFile file, Account account) {
-        if (file.getStoragePath() == null && !file.isFolder()) {
-            File f = new File(FileStorageUtils.getDefaultSavePathFor(account.name, file));
-            if (f.exists()) {
-                file.setStoragePath(f.getAbsolutePath());
-                file.setLastSyncDateForData(f.lastModified());
-            }
-        }
-    }
-
 }

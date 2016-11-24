@@ -448,6 +448,10 @@ public class FileOperationsHelper {
             intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
             intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+            intent.putExtra(
+                OperationsService.EXTRA_SYNC_REGULAR_FILES,
+                true
+            );
             mFileActivity.startService(intent);
 
         }

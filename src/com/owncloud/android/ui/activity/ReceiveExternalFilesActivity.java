@@ -438,20 +438,16 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void startSyncFolderOperation(OCFile folder) {
-        long currentSyncTime = System.currentTimeMillis();
 
         mSyncInProgress = true;
 
         // perform folder synchronization
         SyncOperation synchFolderOp = new RefreshFolderOperation(
             folder,
-            currentSyncTime,
-            false,
-            false,
+            getFileOperationsHelper().isSharedSupported(),
             false,
             getAccount(),
-            getApplicationContext(),
-            false
+            getApplicationContext()
         );
         synchFolderOp.execute(getStorageManager(), this, null, null);
     }

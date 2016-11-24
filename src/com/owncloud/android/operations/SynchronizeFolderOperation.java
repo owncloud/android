@@ -31,10 +31,10 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -78,23 +78,26 @@ public class SynchronizeFolderOperation extends SyncOperation {
     /** Locally cached information about folder to synchronize */
     private OCFile mLocalFolder;
 
-    /** Files and folders contained in the synchronized folder after a successful operation */
-    //private List<OCFile> mChildren;
-
     /** Counter of conflicts found between local and remote files */
     private int mConflictsFound;
 
     /** Counter of failed operations in synchronization of kept-in-sync files */
     private int mFailsInFileSyncsFound;
 
-    private List<OCFile> mFilesForDirectDownload;
-        // to avoid extra PROPFINDs when there was no change in the folder
-    
-    private List<SyncOperation> mFilesToSyncContents;
+    /**
+     * Map of remote and local paths to files that where locally stored in a location
+     * out of the ownCloud folder and couldn't be copied automatically into it
+     **/
+    private Map<String, String> mForgottenLocalFiles;
+
+    private List<SynchronizeFileOperation> mFilesToSyncContents;
 
     private List<Intent> mFoldersToSyncContents;
 
     private final AtomicBoolean mCancellationRequested;
+
+    /** Files and folders contained in the synchronized folder after a successful operation */
+    private List<Pair<OCFile, Boolean>> mChildrenToVisit;
 
     /**
      * When 'true', will assume that folder did not change in the server and
@@ -102,32 +105,55 @@ public class SynchronizeFolderOperation extends SyncOperation {
      */
     private boolean mPushOnly;
 
+    /** 'True' means that Etag will be ignored to decide if merging the remote list of files locally */
+    private boolean mIgnoreETag;
+
+    /** 'True' means that this operation is part of a full account synchronization */
+    private boolean mSyncFullAccount;
+
+    /** 'True' means that the contents of all the files in the folder will be synchronized;
+     * otherwise, only contents of available offline files will be synchronized. */
+    private final boolean mSyncContentOfRegularFiles;
+
     /**
      * Creates a new instance of {@link SynchronizeFolderOperation}.
      *
-     * @param   context                 Application context.
-     * @param   remotePath              Path to synchronize.
-     * @param   account                 ownCloud account where the folder is located.
-     * @param   currentSyncTime         Time stamp for the synchronization process in progress.
-     * @param   pushOnly                When 'true', will assume that folder did not change in the server and
-     *                                  will focus only in push any local change to the server (carefully).
+     * @param   context                     Application context.
+     * @param   remotePath                  Path to synchronize.
+     * @param   account                     ownCloud account where the folder is located.
+     * @param   currentSyncTime             Time stamp for the synchronization process in progress.
+     * @param   pushOnly                    When 'true', will assume that folder did not change in the server and
+     *                                      will focus only in push any local change to the server (carefully).
+     * @param   ignoreETag                  'True' means that the list of files in the remote folder should
+     *                                      be fetched and merged locally even though the 'eTag' did not change.
+     * @param   syncFullAccount             'True' means that this operation is part of a full account
+     *                                      synchronization.
+     * @param   syncContentOfRegularFiles   When 'true', the contents of all the files in the folder will
+     *                                      be synchronized; otherwise, only contents of available offline files
+     *                                      will be synchronized.
      */
     public SynchronizeFolderOperation(
         Context context,
         String remotePath,
         Account account,
         long currentSyncTime,
-        boolean pushOnly
+        boolean pushOnly,
+        boolean ignoreETag,
+        boolean syncFullAccount,
+        boolean syncContentOfRegularFiles
     ) {
         mRemotePath = remotePath;
         mCurrentSyncTime = currentSyncTime;
         mAccount = account;
         mContext = context;
-        mFilesForDirectDownload = new Vector<>();
         mFilesToSyncContents = new Vector<>();
         mFoldersToSyncContents = new Vector<>();
+        mForgottenLocalFiles = new HashMap<>();
         mCancellationRequested = new AtomicBoolean(false);
         mPushOnly = pushOnly;
+        mIgnoreETag = ignoreETag;
+        mSyncFullAccount = syncFullAccount;
+        mSyncContentOfRegularFiles = syncContentOfRegularFiles;
     }
 
 
@@ -137,6 +163,26 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
     public int getFailsInFileSyncsFound() {
         return mFailsInFileSyncsFound;
+    }
+
+    public Map<String, String> getForgottenLocalFiles() {
+        return mForgottenLocalFiles;
+    }
+
+
+
+    /**
+     * Returns the list of children of the folder after the refresh, in a {@link Pair} with a boolean
+     * indicating if was detected as changed in the server or not.
+     *
+     * TODO persist in database remote ETag + local ETag per file, so that returning a collection of
+     * {@link OCFile}s is good enough.
+     *
+     * @return  List of pairs of child files and boolean flags set to 'true' if there are pending changes
+     *          in the server side.
+     */
+    public List<Pair<OCFile, Boolean>> getChildrenToVisit() {
+        return mChildrenToVisit;
     }
 
     /**
@@ -149,7 +195,8 @@ public class SynchronizeFolderOperation extends SyncOperation {
         RemoteOperationResult result;
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
-        
+        mForgottenLocalFiles.clear();
+
         try {
             // get locally cached information about folder
             mLocalFolder = getStorageManager().getFileByPath(mRemotePath);
@@ -157,8 +204,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
             if (mPushOnly) {
                 // assuming there is no update in the server side, still need to handle local changes
                 Log_OC.i(TAG, "Push only sync of " + mAccount.name + mRemotePath);
-                preparePushOfLocalChanges();
-                syncContents();
+                pushOnlySync();
                 result = new RemoteOperationResult(ResultCode.OK);
 
             } else {
@@ -166,21 +212,26 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 result = fetchRemoteFolder(client);
 
                 if (result.isSuccess()) {
-                    if (folderChanged((RemoteFile)result.getData().get(0))) {
-                        // folder was updated in the server side
-                        Log_OC.i(
-                            TAG, "Checked " + mAccount.name + mRemotePath + ", changed"
-                        );
+                    if (mIgnoreETag || folderChanged((RemoteFile) result.getData().get(0))) {
+                        if (!mIgnoreETag) {
+                            // folder was updated in the server side
+                            Log_OC.i(
+                                TAG, "Checked " + mAccount.name + mRemotePath + ", changed"
+                            );
+                        } else {
+                            Log_OC.i(
+                                TAG, "ETag unchanged, merging data from server anyway"
+                            );
+                        }
                         mergeRemoteFolder(result.getData());
-                        syncContents();
+                        syncContents(); // for available offline files or for all???? DEPENDS!
 
                     } else {
                         // folder was not updated in the server side
                         Log_OC.i(
                             TAG, "Checked " + mAccount.name + mRemotePath + ", not changed"
                         );
-                        preparePushOfLocalChanges();
-                        syncContents();
+                        pushOnlySync();
                     }
 
                 } else {
@@ -204,6 +255,21 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
         return result;
 
+    }
+
+    /**
+     * Synchronization of the folder when data in the server did not change from the last synchronization.
+     *
+     * @throws OperationCancelledException
+     */
+    private void pushOnlySync() throws OperationCancelledException{
+        preparePushOfLocalChanges();
+        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
+        mChildrenToVisit = new Vector<>(children.size());
+        for (OCFile child: children) {
+            mChildrenToVisit.add(new Pair<>(child, false));
+        }
+        syncContents();
     }
 
 
@@ -258,7 +324,9 @@ public class SynchronizeFolderOperation extends SyncOperation {
      *  Synchronizes the data retrieved from the server about the contents of the target folder
      *  with the current data in the local database.
      *
-     *  @param folderAndFiles   Remote folder and children files in Folder
+     *  Grants that mChildrenToVisit is updated with fresh data after execution.
+     *
+     *  @param folderAndFiles   Remote folder and children files in folder
      */
     private void mergeRemoteFolder(ArrayList<Object> folderAndFiles)
             throws OperationCancelledException {
@@ -276,7 +344,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 + " changed - starting update of local data ");
 
         List<OCFile> updatedFiles = new Vector<>(folderAndFiles.size() - 1);
-        mFilesForDirectDownload.clear();
+        mChildrenToVisit = new Vector<>(folderAndFiles.size() - 1);
         mFilesToSyncContents.clear();
 
         if (mCancellationRequested.get()) {
@@ -293,7 +361,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         // loop to synchronize every child
         OCFile remoteFile, localFile, updatedLocalFile;
         RemoteFile r;
-        boolean serverUnchanged = false;
+        boolean serverUnchanged;
         for (int i=1; i<folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
             r = (RemoteFile) folderAndFiles.get(i);
@@ -325,20 +393,19 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
             /// check and fix, if needed, local storage path
             searchForLocalFileInDefaultPath(updatedLocalFile);
-            
-            /// classify file to sync/download contents later
+
+            /// prepare content synchronization for kept-in-sync files
             serverUnchanged = updatedLocalFile.getEtag().equals(remoteFile.getEtag());
             addToSyncContents(updatedLocalFile, remoteFile, serverUnchanged);
 
             updatedFiles.add(updatedLocalFile);
+            mChildrenToVisit.add(new Pair<>(updatedLocalFile, !serverUnchanged));
         }
 
         // save updated contents in local database
         storageManager.saveFolder(remoteFolder, updatedFiles, localFilesMap.values());
-
     }
-    
-    
+
     private void preparePushOfLocalChanges() throws OperationCancelledException {
         List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
         for (OCFile child : children) {
@@ -363,51 +430,41 @@ public class SynchronizeFolderOperation extends SyncOperation {
      *                          synchronizations of subfolders will not check for changes again.
      */
     private void addToSyncContents(OCFile localFile, OCFile remoteFile, boolean serverUnchanged) {
-        if (localFile.isFolder()) {
-            /// to sync descendants
-            Intent intent = new Intent(mContext, OperationsService.class);
-            intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
-            intent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
-            intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, localFile.getRemotePath());
-            intent.putExtra(OperationsService.EXTRA_PUSH_ONLY, serverUnchanged);
-            mFoldersToSyncContents.add(intent);
+        if (mSyncContentOfRegularFiles ||
+            localFile.isAvailableOffline()
+            ) {
 
-        } else if (!localFile.isDown()) {
-            mFilesForDirectDownload.add(localFile);
+            if (localFile.isFolder() &&
+                !mSyncFullAccount   // if this operation is part of a full-account sync driven
+                // by {@link FileSyncAdapter}, subfolders will not be expanded by
+                // the operation itself
+                ) {
+                /// to sync descendants
+                Intent intent = new Intent(mContext, OperationsService.class);
+                intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
+                intent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
+                intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, localFile.getRemotePath());
+                intent.putExtra(OperationsService.EXTRA_PUSH_ONLY, serverUnchanged);
+                intent.putExtra(
+                    OperationsService.EXTRA_SYNC_REGULAR_FILES,
+                    mSyncContentOfRegularFiles
+                );
+                mFoldersToSyncContents.add(intent);
 
-        } else if (!localFile.isInConflict()) {
-            /// synchronization for regular files
-            SynchronizeFileOperation operation = new SynchronizeFileOperation(
-                localFile,
-                remoteFile,
-                mAccount,
-                serverUnchanged,
-                mContext
-            );
-            mFilesToSyncContents.add(operation);
-        }
-    }
-
-
-    private void syncContents() throws OperationCancelledException {
-        startDirectDownloads();
-        startContentSynchronizations(mFilesToSyncContents);
-    }
-
-    
-    private void startDirectDownloads() throws OperationCancelledException {
-        for (OCFile file : mFilesForDirectDownload) {
-            synchronized(mCancellationRequested) {
-                if (mCancellationRequested.get()) {
-                    throw new OperationCancelledException();
-                }
-                Intent i = new Intent(mContext, FileDownloader.class);
-                i.putExtra(FileDownloader.EXTRA_ACCOUNT, mAccount);
-                i.putExtra(FileDownloader.EXTRA_FILE, file);
-                mContext.startService(i);
+            } else if (!localFile.isFolder() && !localFile.isInConflict()) {
+                /// synchronization for files
+                SynchronizeFileOperation operation = new SynchronizeFileOperation(
+                    localFile,
+                    remoteFile,
+                    mAccount,
+                    serverUnchanged,
+                    mContext
+                );
+                mFilesToSyncContents.add(operation);
             }
         }
     }
+
 
     /**
      * Performs a list of synchronization operations, determining if a download or upload is needed
@@ -415,15 +472,12 @@ public class SynchronizeFolderOperation extends SyncOperation {
      *
      * If download or upload is needed, request the operation to the corresponding service and goes
      * on.
-     *
-     * @param filesToSyncContents       Synchronization operations to execute.
      */
-    private void startContentSynchronizations(List<SyncOperation> filesToSyncContents)
-            throws OperationCancelledException {
+    private void syncContents() throws OperationCancelledException {
 
         Log_OC.v(TAG, "Starting content synchronization... ");
         RemoteOperationResult contentsResult;
-        for (SyncOperation op: filesToSyncContents) {
+        for (SyncOperation op: mFilesToSyncContents) {
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
             }
@@ -434,7 +488,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 } else {
                     mFailsInFileSyncsFound++;
                     if (contentsResult.getException() != null) {
-                        Log_OC.e(TAG, "Error while synchronizing file : "
+                        Log_OC.e(TAG, "Error while synchronizing file : "   // Vs " av-off file"
                             + contentsResult.getLogMessage(), contentsResult.getException());
                     } else {
                         Log_OC.e(TAG, "Error while synchronizing file : "
@@ -452,10 +506,21 @@ public class SynchronizeFolderOperation extends SyncOperation {
     }
 
     /**
+     /**
      * Scans the default location for saving local copies of files searching for
-     * a 'lost' file with the same full name as the {@link com.owncloud.android.datamodel.OCFile}
-     * received as parameter.
-     *  
+     * a 'lost' file with the same full name as the {@link OCFile} received as
+     * parameter.
+     *
+     * This method helps to keep linked local copies of the files when the app is uninstalled, and then
+     * reinstalled in the device. OR after the cache of the app was deleted in system settings.
+     *
+     * The method is assuming that all the local changes in the file where synchronized in the past. This is dangerous,
+     * but assuming the contrary could lead to massive unnecessary synchronizations of downloaded file after deleting
+     * the app cache.
+     *
+     * This should be changed in the near future to avoid any chance of data loss, but we need to add some options
+     * to limit hard automatic synchronizations to wifi, unless the user wants otherwise.
+     *
      * @param file      File to associate a possible 'lost' local file.
      */
     private void searchForLocalFileInDefaultPath(OCFile file) {

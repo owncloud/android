@@ -188,20 +188,16 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
     
     public void startSyncFolderOperation(OCFile folder, boolean ignoreETag) {
-        long currentSyncTime = System.currentTimeMillis(); 
-        
+
         mSyncInProgress = true;
                 
         // perform folder synchronization
         SyncOperation synchFolderOp = new RefreshFolderOperation(
             folder,
-            currentSyncTime,
-            false,
             getFileOperationsHelper().isSharedSupported(),
             ignoreETag,
             getAccount(),
-            getApplicationContext(),
-            false
+            getApplicationContext()
         );
         synchFolderOp.execute(getStorageManager(), this, null, null);
 
