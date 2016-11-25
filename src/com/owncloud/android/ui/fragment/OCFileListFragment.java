@@ -733,6 +733,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             case R.id.action_unset_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleFavorites(checkedFiles, false);
                 getListView().invalidateViews();
+                invalidateActionMode();
                 return true;
             }
             case R.id.action_move: {
