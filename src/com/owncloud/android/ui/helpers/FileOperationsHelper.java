@@ -28,8 +28,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
-import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -39,7 +37,6 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
@@ -52,7 +49,6 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 /**
  *
@@ -63,7 +59,7 @@ public class FileOperationsHelper {
     
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
 
-    protected FileActivity mFileActivity = null;
+    private FileActivity mFileActivity = null;
 
     /// Identifier of operation in progress which result shouldn't be lost 
     private long mWaitingForOpId = Long.MAX_VALUE;
@@ -295,14 +291,14 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Show an instance of {@link ShareType} for sharing or unsharing the {@OCFile} received as parameter.
+     * Show an instance of {@link ShareType} for sharing or unsharing the {@link OCFile} received as parameter.
      *
      * @param file  File to share or unshare.
      */
     public void showShareFile(OCFile file){
         Intent intent = new Intent(mFileActivity, ShareActivity.class);
-        intent.putExtra(mFileActivity.EXTRA_FILE, (Parcelable) file);
-        intent.putExtra(mFileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        intent.putExtra(FileActivity.EXTRA_FILE, file);
+        intent.putExtra(FileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
         mFileActivity.startActivity(intent);
 
     }
@@ -394,7 +390,7 @@ public class FileOperationsHelper {
     /**
      * @return 'True' if the server supports the Search Users API
      */
-    public boolean isSearchUserSupportedSupported() {
+    public boolean isSearchUserSupported() {
         if (mFileActivity.getAccount() != null) {
             OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
             return (serverVersion != null && serverVersion.isSearchUsersSupported());
@@ -404,7 +400,6 @@ public class FileOperationsHelper {
 
     public void sendDownloadedFile(OCFile file) {
         if (file != null) {
-            String storagePath = file.getStoragePath();
             Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
             // set MimeType
             sendIntent.setType(file.getMimetype());
@@ -457,13 +452,13 @@ public class FileOperationsHelper {
         }
     }
 
-    public void toggleFavorites(Collection<OCFile> files, boolean isFavorite){
+    public void toggleAvailableOffline(Collection<OCFile> files, boolean isAvailableOffline){
         for (OCFile file: files) {
-            toggleFavorite(file, isFavorite);
+            toggleAvailableOffline(file, isAvailableOffline);
         }
     }
 
-    public void toggleFavorite(OCFile file, boolean isFavorite) {
+    public void toggleAvailableOffline(OCFile file, boolean isAvailableOffline) {
         if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
             /// files descending of an av-offline folder can't be toggled
             Toast.makeText(
@@ -474,7 +469,7 @@ public class FileOperationsHelper {
 
         } else {
             /// update local property, for file and all its descendents (if folder)
-            OCFile.AvailableOfflineStatus targetAvailableOfflineStatus = isFavorite ?
+            OCFile.AvailableOfflineStatus targetAvailableOfflineStatus = isAvailableOffline ?
                 OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE :
                 OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
             file.setAvailableOfflineStatus(targetAvailableOfflineStatus);
@@ -486,12 +481,14 @@ public class FileOperationsHelper {
                     mFileActivity,
                     file,
                     mFileActivity.getAccount(),
-                    isFavorite
+                    isAvailableOffline
                 );
 
                 /// immediate content synchronization
                 if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE == file.getAvailableOfflineStatus()) {
                     syncFile(file);
+                } else {
+                    cancelTransference(file);
                 }
             } else {
                 /// unexpected error

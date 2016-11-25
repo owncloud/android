@@ -180,7 +180,7 @@ public class FileMenuFilter {
         }
 
         // CANCEL SYNCHRONIZATION
-        if (mFiles.isEmpty() || !synchronizing) {
+        if (mFiles.isEmpty() || !synchronizing || anyFavorite()) {
             toHide.add(R.id.action_cancel_sync);
 
         } else {
@@ -236,7 +236,7 @@ public class FileMenuFilter {
         }
 
         // UNSET AS AVAILABLE OFFLINE
-        if (synchronizing || !anyFavorite()) {
+        if (!anyFavorite()) {
             toHide.add(R.id.action_unset_available_offline);
         } else {
             toShow.add(R.id.action_unset_available_offline);

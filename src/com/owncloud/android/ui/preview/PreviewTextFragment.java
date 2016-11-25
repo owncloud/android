@@ -380,11 +380,11 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_set_available_offline:{
-                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), true);
+                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
             case R.id.action_unset_available_offline:{
-                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), false);
+                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }
             default:

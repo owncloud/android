@@ -46,7 +46,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
@@ -378,11 +377,11 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
                 return true;
             }
             case R.id.action_set_available_offline:{
-                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), true);
+                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
             case R.id.action_unset_available_offline:{
-                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), false);
+                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }
             default:
