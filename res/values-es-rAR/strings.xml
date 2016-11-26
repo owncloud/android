@@ -12,11 +12,13 @@
   <string name="actionbar_send_file">Mandar</string>
   <string name="actionbar_sort">Orden</string>
   <string name="actionbar_sort_title">Ordenar por</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_close">Cerrar</string>
   <string name="drawer_open">Abrir</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
