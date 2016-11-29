@@ -97,7 +97,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
     private final AtomicBoolean mCancellationRequested;
 
     /** Files and folders contained in the synchronized folder after a successful operation */
-    private List<Pair<OCFile, Boolean>> mChildrenToVisit;
+    private List<Pair<OCFile, Boolean>> mFoldersToVisit;
 
     /**
      * When 'true', will assume that folder did not change in the server and
@@ -172,17 +172,14 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
 
     /**
-     * Returns the list of children of the folder after the refresh, in a {@link Pair} with a boolean
+     * Returns the list of subfolders after the refresh, in a {@link Pair} with a boolean
      * indicating if was detected as changed in the server or not.
      *
-     * TODO persist in database remote ETag + local ETag per file, so that returning a collection of
-     * {@link OCFile}s is good enough.
-     *
-     * @return  List of pairs of child files and boolean flags set to 'true' if there are pending changes
-     *          in the server side.
+     * @return  List of pairs of subfolders and boolean flags set to 'true' if there are pending
+     *          changes in the server side.
      */
-    public List<Pair<OCFile, Boolean>> getChildrenToVisit() {
-        return mChildrenToVisit;
+    public List<Pair<OCFile, Boolean>> getFoldersToVisit() {
+        return mFoldersToVisit;
     }
 
     /**
@@ -204,7 +201,9 @@ public class SynchronizeFolderOperation extends SyncOperation {
             if (mPushOnly) {
                 // assuming there is no update in the server side, still need to handle local changes
                 Log_OC.i(TAG, "Push only sync of " + mAccount.name + mRemotePath);
-                pushOnlySync();
+                preparePushOfLocalChanges();
+                syncContents();
+                //pushOnlySync();
                 result = new RemoteOperationResult(ResultCode.OK);
 
             } else {
@@ -212,20 +211,21 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 result = fetchRemoteFolder(client);
 
                 if (result.isSuccess()) {
-                    if (mIgnoreETag || folderChanged((RemoteFile) result.getData().get(0))) {
-                        if (!mIgnoreETag) {
-                            // folder was updated in the server side
-                            Log_OC.i(
-                                TAG, "Checked " + mAccount.name + mRemotePath + ", changed"
-                            );
-                        } else {
-                            Log_OC.i(
-                                TAG, "ETag unchanged, merging data from server anyway"
-                            );
-                        }
+                    //if (mIgnoreETag || folderChanged((RemoteFile) result.getData().get(0))) {
+                    //    if (!mIgnoreETag) {
+                    //        // folder was updated in the server side
+                    //        Log_OC.i(
+                    //            TAG, "Checked " + mAccount.name + mRemotePath + ", changed"
+                    //        );
+                    //    } else {
+                    //        Log_OC.i(
+                    //            TAG, "ETag unchanged, merging data from server anyway"
+                    //        );
+                    //    }
                         mergeRemoteFolder(result.getData());
                         syncContents(); // for available offline files or for all???? DEPENDS!
 
+                    /*
                     } else {
                         // folder was not updated in the server side
                         Log_OC.i(
@@ -233,6 +233,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
                         );
                         pushOnlySync();
                     }
+                    */
 
                 } else {
                     // fail fetching the server
@@ -262,15 +263,12 @@ public class SynchronizeFolderOperation extends SyncOperation {
      *
      * @throws OperationCancelledException
      */
+    /*
     private void pushOnlySync() throws OperationCancelledException{
         preparePushOfLocalChanges();
-        List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
-        mChildrenToVisit = new Vector<>(children.size());
-        for (OCFile child: children) {
-            mChildrenToVisit.add(new Pair<>(child, false));
-        }
         syncContents();
     }
+    */
 
 
     /**
@@ -301,7 +299,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
      * @return                  'true' if ETag of local and remote folder do not match.
      */
     private boolean folderChanged(RemoteFile remoteFolder) {
-        return (!mLocalFolder.getEtag().equals(remoteFolder.getEtag()));
+        return (!mLocalFolder.getTreeEtag().equals(remoteFolder.getEtag()));
     }
 
 
@@ -324,7 +322,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
      *  Synchronizes the data retrieved from the server about the contents of the target folder
      *  with the current data in the local database.
      *
-     *  Grants that mChildrenToVisit is updated with fresh data after execution.
+     *  Grants that mFoldersToVisit is updated with fresh data after execution.
      *
      *  @param folderAndFiles   Remote folder and children files in folder
      */
@@ -335,16 +333,16 @@ public class SynchronizeFolderOperation extends SyncOperation {
         FileDataStorageManager storageManager = getStorageManager();
         
         // parse data from remote folder
-        OCFile remoteFolder = FileStorageUtils.createOCFileFrom(
+        OCFile updatedFolder = FileStorageUtils.createOCFileFrom(
             (RemoteFile) folderAndFiles.get(0)
-        );
-        remoteFolder.copyLocalPropertiesFrom(mLocalFolder);
+        );  // NOTE: updates ETag with remote value; that's INTENDED
+        updatedFolder.copyLocalPropertiesFrom(mLocalFolder);
 
         Log_OC.d(TAG, "Remote folder " + mLocalFolder.getRemotePath()
                 + " changed - starting update of local data ");
 
         List<OCFile> updatedFiles = new Vector<>(folderAndFiles.size() - 1);
-        mChildrenToVisit = new Vector<>(folderAndFiles.size() - 1);
+        mFoldersToVisit = new Vector<>(folderAndFiles.size() - 1);
         mFilesToSyncContents.clear();
 
         if (mCancellationRequested.get()) {
@@ -361,7 +359,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         // loop to synchronize every child
         OCFile remoteFile, localFile, updatedLocalFile;
         RemoteFile r;
-        boolean serverUnchanged;
+        int foldersToExpand = 0;
         for (int i=1; i<folderAndFiles.size(); i++) {
             /// new OCFile instance with the data from the server
             r = (RemoteFile) folderAndFiles.get(i);
@@ -394,51 +392,63 @@ public class SynchronizeFolderOperation extends SyncOperation {
             /// check and fix, if needed, local storage path
             searchForLocalFileInDefaultPath(updatedLocalFile);
 
-            /// prepare content synchronization for kept-in-sync files
-            serverUnchanged = updatedLocalFile.getEtag().equals(remoteFile.getEtag());
-            addToSyncContents(updatedLocalFile, remoteFile, serverUnchanged);
+            /// prepare content synchronizations
+            boolean serverUnchanged = addToSyncContents(updatedLocalFile, remoteFile);
+            if (updatedLocalFile.isFolder() && !serverUnchanged) {
+                foldersToExpand++;
+            }
 
             updatedFiles.add(updatedLocalFile);
-            mChildrenToVisit.add(new Pair<>(updatedLocalFile, !serverUnchanged));
         }
 
         // save updated contents in local database
-        storageManager.saveFolder(remoteFolder, updatedFiles, localFilesMap.values());
+        if (foldersToExpand == 0) {
+            updatedFolder.setTreeEtag(updatedFolder.getEtag());
+            // TODO - propagate up
+        }
+        storageManager.saveFolder(updatedFolder, updatedFiles, localFilesMap.values());
     }
+
 
     private void preparePushOfLocalChanges() throws OperationCancelledException {
         List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
+        mFoldersToVisit = new Vector<>(children.size());
         for (OCFile child : children) {
             addToSyncContents(
                 child,
-                null,
-                true
+                null
             );
         }
     }
 
 
     /**
-     * Generates the appropriate operations to later sync the contents of localFile with the server, if
-     * it's an available offline file or folder.
+     * Generates the appropriate operations to later sync the contents of localFile with the server.
      *
      * Stores the operations in mFoldersToSyncContents and mFilesToSyncContents.
      *
      * @param localFile         Local information about the file which contents might be sync'ed.
      * @param remoteFile        Server information of the file.
-     * @param serverUnchanged   When 'true', will assume that folder didn't change in server side, so that
-     *                          synchronizations of subfolders will not check for changes again.
+     * @true                    'True' when the received file was not changed in the server side from the
+     *                          last synchronization.
      */
-    private void addToSyncContents(OCFile localFile, OCFile remoteFile, boolean serverUnchanged) {
-        if (mSyncContentOfRegularFiles ||
-            localFile.isAvailableOffline()
-            ) {
+    private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
 
-            if (localFile.isFolder() &&
-                !mSyncFullAccount   // if this operation is part of a full-account sync driven
-                // by {@link FileSyncAdapter}, subfolders will not be expanded by
-                // the operation itself
-                ) {
+        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableOffline());
+        boolean serverUnchanged;
+
+        if (localFile.isFolder()) {
+            // automatic expansion of subfolders depends on treeEtag ;
+            // Etag will be used to optimize browsing via UI one folder at a time
+            serverUnchanged = (remoteFile == null) || localFile.getTreeEtag().equals(remoteFile.getEtag());
+
+            if (mSyncFullAccount) {
+                // this operation is part of a full-account synchronization driven
+                // by {@link FileSyncAdapter}; subfolders will not be expanded by
+                // this operation, but by {@link FileSyncAdapter}
+                mFoldersToVisit.add(new Pair<>(localFile, !serverUnchanged));
+
+            } else if (shouldSyncContents) {
                 /// to sync descendants
                 Intent intent = new Intent(mContext, OperationsService.class);
                 intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
@@ -450,8 +460,13 @@ public class SynchronizeFolderOperation extends SyncOperation {
                     mSyncContentOfRegularFiles
                 );
                 mFoldersToSyncContents.add(intent);
+            }
 
-            } else if (!localFile.isFolder() && !localFile.isInConflict()) {
+        } else {
+            // files do not use treeEtag
+            serverUnchanged = (remoteFile == null) || localFile.getEtag().equals(remoteFile.getEtag());
+
+            if (shouldSyncContents && !localFile.isInConflict()) {
                 /// synchronization for files
                 SynchronizeFileOperation operation = new SynchronizeFileOperation(
                     localFile,
@@ -463,6 +478,8 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 mFilesToSyncContents.add(operation);
             }
         }
+
+        return serverUnchanged;
     }
 
 

@@ -270,7 +270,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             folder.getRemotePath(),
             getAccount(),
             mCurrentSyncTime,
-            false,
+            pushOnly,
                 // passing 'pushOnly' IS NOT GOOD ENOUGH;
                 // we need a separate local field in database storing ETag when bottom of the tree is hit;
                 // otherwise, browsing through the app might prevent that subsequent full-account syncs
@@ -303,9 +303,9 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             }
             if (result.isSuccess()) {
                 // synchronize children folders 
-                List<Pair<OCFile, Boolean>> children = synchFolderOp.getChildrenToVisit();
+                List<Pair<OCFile, Boolean>> children = synchFolderOp.getFoldersToVisit();
                 // beware of the 'hidden' recursion here!
-                syncChildren(children);
+                syncSubfolders(children);
             }
             
         } else if (result.getCode() != ResultCode.FILE_NOT_FOUND) {
@@ -350,29 +350,29 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Triggers the synchronization of any folder contained in the list of received files.
      *
-     * Every file comes with a boolean flag, set to true if the previous sync operation detected
+     * Every subfolder comes with a boolean flag, set to true if the previous sync operation detected
      * that there are pending changes in the file.
      *
      * Only folders that have pending changes in the server will be sync'd here.
      *
-     * @param files         Files to recursively synchronize, with boolean value signaling if there are pending
+     * @param folders       Subfolders to recursively synchronize, with boolean value signaling if there are pending
      *                      changes to sync in the server.
      */
-    private void syncChildren(List<Pair<OCFile, Boolean>> files) {
+    private void syncSubfolders(List<Pair<OCFile, Boolean>> folders) {
         int i;
         Pair<OCFile, Boolean> pair;
-        for (i=0; i < files.size() && !mCancellation; i++) {
-            pair = files.get(i);
+        for (i=0; i < folders.size() && !mCancellation; i++) {
+            pair = folders.get(i);
             if (pair.first.isFolder()) {
                 synchronizeFolder(pair.first, !pair.second);
             }
         }
        
-        if (mCancellation && i <files.size()) {
+        if (mCancellation && i <folders.size()) {
             Log_OC.d(
                 TAG,
                 "Leaving synchronization before synchronizing " +
-                    files.get(i).first.getRemotePath() +
+                    folders.get(i).first.getRemotePath() +
                     " due to cancelation request"
             );
         }

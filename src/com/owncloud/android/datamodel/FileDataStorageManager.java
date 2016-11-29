@@ -192,6 +192,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.getLastSyncDateForProperties());
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.getLastSyncDateForData());
         cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
+        cv.put(ProviderTableMeta.FILE_TREE_ETAG, file.getTreeEtag());
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());
@@ -300,6 +301,7 @@ public class FileDataStorageManager {
             cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, file.getLastSyncDateForProperties());
             cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, file.getLastSyncDateForData());
             cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
+            cv.put(ProviderTableMeta.FILE_TREE_ETAG, file.getTreeEtag());
             cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
             cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
             cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());
@@ -378,6 +380,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, folder.getLastSyncDateForProperties());
         cv.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA, folder.getLastSyncDateForData());
         cv.put(ProviderTableMeta.FILE_ETAG, folder.getEtag());
+        cv.put(ProviderTableMeta.FILE_TREE_ETAG, folder.getTreeEtag());
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, folder.isSharedViaLink() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, folder.isSharedWithSharee() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, folder.getPublicLink());
@@ -1071,6 +1074,7 @@ public class FileDataStorageManager {
                 )
             );
             file.setEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG)));
+            file.setTreeEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_TREE_ETAG)));
             file.setShareViaLink(c.getInt(
                     c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_LINK)) == 1 ? true : false);
             file.setShareWithSharee(c.getInt(
@@ -1521,6 +1525,7 @@ public class FileDataStorageManager {
                 );
                 cv.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, file.getAvailableOfflineStatus().getValue());
                 cv.put(ProviderTableMeta.FILE_ETAG, file.getEtag());
+                cv.put(ProviderTableMeta.FILE_TREE_ETAG, file.getTreeEtag());
                 cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
                 cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
                 cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());

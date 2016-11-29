@@ -118,6 +118,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     private AvailableOfflineStatus mAvailableOfflineStatus;
 
     private String mEtag;
+    private String mTreeEtag;
 
     private boolean mShareByLink;
     private String mPublicLink;
@@ -188,6 +189,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mLastSyncDateForProperties = source.readLong();
         mLastSyncDateForData = source.readLong();
         mEtag = source.readString();
+        mTreeEtag = source.readString();
         mShareByLink = source.readInt() == 1;
         mPublicLink = source.readString();
         mPermissions = source.readString();
@@ -215,6 +217,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         dest.writeLong(mLastSyncDateForProperties);
         dest.writeLong(mLastSyncDateForData);
         dest.writeString(mEtag);
+        dest.writeString(mTreeEtag);
         dest.writeInt(mShareByLink ? 1 : 0);
         dest.writeString(mPublicLink);
         dest.writeString(mPermissions);
@@ -459,7 +462,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mLastSyncDateForData = 0;
         mAvailableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
         mNeedsUpdating = false;
-        mEtag = null;
+        mEtag = "";
+        mTreeEtag = "";
         mShareByLink = false;
         mPublicLink = null;
         mPermissions = null;
@@ -612,11 +616,12 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     @Override
     public String toString() {
-        String asString = "[id=%s, name=%s, mime=%s, downloaded=%s, local=%s, remote=%s, " +
-                "parentId=%s, favorite=%s etag=%s]";
-        asString = String.format(asString, Long.valueOf(mId), getFileName(), mMimeType, isDown(),
-                mLocalPath, mRemotePath, Long.valueOf(mParentId), mAvailableOfflineStatus,
-                mEtag);
+        String asString = "[id=%s, name=%s,  etag=%s, tree_etag=%s, mime=%s, downloaded=%s, local=%s, remote=%s, " +
+                "parentId=%s, favorite=%s]";
+        asString = String.format(asString, Long.valueOf(mId), getFileName(), mEtag, mTreeEtag,
+                mMimeType, isDown(), mLocalPath, mRemotePath, Long.valueOf(mParentId),
+                mAvailableOfflineStatus
+        );
         return asString;
     }
 
@@ -628,6 +633,13 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         this.mEtag = (etag != null ? etag : "");
     }
 
+    public String getTreeEtag() {
+        return mTreeEtag;
+    }
+
+    public void setTreeEtag(String etag) {
+        mTreeEtag = (etag != null ? etag : "");
+    }
 
     public boolean isSharedViaLink() {
         return mShareByLink;
@@ -771,6 +783,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         setPublicLink(sourceFile.getPublicLink());
         setShareViaLink(sourceFile.isSharedViaLink());
         setShareWithSharee(sourceFile.isSharedWithSharee());
+        setTreeEtag(sourceFile.getTreeEtag());
         setEtagInConflict(sourceFile.getEtagInConflict());
     }
 
