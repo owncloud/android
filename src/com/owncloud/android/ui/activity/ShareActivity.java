@@ -52,6 +52,8 @@ import com.owncloud.android.ui.fragment.ShareFragmentListener;
 import com.owncloud.android.utils.ErrorMessageAdapter;
 import com.owncloud.android.utils.GetShareWithUsersAsyncTask;
 
+import java.util.ArrayList;
+
 
 /**
  * Activity for sharing files
@@ -306,7 +308,18 @@ public class ShareActivity extends FileActivity
 
             // Create dialog to allow the user choose an app to send the link
             Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
-            String link = ((OCShare) (result.getData().get(0))).getShareLink();
+
+            String link = null;
+            ArrayList<Object> shares = result.getData();
+            for(Object share : shares) {
+                if(((OCShare)share).getShareType() == ShareType.PUBLIC_LINK) {
+                    if(link == null)
+                       link = ((OCShare) share).getShareLink();
+                    else
+                        Log_OC.e(TAG, "Unexpected repeated public link found");
+                }
+            }
+
             intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
             intentToShareLink.setType("text/plain");
             String username = AccountUtils.getUsernameForAccount(getAccount());
