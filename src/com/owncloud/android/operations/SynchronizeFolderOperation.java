@@ -35,6 +35,8 @@ import android.support.v4.util.Pair;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.datamodel.UploadsStorageManager;
+import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -466,7 +468,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
             // files do not use treeEtag
             serverUnchanged = (remoteFile == null) || localFile.getEtag().equals(remoteFile.getEtag());
 
-            if (shouldSyncContents && !localFile.isInConflict()) {
+            if (shouldSyncContents && !isBlockedForAutomatedSync(localFile)) {
                 /// synchronization for files
                 SynchronizeFileOperation operation = new SynchronizeFileOperation(
                     localFile,
@@ -481,7 +483,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
         return serverUnchanged;
     }
-
 
     /**
      * Performs a list of synchronization operations, determining if a download or upload is needed
@@ -566,7 +567,34 @@ public class SynchronizeFolderOperation extends SyncOperation {
         return FileStorageUtils.getDefaultSavePathFor(mAccount.name, mLocalFolder);
     }
 
+    /**
+     * Checks the last upload of a file and determines if automated synchronization needs to wait for
+     * user action or not.
+     *
+     * @param file      ownCloud file to check.
+     * @return          'True' if the received file should not be automatically sync'ed due to a previous
+     *                  upload error that requires an user action.
+     */
+    private boolean isBlockedForAutomatedSync(OCFile file) {
+        UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(mContext.getContentResolver());
+        OCUpload failedUpload = uploadsStorageManager.getLastUploadFor(file, mAccount.name);
+        if (failedUpload != null) {
+            switch (failedUpload.getLastResult()) {
+                case CREDENTIAL_ERROR:
+                case FOLDER_ERROR:
+                case FILE_NOT_FOUND:
+                case FILE_ERROR:
+                case PRIVILEDGES_ERROR:
+                case CONFLICT_ERROR:
+                    return true;
+            }
+        }
+        return false;
+    }
+
+
     public String getRemotePath() {
         return mRemotePath;
     }
+
 }
