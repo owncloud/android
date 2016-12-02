@@ -73,10 +73,13 @@ public class RefreshFolderOperation extends SyncOperation {
     
     /** 'True' means that Share resources bound to the files into should be refreshed also */
     private boolean mIsShareSupported;
-    
-    /** 'True' means that Etag will be ignored */
-    private boolean mIgnoreETag;
 
+    /**
+     * 'True' means that the list of files in the remote folder should
+     *  be fetched and merged locally even though the 'eTag' did not change.
+     */
+    private boolean mIgnoreETag;    // TODO - use it prefetching ETag of folder; two PROPFINDS, but better
+                                    // TODO -   performance with (big) unchanged folders
 
     /**
      * Creates a new instance of {@link RefreshFolderOperation}.
@@ -127,7 +130,6 @@ public class RefreshFolderOperation extends SyncOperation {
             mAccount,
             System.currentTimeMillis(),
             false,
-            mIgnoreETag,
             false,
             false
         );

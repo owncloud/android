@@ -686,7 +686,6 @@ public class OperationsService extends Service {
                             System.currentTimeMillis(),  // TODO remove this dependency from construction time
                             pushOnly,
                             false,
-                            false,
                             syncContentOfRegularFiles
                     );
 

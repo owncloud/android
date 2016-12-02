@@ -271,18 +271,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             getAccount(),
             mCurrentSyncTime,
             pushOnly,
-                // passing 'pushOnly' IS NOT GOOD ENOUGH;
-                // we need a separate local field in database storing ETag when bottom of the tree is hit;
-                // otherwise, browsing through the app might prevent that subsequent full-account syncs
-                // update deeper levels;
-                // EXAMPLE:
-                // 1. sync full account
-                // 2. in server, add file 'f.txt' in '/childFolder/'
-                // 3. open the app and let it refresh the root folder automatically
-                //      -> ETag of '/' is updated
-                // 4. sync full account; since ETag of '/' was updated, full sync will not enter in
-                //      '/childFolder/' and will not discover 'f.txt', but will finish without error
-            false,      // do not ignore ETag
             true,       // sync full account
             false       // only sync contents of available offline files
         );

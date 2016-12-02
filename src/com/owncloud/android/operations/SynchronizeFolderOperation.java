@@ -107,9 +107,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
      */
     private boolean mPushOnly;
 
-    /** 'True' means that Etag will be ignored to decide if merging the remote list of files locally */
-    private boolean mIgnoreETag;
-
     /** 'True' means that this operation is part of a full account synchronization */
     private boolean mSyncFullAccount;
 
@@ -126,8 +123,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
      * @param   currentSyncTime             Time stamp for the synchronization process in progress.
      * @param   pushOnly                    When 'true', will assume that folder did not change in the server and
      *                                      will focus only in push any local change to the server (carefully).
-     * @param   ignoreETag                  'True' means that the list of files in the remote folder should
-     *                                      be fetched and merged locally even though the 'eTag' did not change.
      * @param   syncFullAccount             'True' means that this operation is part of a full account
      *                                      synchronization.
      * @param   syncContentOfRegularFiles   When 'true', the contents of all the files in the folder will
@@ -140,7 +135,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
         Account account,
         long currentSyncTime,
         boolean pushOnly,
-        boolean ignoreETag,
         boolean syncFullAccount,
         boolean syncContentOfRegularFiles
     ) {
@@ -153,7 +147,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
         mForgottenLocalFiles = new HashMap<>();
         mCancellationRequested = new AtomicBoolean(false);
         mPushOnly = pushOnly;
-        mIgnoreETag = ignoreETag;
         mSyncFullAccount = syncFullAccount;
         mSyncContentOfRegularFiles = syncContentOfRegularFiles;
     }
@@ -213,29 +206,9 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 result = fetchRemoteFolder(client);
 
                 if (result.isSuccess()) {
-                    //if (mIgnoreETag || folderChanged((RemoteFile) result.getData().get(0))) {
-                    //    if (!mIgnoreETag) {
-                    //        // folder was updated in the server side
-                    //        Log_OC.i(
-                    //            TAG, "Checked " + mAccount.name + mRemotePath + ", changed"
-                    //        );
-                    //    } else {
-                    //        Log_OC.i(
-                    //            TAG, "ETag unchanged, merging data from server anyway"
-                    //        );
-                    //    }
-                        mergeRemoteFolder(result.getData());
-                        syncContents(); // for available offline files or for all???? DEPENDS!
-
-                    /*
-                    } else {
-                        // folder was not updated in the server side
-                        Log_OC.i(
-                            TAG, "Checked " + mAccount.name + mRemotePath + ", not changed"
-                        );
-                        pushOnlySync();
-                    }
-                    */
+                    // success - merge updates in server with local state
+                    mergeRemoteFolder(result.getData());
+                    syncContents();
 
                 } else {
                     // fail fetching the server
@@ -259,18 +232,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
         return result;
 
     }
-
-    /**
-     * Synchronization of the folder when data in the server did not change from the last synchronization.
-     *
-     * @throws OperationCancelledException
-     */
-    /*
-    private void pushOnlySync() throws OperationCancelledException{
-        preparePushOfLocalChanges();
-        syncContents();
-    }
-    */
 
 
     /**
@@ -389,6 +350,12 @@ public class SynchronizeFolderOperation extends SyncOperation {
                 updatedLocalFile.setParentId(mLocalFolder.getFileId());
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag("");
+                // new files need to check av-off status of parent folder!
+                if (updatedFolder.isAvailableOffline()) {
+                    updatedLocalFile.setAvailableOfflineStatus(
+                        OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+                    );
+                }
             }
 
             /// check and fix, if needed, local storage path
@@ -431,7 +398,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
      *
      * @param localFile         Local information about the file which contents might be sync'ed.
      * @param remoteFile        Server information of the file.
-     * @true                    'True' when the received file was not changed in the server side from the
+     * @return                  'True' when the received file was not changed in the server side from the
      *                          last synchronization.
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
