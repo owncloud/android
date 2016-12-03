@@ -36,7 +36,7 @@ Avaliando os testes disponíveis no projeto, determinamos que o nome dos mesmo �
 ### Heterogeneidade
 Determina o grau que o uso de diversas tecnologias requer, para usar diversos métodos de ensaio e ferramentas em paralelo.
 
-Como o *OwnCloud* é um projeto com ainda alguns contribuidores, é utilizado um canal IRC para as pessoas que pretendam contribuir possam comunicar entre si e com os principais desenvolvedores. Para facilitar a execução dos testes é também utilizada a biblioteca *JUnit*.
+No momento da avaliação do projecto, tinham sido usados testes em *Apache Ant/JUnit3* na versão inicial do projecto, *Gradle* quando mudaram para o *Android Studio* como principal IDE, *Appium* numa primeira fase de ínicio dos testes da *UI*, e Espresso para testar o *login*. Cada um foi usado num diferente período do projecto, estando os métodos desatualizados sendo apenas o Espresso atualizado e o método que irá permanecer como ferramenta de testes. Assim concluimos que o projecto *OwnCloud* atualmente não é heterogéneo pois embora tenham sido usadas várias ferramentas atualmente apenas uma é usada.
 
 ## *Report Test Statistics and analytics*
 
