@@ -55,7 +55,7 @@
   <string name="sync_string_files">Ficheiros</string>
   <string name="setup_btn_connect">Ligar</string>
   <string name="uploader_btn_upload_text">Carregar</string>
-  <string name="uploader_top_message">Escolha pasta de envio</string>
+  <string name="uploader_top_message">Escolha a pasta de envio</string>
   <string name="uploader_wrn_no_account_title">Nenhuma conta encontrada</string>
   <string name="uploader_wrn_no_account_text">Não existem as contas %1$s no seu dispositivo. Por favor, configure primeiro uma conta.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Configurar</string>
@@ -137,13 +137,13 @@
   <string name="downloader_download_in_progress_ticker">A descarregar…</string>
   <string name="downloader_download_in_progress_content">%1$d%% A descarregar %2$s</string>
   <string name="downloader_download_succeeded_ticker">Transferência concluída com sucesso</string>
-  <string name="downloader_download_succeeded_content">%1$s descarregado</string>
+  <string name="downloader_download_succeeded_content">%1$s transferido</string>
   <string name="downloader_download_failed_ticker">Erro na transferência</string>
   <string name="downloader_download_failed_content">A transferência de %1$s não pode ser concluída </string>
   <string name="downloader_not_downloaded_yet">Por transferir</string>
   <string name="downloader_download_failed_credentials_error">Erro na transferência, por favor inicie novamente a sessão</string>
   <string name="common_choose_account">Escolha a conta</string>
-  <string name="sync_fail_ticker">Falha de sincronização </string>
+  <string name="sync_fail_ticker">Falha na sincronização </string>
   <string name="sync_fail_ticker_unauthorized">A sincronização falhou, é necessário que inicie a sessão novamente</string>
   <string name="sync_fail_content">Não foi possível concluir a sincronização de %1$s</string>
   <string name="sync_fail_content_unauthorized">Palavra-passe para %1$s inválida</string>
