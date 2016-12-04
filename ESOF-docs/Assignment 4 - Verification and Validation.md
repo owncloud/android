@@ -1,27 +1,27 @@
-# Relatório 4 - *Verification and Validation*
+# Relatório 4 - Verificação e Validação
 
 O objetivo deste relatório é documentar o estado atual do projeto no que respeita à verificação e validação. Numa primeira parte, será feita uma análise relativamente ao grau de testabilidade do projeto, relatando a forma de testar os componentes da aplicação, bem como esta podia ser melhorada. De seguida, são apresentadas algumas estatísticas de teste, relativamente ao número de testes e à cobertura. Por fim, é explicada a forma como resolvemos o *bug* escolhido.
 
-## *Software Testability and Reviews*
+## Testabilidade do Software e Comentários
 
 O uso de testes é uma mais valia para garantir a qualidade do projeto, pois permitem determinar a existência de erros importantes. No entanto, os testes não provam que o código não tenha falhas.
 
 ### Controlabilidade
 A controlabilidade, por definição, é o grau que permite controlar o estado do componente a ser testado (CUT - *Component Under Test*).
 
-Analisando os testes do *OwnCloud*, verificamos que são bastantes específicos, ou seja, a sua controlabilidade é tanto maior quanto a especifidade do teste.
+Analisando os testes do *OwnCloud*, verificamos que são bastantes específicos, ou seja, a sua controlabilidade é tanto maior quanto a especificidade do teste.
 
 ### Observabilidade
 Este ponto refere-se ao grau no qual é possível observar os resultados intermediários e finais dos testes.
 
-Para obter o resultado dos testes ao nível da camada da aplicação, é necessário corrê-los no *Android Studio*. Os testes que exercitam as operações no servidor, devem ser corridos através do terminal, sendo para isso necessário possuir o *JUnit* e o *Apache Ant*. 
+Para obter o resultado dos testes ao nível da camada da aplicação, é necessário corrê-los no [**Android Studio**](https://developer.android.com/studio/index.html). Os testes que exercitam as operações no servidor, devem ser corridos através do terminal, sendo para isso necessário possuir o [**JUnit**](http://junit.org/junit4/) e o [**Apache Ant**](http://ant.apache.org/bindownload.cgi). 
 
-No entanto, alguns testes que estão no *branch master* (nomeadamente os que se encontram na pasta *automationTest*) estão obsoletos. Segundo a informação obtida junto do atual responsável pela aplicação, a equipa tem como objetivo produzir um conjunto mais alargado de testes *Espresso* que permitam abranger quase toda a aplicação. Existe já um *branch* denominado *login_suite_espresso* onde estes testes se encontram a ser produzidos, mas não estão prontos para ser testados e, por esta razão, o grupo decidiu não os incluir neste relatório.
+No entanto, alguns testes que estão no *branch master* (nomeadamente os que se encontram na pasta [**automationTest**](https://github.com/PauloSantos13/android/tree/master/automationTest)) estão obsoletos. Segundo a informação obtida junto do atual responsável pela aplicação, a equipa tem como objetivo produzir um conjunto mais alargado de testes [**Espresso**](https://google.github.io/android-testing-support-library/docs/espresso/index.html) que permitam abranger quase toda a aplicação. Existe já um *branch* denominado [**login_suite_espresso**](https://github.com/owncloud/android/tree/login_suite_espresso) onde estes testes se encontram a ser produzidos, mas não estão prontos para ser testados e, por esta razão, o grupo decidiu não os incluir neste relatório.
 
 ### Isolabilidade
 A isolabilidade representa o grau em que cada componente pode ser testado isoladamente.
 
-Assim, a isolabilidade é tanto maior quanto menos se relacionem os módulos uns com os outros. No caso do *OwnCloud*, a maior parte dos módulos estão relacionados entre si, o que dificulta o teste de cada módulo isoladamente.
+Assim, a isolabilidade é tanto maior quanto menor for a relação entre os módulos. No caso do *OwnCloud*, a maior parte dos módulos estão relacionados entre si, o que dificulta o teste de cada um isoladamente.
 
 ### Separação de Responsabilidades
 A separação de responsabilidades define se o componente a ser testado tem uma responsabilidade bem definida.
@@ -36,13 +36,23 @@ Avaliando os testes disponíveis no projeto, determinamos que o nome dos mesmo �
 ### Heterogeneidade
 Determina o grau que o uso de diversas tecnologias requer, para usar diversos métodos de ensaio e ferramentas em paralelo.
 
-No momento da avaliação do projecto, tinham sido usados testes em *Apache Ant/JUnit3* na versão inicial do projecto, *Gradle* quando mudaram para o *Android Studio* como principal IDE, *Appium* numa primeira fase de ínicio dos testes da *UI*, e Espresso para testar o *login*. Cada um foi usado num diferente período do projecto, estando os métodos desatualizados sendo apenas o Espresso atualizado e o método que irá permanecer como ferramenta de testes. Assim concluimos que o projecto *OwnCloud* atualmente não é heterogéneo pois embora tenham sido usadas várias ferramentas atualmente apenas uma é usada.
+Numa fase inicial do projeto, existiam testes ao nível da interface que requiriam o uso da ferramenta [**Appium**](http://appium.io/slate/en/master/?java#about-appium) e das suas dependências. No momento da avaliação do projeto, estes já se encontram desatualizados e não fazem parte do conjunto de testes corridos, estando a ser convertidos em testes *Espresso* (ainda não concluídos). Desta forma, recorrem ao uso de *Apache Ant/JUnit3* para testar as operações ao nível do servidor e *Gradle* (quando mudaram para o *Android Studio* como principal IDE) onde são corridos alguns testes ao nível da interface.
 
-## *Report Test Statistics and analytics*
+Assim, concluí-se que o projecto *OwnCloud* é heterogéneo, uma vez que recorre a diversas tecnologias em paralelo.
+
+## Estatísticas e análises dos testes
 
 De uma forma geral, para avaliar a qualidade do *software*, recorrem-se a estatísticas de teste que tentam contemplar o maior número de componentes possível, determinando a eficiência e estabilidade do sistema. 
 
 No caso particular do *ownCloud*, como foi referido no tópico anterior, o número de casos de teste é muito reduzido, havendo, por isso, uma percentagem de cobertura também muito reduzida.
+
+Para testar esta percentagem de cobertura, tentou-se recorrer à ferramenta *Eclemma* do *Eclipse*, mas como o grupo não conseguiu correr o projeto neste IDE, deduzimos que esta percentagem seria muito reduzida devido ao baixo número de testes.
+
+Tentou-se, também, utilizar as ferramentas *Cucumber*, *Infer* e *Hygieia*, referidas nas aulas teóricas, mas sem sucesso. Apenas se conseguiu usar [**Codacy**](https://www.codacy.com/), obtendo-se algumas estatísticas interessantes demonstradas a seguir:
+
+![CodacyStats](/ESOF-docs/resources/codacy_stats.PNG)
+
+Não foram detetados *flaky tests*, uma vez que correr os testes várias vezes com o mesmo código produz sempre o mesmo resultado.
 
 Ao nível da camada de aplicação, existem apenas 5 testes que incidem sobre os pacotes *authentication*, *datamodel*, *uiautomator*, produzindo o seguinte resultado:
 
@@ -179,16 +189,22 @@ Posto isto, pode-se deduzir que existem testes que exercitam componentes que pod
 
 Numa perspetiva geral, a maior parte dos componentes da camada da aplicação não possui (atualmente) testes implementados. Pode-se concluir que esta falta de testes é um defeito do projeto, pois dificulta a validação da maioria dos módulos.
 
-## *Identify a new bug and/or correct a bug*
-Após alguns testes à aplicação, não detetámos *bugs*, portanto decidimos resolver um dos *bugs* indicados nas *issues* do *GitHub*, escolhendo a *issue* 1562: https://github.com/owncloud/android/issues/1562.
+## Identificação de um novo *bug* e/ou correção do *bug*
+Após alguns testes à aplicação, não detetámos nenhum *bug* novo. Uma vez que que a maioria dos *bugs* que a aplicação possui foram  reportados pelos diversos utilizadores e ainda não foram corrigidos, decidimos resolver um dos indicados nas *issues* do *GitHub*, escolhendo a [***issue* 1562**](https://github.com/owncloud/android/issues/1562).
 
 Esta *issue* indica que quando um ficheiro é partilhado com um utilizador e, depois, é partilhado usando uma hiperligação pública, se se fechar a aplicação e voltar a abrir e abrir as opções de partilha do ficheiro para tentar copiar a hiperligação, nenhuma hiperligação é retornada.
 
-Aqui podem ver as alterações que realizámos para resolver a *issue* (retiramos a linha a vermelho que foi substituída pelas seguintes).
+Aqui registam-se as alterações feitas para resolver a *issue* (foi retirada a linha a vermelho, substituída pelas seguintes).
 
 ![CodeChangedOnShareActivity](/ESOF-docs/resources/code_changed_on_share_activity.PNG)
 
-Para resolver a *issue* 1562, analisamos a situação usando a interface do utilizador e, depois, analisamos o código. Ao nível da interface, verificámos que o problema ocorria tanto com ficheiros como com pastas e que também ocorria se, logo que realizássemos a partilha, pedíssemos a hiperligação duas vezes; a primeira funcionava bem, mas, a partir da segunda vez, já não. Ao nível do código, verificámos que, por vezes, o *ArrayList* retornado pelo método “getData” em “ShareActivity” nem sempre tinha apenas um elemento, tendo mais do que um, isto é, tinha uma hiperligação para *User* e uma para *Public*. Depois, analisámos o código da classe “RemoteOperationResult”, que é usada por diversas classes, e descobrimos que possuía um método chamado “setData”. De seguida, identificámos, com a ajuda da capacidade “Find Usages” do *Android Studio*, todos os locais em que “setData” era usado e verificámos que apenas as classes “ShareToRemoteOperationResultParser” e “ReadRemoteFolderOperation” poderiam criar um *ArrayList* com mais de um elemento. Após analisarmos o que essas duas classes adicionavam ao *ArrayList* delas, antes de ser aplicado o método “setData”, entendemos que o problema não estava em “ReadRemoteFolderOperation”, pois esta classe trata os dados de uma pasta remota e seus ficheiros-filhos. Portanto, verificamos se havia diferentes tipos de hiperligações e descobrimos em “ShareType” que isso era verdade, sendo muito perigoso apenas aceitar hiperligações públicas em “ShareToRemoteOperationResultParser” (sabemos agora que de certeza que isso iria trazer problemas), portanto decidimos usar uma solução que se aparenta com a apresentada na *issue*, mas que achamos melhor que esse *workaround*. Achamos esta a melhor solução para o problema, não trazendo efeitos negativos ao funcionamento da aplicação.
+Para resolver a *issue* 1562, analisamos inicialmente a situação usando a interface do utilizador e, posteriormente, o código. Ao nível da interface, verificámos que o problema ocorria tanto com ficheiros como com pastas e que também ocorria se, logo que realizássemos a partilha, pedíssemos a hiperligação duas vezes; a primeira funcionava bem, mas, a partir da segunda vez, já não. 
+
+Ao nível do código, verificámos que, por vezes, o *ArrayList* retornado pelo método “getData” em “ShareActivity” nem sempre tinha apenas um elemento, tendo mais do que um, isto é, tinha uma hiperligação para *User* e uma para *Public*. 
+
+Depois, analisámos o código da classe “RemoteOperationResult”, que é usada por diversas classes, e descobrimos que possuía um método chamado “setData”. De seguida, identificámos, com a ajuda da capacidade “Find Usages” do *Android Studio*, todos os locais em que “setData” era usado e verificámos que apenas as classes “ShareToRemoteOperationResultParser” e “ReadRemoteFolderOperation” poderiam criar um *ArrayList* com mais de um elemento. 
+
+Após analisarmos o que essas duas classes adicionavam ao *ArrayList* delas, antes de ser aplicado o método “setData”, entendemos que o problema não estava em “ReadRemoteFolderOperation”, pois esta classe trata os dados de uma pasta remota e seus ficheiros-filhos. Portanto, verificamos se havia diferentes tipos de hiperligações e descobrimos em “ShareType” que isso era verdade, sendo muito perigoso apenas aceitar hiperligações públicas em “ShareToRemoteOperationResultParser” (sabemos agora que de certeza que isso iria trazer problemas), portanto decidimos usar uma solução que se aparenta com a apresentada na *issue*, mas que achamos melhor que esse *workaround*. Achamos esta a melhor solução para o problema, não trazendo efeitos negativos ao funcionamento da aplicação.
 
 Mais tarde, confirmamos que, como esperado, as hiperligações eram adicionadas por ordem de criação, então, se a hiperligação pública fosse a primeira a ser criada (ou não fosse criada), nunca havia problema, caso contrário, o problema ocorreria.
 
