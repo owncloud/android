@@ -2,7 +2,7 @@
 
 O objetivo deste relatório é documentar o estado atual do projeto no que respeita à verificação e validação. Numa primeira parte, será feita uma análise relativamente ao grau de testabilidade do projeto, relatando a forma de testar os componentes da aplicação, bem como esta podia ser melhorada. De seguida, são apresentadas algumas estatísticas de teste, relativamente ao número de testes e à cobertura. Por fim, é explicada a forma como resolvemos o *bug* escolhido.
 
-## Testabilidade do Software e Comentários
+## Testabilidade do *Software* e Comentários
 
 O uso de testes é uma mais valia para garantir a qualidade do projeto, pois permitem determinar a existência de erros importantes. No entanto, os testes não provam que o código esteja isento de falhas.
 
@@ -29,14 +29,14 @@ A separação de responsabilidades define se o componente a ser testado tem uma 
 Para que a estrutura do projeto fique bem organizada e de fácil compreensão e acesso, cada módulo deve estar bem definido, evitando assim que o código fique misturado e menos eficiente. No caso do *ownCloud*, a sua estrutura está bem definida. Os principais desenvolvedores optaram por criar vários *packages* de forma a que cada funcionalidade fique bem definida, sendo os seus sub-problemas resolvidos no seu interior.
 
 ### Perceptibilidade
-A perceptibilidade avalia o grau em que o componente em teste está autoexplicativo e documentado.
+A perceptibilidade avalia o grau em que o componente em teste é autoexplicativo e está documentado.
 
 Avaliando os testes disponíveis no projeto, determinamos que o nome dos mesmos é claro e, por isso, autoexplicativo. Isto permite ao utilizador verificar com muita facilidade qual o teste que falhou e a localização do erro.
 
 ### Heterogeneidade
-A heterogeneidade indica a necessidade do projecto em recorrer a diversas tecnologias para testar diferentes funcionalidades.
+A heterogeneidade indica a necessidade do projecto recorrer a diversas tecnologias para testar diferentes funcionalidades.
 
-Numa fase inicial do projeto, existiam testes ao nível da interface que requiriam o uso da ferramenta [**Appium**](http://appium.io/slate/en/master/?java#about-appium) e das suas dependências. No momento da avaliação do projeto, estes já se encontram desatualizados e não fazem parte do conjunto de testes corridos, estando a ser convertidos em testes *Espresso* (ainda não concluídos). Desta forma, recorrem ao uso de *Apache Ant/JUnit3* para testar as operações ao nível do servidor e *Gradle* (quando mudaram para o *Android Studio* como principal IDE) onde são corridos alguns testes ao nível da interface.
+Numa fase inicial do projeto, existiam testes ao nível da interface que requeriam o uso da ferramenta [**Appium**](http://appium.io/slate/en/master/?java#about-appium) e das suas dependências. No momento da avaliação do projeto, estes já se encontram desatualizados e não fazem parte do conjunto de testes corridos, estando a ser convertidos em testes *Espresso* (ainda não concluídos). Desta forma, recorrem ao uso de *Apache Ant/JUnit3* para testar as operações ao nível do servidor e *Gradle* (desde que mudaram para o *Android Studio* como principal IDE), onde são corridos alguns testes ao nível da interface.
 
 Assim, conclui-se que o projecto *ownCloud* é heterogéneo, uma vez que recorre a diversas tecnologias em paralelo.
 
@@ -60,7 +60,7 @@ Ao nível da camada de aplicação, existem apenas 5 testes que incidem sobre os
 
 Além dos testes ao nível da camada da aplicação, existe um outro conjunto de testes baseados em *JUnit3*, que exercitam a maior parte das operações que são possíveis realizar num servidor real do *ownCloud*. Para correr estes testes, foi necessário a instalação do *Apache Ant*, bem como a definição de algumas variáveis de ambiente requiridas pelos mesmos. 
 
-Uma vez que a equipa segue uma prática de integração contínua, recorre ao [**Travis CI**](https://travis-ci.org/owncloud/android) para que sempre que é realizado um *pull request*, estes testes sejam corridos, garantindo que as alterações que o código sofreu não alteraram estas funcionalidades.
+Uma vez que a equipa segue uma prática de integração contínua, recorre ao [**Travis CI**](https://travis-ci.org/owncloud/android) para que, sempre que é realizado um *pull request*, estes testes sejam corridos, garantindo que as alterações que o código sofreu não alteraram estas funcionalidades.
 
 O grupo correu estes testes, e obteve o seguinte resultado:
 
@@ -185,7 +185,7 @@ test:
 ```
 
 Verifica-se que, dos 58 testes existentes, 6 falham e ocorre 1 erro num deles.
-Posto isto, pode-se deduzir que existem testes que exercitam componentes que podem já ter sido alteradas e desta forma encontram-se desatualizados, levando à sua falha.
+Posto isto, pode-se deduzir que existem testes que exercitam componentes que podem já ter sido alterados e, desta forma, encontram-se desatualizados, levando à sua falha.
 
 Numa perspetiva geral, a maior parte dos componentes da camada da aplicação não possui (atualmente) testes implementados. Pode-se concluir que esta falta de testes é um defeito do projeto, pois dificulta a validação da maioria dos módulos.
 
