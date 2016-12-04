@@ -208,6 +208,7 @@ Após analisarmos o que essas duas classes adicionavam ao *ArrayList* delas, ant
 
 Mais tarde, confirmamos que, como esperado, as hiperligações eram adicionadas por ordem de criação, então, se a hiperligação pública fosse a primeira a ser criada (ou não fosse criada), nunca havia problema, caso contrário, o problema ocorreria.
 
+*Pull request*: https://github.com/owncloud/android/pull/1844
 
 ## Contribuições
 
