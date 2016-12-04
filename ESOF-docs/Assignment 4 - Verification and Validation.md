@@ -180,5 +180,18 @@ Posto isto, pode-se deduzir que existem testes que exercitam componentes que pod
 Numa perspetiva geral, a maior parte dos componentes da camada da aplicação não possui (atualmente) testes implementados. Pode-se concluir que esta falta de testes é um defeito do projeto, pois dificulta a validação da maioria dos módulos.
 
 ## *Identify a new bug and/or correct a bug*
-(identification: 4 points; correction: 2 points)
-You think your project has no bugs?! Then, you do need to have a compelling story for us to credit you 6pts! 
+Após alguns testes à aplicação, não detetámos *bugs*, portanto decidimos resolver um dos *bugs* indicados nas *issues* do *GitHub*, escolhendo a *issue* 1562: https://github.com/owncloud/android/issues/1562.
+
+Para resolver a *issue* 1562, analisamos a situação usando a interface do utilizador e, depois, analisamos o código. Ao nível da interface, verificámos que o problema ocorria tanto com ficheiros como com pastas. Ao nível do código, verificámos que, por vezes, o *ArrayList* retornado pelo método “getData” em “ShareActivity” nem sempre tinha apenas um elemento, tendo mais do que um, isto é, tinha uma hiperligação para *User* e uma para *Public*. Depois, analisámos o código da classe “RemoteOperationResult”, que é usada por diversas classes, e descobrimos que possuía um método chamado “setData”. De seguida, identificámos, com a ajuda da capacidade “Find Usages” do *Android Studio*, todos os locais em que “setData” era usado e verificámos que apenas as classes “ShareToRemoteOperationResultParser” e “ReadRemoteFolderOperation” poderiam criar um *ArrayList* com mais de um elemento. Após analisarmos o que essas duas classes adicionavam ao *ArrayList* delas, antes de ser aplicado o método “setData”, entendemos que o problema não estava em “ReadRemoteFolderOperation”, pois esta classe trata os dados de uma pasta remota e seus ficheiros-filhos. Portanto, verificamos se havia diferentes tipos de hiperligações e descobrimos em “ShareType” que isso era verdade, sendo muito perigoso apenas aceitar hiperligações públicas em “ShareToRemoteOperationResultParser” (sabemos agora que de certeza que isso iria trazer problemas), portanto decidimos usar a correção apresentada na *issue* com algumas modificações, que consideramos melhorias, pois achamos que aquilo que foi considerado um *workaround* temporário é a verdadeira solução ao problema, não trazendo efeitos negativos ao funcionamento da aplicação.
+
+Mais tarde, confirmamos que, como esperado, as hiperligações eram adicionadas por ordem de criação, então, se a hiperligação pública fosse a primeira a ser criada (ou não fosse criada), nunca havia problema, caso contrário, o problema ocorreria.
+
+Contribuições
+
+Diogo Cruz - up201105483@fe.up.pt - 25%
+
+Luís Barbosa - up201405729@fe.up.pt - 25%
+
+Paulo Santos - up201403745@fe.up.pt - 25%
+
+Sérgio Ferreira - up201403074@fe.up.pt - 25%
