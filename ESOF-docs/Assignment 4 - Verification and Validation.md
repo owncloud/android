@@ -4,15 +4,15 @@ O objetivo deste relatório é documentar o estado atual do projeto no que respe
 
 ## Testabilidade do Software e Comentários
 
-O uso de testes é uma mais valia para garantir a qualidade do projeto, pois permitem determinar a existência de erros importantes. No entanto, os testes não provam que o código não tenha falhas.
+O uso de testes é uma mais valia para garantir a qualidade do projeto, pois permitem determinar a existência de erros importantes. No entanto, os testes não provam que o código esteja isento de falhas.
 
 ### Controlabilidade
 A controlabilidade, por definição, é o grau que permite controlar o estado do componente a ser testado (CUT - *Component Under Test*).
 
-Analisando os testes do *OwnCloud*, verificamos que são bastantes específicos, ou seja, a sua controlabilidade é tanto maior quanto a especificidade do teste.
+Analisando os testes do *ownCloud*, verificamos que são bastantes específicos, ou seja, a sua controlabilidade é tanto maior quanto a especificidade do teste.
 
 ### Observabilidade
-Este ponto refere-se ao grau no qual é possível observar os resultados intermediários e finais dos testes.
+Este ponto refere-se ao grau no qual é possível observar os resultados intermédios e finais dos testes.
 
 Para obter o resultado dos testes ao nível da camada da aplicação, é necessário corrê-los no [**Android Studio**](https://developer.android.com/studio/index.html). Os testes que exercitam as operações no servidor, devem ser corridos através do terminal, sendo para isso necessário possuir o [**JUnit**](http://junit.org/junit4/) e o [**Apache Ant**](http://ant.apache.org/bindownload.cgi). 
 
@@ -21,24 +21,24 @@ No entanto, alguns testes que estão no *branch master* (nomeadamente os que se 
 ### Isolabilidade
 A isolabilidade representa o grau em que cada componente pode ser testado isoladamente.
 
-Assim, a isolabilidade é tanto maior quanto menor for a relação entre os módulos. No caso do *OwnCloud*, a maior parte dos módulos estão relacionados entre si, o que dificulta o teste de cada um isoladamente.
+Assim, a isolabilidade é tanto maior quanto menor for a relação entre os módulos. No caso do *ownCloud*, a maior parte dos módulos estão relacionados entre si, o que dificulta o teste de cada um isoladamente.
 
 ### Separação de Responsabilidades
 A separação de responsabilidades define se o componente a ser testado tem uma responsabilidade bem definida.
 
-Para que a estrutura do projeto fique bem organizada e de fácil compreensão e acesso, cada módulo deve estar bem definido, evitando assim que o código fique misturado e menos eficiente. No caso do *OwnCloud*, a sua estrutura está bem definida. Os principais desenvolvedores optaram por criar vários *packages* de forma a que cada funcionalidade fique bem definida, sendo os seus sub-problemas resolvidos no seu interior.
+Para que a estrutura do projeto fique bem organizada e de fácil compreensão e acesso, cada módulo deve estar bem definido, evitando assim que o código fique misturado e menos eficiente. No caso do *ownCloud*, a sua estrutura está bem definida. Os principais desenvolvedores optaram por criar vários *packages* de forma a que cada funcionalidade fique bem definida, sendo os seus sub-problemas resolvidos no seu interior.
 
 ### Perceptibilidade
 A perceptibilidade avalia o grau em que o componente em teste está autoexplicativo e documentado.
 
-Avaliando os testes disponíveis no projeto, determinamos que o nome dos mesmo é claro e, por isso, autoexplicativo. Isto permite ao utilizador verificar com muita facilidade qual o teste que falhou e a localização do erro.
+Avaliando os testes disponíveis no projeto, determinamos que o nome dos mesmos é claro e, por isso, autoexplicativo. Isto permite ao utilizador verificar com muita facilidade qual o teste que falhou e a localização do erro.
 
 ### Heterogeneidade
 Determina o grau que o uso de diversas tecnologias requer, para usar diversos métodos de ensaio e ferramentas em paralelo.
 
 Numa fase inicial do projeto, existiam testes ao nível da interface que requiriam o uso da ferramenta [**Appium**](http://appium.io/slate/en/master/?java#about-appium) e das suas dependências. No momento da avaliação do projeto, estes já se encontram desatualizados e não fazem parte do conjunto de testes corridos, estando a ser convertidos em testes *Espresso* (ainda não concluídos). Desta forma, recorrem ao uso de *Apache Ant/JUnit3* para testar as operações ao nível do servidor e *Gradle* (quando mudaram para o *Android Studio* como principal IDE) onde são corridos alguns testes ao nível da interface.
 
-Assim, concluí-se que o projecto *OwnCloud* é heterogéneo, uma vez que recorre a diversas tecnologias em paralelo.
+Assim, conclui-se que o projecto *ownCloud* é heterogéneo, uma vez que recorre a diversas tecnologias em paralelo.
 
 ## Estatísticas e análises dos testes
 
@@ -60,7 +60,7 @@ Ao nível da camada de aplicação, existem apenas 5 testes que incidem sobre os
 
 Além dos testes ao nível da camada da aplicação, existe um outro conjunto de testes baseados em *JUnit3*, que exercitam a maior parte das operações que são possíveis realizar num servidor real do *ownCloud*. Para correr estes testes, foi necessário a instalação do *Apache Ant*, bem como a definição de algumas variáveis de ambiente requiridas pelos mesmos. 
 
-Uma vez que a equipa segue uma prática de integração contínua, recorre ao [**Travis CI**](https://travis-ci.org/owncloud/android) para que sempre que é realizado um *pull request*, estes testes serem corridos, garantindo que as alterações que o código sofreu não alteraram estas funcionalidades.
+Uma vez que a equipa segue uma prática de integração contínua, recorre ao [**Travis CI**](https://travis-ci.org/owncloud/android) para que sempre que é realizado um *pull request*, estes testes sejam corridos, garantindo que as alterações que o código sofreu não alteraram estas funcionalidades.
 
 O grupo correu estes testes, e obteve o seguinte resultado:
 
@@ -190,7 +190,7 @@ Posto isto, pode-se deduzir que existem testes que exercitam componentes que pod
 Numa perspetiva geral, a maior parte dos componentes da camada da aplicação não possui (atualmente) testes implementados. Pode-se concluir que esta falta de testes é um defeito do projeto, pois dificulta a validação da maioria dos módulos.
 
 ## Identificação de um novo *bug* e/ou correção do *bug*
-Após alguns testes à aplicação, não detetámos nenhum *bug* novo. Uma vez que que a maioria dos *bugs* que a aplicação possui foram  reportados pelos diversos utilizadores e ainda não foram corrigidos, decidimos resolver um dos indicados nas *issues* do *GitHub*, escolhendo a [***issue* 1562**](https://github.com/owncloud/android/issues/1562).
+Após alguns testes à aplicação, não detetámos nenhum *bug* novo. Uma vez que a maioria dos *bugs* que a aplicação possui foram  reportados pelos diversos utilizadores e ainda não foram corrigidos, decidimos resolver um dos indicados nas *issues* do *GitHub*, escolhendo a [***issue* 1562**](https://github.com/owncloud/android/issues/1562).
 
 Esta *issue* indica que quando um ficheiro é partilhado com um utilizador e, depois, é partilhado usando uma hiperligação pública, se se fechar a aplicação e voltar a abrir e abrir as opções de partilha do ficheiro para tentar copiar a hiperligação, nenhuma hiperligação é retornada.
 
@@ -198,7 +198,7 @@ Aqui registam-se as alterações feitas para resolver a *issue* (foi retirada a 
 
 ![CodeChangedOnShareActivity](/ESOF-docs/resources/code_changed_on_share_activity.PNG)
 
-Para resolver a *issue* 1562, analisamos inicialmente a situação usando a interface do utilizador e, posteriormente, o código. Ao nível da interface, verificámos que o problema ocorria tanto com ficheiros como com pastas e que também ocorria se, logo que realizássemos a partilha, pedíssemos a hiperligação duas vezes; a primeira funcionava bem, mas, a partir da segunda vez, já não. 
+Para resolver a *issue* 1562, analisamos, inicialmente, a situação usando a interface do utilizador e, posteriormente, o código. Ao nível da interface, verificámos que o problema ocorria tanto com ficheiros como com pastas e que também ocorria se, logo que realizássemos a partilha, pedíssemos a hiperligação duas vezes; a primeira funcionava bem, mas, a partir da segunda vez, já não. 
 
 Ao nível do código, verificámos que, por vezes, o *ArrayList* retornado pelo método “getData” em “ShareActivity” nem sempre tinha apenas um elemento, tendo mais do que um, isto é, tinha uma hiperligação para *User* e uma para *Public*. 
 
