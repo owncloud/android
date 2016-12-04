@@ -34,7 +34,7 @@ A perceptibilidade avalia o grau em que o componente em teste está autoexplicat
 Avaliando os testes disponíveis no projeto, determinamos que o nome dos mesmos é claro e, por isso, autoexplicativo. Isto permite ao utilizador verificar com muita facilidade qual o teste que falhou e a localização do erro.
 
 ### Heterogeneidade
-Determina o grau que o uso de diversas tecnologias requer, para usar diversos métodos de ensaio e ferramentas em paralelo.
+A heterogeneidade indica a necessidade do projecto em recorrer a diversas tecnologias para testar diferentes funcionalidades.
 
 Numa fase inicial do projeto, existiam testes ao nível da interface que requiriam o uso da ferramenta [**Appium**](http://appium.io/slate/en/master/?java#about-appium) e das suas dependências. No momento da avaliação do projeto, estes já se encontram desatualizados e não fazem parte do conjunto de testes corridos, estando a ser convertidos em testes *Espresso* (ainda não concluídos). Desta forma, recorrem ao uso de *Apache Ant/JUnit3* para testar as operações ao nível do servidor e *Gradle* (quando mudaram para o *Android Studio* como principal IDE) onde são corridos alguns testes ao nível da interface.
 
