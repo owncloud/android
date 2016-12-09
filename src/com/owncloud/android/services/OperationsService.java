@@ -669,7 +669,8 @@ public class OperationsService extends Service {
                     String oauth2QueryParameters =
                             operationIntent.getStringExtra(EXTRA_OAUTH2_QUERY_PARAMETERS);
                     operation = new OAuth2GetAccessToken(
-                            getString(R.string.oauth2_client_id), 
+                            getString(R.string.oauth2_client_id),
+                            getString(R.string.oauth2_client_secret),
                             getString(R.string.oauth2_redirect_uri),       
                             getString(R.string.oauth2_grant_type),
                             oauth2QueryParameters);

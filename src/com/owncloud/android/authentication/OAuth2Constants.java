@@ -50,5 +50,7 @@ public class OAuth2Constants {
     public static final String KEY_ERROR_DESCRIPTION = "error_description";
     public static final String KEY_ERROR_URI = "error_uri";
     public static final String VALUE_ERROR_ACCESS_DENIED = "access_denied";
-    
+
+    /// Extra not standard
+    public static final String KEY_USER_ID = "user_id";
 }

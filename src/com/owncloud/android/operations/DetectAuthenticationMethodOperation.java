@@ -89,7 +89,10 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
             String authRequest = ((result.getAuthenticateHeader()).trim()).toLowerCase();
             if (authRequest.startsWith("basic")) {
                 authMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
-
+                //authMethod = AuthenticationMethod.BASIC_HTTP_AUTH;
+                // TODO UNHACK
+                authMethod = AuthenticationMethod.BEARER_TOKEN;
+                
             } else if (authRequest.startsWith("bearer")) {
                 authMethod = AuthenticationMethod.BEARER_TOKEN;
             }

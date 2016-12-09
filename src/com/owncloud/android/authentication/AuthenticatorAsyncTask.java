@@ -24,11 +24,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.owncloud.android.lib.common.OwnCloudBearerCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 
@@ -39,6 +41,8 @@ import java.lang.ref.WeakReference;
  * Async Task to verify the credentials of a user
  */
 public class AuthenticatorAsyncTask  extends AsyncTask<Object, Void, RemoteOperationResult> {
+
+    private static final String TAG = AuthenticatorAsyncTask.class.getName();
 
     private static String REMOTE_PATH = "/";
     private static boolean SUCCESS_IF_ABSENT = false;

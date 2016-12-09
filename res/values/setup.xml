@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App name  and other strings-->
-    <string name="app_name" formatted="false">ownCloud</string>
-    <string name="account_type" formatted="false">owncloud</string>	<!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
-    <string name="authority" formatted="false">org.owncloud</string>
-    <string name="document_provider_authority" formatted="false">org.owncloud.documents</string>
-    <string name="file_provider_authority" formatted="false">org.owncloud.files</string>
-    <string name="search_suggest_authority" formatted="false">org.owncloud.search.users_and_groups</string>
-    <string name="search_suggest_intent_action" formatted="false">org.owncloud.search.users_and_groups.action.SHARE_WITH</string>
+    <string name="app_name" formatted="false">ownCloudTest</string>
+    <string name="account_type" formatted="false">owncloudTest</string>	<!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
+    <string name="authority" formatted="false">org.owncloud.test</string>
+    <string name="document_provider_authority" formatted="false">org.owncloud.test.documents</string>
+    <string name="file_provider_authority" formatted="false">org.owncloud.test.files</string>
+    <string name="search_suggest_authority" formatted="false">org.owncloud.test.search.users_and_groups</string>
+    <string name="search_suggest_intent_action" formatted="false">org.owncloud.test.search.users_and_groups.action.SHARE_WITH</string>
     <string name ="db_file" formatted="false">owncloud.db</string>
     <string name ="db_name" formatted="false">ownCloud</string>
-    <string name ="data_folder" formatted="false">owncloud</string>
+    <string name ="data_folder" formatted="false">owncloudTest</string>
     <string name ="log_name" formatted="false">Owncloud_</string>
-    <string name ="default_display_name_for_root_folder" formatted="false">ownCloud</string>
+    <string name ="default_display_name_for_root_folder" formatted="false">ownCloudTest</string>
     <string name ="user_agent">Mozilla/5.0 (Android) ownCloud-android/%1$s</string>
     
     <!-- URLs and flags related -->
@@ -23,7 +23,7 @@
     <string name="share_api_link" formatted="false"></string>
     
     <!-- Flags to setup the authentication methods available in the app -->
-    <string name="auth_method_oauth2" formatted="false">off</string>
+    <string name="auth_method_oauth2" formatted="false">on</string>
     <string name="auth_method_saml_web_sso" formatted="false">off</string>
     
     <!-- Flags to enable/disable some features -->

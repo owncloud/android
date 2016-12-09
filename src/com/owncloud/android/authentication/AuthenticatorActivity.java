@@ -681,7 +681,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         (ocVersion != null && ocVersion.isPreemptiveAuthenticationPreferred())
                 );
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
-                credentials = OwnCloudCredentialsFactory.newBearerCredentials(mAuthToken);
+                credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, mAuthToken);
 
             }
             accessRootFolder(credentials);
@@ -718,7 +718,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mHostUrlInput.addTextChangedListener(mHostUrlInputWatcher);
         
         if (mNewCapturedUriFromOAuth2Redirection != null) {
-            getOAuth2AccessTokenFromCapturedRedirection();            
+            getOAuth2AccessTokenFromCapturedRedirection();
         }
         
         if (mOperationsServiceBinder != null) {
@@ -771,8 +771,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         getServerInfoIntent.setAction(OperationsService.ACTION_OAUTH2_GET_ACCESS_TOKEN);
         
         getServerInfoIntent.putExtra(
-                OperationsService.EXTRA_SERVER_URL, 
-                mOAuthTokenEndpointText.getText().toString().trim());
+                OperationsService.EXTRA_SERVER_URL,
+                mServerInfo.mBaseUrl + mOAuthTokenEndpointText.getText().toString().trim());
         
         getServerInfoIntent.putExtra(
                 OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
@@ -1004,7 +1004,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showAuthStatus();
 
         // GET AUTHORIZATION request
-        Uri uri = Uri.parse(mOAuthAuthEndpointText.getText().toString().trim());
+        Uri uri = Uri.parse(mServerInfo.mBaseUrl + mOAuthAuthEndpointText.getText().toString().trim());
         Uri.Builder uriBuilder = uri.buildUpon();
         uriBuilder.appendQueryParameter(
                 OAuth2Constants.KEY_RESPONSE_TYPE, getString(R.string.oauth2_response_type)
@@ -1015,8 +1015,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         uriBuilder.appendQueryParameter(
                 OAuth2Constants.KEY_CLIENT_ID, getString(R.string.oauth2_client_id)
         );
+        /*
         uriBuilder.appendQueryParameter(
                 OAuth2Constants.KEY_SCOPE, getString(R.string.oauth2_scope)
+        );
+        */
+        uriBuilder.appendQueryParameter(
+                OAuth2Constants.KEY_STATE, "8alaf8s98lck47vim7sueqiku7"
         );
         uri = uriBuilder.build();
         Log_OC.d(TAG, "Starting browser to view " + uri.toString());
@@ -1341,10 +1346,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Map<String, String> tokens = (Map<String, String>)(result.getData().get(0));
             mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
             Log_OC.d(TAG, "Got ACCESS TOKEN: " + mAuthToken);
+            mUsernameInput.setText(tokens.get(OAuth2Constants.KEY_USER_ID));
 
             /// validate token accessing to root folder / getting session
             OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
-                    mAuthToken);
+                tokens.get(OAuth2Constants.KEY_USER_ID),
+                mAuthToken
+            );
             accessRootFolder(credentials);
 
         } else {
@@ -1495,9 +1503,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         Uri uri = Uri.parse(mServerInfo.mBaseUrl);
         String username = mUsernameInput.getText().toString().trim();
-        if (isOAuth) {
-            username = "OAuth_user" + (new java.util.Random(System.currentTimeMillis())).nextLong();
-        }
         String accountName = com.owncloud.android.lib.common.accounts.AccountUtils.
                 buildAccountName(uri, username);
         Account newAccount = new Account(accountName, MainApp.getAccountType());
@@ -1850,6 +1855,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         
         if (mPendingAutoCheck) {
             checkOcServer();
+            mPendingAutoCheck = false;
         }
     }
 
