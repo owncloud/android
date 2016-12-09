@@ -68,7 +68,11 @@ public class GetUserAvatarTest extends RemoteTest {
 
     /**
      * Test get user avatar only if changed, but wasn't changed
+     *
+     * DISABLED: conditioned call has been disabled due to problems with the network stack;
+     * see comment in src/com/owncloud/android/lib/resources/users/GetRemoteUserAvatarOperation.java#87
      */
+    /*
     public void testGetUserAvatarOnlyIfChangedAfterUnchanged() {
         RemoteOperationResult result = mActivity.getUserAvatar(AVATAR_DIMENSION, null);
         ResultData userAvatar = (ResultData) result.getData().get(0);
@@ -79,6 +83,7 @@ public class GetUserAvatarTest extends RemoteTest {
         assertFalse(result.isSuccess());
         assertTrue(result.getHttpCode() == HttpStatus.SC_NOT_MODIFIED);
     }
+    */
 
     /**
      * Test get user avatar only if changed, and was changed

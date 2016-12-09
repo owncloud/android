@@ -28,6 +28,7 @@ package com.owncloud.android.lib.resources.users;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -73,6 +74,8 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
         RemoteOperationResult result = null;
         GetMethod get = null;
         InputStream inputStream = null;
+        BufferedInputStream bis = null;
+        ByteArrayOutputStream bos = null;
 
         try {
             String uri =
@@ -81,9 +84,19 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
             ;
             Log_OC.d(TAG, "avatar URI: " + uri);
             get = new GetMethod(uri);
+            /*  Conditioned call is corrupting the input stream of the connection.
+                Seems that response with 304 is also including the avatar in the response body,
+                though it's forbidden by HTTPS specification. Besides, HTTPClient library
+                assumes there is nothing in the response body, but the bytes are read
+                by the next request, resulting in an exception due to a corrupt status line
+
+                Maybe when we have a real API we can enable this again.
+
             if (mCurrentEtag != null && mCurrentEtag.length() > 0) {
                 get.addRequestHeader(IF_NONE_MATCH_HEADER, "\"" + mCurrentEtag + "\"");
             }
+            */
+
             //get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
             int status = client.executeMethod(get);
             if (isSuccess(status)) {
@@ -111,8 +124,8 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
 
                 /// download will be performed to a buffer
                 inputStream = get.getResponseBodyAsStream();
-                BufferedInputStream bis = new BufferedInputStream(inputStream);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream(totalToTransfer);
+                bis = new BufferedInputStream(inputStream);
+                bos = new ByteArrayOutputStream(totalToTransfer);
 
                 long transferred = 0;
                 byte[] bytes = new byte[4096];
@@ -147,8 +160,24 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
 
         } finally {
             if (get != null) {
-                if (inputStream != null) {
-                    client.exhaustResponse(inputStream);
+                try {
+                    if (inputStream != null) {
+                        client.exhaustResponse(inputStream);
+                        if (bis != null) {
+                            bis.close();
+                        } else {
+                            inputStream.close();
+                        }
+                    }
+                } catch (IOException i) {
+                    Log_OC.e(TAG, "Unexpected exception closing input stream ", i);
+                }
+                try {
+                    if (bos != null) {
+                        bos.close();
+                    }
+                } catch (IOException o) {
+                    Log_OC.e(TAG, "Unexpected exception closing output stream ", o);
                 }
                 get.releaseConnection();
             }
