@@ -60,8 +60,9 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
 	private static final String TAG = UploadRemoteFileOperation.class.getSimpleName();
 
-	protected static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
-	protected static final String IF_MATCH_HEADER = "If-Match";
+    protected static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
+    protected static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
+    protected static final String IF_MATCH_HEADER = "If-Match";
 
 	protected String mLocalPath;
 	protected String mRemotePath;
@@ -152,6 +153,10 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 				mPutMethod.addRequestHeader(IF_MATCH_HEADER, "\"" + mRequiredEtag + "\"");
 			}
 			mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(f.length()));
+            // Tell to the server what is the last modification date of the file to upload
+            Long timeStampLong = System.currentTimeMillis()/1000;
+            String timeStamp = timeStampLong.toString();
+            mPutMethod.addRequestHeader(OC_X_OC_MTIME_HEADER, timeStamp);
 			mPutMethod.setRequestEntity(mEntity);
 			status = client.executeMethod(mPutMethod);
 
