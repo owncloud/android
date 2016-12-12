@@ -33,7 +33,7 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
-    public static final int DB_VERSION = 15;
+    public static final int DB_VERSION = 16;
 
     private ProviderMeta() {
     }
@@ -76,6 +76,7 @@ public class ProviderMeta {
         public static final String FILE_LAST_SYNC_DATE_FOR_DATA = "last_sync_date_for_data";
         public static final String FILE_KEEP_IN_SYNC = "keep_in_sync";
         public static final String FILE_ETAG = "etag";
+        public static final String FILE_TREE_ETAG = "tree_etag";
         public static final String FILE_SHARED_VIA_LINK = "share_by_link";
         public static final String FILE_SHARED_WITH_SHAREE = "shared_via_users";
         public static final String FILE_PUBLIC_LINK = "public_link";

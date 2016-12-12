@@ -60,6 +60,37 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public static final String PATH_SEPARATOR = "/";
     public static final String ROOT_PATH = PATH_SEPARATOR;
 
+    public enum AvailableOfflineStatus {
+
+        /**
+         * File is not available offline
+         */
+        NOT_AVAILABLE_OFFLINE,
+
+        /**
+         * File is available offline
+         */
+        AVAILABLE_OFFLINE,
+
+        /**
+         * File belongs to an available offline folder
+         */
+        AVAILABLE_OFFLINE_PARENT;
+
+        public int getValue() {
+            return ordinal();
+        }
+
+        public static AvailableOfflineStatus fromValue(int value) {
+            if (value > -1 && value < values().length) {
+                return values()[value];
+            } else {
+                return null;
+            }
+        }
+
+    }
+
     private static final String TAG = OCFile.class.getSimpleName();
 
     private long mId;
@@ -74,9 +105,10 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     private boolean mNeedsUpdating;
     private long mLastSyncDateForProperties;
     private long mLastSyncDateForData;
-    private boolean mFavorite;
+    private AvailableOfflineStatus mAvailableOfflineStatus;
 
     private String mEtag;
+    private String mTreeEtag;
 
     private boolean mShareByLink;
     private String mPublicLink;
@@ -139,10 +171,15 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mLocalPath = source.readString();
         mMimeType = source.readString();
         mNeedsUpdating = source.readInt() == 0;
-        mFavorite = source.readInt() == 1;
+        try {
+            mAvailableOfflineStatus = AvailableOfflineStatus.valueOf(source.readString());
+        } catch (IllegalArgumentException x) {
+            mAvailableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
+        }
         mLastSyncDateForProperties = source.readLong();
         mLastSyncDateForData = source.readLong();
         mEtag = source.readString();
+        mTreeEtag = source.readString();
         mShareByLink = source.readInt() == 1;
         mPublicLink = source.readString();
         mPermissions = source.readString();
@@ -166,10 +203,11 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         dest.writeString(mLocalPath);
         dest.writeString(mMimeType);
         dest.writeInt(mNeedsUpdating ? 1 : 0);
-        dest.writeInt(mFavorite ? 1 : 0);
+        dest.writeString(mAvailableOfflineStatus.name());
         dest.writeLong(mLastSyncDateForProperties);
         dest.writeLong(mLastSyncDateForData);
         dest.writeString(mEtag);
+        dest.writeString(mTreeEtag);
         dest.writeInt(mShareByLink ? 1 : 0);
         dest.writeString(mPublicLink);
         dest.writeString(mPermissions);
@@ -412,9 +450,10 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mModifiedTimestampAtLastSyncForData = 0;
         mLastSyncDateForProperties = 0;
         mLastSyncDateForData = 0;
-        mFavorite = false;
+        mAvailableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
         mNeedsUpdating = false;
-        mEtag = null;
+        mEtag = "";
+        mTreeEtag = "";
         mShareByLink = false;
         mPublicLink = null;
         mPermissions = null;
@@ -521,12 +560,19 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mLastSyncDateForData = lastSyncDate;
     }
 
-    public void setFavorite(boolean favorite) {
-        mFavorite = favorite;
+    public void setAvailableOfflineStatus(AvailableOfflineStatus availableOffline) {
+        mAvailableOfflineStatus = availableOffline;
     }
 
-    public boolean isFavorite() {
-        return mFavorite;
+    public AvailableOfflineStatus getAvailableOfflineStatus() {
+        return mAvailableOfflineStatus;
+    }
+
+    /**
+     * @return      'True' when
+     */
+    public boolean isAvailableOffline() {
+        return (mAvailableOfflineStatus != AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE);
     }
 
     @Override
@@ -560,11 +606,12 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     @Override
     public String toString() {
-        String asString = "[id=%s, name=%s, mime=%s, downloaded=%s, local=%s, remote=%s, " +
-                "parentId=%s, favorite=%s etag=%s]";
-        asString = String.format(asString, Long.valueOf(mId), getFileName(), mMimeType, isDown(),
-                mLocalPath, mRemotePath, Long.valueOf(mParentId), Boolean.valueOf(mFavorite),
-                mEtag);
+        String asString = "[id=%s, name=%s,  etag=%s, tree_etag=%s, mime=%s, downloaded=%s, local=%s, remote=%s, " +
+                "parentId=%s, favorite=%s]";
+        asString = String.format(asString, Long.valueOf(mId), getFileName(), mEtag, mTreeEtag,
+                mMimeType, isDown(), mLocalPath, mRemotePath, Long.valueOf(mParentId),
+                mAvailableOfflineStatus
+        );
         return asString;
     }
 
@@ -576,6 +623,13 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         this.mEtag = (etag != null ? etag : "");
     }
 
+    public String getTreeEtag() {
+        return mTreeEtag;
+    }
+
+    public void setTreeEtag(String etag) {
+        mTreeEtag = (etag != null ? etag : "");
+    }
 
     public boolean isSharedViaLink() {
         return mShareByLink;
@@ -705,6 +759,22 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public boolean isSharedWithMe() {
         String permissions = getPermissions();
         return (permissions != null && permissions.contains(PERMISSION_SHARED_WITH_ME));
+    }
+
+    public void copyLocalPropertiesFrom(OCFile sourceFile) {
+        setParentId(sourceFile.getParentId());
+        setFileId(sourceFile.getFileId());
+        setAvailableOfflineStatus(sourceFile.getAvailableOfflineStatus());
+        setLastSyncDateForData(sourceFile.getLastSyncDateForData());
+        setModificationTimestampAtLastSyncForData(
+            sourceFile.getModificationTimestampAtLastSyncForData()
+        );
+        setStoragePath(sourceFile.getStoragePath());
+        setPublicLink(sourceFile.getPublicLink());
+        setShareViaLink(sourceFile.isSharedViaLink());
+        setShareWithSharee(sourceFile.isSharedWithSharee());
+        setTreeEtag(sourceFile.getTreeEtag());
+        setEtagInConflict(sourceFile.getEtagInConflict());
     }
 
 }

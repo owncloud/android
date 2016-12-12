@@ -43,6 +43,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -336,10 +337,13 @@ public class FileActivity extends DrawerActivity
 
             } else {
                 Toast t = Toast.makeText(this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                    Toast.LENGTH_LONG);
                 t.show();
             }
+
+        } else if (operation instanceof RenameFileOperation && result.isSuccess()) {
+            result.getData();
         }
     }
 

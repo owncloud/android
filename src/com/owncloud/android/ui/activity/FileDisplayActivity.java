@@ -41,16 +41,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -77,6 +73,7 @@ import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.UploadFileOperation;
+import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.fragment.FileDetailFragment;
@@ -1606,21 +1603,18 @@ public class FileDisplayActivity extends HookActivity
                 @Override
                 public void run() {
                     if (hasWindowFocus()) {
-                        long currentSyncTime = System.currentTimeMillis();
                         mSyncInProgress = true;
 
                         // perform folder synchronization
-                        RemoteOperation synchFolderOp = new RefreshFolderOperation(folder,
-                            currentSyncTime,
-                            false,
+                        SyncOperation synchFolderOp = new RefreshFolderOperation(
+                            folder,
                             getFileOperationsHelper().isSharedSupported(),
                             ignoreETag,
-                            getStorageManager(),
                             getAccount(),
                             getApplicationContext()
                         );
                         synchFolderOp.execute(
-                            getAccount(),
+                            getStorageManager(),
                             MainApp.getAppContext(),
                             null,   // unneeded, handling via SyncBroadcastReceiver
                             null
