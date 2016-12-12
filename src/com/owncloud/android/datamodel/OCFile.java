@@ -65,38 +65,28 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         /**
          * File is not available offline
          */
-        NOT_AVAILABLE_OFFLINE(0),
+        NOT_AVAILABLE_OFFLINE,
 
         /**
          * File is available offline
          */
-        AVAILABLE_OFFLINE(1),
+        AVAILABLE_OFFLINE,
 
         /**
          * File belongs to an available offline folder
          */
-        AVAILABLE_OFFLINE_PARENT(2);
-
-        private final int value;
-
-        AvailableOfflineStatus(int value) {
-            this.value = value;
-        }
+        AVAILABLE_OFFLINE_PARENT;
 
         public int getValue() {
-            return value;
+            return ordinal();
         }
 
         public static AvailableOfflineStatus fromValue(int value) {
-            switch (value) {
-                case 0:
-                    return NOT_AVAILABLE_OFFLINE;
-                case 1:
-                    return AVAILABLE_OFFLINE;
-                case 2:
-                    return AVAILABLE_OFFLINE_PARENT;
+            if (value > -1 && value < values().length) {
+                return values()[value];
+            } else {
+                return null;
             }
-            return null;
         }
 
     }
