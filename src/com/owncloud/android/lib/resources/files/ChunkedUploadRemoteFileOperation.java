@@ -122,10 +122,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 }
 
                 status = client.executeMethod(mPutMethod);
-
-                // DELETE NEXT LINE
-                Header[] headers = mPutMethod.getResponseHeaders();
-
+                
                 if (status == 400) {
                     InvalidCharacterExceptionParser xmlParser =
                             new InvalidCharacterExceptionParser();
