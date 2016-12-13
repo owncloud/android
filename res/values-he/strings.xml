@@ -222,8 +222,8 @@
 ⇥</string>
   <string name="auth_can_not_auth_against_server">לא ניתן לאמת עבור שרת זה</string>
   <string name="auth_account_does_not_exist">עדיין לא קיים חשבון במכשיר</string>
-  <string name="favorite">הגדר כזמין באופן לא מקוון</string>
-  <string name="unfavorite">ביטול הגדרה כזמין באופן לא מקוון</string>
+  <string name="set_available_offline">הגדר כזמין באופן לא מקוון</string>
+  <string name="unset_available_offline">ביטול הגדרה כזמין באופן לא מקוון</string>
   <string name="common_rename">שינוי שם</string>
   <string name="common_remove">הסרה</string>
   <string name="confirmation_remove_file_alert">האם באמת להסיר %1$s?</string>

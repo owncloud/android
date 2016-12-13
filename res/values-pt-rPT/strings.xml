@@ -221,8 +221,8 @@
   <string name="auth_fail_get_user_name">O seu servidor não está a devolver a id. correta, por favor, contacte um administrador.</string>
   <string name="auth_can_not_auth_against_server">Não é possível autenticar para este servidor</string>
   <string name="auth_account_does_not_exist">A conta ainda não existe no dispositivo</string>
-  <string name="favorite">Defina como disponível desligado</string>
-  <string name="unfavorite">Defina como não disponível desligado</string>
+  <string name="set_available_offline">Defina como disponível desligado</string>
+  <string name="unset_available_offline">Defina como não disponível desligado</string>
   <string name="common_rename">Renomear</string>
   <string name="common_remove">Remover</string>
   <string name="confirmation_remove_file_alert">Tem a certeza que deseja remover %1$s ?</string>
