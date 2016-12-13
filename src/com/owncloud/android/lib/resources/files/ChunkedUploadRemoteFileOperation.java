@@ -32,7 +32,6 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.Random;
 
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.PutMethod;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -122,7 +121,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 }
 
                 status = client.executeMethod(mPutMethod);
-                
+
                 if (status == 400) {
                     InvalidCharacterExceptionParser xmlParser =
                             new InvalidCharacterExceptionParser();
