@@ -52,12 +52,14 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     private static final String OC_CHUNK_X_OC_MTIME_HEADER = "X-OC-Mtime";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
-    public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType, String fileLastModifTimestamp){
+    public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType,
+                                            String fileLastModifTimestamp){
         super(storagePath, remotePath, mimeType, fileLastModifTimestamp);
     }
 
     public ChunkedUploadRemoteFileOperation(
-            String storagePath, String remotePath, String mimeType, String requiredEtag, String fileLastModifTimestamp
+            String storagePath, String remotePath, String mimeType, String requiredEtag,
+            String fileLastModifTimestamp
     ){
 		 super(storagePath, remotePath, mimeType, requiredEtag, fileLastModifTimestamp);
 	}

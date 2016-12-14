@@ -77,14 +77,16 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
     protected RequestEntity mEntity = null;
 
-    public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType, String fileLastModifTimestamp) {
+    public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType,
+                                     String fileLastModifTimestamp) {
         mLocalPath = localPath;
         mRemotePath = remotePath;
         mMimeType = mimeType;
         mFileLastModifTimestamp = fileLastModifTimestamp;
     }
 
-    public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType, String requiredEtag, String fileLastModifTimestamp) {
+    public UploadRemoteFileOperation(String localPath, String remotePath, String mimeType,
+                                     String requiredEtag, String fileLastModifTimestamp) {
         this(localPath, remotePath, mimeType, fileLastModifTimestamp);
         mRequiredEtag = requiredEtag;
     }
