@@ -72,17 +72,32 @@ public class AuthenticatorAsyncTask  extends AsyncTask<Object, Void, RemoteOpera
             );
             result = operation.execute(client);
 
+            String targetUrlAfterPermanentRedirection = null;
             if (operation.wasRedirected()) {
                 RedirectionPath redirectionPath = operation.getRedirectionPath();
-                String permanentLocation = redirectionPath.getLastPermanentLocation();
-                result.setLastPermanentLocation(permanentLocation);
+                targetUrlAfterPermanentRedirection = redirectionPath.getLastPermanentLocation();
             }
 
             // Operation - get display name
             if (result.isSuccess()) {
                 GetRemoteUserInfoOperation remoteUserNameOperation = new GetRemoteUserInfoOperation();
+                if (targetUrlAfterPermanentRedirection != null) {
+                    // we can't assume that any subpath of the domain is correctly redirected; ugly stuff
+                    client = OwnCloudClientFactory.createOwnCloudClient(
+                        Uri.parse(AccountUtils.trimWebdavSuffix(
+                            targetUrlAfterPermanentRedirection
+                        )),
+                        mContext,
+                        true
+                    );
+                    client.setCredentials(credentials);
+                }
                 result = remoteUserNameOperation.execute(client);
             }
+
+            // let the caller knows what is real URL that should be accessed for the account
+            // being authenticated if the initial URL is being redirected permanently (HTTP code 301)
+            result.setLastPermanentLocation(targetUrlAfterPermanentRedirection);
 
         } else {
             result = new RemoteOperationResult(RemoteOperationResult.ResultCode.UNKNOWN_ERROR);
