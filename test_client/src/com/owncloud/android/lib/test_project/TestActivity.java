@@ -249,9 +249,9 @@ public class TestActivity extends Activity {
 	public RemoteOperationResult uploadFile(
 			String storagePath, String remotePath, String mimeType
 			) {
+
 		return TestActivity.uploadFile(storagePath, remotePath, mimeType, mClient);
 	}
-	
 	
 	/** Access to the library method to Upload a File 
 	 * @param storagePath
@@ -264,14 +264,18 @@ public class TestActivity extends Activity {
 	public static RemoteOperationResult uploadFile(
 			String storagePath, String remotePath, String mimeType, OwnCloudClient client
 			) {
-		UploadRemoteFileOperation uploadOperation;
+
+        String fileLastModifTimestamp = getFileLastModifTimeStamp(storagePath);
+
+        UploadRemoteFileOperation uploadOperation;
+
 		if ((new File(storagePath)).length() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE ) {
             uploadOperation = new ChunkedUploadRemoteFileOperation(
-            		storagePath, remotePath, mimeType
+            		storagePath, remotePath, mimeType, fileLastModifTimestamp
     		);
         } else {
             uploadOperation = new UploadRemoteFileOperation(
-            		storagePath, remotePath, mimeType
+            		storagePath, remotePath, mimeType, fileLastModifTimestamp
     		);
         }
 		
@@ -381,5 +385,9 @@ public class TestActivity extends Activity {
 		return extractedFile;
 	}
 
-
+    private static String getFileLastModifTimeStamp (String storagePath) {
+        File file = new File(storagePath);
+        Long timeStampLong = file.lastModified()/1000;
+        return timeStampLong.toString();
+    }
 }

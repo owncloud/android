@@ -49,16 +49,19 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     public static final long CHUNK_SIZE = 1024000;
     private static final String OC_CHUNKED_HEADER = "OC-Chunked";
     private static final String OC_CHUNK_SIZE_HEADER = "OC-Chunk-Size";
+    private static final String OC_CHUNK_X_OC_MTIME_HEADER = "X-OC-Mtime";
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
-    public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType){
-        super(storagePath, remotePath, mimeType);
+    public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType,
+                                            String fileLastModifTimestamp){
+        super(storagePath, remotePath, mimeType, fileLastModifTimestamp);
     }
 
     public ChunkedUploadRemoteFileOperation(
-            String storagePath, String remotePath, String mimeType, String requiredEtag
+            String storagePath, String remotePath, String mimeType, String requiredEtag,
+            String fileLastModifTimestamp
     ){
-		 super(storagePath, remotePath, mimeType, requiredEtag);
+		 super(storagePath, remotePath, mimeType, requiredEtag, fileLastModifTimestamp);
 	}
     
     @Override
@@ -99,6 +102,9 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
                 mPutMethod.addRequestHeader(OC_CHUNKED_HEADER, OC_CHUNKED_HEADER);
                 mPutMethod.addRequestHeader(OC_CHUNK_SIZE_HEADER, chunkSizeStr);
                 mPutMethod.addRequestHeader(OC_TOTAL_LENGTH_HEADER, totalLengthStr);
+
+                mPutMethod.addRequestHeader(OC_CHUNK_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
+
                 ((ChunkFromFileChannelRequestEntity) mEntity).setOffset(offset);
                 mPutMethod.setRequestEntity(mEntity);
                 if (mCancellationRequested.get()) {
