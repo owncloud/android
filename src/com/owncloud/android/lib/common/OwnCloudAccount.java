@@ -139,6 +139,10 @@ public class OwnCloudAccount {
     	return mSavedAccountName;
     }
 
+    public Account getSavedAccount() {
+        return mSavedAccount;
+    }
+
     public String getDisplayName() {
         if (mDisplayName != null && mDisplayName.length() > 0) {
             return mDisplayName;
