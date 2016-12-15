@@ -69,7 +69,7 @@ public class UploadFileTest extends RemoteTest {
 	 * Test Upload File without chunks
 	 */
 	public void testUploadFile() {
-		
+
 		String fullPath2Upload = mBaseFolderPath + UPLOAD_PATH;
 		RemoteOperationResult result = mActivity.uploadFile(
 				mFileToUpload.getAbsolutePath(), 
@@ -121,5 +121,4 @@ public class UploadFileTest extends RemoteTest {
 		}
 		super.tearDown();
 	}
-	
 }
