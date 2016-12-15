@@ -232,6 +232,7 @@
   <string name="remove_success_msg">ลบเรียบร้อยแล้ว</string>
   <string name="remove_fail_msg">ไม่สามารถลบได้</string>
   <string name="rename_dialog_title">กรอกชื่อใหม่</string>
+  <string name="available_offline_inherited_msg">โฟลเดอร์ที่มีไฟล์นี้สามารถใช้แบบออฟไลน์ได้</string>
   <string name="rename_local_fail_msg">ไฟล์ต้นทางที่คัดลอกไม่สามารถเปลี่ยนชื่อได้, กรุณาเปลี่ยนเป็นชื่อใหม่</string>
   <string name="rename_server_fail_msg">ไม่สามารถเปลี่ยนชื่อได้</string>
   <string name="sync_file_fail_msg">ไม่สามารถตรวจสอบไฟล์รีโมทได้</string>

@@ -232,6 +232,7 @@
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
   <string name="rename_dialog_title">Jepni një emër të ri</string>
+  <string name="available_offline_inherited_msg">Një dosje që përmban këtë kartelë është gati offline</string>
   <string name="rename_local_fail_msg">Kopja vendore s\’u riemërtua dot; provoni një emër tjetër</string>
   <string name="rename_server_fail_msg">Riemërtimi s\’u plotësua dot</string>
   <string name="sync_file_fail_msg">S\’u kap dot kartela e largët</string>

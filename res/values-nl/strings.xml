@@ -236,6 +236,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="remove_success_msg">Succesvol verwijderd</string>
   <string name="remove_fail_msg">Verwijdering kon niet voltooid worden</string>
   <string name="rename_dialog_title">Voer een nieuwe naam in</string>
+  <string name="available_offline_inherited_msg">Een map met dit bestand is offline beschikbaar</string>
   <string name="rename_local_fail_msg">Lokaal kopie kon niet worden hernoemt.</string>
   <string name="rename_server_fail_msg">Hernoemen kon niet worden voltooid</string>
   <string name="sync_file_fail_msg">Extern bestand kon niet worden gecontroleerd</string>
