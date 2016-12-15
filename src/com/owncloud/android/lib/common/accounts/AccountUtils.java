@@ -44,9 +44,9 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class AccountUtils {
-	
-	private static final String TAG = AccountUtils.class.getSimpleName();
-	
+
+    private static final String TAG = AccountUtils.class.getSimpleName();
+
     public static final String WEBDAV_PATH_1_2 = "/webdav/owncloud.php";
     public static final String WEBDAV_PATH_2_0 = "/files/webdav.php";
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
@@ -59,11 +59,11 @@ public class AccountUtils {
     /**
      * Returns the proper URL path to access the WebDAV interface of an ownCloud server,
      * according to its version and the authorization method used.
-     * 
-     * @param	version         	Version of ownCloud server.
-     * @param 	supportsOAuth		If true, access with OAuth 2 authorization is considered. 
-     * @param 	supportsSamlSso		If true, and supportsOAuth is false, access with SAML-based single-sign-on is considered.
-     * @return 						WebDAV path for given OC version, null if OC version unknown
+     *
+     * @param supportsOAuth   If true, access with OAuth 2 authorization is considered.
+     * @param supportsSamlSso If true, and supportsOAuth is false, access with SAML-based single-sign-on is considered.
+     * @return WebDAV path for given OC version, null if OC version unknown
+     * @param    version Version of ownCloud server.
      */
     public static String getWebdavPath(OwnCloudVersion version, boolean supportsOAuth, boolean supportsSamlSso) {
         if (version != null) {
@@ -76,73 +76,72 @@ public class AccountUtils {
             if (version.compareTo(OwnCloudVersion.owncloud_v4) >= 0)
                 return WEBDAV_PATH_4_0;
             if (version.compareTo(OwnCloudVersion.owncloud_v3) >= 0
-                    || version.compareTo(OwnCloudVersion.owncloud_v2) >= 0)
+                || version.compareTo(OwnCloudVersion.owncloud_v2) >= 0)
                 return WEBDAV_PATH_2_0;
             if (version.compareTo(OwnCloudVersion.owncloud_v1) >= 0)
                 return WEBDAV_PATH_1_2;
         }
         return null;
     }
-    
+
     /**
      * Constructs full url to host and webdav resource basing on host version
-     * 
-     * @deprecated 		To be removed in release 1.0. 
-     * 
+     *
      * @param context
      * @param account
      * @return url or null on failure
-     * @throws AccountNotFoundException     When 'account' is unknown for the AccountManager
+     * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
+     * @deprecated To be removed in release 1.0.
      */
     @Deprecated
     public static String constructFullURLForAccount(Context context, Account account) throws AccountNotFoundException {
         AccountManager ama = AccountManager.get(context);
         String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
-        String version  = ama.getUserData(account, Constants.KEY_OC_VERSION);
+        String version = ama.getUserData(account, Constants.KEY_OC_VERSION);
         boolean supportsOAuth = (ama.getUserData(account, Constants.KEY_SUPPORTS_OAUTH2) != null);
         boolean supportsSamlSso = (ama.getUserData(account, Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null);
         OwnCloudVersion ver = new OwnCloudVersion(version);
         String webdavpath = getWebdavPath(ver, supportsOAuth, supportsSamlSso);
 
-        if (baseurl == null || webdavpath == null) 
+        if (baseurl == null || webdavpath == null)
             throw new AccountNotFoundException(account, "Account not found", null);
-        
+
         return baseurl + webdavpath;
-    }
-    
-    /**
-     * Extracts url server from the account
-     * 
-     * @deprecated 	This method will be removed in version 1.0.
-     *  			Use {@link #getBaseUrlForAccount(Context, Account)}
-     *  		 	instead.   
-     * 
-     * @param context
-     * @param account
-     * @return url server or null on failure
-     * @throws AccountNotFoundException     When 'account' is unknown for the AccountManager
-     */
-    @Deprecated
-    public static String constructBasicURLForAccount(Context context, Account account) 
-    		throws AccountNotFoundException {
-    	return getBaseUrlForAccount(context, account);
     }
 
     /**
      * Extracts url server from the account
+     *
      * @param context
      * @param account
      * @return url server or null on failure
-     * @throws AccountNotFoundException     When 'account' is unknown for the AccountManager
+     * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
+     * @deprecated This method will be removed in version 1.0.
+     * Use {@link #getBaseUrlForAccount(Context, Account)}
+     * instead.
      */
-    public static String getBaseUrlForAccount(Context context, Account account) 
-    		throws AccountNotFoundException {
+    @Deprecated
+    public static String constructBasicURLForAccount(Context context, Account account)
+        throws AccountNotFoundException {
+        return getBaseUrlForAccount(context, account);
+    }
+
+    /**
+     * Extracts url server from the account
+     *
+     * @param context
+     * @param account
+     * @return url server or null on failure
+     * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
+     */
+    public static String getBaseUrlForAccount(Context context, Account account)
+        throws AccountNotFoundException {
         AccountManager ama = AccountManager.get(context.getApplicationContext());
         String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
-        
-        if (baseurl == null ) 
+
+        if (baseurl == null)
             throw new AccountNotFoundException(account, "Account not found", null);
-        
+
         return baseurl;
     }
 
@@ -150,8 +149,8 @@ public class AccountUtils {
     /**
      * Get the username corresponding to an OC account.
      *
-     * @param account   An OC account
-     * @return          Username for the given account, extracted from the account.name
+     * @param account An OC account
+     * @return Username for the given account, extracted from the account.name
      */
     public static String getUsernameForAccount(Account account) {
         String username = null;
@@ -164,62 +163,86 @@ public class AccountUtils {
     }
 
     /**
-     * 
-     * @return
-     * @throws IOException 
-     * @throws AuthenticatorException 
-     * @throws OperationCanceledException 
+     * Get the stored server version corresponding to an OC account.
+     *
+     * @param account   An OC account
+     * @param context   Application context
+     * @return Version of the OC server, according to last check
      */
-	public static OwnCloudCredentials getCredentialsForAccount(Context context, Account account) 
-			throws OperationCanceledException, AuthenticatorException, IOException {
-		
-		OwnCloudCredentials credentials = null;
+    public static OwnCloudVersion getServerVersionForAccount(Account account, Context context) {
+        AccountManager ama = AccountManager.get(context);
+        OwnCloudVersion version = null;
+        try {
+            String versionString = ama.getUserData(account, Constants.KEY_OC_VERSION);
+            version = new OwnCloudVersion(versionString);
+
+        } catch (Exception e) {
+            Log_OC.e(TAG, "Couldn't get a the server version for an account", e);
+        }
+        return version;
+    }
+
+    /**
+     * @return
+     * @throws IOException
+     * @throws AuthenticatorException
+     * @throws OperationCanceledException
+     */
+    public static OwnCloudCredentials getCredentialsForAccount(Context context, Account account)
+        throws OperationCanceledException, AuthenticatorException, IOException {
+
+        OwnCloudCredentials credentials = null;
         AccountManager am = AccountManager.get(context);
-        
+
         boolean isOauth2 = am.getUserData(
-        		account, 
-        		AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
-        
+            account,
+            AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
+
         boolean isSamlSso = am.getUserData(
-        		account, 
-        		AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
+            account,
+            AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
 
         String username = AccountUtils.getUsernameForAccount(account);
+        OwnCloudVersion version = new OwnCloudVersion(am.getUserData(account, Constants.KEY_OC_VERSION));
 
-        if (isOauth2) {    
+        if (isOauth2) {
             String accessToken = am.blockingGetAuthToken(
-            		account, 
-            		AccountTypeUtils.getAuthTokenTypeAccessToken(account.type), 
-            		false);
-            
+                account,
+                AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
+                false);
+
             credentials = OwnCloudCredentialsFactory.newBearerCredentials(accessToken);
-        
+
         } else if (isSamlSso) {
             String accessToken = am.blockingGetAuthToken(
-            		account, 
-            		AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type), 
-            		false);
-            
+                account,
+                AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type),
+                false);
+
             credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken);
 
         } else {
             String password = am.blockingGetAuthToken(
-            		account, 
-            		AccountTypeUtils.getAuthTokenTypePass(account.type), 
-            		false);
-            
-            credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password);
-        }
-        
-        return credentials;
-        
-	}
+                account,
+                AccountTypeUtils.getAuthTokenTypePass(account.type),
+                false);
 
-	
+            credentials = OwnCloudCredentialsFactory.newBasicCredentials(
+                username,
+                password,
+                version.isSessionMonitoringSupported()
+            );
+        }
+
+        return credentials;
+
+    }
+
+
     public static String buildAccountNameOld(Uri serverBaseUrl, String username) {
-    	if (serverBaseUrl.getScheme() == null) {
-    		serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString()); 
-    	}
+        if (serverBaseUrl.getScheme() == null) {
+            serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString());
+        }
         String accountName = username + "@" + serverBaseUrl.getHost();
         if (serverBaseUrl.getPort() >= 0) {
             accountName += ":" + serverBaseUrl.getPort();
@@ -228,9 +251,9 @@ public class AccountUtils {
     }
 
     public static String buildAccountName(Uri serverBaseUrl, String username) {
-    	if (serverBaseUrl.getScheme() == null) {
-    		serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString());
-    	}
+        if (serverBaseUrl.getScheme() == null) {
+            serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString());
+        }
 
         // Remove http:// or https://
         String url = serverBaseUrl.toString();
@@ -242,148 +265,153 @@ public class AccountUtils {
         return accountName;
     }
 
-	public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
+    public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
 
-		// Account Manager
-		AccountManager ac = AccountManager.get(context.getApplicationContext());
+        // Account Manager
+        AccountManager ac = AccountManager.get(context.getApplicationContext());
 
-		if (client != null) {
-			String cookiesString = client.getCookiesString();
-			if (!"".equals(cookiesString)) {
-				ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString); 
-				// Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
-			}
-		}
+        if (client != null) {
+            String cookiesString = client.getCookiesString();
+            if (!"".equals(cookiesString)) {
+                ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString);
+                // Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
+            }
+        }
 
-	}
-	
-	
-  /**
-  * Restore the client cookies
-  * @param account
-  * @param client 
-  * @param context
-  */
-	public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
+    }
 
-		Log_OC.d(TAG, "Restoring cookies for " + account.name);
 
-		// Account Manager
-		AccountManager am = AccountManager.get(context.getApplicationContext());
+    /**
+     * Restore the client cookies
+     *
+     * @param account
+     * @param client
+     * @param context
+     */
+    public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
 
-		Uri serverUri = (client.getBaseUri() != null)? client.getBaseUri() : client.getWebdavUri();
+        Log_OC.d(TAG, "Restoring cookies for " + account.name);
 
-		String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
-		if (cookiesString !=null) {
-			String[] cookies = cookiesString.split(";");
-			if (cookies.length > 0) {
-				for (int i=0; i< cookies.length; i++) {
-					Cookie cookie = new Cookie();
-					int equalPos = cookies[i].indexOf('=');
-					cookie.setName(cookies[i].substring(0, equalPos));
-					cookie.setValue(cookies[i].substring(equalPos + 1));
-					cookie.setDomain(serverUri.getHost());	// VERY IMPORTANT 
-					cookie.setPath(serverUri.getPath());	// VERY IMPORTANT
+        // Account Manager
+        AccountManager am = AccountManager.get(context.getApplicationContext());
 
-					client.getState().addCookie(cookie);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Restore the client cookies from accountName
-	 * @param accountName
-	 * @param client
-	 * @param context
-	 */
-	public static void restoreCookies(String accountName, OwnCloudClient client, Context context) {
-		Log_OC.d(TAG, "Restoring cookies for " + accountName);
+        Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getWebdavUri();
 
-		// Account Manager
-		AccountManager am = AccountManager.get(context.getApplicationContext());
-		
-		// Get account
-		Account account = null;
-		Account accounts[] = am.getAccounts();
-		for (Account a : accounts) {
-			if (a.name.equals(accountName)) {
-				account = a;
-				break;
-			}
-		}
-		
-		// Restoring cookies
-		if (account != null) {
-			restoreCookies(account, client, context);
-		}
-	}
-	
+        String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
+        if (cookiesString != null) {
+            String[] cookies = cookiesString.split(";");
+            if (cookies.length > 0) {
+                for (int i = 0; i < cookies.length; i++) {
+                    Cookie cookie = new Cookie();
+                    int equalPos = cookies[i].indexOf('=');
+                    cookie.setName(cookies[i].substring(0, equalPos));
+                    cookie.setValue(cookies[i].substring(equalPos + 1));
+                    cookie.setDomain(serverUri.getHost());    // VERY IMPORTANT
+                    cookie.setPath(serverUri.getPath());    // VERY IMPORTANT
+
+                    client.getState().addCookie(cookie);
+                }
+            }
+        }
+    }
+
+    /**
+     * Restore the client cookies from accountName
+     *
+     * @param accountName
+     * @param client
+     * @param context
+     */
+    public static void restoreCookies(String accountName, OwnCloudClient client, Context context) {
+        Log_OC.d(TAG, "Restoring cookies for " + accountName);
+
+        // Account Manager
+        AccountManager am = AccountManager.get(context.getApplicationContext());
+
+        // Get account
+        Account account = null;
+        Account accounts[] = am.getAccounts();
+        for (Account a : accounts) {
+            if (a.name.equals(accountName)) {
+                account = a;
+                break;
+            }
+        }
+
+        // Restoring cookies
+        if (account != null) {
+            restoreCookies(account, client, context);
+        }
+    }
+
     public static class AccountNotFoundException extends AccountsException {
-        
-		/** Generated - should be refreshed every time the class changes!! */
-		private static final long serialVersionUID = -1684392454798508693L;
-        
-        private Account mFailedAccount; 
-                
+
+        /**
+         * Generated - should be refreshed every time the class changes!!
+         */
+        private static final long serialVersionUID = -1684392454798508693L;
+
+        private Account mFailedAccount;
+
         public AccountNotFoundException(Account failedAccount, String message, Throwable cause) {
             super(message, cause);
             mFailedAccount = failedAccount;
         }
-        
+
         public Account getFailedAccount() {
             return mFailedAccount;
         }
     }
 
 
-	public static class Constants {
-	    /**
-	     * Value under this key should handle path to webdav php script. Will be
-	     * removed and usage should be replaced by combining
-	     * {@link com.owncloud.android.authentication.AuthenticatorActivity.KEY_OC_BASE_URL} and
-	     * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
-	     * 
-	     * @deprecated
-	     */
-	    public static final String KEY_OC_URL = "oc_url";
-	    /**
-	     * Version should be 3 numbers separated by dot so it can be parsed by
-	     * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
-	     */
-	    public static final String KEY_OC_VERSION = "oc_version";
-	    /**
-	     * Base url should point to owncloud installation without trailing / ie:
-	     * http://server/path or https://owncloud.server
-	     */
-	    public static final String KEY_OC_BASE_URL = "oc_base_url";
-	    /**
-	     * Flag signaling if the ownCloud server can be accessed with OAuth2 access tokens.
-	     */
-	    public static final String KEY_SUPPORTS_OAUTH2 = "oc_supports_oauth2";
-	    /**
-	     * Flag signaling if the ownCloud server can be accessed with session cookies from SAML-based web single-sign-on.
-	     */
-	    public static final String KEY_SUPPORTS_SAML_WEB_SSO = "oc_supports_saml_web_sso";
-	    /**
-	    * Flag signaling if the ownCloud server supports Share API"
-        * @deprecated
-        */
-	    public static final String KEY_SUPPORTS_SHARE_API = "oc_supports_share_api";
-	    /**
-	     * OC account cookies
-	     */
-	    public static final String KEY_COOKIES = "oc_account_cookies";
+    public static class Constants {
+        /**
+         * Value under this key should handle path to webdav php script. Will be
+         * removed and usage should be replaced by combining
+         * {@link com.owncloud.android.authentication.AuthenticatorActivity.KEY_OC_BASE_URL} and
+         * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
+         *
+         * @deprecated
+         */
+        public static final String KEY_OC_URL = "oc_url";
+        /**
+         * Version should be 3 numbers separated by dot so it can be parsed by
+         * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
+         */
+        public static final String KEY_OC_VERSION = "oc_version";
+        /**
+         * Base url should point to owncloud installation without trailing / ie:
+         * http://server/path or https://owncloud.server
+         */
+        public static final String KEY_OC_BASE_URL = "oc_base_url";
+        /**
+         * Flag signaling if the ownCloud server can be accessed with OAuth2 access tokens.
+         */
+        public static final String KEY_SUPPORTS_OAUTH2 = "oc_supports_oauth2";
+        /**
+         * Flag signaling if the ownCloud server can be accessed with session cookies from SAML-based web single-sign-on.
+         */
+        public static final String KEY_SUPPORTS_SAML_WEB_SSO = "oc_supports_saml_web_sso";
+        /**
+         * Flag signaling if the ownCloud server supports Share API"
+         *
+         * @deprecated
+         */
+        public static final String KEY_SUPPORTS_SHARE_API = "oc_supports_share_api";
+        /**
+         * OC account cookies
+         */
+        public static final String KEY_COOKIES = "oc_account_cookies";
 
         /**
          * OC account version
          */
         public static final String KEY_OC_ACCOUNT_VERSION = "oc_account_version";
 
-		/**
-		 * User's display name
-		 */
-		public static final String KEY_DISPLAY_NAME = "oc_display_name";
+        /**
+         * User's display name
+         */
+        public static final String KEY_DISPLAY_NAME = "oc_display_name";
 
     }
 

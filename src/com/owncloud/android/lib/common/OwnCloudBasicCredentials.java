@@ -32,41 +32,49 @@ import org.apache.commons.httpclient.auth.AuthScope;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
-	private String mUsername;
-	private String mPassword;
+    private String mUsername;
+    private String mPassword;
+    private boolean mAuthenticationPreemptive;
 
-	public OwnCloudBasicCredentials(String username, String password) {
-		mUsername = username != null ? username : "";
-		mPassword = password != null ? password : "";
-	}
+    public OwnCloudBasicCredentials(String username, String password) {
+        mUsername = username != null ? username : "";
+        mPassword = password != null ? password : "";
+        mAuthenticationPreemptive = true;
+    }
 
-	@Override
-	public void applyTo(OwnCloudClient client) {
+    public OwnCloudBasicCredentials(String username, String password, boolean sessionEnabled) {
+        mUsername = username != null ? username : "";
+        mPassword = password != null ? password : "";
+        mAuthenticationPreemptive = !sessionEnabled;
+    }
+
+    @Override
+    public void applyTo(OwnCloudClient client) {
         List<String> authPrefs = new ArrayList<String>(1);
         authPrefs.add(AuthPolicy.BASIC);
-        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);        
-        
-        client.getParams().setAuthenticationPreemptive(true);
+        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
+
+        client.getParams().setAuthenticationPreemptive(mAuthenticationPreemptive);
         client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
         client.getState().setCredentials(
-        		AuthScope.ANY, 
-        		new UsernamePasswordCredentials(mUsername, mPassword)
-		);
-	}
+            AuthScope.ANY,
+            new UsernamePasswordCredentials(mUsername, mPassword)
+        );
+    }
 
-	@Override
-	public String getUsername() {
-		return mUsername;
-	}
+    @Override
+    public String getUsername() {
+        return mUsername;
+    }
 
-	@Override
-	public String getAuthToken() {
-		return mPassword;
-	}
+    @Override
+    public String getAuthToken() {
+        return mPassword;
+    }
 
-	@Override
-	public boolean authTokenExpires() {
-		return false;
-	}
+    @Override
+    public boolean authTokenExpires() {
+        return false;
+    }
 
 }
