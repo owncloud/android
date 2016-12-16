@@ -42,6 +42,7 @@ import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class OwnCloudClientFactory {
     
@@ -69,7 +70,11 @@ public class OwnCloudClientFactory {
      * @throws IOException                  If there was some I/O error while getting the
      *                                      authorization token for the account.
      * @throws AccountNotFoundException     If 'account' is unknown for the AccountManager
+     *
+     * @deprecated :    Will be deleted in version 1.0.
+     *                  Use {@link #createOwnCloudClient(Account, Context, Activity)} instead.
      */
+    @Deprecated
     public static OwnCloudClient createOwnCloudClient (Account account, Context appContext)
             throws OperationCanceledException, AuthenticatorException, IOException,
             AccountNotFoundException {
@@ -86,35 +91,40 @@ public class OwnCloudClientFactory {
         String username = AccountUtils.getUsernameForAccount(account);
         if (isOauth2) {
             String accessToken = am.blockingGetAuthToken(
-            		account, 
-            		AccountTypeUtils.getAuthTokenTypeAccessToken(account.type), 
-            		false);
+                account,
+                AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
+                false);
             
             client.setCredentials(
-            		OwnCloudCredentialsFactory.newBearerCredentials(accessToken)
+                OwnCloudCredentialsFactory.newBearerCredentials(accessToken)
     		);
         
         } else if (isSamlSso) {    // TODO avoid a call to getUserData here
             String accessToken = am.blockingGetAuthToken(
-            		account, 
-            		AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type), 
-            		false);
+                account,
+                AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type),
+                false);
             
             client.setCredentials(
-            		OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken)
-    		);
+                OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken)
+            );
 
         } else {
             //String password = am.getPassword(account);
             String password = am.blockingGetAuthToken(
-            		account, 
-            		AccountTypeUtils.getAuthTokenTypePass(account.type), 
-            		false);
-            
+                account,
+                AccountTypeUtils.getAuthTokenTypePass(account.type),
+                false);
+
+            OwnCloudVersion version = AccountUtils.getServerVersionForAccount(account, appContext);
             client.setCredentials(
-            		OwnCloudCredentialsFactory.newBasicCredentials(username, password)
-    		);
-            
+                OwnCloudCredentialsFactory.newBasicCredentials(
+                    username,
+                    password,
+                    (version != null && version.isSessionMonitoringSupported())
+                )
+            );
+
         }
         
         // Restore cookies
@@ -140,35 +150,35 @@ public class OwnCloudClientFactory {
         String username = AccountUtils.getUsernameForAccount(account);
         if (isOauth2) {    // TODO avoid a call to getUserData here
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
-            		account,  
-            		AccountTypeUtils.getAuthTokenTypeAccessToken(account.type), 
-            		null, 
-            		currentActivity, 
-            		null, 
-            		null);
+                account,
+                AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
+                null,
+                currentActivity,
+                null,
+                null);
             
             Bundle result = future.getResult();
             String accessToken = result.getString(AccountManager.KEY_AUTHTOKEN);
             if (accessToken == null) throw new AuthenticatorException("WTF!");
             client.setCredentials(
-            		OwnCloudCredentialsFactory.newBearerCredentials(accessToken)
-    		);
+                OwnCloudCredentialsFactory.newBearerCredentials(accessToken)
+            );
 
         } else if (isSamlSso) {    // TODO avoid a call to getUserData here
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
-            		account, 
-            		AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type), 
-            		null, 
-            		currentActivity, 
-            		null, 
-            		null);
+               account,
+               AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type),
+                null,
+                currentActivity,
+                null,
+                null);
             
             Bundle result = future.getResult();
             String accessToken = result.getString(AccountManager.KEY_AUTHTOKEN);
             if (accessToken == null) throw new AuthenticatorException("WTF!");
             client.setCredentials(
-            		OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken)
-    		);
+                OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken)
+            );
 
 
         } else {
@@ -176,18 +186,24 @@ public class OwnCloudClientFactory {
             //String password = am.blockingGetAuthToken(account, MainApp.getAuthTokenTypePass(),
             // false);
             AccountManagerFuture<Bundle> future =  am.getAuthToken(
-            		account,  
-            		AccountTypeUtils.getAuthTokenTypePass(account.type), 
-            		null, 
-            		currentActivity, 
-            		null, 
-            		null);
+                account,
+                AccountTypeUtils.getAuthTokenTypePass(account.type),
+                null,
+                currentActivity,
+                null,
+                null
+            );
             
             Bundle result = future.getResult();
             String password = result.getString(AccountManager.KEY_AUTHTOKEN);
+            OwnCloudVersion version = AccountUtils.getServerVersionForAccount(account, appContext);
             client.setCredentials(
-            		OwnCloudCredentialsFactory.newBasicCredentials(username, password)
-    		);
+                OwnCloudCredentialsFactory.newBasicCredentials(
+                    username,
+                    password,
+                    (version != null && version.isSessionMonitoringSupported())
+                )
+            );
         }
         
         // Restore cookies

@@ -26,55 +26,61 @@ package com.owncloud.android.lib.common;
 
 public class OwnCloudCredentialsFactory {
 
-	public static final String CREDENTIAL_CHARSET = "UTF-8";
+    public static final String CREDENTIAL_CHARSET = "UTF-8";
 
-	private static OwnCloudAnonymousCredentials sAnonymousCredentials;
+    private static OwnCloudAnonymousCredentials sAnonymousCredentials;
 
-	public static OwnCloudCredentials newBasicCredentials(String username, String password) {
-		return new OwnCloudBasicCredentials(username, password);
-	}
-	
-	public static OwnCloudCredentials newBearerCredentials(String authToken) {
+    public static OwnCloudCredentials newBasicCredentials(String username, String password) {
+        return new OwnCloudBasicCredentials(username, password);
+    }
+
+    public static OwnCloudCredentials newBasicCredentials(
+        String username, String password, boolean sessionEnabled
+    ) {
+        return new OwnCloudBasicCredentials(username, password, sessionEnabled);
+    }
+
+    public static OwnCloudCredentials newBearerCredentials(String authToken) {
         return new OwnCloudBearerCredentials(authToken);
-	}
-    
-	public static OwnCloudCredentials newSamlSsoCredentials(String username, String sessionCookie) {
-		return new OwnCloudSamlSsoCredentials(username, sessionCookie);
-	}
+    }
 
-	public static final OwnCloudCredentials getAnonymousCredentials() {
-		if (sAnonymousCredentials == null) {
-			sAnonymousCredentials = new OwnCloudAnonymousCredentials();
-		}
-		return sAnonymousCredentials;
-	}
+    public static OwnCloudCredentials newSamlSsoCredentials(String username, String sessionCookie) {
+        return new OwnCloudSamlSsoCredentials(username, sessionCookie);
+    }
 
-	public static final class OwnCloudAnonymousCredentials implements OwnCloudCredentials {
-		
-		protected OwnCloudAnonymousCredentials() {
-		}
-		
-		@Override
-		public void applyTo(OwnCloudClient client) {
-			client.getState().clearCredentials();
-			client.getState().clearCookies();
-		}
+    public static final OwnCloudCredentials getAnonymousCredentials() {
+        if (sAnonymousCredentials == null) {
+            sAnonymousCredentials = new OwnCloudAnonymousCredentials();
+        }
+        return sAnonymousCredentials;
+    }
 
-		@Override
-		public String getAuthToken() {
-			return "";
-		}
+    public static final class OwnCloudAnonymousCredentials implements OwnCloudCredentials {
 
-		@Override
-		public boolean authTokenExpires() {
-			return false;
-		}
+        protected OwnCloudAnonymousCredentials() {
+        }
 
-		@Override
-		public String getUsername() {
-			// no user name
-			return null;
-		}
-	}
+        @Override
+        public void applyTo(OwnCloudClient client) {
+            client.getState().clearCredentials();
+            client.getState().clearCookies();
+        }
+
+        @Override
+        public String getAuthToken() {
+            return "";
+        }
+
+        @Override
+        public boolean authTokenExpires() {
+            return false;
+        }
+
+        @Override
+        public String getUsername() {
+            // no user name
+            return null;
+        }
+    }
 
 }
