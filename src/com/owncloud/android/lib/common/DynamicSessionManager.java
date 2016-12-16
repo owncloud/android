@@ -45,12 +45,12 @@ public class DynamicSessionManager implements OwnCloudClientManager {
 
     @Override
     public OwnCloudClient removeClientFor(OwnCloudAccount account) {
-        OwnCloudClient clientRemoved = mSimpleFactoryManager.removeClientFor(account);
-        OwnCloudClient clientRemoved2 = mSingleSessionManager.removeClientFor(account);
-        if (clientRemoved2 != null) {
-            return clientRemoved2;
+        OwnCloudClient clientRemovedFromFactoryManager = mSimpleFactoryManager.removeClientFor(account);
+        OwnCloudClient clientRemovedFromSingleSessionManager = mSingleSessionManager.removeClientFor(account);
+        if (clientRemovedFromSingleSessionManager != null) {
+            return clientRemovedFromSingleSessionManager;
         } else {
-            return clientRemoved;
+            return clientRemovedFromFactoryManager;
         }
         // clientRemoved and clientRemoved2 should not be != null at the same time
     }
