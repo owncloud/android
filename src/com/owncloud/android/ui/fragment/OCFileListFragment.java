@@ -807,12 +807,14 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
             mFile = directory;
 
-            updateLayout();
+            long usedQuota = storageManager.getUsedQuota();
+            long totalQuota = storageManager.getTotalQuota();
+            updateLayout(usedQuota, totalQuota);
 
         }
     }
 
-    private void updateLayout() {
+    private void updateLayout(long usedQuota, long totalQuota) {
         if (!isShowingJustFolders()) {
             int filesCount = 0, foldersCount = 0;
             int count = mAdapter.getCount();
@@ -827,8 +829,9 @@ public class OCFileListFragment extends ExtendedListFragment {
                     }
                 }
             }
+
             // set footer text
-            setFooterText(generateFooterText(filesCount, foldersCount));
+            setFooterText(generateFooterText(filesCount, foldersCount, usedQuota, totalQuota));
 
             // decide grid vs list view
             OwnCloudVersion version = AccountUtils.getServerVersion(
@@ -849,7 +852,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         }
     }
 
-    private String generateFooterText(int filesCount, int foldersCount) {
+    private String generateFooterText(int filesCount, int foldersCount, long usedQuota, long totalQuota) {
         String output;
         if (filesCount <= 0) {
             if (foldersCount <= 0) {
@@ -886,6 +889,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
             }
         }
+        output += "\n " + usedQuota + " of " + totalQuota + " used";
         return output;
     }
 
