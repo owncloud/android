@@ -555,13 +555,18 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     /**
-     * Saves the current listed folder.
+     * Saves the current listed folder
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(KEY_FILE, mFile);
-        mMultiChoiceModeListener.storeStateIn(outState);
+
+        // If this fragment is used to show target folders where a selected file/folder can be
+        // copied/moved, multiple choice is disabled
+        if (mMultiChoiceModeListener != null) {
+            mMultiChoiceModeListener.storeStateIn(outState);
+        }
     }
 
     @Override
