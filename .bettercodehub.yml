@@ -1,6 +1,6 @@
 exclude:
 - /user_manual/conf.py
-component_depth: 6
+component_depth: 2
 languages:
 - java
 - python
