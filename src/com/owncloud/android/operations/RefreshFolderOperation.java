@@ -269,10 +269,13 @@ public class RefreshFolderOperation extends RemoteOperation {
         RemoteOperationResult result = operation.execute(mClient);
         ArrayList<Object> data = result.getData();
 
-        mStorageManager.setQuota(((GetRemoteUserQuotaOperation.Quota)data.get(0)).getFree(),
-                ((GetRemoteUserQuotaOperation.Quota)data.get(0)).getUsed(),
-                ((GetRemoteUserQuotaOperation.Quota)data.get(0)).getTotal());
+        long free = ((GetRemoteUserQuotaOperation.Quota)data.get(0)).getFree();
+        long used = ((GetRemoteUserQuotaOperation.Quota)data.get(0)).getUsed();
+        long total = ((GetRemoteUserQuotaOperation.Quota)data.get(0)).getTotal();
+
+        mStorageManager.setQuota(free, used, total);
     }
+
     private void updateCapabilities(){
         GetCapabilitiesOperarion getCapabilities = new GetCapabilitiesOperarion();
         RemoteOperationResult  result = getCapabilities.execute(mStorageManager,mContext);

@@ -70,7 +70,6 @@ public class FileDataStorageManager {
 
     private long freeQuota, usedQuota, totalQuota;
 
-
     public FileDataStorageManager(Account account, ContentResolver cr) {
         mContentProviderClient = null;
         mContentResolver = cr;

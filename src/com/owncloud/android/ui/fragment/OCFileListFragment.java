@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.format.Formatter;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -108,7 +109,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     private ActionMode mActiveActionMode;
     private OCFileListFragment.MultiChoiceModeListener mMultiChoiceModeListener;
 
-
+    
     /**
      * Public factory method to create new {@link OCFileListFragment} instances.
      *
@@ -889,7 +890,9 @@ public class OCFileListFragment extends ExtendedListFragment {
 
             }
         }
-        output += "\n " + usedQuota + " of " + totalQuota + " used";
+        String usedQuotaFormatted = Formatter.formatShortFileSize(getContext(), usedQuota);
+        String totalQuotaFormatted = Formatter.formatShortFileSize(getContext(), totalQuota);
+        output += "\n" + usedQuotaFormatted + " of " + totalQuotaFormatted + " used";
         return output;
     }
 
