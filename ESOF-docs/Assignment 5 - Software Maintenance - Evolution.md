@@ -6,6 +6,21 @@ O objetivo deste relatório é documentar o processo seguido para desenvolver a 
 
 [![BCH compliance](https://bettercodehub.com/edge/badge/PauloSantos13/android)](https://bettercodehub.com)
 
+Utilizamos a ferramenta [**Better Code Hub**](https://bettercodehub.com) para avaliar a qualidade do *Own Cloud*. A avaliação é feita com os seguintes tópicos:
+
+    • Escrever pequenos pedaços de código
+    • Escrever pedaços de código simples
+    • Repetir código
+    • Manter as unidades de interface pequenas
+    • Separar funcionalidades em módulos
+    • Arquitetura com componentes independentes
+    • Manter as componentes arquiteturais equilibradas
+    • Manter a base de código pequena
+    • Automação de testes
+    • Desenvolvimento de código estruturado e otimizado
+
+Analisando estas características, o nosso projeto obteve uma classificação de 3 em 10.
+
 Discuss Software Maintainability using the SIG metrics (plus add the badge to this .md file).
 
 ## Processo de evolução (análise do impacto das alterações e implementação)
