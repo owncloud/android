@@ -7,19 +7,21 @@ O objetivo deste relatório é documentar o processo seguido para desenvolver a 
 [![BCH compliance](https://bettercodehub.com/edge/badge/PauloSantos13/android)](https://bettercodehub.com)
 
 Utilizamos a ferramenta [**Better Code Hub**](https://bettercodehub.com) para avaliar a qualidade do *Own Cloud*. A avaliação é feita com os seguintes tópicos:
-
-    • Escrever pequenos pedaços de código
-    • Escrever pedaços de código simples
-    • Repetir código
-    • Manter as unidades de interface pequenas
-    • Separar funcionalidades em módulos
-    • Arquitetura com componentes independentes
-    • Manter as componentes arquiteturais equilibradas
-    • Manter a base de código pequena
-    • Automação de testes
-    • Desenvolvimento de código estruturado e otimizado
-
+<ul>
+    <li>Escrever pequenos pedaços de código</li>
+    <li>Escrever pedaços de código simples</li>
+    <li>Repetir código</li>
+    <li>Manter as unidades de interface pequenas</li>
+    <li>Separar funcionalidades em módulos</li>
+    <li>Arquitetura com componentes independentes</li>
+    <li>Manter as componentes arquiteturais equilibradas</li>
+    <li>Manter a base de código pequena</li>
+    <li>Automação de testes</li>
+    <li>Desenvolvimento de código estruturado e otimizado</li>
+</ul>
 Analisando estas características, o nosso projeto obteve uma classificação de 3 em 10.
+
+![compliance](/ESOF-docs/resources/compliance.png)
 
 Discuss Software Maintainability using the SIG metrics (plus add the badge to this .md file).
 
