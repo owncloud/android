@@ -1,6 +1,5 @@
 exclude:
 - /oc_jb_workaround/src/com/owncloud/android/workaround/accounts/AccountAuthenticatorService.java
-- /user_manual/conf.py
 - /wait_for_emulator.sh
 component_depth: 1
 languages:
