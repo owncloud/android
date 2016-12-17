@@ -233,6 +233,7 @@
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
+  <string name="available_offline_inherited_msg">La carpeta que contiene este archivo está disponible offline</string>
   <string name="rename_local_fail_msg">No se pudo cambiar el nombre de la copia local, trata con un nombre differente</string>
   <string name="rename_server_fail_msg">No se pudo cambiar el nombre</string>
   <string name="sync_file_fail_msg">No se ha podido comprobar el fichero remoto</string>

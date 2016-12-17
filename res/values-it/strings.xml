@@ -233,6 +233,7 @@
   <string name="remove_success_msg">Rimozione effettuata con successo</string>
   <string name="remove_fail_msg">La rimozione non può essere completata</string>
   <string name="rename_dialog_title">Digita un nuovo nome</string>
+  <string name="available_offline_inherited_msg">Una cartella che contiene questo file è disponibile non in linea</string>
   <string name="rename_local_fail_msg">La copia locale non può essere rinominata; prova un nome diverso</string>
   <string name="rename_server_fail_msg">La rinomina non può essere completata</string>
   <string name="sync_file_fail_msg">Il file remoto non può essere controllato</string>
