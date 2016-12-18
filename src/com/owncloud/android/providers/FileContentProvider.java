@@ -782,6 +782,25 @@ public class FileContentProvider extends ContentProvider {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                         ", newVersion == " + newVersion);
 
+            if (oldVersion < 16 && newVersion >= 16) {
+                Log_OC.i("SQL", "Entering in the #16 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
+                        " ADD COLUMN " + ProviderTableMeta.FILE_TREE_ETAG + " TEXT " +
+                        " DEFAULT NULL");
+
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+            if (!upgraded)
+                Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
+                    ", newVersion == " + newVersion);
+
+
         }
     }
 
@@ -802,6 +821,7 @@ public class FileContentProvider extends ContentProvider {
                         + ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " INTEGER, "
                         + ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " INTEGER, "
                         + ProviderTableMeta.FILE_ETAG + " TEXT, "
+                        + ProviderTableMeta.FILE_TREE_ETAG + " TEXT, "
                         + ProviderTableMeta.FILE_SHARED_VIA_LINK + " INTEGER, "
                         + ProviderTableMeta.FILE_PUBLIC_LINK + " TEXT, "
                         + ProviderTableMeta.FILE_PERMISSIONS + " TEXT null,"

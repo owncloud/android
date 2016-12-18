@@ -223,8 +223,8 @@
 ⇥</string>
   <string name="auth_can_not_auth_against_server">Не удается авторизоваться на этом сервере</string>
   <string name="auth_account_does_not_exist">Аккаунт ещё не существует на устройстве</string>
-  <string name="favorite">Сделать доступным автономно</string>
-  <string name="unfavorite">Убрать доступность автономно</string>
+  <string name="set_available_offline">Сделать доступным автономно</string>
+  <string name="unset_available_offline">Убрать доступность автономно</string>
   <string name="common_rename">Переименовать</string>
   <string name="common_remove">Удалить</string>
   <string name="confirmation_remove_file_alert">Вы действительно хотите удалить %1$s?</string>
@@ -234,6 +234,7 @@
   <string name="remove_success_msg">Удаление завершено</string>
   <string name="remove_fail_msg">Ошибка удаления</string>
   <string name="rename_dialog_title">Введите новое имя</string>
+  <string name="available_offline_inherited_msg">Каталог, содержащий этот файл, доступен автономно</string>
   <string name="rename_local_fail_msg">Локальная копия не может быть переименована; попробуйте другое имя</string>
   <string name="rename_server_fail_msg">Переименование не может быть завершено</string>
   <string name="sync_file_fail_msg">Удаленный файл не может быть проверен</string>

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App name  and other strings-->
-    <string name="app_name">ownCloud</string>
-    <string name="account_type">owncloud</string>	<!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
-    <string name="authority">org.owncloud</string>
-    <string name="document_provider_authority">org.owncloud.documents</string>
-    <string name="file_provider_authority">org.owncloud.files</string>
-    <string name="search_suggest_authority">org.owncloud.search.users_and_groups</string>
-    <string name="search_suggest_intent_action">org.owncloud.search.users_and_groups.action.SHARE_WITH</string>
-    <string name ="db_file">owncloud.db</string>
-    <string name ="db_name">ownCloud</string>
-    <string name ="data_folder">owncloud</string>
-    <string name ="log_name">Owncloud_</string>
-    <string name ="default_display_name_for_root_folder">ownCloud</string>
+    <string name="app_name" formatted="false">ownCloud</string>
+    <string name="account_type" formatted="false">owncloud</string>	<!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
+    <string name="authority" formatted="false">org.owncloud</string>
+    <string name="document_provider_authority" formatted="false">org.owncloud.documents</string>
+    <string name="file_provider_authority" formatted="false">org.owncloud.files</string>
+    <string name="search_suggest_authority" formatted="false">org.owncloud.search.users_and_groups</string>
+    <string name="search_suggest_intent_action" formatted="false">org.owncloud.search.users_and_groups.action.SHARE_WITH</string>
+    <string name ="db_file" formatted="false">owncloud.db</string>
+    <string name ="db_name" formatted="false">ownCloud</string>
+    <string name ="data_folder" formatted="false">owncloud</string>
+    <string name ="log_name" formatted="false">Owncloud_</string>
+    <string name ="default_display_name_for_root_folder" formatted="false">ownCloud</string>
     <string name ="user_agent">Mozilla/5.0 (Android) ownCloud-android/%1$s</string>
     
     <!-- URLs and flags related -->
-    <string name="server_url"></string>
+    <string name="server_url" formatted="false"></string>
     <bool name="show_server_url_input">true</bool>
     <bool name="show_welcome_link">true</bool>
-	<string name="welcome_link_url">"https://owncloud.com/mobile/new"</string>
-	<string name="share_api_link"></string>
+    <string name="welcome_link_url" formatted="false">"https://owncloud.com/mobile/new"</string>
+    <string name="share_api_link" formatted="false"></string>
     
     <!-- Flags to setup the authentication methods available in the app -->
-    <string name="auth_method_oauth2">off</string>
-    <string name="auth_method_saml_web_sso">off</string>
+    <string name="auth_method_oauth2" formatted="false">off</string>
+    <string name="auth_method_saml_web_sso" formatted="false">off</string>
     
     <!-- Flags to enable/disable some features -->
-    <string name = "send_files_to_other_apps">on</string>
+    <string name = "send_files_to_other_apps" formatted="false">on</string>
     <bool name = "share_via_link_feature">true</bool>
     <bool name = "share_with_users_feature">true</bool>
     
@@ -61,14 +61,14 @@
     <bool name="recommend_enabled">true</bool>
     <bool name="feedback_enabled">true</bool>
     <bool name="logger_enabled">false</bool>
-    <string name="url_help">http://owncloud.com/mobile/help</string>
-    <string name="url_imprint"></string>
-    <string name="mail_recommend">"mailto:"</string>
-    <string name="mail_feedback">"mailto:apps@owncloud.com"</string>
-    <string name="url_app_download">"https://play.google.com/store/apps/details?id=com.owncloud.android"</string>
+    <string name="url_help" formatted="false">http://owncloud.com/mobile/help</string>
+    <string name="url_imprint" formatted="false"></string>
+    <string name="mail_recommend" formatted="false">"mailto:"</string>
+    <string name="mail_feedback" formatted="false">"mailto:apps@owncloud.com"</string>
+    <string name="url_app_download" formatted="false">"https://play.google.com/store/apps/details?id=com.owncloud.android"</string>
 
     <!--Destination mail for sending log files -->
-    <string name="mail_logger"></string>
+    <string name="mail_logger" formatted="false"></string>
 
 </resources>
 

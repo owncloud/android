@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
+import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -90,8 +91,8 @@ public class FileMenuFilter {
             hideAll(menu);
 
         } else {
-            List<Integer> toShow = new ArrayList<Integer>();
-            List<Integer> toHide = new ArrayList<Integer>();
+            List<Integer> toShow = new ArrayList<>();
+            List<Integer> toHide = new ArrayList<>();
 
             filter(toShow, toHide);
 
@@ -179,7 +180,7 @@ public class FileMenuFilter {
         }
 
         // CANCEL SYNCHRONIZATION
-        if (mFiles.isEmpty() || !synchronizing) {
+        if (mFiles.isEmpty() || !synchronizing || anyFavorite()) {
             toHide.add(R.id.action_cancel_sync);
 
         } else {
@@ -227,18 +228,18 @@ public class FileMenuFilter {
             toShow.add(R.id.action_send_file);
         }
 
-        // FAVORITES
-        if (!allFiles() || synchronizing || allFavorites()) {
-            toHide.add(R.id.action_favorite_file);
+        // SET AS AVAILABLE OFFLINE
+        if (synchronizing || !anyUnfavorite()) {
+            toHide.add(R.id.action_set_available_offline);
         } else {
-            toShow.add(R.id.action_favorite_file);
+            toShow.add(R.id.action_set_available_offline);
         }
 
-        // UNFAVORITES
-        if (!allFiles() || synchronizing || allUnfavorites()) {
-            toHide.add(R.id.action_unfavorite_file);
+        // UNSET AS AVAILABLE OFFLINE
+        if (!anyFavorite()) {
+            toHide.add(R.id.action_unset_available_offline);
         } else {
-            toShow.add(R.id.action_unfavorite_file);
+            toShow.add(R.id.action_unset_available_offline);
         }
 
     }
@@ -296,10 +297,6 @@ public class FileMenuFilter {
         return isSingleSelection() && !mFiles.get(0).isFolder();
     }
 
-    private boolean allFiles() {
-        return mFiles != null && !containsFolder();
-    }
-
     private boolean containsFolder() {
         for(OCFile file: mFiles) {
             if(file.isFolder()) {
@@ -318,22 +315,22 @@ public class FileMenuFilter {
         return false;
     }
 
-    private boolean allFavorites() {
+    private boolean anyFavorite() {
         for(OCFile file: mFiles) {
-            if(!file.isFavorite()) {
-                return false;
+            if(file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    private boolean allUnfavorites() {
+    private boolean anyUnfavorite() {
         for(OCFile file: mFiles) {
-            if(file.isFavorite()) {
-                return false;
+            if(file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
 }

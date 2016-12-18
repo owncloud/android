@@ -221,8 +221,8 @@
   <string name="auth_fail_get_user_name">Shërbyesi juaj s\’po përgjigje me id të saktë përdoruesi, ju lutemi, lidhuni me një admin</string>
   <string name="auth_can_not_auth_against_server">S’kryhet dot mirëfilltësimi me këtë shërbyes</string>
   <string name="auth_account_does_not_exist">Llogaria s\’ekziston ende te pajisja</string>
-  <string name="favorite">Caktojeni si të passhëm jo në linjë</string>
-  <string name="unfavorite">Hiqeni si të passhëm jo në linjë</string>
+  <string name="set_available_offline">Caktojeni si të passhëm jo në linjë</string>
+  <string name="unset_available_offline">Hiqeni si të passhëm jo në linjë</string>
   <string name="common_rename">Riemërtojeni</string>
   <string name="common_remove">Hiqe</string>
   <string name="confirmation_remove_file_alert">Doni vërtet të hiqet %1$s?</string>
@@ -232,6 +232,7 @@
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
   <string name="rename_dialog_title">Jepni një emër të ri</string>
+  <string name="available_offline_inherited_msg">Një dosje që përmban këtë kartelë është gati offline</string>
   <string name="rename_local_fail_msg">Kopja vendore s\’u riemërtua dot; provoni një emër tjetër</string>
   <string name="rename_server_fail_msg">Riemërtimi s\’u plotësua dot</string>
   <string name="sync_file_fail_msg">S\’u kap dot kartela e largët</string>

@@ -28,8 +28,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
-import android.os.Parcelable;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -39,7 +37,6 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
@@ -62,7 +59,7 @@ public class FileOperationsHelper {
     
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
 
-    protected FileActivity mFileActivity = null;
+    private FileActivity mFileActivity = null;
 
     /// Identifier of operation in progress which result shouldn't be lost 
     private long mWaitingForOpId = Long.MAX_VALUE;
@@ -294,14 +291,14 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Show an instance of {@link ShareType} for sharing or unsharing the {@OCFile} received as parameter.
+     * Show an instance of {@link ShareType} for sharing or unsharing the {@link OCFile} received as parameter.
      *
      * @param file  File to share or unshare.
      */
     public void showShareFile(OCFile file){
         Intent intent = new Intent(mFileActivity, ShareActivity.class);
-        intent.putExtra(mFileActivity.EXTRA_FILE, (Parcelable) file);
-        intent.putExtra(mFileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        intent.putExtra(FileActivity.EXTRA_FILE, file);
+        intent.putExtra(FileActivity.EXTRA_ACCOUNT, mFileActivity.getAccount());
         mFileActivity.startActivity(intent);
 
     }
@@ -393,7 +390,7 @@ public class FileOperationsHelper {
     /**
      * @return 'True' if the server supports the Search Users API
      */
-    public boolean isSearchUserSupportedSupported() {
+    public boolean isSearchUserSupported() {
         if (mFileActivity.getAccount() != null) {
             OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mFileActivity.getAccount());
             return (serverVersion != null && serverVersion.isSearchUsersSupported());
@@ -403,7 +400,6 @@ public class FileOperationsHelper {
 
     public void sendDownloadedFile(OCFile file) {
         if (file != null) {
-            String storagePath = file.getStoragePath();
             Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
             // set MimeType
             sendIntent.setType(file.getMimetype());
@@ -440,7 +436,6 @@ public class FileOperationsHelper {
             intent.setAction(OperationsService.ACTION_SYNC_FILE);
             intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            intent.putExtra(OperationsService.EXTRA_SYNC_FILE_CONTENTS, true);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(intent);
 
         } else {
@@ -448,35 +443,64 @@ public class FileOperationsHelper {
             intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
             intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
             intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+            intent.putExtra(
+                OperationsService.EXTRA_SYNC_REGULAR_FILES,
+                true
+            );
             mFileActivity.startService(intent);
 
         }
     }
 
-    public void toggleFavorites(Collection<OCFile> files, boolean isFavorite){
+    public void toggleAvailableOffline(Collection<OCFile> files, boolean isAvailableOffline){
         for (OCFile file: files) {
-            toggleFavorite(file, isFavorite);
+            toggleAvailableOffline(file, isAvailableOffline);
         }
     }
 
-    public void toggleFavorite(OCFile file, boolean isFavorite) {
-        file.setFavorite(isFavorite);
-        mFileActivity.getStorageManager().saveFile(file);
-
-        /// register the OCFile instance in the observer service to monitor local updates
-        FileObserverService.observeFile(
+    public void toggleAvailableOffline(OCFile file, boolean isAvailableOffline) {
+        if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
+            /// files descending of an av-offline folder can't be toggled
+            Toast.makeText(
                 mFileActivity,
-                file,
-                mFileActivity.getAccount(),
-                isFavorite
-        );
+                mFileActivity.getString(R.string.available_offline_inherited_msg),
+                Toast.LENGTH_LONG
+            ).show();
 
-        /// immediate content synchronization
-        if (file.isFavorite()) {
-            syncFile(file);
+        } else {
+            /// update local property, for file and all its descendents (if folder)
+            OCFile.AvailableOfflineStatus targetAvailableOfflineStatus = isAvailableOffline ?
+                OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE :
+                OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
+            file.setAvailableOfflineStatus(targetAvailableOfflineStatus);
+            boolean success = mFileActivity.getStorageManager().saveLocalAvailableOfflineStatus(file);
+
+            if (success) {
+                /// register the OCFile instance in the observer service to monitor local updates
+                FileObserverService.observeFile(
+                    mFileActivity,
+                    file,
+                    mFileActivity.getAccount(),
+                    isAvailableOffline
+                );
+
+                /// immediate content synchronization
+                if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE == file.getAvailableOfflineStatus()) {
+                    syncFile(file);
+                } else {
+                    cancelTransference(file);
+                }
+            } else {
+                /// unexpected error
+                Toast.makeText(
+                    mFileActivity,
+                    mFileActivity.getString(R.string.common_error_unknown),
+                    Toast.LENGTH_SHORT
+                ).show();
+            }
         }
     }
-    
+
     public void renameFile(OCFile file, String newFilename) {
         // RenameFile
         Intent service = new Intent(mFileActivity, OperationsService.class);

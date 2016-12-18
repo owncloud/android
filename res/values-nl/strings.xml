@@ -225,8 +225,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
 	</string>
   <string name="auth_can_not_auth_against_server">Kan niet authenticeren tegen deze server</string>
   <string name="auth_account_does_not_exist">Het account bestaat nog niet in dit apparaat</string>
-  <string name="favorite">Instellen als beschikbaar offline</string>
-  <string name="unfavorite">Instellen als niet beschikbaar offline</string>
+  <string name="set_available_offline">Instellen als beschikbaar offline</string>
+  <string name="unset_available_offline">Instellen als niet beschikbaar offline</string>
   <string name="common_rename">Hernoemen</string>
   <string name="common_remove">Verwijderen</string>
   <string name="confirmation_remove_file_alert">Wilt u %1$s werkelijk verwijderen?</string>
@@ -236,6 +236,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="remove_success_msg">Succesvol verwijderd</string>
   <string name="remove_fail_msg">Verwijdering kon niet voltooid worden</string>
   <string name="rename_dialog_title">Voer een nieuwe naam in</string>
+  <string name="available_offline_inherited_msg">Een map met dit bestand is offline beschikbaar</string>
   <string name="rename_local_fail_msg">Lokaal kopie kon niet worden hernoemt.</string>
   <string name="rename_server_fail_msg">Hernoemen kon niet worden voltooid</string>
   <string name="sync_file_fail_msg">Extern bestand kon niet worden gecontroleerd</string>

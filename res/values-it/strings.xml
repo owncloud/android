@@ -222,8 +222,8 @@
 	</string>
   <string name="auth_can_not_auth_against_server">Impossibile autenticarsi a questo server</string>
   <string name="auth_account_does_not_exist">L\'account non esiste ancora sul dispositivo</string>
-  <string name="favorite">Imposta come disponibile non in linea</string>
-  <string name="unfavorite">Rimuovi come disponibile non in linea</string>
+  <string name="set_available_offline">Imposta come disponibile non in linea</string>
+  <string name="unset_available_offline">Rimuovi come disponibile non in linea</string>
   <string name="common_rename">Rinomina</string>
   <string name="common_remove">Rimuovi</string>
   <string name="confirmation_remove_file_alert">Vuoi davvero rimuovere %1$s?</string>
@@ -233,6 +233,7 @@
   <string name="remove_success_msg">Rimozione effettuata con successo</string>
   <string name="remove_fail_msg">La rimozione non può essere completata</string>
   <string name="rename_dialog_title">Digita un nuovo nome</string>
+  <string name="available_offline_inherited_msg">Una cartella che contiene questo file è disponibile non in linea</string>
   <string name="rename_local_fail_msg">La copia locale non può essere rinominata; prova un nome diverso</string>
   <string name="rename_server_fail_msg">La rinomina non può essere completata</string>
   <string name="sync_file_fail_msg">Il file remoto non può essere controllato</string>

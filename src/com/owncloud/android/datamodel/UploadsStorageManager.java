@@ -46,7 +46,6 @@ public class UploadsStorageManager extends Observable {
 
     static private final String TAG = UploadsStorageManager.class.getSimpleName();
 
-
     public enum UploadStatus {
 
         /**
@@ -184,9 +183,7 @@ public class UploadsStorageManager extends Observable {
             if(localPath != null) {
                 upload.setLocalPath(localPath);
             }
-            if (status == UploadStatus.UPLOAD_SUCCEEDED) {
-                upload.setUploadEndTimestamp(Calendar.getInstance().getTimeInMillis());
-            }
+            upload.setUploadEndTimestamp(Calendar.getInstance().getTimeInMillis());
 
             // store update upload object to db
             r = updateUpload(upload);
@@ -303,17 +300,29 @@ public class UploadsStorageManager extends Observable {
     }
 
     public OCUpload[] getAllStoredUploads() {
-        return getUploads(null, null);
+        return getUploads(null, null, null);
     }
 
+    public OCUpload getLastUploadFor(OCFile file, String accountName) {
+        OCUpload[] uploads = getUploads(
+            ProviderTableMeta.UPLOADS_REMOTE_PATH + "== ? AND " +
+                ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "== ?",
+            new String[] {
+                file.getRemotePath(),
+                accountName
+            },
+            ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP + " desc"
+        );
+        return (uploads.length > 0 ? uploads[0] : null);
+    }
 
-    private OCUpload[] getUploads(String selection, String[] selectionArgs) {
+    private OCUpload[] getUploads(String selection, String[] selectionArgs, String sortOrder) {
         Cursor c = getDB().query(
                 ProviderTableMeta.CONTENT_URI_UPLOADS,
                 null,
                 selection,
                 selectionArgs,
-                null
+                sortOrder
         );
         OCUpload[] list = new OCUpload[c.getCount()];
         if (c.moveToFirst()) {
@@ -366,6 +375,7 @@ public class UploadsStorageManager extends Observable {
         return getUploads(
             ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_IN_PROGRESS.value + " OR " +
             ProviderTableMeta.UPLOADS_LAST_RESULT + "==" + UploadResult.DELAYED_FOR_WIFI.getValue(),
+            null,
             null
         );
     }
@@ -374,14 +384,22 @@ public class UploadsStorageManager extends Observable {
      * Get all failed uploads.
      */
     public OCUpload[] getFailedUploads() {
-        return getUploads(ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_FAILED.value, null);
+        return getUploads(
+            ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_FAILED.value,
+            null,
+            null
+        );
     }
 
     /**
      * Get all uploads which where successfully completed.
      */
     public OCUpload[] getFinishedUploads() {
-        return getUploads(ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_SUCCEEDED.value, null);
+        return getUploads(
+            ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_SUCCEEDED.value,
+            null,
+            null
+        );
     }
 
     /**
@@ -392,6 +410,7 @@ public class UploadsStorageManager extends Observable {
         return getUploads(
             ProviderTableMeta.UPLOADS_STATUS + "==" + UploadStatus.UPLOAD_FAILED.value + " AND " +
                 ProviderTableMeta.UPLOADS_LAST_RESULT + "<>" + UploadResult.DELAYED_FOR_WIFI.getValue(),
+            null,
             null
         );
     }

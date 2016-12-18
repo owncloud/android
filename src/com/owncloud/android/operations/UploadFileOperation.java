@@ -356,6 +356,10 @@ public class UploadFileOperation extends SyncOperation {
                 throw new OperationCancelledException();
             }
 
+            // Get the last modification date of the file from the file system
+            Long timeStampLong = originalFile.lastModified()/1000;
+            String timeStamp = timeStampLong.toString();
+
             /// perform the upload
             if ( mChunked &&
                     (new File(mFile.getStoragePath())).length() >
@@ -534,7 +538,7 @@ public class UploadFileOperation extends SyncOperation {
                 mFile.getModificationTimestampAtLastSyncForData()
         );
         newFile.setEtag(mFile.getEtag());
-        newFile.setFavorite(mFile.isFavorite());
+        newFile.setAvailableOfflineStatus(mFile.getAvailableOfflineStatus());
         newFile.setLastSyncDateForProperties(mFile.getLastSyncDateForProperties());
         newFile.setLastSyncDateForData(mFile.getLastSyncDateForData());
         newFile.setStoragePath(mFile.getStoragePath());

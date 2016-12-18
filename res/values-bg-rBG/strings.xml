@@ -222,8 +222,8 @@
 Моля, свържете се с администратора.</string>
   <string name="auth_can_not_auth_against_server">Неуспешно аутентикиране към този сървър</string>
   <string name="auth_account_does_not_exist">Профила не съществува на устройството все още</string>
-  <string name="favorite">Маркирай като налични когато няма мрежа</string>
-  <string name="unfavorite">Отмаркирай като налични когато няма мрежа</string>
+  <string name="set_available_offline">Маркирай като налични когато няма мрежа</string>
+  <string name="unset_available_offline">Отмаркирай като налични когато няма мрежа</string>
   <string name="common_rename">Преименуване</string>
   <string name="common_remove">Премахване</string>
   <string name="confirmation_remove_file_alert">Наистина ли искате да изтриете %1$s ?</string>

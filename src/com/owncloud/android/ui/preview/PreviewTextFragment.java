@@ -379,12 +379,12 @@ public class PreviewTextFragment extends FileFragment {
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-            case R.id.action_favorite_file:{
-                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), true);
+            case R.id.action_set_available_offline:{
+                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
-            case R.id.action_unfavorite_file:{
-                mContainerActivity.getFileOperationsHelper().toggleFavorite(getFile(), false);
+            case R.id.action_unset_available_offline:{
+                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }
             default:

@@ -222,8 +222,8 @@
 	</string>
   <string name="auth_can_not_auth_against_server">Povezave s strežnikom ni mogoče overiti</string>
   <string name="auth_account_does_not_exist">Račun na napravi še ne obstaja.</string>
-  <string name="favorite">Nastavi dosegljivost brez povezave</string>
-  <string name="unfavorite">Odstrani dosegljivost brez povezave</string>
+  <string name="set_available_offline">Nastavi dosegljivost brez povezave</string>
+  <string name="unset_available_offline">Odstrani dosegljivost brez povezave</string>
   <string name="common_rename">Preimenuj</string>
   <string name="common_remove">Odstrani</string>
   <string name="confirmation_remove_file_alert">Ali res želite odstraniti %1$s?</string>
@@ -233,6 +233,7 @@
   <string name="remove_success_msg">Odstranitev je uspešno končana</string>
   <string name="remove_fail_msg">Odstranjevanje je spodletelo</string>
   <string name="rename_dialog_title">Vnesite novo ime</string>
+  <string name="available_offline_inherited_msg">Mapa s to datoteko je na voljo tudi za delo brez povezave</string>
   <string name="rename_local_fail_msg">Krajevne datoteke ni mogoče preimenovati; poskusite z drugačnim novim imenom</string>
   <string name="rename_server_fail_msg">Preimenovanja ni možno dokončati</string>
   <string name="sync_file_fail_msg">Oddaljene datoteke ni mogoče preveriti</string>

@@ -221,8 +221,8 @@
 ⇥</string>
   <string name="auth_can_not_auth_against_server">Неможливо ввійти на цей сервер</string>
   <string name="auth_account_does_not_exist">Користвача в пристрої не існуе</string>
-  <string name="favorite">Встановити як доступний не в мережі</string>
-  <string name="unfavorite">Не встановлювати як доступний не в мережі</string>
+  <string name="set_available_offline">Встановити як доступний не в мережі</string>
+  <string name="unset_available_offline">Не встановлювати як доступний не в мережі</string>
   <string name="common_rename">Перейменувати</string>
   <string name="common_remove">Видалити</string>
   <string name="confirmation_remove_file_alert">Ви дійсно бажаєте видалити %1$s?</string>
