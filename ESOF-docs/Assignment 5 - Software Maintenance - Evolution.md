@@ -78,7 +78,7 @@ Como estes dados têm que ser guardados numa forma persistente para conseguirmos
 
 ![fileDataStoreManager](/ESOF-docs/resources/fileDataStoreManager.PNG)
 
-Achamos que o melhor local para mostrar ao utilizador esta informação seria no *footer* da página inicial, uma vez que neste já era mostrado o número de ficheiros e pastas que existiam na *cloud*, completando assim essa informação. Verificamos que este era atualizado na função **updateLayout** da classe **OCFileListFragment** do *package com.owncloud.android.ui.fragment*. Esta função é chamada por outra denominada **listDirectory**, e é nesta que vamos buscar os dados que armazenamos anteriormente na base de dados acerca da quota do utilizador.
+Achamos que o melhor local para mostrar ao utilizador esta informação seria no *footer* de cada página, uma vez que neste já era mostrado o número de ficheiros e pastas que existiam na *cloud*, completando assim essa informação. Verificamos que este era atualizado na função **updateLayout** da classe **OCFileListFragment** do *package com.owncloud.android.ui.fragment*. Esta função é chamada por outra denominada **listDirectory**, e é nesta que vamos buscar os dados que armazenamos anteriormente na base de dados acerca da quota do utilizador.
 
 ![listDirectory](/ESOF-docs/resources/listDirectory.PNG)
 
@@ -86,7 +86,7 @@ A função **updateLayout** recebe agora os parâmetros *usedQuota* e *totalQuot
 
 ![updateLayout](/ESOF-docs/resources/updateLayout.PNG)
 
-Esse *footer* é criado na função **generateFooterText**, onde inicialmente era mostrado apenas o número de ficheiros e pastas existentes no diretório raiz, contendo agora as informações sobre o espaço utilizado e o espaço total do servidor no qual o utilizador possui uma conta.
+Esse *footer* é criado na função **generateFooterText**, onde inicialmente era mostrado apenas o número de ficheiros e pastas existentes em cada diretório, contendo agora as informações sobre o espaço utilizado e o espaço total do servidor no qual o utilizador possui uma conta.
 
 ![generateFooterText](/ESOF-docs/resources/generateFooterText.PNG)
 
@@ -132,6 +132,7 @@ Mostra-se, a seguir, o resultado antes e depois das alterações:
 <img src="/ESOF-docs/resources/afterChanges.png" align="center" width="400" >
 
 ## Link para o *pull request*
+
 https://github.com/owncloud/android/pull/1855
 
 ## Contribuições
