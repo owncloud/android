@@ -34,7 +34,7 @@ Para reduzir esta complexidade, devem-se separar estes pedaços de código noutr
 
 ![writeCodeOnce](/ESOF-docs/resources/writeCodeOnce.png)
 
-**Manter as unidades de interface pequenas** revela um bom encapsulamento e o contrário demonstra a necessidade de repensar a organização das estruturas e a necessidade de estruturas intermédias mais pequenas. Isto pode ser analisado pelo número de parâmetros que as funções precisam. Foram encontrado 7 casos em que a função tinha mais de 6 parâmetros. 
+**Manter as unidades de interface pequenas** revela um bom encapsulamento e o contrário demonstra a necessidade de repensar a organização das estruturas e a necessidade de estruturas intermédias mais pequenas. Isto pode ser analisado pelo número de parâmetros que as funções precisam. Foram encontrados 7 casos em que a função tinha mais de 6 parâmetros. 
 
 ![demasiados parâmetros](/ESOF-docs/resources/CompatScroller.fling(int,int,int,int,int,int,int,int).png)
 
@@ -42,7 +42,7 @@ Para reduzir esta complexidade, devem-se separar estes pedaços de código noutr
 
 ![demasiados parâmetros](/ESOF-docs/resources/Separar funcionalidades em módulos.png)
 
-A **arquitetura com componentes independentes** permite manter um subprojeto caso seja alterado para um novo ambiente sem os restantes subprojetos. Neste caso os principais subprojetos são o *com\owncloud\android* e o *third_parties*. Sendo que existe 5 ou menos chamadas entre subprojetos, é considerado que o projeto tem os componentes independentes entre si.
+A **arquitetura com componentes independentes** permite manter um subprojeto caso seja alterado para um novo ambiente sem os restantes subprojetos. Neste caso os principais subprojetos são o *com\owncloud\android* e o *third_parties*. Sendo que existem 5 ou menos chamadas entre subprojetos, é considerado que o projeto tem os componentes independentes entre si.
 
 **Manter as componentes arquiteturais equilibradas** faz com que seja mais fácil localizar o código. Como quase a totalidade do código se encontra em *com\owncloud\android*, é considerado um projeto desequilibrado.
 
@@ -96,27 +96,34 @@ Faz-se uso da função **formatShortFileSize** para formatar o tamanho do espaç
 
 Ambas a imagens correspondem ao mesmo código. A primeira imagem corresponde a uma versão do código apresentada pelo *Android Studio* de uma forma simplificada, já a segunda imagem corresponde ao código que realmente foi escrito.
 
-Este código permite que a informação presente na *string* seja traduzida para diferentes línguas, em que *R.string.file_list__footer__used_storage* corresponde a um identificador hexadecimal único para a *string* em causa. Para tal, foi necessário definir num conjunto de ficheiros XML, cada um referente a um idioma, a tradução correspondente, usando o identificador anterior como chave. Criámos uma frase em inglês que é usada sempre que não existe tradução disponível e traduções para as seguintes línguas: inglês britânico, espanhol, francês, italiano, português do Brasil e português de Portugal, tal como se pode ver a seguir. Não realizámos traduções para outros idiomas, pois nem todos estão completos e não podíamos garantir que a tradução estava correta. 
+Este código permite que a informação apresentada seja traduzida para diferentes línguas, em que *R.string.file_list__footer__used_storage* corresponde a um identificador hexadecimal único para a *string* em causa. Para tal, foi necessário definir num conjunto de ficheiros XML, cada um referente a um idioma, a tradução correspondente, usando o identificador anterior como chave. Criámos uma frase em inglês que é usada sempre que não existe tradução disponível e traduções para as seguintes línguas: inglês britânico, espanhol, francês, italiano, português do Brasil e português de Portugal, tal como se pode ver a seguir. Não realizámos traduções para outros idiomas, pois nem todos estão completos e não podíamos garantir que a tradução estava correta. 
 
-Definição do texto apresentado caso não exista no idioma do utilizador:
+### Definição do texto apresentado caso não exista no idioma do utilizador:
+
 ![default_translation](/ESOF-docs/resources/1_default_translation.PNG)
 
-Definição do texto para inglês britânico:
+### Definição do texto para inglês britânico:
+
 ![en_rGB_translation](/ESOF-docs/resources/2_en_rGB_translation.PNG)
 
-Definição do texto para espanhol:
+### Definição do texto para espanhol:
+
 ![es_translation](/ESOF-docs/resources/3_es_translation.PNG)
 
-Definição do texto para francês:
+### Definição do texto para francês:
+
 ![fr_translation](/ESOF-docs/resources/4_fr_translation.PNG)
 
-Definição do texto para italiano:
+### Definição do texto para italiano:
+
 ![it_translation](/ESOF-docs/resources/5_it_translation.PNG)
 
-Definição do texto para português do Brasil:
+### Definição do texto para português do Brasil:
+
 ![pt_rBR_translation](/ESOF-docs/resources/6_pt_rBR_translation.PNG)
 
-Definição do texto para português de Portugal:
+### Definição do texto para português de Portugal:
+
 ![pt_rPT_translation](/ESOF-docs/resources/7_pt_rPT_translation.PNG)
 
 Mostra-se, a seguir, o resultado antes e depois das alterações: 
