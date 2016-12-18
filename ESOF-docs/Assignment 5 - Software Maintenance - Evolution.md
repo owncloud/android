@@ -12,25 +12,34 @@ Utilizamos a ferramenta [**Better Code Hub**](https://bettercodehub.com) para av
     <li>[ ] Escrever pedaços de código simples</li>
     <li>[ ] Não repetir código</li>
     <li>[ ] Manter as unidades de interface pequenas</li>
-    <li>[ ] Separar funcionalidades em módulos</li>
+    <li>[ ] Separar as funcionalidades por módulos</li>
     <li>[x] Arquitetura com componentes independentes</li>
     <li>[ ] Manter as componentes arquiteturais equilibradas</li>
-    <li>[ ] Manter a base de código pequena</li>
+    <li>[x] Manter a quantidade de código pequena</li>
     <li>[ ] Automação de testes</li>
-    <li>[ ] Manter o código limpo</li>
+    <li>[x] Manter o código limpo</li>
 </ul>
 Analisando estas características, o nosso projeto obteve uma classificação de 3 em 10.
 
-Escrever pequenos pedaços de código é o mesmo que dizer encapsular o código
-Escrever pedaços de código simples é ter pouca densidade de *branch points* (if, for, while, etc.), métodos que dividem o caminho do código e tornam mais complicada a análise por outro programador.
-Não repetir código é uma boa prática porque ao usar o mesmo código noutro sítio não se está a analisar devidamente a nova função pois pode levar a erros inesperados por o programador estar predisposto a aceitar o código que funcionou noutro sítio.
-Manter as unidades de interface pequenas revela um bom encapsulamento e o contrário demonstra a necessidade de repensar a organização das estruturas e a necessidade de estruturas intermédias mais pequenas.
-Separar funcionalidades em módulos faz com que ao mudar um módulo não se afete os restantes. (...)
-Arquitetura com componentes independentes (...)
-Manter as componentes arquiteturais equilibradas faz com que seja mais fácil localizar o código (...)
-Manter a codebase pequena torna possível compreender todo o projeto e ser fácil saber todas as funções do projeto. Por exemplo criar estruturas cada vez mais genéricas para remover código duplicado, e usar bibliotecas já existentes.
-A Automação de testes dá uma maior segurançao para gerar novo código pois permite saber se o novo código é compatível com o antigo por exemplo. Como já foi referido [no relatório anterior](/ESOF-docs/Assignment 4 - Verification and Validation.md), o projeto *ownCloud* ainda não tem uma implementação de testes abrangente e essa análise foi feita nesse relatório.
-Manter o código limpo é uma boa prática. Ao desenvolver o código é normal deixar notas pessoais para quando mais tarde se voltar a trabalhar ser fácil retomar o raciocínio, mas depois de entregue é necessário remover esses apontamentos. O projeto tem muitos *code smells* que se nota que são partes a ser completadas que o programador não acabou, caso dos *else* vazios nos condicionais.
+**Escrever pequenos pedaços de código** é o mesmo que dizer encapsular o código. No caso deste projeto nota-se que não preocupação em criar funções para por exemplo atribuir valores predefinidos a variáveis, ficando uma função longa com um *for* muito extenso.
+
+**Escrever pedaços de código simples** é ter pouca densidade de *branch points* (if, for, while, etc.), métodos que dividem o caminho do código e tornam mais complicada a análise por outro programador.
+
+**Não repetir código** é uma boa prática porque se for encontrado um *bug* terá que se o corrigir em todas as situações em que se copiou o código. Existem no projeto várias situações em que blocos de texto foram copiados para outros ficheiros, o que é uma má prática.
+
+**Manter as unidades de interface pequenas** revela um bom encapsulamento e o contrário demonstra a necessidade de repensar a organização das estruturas e a necessidade de estruturas intermédias mais pequenas. Isto pode ser analisado pelo número de parâmetros que as funções precisam. Foram encontrado 7 casos em que a função tinha mais de 6 parâmetros.
+
+**Separar as funcionalidades por módulos** faz com que ao mudar um módulo não se afete os restantes e como tal seja necessária uma menor reestruturação das funções. Existem 11 módulos com mais de 50 chamadas, ou seja, uma alteração num desses módulos implica ir confirmar se todas essas chamadas continuam a funcionar.
+
+A **arquitetura com componentes independentes** permite manter um subprojeto caso seja alterado para um novo ambiente sem os restantes subprojetos. Neste caso os principais subprojetos são o *com\owncloud\android* e o *third_parties*. Sendo que existe 5 ou menos chamadas entre subprojetos, é considerado que o projeto tem os componentes independentes entre si.
+
+**Manter as componentes arquiteturais equilibradas** faz com que seja mais fácil localizar o código. Como quase a totalidade do código se encontra em *com\owncloud\android*, é considerado um projeto desequilibrado.
+
+**Manter a quantidade de código pequena** torna possível compreender todo o projeto e ser fácil saber todas as funções do projeto. O projeto foi avaliado em 20 *man-year*, o que é um valor no limear do aceitável.
+
+A **Automação de testes** dá uma maior segurançao para gerar novo código pois permite saber se o novo código é compatível com o antigo por exemplo. Como já foi referido [no relatório anterior](/ESOF-docs/Assignment 4 - Verification and Validation.md), o projeto *ownCloud* ainda não tem uma implementação de testes abrangente e essa análise foi feita nesse relatório.
+
+**Manter o código limpo** é uma boa prática. Ao desenvolver o código é normal deixar notas pessoais para quando mais tarde se voltar a trabalhar ser fácil retomar o raciocínio, mas depois de entregue é necessário remover esses apontamentos. O projeto tem alguns *code smells* que se nota que são partes a ser completadas que o programador não acabou, caso dos *else* vazios nos condicionais ou linhas comentadas, mas ainda assim numa quantidade aceitável.
 
 A opinião do grupo face ao baixo resultado de aprovação dos testes é que, ao ser um projeto livre que qualquer um pode contribuir, os programadores não têm cuidado em verificar o código dos colegas, não fazendo refactoring.
 
