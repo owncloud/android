@@ -98,12 +98,25 @@ Ambas a imagens correspondem ao mesmo código. A primeira imagem corresponde a u
 
 Este código permite que a informação presente na *string* seja traduzida para diferentes línguas, em que *R.string.file_list__footer__used_storage* corresponde a um identificador hexadecimal único para a *string* em causa. Para tal, foi necessário definir num conjunto de ficheiros XML, cada um referente a um idioma, a tradução correspondente, usando o identificador anterior como chave. Criámos uma frase em inglês que é usada sempre que não existe tradução disponível e traduções para as seguintes línguas: inglês britânico, espanhol, francês, italiano, português do Brasil e português de Portugal, tal como se pode ver a seguir. Não realizámos traduções para outros idiomas, pois nem todos estão completos e não podíamos garantir que a tradução estava correta. 
 
+Definição do texto apresentado caso não exista no idioma do utilizador:
 ![default_translation](/ESOF-docs/resources/1_default_translation.PNG)
+
+Definição do texto para inglês britânico:
 ![en_rGB_translation](/ESOF-docs/resources/2_en_rGB_translation.PNG)
+
+Definição do texto para espanhol:
 ![es_translation](/ESOF-docs/resources/3_es_translation.PNG)
+
+Definição do texto para francês:
 ![fr_translation](/ESOF-docs/resources/4_fr_translation.PNG)
+
+Definição do texto para italiano:
 ![it_translation](/ESOF-docs/resources/5_it_translation.PNG)
+
+Definição do texto para português do Brasil:
 ![pt_rBR_translation](/ESOF-docs/resources/6_pt_rBR_translation.PNG)
+
+Definição do texto para português de Portugal:
 ![pt_rPT_translation](/ESOF-docs/resources/7_pt_rPT_translation.PNG)
 
 Mostra-se, a seguir, o resultado antes e depois das alterações: 
