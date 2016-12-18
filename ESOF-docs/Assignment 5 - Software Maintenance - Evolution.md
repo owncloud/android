@@ -54,7 +54,7 @@ A **Automação de testes** dá uma maior segurança ao desenvolver novo código
 
 **Manter o código limpo** é uma boa prática. Ao desenvolver o código é normal deixar notas pessoais para quando mais tarde se voltar a trabalhar ser fácil retomar o raciocínio, mas depois de entregue é necessário remover esses apontamentos. O projeto tem alguns *code smells* que se nota que são partes a ser completadas que o programador não acabou, caso dos *else* vazios nos condicionais ou linhas comentadas, mas ainda assim numa quantidade aceitável.
 
-A opinião do grupo face ao baixo resultado de aprovação dos testes é que, ao ser um projeto livre que qualquer um pode contribuir, os programadores responsáveis não têm uma análise totalmente detalhada relativamente ao código submetido dos colegas, não fazendo o *refactoring* necessário.
+A opinião do grupo face ao baixo resultado de aprovação dos testes é que, ao ser um projeto livre em que qualquer um pode contribuir, os programadores responsáveis não têm uma análise totalmente detalhada relativamente ao código submetido dos colegas, não fazendo o *refactoring* necessário.
 
 ![compliance](/ESOF-docs/resources/compliance.png)
 
@@ -74,7 +74,7 @@ A função **updateUserQuota** consiste na criação e execução de uma instân
 
 ![updateUserQuota](/ESOF-docs/resources/updateUserQuota.PNG)
 
-Como estes dados têm que ser guardados numa forma persistente para conseguirmos aceder a estes noutros módulos, recorremos à base de dados local (**mStoreManager**, instância da classe **FileDataStorageManager** do *package com.owncloud.android.datamodel*) onde criamos uma função **setQuota** para definirmos os dados.
+Como estes dados têm que ser guardados numa forma persistente para conseguirmos aceder a estes noutros módulos, recorremos à base de dados local (acessível através de **getStoreManager()**, que retorna uma instância da classe **FileDataStorageManager** do *package com.owncloud.android.datamodel*) onde criamos uma função **setQuota** para definirmos os dados.
 
 ![fileDataStoreManager](/ESOF-docs/resources/fileDataStoreManager.PNG)
 
