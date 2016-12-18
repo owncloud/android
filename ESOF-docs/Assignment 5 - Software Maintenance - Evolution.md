@@ -49,8 +49,6 @@ A opinião do grupo face ao baixo resultado de aprovação dos testes é que, ao
 
 ![compliance](/ESOF-docs/resources/compliance.png)
 
-Discuss Software Maintainability using the SIG metrics (plus add the badge to this .md file).
-
 ## Processo de evolução (análise do impacto das alterações e implementação)
 
 Após uma análise detalhada das funcionalidades que a aplicaçao do *ownCloud* permite ao utilizador, o grupo achou que estava em falta a informação sobre o espaço que o utilizador já ocupou na *cloud* relativamente ao espaço total, dado o propósito da aplicação.
@@ -82,6 +80,7 @@ A função **updateLayout** recebe agora os parâmetros *usedQuota* e *totalQuot
 Esse *footer* é criado na função **generateFooterText**, onde inicialmente era mostrado apenas o número de ficheiros e pastas existentes no diretório raiz, contendo agora as informações sobre o espaço utilizado e o espaço total do servidor no qual o utilizador possui uma conta.
 
 ![generateFooterText](/ESOF-docs/resources/generateFooterText.PNG)
+![generateFooterText2](/ESOF-docs/resources/generateFooterText2.PNG)
 
 Faz-se uso da função **formatShortFileSize** para formatar o tamanho do espaço utilizado e total para o mais adequado, uma vez que os parâmetros *usedQuota* e *totalQuota* são expressos em *bytes*.
 
@@ -93,3 +92,11 @@ Mostra-se, a seguir, o resultado antes e depois das alterações:
 ## Link para o *pull request*
 
 ## Contribuições
+
+Diogo Cruz - up201105483@fe.up.pt - 25%
+
+Luís Barbosa - up201405729@fe.up.pt - 25%
+
+Paulo Santos - up201403745@fe.up.pt - 25%
+
+Sérgio Ferreira - up201403074@fe.up.pt - 25%
