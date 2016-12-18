@@ -892,7 +892,8 @@ public class OCFileListFragment extends ExtendedListFragment {
         }
         String usedQuotaFormatted = Formatter.formatShortFileSize(getContext(), usedQuota);
         String totalQuotaFormatted = Formatter.formatShortFileSize(getContext(), totalQuota);
-        output += "\n" + usedQuotaFormatted + " of " + totalQuotaFormatted + " used";
+        output +=  "\n" + getResources().getString(
+                R.string.file_list__footer__used_storage, usedQuotaFormatted, totalQuotaFormatted);
         return output;
     }
 
