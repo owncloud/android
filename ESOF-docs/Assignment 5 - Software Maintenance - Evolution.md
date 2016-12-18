@@ -21,31 +21,40 @@ Utilizamos a ferramenta [**Better Code Hub**](https://bettercodehub.com) para av
 </ul>
 Analisando estas características, o nosso projeto obteve uma classificação de 3 em 10.
 
-**Escrever pequenos pedaços de código** é o mesmo que dizer encapsular o código. No caso deste projeto nota-se que não preocupação em criar funções para por exemplo atribuir valores predefinidos a variáveis, ficando uma função longa com um *for* muito extenso.
+**Escrever pequenos pedaços de código** é o mesmo que dizer encapsular o código, tornando-o mais legível e de fácil compreensão. No caso deste projeto nota-se que não existe uma grande preocupação em criar funções para, por exemplo, atribuir valores predefinidos a variáveis, criando-se, no caso demonstrado a seguir, uma função longa com um *for* muito extenso. Deveria-se, portanto, procurar dividir estas funções com um maior número de linhas noutras sub-funções com não mais de 15 linhas.
+
 ![for muito extenso](/ESOF-docs/resources/FileDataStorageManager.updateSharedFiles(Collection).png)
 
-**Escrever pedaços de código simples** é ter pouca densidade de *branch points* (if, for, while, etc.), métodos que dividem o caminho do código e tornam mais complicada a análise por outro programador.
+**Escrever pedaços de código simples** consiste em existir baixa densidade de *branch points* (if, for, while, etc.), métodos que dividem o caminho do código e tornam mais complicada a análise por outro programador, assim como futuras modificações ou testes.
+Para reduzir esta complexidade, devem-se separar estes pedaços de código noutros que possuam, no máximo, 4 *branch points*.
+
 ![for muito extenso](/ESOF-docs/resources/LocalFileListAdapter.getView(int,View,ViewGroup).png)
 
-**Não repetir código** é uma boa prática porque se for encontrado um *bug* terá que se o corrigir em todas as situações em que se copiou o código. Existem no projeto várias situações em que blocos de texto foram copiados para outros ficheiros, o que é uma má prática.
+**Não repetir código** é uma boa prática, uma vez que caso se encontre um *bug*, este terá que ser corrigido em todas as situações em que se copiou o código. Existem no projeto várias situações em que blocos de texto foram copiados para outros ficheiros, o que é uma má prática. Como tal, deve-se criar apenas uma função que corresponda a uma determinada ação.
+
+![writeCodeOnce](/ESOF-docs/resources/writeCodeOnce.png)
 
 **Manter as unidades de interface pequenas** revela um bom encapsulamento e o contrário demonstra a necessidade de repensar a organização das estruturas e a necessidade de estruturas intermédias mais pequenas. Isto pode ser analisado pelo número de parâmetros que as funções precisam. Foram encontrado 7 casos em que a função tinha mais de 6 parâmetros. 
+
 ![demasiados parâmetros](/ESOF-docs/resources/CompatScroller.fling(int,int,int,int,int,int,int,int).png)
 
 **Separar as funcionalidades por módulos** faz com que ao mudar um módulo não se afete os restantes e como tal seja necessária uma menor reestruturação das funções. Existem 11 módulos com mais de 50 chamadas, ou seja, uma alteração num desses módulos implica ir confirmar se todas essas chamadas continuam a funcionar.
+
 ![demasiados parâmetros](/ESOF-docs/resources/Separar funcionalidades em módulos.png)
 
 A **arquitetura com componentes independentes** permite manter um subprojeto caso seja alterado para um novo ambiente sem os restantes subprojetos. Neste caso os principais subprojetos são o *com\owncloud\android* e o *third_parties*. Sendo que existe 5 ou menos chamadas entre subprojetos, é considerado que o projeto tem os componentes independentes entre si.
 
 **Manter as componentes arquiteturais equilibradas** faz com que seja mais fácil localizar o código. Como quase a totalidade do código se encontra em *com\owncloud\android*, é considerado um projeto desequilibrado.
 
-**Manter a quantidade de código pequena** torna possível compreender todo o projeto e ser fácil saber todas as funções do projeto. O projeto foi avaliado em 20 *man-year*, o que é um valor no limear do aceitável.
+**Manter a quantidade de código pequena** permite uma melhor manutenção e evolução da aplicação, tornando possível compreender todo o projeto, bem como as suas funcionalidades. O projeto foi avaliado em 46 *man-months*, o que é um valor consideravelmente bom, tendo em conta que o limite ideal máximo corresponde a 20 *man-years*.
 
-A **Automação de testes** dá uma maior segurançao para gerar novo código pois permite saber se o novo código é compatível com o antigo por exemplo. Como já foi referido [no relatório anterior](/ESOF-docs/Assignment 4 - Verification and Validation.md), o projeto *ownCloud* ainda não tem uma implementação de testes abrangente e essa análise foi feita nesse relatório.
+A **Automação de testes** dá uma maior segurança ao desenvolver novo código, pois permite saber se este é compatível com o antigo, por exemplo. Como já foi referido [no relatório anterior](/ESOF-docs/Assignment 4 - Verification and Validation.md), o projeto *ownCloud* ainda não tem uma implementação de testes abrangente e essa análise foi feita nesse relatório, refletindo-se neste resultado. Uma vez que este projeto possui mais de 10,000 linhas de código, pelo menos metade dessas deveriam ser abrangidas pelos testes, e deveriam existir cerca de 5% de asserções.
+
+![automateTests](/ESOF-docs/resources/automateTests.png)
 
 **Manter o código limpo** é uma boa prática. Ao desenvolver o código é normal deixar notas pessoais para quando mais tarde se voltar a trabalhar ser fácil retomar o raciocínio, mas depois de entregue é necessário remover esses apontamentos. O projeto tem alguns *code smells* que se nota que são partes a ser completadas que o programador não acabou, caso dos *else* vazios nos condicionais ou linhas comentadas, mas ainda assim numa quantidade aceitável.
 
-A opinião do grupo face ao baixo resultado de aprovação dos testes é que, ao ser um projeto livre que qualquer um pode contribuir, os programadores não têm cuidado em verificar o código dos colegas, não fazendo refactoring.
+A opinião do grupo face ao baixo resultado de aprovação dos testes é que, ao ser um projeto livre que qualquer um pode contribuir, os programadores responsáveis não têm uma análise totalmente detalhada relativamente ao código submetido dos colegas, não fazendo o *refactoring* necessário.
 
 ![compliance](/ESOF-docs/resources/compliance.png)
 
@@ -80,7 +89,8 @@ A função **updateLayout** recebe agora os parâmetros *usedQuota* e *totalQuot
 Esse *footer* é criado na função **generateFooterText**, onde inicialmente era mostrado apenas o número de ficheiros e pastas existentes no diretório raiz, contendo agora as informações sobre o espaço utilizado e o espaço total do servidor no qual o utilizador possui uma conta.
 
 ![generateFooterText](/ESOF-docs/resources/generateFooterText.PNG)
-![generateFooterText2](/ESOF-docs/resources/generateFooterText2.PNG)
+
+![generateFooterText2](/ESOF-docs/resources/generateFooterText2.png)
 
 Faz-se uso da função **formatShortFileSize** para formatar o tamanho do espaço utilizado e total para o mais adequado, uma vez que os parâmetros *usedQuota* e *totalQuota* são expressos em *bytes*.
 
