@@ -6,20 +6,33 @@ O objetivo deste relatório é documentar o processo seguido para desenvolver a 
 
 [![BCH compliance](https://bettercodehub.com/edge/badge/PauloSantos13/android)](https://bettercodehub.com)
 
-Utilizamos a ferramenta [**Better Code Hub**](https://bettercodehub.com) para avaliar a qualidade do *Own Cloud*. A avaliação é feita com os seguintes tópicos:
+Utilizamos a ferramenta [**Better Code Hub**](https://bettercodehub.com) para avaliar a qualidade do *ownCloud*. A avaliação é feita com os seguintes tópicos:
 <ul>
-    <li>Escrever pequenos pedaços de código</li>
-    <li>Escrever pedaços de código simples</li>
-    <li>Repetir código</li>
-    <li>Manter as unidades de interface pequenas</li>
-    <li>Separar funcionalidades em módulos</li>
-    <li>Arquitetura com componentes independentes</li>
-    <li>Manter as componentes arquiteturais equilibradas</li>
-    <li>Manter a base de código pequena</li>
-    <li>Automação de testes</li>
-    <li>Desenvolvimento de código estruturado e otimizado</li>
+    <li>[ ] Escrever pequenos pedaços de código</li>
+    <li>[ ] Escrever pedaços de código simples</li>
+    <li>[ ] Não repetir código</li>
+    <li>[ ] Manter as unidades de interface pequenas</li>
+    <li>[ ] Separar funcionalidades em módulos</li>
+    <li>[x] Arquitetura com componentes independentes</li>
+    <li>[ ] Manter as componentes arquiteturais equilibradas</li>
+    <li>[ ] Manter a base de código pequena</li>
+    <li>[ ] Automação de testes</li>
+    <li>[ ] Manter o código limpo</li>
 </ul>
 Analisando estas características, o nosso projeto obteve uma classificação de 3 em 10.
+
+Escrever pequenos pedaços de código é o mesmo que dizer encapsular o código
+Escrever pedaços de código simples é ter pouca densidade de *branch points* (if, for, while, etc.), métodos que dividem o caminho do código e tornam mais complicada a análise por outro programador.
+Não repetir código é uma boa prática porque ao usar o mesmo código noutro sítio não se está a analisar devidamente a nova função pois pode levar a erros inesperados por o programador estar predisposto a aceitar o código que funcionou noutro sítio.
+Manter as unidades de interface pequenas revela um bom encapsulamento e o contrário demonstra a necessidade de repensar a organização das estruturas e a necessidade de estruturas intermédias mais pequenas.
+Separar funcionalidades em módulos faz com que ao mudar um módulo não se afete os restantes. (...)
+Arquitetura com componentes independentes (...)
+Manter as componentes arquiteturais equilibradas faz com que seja mais fácil localizar o código (...)
+Manter a codebase pequena torna possível compreender todo o projeto e ser fácil saber todas as funções do projeto. Por exemplo criar estruturas cada vez mais genéricas para remover código duplicado, e usar bibliotecas já existentes.
+A Automação de testes dá uma maior segurançao para gerar novo código pois permite saber se o novo código é compatível com o antigo por exemplo. Como já foi referido [no relatório anterior](/ESOF-docs/Assignment 4 - Verification and Validation.md), o projeto *ownCloud* ainda não tem uma implementação de testes abrangente e essa análise foi feita nesse relatório.
+Manter o código limpo é uma boa prática. Ao desenvolver o código é normal deixar notas pessoais para quando mais tarde se voltar a trabalhar ser fácil retomar o raciocínio, mas depois de entregue é necessário remover esses apontamentos. O projeto tem muitos *code smells* que se nota que são partes a ser completadas que o programador não acabou, caso dos *else* vazios nos condicionais.
+
+A opinião do grupo face ao baixo resultado de aprovação dos testes é que, ao ser um projeto livre que qualquer um pode contribuir, os programadores não têm cuidado em verificar o código dos colegas, não fazendo refactoring.
 
 ![compliance](/ESOF-docs/resources/compliance.png)
 
@@ -27,7 +40,7 @@ Discuss Software Maintainability using the SIG metrics (plus add the badge to th
 
 ## Processo de evolução (análise do impacto das alterações e implementação)
 
-Após uma análise detalhada das funcionalidades que a aplicaçao do **ownCloud** permite ao utilizador, o grupo achou que estava em falta a informação sobre o espaço que o utilizador já ocupou na *cloud* relativamente ao espaço total, dado o propósito da aplicação.
+Após uma análise detalhada das funcionalidades que a aplicaçao do *ownCloud* permite ao utilizador, o grupo achou que estava em falta a informação sobre o espaço que o utilizador já ocupou na *cloud* relativamente ao espaço total, dado o propósito da aplicação.
 
 Desta forma, falamos com o responsável pela aplicação, e este deu-nos algumas dicas por onde devíamos começar, concordando que era uma *feature* interessante para ser implementada.
 
