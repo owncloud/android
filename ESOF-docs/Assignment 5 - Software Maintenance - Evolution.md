@@ -94,6 +94,18 @@ Esse *footer* é criado na função **generateFooterText**, onde inicialmente er
 
 Faz-se uso da função **formatShortFileSize** para formatar o tamanho do espaço utilizado e total para o mais adequado, uma vez que os parâmetros *usedQuota* e *totalQuota* são expressos em *bytes*.
 
+Ambas a imagens correspondem ao mesmo código. A primeira imagem corresponde a uma versão do código apresentada pelo *Android Studio* de uma forma simplificada, já a segunda imagem corresponde ao código que realmente foi escrito.
+
+Este código permite que a informação presente na *string* seja traduzida para diferentes línguas, em que *R.string.file_list__footer__used_storage* corresponde a um identificador hexadecimal único para a *string* em causa. Para tal, foi necessário definir num conjunto de ficheiros XML, cada um referente a um idioma, a tradução correspondente, usando o identificador anterior como chave. Criámos uma frase em inglês que é usada sempre que não existe tradução disponível e traduções para as seguintes línguas: inglês britânico, espanhol, francês, italiano, português do Brasil e português de Portugal, tal como se pode ver a seguir. Não realizámos traduções para outros idiomas, pois nem todos estão completos e não podíamos garantir que a tradução estava correta. 
+
+![default_translation](/ESOF-docs/resources/1_default_translation.PNG)
+![en_rGB_translation](/ESOF-docs/resources/2_en_rGB_translation.PNG)
+![es_translation](/ESOF-docs/resources/3_es_translation.PNG)
+![fr_translation](/ESOF-docs/resources/4_fr_translation.PNG)
+![it_translation](/ESOF-docs/resources/5_it_translation.PNG)
+![pt_rBR_translation](/ESOF-docs/resources/6_pt_rBR_translation.PNG)
+![pt_rPT_translation](/ESOF-docs/resources/7_pt_rPT_translation.PNG)
+
 Mostra-se, a seguir, o resultado antes e depois das alterações: 
 
 <img src="/ESOF-docs/resources/beforeChanges.png" align="center" width="400" >
