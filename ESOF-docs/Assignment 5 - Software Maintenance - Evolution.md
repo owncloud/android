@@ -22,14 +22,18 @@ Utilizamos a ferramenta [**Better Code Hub**](https://bettercodehub.com) para av
 Analisando estas características, o nosso projeto obteve uma classificação de 3 em 10.
 
 **Escrever pequenos pedaços de código** é o mesmo que dizer encapsular o código. No caso deste projeto nota-se que não preocupação em criar funções para por exemplo atribuir valores predefinidos a variáveis, ficando uma função longa com um *for* muito extenso.
+![for muito extenso](/ESOF-docs/resources/FileDataStorageManager.updateSharedFiles(Collection).png)
 
 **Escrever pedaços de código simples** é ter pouca densidade de *branch points* (if, for, while, etc.), métodos que dividem o caminho do código e tornam mais complicada a análise por outro programador.
+![for muito extenso](/ESOF-docs/resources/LocalFileListAdapter.getView(int,View,ViewGroup).png)
 
 **Não repetir código** é uma boa prática porque se for encontrado um *bug* terá que se o corrigir em todas as situações em que se copiou o código. Existem no projeto várias situações em que blocos de texto foram copiados para outros ficheiros, o que é uma má prática.
 
-**Manter as unidades de interface pequenas** revela um bom encapsulamento e o contrário demonstra a necessidade de repensar a organização das estruturas e a necessidade de estruturas intermédias mais pequenas. Isto pode ser analisado pelo número de parâmetros que as funções precisam. Foram encontrado 7 casos em que a função tinha mais de 6 parâmetros.
+**Manter as unidades de interface pequenas** revela um bom encapsulamento e o contrário demonstra a necessidade de repensar a organização das estruturas e a necessidade de estruturas intermédias mais pequenas. Isto pode ser analisado pelo número de parâmetros que as funções precisam. Foram encontrado 7 casos em que a função tinha mais de 6 parâmetros. 
+![demasiados parâmetros](/ESOF-docs/resources/CompatScroller.fling(int,int,int,int,int,int,int,int).png)
 
 **Separar as funcionalidades por módulos** faz com que ao mudar um módulo não se afete os restantes e como tal seja necessária uma menor reestruturação das funções. Existem 11 módulos com mais de 50 chamadas, ou seja, uma alteração num desses módulos implica ir confirmar se todas essas chamadas continuam a funcionar.
+![demasiados parâmetros](/ESOF-docs/resources/Separar funcionalidades em módulos.png)
 
 A **arquitetura com componentes independentes** permite manter um subprojeto caso seja alterado para um novo ambiente sem os restantes subprojetos. Neste caso os principais subprojetos são o *com\owncloud\android* e o *third_parties*. Sendo que existe 5 ou menos chamadas entre subprojetos, é considerado que o projeto tem os componentes independentes entre si.
 
