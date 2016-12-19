@@ -1,0 +1,7 @@
+exclude:
+- /user_manual/conf.py
+component_depth: 1
+languages:
+- java
+- python
+- script

@@ -669,8 +669,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 OwnCloudVersion ocVersion = (version != null) ? new OwnCloudVersion(version) : null;
                 credentials = OwnCloudCredentialsFactory.newBasicCredentials(
                     username,
-                    password,
-                    (ocVersion != null && ocVersion.isSessionMonitoringSupported())
+                    password /*,
+                    (ocVersion != null && ocVersion.isSessionMonitoringSupported()) */
                 );
 
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
@@ -970,11 +970,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// validate credentials accessing the root folder
         OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBasicCredentials(
             username,
-            password,
+            password /*,
             (mServerInfo != null &&
-                mServerInfo.mVersion != null &&
+                mServerInfo.mVersion != null  &&
                 mServerInfo.mVersion.isSessionMonitoringSupported()
-            )
+            )*/
         );
         accessRootFolder(credentials);
     }

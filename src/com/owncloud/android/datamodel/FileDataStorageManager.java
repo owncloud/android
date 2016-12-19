@@ -70,11 +70,15 @@ public class FileDataStorageManager {
 
     private static String TAG = FileDataStorageManager.class.getSimpleName();
 
+    private long freeQuota, usedQuota, totalQuota;
 
     public FileDataStorageManager(Account account, ContentResolver cr) {
         mContentProviderClient = null;
         mContentResolver = cr;
         mAccount = account;
+        freeQuota = 0;
+        usedQuota = 0;
+        totalQuota = 0;
     }
 
     public FileDataStorageManager(Account account, ContentProviderClient cp) {
@@ -83,6 +87,23 @@ public class FileDataStorageManager {
         mAccount = account;
     }
 
+    public void setQuota(long free, long used, long total) {
+        freeQuota = free;
+        usedQuota = used;
+        totalQuota = total;
+    }
+
+    public long getFreeQuota() {
+        return freeQuota;
+    }
+
+    public long getUsedQuota() {
+        return usedQuota;
+    }
+
+    public long getTotalQuota() {
+        return totalQuota;
+    }
 
     public void setAccount(Account account) {
         mAccount = account;

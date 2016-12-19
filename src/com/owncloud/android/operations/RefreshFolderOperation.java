@@ -28,12 +28,15 @@ import android.content.Intent;
 
 import com.owncloud.android.datamodel.OCFile;
 
+import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
-
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 
@@ -121,6 +124,7 @@ public class RefreshFolderOperation extends SyncOperation {
         if (OCFile.ROOT_PATH.equals(mLocalFolder.getRemotePath())) {
             updateOCVersion(client);
             updateUserProfile();
+            updateUserQuota();
         }
 
         // sync list of files, and contents of available offline files & folders
@@ -173,8 +177,29 @@ public class RefreshFolderOperation extends SyncOperation {
         if (!result.isSuccess()) {
             Log_OC.w(TAG, "Couldn't update user profile from server");
         } else {
-            Log_OC.i(TAG, "Got user profile");
+            Log_OC.i(TAG, "Got display name: " + result.getData().get(0));
         }
+    }
+
+    private void updateUserQuota() {
+        RemoteOperation operation = new GetRemoteUserQuotaOperation();
+        OwnCloudClient mClient = null;
+        try {
+            OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
+            mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                    getClientFor(ocAccount, mContext);
+        } catch (Exception e) {
+            Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
+            return;
+        }
+        RemoteOperationResult result = operation.execute(mClient);
+        GetRemoteUserQuotaOperation.Quota quota = (GetRemoteUserQuotaOperation.Quota)result.getData().get(0);
+
+        long free = quota.getFree();
+        long used = quota.getUsed();
+        long total = quota.getTotal();
+
+        getStorageManager().setQuota(free, used, total);
     }
 
     private void updateCapabilities(){
@@ -193,7 +218,7 @@ public class RefreshFolderOperation extends SyncOperation {
      *                  the operation.
      */
     private RemoteOperationResult refreshSharesForFolder(OwnCloudClient client) {
-        RemoteOperationResult result;
+        RemoteOperationResult result = null;
         
         // remote request 
         GetRemoteSharesForFileOperation operation = 
@@ -202,7 +227,7 @@ public class RefreshFolderOperation extends SyncOperation {
         
         if (result.isSuccess()) {
             // update local database
-            ArrayList<OCShare> shares = new ArrayList<>();
+            ArrayList<OCShare> shares = new ArrayList<OCShare>();
             for(Object obj: result.getData()) {
                 shares.add((OCShare) obj);
             }
@@ -220,6 +245,7 @@ public class RefreshFolderOperation extends SyncOperation {
      * @param event             Action type to broadcast
      * @param dirRemotePath     Remote path of a folder that was just synchronized 
      *                          (with or without success)
+     * @param result
      */
     private void sendLocalBroadcast(
             String event, String dirRemotePath, RemoteOperationResult result
@@ -234,6 +260,5 @@ public class RefreshFolderOperation extends SyncOperation {
         mContext.sendStickyBroadcast(intent);
         //LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
-
 
 }
