@@ -62,6 +62,7 @@
   <string name="uploader_wrn_no_account_quit_btn_text">Έξοδος</string>
   <string name="uploader_error_title_no_file_to_upload">Δεν επιλέχθηκε αρχείο για μεταφόρτωση</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Το αρχείο αυτό δεν μπορεί να μεταφερθεί</string>
+  <string name="uploader_error_message_read_permission_not_granted">%1$s δεν επιτρέπεται την ανάγνωση ενός αρχείου που λάβατε</string>
   <string name="uploader_error_message_source_file_not_found">Το προς μεταφόρτωση αρχείο δεν βρέθηκε. Παρακαλώ ελέγξτε αν πράγματι υπάρχει σ\'αυτήν τη θέση.</string>
   <string name="uploader_error_message_source_file_not_copied">Παρουσιάστηκε σφάλμα στην προσπάθεια αντιγραφής αυτού του αρχείου σε έναν προσωρινό φάκελο. Παρακαλώ ξαναπροσπαθήστε να το στείλετε</string>
   <string name="file_list_seconds_ago">δευτερόλεπτα πριν</string>
@@ -226,9 +227,11 @@
   <string name="confirmation_remove_file_alert">Θέλετε στ\' αλήθεια να αφαιρέσετε το  %1$s;</string>
   <string name="confirmation_remove_folder_alert">Θέλετε στ\' αλήθεια να διαγράψετε το %1$s και τα περιεχόμενά του;</string>
   <string name="confirmation_remove_local">Μόνο τοπικά</string>
+  <string name="confirmation_remove_account_alert">Θέλετε πραγματικά να καταργήσετε τον λογαριασμό %1$s ;</string>
   <string name="remove_success_msg">Αφαίρεση επιτυχής</string>
   <string name="remove_fail_msg">Η αφαίρεση απέτυχε</string>
   <string name="rename_dialog_title">Εισάγετε νέο όνομα</string>
+  <string name="available_offline_inherited_msg">Ο φάκελος που περιέχει αυτό το αρχείο είναι διαθέσιμο χωρίς σύνδεση</string>
   <string name="rename_local_fail_msg">Το τοπικό αντίγραφο δεν ήταν δυνατόν να μετονομαστεί. Παρακαλώ επιλέξτε ένα διαφορετικό όνομα.</string>
   <string name="rename_server_fail_msg">Η μετονομασία δεν ήταν επιτυχής</string>
   <string name="sync_file_fail_msg">Αδυναμία ελέγχου του απομακρυσμένου αρχείου</string>
@@ -364,6 +367,9 @@
   <string name="file_list__footer__files">%1$d αρχεία</string>
   <string name="file_list__footer__files_and_folder">%1$d αρχεία, 1 φάκελος</string>
   <string name="file_list__footer__files_and_folders">%1$d αρχεία, %2$d φάκελοι</string>
+  <string name="prefs_instant_upload_source_path_title">Φάκελος κάμερας (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">απαιτείται</string>
+  <string name="prefs_instant_upload_source_path_title_optional">προαιρετικό</string>
   <string name="prefs_instant_behaviour_dialogTitle">Το πρωτότυπο αρχείο θα είναι</string>
   <string name="prefs_instant_behaviour_title">Το πρωτότυπο αρχείο θα είναι</string>
   <string name="upload_copy_files">Αντιγραφή αρχείου</string>
@@ -397,10 +403,10 @@
   <string name="share_privilege_can_edit_delete">διαγραφή</string>
   <string name="edit_share_unshare">Διακοπή διαμοιρασμού</string>
   <string name="edit_share_done">ολοκληρώθηκε</string>
-  <string name="action_retry_uploads">Η προσπάθεια απέτυχε </string>
-  <string name="action_clear_failed_uploads">Αποτυχία εκκαθάρισης</string>
-  <string name="action_clear_successful_uploads">Επιτυχής εκκαθάριση</string>
-  <string name="action_clear_finished_uploads">Η εκκαθάριση ολοκληρώθηκε</string>
+  <string name="action_retry_uploads">Επανάληψη όσων απέτυχαν</string>
+  <string name="action_clear_failed_uploads">Εκκαθάριση Αποτυχιών</string>
+  <string name="action_clear_successful_uploads">Εκκαθάριση επιτυχημένων</string>
+  <string name="action_clear_finished_uploads">Εκκαθάριση oλοκληρωμένων</string>
   <string name="action_switch_grid_view">Προβολή πλέγματος</string>
   <string name="action_switch_list_view">Προβολή λίστας</string>
   <string name="manage_space_title">Διαχείριση χώρου</string>
