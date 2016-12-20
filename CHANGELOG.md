@@ -1,3 +1,15 @@
+## 2.2.0 (December 2016)
+- Set folders as Available Offline
+- New navigation drawer, with avatar and account switch.
+- New account manager, accessible from navigation drawer.
+- Set edit permissions in federated shares of folders (OC server >= 9.1)
+- Monitor and revoke session from web UI (OC server >= 9.1)
+- Improved look and contents of file menu.
+- Bugs fixed, including:
+  + Keep modification time of uploaded files.
+  + Stop audio when file is deleted.
+  + Upload of big files.
+
 ## 2.1.2 (September 2016)
 - Instant uploads fixed in Android 6.
 
