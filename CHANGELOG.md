@@ -1,15 +1,14 @@
 ## 2.2.0 (December 2016)
-- Quick Account-Switching in navigation drawer.
+- New order in the actions menu options, adding icons to Send and Details options.
+- New toolbar and material navigation drawer with account-switching.
 - Edit options in federated sharing.
 - Automated synchronization of folders.
 - Use session cookies for android app.
 - Bugs fixed, including:
-    + Use toolbar instead of actionbar where applicable.
-    + Full-height material drawer.
-    + Internal music player does not stop playing when file is deleted.
-    + Fails to upload bigfile when chunk assembly take more than 60 seconds.
-    + Hide vain options in contextual menu while copying/moving a file/folder.
-    + File modification date lost when uploading file.
+    + Internal music player stop playing when file is deleted.
+    + Upload bigfile when chunk assembly take more than 60 seconds is working properly.
+    + Hide vain options in contextual menu when copying/moving a file/folder.
+    + Get file modification date from the file system when uploading file.
 
 ## 2.1.2 (September 2016)
 - Instant uploads fixed in Android 6.
