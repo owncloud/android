@@ -115,7 +115,7 @@ public class OwnCloudClient extends HttpClient {
                 proxyPort = Integer.parseInt(proxyPortSt);
             }
         } catch (Exception e) {
-            // nothing to do here
+            Log_OC.w(TAG, "Proxy port could not be read, keeping default value " + proxyPort);
         }
 
         if (proxyHost != null && proxyHost.length() > 0) {
@@ -166,11 +166,11 @@ public class OwnCloudClient extends HttpClient {
 
     /**
      * Requests the received method with the received timeout (milliseconds).
-     * <p>
+     *
      * Executes the method through the inherited HttpClient.executedMethod(method).
-     * <p>
+     *
      * Sets the socket and connection timeouts only for the method received.
-     * <p>
+     *
      * The timeouts are both in milliseconds; 0 means 'infinite';
      * < 0 means 'do not change the default'
      *
@@ -200,7 +200,7 @@ public class OwnCloudClient extends HttpClient {
 
     /**
      * Requests the received method.
-     * <p>
+     *
      * Executes the method through the inherited HttpClient.executedMethod(method).
      *
      * @param method HTTP method request.
@@ -361,7 +361,7 @@ public class OwnCloudClient extends HttpClient {
 
     /**
      * Sets the root URI to the ownCloud server.
-     * <p>
+     *
      * Use with care.
      *
      * @param uri
