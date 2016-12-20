@@ -1,14 +1,14 @@
 ## 2.2.0 (December 2016)
-- New order in the actions menu options, adding icons to Send and Details options.
-- New toolbar and material navigation drawer with account-switching.
-- Edit options in federated sharing.
-- Automated synchronization of folders.
-- Use session cookies for android app.
+- Set folders as Available Offline
+- New navigation drawer, with avatar and account switch.
+- New account manager, accessible from navigation drawer.
+- Set edit permissions in federated shares of folders (OC server >= 9.1)
+- Monitor and revoke session from web UI (OC server >= 9.1)
+- Improved look and contents of file menu.
 - Bugs fixed, including:
-    + Internal music player stop playing when file is deleted.
-    + Upload bigfile when chunk assembly take more than 60 seconds is working properly.
-    + Hide vain options in contextual menu when copying/moving a file/folder.
-    + Get file modification date from the file system when uploading file.
+  + Keep modification time of uploaded files.
+  + Stop audio when file is deleted.
+  + Upload of big files.
 
 ## 2.1.2 (September 2016)
 - Instant uploads fixed in Android 6.
