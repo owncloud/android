@@ -234,6 +234,7 @@
   <string name="remove_success_msg">削除に成功しました</string>
   <string name="remove_fail_msg">削除を完了できませんでした</string>
   <string name="rename_dialog_title">新しい名前を入力</string>
+  <string name="available_offline_inherited_msg">このファイルを含むフォルダは、オフラインでも閲覧可能です</string>
   <string name="rename_local_fail_msg">ローカルコピーの名前の変更ができませんでした。別の名前で試してみてください</string>
   <string name="rename_server_fail_msg">名前の変更ができませんでした</string>
   <string name="sync_file_fail_msg">リモートファイルをチェックできませんでした</string>
