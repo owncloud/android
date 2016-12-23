@@ -228,7 +228,9 @@
 	</string>
 	<string name="auth_can_not_auth_against_server">Cannot authenticate to this server</string>
     <string name="auth_account_does_not_exist">Account does not exist in the device yet</string>
-    
+    <string name="auth_maintenance_mode">The server is in maintenance mode, please try again later.</string>
+
+
     <string name="set_available_offline">Set as available offline</string>
     <string name="unset_available_offline">Unset as available offline</string>
     <string name="common_rename">Rename</string>
