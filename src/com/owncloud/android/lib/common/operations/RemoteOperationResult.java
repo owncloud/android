@@ -34,6 +34,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
 import android.accounts.Account;
 import android.accounts.AccountsException;
 
@@ -61,7 +62,8 @@ import javax.net.ssl.SSLException;
  */
 public class RemoteOperationResult implements Serializable {
 
-	/** Generated - should be refreshed every time the class changes!! */;
+    /** Generated - should be refreshed every time the class changes!! */
+    ;
     private static final long serialVersionUID = 1129130415603799707L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
@@ -100,19 +102,20 @@ public class RemoteOperationResult implements Serializable {
         ACCOUNT_NOT_THE_SAME,
         INVALID_CHARACTER_IN_NAME,
         SHARE_NOT_FOUND,
-		LOCAL_STORAGE_NOT_REMOVED,
-		FORBIDDEN,
-		SHARE_FORBIDDEN,
-		OK_REDIRECT_TO_NON_SECURE_CONNECTION, 
-		INVALID_MOVE_INTO_DESCENDANT,
+        LOCAL_STORAGE_NOT_REMOVED,
+        FORBIDDEN,
+        SHARE_FORBIDDEN,
+        OK_REDIRECT_TO_NON_SECURE_CONNECTION,
+        INVALID_MOVE_INTO_DESCENDANT,
         INVALID_COPY_INTO_DESCENDANT,
-		PARTIAL_MOVE_DONE,
+        PARTIAL_MOVE_DONE,
         PARTIAL_COPY_DONE,
         SHARE_WRONG_PARAMETER,
         WRONG_SERVER_RESPONSE,
         INVALID_CHARACTER_DETECT_IN_SERVER,
         DELAYED_FOR_WIFI,
-        LOCAL_FILE_NOT_FOUND
+        LOCAL_FILE_NOT_FOUND,
+        MAINTENANCE_MODE
     }
 
     private boolean mSuccess = false;
@@ -127,7 +130,7 @@ public class RemoteOperationResult implements Serializable {
 
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
-		mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL ||
+        mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL ||
                 code == ResultCode.OK_NO_SSL ||
                 code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
         mData = null;
@@ -142,28 +145,31 @@ public class RemoteOperationResult implements Serializable {
 
         } else if (httpCode > 0) {
             switch (httpCode) {
-            case HttpStatus.SC_UNAUTHORIZED:
-                mCode = ResultCode.UNAUTHORIZED;
-                break;
-            case HttpStatus.SC_NOT_FOUND:
-                mCode = ResultCode.FILE_NOT_FOUND;
-                break;
-            case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-                mCode = ResultCode.INSTANCE_NOT_CONFIGURED;
-                break;
-            case HttpStatus.SC_CONFLICT:
-                mCode = ResultCode.CONFLICT;
-                break;
-            case HttpStatus.SC_INSUFFICIENT_STORAGE:
-                mCode = ResultCode.QUOTA_EXCEEDED;
-                break;
-			case HttpStatus.SC_FORBIDDEN:
-				mCode = ResultCode.FORBIDDEN;
-                break;
-            default:
-                mCode = ResultCode.UNHANDLED_HTTP_CODE;
-                Log_OC.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
-                        httpCode);
+                case HttpStatus.SC_UNAUTHORIZED:
+                    mCode = ResultCode.UNAUTHORIZED;
+                    break;
+                case HttpStatus.SC_NOT_FOUND:
+                    mCode = ResultCode.FILE_NOT_FOUND;
+                    break;
+                case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+                    mCode = ResultCode.INSTANCE_NOT_CONFIGURED;
+                    break;
+                case HttpStatus.SC_CONFLICT:
+                    mCode = ResultCode.CONFLICT;
+                    break;
+                case HttpStatus.SC_INSUFFICIENT_STORAGE:
+                    mCode = ResultCode.QUOTA_EXCEEDED;
+                    break;
+                case HttpStatus.SC_FORBIDDEN:
+                    mCode = ResultCode.FORBIDDEN;
+                    break;
+                case HttpStatus.SC_SERVICE_UNAVAILABLE:
+                    mCode = ResultCode.MAINTENANCE_MODE;
+                    break;
+                default:
+                    mCode = ResultCode.UNHANDLED_HTTP_CODE;
+                    Log_OC.d(TAG, "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
+                            httpCode);
             }
         }
     }
@@ -366,10 +372,10 @@ public class RemoteOperationResult implements Serializable {
 
             } else if (mException instanceof AccountNotFoundException) {
                 Account failedAccount =
-                        ((AccountNotFoundException)mException).getFailedAccount();
+                        ((AccountNotFoundException) mException).getFailedAccount();
                 return mException.getMessage() + " (" +
                         (failedAccount != null ? failedAccount.name : "NULL") + ")";
-                
+
             } else if (mException instanceof AccountsException) {
                 return "Exception while using account";
 
@@ -403,12 +409,12 @@ public class RemoteOperationResult implements Serializable {
             return "Authenticated with a different account than the one updating";
 
         } else if (mCode == ResultCode.INVALID_CHARACTER_IN_NAME) {
-                return "The file name contains an forbidden character";
+            return "The file name contains an forbidden character";
 
         } else if (mCode == ResultCode.FILE_NOT_FOUND) {
-	  	    return "Local file does not exist";
+            return "Local file does not exist";
 
- 	    } else if (mCode == ResultCode.SYNC_CONFLICT) {
+        } else if (mCode == ResultCode.SYNC_CONFLICT) {
             return "Synchronization conflict";
         }
 
