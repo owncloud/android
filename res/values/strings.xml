@@ -228,7 +228,6 @@
 	</string>
 	<string name="auth_can_not_auth_against_server">Cannot authenticate to this server</string>
     <string name="auth_account_does_not_exist">Account does not exist in the device yet</string>
-    <string name="auth_maintenance_mode">The server is in maintenance mode, please try again later.</string>
 
 
     <string name="set_available_offline">Set as available offline</string>
@@ -462,7 +461,7 @@
     <string name="local_file_not_found_toast">The file was not found in the local file system</string>
     <string name="confirmation_remove_files_alert">Do you really want to remove the selected items?</string>
     <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
-    <string name="maintenance_mode">This %1$s server is in maintenance mode, please try again later.</string>
+    <string name="maintenance_mode">Server in maintenance mode</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
