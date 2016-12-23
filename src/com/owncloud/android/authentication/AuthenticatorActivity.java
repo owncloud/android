@@ -1214,74 +1214,77 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mServerStatusIcon = R.drawable.common_error;    // the most common case in the switch below
 
         switch (result.getCode()) {
-        case OK_SSL:
-            mServerStatusIcon = R.drawable.ic_lock;
-            mServerStatusText = R.string.auth_secure_connection;
-            break;
+            case OK_SSL:
+                mServerStatusIcon = R.drawable.ic_lock;
+                mServerStatusText = R.string.auth_secure_connection;
+                break;
 
-        case OK_NO_SSL:
-        case OK:
-            if (mHostUrlInput.getText().toString().trim().toLowerCase().startsWith("http://") ) {
-                mServerStatusText = R.string.auth_connection_established;
-                mServerStatusIcon = R.drawable.ic_ok;
-            } else {
-                mServerStatusText = R.string.auth_nossl_plain_ok_title;
+            case OK_NO_SSL:
+            case OK:
+                if (mHostUrlInput.getText().toString().trim().toLowerCase().startsWith("http://")) {
+                    mServerStatusText = R.string.auth_connection_established;
+                    mServerStatusIcon = R.drawable.ic_ok;
+                } else {
+                    mServerStatusText = R.string.auth_nossl_plain_ok_title;
+                    mServerStatusIcon = R.drawable.ic_lock_open;
+                }
+                break;
+
+            case NO_NETWORK_CONNECTION:
+                mServerStatusIcon = R.drawable.no_network;
+                mServerStatusText = R.string.auth_no_net_conn_title;
+                break;
+
+            case SSL_RECOVERABLE_PEER_UNVERIFIED:
+                mServerStatusText = R.string.auth_ssl_unverified_server_title;
+                break;
+            case BAD_OC_VERSION:
+                mServerStatusText = R.string.auth_bad_oc_version_title;
+                break;
+            case WRONG_CONNECTION:
+                mServerStatusText = R.string.auth_wrong_connection_title;
+                break;
+            case TIMEOUT:
+                mServerStatusText = R.string.auth_timeout_title;
+                break;
+            case INCORRECT_ADDRESS:
+                mServerStatusText = R.string.auth_incorrect_address_title;
+                break;
+            case SSL_ERROR:
+                mServerStatusText = R.string.auth_ssl_general_error_title;
+                break;
+            case UNAUTHORIZED:
+                mServerStatusText = R.string.auth_unauthorized;
+                break;
+            case HOST_NOT_AVAILABLE:
+                mServerStatusText = R.string.auth_unknown_host_title;
+                break;
+            case INSTANCE_NOT_CONFIGURED:
+                mServerStatusText = R.string.auth_not_configured_title;
+                break;
+            case FILE_NOT_FOUND:
+                mServerStatusText = R.string.auth_incorrect_path_title;
+                break;
+            case OAUTH2_ERROR:
+                mServerStatusText = R.string.auth_oauth_error;
+                break;
+            case OAUTH2_ERROR_ACCESS_DENIED:
+                mServerStatusText = R.string.auth_oauth_error_access_denied;
+                break;
+            case UNHANDLED_HTTP_CODE:
+            case UNKNOWN_ERROR:
+                mServerStatusText = R.string.auth_unknown_error_title;
+                break;
+            case OK_REDIRECT_TO_NON_SECURE_CONNECTION:
                 mServerStatusIcon = R.drawable.ic_lock_open;
-            }
-            break;
-
-        case NO_NETWORK_CONNECTION:
-            mServerStatusIcon = R.drawable.no_network;
-            mServerStatusText = R.string.auth_no_net_conn_title;
-            break;
-
-        case SSL_RECOVERABLE_PEER_UNVERIFIED:
-            mServerStatusText = R.string.auth_ssl_unverified_server_title;
-            break;
-        case BAD_OC_VERSION:
-            mServerStatusText = R.string.auth_bad_oc_version_title;
-            break;
-        case WRONG_CONNECTION:
-            mServerStatusText = R.string.auth_wrong_connection_title;
-            break;
-        case TIMEOUT:
-            mServerStatusText = R.string.auth_timeout_title;
-            break;
-        case INCORRECT_ADDRESS:
-            mServerStatusText = R.string.auth_incorrect_address_title;
-            break;
-        case SSL_ERROR:
-            mServerStatusText = R.string.auth_ssl_general_error_title;
-            break;
-        case UNAUTHORIZED:
-            mServerStatusText = R.string.auth_unauthorized;
-            break;
-        case HOST_NOT_AVAILABLE:
-            mServerStatusText = R.string.auth_unknown_host_title;
-            break;
-        case INSTANCE_NOT_CONFIGURED:
-            mServerStatusText = R.string.auth_not_configured_title;
-            break;
-        case FILE_NOT_FOUND:
-            mServerStatusText = R.string.auth_incorrect_path_title;
-            break;
-        case OAUTH2_ERROR:
-            mServerStatusText = R.string.auth_oauth_error;
-            break;
-        case OAUTH2_ERROR_ACCESS_DENIED:
-            mServerStatusText = R.string.auth_oauth_error_access_denied;
-            break;
-        case UNHANDLED_HTTP_CODE:
-        case UNKNOWN_ERROR:
-            mServerStatusText = R.string.auth_unknown_error_title;
-            break;
-        case OK_REDIRECT_TO_NON_SECURE_CONNECTION:
-            mServerStatusIcon = R.drawable.ic_lock_open;
-            mServerStatusText = R.string.auth_redirect_non_secure_connection_title;
-            break;
-        default:
-            mServerStatusText = 0;
-            mServerStatusIcon = 0;
+                mServerStatusText = R.string.auth_redirect_non_secure_connection_title;
+                break;
+            case MAINTENANCE_MODE:
+                mServerStatusText = R.string.maintenance_mode;
+                break;
+            default:
+                mServerStatusText = 0;
+                mServerStatusIcon = 0;
         }
     }
 
