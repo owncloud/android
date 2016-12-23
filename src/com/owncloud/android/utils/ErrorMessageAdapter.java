@@ -184,6 +184,7 @@ public class ErrorMessageAdapter {
             } else {
                 message = res.getString(R.string.create_dir_fail_msg);
             }
+
         } else if (operation instanceof CreateShareViaLinkOperation ||
                     operation instanceof CreateShareWithShareeOperation) {
 
@@ -197,6 +198,9 @@ public class ErrorMessageAdapter {
                 // Error --> No permissions
                 message = String.format(res.getString(R.string.forbidden_permissions),
                         res.getString(R.string.share_link_forbidden_permissions));
+
+            } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
+                message = res.getString(R.string.maintenance_mode);
 
             } else {    // Generic error
                 // Show a Message, operation finished without success
@@ -216,6 +220,9 @@ public class ErrorMessageAdapter {
                 message = String.format(res.getString(R.string.forbidden_permissions),
                         res.getString(R.string.unshare_link_forbidden_permissions));
 
+            } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
+                message = res.getString(R.string.maintenance_mode);
+
             } else {    // Generic error
                 // Show a Message, operation finished without success
                 message = res.getString(R.string.unshare_link_file_error);
@@ -234,6 +241,9 @@ public class ErrorMessageAdapter {
                 // Error --> No permissions
                 message = String.format(res.getString(R.string.forbidden_permissions),
                         res.getString(R.string.update_link_forbidden_permissions));
+
+            } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
+                message = res.getString(R.string.maintenance_mode);
 
             } else {    // Generic error
                 // Show a Message, operation finished without success
@@ -257,10 +267,14 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER) {
                 message = res.getString(R.string.filename_forbidden_charaters_from_server);
 
+            } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
+                message = res.getString(R.string.maintenance_mode);
+
             } else {    // Generic error
                 // Show a Message, operation finished without success
                 message = res.getString(R.string.move_file_error);
             }
+
         } else if (operation instanceof SynchronizeFolderOperation) {
 
             if (!result.isSuccess()) {
@@ -270,15 +284,20 @@ public class ErrorMessageAdapter {
                     message = String.format(res.getString(R.string.sync_current_folder_was_removed),
                             folderPathName);
 
+                } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
+                    message = res.getString(R.string.maintenance_mode);
+
                 } else {    // Generic error
                     // Show a Message, operation finished without success
                     message = String.format(res.getString(R.string.sync_folder_failed_content),
                             folderPathName);
                 }
             }
+
         } else if (operation instanceof CopyFileOperation) {
             if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
                 message = res.getString(R.string.copy_file_not_found);
+
             } else if (result.getCode() == ResultCode.INVALID_COPY_INTO_DESCENDANT) {
                 message = res.getString(R.string.copy_file_invalid_into_descendent);
 
@@ -288,6 +307,9 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.FORBIDDEN) {
                 message = String.format(res.getString(R.string.forbidden_permissions),
                         res.getString(R.string.forbidden_permissions_copy));
+                
+            } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
+                message = res.getString(R.string.maintenance_mode);
 
             } else {    // Generic error
                 // Show a Message, operation finished without success
