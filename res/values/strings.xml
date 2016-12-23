@@ -460,7 +460,7 @@
     <string name="local_file_not_found_toast">The file was not found in the local file system</string>
     <string name="confirmation_remove_files_alert">Do you really want to remove the selected items?</string>
     <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
-    <string name="maintenance_mode">This Owncloud instance is in maintenance mode, so it may take a while.</string>
+    <string name="maintenance_mode">This Owncloud instance is in maintenance mode, please try again later or contact your system administrator.</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
