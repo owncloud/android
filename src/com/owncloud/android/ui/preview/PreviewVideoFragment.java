@@ -363,10 +363,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
-            case R.id.action_see_details: {
-                seeDetails();
-                return true;
-            }
             case R.id.action_send_file: {
                 stopPreview();
                 mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());

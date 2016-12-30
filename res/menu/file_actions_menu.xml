@@ -87,12 +87,6 @@
         app:showAsAction="never"
         android:orderInCategory="1" />
     <item
-        android:id="@+id/action_see_details"
-        android:title="@string/actionbar_see_details"
-        android:icon="@drawable/ic_info_white"
-        app:showAsAction="never"
-        android:orderInCategory="1" />
-    <item
         android:id="@+id/action_remove_file"
         android:title="@string/common_remove"
         android:icon="@drawable/ic_action_delete_white"

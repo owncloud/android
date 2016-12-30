@@ -362,10 +362,6 @@ public class PreviewAudioFragment extends FileFragment {
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
-            case R.id.action_see_details: {
-                seeDetails();
-                return true;
-            }
             case R.id.action_send_file: {
                 mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
                 return true;
