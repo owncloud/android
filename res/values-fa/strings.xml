@@ -144,6 +144,8 @@
   <string name="downloader_download_failed_credentials_error">بارگیری شکست خورد. لازم است دوباره وارد شوید</string>
   <string name="common_choose_account">حساب را برگزینید</string>
   <string name="sync_fail_ticker">همگامسازی انجام نشد.</string>
+  <string name="sync_fail_ticker_unauthorized">هم‌گام سازی شکست خورد. لازم است دوباره وارد شوید</string>
+  <string name="sync_fail_content">هم‌گام سازی %1$s نتوانست کامل شود</string>
   <string name="sync_fail_content_unauthorized">رمز عبور نامعتبر برای %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">ناسازگاری ها یافت شدند</string>
   <string name="sync_conflicts_in_favourites_content">%1$d پرونده ها نمیتوانند همگام سازی شوند.</string>
@@ -255,6 +257,7 @@
   <string name="ssl_validator_label_validity_to">به:</string>
   <string name="ssl_validator_label_signature">امضا:</string>
   <string name="ssl_validator_label_signature_algorithm">الگوریتم:</string>
+  <string name="ssl_validator_label_certificate_fingerprint">اثرانگشت:</string>
   <string name="ssl_validator_null_cert">نمایش گواهینامه امکانپذیر نمی باشد</string>
   <string name="ssl_validator_no_info_about_error">هیچ گونه اطلاعاتی درباره خطا وجود ندارد</string>
   <string name="placeholder_sentence">این یک حفره است.</string>
@@ -272,6 +275,7 @@
   <string name="preview_image_description">پیش نمایش تصویر</string>
   <string name="preview_image_error_unknown_format">نمایش این عکس امکانپذیر نمی باشد</string>
   <string name="error__upload__local_file_not_copied">کپی %1$s به پوشه محلی %2$s امکان پذیر نیست</string>
+  <string name="prefs_instant_upload_path_title">مسیر بارگذاری</string>
   <string name="share_link_file_error">در حین اشتراک گذاری این فایل یا پوشه خطایی رخ داده است</string>
   <string name="unshare_link_file_error">در حین حذف اشتراک گذاری این فایل یا پوشه خطایی رخ داده است</string>
   <string name="share_link_password_title">یک رمزعبور را وارد کنید</string>
@@ -292,6 +296,8 @@
   <string name="prefs_add_account">ایحاد حساب کاربری</string>
   <string name="drawer_manage_accounts">مدیریت حساب‌ها</string>
   <string name="actionbar_logger">لاگ‌ها</string>
+  <string name="log_send_history_button">فرستادن تاریخچه</string>
+  <string name="log_progress_dialog_text">بار کردن داده…</string>
   <string name="saml_authentication_required_text">احراز هویت مورد نیاز است</string>
   <string name="saml_authentication_wrong_pass">رمز عبور اشتباه است</string>
   <string name="actionbar_move">انتقال</string>
@@ -305,6 +311,7 @@
   <string name="copy_file_invalid_overwrite">این فایل هم‌اکنون در پوشه‌‎ی مقصد وجود دارد</string>
   <string name="copy_file_error">یک خطا در زمان تلاش برای کپی این فایل یا شاخه رخ داد</string>
   <string name="forbidden_permissions_copy">کپی این فایل</string>
+  <string name="prefs_category_instant_uploading">بارگذاری‌های آنی</string>
   <string name="prefs_category_details">جزئیات</string>
   <string name="shared_subject_header">به اشتراک گذاشته شد</string>
   <string name="with_you_subject_header">با تو</string>
@@ -322,15 +329,42 @@
   <string name="file_list__footer__files">%1$d  فایل</string>
   <string name="file_list__footer__files_and_folder">%1$d فایل، 1 پوشه</string>
   <string name="file_list__footer__files_and_folders">%1$d فایل, %2$d پوشه</string>
+  <string name="prefs_instant_upload_source_path_title_required">ضروری</string>
+  <string name="prefs_instant_upload_source_path_title_optional">اختیاری</string>
+  <string name="upload_copy_files">رونوشت از پرونده</string>
+  <string name="upload_move_files">جابه‌جایی پرونده</string>
   <string name="share_dialog_title">اشتراک گذاری</string>
+  <string name="share_file">هم‌رسانی %1$s</string>
   <string name="share_via_link_section_title">اشتراک گذاشتن لینک</string>
   <string name="share_via_link_expiration_date_label">تنظیم تاریخ انقضا</string>
   <string name="share_via_link_password_label">نگهداری کردن رمز عبور</string>
+  <string name="share_via_link_password_title">امن شده</string>
   <string name="share_via_link_edit_permission_label">اجازه‌ی ویرایش</string>
+  <string name="share_get_public_link_button">گرفتن پیوند</string>
+  <string name="share_with_title">هم‌رسانی با…</string>
+  <string name="share_with_edit_title">هم‌رسانی با %1$s</string>
   <string name="share_search">جست‌و‌جو</string>
+  <string name="search_users_and_groups_hint">جست‌وجوی کاربران و گروه‌ها</string>
+  <string name="share_group_clarification">‫%1$s (گروه)</string>
+  <string name="share_remote_clarification">‫%1$s (دوردست)</string>
+  <string name="share_known_remote_clarification">‫%1$s (در )%2$s</string>
   <string name="share_privilege_can_share">قابل به اشتراک گذاری</string>
   <string name="share_privilege_can_edit">می توان ویرایش کرد</string>
   <string name="share_privilege_can_edit_create">ایجاد</string>
   <string name="share_privilege_can_edit_change">تغییر</string>
   <string name="share_privilege_can_edit_delete">حذف</string>
+  <string name="edit_share_unshare">توقّف هم‌رسانی</string>
+  <string name="edit_share_done">انجام شد</string>
+  <string name="action_retry_uploads">تلاش دوباره شکست خورد</string>
+  <string name="action_clear_failed_uploads">پاک‌سازی شکست خورد</string>
+  <string name="action_clear_successful_uploads">پاک‌سازی موفّق بود</string>
+  <string name="action_clear_finished_uploads">پاک‌سازی همه تمام شد</string>
+  <string name="action_switch_grid_view">نمای شبکه‌ای</string>
+  <string name="action_switch_list_view">نمای فهرستی</string>
+  <string name="manage_space_title">مدیریت فضا</string>
+  <string name="manage_space_clear_data">پاک‌سازی داده</string>
+  <string name="manage_space_error">برخی پرونده‌ها نمي‌توانند حذف شوند.</string>
+  <plurals name="items_selected_count">
+    <item quantity="other">‫%d گزیده</item>
+  </plurals>
 </resources>
