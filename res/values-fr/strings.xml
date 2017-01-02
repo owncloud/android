@@ -234,9 +234,11 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="confirmation_remove_file_alert">Voulez-vous vraiment supprimer %1$s ?</string>
   <string name="confirmation_remove_folder_alert">Voulez-vous vraiment supprimer %1$s et son contenu ?</string>
   <string name="confirmation_remove_local">Local seulement</string>
+  <string name="confirmation_remove_account_alert">Voulez-vous vraiment supprimer le compte %1$s ?</string>
   <string name="remove_success_msg">Suppression effectuée avec succès</string>
   <string name="remove_fail_msg">Suppression impossible</string>
   <string name="rename_dialog_title">Entrez un nouveau nom</string>
+  <string name="available_offline_inherited_msg">Un dossier contenant ce fichier est disponible hors ligne</string>
   <string name="rename_local_fail_msg">La version locale ne peut être renommée, veuillez réessayer avec un nom différent</string>
   <string name="rename_server_fail_msg">Renommage impossible</string>
   <string name="sync_file_fail_msg">Le fichier distant n\'a pu être vérifié</string>
