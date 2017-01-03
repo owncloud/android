@@ -229,9 +229,11 @@
   <string name="confirmation_remove_file_alert">Czy naprawdę chcesz usunąć %1$s?</string>
   <string name="confirmation_remove_folder_alert">Czy naprawdę chcesz usunąć %1$s i jego zawartość?</string>
   <string name="confirmation_remove_local">Tylko lokalnie</string>
+  <string name="confirmation_remove_account_alert">Czy naprawdę chcesz usunąć konto %1$s?</string>
   <string name="remove_success_msg">Usunięto</string>
   <string name="remove_fail_msg">Nie można usunąć</string>
   <string name="rename_dialog_title">Wprowadź nową nazwę</string>
+  <string name="available_offline_inherited_msg">Folder zawierający ten plik jest dostępny offline</string>
   <string name="rename_local_fail_msg">Nie można zmienić nazwy kopii lokalnej; spróbuj wybrać inną nazwę </string>
   <string name="rename_server_fail_msg">Zmiana nazwy nie powiodła się</string>
   <string name="sync_file_fail_msg">Nie można sprawdzić zdalnego pliku</string>
