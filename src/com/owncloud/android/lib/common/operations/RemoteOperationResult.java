@@ -64,8 +64,8 @@ public class RemoteOperationResult implements Serializable {
 
     /** Generated - should be refreshed every time the class changes!! */
     ;
-    private static final long serialVersionUID = 1129130415603799707L;
-
+    
+    private static final long serialVersionUID = -1909603208238358633L;
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
 
     public enum ResultCode {
