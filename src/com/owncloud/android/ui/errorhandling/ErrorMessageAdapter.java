@@ -96,7 +96,6 @@ public class ErrorMessageAdapter {
         return message;
     }
 
-
     /**
      * Return a user message corresponding to an operation result and specific for the operation
      * performed.
@@ -334,6 +333,9 @@ public class ErrorMessageAdapter {
 
             } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
                 message = res.getString(R.string.maintenance_mode);
+
+            } else if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
+                message = res.getString(R.string.ssl_validator_header);
 
             } else if (result.getHttpPhrase() != null && result.getHttpPhrase().length() > 0) {
                 // last chance: error message from server
