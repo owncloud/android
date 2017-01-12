@@ -69,7 +69,6 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     protected String mMimeType;
     protected String mFileLastModifTimestamp;
     protected PutMethod mPutMethod = null;
-    protected boolean mForbiddenCharsInServer = false;
     protected String mRequiredEtag = null;
 
     protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
@@ -112,14 +111,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
 
             } else {
                 // perform the upload
-                int status = uploadFile(client);
-                if (mForbiddenCharsInServer){
-                    result = new RemoteOperationResult(
-                            RemoteOperationResult.ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER);
-                } else {
-                    result = new RemoteOperationResult(isSuccess(status), status,
-                            (mPutMethod != null ? mPutMethod.getResponseHeaders() : null));
-                }
+                result = uploadFile(client);
             }
 
         } catch (Exception e) {
@@ -144,8 +136,9 @@ public class UploadRemoteFileOperation extends RemoteOperation {
                 status == HttpStatus.SC_NO_CONTENT));
     }
 
-    protected int uploadFile(OwnCloudClient client) throws IOException {
-        int status = -1;
+    protected RemoteOperationResult uploadFile(OwnCloudClient client) throws IOException {
+        int status;
+        RemoteOperationResult result;
         try {
             File f = new File(mLocalPath);
             mEntity  = new FileRequestEntity(f, mMimeType);
@@ -163,25 +156,16 @@ public class UploadRemoteFileOperation extends RemoteOperation {
             mPutMethod.setRequestEntity(mEntity);
             status = client.executeMethod(mPutMethod);
 
-            if (status == 400) {
-                InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
-                InputStream is = new ByteArrayInputStream(
-                        mPutMethod.getResponseBodyAsString().getBytes());
-                try {
-                    mForbiddenCharsInServer = xmlParser.parseXMLResponse(is);
-
-                } catch (Exception e) {
-                    mForbiddenCharsInServer = false;
-                    Log_OC.e(TAG, "Exception reading exception from server", e);
-                }
-            }
-
+            result = new RemoteOperationResult(
+                isSuccess(status),
+                mPutMethod
+            );
             client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
 
         } finally {
             mPutMethod.releaseConnection(); // let the connection available for other methods
         }
-        return status;
+        return result;
     }
 
     public Set<OnDatatransferProgressListener> getDataTransferListeners() {

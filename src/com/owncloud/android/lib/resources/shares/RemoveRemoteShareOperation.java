@@ -40,63 +40,63 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 public class RemoveRemoteShareOperation extends RemoteOperation {
 
-	private static final String TAG = RemoveRemoteShareOperation.class.getSimpleName();
-	
-	private int mRemoteShareId;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param remoteShareId		Share ID
-	 */
-	
-	public RemoveRemoteShareOperation(int remoteShareId) {
-		mRemoteShareId = remoteShareId;
-		
-	}
+    private static final String TAG = RemoveRemoteShareOperation.class.getSimpleName();
 
-	@Override
-	protected RemoteOperationResult run(OwnCloudClient client) {
-		RemoteOperationResult result = null;
-		int status = -1;
+    private int mRemoteShareId;
 
-		DeleteMethod delete = null;
+    /**
+     * Constructor
+     *
+     * @param remoteShareId Share ID
+     */
 
-		try {
-			String id = "/" + String.valueOf(mRemoteShareId);
-			delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
+    public RemoveRemoteShareOperation(int remoteShareId) {
+        mRemoteShareId = remoteShareId;
 
-			delete.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+    }
 
-			status = client.executeMethod(delete);
+    @Override
+    protected RemoteOperationResult run(OwnCloudClient client) {
+        RemoteOperationResult result = null;
+        int status = -1;
 
-			if(isSuccess(status)) {
-				String response = delete.getResponseBodyAsString();
+        DeleteMethod delete = null;
 
-				// Parse xml response and obtain the list of shares
-				ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
-						new ShareXMLParser()
-				);
-				result = parser.parse(response);
+        try {
+            String id = "/" + String.valueOf(mRemoteShareId);
+            delete = new DeleteMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + id);
 
-				Log_OC.d(TAG, "Unshare " + id + ": " + result.getLogMessage());
+            delete.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-			} else {
-				result = new RemoteOperationResult(false, status, delete.getResponseHeaders());
-			}
-		} catch (Exception e) {
-			result = new RemoteOperationResult(e);
-			Log_OC.e(TAG, "Unshare Link Exception " + result.getLogMessage(), e);
+            status = client.executeMethod(delete);
 
-		} finally {
-			if (delete != null)
-				delete.releaseConnection();
-		}
-		return result;
-	}
+            if (isSuccess(status)) {
+                String response = delete.getResponseBodyAsString();
+
+                // Parse xml response and obtain the list of shares
+                ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
+                    new ShareXMLParser()
+                );
+                result = parser.parse(response);
+
+                Log_OC.d(TAG, "Unshare " + id + ": " + result.getLogMessage());
+
+            } else {
+                result = new RemoteOperationResult(false, delete);
+            }
+        } catch (Exception e) {
+            result = new RemoteOperationResult(e);
+            Log_OC.e(TAG, "Unshare Link Exception " + result.getLogMessage(), e);
+
+        } finally {
+            if (delete != null)
+                delete.releaseConnection();
+        }
+        return result;
+    }
 
 
-	private boolean isSuccess(int status) {
-		return (status == HttpStatus.SC_OK);
-	}
+    private boolean isSuccess(int status) {
+        return (status == HttpStatus.SC_OK);
+    }
 }

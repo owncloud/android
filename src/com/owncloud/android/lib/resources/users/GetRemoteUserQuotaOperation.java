@@ -107,14 +107,14 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
 
 
                 // Result
-                result = new RemoteOperationResult(true, status, get.getResponseHeaders());
+                result = new RemoteOperationResult(true, get);
                 //Quota data in data collection
                 ArrayList<Object> data = new ArrayList<Object>();
                 data.add(new Quota(quotaFree, quotaUsed, quotaTotal, quotaRelative));
                 result.setData(data);
 
             } else {
-                result = new RemoteOperationResult(false, status, get.getResponseHeaders());
+                result = new RemoteOperationResult(false, get);
                 String response = get.getResponseBodyAsString();
                 Log_OC.e(TAG, "Failed response while getting user quota information ");
                 if (response != null) {

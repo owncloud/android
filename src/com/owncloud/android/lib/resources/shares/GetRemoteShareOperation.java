@@ -33,68 +33,68 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 
-/** 
+/**
  * Get the data about a Share resource, known its remote ID.
  */
 
 public class GetRemoteShareOperation extends RemoteOperation {
 
-	private static final String TAG = GetRemoteShareOperation.class.getSimpleName();
+    private static final String TAG = GetRemoteShareOperation.class.getSimpleName();
 
-	private long mRemoteId;
-
-
-	public GetRemoteShareOperation(long remoteId) {
-		mRemoteId = remoteId;
-	}
+    private long mRemoteId;
 
 
-	@Override
-	protected RemoteOperationResult run(OwnCloudClient client) {
-		RemoteOperationResult result = null;
-		int status = -1;
+    public GetRemoteShareOperation(long remoteId) {
+        mRemoteId = remoteId;
+    }
 
-		// Get Method        
-		GetMethod get = null;
 
-		// Get the response
-		try{
-			get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + "/" + Long.toString(mRemoteId));
-			get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+    @Override
+    protected RemoteOperationResult run(OwnCloudClient client) {
+        RemoteOperationResult result = null;
+        int status = -1;
 
-			status = client.executeMethod(get);
+        // Get Method
+        GetMethod get = null;
 
-			if(isSuccess(status)) {
-				String response = get.getResponseBodyAsString();
+        // Get the response
+        try {
+            get = new GetMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH + "/" + Long.toString(mRemoteId));
+            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-				// Parse xml response and obtain the list of shares
-				ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
-						new ShareXMLParser()
-				);
-				parser.setOneOrMoreSharesRequired(true);
-				parser.setOwnCloudVersion(client.getOwnCloudVersion());
-				parser.setServerBaseUri(client.getBaseUri());
-				result = parser.parse(response);
+            status = client.executeMethod(get);
 
-			} else {
-				result = new RemoteOperationResult(false, status, get.getResponseHeaders());
-			}
-			
-		} catch (Exception e) {
-			result = new RemoteOperationResult(e);
-			Log_OC.e(TAG, "Exception while getting remote shares ", e);
-			
-		} finally {
-			if (get != null) {
-				get.releaseConnection();
-			}
-		}
-		return result;
-	}
+            if (isSuccess(status)) {
+                String response = get.getResponseBodyAsString();
 
-	private boolean isSuccess(int status) {
-		return (status == HttpStatus.SC_OK);
-	}
+                // Parse xml response and obtain the list of shares
+                ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
+                    new ShareXMLParser()
+                );
+                parser.setOneOrMoreSharesRequired(true);
+                parser.setOwnCloudVersion(client.getOwnCloudVersion());
+                parser.setServerBaseUri(client.getBaseUri());
+                result = parser.parse(response);
+
+            } else {
+                result = new RemoteOperationResult(false, get);
+            }
+
+        } catch (Exception e) {
+            result = new RemoteOperationResult(e);
+            Log_OC.e(TAG, "Exception while getting remote shares ", e);
+
+        } finally {
+            if (get != null) {
+                get.releaseConnection();
+            }
+        }
+        return result;
+    }
+
+    private boolean isSuccess(int status) {
+        return (status == HttpStatus.SC_OK);
+    }
 
 
 }

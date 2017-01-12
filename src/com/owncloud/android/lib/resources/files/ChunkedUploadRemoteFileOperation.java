@@ -39,6 +39,7 @@ import com.owncloud.android.lib.common.network.ChunkFromFileChannelRequestEntity
 import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.InvalidCharacterExceptionParser;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 
@@ -53,20 +54,21 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
     private static final String TAG = ChunkedUploadRemoteFileOperation.class.getSimpleName();
 
     public ChunkedUploadRemoteFileOperation(String storagePath, String remotePath, String mimeType,
-                                            String fileLastModifTimestamp){
+                                            String fileLastModifTimestamp) {
         super(storagePath, remotePath, mimeType, fileLastModifTimestamp);
     }
 
     public ChunkedUploadRemoteFileOperation(
-            String storagePath, String remotePath, String mimeType, String requiredEtag,
-            String fileLastModifTimestamp
-    ){
-		 super(storagePath, remotePath, mimeType, requiredEtag, fileLastModifTimestamp);
-	}
-    
+        String storagePath, String remotePath, String mimeType, String requiredEtag,
+        String fileLastModifTimestamp
+    ) {
+        super(storagePath, remotePath, mimeType, requiredEtag, fileLastModifTimestamp);
+    }
+
     @Override
-    protected int uploadFile(OwnCloudClient client) throws IOException {
+    protected RemoteOperationResult uploadFile(OwnCloudClient client) throws IOException {
         int status = -1;
+        RemoteOperationResult result = null;
 
         FileChannel channel = null;
         RandomAccessFile raf = null;
@@ -76,24 +78,24 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             channel = raf.getChannel();
             mEntity = new ChunkFromFileChannelRequestEntity(channel, mMimeType, CHUNK_SIZE, file);
             synchronized (mDataTransferListeners) {
-				((ProgressiveDataTransferer)mEntity)
-                        .addDatatransferProgressListeners(mDataTransferListeners);
-			}
-            
+                ((ProgressiveDataTransferer) mEntity)
+                    .addDatatransferProgressListeners(mDataTransferListeners);
+            }
+
             long offset = 0;
             String uriPrefix = client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath) +
-                    "-chunking-" + Math.abs((new Random()).nextInt(9000)+1000) + "-" ;
+                "-chunking-" + Math.abs((new Random()).nextInt(9000) + 1000) + "-";
             long totalLength = file.length();
-            long chunkCount = (long) Math.ceil((double)totalLength / CHUNK_SIZE);
+            long chunkCount = (long) Math.ceil((double) totalLength / CHUNK_SIZE);
             String chunkSizeStr = String.valueOf(CHUNK_SIZE);
             String totalLengthStr = String.valueOf(file.length());
-            for (int chunkIndex = 0; chunkIndex < chunkCount ; chunkIndex++, offset += CHUNK_SIZE) {
+            for (int chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++, offset += CHUNK_SIZE) {
                 if (chunkIndex == chunkCount - 1) {
                     chunkSizeStr = String.valueOf(CHUNK_SIZE * chunkCount - totalLength);
                 }
                 if (mPutMethod != null) {
                     mPutMethod.releaseConnection();     // let the connection available
-                                                        // for other methods
+                    // for other methods
                 }
                 mPutMethod = new PutMethod(uriPrefix + chunkCount + "-" + chunkIndex);
                 if (mRequiredEtag != null && mRequiredEtag.length() > 0) {
@@ -121,29 +123,20 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
 
                 status = client.executeMethod(mPutMethod);
 
-                if (status == 400) {
-                    InvalidCharacterExceptionParser xmlParser =
-                            new InvalidCharacterExceptionParser();
-                    InputStream is = new ByteArrayInputStream(
-                            mPutMethod.getResponseBodyAsString().getBytes());
-                    try {
-                        mForbiddenCharsInServer = xmlParser.parseXMLResponse(is);
-
-                    } catch (Exception e) {
-                        mForbiddenCharsInServer = false;
-                        Log_OC.e(TAG, "Exception reading exception from server", e);
-                    }
-                }
+                result = new RemoteOperationResult(
+                    isSuccess(status),
+                    mPutMethod
+                );
 
                 client.exhaustResponse(mPutMethod.getResponseBodyAsStream());
                 Log_OC.d(TAG, "Upload of " + mLocalPath + " to " + mRemotePath +
-                        ", chunk index " + chunkIndex + ", count " + chunkCount +
-                        ", HTTP result status " + status);
+                    ", chunk index " + chunkIndex + ", count " + chunkCount +
+                    ", HTTP result status " + status);
 
                 if (!isSuccess(status))
                     break;
             }
-            
+
         } finally {
             if (channel != null)
                 channel.close();
@@ -152,7 +145,7 @@ public class ChunkedUploadRemoteFileOperation extends UploadRemoteFileOperation 
             if (mPutMethod != null)
                 mPutMethod.releaseConnection();    // let the connection available for other methods
         }
-        return status;
+        return result;
     }
 
 }

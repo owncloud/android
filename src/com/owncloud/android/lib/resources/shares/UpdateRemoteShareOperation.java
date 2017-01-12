@@ -216,7 +216,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
                     result = parser.parse(response);
 
                 } else {
-                    result = new RemoteOperationResult(false, status, put.getResponseHeaders());
+                    result = new RemoteOperationResult(false, put);
                 }
                 if (!result.isSuccess()) {
                     break;
