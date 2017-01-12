@@ -88,7 +88,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoActivity;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.DisplayUtils;
-import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.PermissionUtil;
 
 import java.io.File;

@@ -74,7 +74,7 @@ import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
-import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.util.ArrayList;

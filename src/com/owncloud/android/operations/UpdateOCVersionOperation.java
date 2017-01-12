@@ -69,9 +69,9 @@ public class UpdateOCVersionOperation extends RemoteOperation {
             get = new GetMethod(statUrl);
             int status = client.executeMethod(get);
             if (status != HttpStatus.SC_OK) {
+                result = new RemoteOperationResult(false, get);
                 client.exhaustResponse(get.getResponseBodyAsStream());
-                result = new RemoteOperationResult(false, status, get.getResponseHeaders());
-                
+
             } else {
                 String response = get.getResponseBodyAsString();
                 if (response != null) {

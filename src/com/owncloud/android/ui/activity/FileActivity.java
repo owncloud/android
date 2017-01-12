@@ -34,9 +34,6 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
@@ -71,7 +68,7 @@ import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
-import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 
 
 /**

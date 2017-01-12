@@ -43,7 +43,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.GetRemoteShareesOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
-import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
