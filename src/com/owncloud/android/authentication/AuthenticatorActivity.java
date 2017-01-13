@@ -39,6 +39,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -93,6 +94,7 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SamlWebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 
 import java.security.cert.X509Certificate;
@@ -237,6 +239,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                     R.string.error_cant_bind_to_operations_service, 
                     Toast.LENGTH_LONG)
                         .show();
+                //  do not use a Snackbar, finishing right now!
             finish();
         }
 
@@ -1084,6 +1087,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                         Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
                         Toast.makeText(this, R.string.auth_account_does_not_exist,
                                 Toast.LENGTH_SHORT).show();
+                            // don't use a Snackbar, finishing right now
                         finish();
                     }
                 }
@@ -1448,6 +1452,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                     Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
                     Toast.makeText(this, R.string.auth_account_does_not_exist,
                             Toast.LENGTH_SHORT).show();
+                        // do not use a Snackbar, finishing right now!
                     finish();
                 }
             }
@@ -1896,7 +1901,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     public void onFailedSavingCertificate() {
         dismissDialog(SAML_DIALOG_TAG);
-        Toast.makeText(this, R.string.ssl_validator_not_saved, Toast.LENGTH_LONG).show();
+
+        Snackbar snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            R.string.ssl_validator_not_saved,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
     }
 
     @Override
@@ -1959,7 +1970,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Create and show dialog for request authentication to the user
-     * @param webView   Web view to emebd into the authentication dialog.
+     * @param webView   Web view to embed into the authentication dialog.
      * @param handler   Object responsible for catching and recovering HTTP authentication fails.
      */
     public void createAuthenticationDialog(WebView webView, HttpAuthHandler handler) {
@@ -1974,11 +1985,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         dialog.show(ft, CREDENTIALS_DIALOG_TAG);
 
         if (!mIsFirstAuthAttempt) {
-            Toast.makeText(
-                    getApplicationContext(), 
-                    getText(R.string.saml_authentication_wrong_pass), 
-                    Toast.LENGTH_LONG
-            ).show();
+            Snackbar snackbar = Snackbar.make(
+                findViewById(android.R.id.content),
+                getText(R.string.saml_authentication_wrong_pass),
+                Snackbar.LENGTH_LONG
+            );
+            snackbar.show();
+
         } else {
             mIsFirstAuthAttempt = false;
         }

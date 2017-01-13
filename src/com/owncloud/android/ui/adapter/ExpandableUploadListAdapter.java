@@ -23,6 +23,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
+import android.support.design.widget.Snackbar;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -380,17 +381,23 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     view.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                        File file = new File(upload.getLocalPath());
-                        if (file.exists()) {
-                            FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
-                            requester.retry(mParentActivity, upload);
-                            refreshView();
-                        } else {
-                            final String message = String.format(
-                                mParentActivity.getString(R.string.local_file_not_found_toast)
-                            );
-                            Toast.makeText(mParentActivity, message, Toast.LENGTH_SHORT).show();
-                        }
+                            File file = new File(upload.getLocalPath());
+                            if (file.exists()) {
+                                FileUploader.UploadRequester requester =
+                                    new FileUploader.UploadRequester();
+                                requester.retry(mParentActivity, upload);
+                                refreshView();
+                            } else {
+                                final String message = String.format(
+                                    mParentActivity.getString(R.string.local_file_not_found_toast)
+                                );
+                                Snackbar snackbar = Snackbar.make(
+                                    v.getRootView().findViewById(android.R.id.content),
+                                    message,
+                                    Snackbar.LENGTH_LONG
+                                );
+                                snackbar.show();
+                            }
                         }
                     });
                 }

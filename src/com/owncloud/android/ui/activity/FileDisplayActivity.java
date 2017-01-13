@@ -679,10 +679,12 @@ public class FileDisplayActivity extends HookActivity
 
         } else {
             Log_OC.d(TAG, "User clicked on 'Update' with no selection");
-            Toast t = Toast.makeText(this, getString(R.string.filedisplay_no_file_selected),
-                    Toast.LENGTH_LONG);
-            t.show();
-            return;
+            Snackbar snackbar = Snackbar.make(
+                findViewById(android.R.id.content),
+                R.string.filedisplay_no_file_selected,
+                Snackbar.LENGTH_LONG
+            );
+            snackbar.show();
         }
     }
 
@@ -904,14 +906,15 @@ public class FileDisplayActivity extends HookActivity
 
                         if (currentDir == null) {
                             // current folder was removed from the server 
-                            Toast.makeText(FileDisplayActivity.this,
-                                    String.format(
-                                            getString(R.string.
-                                                    sync_current_folder_was_removed),
-                                            synchFolderRemotePath),
-
-                                    Toast.LENGTH_LONG)
-                                    .show();
+                            Snackbar snackbar = Snackbar.make(
+                                findViewById(android.R.id.content),
+                                String.format(
+                                    getString(R.string.sync_current_folder_was_removed),
+                                    synchFolderRemotePath
+                                ),
+                                Snackbar.LENGTH_LONG
+                            );
+                            snackbar.show();
 
                             browseToRoot();
 
@@ -1056,13 +1059,15 @@ public class FileDisplayActivity extends HookActivity
                     );
                     if (renamedInUpload) {
                         String newName = (new File(uploadedRemotePath)).getName();
-                        Toast msg = Toast.makeText(
-                            context,
+                        Snackbar snackbar = Snackbar.make(
+                            findViewById(android.R.id.content),
                             String.format(
                                 getString(R.string.filedetails_renamed_in_upload_msg),
-                                newName),
-                            Toast.LENGTH_LONG);
-                        msg.show();
+                                newName
+                            ),
+                            Snackbar.LENGTH_LONG
+                        );
+                        snackbar.show();
                         updateActionBarTitleAndHomeButton(getFile());
                     }
                 }
@@ -1393,10 +1398,13 @@ public class FileDisplayActivity extends HookActivity
      */
     private void onRemoveFileOperationFinish(RemoveFileOperation operation,
                                              RemoteOperationResult result) {
-        Toast msg = Toast.makeText(this,
+
+        Snackbar snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
             ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-            Toast.LENGTH_LONG);
-        msg.show();
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
 
         if (result.isSuccess()) {
             OCFile removedFile = operation.getFile();
@@ -1436,10 +1444,12 @@ public class FileDisplayActivity extends HookActivity
             refreshListOfFilesFragment(true);
         } else {
             try {
-                Toast msg = Toast.makeText(FileDisplayActivity.this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
-                msg.show();
+                Snackbar snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);
@@ -1459,10 +1469,12 @@ public class FileDisplayActivity extends HookActivity
             refreshListOfFilesFragment(true);
         } else {
             try {
-                Toast msg = Toast.makeText(FileDisplayActivity.this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
-                msg.show();
+                Snackbar snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);
@@ -1494,10 +1506,12 @@ public class FileDisplayActivity extends HookActivity
             }
 
         } else {
-            Toast msg = Toast.makeText(this,
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Toast.LENGTH_LONG);
-            msg.show();
+            Snackbar snackbar = Snackbar.make(
+                findViewById(android.R.id.content),
+                ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                Snackbar.LENGTH_LONG
+            );
+            snackbar.show();
 
             if (result.isSslRecoverableException()) {
                 mLastSslUntrustedServerResult = result;
@@ -1521,9 +1535,12 @@ public class FileDisplayActivity extends HookActivity
                 }
 
             } else if (getSecondFragment() == null) {
-                Toast msg = Toast.makeText(this, ErrorMessageAdapter.getErrorCauseMessage(result,
-                    operation, getResources()), Toast.LENGTH_LONG);
-                msg.show();
+                Snackbar snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
             }
         }
 
@@ -1553,10 +1570,12 @@ public class FileDisplayActivity extends HookActivity
             refreshListOfFilesFragment(true);
         } else {
             try {
-                Toast msg = Toast.makeText(FileDisplayActivity.this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
-                msg.show();
+                Snackbar snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);

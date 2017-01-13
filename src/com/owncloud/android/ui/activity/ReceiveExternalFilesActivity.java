@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -50,7 +51,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -547,10 +547,12 @@ public class ReceiveExternalFilesActivity extends FileActivity
             populateDirectoryList();
         } else {
             try {
-                Toast msg = Toast.makeText(this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
-                msg.show();
+                Snackbar snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);
@@ -668,12 +670,15 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
                         if (currentDir == null) {
                             // current folder was removed from the server
-                            Toast.makeText(context,
-                                    String.format(
-                                            getString(R.string.sync_current_folder_was_removed),
-                                            getCurrentFolder().getFileName()),
-                                    Toast.LENGTH_LONG)
-                                    .show();
+                            Snackbar snackbar = Snackbar.make(
+                                findViewById(android.R.id.content),
+                                String.format(
+                                    getString(R.string.sync_current_folder_was_removed),
+                                    getCurrentFolder().getFileName()
+                                ),
+                                Snackbar.LENGTH_LONG
+                            );
+                            snackbar.show();
                             browseToRoot();
 
                         } else {

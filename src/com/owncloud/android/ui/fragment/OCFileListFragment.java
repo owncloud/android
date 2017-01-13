@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.SparseBooleanArray;
@@ -267,7 +268,12 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUpload().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(getActivity(), R.string.actionbar_upload, Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(
+                    getActivity().findViewById(android.R.id.content),
+                    R.string.actionbar_upload,
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
                 return true;
             }
         });
@@ -292,7 +298,12 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabMkdir().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(getActivity(), R.string.actionbar_mkdir, Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(
+                    getActivity().findViewById(android.R.id.content),
+                    R.string.actionbar_mkdir,
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
                 return true;
             }
         });
@@ -324,9 +335,12 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUploadFromApp().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(getActivity(),
-                        R.string.actionbar_upload_from_apps,
-                        Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(
+                    getActivity().findViewById(android.R.id.content),
+                    R.string.actionbar_upload_from_apps,
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
                 return true;
             }
         });

@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -38,7 +39,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -394,10 +394,12 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             refreshListOfFilesFragment();
         } else {
             try {
-                Toast msg = Toast.makeText(FolderPickerActivity.this, 
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()), 
-                        Toast.LENGTH_LONG); 
-                msg.show();
+                Snackbar snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message " , e);
@@ -436,13 +438,17 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                             getStorageManager().getFileByPath(getCurrentFolder().getRemotePath());
     
                         if (currentDir == null) {
-                            // current folder was removed from the server 
-                            Toast.makeText( FolderPickerActivity.this, 
-                                            String.format(
-                                                    getString(R.string.sync_current_folder_was_removed), 
-                                                    getCurrentFolder().getFileName()), 
-                                            Toast.LENGTH_LONG)
-                                .show();
+                            // current folder was removed from the server
+                            Snackbar snackbar = Snackbar.make(
+                                findViewById(android.R.id.content),
+                                String.format(
+                                    getString(R.string.sync_current_folder_was_removed),
+                                    getCurrentFolder().getFileName()
+                                ),
+                                Snackbar.LENGTH_LONG
+                            );
+                            snackbar.show();
+
                             browseToRoot();
                             
                         } else {

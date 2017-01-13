@@ -37,7 +37,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -483,10 +482,7 @@ public class PreviewAudioFragment extends FileFragment {
                     mMediaController.setMediaPlayer(null);
                 }
                 else {
-                    Toast.makeText(
-                            getActivity(),
-                            "No media controller to release when disconnected from media service", 
-                            Toast.LENGTH_SHORT).show();
+                    Log_OC.w(TAG, "No media controller to release when disconnected from media service");
                 }
                 mMediaServiceBinder = null;
                 mMediaServiceConnection = null;

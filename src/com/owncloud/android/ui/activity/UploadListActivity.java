@@ -33,6 +33,7 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.view.Menu;
@@ -140,8 +141,13 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         /// TODO is this path still active?
         File f = new File(file.getLocalPath());
         if(!f.exists()) {
-            Toast.makeText(this, "Cannot open. Local file does not exist.",
-                    Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(
+                findViewById(android.R.id.content),
+                R.string.local_file_not_found_toast,
+                Snackbar.LENGTH_LONG
+            );
+            snackbar.show();
+
         } else {
             openFileWithDefault(file.getLocalPath());
         }
@@ -162,7 +168,12 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         try {
             startActivity(myIntent);
         } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "Found no app to open this file.", Toast.LENGTH_LONG).show();
+            Snackbar snackbar = Snackbar.make(
+                findViewById(android.R.id.content),
+                R.string.file_list_no_app_for_file_type,
+                Snackbar.LENGTH_LONG
+            );
+            snackbar.show();
             Log_OC.i(TAG, "Could not find app for sending log history.");
 
         }        

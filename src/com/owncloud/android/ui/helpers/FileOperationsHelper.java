@@ -24,13 +24,12 @@ package com.owncloud.android.ui.helpers;
 
 import android.accounts.Account;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -118,10 +117,10 @@ public class FileOperationsHelper {
                             )
                     );
                 } catch (ActivityNotFoundException anfe) {
-                    showNoAppForFileTypeToast(mFileActivity.getApplicationContext());
+                    showNoAppForFileType();
                 }
             } else {
-                showNoAppForFileTypeToast(mFileActivity.getApplicationContext());
+                showNoAppForFileType();
             }
 
         } else {
@@ -131,13 +130,14 @@ public class FileOperationsHelper {
 
     /**
      * Displays a toast stating that no application could be found to open the file.
-     *
-     * @param context the context to be able to show a toast.
      */
-    private void showNoAppForFileTypeToast(Context context) {
-        Toast.makeText(context,
-                R.string.file_list_no_app_for_file_type, Toast.LENGTH_SHORT)
-                .show();
+    private void showNoAppForFileType() {
+        Snackbar snackbar = Snackbar.make(
+            mFileActivity.findViewById(android.R.id.content),
+            R.string.file_list_no_app_for_file_type,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
     }
 
 
@@ -167,11 +167,12 @@ public class FileOperationsHelper {
 
         } else {
             // Show a Message
-            Toast t = Toast.makeText(
-                    mFileActivity, mFileActivity.getString(R.string.share_link_no_support_share_api),
-                    Toast.LENGTH_LONG
+            Snackbar snackbar = Snackbar.make(
+                mFileActivity.findViewById(android.R.id.content),
+                R.string.share_link_no_support_share_api,
+                Snackbar.LENGTH_LONG
             );
-            t.show();
+            snackbar.show();
         }
     }
 
@@ -191,11 +192,12 @@ public class FileOperationsHelper {
             }
         } else {
             // Show a Message
-            Toast t = Toast.makeText(
-                    mFileActivity, mFileActivity.getString(R.string.share_link_no_support_share_api),
-                    Toast.LENGTH_LONG
+            Snackbar snackbar = Snackbar.make(
+                mFileActivity.findViewById(android.R.id.content),
+                R.string.share_link_no_support_share_api,
+                Snackbar.LENGTH_LONG
             );
-            t.show();
+            snackbar.show();
         }
     }
 
@@ -282,11 +284,12 @@ public class FileOperationsHelper {
 
         } else {
             // Show a Message
-            Toast t = Toast.makeText(mFileActivity,
-                    mFileActivity.getString(R.string.share_link_no_support_share_api),
-                    Toast.LENGTH_LONG);
-            t.show();
-
+            Snackbar snackbar = Snackbar.make(
+                mFileActivity.findViewById(android.R.id.content),
+                R.string.share_link_no_support_share_api,
+                Snackbar.LENGTH_LONG
+            );
+            snackbar.show();
         }
     }
 
@@ -461,11 +464,12 @@ public class FileOperationsHelper {
     public void toggleAvailableOffline(OCFile file, boolean isAvailableOffline) {
         if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
             /// files descending of an av-offline folder can't be toggled
-            Toast.makeText(
-                mFileActivity,
-                mFileActivity.getString(R.string.available_offline_inherited_msg),
-                Toast.LENGTH_LONG
-            ).show();
+            Snackbar snackbar = Snackbar.make(
+                mFileActivity.findViewById(android.R.id.content),
+                R.string.available_offline_inherited_msg,
+                Snackbar.LENGTH_LONG
+            );
+            snackbar.show();
 
         } else {
             /// update local property, for file and all its descendents (if folder)
@@ -492,11 +496,12 @@ public class FileOperationsHelper {
                 }
             } else {
                 /// unexpected error
-                Toast.makeText(
-                    mFileActivity,
-                    mFileActivity.getString(R.string.common_error_unknown),
-                    Toast.LENGTH_SHORT
-                ).show();
+                Snackbar snackbar = Snackbar.make(
+                    mFileActivity.findViewById(android.R.id.content),
+                    R.string.common_error_unknown,
+                    Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
             }
         }
     }
