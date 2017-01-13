@@ -242,18 +242,18 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
                     }
                     // Result
                     data.add(capability);
-                    result = new RemoteOperationResult(true, status, get.getResponseHeaders());
+                    result = new RemoteOperationResult(true, get);
                     result.setData(data);
 
                     Log_OC.d(TAG, "*** Get Capabilities completed ");
                 } else {
-                    result = new RemoteOperationResult(statusProp, statuscode, null);
+                    result = new RemoteOperationResult(statusProp, statuscode, null, null);
                     Log_OC.e(TAG, "Failed response while getting capabilities from the server ");
                     Log_OC.e(TAG, "*** status: " + statusProp + "; message: " + message);
                 }
 
             } else {
-                result = new RemoteOperationResult(false, status, get.getResponseHeaders());
+                result = new RemoteOperationResult(false, get);
                 String response = get.getResponseBodyAsString();
                 Log_OC.e(TAG, "Failed response while getting capabilities from the server ");
                 if (response != null) {

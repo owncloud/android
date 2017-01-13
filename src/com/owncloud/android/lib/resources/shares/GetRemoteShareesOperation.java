@@ -166,13 +166,13 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                 }
 
                 // Result
-                result = new RemoteOperationResult(true, status, get.getResponseHeaders());
+                result = new RemoteOperationResult(true, get);
                 result.setData(data);
 
                 Log_OC.d(TAG, "*** Get Users or groups completed " );
 
             } else {
-                result = new RemoteOperationResult(false, status, get.getResponseHeaders());
+                result = new RemoteOperationResult(false, get);
                 String response = get.getResponseBodyAsString();
                 Log_OC.e(TAG, "Failed response while getting users/groups from the server ");
                 if (response != null) {

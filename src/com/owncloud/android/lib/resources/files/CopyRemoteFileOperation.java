@@ -129,15 +129,8 @@ public class CopyRemoteFileOperation extends RemoteOperation {
                 /// for other errors that could be explicitly handled, check first:
                 /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
 
-            } else if (status == 400) {
-                result = new RemoteOperationResult(copyMethod.succeeded(),
-                        copyMethod.getResponseBodyAsString(), status);
             } else {
-                result = new RemoteOperationResult(
-                        isSuccess(status),    // copy.succeeded()? trustful?
-                        status,
-                        copyMethod.getResponseHeaders()
-                );
+                result = new RemoteOperationResult(isSuccess(status), copyMethod);
                 client.exhaustResponse(copyMethod.getResponseBodyAsStream());
             }
 
@@ -196,11 +189,7 @@ public class CopyRemoteFileOperation extends RemoteOperation {
         if (failFound) {
             result = new RemoteOperationResult(ResultCode.PARTIAL_COPY_DONE);
         } else {
-            result = new RemoteOperationResult(
-                    true,
-                    HttpStatus.SC_MULTI_STATUS,
-                    copyMethod.getResponseHeaders()
-            );
+            result = new RemoteOperationResult(true, copyMethod);
         }
 
         return result;

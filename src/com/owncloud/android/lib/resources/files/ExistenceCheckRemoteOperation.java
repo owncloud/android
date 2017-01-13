@@ -96,7 +96,12 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
             client.exhaustResponse(head.getResponseBodyAsStream());
             boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) ||
                     (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
-            result = new RemoteOperationResult(success, status, head.getResponseHeaders());
+            result = new RemoteOperationResult(
+                success,
+                status,
+                head.getStatusText(),
+                head.getResponseHeaders()
+            );
             Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") +

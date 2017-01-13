@@ -45,176 +45,163 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
  * in the same account.
- * 
+ * <p>
  * Allows renaming the moving file/folder at the same time.
- * 
+ *
  * @author David A. Velasco
  */
 public class MoveRemoteFileOperation extends RemoteOperation {
 
-	private static final String TAG = MoveRemoteFileOperation.class.getSimpleName();
+    private static final String TAG = MoveRemoteFileOperation.class.getSimpleName();
 
-	private static final int MOVE_READ_TIMEOUT = 600000;
-	private static final int MOVE_CONNECTION_TIMEOUT = 5000;
+    private static final int MOVE_READ_TIMEOUT = 600000;
+    private static final int MOVE_CONNECTION_TIMEOUT = 5000;
 
     private String mSrcRemotePath;
     private String mTargetRemotePath;
 
-	private boolean mOverwrite;
-    
-    
+    private boolean mOverwrite;
+
+
     /**
      * Constructor.
-     * 
+     * <p>
      * TODO Paths should finish in "/" in the case of folders. ?
-     * 
-     * @param srcRemotePath		Remote path of the file/folder to move.  
-     * @param targetRemotePath	Remove path desired for the file/folder after moving it.
+     *
+     * @param srcRemotePath    Remote path of the file/folder to move.
+     * @param targetRemotePath Remove path desired for the file/folder after moving it.
      */
-	public MoveRemoteFileOperation(
-			String srcRemotePath, String targetRemotePath, boolean overwrite
-			) {
-		
-		mSrcRemotePath = srcRemotePath;
-		mTargetRemotePath = targetRemotePath;
-		mOverwrite = overwrite;
-	}
+    public MoveRemoteFileOperation(
+        String srcRemotePath, String targetRemotePath, boolean overwrite
+    ) {
 
-	
-	 /**
+        mSrcRemotePath = srcRemotePath;
+        mTargetRemotePath = targetRemotePath;
+        mOverwrite = overwrite;
+    }
+
+
+    /**
      * Performs the rename operation.
-     * 
-     * @param   client      Client object to communicate with the remote ownCloud server.
+     *
+     * @param client Client object to communicate with the remote ownCloud server.
      */
-	@Override
-	protected RemoteOperationResult run(OwnCloudClient client) {
+    @Override
+    protected RemoteOperationResult run(OwnCloudClient client) {
 
-		OwnCloudVersion version = client.getOwnCloudVersion();
-		boolean versionWithForbiddenChars =
-                (version != null && version.isVersionWithForbiddenCharacters());
+        OwnCloudVersion version = client.getOwnCloudVersion();
+        boolean versionWithForbiddenChars =
+            (version != null && version.isVersionWithForbiddenCharacters());
 
-    	/// check parameters
+        /// check parameters
         if (!FileUtils.isValidPath(mTargetRemotePath, versionWithForbiddenChars)) {
-        	return new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
+            return new RemoteOperationResult(ResultCode.INVALID_CHARACTER_IN_NAME);
         }
-        
+
         if (mTargetRemotePath.equals(mSrcRemotePath)) {
-        	// nothing to do!
+            // nothing to do!
             return new RemoteOperationResult(ResultCode.OK);
         }
 
         if (mTargetRemotePath.startsWith(mSrcRemotePath)) {
-        	return new RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
+            return new RemoteOperationResult(ResultCode.INVALID_MOVE_INTO_DESCENDANT);
         }
-        
+
 
         /// perform remote operation
-		//LocalMoveMethod move = null;
-		MoveMethod move = null;
-		RemoteOperationResult result = null;
+        MoveMethod move = null;
+        RemoteOperationResult result = null;
         try {
             move = new MoveMethod(
-            		client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath),
-            		client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
-            		mOverwrite
-    		);
+                client.getWebdavUri() + WebdavUtils.encodePath(mSrcRemotePath),
+                client.getWebdavUri() + WebdavUtils.encodePath(mTargetRemotePath),
+                mOverwrite
+            );
             int status = client.executeMethod(move, MOVE_READ_TIMEOUT, MOVE_CONNECTION_TIMEOUT);
-            
-            /// process response
-        	if (status == HttpStatus.SC_MULTI_STATUS) {
-        		result = processPartialError(move);
-        		
-        	} else if (status == HttpStatus.SC_PRECONDITION_FAILED && !mOverwrite) {
-        		
-        		result = new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
-        		client.exhaustResponse(move.getResponseBodyAsStream());
 
-        		
-    		/// for other errors that could be explicitly handled, check first:
-    		/// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
-        		
-        	} else if (status == 400) {
-				result = new RemoteOperationResult(move.succeeded(),
-						move.getResponseBodyAsString(), status);
-			} else {
-					result = new RemoteOperationResult(
-							isSuccess(status), 	// move.succeeded()? trustful?
-							status,
-							move.getResponseHeaders()
-					);
-					client.exhaustResponse(move.getResponseBodyAsStream());
-			}
-            
-            Log.i(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + 
-        		result.getLogMessage());
-            
+            /// process response
+            if (status == HttpStatus.SC_MULTI_STATUS) {
+                result = processPartialError(move);
+
+            } else if (status == HttpStatus.SC_PRECONDITION_FAILED && !mOverwrite) {
+
+                result = new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
+                client.exhaustResponse(move.getResponseBodyAsStream());
+
+
+                /// for other errors that could be explicitly handled, check first:
+                /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
+
+            } else {
+                result = new RemoteOperationResult(isSuccess(status), move);
+                client.exhaustResponse(move.getResponseBodyAsStream());
+            }
+
+            Log.i(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
+                result.getLogMessage());
+
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log.e(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " + 
-        		result.getLogMessage(), e);
-            
+            Log.e(TAG, "Move " + mSrcRemotePath + " to " + mTargetRemotePath + ": " +
+                result.getLogMessage(), e);
+
         } finally {
             if (move != null)
                 move.releaseConnection();
         }
-        	
+
         return result;
-	}
-	
-	
-	/**
-	 *  Analyzes a multistatus response from the OC server to generate an appropriate result.
-	 * 
-	 *  In WebDAV, a MOVE request on collections (folders) can be PARTIALLY successful: some
-	 *  children are moved, some other aren't.
-	 *  
-	 *  According to the WebDAV specification, a multistatus response SHOULD NOT include partial  
-	 *  successes (201, 204) nor for descendants of already failed children (424) in the response 
-	 *  entity. But SHOULD NOT != MUST NOT, so take carefully. 
-	 * 
-	 *  @param 	move	Move operation just finished with a multistatus response
-	 *  @return	A result for the {@link MoveRemoteFileOperation} caller
-	 *  
-	 *  @throws IOException 	If the response body could not be parsed
-	 *  @throws DavException 	If the status code is other than MultiStatus or if obtaining
-	 *  						the response XML document fails
-	 */
-    private RemoteOperationResult processPartialError(MoveMethod move) 
-    		throws IOException, DavException {
-    	// Adding a list of failed descendants to the result could be interesting; or maybe not.
-    	// For the moment, let's take the easy way.
-    	
-    	/// check that some error really occurred  
-    	MultiStatusResponse[] responses = move.getResponseBodyAsMultiStatus().getResponses();
-    	Status[] status = null;
-    	boolean failFound = false;
-    	for (int i = 0; i < responses.length && !failFound; i++ ) {
-    		status = responses[i].getStatus();
-    		failFound = (
-    				status != null && 
-    				status.length > 0 && 
-    				status[0].getStatusCode() > 299
-			);
-    	}
-    	
-    	RemoteOperationResult result;
-    	if (failFound) {
-    		result = new RemoteOperationResult(ResultCode.PARTIAL_MOVE_DONE);
-    	} else {
-    		result = new RemoteOperationResult(
-            		true,
-            		HttpStatus.SC_MULTI_STATUS, 
-            		move.getResponseHeaders()
-    		);
-    	}
-		
-    	return result; 
-    			
-	}
+    }
 
 
-	protected boolean isSuccess(int status) {
+    /**
+     * Analyzes a multistatus response from the OC server to generate an appropriate result.
+     * <p>
+     * In WebDAV, a MOVE request on collections (folders) can be PARTIALLY successful: some
+     * children are moved, some other aren't.
+     * <p>
+     * According to the WebDAV specification, a multistatus response SHOULD NOT include partial
+     * successes (201, 204) nor for descendants of already failed children (424) in the response
+     * entity. But SHOULD NOT != MUST NOT, so take carefully.
+     *
+     * @param move Move operation just finished with a multistatus response
+     * @throws IOException  If the response body could not be parsed
+     * @throws DavException If the status code is other than MultiStatus or if obtaining
+     *                      the response XML document fails
+     * @return A result for the {@link MoveRemoteFileOperation} caller
+     */
+    private RemoteOperationResult processPartialError(MoveMethod move)
+        throws IOException, DavException {
+        // Adding a list of failed descendants to the result could be interesting; or maybe not.
+        // For the moment, let's take the easy way.
+
+        /// check that some error really occurred
+        MultiStatusResponse[] responses = move.getResponseBodyAsMultiStatus().getResponses();
+        Status[] status = null;
+        boolean failFound = false;
+        for (int i = 0; i < responses.length && !failFound; i++) {
+            status = responses[i].getStatus();
+            failFound = (
+                status != null &&
+                    status.length > 0 &&
+                    status[0].getStatusCode() > 299
+            );
+        }
+
+        RemoteOperationResult result;
+        if (failFound) {
+            result = new RemoteOperationResult(ResultCode.PARTIAL_MOVE_DONE);
+        } else {
+            result = new RemoteOperationResult(true, move);
+        }
+
+        return result;
+
+    }
+
+
+    protected boolean isSuccess(int status) {
         return status == HttpStatus.SC_CREATED || status == HttpStatus.SC_NO_CONTENT;
     }
-        
+
 }

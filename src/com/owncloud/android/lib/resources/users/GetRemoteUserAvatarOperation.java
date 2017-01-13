@@ -143,15 +143,15 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 }
 
                 // Result
-                result = new RemoteOperationResult(true, status, get.getResponseHeaders());
+                result = new RemoteOperationResult(true, get);
                 ResultData resultData = new ResultData(bos.toByteArray(), mimeType, etag);
                 ArrayList<Object> data = new ArrayList<Object>();
                 data.add(resultData);
                 result.setData(data);
 
             } else {
+                result = new RemoteOperationResult(false, get);
                 client.exhaustResponse(get.getResponseBodyAsStream());
-                result = new RemoteOperationResult(false, status, get.getResponseHeaders());
             }
 
         } catch (Exception e) {
