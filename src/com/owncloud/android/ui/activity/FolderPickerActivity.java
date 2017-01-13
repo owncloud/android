@@ -28,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -394,12 +393,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             refreshListOfFilesFragment();
         } else {
             try {
-                Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Snackbar.LENGTH_LONG
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
                 );
-                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message " , e);
@@ -439,16 +435,12 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     
                         if (currentDir == null) {
                             // current folder was removed from the server
-                            Snackbar snackbar = Snackbar.make(
-                                findViewById(android.R.id.content),
+                            showSnackMessage(
                                 String.format(
                                     getString(R.string.sync_current_folder_was_removed),
                                     getCurrentFolder().getFileName()
-                                ),
-                                Snackbar.LENGTH_LONG
+                                )
                             );
-                            snackbar.show();
-
                             browseToRoot();
                             
                         } else {

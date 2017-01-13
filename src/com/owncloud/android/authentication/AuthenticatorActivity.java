@@ -94,7 +94,6 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SamlWebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 
 import java.security.cert.X509Certificate;
@@ -1901,13 +1900,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     public void onFailedSavingCertificate() {
         dismissDialog(SAML_DIALOG_TAG);
-
-        Snackbar snackbar = Snackbar.make(
-            findViewById(android.R.id.content),
-            R.string.ssl_validator_not_saved,
-            Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
+        showSnackMessage(R.string.ssl_validator_not_saved);
     }
 
     @Override
@@ -1985,12 +1978,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         dialog.show(ft, CREDENTIALS_DIALOG_TAG);
 
         if (!mIsFirstAuthAttempt) {
-            Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                getText(R.string.saml_authentication_wrong_pass),
-                Snackbar.LENGTH_LONG
-            );
-            snackbar.show();
+            showSnackMessage(R.string.saml_authentication_wrong_pass);
 
         } else {
             mIsFirstAuthAttempt = false;
@@ -2003,5 +1991,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     public void doNegativeAuthenticatioDialogClick(){
         mIsFirstAuthAttempt = true;
     }
+
+
+    private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
+    }
+
 
 }

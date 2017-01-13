@@ -64,16 +64,16 @@ public class UpdateOCVersionOperation extends RemoteOperation {
         String statUrl = accountMngr.getUserData(mAccount, Constants.KEY_OC_BASE_URL);
         statUrl += AccountUtils.STATUS_PATH;
         RemoteOperationResult result = null;
-        GetMethod get = null;
+        GetMethod getMethod = null;
         try {
-            get = new GetMethod(statUrl);
-            int status = client.executeMethod(get);
+            getMethod = new GetMethod(statUrl);
+            int status = client.executeMethod(getMethod);
             if (status != HttpStatus.SC_OK) {
-                result = new RemoteOperationResult(false, get);
-                client.exhaustResponse(get.getResponseBodyAsStream());
+                result = new RemoteOperationResult(false, getMethod);
+                client.exhaustResponse(getMethod.getResponseBodyAsStream());
 
             } else {
-                String response = get.getResponseBodyAsString();
+                String response = getMethod.getResponseBodyAsString();
                 if (response != null) {
                     JSONObject json = new JSONObject(response);
                     if (json != null && json.getString("version") != null) {
@@ -107,8 +107,8 @@ public class UpdateOCVersionOperation extends RemoteOperation {
             Log_OC.e(TAG, "Check for update of ownCloud server version at " + client.getWebdavUri() + ": " + result.getLogMessage(), e);
             
         } finally {
-            if (get != null) 
-                get.releaseConnection();
+            if (getMethod != null)
+                getMethod.releaseConnection();
         }
         return result;
     }

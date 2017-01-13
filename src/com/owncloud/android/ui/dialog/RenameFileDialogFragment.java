@@ -112,12 +112,7 @@ public class RenameFileDialogFragment
                     .getText().toString().trim();
             
             if (newFileName.length() <= 0) {
-                Snackbar snackbar = Snackbar.make(
-                    getActivity().findViewById(android.R.id.content),
-                    R.string.filename_empty,
-                    Snackbar.LENGTH_LONG
-                );
-                snackbar.show();
+                showSnackMessage(R.string.filename_empty);
                 return;
             }
 
@@ -131,12 +126,7 @@ public class RenameFileDialogFragment
                 } else {
                     messageId = R.string.filename_forbidden_characters;
                 }
-                Snackbar snackbar = Snackbar.make(
-                    getActivity().findViewById(android.R.id.content),
-                    messageId,
-                    Snackbar.LENGTH_LONG
-                );
-                snackbar.show();
+                showSnackMessage(messageId);
                 return;
             }
 
@@ -145,4 +135,19 @@ public class RenameFileDialogFragment
 
         }
     }
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view of the parent Activity
+     *
+     * @param messageResource       Message to show.
+     */
+    private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+            getActivity().findViewById(android.R.id.content),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
+    }
+
 }

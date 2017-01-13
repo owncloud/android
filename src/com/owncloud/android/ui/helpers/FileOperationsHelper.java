@@ -27,7 +27,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 
@@ -117,29 +116,22 @@ public class FileOperationsHelper {
                             )
                     );
                 } catch (ActivityNotFoundException anfe) {
-                    showNoAppForFileType();
+                    mFileActivity.showSnackMessage(
+                        mFileActivity.getString(
+                            R.string.file_list_no_app_for_file_type
+                        )
+                    );
                 }
             } else {
-                showNoAppForFileType();
+                mFileActivity.showSnackMessage(
+                    mFileActivity.getString(R.string.file_list_no_app_for_file_type)
+                );
             }
 
         } else {
             Log_OC.e(TAG, "Trying to open a NULL OCFile");
         }
     }
-
-    /**
-     * Displays a toast stating that no application could be found to open the file.
-     */
-    private void showNoAppForFileType() {
-        Snackbar snackbar = Snackbar.make(
-            mFileActivity.findViewById(android.R.id.content),
-            R.string.file_list_no_app_for_file_type,
-            Snackbar.LENGTH_LONG
-        );
-        snackbar.show();
-    }
-
 
     /**
      * Helper method to share a file via a public link. Starts a request to do it in {@link OperationsService}
@@ -167,12 +159,9 @@ public class FileOperationsHelper {
 
         } else {
             // Show a Message
-            Snackbar snackbar = Snackbar.make(
-                mFileActivity.findViewById(android.R.id.content),
-                R.string.share_link_no_support_share_api,
-                Snackbar.LENGTH_LONG
+            mFileActivity.showSnackMessage(
+                mFileActivity.getString(R.string.share_link_no_support_share_api)
             );
-            snackbar.show();
         }
     }
 
@@ -192,12 +181,9 @@ public class FileOperationsHelper {
             }
         } else {
             // Show a Message
-            Snackbar snackbar = Snackbar.make(
-                mFileActivity.findViewById(android.R.id.content),
-                R.string.share_link_no_support_share_api,
-                Snackbar.LENGTH_LONG
+            mFileActivity.showSnackMessage(
+                mFileActivity.getString(R.string.share_link_no_support_share_api)
             );
-            snackbar.show();
         }
     }
 
@@ -284,12 +270,9 @@ public class FileOperationsHelper {
 
         } else {
             // Show a Message
-            Snackbar snackbar = Snackbar.make(
-                mFileActivity.findViewById(android.R.id.content),
-                R.string.share_link_no_support_share_api,
-                Snackbar.LENGTH_LONG
+            mFileActivity.showSnackMessage(
+                mFileActivity.getString(R.string.share_link_no_support_share_api)
             );
-            snackbar.show();
         }
     }
 
@@ -464,12 +447,9 @@ public class FileOperationsHelper {
     public void toggleAvailableOffline(OCFile file, boolean isAvailableOffline) {
         if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
             /// files descending of an av-offline folder can't be toggled
-            Snackbar snackbar = Snackbar.make(
-                mFileActivity.findViewById(android.R.id.content),
-                R.string.available_offline_inherited_msg,
-                Snackbar.LENGTH_LONG
+            mFileActivity.showSnackMessage(
+                mFileActivity.getString(R.string.available_offline_inherited_msg)
             );
-            snackbar.show();
 
         } else {
             /// update local property, for file and all its descendents (if folder)
@@ -496,12 +476,9 @@ public class FileOperationsHelper {
                 }
             } else {
                 /// unexpected error
-                Snackbar snackbar = Snackbar.make(
-                    mFileActivity.findViewById(android.R.id.content),
-                    R.string.common_error_unknown,
-                    Snackbar.LENGTH_LONG
+                mFileActivity.showSnackMessage(
+                    mFileActivity.getString(R.string.common_error_unknown)
                 );
-                snackbar.show();
             }
         }
     }

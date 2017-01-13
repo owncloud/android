@@ -38,7 +38,6 @@ import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -547,12 +546,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
             populateDirectoryList();
         } else {
             try {
-                Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Snackbar.LENGTH_LONG
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
                 );
-                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);
@@ -670,15 +666,12 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
                         if (currentDir == null) {
                             // current folder was removed from the server
-                            Snackbar snackbar = Snackbar.make(
-                                findViewById(android.R.id.content),
+                            showSnackMessage(
                                 String.format(
                                     getString(R.string.sync_current_folder_was_removed),
                                     getCurrentFolder().getFileName()
-                                ),
-                                Snackbar.LENGTH_LONG
+                                )
                             );
-                            snackbar.show();
                             browseToRoot();
 
                         } else {

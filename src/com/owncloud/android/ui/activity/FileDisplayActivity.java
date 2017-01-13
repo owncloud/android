@@ -51,7 +51,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -679,12 +678,7 @@ public class FileDisplayActivity extends HookActivity
 
         } else {
             Log_OC.d(TAG, "User clicked on 'Update' with no selection");
-            Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                R.string.filedisplay_no_file_selected,
-                Snackbar.LENGTH_LONG
-            );
-            snackbar.show();
+            showSnackMessage(getString(R.string.filedisplay_no_file_selected));
         }
     }
 
@@ -905,17 +899,13 @@ public class FileDisplayActivity extends HookActivity
                                 getStorageManager().getFileByPath(getCurrentDir().getRemotePath());
 
                         if (currentDir == null) {
-                            // current folder was removed from the server 
-                            Snackbar snackbar = Snackbar.make(
-                                findViewById(android.R.id.content),
+                            // current folder was removed from the server
+                            showSnackMessage(
                                 String.format(
                                     getString(R.string.sync_current_folder_was_removed),
                                     synchFolderRemotePath
-                                ),
-                                Snackbar.LENGTH_LONG
+                                )
                             );
-                            snackbar.show();
-
                             browseToRoot();
 
                         } else {
@@ -1059,15 +1049,12 @@ public class FileDisplayActivity extends HookActivity
                     );
                     if (renamedInUpload) {
                         String newName = (new File(uploadedRemotePath)).getName();
-                        Snackbar snackbar = Snackbar.make(
-                            findViewById(android.R.id.content),
+                        showSnackMessage(
                             String.format(
                                 getString(R.string.filedetails_renamed_in_upload_msg),
                                 newName
-                            ),
-                            Snackbar.LENGTH_LONG
+                            )
                         );
-                        snackbar.show();
                         updateActionBarTitleAndHomeButton(getFile());
                     }
                 }
@@ -1399,12 +1386,9 @@ public class FileDisplayActivity extends HookActivity
     private void onRemoveFileOperationFinish(RemoveFileOperation operation,
                                              RemoteOperationResult result) {
 
-        Snackbar snackbar = Snackbar.make(
-            findViewById(android.R.id.content),
-            ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-            Snackbar.LENGTH_LONG
+        showSnackMessage(
+            ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
         );
-        snackbar.show();
 
         if (result.isSuccess()) {
             OCFile removedFile = operation.getFile();
@@ -1444,12 +1428,9 @@ public class FileDisplayActivity extends HookActivity
             refreshListOfFilesFragment(true);
         } else {
             try {
-                Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Snackbar.LENGTH_LONG
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
                 );
-                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);
@@ -1469,12 +1450,9 @@ public class FileDisplayActivity extends HookActivity
             refreshListOfFilesFragment(true);
         } else {
             try {
-                Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Snackbar.LENGTH_LONG
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
                 );
-                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);
@@ -1506,12 +1484,9 @@ public class FileDisplayActivity extends HookActivity
             }
 
         } else {
-            Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                Snackbar.LENGTH_LONG
+            showSnackMessage(
+                ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
             );
-            snackbar.show();
 
             if (result.isSslRecoverableException()) {
                 mLastSslUntrustedServerResult = result;
@@ -1535,12 +1510,9 @@ public class FileDisplayActivity extends HookActivity
                 }
 
             } else if (getSecondFragment() == null) {
-                Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Snackbar.LENGTH_LONG
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
                 );
-                snackbar.show();
             }
         }
 
@@ -1570,12 +1542,9 @@ public class FileDisplayActivity extends HookActivity
             refreshListOfFilesFragment(true);
         } else {
             try {
-                Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Snackbar.LENGTH_LONG
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
                 );
-                snackbar.show();
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);

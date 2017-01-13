@@ -79,8 +79,6 @@ public class Preferences extends PreferenceActivity {
     private Preference pAboutApp;
     private AppCompatDelegate mDelegate;
 
-    private PreferenceCategory mAccountsPrefCategory = null;
-
     private String mUploadPath;
     private String mUploadVideoPath;
     private String mSourcePath;
@@ -494,12 +492,7 @@ public class Preferences extends PreferenceActivity {
                 }
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
                 appPrefs.commit();
-                Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    R.string.pass_code_stored,
-                    Snackbar.LENGTH_LONG
-                );
-                snackbar.show();
+                showSnackMessage(R.string.pass_code_stored);
             }
 
         } else if (requestCode == ACTION_CONFIRM_PASSCODE && resultCode == RESULT_OK) {
@@ -509,13 +502,7 @@ public class Preferences extends PreferenceActivity {
                         .getDefaultSharedPreferences(getApplicationContext()).edit();
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
                 appPrefs.commit();
-
-                Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    R.string.pass_code_removed,
-                    Snackbar.LENGTH_LONG
-                );
-                snackbar.show();
+                showSnackMessage(R.string.pass_code_removed);
             }
         }
     }
@@ -681,6 +668,21 @@ public class Preferences extends PreferenceActivity {
         SharedPreferences.Editor editor = appPrefs.edit();
         editor.putString("instant_upload_source_path", mSourcePath);
         editor.commit();
+    }
+
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view
+     *
+     * @param messageResource       Message to show.
+     */
+    private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
     }
 
 }
