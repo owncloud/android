@@ -86,6 +86,7 @@
   <string name="uploader_upload_failed_credentials_error">Feil ved opplasting, logg inn på nytt</string>
   <string name="uploads_view_title">Opplastingar</string>
   <string name="uploads_view_group_failed_uploads">Feil (klikk for å prøva på nytt)</string>
+  <string name="uploads_view_upload_status_cancelled">Avbrote</string>
   <string name="uploads_view_upload_status_unknown_fail">Ukjend feil</string>
   <string name="downloader_download_in_progress_ticker">Lastar ned …</string>
   <string name="downloader_download_in_progress_content">%1$d%% lastar ned %2$s</string>

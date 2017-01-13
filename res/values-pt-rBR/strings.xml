@@ -419,6 +419,7 @@
   <string name="local_file_not_found_toast">O arquivo não foi encontrado no sistema de arquivos local</string>
   <string name="confirmation_remove_files_alert">Você realmente deseja remover os itens selecionados?</string>
   <string name="confirmation_remove_folders_alert">Você realmente deseja remover os itens selecionados e seus conteúdos?</string>
+  <string name="maintenance_mode">Servidor em modo de manutenção</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

@@ -419,6 +419,7 @@
   <string name="local_file_not_found_toast">הקובץ לא נמצא במערכת הקבצים המקומית</string>
   <string name="confirmation_remove_files_alert">האם באמת להסיר את הפריטים הנבחרים?</string>
   <string name="confirmation_remove_folders_alert">האם באמת להסיר את הפריטים הנבחרים ואת התוכן שלהם?</string>
+  <string name="maintenance_mode">השרת במצב תחזוקה</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>
