@@ -94,31 +94,7 @@
                 android:layout_gravity="start"
                 android:text="@string/share_with_user_section_title"
                 android:textColor="@color/color_accent" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/shareNoUsers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/standard_half_padding"
-                    android:text="@string/share_no_users"
-                    android:textSize="12sp" />
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/addUserButton"
-                    style="@style/ownCloud.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:contentDescription="shareAddUserButton"
-                    android:text="@string/share_add_user_or_group"
-                    android:theme="@style/Button.Primary" />
-            </LinearLayout>
-
+            
             <ListView
                 android:id="@+id/shareUsersList"
                 android:layout_width="match_parent"
@@ -127,6 +103,24 @@
                 android:paddingLeft="@dimen/standard_half_padding"
                 android:scrollbars="vertical"
                 android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/shareNoUsers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/standard_half_padding"
+                android:text="@string/share_no_users"
+                android:textSize="12sp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/addUserButton"
+                style="@style/ownCloud.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="shareAddUserButton"
+                android:text="@string/share_add_user_or_group"
+                android:theme="@style/Button.Primary" />
 
         </LinearLayout>
 
