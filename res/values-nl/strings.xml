@@ -422,6 +422,7 @@ Neem contact op met uw beheerder</string>
   <string name="local_file_not_found_toast">Het bestand is niet te vinden binnen het lokale bestandssysteem.</string>
   <string name="confirmation_remove_files_alert">Wilt u werkelijk de geselecteerde onderwerpen verwijderen?</string>
   <string name="confirmation_remove_folders_alert">Wilt u werkelijk de geselecteerde onderwerpen en de inhoud ervan verwijderen?</string>
+  <string name="maintenance_mode">Server in onderhoudsmodus</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>

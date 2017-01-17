@@ -72,6 +72,7 @@
   <string name="file_list_loading">Loading…</string>
   <string name="file_list_no_app_for_file_type">No app found for file type!</string>
   <string name="local_file_list_empty">There are no files in this folder.</string>
+  <string name="local_file_list_empty_just_folders">There are no folders in this folder.</string>
   <string name="upload_list_empty">No uploads available.</string>
   <string name="file_list_folder">folder</string>
   <string name="file_list_folders">folders</string>
@@ -228,9 +229,11 @@
   <string name="confirmation_remove_file_alert">Do you really want to remove %1$s?</string>
   <string name="confirmation_remove_folder_alert">Do you really want to remove %1$s and its contents?</string>
   <string name="confirmation_remove_local">Local only</string>
+  <string name="confirmation_remove_account_alert">Do you really want to remove the account %1$s?</string>
   <string name="remove_success_msg">Removal succeeded</string>
   <string name="remove_fail_msg">Removal failed</string>
   <string name="rename_dialog_title">Enter a new name</string>
+  <string name="available_offline_inherited_msg">A folder that contains this file is available offline</string>
   <string name="rename_local_fail_msg">Local copy could not be renamed; try a different name</string>
   <string name="rename_server_fail_msg">Rename could not be completed</string>
   <string name="sync_file_fail_msg">Remote file could not be checked</string>
@@ -366,6 +369,9 @@
   <string name="file_list__footer__files">%1$d files</string>
   <string name="file_list__footer__files_and_folder">%1$d files, 1 folder</string>
   <string name="file_list__footer__files_and_folders">%1$d files, %2$d folders</string>
+  <string name="prefs_instant_upload_source_path_title">Camera folder (%1$s)</string>
+  <string name="prefs_instant_upload_source_path_title_required">required</string>
+  <string name="prefs_instant_upload_source_path_title_optional">optional</string>
   <string name="prefs_instant_behaviour_dialogTitle">Original file will be...</string>
   <string name="prefs_instant_behaviour_title">Original file will be...</string>
   <string name="upload_copy_files">Copy file</string>
@@ -413,6 +419,7 @@
   <string name="local_file_not_found_toast">The file was not found in the local file system</string>
   <string name="confirmation_remove_files_alert">Do you really want to remove the selected items?</string>
   <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
+  <string name="maintenance_mode">Server in maintenance mode</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selected</item>
     <item quantity="other">%d selected</item>

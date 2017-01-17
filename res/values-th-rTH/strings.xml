@@ -417,6 +417,7 @@
   <string name="local_file_not_found_toast">ไม่พบไฟล์ที่ไฟล์ระบบต้นทาง</string>
   <string name="confirmation_remove_files_alert">คุณมั่นใจว่าต้องการลบรายการที่เลือก?</string>
   <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>
+  <string name="maintenance_mode">เซิร์ฟเวอร์อยู่ในโหมดบำรุงรักษา</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>
