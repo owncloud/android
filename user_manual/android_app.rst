@@ -15,20 +15,6 @@ some advantages over the Web interface:
 * Easily add files from your device to ownCloud
 * Two-factor authentication
 
-New In Version 2.0.0
---------------------
-
-This release contains a number of improvements, including:
-
-* View status of uploads and manage failures
-* Federated sharing is now supported with users on ownCloud servers
-* UI improvements, following Material Design lines
-* Share-by-link folders are editable
-* Instant uploads automatically stop when Wifi connection is interrupted
-* Server certificate warnings are supported
-* Improvement when other apps send files to ownCloud
-* Bug fixes
-
 Upgrading
 ---------
 
