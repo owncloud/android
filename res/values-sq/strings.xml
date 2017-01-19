@@ -380,6 +380,7 @@
   <string name="share_file">Ndajeni %1$s</string>
   <string name="share_with_user_section_title">Ndajeni me përdorues dhe grupe</string>
   <string name="share_no_users">Ende pa të dhëna të ndara me përdorues</string>
+  <string name="share_incompatible_version">Që të ndahen gjëra me përdorues të tjerë, shërbyesi juaj lypset të jetë të paktën nën versionin 8.2</string>
   <string name="share_add_user_or_group">Shtoni përdorues ose grup</string>
   <string name="share_via_link_section_title">Lidhje ndarjeje</string>
   <string name="share_via_link_expiration_date_label">Caktoni datë skadimi</string>
