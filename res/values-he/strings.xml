@@ -382,6 +382,7 @@
   <string name="share_file">שיתוף %1$s</string>
   <string name="share_with_user_section_title">שיתוף עם משתמשים וקבוצות</string>
   <string name="share_no_users">עדיין לא שותף מידע עם משתמשים</string>
+  <string name="share_incompatible_version">לשיתוף עם משתמשים אחרים, גרסת השרת שלך חייבת להיות לפחות 8.2</string>
   <string name="share_add_user_or_group">הוספת משתמש או קבוצה</string>
   <string name="share_via_link_section_title">קישור לשיתוף</string>
   <string name="share_via_link_expiration_date_label">הגדרת תאריך תפוגה</string>

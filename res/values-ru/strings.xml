@@ -383,6 +383,7 @@
   <string name="share_file">Поделиться %1$s</string>
   <string name="share_with_user_section_title">Поделиться с пользователями и группами</string>
   <string name="share_no_users">Нет данных используемых совместно с другими пользователями</string>
+  <string name="share_incompatible_version">Чтобы предоставлять доступ другим пользователям, ваш сервер должен как минимум иметь версию 8.2.</string>
   <string name="share_add_user_or_group">Добавить пользователя или группу</string>
   <string name="share_via_link_section_title">Поделиться ссылкой</string>
   <string name="share_via_link_expiration_date_label">Установить срок действия</string>
