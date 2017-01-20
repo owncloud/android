@@ -335,7 +335,9 @@ public class ErrorMessageAdapter {
                 message = res.getString(R.string.maintenance_mode);
 
             } else if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
-                message = res.getString(R.string.ssl_validator_header);
+                message = res.getString(
+                    R.string.uploads_view_upload_status_failed_ssl_certificate_not_trusted
+                );
 
             } else if (result.getHttpPhrase() != null && result.getHttpPhrase().length() > 0) {
                 // last chance: error message from server
