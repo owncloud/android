@@ -465,6 +465,7 @@
     <string name="confirmation_remove_files_alert">Do you really want to remove the selected items?</string>
     <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
     <string name="maintenance_mode">Server in maintenance mode</string>
+    <string name="failed_upload_quota_exceeded_text">Not enough free space</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
