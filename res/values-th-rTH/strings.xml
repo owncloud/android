@@ -380,6 +380,7 @@
   <string name="share_file">แชร์ %1$s</string>
   <string name="share_with_user_section_title">แชร์กับผู้ใช้และกลุ่ม</string>
   <string name="share_no_users">ยังไม่มีข้อมูลที่แชร์กับผู้ใช้ในตอนนี้</string>
+  <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่นๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นรุ่น 8.2 ขึ้นไป</string>
   <string name="share_add_user_or_group">เพิ่มชื่อผู้ใช้งาน หรือชื่อกลุ่ม</string>
   <string name="share_via_link_section_title">แชร์ลิงค์</string>
   <string name="share_via_link_expiration_date_label">กำหนดวันที่หมดอายุ</string>
