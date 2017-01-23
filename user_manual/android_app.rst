@@ -252,15 +252,50 @@ Use the **Settings** screen to control your ownCloud applications settings and f
 .. figure:: images/android-settings-page.jpg
    :alt: the Settings screen.
 
-The **Instant Uploads** section creates a directory, file:`/InstantUpload`, and
-any photos or videos created with your Android device's camera are instantly
-uploaded to this directory. 
-You also have the option to choose any other existing directory, or to create
-a new one. 
-Another nice option is **Upload Pictures/Video via WiFi Only**, to conserve
-your mobile data usage.
-You can also set a passcode lock to further protect your files and folders.
+Instant Uploads
+^^^^^^^^^^^^^^^
 
+If you take photos or create videos with your Android device, they can be
+instantly uploaded to your ownCloud server. 
+To enable this, under "Instant Uploads" tap one or both of:
+
+- "Instant picture uploads" 
+- "Instant video uploads"
+
+.. figure:: images/android-settings-instant-upload.png
+   :alt: the Settings screen.
+
+These start the process of uploading any new photos and/or videos which you
+create.
+
+If you’re concerned about mobile data usage, or have an account with limited
+data available, you can limit uploading to only when a WiFi is in use. 
+This option is visible once you've enabled the respective option.
+For photos tap **"Upload pictures via wifi only"**:sup:`1`. 
+For videos tap **"Upload videos via wifi only"**:sup:`2`
+
+.. figure:: images/android-settings-enable-instant-upload.png
+   :alt: Enabling instant upload picture and video 
+
+By default, photos and videos are uploaded to a directory called
+file:`/InstantUpload`. 
+However, you also have the option to choose any other existing directory, or
+to create a new one. 
+
+To change the upload location, tap on **"Upload path"** under either photos or
+videos, and choose one of the folders which is displayed. 
+
+To create a new folder, click the three dots in the top right-hand corner. 
+This will display the menu option: **"New folder"**. 
+Tap it and enter the name of the new folder in the **"Folder name"** dialog.
+Then, tap the newly created folder and tap **"Choose"** in the bottom right-hand
+corner. 
+You'll see that the path has been updated.
+
+Passcode Locks
+^^^^^^^^^^^^^^
+
+You can also set a passcode lock to further protect your files and folders.
 The bottom section of the **Settings** screen has links to:
 
 - Help
