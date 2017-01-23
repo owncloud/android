@@ -25,6 +25,7 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.SwitchCompat;
@@ -39,7 +40,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -236,7 +236,12 @@ public class ShareFileFragment extends Fragment
                     mListener.showSearchUsersAndGroups();
                 } else {
                     String message = getString(R.string.share_sharee_unavailable);
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(
+                        getActivity().findViewById(android.R.id.content),
+                        message,
+                        Snackbar.LENGTH_LONG
+                    );
+                    snackbar.show();
                 }
             }
         });

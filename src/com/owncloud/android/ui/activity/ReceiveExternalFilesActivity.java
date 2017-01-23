@@ -50,7 +50,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
@@ -74,7 +73,7 @@ import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
-import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.util.ArrayList;
@@ -547,10 +546,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
             populateDirectoryList();
         } else {
             try {
-                Toast msg = Toast.makeText(this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
-                msg.show();
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                );
 
             } catch (NotFoundException e) {
                 Log_OC.e(TAG, "Error while trying to show fail message ", e);
@@ -668,12 +666,12 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
                         if (currentDir == null) {
                             // current folder was removed from the server
-                            Toast.makeText(context,
-                                    String.format(
-                                            getString(R.string.sync_current_folder_was_removed),
-                                            getCurrentFolder().getFileName()),
-                                    Toast.LENGTH_LONG)
-                                    .show();
+                            showSnackMessage(
+                                String.format(
+                                    getString(R.string.sync_current_folder_was_removed),
+                                    getCurrentFolder().getFileName()
+                                )
+                            );
                             browseToRoot();
 
                         } else {

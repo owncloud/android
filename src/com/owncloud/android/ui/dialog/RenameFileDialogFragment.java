@@ -25,6 +25,7 @@ package com.owncloud.android.ui.dialog;
  * 
  *  Triggers the rename operation. 
  */
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -35,7 +36,6 @@ import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -112,10 +112,7 @@ public class RenameFileDialogFragment
                     .getText().toString().trim();
             
             if (newFileName.length() <= 0) {
-                Toast.makeText(
-                        getActivity(),
-                        R.string.filename_empty, 
-                        Toast.LENGTH_LONG).show();
+                showSnackMessage(R.string.filename_empty);
                 return;
             }
 
@@ -129,7 +126,7 @@ public class RenameFileDialogFragment
                 } else {
                     messageId = R.string.filename_forbidden_characters;
                 }
-                Toast.makeText(getActivity(), messageId, Toast.LENGTH_LONG).show();
+                showSnackMessage(messageId);
                 return;
             }
 
@@ -138,4 +135,19 @@ public class RenameFileDialogFragment
 
         }
     }
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view of the parent Activity
+     *
+     * @param messageResource       Message to show.
+     */
+    private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+            getActivity().findViewById(android.R.id.content),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
+    }
+
 }

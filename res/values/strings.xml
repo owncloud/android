@@ -73,7 +73,7 @@
     <string name="file_list_seconds_ago">seconds ago</string>
     <string name="file_list_empty">Nothing in here. Upload something!</string>
     <string name="file_list_loading">Loading&#8230;</string>
-    <string name="file_list_no_app_for_file_type">No app found for file type!</string>
+    <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
     <string name="local_file_list_empty_just_folders">There are no folders in this folder.</string>
     <string name="upload_list_empty">No uploads available.</string>
@@ -118,6 +118,8 @@
     <string name="uploader_upload_failed_ticker">Upload failed</string>
     <string name="uploader_upload_failed_content_single">Upload of %1$s could not be completed</string>
     <string name="uploader_upload_failed_credentials_error">Upload failed, you need to log in again</string>
+    <string name="uploader_upload_failed_ssl_certificate_not_trusted">Server certificate is not trusted</string>
+    <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Server certificate is not trusted</string>
     <string name="uploads_view_title">Uploads</string>
     <string name="uploads_view_group_current_uploads">Current</string>
     <string name="uploads_view_group_failed_uploads">Failed (tap to retry)</string>
@@ -260,7 +262,7 @@
     <string name="oauth_check_onoff">Login with oAuth2</string> 
     <string name="oauth_login_connection">Connecting to oAuth2 server…</string>    
         
-    <string name="ssl_validator_header">The identity of the site could not be verified</string>
+    <string name="ssl_validator_header">The identity of the server could not be verified</string>
     <string name="ssl_validator_reason_cert_not_trusted">- The server certificate is not trusted</string>
     <string name="ssl_validator_reason_cert_expired">- The server certificate expired</string>
     <string name="ssl_validator_reason_cert_not_yet_valid">- The server certificate valid dates are in the future</string>

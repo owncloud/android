@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.ui.dialog;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -28,7 +29,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -112,10 +112,12 @@ public class SharePasswordDialogFragment extends DialogFragment
                 String encodedPassword = URLEncoder.encode(password, "UTF-8");
 
                 if (encodedPassword.length() <= 0) {
-                    Toast.makeText(
-                            getActivity(),
-                            R.string.share_link_empty_password,
-                            Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(
+                        getActivity().findViewById(android.R.id.content),
+                        R.string.share_link_empty_password,
+                        Snackbar.LENGTH_LONG
+                    );
+                    snackbar.show();
                     return;
                 }
 

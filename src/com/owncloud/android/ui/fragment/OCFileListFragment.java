@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.SparseBooleanArray;
@@ -43,7 +44,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -251,7 +251,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     /**
      * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
-     * on the Upload mini FAB for the linked action and {@link Toast} showing the underlying action.
+     * on the Upload mini FAB for the linked action an {@link Snackbar} showing the underlying action.
      */
     private void registerFabUploadListeners() {
         getFabUpload().setOnClickListener(new View.OnClickListener() {
@@ -267,7 +267,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUpload().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(getActivity(), R.string.actionbar_upload, Toast.LENGTH_SHORT).show();
+                showSnackMessage(R.string.actionbar_upload);
                 return true;
             }
         });
@@ -275,7 +275,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     /**
      * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
-     * on the 'Create Dir' mini FAB for the linked action and {@link Toast} showing the underlying action.
+     * on the 'Create Dir' mini FAB for the linked action and {@link Snackbar} showing the underlying action.
      */
     private void registerFabMkDirListeners() {
         getFabMkdir().setOnClickListener(new View.OnClickListener() {
@@ -292,7 +292,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabMkdir().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(getActivity(), R.string.actionbar_mkdir, Toast.LENGTH_SHORT).show();
+                showSnackMessage(R.string.actionbar_mkdir);
                 return true;
             }
         });
@@ -300,7 +300,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     /**
      * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
-     * on the Upload from App mini FAB for the linked action and {@link Toast} showing the underlying action.
+     * on the Upload from App mini FAB for the linked action and {@link Snackbar} showing the underlying action.
      */
     private void registerFabUploadFromAppListeners() {
         getFabUploadFromApp().setOnClickListener(new View.OnClickListener() {
@@ -324,9 +324,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUploadFromApp().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(getActivity(),
-                        R.string.actionbar_upload_from_apps,
-                        Toast.LENGTH_SHORT).show();
+                showSnackMessage(R.string.actionbar_upload_from_apps);
                 return true;
             }
         });
@@ -992,5 +990,19 @@ public class OCFileListFragment extends ExtendedListFragment {
         editor.apply();
     }
 
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view of the parent Activity
+     *
+     * @param messageResource       Message to show.
+     */
+    private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+            getActivity().findViewById(android.R.id.content),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
+    }
 
 }
