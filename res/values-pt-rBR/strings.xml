@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty">Nada aqui. Envie alguma coisa!</string>
   <string name="file_list_loading">Carregando...</string>
-  <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo!</string>
   <string name="local_file_list_empty">Não existe nenhum arquivo nesta pasta.</string>
   <string name="local_file_list_empty_just_folders">Não existem pastas nessa pasta.</string>
   <string name="upload_list_empty">Nenhum arquivo enviado está disponível.</string>
@@ -250,7 +249,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Copiando o arquivo de armazenagem privada</string>
   <string name="oauth_check_onoff">Login com oAuth2</string>
   <string name="oauth_login_connection">Conectando-se a oAuth2 servidor ...</string>
-  <string name="ssl_validator_header">A identidade do site não pode ser verificada</string>
   <string name="ssl_validator_reason_cert_not_trusted">- O certificado do servidor não é confiável</string>
   <string name="ssl_validator_reason_cert_expired">- O certificado do servidor expirou</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- O datas de validade do certificado do servidor estão no futuro</string>

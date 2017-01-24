@@ -108,7 +108,6 @@
   <string name="wait_a_moment">espera un momento</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado ; por favor seleccione el archivo desde una aplicación diferente</string>
   <string name="filedisplay_no_file_selected">ningun archivo electo</string>
-  <string name="ssl_validator_header">La identidad del sitio no pudo ser verificada</string>
   <string name="ssl_validator_reason_cert_not_trusted">-El certificado del servidor no es confiable</string>
   <string name="ssl_validator_reason_cert_expired">-El certificado del servidor está expirado</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">-Las fechas validas para el certificado del servidor son futuras.</string>

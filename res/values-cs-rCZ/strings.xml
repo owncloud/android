@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">před pár sekundami</string>
   <string name="file_list_empty">Žádný obsah. Nahrajte něco!</string>
   <string name="file_list_loading">Načítání...</string>
-  <string name="file_list_no_app_for_file_type">Pro tento typ souboru nebyla nalezena aplikace!</string>
   <string name="local_file_list_empty">V tomto adresáři nejsou žádné soubory.</string>
   <string name="local_file_list_empty_just_folders">V tomto adresáři nejsou žádné podadresáře.</string>
   <string name="upload_list_empty">Nahraná data nejsou dostupná.</string>
@@ -248,7 +247,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopírování souboru z privátního úložiště</string>
   <string name="oauth_check_onoff">Přihlásit se s oAuth2</string>
   <string name="oauth_login_connection">Připojuji se k oAuth2 serveru...</string>
-  <string name="ssl_validator_header">Identitu stránky nelze ověřit</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Certifikát serveru je nedůvěryhodný</string>
   <string name="ssl_validator_reason_cert_expired">- Certifikátu serveru vypršela platnost</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Datum platnosti certifikátu je v budoucnosti</string>

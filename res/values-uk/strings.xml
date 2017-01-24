@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">секунди тому</string>
   <string name="file_list_empty">Тут нічого немає. Відвантажте що-небудь!</string>
   <string name="file_list_loading">Завантаження…</string>
-  <string name="file_list_no_app_for_file_type">Не знайдено програми для цього типу файлу!</string>
   <string name="local_file_list_empty">В цій теці немає файлів.</string>
   <string name="local_file_list_empty_just_folders">Немає тек в цій теці.</string>
   <string name="upload_list_empty">Немає доступних надсилань.</string>
@@ -250,7 +249,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Копіювання файлу з приватного сховища</string>
   <string name="oauth_check_onoff">Увійти через oAuth2</string>
   <string name="oauth_login_connection">Підключення до серверу oAuth2...</string>
-  <string name="ssl_validator_header">Не вдалося перевірити ідентифікацію сайта</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Не довірений сертифікат серверу</string>
   <string name="ssl_validator_reason_cert_expired">- Сертифікат серверу втратив чинність</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Сертифікат серверу занадто новий</string>

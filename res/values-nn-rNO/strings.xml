@@ -119,7 +119,6 @@
   <string name="wait_a_moment">Vent litt</string>
   <string name="filedisplay_unexpected_bad_get_content">Uventa problem ; ver venleg å vel fila frå ein annan app</string>
   <string name="filedisplay_no_file_selected">Inga fil valt</string>
-  <string name="ssl_validator_header">Klarte ikkje å stadfesta identiteten til nettstaden</string>
   <string name="ssl_validator_reason_cert_not_trusted">– Tenarsertifikatet er ikkje klarert</string>
   <string name="ssl_validator_reason_cert_expired">– Tenarsertifikatet er utløpt</string>
   <string name="ssl_validator_reason_hostname_not_verified">– URL-en stemmer ikkje med tenarnamnet i sertifikatet</string>

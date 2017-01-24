@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">sekonda më parë</string>
   <string name="file_list_empty">Këtu nuk ka gjë. Ngarkoni diçka!</string>
   <string name="file_list_loading">Po ngarkohet…</string>
-  <string name="file_list_no_app_for_file_type">S’u gjet aplikacion për llojin e kartelës!</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
   <string name="local_file_list_empty_just_folders">S’ka dosje brenda kësaj dosjeje.</string>
   <string name="upload_list_empty">S’ka ngarkime gati.</string>
@@ -249,7 +248,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Po kopjohet kartelë nga depo private</string>
   <string name="oauth_check_onoff">Hyrje me oAuth2</string>
   <string name="oauth_login_connection">Po lidhet me shërbyesin oAuth2…</string>
-  <string name="ssl_validator_header">Identiteti i sajtit s\’u verifikua dot</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="ssl_validator_reason_cert_expired">- Dëshmia e shërbyesit skadoi</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Datat e vlefshmërisë së dëshmisë së shërbyesit i përkasin të ardhmes</string>

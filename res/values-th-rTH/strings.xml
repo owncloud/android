@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">วินาที ก่อนหน้านี้</string>
   <string name="file_list_empty">ยังไม่มีไฟล์ใดๆเลย ลองอัพโหลดดูสิ!</string>
   <string name="file_list_loading">กำลังโหลด...</string>
-  <string name="file_list_no_app_for_file_type">ไม่พบแอพสำหรับชนิดของไฟล์</string>
   <string name="local_file_list_empty">ยังไม่มีไฟล์ในโฟลเดอร์นี้</string>
   <string name="local_file_list_empty_just_folders">ไม่มีโฟลเดอร์ในโฟลเดอร์นี้</string>
   <string name="upload_list_empty">ไม่พบการอัพโหลดใดๆ</string>
@@ -249,7 +248,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">คัดลอกไฟล์จากพื้นที่จัดเก็บส่วนตัว</string>
   <string name="oauth_check_onoff">เข้าสู่ระบบด้วย oAuth2</string>
   <string name="oauth_login_connection">เชื่อมต่อกับเซิร์ฟเวอร์ oAuth2 ...</string>
-  <string name="ssl_validator_header">ไม่สามารถยืนยันตัวตนของเว็บไซต์ได้</string>
   <string name="ssl_validator_reason_cert_not_trusted">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="ssl_validator_reason_cert_expired">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์หมดอายุแล้ว</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์ยังมีอายุน้อยอยู่</string>

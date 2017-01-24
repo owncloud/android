@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">几秒前</string>
   <string name="file_list_empty">这里还什么都没有。上传些东西吧！</string>
   <string name="file_list_loading">加载中...</string>
-  <string name="file_list_no_app_for_file_type">没有找到程序打开文件格式！</string>
   <string name="local_file_list_empty">在该文件夹中不存在文件。</string>
   <string name="local_file_list_empty_just_folders">在该文件夹中不存在其它文件夹。</string>
   <string name="upload_list_empty">没有可用的上传任务。</string>
@@ -246,7 +245,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">从私有存储中拷贝文件</string>
   <string name="oauth_check_onoff">使用oAuth2登陆</string>
   <string name="oauth_login_connection">连接oAuth2 服务器...</string>
-  <string name="ssl_validator_header">站点身份无法验证</string>
   <string name="ssl_validator_reason_cert_not_trusted">- 不受信任的服务器证书</string>
   <string name="ssl_validator_reason_cert_expired">- 服务器证书过期</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- 服务器证书时间比当前时间还晚</string>

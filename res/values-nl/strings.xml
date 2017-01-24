@@ -71,7 +71,6 @@ Download hier: %2$s</string>
   <string name="file_list_seconds_ago">seconden geleden</string>
   <string name="file_list_empty">Er bevindt zich hier niets. Upload een bestand!</string>
   <string name="file_list_loading">Laden...</string>
-  <string name="file_list_no_app_for_file_type">Geen app gevonden voor dit bestandsformaat!</string>
   <string name="local_file_list_empty">Er staan geen bestanden in deze map.</string>
   <string name="local_file_list_empty_just_folders">Er zitten geen mappen in deze map.</string>
   <string name="upload_list_empty">Geen uploads beschikbaar.</string>
@@ -253,7 +252,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="wait_for_tmp_copy_from_private_storage">Kopiëren bestand vanaf privéopslag</string>
   <string name="oauth_check_onoff">Inloggen met oAuth2</string>
   <string name="oauth_login_connection">Verbinden met oAuth2-server.</string>
-  <string name="ssl_validator_header">De identiteit van de site kan niet worden gecontroleerd</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Het server certificaat wordt niet vertrouwd</string>
   <string name="ssl_validator_reason_cert_expired">- Het server certificaat is verlopen</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Het server certificaat is te recent</string>

@@ -71,7 +71,6 @@
   <string name="file_list_seconds_ago">несколько секунд назад</string>
   <string name="file_list_empty">Здесь ничего нет. Загрузите что-нибудь!</string>
   <string name="file_list_loading">Загрузка...</string>
-  <string name="file_list_no_app_for_file_type">Приложение для этого типа файла не найдено!</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
   <string name="local_file_list_empty_just_folders">В этом каталоге нет каталогов.</string>
   <string name="upload_list_empty">Нет доступных загрузок.</string>
@@ -251,7 +250,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Копирование файла из частной хранилища</string>
   <string name="oauth_check_onoff">Войти через oAuth2</string>
   <string name="oauth_login_connection">Подключение к серверу oAuth2...</string>
-  <string name="ssl_validator_header">Подлинность сайта не может быть проверена</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Сертификат сервера не является доверенным</string>
   <string name="ssl_validator_reason_cert_expired">- Срок действия сертификата сервера истёк</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Срок действия сертификата сервера ещё не начался</string>

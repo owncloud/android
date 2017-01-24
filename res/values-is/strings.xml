@@ -58,7 +58,6 @@
   <string name="file_list_seconds_ago">sek.</string>
   <string name="file_list_empty">Ekkert hér. Settu eitthvað inn!</string>
   <string name="file_list_loading">Hleð inn…</string>
-  <string name="file_list_no_app_for_file_type">Engin forrit fundust fyrir skráategund!</string>
   <string name="local_file_list_empty">Það eru engar skrár í þessari möppu.</string>
   <string name="filedetails_select_file">Bankaðu á skrá til að sjá ítarlegri upplýsingar.</string>
   <string name="filedetails_size">Stærð:</string>
@@ -208,7 +207,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Afrita skrá úr einkageymslu</string>
   <string name="oauth_check_onoff">Skrá inn með oAuth2</string>
   <string name="oauth_login_connection">Tengist við oAuth2-þjón…</string>
-  <string name="ssl_validator_header">Ekki var hægt að sannreyna auðkenni vefsvæðisins</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Skilríki þjónsins er ekki treyst</string>
   <string name="ssl_validator_reason_cert_expired">- Skilríki þjónsins er útrunnið</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Skilríki þjónsins er með gildistíma í framtíðinni</string>

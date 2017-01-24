@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">שניות</string>
   <string name="file_list_empty">אין כאן שום דבר. אולי ברצונך להעלות משהו?</string>
   <string name="file_list_loading">בטעינה …</string>
-  <string name="file_list_no_app_for_file_type">לא נמצא יישום עבור סוג זה!</string>
   <string name="local_file_list_empty">אין קבצים בתיקייה זו:</string>
   <string name="local_file_list_empty_just_folders">אין תיקיות משנה בתיקייה זו.</string>
   <string name="upload_list_empty">אין העלאות זמינות.</string>
@@ -250,7 +249,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">מעתיק קובץ מאחסון פרטי</string>
   <string name="oauth_check_onoff">התחברות באמצעות oAuth2</string>
   <string name="oauth_login_connection">התחברות אל שרת oAuth2…</string>
-  <string name="ssl_validator_header">לא ניתן לאמת את זהות האתר</string>
   <string name="ssl_validator_reason_cert_not_trusted">- תעודת השרת אינה מהימנה</string>
   <string name="ssl_validator_reason_cert_expired">- תוקף תעודת השרת פג</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- תוקף תעודת השרת מתייחס לתאריכים בעתיד</string>

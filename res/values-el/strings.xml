@@ -68,7 +68,6 @@
   <string name="file_list_seconds_ago">δευτερόλεπτα πριν</string>
   <string name="file_list_empty">Δεν υπάρχει τίποτα εδώ. Μεταφορτώστε κάτι!</string>
   <string name="file_list_loading">Φόρτωση...</string>
-  <string name="file_list_no_app_for_file_type">Δεν βρέθηκε εφαρμογή για τον τύπο αρχείου!</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
   <string name="local_file_list_empty_just_folders">Δεν υπάρχουν φάκελοι σε αυτόν τον φάκελο.</string>
   <string name="upload_list_empty">Δεν υπάρχουν διαθέσιμα προς μεταφόρτωση αρχεία.</string>
@@ -248,7 +247,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Αντιγραφή αρχείου από ιδιωτική αποθήκευση</string>
   <string name="oauth_check_onoff">Σύνδεση με oAuth2</string>
   <string name="oauth_login_connection">Σύνδεση με το διακομιστή oAuth2 σε εξέλιξη...</string>
-  <string name="ssl_validator_header">Η ταυτότητα της σελίδας δεν μπορεί να επληθευτεί</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Το πιστοποιητικό του διακομιστή δεν είναι έμπιστο</string>
   <string name="ssl_validator_reason_cert_expired">- Το πιστοποιητικό του διακομιστή έχει λήξει</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Το πιστοποιητικό του διακομιστή είναι πολύ νέο</string>

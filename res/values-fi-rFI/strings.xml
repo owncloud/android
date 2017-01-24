@@ -68,7 +68,6 @@
   <string name="file_list_seconds_ago">sekuntia sitten</string>
   <string name="file_list_empty">Täällä ei ole mitään. Lähetä tänne jotakin!</string>
   <string name="file_list_loading">Ladataan…</string>
-  <string name="file_list_no_app_for_file_type">Tälle tiedostotyypille ei löytynyt sovellusta!</string>
   <string name="local_file_list_empty">Tässä kansiossa ei ole tiedostoja</string>
   <string name="local_file_list_empty_just_folders">Tässä kansiossa ei ole kansioita.</string>
   <string name="upload_list_empty">Ei lähetyksiä saatavilla.</string>
@@ -237,7 +236,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopioidaan tiedostoa yksityisestä tallennustilasta</string>
   <string name="oauth_check_onoff">Kirjaudu oAuth2:lla</string>
   <string name="oauth_login_connection">Yhdistetään oAuth2-palvelimeen…</string>
-  <string name="ssl_validator_header">Sivuston identiteetin vahvistaminen ei onnistunut</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Palvelimen varmenteeseen ei luoteta</string>
   <string name="ssl_validator_reason_cert_expired">- Palvelimen varmenne on vanhentunut</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Palvelimen varmenteen kelvolliset päivät ovat tulevaisuudessa</string>

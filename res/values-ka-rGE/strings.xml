@@ -95,7 +95,6 @@
   <string name="wait_a_moment">გთხოვთ მოითმინოთ</string>
   <string name="filedisplay_unexpected_bad_get_content">მოულოდნელი პრობლემა: გთხოვთ აირჩიოთ ფაილი სხვადასხვა აპლიკაციიდან</string>
   <string name="filedisplay_no_file_selected">ფაილი არ ყოფილა მონიშნული</string>
-  <string name="ssl_validator_header">საიტის იდენტობა ვერ დამოწმდა</string>
   <string name="ssl_validator_reason_cert_not_trusted">– სერვერის სერთიფიკატები არ არის ცნობიადი</string>
   <string name="ssl_validator_reason_cert_expired">– სერვერის სერთიფიკატი ვადაგასულია</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">–სერვერის სერთიფიკატი არის დაშვებადი მომავალში</string>
