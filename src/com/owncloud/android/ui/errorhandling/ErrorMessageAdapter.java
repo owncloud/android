@@ -150,6 +150,12 @@ public class ErrorMessageAdapter {
                         new File(((DownloadFileOperation) operation).getSavePath()).getName());
 
             } else {
+
+                if (result.getCode() == ResultCode.FORBIDDEN) {
+                    message = String.format(res.getString(R.string.forbidden_permissions),
+                            res.getString(R.string.downloader_download_forbidden_permissions));
+                }
+
                 if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
                     message = res.getString(R.string.downloader_download_file_not_found);
 
