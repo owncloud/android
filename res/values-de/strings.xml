@@ -70,6 +70,7 @@
   <string name="file_list_seconds_ago">Gerade eben</string>
   <string name="file_list_empty">Alles leer. Lade etwas hoch!</string>
   <string name="file_list_loading">Lade…</string>
+  <string name="file_list_no_app_for_file_type">Keine Applikationen für diesen Dateityp gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
   <string name="local_file_list_empty_just_folders">Es befinden sich keine Ordner in diesem Ordner.</string>
   <string name="upload_list_empty">Es</string>
@@ -114,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Hochladen fehlgeschlagen</string>
   <string name="uploader_upload_failed_content_single">Hochladen von  %1$s konnte nicht abgeschlossen werden</string>
   <string name="uploader_upload_failed_credentials_error">Hochladen fehlgeschlagen, du musst dich erneut anmelden</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Wird hochgeladen</string>
   <string name="uploads_view_group_failed_uploads">Fehlgeschlagen (Tippen zum Wiederholen)</string>
@@ -249,6 +252,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopiere Datei vom privatem Speicher</string>
   <string name="oauth_check_onoff">Anmelden mit oAuth2</string>
   <string name="oauth_login_connection">Verbinde mit dem oAuth2-Server.</string>
+  <string name="ssl_validator_header">Die Identität des Servers konnte nicht verifiziert werden</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Das Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="ssl_validator_reason_cert_expired">- Das Zertifikat des Servers ist abgelaufen</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Das Gültigkeitsdatum des Serverzertifikats liegt in der Zukunft</string>
