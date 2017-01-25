@@ -63,7 +63,9 @@ import javax.net.ssl.SSLException;
  */
 public class RemoteOperationResult implements Serializable {
 
-    /** Generated - should be refreshed every time the class changes!! */
+    /**
+     * Generated - should be refreshed every time the class changes!!
+     */
     private static final long serialVersionUID = 4968939884332372230L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
@@ -131,10 +133,10 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Public constructor from result code.
-     *
+     * <p>
      * To be used when the caller takes the responsibility of interpreting the result of a {@link RemoteOperation}
      *
-     * @param code      {@link ResultCode} decided by the caller.
+     * @param code {@link ResultCode} decided by the caller.
      */
     public RemoteOperationResult(ResultCode code) {
         mCode = code;
@@ -146,12 +148,12 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Public constructor from exception.
-     *
+     * <p>
      * To be used when an exception prevented the end of the {@link RemoteOperation}.
-     *
+     * <p>
      * Determines a {@link ResultCode} depending on the type of the exception.
      *
-     * @param e     Exception that interrupted the {@link RemoteOperation}
+     * @param e Exception that interrupted the {@link RemoteOperation}
      */
     public RemoteOperationResult(Exception e) {
         mException = e;
@@ -205,28 +207,28 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Public constructor from separate elements of an HTTP or DAV response.
-     *
+     * <p>
      * To be used when the result needs to be interpreted from the response of an HTTP/DAV method.
-     *
+     * <p>
      * Determines a {@link ResultCode} from the already executed method received as a parameter. Generally,
      * will depend on the HTTP code and HTTP response headers received. In some cases will inspect also the
      * response body.
      *
-     * @param success       The operation was considered successful or not.
-     * @param httpMethod    HTTP/DAV method already executed which response will be examined to interpret the
-     *                      result.
+     * @param success    The operation was considered successful or not.
+     * @param httpMethod HTTP/DAV method already executed which response will be examined to interpret the
+     *                   result.
      */
     public RemoteOperationResult(boolean success, HttpMethod httpMethod) throws IOException {
         this(
-            success,
-            httpMethod.getStatusCode(),
-            httpMethod.getStatusText(),
-            httpMethod.getResponseHeaders()
+                success,
+                httpMethod.getStatusCode(),
+                httpMethod.getStatusText(),
+                httpMethod.getResponseHeaders()
         );
 
         if (mHttpCode == HttpStatus.SC_BAD_REQUEST) {   // 400
             String bodyResponse = httpMethod.getResponseBodyAsString();
-                // do not get for other HTTP codes!; could not be available
+            // do not get for other HTTP codes!; could not be available
 
             if (bodyResponse != null && bodyResponse.length() > 0) {
                 InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
@@ -242,23 +244,38 @@ public class RemoteOperationResult implements Serializable {
                 }
             }
         }
+
+        if (mHttpCode == HttpStatus.SC_FORBIDDEN) {
+            String bodyResponse = httpMethod.getResponseBodyAsString();
+
+            if (bodyResponse != null && bodyResponse.length() > 0) {
+                InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
+                ForbiddenExceptionParser xmlParser = new ForbiddenExceptionParser();
+                try {
+                    mHttpPhrase = xmlParser.parseXMLResponse(is);
+                } catch (Exception e) {
+                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
+                    // mCode stays as set in this(success, httpCode, headers)
+                }
+            }
+        }
     }
 
     /**
      * Public constructor from separate elements of an HTTP or DAV response.
-     *
+     * <p>
      * To be used when the result needs to be interpreted from HTTP response elements that could come from
      * different requests (WARNING: black magic, try to avoid).
-     *
+     * <p>
      * If all the fields come from the same HTTP/DAV response, {@link #RemoteOperationResult(boolean, HttpMethod)}
      * should be used instead.
-     *
+     * <p>
      * Determines a {@link ResultCode} depending on the HTTP code and HTTP response headers received.
      *
-     * @param success       The operation was considered successful or not.
-     * @param httpCode      HTTP status code returned by an HTTP/DAV method.
-     * @param httpPhrase    HTTP status line phrase returned by an HTTP/DAV method
-     * @param httpHeaders   HTTP response header returned by an HTTP/DAV method
+     * @param success     The operation was considered successful or not.
+     * @param httpCode    HTTP status code returned by an HTTP/DAV method.
+     * @param httpPhrase  HTTP status line phrase returned by an HTTP/DAV method
+     * @param httpHeaders HTTP response header returned by an HTTP/DAV method
      */
     public RemoteOperationResult(boolean success, int httpCode, String httpPhrase, Header[] httpHeaders) {
         this(success, httpCode, httpPhrase);
@@ -283,12 +300,12 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Private constructor for results built interpreting a HTTP or DAV response.
-     *
+     * <p>
      * Determines a {@link ResultCode} depending of the type of the exception.
      *
-     * @param success       Operation was successful or not.
-     * @param httpCode      HTTP status code returned by the HTTP/DAV method.
-     * @param httpPhrase    HTTP status line phrase returned by the HTTP/DAV method
+     * @param success    Operation was successful or not.
+     * @param httpCode   HTTP status code returned by the HTTP/DAV method.
+     * @param httpPhrase HTTP status line phrase returned by the HTTP/DAV method
      */
     private RemoteOperationResult(boolean success, int httpCode, String httpPhrase) {
         mSuccess = success;
@@ -324,8 +341,8 @@ public class RemoteOperationResult implements Serializable {
                 default:
                     mCode = ResultCode.UNHANDLED_HTTP_CODE;         // UNKNOWN ERROR
                     Log_OC.d(TAG,
-                        "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
-                        mHttpCode + " " + mHttpPhrase
+                            "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
+                                    mHttpCode + " " + mHttpPhrase
                     );
             }
         }

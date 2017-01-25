@@ -34,30 +34,30 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Parser for Invalid Character server exception
+ * Parser for forbidden server exception
  * @author masensio
  */
-public class InvalidCharacterExceptionParser {
+public class ForbiddenExceptionParser {
 
-    private static final String EXCEPTION_STRING = "OC\\Connector\\Sabre\\Exception\\InvalidPath";
-	private static final String EXCEPTION_UPLOAD_STRING = "OCP\\Files\\InvalidPathException";
+    private static final String EXCEPTION_STRING = "OCA\\DAV\\Connector\\Sabre\\Exception\\Forbidden";
 
     // No namespaces
 	private static final String ns = null;
 
     // Nodes for XML Parser
     private static final String NODE_ERROR = "d:error";
-	private static final String NODE_EXCEPTION = "s:exception";
+	private static final String NODE_MESSAGE = "s:message";
+
     /**
-	 * Parse is as an Invalid Path Exception
+	 * Parse is as an forbidden exception
 	 * @param is
-	 * @return if The exception is an Invalid Char Exception
+	 * @return reason for forbidden exception
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public boolean parseXMLResponse(InputStream is) throws XmlPullParserException,
+	public String parseXMLResponse(InputStream is) throws XmlPullParserException,
             IOException {
-        boolean result = false;
+        String errorMessage = "";
 
 		try {
 			// XMLPullParser
@@ -68,39 +68,38 @@ public class InvalidCharacterExceptionParser {
 			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 			parser.setInput(is, null);
 			parser.nextTag();
-			result = readError(parser);
+            errorMessage = readError(parser);
 
 		} finally {
 			is.close();
 		}
-		return result;
+		return errorMessage;
 	}
 
 	/**
 	 * Parse OCS node
 	 * @param parser
-	 * @return List of ShareRemoteFiles
+	 * @return reason for forbidden exception
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private boolean readError (XmlPullParser parser) throws XmlPullParserException, IOException {
-		String exception = "";
+	private String readError (XmlPullParser parser) throws XmlPullParserException, IOException {
+        String message = "";
 		parser.require(XmlPullParser.START_TAG,  ns , NODE_ERROR);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
 			String name = parser.getName();
-			// read NODE_EXCEPTION
-			if (name.equalsIgnoreCase(NODE_EXCEPTION)) {
-				exception = readText(parser);
-			} else {
+			// read NODE_MESSAGE
+            if (name.equalsIgnoreCase(NODE_MESSAGE)) {
+                message = readText(parser);
+            } else {
 				skip(parser);
 			}
 
 		}
-		return exception.equalsIgnoreCase(EXCEPTION_STRING) ||
-				exception.equalsIgnoreCase(EXCEPTION_UPLOAD_STRING);
+        return message;
 	}
 
 	/**
