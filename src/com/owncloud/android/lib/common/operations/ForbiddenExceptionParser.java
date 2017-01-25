@@ -1,4 +1,3 @@
-
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2016 ownCloud GmbH.
  *
