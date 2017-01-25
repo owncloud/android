@@ -575,6 +575,9 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     case MAINTENANCE_MODE:
                         status = mParentActivity.getString(R.string.maintenance_mode);
                         break;
+                    case QUOTA_EXCEEDED:
+                        status = mParentActivity.getString(R.string.failed_upload_quota_exceeded_text);
+                        break;
                     case SSL_RECOVERABLE_PEER_UNVERIFIED:
                         status =
                             mParentActivity.getString(
