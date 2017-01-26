@@ -107,6 +107,7 @@ public class RemoteOperationResult implements Serializable {
         LOCAL_STORAGE_NOT_REMOVED,
         FORBIDDEN,
         SHARE_FORBIDDEN,
+        SPECIFIC_FORBIDDEN,
         OK_REDIRECT_TO_NON_SECURE_CONNECTION,
         INVALID_MOVE_INTO_DESCENDANT,
         INVALID_COPY_INTO_DESCENDANT,
@@ -252,7 +253,11 @@ public class RemoteOperationResult implements Serializable {
                 InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
                 ForbiddenExceptionParser xmlParser = new ForbiddenExceptionParser();
                 try {
-                    mHttpPhrase = xmlParser.parseXMLResponse(is);
+                    String errorMessage = xmlParser.parseXMLResponse(is);
+                    if (errorMessage != "" && errorMessage != null) {
+                        mCode = ResultCode.SPECIFIC_FORBIDDEN;
+                        mHttpPhrase = errorMessage;
+                    }
                 } catch (Exception e) {
                     Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
                     // mCode stays as set in this(success, httpCode, headers)

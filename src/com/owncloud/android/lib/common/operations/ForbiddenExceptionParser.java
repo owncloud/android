@@ -38,17 +38,14 @@ import java.io.InputStream;
  * @author masensio
  */
 public class ForbiddenExceptionParser {
-
-    private static final String EXCEPTION_STRING = "OCA\\DAV\\Connector\\Sabre\\Exception\\Forbidden";
-
-    // No namespaces
+	// No namespaces
 	private static final String ns = null;
 
-    // Nodes for XML Parser
-    private static final String NODE_ERROR = "d:error";
+	// Nodes for XML Parser
+	private static final String NODE_ERROR = "d:error";
 	private static final String NODE_MESSAGE = "s:message";
 
-    /**
+	/**
 	 * Parse is as an forbidden exception
 	 * @param is
 	 * @return reason for forbidden exception
@@ -56,8 +53,8 @@ public class ForbiddenExceptionParser {
 	 * @throws IOException
 	 */
 	public String parseXMLResponse(InputStream is) throws XmlPullParserException,
-            IOException {
-        String errorMessage = "";
+			IOException {
+		String errorMessage = "";
 
 		try {
 			// XMLPullParser
@@ -68,7 +65,7 @@ public class ForbiddenExceptionParser {
 			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 			parser.setInput(is, null);
 			parser.nextTag();
-            errorMessage = readError(parser);
+			errorMessage = readError(parser);
 
 		} finally {
 			is.close();
@@ -84,7 +81,7 @@ public class ForbiddenExceptionParser {
 	 * @throws IOException
 	 */
 	private String readError (XmlPullParser parser) throws XmlPullParserException, IOException {
-        String message = "";
+		String errorMessage = "";
 		parser.require(XmlPullParser.START_TAG,  ns , NODE_ERROR);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -92,14 +89,13 @@ public class ForbiddenExceptionParser {
 			}
 			String name = parser.getName();
 			// read NODE_MESSAGE
-            if (name.equalsIgnoreCase(NODE_MESSAGE)) {
-                message = readText(parser);
-            } else {
+			if (name.equalsIgnoreCase(NODE_MESSAGE)) {
+				errorMessage = readText(parser);
+			} else {
 				skip(parser);
 			}
-
 		}
-        return message;
+		return errorMessage;
 	}
 
 	/**
@@ -115,17 +111,17 @@ public class ForbiddenExceptionParser {
 		int depth = 1;
 		while (depth != 0) {
 			switch (parser.next()) {
-			case XmlPullParser.END_TAG:
-				depth--;
-				break;
-			case XmlPullParser.START_TAG:
-				depth++;
-				break;
+				case XmlPullParser.END_TAG:
+					depth--;
+					break;
+				case XmlPullParser.START_TAG:
+					depth++;
+					break;
 			}
 		}
 	}
 
-    	/**
+	/**
 	 * Read the text from a node
 	 * @param parser
 	 * @return Text of the node
