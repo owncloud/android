@@ -134,6 +134,7 @@
     <string name="uploads_view_upload_status_failed_file_error">File error</string>
     <string name="uploads_view_upload_status_failed_localfile_error">Local file not found</string>
     <string name="uploads_view_upload_status_failed_permission_error">Permission error</string>
+    <string name="uploads_view_upload_status_failed_firewall_error">Forbidden due to a firewall rule</string>
     <string name="uploads_view_upload_status_conflict">Conflict</string>
     <string name="uploads_view_upload_status_service_interrupted">App was terminated</string>
     <string name="uploads_view_upload_status_unknown_fail">Unknown error</string>
