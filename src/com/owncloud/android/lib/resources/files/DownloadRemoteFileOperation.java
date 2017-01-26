@@ -160,7 +160,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     // TODO some kind of error control!
                 }
 
-            } else {
+            } else if (status != 403){
                 client.exhaustResponse(mGet.getResponseBodyAsStream());
             }
 
