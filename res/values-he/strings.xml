@@ -423,6 +423,7 @@
   <string name="confirmation_remove_files_alert">האם באמת להסיר את הפריטים הנבחרים?</string>
   <string name="confirmation_remove_folders_alert">האם באמת להסיר את הפריטים הנבחרים ואת התוכן שלהם?</string>
   <string name="maintenance_mode">השרת במצב תחזוקה</string>
+  <string name="failed_upload_quota_exceeded_text">אין מספיק מקום בחשבון</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>

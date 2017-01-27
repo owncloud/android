@@ -423,6 +423,7 @@
   <string name="confirmation_remove_files_alert">Ali res želite odstraniti izbrane predmete?</string>
   <string name="confirmation_remove_folders_alert">Ali res želite odstraniti izbrane predmete in njihovo vsebino?</string>
   <string name="maintenance_mode">Strežnik je trenutno v vzdrževalnem načinu</string>
+  <string name="failed_upload_quota_exceeded_text">Na računu ni dovolj prostora</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>

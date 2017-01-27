@@ -70,6 +70,7 @@
   <string name="file_list_seconds_ago">วินาที ก่อนหน้านี้</string>
   <string name="file_list_empty">ยังไม่มีไฟล์ใดๆเลย ลองอัพโหลดดูสิ!</string>
   <string name="file_list_loading">กำลังโหลด...</string>
+  <string name="file_list_no_app_for_file_type">ไม่พบแอพฯที่ตรงกับประเภทของไฟล์</string>
   <string name="local_file_list_empty">ยังไม่มีไฟล์ในโฟลเดอร์นี้</string>
   <string name="local_file_list_empty_just_folders">ไม่มีโฟลเดอร์ในโฟลเดอร์นี้</string>
   <string name="upload_list_empty">ไม่พบการอัพโหลดใดๆ</string>
@@ -114,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">อัพโหลดล้มเหลว</string>
   <string name="uploader_upload_failed_content_single">ไม่สามารถดำเนินการอัพโหลด %1$s ให้เสร็จสมบูรณ์ได้</string>
   <string name="uploader_upload_failed_credentials_error">การอัพโหลดล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="uploads_view_title">อัพโหลด</string>
   <string name="uploads_view_group_current_uploads">ปัจจุบัน</string>
   <string name="uploads_view_group_failed_uploads">ล้มเหลว (แตะเพื่อลองอีกครั้ง)</string>
@@ -248,6 +251,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">คัดลอกไฟล์จากพื้นที่จัดเก็บส่วนตัว</string>
   <string name="oauth_check_onoff">เข้าสู่ระบบด้วย oAuth2</string>
   <string name="oauth_login_connection">เชื่อมต่อกับเซิร์ฟเวอร์ oAuth2 ...</string>
+  <string name="ssl_validator_header">ไม่สามารถตรวจสอบตัวตนของเซิร์ฟเวอร์</string>
   <string name="ssl_validator_reason_cert_not_trusted">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="ssl_validator_reason_cert_expired">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์หมดอายุแล้ว</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์ยังมีอายุน้อยอยู่</string>
@@ -417,6 +421,7 @@
   <string name="confirmation_remove_files_alert">คุณมั่นใจว่าต้องการลบรายการที่เลือก?</string>
   <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>
   <string name="maintenance_mode">เซิร์ฟเวอร์อยู่ในโหมดบำรุงรักษา</string>
+  <string name="failed_upload_quota_exceeded_text">พื้นที่ในบัญชีไม่เพียงพอ</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>
