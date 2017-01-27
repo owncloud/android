@@ -82,8 +82,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
         /// perform the download
         try {
             tmpFile.getParentFile().mkdirs();
-            int status = downloadFile(client, tmpFile);
-            result = new RemoteOperationResult(isSuccess(status), mGet);
+            result = downloadFile(client, tmpFile);
             Log_OC.i(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
                 result.getLogMessage());
 
@@ -97,8 +96,10 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
     }
 
 
-    protected int downloadFile(OwnCloudClient client, File targetFile) throws HttpException,
+    private RemoteOperationResult downloadFile(OwnCloudClient client, File targetFile) throws
         IOException, OperationCancelledException {
+
+        RemoteOperationResult result;
         int status = -1;
         boolean savedFile = false;
         mGet = new GetMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
@@ -162,7 +163,10 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
 
             } else if (status != 403){
                 client.exhaustResponse(mGet.getResponseBodyAsStream());
-            }
+
+            } // else, body read by RemoteOeprationResult constructor
+
+            result = new RemoteOperationResult(isSuccess(status), mGet);
 
         } finally {
             if (fos != null) fos.close();
@@ -171,7 +175,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
             }
             mGet.releaseConnection();    // let the connection available for other methods
         }
-        return status;
+        return result;
     }
 
     private boolean isSuccess(int status) {
