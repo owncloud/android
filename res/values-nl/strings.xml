@@ -71,6 +71,7 @@ Download hier: %2$s</string>
   <string name="file_list_seconds_ago">seconden geleden</string>
   <string name="file_list_empty">Er bevindt zich hier niets. Upload een bestand!</string>
   <string name="file_list_loading">Laden...</string>
+  <string name="file_list_no_app_for_file_type">Geen app gevonden voor het bestandsformaat</string>
   <string name="local_file_list_empty">Er staan geen bestanden in deze map.</string>
   <string name="local_file_list_empty_just_folders">Er zitten geen mappen in deze map.</string>
   <string name="upload_list_empty">Geen uploads beschikbaar.</string>
@@ -115,6 +116,8 @@ Download hier: %2$s</string>
   <string name="uploader_upload_failed_ticker">Upload mislukt</string>
   <string name="uploader_upload_failed_content_single">Upload van %1$s kon niet voltooid worden</string>
   <string name="uploader_upload_failed_credentials_error">Upload mislukt, u moet opnieuw inloggen</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_group_failed_uploads">Mislukt (tik om opnieuw te proberen)</string>
@@ -252,6 +255,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="wait_for_tmp_copy_from_private_storage">Kopiëren bestand vanaf privéopslag</string>
   <string name="oauth_check_onoff">Inloggen met oAuth2</string>
   <string name="oauth_login_connection">Verbinden met oAuth2-server.</string>
+  <string name="ssl_validator_header">De identiteit van deze server kon niet worden geverifieerd</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Het server certificaat wordt niet vertrouwd</string>
   <string name="ssl_validator_reason_cert_expired">- Het server certificaat is verlopen</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Het server certificaat is te recent</string>
@@ -422,6 +426,7 @@ Neem contact op met uw beheerder</string>
   <string name="confirmation_remove_files_alert">Wilt u werkelijk de geselecteerde onderwerpen verwijderen?</string>
   <string name="confirmation_remove_folders_alert">Wilt u werkelijk de geselecteerde onderwerpen en de inhoud ervan verwijderen?</string>
   <string name="maintenance_mode">Server in onderhoudsmodus</string>
+  <string name="failed_upload_quota_exceeded_text">Niet genoeg ruimte in dit account</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>

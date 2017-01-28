@@ -2,7 +2,7 @@
 <resources>
   <string name="about_android">%1$s Android-додаток</string>
   <string name="about_version">версія %1$s</string>
-  <string name="actionbar_sync">Оновити account</string>
+  <string name="actionbar_sync">Оновити обліковий запис</string>
   <string name="actionbar_upload">Відвантажити</string>
   <string name="actionbar_upload_from_apps">Вміст із інших програм</string>
   <string name="actionbar_upload_files">Файли</string>
@@ -70,6 +70,7 @@
   <string name="file_list_seconds_ago">секунди тому</string>
   <string name="file_list_empty">Тут нічого немає. Відвантажте що-небудь!</string>
   <string name="file_list_loading">Завантаження…</string>
+  <string name="file_list_no_app_for_file_type">Не знайдено додатка для типу файла</string>
   <string name="local_file_list_empty">В цій теці немає файлів.</string>
   <string name="local_file_list_empty_just_folders">Немає тек в цій теці.</string>
   <string name="upload_list_empty">Немає доступних надсилань.</string>
@@ -114,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Помилка завантаження</string>
   <string name="uploader_upload_failed_content_single">Завантаження %1$s не може завершитись</string>
   <string name="uploader_upload_failed_credentials_error">Надсилання не повелося, Вам потрібно ввійти знову</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Сертифікат сервера не є довіреним</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Сертифікат сервера не є довіреним</string>
   <string name="uploads_view_title">Завантаженнь</string>
   <string name="uploads_view_group_current_uploads">Поточний</string>
   <string name="uploads_view_group_failed_uploads">Не повелося (натисніть для нової спроби)</string>
@@ -249,6 +252,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Копіювання файлу з приватного сховища</string>
   <string name="oauth_check_onoff">Увійти через oAuth2</string>
   <string name="oauth_login_connection">Підключення до серверу oAuth2...</string>
+  <string name="ssl_validator_header">Справжність сервера не може бути перевірена</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Не довірений сертифікат серверу</string>
   <string name="ssl_validator_reason_cert_expired">- Сертифікат серверу втратив чинність</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Сертифікат серверу занадто новий</string>
@@ -419,6 +423,7 @@
   <string name="confirmation_remove_files_alert">Ви дійсно бажаєте вилучити вибране?</string>
   <string name="confirmation_remove_folders_alert">Ви дійсно бажаєте вилучити вибране і їхній вміст?</string>
   <string name="maintenance_mode">Сервер в режимі технічного обслуговування</string>
+  <string name="failed_upload_quota_exceeded_text">Недостатньо місця для цього облікового запису</string>
   <plurals name="items_selected_count">
     <item quantity="one">Вибрано %d</item>
     <item quantity="few">Вибрано %d</item>
