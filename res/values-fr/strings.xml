@@ -354,7 +354,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="forbidden_permissions_copy">de copier ce fichier</string>
   <string name="prefs_category_instant_uploading">Téléversement immédiat</string>
   <string name="prefs_category_details">Détails</string>
-  <string name="prefs_instant_video_upload_path_title">Répertoire de téléversement des vidéos</string>
+  <string name="prefs_instant_video_upload_path_title">Dossier de téléversement des vidéos</string>
   <string name="sync_folder_failed_content">La synchronisation du dossier %1$s n\'a pas pu être terminée</string>
   <string name="shared_subject_header">a partagé</string>
   <string name="with_you_subject_header">avec vous</string>
