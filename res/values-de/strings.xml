@@ -70,7 +70,7 @@
   <string name="file_list_seconds_ago">Gerade eben</string>
   <string name="file_list_empty">Alles leer. Lade etwas hoch!</string>
   <string name="file_list_loading">Lade…</string>
-  <string name="file_list_no_app_for_file_type">Es wurde keine App für diesen Dateityp gefunden!</string>
+  <string name="file_list_no_app_for_file_type">Keine Applikationen für diesen Dateityp gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
   <string name="local_file_list_empty_just_folders">Es befinden sich keine Ordner in diesem Ordner.</string>
   <string name="upload_list_empty">Es</string>
@@ -115,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Hochladen fehlgeschlagen</string>
   <string name="uploader_upload_failed_content_single">Hochladen von  %1$s konnte nicht abgeschlossen werden</string>
   <string name="uploader_upload_failed_credentials_error">Hochladen fehlgeschlagen, du musst dich erneut anmelden</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Wird hochgeladen</string>
   <string name="uploads_view_group_failed_uploads">Fehlgeschlagen (Tippen zum Wiederholen)</string>
@@ -250,7 +252,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopiere Datei vom privatem Speicher</string>
   <string name="oauth_check_onoff">Anmelden mit oAuth2</string>
   <string name="oauth_login_connection">Verbinde mit dem oAuth2-Server.</string>
-  <string name="ssl_validator_header">Die Identität der Website konnte nicht überprüft werden</string>
+  <string name="ssl_validator_header">Die Identität des Servers konnte nicht verifiziert werden</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Das Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="ssl_validator_reason_cert_expired">- Das Zertifikat des Servers ist abgelaufen</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Das Gültigkeitsdatum des Serverzertifikats liegt in der Zukunft</string>
@@ -382,6 +384,7 @@
   <string name="share_file">Teile %1$s</string>
   <string name="share_with_user_section_title">Mit Benutzern oder Gruppen teilen</string>
   <string name="share_no_users">Es wurden noch keine Dateien mit Benutzern geteilt</string>
+  <string name="share_incompatible_version">Zum Teilen mit anderen Nutzern, muss sich auf dem Server mindestens die Version 8.2 befinden</string>
   <string name="share_add_user_or_group">Füge Benutzer oder Gruppe hinzu</string>
   <string name="share_via_link_section_title">Link teilen</string>
   <string name="share_via_link_expiration_date_label">Setze ein Ablaufdatum</string>
@@ -420,6 +423,7 @@
   <string name="confirmation_remove_files_alert">Möchtest du die ausgewählten Elemente wirklich löschen?</string>
   <string name="confirmation_remove_folders_alert">Möchtest du die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>
   <string name="maintenance_mode">Server befindet sich im Wartungsmodus</string>
+  <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>

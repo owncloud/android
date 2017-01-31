@@ -115,7 +115,6 @@
   <string name="wait_a_moment">Uzgaidīt brīdi</string>
   <string name="filedisplay_unexpected_bad_get_content">Negaidīta problēma; lūdzu, izvēlieties datni no citas lietotnes</string>
   <string name="filedisplay_no_file_selected">Netika izvēlēta neviena datne</string>
-  <string name="ssl_validator_header">Šīs vietnes identitāti nevarēja pārbaudīt</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Nav uzticības servera sertifikātam</string>
   <string name="ssl_validator_reason_cert_expired">- Servera sertifikātam ir beidzies termiņš</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Servera sertifikāta datumi ir nākotnē</string>

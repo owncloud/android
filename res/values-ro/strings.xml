@@ -224,7 +224,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Copiere fișier din stocare privată</string>
   <string name="oauth_check_onoff">Întră în cont cu oAuth2</string>
   <string name="oauth_login_connection">Se conectează la serverul oAuth2...</string>
-  <string name="ssl_validator_header">Nu s-a putut verifica identitatea site-ului</string>
   <string name="ssl_validator_reason_cert_not_trusted">Certificatul serverului nu este de incredere </string>
   <string name="ssl_validator_reason_cert_expired">Certificatul serverului a expirat</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Perioada de valabilitate a certificatului serverului este în viitor</string>

@@ -25,6 +25,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -35,7 +36,6 @@ import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  *  Dialog to input the name for a new folder to create.  
@@ -100,10 +100,7 @@ public class CreateFolderDialogFragment
                         .getText().toString().trim();
             
             if (newFolderName.length() <= 0) {
-                Toast.makeText(
-                        getActivity(),
-                        R.string.filename_empty, 
-                        Toast.LENGTH_LONG).show();
+                showSnackMessage(R.string.filename_empty);
                 return;
             }
             boolean serverWithForbiddenChars = ((ComponentsGetter)getActivity()).
@@ -116,8 +113,7 @@ public class CreateFolderDialogFragment
                 } else {
                     messageId = R.string.filename_forbidden_characters;
                 }
-                Toast.makeText(getActivity(), messageId, Toast.LENGTH_LONG).show();
-
+                showSnackMessage(messageId);
                 return;
             }
             
@@ -127,5 +123,19 @@ public class CreateFolderDialogFragment
                 getFileOperationsHelper().createFolder(path, false);
         }
     }
-        
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view of the parent Activity
+     *
+     * @param messageResource       Message to show.
+     */
+    private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+            getActivity().findViewById(android.R.id.content),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
+    }
+
 }

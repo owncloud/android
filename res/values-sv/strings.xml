@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">sekunder sedan</string>
   <string name="file_list_empty">Ingenting här. Ladda upp något!</string>
   <string name="file_list_loading">Laddar...</string>
-  <string name="file_list_no_app_for_file_type">Inget program kan hantera denna filtyp</string>
   <string name="local_file_list_empty">Det finns inga filer i den här mappen.</string>
   <string name="local_file_list_empty_just_folders">Det finns inga mappar i den här mappen.</string>
   <string name="upload_list_empty">Inga uppladdningar tillgängliga.</string>
@@ -249,7 +248,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopierar fil från privat lagring</string>
   <string name="oauth_check_onoff">Logga in med oAuth2.</string>
   <string name="oauth_login_connection">Ansluter till oAuth2 servern…</string>
-  <string name="ssl_validator_header">Webbplatsens identitet kunde inte verifieras</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Servercertifikatet är inte tillförlitligt</string>
   <string name="ssl_validator_reason_cert_expired">- Servercertifikatet har gått ut</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Servercertifikatet är för nytt</string>

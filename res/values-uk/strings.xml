@@ -2,7 +2,7 @@
 <resources>
   <string name="about_android">%1$s Android-додаток</string>
   <string name="about_version">версія %1$s</string>
-  <string name="actionbar_sync">Оновити account</string>
+  <string name="actionbar_sync">Оновити обліковий запис</string>
   <string name="actionbar_upload">Відвантажити</string>
   <string name="actionbar_upload_from_apps">Вміст із інших програм</string>
   <string name="actionbar_upload_files">Файли</string>
@@ -70,7 +70,7 @@
   <string name="file_list_seconds_ago">секунди тому</string>
   <string name="file_list_empty">Тут нічого немає. Відвантажте що-небудь!</string>
   <string name="file_list_loading">Завантаження…</string>
-  <string name="file_list_no_app_for_file_type">Не знайдено програми для цього типу файлу!</string>
+  <string name="file_list_no_app_for_file_type">Не знайдено додатка для типу файла</string>
   <string name="local_file_list_empty">В цій теці немає файлів.</string>
   <string name="local_file_list_empty_just_folders">Немає тек в цій теці.</string>
   <string name="upload_list_empty">Немає доступних надсилань.</string>
@@ -86,6 +86,7 @@
   <string name="filedetails_download">Завантажити</string>
   <string name="filedetails_sync_file">Синхронізувати</string>
   <string name="filedetails_renamed_in_upload_msg">Файл був переіменований в %1$s протягом вивантаження</string>
+  <string name="list_layout">Розклад списку</string>
   <string name="action_share">Поділитися</string>
   <string name="common_yes">Так</string>
   <string name="common_no">Ні</string>
@@ -114,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Помилка завантаження</string>
   <string name="uploader_upload_failed_content_single">Завантаження %1$s не може завершитись</string>
   <string name="uploader_upload_failed_credentials_error">Надсилання не повелося, Вам потрібно ввійти знову</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Сертифікат сервера не є довіреним</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Сертифікат сервера не є довіреним</string>
   <string name="uploads_view_title">Завантаженнь</string>
   <string name="uploads_view_group_current_uploads">Поточний</string>
   <string name="uploads_view_group_failed_uploads">Не повелося (натисніть для нової спроби)</string>
@@ -232,6 +235,7 @@
   <string name="remove_success_msg">Успішно видалено</string>
   <string name="remove_fail_msg">Видалення не вдалось</string>
   <string name="rename_dialog_title">Введіть нове ім\'я</string>
+  <string name="available_offline_inherited_msg">Тека, що містить цей файл, є доступною офлайн</string>
   <string name="rename_local_fail_msg">Локальна копія не може бути перейменована; спробуйте визначити нове ім\'я</string>
   <string name="rename_server_fail_msg">Перейменування не вдалося</string>
   <string name="sync_file_fail_msg">Неможливо перевірити віддалений файл</string>
@@ -241,13 +245,14 @@
   <string name="filename_forbidden_charaters_from_server">Ім’я файлу містить принаймні один некоректний символ</string>
   <string name="filename_empty"> Ім\'я файлу не може бути порожнім.</string>
   <string name="wait_a_moment">Зачекайте хвилинку</string>
+  <string name="wait_checking_credentials">Перевірка збережених облікових даних</string>
   <string name="filedisplay_unexpected_bad_get_content">Несподівані проблеми ; будь ласка, спробуйте використати іншу програму для вибору файлу</string>
   <string name="filedisplay_no_file_selected">Не обрано файл</string>
   <string name="activity_chooser_title">Надіслати посилання...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копіювання файлу з приватного сховища</string>
   <string name="oauth_check_onoff">Увійти через oAuth2</string>
   <string name="oauth_login_connection">Підключення до серверу oAuth2...</string>
-  <string name="ssl_validator_header">Не вдалося перевірити ідентифікацію сайта</string>
+  <string name="ssl_validator_header">Справжність сервера не може бути перевірена</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Не довірений сертифікат серверу</string>
   <string name="ssl_validator_reason_cert_expired">- Сертифікат серверу втратив чинність</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Сертифікат серверу занадто новий</string>
@@ -269,6 +274,7 @@
   <string name="ssl_validator_label_validity_to">До:</string>
   <string name="ssl_validator_label_signature">Підпис:</string>
   <string name="ssl_validator_label_signature_algorithm">Алгоритм:</string>
+  <string name="digest_algorithm_not_available">Цей алгоритм недоступний на Вашому телефоні.</string>
   <string name="ssl_validator_label_certificate_fingerprint">Відбиток пальця:</string>
   <string name="certificate_load_problem">Проблема завантаження сертифікату.</string>
   <string name="ssl_validator_null_cert">Не вдалося показати сертифікат.</string>
@@ -297,6 +303,7 @@
   <string name="unshare_link_file_no_exist">Неможливо заборонити доступ. Будь ласка, перевірте, чи існує файл</string>
   <string name="unshare_link_file_error">Виникла помилка при спробі заборонити доступ до файлу або теки</string>
   <string name="update_link_file_no_exist">Неможливо оновити. Будь ласка, перевірте, чи існує файл</string>
+  <string name="update_link_file_error">Виникла помилка при спробі оновити дані доступу</string>
   <string name="share_link_password_title">Ввести пароль</string>
   <string name="share_link_empty_password">Ви повинні ввести пароль</string>
   <string name="activity_chooser_send_file_title">Надіслати</string>
@@ -304,6 +311,7 @@
   <string name="clipboard_text_copied">Скопійовано в буфер обміну</string>
   <string name="clipboard_no_text_to_copy">Не отримано тексту для копіювання в буфер</string>
   <string name="clipboard_uxexpected_error">Неочікувана помилка під час копіювання в буфер</string>
+  <string name="clipboard_label">Скопійований текст з %1$s</string>
   <string name="error_cant_bind_to_operations_service">Критична помилка: виконання операції неможливе</string>
   <string name="network_error_socket_exception">Виникла помилка при підключені до сервера.</string>
   <string name="network_error_socket_timeout_exception">Під час очікування на сервер виникла помилка, операцію неможливо завершити</string>
@@ -324,6 +332,7 @@
   <string name="auth_redirect_non_secure_connection_title">Безпечне підключення перенаправляється через незабезпечений маршрут.</string>
   <string name="actionbar_logger">Журнали</string>
   <string name="log_send_history_button">Надіслати історію</string>
+  <string name="log_send_no_mail_app">Не знайдено програм для висилання журналів. Будь ласка, встановіть поштову програму.</string>
   <string name="log_send_mail_subject">%1$s Android лог додатку</string>
   <string name="log_progress_dialog_text">Завантаження даних ...</string>
   <string name="saml_authentication_required_text">Потрібна аутентифікація</string>
@@ -375,6 +384,7 @@
   <string name="share_file">Поділитися %1$s</string>
   <string name="share_with_user_section_title">Поділитися з користувачами і групами</string>
   <string name="share_no_users">З користувачами ще нічим не поділилися</string>
+  <string name="share_incompatible_version">Щоб надати доступ іншим користувачам Ваш сервер повинен мати версію не нижче 8.2</string>
   <string name="share_add_user_or_group">Додати користувача або групу</string>
   <string name="share_via_link_section_title">Поділитись посиланням</string>
   <string name="share_via_link_expiration_date_label">Встановити термін дії</string>
@@ -412,4 +422,11 @@
   <string name="local_file_not_found_toast">Файл не знайдено в локальній файловій системі</string>
   <string name="confirmation_remove_files_alert">Ви дійсно бажаєте вилучити вибране?</string>
   <string name="confirmation_remove_folders_alert">Ви дійсно бажаєте вилучити вибране і їхній вміст?</string>
+  <string name="maintenance_mode">Сервер в режимі технічного обслуговування</string>
+  <string name="failed_upload_quota_exceeded_text">Недостатньо місця для цього облікового запису</string>
+  <plurals name="items_selected_count">
+    <item quantity="one">Вибрано %d</item>
+    <item quantity="few">Вибрано %d</item>
+    <item quantity="other">Вибрано %d</item>
+  </plurals>
 </resources>

@@ -56,7 +56,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

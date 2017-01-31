@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">幾秒前</string>
   <string name="file_list_empty">這裡還沒有東西，上傳一些吧！</string>
   <string name="file_list_loading">載入中…</string>
-  <string name="file_list_no_app_for_file_type">檔案格式無對應的應用程式可開啟</string>
   <string name="local_file_list_empty">這個資料夾中沒有任何檔案.</string>
   <string name="local_file_list_empty_just_folders">這個資料夾中沒有任何資料夾.</string>
   <string name="upload_list_empty">無上傳</string>
@@ -249,7 +248,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">由私有的儲存空間複製檔案中</string>
   <string name="oauth_check_onoff">以 oAuth2 方式登入</string>
   <string name="oauth_login_connection">連線到 oAuth2 伺服器…</string>
-  <string name="ssl_validator_header">這個網站的憑證無法被驗證</string>
   <string name="ssl_validator_reason_cert_not_trusted">- 這個伺服器使用未被信任的憑證</string>
   <string name="ssl_validator_reason_cert_expired">- 這個伺服器的憑證已過期</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- 這個伺服器的憑證有效期限不正確</string>

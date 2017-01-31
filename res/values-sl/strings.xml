@@ -70,7 +70,7 @@
   <string name="file_list_seconds_ago">pred nekaj sekundami</string>
   <string name="file_list_empty">Tukaj še ni ničesar. Najprej je treba datoteke poslati v oblak!</string>
   <string name="file_list_loading">Poteka nalaganje ...</string>
-  <string name="file_list_no_app_for_file_type">Ni programa za prikaz te vrste datoteke!</string>
+  <string name="file_list_no_app_for_file_type">Ni nameščenega programa za to vrsto datoteke</string>
   <string name="local_file_list_empty">V tej mapi ni datotek.</string>
   <string name="local_file_list_empty_just_folders">V tej mapi ni drugih map.</string>
   <string name="upload_list_empty">Ni posodobitev</string>
@@ -115,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Pošiljanje je spodletelo</string>
   <string name="uploader_upload_failed_content_single">Pošiljanja %1$s ni mogoče dokončati</string>
   <string name="uploader_upload_failed_credentials_error">Pošiljanje je spodletelo. Zahtevana je ponovna prijava.</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
   <string name="uploads_view_title">Poslano</string>
   <string name="uploads_view_group_current_uploads">Trenutno</string>
   <string name="uploads_view_group_failed_uploads">Spodletelo (kliknite za ponovni poskus)</string>
@@ -250,7 +252,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopiranje datoteke iz zasebne shrambe</string>
   <string name="oauth_check_onoff">Prijava  z oAuth2</string>
   <string name="oauth_login_connection">Poteka povezovanje s strežnikom oAuth2 ...</string>
-  <string name="ssl_validator_header">Istovetnosti strani ni mogoče preveriti</string>
+  <string name="ssl_validator_header">Istovetnosti strežnika ni mogoče preveriti</string>
   <string name="ssl_validator_reason_cert_not_trusted">- potrdilo strežnika ni vredno zaupanja</string>
   <string name="ssl_validator_reason_cert_expired">- potrdilo strežnika je poteklo</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- potrdilo strežnika je v uporabi</string>
@@ -382,6 +384,7 @@
   <string name="share_file">Omogoči souporabo %1$s</string>
   <string name="share_with_user_section_title">Omogoči souporabo s skupino ali z uporabnikom</string>
   <string name="share_no_users">Ni datotek, ki bi jih omogočili za souporabo z drugimi</string>
+  <string name="share_incompatible_version">Za souporabo z drugimi uporabniki mora biti na strežniku nameščena vsaj različica 8.2.</string>
   <string name="share_add_user_or_group">Dodaj uporabnika ali skupino</string>
   <string name="share_via_link_section_title">Omogoči souporabo prek povezave</string>
   <string name="share_via_link_expiration_date_label">Nastavi datum preteka</string>
@@ -420,6 +423,7 @@
   <string name="confirmation_remove_files_alert">Ali res želite odstraniti izbrane predmete?</string>
   <string name="confirmation_remove_folders_alert">Ali res želite odstraniti izbrane predmete in njihovo vsebino?</string>
   <string name="maintenance_mode">Strežnik je trenutno v vzdrževalnem načinu</string>
+  <string name="failed_upload_quota_exceeded_text">Na računu ni dovolj prostora</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>

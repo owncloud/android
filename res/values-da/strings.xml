@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">sekunder siden</string>
   <string name="file_list_empty">Her er tomt. Upload noget!</string>
   <string name="file_list_loading">Indlæser...</string>
-  <string name="file_list_no_app_for_file_type">Ingen app fundet til filtyppen!</string>
   <string name="local_file_list_empty">Der er ingen filer i denne mappe.</string>
   <string name="local_file_list_empty_just_folders">Der er ingen mapper i denne mappe.</string>
   <string name="upload_list_empty">Ingen uploads tilgængelige.</string>
@@ -248,7 +247,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopierer fil fra privat lager.</string>
   <string name="oauth_check_onoff">Log på med oAuth2</string>
   <string name="oauth_login_connection">Forbinder til oAuth2-server...</string>
-  <string name="ssl_validator_header">Sidens identitet kunne ikke verificeres</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Serverens certifikat er ikke troværdigt</string>
   <string name="ssl_validator_reason_cert_expired">- Serverens certifikat er udløbet</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Serverens certifikat er for ung</string>

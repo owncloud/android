@@ -71,7 +71,6 @@
   <string name="file_list_seconds_ago">数秒前</string>
   <string name="file_list_empty">ここには何もありません。何かアップロードしてください。</string>
   <string name="file_list_loading">読込中...</string>
-  <string name="file_list_no_app_for_file_type">ファイルタイプ に対応するアプリはありません！</string>
   <string name="local_file_list_empty">このフォルダーにはファイルがありません。</string>
   <string name="local_file_list_empty_just_folders">このフォルダにはフォルダがありません。</string>
   <string name="upload_list_empty">ファイルがありません。</string>
@@ -251,7 +250,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">プライベートストレージからファイルをコピー中</string>
   <string name="oauth_check_onoff">oAuth2でログイン</string>
   <string name="oauth_login_connection">oAuth2サーバーに接続中...</string>
-  <string name="ssl_validator_header">サイトの識別子を確認できませんでした</string>
   <string name="ssl_validator_reason_cert_not_trusted">- サーバー証明書は信頼されていません</string>
   <string name="ssl_validator_reason_cert_expired">- サーバー証明書は有効期限切れです</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- サーバー証明書の有効期限は未来のものです</string>

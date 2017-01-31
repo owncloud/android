@@ -61,7 +61,6 @@
   <string name="file_list_seconds_ago">пре пар секунди</string>
   <string name="file_list_empty">Овде нема ничег. Отпремите нешто!</string>
   <string name="file_list_loading">Учитавам…</string>
-  <string name="file_list_no_app_for_file_type">Нема апликације за тип фајла!</string>
   <string name="local_file_list_empty">Нема фајлова у овој фасцикли.</string>
   <string name="file_list_folder">фасцикла</string>
   <string name="file_list_folders">фасцикли</string>
@@ -230,7 +229,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Копирам фајл из личног складишта</string>
   <string name="oauth_check_onoff">Пријави се помоћу „oAuth2“</string>
   <string name="oauth_login_connection">Повезујем се на „oAuth2“ сервер...</string>
-  <string name="ssl_validator_header">Не могу да проверим идентитет сајта</string>
   <string name="ssl_validator_reason_cert_not_trusted">– Сертификат сервера није од поверења</string>
   <string name="ssl_validator_reason_cert_expired">– Сертификат сервера је истекао</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Датуми важења сертификата су у будућности</string>

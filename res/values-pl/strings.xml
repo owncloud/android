@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">sekund temu</string>
   <string name="file_list_empty">Pusto. Wyślij coś!</string>
   <string name="file_list_loading">Wczytywanie...</string>
-  <string name="file_list_no_app_for_file_type">Brak aplikacji dla tego typu plików!</string>
   <string name="local_file_list_empty">Nie ma plików w tym folderze.</string>
   <string name="local_file_list_empty_just_folders">W tym folderze nie ma żadnych folderów.</string>
   <string name="upload_list_empty">Brak przesłanych plików.</string>
@@ -250,7 +249,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopiowanie pliku z prywatnego zasobu</string>
   <string name="oauth_check_onoff">Loguj przez oAuth2</string>
   <string name="oauth_login_connection">Łączenie z serwerem oAuth2...</string>
-  <string name="ssl_validator_header">Nie można zweryfikować tożsamości strony</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Certyfikat serwera jest niezaufany</string>
   <string name="ssl_validator_reason_cert_expired">- Certyfikat serwera wygasł</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Certyfikat serwera jest wystawiony w przyszłości</string>

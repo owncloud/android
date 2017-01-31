@@ -66,7 +66,6 @@
   <string name="file_list_seconds_ago">Sekonnen hier</string>
   <string name="file_list_empty">Hei ass näischt. Lued eppes erop!</string>
   <string name="file_list_loading">Et gëtt gelueden</string>
-  <string name="file_list_no_app_for_file_type">Et gouf keng App fir dësen Typ vu Fichier fonnt!</string>
   <string name="local_file_list_empty">Et gi keng Fichieren fir dësen Dossier.</string>
   <string name="upload_list_empty">Keng Uploads verfügbar.</string>
   <string name="file_list_folder">Dossier</string>
@@ -232,7 +231,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">De Fichier gëtt vun engem private Späicher kopéiert</string>
   <string name="oauth_check_onoff">Mat oAuth2 aloggen</string>
   <string name="oauth_login_connection">Verbanne mam oAuth2 Server ...</string>
-  <string name="ssl_validator_header">D\'Identitéit vun der Säit konnt net iwwerpréift ginn</string>
   <string name="ssl_validator_reason_cert_not_trusted">- De Server-Zertifikat ass net vertrauensvoll</string>
   <string name="ssl_validator_reason_cert_expired">- D\'Server-Zerfitikat ass ofgelaf</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- D\'Validitéitsdate vum Server-Zertifikat leien an der Zukunft</string>

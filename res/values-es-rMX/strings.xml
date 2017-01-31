@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">hace segundos</string>
   <string name="file_list_empty">No hay nada aquí. ¡Suba algo!</string>
   <string name="file_list_loading">Cargando...</string>
-  <string name="file_list_no_app_for_file_type">¡Aplicación no encontrada para el tipo de archivo!</string>
   <string name="local_file_list_empty">No hay archivos en esta carpeta.</string>
   <string name="local_file_list_empty_just_folders">No hay archivos en esta carpeta</string>
   <string name="upload_list_empty">Sin datos para subir.</string>
@@ -250,7 +249,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Copiando el archivo desde el almacenamiento privado.</string>
   <string name="oauth_check_onoff">Ingresar con oAuth2</string>
   <string name="oauth_login_connection">Conectando al servidor oAuth2...</string>
-  <string name="ssl_validator_header">La identidad del sitio no puede ser verificada</string>
   <string name="ssl_validator_reason_cert_not_trusted">- El certificado del servidor no es de confianza</string>
   <string name="ssl_validator_reason_cert_expired">- El certificado del servidor expiró</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- El certificado del servidor es de una fecha que aún no ha llegado</string>
