@@ -672,7 +672,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 credentials = OwnCloudCredentialsFactory.newBasicCredentials(
                     username,
                     password,
-                    (ocVersion != null && ocVersion.isSessionMonitoringSupported())
+                    (ocVersion != null && ocVersion.isPreemptiveAuthenticationPreferred())
                 );
 
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
@@ -975,7 +975,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             password,
             (mServerInfo != null &&
                 mServerInfo.mVersion != null &&
-                mServerInfo.mVersion.isSessionMonitoringSupported()
+                mServerInfo.mVersion.isPreemptiveAuthenticationPreferred()
             )
         );
         accessRootFolder(credentials);
