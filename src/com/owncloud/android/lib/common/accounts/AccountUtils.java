@@ -282,65 +282,40 @@ public class AccountUtils {
 
 
     /**
-     * Restore the client cookies
+     * Restore the client cookies persisted in an account stored in the system AccountManager.
      *
-     * @param account
-     * @param client
-     * @param context
+     * @param account           Stored account.
+     * @param client            Client to restore cookies in.
+     * @param context           Android context used to access the system AccountManager.
      */
     public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
+        if (account == null) {
+            Log_OC.d(TAG, "Cannot restore cookie for null account");
 
-        Log_OC.d(TAG, "Restoring cookies for " + account.name);
+        } else {
+            Log_OC.d(TAG, "Restoring cookies for " + account.name);
 
-        // Account Manager
-        AccountManager am = AccountManager.get(context.getApplicationContext());
+            // Account Manager
+            AccountManager am = AccountManager.get(context.getApplicationContext());
 
-        Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getWebdavUri();
+            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getWebdavUri();
 
-        String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
-        if (cookiesString != null) {
-            String[] cookies = cookiesString.split(";");
-            if (cookies.length > 0) {
-                for (int i = 0; i < cookies.length; i++) {
-                    Cookie cookie = new Cookie();
-                    int equalPos = cookies[i].indexOf('=');
-                    cookie.setName(cookies[i].substring(0, equalPos));
-                    cookie.setValue(cookies[i].substring(equalPos + 1));
-                    cookie.setDomain(serverUri.getHost());    // VERY IMPORTANT
-                    cookie.setPath(serverUri.getPath());    // VERY IMPORTANT
+            String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
+            if (cookiesString != null) {
+                String[] cookies = cookiesString.split(";");
+                if (cookies.length > 0) {
+                    for (int i = 0; i < cookies.length; i++) {
+                        Cookie cookie = new Cookie();
+                        int equalPos = cookies[i].indexOf('=');
+                        cookie.setName(cookies[i].substring(0, equalPos));
+                        cookie.setValue(cookies[i].substring(equalPos + 1));
+                        cookie.setDomain(serverUri.getHost());    // VERY IMPORTANT
+                        cookie.setPath(serverUri.getPath());    // VERY IMPORTANT
 
-                    client.getState().addCookie(cookie);
+                        client.getState().addCookie(cookie);
+                    }
                 }
             }
-        }
-    }
-
-    /**
-     * Restore the client cookies from accountName
-     *
-     * @param accountName
-     * @param client
-     * @param context
-     */
-    public static void restoreCookies(String accountName, OwnCloudClient client, Context context) {
-        Log_OC.d(TAG, "Restoring cookies for " + accountName);
-
-        // Account Manager
-        AccountManager am = AccountManager.get(context.getApplicationContext());
-
-        // Get account
-        Account account = null;
-        Account accounts[] = am.getAccounts();
-        for (Account a : accounts) {
-            if (a.name.equals(accountName)) {
-                account = a;
-                break;
-            }
-        }
-
-        // Restoring cookies
-        if (account != null) {
-            restoreCookies(account, client, context);
         }
     }
 
@@ -368,7 +343,7 @@ public class AccountUtils {
         /**
          * Value under this key should handle path to webdav php script. Will be
          * removed and usage should be replaced by combining
-         * {@link com.owncloud.android.authentication.AuthenticatorActivity.KEY_OC_BASE_URL} and
+         * {@link #KEY_OC_BASE_URL } and
          * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
          *
          * @deprecated

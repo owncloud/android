@@ -25,9 +25,7 @@
 package com.owncloud.android.lib.common;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -46,193 +44,192 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
  * Implementation of {@link OwnCloudClientManager}
- * 
+ * <p>
  * TODO check multithreading safety
- * 
+ *
  * @author David A. Velasco
  * @author masensio
  */
 
 public class SingleSessionManager implements OwnCloudClientManager {
-    
-	private static final String TAG = SingleSessionManager.class.getSimpleName();
+
+    private static final String TAG = SingleSessionManager.class.getSimpleName();
 
     private ConcurrentMap<String, OwnCloudClient> mClientsWithKnownUsername =
-    		new ConcurrentHashMap<String, OwnCloudClient>();
-    
+        new ConcurrentHashMap<String, OwnCloudClient>();
+
     private ConcurrentMap<String, OwnCloudClient> mClientsWithUnknownUsername =
-    		new ConcurrentHashMap<String, OwnCloudClient>();
-    
-    
+        new ConcurrentHashMap<String, OwnCloudClient>();
+
+
     @Override
     public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-            throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
-            IOException {
+        throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
+        IOException {
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "getClientFor starting ");
         }
-    	if (account == null) {
-    		throw new IllegalArgumentException("Cannot get an OwnCloudClient for a null account");
-    	}
+        if (account == null) {
+            throw new IllegalArgumentException("Cannot get an OwnCloudClient for a null account");
+        }
 
-    	OwnCloudClient client = null;
-    	String accountName = account.getName();
-    	String sessionName = account.getCredentials() == null ? "" :
-            AccountUtils.buildAccountName (
+        OwnCloudClient client = null;
+        String accountName = account.getName();
+        String sessionName = account.getCredentials() == null ? "" :
+            AccountUtils.buildAccountName(
                 account.getBaseUri(),
                 account.getCredentials().getAuthToken()
-            )
-        ;
+            );
 
-    	if (accountName != null) {
-    		client = mClientsWithKnownUsername.get(accountName);
-    	}
-    	boolean reusingKnown = false;	// just for logs
-    	if (client == null) {
-    		if (accountName != null) {
-    			client = mClientsWithUnknownUsername.remove(sessionName);
-    			if (client != null) {
+        if (accountName != null) {
+            client = mClientsWithKnownUsername.get(accountName);
+        }
+        boolean reusingKnown = false;    // just for logs
+        if (client == null) {
+            if (accountName != null) {
+                client = mClientsWithUnknownUsername.remove(sessionName);
+                if (client != null) {
                     if (Log.isLoggable(TAG, Log.VERBOSE)) {
                         Log_OC.v(TAG, "reusing client for session " + sessionName);
                     }
-    				mClientsWithKnownUsername.put(accountName, client);
+                    mClientsWithKnownUsername.put(accountName, client);
                     if (Log.isLoggable(TAG, Log.VERBOSE)) {
                         Log_OC.v(TAG, "moved client to account " + accountName);
                     }
-    			}
-    		} else {
-        		client = mClientsWithUnknownUsername.get(sessionName);
-    		}
-    	} else {
+                }
+            } else {
+                client = mClientsWithUnknownUsername.get(sessionName);
+            }
+        } else {
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
                 Log_OC.v(TAG, "reusing client for account " + accountName);
             }
-    		reusingKnown = true;
-    	}
-    	
-    	if (client == null) {
-    		// no client to reuse - create a new one
-    		client = OwnCloudClientFactory.createOwnCloudClient(
-    				account.getBaseUri(), 
-    				context.getApplicationContext(), 
-    				true);	// TODO remove dependency on OwnCloudClientFactory
+            reusingKnown = true;
+        }
+
+        if (client == null) {
+            // no client to reuse - create a new one
+            client = OwnCloudClientFactory.createOwnCloudClient(
+                account.getBaseUri(),
+                context.getApplicationContext(),
+                true);    // TODO remove dependency on OwnCloudClientFactory
             client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
-            	// enable cookie tracking
-            
-    		AccountUtils.restoreCookies(accountName, client, context);
+            // enable cookie tracking
+
+            AccountUtils.restoreCookies(account.getSavedAccount(), client, context);
 
             account.loadCredentials(context);
-    		client.setCredentials(account.getCredentials());
-    		if (accountName != null) {
-    			mClientsWithKnownUsername.put(accountName, client);
+            client.setCredentials(account.getCredentials());
+            if (accountName != null) {
+                mClientsWithKnownUsername.put(accountName, client);
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log_OC.v(TAG, "new client for account " + accountName);
                 }
 
-    		} else {
-    			mClientsWithUnknownUsername.put(sessionName, client);
+            } else {
+                mClientsWithUnknownUsername.put(sessionName, client);
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log_OC.v(TAG, "new client for session " + sessionName);
                 }
-    		}
-    	} else {
-    		if (!reusingKnown && Log.isLoggable(TAG, Log.VERBOSE)) {
-    			Log_OC.v(TAG, "reusing client for session " + sessionName);
-    		}
-    		keepCredentialsUpdated(account, client);
-    		keepUriUpdated(account, client);
-    	}
+            }
+        } else {
+            if (!reusingKnown && Log.isLoggable(TAG, Log.VERBOSE)) {
+                Log_OC.v(TAG, "reusing client for session " + sessionName);
+            }
+            keepCredentialsUpdated(account, client);
+            keepUriUpdated(account, client);
+        }
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "getClientFor finishing ");
         }
-    	return client;
+        return client;
     }
-    
-    
-	@Override
-	public OwnCloudClient removeClientFor(OwnCloudAccount account) {
+
+
+    @Override
+    public OwnCloudClient removeClientFor(OwnCloudAccount account) {
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "removeClientFor starting ");
         }
 
-    	if (account == null) {
-    		return null;
-    	}
+        if (account == null) {
+            return null;
+        }
 
-    	OwnCloudClient client = null;
-    	String accountName = account.getName();
-    	if (accountName != null) {
-    		client = mClientsWithKnownUsername.remove(accountName);
-        	if (client != null) {
+        OwnCloudClient client;
+        String accountName = account.getName();
+        if (accountName != null) {
+            client = mClientsWithKnownUsername.remove(accountName);
+            if (client != null) {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log_OC.v(TAG, "Removed client for account " + accountName);
                 }
-        		return client;
-        	} else {
+                return client;
+            } else {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log_OC.v(TAG, "No client tracked for  account " + accountName);
                 }
-        	}
-    	}
+            }
+        }
 
         mClientsWithUnknownUsername.clear();
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "removeClientFor finishing ");
         }
-		return null;
-		
-	}
+        return null;
 
-    
+    }
+
+
     @Override
     public void saveAllClients(Context context, String accountType)
-    		throws AccountNotFoundException, AuthenticatorException, IOException,
-    		OperationCanceledException {
+        throws AccountNotFoundException, AuthenticatorException, IOException,
+        OperationCanceledException {
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "Saving sessions... ");
         }
 
-    	Iterator<String> accountNames = mClientsWithKnownUsername.keySet().iterator();
-    	String accountName = null;
-    	Account account = null;
-    	while (accountNames.hasNext()) {
-    		accountName = accountNames.next();
-    		account = new Account(accountName, accountType);
-    		AccountUtils.saveClient(
-    				mClientsWithKnownUsername.get(accountName),
-    				account, 
-    				context);
-    	}
+        Iterator<String> accountNames = mClientsWithKnownUsername.keySet().iterator();
+        String accountName;
+        Account account;
+        while (accountNames.hasNext()) {
+            accountName = accountNames.next();
+            account = new Account(accountName, accountType);
+            AccountUtils.saveClient(
+                mClientsWithKnownUsername.get(accountName),
+                account,
+                context);
+        }
 
         if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log_OC.d(TAG, "All sessions saved");
         }
     }
 
-    
-	private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
-		OwnCloudCredentials recentCredentials = account.getCredentials();
-		if (recentCredentials != null && !recentCredentials.getAuthToken().equals(
-				reusedClient.getCredentials().getAuthToken())) {
-			reusedClient.setCredentials(recentCredentials);
-		}
-		
-	}
 
-	// this method is just a patch; we need to distinguish accounts in the same host but
-	// different paths; but that requires updating the accountNames for apps upgrading 
-	private void keepUriUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
-		Uri recentUri = account.getBaseUri();
-		if (!recentUri.equals(reusedClient.getBaseUri())) {
-			reusedClient.setBaseUri(recentUri);
-		}
-		
-	}
+    private void keepCredentialsUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
+        OwnCloudCredentials recentCredentials = account.getCredentials();
+        if (recentCredentials != null && !recentCredentials.getAuthToken().equals(
+            reusedClient.getCredentials().getAuthToken())) {
+            reusedClient.setCredentials(recentCredentials);
+        }
+
+    }
+
+    // this method is just a patch; we need to distinguish accounts in the same host but
+    // different paths; but that requires updating the accountNames for apps upgrading
+    private void keepUriUpdated(OwnCloudAccount account, OwnCloudClient reusedClient) {
+        Uri recentUri = account.getBaseUri();
+        if (!recentUri.equals(reusedClient.getBaseUri())) {
+            reusedClient.setBaseUri(recentUri);
+        }
+
+    }
 
 
 }

@@ -28,6 +28,11 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <!-- USE_CREDENTIALS, MANAGE_ACCOUNTS and AUTHENTICATE_ACCOUNTS are needed for API < 23.
+        In API >= 23 the do not exist anymore -->
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="24" />
