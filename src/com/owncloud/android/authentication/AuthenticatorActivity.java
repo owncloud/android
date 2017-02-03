@@ -1370,6 +1370,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         case UNKNOWN_ERROR:
             mAuthStatusText = R.string.auth_unknown_error_title;
             break;
+        case FORBIDDEN:
+            mAuthStatusText = R.string.auth_forbidden;
+            break;
         default:
             mAuthStatusText = 0;
             mAuthStatusIcon = 0;
