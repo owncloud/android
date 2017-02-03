@@ -388,7 +388,7 @@
   <string name="share_add_user_or_group">Añadir usuario o grupo</string>
   <string name="share_via_link_section_title">Compartir enlace</string>
   <string name="share_via_link_expiration_date_label">Establecer fecha de caducidad</string>
-  <string name="share_via_link_password_label">Protección con contraseña</string>
+  <string name="share_via_link_password_label">Proteger con contraseña</string>
   <string name="share_via_link_password_title">Asegurado</string>
   <string name="share_via_link_edit_permission_label">Permitir edición</string>
   <string name="share_get_public_link_button">Obtener enlace</string>
@@ -403,9 +403,9 @@
   <string name="share_privilege_can_share">puede compartir</string>
   <string name="share_privilege_can_edit">puede editar</string>
   <string name="share_privilege_can_edit_create">crear</string>
-  <string name="share_privilege_can_edit_change">cambio</string>
+  <string name="share_privilege_can_edit_change">Cambiar</string>
   <string name="share_privilege_can_edit_delete">borrar</string>
-  <string name="edit_share_unshare">Parar de compatir</string>
+  <string name="edit_share_unshare">Dejar de compatir</string>
   <string name="edit_share_done">hecho</string>
   <string name="action_retry_uploads">Reintento fallido</string>
   <string name="action_clear_failed_uploads">Limpiar fallido</string>
@@ -417,8 +417,8 @@
   <string name="manage_space_description">Los ajustes, bases de datos y certificados de servidor de %1$s serán borrados permanentemente. \n\nLos archivos descargados se mantendrán intactos. .\n\nEste proceso puede tardar algún tiempo.</string>
   <string name="manage_space_clear_data">Limpiar datos</string>
   <string name="manage_space_error">No se han podido eliminar algunos archivos</string>
-  <string name="permission_storage_access">Se requieren permisos adicionales para subir &amp; y descargar archivos.</string>
-  <string name="local_file_not_found_toast">El archivo no se encuentra en el servidor local de archivos.</string>
+  <string name="permission_storage_access">Se requieren permisos adicionales para subir &amp; descargar archivos.</string>
+  <string name="local_file_not_found_toast">El archivo no se encuentra en el sistema local de archivos.</string>
   <string name="confirmation_remove_files_alert">¿Desea realmene quitar los ítems seleccionados?</string>
   <string name="confirmation_remove_folders_alert">¿Desea realmente quitar los ítems seleccionados y sus contenidos?</string>
   <string name="maintenance_mode">Servidor en modo mantenimiento</string>
