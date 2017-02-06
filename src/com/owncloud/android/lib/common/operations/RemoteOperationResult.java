@@ -118,7 +118,8 @@ public class RemoteOperationResult implements Serializable {
         INVALID_CHARACTER_DETECT_IN_SERVER,
         DELAYED_FOR_WIFI,
         LOCAL_FILE_NOT_FOUND,
-        MAINTENANCE_MODE
+        MAINTENANCE_MODE,
+        SPECIFIC_SERVICE_UNAVAILABLE
     }
 
     private boolean mSuccess = false;
@@ -254,8 +255,27 @@ public class RemoteOperationResult implements Serializable {
                 ErrorMessageParser xmlParser = new ErrorMessageParser();
                 try {
                     String errorMessage = xmlParser.parseXMLResponse(is);
-                    if (errorMessage != null && errorMessage != "") {
+                    if (errorMessage != "" && errorMessage != null) {
                         mCode = ResultCode.SPECIFIC_FORBIDDEN;
+                        mHttpPhrase = errorMessage;
+                    }
+                } catch (Exception e) {
+                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
+                    // mCode stays as set in this(success, httpCode, headers)
+                }
+            }
+        }
+
+        if (mHttpCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {
+            String bodyResponse = httpMethod.getResponseBodyAsString();
+
+            if (bodyResponse != null && bodyResponse.length() > 0) {
+                InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
+                ErrorMessageParser xmlParser = new ErrorMessageParser();
+                try {
+                    String errorMessage = xmlParser.parseXMLResponse(is);
+                    if (errorMessage != "" && errorMessage != null) {
+                        mCode = ResultCode.SPECIFIC_SERVICE_UNAVAILABLE;
                         mHttpPhrase = errorMessage;
                     }
                 } catch (Exception e) {

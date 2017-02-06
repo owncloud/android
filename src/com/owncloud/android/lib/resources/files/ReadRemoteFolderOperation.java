@@ -96,7 +96,6 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                 }
             } else {
                 // synchronization failed
-                client.exhaustResponse(query.getResponseBodyAsStream());
                 result = new RemoteOperationResult(false, query);
             }
 
