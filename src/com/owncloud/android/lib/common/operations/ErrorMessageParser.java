@@ -33,10 +33,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Parser for forbidden server exception
- * @author masensio
+ * Parser for server exceptions
+ * @author davidgonzalez
  */
-public class ForbiddenExceptionParser {
+public class ErrorMessageParser {
 	// No namespaces
 	private static final String ns = null;
 
@@ -45,9 +45,9 @@ public class ForbiddenExceptionParser {
 	private static final String NODE_MESSAGE = "s:message";
 
 	/**
-	 * Parse is as an forbidden exception
+	 * Parse exception response
 	 * @param is
-	 * @return reason for forbidden exception
+	 * @return errorMessage for an exception
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
@@ -75,7 +75,7 @@ public class ForbiddenExceptionParser {
 	/**
 	 * Parse OCS node
 	 * @param parser
-	 * @return reason for forbidden exception
+	 * @return reason for exception
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
