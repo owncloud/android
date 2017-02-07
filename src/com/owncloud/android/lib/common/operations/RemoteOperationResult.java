@@ -254,7 +254,7 @@ public class RemoteOperationResult implements Serializable {
                 ErrorMessageParser xmlParser = new ErrorMessageParser();
                 try {
                     String errorMessage = xmlParser.parseXMLResponse(is);
-                    if (errorMessage != "" && errorMessage != null) {
+                    if (errorMessage != null && errorMessage != "") {
                         mCode = ResultCode.SPECIFIC_FORBIDDEN;
                         mHttpPhrase = errorMessage;
                     }

@@ -57,6 +57,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 public class DownloadRemoteFileOperation extends RemoteOperation {
 
     private static final String TAG = DownloadRemoteFileOperation.class.getSimpleName();
+    private static final int FORBIDDEN_ERROR = 403;
 
     private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
@@ -161,7 +162,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     // TODO some kind of error control!
                 }
 
-            } else if (status != 403){
+            } else if (status != FORBIDDEN_ERROR){
                 client.exhaustResponse(mGet.getResponseBodyAsStream());
 
             } // else, body read by RemoteOeprationResult constructor
