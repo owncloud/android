@@ -94,6 +94,7 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SamlWebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 
 import java.security.cert.X509Certificate;
@@ -1301,12 +1302,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void updateAuthStatusIconAndText(RemoteOperationResult result) {
         mAuthStatusIcon = R.drawable.common_error;    // the most common case in the switch below
 
+        String test = ErrorMessageAdapter.getErrorCauseMessage(result, null, getResources());
+
         switch (result.getCode()) {
         case OK_SSL:
             mAuthStatusIcon = R.drawable.ic_lock;
             mAuthStatusText = R.string.auth_secure_connection;
             break;
-
         case OK_NO_SSL:
         case OK:
             if (mHostUrlInput.getText().toString().trim().toLowerCase().startsWith("http://") ) {
@@ -1322,56 +1324,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mAuthStatusIcon = R.drawable.no_network;
             mAuthStatusText = R.string.auth_no_net_conn_title;
             break;
-
-        case SSL_RECOVERABLE_PEER_UNVERIFIED:
-            mAuthStatusText = R.string.auth_ssl_unverified_server_title;
-            break;
-        case BAD_OC_VERSION:
-            mAuthStatusText = R.string.auth_bad_oc_version_title;
-            break;
-        case WRONG_CONNECTION:
-            mAuthStatusText = R.string.auth_wrong_connection_title;
-            break;
         case TIMEOUT:
             mAuthStatusText = R.string.auth_timeout_title;
-            break;
-        case INCORRECT_ADDRESS:
-            mAuthStatusText = R.string.auth_incorrect_address_title;
-            break;
-        case SSL_ERROR:
-            mAuthStatusText = R.string.auth_ssl_general_error_title;
-            break;
-        case UNAUTHORIZED:
-            mAuthStatusText = R.string.auth_unauthorized;
             break;
         case HOST_NOT_AVAILABLE:
             mAuthStatusText = R.string.auth_unknown_host_title;
             break;
-        case INSTANCE_NOT_CONFIGURED:
-            mAuthStatusText = R.string.auth_not_configured_title;
-            break;
-        case FILE_NOT_FOUND:
-            mAuthStatusText = R.string.auth_incorrect_path_title;
-            break;
-        case OAUTH2_ERROR:
-            mAuthStatusText = R.string.auth_oauth_error;
-            break;
-        case OAUTH2_ERROR_ACCESS_DENIED:
-            mAuthStatusText = R.string.auth_oauth_error_access_denied;
-            break;
-        case ACCOUNT_NOT_NEW:
-            mAuthStatusText = R.string.auth_account_not_new;
-            break;
-        case ACCOUNT_NOT_THE_SAME:
-            mAuthStatusText = R.string.auth_account_not_the_same;
-            break;
         case UNHANDLED_HTTP_CODE:
-        case UNKNOWN_ERROR:
-            mAuthStatusText = R.string.auth_unknown_error_title;
-            break;
-        case FORBIDDEN:
-            mAuthStatusText = R.string.auth_forbidden;
-            break;
         default:
             mAuthStatusText = 0;
             mAuthStatusIcon = 0;
@@ -1506,8 +1465,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     private void updateAccountAuthentication() throws AccountNotFoundException {
 
-
-        
         Bundle response = new Bundle();
         response.putString(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
         response.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccount.type);

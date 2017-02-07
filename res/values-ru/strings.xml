@@ -117,7 +117,7 @@
   <string name="uploader_upload_failed_content_single">Загрузка %1$s не может быть завершена</string>
   <string name="uploader_upload_failed_credentials_error">Загрузка не удалась, вам необходимо войти повторно.</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
+  <string name="ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
   <string name="uploads_view_title">Загрузки</string>
   <string name="uploads_view_group_current_uploads">Текущие</string>
   <string name="uploads_view_group_failed_uploads">Не удалось (тапните для повторения)</string>

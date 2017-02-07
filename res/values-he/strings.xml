@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">אין אפשרות להשלים את ההעלאה של %1$s</string>
   <string name="uploader_upload_failed_credentials_error">העלאה נכשלה, יש להתחבר מחדש</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">תעודת שרת אינה מהימנה</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">תעודת השרת אינה מהימנה</string>
+  <string name="ssl_certificate_not_trusted">תעודת השרת אינה מהימנה</string>
   <string name="uploads_view_title">העלאות</string>
   <string name="uploads_view_group_current_uploads">נוכחי</string>
   <string name="uploads_view_group_failed_uploads">נכשל (יש להקיש לניסיון נוסף)</string>

@@ -117,7 +117,7 @@ Download hier: %2$s</string>
   <string name="uploader_upload_failed_content_single">Upload van %1$s kon niet voltooid worden</string>
   <string name="uploader_upload_failed_credentials_error">Upload mislukt, u moet opnieuw inloggen</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
+  <string name="ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_group_failed_uploads">Mislukt (tik om opnieuw te proberen)</string>

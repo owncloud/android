@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">Hochladen von  %1$s konnte nicht abgeschlossen werden</string>
   <string name="uploader_upload_failed_credentials_error">Hochladen fehlgeschlagen, du musst dich erneut anmelden</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
+  <string name="ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Wird hochgeladen</string>
   <string name="uploads_view_group_failed_uploads">Fehlgeschlagen (Tippen zum Wiederholen)</string>

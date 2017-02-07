@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">Il caricamento di %1$s non può essere completato</string>
   <string name="uploader_upload_failed_credentials_error">Caricamento non riuscito, devi effettuare nuovamente l\'accesso</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
+  <string name="ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
   <string name="uploads_view_title">Caricamenti</string>
   <string name="uploads_view_group_current_uploads">Attuale</string>
   <string name="uploads_view_group_failed_uploads">Non riuscito (tocca per riprovare)</string>

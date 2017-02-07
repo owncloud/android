@@ -581,7 +581,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     case SSL_RECOVERABLE_PEER_UNVERIFIED:
                         status =
                             mParentActivity.getString(
-                                R.string.uploads_view_upload_status_failed_ssl_certificate_not_trusted
+                                R.string.ssl_certificate_not_trusted
                             );
                         break;
                     case UNKNOWN:

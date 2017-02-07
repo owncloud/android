@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">Envio de %1$s não pôde ser finalizado</string>
   <string name="uploader_upload_failed_credentials_error">Falha no envio, você precisa se conectar novamente</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">O certificado de servidor não é confiável</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">O certificado de servidor não é confiável</string>
+  <string name="ssl_certificate_not_trusted">O certificado de servidor não é confiável</string>
   <string name="uploads_view_title">Envios</string>
   <string name="uploads_view_group_current_uploads">Atual</string>
   <string name="uploads_view_group_failed_uploads">Falha (toque para tentar novamente)</string>
