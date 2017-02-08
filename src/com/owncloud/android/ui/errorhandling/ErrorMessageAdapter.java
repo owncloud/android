@@ -355,6 +355,7 @@ public class ErrorMessageAdapter {
                 message = res.getString(
                         R.string.auth_incorrect_address_title
                 );
+
             } else if (result.getCode() == ResultCode.SSL_ERROR) {
                 message = res.getString(
                         R.string.auth_ssl_general_error_title
