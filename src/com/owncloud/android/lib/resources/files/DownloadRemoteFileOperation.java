@@ -57,6 +57,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 public class DownloadRemoteFileOperation extends RemoteOperation {
 
     private static final String TAG = DownloadRemoteFileOperation.class.getSimpleName();
+    private static final int FORBIDDEN_ERROR = 403;
 
     private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
@@ -82,8 +83,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
         /// perform the download
         try {
             tmpFile.getParentFile().mkdirs();
-            int status = downloadFile(client, tmpFile);
-            result = new RemoteOperationResult(isSuccess(status), mGet);
+            result = downloadFile(client, tmpFile);
             Log_OC.i(TAG, "Download of " + mRemotePath + " to " + getTmpPath() + ": " +
                 result.getLogMessage());
 
@@ -97,8 +97,10 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
     }
 
 
-    protected int downloadFile(OwnCloudClient client, File targetFile) throws HttpException,
+    private RemoteOperationResult downloadFile(OwnCloudClient client, File targetFile) throws
         IOException, OperationCancelledException {
+
+        RemoteOperationResult result;
         int status = -1;
         boolean savedFile = false;
         mGet = new GetMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
@@ -160,9 +162,12 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     // TODO some kind of error control!
                 }
 
-            } else {
+            } else if (status != FORBIDDEN_ERROR){
                 client.exhaustResponse(mGet.getResponseBodyAsStream());
-            }
+
+            } // else, body read by RemoteOeprationResult constructor
+
+            result = new RemoteOperationResult(isSuccess(status), mGet);
 
         } finally {
             if (fos != null) fos.close();
@@ -171,7 +176,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
             }
             mGet.releaseConnection();    // let the connection available for other methods
         }
-        return status;
+        return result;
     }
 
     private boolean isSuccess(int status) {

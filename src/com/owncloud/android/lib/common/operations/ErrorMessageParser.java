@@ -1,6 +1,5 @@
-
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -34,30 +33,27 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Parser for Invalid Character server exception
- * @author masensio
+ * Parser for server exceptions
+ * @author davidgonzalez
  */
-public class InvalidCharacterExceptionParser {
-
-    private static final String EXCEPTION_STRING = "OC\\Connector\\Sabre\\Exception\\InvalidPath";
-	private static final String EXCEPTION_UPLOAD_STRING = "OCP\\Files\\InvalidPathException";
-
-    // No namespaces
+public class ErrorMessageParser {
+	// No namespaces
 	private static final String ns = null;
 
-    // Nodes for XML Parser
-    private static final String NODE_ERROR = "d:error";
-	private static final String NODE_EXCEPTION = "s:exception";
-    /**
-	 * Parse is as an Invalid Path Exception
+	// Nodes for XML Parser
+	private static final String NODE_ERROR = "d:error";
+	private static final String NODE_MESSAGE = "s:message";
+
+	/**
+	 * Parse exception response
 	 * @param is
-	 * @return if The exception is an Invalid Char Exception
+	 * @return errorMessage for an exception
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public boolean parseXMLResponse(InputStream is) throws XmlPullParserException,
-            IOException {
-        boolean result = false;
+	public String parseXMLResponse(InputStream is) throws XmlPullParserException,
+			IOException {
+		String errorMessage = "";
 
 		try {
 			// XMLPullParser
@@ -68,39 +64,37 @@ public class InvalidCharacterExceptionParser {
 			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 			parser.setInput(is, null);
 			parser.nextTag();
-			result = readError(parser);
+			errorMessage = readError(parser);
 
 		} finally {
 			is.close();
 		}
-		return result;
+		return errorMessage;
 	}
 
 	/**
 	 * Parse OCS node
 	 * @param parser
-	 * @return List of ShareRemoteFiles
+	 * @return reason for exception
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private boolean readError (XmlPullParser parser) throws XmlPullParserException, IOException {
-		String exception = "";
+	private String readError (XmlPullParser parser) throws XmlPullParserException, IOException {
+		String errorMessage = "";
 		parser.require(XmlPullParser.START_TAG,  ns , NODE_ERROR);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
 			String name = parser.getName();
-			// read NODE_EXCEPTION
-			if (name.equalsIgnoreCase(NODE_EXCEPTION)) {
-				exception = readText(parser);
+			// read NODE_MESSAGE
+			if (name.equalsIgnoreCase(NODE_MESSAGE)) {
+				errorMessage = readText(parser);
 			} else {
 				skip(parser);
 			}
-
 		}
-		return exception.equalsIgnoreCase(EXCEPTION_STRING) ||
-				exception.equalsIgnoreCase(EXCEPTION_UPLOAD_STRING);
+		return errorMessage;
 	}
 
 	/**
@@ -116,17 +110,17 @@ public class InvalidCharacterExceptionParser {
 		int depth = 1;
 		while (depth != 0) {
 			switch (parser.next()) {
-			case XmlPullParser.END_TAG:
-				depth--;
-				break;
-			case XmlPullParser.START_TAG:
-				depth++;
-				break;
+				case XmlPullParser.END_TAG:
+					depth--;
+					break;
+				case XmlPullParser.START_TAG:
+					depth++;
+					break;
 			}
 		}
 	}
 
-    	/**
+	/**
 	 * Read the text from a node
 	 * @param parser
 	 * @return Text of the node
