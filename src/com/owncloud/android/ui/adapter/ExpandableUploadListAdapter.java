@@ -599,6 +599,9 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         // should not get here ; status should be UPLOAD_SUCCESS
                         status =  mParentActivity.getString(R.string.uploads_view_upload_status_succeeded);
                         break;
+                    case SPECIFIC_FORBIDDEN:
+                        status = mParentActivity.getString(R.string.uploads_view_upload_status_failed_firewall_error);
+                        break;
                     default:
                         status = "Naughty devs added a new fail result but no description for the user";
                         break;
