@@ -58,6 +58,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
 
     private static final String TAG = DownloadRemoteFileOperation.class.getSimpleName();
     private static final int FORBIDDEN_ERROR = 403;
+    private static final int SERVICE_UNAVAILABLE_ERROR = 503;
 
     private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
@@ -162,7 +163,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     // TODO some kind of error control!
                 }
 
-            } else if (status != FORBIDDEN_ERROR){
+            } else if (status != FORBIDDEN_ERROR && status != SERVICE_UNAVAILABLE_ERROR){
                 client.exhaustResponse(mGet.getResponseBodyAsStream());
 
             } // else, body read by RemoteOeprationResult constructor

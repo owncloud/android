@@ -25,7 +25,8 @@
 package com.owncloud.android.lib.resources.files;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.jackrabbit.webdav.DavConstants;
+import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
 
 import android.content.Context;
 
@@ -47,6 +48,9 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
     public static final int TIMEOUT = 10000;
     
     private static final String TAG = ExistenceCheckRemoteOperation.class.getSimpleName();
+
+    private static final int FORBIDDEN_ERROR = 403;
+    private static final int SERVICE_UNAVAILABLE_ERROR = 503;
     
     private String mPath;
     private boolean mSuccessIfAbsent;
@@ -83,24 +87,32 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
     @Override
 	protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        HeadMethod head = null;
+        PropFindMethod propfind = null;
         boolean previousFollowRedirects = client.getFollowRedirects();
         try {
-            head = new HeadMethod(client.getWebdavUri() + WebdavUtils.encodePath(mPath));
+            propfind = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mPath),
+                    WebdavUtils.getAllPropSet(), DavConstants.DEPTH_0);
             client.setFollowRedirects(false);
-            int status = client.executeMethod(head, TIMEOUT, TIMEOUT);
+            int status = client.executeMethod(propfind, TIMEOUT, TIMEOUT);
             if (previousFollowRedirects) {
-                mRedirectionPath = client.followRedirection(head);
+                mRedirectionPath = client.followRedirection(propfind);
                 status = mRedirectionPath.getLastStatus();
             }
-            client.exhaustResponse(head.getResponseBodyAsStream());
-            boolean success = (status == HttpStatus.SC_OK && !mSuccessIfAbsent) ||
+            if (status != FORBIDDEN_ERROR && status != SERVICE_UNAVAILABLE_ERROR) {
+                client.exhaustResponse(propfind.getResponseBodyAsStream());
+            }
+            /**
+             *  PROPFIND method
+             *  404 NOT FOUND: path doesn't exist,
+             *  207 MULTI_STATUS: path exists.
+             */
+            boolean success = ((status == HttpStatus.SC_OK || status == HttpStatus.SC_MULTI_STATUS) &&
+                    !mSuccessIfAbsent) ||
+                    (status == HttpStatus.SC_MULTI_STATUS && !mSuccessIfAbsent) ||
                     (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
             result = new RemoteOperationResult(
                 success,
-                status,
-                head.getStatusText(),
-                head.getResponseHeaders()
+                propfind
             );
             Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
@@ -115,8 +127,8 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
                     result.getLogMessage(), result.getException());
             
         } finally {
-            if (head != null)
-                head.releaseConnection();
+            if (propfind != null)
+                propfind.releaseConnection();
             client.setFollowRedirects(previousFollowRedirects);
         }
         return result;
