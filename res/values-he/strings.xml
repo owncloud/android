@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">שגיאת קובץ</string>
   <string name="uploads_view_upload_status_failed_localfile_error">קובץ מקומי לא נמצא</string>
   <string name="uploads_view_upload_status_failed_permission_error">שגיאת הרשאה</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">איסור גישה בשל כלל חומת אש</string>
   <string name="uploads_view_upload_status_conflict">התנגשות</string>
   <string name="uploads_view_upload_status_service_interrupted">יישום הופסק</string>
   <string name="uploads_view_upload_status_unknown_fail">שגיאה בלתי ידועה</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">לא ניתן להשלים את ההורדה של </string>
   <string name="downloader_not_downloaded_yet">לא הורד עדיין</string>
   <string name="downloader_download_failed_credentials_error">הורדה נכשלה, יש להתחבר מחדש</string>
+  <string name="downloader_download_forbidden_permissions">להורדת קובץ זה</string>
   <string name="common_choose_account">נא לבחור בחשבון</string>
   <string name="sync_fail_ticker">סנכרון נכשל</string>
   <string name="sync_fail_ticker_unauthorized">סנכרון נכשל, יש להתחבר מחדש</string>
@@ -424,6 +426,7 @@
   <string name="confirmation_remove_folders_alert">האם באמת להסיר את הפריטים הנבחרים ואת התוכן שלהם?</string>
   <string name="maintenance_mode">השרת במצב תחזוקה</string>
   <string name="failed_upload_quota_exceeded_text">אין מספיק מקום בחשבון</string>
+  <string name="auth_forbidden">אימות אסור</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>

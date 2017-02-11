@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Napaka datoteke</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Krajevne datoteke ni mogoče najti</string>
   <string name="uploads_view_upload_status_failed_permission_error">Napaka dovoljenj</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Dostop je prepovedan na osnovi določil požarnega zidu</string>
   <string name="uploads_view_upload_status_conflict">Spor</string>
   <string name="uploads_view_upload_status_service_interrupted">Program je končan</string>
   <string name="uploads_view_upload_status_unknown_fail">Neznana napaka</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">Prejemanja %1$s ni mogoče dokončati</string>
   <string name="downloader_not_downloaded_yet">Prejem še ni zaključen</string>
   <string name="downloader_download_failed_credentials_error">Prejemanje je spodletelo. Zahtevana je ponovna prijava.</string>
+  <string name="downloader_download_forbidden_permissions">za prejem te datoteke</string>
   <string name="common_choose_account">Izbor računa</string>
   <string name="sync_fail_ticker">Usklajevanje je spodletelo</string>
   <string name="sync_fail_ticker_unauthorized">Usklajevanje je spodletelo. Zahtevana je ponovna prijava.</string>
@@ -424,6 +426,7 @@
   <string name="confirmation_remove_folders_alert">Ali res želite odstraniti izbrane predmete in njihovo vsebino?</string>
   <string name="maintenance_mode">Strežnik je trenutno v vzdrževalnem načinu</string>
   <string name="failed_upload_quota_exceeded_text">Na računu ni dovolj prostora</string>
+  <string name="auth_forbidden">Overitev je prepovedana</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>
