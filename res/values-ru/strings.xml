@@ -132,6 +132,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Ошибка файла</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Локальный файл не найден</string>
   <string name="uploads_view_upload_status_failed_permission_error">Ошибка доступа</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Запрещено правилом в межсетевом экране</string>
   <string name="uploads_view_upload_status_conflict">Конфликт</string>
   <string name="uploads_view_upload_status_service_interrupted">Работа приложения была прекращена</string>
   <string name="uploads_view_upload_status_unknown_fail">Неизвестная ошибка</string>
@@ -145,6 +146,7 @@
   <string name="downloader_download_failed_content">Скачивание %1$s не может быть завершено</string>
   <string name="downloader_not_downloaded_yet">Ещё не скачано</string>
   <string name="downloader_download_failed_credentials_error">Скачивание не удалось, вам необходимо войти повторно</string>
+  <string name="downloader_download_forbidden_permissions">на скачивание этого файла</string>
   <string name="common_choose_account">Выберите учётную запись</string>
   <string name="sync_fail_ticker">Синхронизация не удалась</string>
   <string name="sync_fail_ticker_unauthorized">Синхронизация не удалась, вам нужно войти повторно</string>
@@ -424,6 +426,7 @@
   <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым?</string>
   <string name="maintenance_mode">Сервер в режиме технического обслужиания</string>
   <string name="failed_upload_quota_exceeded_text">Недостаточно места в учётной записи</string>
+  <string name="auth_forbidden">Запрещённая аутентификация</string>
   <plurals name="items_selected_count">
     <item quantity="one">Выбран %d</item>
     <item quantity="few">Выбрано %d</item>

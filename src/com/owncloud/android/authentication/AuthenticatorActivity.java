@@ -667,12 +667,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             OwnCloudCredentials credentials = null;
             if (BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
-                String version = savedInstanceState.getString(KEY_OC_VERSION);
-                OwnCloudVersion ocVersion = (version != null) ? new OwnCloudVersion(version) : null;
                 credentials = OwnCloudCredentialsFactory.newBasicCredentials(
                     username,
                     password,
-                    (ocVersion != null && ocVersion.isSessionMonitoringSupported())
+                    false // currently session is not created on log-in, but in first request after
+                          // TODO create session for Basic-Auth on log-in
                 );
 
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
@@ -973,10 +972,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBasicCredentials(
             username,
             password,
-            (mServerInfo != null &&
-                mServerInfo.mVersion != null &&
-                mServerInfo.mVersion.isSessionMonitoringSupported()
-            )
+            false       // currently session is not created on log-in, but in first request after
+                        // TODO create session for Basic-Auth on log-in
         );
         accessRootFolder(credentials);
     }
@@ -1369,6 +1366,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         case UNHANDLED_HTTP_CODE:
         case UNKNOWN_ERROR:
             mAuthStatusText = R.string.auth_unknown_error_title;
+            break;
+        case FORBIDDEN:
+            mAuthStatusText = R.string.auth_forbidden;
             break;
         default:
             mAuthStatusText = 0;

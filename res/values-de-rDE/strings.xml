@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Dateifehler</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Lokale Datei nicht gefunden</string>
   <string name="uploads_view_upload_status_failed_permission_error">Berechtigungsfehler</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Zugriff aufgrund einer Firewall-Regel nicht erlaubt</string>
   <string name="uploads_view_upload_status_conflict">Konflikt</string>
   <string name="uploads_view_upload_status_service_interrupted">Die Anwendung wurde beendet</string>
   <string name="uploads_view_upload_status_unknown_fail">Unbekannter Fehler</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">Herunterladen von %1$s konnte nicht abgeschlossen werden</string>
   <string name="downloader_not_downloaded_yet">Noch nicht heruntergeladen</string>
   <string name="downloader_download_failed_credentials_error">Herunterladen fehlgeschlagen, Sie müssen sich erneut anmelden.</string>
+  <string name="downloader_download_forbidden_permissions">um diese Datei herunter zu laden</string>
   <string name="common_choose_account">Konto auswählen</string>
   <string name="sync_fail_ticker">Synchronisation fehlgeschlagen</string>
   <string name="sync_fail_ticker_unauthorized">Synchronisation fehlgeschlagen, Sie müssen sich erneut anmelden.</string>
@@ -424,6 +426,7 @@
   <string name="confirmation_remove_folders_alert">Möchten Sie die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>
   <string name="maintenance_mode">Server befindet sich im Wartungsmodus</string>
   <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
+  <string name="auth_forbidden">Authentifizierung verweigert</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>
