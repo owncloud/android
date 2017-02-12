@@ -61,6 +61,7 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Ρύθμιση</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Έξοδος</string>
   <string name="uploader_error_title_no_file_to_upload">Δεν επιλέχθηκε αρχείο για μεταφόρτωση</string>
+  <string name="uploader_error_message_no_file_to_upload">Τα δεδομένα που ελήφθησαν δεν περιέχουν έγκυρο αρχείο.</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Το αρχείο αυτό δεν μπορεί να μεταφερθεί</string>
   <string name="uploader_error_message_read_permission_not_granted">%1$s δεν επιτρέπεται την ανάγνωση ενός αρχείου που λάβατε</string>
   <string name="uploader_error_message_source_file_not_found">Το προς μεταφόρτωση αρχείο δεν βρέθηκε. Παρακαλώ ελέγξτε αν πράγματι υπάρχει σ\'αυτήν τη θέση.</string>
@@ -68,6 +69,7 @@
   <string name="file_list_seconds_ago">δευτερόλεπτα πριν</string>
   <string name="file_list_empty">Δεν υπάρχει τίποτα εδώ. Μεταφορτώστε κάτι!</string>
   <string name="file_list_loading">Φόρτωση...</string>
+  <string name="file_list_no_app_for_file_type">Δεν βρέθηκε εφαρμογή για τον τύπο αρχείου</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
   <string name="local_file_list_empty_just_folders">Δεν υπάρχουν φάκελοι σε αυτόν τον φάκελο.</string>
   <string name="upload_list_empty">Δεν υπάρχουν διαθέσιμα προς μεταφόρτωση αρχεία.</string>
@@ -112,6 +114,8 @@
   <string name="uploader_upload_failed_ticker">Η μεταφόρτωση απέτυχε</string>
   <string name="uploader_upload_failed_content_single">Η μεταφόρτωση του %1$s δεν ήταν δυνατόν να ολοκληρωθεί</string>
   <string name="uploader_upload_failed_credentials_error">Η μεταφόρτωση απέτυχε, πρέπει να επανασυνδεθείτε</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Το πιστοποιητικό του διακομιστή δεν είναι έμπιστο</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Το πιστοποιητικό του διακομιστή δεν είναι έμπιστο</string>
   <string name="uploads_view_title">Μεταφορτώσεις</string>
   <string name="uploads_view_group_current_uploads">Τρέχουσα</string>
   <string name="uploads_view_group_failed_uploads">Αποτυχία (πατήστε για επανάληψη)</string>
@@ -247,6 +251,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Αντιγραφή αρχείου από ιδιωτική αποθήκευση</string>
   <string name="oauth_check_onoff">Σύνδεση με oAuth2</string>
   <string name="oauth_login_connection">Σύνδεση με το διακομιστή oAuth2 σε εξέλιξη...</string>
+  <string name="ssl_validator_header">Η ταυτότητα του διακομιστή δεν μπορεί να επαληθευτεί</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Το πιστοποιητικό του διακομιστή δεν είναι έμπιστο</string>
   <string name="ssl_validator_reason_cert_expired">- Το πιστοποιητικό του διακομιστή έχει λήξει</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Το πιστοποιητικό του διακομιστή είναι πολύ νέο</string>
@@ -378,6 +383,7 @@
   <string name="share_file">Διαμοιρασμός %1$s</string>
   <string name="share_with_user_section_title">Διαμοιρασμός με χρήστες και ομάδες</string>
   <string name="share_no_users">Δεν έχουν διαμοιραστεί ακόμα δεδομένα με τους χρήστες</string>
+  <string name="share_incompatible_version">Για διαμοιρασμό με άλλους χρήστες, απαιτείται να έχετε τουλάχιστον έκδοση διακομιστή 8.2</string>
   <string name="share_add_user_or_group">Προσθήκη χρήστη ή ομάδας</string>
   <string name="share_via_link_section_title">Διαμοιρασμός συνδέσμου</string>
   <string name="share_via_link_expiration_date_label">Ορισμός ημ. λήξης</string>
@@ -415,6 +421,8 @@
   <string name="local_file_not_found_toast">Δεν βρέθηκε το αρχείο στο τοπικό σύστημα</string>
   <string name="confirmation_remove_files_alert">Επιβεβαιώστε ότι θέλετε να διαγράψετε τα επιλεγμένα αρχεία</string>
   <string name="confirmation_remove_folders_alert">Επιβεβαιώστε ότι θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα και το περιεχόμενό τους</string>
+  <string name="maintenance_mode">Διακομιστής σε κατάσταση συντήρησης</string>
+  <string name="failed_upload_quota_exceeded_text">Δεν υπάρχει αρκετός διαθέσιμος χώρος στον λογαριασμό</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d επιλέχτηκε</item>
     <item quantity="other">%d επιλέχτηκαν</item>
