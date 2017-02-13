@@ -121,7 +121,7 @@ public class OwnCloudClientFactory {
                 OwnCloudCredentialsFactory.newBasicCredentials(
                     username,
                     password,
-                    (version != null && version.isSessionMonitoringSupported())
+                    (version != null && version.isPreemptiveAuthenticationPreferred())
                 )
             );
 
@@ -201,7 +201,7 @@ public class OwnCloudClientFactory {
                 OwnCloudCredentialsFactory.newBasicCredentials(
                     username,
                     password,
-                    (version != null && version.isSessionMonitoringSupported())
+                    (version != null && version.isPreemptiveAuthenticationPreferred())
                 )
             );
         }

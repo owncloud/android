@@ -55,6 +55,9 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     private static final int MINIMUM_VERSION_WITH_SESSION_MONITORING = 0x09010000;   // 9.1
 
+    private static final int MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE = 0x09010301;
+      // 9.1.3.1, final 9.1.3: https://github.com/owncloud/core/commit/f9a867b70c217463289a741d4d26079eb2a80dfd
+
     private static final int MAX_DOTS = 3;
 
     // format is in version
@@ -167,5 +170,19 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     public boolean isSessionMonitoringSupported() {
         return (mVersion >= MINIMUM_VERSION_WITH_SESSION_MONITORING);
+    }
+
+    /**
+     * From OC 9.1 session tracking is a feature, but to get it working in the OC app we need the preemptive
+     * mode of basic authentication is disabled. This changes in OC 9.1.3, where preemptive mode is compatible
+     * with session tracking again.
+     *
+     * @return      True for every version before 9.1 and from 9.1.3, false otherwise
+     */
+    public boolean isPreemptiveAuthenticationPreferred() {
+        return (
+                (mVersion < MINIMUM_VERSION_WITH_SESSION_MONITORING) ||
+                (mVersion >= MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE)
+        );
     }
 }
