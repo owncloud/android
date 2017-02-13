@@ -508,7 +508,7 @@ public class PreviewAudioFragment extends FileFragment {
      * @return 'True' if the file can be handled by the fragment.
      */
     public static boolean canBePreviewed(OCFile file) {
-        return (file != null && file.isDown() && file.isAudio());
+        return (file != null && file.isAudio());
     }
 
 

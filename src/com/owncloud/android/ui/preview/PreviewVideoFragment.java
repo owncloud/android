@@ -20,7 +20,10 @@
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -29,6 +32,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -46,6 +50,9 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.lib.common.OwnCloudAccount;
+import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
@@ -55,6 +62,12 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -192,9 +205,9 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         if (mAccount == null) {
             throw new IllegalStateException("Instanced with a NULL ownCloud Account");
         }
-        if (!file.isDown()) {
-            throw new IllegalStateException("There is no local file to preview");
-        }
+//        if (!file.isDown()) {
+//            throw new IllegalStateException("There is no local file to preview");
+//        }
         if (!file.isVideo()) {
             throw new IllegalStateException("Not a video file");
         }
@@ -231,7 +244,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
         OCFile file = getFile();
 
-        if (file != null && file.isDown()) {
+        if (file != null) {
             mProgressController.startListeningProgressFor(file, mAccount);
             stopAudio();
             playVideo();
@@ -272,7 +285,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     @Override
     public void onFileContentChanged() {
-        playVideo();
+
     }
 
     @Override
@@ -287,11 +300,65 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     private void playVideo() {
         // create and prepare control panel for the user
-        mMediaController.setMediaPlayer(mVideoPreview);
+//        mMediaController.setMediaPlayer(mVideoPreview);
 
         // load the video file in the video player ;
         // when done, VideoHelper#onPrepared() will be called
-        mVideoPreview.setVideoURI(getFile().getStorageUri());
+//        mVideoPreview.setVideoURI(getFile().getStorageUri());
+
+//        String path1="http://admin:Password@docker.oc.solidgear.es:61340/remote.php/webdav/ddmsrec.mp4";
+//
+//        mVideoPreview.setVideoPath(path1);
+//
+//        mVideoPreview.start();
+
+        try {
+            // Start the MediaController
+            mMediaController.setMediaPlayer(mVideoPreview);
+            String path1="http://admin:Password@docker.oc.solidgear.es:61340/remote.php/webdav/ddmsrec.mp4";
+            // Get the URL from String VideoURL
+//            Uri video = Uri.fromFile(new File(path1));
+            mVideoPreview.setVideoPath(path1);
+            mVideoPreview.start();
+
+            Method setVideoURIMethod = mVideoPreview.getClass().getMethod("setVideoURI", Uri.class, Map.class);
+            Map<String, String> params = new HashMap<String, String>(1);
+            final String cred = login + ":" + pwd;
+            final String auth = "Basic " + Base64.encodeBytes(cred.getBytes("UTF-8"));
+            params.put("Authorization", auth);
+            setVideoURIMethod.invoke(videoView, uri, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String generateUrlWithCredentials(Account account, Context context, OCFile file){
+        OwnCloudAccount ocAccount = null;
+        try {
+            ocAccount = new OwnCloudAccount(account, context);
+
+            try {
+                ocAccount.loadCredentials(context);
+
+                OwnCloudCredentials credentials = ocAccount.getCredentials();
+
+                String url = AccountUtils.constructFullURLForAccount(context, account) + Uri.encode(file.getRemotePath(), "/");
+
+                return url.replace("//", "//" + credentials.getUsername() + ":" + credentials.getAuthToken() + "@");
+
+            } catch (AuthenticatorException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (OperationCanceledException e) {
+                e.printStackTrace();
+            }
+
+        } catch (AccountUtils.AccountNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     /**
@@ -539,7 +606,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
      * @return 'True' if the file can be handled by the fragment.
      */
     public static boolean canBePreviewed(OCFile file) {
-        return (file != null && file.isDown() && file.isVideo());
+        return (file != null && file.isVideo());
     }
 
 

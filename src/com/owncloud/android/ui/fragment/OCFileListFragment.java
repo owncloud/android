@@ -649,7 +649,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 } else if (PreviewVideoFragment.canBePreviewed(file)) {
                     // media preview
                     ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
-                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+                    //mContainerActivity.getFileOperationsHelper().syncFile(file);
 
                 } else {
                     // sync file content, then open with external apps
