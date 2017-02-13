@@ -114,6 +114,8 @@
   <string name="uploader_upload_failed_ticker">Envio falhou</string>
   <string name="uploader_upload_failed_content_single">Não foi possível concluir o envio de %1$s.</string>
   <string name="uploader_upload_failed_credentials_error">Falha no carregamento, precisa de iniciar a sessão novamente</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">O certificado do servidor não é de confiança</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">O certificado do servidor não é de confiança</string>
   <string name="uploads_view_title">Envios</string>
   <string name="uploads_view_group_current_uploads">Atual</string>
   <string name="uploads_view_group_failed_uploads">Falhou (toque para repetir)</string>
@@ -231,6 +233,7 @@
   <string name="remove_success_msg">Removido com sucesso</string>
   <string name="remove_fail_msg">Não foi possível remover</string>
   <string name="rename_dialog_title">Introduza um novo nome</string>
+  <string name="available_offline_inherited_msg">Uma pasta que contém este ficheiro já está disponível offline</string>
   <string name="rename_local_fail_msg">Não foi possível renomear a cópia local, por favor, tente um nome diferente.</string>
   <string name="rename_server_fail_msg">Não foi possível renomear</string>
   <string name="sync_file_fail_msg">Não foi possível verificar o ficheiro remoto</string>
@@ -247,6 +250,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">A copiar o ficheiro do armazenamento privado</string>
   <string name="oauth_check_onoff">Iniciar sessão com oAuth2</string>
   <string name="oauth_login_connection">A ligar ao servidor oAuth2...</string>
+  <string name="ssl_validator_header">Não foi possivel verificar a identidade do servidor</string>
   <string name="ssl_validator_reason_cert_not_trusted">- O certificado do servidor não é de confiança</string>
   <string name="ssl_validator_reason_cert_expired">- O certificado do servidor expirou</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- O certificado do servidor é muito recente</string>
@@ -377,6 +381,7 @@
   <string name="share_file">Partilhar %1$s</string>
   <string name="share_with_user_section_title">Partilhar com utilizadores e grupos</string>
   <string name="share_no_users">Ainda não foram partilhados os dados com os utilizadores</string>
+  <string name="share_incompatible_version">Para partilhar com outros utilizadores, o seu servidor deve estar pelo menos na versão 8.2</string>
   <string name="share_add_user_or_group">Adicionar utilizador ou grupo</string>
   <string name="share_via_link_section_title">Compartilhar hiperligação</string>
   <string name="share_via_link_expiration_date_label">Definir a data de expiração</string>
@@ -414,6 +419,7 @@
   <string name="local_file_not_found_toast">O ficheiro não foi encontrado no sistema de ficheiros local</string>
   <string name="confirmation_remove_files_alert">Tem a certeza que deseja remover os items selecionados?</string>
   <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os items selecionados e os seus respetivos conteúdos?</string>
+  <string name="failed_upload_quota_exceeded_text">Não existe espaço suficiente na conta</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

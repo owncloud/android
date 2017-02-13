@@ -132,6 +132,7 @@ Download hier: %2$s</string>
   <string name="uploads_view_upload_status_failed_file_error">Bestandsfout</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Lokaal bestand niet gevonden</string>
   <string name="uploads_view_upload_status_failed_permission_error">Permissie fout</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Verboden wegens een firewallregel</string>
   <string name="uploads_view_upload_status_conflict">Conflict</string>
   <string name="uploads_view_upload_status_service_interrupted">App werd gesloten</string>
   <string name="uploads_view_upload_status_unknown_fail">Onbekende fout</string>
@@ -145,6 +146,7 @@ Download hier: %2$s</string>
   <string name="downloader_download_failed_content">Download van %1$s kon niet worden voltooid</string>
   <string name="downloader_not_downloaded_yet">Nog niet gedownload</string>
   <string name="downloader_download_failed_credentials_error">Download mislukt, u moet opnieuw inloggen</string>
+  <string name="downloader_download_forbidden_permissions">om dit bestand te downloaden</string>
   <string name="common_choose_account">Kies account</string>
   <string name="sync_fail_ticker">Sync mislukt</string>
   <string name="sync_fail_ticker_unauthorized">Synchronisatie mislukt, u moet opnieuw inloggen</string>
@@ -427,6 +429,7 @@ Neem contact op met uw beheerder</string>
   <string name="confirmation_remove_folders_alert">Wilt u werkelijk de geselecteerde onderwerpen en de inhoud ervan verwijderen?</string>
   <string name="maintenance_mode">Server in onderhoudsmodus</string>
   <string name="failed_upload_quota_exceeded_text">Niet genoeg ruimte in dit account</string>
+  <string name="auth_forbidden">Verboden authenticatie</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>

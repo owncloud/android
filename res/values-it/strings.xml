@@ -70,6 +70,7 @@
   <string name="file_list_seconds_ago">secondi fa</string>
   <string name="file_list_empty">Non c\'è niente qui. Carica qualcosa!</string>
   <string name="file_list_loading">Caricamento in corso...</string>
+  <string name="file_list_no_app_for_file_type">Nessuna applicazione trovata per il tipo di file</string>
   <string name="local_file_list_empty">Non ci sono file in questa cartella.</string>
   <string name="local_file_list_empty_just_folders">Non ci sono cartelle in questa cartella.</string>
   <string name="upload_list_empty">Nessun caricamento disponibile.</string>
@@ -114,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Caricamento non riuscito</string>
   <string name="uploader_upload_failed_content_single">Il caricamento di %1$s non può essere completato</string>
   <string name="uploader_upload_failed_credentials_error">Caricamento non riuscito, devi effettuare nuovamente l\'accesso</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
+  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
   <string name="uploads_view_title">Caricamenti</string>
   <string name="uploads_view_group_current_uploads">Attuale</string>
   <string name="uploads_view_group_failed_uploads">Non riuscito (tocca per riprovare)</string>
@@ -249,6 +252,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Copia file dall\'archiviazione privata</string>
   <string name="oauth_check_onoff">Accesso con oAuth2.</string>
   <string name="oauth_login_connection">Connessione al server oAuth2 in corso...</string>
+  <string name="ssl_validator_header">L\'identità del server non può essere verificata</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Il certificato del server non è affidabile</string>
   <string name="ssl_validator_reason_cert_expired">- Il certificato del server è scaduto</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Il certificato del server è troppo recente</string>
@@ -380,6 +384,7 @@
   <string name="share_file">Condividi %1$s</string>
   <string name="share_with_user_section_title">Condividi con utenti e gruppi</string>
   <string name="share_no_users">Ancora nessun dato condiviso con gli utenti </string>
+  <string name="share_incompatible_version">Per condividere con altri utenti, il tuo server deve essere almeno alla versione 8.2</string>
   <string name="share_add_user_or_group">Aggiungi utente o gruppo</string>
   <string name="share_via_link_section_title">Condividi collegamento</string>
   <string name="share_via_link_expiration_date_label">Imposta data di scadenza</string>
@@ -417,6 +422,8 @@
   <string name="local_file_not_found_toast">Il file non è stato trovato nel file system locale</string>
   <string name="confirmation_remove_files_alert">Vuoi davvero rimuovere gli elementi selezionati?</string>
   <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
+  <string name="maintenance_mode">Server in modalità di manutenzione</string>
+  <string name="failed_upload_quota_exceeded_text">Spazio insufficiente nell\'account</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>
