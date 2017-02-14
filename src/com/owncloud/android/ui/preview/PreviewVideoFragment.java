@@ -55,9 +55,11 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.OwnCloudAccount;
+import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.media.MediaControlView;
@@ -329,9 +331,17 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
                 Map<String, String> params = new HashMap<String, String>(1);
-                final String cred = login + ":" + password;
-                final String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
-                params.put("Authorization", auth);
+
+                if (credentials instanceof OwnCloudBasicCredentials) {
+                    // Basic auth
+                    String cred = login + ":" + password;
+                    String auth  = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
+                    params.put("Authorization", auth);
+                } else if (credentials instanceof OwnCloudSamlSsoCredentials) {
+                    // SAML SSO
+                    params.put("Cookie", password);
+                }
+
                 mVideoPreview.setVideoURI(Uri.parse(url), params);
 
             } else {
