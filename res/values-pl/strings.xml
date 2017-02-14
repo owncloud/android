@@ -420,6 +420,7 @@
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>
+    <item quantity="many">wybrano: %d</item>
     <item quantity="other">wybrano: %d</item>
   </plurals>
 </resources>

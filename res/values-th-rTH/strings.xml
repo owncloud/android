@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">ข้อผิดพลาดของไฟล์</string>
   <string name="uploads_view_upload_status_failed_localfile_error">ไม่พบไฟล์ต้นทาง</string>
   <string name="uploads_view_upload_status_failed_permission_error">เกิดข้อผิดพลาดเกี่ยวกับสิทธิ์การเข้าใช้งาน</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">ถูกห้ามเนื่องจากผิดกฎของไฟร์วอลล์</string>
   <string name="uploads_view_upload_status_conflict">ปัญหา</string>
   <string name="uploads_view_upload_status_service_interrupted">แอพฯได้ถูกยกเลิกแล้ว</string>
   <string name="uploads_view_upload_status_unknown_fail">เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">การดาวน์โหลด %1$s ไม่สามารถดำเนินการให้เสร็จสมบูรณ์ได้</string>
   <string name="downloader_not_downloaded_yet">ยังดาวน์โหลดไม่ได้</string>
   <string name="downloader_download_failed_credentials_error">การดาวน์โหลดล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
+  <string name="downloader_download_forbidden_permissions">หากจะดาวน์โหลดไฟล์นี้</string>
   <string name="common_choose_account">เลือกบัญชี</string>
   <string name="sync_fail_ticker">การผสานข้อมูลล้มเหลว</string>
   <string name="sync_fail_ticker_unauthorized">การผสานข้อมูลล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
@@ -422,6 +424,7 @@
   <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>
   <string name="maintenance_mode">เซิร์ฟเวอร์อยู่ในโหมดบำรุงรักษา</string>
   <string name="failed_upload_quota_exceeded_text">พื้นที่ในบัญชีไม่เพียงพอ</string>
+  <string name="auth_forbidden">การรับรองความถูกต้องถูกห้าม</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>

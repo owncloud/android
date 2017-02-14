@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Erro de arquivo</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Arquivo local não encontrado</string>
   <string name="uploads_view_upload_status_failed_permission_error">Erro de permissão</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Proibido devido a uma regra de firewall</string>
   <string name="uploads_view_upload_status_conflict">Conflito</string>
   <string name="uploads_view_upload_status_service_interrupted">App foi encerrado</string>
   <string name="uploads_view_upload_status_unknown_fail">Erro desconhecido</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">Download de %1$s não pôde ser concluído</string>
   <string name="downloader_not_downloaded_yet">Não baixado ainda</string>
   <string name="downloader_download_failed_credentials_error">Falha em baixar o arquivo, você precisa se conectar novamente</string>
+  <string name="downloader_download_forbidden_permissions">para baixar este arquivo</string>
   <string name="common_choose_account">Escolha a conta</string>
   <string name="sync_fail_ticker">Falha na sincronização</string>
   <string name="sync_fail_ticker_unauthorized">Falha na sincronização, você precisa se conectar novamente</string>
@@ -424,6 +426,7 @@
   <string name="confirmation_remove_folders_alert">Você realmente deseja remover os itens selecionados e seus conteúdos?</string>
   <string name="maintenance_mode">Servidor em modo de manutenção</string>
   <string name="failed_upload_quota_exceeded_text">Espaço insuficiente na conta</string>
+  <string name="auth_forbidden">Autenticação proibida</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

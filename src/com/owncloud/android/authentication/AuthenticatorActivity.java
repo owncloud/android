@@ -667,13 +667,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             OwnCloudCredentials credentials = null;
             if (BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
+                String version = savedInstanceState.getString(KEY_OC_VERSION);
+                OwnCloudVersion ocVersion = (version != null) ? new OwnCloudVersion(version) : null;
                 credentials = OwnCloudCredentialsFactory.newBasicCredentials(
-                    username,
-                    password,
-                    false // currently session is not created on log-in, but in first request after
-                          // TODO create session for Basic-Auth on log-in
+                        username,
+                        password,
+                        (ocVersion != null && ocVersion.isPreemptiveAuthenticationPreferred())
                 );
-
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
                 credentials = OwnCloudCredentialsFactory.newBearerCredentials(mAuthToken);
 
@@ -970,10 +970,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         /// validate credentials accessing the root folder
         OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBasicCredentials(
-            username,
-            password,
-            false       // currently session is not created on log-in, but in first request after
-                        // TODO create session for Basic-Auth on log-in
+                username,
+                password,
+                (mServerInfo != null &&
+                        mServerInfo.mVersion != null &&
+                        mServerInfo.mVersion.isPreemptiveAuthenticationPreferred()
+                )
         );
         accessRootFolder(credentials);
     }
