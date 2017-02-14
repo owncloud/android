@@ -42,10 +42,10 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         mAuthenticationPreemptive = true;
     }
 
-    public OwnCloudBasicCredentials(String username, String password, boolean sessionEnabled) {
+    public OwnCloudBasicCredentials(String username, String password, boolean preemptiveMode) {
         mUsername = username != null ? username : "";
         mPassword = password != null ? password : "";
-        mAuthenticationPreemptive = !sessionEnabled;
+        mAuthenticationPreemptive = preemptiveMode;
     }
 
     @Override

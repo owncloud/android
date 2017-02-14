@@ -230,7 +230,7 @@ public class AccountUtils {
             credentials = OwnCloudCredentialsFactory.newBasicCredentials(
                 username,
                 password,
-                version.isSessionMonitoringSupported()
+                version.isPreemptiveAuthenticationPreferred()
             );
         }
 
