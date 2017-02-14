@@ -33,8 +33,10 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -315,18 +317,20 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         try {
             // Start the MediaController
             mMediaController.setMediaPlayer(mVideoPreview);
-            String path1="http://admin:Password@docker.oc.solidgear.es:61340/remote.php/webdav/ddmsrec.mp4";
-            // Get the URL from String VideoURL
-//            Uri video = Uri.fromFile(new File(path1));
-            mVideoPreview.setVideoPath(path1);
-            mVideoPreview.start();
 
-            Method setVideoURIMethod = mVideoPreview.getClass().getMethod("setVideoURI", Uri.class, Map.class);
             Map<String, String> params = new HashMap<String, String>(1);
-            final String cred = login + ":" + pwd;
-            final String auth = "Basic " + Base64.encodeBytes(cred.getBytes("UTF-8"));
+            final String cred = "admin" + ":" + "Password";
+            final String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
             params.put("Authorization", auth);
-            setVideoURIMethod.invoke(videoView, uri, params);
+            String url="http://@docker.oc.solidgear.es:61340/remote.php/webdav/ddmsrec.mp4";
+
+            // load the video file in the video player ;
+            // when done, VideoHelper#onPrepared() will be called
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mVideoPreview.setVideoURI(Uri.parse(url), params);
+            } else {
+                String url2 = AccountUtils.constructFullURLForAccount(getContext(), mAccount) + Uri.encode(getFile().getRemotePath(), "/");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
