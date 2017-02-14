@@ -33,6 +33,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -48,11 +49,14 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
 
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.OwnCloudAccount;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -70,6 +74,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -301,68 +306,78 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     }
 
     private void playVideo() {
-        // create and prepare control panel for the user
-//        mMediaController.setMediaPlayer(mVideoPreview);
-
-        // load the video file in the video player ;
-        // when done, VideoHelper#onPrepared() will be called
-//        mVideoPreview.setVideoURI(getFile().getStorageUri());
-
-//        String path1="http://admin:Password@docker.oc.solidgear.es:61340/remote.php/webdav/ddmsrec.mp4";
-//
-//        mVideoPreview.setVideoPath(path1);
-//
-//        mVideoPreview.start();
 
         try {
-            // Start the MediaController
+
+            // create and prepare control panel for the user
             mMediaController.setMediaPlayer(mVideoPreview);
 
-            Map<String, String> params = new HashMap<String, String>(1);
-            final String cred = "admin" + ":" + "Password";
-            final String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
-            params.put("Authorization", auth);
-            String url="http://@docker.oc.solidgear.es:61340/remote.php/webdav/ddmsrec.mp4";
+            String url = AccountUtils.constructFullURLForAccount(getContext(), mAccount) + Uri.encode(getFile().getRemotePath(), "/");
+
+            OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, getContext());
+
+            final GetCredentialsTask task = new GetCredentialsTask();
+            task.execute(ocAccount);
+
+            OwnCloudCredentials credentials = task.get();
+
+            String login = credentials.getUsername();
+            String password = credentials.getAuthToken();
 
             // load the video file in the video player ;
             // when done, VideoHelper#onPrepared() will be called
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                Map<String, String> params = new HashMap<String, String>(1);
+                final String cred = login + ":" + password;
+                final String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
+                params.put("Authorization", auth);
                 mVideoPreview.setVideoURI(Uri.parse(url), params);
+
             } else {
-                String url2 = AccountUtils.constructFullURLForAccount(getContext(), mAccount) + Uri.encode(getFile().getRemotePath(), "/");
-            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String generateUrlWithCredentials(Account account, Context context, OCFile file){
-        OwnCloudAccount ocAccount = null;
-        try {
-            ocAccount = new OwnCloudAccount(account, context);
-
-            try {
-                ocAccount.loadCredentials(context);
-
-                OwnCloudCredentials credentials = ocAccount.getCredentials();
-
-                String url = AccountUtils.constructFullURLForAccount(context, account) + Uri.encode(file.getRemotePath(), "/");
-
-                return url.replace("//", "//" + credentials.getUsername() + ":" + credentials.getAuthToken() + "@");
-
-            } catch (AuthenticatorException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (OperationCanceledException e) {
-                e.printStackTrace();
+                url.replace("//", "//" + login + ":" + password + "@");
+                mVideoPreview.setVideoURI(Uri.parse(url));
             }
 
         } catch (AccountUtils.AccountNotFoundException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return "";
+    }
+
+    public static class GetCredentialsTask extends AsyncTask<Object, Void, OwnCloudCredentials> {
+        @Override
+        protected OwnCloudCredentials doInBackground(Object... params) {
+            Object account = params[0];
+            if (account instanceof OwnCloudAccount){
+                try {
+                    OwnCloudAccount ocAccount = (OwnCloudAccount) account;
+                    ocAccount.loadCredentials(MainApp.getAppContext());
+                    return ocAccount.getCredentials();
+                } catch (AccountUtils.AccountNotFoundException e) {
+                    e.printStackTrace();
+                } catch (OperationCanceledException e) {
+                    e.printStackTrace();
+                } catch (AuthenticatorException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+        }
+
+        protected void onPostExecute(OwnCloudCredentials credentials) {
+
+        }
     }
 
     /**
