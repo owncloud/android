@@ -308,16 +308,25 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     }
 
     private void playVideo() {
+        // create and prepare control panel for the user
+        mMediaController.setMediaPlayer(mVideoPreview);
+
+        if (getFile().isDown()) {
+            mVideoPreview.setVideoURI(getFile().getStorageUri());
+        } else {
+            streamVideo();
+        }
+    }
+
+    private void streamVideo () {
 
         try {
-
-            // create and prepare control panel for the user
-            mMediaController.setMediaPlayer(mVideoPreview);
 
             String url = AccountUtils.constructFullURLForAccount(getContext(), mAccount) + Uri.encode(getFile().getRemotePath(), "/");
 
             OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, getContext());
 
+            //Get account credentials asynchronously
             final GetCredentialsTask task = new GetCredentialsTask();
             task.execute(ocAccount);
 
@@ -335,7 +344,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
                 if (credentials instanceof OwnCloudBasicCredentials) {
                     // Basic auth
                     String cred = login + ":" + password;
-                    String auth  = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
+                    String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
                     params.put("Authorization", auth);
                 } else if (credentials instanceof OwnCloudSamlSsoCredentials) {
                     // SAML SSO
@@ -398,7 +407,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.file_actions_menu, menu);
     }
-
 
     /**
      * {@inheritDoc}
@@ -478,6 +486,10 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
             }
             case R.id.action_unset_available_offline:{
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
+                return true;
+            }
+            case R.id.action_download_file: {
+                mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
             default:
