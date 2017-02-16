@@ -37,22 +37,11 @@
         android:layout_alignParentTop="true"
         >
 
-        <VideoView
-            android:id="@+id/video_preview"
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView android:id="@+id/video_preview_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            />
+            android:layout_height="match_parent"/>
 
     </FrameLayout>
-
-    <com.owncloud.android.media.MediaControlView
-        android:id="@id/media_controller"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        />
 
     <!-- last to draw, will be top in Z axis -->
     <include layout="@layout/top_progress_bar"/>

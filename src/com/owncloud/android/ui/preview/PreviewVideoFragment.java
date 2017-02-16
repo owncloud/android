@@ -23,20 +23,13 @@ import android.accounts.Account;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnErrorListener;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.os.Handler;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,6 +42,24 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
 
+import com.google.android.exoplayer2.BuildConfig;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.drm.DrmSessionManager;
+import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -56,8 +67,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -71,11 +80,10 @@ import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 
@@ -98,12 +106,26 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     private Account mAccount;
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
-    private VideoView mVideoPreview;
+//    private VideoView mVideoPreview;
     private int mSavedPlaybackPosition;
+
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+
+    private Handler mainHandler;
+    private SimpleExoPlayerView simpleExoPlayerView;
+
+    private DataSource.Factory mediaDataSourceFactory;
+    private SimpleExoPlayer player;
+    private DefaultTrackSelector trackSelector;
+    private boolean playerNeedsSource;
 
     private MediaControlView mMediaController = null;
     private boolean mAutoplay;
     public boolean mPrepared;
+
+    private boolean shouldAutoPlay;
+    private int resumeWindow;
+    private long resumePosition;
 
     private static final String TAG = PreviewVideoFragment.class.getSimpleName();
 
@@ -171,15 +193,68 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         super.onCreateView(inflater, container, savedInstanceState);
         Log_OC.v(TAG, "onCreateView");
 
+        shouldAutoPlay = true;
+        clearResumePosition();
+        mediaDataSourceFactory = buildDataSourceFactory(true);
+        mainHandler = new Handler();
+
         View view = inflater.inflate(R.layout.preview_video_fragment, container, false);
+//        View rootView = view.findViewById(R.id.root);
+//        rootView.setOnClickListener(getContext());
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
-        mVideoPreview = (VideoView) view.findViewById(R.id.video_preview);
-        mVideoPreview.setOnTouchListener(this);
-        mMediaController = (MediaControlView) view.findViewById(R.id.media_controller);
+
+        simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.video_preview_full);
+//        simpleExoPlayerView.setControllerVisibilityListener(getContext());
+//        simpleExoPlayerView.requestFocus();
+
+
+        /**
+         * PREVIOUS
+         */
+
+//        mVideoPreview = (VideoView) view.findViewById(R.id.video_preview_fragment);
+//        mVideoPreview.setOnTouchListener(this);
+//        mMediaController = (MediaControlView) view.findViewById(R.id.media_controller);
 
         return view;
+    }
+
+    /**
+     * Returns a new DataSource factory.
+     *
+     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
+     *     DataSource factory.
+     * @return A new DataSource factory.
+     */
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
+
+    /**
+     * Returns a new HttpDataSource factory.
+     *
+     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
+     *     DataSource factory.
+     * @return A new HttpDataSource factory.
+     */
+    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
+
+    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultDataSourceFactory(getContext(), bandwidthMeter,
+                buildHttpDataSourceFactory(bandwidthMeter));
+    }
+
+    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new CustomHttpDataSourceFactory(Util.getUserAgent(getContext(), "ExoPlayerDemo"), bandwidthMeter);
+    }
+
+    private void clearResumePosition() {
+        resumeWindow = C.INDEX_UNSET;
+        resumePosition = C.TIME_UNSET;
     }
 
 
@@ -239,8 +314,8 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         outState.putParcelable(PreviewVideoFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
 
-        mSavedPlaybackPosition = mVideoPreview.getCurrentPosition();
-        mAutoplay = mVideoPreview.isPlaying();
+//        mSavedPlaybackPosition = mVideoPreview.getCurrentPosition();
+//        mAutoplay = mVideoPreview.isPlaying();
         outState.putInt(PreviewVideoFragment.EXTRA_PLAY_POSITION, mSavedPlaybackPosition);
         outState.putBoolean(PreviewVideoFragment.EXTRA_PLAYING, mAutoplay);
     }
@@ -251,12 +326,40 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         super.onStart();
         Log_OC.v(TAG, "onStart");
 
-        OCFile file = getFile();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
 
-        if (file != null) {
-            mProgressController.startListeningProgressFor(file, mAccount);
-            stopAudio();
-            playVideo();
+//        OCFile file = getFile();
+//
+//        if (file != null) {
+//            mProgressController.startListeningProgressFor(file, mAccount);
+//            stopAudio();
+//            playVideo();
+//        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            initializePlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
         }
     }
 
@@ -309,10 +412,10 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     private void playVideo() {
         // create and prepare control panel for the user
-        mMediaController.setMediaPlayer(mVideoPreview);
+//        mMediaController.setMediaPlayer(mVideoPreview);
 
         if (getFile().isDown()) {
-            mVideoPreview.setVideoURI(getFile().getStorageUri());
+//            mVideoPreview.setVideoURI(getFile().getStorageUri());
         } else {
             streamVideo();
         }
@@ -351,12 +454,12 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
                     params.put("Cookie", password);
                 }
 
-                mVideoPreview.setVideoURI(Uri.parse(url), params);
+//                mVideoPreview.setVideoURI(Uri.parse(url), params);
 
             } else {
 
                 url.replace("//", "//" + login + ":" + password + "@");
-                mVideoPreview.setVideoURI(Uri.parse(url));
+//                mVideoPreview.setVideoURI(Uri.parse(url));
             }
 
         } catch (AccountUtils.AccountNotFoundException e) {
@@ -505,81 +608,81 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     private void prepareVideo() {
         // create helper to get more control on the playback
-        VideoHelper videoHelper = new VideoHelper();
-        mVideoPreview.setOnPreparedListener(videoHelper);
-        mVideoPreview.setOnCompletionListener(videoHelper);
-        mVideoPreview.setOnErrorListener(videoHelper);
+//        VideoHelper videoHelper = new VideoHelper();
+//        mVideoPreview.setOnPreparedListener(videoHelper);
+//        mVideoPreview.setOnCompletionListener(videoHelper);
+//        mVideoPreview.setOnErrorListener(videoHelper);
     }
 
 
-    private class VideoHelper implements OnCompletionListener, OnPreparedListener, OnErrorListener {
-
-        /**
-         * Called when the file is ready to be played.
-         * <p/>
-         * Just starts the playback.
-         *
-         * @param   vp    {@link MediaPlayer} instance performing the playback.
-         */
-        @Override
-        public void onPrepared(MediaPlayer vp) {
-            Log_OC.v(TAG, "onPrepared");
-            mVideoPreview.seekTo(mSavedPlaybackPosition);
-            if (mAutoplay) {
-                mVideoPreview.start();
-            }
-            mMediaController.setEnabled(true);
-            mMediaController.updatePausePlay();
-            mPrepared = true;
-        }
-
-
-        /**
-         * Called when the file is finished playing.
-         * <p/>
-         * Finishes the activity.
-         *
-         * @param mp {@link MediaPlayer} instance performing the playback.
-         */
-        @Override
-        public void onCompletion(MediaPlayer mp) {
-            Log_OC.v(TAG, "completed");
-            if (mp != null) {
-                mVideoPreview.seekTo(0);
-            } // else : called from onError()
-            mMediaController.updatePausePlay();
-        }
-
-
-        /**
-         * Called when an error in playback occurs.
-         *
-         * @param mp    {@link MediaPlayer} instance performing the playback.
-         * @param what  Type of error
-         * @param extra Extra code specific to the error
-         */
-        @Override
-        public boolean onError(MediaPlayer mp, int what, int extra) {
-            Log_OC.e(TAG, "Error in video playback, what = " + what + ", extra = " + extra);
-            if (mVideoPreview.getWindowToken() != null) {
-                String message = MediaService.getMessageForMediaError(
-                        getActivity(), what, extra);
-                new AlertDialog.Builder(getActivity())
-                        .setMessage(message)
-                        .setPositiveButton(android.R.string.VideoView_error_button,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        dialog.dismiss();
-                                        PreviewVideoFragment.VideoHelper.this.onCompletion(null);
-                                    }
-                                })
-                        .setCancelable(false)
-                        .show();
-            }
-            return true;
-        }
-
-    }
+//    private class VideoHelper implements OnCompletionListener, OnPreparedListener, OnErrorListener {
+//
+//        /**
+//         * Called when the file is ready to be played.
+//         * <p/>
+//         * Just starts the playback.
+//         *
+//         * @param   vp    {@link MediaPlayer} instance performing the playback.
+//         */
+//        @Override
+//        public void onPrepared(MediaPlayer vp) {
+//            Log_OC.v(TAG, "onPrepared");
+//            mVideoPreview.seekTo(mSavedPlaybackPosition);
+//            if (mAutoplay) {
+//                mVideoPreview.start();
+//            }
+//            mMediaController.setEnabled(true);
+//            mMediaController.updatePausePlay();
+//            mPrepared = true;
+//        }
+//
+//
+//        /**
+//         * Called when the file is finished playing.
+//         * <p/>
+//         * Finishes the activity.
+//         *
+//         * @param mp {@link MediaPlayer} instance performing the playback.
+//         */
+//        @Override
+//        public void onCompletion(MediaPlayer mp) {
+//            Log_OC.v(TAG, "completed");
+//            if (mp != null) {
+//                mVideoPreview.seekTo(0);
+//            } // else : called from onError()
+//            mMediaController.updatePausePlay();
+//        }
+//
+//
+//        /**
+//         * Called when an error in playback occurs.
+//         *
+//         * @param mp    {@link MediaPlayer} instance performing the playback.
+//         * @param what  Type of error
+//         * @param extra Extra code specific to the error
+//         */
+//        @Override
+//        public boolean onError(MediaPlayer mp, int what, int extra) {
+//            Log_OC.e(TAG, "Error in video playback, what = " + what + ", extra = " + extra);
+//            if (mVideoPreview.getWindowToken() != null) {
+//                String message = MediaService.getMessageForMediaError(
+//                        getActivity(), what, extra);
+//                new AlertDialog.Builder(getActivity())
+//                        .setMessage(message)
+//                        .setPositiveButton(android.R.string.VideoView_error_button,
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//                                        dialog.dismiss();
+//                                        PreviewVideoFragment.VideoHelper.this.onCompletion(null);
+//                                    }
+//                                })
+//                        .setCancelable(false)
+//                        .show();
+//            }
+//            return true;
+//        }
+//
+//    }
 
 
     @Override
@@ -592,13 +695,13 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN && v == mVideoPreview) {
-            // added a margin on the left to avoid interfering with gesture to open navigation drawer
-            if (event.getX() / Resources.getSystem().getDisplayMetrics().density > 24.0) {
-                startFullScreenVideo();
-            }
-            return true;        
-        }
+//        if (event.getAction() == MotionEvent.ACTION_DOWN && v == mVideoPreview) {
+//            // added a margin on the left to avoid interfering with gesture to open navigation drawer
+//            if (event.getX() / Resources.getSystem().getDisplayMetrics().density > 24.0) {
+//                startFullScreenVideo();
+//            }
+//            return true;
+//        }
         return false;
     }
 
@@ -614,7 +717,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
                 .putExtra("extension", "")
                 .setAction("com.google.android.exoplayer.demo.action.VIEW");
 
-        mVideoPreview.stopPlayback();
+//        mVideoPreview.stopPlayback();
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
     }
 
@@ -657,7 +760,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
 
     public void stopPreview() {
-        mVideoPreview.stopPlayback();
+//        mVideoPreview.stopPlayback();
     }
 
 

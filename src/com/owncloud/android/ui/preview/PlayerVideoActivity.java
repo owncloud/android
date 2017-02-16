@@ -63,7 +63,6 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
 
-import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.UUID;
@@ -113,25 +112,14 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
         clearResumePosition();
         mediaDataSourceFactory = buildDataSourceFactory(true);
         mainHandler = new Handler();
-        if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
-            CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
-        }
 
         setContentView(R.layout.player_activity);
         View rootView = findViewById(R.id.root);
         rootView.setOnClickListener(this);
 
-        simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
+        simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.video_preview_full);
         simpleExoPlayerView.setControllerVisibilityListener(this);
         simpleExoPlayerView.requestFocus();
-    }
-
-    @Override
-    public void onNewIntent(Intent intent) {
-        releasePlayer();
-        shouldAutoPlay = true;
-        clearResumePosition();
-        setIntent(intent);
     }
 
     @Override
@@ -219,7 +207,7 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
             Uri[] uris;
             String[] extensions;
             if (ACTION_VIEW.equals(action)) {
-                uris = new Uri[] {Uri.parse("http://techslides.com/demos/sample-videos/small.mp4")};
+                uris = new Uri[] {Uri.parse("http://docker.oc.solidgear.es:61346/remote.php/webdav/ddmsrec.mp4")};
                 extensions = new String[] {intent.getStringExtra(EXTENSION_EXTRA)};
             } else if (ACTION_VIEW_LIST.equals(action)) {
                 String[] uriStrings = intent.getStringArrayExtra(URI_LIST_EXTRA);
