@@ -15,13 +15,15 @@
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView android:id="@+id/video_preview_full"
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView android:id="@+id/video_player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:controller_layout_id="@layout/custom_playback_control"/>
 
 </FrameLayout>

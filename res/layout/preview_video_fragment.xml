@@ -33,7 +33,6 @@
         android:id="@+id/visual_area"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_above="@+id/media_controller"
         android:layout_alignParentTop="true"
         >
 

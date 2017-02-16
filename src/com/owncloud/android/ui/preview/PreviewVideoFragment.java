@@ -39,21 +39,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.VideoView;
 
-import com.google.android.exoplayer2.BuildConfig;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.drm.DrmSessionManager;
-import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -71,7 +75,6 @@ import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.media.MediaControlView;
 import com.owncloud.android.media.MediaService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
@@ -83,7 +86,6 @@ import com.owncloud.android.utils.DisplayUtils;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 
@@ -96,7 +98,7 @@ import java.util.concurrent.ExecutionException;
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is
  * generated on instantiation too.
  */
-public class PreviewVideoFragment extends FileFragment implements OnTouchListener {
+public class PreviewVideoFragment extends FileFragment implements OnTouchListener, ExoPlayer.EventListener {
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
@@ -106,8 +108,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     private Account mAccount;
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
-//    private VideoView mVideoPreview;
-    private int mSavedPlaybackPosition;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
@@ -119,11 +119,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     private DefaultTrackSelector trackSelector;
     private boolean playerNeedsSource;
 
-    private MediaControlView mMediaController = null;
     private boolean mAutoplay;
-    public boolean mPrepared;
-
-    private boolean shouldAutoPlay;
     private int resumeWindow;
     private long resumePosition;
 
@@ -169,7 +165,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     public PreviewVideoFragment() {
         super();
         mAccount = null;
-        mSavedPlaybackPosition = 0;
         mAutoplay = true;
     }
 
@@ -193,30 +188,27 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         super.onCreateView(inflater, container, savedInstanceState);
         Log_OC.v(TAG, "onCreateView");
 
-        shouldAutoPlay = true;
         clearResumePosition();
         mediaDataSourceFactory = buildDataSourceFactory(true);
         mainHandler = new Handler();
 
-        View view = inflater.inflate(R.layout.preview_video_fragment, container, false);
-//        View rootView = view.findViewById(R.id.root);
-//        rootView.setOnClickListener(getContext());
+        View view = inflater.inflate(R.layout.video_preview, container, false);
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
-        simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.video_preview_full);
-//        simpleExoPlayerView.setControllerVisibilityListener(getContext());
-//        simpleExoPlayerView.requestFocus();
+        simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.video_player);
 
+        ImageButton fullScreen = (ImageButton) view.findViewById(R.id.exo_fullscreen_button);
 
-        /**
-         * PREVIOUS
-         */
+        fullScreen.setOnClickListener(new View.OnClickListener() {
 
-//        mVideoPreview = (VideoView) view.findViewById(R.id.video_preview_fragment);
-//        mVideoPreview.setOnTouchListener(this);
-//        mMediaController = (MediaControlView) view.findViewById(R.id.media_controller);
+            @Override
+            public void onClick(View v) {
+                releasePlayer();
+                startFullScreenVideo();
+            }
+        });
 
         return view;
     }
@@ -249,12 +241,8 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     }
 
     private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new CustomHttpDataSourceFactory(Util.getUserAgent(getContext(), "ExoPlayerDemo"), bandwidthMeter);
-    }
 
-    private void clearResumePosition() {
-        resumeWindow = C.INDEX_UNSET;
-        resumePosition = C.TIME_UNSET;
+        return new CustomHttpDataSourceFactory(Util.getUserAgent(getContext(), "ExoPlayerDemo"), bandwidthMeter);
     }
 
 
@@ -272,14 +260,12 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
             file = args.getParcelable(PreviewVideoFragment.EXTRA_FILE);
             setFile(file);
             mAccount = args.getParcelable(PreviewVideoFragment.EXTRA_ACCOUNT);
-            mSavedPlaybackPosition = args.getInt(PreviewVideoFragment.EXTRA_PLAY_POSITION);
             mAutoplay = args.getBoolean(PreviewVideoFragment.EXTRA_PLAYING);
 
         } else {
             file = savedInstanceState.getParcelable(PreviewVideoFragment.EXTRA_FILE);
             setFile(file);
             mAccount = savedInstanceState.getParcelable(PreviewVideoFragment.EXTRA_ACCOUNT);
-            mSavedPlaybackPosition = savedInstanceState.getInt(PreviewVideoFragment.EXTRA_PLAY_POSITION);
             mAutoplay = savedInstanceState.getBoolean(PreviewVideoFragment.EXTRA_PLAYING);
         }
 
@@ -299,7 +285,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         mProgressController = new TransferProgressController(mContainerActivity);
         mProgressController.setProgressBar(mProgressBar);
 
-        prepareVideo();
     }
 
 
@@ -313,10 +298,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
         outState.putParcelable(PreviewVideoFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
-
-//        mSavedPlaybackPosition = mVideoPreview.getCurrentPosition();
-//        mAutoplay = mVideoPreview.isPlaying();
-        outState.putInt(PreviewVideoFragment.EXTRA_PLAY_POSITION, mSavedPlaybackPosition);
         outState.putBoolean(PreviewVideoFragment.EXTRA_PLAYING, mAutoplay);
     }
 
@@ -357,12 +338,74 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     @Override
     public void onStop() {
+        Log_OC.v(TAG, "onStop");
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
+//        mPrepared = false;
+
         super.onStop();
+
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
     }
 
+    private void initializePlayer() {
+        if (player == null) {
+            TrackSelection.Factory videoTrackSelectionFactory =
+                    new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+            trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+            player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
+            player.addListener(this);
+
+            simpleExoPlayerView.setPlayer(player);
+            player.setPlayWhenReady(mAutoplay);
+            playerNeedsSource = true;
+        }
+        if (playerNeedsSource) {
+
+            try {
+                String url = AccountUtils.constructFullURLForAccount(getContext(), mAccount) + Uri.encode(getFile().getRemotePath(), "/");
+
+                MediaSource mediaSource = buildMediaSource(Uri.parse(url));
+                boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
+                if (haveResumePosition) {
+                    player.seekTo(resumeWindow, resumePosition);
+                }
+                player.prepare(mediaSource, !haveResumePosition, false);
+                playerNeedsSource = false;
+
+            } catch (AccountUtils.AccountNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private MediaSource buildMediaSource(Uri uri) {
+        return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                mainHandler, null);
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            mAutoplay = player.getPlayWhenReady();
+            updateResumePosition();
+            player.release();
+            player = null;
+            trackSelector = null;
+        }
+    }
+
+    private void updateResumePosition() {
+        resumeWindow = player.getCurrentWindowIndex();
+        resumePosition = player.isCurrentWindowSeekable() ? Math.max(0, player.getCurrentPosition())
+                : C.TIME_UNSET;
+    }
+
+    private void clearResumePosition() {
+        resumeWindow = C.INDEX_UNSET;
+        resumePosition = C.TIME_UNSET;
+    }
 
     private void stopAudio() {
         Intent i = new Intent(getActivity(), MediaService.class);
@@ -408,17 +451,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     @Override
     public void updateViewForSyncOff() {
         mProgressController.hideProgressBar();
-    }
-
-    private void playVideo() {
-        // create and prepare control panel for the user
-//        mMediaController.setMediaPlayer(mVideoPreview);
-
-        if (getFile().isDown()) {
-//            mVideoPreview.setVideoURI(getFile().getStorageUri());
-        } else {
-            streamVideo();
-        }
     }
 
     private void streamVideo () {
@@ -469,6 +501,36 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity() {
+
     }
 
     public static class GetCredentialsTask extends AsyncTask<Object, Void, OwnCloudCredentials> {
@@ -614,85 +676,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 //        mVideoPreview.setOnErrorListener(videoHelper);
     }
 
-
-//    private class VideoHelper implements OnCompletionListener, OnPreparedListener, OnErrorListener {
-//
-//        /**
-//         * Called when the file is ready to be played.
-//         * <p/>
-//         * Just starts the playback.
-//         *
-//         * @param   vp    {@link MediaPlayer} instance performing the playback.
-//         */
-//        @Override
-//        public void onPrepared(MediaPlayer vp) {
-//            Log_OC.v(TAG, "onPrepared");
-//            mVideoPreview.seekTo(mSavedPlaybackPosition);
-//            if (mAutoplay) {
-//                mVideoPreview.start();
-//            }
-//            mMediaController.setEnabled(true);
-//            mMediaController.updatePausePlay();
-//            mPrepared = true;
-//        }
-//
-//
-//        /**
-//         * Called when the file is finished playing.
-//         * <p/>
-//         * Finishes the activity.
-//         *
-//         * @param mp {@link MediaPlayer} instance performing the playback.
-//         */
-//        @Override
-//        public void onCompletion(MediaPlayer mp) {
-//            Log_OC.v(TAG, "completed");
-//            if (mp != null) {
-//                mVideoPreview.seekTo(0);
-//            } // else : called from onError()
-//            mMediaController.updatePausePlay();
-//        }
-//
-//
-//        /**
-//         * Called when an error in playback occurs.
-//         *
-//         * @param mp    {@link MediaPlayer} instance performing the playback.
-//         * @param what  Type of error
-//         * @param extra Extra code specific to the error
-//         */
-//        @Override
-//        public boolean onError(MediaPlayer mp, int what, int extra) {
-//            Log_OC.e(TAG, "Error in video playback, what = " + what + ", extra = " + extra);
-//            if (mVideoPreview.getWindowToken() != null) {
-//                String message = MediaService.getMessageForMediaError(
-//                        getActivity(), what, extra);
-//                new AlertDialog.Builder(getActivity())
-//                        .setMessage(message)
-//                        .setPositiveButton(android.R.string.VideoView_error_button,
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int whichButton) {
-//                                        dialog.dismiss();
-//                                        PreviewVideoFragment.VideoHelper.this.onCompletion(null);
-//                                    }
-//                                })
-//                        .setCancelable(false)
-//                        .show();
-//            }
-//            return true;
-//        }
-//
-//    }
-
-
-    @Override
-    public void onStop() {
-        Log_OC.v(TAG, "onStop");
-        mProgressController.stopListeningProgressFor(getFile(), mAccount);
-        mPrepared = false;
-        super.onStop();
-    }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 //        if (event.getAction() == MotionEvent.ACTION_DOWN && v == mVideoPreview) {
@@ -731,8 +714,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         Log_OC.v(TAG, "onActivityResult " + this);
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            mSavedPlaybackPosition = data.getExtras().getInt(
-                    PreviewVideoActivity.EXTRA_START_POSITION);
             mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
         }
     }
@@ -762,7 +743,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     public void stopPreview() {
 //        mVideoPreview.stopPlayback();
     }
-
 
     /**
      * Finishes the preview

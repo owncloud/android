@@ -88,6 +88,7 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
     protected DefaultHttpDataSource createDataSourceInternal() {
         DefaultHttpDataSource defaultHttpDataSource = new DefaultHttpDataSource(userAgent, null, listener, connectTimeoutMillis,
                 readTimeoutMillis, allowCrossProtocolRedirects);
+
         String cred = "admin" + ":" + "Password";
         String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
         defaultHttpDataSource.setRequestProperty("Authorization", auth);
