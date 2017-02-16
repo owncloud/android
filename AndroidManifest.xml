@@ -213,17 +213,19 @@
             android:name=".broadcastreceivers.ConnectivityActionReceiver"
             android:enabled="true"
             android:label="ConnectivityActionReceiver">
-            <intent-filter>
 
+            <intent-filter>
                 <!-- action android:name="android.net.conn.CONNECTIVITY_CHANGE"/ -->
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".broadcastreceivers.BootupBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".broadcastreceivers.InstantUploadBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.hardware.action.NEW_PICTURE" />
@@ -265,7 +267,10 @@
             android:label="@string/manage_space_title"
             android:theme="@style/Theme.ownCloud" />
         <activity android:name=".ui.activity.PrivacyPolicyActivity"></activity>
-        <activity android:name=".ui.preview.PlayerVideoActivity"></activity>
+        <activity android:name=".ui.preview.PlayerVideoActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:launchMode="singleTop">
+        </activity>
     </application>
 
 </manifest>
