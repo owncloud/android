@@ -604,11 +604,16 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
 
     private void startFullScreenVideo() {
-        Intent i = new Intent(getActivity(), PreviewVideoActivity.class);
-        i.putExtra(FileActivity.EXTRA_ACCOUNT, mAccount);
-        i.putExtra(FileActivity.EXTRA_FILE, getFile());
-        i.putExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, mVideoPreview.isPlaying());
-        i.putExtra(PreviewVideoActivity.EXTRA_START_POSITION, mVideoPreview.getCurrentPosition());
+        Intent i = new Intent(getActivity(), PlayerVideoActivity.class);
+//        i.putExtra(FileActivity.EXTRA_ACCOUNT, mAccount);
+//        i.putExtra(FileActivity.EXTRA_FILE, getFile());
+//        i.putExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, mVideoPreview.isPlaying());
+//        i.putExtra(PreviewVideoActivity.EXTRA_START_POSITION, mVideoPreview.getCurrentPosition());
+
+        i.setData(Uri.parse("http://techslides.com/demos/sample-videos/small.mp4"))
+                .putExtra("extension", "")
+                .setAction("com.google.android.exoplayer.demo.action.VIEW");
+
         mVideoPreview.stopPlayback();
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
     }
