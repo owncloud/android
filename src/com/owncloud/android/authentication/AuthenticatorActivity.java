@@ -670,11 +670,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 String version = savedInstanceState.getString(KEY_OC_VERSION);
                 OwnCloudVersion ocVersion = (version != null) ? new OwnCloudVersion(version) : null;
                 credentials = OwnCloudCredentialsFactory.newBasicCredentials(
-                    username,
-                    password,
-                    (ocVersion != null && ocVersion.isSessionMonitoringSupported())
+                        username,
+                        password,
+                        (ocVersion != null && ocVersion.isPreemptiveAuthenticationPreferred())
                 );
-
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
                 credentials = OwnCloudCredentialsFactory.newBearerCredentials(mAuthToken);
 
@@ -971,12 +970,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         /// validate credentials accessing the root folder
         OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBasicCredentials(
-            username,
-            password,
-            (mServerInfo != null &&
-                mServerInfo.mVersion != null &&
-                mServerInfo.mVersion.isSessionMonitoringSupported()
-            )
+                username,
+                password,
+                (mServerInfo != null &&
+                        mServerInfo.mVersion != null &&
+                        mServerInfo.mVersion.isPreemptiveAuthenticationPreferred()
+                )
         );
         accessRootFolder(credentials);
     }
@@ -1369,6 +1368,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         case UNHANDLED_HTTP_CODE:
         case UNKNOWN_ERROR:
             mAuthStatusText = R.string.auth_unknown_error_title;
+            break;
+        case FORBIDDEN:
+            mAuthStatusText = R.string.auth_forbidden;
             break;
         default:
             mAuthStatusText = 0;

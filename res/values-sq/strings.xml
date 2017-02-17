@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Gabim kartele</string>
   <string name="uploads_view_upload_status_failed_localfile_error">S’u gjet kartelë vendore</string>
   <string name="uploads_view_upload_status_failed_permission_error">Gabim lejesh</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">E ndaluar për shkak të një rregulli firewall-i</string>
   <string name="uploads_view_upload_status_conflict">Përplasje</string>
   <string name="uploads_view_upload_status_service_interrupted">Aplikacioni u përfundua</string>
   <string name="uploads_view_upload_status_unknown_fail">Gabim i panjohur</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">Shkarkimi i %1$s s\’u plotësua dot</string>
   <string name="downloader_not_downloaded_yet">Ende e pashkarkuar</string>
   <string name="downloader_download_failed_credentials_error">Shkarkimi dështoi, lypset të bëni hyrjen sërish</string>
+  <string name="downloader_download_forbidden_permissions">që të shkarkoni këtë kartelë</string>
   <string name="common_choose_account">Zgjidhni llogari</string>
   <string name="sync_fail_ticker">Njëkohësimi dështoi</string>
   <string name="sync_fail_ticker_unauthorized">Njëkohësimi dështoi, lypset të ribëni hyrjen</string>
@@ -422,6 +424,7 @@
   <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>
   <string name="maintenance_mode">Shërbyesi gjendet nën mënyrën mirëmbajtje</string>
   <string name="failed_upload_quota_exceeded_text">Hapësirë e pamjaftueshme te llogaria</string>
+  <string name="auth_forbidden">Mirëfilltësim i ndaluar</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d i përzgjedhur</item>
     <item quantity="other">%d të përzgjedhur</item>
