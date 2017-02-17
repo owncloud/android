@@ -90,7 +90,7 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
 
         shouldAutoPlay = true;
         clearResumePosition();
-        mediaDataSourceFactory = buildDataSourceFactory(true);
+//        mediaDataSourceFactory = buildDataSourceFactory(true);
         mainHandler = new Handler();
 
         setContentView(R.layout.video_preview);
@@ -212,9 +212,9 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
      *     DataSource factory.
      * @return A new DataSource factory.
      */
-    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
+//    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+//        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+//    }
 
     /**
      * Returns a new HttpDataSource factory.
@@ -223,18 +223,18 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
      *     DataSource factory.
      * @return A new HttpDataSource factory.
      */
-    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
+//    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+//        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+//    }
+//
+//    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+//        return new DefaultDataSourceFactory(this, bandwidthMeter,
+//                buildHttpDataSourceFactory(bandwidthMeter));
+//    }
 
-    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(this, bandwidthMeter,
-                buildHttpDataSourceFactory(bandwidthMeter));
-    }
-
-    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new CustomHttpDataSourceFactory(Util.getUserAgent(this, "ExoPlayerDemo"), bandwidthMeter);
-    }
+//    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+//        return new CustomHttpDataSourceFactory(Util.getUserAgent(this, "ExoPlayerDemo"), bandwidthMeter);
+//    }
 
     // ExoPlayer.EventListener implementation
 

@@ -62,6 +62,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.MainApp;
@@ -98,7 +99,7 @@ import java.util.concurrent.ExecutionException;
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is
  * generated on instantiation too.
  */
-public class PreviewVideoFragment extends FileFragment implements OnTouchListener, ExoPlayer.EventListener {
+public class PreviewVideoFragment extends FileFragment implements ExoPlayer.EventListener {
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
@@ -188,14 +189,11 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         super.onCreateView(inflater, container, savedInstanceState);
         Log_OC.v(TAG, "onCreateView");
 
-        clearResumePosition();
-        mediaDataSourceFactory = buildDataSourceFactory(true);
-        mainHandler = new Handler();
-
         View view = inflater.inflate(R.layout.video_preview, container, false);
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
+        mProgressBar.setVisibility(View.GONE);
 
         simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.video_player);
 
@@ -212,39 +210,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
         return view;
     }
-
-    /**
-     * Returns a new DataSource factory.
-     *
-     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
-     * @return A new DataSource factory.
-     */
-    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
-
-    /**
-     * Returns a new HttpDataSource factory.
-     *
-     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
-     * @return A new HttpDataSource factory.
-     */
-    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
-
-    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(getContext(), bandwidthMeter,
-                buildHttpDataSourceFactory(bandwidthMeter));
-    }
-
-    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-
-        return new CustomHttpDataSourceFactory(Util.getUserAgent(getContext(), "ExoPlayerDemo"), bandwidthMeter);
-    }
-
 
     /**
      * {@inheritDoc}
@@ -275,9 +240,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         if (mAccount == null) {
             throw new IllegalStateException("Instanced with a NULL ownCloud Account");
         }
-//        if (!file.isDown()) {
-//            throw new IllegalStateException("There is no local file to preview");
-//        }
         if (!file.isVideo()) {
             throw new IllegalStateException("Not a video file");
         }
@@ -307,17 +269,16 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         super.onStart();
         Log_OC.v(TAG, "onStart");
 
+        OCFile file = getFile();
+
+        if (file != null) {
+            mProgressController.startListeningProgressFor(file, mAccount);
+            stopAudio();
+        }
+
         if (Util.SDK_INT > 23) {
             initializePlayer();
         }
-
-//        OCFile file = getFile();
-//
-//        if (file != null) {
-//            mProgressController.startListeningProgressFor(file, mAccount);
-//            stopAudio();
-//            playVideo();
-//        }
     }
 
     @Override
@@ -340,7 +301,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     public void onStop() {
         Log_OC.v(TAG, "onStop");
         mProgressController.stopListeningProgressFor(getFile(), mAccount);
-//        mPrepared = false;
 
         super.onStop();
 
@@ -364,9 +324,19 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         if (playerNeedsSource) {
 
             try {
-                String url = AccountUtils.constructFullURLForAccount(getContext(), mAccount) + Uri.encode(getFile().getRemotePath(), "/");
 
-                MediaSource mediaSource = buildMediaSource(Uri.parse(url));
+                clearResumePosition();
+
+                // If the file is already downloaded, reproduce it locally
+                Uri uri = getFile().isDown() ? getFile().getStorageUri() :
+                        Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
+                                Uri.encode(getFile().getRemotePath(), "/"));
+
+
+                mediaDataSourceFactory = buildDataSourceFactory(true);
+                mainHandler = new Handler();
+
+                MediaSource mediaSource = buildMediaSource(uri);
                 boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
                 if (haveResumePosition) {
                     player.seekTo(resumeWindow, resumePosition);
@@ -384,16 +354,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
                 mainHandler, null);
-    }
-
-    private void releasePlayer() {
-        if (player != null) {
-            mAutoplay = player.getPlayWhenReady();
-            updateResumePosition();
-            player.release();
-            player = null;
-            trackSelector = null;
-        }
     }
 
     private void updateResumePosition() {
@@ -453,56 +413,6 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         mProgressController.hideProgressBar();
     }
 
-    private void streamVideo () {
-
-        try {
-
-            String url = AccountUtils.constructFullURLForAccount(getContext(), mAccount) + Uri.encode(getFile().getRemotePath(), "/");
-
-            OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, getContext());
-
-            //Get account credentials asynchronously
-            final GetCredentialsTask task = new GetCredentialsTask();
-            task.execute(ocAccount);
-
-            OwnCloudCredentials credentials = task.get();
-
-            String login = credentials.getUsername();
-            String password = credentials.getAuthToken();
-
-            // load the video file in the video player ;
-            // when done, VideoHelper#onPrepared() will be called
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                Map<String, String> params = new HashMap<String, String>(1);
-
-                if (credentials instanceof OwnCloudBasicCredentials) {
-                    // Basic auth
-                    String cred = login + ":" + password;
-                    String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
-                    params.put("Authorization", auth);
-                } else if (credentials instanceof OwnCloudSamlSsoCredentials) {
-                    // SAML SSO
-                    params.put("Cookie", password);
-                }
-
-//                mVideoPreview.setVideoURI(Uri.parse(url), params);
-
-            } else {
-
-                url.replace("//", "//" + login + ":" + password + "@");
-//                mVideoPreview.setVideoURI(Uri.parse(url));
-            }
-
-        } catch (AccountUtils.AccountNotFoundException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
 
@@ -525,43 +435,12 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-
+        String a = "";
     }
 
     @Override
     public void onPositionDiscontinuity() {
 
-    }
-
-    public static class GetCredentialsTask extends AsyncTask<Object, Void, OwnCloudCredentials> {
-        @Override
-        protected OwnCloudCredentials doInBackground(Object... params) {
-            Object account = params[0];
-            if (account instanceof OwnCloudAccount){
-                try {
-                    OwnCloudAccount ocAccount = (OwnCloudAccount) account;
-                    ocAccount.loadCredentials(MainApp.getAppContext());
-                    return ocAccount.getCredentials();
-                } catch (AccountUtils.AccountNotFoundException e) {
-                    e.printStackTrace();
-                } catch (OperationCanceledException e) {
-                    e.printStackTrace();
-                } catch (AuthenticatorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-        }
-
-        protected void onPostExecute(OwnCloudCredentials credentials) {
-
-        }
     }
 
     /**
@@ -619,7 +498,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share_file: {
-                stopPreview();
+                releasePlayer();
                 mContainerActivity.getFileOperationsHelper().showShareFile(getFile());
                 return true;
             }
@@ -637,7 +516,7 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
                 return true;
             }
             case R.id.action_send_file: {
-                stopPreview();
+                releasePlayer();
                 mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
                 return true;
             }
@@ -654,6 +533,9 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
                 return true;
             }
             case R.id.action_download_file: {
+                releasePlayer();
+                // Show progress bar
+                mProgressBar.setVisibility(View.VISIBLE);
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
@@ -664,28 +546,8 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 
 
     private void seeDetails() {
-        stopPreview();
+        releasePlayer();
         mContainerActivity.showDetails(getFile());
-    }
-
-    private void prepareVideo() {
-        // create helper to get more control on the playback
-//        VideoHelper videoHelper = new VideoHelper();
-//        mVideoPreview.setOnPreparedListener(videoHelper);
-//        mVideoPreview.setOnCompletionListener(videoHelper);
-//        mVideoPreview.setOnErrorListener(videoHelper);
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-//        if (event.getAction() == MotionEvent.ACTION_DOWN && v == mVideoPreview) {
-//            // added a margin on the left to avoid interfering with gesture to open navigation drawer
-//            if (event.getX() / Resources.getSystem().getDisplayMetrics().density > 24.0) {
-//                startFullScreenVideo();
-//            }
-//            return true;
-//        }
-        return false;
     }
 
 
@@ -697,10 +559,8 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
 //        i.putExtra(PreviewVideoActivity.EXTRA_START_POSITION, mVideoPreview.getCurrentPosition());
 
         i.setData(Uri.parse("http://techslides.com/demos/sample-videos/small.mp4"))
-                .putExtra("extension", "")
                 .setAction("com.google.android.exoplayer.demo.action.VIEW");
 
-//        mVideoPreview.stopPlayback();
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
     }
 
@@ -718,12 +578,11 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         }
     }
 
-
     /**
      * Opens the previewed file with an external application.
      */
     private void openFile() {
-        stopPreview();
+        releasePlayer();
         mContainerActivity.getFileOperationsHelper().openFile(getFile());
         finish();
     }
@@ -739,9 +598,14 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         return (file != null && file.isVideo());
     }
 
-
-    public void stopPreview() {
-//        mVideoPreview.stopPlayback();
+    public void releasePlayer() {
+        if (player != null) {
+            mAutoplay = player.getPlayWhenReady();
+            updateResumePosition();
+            player.release();
+            player = null;
+            trackSelector = null;
+        }
     }
 
     /**
@@ -751,4 +615,88 @@ public class PreviewVideoFragment extends FileFragment implements OnTouchListene
         getActivity().onBackPressed();
     }
 
+    /**
+     * Returns a new DataSource factory.
+     *
+     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
+     *     DataSource factory.
+     * @return A new DataSource factory.
+     */
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
+
+    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultDataSourceFactory(getContext(), bandwidthMeter,
+                buildHttpDataSourceFactory(bandwidthMeter));
+    }
+
+    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+
+        if (getFile().isDown()) {
+            return new DefaultHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter);
+        } else {
+
+            OwnCloudAccount ocAccount = null;
+            try {
+                ocAccount = new OwnCloudAccount(mAccount, getContext());
+
+                //Get account credentials asynchronously
+                final GetCredentialsTask task = new GetCredentialsTask();
+                task.execute(ocAccount);
+
+                OwnCloudCredentials credentials = task.get();
+
+                String login = credentials.getUsername();
+                String password = credentials.getAuthToken();
+
+                Map<String, String> params = new HashMap<String, String>(1);
+
+                if (credentials instanceof OwnCloudBasicCredentials) {
+                    // Basic auth
+                    String cred = login + ":" + password;
+                    String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
+                    params.put("Authorization", auth);
+                } else if (credentials instanceof OwnCloudSamlSsoCredentials) {
+                    // SAML SSO
+                    params.put("Cookie", password);
+                }
+
+                return new CustomHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter, params);
+
+            } catch (AccountUtils.AccountNotFoundException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    public static class GetCredentialsTask extends AsyncTask<Object, Void, OwnCloudCredentials> {
+        @Override
+        protected OwnCloudCredentials doInBackground(Object... params) {
+            Object account = params[0];
+            if (account instanceof OwnCloudAccount){
+                try {
+                    OwnCloudAccount ocAccount = (OwnCloudAccount) account;
+                    ocAccount.loadCredentials(MainApp.getAppContext());
+                    return ocAccount.getCredentials();
+                } catch (AccountUtils.AccountNotFoundException e) {
+                    e.printStackTrace();
+                } catch (OperationCanceledException e) {
+                    e.printStackTrace();
+                } catch (AuthenticatorException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+    }
 }

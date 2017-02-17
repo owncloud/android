@@ -1401,7 +1401,7 @@ public class FileDisplayActivity extends HookActivity
                 if (second instanceof PreviewAudioFragment) {
                     ((PreviewAudioFragment) second).stopPreview();
                 } else if (second instanceof PreviewVideoFragment) {
-                    ((PreviewVideoFragment) second).stopPreview();
+                    ((PreviewVideoFragment) second).releasePlayer();
                 }
                 setFile(getStorageManager().getFileById(removedFile.getParentId()));
                 cleanSecondFragment();

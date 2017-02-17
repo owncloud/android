@@ -26,4 +26,7 @@
         android:layout_height="match_parent"
         app:controller_layout_id="@layout/custom_playback_control"/>
 
+    <!-- last to draw, will be top in Z axis -->
+    <include layout="@layout/top_progress_bar"/>
+
 </FrameLayout>
