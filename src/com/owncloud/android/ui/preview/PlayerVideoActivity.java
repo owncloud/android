@@ -73,6 +73,13 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
     private DefaultTrackSelector trackSelector;
     private boolean playerNeedsSource;
 
+
+    /** Key to receive a flag signaling if the video should be started immediately */
+    public static final String EXTRA_AUTOPLAY = "AUTOPLAY";
+
+    /** Key to receive the position of the playback where the video should be put at start */
+    public static final String EXTRA_START_POSITION = "START_POSITION";
+
     private boolean shouldAutoPlay;
     private int resumeWindow;
     private long resumePosition;

@@ -1,21 +1,20 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David A. Velasco
+ * Copyright (C) 2016 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.owncloud.android.ui.preview;
 
@@ -23,23 +22,21 @@ import android.accounts.Account;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
@@ -95,7 +92,7 @@ import java.util.concurrent.ExecutionException;
  *
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
- * 
+ *
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is
  * generated on instantiation too.
  */
@@ -121,8 +118,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     private boolean playerNeedsSource;
 
     private boolean mAutoplay;
-    private int resumeWindow;
-    private long resumePosition;
+    private int mResumeWindow;
+    private long mPlaybackPosition;
 
     private static final String TAG = PreviewVideoFragment.class.getSimpleName();
 
@@ -135,13 +132,13 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
      * @param startPlaybackPosition     Time in milliseconds where the play should be started
      * @param autoplay                  If 'true', the file will be played automatically when
      *                                  the fragment is displayed.
-     * @return                          Fragment ready to be used.
+     * @return Fragment ready to be used.
      */
     public static PreviewVideoFragment newInstance(
-        OCFile file,
-        Account account,
-        int startPlaybackPosition,
-        boolean autoplay
+            OCFile file,
+            Account account,
+            int startPlaybackPosition,
+            boolean autoplay
     ) {
         PreviewVideoFragment frag = new PreviewVideoFragment();
         Bundle args = new Bundle();
@@ -226,12 +223,14 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
             setFile(file);
             mAccount = args.getParcelable(PreviewVideoFragment.EXTRA_ACCOUNT);
             mAutoplay = args.getBoolean(PreviewVideoFragment.EXTRA_PLAYING);
+            mPlaybackPosition = args.getLong(PreviewVideoFragment.EXTRA_PLAY_POSITION);
 
         } else {
             file = savedInstanceState.getParcelable(PreviewVideoFragment.EXTRA_FILE);
             setFile(file);
             mAccount = savedInstanceState.getParcelable(PreviewVideoFragment.EXTRA_ACCOUNT);
             mAutoplay = savedInstanceState.getBoolean(PreviewVideoFragment.EXTRA_PLAYING);
+            mPlaybackPosition = savedInstanceState.getLong(PreviewVideoFragment.EXTRA_PLAY_POSITION);
         }
 
         if (file == null) {
@@ -247,6 +246,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         mProgressController = new TransferProgressController(mContainerActivity);
         mProgressController.setProgressBar(mProgressBar);
 
+        initializePlayer();
+
     }
 
 
@@ -261,6 +262,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         outState.putParcelable(PreviewVideoFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
         outState.putBoolean(PreviewVideoFragment.EXTRA_PLAYING, mAutoplay);
+        outState.putLong(PreviewVideoFragment.EXTRA_PLAY_POSITION, player.getCurrentPosition());
     }
 
 
@@ -310,6 +312,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     }
 
     private void initializePlayer() {
+
         if (player == null) {
             TrackSelection.Factory videoTrackSelectionFactory =
                     new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
@@ -337,9 +340,9 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
                 mainHandler = new Handler();
 
                 MediaSource mediaSource = buildMediaSource(uri);
-                boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
+                boolean haveResumePosition = mResumeWindow != C.INDEX_UNSET;
                 if (haveResumePosition) {
-                    player.seekTo(resumeWindow, resumePosition);
+                    player.seekTo(mResumeWindow, mPlaybackPosition);
                 }
                 player.prepare(mediaSource, !haveResumePosition, false);
                 playerNeedsSource = false;
@@ -357,14 +360,14 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     }
 
     private void updateResumePosition() {
-        resumeWindow = player.getCurrentWindowIndex();
-        resumePosition = player.isCurrentWindowSeekable() ? Math.max(0, player.getCurrentPosition())
+        mResumeWindow = player.getCurrentWindowIndex();
+        mPlaybackPosition = player.isCurrentWindowSeekable() ? Math.max(0, player.getCurrentPosition())
                 : C.TIME_UNSET;
     }
 
     private void clearResumePosition() {
-        resumeWindow = C.INDEX_UNSET;
-        resumePosition = C.TIME_UNSET;
+        mResumeWindow = C.INDEX_UNSET;
+        mPlaybackPosition = C.TIME_UNSET;
     }
 
     private void stopAudio() {
@@ -435,7 +438,20 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-        String a = "";
+        String message = error.getCause().getMessage();
+        if (message == null) {
+            message = getString(R.string.common_error_unknown);
+        }
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton(android.R.string.VideoView_error_button,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setCancelable(false)
+                .show();
     }
 
     @Override
@@ -460,10 +476,10 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         super.onPrepareOptionsMenu(menu);
 
         FileMenuFilter mf = new FileMenuFilter(
-            getFile(),
-            mAccount,
-            mContainerActivity,
-            getActivity()
+                getFile(),
+                mAccount,
+                mContainerActivity,
+                getActivity()
         );
         mf.filter(menu);
 
@@ -524,11 +540,11 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
-            case R.id.action_set_available_offline:{
+            case R.id.action_set_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
                 return true;
             }
-            case R.id.action_unset_available_offline:{
+            case R.id.action_unset_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
             }
@@ -680,7 +696,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         @Override
         protected OwnCloudCredentials doInBackground(Object... params) {
             Object account = params[0];
-            if (account instanceof OwnCloudAccount){
+            if (account instanceof OwnCloudAccount) {
                 try {
                     OwnCloudAccount ocAccount = (OwnCloudAccount) account;
                     ocAccount.loadCredentials(MainApp.getAppContext());
