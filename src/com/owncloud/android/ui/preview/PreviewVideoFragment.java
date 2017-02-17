@@ -40,7 +40,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -89,10 +88,10 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * This fragment shows a preview of a downloaded video file.
- *
+ * <p>
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
- *
+ * <p>
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is
  * generated on instantiation too.
  */
@@ -115,10 +114,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
-    private boolean playerNeedsSource;
 
     private boolean mAutoplay;
-    private int mResumeWindow;
     private long mPlaybackPosition;
 
     private static final String TAG = PreviewVideoFragment.class.getSimpleName();
@@ -127,11 +124,11 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     /**
      * Public factory method to create new PreviewVideoFragment instances.
      *
-     * @param file                      An {@link OCFile} to preview in the fragment
-     * @param account                   ownCloud account containing file
-     * @param startPlaybackPosition     Time in milliseconds where the play should be started
-     * @param autoplay                  If 'true', the file will be played automatically when
-     *                                  the fragment is displayed.
+     * @param file                  An {@link OCFile} to preview in the fragment
+     * @param account               ownCloud account containing file
+     * @param startPlaybackPosition Time in milliseconds where the play should be started
+     * @param autoplay              If 'true', the file will be played automatically when
+     *                              the fragment is displayed.
      * @return Fragment ready to be used.
      */
     public static PreviewVideoFragment newInstance(
@@ -153,10 +150,10 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
     /**
      * Creates an empty fragment to preview video files.
-
+     * <p>
      * MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
      * (for instance, when the device is turned a aside).
-
+     * <p>
      * DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
      * construction
      */
@@ -246,7 +243,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         mProgressController = new TransferProgressController(mContainerActivity);
         mProgressController.setProgressBar(mProgressBar);
 
-        initializePlayer();
+        preparePlayer();
 
     }
 
@@ -275,11 +272,11 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
         if (file != null) {
             mProgressController.startListeningProgressFor(file, mAccount);
-            stopAudio();
         }
 
         if (Util.SDK_INT > 23) {
-            initializePlayer();
+            player.seekTo(mPlaybackPosition);
+            player.setPlayWhenReady(mAutoplay);
         }
     }
 
@@ -287,7 +284,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     public void onResume() {
         super.onResume();
         if ((Util.SDK_INT <= 23 || player == null)) {
-            initializePlayer();
+            player.seekTo(mPlaybackPosition);
+            player.setPlayWhenReady(mAutoplay);
         }
     }
 
@@ -311,45 +309,32 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         }
     }
 
-    private void initializePlayer() {
+    private void preparePlayer() {
 
-        if (player == null) {
-            TrackSelection.Factory videoTrackSelectionFactory =
-                    new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
-            trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-            player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
-            player.addListener(this);
+        // Create a default TrackSelector
+        mainHandler = new Handler();
+        TrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
+        player.addListener(this);
+        simpleExoPlayerView.setPlayer(player);
 
-            simpleExoPlayerView.setPlayer(player);
-            player.setPlayWhenReady(mAutoplay);
-            playerNeedsSource = true;
-        }
-        if (playerNeedsSource) {
+        try {
 
-            try {
+            // If the file is already downloaded, reproduce it locally
+            Uri uri = getFile().isDown() ? getFile().getStorageUri() :
+                    Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
+                            Uri.encode(getFile().getRemotePath(), "/"));
 
-                clearResumePosition();
+            mediaDataSourceFactory = buildDataSourceFactory(true);
 
-                // If the file is already downloaded, reproduce it locally
-                Uri uri = getFile().isDown() ? getFile().getStorageUri() :
-                        Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
-                                Uri.encode(getFile().getRemotePath(), "/"));
+            MediaSource mediaSource = buildMediaSource(uri);
 
+            player.prepare(mediaSource);
 
-                mediaDataSourceFactory = buildDataSourceFactory(true);
-                mainHandler = new Handler();
-
-                MediaSource mediaSource = buildMediaSource(uri);
-                boolean haveResumePosition = mResumeWindow != C.INDEX_UNSET;
-                if (haveResumePosition) {
-                    player.seekTo(mResumeWindow, mPlaybackPosition);
-                }
-                player.prepare(mediaSource, !haveResumePosition, false);
-                playerNeedsSource = false;
-
-            } catch (AccountUtils.AccountNotFoundException e) {
-                e.printStackTrace();
-            }
+        } catch (AccountUtils.AccountNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -360,22 +345,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     }
 
     private void updateResumePosition() {
-        mResumeWindow = player.getCurrentWindowIndex();
-        mPlaybackPosition = player.isCurrentWindowSeekable() ? Math.max(0, player.getCurrentPosition())
-                : C.TIME_UNSET;
+        mPlaybackPosition = player.getCurrentPosition();
     }
-
-    private void clearResumePosition() {
-        mResumeWindow = C.INDEX_UNSET;
-        mPlaybackPosition = C.TIME_UNSET;
-    }
-
-    private void stopAudio() {
-        Intent i = new Intent(getActivity(), MediaService.class);
-        i.setAction(MediaService.ACTION_STOP_ALL);
-        getActivity().startService(i);
-    }
-
 
     @Override
     public void onTransferServiceConnected() {
@@ -619,7 +590,6 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
             mAutoplay = player.getPlayWhenReady();
             updateResumePosition();
             player.release();
-            player = null;
             trackSelector = null;
         }
     }
@@ -635,7 +605,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
      * Returns a new DataSource factory.
      *
      * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
+     *                          DataSource factory.
      * @return A new DataSource factory.
      */
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
