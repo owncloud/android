@@ -12,7 +12,6 @@
   <string name="actionbar_send_file">Αποστολή</string>
   <string name="actionbar_sort">Ταξινόμηση</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
-  <string name="actionbar_sort_by_name">Α-Ω</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
@@ -83,6 +82,7 @@
   <string name="downloader_download_failed_content">Η λήψη του %1$s δεν μπόρεσε να ολοκληρωθεί</string>
   <string name="downloader_not_downloaded_yet">Δεν έχει ληφθεί ακόμα</string>
   <string name="common_choose_account">Επιλογή λογαριασμού</string>
+  <string name="sync_fail_ticker"> </string>
   <string name="sync_fail_content_unauthorized">Λάθος κωδικός για %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Βρέθηκαν συγκρούσεις</string>
   <string name="sync_conflicts_in_favourites_content">%1$d αρχεία σε αναμονή συγχρονισμού δεν μπόρεσαν να συγχρονιστούν</string>
@@ -227,8 +227,6 @@
   <string name="move_file_invalid_overwrite">Το αρχείο υπάρχει ήδη στο φάκελο προορισμού</string>
   <string name="move_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια μετακίνησης αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_move">για μετακίνηση αυτού του αρχείου</string>
-  <string name="username">Όνομα χρήστη</string>
-  <string name="file_list__footer__files_and_folder">%1$d αρχεία, 1 φάκελος</string>
   <string name="search_users_and_groups_hint">Αναζήτηση χρηστών και ομάδων</string>
   <string name="share_sharee_unavailable">Δεν επιτρέπεται ο διαμοιρασμός μεταξύ χρηστών μέσω εφαρμογής, σε αυτή την έκδοση.
 \nΕπικοινωνήστε με το διαχειριστή του συστήματος</string>
