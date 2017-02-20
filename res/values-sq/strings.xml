@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">Ngarkimi i %1$s s\’u plotësua dot</string>
   <string name="uploader_upload_failed_credentials_error">Ngarkimi dështoi, lypset të bëni hyrjen sërish</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
+  <string name="ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="uploads_view_title">Ngarkime</string>
   <string name="uploads_view_group_current_uploads">Të tanishëm</string>
   <string name="uploads_view_group_failed_uploads">Dështoi (prekeni që të riprovohet)</string>

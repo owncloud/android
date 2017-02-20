@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">ไม่สามารถดำเนินการอัพโหลด %1$s ให้เสร็จสมบูรณ์ได้</string>
   <string name="uploader_upload_failed_credentials_error">การอัพโหลดล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
+  <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="uploads_view_title">อัพโหลด</string>
   <string name="uploads_view_group_current_uploads">ปัจจุบัน</string>
   <string name="uploads_view_group_failed_uploads">ล้มเหลว (แตะเพื่อลองอีกครั้ง)</string>

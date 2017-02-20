@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">Завантаження %1$s не може завершитись</string>
   <string name="uploader_upload_failed_credentials_error">Збій при завантаженні, Вам необхідно знову увійти в систему</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Сертифікат сервера не є довіреним</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Сертифікат сервера не є довіреним</string>
+  <string name="ssl_certificate_not_trusted">Сертифікат сервера не є довіреним</string>
   <string name="uploads_view_title">Завантаженнь</string>
   <string name="uploads_view_group_current_uploads">Поточний</string>
   <string name="uploads_view_group_failed_uploads">Помилка (натисніть для нової спроби)</string>

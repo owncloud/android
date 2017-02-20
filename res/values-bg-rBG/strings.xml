@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">Качването на %1$s не може да бъде завършено.</string>
   <string name="uploader_upload_failed_credentials_error">Неуспешно качване, нужно е да влезете отново</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Сертификатът на сървъра не е надежден</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Сертификатът на сървъра не е надежден</string>
+  <string name="ssl_certificate_not_trusted">Сертификатът на сървъра не е надежден</string>
   <string name="uploads_view_title">Качено</string>
   <string name="uploads_view_group_current_uploads">Текущ</string>
   <string name="uploads_view_group_failed_uploads">Неуспешно (натисни за нов опит)</string>
