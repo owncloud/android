@@ -37,6 +37,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
@@ -260,53 +262,6 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
         outState.putBoolean(PreviewVideoFragment.EXTRA_PLAYING, mAutoplay);
         outState.putLong(PreviewVideoFragment.EXTRA_PLAY_POSITION, player.getCurrentPosition());
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log_OC.v(TAG, "onStart");
-
-        OCFile file = getFile();
-
-        if (file != null) {
-            mProgressController.startListeningProgressFor(file, mAccount);
-        }
-
-        if (Util.SDK_INT > 23) {
-            player.seekTo(mPlaybackPosition);
-            player.setPlayWhenReady(mAutoplay);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            player.seekTo(mPlaybackPosition);
-            player.setPlayWhenReady(mAutoplay);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        Log_OC.v(TAG, "onStop");
-        mProgressController.stopListeningProgressFor(getFile(), mAccount);
-
-        super.onStop();
-
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
     }
 
     private void preparePlayer() {
@@ -540,13 +495,9 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
     private void startFullScreenVideo() {
         Intent i = new Intent(getActivity(), PlayerVideoActivity.class);
-//        i.putExtra(FileActivity.EXTRA_ACCOUNT, mAccount);
-//        i.putExtra(FileActivity.EXTRA_FILE, getFile());
-//        i.putExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, mVideoPreview.isPlaying());
-//        i.putExtra(PreviewVideoActivity.EXTRA_START_POSITION, mVideoPreview.getCurrentPosition());
-
-        i.setData(Uri.parse("http://techslides.com/demos/sample-videos/small.mp4"))
-                .setAction("com.google.android.exoplayer.demo.action.VIEW");
+        i.putExtra(PlayerVideoActivity.EXTRA_AUTOPLAY, player.getPlayWhenReady());
+        i.putExtra(PlayerVideoActivity.EXTRA_START_POSITION, player.getCurrentPosition());
+        i.putExtra(FileActivity.EXTRA_FILE, getFile());
 
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
     }
@@ -683,6 +634,52 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
             }
 
             return null;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log_OC.v(TAG, "onStart");
+
+        OCFile file = getFile();
+
+        if (file != null) {
+            mProgressController.startListeningProgressFor(file, mAccount);
+        }
+
+        if (Util.SDK_INT > 23) {
+            player.seekTo(mPlaybackPosition);
+            player.setPlayWhenReady(mAutoplay);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            player.seekTo(mPlaybackPosition);
+            player.setPlayWhenReady(mAutoplay);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        Log_OC.v(TAG, "onStop");
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
+
+        super.onStop();
+
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
         }
     }
 }

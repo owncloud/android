@@ -54,6 +54,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
@@ -80,7 +81,7 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
     /** Key to receive the position of the playback where the video should be put at start */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
-    private boolean shouldAutoPlay;
+    private boolean mAutoplay;
     private int resumeWindow;
     private long resumePosition;
 
@@ -95,9 +96,11 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //Remove notification bar
 
-        shouldAutoPlay = true;
+        mAutoplay = true;
         clearResumePosition();
-//        mediaDataSourceFactory = buildDataSourceFactory(true);
+
+        mediaDataSourceFactory = buildDataSourceFactory(true);
+
         mainHandler = new Handler();
 
         setContentView(R.layout.video_preview);
@@ -170,11 +173,11 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
             player.addListener(this);
 
             simpleExoPlayerView.setPlayer(player);
-            player.setPlayWhenReady(shouldAutoPlay);
+            player.setPlayWhenReady(mAutoplay);
             playerNeedsSource = true;
         }
         if (playerNeedsSource) {
-            Uri uri = Uri.parse("http://docker.oc.solidgear.es:61346/remote.php/webdav/ddmsrec.mp4");
+            Uri uri = Uri.parse("http://techslides.com/demos/sample-videos/small.mp4");
 
             MediaSource mediaSource = buildMediaSource(uri);
             boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
@@ -193,7 +196,7 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
 
     private void releasePlayer() {
         if (player != null) {
-            shouldAutoPlay = player.getPlayWhenReady();
+            mAutoplay = player.getPlayWhenReady();
             updateResumePosition();
             player.release();
             player = null;
@@ -219,9 +222,9 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
      *     DataSource factory.
      * @return A new DataSource factory.
      */
-//    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-//        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-//    }
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
 
     /**
      * Returns a new HttpDataSource factory.
@@ -230,18 +233,18 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
      *     DataSource factory.
      * @return A new HttpDataSource factory.
      */
-//    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-//        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-//    }
-//
-//    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-//        return new DefaultDataSourceFactory(this, bandwidthMeter,
-//                buildHttpDataSourceFactory(bandwidthMeter));
-//    }
+    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
 
-//    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-//        return new CustomHttpDataSourceFactory(Util.getUserAgent(this, "ExoPlayerDemo"), bandwidthMeter);
-//    }
+    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultDataSourceFactory(this, bandwidthMeter,
+                buildHttpDataSourceFactory(bandwidthMeter));
+    }
+
+    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "ExoPlayerDemo"), bandwidthMeter);
+    }
 
     // ExoPlayer.EventListener implementation
 
