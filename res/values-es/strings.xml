@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">La subida de %1$s no se pudo completar</string>
   <string name="uploader_upload_failed_credentials_error">Subida fallida, necesita volver a iniciar sesión</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">El certificado del servidor no es de confianza</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">El certificado del servidor no es de confianza</string>
+  <string name="ssl_certificate_not_trusted">El certificado del servidor no es de confianza</string>
   <string name="uploads_view_title">Subidas</string>
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Fallido (presiona para reintentarlo)</string>

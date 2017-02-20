@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">Pošiljanja %1$s ni mogoče dokončati</string>
   <string name="uploader_upload_failed_credentials_error">Pošiljanje je spodletelo. Zahtevana je ponovna prijava.</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
+  <string name="ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
   <string name="uploads_view_title">Poslano</string>
   <string name="uploads_view_group_current_uploads">Trenutno</string>
   <string name="uploads_view_group_failed_uploads">Spodletelo (kliknite za ponovni poskus)</string>
