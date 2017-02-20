@@ -602,6 +602,9 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     case SPECIFIC_FORBIDDEN:
                         status = mParentActivity.getString(R.string.uploads_view_upload_status_failed_firewall_error);
                         break;
+                    case SPECIFIC_SERVICE_UNAVAILABLE:
+                        status = mParentActivity.getString(R.string.uploads_view_upload_status_failed_storage_not_available_error);
+                        break;
                     default:
                         status = "Naughty devs added a new fail result but no description for the user";
                         break;
