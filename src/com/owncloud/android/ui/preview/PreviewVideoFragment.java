@@ -113,7 +113,6 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     private Handler mainHandler;
     private SimpleExoPlayerView simpleExoPlayerView;
 
-    private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
@@ -282,9 +281,9 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
                     Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
                             Uri.encode(getFile().getRemotePath(), "/"));
 
-            mediaDataSourceFactory = buildDataSourceFactory(true);
+            DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
 
-            MediaSource mediaSource = buildMediaSource(uri);
+            MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
 
             player.prepare(mediaSource);
 
@@ -294,7 +293,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     }
 
 
-    private MediaSource buildMediaSource(Uri uri) {
+    private MediaSource buildMediaSource(DataSource.Factory mediaDataSourceFactory, Uri uri) {
         return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
                 mainHandler, null);
     }

@@ -24,11 +24,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.exoplayer2.C;
@@ -57,19 +59,29 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.lib.common.OwnCloudAccount;
+import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
+import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.ui.activity.FileActivity;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * An activity that plays media using {@link SimpleExoPlayer}.
  */
-public class PlayerVideoActivity extends Activity implements OnClickListener, ExoPlayer.EventListener {
+public class PlayerVideoActivity extends FileActivity implements OnClickListener, ExoPlayer.EventListener {
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
     private Handler mainHandler;
     private SimpleExoPlayerView simpleExoPlayerView;
 
-    private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
     private boolean playerNeedsSource;
@@ -99,53 +111,20 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
         mAutoplay = true;
         clearResumePosition();
 
-        mediaDataSourceFactory = buildDataSourceFactory(true);
-
-        mainHandler = new Handler();
-
         setContentView(R.layout.video_preview);
 
         simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.video_player);
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23) {
-            initializePlayer();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            initializePlayer();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
+        // Hide sync bar
+        ProgressBar syncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
+        syncProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            initializePlayer();
+            preparePlayer();
         } else {
 //          // permission denied --> do nothing
             finish();
@@ -164,32 +143,62 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
 
     // Internal methods
 
-    private void initializePlayer() {
-        if (player == null) {
-            TrackSelection.Factory videoTrackSelectionFactory =
-                    new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
-            trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-            player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl());
-            player.addListener(this);
+//    private void initializePlayer() {
+//        if (player == null) {
+//            TrackSelection.Factory videoTrackSelectionFactory =
+//                    new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+//            trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+//            player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl());
+//            player.addListener(this);
+//
+//            simpleExoPlayerView.setPlayer(player);
+//            player.setPlayWhenReady(mAutoplay);
+//            playerNeedsSource = true;
+//        }
+//        if (playerNeedsSource) {
+//            Uri uri = Uri.parse("http://techslides.com/demos/sample-videos/small.mp4");
+//
+//            MediaSource mediaSource = buildMediaSource(uri);
+//            boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
+//            if (haveResumePosition) {
+//                player.seekTo(resumeWindow, resumePosition);
+//            }
+//            player.prepare(mediaSource, !haveResumePosition, false);
+//            playerNeedsSource = false;
+//        }
+//    }
 
-            simpleExoPlayerView.setPlayer(player);
-            player.setPlayWhenReady(mAutoplay);
-            playerNeedsSource = true;
-        }
-        if (playerNeedsSource) {
-            Uri uri = Uri.parse("http://techslides.com/demos/sample-videos/small.mp4");
+    private void preparePlayer() {
 
-            MediaSource mediaSource = buildMediaSource(uri);
-            boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
-            if (haveResumePosition) {
-                player.seekTo(resumeWindow, resumePosition);
-            }
-            player.prepare(mediaSource, !haveResumePosition, false);
-            playerNeedsSource = false;
+        // Create a default TrackSelector
+        mainHandler = new Handler();
+        TrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl());
+        player.addListener(this);
+        simpleExoPlayerView.setPlayer(player);
+        player.setPlayWhenReady(mAutoplay);
+
+        try {
+
+            // If the file is already downloaded, reproduce it locally
+            Uri uri = getFile().isDown() ? getFile().getStorageUri() :
+                    Uri.parse(AccountUtils.constructFullURLForAccount(this, getAccount()) +
+                            Uri.encode(getFile().getRemotePath(), "/"));
+
+            DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
+
+            MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
+
+            player.prepare(mediaSource);
+
+        } catch (AccountUtils.AccountNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
-    private MediaSource buildMediaSource(Uri uri) {
+    private MediaSource buildMediaSource(DataSource.Factory mediaDataSourceFactory, Uri uri) {
         return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
                 mainHandler, null);
     }
@@ -213,37 +222,6 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
     private void clearResumePosition() {
         resumeWindow = C.INDEX_UNSET;
         resumePosition = C.TIME_UNSET;
-    }
-
-    /**
-     * Returns a new DataSource factory.
-     *
-     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
-     * @return A new DataSource factory.
-     */
-    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
-
-    /**
-     * Returns a new HttpDataSource factory.
-     *
-     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
-     * @return A new HttpDataSource factory.
-     */
-    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
-
-    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(this, bandwidthMeter,
-                buildHttpDataSourceFactory(bandwidthMeter));
-    }
-
-    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "ExoPlayerDemo"), bandwidthMeter);
     }
 
     // ExoPlayer.EventListener implementation
@@ -304,7 +282,7 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
         playerNeedsSource = true;
         if (isBehindLiveWindow(e)) {
             clearResumePosition();
-            initializePlayer();
+            preparePlayer();
         } else {
             updateResumePosition();
         }
@@ -351,5 +329,97 @@ public class PlayerVideoActivity extends Activity implements OnClickListener, Ex
     @Override
     public void onClick(View view) {
 
+    }
+
+    /**
+     * Returns a new DataSource factory.
+     *
+     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
+     *     DataSource factory.
+     * @return A new DataSource factory.
+     */
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
+
+    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultDataSourceFactory(this, bandwidthMeter,
+                buildHttpDataSourceFactory(bandwidthMeter));
+    }
+
+    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        if (getFile().isDown()) {
+            return new DefaultHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter);
+        } else {
+
+            OwnCloudAccount ocAccount = null;
+            try {
+                ocAccount = new OwnCloudAccount(getAccount(), this);
+
+                //Get account credentials asynchronously
+                final PreviewVideoFragment.GetCredentialsTask task = new PreviewVideoFragment.GetCredentialsTask();
+                task.execute(ocAccount);
+
+                OwnCloudCredentials credentials = task.get();
+
+                String login = credentials.getUsername();
+                String password = credentials.getAuthToken();
+
+                Map<String, String> params = new HashMap<String, String>(1);
+
+                if (credentials instanceof OwnCloudBasicCredentials) {
+                    // Basic auth
+                    String cred = login + ":" + password;
+                    String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
+                    params.put("Authorization", auth);
+                } else if (credentials instanceof OwnCloudSamlSsoCredentials) {
+                    // SAML SSO
+                    params.put("Cookie", password);
+                }
+
+                return new CustomHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter, params);
+
+            } catch (AccountUtils.AccountNotFoundException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            preparePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            preparePlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 }
