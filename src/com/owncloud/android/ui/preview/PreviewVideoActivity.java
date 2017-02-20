@@ -73,7 +73,6 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.IOException;

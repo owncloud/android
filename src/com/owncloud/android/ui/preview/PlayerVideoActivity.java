@@ -20,6 +20,7 @@
 package com.owncloud.android.ui.preview;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -66,6 +67,7 @@ import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 
 import java.util.HashMap;
@@ -93,9 +95,8 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
     /** Key to receive the position of the playback where the video should be put at start */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
-    private boolean mAutoplay;
-    private int resumeWindow;
-    private long resumePosition;
+    private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
+    private long mPlaybackPosition; // continue the playback in the specified position
 
     // Activity lifecycle
 
@@ -108,7 +109,6 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //Remove notification bar
 
-        mAutoplay = true;
         clearResumePosition();
 
         setContentView(R.layout.video_preview);
@@ -118,6 +118,11 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
         // Hide sync bar
         ProgressBar syncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
         syncProgressBar.setVisibility(View.GONE);
+
+        Bundle extras = getIntent().getExtras();
+
+        mAutoplay = extras.getBoolean(EXTRA_AUTOPLAY);
+        mPlaybackPosition = extras.getLong(EXTRA_START_POSITION);
     }
 
     @Override
@@ -141,32 +146,6 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
         return super.dispatchKeyEvent(event) || simpleExoPlayerView.dispatchMediaKeyEvent(event);
     }
 
-    // Internal methods
-
-//    private void initializePlayer() {
-//        if (player == null) {
-//            TrackSelection.Factory videoTrackSelectionFactory =
-//                    new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
-//            trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-//            player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl());
-//            player.addListener(this);
-//
-//            simpleExoPlayerView.setPlayer(player);
-//            player.setPlayWhenReady(mAutoplay);
-//            playerNeedsSource = true;
-//        }
-//        if (playerNeedsSource) {
-//            Uri uri = Uri.parse("http://techslides.com/demos/sample-videos/small.mp4");
-//
-//            MediaSource mediaSource = buildMediaSource(uri);
-//            boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
-//            if (haveResumePosition) {
-//                player.seekTo(resumeWindow, resumePosition);
-//            }
-//            player.prepare(mediaSource, !haveResumePosition, false);
-//            playerNeedsSource = false;
-//        }
-//    }
 
     private void preparePlayer() {
 
@@ -178,6 +157,7 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl());
         player.addListener(this);
         simpleExoPlayerView.setPlayer(player);
+        player.seekTo(mPlaybackPosition);
         player.setPlayWhenReady(mAutoplay);
 
         try {
@@ -214,14 +194,12 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
     }
 
     private void updateResumePosition() {
-        resumeWindow = player.getCurrentWindowIndex();
-        resumePosition = player.isCurrentWindowSeekable() ? Math.max(0, player.getCurrentPosition())
+        mPlaybackPosition = player.isCurrentWindowSeekable() ? Math.max(0, player.getCurrentPosition())
                 : C.TIME_UNSET;
     }
 
     private void clearResumePosition() {
-        resumeWindow = C.INDEX_UNSET;
-        resumePosition = C.TIME_UNSET;
+        mPlaybackPosition = C.TIME_UNSET;
     }
 
     // ExoPlayer.EventListener implementation
@@ -421,5 +399,16 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log_OC.v(TAG, "onBackPressed");
+        Intent i = new Intent();
+        i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
+        i.putExtra(EXTRA_START_POSITION, player.getCurrentPosition());
+        player.release();
+        setResult(RESULT_OK, i);
+        super.onBackPressed();
     }
 }

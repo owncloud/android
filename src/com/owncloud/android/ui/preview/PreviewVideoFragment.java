@@ -37,8 +37,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
@@ -74,7 +72,6 @@ import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.media.MediaService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -101,8 +98,12 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
-    private static final String EXTRA_PLAY_POSITION = "PLAY_POSITION";
-    private static final String EXTRA_PLAYING = "PLAYING";
+
+    /** Key to receive a flag signaling if the video should be started immediately */
+    private static final String EXTRA_AUTOPLAY = "AUTOPLAY";
+
+    /** Key to receive the position of the playback where the video should be put at start */
+    private static final String EXTRA_PLAY_POSITION = "START_POSITION";
 
     private Account mAccount;
     private ProgressBar mProgressBar;
@@ -143,7 +144,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         args.putParcelable(EXTRA_FILE, file);
         args.putParcelable(EXTRA_ACCOUNT, account);
         args.putInt(EXTRA_PLAY_POSITION, startPlaybackPosition);
-        args.putBoolean(EXTRA_PLAYING, autoplay);
+        args.putBoolean(EXTRA_AUTOPLAY, autoplay);
         frag.setArguments(args);
         return frag;
     }
@@ -220,14 +221,14 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
             file = args.getParcelable(PreviewVideoFragment.EXTRA_FILE);
             setFile(file);
             mAccount = args.getParcelable(PreviewVideoFragment.EXTRA_ACCOUNT);
-            mAutoplay = args.getBoolean(PreviewVideoFragment.EXTRA_PLAYING);
+            mAutoplay = args.getBoolean(PreviewVideoFragment.EXTRA_AUTOPLAY);
             mPlaybackPosition = args.getLong(PreviewVideoFragment.EXTRA_PLAY_POSITION);
 
         } else {
             file = savedInstanceState.getParcelable(PreviewVideoFragment.EXTRA_FILE);
             setFile(file);
             mAccount = savedInstanceState.getParcelable(PreviewVideoFragment.EXTRA_ACCOUNT);
-            mAutoplay = savedInstanceState.getBoolean(PreviewVideoFragment.EXTRA_PLAYING);
+            mAutoplay = savedInstanceState.getBoolean(PreviewVideoFragment.EXTRA_AUTOPLAY);
             mPlaybackPosition = savedInstanceState.getLong(PreviewVideoFragment.EXTRA_PLAY_POSITION);
         }
 
@@ -259,7 +260,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
         outState.putParcelable(PreviewVideoFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
-        outState.putBoolean(PreviewVideoFragment.EXTRA_PLAYING, mAutoplay);
+        outState.putBoolean(PreviewVideoFragment.EXTRA_AUTOPLAY, mAutoplay);
         outState.putLong(PreviewVideoFragment.EXTRA_PLAY_POSITION, player.getCurrentPosition());
     }
 
@@ -494,8 +495,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
     private void startFullScreenVideo() {
         Intent i = new Intent(getActivity(), PlayerVideoActivity.class);
-        i.putExtra(PlayerVideoActivity.EXTRA_AUTOPLAY, player.getPlayWhenReady());
-        i.putExtra(PlayerVideoActivity.EXTRA_START_POSITION, player.getCurrentPosition());
+        i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
+        i.putExtra(EXTRA_PLAY_POSITION, player.getCurrentPosition());
         i.putExtra(FileActivity.EXTRA_FILE, getFile());
 
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
@@ -511,7 +512,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         Log_OC.v(TAG, "onActivityResult " + this);
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
+            mAutoplay = data.getExtras().getBoolean(PlayerVideoActivity.EXTRA_AUTOPLAY);
         }
     }
 

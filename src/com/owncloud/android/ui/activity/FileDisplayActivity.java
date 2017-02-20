@@ -80,6 +80,7 @@ import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
+import com.owncloud.android.ui.preview.PlayerVideoActivity;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
@@ -363,9 +364,9 @@ public class FileDisplayActivity extends HookActivity
                     file.getLastSyncDateForProperties() > 0  // temporal fix
                     ) {
                 int startPlaybackPosition =
-                    getIntent().getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0);
+                    getIntent().getIntExtra(PlayerVideoActivity.EXTRA_START_POSITION, 0);
                 boolean autoplay =
-                    getIntent().getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true);
+                    getIntent().getBooleanExtra(PlayerVideoActivity.EXTRA_AUTOPLAY, true);
 
                 if (PreviewAudioFragment.canBePreviewed(file)) {
                     secondFragment = PreviewAudioFragment.newInstance(
