@@ -230,4 +230,5 @@
   <string name="share_privilege_can_edit">সম্পাদনা করতে পারবেন</string>
   <string name="share_privilege_can_edit_create">তৈরী করুন</string>
   <string name="share_privilege_can_edit_delete">মুছে ফেল</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">সংরক্ষণের স্থান নেই</string>
 </resources>

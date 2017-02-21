@@ -416,6 +416,7 @@
   <string name="local_file_not_found_toast">在本地的檔案系統中找不到這個檔案</string>
   <string name="confirmation_remove_files_alert">您真的要移除所選取的項目?</string>
   <string name="confirmation_remove_folders_alert">您真的要移除所選取的項目與裡面的文件?</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">無法存取儲存空間</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已選取</item>
   </plurals>

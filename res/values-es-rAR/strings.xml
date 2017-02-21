@@ -250,4 +250,5 @@
   <string name="share_privilege_can_edit">podés editar</string>
   <string name="share_privilege_can_edit_create">crear</string>
   <string name="share_privilege_can_edit_delete">borrar</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Almacenamiento no disponible</string>
 </resources>

@@ -384,6 +384,7 @@
   <string name="manage_space_error">Alguns fitxers no s\'han pogut esborrar</string>
   <string name="permission_storage_access">Es requereixen permisos addicionals per a pujar i baixar fitxers.</string>
   <string name="failed_upload_quota_exceeded_text">No hi ha prou espai en el compte</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Emmagatzemament no disponible</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionat</item>
     <item quantity="other">%d seleccionats</item>

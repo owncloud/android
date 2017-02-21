@@ -279,4 +279,5 @@
   <string name="share_privilege_can_edit_create">إنشاء</string>
   <string name="share_privilege_can_edit_change">تغيير</string>
   <string name="share_privilege_can_edit_delete">حذف</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">وحدة التخزين غير متوفرة </string>
 </resources>

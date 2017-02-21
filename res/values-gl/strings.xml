@@ -311,4 +311,5 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_privilege_can_edit_create">crear</string>
   <string name="share_privilege_can_edit_change">cambio</string>
   <string name="share_privilege_can_edit_delete">eliminar</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Almacenamento non dispoñíbel</string>
 </resources>

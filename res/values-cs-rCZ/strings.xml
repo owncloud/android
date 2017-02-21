@@ -415,6 +415,7 @@ správce systému.</string>
   <string name="local_file_not_found_toast">Soubor nebyl nalezen v místním souborovém systému</string>
   <string name="confirmation_remove_files_alert">Opravdu chcete odstranit vybrané položky?</string>
   <string name="confirmation_remove_folders_alert">Opravdu chcete odstranit vybrané položky a jejich obsah?</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Úložiště není dostupné</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
