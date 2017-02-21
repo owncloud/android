@@ -106,9 +106,6 @@
         <activity
             android:name=".ui.preview.PreviewImageActivity"
             android:theme="@style/Theme.ownCloud.Overlay" />
-        <activity
-            android:name=".ui.preview.PreviewVideoActivity"
-            android:theme="@style/Theme.ownCloud.Fullscreen" />
 
         <service
             android:name=".authentication.AccountAuthenticatorService"
@@ -267,9 +264,10 @@
             android:label="@string/manage_space_title"
             android:theme="@style/Theme.ownCloud" />
         <activity android:name=".ui.activity.PrivacyPolicyActivity"></activity>
-        <activity android:name=".ui.preview.PlayerVideoActivity"
+        <activity android:name=".ui.preview.PreviewVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.ownCloud.Fullscreen">
         </activity>
     </application>
 

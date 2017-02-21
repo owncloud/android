@@ -494,7 +494,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
 
     private void startFullScreenVideo() {
-        Intent i = new Intent(getActivity(), PlayerVideoActivity.class);
+        Intent i = new Intent(getActivity(), PreviewVideoActivity.class);
         i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
         i.putExtra(EXTRA_PLAY_POSITION, player.getCurrentPosition());
         i.putExtra(FileActivity.EXTRA_FILE, getFile());
@@ -512,7 +512,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         Log_OC.v(TAG, "onActivityResult " + this);
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            mAutoplay = data.getExtras().getBoolean(PlayerVideoActivity.EXTRA_AUTOPLAY);
+            mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
         }
     }
 
