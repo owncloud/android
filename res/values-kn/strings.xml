@@ -46,4 +46,5 @@
   <string name="share_privilege_can_edit_create">ಸೃಷ್ಟಿಸು</string>
   <string name="share_privilege_can_edit_change">﻿ಬದಲಾವಣೆ</string>
   <string name="share_privilege_can_edit_delete">﻿ಅಳಿಸಿ</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">﻿ಲಭ್ಯವಿಲ್ಲ ಸಂಗ್ರಹ</string>
 </resources>

@@ -377,6 +377,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="action_switch_list_view">Lista</string>
   <string name="manage_space_title">Gestion de l\'espaci</string>
   <string name="manage_space_clear_data">Escafar las donadas</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Supòrt d\'emmagazinatge pas disponible</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionat</item>
     <item quantity="other">%d seleccionats</item>

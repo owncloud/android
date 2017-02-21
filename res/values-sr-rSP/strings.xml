@@ -97,4 +97,5 @@
   <string name="share_privilege_can_edit_create">napravi</string>
   <string name="share_privilege_can_edit_change">izmeni</string>
   <string name="share_privilege_can_edit_delete">brisanje</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Skladište nije dostupno</string>
 </resources>

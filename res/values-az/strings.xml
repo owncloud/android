@@ -253,4 +253,5 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="share_privilege_can_share">yayımlaya bilərsiniz</string>
   <string name="share_privilege_can_edit">dəyişmək olar</string>
   <string name="share_privilege_can_edit_delete">sil</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">İnformasiya daşıyıcısı mövcud deyil</string>
 </resources>

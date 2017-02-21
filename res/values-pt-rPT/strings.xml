@@ -420,6 +420,7 @@
   <string name="confirmation_remove_files_alert">Tem a certeza que deseja remover os items selecionados?</string>
   <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os items selecionados e os seus respetivos conteúdos?</string>
   <string name="failed_upload_quota_exceeded_text">Não existe espaço suficiente na conta</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Armazenamento indisponível</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

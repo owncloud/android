@@ -362,6 +362,7 @@
   <string name="manage_space_title">مدیریت فضا</string>
   <string name="manage_space_clear_data">پاک‌سازی داده</string>
   <string name="manage_space_error">برخی پرونده‌ها نمي‌توانند حذف شوند.</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">فضای ذخیره سازی موجود نیست</string>
   <plurals name="items_selected_count">
     <item quantity="other">‫%d گزیده</item>
   </plurals>

@@ -71,4 +71,5 @@
   <string name="share_privilege_can_edit_create">Kreirajte</string>
   <string name="share_privilege_can_edit_change">promijeni</string>
   <string name="share_privilege_can_edit_delete">Izbrišite</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Pohrana nedostupna</string>
 </resources>

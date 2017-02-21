@@ -404,6 +404,7 @@
   <string name="manage_space_clear_data">清除数据</string>
   <string name="manage_space_error">某些文件无法删除。</string>
   <string name="permission_storage_access">没有权限上传和下载文件。</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">存储空间不可用</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已选择</item>
   </plurals>

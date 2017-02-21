@@ -421,6 +421,7 @@
   <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
   <string name="maintenance_mode">サーバーはメンテナンスモードです</string>
   <string name="failed_upload_quota_exceeded_text">アカウントに十分なスペースがありません</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">ストレージが利用できません</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d個選択中</item>
   </plurals>

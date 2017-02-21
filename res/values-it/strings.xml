@@ -424,6 +424,7 @@
   <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
   <string name="maintenance_mode">Server in modalità di manutenzione</string>
   <string name="failed_upload_quota_exceeded_text">Spazio insufficiente nell\'account</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Archiviazione non disponibile</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>

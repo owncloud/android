@@ -425,6 +425,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="confirmation_remove_folders_alert">Êtes-vous sur de vouloir supprimer ses objets et leurs contenus?</string>
   <string name="maintenance_mode">Serveur en cours de maintenance</string>
   <string name="failed_upload_quota_exceeded_text">Espace insuffisant pour ce compte</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Support de stockage non disponible</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>

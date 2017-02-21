@@ -427,6 +427,7 @@
   <string name="maintenance_mode">השרת במצב תחזוקה</string>
   <string name="failed_upload_quota_exceeded_text">אין מספיק מקום בחשבון</string>
   <string name="auth_forbidden">אימות אסור</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">אחסון לא זמין</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>
