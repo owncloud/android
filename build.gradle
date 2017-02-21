@@ -86,7 +86,12 @@ android {
         // arguments to be passed to functional tests
         testInstrumentationRunnerArgument "TEST_USER", "\"$System.env.OCTEST_APP_USERNAME\""
         testInstrumentationRunnerArgument "TEST_PASSWORD", "\"$System.env.OCTEST_APP_PASSWORD\""
+        testInstrumentationRunnerArgument "TEST_USER2", "\"$System.env.OCTEST_APP_USERNAME2\""
+        testInstrumentationRunnerArgument "TEST_PASSWORD2", "\"$System.env.OCTEST_APP_PASSWORD2\""
         testInstrumentationRunnerArgument "TEST_SERVER_URL", "\"$System.env.OCTEST_SERVER_BASE_URL\""
+        testInstrumentationRunnerArgument "TEST_SERVER_PORT", "\"$System.env.OCTEST_SERVER_PORT\""
+        testInstrumentationRunnerArgument "TEST_SERVER_PORT_SECURE", "\"$System.env.OCTEST_SERVER_PORT_SECURE\""
+        testInstrumentationRunnerArgument "TRUSTED", "\"$System.env.OCTEST_SERVER_TRUSTED\""
 
         jackOptions {
             enabled false
