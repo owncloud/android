@@ -78,7 +78,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * An activity that plays media using {@link SimpleExoPlayer}.
  */
-public class PlayerVideoActivity extends FileActivity implements OnClickListener, ExoPlayer.EventListener {
+public class PlayerVideoActivity extends FileActivity implements   ExoPlayer.EventListener {
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
@@ -287,22 +287,7 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
 
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-//        updateButtonVisibilities();
-        MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
-        if (mappedTrackInfo != null) {
-            if (mappedTrackInfo.getTrackTypeRendererSupport(C.TRACK_TYPE_VIDEO)
-                    == MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS) {
-//                showToast(R.string.error_unsupported_video);
-            }
-            if (mappedTrackInfo.getTrackTypeRendererSupport(C.TRACK_TYPE_AUDIO)
-                    == MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS) {
-//                showToast(R.string.error_unsupported_audio);
-            }
-        }
-    }
-
-    private void showToast(int messageId) {
-        showToast(getString(messageId));
+        // Do nothing
     }
 
     private void showToast(String message) {
@@ -321,11 +306,6 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
             cause = cause.getCause();
         }
         return false;
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     /**
