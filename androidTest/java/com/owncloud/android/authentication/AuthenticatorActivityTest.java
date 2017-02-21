@@ -82,7 +82,7 @@ public class AuthenticatorActivityTest {
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
     private static final int WAIT_INITIAL = 500;
-    private static final int WAIT_LOGIN = 2000;
+    private static final int WAIT_LOGIN = 4000;
     private static final int WAIT_CONNECTION = 2000;
 
     private static final String ERROR_MESSAGE = "Activity not finished";
@@ -408,38 +408,41 @@ public class AuthenticatorActivityTest {
     public void test9_check_certif_not_secure_no_accept()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Log_OC.i(LOG_TAG, "Test not accept not secure start");
+        //API versions < 24 do not execute the clicks in certificate layout
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-        if (testServerPortSecure != null && trusted == 0) {
+            Log_OC.i(LOG_TAG, "Test not accept not secure start");
 
-            String connectionString = getConnectionString(testServerURL, testServerPortSecure);
+            if (testServerPortSecure != null && trusted == 0) {
 
-            // Check that login button is disabled
-            onView(withId(R.id.buttonOK))
-                    .check(matches(not(isEnabled())));
+                String connectionString = getConnectionString(testServerURL, testServerPortSecure);
 
-            // Type server url
-            onView(withId(R.id.hostUrlInput))
-                    .perform(replaceText(connectionString), closeSoftKeyboard());
-            onView(withId(R.id.account_username)).perform(click());
+                // Check that login button is disabled
+                onView(withId(R.id.buttonOK))
+                        .check(matches(not(isEnabled())));
 
-            SystemClock.sleep(WAIT_CONNECTION);
+                // Type server url
+                onView(withId(R.id.hostUrlInput))
+                        .perform(replaceText(connectionString), closeSoftKeyboard());
+                onView(withId(R.id.account_username)).perform(click());
 
-            //certif not accepted
-            onView(withId(R.id.cancel)).perform(click());
+                SystemClock.sleep(WAIT_CONNECTION);
 
-            SystemClock.sleep(WAIT_CONNECTION);
+                //certif not accepted
+                onView(withId(R.id.cancel)).perform(click());
 
-            // Check that login button keeps on being disabled
-            onView(withId(R.id.buttonOK))
-                    .check(matches(not(isEnabled())));
+                SystemClock.sleep(WAIT_CONNECTION);
 
-            // Check that SSL server is not trusted
-            onView(withId(R.id.server_status_text))
-                    .check(matches(withText(R.string.auth_ssl_unverified_server_title)));
+                // Check that login button keeps on being disabled
+                onView(withId(R.id.buttonOK))
+                        .check(matches(not(isEnabled())));
 
-            Log_OC.i(LOG_TAG, "Test not accept not secure passed");
+                // Check that SSL server is not trusted
+                onView(withId(R.id.server_status_text))
+                        .check(matches(withText(R.string.auth_ssl_unverified_server_title)));
 
+                Log_OC.i(LOG_TAG, "Test not accept not secure passed");
+            }
         }
     }
 
@@ -451,68 +454,71 @@ public class AuthenticatorActivityTest {
     public void test_10_check_certif_not_secure()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Log_OC.i(LOG_TAG, "Test accept not secure start");
+        //API versions < 24 do not execute the clicks in certificate layout
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-        // Get values passed
+            Log_OC.i(LOG_TAG, "Test accept not secure start");
 
-        if (testServerPort != null && trusted == 0) {
+            // Get values passed
 
-            String connectionString = getConnectionString(testServerURL, testServerPortSecure);
+            if (testServerPort != null && trusted == 0) {
 
-            // Check that login button is disabled
-            onView(withId(R.id.buttonOK))
-                    .check(matches(not(isEnabled())));
+                String connectionString = getConnectionString(testServerURL, testServerPortSecure);
 
-            // Type server url
-            onView(withId(R.id.hostUrlInput))
-                    .perform(replaceText(connectionString), closeSoftKeyboard());
-            onView(withId(R.id.account_username)).perform(click());
+                // Check that login button is disabled
+                onView(withId(R.id.buttonOK))
+                        .check(matches(not(isEnabled())));
 
-            SystemClock.sleep(WAIT_CONNECTION);
+                // Type server url
+                onView(withId(R.id.hostUrlInput))
+                        .perform(replaceText(connectionString), closeSoftKeyboard());
+                onView(withId(R.id.account_username)).perform(click());
 
-            //Check untrusted certificate, opening the details
-            onView(withId(R.id.details_btn)).perform(click());
-            //Check that the details view is present after opening
-            onView(withId(R.id.details_view)).check(matches(isDisplayed()));
-            //Close the details
-            onView(withId(R.id.details_btn)).perform(click());
-            //Check that the details view is already not present
-            onView(withId(R.id.details_view)).check(matches(not((isDisplayed()))));
+                SystemClock.sleep(WAIT_CONNECTION);
 
-            //Closing the view
-            onView(withId(R.id.ok)).perform(click());
+                //Check untrusted certificate, opening the details
+                onView(withId(R.id.details_btn)).perform(click());
+                //Check that the details view is present after opening
+                onView(withId(R.id.details_view)).check(matches(isDisplayed()));
+                //Close the details
+                onView(withId(R.id.details_btn)).perform(click());
+                //Check that the details view is already not present
+                onView(withId(R.id.details_view)).check(matches(not((isDisplayed()))));
 
-            SystemClock.sleep(WAIT_CONNECTION);
-            //Check correct connection message
-            onView(withId(R.id.server_status_text))
-                    .check(matches(withText(R.string.auth_secure_connection)));
+                //Closing the view
+                onView(withId(R.id.ok)).perform(click());
 
-            // Type user
-            onView(withId(R.id.account_username))
-                    .perform(replaceText(testUser), closeSoftKeyboard());
+                SystemClock.sleep(WAIT_CONNECTION);
+                //Check correct connection message
+                onView(withId(R.id.server_status_text))
+                        .check(matches(withText(R.string.auth_secure_connection)));
 
-            // Type user pass
-            onView(withId(R.id.account_password))
-                    .perform(replaceText(testPassword), closeSoftKeyboard());
+                // Type user
+                onView(withId(R.id.account_username))
+                        .perform(replaceText(testUser), closeSoftKeyboard());
 
-            onView(withId(R.id.buttonOK)).perform(click());
+                // Type user pass
+                onView(withId(R.id.account_password))
+                        .perform(replaceText(testPassword), closeSoftKeyboard());
 
-            // Check that the Activity ends after clicking
-            SystemClock.sleep(WAIT_LOGIN);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-                assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
-            else {
-                Field f = Activity.class.getDeclaredField(RESULT_CODE);
-                f.setAccessible(true);
-                int mResultCode = f.getInt(mActivityRule.getActivity());
-                assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
+                onView(withId(R.id.buttonOK)).perform(click());
+
+                // Check that the Activity ends after clicking
+                SystemClock.sleep(WAIT_LOGIN);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                    assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
+                else {
+                    Field f = Activity.class.getDeclaredField(RESULT_CODE);
+                    f.setAccessible(true);
+                    int mResultCode = f.getInt(mActivityRule.getActivity());
+                    assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
+
+                }
+
+                Log_OC.i(LOG_TAG, "Test accept not secure passed");
 
             }
-
-            Log_OC.i(LOG_TAG, "Test accept not secure passed");
-
         }
-
     }
 
 
