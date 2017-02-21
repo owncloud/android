@@ -193,7 +193,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
         simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.video_player);
 
-        ImageButton fullScreen = (ImageButton) view.findViewById(R.id.exo_fullscreen_button);
+        ImageButton fullScreen = (ImageButton) view.findViewById(R.id.fullscreen_button);
 
         fullScreen.setOnClickListener(new View.OnClickListener() {
 

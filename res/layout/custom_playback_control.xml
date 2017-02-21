@@ -45,9 +45,15 @@
 
         // This is the custom button
         <ImageButton
-            android:id="@+id/exo_fullscreen_button"
+            android:id="@+id/fullscreen_button"
             style="@style/ExoMediaButton"
             android:src="@drawable/ic_fullscreen"/>
+
+        <ImageButton
+            android:id="@+id/exit_fullscreen_button"
+            style="@style/ExoMediaButton"
+            android:src="@drawable/ic_fullscreen_exit"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -118,6 +119,24 @@ public class PlayerVideoActivity extends FileActivity implements OnClickListener
         // Hide sync bar
         ProgressBar syncProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
         syncProgressBar.setVisibility(View.GONE);
+
+        // Hide full screen button
+        ImageButton fullScreen = (ImageButton) findViewById(R.id.fullscreen_button);
+        fullScreen.setVisibility(View.GONE);
+
+        // Show exit full screen button
+        ImageButton exitFullScreen = (ImageButton) findViewById(R.id.exit_fullscreen_button);
+        exitFullScreen.setVisibility(View.VISIBLE);
+
+        exitFullScreen.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                releasePlayer();
+                finish();
+            }
+        });
+
 
         Bundle extras = getIntent().getExtras();
 
