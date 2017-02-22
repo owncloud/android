@@ -94,15 +94,19 @@ import java.util.concurrent.ExecutionException;
  * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is
  * generated on instantiation too.
  */
-public class PreviewVideoFragment extends FileFragment implements ExoPlayer.EventListener {
+public class PreviewVideoFragment extends FileFragment implements View.OnClickListener, ExoPlayer.EventListener {
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
-    /** Key to receive a flag signaling if the video should be started immediately */
+    /**
+     * Key to receive a flag signaling if the video should be started immediately
+     */
     private static final String EXTRA_AUTOPLAY = "AUTOPLAY";
 
-    /** Key to receive the position of the playback where the video should be put at start */
+    /**
+     * Key to receive the position of the playback where the video should be put at start
+     */
     private static final String EXTRA_PLAY_POSITION = "START_POSITION";
 
     private Account mAccount;
@@ -116,6 +120,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
+
+    private ImageButton fullScreenButton;
 
     private boolean mAutoplay;
     private long mPlaybackPosition;
@@ -166,6 +172,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     }
 
 
+    // Fragment and activity lifecicle
+
     /**
      * {@inheritDoc}
      */
@@ -174,7 +182,6 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
 
     /**
      * {@inheritDoc}
@@ -193,16 +200,9 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
         simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.video_player);
 
-        ImageButton fullScreen = (ImageButton) view.findViewById(R.id.fullscreen_button);
+        fullScreenButton = (ImageButton) view.findViewById(R.id.fullscreen_button);
 
-        fullScreen.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                releasePlayer();
-                startFullScreenVideo();
-            }
-        });
+        fullScreenButton.setOnClickListener(this);
 
         return view;
     }
@@ -249,6 +249,51 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log_OC.v(TAG, "onStart");
+
+        OCFile file = getFile();
+
+        if (file != null) {
+            mProgressController.startListeningProgressFor(file, mAccount);
+        }
+
+        if (Util.SDK_INT > 23) {
+            player.seekTo(mPlaybackPosition);
+            player.setPlayWhenReady(mAutoplay);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            player.seekTo(mPlaybackPosition);
+            player.setPlayWhenReady(mAutoplay);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        Log_OC.v(TAG, "onStop");
+        mProgressController.stopListeningProgressFor(getFile(), mAccount);
+
+        super.onStop();
+
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -264,72 +309,46 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         outState.putLong(PreviewVideoFragment.EXTRA_PLAY_POSITION, player.getCurrentPosition());
     }
 
-    private void preparePlayer() {
-
-        // Create a default TrackSelector
-        mainHandler = new Handler();
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
-        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
-        player.addListener(this);
-        simpleExoPlayerView.setPlayer(player);
-
-        try {
-
-            // If the file is already downloaded, reproduce it locally
-            Uri uri = getFile().isDown() ? getFile().getStorageUri() :
-                    Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
-                            Uri.encode(getFile().getRemotePath(), "/"));
-
-            DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
-
-            MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
-
-            player.prepare(mediaSource);
-
-        } catch (AccountUtils.AccountNotFoundException e) {
-            e.printStackTrace();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log_OC.v(TAG, "onActivityResult " + this);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
         }
     }
 
-
-    private MediaSource buildMediaSource(DataSource.Factory mediaDataSourceFactory, Uri uri) {
-        return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
-                mainHandler, null);
+    private void finish() {
+        getActivity().onBackPressed();
     }
 
-    private void updateResumePosition() {
-        mPlaybackPosition = player.getCurrentPosition();
+
+    // OnClickListener methods
+
+    public void onClick(View view) {
+        if (view == fullScreenButton) {
+            releasePlayer();
+            startFullScreenVideo();
+        }
     }
+
+    private void startFullScreenVideo() {
+        Intent i = new Intent(getActivity(), PreviewVideoActivity.class);
+        i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
+        i.putExtra(EXTRA_PLAY_POSITION, player.getCurrentPosition());
+        i.putExtra(FileActivity.EXTRA_FILE, getFile());
+
+        startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
+    }
+
+
+    // Progress bar
 
     @Override
     public void onTransferServiceConnected() {
         if (mProgressController != null) {
             mProgressController.startListeningProgressFor(getFile(), mAccount);
         }
-    }
-
-    @Override
-    public void onFileMetadataChanged(OCFile updatedFile) {
-        if (updatedFile != null) {
-            setFile(updatedFile);
-        }
-        getActivity().invalidateOptionsMenu();
-    }
-
-    @Override
-    public void onFileMetadataChanged() {
-        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
-        if (storageManager != null) {
-            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
-        }
-        getActivity().invalidateOptionsMenu();
-    }
-
-    @Override
-    public void onFileContentChanged() {
-
     }
 
     @Override
@@ -342,48 +361,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         mProgressController.hideProgressBar();
     }
 
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
 
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-        String message = error.getCause().getMessage();
-        if (message == null) {
-            message = getString(R.string.common_error_unknown);
-        }
-        new AlertDialog.Builder(getActivity())
-                .setMessage(message)
-                .setPositiveButton(android.R.string.VideoView_error_button,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                            }
-                        })
-                .setCancelable(false)
-                .show();
-    }
-
-    @Override
-    public void onPositionDiscontinuity() {
-
-    }
+    // Menu options
 
     /**
      * {@inheritDoc}
@@ -409,7 +388,7 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         );
         mf.filter(menu);
 
-        // additional restriction for this fragment 
+        // additional restriction for this fragment
         // TODO allow renaming in PreviewVideoFragment
         MenuItem item = menu.findItem(R.id.action_rename_file);
         if (item != null) {
@@ -431,7 +410,6 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
             item.setEnabled(false);
         }
     }
-
 
     /**
      * {@inheritDoc}
@@ -487,53 +465,41 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     }
 
 
-    private void seeDetails() {
-        releasePlayer();
-        mContainerActivity.showDetails(getFile());
-    }
+    // Video player internal methods
 
+    private void preparePlayer() {
 
-    private void startFullScreenVideo() {
-        Intent i = new Intent(getActivity(), PreviewVideoActivity.class);
-        i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
-        i.putExtra(EXTRA_PLAY_POSITION, player.getCurrentPosition());
-        i.putExtra(FileActivity.EXTRA_FILE, getFile());
+        // Create a default TrackSelector
+        mainHandler = new Handler();
+        TrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
+        player.addListener(this);
+        simpleExoPlayerView.setPlayer(player);
 
-        startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
-    }
+        try {
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        Log_OC.v(TAG, "onConfigurationChanged " + this);
-    }
+            // If the file is already downloaded, reproduce it locally
+            Uri uri = getFile().isDown() ? getFile().getStorageUri() :
+                    Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
+                            Uri.encode(getFile().getRemotePath(), "/"));
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log_OC.v(TAG, "onActivityResult " + this);
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
+            DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
+
+            MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
+
+            player.prepare(mediaSource);
+
+        } catch (AccountUtils.AccountNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Opens the previewed file with an external application.
-     */
-    private void openFile() {
-        releasePlayer();
-        mContainerActivity.getFileOperationsHelper().openFile(getFile());
-        finish();
-    }
 
-    /**
-     * Helper method to test if an {@link OCFile} can be passed to a {@link PreviewVideoFragment}
-     * to be previewed.
-     *
-     * @param file File to test if can be previewed.
-     * @return 'True' if the file can be handled by the fragment.
-     */
-    public static boolean canBePreviewed(OCFile file) {
-        return (file != null && file.isVideo());
+    private MediaSource buildMediaSource(DataSource.Factory mediaDataSourceFactory, Uri uri) {
+        return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                mainHandler, null);
     }
 
     public void releasePlayer() {
@@ -545,11 +511,8 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
         }
     }
 
-    /**
-     * Finishes the preview
-     */
-    private void finish() {
-        getActivity().onBackPressed();
+    private void updateResumePosition() {
+        mPlaybackPosition = player.getCurrentPosition();
     }
 
     /**
@@ -568,13 +531,20 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
                 buildHttpDataSourceFactory(bandwidthMeter));
     }
 
+    /**
+     * Returns a new HttpDataSource factory.
+     *
+     * @param bandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
+     *                       DataSource factory.
+     * @return A new HttpDataSource factory.
+     */
     private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
 
         if (getFile().isDown()) {
             return new DefaultHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter);
         } else {
 
-            OwnCloudAccount ocAccount = null;
+            OwnCloudAccount ocAccount;
             try {
                 ocAccount = new OwnCloudAccount(mAccount, getContext());
 
@@ -638,48 +608,104 @@ public class PreviewVideoFragment extends FileFragment implements ExoPlayer.Even
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log_OC.v(TAG, "onStart");
-
-        OCFile file = getFile();
-
-        if (file != null) {
-            mProgressController.startListeningProgressFor(file, mAccount);
+    public void onPlayerError(ExoPlaybackException error) {
+        String message = error.getCause().getMessage();
+        if (message == null) {
+            message = getString(R.string.common_error_unknown);
         }
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton(android.R.string.VideoView_error_button,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setCancelable(false)
+                .show();
+    }
 
-        if (Util.SDK_INT > 23) {
-            player.seekTo(mPlaybackPosition);
-            player.setPlayWhenReady(mAutoplay);
-        }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+        // Do nothing
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            player.seekTo(mPlaybackPosition);
-            player.setPlayWhenReady(mAutoplay);
-        }
+    public void onLoadingChanged(boolean isLoading) {
+        // Do nothing
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        // Do nothing
     }
 
     @Override
-    public void onStop() {
-        Log_OC.v(TAG, "onStop");
-        mProgressController.stopListeningProgressFor(getFile(), mAccount);
+    public void onPositionDiscontinuity() {
+        // Do nothing
+    }
 
-        super.onStop();
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+        // Do nothing
+    }
 
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
+
+    // File extra methods
+
+    @Override
+    public void onFileMetadataChanged(OCFile updatedFile) {
+        if (updatedFile != null) {
+            setFile(updatedFile);
         }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileMetadataChanged() {
+        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
+        if (storageManager != null) {
+            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+        }
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onFileContentChanged() {
+        player.seekTo(mPlaybackPosition);
+        player.setPlayWhenReady(mAutoplay);
+    }
+
+
+    private void seeDetails() {
+        releasePlayer();
+        mContainerActivity.showDetails(getFile());
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log_OC.v(TAG, "onConfigurationChanged " + this);
+    }
+
+    /**
+     * Opens the previewed file with an external application.
+     */
+    private void openFile() {
+        releasePlayer();
+        mContainerActivity.getFileOperationsHelper().openFile(getFile());
+        finish();
+    }
+
+    /**
+     * Helper method to test if an {@link OCFile} can be passed to a {@link PreviewVideoFragment}
+     * to be previewed.
+     *
+     * @param file File to test if can be previewed.
+     * @return 'True' if the file can be handled by the fragment.
+     */
+    public static boolean canBePreviewed(OCFile file) {
+        return (file != null && file.isVideo());
     }
 }
