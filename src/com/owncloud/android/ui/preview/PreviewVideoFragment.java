@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
- * Copyright (C) 2016 ownCloud GmbH.
+ * @author David González Verdugo
+ * Copyright (C) 2017 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,18 +20,14 @@
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,19 +54,11 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
-import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
-import com.owncloud.android.lib.common.OwnCloudCredentials;
-import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -79,14 +68,10 @@ import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
 
 /**
- * This fragment shows a preview of a downloaded video file.
+ * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
+ * downloaded yet.
  * <p>
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
@@ -99,21 +84,15 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
-    /**
-     * Key to receive a flag signaling if the video should be started immediately
-     */
+    /** Key to receive a flag signaling if the video should be started immediately */
     private static final String EXTRA_AUTOPLAY = "AUTOPLAY";
 
-    /**
-     * Key to receive the position of the playback where the video should be put at start
-     */
+    /** Key to receive the position of the playback where the video should be put at start */
     private static final String EXTRA_PLAY_POSITION = "START_POSITION";
 
     private Account mAccount;
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
-
-    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
     private Handler mainHandler;
     private SimpleExoPlayerView simpleExoPlayerView;
@@ -127,6 +106,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private long mPlaybackPosition;
 
     private static final String TAG = PreviewVideoFragment.class.getSimpleName();
+
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
 
     /**
@@ -172,7 +153,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
 
-    // Fragment and activity lifecicle
+     // Fragment and activity lifecicle
 
     /**
      * {@inheritDoc}
@@ -323,7 +304,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
 
-    // OnClickListener methods
+     // OnClickListener methods
 
     public void onClick(View view) {
         if (view == fullScreenButton) {
@@ -341,8 +322,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
     }
 
-
-    // Progress bar
+     // Progress bar
 
     @Override
     public void onTransferServiceConnected() {
@@ -362,7 +342,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
 
-    // Menu options
+     // Menu options
 
     /**
      * {@inheritDoc}
@@ -485,7 +465,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                     Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
                             Uri.encode(getFile().getRemotePath(), "/"));
 
-            DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
+            DataSource.Factory mediaDataSourceFactory = PreviewUtils.buildDataSourceFactory(true,
+                    getContext(), getFile(), mAccount);
 
             MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
 
@@ -515,97 +496,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         mPlaybackPosition = player.getCurrentPosition();
     }
 
-    /**
-     * Returns a new DataSource factory.
-     *
-     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *                          DataSource factory.
-     * @return A new DataSource factory.
-     */
-    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
-    }
-
-    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(getContext(), bandwidthMeter,
-                buildHttpDataSourceFactory(bandwidthMeter));
-    }
-
-    /**
-     * Returns a new HttpDataSource factory.
-     *
-     * @param bandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *                       DataSource factory.
-     * @return A new HttpDataSource factory.
-     */
-    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-
-        if (getFile().isDown()) {
-            return new DefaultHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter);
-        } else {
-
-            OwnCloudAccount ocAccount;
-            try {
-                ocAccount = new OwnCloudAccount(mAccount, getContext());
-
-                //Get account credentials asynchronously
-                final GetCredentialsTask task = new GetCredentialsTask();
-                task.execute(ocAccount);
-
-                OwnCloudCredentials credentials = task.get();
-
-                String login = credentials.getUsername();
-                String password = credentials.getAuthToken();
-
-                Map<String, String> params = new HashMap<String, String>(1);
-
-                if (credentials instanceof OwnCloudBasicCredentials) {
-                    // Basic auth
-                    String cred = login + ":" + password;
-                    String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
-                    params.put("Authorization", auth);
-                } else if (credentials instanceof OwnCloudSamlSsoCredentials) {
-                    // SAML SSO
-                    params.put("Cookie", password);
-                }
-
-                return new CustomHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter, params);
-
-            } catch (AccountUtils.AccountNotFoundException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return null;
-    }
-
-    public static class GetCredentialsTask extends AsyncTask<Object, Void, OwnCloudCredentials> {
-        @Override
-        protected OwnCloudCredentials doInBackground(Object... params) {
-            Object account = params[0];
-            if (account instanceof OwnCloudAccount) {
-                try {
-                    OwnCloudAccount ocAccount = (OwnCloudAccount) account;
-                    ocAccount.loadCredentials(MainApp.getAppContext());
-                    return ocAccount.getCredentials();
-                } catch (AccountUtils.AccountNotFoundException e) {
-                    e.printStackTrace();
-                } catch (OperationCanceledException e) {
-                    e.printStackTrace();
-                } catch (AuthenticatorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
-        }
-    }
+    // Video player eventListener implementation
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
