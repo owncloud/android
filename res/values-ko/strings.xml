@@ -360,4 +360,5 @@
   <string name="share_privilege_can_edit_create">생성</string>
   <string name="share_privilege_can_edit_change">변경</string>
   <string name="share_privilege_can_edit_delete">삭제</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">저장소를 사용할 수 없음</string>
 </resources>

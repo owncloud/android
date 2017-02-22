@@ -262,4 +262,5 @@ Mesedez, baimendu berriz</string>
   <string name="share_privilege_can_edit_create">sortu</string>
   <string name="share_privilege_can_edit_change">aldatu</string>
   <string name="share_privilege_can_edit_delete">ezabatu</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Biltegia ez dago eskuragarri</string>
 </resources>

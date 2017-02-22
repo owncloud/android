@@ -427,6 +427,7 @@
   <string name="maintenance_mode">Strežnik je trenutno v vzdrževalnem načinu</string>
   <string name="failed_upload_quota_exceeded_text">Na računu ni dovolj prostora</string>
   <string name="auth_forbidden">Overitev je prepovedana</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Shramba ni na voljo</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>

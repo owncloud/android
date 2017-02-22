@@ -418,6 +418,7 @@
   <string name="confirmation_remove_files_alert">Do you really want to remove the selected items?</string>
   <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
   <string name="maintenance_mode">Server in maintenance mode</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Storage not available</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selected</item>
     <item quantity="other">%d selected</item>

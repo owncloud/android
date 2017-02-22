@@ -283,4 +283,5 @@
   <string name="manage_space_title">Administri spacon</string>
   <string name="manage_space_clear_data">Forviŝi datumojn</string>
   <string name="manage_space_error">Kelkaj dosieroj ne povis foriĝi.</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Memoro ne disponeblas</string>
 </resources>

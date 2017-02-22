@@ -199,4 +199,5 @@
   <string name="share_privilege_can_edit">có thể chỉnh sửa</string>
   <string name="share_privilege_can_edit_create">tạo</string>
   <string name="share_privilege_can_edit_delete">xóa</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Lưu trữ không có sẵn</string>
 </resources>

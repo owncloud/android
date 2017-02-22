@@ -426,6 +426,7 @@
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
   <string name="maintenance_mode">Сървърът е в режим на поддръжка</string>
   <string name="failed_upload_quota_exceeded_text">Няма достатъчно свободно място в този профил</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Липсва дисковото устройство.</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d избран</item>
     <item quantity="other">%d избран</item>

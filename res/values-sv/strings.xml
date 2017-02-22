@@ -415,6 +415,7 @@
   <string name="local_file_not_found_toast">Filen hittades inte i det lokala filsystemet</string>
   <string name="confirmation_remove_files_alert">Vill du verkligen ta bort de markerade objekten?</string>
   <string name="confirmation_remove_folders_alert">Vill du verkligen ta bort de markerade objekten och deras innehåll?</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Lagring inte tillgänglig</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vald</item>
     <item quantity="other">%d valda</item>

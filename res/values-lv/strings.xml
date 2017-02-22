@@ -173,4 +173,5 @@
   <string name="share_privilege_can_edit">var rediģēt</string>
   <string name="share_privilege_can_edit_create">izveidot</string>
   <string name="share_privilege_can_edit_delete">dzēst</string>
+  <string name="uploads_view_upload_status_failed_storage_not_available_error">Glabātuve nav pieejama</string>
 </resources>
