@@ -389,6 +389,35 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             item.setVisible(false);
             item.setEnabled(false);
         }
+
+        // additional restriction for this fragment
+        item = menu.findItem(R.id.action_sort);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
+        // additional restriction for this fragment
+        item = menu.findItem(R.id.action_switch_view);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
+        // additional restriction for this fragment
+        item = menu.findItem(R.id.action_sync_account);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
+        if (!getFile().isDown()) {
+            item = menu.findItem(R.id.action_download_file);
+            if (item != null) {
+                item.setVisible(false);
+                item.setEnabled(false);
+            }
+        }
     }
 
     /**

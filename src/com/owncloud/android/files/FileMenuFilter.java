@@ -222,14 +222,14 @@ public class FileMenuFilter {
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));
-        if (!isSingleFile() || !sendAllowed || synchronizing) {
+        if (!isSingleFile() || !sendAllowed || synchronizing || !anyFileDown()) {
             toHide.add(R.id.action_send_file);
         } else {
             toShow.add(R.id.action_send_file);
         }
 
         // SET AS AVAILABLE OFFLINE
-        if (synchronizing || !anyUnfavorite()) {
+        if (synchronizing || !anyUnfavorite() || !anyFileDown()) {
             toHide.add(R.id.action_set_available_offline);
         } else {
             toShow.add(R.id.action_set_available_offline);
