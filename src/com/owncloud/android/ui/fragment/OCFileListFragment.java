@@ -646,7 +646,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                     ((FileDisplayActivity) mContainerActivity).startAudioPreview(file, 0);
                     mContainerActivity.getFileOperationsHelper().syncFile(file);
 
-                } else if (PreviewVideoFragment.canBePreviewed(file)) {
+                } else if (PreviewVideoFragment.canBePreviewed(file) &&
+                        !fileIsDownloading(file)) {
                     // media preview
                     ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
                     //mContainerActivity.getFileOperationsHelper().syncFile(file);
@@ -662,6 +663,16 @@ public class OCFileListFragment extends ExtendedListFragment {
             Log_OC.d(TAG, "Null object in ListAdapter!!");
         }
 
+    }
+
+    /**
+     *
+     * @param file
+     * @return 'true' if the file is being downloaded, 'false' otherwise.
+     */
+    private boolean fileIsDownloading(OCFile file) {
+        return mContainerActivity.getFileDownloaderBinder().isDownloading(
+                ((FileActivity) mContainerActivity).getAccount(), file);
     }
 
     /**
