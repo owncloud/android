@@ -233,6 +233,21 @@ public class Preferences extends PreferenceActivity {
             }
         }
 
+        boolean privacyPolicyEnabled = getResources().getBoolean(R.bool.privacy_policy_enabled);
+        Preference pPrivacyPolicy =  findPreference("privacyPolicy");
+        if (pPrivacyPolicy != null){
+            if (privacyPolicyEnabled) {
+                pPrivacyPolicy.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        return true;
+                    }
+                });
+            } else {
+                preferenceCategory.removePreference(pPrivacyPolicy);
+            }
+        }
+
         boolean loggerEnabled = getResources().getBoolean(R.bool.logger_enabled) || BuildConfig.DEBUG;
         Preference pLogger =  findPreference("logger");
         if (pLogger != null){

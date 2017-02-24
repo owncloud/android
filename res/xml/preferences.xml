@@ -92,6 +92,10 @@
             android:key="logger"
             />
         <Preference
+            android:title="@string/prefs_privacy_policy"
+            android:key="privacyPolicy"
+            />
+        <Preference
             android:title="@string/prefs_imprint"
             android:key="imprint"
             />
