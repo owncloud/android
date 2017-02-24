@@ -240,6 +240,9 @@ public class Preferences extends PreferenceActivity {
                 pPrivacyPolicy.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
+                        Intent privacyPolicyIntent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
+                        startActivity(privacyPolicyIntent);
+
                         return true;
                     }
                 });

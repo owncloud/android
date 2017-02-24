@@ -62,6 +62,7 @@
     <bool name="feedback_enabled">true</bool>
     <bool name="logger_enabled">false</bool>
     <bool name="privacy_policy_enabled">true</bool>
+    <string name="url_privacy_policy">https://owncloud.com/privacy-legal/</string>
     <string name="url_help" formatted="false">http://owncloud.com/mobile/help</string>
     <string name="url_imprint" formatted="false"></string>
     <string name="mail_recommend" formatted="false">"mailto:"</string>
