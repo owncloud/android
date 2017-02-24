@@ -516,7 +516,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             Log_OC.v(TAG, "playerPrepared");
 
         } catch (AccountUtils.AccountNotFoundException e) {
-            Log_OC.e(TAG, "Account not found due to", e);
+            Log_OC.e(TAG, "Account not found due to", e.getCause());
         }
     }
 
@@ -532,6 +532,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             updateResumePosition();
             player.release();
             trackSelector = null;
+            Log_OC.v(TAG, "playerReleased");
         }
     }
 
@@ -543,7 +544,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-        Log_OC.e(TAG, "Error in video player, error = " + error);
+        Log_OC.v(TAG, "Error in video player, what = " + error);
         String message = error.getCause().getMessage();
         if (message == null) {
             message = getString(R.string.common_error_unknown);

@@ -85,6 +85,7 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log_OC.v(TAG, "onCreate");
 
         clearResumePosition();
 
@@ -123,6 +124,7 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
     @Override
     public void onStart() {
         super.onStart();
+        Log_OC.v(TAG, "onStart");
         if (Util.SDK_INT > 23) {
             preparePlayer();
         }
@@ -131,6 +133,7 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
     @Override
     public void onResume() {
         super.onResume();
+        Log_OC.v(TAG, "onResume");
         if ((Util.SDK_INT <= 23 || player == null)) {
             preparePlayer();
         }
@@ -139,6 +142,7 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
     @Override
     public void onPause() {
         super.onPause();
+        Log_OC.v(TAG, "onPause");
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -147,6 +151,7 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
     @Override
     public void onStop() {
         super.onStop();
+        Log_OC.v(TAG, "onStop");
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
@@ -205,8 +210,10 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
 
             player.prepare(mediaSource);
 
+            Log_OC.v(TAG, "playerPrepared");
+
         } catch (AccountUtils.AccountNotFoundException e) {
-            e.printStackTrace();
+            Log_OC.e(TAG, "Account not found due to", e.getCause());
         }
     }
 
@@ -222,6 +229,7 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
             player.release();
             player = null;
             trackSelector = null;
+            Log_OC.v(TAG, "playerReleased");
         }
     }
 
@@ -238,6 +246,7 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
+        Log_OC.v(TAG, "Error in video player, what = " + error);
         String message = error.getCause().getMessage();
         if (message == null) {
             message = getString(R.string.common_error_unknown);
