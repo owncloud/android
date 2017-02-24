@@ -250,6 +250,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
+        Log_OC.v(TAG, "onResume");
+
         if ((Util.SDK_INT <= 23 || player == null)) {
             player.seekTo(mPlaybackPosition);
             player.setPlayWhenReady(mAutoplay);
@@ -259,6 +261,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onPause() {
         super.onPause();
+        Log_OC.v(TAG, "onPause");
+
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -267,6 +271,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onStop() {
         Log_OC.v(TAG, "onStop");
+
         mProgressController.stopListeningProgressFor(getFile(), mAccount);
 
         super.onStop();
@@ -508,8 +513,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             // Prepare the player with the media source
             player.prepare(mediaSource);
 
+            Log_OC.v(TAG, "playerPrepared");
+
         } catch (AccountUtils.AccountNotFoundException e) {
-            e.printStackTrace();
+            Log_OC.e(TAG, "Account not found due to", e);
         }
     }
 
@@ -536,6 +543,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
+        Log_OC.e(TAG, "Error in video player, error = " + error);
         String message = error.getCause().getMessage();
         if (message == null) {
             message = getString(R.string.common_error_unknown);
