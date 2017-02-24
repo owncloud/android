@@ -68,6 +68,8 @@ import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
 
+import java.security.cert.CertificateException;
+
 
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
@@ -545,20 +547,45 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         Log_OC.v(TAG, "Error in video player, what = " + error);
-        String message = error.getCause().getMessage();
-        if (message == null) {
-            message = getString(R.string.common_error_unknown);
+
+        // If the current certificate is untrusted, video streaming won't work. In that case,
+        // show a specific error message and initialize the download
+        if (error.getSourceException().getCause().getCause() instanceof CertificateException) {
+            String certificateErrorMessage = getString(R.string.streaming_certificate_error);
+
+            new AlertDialog.Builder(getActivity())
+                    .setMessage(certificateErrorMessage)
+                    .setPositiveButton(android.R.string.VideoView_error_button,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    mContainerActivity.getFileOperationsHelper().syncFile(getFile());
+                                    finish();
+                                }
+                            })
+                    .setCancelable(false)
+                    .show();
+
+        } else { //Common player error
+
+            String message;
+
+            message = error.getCause().getMessage();
+
+            if (message == null) {
+                message = getString(R.string.common_error_unknown);
+            }
+
+            new AlertDialog.Builder(getActivity())
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.VideoView_error_button,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    dialog.dismiss();
+                                }
+                            })
+                    .setCancelable(false)
+                    .show();
         }
-        new AlertDialog.Builder(getActivity())
-                .setMessage(message)
-                .setPositiveButton(android.R.string.VideoView_error_button,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                            }
-                        })
-                .setCancelable(false)
-                .show();
     }
 
 
