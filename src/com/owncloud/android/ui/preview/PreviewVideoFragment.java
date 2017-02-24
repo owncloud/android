@@ -483,22 +483,29 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+        // Create the player
         player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
         player.addListener(this);
+
+        // Bind the player to the view.
         simpleExoPlayerView.setPlayer(player);
 
         try {
 
-            // If the file is already downloaded, reproduce it locally
+            // If the file is already downloaded, reproduce it locally, if not, do streaming
             Uri uri = getFile().isDown() ? getFile().getStorageUri() :
                     Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
                             Uri.encode(getFile().getRemotePath(), "/"));
 
+            // Produces DataSource instances through which media data is loaded.
             DataSource.Factory mediaDataSourceFactory = PreviewUtils.buildDataSourceFactory(true,
                     getContext(), getFile(), mAccount);
 
+            // This represents the media to be played.
             MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
 
+            // Prepare the player with the media source
             player.prepare(mediaSource);
 
         } catch (AccountUtils.AccountNotFoundException e) {
