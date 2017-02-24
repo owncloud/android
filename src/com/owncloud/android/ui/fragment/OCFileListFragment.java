@@ -650,8 +650,11 @@ public class OCFileListFragment extends ExtendedListFragment {
                         !fileIsDownloading(file)) {
                     // media preview
                     ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
-                    //mContainerActivity.getFileOperationsHelper().syncFile(file);
-
+                    // If the file is already downloaded sync it, just to update it if there is a
+                    // new available file version
+                    if(file.isDown()) {
+                        mContainerActivity.getFileOperationsHelper().syncFile(file);
+                    }
                 } else {
                     // sync file content, then open with external apps
                     ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);

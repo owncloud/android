@@ -593,7 +593,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onFileContentChanged() {
-        player.seekTo(mPlaybackPosition);
+        // Reset the player with the updated file
+        releasePlayer();
+        preparePlayer();
+        mPlaybackPosition = 0;
         player.setPlayWhenReady(mAutoplay);
     }
 
