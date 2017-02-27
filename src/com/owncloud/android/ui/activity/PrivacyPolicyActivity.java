@@ -60,8 +60,9 @@ public class PrivacyPolicyActivity extends ToolbarActivity  {
         WebView webview = (WebView) findViewById(R.id.privacyPolicyWebview);
         webview.getSettings().setJavaScriptEnabled(true);
 
-        //Enable zoom controls
+        //Enable zoom but hide display zoom controls
         webview.getSettings().setBuiltInZoomControls(true);
+        webview.getSettings().setDisplayZoomControls(false);
 
         final Activity activity = this;
         webview.setWebChromeClient(new WebChromeClient() {
