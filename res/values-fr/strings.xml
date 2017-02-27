@@ -421,8 +421,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="manage_space_error">Certains fichiers n\'ont pu être supprimés.</string>
   <string name="permission_storage_access">Des permissions supplémentaires sont exigées pour téléverser &amp; télécharger des fichiers.</string>
   <string name="local_file_not_found_toast">Le fichier n\'a pas été trouvé sur le système de fichier local</string>
-  <string name="confirmation_remove_files_alert">Êtes-vous sur de vouloir supprimer ses objets?</string>
-  <string name="confirmation_remove_folders_alert">Êtes-vous sur de vouloir supprimer ses objets et leurs contenus?</string>
+  <string name="confirmation_remove_files_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ?</string>
+  <string name="confirmation_remove_folders_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ainsi que leurs contenus ?</string>
   <string name="maintenance_mode">Serveur en cours de maintenance</string>
   <string name="failed_upload_quota_exceeded_text">Espace insuffisant pour ce compte</string>
   <string name="uploads_view_upload_status_failed_storage_not_available_error">Support de stockage non disponible</string>
