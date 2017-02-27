@@ -28,10 +28,14 @@
     <include
         layout="@layout/toolbar_standard" />
 
+
+    <!-- last to draw, will be top in Z axis -->
+    <include layout="@layout/top_progress_bar"/>
+
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:id="@+id/privacyPolicyWebview"
         />
 
 </LinearLayout>
