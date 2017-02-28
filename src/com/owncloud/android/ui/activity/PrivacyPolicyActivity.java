@@ -23,6 +23,7 @@ package com.owncloud.android.ui.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -64,7 +65,6 @@ public class PrivacyPolicyActivity extends ToolbarActivity  {
         webview.getSettings().setBuiltInZoomControls(true);
         webview.getSettings().setDisplayZoomControls(false);
 
-        final Activity activity = this;
         webview.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress)
             {
@@ -77,7 +77,13 @@ public class PrivacyPolicyActivity extends ToolbarActivity  {
         });
         webview.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                Toast.makeText(activity, "An error has occurred: " + description, Toast.LENGTH_SHORT).show();
+
+                Snackbar snackbar = Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "An error has occurred: " + description,
+                        Snackbar.LENGTH_LONG
+                );
+                snackbar.show();
             }
         });
 
