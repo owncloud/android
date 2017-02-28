@@ -368,7 +368,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         );
         mf.filter(menu);
 
-        // additional restriction for this fragment
+        // additional restrictions for this fragment
+
         // TODO allow renaming in PreviewVideoFragment
         MenuItem item = menu.findItem(R.id.action_rename_file);
         if (item != null) {
@@ -376,35 +377,30 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             item.setEnabled(false);
         }
 
-        // additional restriction for this fragment
         item = menu.findItem(R.id.action_move);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
 
-        // additional restriction for this fragment
         item = menu.findItem(R.id.action_copy);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
 
-        // additional restriction for this fragment
         item = menu.findItem(R.id.action_sort);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
 
-        // additional restriction for this fragment
         item = menu.findItem(R.id.action_switch_view);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
 
-        // additional restriction for this fragment
         item = menu.findItem(R.id.action_sync_account);
         if (item != null) {
             item.setVisible(false);
@@ -413,6 +409,24 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         if (!getFile().isDown()) {
             item = menu.findItem(R.id.action_download_file);
+            if (item != null) {
+                item.setVisible(false);
+                item.setEnabled(false);
+            }
+
+            item = menu.findItem(R.id.action_send_file);
+            if (item != null) {
+                item.setVisible(false);
+                item.setEnabled(false);
+            }
+
+            item = menu.findItem(R.id.action_set_available_offline);
+            if (item != null) {
+                item.setVisible(false);
+                item.setEnabled(false);
+            }
+
+            item = menu.findItem(R.id.action_unset_available_offline);
             if (item != null) {
                 item.setVisible(false);
                 item.setEnabled(false);
