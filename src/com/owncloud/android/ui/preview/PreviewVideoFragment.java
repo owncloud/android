@@ -230,8 +230,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         mProgressController = new TransferProgressController(mContainerActivity);
         mProgressController.setProgressBar(mProgressBar);
 
-        preparePlayer();
-
     }
 
     @Override
@@ -244,11 +242,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         if (file != null) {
             mProgressController.startListeningProgressFor(file, mAccount);
         }
-
-        if (Util.SDK_INT > 23) {
-            player.seekTo(mPlaybackPosition);
-            player.setPlayWhenReady(mAutoplay);
-        }
     }
 
     @Override
@@ -256,10 +249,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         super.onResume();
         Log_OC.v(TAG, "onResume");
 
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            player.seekTo(mPlaybackPosition);
-            player.setPlayWhenReady(mAutoplay);
-        }
+        preparePlayer();
+
+        player.seekTo(mPlaybackPosition);
+        player.setPlayWhenReady(mAutoplay);
     }
 
     @Override
@@ -267,9 +260,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         super.onPause();
         Log_OC.v(TAG, "onPause");
 
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
+        releasePlayer();
     }
 
     @Override
