@@ -47,6 +47,7 @@ import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.UnrecognizedInputFormatException;
 import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -62,6 +63,7 @@ import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
@@ -132,7 +134,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_FILE, file);
         args.putParcelable(EXTRA_ACCOUNT, account);
-        args.putInt(EXTRA_PLAY_POSITION, startPlaybackPosition);
+        args.putLong(EXTRA_PLAY_POSITION, startPlaybackPosition);
         args.putBoolean(EXTRA_AUTOPLAY, autoplay);
         frag.setArguments(args);
         return frag;
@@ -550,44 +552,58 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         // If the current certificate is untrusted, video streaming won't work. In that case,
         // show a specific error message and initialize the download
-        if (error.getSourceException().getCause().getCause() instanceof CertificateException) {
+        if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                .getCause() instanceof CertificateException) {
             String certificateErrorMessage = getString(R.string.streaming_certificate_error);
 
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(certificateErrorMessage)
-                    .setPositiveButton(android.R.string.VideoView_error_button,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    mContainerActivity.getFileOperationsHelper().syncFile(getFile());
-                                    finish();
-                                }
-                            })
-                    .setCancelable(false)
-                    .show();
+            showAlertDialog(true, certificateErrorMessage);
 
-        } else { //Common player error
+        } else if (error.getCause() instanceof UnrecognizedInputFormatException) { //Common player error
 
-            String message;
+            showAlertDialog(false, getString(R.string.streaming_unrecognized_input));
 
-            message = error.getCause().getMessage();
+        } else {
+
+            String message = error.getCause().getMessage();
 
             if (message == null) {
                 message = getString(R.string.common_error_unknown);
             }
 
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(message)
-                    .setPositiveButton(android.R.string.VideoView_error_button,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    dialog.dismiss();
-                                }
-                            })
-                    .setCancelable(false)
-                    .show();
+            showAlertDialog(false, message);
         }
     }
 
+    /**
+     * Show an alert dialog with the error produced while playing the video
+     * @param isCertificateError 'true' if error is caused by a problem with the certificate,
+     *                           'false' otherwhise
+     * @param errorMessage string with the error message
+     */
+    private void showAlertDialog (final boolean isCertificateError, String errorMessage) {
+
+        new AlertDialog.Builder(getActivity())
+                .setMessage(errorMessage)
+                .setPositiveButton(android.R.string.VideoView_error_button,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                if (isCertificateError) {
+                                    // Initialize the file download
+                                    mContainerActivity.getFileOperationsHelper().syncFile(getFile());
+
+                                } else {
+                                    // Start to sync the parent file folder
+                                    OCFile folder = new OCFile(getFile().getParentRemotePath());
+                                    ((FileDisplayActivity) getActivity()).startSyncFolderOperation(folder, false);
+                                }
+
+                                finish();
+                            }
+                        })
+                .setCancelable(false)
+                .show();
+    }
 
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
