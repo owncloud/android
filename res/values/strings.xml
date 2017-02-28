@@ -477,7 +477,7 @@
 
     <string name="uploads_view_upload_status_failed_storage_not_available_error">Storage not available</string>
     <string name="streaming_certificate_error">Streaming cannot be initialized because your server certificate is untrusted. File download will start automatically</string>
-    <string name="streaming_unrecognized_input">Stream cannot be read</string>
+    <string name="streaming_unrecognized_input">Video cannot be reproduced</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
