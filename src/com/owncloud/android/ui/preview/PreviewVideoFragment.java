@@ -299,11 +299,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         }
     }
 
-    private void finish() {
-        getActivity().onBackPressed();
-    }
-
-
      // OnClickListener methods
 
     public void onClick(View view) {
@@ -602,8 +597,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                                     OCFile folder = new OCFile(getFile().getParentRemotePath());
                                     ((FileDisplayActivity) getActivity()).startSyncFolderOperation(folder, false);
                                 }
-
-                                finish();
                             }
                         })
                 .setCancelable(false)
@@ -683,6 +676,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         releasePlayer();
         mContainerActivity.getFileOperationsHelper().openFile(getFile());
         finish();
+    }
+
+    private void finish() {
+        getActivity().onBackPressed();
     }
 
     /**
