@@ -55,6 +55,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -112,6 +113,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private static final String TAG = PreviewVideoFragment.class.getSimpleName();
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+
+    private static final int NOT_FOUND_ERROR = 404;
 
 
     /**
@@ -550,37 +553,51 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public void onPlayerError(ExoPlaybackException error) {
         Log_OC.v(TAG, "Error in video player, what = " + error);
 
-        // If the current certificate is untrusted, video streaming won't work. In that case,
-        // show a specific error message and initialize the download
         if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                .getCause() instanceof CertificateException) {
+                .getCause() instanceof CertificateException) { // Current certificate untrusted
+
             String certificateErrorMessage = getString(R.string.streaming_certificate_error);
 
-            showAlertDialog(true, certificateErrorMessage);
+            showAlertDialog(true, false, certificateErrorMessage);
 
-        } else if (error.getCause() instanceof UnrecognizedInputFormatException) { //Common player error
+        } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
 
-            showAlertDialog(false, getString(R.string.streaming_unrecognized_input));
+            // Unsupported video file format
+
+            showAlertDialog(false, true, getString(R.string.streaming_unrecognized_input));
+
+        } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
+
+                && ((HttpDataSource.InvalidResponseCodeException)error.getSourceException())
+
+                .responseCode == NOT_FOUND_ERROR) {
+
+                // Video file no longer exists in the server
+
+                showAlertDialog(false, false, getString(R.string.streaming_file_not_found_error));
 
         } else {
 
-            String message = error.getCause().getMessage();
+            String message = error.getSourceException().getMessage();
 
             if (message == null) {
                 message = getString(R.string.common_error_unknown);
             }
 
-            showAlertDialog(false, message);
+            showAlertDialog(false, false, message);
         }
     }
 
     /**
      * Show an alert dialog with the error produced while playing the video
-     * @param isCertificateError 'true' if error is caused by a problem with the certificate,
-     *                           'false' otherwhise
+     * @param syncFile 'true' if error requires that the file be synchronised,
+     *                 'false' otherwhise
+     * @param syncParentFolder 'true' if error requires that the parent folder be synchronised,
+     *                         'false' otherwhise
      * @param errorMessage string with the error message
      */
-    private void showAlertDialog (final boolean isCertificateError, String errorMessage) {
+    private void showAlertDialog (final boolean syncFile, final boolean syncParentFolder,
+                                  String errorMessage) {
 
         new AlertDialog.Builder(getActivity())
                 .setMessage(errorMessage)
@@ -588,14 +605,17 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                if (isCertificateError) {
+                                if (syncFile) {
                                     // Initialize the file download
                                     mContainerActivity.getFileOperationsHelper().syncFile(getFile());
 
-                                } else {
+                                }
+
+                                if (syncParentFolder) {
                                     // Start to sync the parent file folder
                                     OCFile folder = new OCFile(getFile().getParentRemotePath());
-                                    ((FileDisplayActivity) getActivity()).startSyncFolderOperation(folder, false);
+                                    ((FileDisplayActivity) getActivity()).
+                                            startSyncFolderOperation(folder, false);
                                 }
                             }
                         })
