@@ -71,6 +71,7 @@ import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
 
+import java.net.UnknownHostException;
 import java.security.cert.CertificateException;
 
 
@@ -560,6 +561,11 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
             showAlertDialog(true, false, certificateErrorMessage);
 
+        } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                instanceof UnknownHostException) {  // Cannot connect with the server
+
+            showAlertDialog(false, false, getString(R.string.network_error_socket_exception));
+
         } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
 
             // Unsupported video file format
@@ -570,9 +576,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
                 && ((HttpDataSource.InvalidResponseCodeException)error.getSourceException())
 
-                .responseCode == NOT_FOUND_ERROR) {
-
-                // Video file no longer exists in the server
+                .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
 
                 showAlertDialog(false, false, getString(R.string.streaming_file_not_found_error));
 
