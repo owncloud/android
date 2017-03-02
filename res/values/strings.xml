@@ -473,6 +473,7 @@
 
     <string name="actionbar_privacy_policy">Privacy policy</string>
     <string name="prefs_privacy_policy">Privacy policy</string>
+    <string name="privacy_policy_error">"An error has occurred: "</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>

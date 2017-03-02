@@ -80,7 +80,7 @@ public class PrivacyPolicyActivity extends ToolbarActivity  {
 
                 Snackbar snackbar = Snackbar.make(
                         findViewById(android.R.id.content),
-                        "An error has occurred: " + description,
+                        getString(R.string.privacy_policy_error) + description,
                         Snackbar.LENGTH_LONG
                 );
                 snackbar.show();
