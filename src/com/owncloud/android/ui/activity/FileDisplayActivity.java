@@ -129,7 +129,7 @@ public class FileDisplayActivity extends HookActivity
     private static final String TAG_LIST_OF_FILES = "LIST_OF_FILES";
     private static final String TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT";
 
-    private OCFile mWaitingToPreview;
+    private OCFile mFileWaitingToPreview;
 
     private boolean mSyncInProgress = false;
 
@@ -150,13 +150,13 @@ public class FileDisplayActivity extends HookActivity
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
-            mWaitingToPreview = (OCFile) savedInstanceState.getParcelable(
+            mFileWaitingToPreview = (OCFile) savedInstanceState.getParcelable(
                     FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
             mWaitingToSend = (OCFile) savedInstanceState.getParcelable(
                     FileDisplayActivity.KEY_WAITING_TO_SEND);
         } else {
-            mWaitingToPreview = null;
+            mFileWaitingToPreview = null;
             mSyncInProgress = false;
             mWaitingToSend = null;
         }
@@ -789,7 +789,7 @@ public class FileDisplayActivity extends HookActivity
         // onRestoreInstanceState when there are Fragments involved
         Log_OC.v(TAG, "onSaveInstanceState() start");
         super.onSaveInstanceState(outState);
-        outState.putParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW, mWaitingToPreview);
+        outState.putParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW, mFileWaitingToPreview);
         outState.putBoolean(FileDisplayActivity.KEY_SYNC_IN_PROGRESS, mSyncInProgress);
         //outState.putBoolean(FileDisplayActivity.KEY_REFRESH_SHARES_IN_PROGRESS,
         // mRefreshSharesInProgress);
@@ -1195,32 +1195,32 @@ public class FileDisplayActivity extends HookActivity
                     if (fileInFragment != null &&
                         !downloadedRemotePath.equals(fileInFragment.getRemotePath())) {
                         // the user browsed to other file ; forget the automatic preview
-                        mWaitingToPreview = null;
+                        mFileWaitingToPreview = null;
 
                     } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
                         //  replace the right panel if waiting for preview
                         boolean waitedPreview = (
-                            mWaitingToPreview != null &&
-                                mWaitingToPreview.getRemotePath().equals(downloadedRemotePath)
+                            mFileWaitingToPreview != null &&
+                                mFileWaitingToPreview.getRemotePath().equals(downloadedRemotePath)
                         );
                         if (waitedPreview) {
                             if (success) {
                                 // update the file from database, to get the local storage path
-                                mWaitingToPreview = getStorageManager().getFileById(
-                                    mWaitingToPreview.getFileId()
+                                mFileWaitingToPreview = getStorageManager().getFileById(
+                                    mFileWaitingToPreview.getFileId()
                                 );
                                 fragmentReplaced = true;
-                                if (PreviewAudioFragment.canBePreviewed(mWaitingToPreview)) {
-                                    startAudioPreview(mWaitingToPreview, 0);
-                                } else if (PreviewVideoFragment.canBePreviewed(mWaitingToPreview)) {
-                                    startVideoPreview(mWaitingToPreview, 0);
-                                } else if (PreviewTextFragment.canBePreviewed(mWaitingToPreview)) {
-                                    startTextPreview(mWaitingToPreview);
+                                if (PreviewAudioFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    startAudioPreview(mFileWaitingToPreview, 0);
+                                } else if (PreviewVideoFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    startVideoPreview(mFileWaitingToPreview, 0);
+                                } else if (PreviewTextFragment.canBePreviewed(mFileWaitingToPreview)) {
+                                    startTextPreview(mFileWaitingToPreview);
                                 } else {
-                                    getFileOperationsHelper().openFile(mWaitingToPreview);
+                                    getFileOperationsHelper().openFile(mFileWaitingToPreview);
                                 }
                             }
-                            mWaitingToPreview = null;
+                            mFileWaitingToPreview = null;
                         }
                     }
                 }
@@ -1305,13 +1305,16 @@ public class FileDisplayActivity extends HookActivity
                     FileDisplayActivity.this, FileDownloader.class))) {
                 Log_OC.d(TAG, "Download service connected");
                 mDownloaderBinder = (FileDownloaderBinder) service;
-                if (mWaitingToPreview != null)
+
+                if (mFileWaitingToPreview != null)
                     if (getStorageManager() != null) {
                         // update the file
-                        mWaitingToPreview =
-                                getStorageManager().getFileById(mWaitingToPreview.getFileId());
-                        if (!mWaitingToPreview.isDown()) {
-                             requestForDownload();
+                        mFileWaitingToPreview =
+                                getStorageManager().getFileById(mFileWaitingToPreview.getFileId());
+                        if (!mFileWaitingToPreview.isDown()) {
+                             // If the file to preview isn't downloaded yet, check if it is being
+                             // downloaded in this moment or not
+                             requestForDownloadOrShowDetails();
                         }
                     }
 
@@ -1522,13 +1525,13 @@ public class FileDisplayActivity extends HookActivity
 
         /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
         boolean waitedForPreview = (
-            mWaitingToPreview != null &&
-            mWaitingToPreview.equals(operation.getLocalFile())
-            && mWaitingToPreview.isDown()
+            mFileWaitingToPreview != null &&
+            mFileWaitingToPreview.equals(operation.getLocalFile())
+            && mFileWaitingToPreview.isDown()
         );
         if (!operation.transferWasRequested() & waitedForPreview) {
-            getFileOperationsHelper().openFile(mWaitingToPreview);
-            mWaitingToPreview = null;
+            getFileOperationsHelper().openFile(mFileWaitingToPreview);
+            mFileWaitingToPreview = null;
         }
 
     }
@@ -1557,14 +1560,32 @@ public class FileDisplayActivity extends HookActivity
     }
 
 
-    private void requestForDownload() {
+    private void requestForDownloadOrShowDetails() {
         Account account = getAccount();
-        //if (!mWaitingToPreview.isDownloading()) {
-        if (!mDownloaderBinder.isDownloading(account, mWaitingToPreview)) {
+        //if (!mFileWaitingToPreview.isDownloading()) {
+
+        // If the file is not being downloaded, start the download
+        if (!mDownloaderBinder.isDownloading(account, mFileWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
             i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-            i.putExtra(FileDownloader.EXTRA_FILE, mWaitingToPreview);
+            i.putExtra(FileDownloader.EXTRA_FILE, mFileWaitingToPreview);
             startService(i);
+
+        } else {
+
+            // If the file is being downloaded, assure that the fragment to show is details fragment,
+            // not the streaming video fragment which could have been previously set in
+            // chooseInitialSecondFragment()
+
+            FileFragment secondFragment = getSecondFragment();
+            if (secondFragment != null) {
+                cleanSecondFragment();
+            }
+
+            Fragment detailFragment = FileDetailFragment.newInstance(mFileWaitingToPreview, getAccount());
+            setSecondFragment(detailFragment);
+            updateFragmentsVisibility(true);
+            updateActionBarTitleAndHomeButton(mFileWaitingToPreview);
         }
     }
 
@@ -1629,7 +1650,7 @@ public class FileDisplayActivity extends HookActivity
 
     private void requestForDownload(OCFile file) {
         Account account = getAccount();
-        if (!mDownloaderBinder.isDownloading(account, mWaitingToPreview)) {
+        if (!mDownloaderBinder.isDownloading(account, mFileWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
             i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
             i.putExtra(FileDownloader.EXTRA_FILE, file);
@@ -1736,7 +1757,7 @@ public class FileDisplayActivity extends HookActivity
     public void startSyncThenOpen(OCFile file) {
         FileDetailFragment detailFragment = FileDetailFragment.newInstance(file, getAccount());
         setSecondFragment(detailFragment);
-        mWaitingToPreview = file;
+        mFileWaitingToPreview = file;
         getFileOperationsHelper().syncFile(file);
         updateFragmentsVisibility(true);
         updateActionBarTitleAndHomeButton(file);
@@ -1751,9 +1772,9 @@ public class FileDisplayActivity extends HookActivity
      */
     public void cancelTransference(OCFile file) {
         getFileOperationsHelper().cancelTransference(file);
-        if (mWaitingToPreview != null &&
-                mWaitingToPreview.getRemotePath().equals(file.getRemotePath())) {
-            mWaitingToPreview = null;
+        if (mFileWaitingToPreview != null &&
+                mFileWaitingToPreview.getRemotePath().equals(file.getRemotePath())) {
+            mFileWaitingToPreview = null;
         }
         if (mWaitingToSend != null &&
                 mWaitingToSend.getRemotePath().equals(file.getRemotePath())) {
