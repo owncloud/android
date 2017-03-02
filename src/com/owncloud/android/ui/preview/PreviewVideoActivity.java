@@ -43,6 +43,7 @@ import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.UnrecognizedInputFormatException;
 import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -50,16 +51,22 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.FileDisplayActivity;
+
+import java.net.UnknownHostException;
+import java.security.cert.CertificateException;
 
 /**
  * An activity that plays media using {@link SimpleExoPlayer}.
  */
-public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.EventListener {
+public class PreviewVideoActivity extends FileActivity implements ExoPlayer.EventListener {
 
     private static final String TAG = PreviewVideoActivity.class.getSimpleName();
 
@@ -79,6 +86,8 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
 
     private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
     private long mPlaybackPosition; // continue the playback in the specified position
+
+    private static final int NOT_FOUND_ERROR = 404;
 
     // Activity lifecycle
 
@@ -246,17 +255,62 @@ public class PreviewVideoActivity extends FileActivity implements   ExoPlayer.Ev
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
+
+        releasePlayer();
+
         Log_OC.v(TAG, "Error in video player, what = " + error);
-        String message = error.getCause().getMessage();
-        if (message == null) {
-            message = getString(R.string.common_error_unknown);
+
+        if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                .getCause() instanceof CertificateException) { // Current certificate untrusted
+
+            String certificateErrorMessage = getString(R.string.streaming_certificate_error);
+
+            showAlertDialog(certificateErrorMessage);
+
+        } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                instanceof UnknownHostException) {  // Cannot connect with the server
+
+            showAlertDialog(getString(R.string.network_error_socket_exception));
+
+        } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
+
+            // Unsupported video file format
+
+            showAlertDialog(getString(R.string.streaming_unrecognized_input));
+
+        } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
+
+                && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
+
+                .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
+
+            showAlertDialog(getString(R.string.streaming_file_not_found_error));
+
+        } else {
+
+            String message = error.getSourceException().getMessage();
+
+            if (message == null) {
+                message = getString(R.string.common_error_unknown);
+            }
+
+            showAlertDialog(message);
         }
+    }
+
+    /**
+     * Show an alert dialog with the error produced while playing the video
+     * @param errorMessage string with the error message
+     */
+    private void showAlertDialog(String errorMessage) {
+
         new AlertDialog.Builder(this)
-                .setMessage(message)
+                .setMessage(errorMessage)
                 .setPositiveButton(android.R.string.VideoView_error_button,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
+
+                                finish();
                             }
                         })
                 .setCancelable(false)

@@ -78,22 +78,24 @@ import java.security.cert.CertificateException;
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
  * downloaded yet.
- * <p>
+ *
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
- * <p>
- * If the {@link OCFile} passed is not downloaded, an {@link IllegalStateException} is
- * generated on instantiation too.
+ *
  */
 public class PreviewVideoFragment extends FileFragment implements View.OnClickListener, ExoPlayer.EventListener {
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
-    /** Key to receive a flag signaling if the video should be started immediately */
+    /**
+     * Key to receive a flag signaling if the video should be started immediately
+     */
     private static final String EXTRA_AUTOPLAY = "AUTOPLAY";
 
-    /** Key to receive the position of the playback where the video should be put at start */
+    /**
+     * Key to receive the position of the playback where the video should be put at start
+     */
     private static final String EXTRA_PLAY_POSITION = "START_POSITION";
 
     private Account mAccount;
@@ -161,7 +163,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
 
-     // Fragment and activity lifecicle
+    // Fragment and activity lifecicle
 
     /**
      * {@inheritDoc}
@@ -303,7 +305,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         }
     }
 
-     // OnClickListener methods
+    // OnClickListener methods
 
     public void onClick(View view) {
         if (view == fullScreenButton) {
@@ -313,6 +315,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
     private void startFullScreenVideo() {
+
         Intent i = new Intent(getActivity(), PreviewVideoActivity.class);
         i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
         i.putExtra(EXTRA_PLAY_POSITION, player.getCurrentPosition());
@@ -321,7 +324,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
     }
 
-     // Progress bar
+    // Progress bar
 
     @Override
     public void onTransferServiceConnected() {
@@ -341,7 +344,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
 
-     // Menu options
+    // Menu options
 
     /**
      * {@inheritDoc}
@@ -552,6 +555,9 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
+
+        releasePlayer();
+
         Log_OC.v(TAG, "Error in video player, what = " + error);
 
         if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
@@ -574,11 +580,11 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
 
-                && ((HttpDataSource.InvalidResponseCodeException)error.getSourceException())
+                && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
 
                 .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
 
-                showAlertDialog(false, false, getString(R.string.streaming_file_not_found_error));
+            showAlertDialog(false, false, getString(R.string.streaming_file_not_found_error));
 
         } else {
 
@@ -594,14 +600,15 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     /**
      * Show an alert dialog with the error produced while playing the video
-     * @param syncFile 'true' if error requires that the file be synchronised,
-     *                 'false' otherwhise
+     *
+     * @param syncFile         'true' if error requires that the file be synchronised,
+     *                         'false' otherwhise
      * @param syncParentFolder 'true' if error requires that the parent folder be synchronised,
      *                         'false' otherwhise
-     * @param errorMessage string with the error message
+     * @param errorMessage     string with the error message
      */
-    private void showAlertDialog (final boolean syncFile, final boolean syncParentFolder,
-                                  String errorMessage) {
+    private void showAlertDialog(final boolean syncFile, final boolean syncParentFolder,
+                                 String errorMessage) {
 
         new AlertDialog.Builder(getActivity())
                 .setMessage(errorMessage)
@@ -639,7 +646,12 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        // Do nothing
+        // If player is already, show full screen button
+        if (playbackState == ExoPlayer.STATE_READY) {
+            fullScreenButton.setVisibility(View.VISIBLE);
+        } else if (playbackState == ExoPlayer.STATE_ENDED) {
+            fullScreenButton.setVisibility(View.GONE);
+        }
     }
 
     @Override

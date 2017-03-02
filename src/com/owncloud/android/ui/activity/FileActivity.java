@@ -402,7 +402,6 @@ public class FileActivity extends DrawerActivity
         } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
             showSnackMessage(getString(R.string.auth_account_does_not_exist));
         }
-
     }
 
     /**
