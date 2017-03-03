@@ -167,7 +167,6 @@ public class FileActivity extends DrawerActivity
             bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
                     Context.BIND_AUTO_CREATE);
         }
-
     }
 
     @Override

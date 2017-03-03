@@ -135,7 +135,6 @@ public class FileDisplayActivity extends HookActivity
 
     private OCFile mWaitingToSend;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -1229,7 +1228,6 @@ public class FileDisplayActivity extends HookActivity
                 }
             }
         }
-
     }
 
 
@@ -1314,9 +1312,26 @@ public class FileDisplayActivity extends HookActivity
                         if (!mFileWaitingToPreview.isDown()) {
                              // If the file to preview isn't downloaded yet, check if it is being
                              // downloaded in this moment or not
-                             requestForDownloadOrShowDetails();
+                             requestForDownload();
                         }
                     }
+
+                if (getFile() != null && mDownloaderBinder.isDownloading(getAccount(), getFile())) {
+
+                    // If the file is being downloaded, assure that the fragment to show is details
+                    // fragment, not the streaming video fragment which has been previously
+                    // set in chooseInitialSecondFragment method
+
+                    FileFragment secondFragment = getSecondFragment();
+                    if (secondFragment != null && secondFragment instanceof PreviewVideoFragment) {
+                        cleanSecondFragment();
+
+                        Fragment detailFragment = FileDetailFragment.newInstance(getFile(), getAccount());
+                        setSecondFragment(detailFragment);
+                        updateFragmentsVisibility(true);
+                        updateActionBarTitleAndHomeButton(getFile());
+                    }
+                }
 
             } else if (component.equals(new ComponentName(FileDisplayActivity.this,
                     FileUploader.class))) {
@@ -1559,33 +1574,16 @@ public class FileDisplayActivity extends HookActivity
         }
     }
 
-
-    private void requestForDownloadOrShowDetails() {
+    private void requestForDownload() {
         Account account = getAccount();
-        //if (!mFileWaitingToPreview.isDownloading()) {
 
+        //if (!mFileWaitingToPreview.isDownloading()) {
         // If the file is not being downloaded, start the download
         if (!mDownloaderBinder.isDownloading(account, mFileWaitingToPreview)) {
             Intent i = new Intent(this, FileDownloader.class);
             i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
             i.putExtra(FileDownloader.EXTRA_FILE, mFileWaitingToPreview);
             startService(i);
-
-        } else {
-
-            // If the file is being downloaded, assure that the fragment to show is details fragment,
-            // not the streaming video fragment which could have been previously set in
-            // chooseInitialSecondFragment()
-
-            FileFragment secondFragment = getSecondFragment();
-            if (secondFragment != null) {
-                cleanSecondFragment();
-            }
-
-            Fragment detailFragment = FileDetailFragment.newInstance(mFileWaitingToPreview, getAccount());
-            setSecondFragment(detailFragment);
-            updateFragmentsVisibility(true);
-            updateActionBarTitleAndHomeButton(mFileWaitingToPreview);
         }
     }
 
