@@ -575,6 +575,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
 
             // Unsupported video file format
+            // Important: this error is also thrown when the saml session expires
 
             showAlertDialog(false, true, getString(R.string.streaming_unrecognized_input));
 
@@ -591,7 +592,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             String message = error.getSourceException().getMessage();
 
             if (message == null) {
-                message = getString(R.string.common_error_unknown);
+                message = getString(R.string.streaming_common_error);
             }
 
             showAlertDialog(false, false, message);

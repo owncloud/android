@@ -291,7 +291,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
             String message = error.getSourceException().getMessage();
 
             if (message == null) {
-                message = getString(R.string.common_error_unknown);
+                message = getString(R.string.streaming_common_error);
             }
 
             showAlertDialog(message);
