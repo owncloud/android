@@ -377,11 +377,11 @@
   <string name="prefs_instant_upload_source_path_title_required">zahtevano</string>
   <string name="prefs_instant_upload_source_path_title_optional">izbirno</string>
   <string name="prefs_instant_behaviour_dialogTitle">Izvorno datoteko ...</string>
-  <string name="prefs_instant_behaviour_title">Izvorno datoteko ...</string>
+  <string name="prefs_instant_behaviour_title">Mesto izvorne datoteke</string>
   <string name="upload_copy_files">Kopiraj datoteko</string>
   <string name="upload_move_files">Premakni datoteko</string>
-  <string name="pref_behaviour_entries_keep_file">ohrani v izvorni mapi</string>
-  <string name="pref_behaviour_entries_move">premakni v mapo programa</string>
+  <string name="pref_behaviour_entries_keep_file">Ohrani v izvorni mapi</string>
+  <string name="pref_behaviour_entries_move">Premakni v mapo programa</string>
   <string name="share_dialog_title">Souporaba</string>
   <string name="share_file">Omogoči souporabo %1$s</string>
   <string name="share_with_user_section_title">Omogoči souporabo s skupino ali z uporabnikom</string>
