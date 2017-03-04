@@ -141,6 +141,7 @@
   <string name="downloader_download_failed_content">Download af %1$s kunne ikke fuldføres</string>
   <string name="downloader_not_downloaded_yet">Endnu ikke downloadet</string>
   <string name="downloader_download_failed_credentials_error">Download fejlet, du skal logge ind igen</string>
+  <string name="downloader_download_forbidden_permissions">for at downloade denne fil</string>
   <string name="common_choose_account">Vælg konto</string>
   <string name="sync_fail_ticker">Synk fejlet</string>
   <string name="sync_fail_ticker_unauthorized">Synk fejlet, du skal logge ind igen</string>

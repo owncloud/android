@@ -70,6 +70,7 @@
   <string name="file_list_seconds_ago">几秒前</string>
   <string name="file_list_empty">这里还什么都没有。上传些东西吧！</string>
   <string name="file_list_loading">加载中...</string>
+  <string name="file_list_no_app_for_file_type">没有支持此文件的应用</string>
   <string name="local_file_list_empty">在该文件夹中不存在文件。</string>
   <string name="local_file_list_empty_just_folders">在该文件夹中不存在其它文件夹。</string>
   <string name="upload_list_empty">没有可用的上传任务。</string>
@@ -114,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">上传失败</string>
   <string name="uploader_upload_failed_content_single">%1$s 未能成功上传</string>
   <string name="uploader_upload_failed_credentials_error">上传失败，你需要重新登录</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">服务器证书不被信任</string>
+  <string name="ssl_certificate_not_trusted">服务器证书不被信任</string>
   <string name="uploads_view_title">上传</string>
   <string name="uploads_view_group_current_uploads">当前</string>
   <string name="uploads_view_group_failed_uploads">失败。(轻按以重试)</string>
@@ -128,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">文件错误</string>
   <string name="uploads_view_upload_status_failed_localfile_error">本地文件未找到</string>
   <string name="uploads_view_upload_status_failed_permission_error">权限错误</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">被防火墙阻止</string>
   <string name="uploads_view_upload_status_conflict">冲突</string>
   <string name="uploads_view_upload_status_service_interrupted">应用已被终止</string>
   <string name="uploads_view_upload_status_unknown_fail">未知错误</string>
@@ -404,6 +408,8 @@
   <string name="manage_space_clear_data">清除数据</string>
   <string name="manage_space_error">某些文件无法删除。</string>
   <string name="permission_storage_access">没有权限上传和下载文件。</string>
+  <string name="local_file_not_found_toast">本地文件丢失</string>
+  <string name="confirmation_remove_files_alert">确认删除选中的项目吗？</string>
   <string name="uploads_view_upload_status_failed_storage_not_available_error">存储空间不可用</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已选择</item>
