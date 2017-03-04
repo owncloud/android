@@ -1,6 +1,6 @@
 ==============================
-Using the ownCloud Android App
-==============================
+Using the ownCloud Android App 2.2.0
+==============================  
 
 Accessing your files on your ownCloud server via the Web interface is easy and 
 convenient, as you can use any Web browser on any operating system without 
@@ -15,7 +15,7 @@ some advantages over the Web interface:
 * Easily add files from your device to ownCloud
 * Two-factor authentication
 
-New In Version 2.1.2
+New In Version 2.0.0
 --------------------
 
 This release contains a number of improvements, including:
