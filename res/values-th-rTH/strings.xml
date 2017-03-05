@@ -426,6 +426,9 @@
   <string name="failed_upload_quota_exceeded_text">พื้นที่ในบัญชีไม่เพียงพอ</string>
   <string name="auth_forbidden">การรับรองความถูกต้องถูกห้าม</string>
   <string name="uploads_view_upload_status_failed_storage_not_available_error">ไม่สามารถใช้พื้นที่จัดเก็บข้อมูลได้</string>
+  <string name="actionbar_privacy_policy">นโยบายความเป็นส่วนตัว</string>
+  <string name="prefs_privacy_policy">นโยบายความเป็นส่วนตัว</string>
+  <string name="privacy_policy_error">เกิดข้อผิดพลาด:</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>
