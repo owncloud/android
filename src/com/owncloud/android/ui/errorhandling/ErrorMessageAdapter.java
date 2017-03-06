@@ -339,8 +339,8 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.HOST_NOT_AVAILABLE) {
                 message = res.getString(R.string.network_host_not_available);
 
-            } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
-                message = res.getString(R.string.maintenance_mode);
+            } else if (result.getCode() == ResultCode.SERVICE_UNAVAILABLE) {
+                message = res.getString(R.string.service_unavailable);
 
             } else if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
                 message = res.getString(

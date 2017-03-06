@@ -1100,8 +1100,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (success)
                 finish();
         } else {
-            int failedStatusText = result.getCode() == ResultCode.MAINTENANCE_MODE ?
-                    R.string.maintenance_mode : R.string.auth_fail_get_user_name;
+            int failedStatusText = result.getCode() == ResultCode.SERVICE_UNAVAILABLE ?
+                    R.string.service_unavailable : R.string.auth_fail_get_user_name;
             updateFailedAuthStatusIconAndText(failedStatusText);
             showAuthStatus();
             Log_OC.e(TAG, "Access to user name failed: " + result.getLogMessage());
