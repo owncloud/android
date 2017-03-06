@@ -118,7 +118,7 @@ public class RemoteOperationResult implements Serializable {
         INVALID_CHARACTER_DETECT_IN_SERVER,
         DELAYED_FOR_WIFI,
         LOCAL_FILE_NOT_FOUND,
-        MAINTENANCE_MODE,
+        SERVICE_UNAVAILABLE,
         SPECIFIC_SERVICE_UNAVAILABLE
     }
 
@@ -358,7 +358,7 @@ public class RemoteOperationResult implements Serializable {
                     mCode = ResultCode.INSTANCE_NOT_CONFIGURED;     // assuming too much...
                     break;
                 case HttpStatus.SC_SERVICE_UNAVAILABLE:             // 503
-                    mCode = ResultCode.MAINTENANCE_MODE;
+                    mCode = ResultCode.SERVICE_UNAVAILABLE;
                     break;
                 case HttpStatus.SC_INSUFFICIENT_STORAGE:            // 507
                     mCode = ResultCode.QUOTA_EXCEEDED;              // surprise!
