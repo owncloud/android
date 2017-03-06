@@ -729,4 +729,13 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public static boolean canBePreviewed(OCFile file) {
         return (file != null && file.isVideo());
     }
+
+    /**
+     * Helper method to know if the passed file is the file to preview
+     * @param file
+     * @return 'true' if the file is the file to preview
+     */
+    public boolean isFileToPreview(OCFile file) {
+        return file.getRemotePath().equals(getFile().getRemotePath());
+    }
 }

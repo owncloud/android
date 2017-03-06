@@ -29,6 +29,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.SparseBooleanArray;
@@ -485,6 +486,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 getActivity()
             );
             mf.filter(menu);
+
             return true;
         }
 

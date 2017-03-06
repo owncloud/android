@@ -22,17 +22,19 @@ package com.owncloud.android.files;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+import com.owncloud.android.ui.activity.HookActivity;
+import com.owncloud.android.ui.preview.PreviewVideoFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -134,12 +136,15 @@ public class FileMenuFilter {
      * @param toHide            List to save the options that must be shown in the menu.
      */
     private void filter(List<Integer> toShow, List <Integer> toHide) {
+
+        boolean previewing = anyFileVideoPreviewing();
+
         boolean synchronizing = anyFileSynchronizing();
 
         /// decision is taken for each possible action on a file in the menu
 
         // DOWNLOAD 
-        if (mFiles.isEmpty() || containsFolder() || anyFileDown() || synchronizing) {
+        if (mFiles.isEmpty() || containsFolder() || anyFileDown() || synchronizing || previewing) {
             toHide.add(R.id.action_download_file);
 
         } else {
@@ -287,6 +292,20 @@ public class FileMenuFilter {
             }
         }
         return uploading;
+    }
+
+    private boolean anyFileVideoPreviewing() {
+        final HookActivity activity = (HookActivity) mContext;
+        Fragment secondFragment = activity.getSupportFragmentManager().findFragmentByTag(
+                "SECOND_FRAGMENT");
+        boolean videoPreviewing = false;
+        if (secondFragment instanceof PreviewVideoFragment) {
+            for (int i=0; !videoPreviewing && i < mFiles.size(); i++) {
+                videoPreviewing = ((PreviewVideoFragment) secondFragment)
+                        .isFileToPreview(mFiles.get(i));
+            }
+        };
+        return videoPreviewing;
     }
 
     private boolean isSingleSelection() {
