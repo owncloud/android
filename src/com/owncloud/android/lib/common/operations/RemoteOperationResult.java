@@ -325,7 +325,7 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Private constructor for results built interpreting a HTTP or DAV response.
-     * <p>
+     *
      * Determines a {@link ResultCode} depending of the type of the exception.
      *
      * @param success    Operation was successful or not.
