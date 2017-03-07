@@ -139,6 +139,9 @@ public class ErrorMessageAdapter {
 
                 } else if (result.getCode() == ResultCode.QUOTA_EXCEEDED) {
                     message = res.getString(R.string.failed_upload_quota_exceeded_text);
+
+                } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                    message = res.getString(R.string.uploads_view_upload_status_failed_folder_error);
                 }
             }
 
