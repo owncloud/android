@@ -372,32 +372,13 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         // additional restrictions for this fragment
 
-        // TODO allow renaming in PreviewVideoFragment
-        MenuItem item = menu.findItem(R.id.action_rename_file);
+        MenuItem item = menu.findItem(R.id.action_sort);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
 
-        item = menu.findItem(R.id.action_move);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        item = menu.findItem(R.id.action_copy);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        item = menu.findItem(R.id.action_sort);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        item = menu.findItem(R.id.action_switch_view);
+            item = menu.findItem(R.id.action_switch_view);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
@@ -407,32 +388,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
-        }
-
-        if (!getFile().isDown()) {
-            item = menu.findItem(R.id.action_download_file);
-            if (item != null) {
-                item.setVisible(false);
-                item.setEnabled(false);
-            }
-
-            item = menu.findItem(R.id.action_send_file);
-            if (item != null) {
-                item.setVisible(false);
-                item.setEnabled(false);
-            }
-
-            item = menu.findItem(R.id.action_set_available_offline);
-            if (item != null) {
-                item.setVisible(false);
-                item.setEnabled(false);
-            }
-
-            item = menu.findItem(R.id.action_unset_available_offline);
-            if (item != null) {
-                item.setVisible(false);
-                item.setEnabled(false);
-            }
         }
     }
 

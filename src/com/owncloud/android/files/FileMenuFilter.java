@@ -137,14 +137,14 @@ public class FileMenuFilter {
      */
     private void filter(List<Integer> toShow, List <Integer> toHide) {
 
-        boolean previewing = anyFileVideoPreviewing();
-
         boolean synchronizing = anyFileSynchronizing();
+
+        boolean videoPreviewing = anyFileVideoPreviewing();
 
         /// decision is taken for each possible action on a file in the menu
 
         // DOWNLOAD 
-        if (mFiles.isEmpty() || containsFolder() || anyFileDown() || synchronizing || previewing) {
+        if (mFiles.isEmpty() || containsFolder() || anyFileDown() || synchronizing || videoPreviewing) {
             toHide.add(R.id.action_download_file);
 
         } else {
@@ -152,7 +152,7 @@ public class FileMenuFilter {
         }
 
         // RENAME
-        if (!isSingleSelection() || synchronizing) {
+        if (!isSingleSelection() || synchronizing || videoPreviewing) {
             toHide.add(R.id.action_rename_file);
 
         } else {
@@ -160,9 +160,10 @@ public class FileMenuFilter {
         }
 
         // MOVE & COPY
-        if (mFiles.isEmpty() || synchronizing) {
+        if (mFiles.isEmpty() || synchronizing || videoPreviewing) {
             toHide.add(R.id.action_move);
             toHide.add(R.id.action_copy);
+
         } else {
             toShow.add(R.id.action_move);
             toShow.add(R.id.action_copy);
@@ -227,21 +228,22 @@ public class FileMenuFilter {
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));
-        if (!isSingleFile() || !sendAllowed || synchronizing ) {
+        if (!isSingleFile() || !sendAllowed || synchronizing ||
+                (!anyFileDown() && anyFileVideoPreviewing())) {
             toHide.add(R.id.action_send_file);
         } else {
             toShow.add(R.id.action_send_file);
         }
 
         // SET AS AVAILABLE OFFLINE
-        if (synchronizing || !anyUnfavorite() ) {
+        if (synchronizing || !anyUnfavorite() || (!anyFileDown() && anyFileVideoPreviewing())) {
             toHide.add(R.id.action_set_available_offline);
         } else {
             toShow.add(R.id.action_set_available_offline);
         }
 
         // UNSET AS AVAILABLE OFFLINE
-        if (!anyFavorite()) {
+        if (!anyFavorite() || (!anyFileDown() && anyFileVideoPreviewing())) {
             toHide.add(R.id.action_unset_available_offline);
         } else {
             toShow.add(R.id.action_unset_available_offline);
