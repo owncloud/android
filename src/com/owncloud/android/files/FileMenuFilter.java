@@ -47,6 +47,7 @@ import java.util.List;
 public class FileMenuFilter {
 
     private static final int SINGLE_SELECT_ITEMS = 1;
+    private static final String TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT";
 
     private List<OCFile> mFiles;
     private ComponentsGetter mComponentsGetter;
@@ -299,7 +300,7 @@ public class FileMenuFilter {
     private boolean anyFileVideoPreviewing() {
         final HookActivity activity = (HookActivity) mContext;
         Fragment secondFragment = activity.getSupportFragmentManager().findFragmentByTag(
-                "SECOND_FRAGMENT");
+                TAG_SECOND_FRAGMENT);
         boolean videoPreviewing = false;
         if (secondFragment instanceof PreviewVideoFragment) {
             for (int i=0; !videoPreviewing && i < mFiles.size(); i++) {
