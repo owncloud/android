@@ -114,6 +114,8 @@
   <string name="uploader_upload_failed_ticker">Wysyłanie nie powiodło się</string>
   <string name="uploader_upload_failed_content_single">Wysyłanie %1$s nie powiodło się</string>
   <string name="uploader_upload_failed_credentials_error">Błąd przy wysyłaniu zaloguj się ponownie</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certyfikat serwera jest niezaufany</string>
+  <string name="ssl_certificate_not_trusted">Certyfikat serwera nie jest niezaufany</string>
   <string name="uploads_view_title">Wysłane</string>
   <string name="uploads_view_group_current_uploads">Obecny</string>
   <string name="uploads_view_group_failed_uploads">Błąd (kliknij, by ponowić)</string>
@@ -417,6 +419,7 @@
   <string name="local_file_not_found_toast">Plik nie został znaleziony w lokalnym systemie plików</string>
   <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
+  <string name="maintenance_mode">Serwer znajduje się w trybie konserwacji</string>
   <string name="uploads_view_upload_status_failed_storage_not_available_error">Pamięć nie dostępna</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>

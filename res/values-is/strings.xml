@@ -13,12 +13,14 @@
   <string name="actionbar_send_file">Senda</string>
   <string name="actionbar_sort">Raða</string>
   <string name="actionbar_sort_title">Raða sem</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Allar skrár</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Stillingar</string>
+  <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Loka</string>
   <string name="drawer_open">Opna</string>
   <string name="prefs_category_general">Almennt</string>
@@ -59,6 +61,10 @@
   <string name="file_list_empty">Ekkert hér. Settu eitthvað inn!</string>
   <string name="file_list_loading">Hleð inn…</string>
   <string name="local_file_list_empty">Það eru engar skrár í þessari möppu.</string>
+  <string name="file_list_folder">folder</string>
+  <string name="file_list_folders">folders</string>
+  <string name="file_list_file">file</string>
+  <string name="file_list_files">files</string>
   <string name="filedetails_select_file">Bankaðu á skrá til að sjá ítarlegri upplýsingar.</string>
   <string name="filedetails_size">Stærð:</string>
   <string name="filedetails_type">Tegund:</string>
@@ -78,6 +84,7 @@
   <string name="common_save_exit">Vista &amp; fara út</string>
   <string name="common_error"><strong>Villa</strong></string>
   <string name="common_loading">Hleð inn …</string>
+  <string name="common_unknown">óþekkt</string>
   <string name="common_error_unknown">Óþekkt villa</string>
   <string name="common_pending">Í bið</string>
   <string name="about_title">Um</string>
@@ -93,10 +100,17 @@
   <string name="uploader_upload_failed_ticker">Innsending mistókst</string>
   <string name="uploader_upload_failed_content_single">Ekki var hægt að ljúka innsendingu á %1$s</string>
   <string name="uploader_upload_failed_credentials_error">Innsending mistókst, þú verður að skrá þig inn aftur</string>
+  <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Núverandi</string>
   <string name="uploads_view_group_finished_uploads">Hlaðið inn</string>
   <string name="uploads_view_upload_status_succeeded">Lokið</string>
+  <string name="uploads_view_upload_status_cancelled">Hætt við</string>
+  <string name="uploads_view_upload_status_failed_credentials_error">Credentials error</string>
+  <string name="uploads_view_upload_status_failed_folder_error">Folder error</string>
+  <string name="uploads_view_upload_status_failed_permission_error">Permission error</string>
+  <string name="uploads_view_upload_status_conflict">Árekstrar</string>
   <string name="uploads_view_upload_status_unknown_fail">Óþekkt villa</string>
+  <string name="uploads_view_later_waiting_to_upload">Waiting to upload</string>
   <string name="downloader_download_in_progress_ticker">Sæki ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Sæki %2$s</string>
   <string name="downloader_download_succeeded_ticker">Niðurhal tókst</string>
@@ -349,11 +363,13 @@
   <string name="share_privilege_can_edit_delete">eyða</string>
   <string name="edit_share_unshare">Hætta deilingu</string>
   <string name="edit_share_done">lokið</string>
+  <string name="action_clear_successful_uploads">Clear successful</string>
   <string name="action_switch_grid_view">Reitir</string>
   <string name="action_switch_list_view">Listi</string>
   <string name="manage_space_title">Sýsla með geymslurými</string>
   <string name="manage_space_clear_data">Hreinsa gögn</string>
   <string name="manage_space_error">Ekki tókst að eyða öllum skrám.</string>
   <string name="permission_storage_access">Aukinna heimilda er krafist til að geta sent inn og sótt skrár.</string>
+  <string name="failed_upload_quota_exceeded_text">Not enough space in the account</string>
   <string name="uploads_view_upload_status_failed_storage_not_available_error">Geymsla ekki tiltæk</string>
 </resources>

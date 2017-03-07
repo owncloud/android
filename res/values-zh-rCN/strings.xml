@@ -145,6 +145,7 @@
   <string name="downloader_download_failed_content">%1$s 下载未能完成</string>
   <string name="downloader_not_downloaded_yet">未下载完毕</string>
   <string name="downloader_download_failed_credentials_error">下载失败，你需要重新登录</string>
+  <string name="downloader_download_forbidden_permissions">下载这个文件</string>
   <string name="common_choose_account">选择账户</string>
   <string name="sync_fail_ticker">同步失败</string>
   <string name="sync_fail_ticker_unauthorized">同步失败，你需要重新登录</string>
@@ -410,6 +411,9 @@
   <string name="permission_storage_access">没有权限上传和下载文件。</string>
   <string name="local_file_not_found_toast">本地文件丢失</string>
   <string name="confirmation_remove_files_alert">确认删除选中的项目吗？</string>
+  <string name="confirmation_remove_folders_alert">你真的要删除选定的项目及其内容吗？</string>
+  <string name="maintenance_mode">服务器处于维护模式</string>
+  <string name="failed_upload_quota_exceeded_text">该账户没有足够的空间</string>
   <string name="uploads_view_upload_status_failed_storage_not_available_error">存储空间不可用</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已选择</item>

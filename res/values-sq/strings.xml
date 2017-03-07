@@ -426,6 +426,9 @@
   <string name="failed_upload_quota_exceeded_text">Hapësirë e pamjaftueshme te llogaria</string>
   <string name="auth_forbidden">Mirëfilltësim i ndaluar</string>
   <string name="uploads_view_upload_status_failed_storage_not_available_error">Pa depozitë gati</string>
+  <string name="actionbar_privacy_policy">Rregulla privatësie</string>
+  <string name="prefs_privacy_policy">Rregulla privatësie</string>
+  <string name="privacy_policy_error">Ndodhi një gabim:</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d i përzgjedhur</item>
     <item quantity="other">%d të përzgjedhur</item>
