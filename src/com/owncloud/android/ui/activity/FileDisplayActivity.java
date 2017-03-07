@@ -367,21 +367,34 @@ public class FileDisplayActivity extends HookActivity
                     getIntent().getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true);
 
                 if (PreviewAudioFragment.canBePreviewed(file)) {
-                    secondFragment = PreviewAudioFragment.newInstance(
-                        file,
-                        getAccount(),
-                        startPlaybackPosition,
-                        autoplay
-                    );
-                } else {
-                    secondFragment = PreviewVideoFragment.newInstance(
-                        file,
-                        getAccount(),
-                        startPlaybackPosition,
-                        autoplay
-                    );
-                }
 
+                    secondFragment = PreviewAudioFragment.newInstance(
+                            file,
+                            getAccount(),
+                            startPlaybackPosition,
+                            autoplay
+                    );
+
+                } else {
+
+                    Fragment previewVideoFragment =
+                            getSupportFragmentManager().findFragmentByTag(TAG_SECOND_FRAGMENT);
+
+                    if (previewVideoFragment == null) {
+
+                        secondFragment = PreviewVideoFragment.newInstance(
+                                file,
+                                getAccount(),
+                                startPlaybackPosition,
+                                autoplay
+                        );
+
+                    } else {
+
+                        secondFragment = previewVideoFragment;
+
+                    }
+                }
             } else if (PreviewTextFragment.canBePreviewed(file)) {
                 secondFragment = PreviewTextFragment.newInstance(
                     file,

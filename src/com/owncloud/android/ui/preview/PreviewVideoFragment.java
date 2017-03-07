@@ -4,16 +4,16 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * Copyright (C) 2017 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -149,10 +149,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     /**
      * Creates an empty fragment to preview video files.
-     * <p>
+     *
      * MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
      * (for instance, when the device is turned a aside).
-     * <p>
+     *
      * DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
      * construction
      */
