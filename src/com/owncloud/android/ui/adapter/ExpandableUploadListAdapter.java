@@ -602,8 +602,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     case SPECIFIC_FORBIDDEN:
                         // We don't know the specific forbidden error message because it is not being
                         // saved in uploads storage
-                        status = String.format(mParentActivity.getString(R.string.forbidden_permissions),
-                                mParentActivity.getString(R.string.uploader_upload_forbidden_permissions));
+                        status = String.format(mParentActivity.getString(R.string.uploader_upload_forbidden));
                         break;
                     case SPECIFIC_SERVICE_UNAVAILABLE:
                         // We don't know the specific unavailable service error message because
