@@ -273,6 +273,8 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER) {
                 message = res.getString(R.string.filename_forbidden_charaters_from_server);
 
+            } else if (result.getCode() == ResultCode.CONFLICT) {
+                message = res.getString(R.string.move_file_error);
             }
 
         } else if (operation instanceof SynchronizeFolderOperation) {
