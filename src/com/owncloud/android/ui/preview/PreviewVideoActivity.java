@@ -118,8 +118,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
             @Override
             public void onClick(View v) {
-                releasePlayer();
-                finish();
+                onBackPressed();
             }
         });
 

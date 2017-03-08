@@ -355,34 +355,29 @@ public class FileDisplayActivity extends HookActivity
         }
     }
 
+    /**
+     * Choose the second fragment that is going to be shown
+     * @param file used to decide which fragment should be chosen
+     * @return a new second fragment instance if it has not been chosen before, or the fragment
+     * previously chosen otherwhise
+     */
     private Fragment chooseInitialSecondFragment(OCFile file) {
-        Fragment secondFragment = null;
-        if (file != null && !file.isFolder()) {
-            if ((PreviewAudioFragment.canBePreviewed(file) || PreviewVideoFragment.canBePreviewed(file)) &&
-                    file.getLastSyncDateForProperties() > 0  // temporal fix
-                    ) {
-                int startPlaybackPosition =
-                    getIntent().getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0);
-                boolean autoplay =
-                    getIntent().getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true);
 
-                if (PreviewAudioFragment.canBePreviewed(file)) {
+        Fragment secondFragment = getSupportFragmentManager().findFragmentByTag(TAG_SECOND_FRAGMENT);
 
-                    secondFragment = PreviewAudioFragment.newInstance(
-                            file,
-                            getAccount(),
-                            startPlaybackPosition,
-                            autoplay
-                    );
+        if (secondFragment == null) { // If second fragment has not been chosen yet, choose it
+            if (file != null && !file.isFolder()) {
+                if ((PreviewAudioFragment.canBePreviewed(file) || PreviewVideoFragment.canBePreviewed(file)) &&
+                        file.getLastSyncDateForProperties() > 0  // temporal fix
+                        ) {
+                    int startPlaybackPosition =
+                            getIntent().getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0);
+                    boolean autoplay =
+                            getIntent().getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true);
 
-                } else {
+                    if (PreviewAudioFragment.canBePreviewed(file)) {
 
-                    Fragment previewVideoFragment =
-                            getSupportFragmentManager().findFragmentByTag(TAG_SECOND_FRAGMENT);
-
-                    if (previewVideoFragment == null) {
-
-                        secondFragment = PreviewVideoFragment.newInstance(
+                        secondFragment = PreviewAudioFragment.newInstance(
                                 file,
                                 getAccount(),
                                 startPlaybackPosition,
@@ -391,20 +386,26 @@ public class FileDisplayActivity extends HookActivity
 
                     } else {
 
-                        secondFragment = previewVideoFragment;
-
+                        secondFragment = PreviewVideoFragment.newInstance(
+                                file,
+                                getAccount(),
+                                startPlaybackPosition,
+                                autoplay
+                        );
                     }
-                }
-            } else if (PreviewTextFragment.canBePreviewed(file)) {
-                secondFragment = PreviewTextFragment.newInstance(
-                    file,
-                    getAccount()
-                );
 
-            } else {
-                secondFragment = FileDetailFragment.newInstance(file, getAccount());
+                } else if (PreviewTextFragment.canBePreviewed(file)) {
+                    secondFragment = PreviewTextFragment.newInstance(
+                            file,
+                            getAccount()
+                    );
+
+                } else {
+                    secondFragment = FileDetailFragment.newInstance(file, getAccount());
+                }
             }
         }
+
         return secondFragment;
     }
 

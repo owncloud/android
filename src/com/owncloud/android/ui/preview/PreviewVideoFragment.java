@@ -302,6 +302,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
+            mPlaybackPosition = data.getExtras().getLong(PreviewVideoActivity.EXTRA_START_POSITION);
         }
     }
 
