@@ -70,6 +70,7 @@
   <string name="file_list_seconds_ago">sekund temu</string>
   <string name="file_list_empty">Pusto. Wyślij coś!</string>
   <string name="file_list_loading">Wczytywanie...</string>
+  <string name="file_list_no_app_for_file_type">Nie znaleziono aplikacji dla tego rodzaju pliku</string>
   <string name="local_file_list_empty">Nie ma plików w tym folderze.</string>
   <string name="local_file_list_empty_just_folders">W tym folderze nie ma żadnych folderów.</string>
   <string name="upload_list_empty">Brak przesłanych plików.</string>
@@ -420,7 +421,11 @@
   <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
   <string name="maintenance_mode">Serwer znajduje się w trybie konserwacji</string>
+  <string name="failed_upload_quota_exceeded_text">Brak wystarczającej ilości miejsca na koncie</string>
   <string name="uploads_view_upload_status_failed_storage_not_available_error">Pamięć nie dostępna</string>
+  <string name="actionbar_privacy_policy">Polityka prywatności</string>
+  <string name="prefs_privacy_policy">Polityka prywatności</string>
+  <string name="privacy_policy_error">Wystąpił bład:</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>
