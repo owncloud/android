@@ -118,7 +118,7 @@ public class RemoteOperationResult implements Serializable {
         INVALID_CHARACTER_DETECT_IN_SERVER,
         DELAYED_FOR_WIFI,
         LOCAL_FILE_NOT_FOUND,
-        MAINTENANCE_MODE,
+        SERVICE_UNAVAILABLE,
         SPECIFIC_SERVICE_UNAVAILABLE
     }
 
@@ -325,7 +325,7 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Private constructor for results built interpreting a HTTP or DAV response.
-     * <p>
+     *
      * Determines a {@link ResultCode} depending of the type of the exception.
      *
      * @param success    Operation was successful or not.
@@ -358,7 +358,7 @@ public class RemoteOperationResult implements Serializable {
                     mCode = ResultCode.INSTANCE_NOT_CONFIGURED;     // assuming too much...
                     break;
                 case HttpStatus.SC_SERVICE_UNAVAILABLE:             // 503
-                    mCode = ResultCode.MAINTENANCE_MODE;
+                    mCode = ResultCode.SERVICE_UNAVAILABLE;
                     break;
                 case HttpStatus.SC_INSUFFICIENT_STORAGE:            // 507
                     mCode = ResultCode.QUOTA_EXCEEDED;              // surprise!
