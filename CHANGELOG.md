@@ -1,3 +1,10 @@
+## 2.3.0 (March 2017)
+- Included privacy policy.
+- Error messages improvement.
+- Design/UI improvement: snackbars replace toasts.
+- Bugs fixed, including:
+    - Crash when other app uses same account name.
+
 ## 2.2.0 (December 2016)
 - Set folders as Available Offline
 - New navigation drawer, with avatar and account switch.
