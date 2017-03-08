@@ -139,6 +139,9 @@ public class ErrorMessageAdapter {
 
                 } else if (result.getCode() == ResultCode.QUOTA_EXCEEDED) {
                     message = res.getString(R.string.failed_upload_quota_exceeded_text);
+
+                } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                    message = res.getString(R.string.uploads_view_upload_status_failed_folder_error);
                 }
             }
 
@@ -189,6 +192,8 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER) {
                 message = res.getString(R.string.filename_forbidden_charaters_from_server);
 
+            } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                message = res.getString(R.string.rename_server_fail_msg);
             }
 
         } else if (operation instanceof SynchronizeFileOperation) {
@@ -273,6 +278,8 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER) {
                 message = res.getString(R.string.filename_forbidden_charaters_from_server);
 
+            } else if (result.getCode() == ResultCode.CONFLICT) {
+                message = res.getString(R.string.move_file_error);
             }
 
         } else if (operation instanceof SynchronizeFolderOperation) {
@@ -339,8 +346,8 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.HOST_NOT_AVAILABLE) {
                 message = res.getString(R.string.network_host_not_available);
 
-            } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
-                message = res.getString(R.string.maintenance_mode);
+            } else if (result.getCode() == ResultCode.SERVICE_UNAVAILABLE) {
+                message = res.getString(R.string.service_unavailable);
 
             } else if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
                 message = res.getString(
