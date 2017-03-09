@@ -572,8 +572,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                             R.string.uploads_view_upload_status_service_interrupted
                         );
                         break;
-                    case MAINTENANCE_MODE:
-                        status = mParentActivity.getString(R.string.maintenance_mode);
+                    case SERVICE_UNAVAILABLE:
+                        status = mParentActivity.getString(R.string.service_unavailable);
                         break;
                     case QUOTA_EXCEEDED:
                         status = mParentActivity.getString(R.string.failed_upload_quota_exceeded_text);
@@ -581,7 +581,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     case SSL_RECOVERABLE_PEER_UNVERIFIED:
                         status =
                             mParentActivity.getString(
-                                R.string.uploads_view_upload_status_failed_ssl_certificate_not_trusted
+                                R.string.ssl_certificate_not_trusted
                             );
                         break;
                     case UNKNOWN:
@@ -598,6 +598,16 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     case UPLOADED:
                         // should not get here ; status should be UPLOAD_SUCCESS
                         status =  mParentActivity.getString(R.string.uploads_view_upload_status_succeeded);
+                        break;
+                    case SPECIFIC_FORBIDDEN:
+                        // We don't know the specific forbidden error message because it is not being
+                        // saved in uploads storage
+                        status = String.format(mParentActivity.getString(R.string.uploader_upload_forbidden));
+                        break;
+                    case SPECIFIC_SERVICE_UNAVAILABLE:
+                        // We don't know the specific unavailable service error message because
+                        // it is not being saved in uploads storage
+                        status = mParentActivity.getString(R.string.service_unavailable);
                         break;
                     default:
                         status = "Naughty devs added a new fail result but no description for the user";

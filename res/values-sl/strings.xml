@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">Pošiljanja %1$s ni mogoče dokončati</string>
   <string name="uploader_upload_failed_credentials_error">Pošiljanje je spodletelo. Zahtevana je ponovna prijava.</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
+  <string name="ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
   <string name="uploads_view_title">Poslano</string>
   <string name="uploads_view_group_current_uploads">Trenutno</string>
   <string name="uploads_view_group_failed_uploads">Spodletelo (kliknite za ponovni poskus)</string>
@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Napaka datoteke</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Krajevne datoteke ni mogoče najti</string>
   <string name="uploads_view_upload_status_failed_permission_error">Napaka dovoljenj</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Dostop je prepovedan na osnovi določil požarnega zidu</string>
   <string name="uploads_view_upload_status_conflict">Spor</string>
   <string name="uploads_view_upload_status_service_interrupted">Program je končan</string>
   <string name="uploads_view_upload_status_unknown_fail">Neznana napaka</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">Prejemanja %1$s ni mogoče dokončati</string>
   <string name="downloader_not_downloaded_yet">Prejem še ni zaključen</string>
   <string name="downloader_download_failed_credentials_error">Prejemanje je spodletelo. Zahtevana je ponovna prijava.</string>
+  <string name="downloader_download_forbidden_permissions">za prejem te datoteke</string>
   <string name="common_choose_account">Izbor računa</string>
   <string name="sync_fail_ticker">Usklajevanje je spodletelo</string>
   <string name="sync_fail_ticker_unauthorized">Usklajevanje je spodletelo. Zahtevana je ponovna prijava.</string>
@@ -375,11 +377,11 @@
   <string name="prefs_instant_upload_source_path_title_required">zahtevano</string>
   <string name="prefs_instant_upload_source_path_title_optional">izbirno</string>
   <string name="prefs_instant_behaviour_dialogTitle">Izvorno datoteko ...</string>
-  <string name="prefs_instant_behaviour_title">Izvorno datoteko ...</string>
+  <string name="prefs_instant_behaviour_title">Mesto izvorne datoteke</string>
   <string name="upload_copy_files">Kopiraj datoteko</string>
   <string name="upload_move_files">Premakni datoteko</string>
-  <string name="pref_behaviour_entries_keep_file">ohrani v izvorni mapi</string>
-  <string name="pref_behaviour_entries_move">premakni v mapo programa</string>
+  <string name="pref_behaviour_entries_keep_file">Ohrani v izvorni mapi</string>
+  <string name="pref_behaviour_entries_move">Premakni v mapo programa</string>
   <string name="share_dialog_title">Souporaba</string>
   <string name="share_file">Omogoči souporabo %1$s</string>
   <string name="share_with_user_section_title">Omogoči souporabo s skupino ali z uporabnikom</string>
@@ -422,8 +424,11 @@
   <string name="local_file_not_found_toast">Datoteke ni mogoče najti na krajevnem sistemu</string>
   <string name="confirmation_remove_files_alert">Ali res želite odstraniti izbrane predmete?</string>
   <string name="confirmation_remove_folders_alert">Ali res želite odstraniti izbrane predmete in njihovo vsebino?</string>
-  <string name="maintenance_mode">Strežnik je trenutno v vzdrževalnem načinu</string>
   <string name="failed_upload_quota_exceeded_text">Na računu ni dovolj prostora</string>
+  <string name="auth_forbidden">Overitev je prepovedana</string>
+  <string name="actionbar_privacy_policy">Določila zasebnosti</string>
+  <string name="prefs_privacy_policy">Določila zasebnosti</string>
+  <string name="privacy_policy_error">Prišlo je do napake:</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>

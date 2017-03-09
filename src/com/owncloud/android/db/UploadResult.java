@@ -35,9 +35,11 @@ public enum UploadResult {
     FILE_NOT_FOUND(8),
     DELAYED_FOR_WIFI(9),
     SERVICE_INTERRUPTED(10),
-    MAINTENANCE_MODE(11),
+    SERVICE_UNAVAILABLE(11),
     QUOTA_EXCEEDED(12),
-    SSL_RECOVERABLE_PEER_UNVERIFIED(13);
+    SSL_RECOVERABLE_PEER_UNVERIFIED(13),
+    SPECIFIC_FORBIDDEN(14),
+    SPECIFIC_SERVICE_UNAVAILABLE(15);
 
     private final int value;
 
@@ -75,11 +77,15 @@ public enum UploadResult {
             case 10:
                 return SERVICE_INTERRUPTED;
             case 11:
-                return MAINTENANCE_MODE;
+                return SERVICE_UNAVAILABLE;
             case 12:
                 return QUOTA_EXCEEDED;
             case 13:
                 return SSL_RECOVERABLE_PEER_UNVERIFIED;
+            case 14:
+                return SPECIFIC_FORBIDDEN;
+            case 15:
+                return SPECIFIC_SERVICE_UNAVAILABLE;
         }
         return null;
     }
@@ -113,12 +119,16 @@ public enum UploadResult {
                 return CANCELLED;
             case DELAYED_FOR_WIFI:
                 return DELAYED_FOR_WIFI;
-            case MAINTENANCE_MODE:
-                return MAINTENANCE_MODE;
+            case SERVICE_UNAVAILABLE:
+                return SERVICE_UNAVAILABLE;
             case QUOTA_EXCEEDED:
                 return QUOTA_EXCEEDED;
             case SSL_RECOVERABLE_PEER_UNVERIFIED:
                 return SSL_RECOVERABLE_PEER_UNVERIFIED;
+            case SPECIFIC_FORBIDDEN:
+                return SPECIFIC_FORBIDDEN;
+            case SPECIFIC_SERVICE_UNAVAILABLE:
+                return SPECIFIC_SERVICE_UNAVAILABLE;
             case UNKNOWN_ERROR:
                 if (result.getException() instanceof java.io.FileNotFoundException) {
                     return FILE_ERROR;

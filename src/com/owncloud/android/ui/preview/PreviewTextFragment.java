@@ -314,6 +314,12 @@ public class PreviewTextFragment extends FileFragment {
             item.setEnabled(false);
         }
 
+        item = menu.findItem(R.id.action_copy);
+        if (item != null) {
+            item.setVisible(false);
+            item.setEnabled(false);
+        }
+
         // this one doesn't make sense since the file has to be down in order to be previewed
         item = menu.findItem(R.id.action_download_file);
         if (item != null) {

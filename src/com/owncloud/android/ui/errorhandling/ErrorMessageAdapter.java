@@ -139,6 +139,9 @@ public class ErrorMessageAdapter {
 
                 } else if (result.getCode() == ResultCode.QUOTA_EXCEEDED) {
                     message = res.getString(R.string.failed_upload_quota_exceeded_text);
+
+                } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                    message = res.getString(R.string.uploads_view_upload_status_failed_folder_error);
                 }
             }
 
@@ -150,6 +153,12 @@ public class ErrorMessageAdapter {
                         new File(((DownloadFileOperation) operation).getSavePath()).getName());
 
             } else {
+
+                if (result.getCode() == ResultCode.FORBIDDEN) {
+                    message = String.format(res.getString(R.string.forbidden_permissions),
+                            res.getString(R.string.downloader_download_forbidden_permissions));
+                }
+
                 if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
                     message = res.getString(R.string.downloader_download_file_not_found);
 
@@ -183,6 +192,8 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER) {
                 message = res.getString(R.string.filename_forbidden_charaters_from_server);
 
+            } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                message = res.getString(R.string.rename_server_fail_msg);
             }
 
         } else if (operation instanceof SynchronizeFileOperation) {
@@ -267,6 +278,8 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER) {
                 message = res.getString(R.string.filename_forbidden_charaters_from_server);
 
+            } else if (result.getCode() == ResultCode.CONFLICT) {
+                message = res.getString(R.string.move_file_error);
             }
 
         } else if (operation instanceof SynchronizeFolderOperation) {
@@ -333,15 +346,58 @@ public class ErrorMessageAdapter {
             } else if (result.getCode() == ResultCode.HOST_NOT_AVAILABLE) {
                 message = res.getString(R.string.network_host_not_available);
 
-            } else if (result.getCode() == ResultCode.MAINTENANCE_MODE) {
-                message = res.getString(R.string.maintenance_mode);
+            } else if (result.getCode() == ResultCode.SERVICE_UNAVAILABLE) {
+                message = res.getString(R.string.service_unavailable);
 
             } else if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
                 message = res.getString(
-                        R.string.uploads_view_upload_status_failed_ssl_certificate_not_trusted
+                        R.string.ssl_certificate_not_trusted
                 );
 
-            } else if (result.getHttpPhrase() != null && result.getHttpPhrase().length() > 0) {
+            } else if (result.getCode() == ResultCode.BAD_OC_VERSION) {
+                message = res.getString(
+                        R.string.auth_bad_oc_version_title
+                );
+            } else if (result.getCode() == ResultCode.INCORRECT_ADDRESS) {
+                message = res.getString(
+                        R.string.auth_incorrect_address_title
+                );
+
+            } else if (result.getCode() == ResultCode.SSL_ERROR) {
+                message = res.getString(
+                        R.string.auth_ssl_general_error_title
+                );
+            } else if (result.getCode() == ResultCode.UNAUTHORIZED) {
+                message = res.getString(
+                        R.string.auth_unauthorized
+                );
+            } else if (result.getCode() == ResultCode.INSTANCE_NOT_CONFIGURED) {
+                message = res.getString(
+                        R.string.auth_not_configured_title
+                );
+            } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
+                message = res.getString(
+                        R.string.auth_incorrect_path_title
+                );
+            } else if (result.getCode() == ResultCode.OAUTH2_ERROR) {
+                message = res.getString(
+                    R.string.auth_oauth_error
+                );
+            } else if (result.getCode() == ResultCode.OAUTH2_ERROR_ACCESS_DENIED) {
+                message = res.getString(
+                        R.string.auth_oauth_error_access_denied
+                );
+            } else if (result.getCode() == ResultCode.ACCOUNT_NOT_NEW) {
+                message = res.getString(
+                        R.string.auth_account_not_new
+                );
+            } else if (result.getCode() == ResultCode.ACCOUNT_NOT_THE_SAME) {
+                message = res.getString(
+                        R.string.auth_account_not_the_same
+                );
+            }
+
+            else if (result.getHttpPhrase() != null && result.getHttpPhrase().length() > 0) {
                 // last chance: error message from server
                 message = result.getHttpPhrase();
             }

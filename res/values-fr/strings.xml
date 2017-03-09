@@ -103,7 +103,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="common_unknown">Inconnu</string>
   <string name="common_error_unknown">Erreur inconnue </string>
   <string name="common_pending">En attente</string>
-  <string name="about_title">À propos de</string>
+  <string name="about_title">À propos</string>
   <string name="change_password">Changer de mot de passe</string>
   <string name="delete_account">Supprimer le compte</string>
   <string name="create_account">Créer un compte</string>
@@ -421,9 +421,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="manage_space_error">Certains fichiers n\'ont pu être supprimés.</string>
   <string name="permission_storage_access">Des permissions supplémentaires sont exigées pour téléverser &amp; télécharger des fichiers.</string>
   <string name="local_file_not_found_toast">Le fichier n\'a pas été trouvé sur le système de fichier local</string>
-  <string name="confirmation_remove_files_alert">Êtes-vous sur de vouloir supprimer ses objets?</string>
-  <string name="confirmation_remove_folders_alert">Êtes-vous sur de vouloir supprimer ses objets et leurs contenus?</string>
-  <string name="maintenance_mode">Serveur en cours de maintenance</string>
+  <string name="confirmation_remove_files_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ?</string>
+  <string name="confirmation_remove_folders_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ainsi que leurs contenus ?</string>
   <string name="failed_upload_quota_exceeded_text">Espace insuffisant pour ce compte</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>

@@ -70,6 +70,7 @@
   <string name="file_list_seconds_ago">sekunder sedan</string>
   <string name="file_list_empty">Ingenting här. Ladda upp något!</string>
   <string name="file_list_loading">Laddar...</string>
+  <string name="file_list_no_app_for_file_type">Ingen app hittades för filtypen</string>
   <string name="local_file_list_empty">Det finns inga filer i den här mappen.</string>
   <string name="local_file_list_empty_just_folders">Det finns inga mappar i den här mappen.</string>
   <string name="upload_list_empty">Inga uppladdningar tillgängliga.</string>
@@ -114,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Misslyckad uppladdning</string>
   <string name="uploader_upload_failed_content_single">Uppladdning av %1$s kunde inte slutföras</string>
   <string name="uploader_upload_failed_credentials_error">Uppladdningen misslyckades, du måste logga in igen</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Litar inte på servercertifikat</string>
+  <string name="ssl_certificate_not_trusted">Litar inte på servercertifikat</string>
   <string name="uploads_view_title">Uppladdningar</string>
   <string name="uploads_view_group_current_uploads">Nuvarande</string>
   <string name="uploads_view_group_failed_uploads">Misslyckades (tryck för att försöka igen)</string>
@@ -128,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Filfel</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Lokal fil ej hittad</string>
   <string name="uploads_view_upload_status_failed_permission_error">Behörighetsfel</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Förbjudet på grund av en brandväggsregel</string>
   <string name="uploads_view_upload_status_conflict">Konflikt</string>
   <string name="uploads_view_upload_status_service_interrupted">Applikationen stängdes ner</string>
   <string name="uploads_view_upload_status_unknown_fail">Okänt fel</string>
@@ -141,6 +145,7 @@
   <string name="downloader_download_failed_content">Nedladdning av %1$s kunde inte slutföras</string>
   <string name="downloader_not_downloaded_yet">Ännu inte nedladdade</string>
   <string name="downloader_download_failed_credentials_error">Nedladdningen misslyckades, du måste logga in igen</string>
+  <string name="downloader_download_forbidden_permissions">för att ladda ned denna fil</string>
   <string name="common_choose_account">Välj konto</string>
   <string name="sync_fail_ticker">Synkronisering misslyckades</string>
   <string name="sync_fail_ticker_unauthorized">Synkronisering misslyckades, du måste logga in igen</string>
@@ -232,6 +237,7 @@
   <string name="remove_success_msg">Lyckad radering</string>
   <string name="remove_fail_msg">Radering kunde inte slutföras</string>
   <string name="rename_dialog_title">Ange ett nytt namn</string>
+  <string name="available_offline_inherited_msg">En mapp som innehåller denna fil är tillgänglig offline</string>
   <string name="rename_local_fail_msg">Den lokala kopian kunde inte döpas om, prova med ett annat namn</string>
   <string name="rename_server_fail_msg">Namnbyte kunde inte slutföras</string>
   <string name="sync_file_fail_msg">Fjärrfilen kunde inte kontrolleras</string>
@@ -248,6 +254,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopierar fil från privat lagring</string>
   <string name="oauth_check_onoff">Logga in med oAuth2.</string>
   <string name="oauth_login_connection">Ansluter till oAuth2 servern…</string>
+  <string name="ssl_validator_header">Identiteten av servern kunde inte verifieras</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Servercertifikatet är inte tillförlitligt</string>
   <string name="ssl_validator_reason_cert_expired">- Servercertifikatet har gått ut</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Servercertifikatet är för nytt</string>
@@ -379,6 +386,7 @@
   <string name="share_file">Dela %1$s</string>
   <string name="share_with_user_section_title">Dela med användare och grupper</string>
   <string name="share_no_users">Ingen data delar med användare än</string>
+  <string name="share_incompatible_version">För att dela med andra användare behöver din server vara åtminstone version 8.2</string>
   <string name="share_add_user_or_group">Lägg till användare eller grupp</string>
   <string name="share_via_link_section_title">Dela länk</string>
   <string name="share_via_link_expiration_date_label">Sätt utgångsdatum</string>
@@ -415,6 +423,11 @@
   <string name="local_file_not_found_toast">Filen hittades inte i det lokala filsystemet</string>
   <string name="confirmation_remove_files_alert">Vill du verkligen ta bort de markerade objekten?</string>
   <string name="confirmation_remove_folders_alert">Vill du verkligen ta bort de markerade objekten och deras innehåll?</string>
+  <string name="failed_upload_quota_exceeded_text">Inte tillräckligt med utrymme på ditt konto</string>
+  <string name="auth_forbidden">Förbjuden autentisering</string>
+  <string name="actionbar_privacy_policy">Integritetspolicy</string>
+  <string name="prefs_privacy_policy">Integritetspolicy</string>
+  <string name="privacy_policy_error">Ett fel har inträffat:</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vald</item>
     <item quantity="other">%d valda</item>

@@ -116,7 +116,7 @@
   <string name="uploader_upload_failed_content_single">ไม่สามารถดำเนินการอัพโหลด %1$s ให้เสร็จสมบูรณ์ได้</string>
   <string name="uploader_upload_failed_credentials_error">การอัพโหลดล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
-  <string name="uploads_view_upload_status_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
+  <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="uploads_view_title">อัพโหลด</string>
   <string name="uploads_view_group_current_uploads">ปัจจุบัน</string>
   <string name="uploads_view_group_failed_uploads">ล้มเหลว (แตะเพื่อลองอีกครั้ง)</string>
@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">ข้อผิดพลาดของไฟล์</string>
   <string name="uploads_view_upload_status_failed_localfile_error">ไม่พบไฟล์ต้นทาง</string>
   <string name="uploads_view_upload_status_failed_permission_error">เกิดข้อผิดพลาดเกี่ยวกับสิทธิ์การเข้าใช้งาน</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">ถูกห้ามเนื่องจากผิดกฎของไฟร์วอลล์</string>
   <string name="uploads_view_upload_status_conflict">ปัญหา</string>
   <string name="uploads_view_upload_status_service_interrupted">แอพฯได้ถูกยกเลิกแล้ว</string>
   <string name="uploads_view_upload_status_unknown_fail">เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">การดาวน์โหลด %1$s ไม่สามารถดำเนินการให้เสร็จสมบูรณ์ได้</string>
   <string name="downloader_not_downloaded_yet">ยังดาวน์โหลดไม่ได้</string>
   <string name="downloader_download_failed_credentials_error">การดาวน์โหลดล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
+  <string name="downloader_download_forbidden_permissions">หากจะดาวน์โหลดไฟล์นี้</string>
   <string name="common_choose_account">เลือกบัญชี</string>
   <string name="sync_fail_ticker">การผสานข้อมูลล้มเหลว</string>
   <string name="sync_fail_ticker_unauthorized">การผสานข้อมูลล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
@@ -420,8 +422,11 @@
   <string name="local_file_not_found_toast">ไม่พบไฟล์ที่ไฟล์ระบบต้นทาง</string>
   <string name="confirmation_remove_files_alert">คุณมั่นใจว่าต้องการลบรายการที่เลือก?</string>
   <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>
-  <string name="maintenance_mode">เซิร์ฟเวอร์อยู่ในโหมดบำรุงรักษา</string>
   <string name="failed_upload_quota_exceeded_text">พื้นที่ในบัญชีไม่เพียงพอ</string>
+  <string name="auth_forbidden">การรับรองความถูกต้องถูกห้าม</string>
+  <string name="actionbar_privacy_policy">นโยบายความเป็นส่วนตัว</string>
+  <string name="prefs_privacy_policy">นโยบายความเป็นส่วนตัว</string>
+  <string name="privacy_policy_error">เกิดข้อผิดพลาด:</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>

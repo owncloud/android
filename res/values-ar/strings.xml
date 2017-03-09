@@ -14,6 +14,8 @@
   <string name="actionbar_sort">ترتيب</string>
   <string name="actionbar_sort_title">ترتيب بـ</string>
   <string name="actionbar_sort_by_name">أ-ي</string>
+  <string name="actionbar_sort_by_date">الاحدث - الاقدم</string>
+  <string name="actionbar_sort_by_size">الاضخم - الاصغر</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">كل الملفات</string>
@@ -261,6 +263,7 @@
   <string name="prefs_category_accounts">حسابات</string>
   <string name="drawer_manage_accounts">إدارة الحسابات</string>
   <string name="actionbar_logger">سجل</string>
+  <string name="log_progress_dialog_text">تحميل البيانات</string>
   <string name="saml_authentication_wrong_pass">كلمة مرور خاطئة</string>
   <string name="actionbar_move">أنقل</string>
   <string name="folder_picker_choose_button_text">اختيار</string>
