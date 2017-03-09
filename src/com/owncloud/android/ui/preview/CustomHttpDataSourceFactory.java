@@ -48,10 +48,12 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
      * @param userAgent The User-Agent string that should be used.
      * @param listener An optional listener.
      * @param params http authentication header
-     * @see #CustomHttpDataSourceFactory(String, TransferListener, int, int, boolean, Map<String, String>)
+     * @see #CustomHttpDataSourceFactory(String, TransferListener, int, int, boolean,
+     * Map<String, String>)
      */
     public CustomHttpDataSourceFactory(
-            String userAgent, TransferListener<? super DataSource> listener, Map<String, String> params) {
+            String userAgent, TransferListener<? super DataSource> listener, Map<String,
+            String> params) {
         this(userAgent, listener, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, false, params);
     }
@@ -67,9 +69,10 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
      *     to HTTPS and vice versa) are enabled.
      */
     public CustomHttpDataSourceFactory(String userAgent,
-                                        TransferListener<? super DataSource> listener, int connectTimeoutMillis,
-                                        int readTimeoutMillis, boolean allowCrossProtocolRedirects,
-                                         Map<String, String> params) {
+                                       TransferListener<? super DataSource> listener,
+                                       int connectTimeoutMillis, int readTimeoutMillis,
+                                       boolean allowCrossProtocolRedirects,
+                                       Map<String, String> params) {
         this.userAgent = userAgent;
         this.listener = listener;
         this.connectTimeoutMillis = connectTimeoutMillis;
@@ -80,7 +83,8 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
 
     @Override
     protected DefaultHttpDataSource createDataSourceInternal() {
-        DefaultHttpDataSource defaultHttpDataSource = new DefaultHttpDataSource(userAgent, null, listener, connectTimeoutMillis,
+        DefaultHttpDataSource defaultHttpDataSource = new DefaultHttpDataSource(userAgent, null,
+                listener, connectTimeoutMillis,
                 readTimeoutMillis, allowCrossProtocolRedirects);
 
         // Set headers in http data source
