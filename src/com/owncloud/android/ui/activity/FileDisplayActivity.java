@@ -1340,10 +1340,7 @@ public class FileDisplayActivity extends HookActivity
                     if (secondFragment != null && secondFragment instanceof PreviewVideoFragment) {
                         cleanSecondFragment();
 
-                        Fragment detailFragment = FileDetailFragment.newInstance(getFile(), getAccount());
-                        setSecondFragment(detailFragment);
-                        updateFragmentsVisibility(true);
-                        updateActionBarTitleAndHomeButton(getFile());
+                        showDetails(getFile());
                     }
                 }
 
