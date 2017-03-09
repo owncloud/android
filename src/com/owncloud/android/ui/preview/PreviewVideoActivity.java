@@ -253,52 +253,18 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
         Log_OC.v(TAG, "Error in video player, what = " + error);
 
-            if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                    .getCause() instanceof CertificateException) { // Current certificate untrusted
-
-                String certificateErrorMessage = getString(R.string.streaming_certificate_error);
-
-                showAlertDialog(certificateErrorMessage);
-
-            } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                    instanceof UnknownHostException) {  // Cannot connect with the server
-
-                showAlertDialog(getString(R.string.network_error_socket_exception));
-
-            } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
-
-                // Unsupported video file format
-
-                showAlertDialog(getString(R.string.streaming_unrecognized_input));
-
-            } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
-
-                    && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
-
-                    .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
-
-                showAlertDialog(getString(R.string.streaming_file_not_found_error));
-
-            } else {
-
-                String message = error.getSourceException().getMessage();
-
-                if (message == null) {
-                    message = getString(R.string.streaming_common_error);
-                }
-
-                showAlertDialog(message);
-            }
+        showAlertDialog(PreviewVideoUtils.handlePreviewVideoError(error, this));
     }
 
     /**
      * Show an alert dialog with the error produced while playing the video
-     * @param errorMessage string with the error message
+     *
+     * @param previewVideoError player error with the needed info
      */
-    private void showAlertDialog(String errorMessage) {
+    private void showAlertDialog(PreviewVideoError previewVideoError) {
 
         new AlertDialog.Builder(this)
-                .setMessage(errorMessage)
+                .setMessage(previewVideoError.getErrorMessage())
                 .setPositiveButton(android.R.string.VideoView_error_button,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
