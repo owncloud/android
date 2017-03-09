@@ -27,12 +27,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.source.UnrecognizedInputFormatException;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.owncloud.android.MainApp;
+import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
@@ -40,6 +43,8 @@ import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
+import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -51,9 +56,10 @@ import java.util.concurrent.ExecutionException;
  * An utils provider for building data sources used in video preview
  */
 
-public class PreviewUtils {
+public class PreviewVideoUtils {
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    private static final int NOT_FOUND_ERROR = 404;
 
     /**
      * Returns a new DataSource factory.
@@ -145,5 +151,161 @@ public class PreviewUtils {
 
             return null;
         }
+    }
+
+    /**
+     *
+     * @param error Exoplayer exception
+     * @param context
+     * @return preview video error after processing the Exoplayer exception
+     */
+    public static PreviewVideoError handlePreviewVideoError (ExoPlaybackException error, Context context) {
+
+        PreviewVideoError previewVideoError = null;
+
+        switch (error.type) {
+
+            case ExoPlaybackException.TYPE_SOURCE:
+
+                previewVideoError = handlePlayerSourceError(error, context);
+
+                break;
+
+            case ExoPlaybackException.TYPE_UNEXPECTED:
+
+                previewVideoError = handlePlayerUnexpectedError(error, context);
+
+                break;
+
+            case ExoPlaybackException.TYPE_RENDERER:
+
+                previewVideoError = handlePlayerRendererError(error, context);
+
+                break;
+        }
+
+        return previewVideoError;
+    }
+
+    /**
+     * Handle video player source exceptions and create a PreviewVideoError with the appropriate info
+     *
+     * @param error Exoplayer source exception
+     * @param context
+     * @return preview video error after processing the Exoplayer source exception
+     */
+    private static PreviewVideoError handlePlayerSourceError(ExoPlaybackException error, Context context) {
+
+        PreviewVideoError previewVideoError;
+
+        if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                .getCause() instanceof CertificateException) { // Current certificate untrusted
+
+            previewVideoError = new PreviewVideoError(
+                    context.getString(R.string.streaming_certificate_error),
+                    true,
+                    false);
+
+        } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                instanceof UnknownHostException) {  // Cannot connect with the server
+
+            previewVideoError = new PreviewVideoError(
+                    context.getString(R.string.network_error_socket_exception),
+                    false,
+                    false);
+
+        } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
+
+            // Unsupported video file format
+            // Important: this error is also thrown when the saml session expires. In this case,
+            // the parent folder starts to synchronize and login view is shown
+
+            previewVideoError = new PreviewVideoError(
+                    context.getString(R.string.streaming_unrecognized_input),
+                    false,
+                    true);
+
+        } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
+
+                && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
+
+                .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
+
+            previewVideoError = new PreviewVideoError(
+                    context.getString(R.string.streaming_file_not_found_error),
+                    false,
+                    false);
+        } else {
+
+            String message = error.getSourceException().getMessage();
+
+            if (message == null) {
+                message = context.getString(R.string.streaming_common_error);
+            }
+
+            previewVideoError = new PreviewVideoError(message, false, false);
+        }
+
+        return previewVideoError;
+    }
+
+    /**
+     * Handle video player unexpected exceptions and create a PreviewVideoError with the appropriate
+     * info
+     *
+     * @param error Exoplayer unexpected exception
+     * @param context
+     * @return preview video error after processing the Exoplayer unexpected exception
+     */
+    private static PreviewVideoError handlePlayerUnexpectedError(ExoPlaybackException error,
+                                                                 Context context) {
+
+        PreviewVideoError previewVideoError;
+
+        String message = error.getUnexpectedException().getMessage();
+
+        if (message != null ) {
+
+            previewVideoError = new PreviewVideoError(message, false, false);
+
+        } else {
+
+            previewVideoError = new PreviewVideoError(
+                    context.getString(R.string.streaming_common_error),
+                    false,
+                    false);
+
+        }
+
+        return  previewVideoError;
+    }
+
+    /**
+     * Handle video player renderer exceptions and create a PreviewVideoError with the appropriate
+     * info
+     * @param error Exoplayer renderer exception
+     * @param context
+     * @return preview video error after processing the Exoplayer renderer exception
+     */
+    private static PreviewVideoError handlePlayerRendererError(ExoPlaybackException error,
+                                                               Context context) {
+
+        PreviewVideoError previewVideoError;
+
+        String message = error.getRendererException().getMessage();
+
+        if (message != null ) {
+
+            previewVideoError = new PreviewVideoError(message, false, false);
+
+        } else {
+
+            previewVideoError = new PreviewVideoError(
+                    context.getString(R.string.streaming_common_error),
+                    false,
+                    false);
+        }
+
+        return previewVideoError;
     }
 }

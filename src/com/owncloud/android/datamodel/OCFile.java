@@ -141,7 +141,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Create new {@link OCFile} with given path.
-     * <p/>
+     *
      * The path received must be URL-decoded. Path separator must be OCFile.PATH_SEPARATOR, and it must be the first character in 'path'.
      *
      * @param path The remote path of the file.
@@ -362,7 +362,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Set a UNIX timestamp of the time the time the file was modified.
-     * <p/>
+     *
      * To update with the value returned by the server in every synchronization of the properties
      * of this file.
      *
@@ -385,7 +385,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Set a UNIX timestamp of the time the time the file was modified.
-     * <p/>
+     *
      * To update with the value returned by the server in every synchronization of THE CONTENTS
      * of this file.
      *
@@ -408,7 +408,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Sets the name of the file
-     * <p/>
+     *
      * Does nothing if the new name is null, empty or includes "/" ; or if the file is the root
      * directory
      */

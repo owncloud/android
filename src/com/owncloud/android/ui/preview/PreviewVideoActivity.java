@@ -27,8 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
@@ -54,11 +52,9 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.activity.FileDisplayActivity;
 
 import java.net.UnknownHostException;
 import java.security.cert.CertificateException;
@@ -211,7 +207,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
                     Uri.parse(AccountUtils.constructFullURLForAccount(this, getAccount()) +
                             Uri.encode(getFile().getRemotePath(), "/"));
 
-            DataSource.Factory mediaDataSourceFactory = PreviewUtils.buildDataSourceFactory(true,
+            DataSource.Factory mediaDataSourceFactory = PreviewVideoUtils.buildDataSourceFactory(true,
                     this, getFile(), getAccount());
 
             MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
@@ -255,11 +251,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     @Override
     public void onPlayerError(ExoPlaybackException error) {
 
-        releasePlayer();
-
         Log_OC.v(TAG, "Error in video player, what = " + error);
-
-        try {
 
             if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
                     .getCause() instanceof CertificateException) { // Current certificate untrusted
@@ -297,11 +289,6 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
                 showAlertDialog(message);
             }
-
-        } catch (Exception e) { // Some files could throw exceptions, catch them here
-
-            showAlertDialog(getString(R.string.streaming_common_error));
-        }
     }
 
     /**

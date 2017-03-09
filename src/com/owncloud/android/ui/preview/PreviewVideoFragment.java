@@ -47,7 +47,6 @@ import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.UnrecognizedInputFormatException;
 import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -55,7 +54,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -70,9 +68,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.DisplayUtils;
-
-import java.net.UnknownHostException;
-import java.security.cert.CertificateException;
 
 
 /**
@@ -116,9 +111,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private static final String TAG = PreviewVideoFragment.class.getSimpleName();
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-
-    private static final int NOT_FOUND_ERROR = 404;
-
 
     /**
      * Public factory method to create new PreviewVideoFragment instances.
@@ -235,7 +227,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         mProgressController = new TransferProgressController(mContainerActivity);
         mProgressController.setProgressBar(mProgressBar);
-
     }
 
     @Override
@@ -272,8 +263,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onStop() {
         Log_OC.v(TAG, "onStop");
-
-        mProgressController.stopListeningProgressFor(getFile(), mAccount);
 
         super.onStop();
 
@@ -326,7 +315,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
     // Progress bar
-
     @Override
     public void onTransferServiceConnected() {
         if (mProgressController != null) {
@@ -343,7 +331,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public void updateViewForSyncOff() {
         mProgressController.hideProgressBar();
     }
-
 
     // Menu options
 
@@ -445,7 +432,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         }
     }
 
-
     // Video player internal methods
 
     private void preparePlayer() {
@@ -471,7 +457,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                             Uri.encode(getFile().getRemotePath(), "/"));
 
             // Produces DataSource instances through which media data is loaded.
-            DataSource.Factory mediaDataSourceFactory = PreviewUtils.buildDataSourceFactory(true,
+            DataSource.Factory mediaDataSourceFactory = PreviewVideoUtils.buildDataSourceFactory(true,
                     getContext(), getFile(), mAccount);
 
             // This represents the media to be played.
@@ -512,82 +498,32 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     @Override
     public void onPlayerError(ExoPlaybackException error) {
 
-        releasePlayer();
-
         Log_OC.v(TAG, "Error in video player, what = " + error);
 
-        try {
-
-            if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                    .getCause() instanceof CertificateException) { // Current certificate untrusted
-
-                String certificateErrorMessage = getString(R.string.streaming_certificate_error);
-
-                showAlertDialog(true, false, certificateErrorMessage);
-
-            } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                    instanceof UnknownHostException) {  // Cannot connect with the server
-
-                showAlertDialog(false, false, getString(R.string.network_error_socket_exception));
-
-            } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
-
-                // Unsupported video file format
-                // Important: this error is also thrown when the saml session expires. In this case,
-                // the parent folder starts to synchronize and login view is shown
-
-                showAlertDialog(false, true, getString(R.string.streaming_unrecognized_input));
-
-            } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
-
-                    && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
-
-                    .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
-
-                showAlertDialog(false, false, getString(R.string.streaming_file_not_found_error));
-
-            } else {
-
-                String message = error.getSourceException().getMessage();
-
-                if (message == null) {
-                    message = getString(R.string.streaming_common_error);
-                }
-
-                showAlertDialog(false, false, message);
-            }
-
-        } catch (Exception e) { // Some files could throw exceptions, catch them here
-
-            showAlertDialog(false, false, getString(R.string.streaming_common_error));
-        }
+        showAlertDialog(PreviewVideoUtils.handlePreviewVideoError(error, getContext()));
     }
 
     /**
-     * Show an alert dialog with the error produced while playing the video
+     * Show an alert dialog with the error produced while playing the video and initialize a
+     * specific behaviour when necessary
      *
-     * @param syncFile         'true' if error requires that the file be synchronised,
-     *                         'false' otherwhise
-     * @param syncParentFolder 'true' if error requires that the parent folder be synchronised,
-     *                         'false' otherwhise
-     * @param errorMessage     string with the error message
+     * @param previewVideoError player error with the needed info
      */
-    private void showAlertDialog(final boolean syncFile, final boolean syncParentFolder,
-                                 String errorMessage) {
+    private void showAlertDialog(final PreviewVideoError previewVideoError) {
 
         new AlertDialog.Builder(getActivity())
-                .setMessage(errorMessage)
+                .setMessage(previewVideoError.getErrorMessage())
                 .setPositiveButton(android.R.string.VideoView_error_button,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                if (syncFile) {
+                                if (previewVideoError.isFileSyncNeeded()) {
                                     // Initialize the file download
                                     mContainerActivity.getFileOperationsHelper().syncFile(getFile());
 
                                 }
 
-                                if (syncParentFolder) {
+                                if (previewVideoError.isParentFolderSyncNeeded()) {
                                     // Start to sync the parent file folder
                                     OCFile folder = new OCFile(getFile().getParentRemotePath());
                                     ((FileDisplayActivity) getActivity()).
