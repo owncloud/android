@@ -29,7 +29,7 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 
 import java.util.Map;
 
-/** A {@link Factory} that produces {@link DefaultHttpDataSource} instances. */
+/** A {@link Factory} that produces {@link CustomHttpDataSourceFactory} instances. */
 public final class CustomHttpDataSourceFactory extends BaseFactory {
 
     private final String userAgent;
@@ -40,7 +40,7 @@ public final class CustomHttpDataSourceFactory extends BaseFactory {
     private final Map<String, String> headers;
 
     /**
-     * Constructs a DefaultHttpDataSourceFactory. Sets {@link
+     * Constructs a CustomHttpDataSourceFactory. Sets {@link
      * DefaultHttpDataSource#DEFAULT_CONNECT_TIMEOUT_MILLIS} as the connection timeout, {@link
      * DefaultHttpDataSource#DEFAULT_READ_TIMEOUT_MILLIS} as the read timeout and disables
      * cross-protocol redirects.
