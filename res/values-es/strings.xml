@@ -423,10 +423,8 @@
   <string name="local_file_not_found_toast">El archivo no se encuentra en el sistema local de archivos.</string>
   <string name="confirmation_remove_files_alert">¿Desea realmene quitar los ítems seleccionados?</string>
   <string name="confirmation_remove_folders_alert">¿Desea realmente quitar los ítems seleccionados y sus contenidos?</string>
-  <string name="maintenance_mode">Servidor en modo mantenimiento</string>
   <string name="failed_upload_quota_exceeded_text">No se dispone de suficiente espacio libre en la cuenta</string>
   <string name="auth_forbidden">Autentificación prohibida</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Almacenamiento no disponible</string>
   <string name="actionbar_privacy_policy">Política de privacidad</string>
   <string name="prefs_privacy_policy">Política de privacidad</string>
   <string name="privacy_policy_error">Ha ocurrido un error:</string>

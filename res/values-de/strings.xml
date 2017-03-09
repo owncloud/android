@@ -424,10 +424,8 @@
   <string name="local_file_not_found_toast">Die Datei wurde im lokalen Dateisystem nicht gefunden</string>
   <string name="confirmation_remove_files_alert">Möchtest du die ausgewählten Elemente wirklich löschen?</string>
   <string name="confirmation_remove_folders_alert">Möchtest du die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>
-  <string name="maintenance_mode">Server befindet sich im Wartungsmodus</string>
   <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
   <string name="auth_forbidden">Authentifizierung verweigert</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Speicher nicht verfügbar</string>
   <string name="actionbar_privacy_policy">Datenschutzerklärung</string>
   <string name="prefs_privacy_policy">Datenschutzerklärung</string>
   <string name="privacy_policy_error">Es ist ein Fehler aufgetreten:</string>

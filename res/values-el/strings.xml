@@ -232,5 +232,4 @@
   <string name="share_sharee_unavailable">Δεν επιτρέπεται ο διαμοιρασμός μεταξύ χρηστών μέσω εφαρμογής, σε αυτή την έκδοση.
 \nΕπικοινωνήστε με το διαχειριστή του συστήματος</string>
   <string name="action_clear_successful_uploads"> </string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Μη διαθέσιμος αποθηκευτικός χώρος</string>
 </resources>

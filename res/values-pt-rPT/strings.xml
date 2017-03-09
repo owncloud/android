@@ -422,10 +422,8 @@
   <string name="local_file_not_found_toast">O ficheiro não foi encontrado no sistema de ficheiros local</string>
   <string name="confirmation_remove_files_alert">Tem a certeza que deseja remover os items selecionados?</string>
   <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os items selecionados e os seus respetivos conteúdos?</string>
-  <string name="maintenance_mode">O servidor encontra-se em manutenção</string>
   <string name="failed_upload_quota_exceeded_text">Não existe espaço suficiente na conta</string>
   <string name="auth_forbidden">Autenticação não permitida</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Armazenamento indisponível</string>
   <string name="actionbar_privacy_policy">Política de privacidade</string>
   <string name="prefs_privacy_policy">Política de privacidade</string>
   <string name="privacy_policy_error">Ocorreu um erro:</string>

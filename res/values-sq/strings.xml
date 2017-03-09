@@ -422,10 +422,8 @@
   <string name="local_file_not_found_toast">Kartela s’u gjet te sistemi vendor i kartelave</string>
   <string name="confirmation_remove_files_alert">Doni vërtet të hiqen objektet e përgjedhur?</string>
   <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>
-  <string name="maintenance_mode">Shërbyesi gjendet nën mënyrën mirëmbajtje</string>
   <string name="failed_upload_quota_exceeded_text">Hapësirë e pamjaftueshme te llogaria</string>
   <string name="auth_forbidden">Mirëfilltësim i ndaluar</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Pa depozitë gati</string>
   <string name="actionbar_privacy_policy">Rregulla privatësie</string>
   <string name="prefs_privacy_policy">Rregulla privatësie</string>
   <string name="privacy_policy_error">Ndodhi një gabim:</string>

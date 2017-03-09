@@ -424,10 +424,8 @@
   <string name="local_file_not_found_toast">Файл не знайдено в локальній файловій системі</string>
   <string name="confirmation_remove_files_alert">Ви дійсно бажаєте вилучити вибране?</string>
   <string name="confirmation_remove_folders_alert">Ви дійсно бажаєте вилучити вибране і їхній вміст?</string>
-  <string name="maintenance_mode">Сервер в режимі технічного обслуговування</string>
   <string name="failed_upload_quota_exceeded_text">Недостатньо місця для цього облікового запису</string>
   <string name="auth_forbidden">Заборонена аутентифікація</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Сховище не доступне</string>
   <plurals name="items_selected_count">
     <item quantity="one">Вибрано %d</item>
     <item quantity="few">Вибрано %d</item>

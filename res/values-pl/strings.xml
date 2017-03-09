@@ -420,9 +420,7 @@
   <string name="local_file_not_found_toast">Plik nie został znaleziony w lokalnym systemie plików</string>
   <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
-  <string name="maintenance_mode">Serwer znajduje się w trybie konserwacji</string>
   <string name="failed_upload_quota_exceeded_text">Brak wystarczającej ilości miejsca na koncie</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Pamięć nie dostępna</string>
   <string name="actionbar_privacy_policy">Polityka prywatności</string>
   <string name="prefs_privacy_policy">Polityka prywatności</string>
   <string name="privacy_policy_error">Wystąpił bład:</string>
