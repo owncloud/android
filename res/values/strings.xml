@@ -475,7 +475,6 @@
     <string name="privacy_policy_error">"An error has occurred: "</string>
     <string name="service_unavailable">Server is unavailable</string>
 
-    <string name="uploads_view_upload_status_failed_storage_not_available_error">Storage not available</string>
     <string name="streaming_certificate_error">Streaming cannot be initialized because your server certificate is untrusted. File download will start automatically</string>
     <string name="streaming_unrecognized_input">This video format is not supported</string>
     <string name="streaming_file_not_found_error">This video file is no longer available in the server</string>
