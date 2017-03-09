@@ -9,8 +9,8 @@ AC:
  - [ ] [DEV] Update version number and name in AndroidManifest.xml in android module
  - [ ] [DEV] Update version number and name in AndroidManifest.xml in oc_jb_workaround module
  - [ ] [DIS] Create changelog file (< 500 chars) and add to CHANGELOG.md in owncloud/android
- - [ ] [QA] Design Test plan  @jesmrec
- - [ ] [QA] Regression Test plan @jesmrec
+ - [ ] [QA] Design Test plan
+ - [ ] [QA] Regression Test plan
  - [ ] [GIT] Merge branch release_0.9.16 in owncloud/android-library, into master
  - [ ] [GIT] Merge branch release_2.3.0 in owncloud/android, into master
  - [ ] [DIS] Generate test APKs and BAR files from branch master in owncloud/android
