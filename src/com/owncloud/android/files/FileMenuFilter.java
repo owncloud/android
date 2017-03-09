@@ -23,6 +23,7 @@ package com.owncloud.android.files;
 import android.accounts.Account;
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -33,7 +34,6 @@ import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
-import com.owncloud.android.ui.activity.HookActivity;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 
 import java.util.ArrayList;
@@ -213,7 +213,8 @@ public class FileMenuFilter {
                 (capability.getFilesSharingApiEnabled().isTrue() ||
                         capability.getFilesSharingApiEnabled().isUnknown()
                 );
-        if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() || !shareApiEnabled) {
+        if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
+                !shareApiEnabled) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);
@@ -298,14 +299,14 @@ public class FileMenuFilter {
     }
 
     private boolean anyFileVideoPreviewing() {
-        final HookActivity activity = (HookActivity) mContext;
+        final FragmentActivity activity = (FragmentActivity) mContext;
         Fragment secondFragment = activity.getSupportFragmentManager().findFragmentByTag(
                 TAG_SECOND_FRAGMENT);
         boolean videoPreviewing = false;
         if (secondFragment instanceof PreviewVideoFragment) {
             for (int i=0; !videoPreviewing && i < mFiles.size(); i++) {
-                videoPreviewing = ((PreviewVideoFragment) secondFragment)
-                        .isFileToPreview(mFiles.get(i));
+                videoPreviewing = ((PreviewVideoFragment) secondFragment).
+                        getFile().equals(mFiles.get(i));
             }
         };
         return videoPreviewing;
