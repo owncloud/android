@@ -516,42 +516,50 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         Log_OC.v(TAG, "Error in video player, what = " + error);
 
-        if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                .getCause() instanceof CertificateException) { // Current certificate untrusted
+        try {
 
-            String certificateErrorMessage = getString(R.string.streaming_certificate_error);
+            if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                    .getCause() instanceof CertificateException) { // Current certificate untrusted
 
-            showAlertDialog(true, false, certificateErrorMessage);
+                String certificateErrorMessage = getString(R.string.streaming_certificate_error);
 
-        } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                instanceof UnknownHostException) {  // Cannot connect with the server
+                showAlertDialog(true, false, certificateErrorMessage);
 
-            showAlertDialog(false, false, getString(R.string.network_error_socket_exception));
+            } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                    instanceof UnknownHostException) {  // Cannot connect with the server
 
-        } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
+                showAlertDialog(false, false, getString(R.string.network_error_socket_exception));
 
-            // Unsupported video file format
-            // Important: this error is also thrown when the saml session expires
+            } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
 
-            showAlertDialog(false, true, getString(R.string.streaming_unrecognized_input));
+                // Unsupported video file format
+                // Important: this error is also thrown when the saml session expires. In this case,
+                // the parent folder starts to synchronize and login view is shown
 
-        } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
+                showAlertDialog(false, true, getString(R.string.streaming_unrecognized_input));
 
-                && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
+            } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
 
-                .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
+                    && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
 
-            showAlertDialog(false, false, getString(R.string.streaming_file_not_found_error));
+                    .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
 
-        } else {
+                showAlertDialog(false, false, getString(R.string.streaming_file_not_found_error));
 
-            String message = error.getSourceException().getMessage();
+            } else {
 
-            if (message == null) {
-                message = getString(R.string.streaming_common_error);
+                String message = error.getSourceException().getMessage();
+
+                if (message == null) {
+                    message = getString(R.string.streaming_common_error);
+                }
+
+                showAlertDialog(false, false, message);
             }
 
-            showAlertDialog(false, false, message);
+        } catch (Exception e) { // Some files could throw exceptions, catch them here
+
+            showAlertDialog(false, false, getString(R.string.streaming_common_error));
         }
     }
 

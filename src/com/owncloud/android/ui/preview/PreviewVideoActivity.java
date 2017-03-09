@@ -259,41 +259,48 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
         Log_OC.v(TAG, "Error in video player, what = " + error);
 
-        if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                .getCause() instanceof CertificateException) { // Current certificate untrusted
+        try {
 
-            String certificateErrorMessage = getString(R.string.streaming_certificate_error);
+            if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                    .getCause() instanceof CertificateException) { // Current certificate untrusted
 
-            showAlertDialog(certificateErrorMessage);
+                String certificateErrorMessage = getString(R.string.streaming_certificate_error);
 
-        } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                instanceof UnknownHostException) {  // Cannot connect with the server
+                showAlertDialog(certificateErrorMessage);
 
-            showAlertDialog(getString(R.string.network_error_socket_exception));
+            } else if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
+                    instanceof UnknownHostException) {  // Cannot connect with the server
 
-        } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
+                showAlertDialog(getString(R.string.network_error_socket_exception));
 
-            // Unsupported video file format
+            } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
 
-            showAlertDialog(getString(R.string.streaming_unrecognized_input));
+                // Unsupported video file format
 
-        } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
+                showAlertDialog(getString(R.string.streaming_unrecognized_input));
 
-                && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
+            } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
 
-                .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
+                    && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
 
-            showAlertDialog(getString(R.string.streaming_file_not_found_error));
+                    .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
 
-        } else {
+                showAlertDialog(getString(R.string.streaming_file_not_found_error));
 
-            String message = error.getSourceException().getMessage();
+            } else {
 
-            if (message == null) {
-                message = getString(R.string.streaming_common_error);
+                String message = error.getSourceException().getMessage();
+
+                if (message == null) {
+                    message = getString(R.string.streaming_common_error);
+                }
+
+                showAlertDialog(message);
             }
 
-            showAlertDialog(message);
+        } catch (Exception e) { // Some files could throw exceptions, catch them here
+
+            showAlertDialog(getString(R.string.streaming_common_error));
         }
     }
 

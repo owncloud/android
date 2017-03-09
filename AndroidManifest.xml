@@ -266,7 +266,6 @@
         <activity android:name=".ui.activity.PrivacyPolicyActivity"></activity>
         <activity android:name=".ui.preview.PreviewVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud.Fullscreen">
         </activity>
     </application>
