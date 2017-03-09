@@ -113,18 +113,13 @@ Change User Password
 ^^^^^^^^^^^^^^^^^^^^
 
 To change a user's password, click the key icon, next to the user's details. 
-This will display the user details page, with the ownCloud server URI and user account pre-filled.
+This will display the user details page, with the ownCloud server URI and user account, pre-filled.
 Enter a new password, and click "Connect", and the password will be updated.
-
-.. NOTE:: 
-   If you want extra security, you can set a login PIN on your Android device,
-   and also on your ownCloud account. If you are using a shared Android device,
-   other users can access your files in the file manager if you are sharing
-   a single user account. To avoid this, you could set up multiple user
-   accounts to protect your files.
 
 .. figure:: images/android-13.png
    :alt: Change password or remove account dialog.
+
+If you want extra security, please refer to the `Passcode Locks & Pins`_ section.
 
 Removing An Account / Logging Out
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -132,9 +127,9 @@ Removing An Account / Logging Out
 To remove an account, click the rubbish bin icon, next to the key icon. 
 This will display a confirmation dialog, asking if you want to remove the account.
 If you click "Yes", the account will be removed. 
-This action logs both you out of the server and removes your account settings **and**
-files from your Android device. 
-It *does not* change anything on the server.
+This action logs you out of the server deletes the database with the list of files. 
+But, any files that were downloaded onto the device at the moment of the removal will still be there afterwards
+You can find them in the public partition.
 
 .. figure:: images/android-6.png
    :alt: Top-right menu.   
@@ -292,10 +287,14 @@ Then, tap the newly created folder and tap **"Choose"** in the bottom right-hand
 corner. 
 You'll see that the path has been updated.
 
-Passcode Locks
-^^^^^^^^^^^^^^
+Passcode Locks & Pins
+^^^^^^^^^^^^^^^^^^^^^
 
 You can also set a passcode lock to further protect your files and folders.
+And, if you want extra security, you can set a login PIN on your Android device, and also on your ownCloud account. 
+If you are using a shared Android device, other users can access your files in the file manager if you are sharing a single user account. 
+To avoid this, you could set up multiple user accounts to protect your files.
+
 The bottom section of the **Settings** screen has links to:
 
 - Help
