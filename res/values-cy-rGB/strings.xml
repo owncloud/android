@@ -87,7 +87,6 @@
   <string name="wait_a_moment">Arhoswch eiliad</string>
   <string name="filedisplay_unexpected_bad_get_content">Gwall annisgwyl ; dewiswch y ffeil o ap gwahanol</string>
   <string name="filedisplay_no_file_selected">Ni ddewiswyd ffeil</string>
-  <string name="ssl_validator_header">Methwyd gwirio hunaniaeth y safle</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Nid yw tystysgrif y gweinydd yn ddibynadwy</string>
   <string name="ssl_validator_reason_cert_expired">- Mae tystysgrif y gweinydd wedi dod i ben</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Mae dyddiadau dilysrwydd tystysgrif y gweinydd yn y dyfodol</string>

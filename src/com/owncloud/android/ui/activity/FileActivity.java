@@ -31,13 +31,10 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -71,7 +68,7 @@ import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
-import com.owncloud.android.utils.ErrorMessageAdapter;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 
 
 /**
@@ -301,10 +298,9 @@ public class FileActivity extends DrawerActivity
             requestCredentialsUpdate(this);
 
             if (result.getCode() == ResultCode.UNAUTHORIZED) {
-                Toast t = Toast.makeText(this, ErrorMessageAdapter.getErrorCauseMessage(result,
-                        operation, getResources()),
-                    Toast.LENGTH_LONG);
-                t.show();
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                );
             }
 
         } else if (!result.isSuccess() && ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(result.getCode())) {
@@ -322,10 +318,9 @@ public class FileActivity extends DrawerActivity
                 updateFileFromDB();
 
             } else if (result.getCode() != ResultCode.CANCELLED) {
-                Toast t = Toast.makeText(this,
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Toast.LENGTH_LONG);
-                t.show();
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                );
             }
 
         } else if (operation instanceof SynchronizeFileOperation) {
@@ -336,10 +331,9 @@ public class FileActivity extends DrawerActivity
                 updateFileFromDB();
 
             } else {
-                Toast t = Toast.makeText(this,
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Toast.LENGTH_LONG);
-                t.show();
+                showSnackMessage(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                );
             }
 
         } else if (operation instanceof RenameFileOperation && result.isSuccess()) {
@@ -406,7 +400,7 @@ public class FileActivity extends DrawerActivity
             startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
 
         } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
-            Toast.makeText(context, R.string.auth_account_does_not_exist, Toast.LENGTH_SHORT).show();
+            showSnackMessage(getString(R.string.auth_account_does_not_exist));
         }
 
     }
@@ -576,6 +570,21 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onCancelCertificate() {
         // nothing to do
+    }
+
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view
+     *
+     * @param message       Message to show.
+     */
+    public void showSnackMessage(String message) {
+        Snackbar snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            message,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
     }
 
 }

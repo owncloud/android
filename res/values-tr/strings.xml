@@ -70,7 +70,6 @@
   <string name="file_list_seconds_ago">saniyeler önce</string>
   <string name="file_list_empty">Burada hiçbir şey yok. Bir şeyler yükleyin!</string>
   <string name="file_list_loading">Yükleniyor...</string>
-  <string name="file_list_no_app_for_file_type">Dosya türü için uygulama bulunamadı!</string>
   <string name="local_file_list_empty">Bu klasörde dosya yok.</string>
   <string name="local_file_list_empty_just_folders">Bu klasör içinde klasör yok.</string>
   <string name="upload_list_empty">Uygun yükleme yok.</string>
@@ -248,7 +247,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Dosya özel depolamadan kopyalanıyor</string>
   <string name="oauth_check_onoff">oAuth2 ile oturum aç</string>
   <string name="oauth_login_connection">oAuth2 sunucusuna bağlanılıyor…</string>
-  <string name="ssl_validator_header">Bu sitenin sertifikası doğrulanamadı</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Sunucu sertifikasına güvenilmiyor</string>
   <string name="ssl_validator_reason_cert_expired">- Sunucu sertifikasının süresi dolmuş</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Sunucu sertifikasının geçerlilik tarihi ileride</string>

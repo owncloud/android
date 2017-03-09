@@ -135,7 +135,6 @@
   <string name="confirmation_remove_local">ਕੇਵਲ ਲੋਕਲ</string>
   <string name="wait_a_moment">ਪਲ਼ ਭਰ ਲਈ ਉਡੀਕੋ</string>
   <string name="filedisplay_no_file_selected">ਕੋਈ ਫਾਇਲ ਨਹੀਂ ਚੁਣੀ ਗਈ</string>
-  <string name="ssl_validator_header">ਇਹ ਸਾਈਟ ਦੀ ਪਛਾਣ ਦੀ ਜਾਂਚ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ ਹੈ</string>
   <string name="ssl_validator_reason_cert_not_trusted">- ਸਰਵਰ ਸਰਟੀਫਿਕੇਟ ਭਰੋਸੇਯੋਗ (ਟਰੱਸਟਡ) ਨਹੀਂ ਹੈ</string>
   <string name="ssl_validator_reason_cert_expired">- ਸਰਵਰ ਸਰਟੀਫਿਕੇਟ ਦੀ ਮਿਆਦ ਪੁੱਗ ਗਈ ਹੈ</string>
   <string name="ssl_validator_not_saved">ਸਰਟੀਫਿਕੇਟ ਨੂੰ ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ</string>

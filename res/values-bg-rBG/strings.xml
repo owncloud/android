@@ -70,7 +70,7 @@
   <string name="file_list_seconds_ago">преди секунди</string>
   <string name="file_list_empty">Тук няма нищо. Качете нещо!</string>
   <string name="file_list_loading">Зарежда…</string>
-  <string name="file_list_no_app_for_file_type">Няма намерени приложения за типа фаил</string>
+  <string name="file_list_no_app_for_file_type">Не е е открито приложение за този тип файл</string>
   <string name="local_file_list_empty">Няма файлове в тази папка.</string>
   <string name="local_file_list_empty_just_folders">Няма папки в тази папка.</string>
   <string name="upload_list_empty">Няма налични актуализации.</string>
@@ -115,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Качването е неуспешно.</string>
   <string name="uploader_upload_failed_content_single">Качването на %1$s не може да бъде завършено.</string>
   <string name="uploader_upload_failed_credentials_error">Неуспешно качване, нужно е да влезете отново</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Сертификатът на сървъра не е надежден</string>
+  <string name="ssl_certificate_not_trusted">Сертификатът на сървъра не е надежден</string>
   <string name="uploads_view_title">Качено</string>
   <string name="uploads_view_group_current_uploads">Текущ</string>
   <string name="uploads_view_group_failed_uploads">Неуспешно (натисни за нов опит)</string>
@@ -250,7 +252,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Копира файла от личното хранилище</string>
   <string name="oauth_check_onoff">Вписване с oAuth2</string>
   <string name="oauth_login_connection">Свързване с оАутх2 сървър...</string>
-  <string name="ssl_validator_header">Самоличността на сайта не може да бъде проверена.</string>
+  <string name="ssl_validator_header">Идентичността на сървъра не може да бъде потвърдена</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Сертификатът на сървъра не е надежден.</string>
   <string name="ssl_validator_reason_cert_expired">- Сертификатът на сървъра е изтекъл</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Датите на валидност на сървърния сертификат са в бъдещето.</string>
@@ -382,6 +384,7 @@
   <string name="share_file">Сподели %1$s</string>
   <string name="share_with_user_section_title">Споделяне с потребители и групаи</string>
   <string name="share_no_users">Все още няма споделени с потребители данни </string>
+  <string name="share_incompatible_version">За да споделяте с други потребители, Вашият сървър трябва да бъде поне версия 8.2</string>
   <string name="share_add_user_or_group">Добави потребител или група</string>
   <string name="share_via_link_section_title">Връзка за споделяне</string>
   <string name="share_via_link_expiration_date_label">Задаване на дата на изтичане</string>
@@ -421,7 +424,7 @@
   <string name="local_file_not_found_toast">Файла не беше намерен на локалната файлова система</string>
   <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
-  <string name="maintenance_mode">Сървърът е в режим на поддръжка</string>
+  <string name="failed_upload_quota_exceeded_text">Няма достатъчно свободно място в този профил</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d избран</item>
     <item quantity="other">%d избран</item>

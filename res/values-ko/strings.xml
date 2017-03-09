@@ -67,7 +67,6 @@
   <string name="file_list_seconds_ago">초 지남</string>
   <string name="file_list_empty">내용이 없습니다. 업로드할 수 있습니다!</string>
   <string name="file_list_loading">불러오는 중...</string>
-  <string name="file_list_no_app_for_file_type">해당 파일 타입을 위한 앱이 없습니다.</string>
   <string name="local_file_list_empty">이 폴더에 파일이 없습니다.</string>
   <string name="upload_list_empty">업로드가 불가능합니다.</string>
   <string name="file_list_folder">폴더</string>
@@ -232,7 +231,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">개인 저장소에서 파일 복사</string>
   <string name="oauth_check_onoff">oAuth2로 로그인하기</string>
   <string name="oauth_login_connection">oAuth2 서버에 연결 중...</string>
-  <string name="ssl_validator_header">사이트 인증서를 확인할 수 없습니다</string>
   <string name="ssl_validator_reason_cert_not_trusted">- 서버 인증서를 신뢰할 수 없습니다</string>
   <string name="ssl_validator_reason_cert_expired">- 서버 인증서가 만료되었습니다</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- 서버 인증서의 유효 기간이 시작되지 않았습니다</string>

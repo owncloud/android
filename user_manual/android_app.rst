@@ -262,6 +262,7 @@ To enable this, under "Instant Uploads" tap one or both of:
 
 These start the process of uploading any new photos and/or videos which you
 create.
+<<<<<<< HEAD
 
 If you’re concerned about mobile data usage, or have an account with limited
 data available, you can limit uploading to only when a WiFi is in use. 
@@ -294,7 +295,37 @@ You can also set a passcode lock to further protect your files and folders.
 And, if you want extra security, you can set a login PIN on your Android device, and also on your ownCloud account. 
 If you are using a shared Android device, other users can access your files in the file manager if you are sharing a single user account. 
 To avoid this, you could set up multiple user accounts to protect your files.
+=======
+>>>>>>> 5969c302dec8387f7e797b76ca15ca3dfdd8b57e
 
+If you’re concerned about mobile data usage, or have an account with limited
+data available, you can limit uploading to only when a WiFi is in use. 
+This option is visible once you've enabled the respective option.
+For photos tap **"Upload pictures via wifi only"**:sup:`1`. 
+For videos tap **"Upload videos via wifi only"**:sup:`2`
+
+.. figure:: images/android-settings-enable-instant-upload.png
+   :alt: Enabling instant upload picture and video 
+
+By default, photos and videos are uploaded to a directory called
+file:`/InstantUpload`. 
+However, you also have the option to choose any other existing directory, or
+to create a new one. 
+
+To change the upload location, tap on **"Upload path"** under either photos or
+videos, and choose one of the folders which is displayed. 
+
+To create a new folder, click the three dots in the top right-hand corner. 
+This will display the menu option: **"New folder"**. 
+Tap it and enter the name of the new folder in the **"Folder name"** dialog.
+Then, tap the newly created folder and tap **"Choose"** in the bottom right-hand
+corner. 
+You'll see that the path has been updated.
+
+Passcode Locks
+^^^^^^^^^^^^^^
+
+You can also set a passcode lock to further protect your files and folders.
 The bottom section of the **Settings** screen has links to:
 
 - Help

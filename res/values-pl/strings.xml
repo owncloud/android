@@ -70,7 +70,7 @@
   <string name="file_list_seconds_ago">sekund temu</string>
   <string name="file_list_empty">Pusto. Wyślij coś!</string>
   <string name="file_list_loading">Wczytywanie...</string>
-  <string name="file_list_no_app_for_file_type">Brak aplikacji dla tego typu plików!</string>
+  <string name="file_list_no_app_for_file_type">Nie znaleziono aplikacji dla tego rodzaju pliku</string>
   <string name="local_file_list_empty">Nie ma plików w tym folderze.</string>
   <string name="local_file_list_empty_just_folders">W tym folderze nie ma żadnych folderów.</string>
   <string name="upload_list_empty">Brak przesłanych plików.</string>
@@ -115,6 +115,8 @@
   <string name="uploader_upload_failed_ticker">Wysyłanie nie powiodło się</string>
   <string name="uploader_upload_failed_content_single">Wysyłanie %1$s nie powiodło się</string>
   <string name="uploader_upload_failed_credentials_error">Błąd przy wysyłaniu zaloguj się ponownie</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certyfikat serwera jest niezaufany</string>
+  <string name="ssl_certificate_not_trusted">Certyfikat serwera nie jest niezaufany</string>
   <string name="uploads_view_title">Wysłane</string>
   <string name="uploads_view_group_current_uploads">Obecny</string>
   <string name="uploads_view_group_failed_uploads">Błąd (kliknij, by ponowić)</string>
@@ -250,7 +252,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopiowanie pliku z prywatnego zasobu</string>
   <string name="oauth_check_onoff">Loguj przez oAuth2</string>
   <string name="oauth_login_connection">Łączenie z serwerem oAuth2...</string>
-  <string name="ssl_validator_header">Nie można zweryfikować tożsamości strony</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Certyfikat serwera jest niezaufany</string>
   <string name="ssl_validator_reason_cert_expired">- Certyfikat serwera wygasł</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Certyfikat serwera jest wystawiony w przyszłości</string>
@@ -419,9 +420,14 @@
   <string name="local_file_not_found_toast">Plik nie został znaleziony w lokalnym systemie plików</string>
   <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
+  <string name="failed_upload_quota_exceeded_text">Brak wystarczającej ilości miejsca na koncie</string>
+  <string name="actionbar_privacy_policy">Polityka prywatności</string>
+  <string name="prefs_privacy_policy">Polityka prywatności</string>
+  <string name="privacy_policy_error">Wystąpił bład:</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>
+    <item quantity="many">wybrano: %d</item>
     <item quantity="other">wybrano: %d</item>
   </plurals>
 </resources>

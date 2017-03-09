@@ -231,7 +231,6 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="wait_for_tmp_copy_from_private_storage">Còpia del fichièr dempuèi l\'emmagazinatge privat</string>
   <string name="oauth_check_onoff">Connexion amb oAuth2</string>
   <string name="oauth_login_connection">Connexion al servidor oAuth2…</string>
-  <string name="ssl_validator_header">L\'identitat del site pòt pas èsser verificada</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Lo certificat del servidor es pas segur</string>
   <string name="ssl_validator_reason_cert_expired">- Lo certificat del servidor a expirat</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Lo certificat del servidor es pas encara valid</string>

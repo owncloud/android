@@ -44,7 +44,6 @@
   <string name="file_list_seconds_ago">sekundoj antaŭe</string>
   <string name="file_list_empty">Nenio estas ĉi tie. Alŝutu ion!</string>
   <string name="file_list_loading">Ŝargante...</string>
-  <string name="file_list_no_app_for_file_type">Neniu aplikaĵo troviĝis por la dosiertipo!</string>
   <string name="local_file_list_empty">Estas neniu dosiero en ĉi tiu dosierujo.</string>
   <string name="file_list_folder">dosierujo</string>
   <string name="file_list_folders">dosierujoj</string>
@@ -163,7 +162,6 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopiante dosieron el malpublika memoro</string>
   <string name="oauth_check_onoff">Ensaluti per oAuth2</string>
   <string name="oauth_login_connection">Konektante al oAuth2-servilo...</string>
-  <string name="ssl_validator_header">La idento de la ejo ne povis kontroliĝi</string>
   <string name="ssl_validator_reason_cert_not_trusted">- La servila atestilo ne fidindas</string>
   <string name="ssl_validator_reason_cert_expired">- La servila atestilo eksvalidiĝis</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- La servila atestilo tro junas</string>

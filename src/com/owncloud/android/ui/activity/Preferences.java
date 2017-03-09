@@ -21,7 +21,6 @@
  */
 package com.owncloud.android.ui.activity;
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -39,6 +38,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
@@ -47,11 +47,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.InstantUploadsConfiguration;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -80,8 +78,6 @@ public class Preferences extends PreferenceActivity {
     private CheckBoxPreference pCode;
     private Preference pAboutApp;
     private AppCompatDelegate mDelegate;
-
-    private PreferenceCategory mAccountsPrefCategory = null;
 
     private String mUploadPath;
     private String mUploadVideoPath;
@@ -234,6 +230,24 @@ public class Preferences extends PreferenceActivity {
                 });
             } else {
                 preferenceCategory.removePreference(pFeedback);
+            }
+        }
+
+        boolean privacyPolicyEnabled = getResources().getBoolean(R.bool.privacy_policy_enabled);
+        Preference pPrivacyPolicy =  findPreference("privacyPolicy");
+        if (pPrivacyPolicy != null){
+            if (privacyPolicyEnabled) {
+                pPrivacyPolicy.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        Intent privacyPolicyIntent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
+                        startActivity(privacyPolicyIntent);
+
+                        return true;
+                    }
+                });
+            } else {
+                preferenceCategory.removePreference(pPrivacyPolicy);
             }
         }
 
@@ -496,7 +510,7 @@ public class Preferences extends PreferenceActivity {
                 }
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
                 appPrefs.commit();
-                Toast.makeText(this, R.string.pass_code_stored, Toast.LENGTH_LONG).show();
+                showSnackMessage(R.string.pass_code_stored);
             }
 
         } else if (requestCode == ACTION_CONFIRM_PASSCODE && resultCode == RESULT_OK) {
@@ -506,8 +520,7 @@ public class Preferences extends PreferenceActivity {
                         .getDefaultSharedPreferences(getApplicationContext()).edit();
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
                 appPrefs.commit();
-
-                Toast.makeText(this, R.string.pass_code_removed, Toast.LENGTH_LONG).show();
+                showSnackMessage(R.string.pass_code_removed);
             }
         }
     }
@@ -673,6 +686,21 @@ public class Preferences extends PreferenceActivity {
         SharedPreferences.Editor editor = appPrefs.edit();
         editor.putString("instant_upload_source_path", mSourcePath);
         editor.commit();
+    }
+
+
+    /**
+     * Show a temporary message in a Snackbar bound to the content view
+     *
+     * @param messageResource       Message to show.
+     */
+    private void showSnackMessage(int messageResource) {
+        Snackbar snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            messageResource,
+            Snackbar.LENGTH_LONG
+        );
+        snackbar.show();
     }
 
 }

@@ -71,7 +71,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="file_list_seconds_ago">il y a quelques secondes</string>
   <string name="file_list_empty">Il n\'y a rien ici ! Envoyez donc quelque chose :)</string>
   <string name="file_list_loading">Chargement...</string>
-  <string name="file_list_no_app_for_file_type">Aucune application trouvée pour ce type de fichier !</string>
+  <string name="file_list_no_app_for_file_type">Aucune application trouvée pour ce type de fichier</string>
   <string name="local_file_list_empty">Aucun fichier n\'est présent dans ce dossier.</string>
   <string name="local_file_list_empty_just_folders">Il n\'y a pas de dossiers dans ce dossier.</string>
   <string name="upload_list_empty">Aucun téléversement disponible.</string>
@@ -103,7 +103,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="common_unknown">Inconnu</string>
   <string name="common_error_unknown">Erreur inconnue </string>
   <string name="common_pending">En attente</string>
-  <string name="about_title">À propos de</string>
+  <string name="about_title">À propos</string>
   <string name="change_password">Changer de mot de passe</string>
   <string name="delete_account">Supprimer le compte</string>
   <string name="create_account">Créer un compte</string>
@@ -255,7 +255,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="wait_for_tmp_copy_from_private_storage">Copie du fichier depuis le stockage privé</string>
   <string name="oauth_check_onoff">Connexion avec oAuth2</string>
   <string name="oauth_login_connection">Connexion au serveur oAuth2…</string>
-  <string name="ssl_validator_header">L\'identité du site ne peut être vérifiée</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Le certificat du serveur n\'est pas sûr</string>
   <string name="ssl_validator_reason_cert_expired">- Le certificat du serveur a expiré</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Le certificat du serveur n\'est pas encore valide</string>
@@ -355,7 +354,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="forbidden_permissions_copy">de copier ce fichier</string>
   <string name="prefs_category_instant_uploading">Téléversement immédiat</string>
   <string name="prefs_category_details">Détails</string>
-  <string name="prefs_instant_video_upload_path_title">Répertoire de téléversement des vidéos</string>
+  <string name="prefs_instant_video_upload_path_title">Dossier de téléversement des vidéos</string>
   <string name="sync_folder_failed_content">La synchronisation du dossier %1$s n\'a pas pu être terminée</string>
   <string name="shared_subject_header">a partagé</string>
   <string name="with_you_subject_header">avec vous</string>
@@ -386,6 +385,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="share_file">Partager %1$s</string>
   <string name="share_with_user_section_title">Partager avec des utilisateurs et des groupes</string>
   <string name="share_no_users">Aucune donnée partagée avec des utilisateurs pour le moment</string>
+  <string name="share_incompatible_version">Le partage n\'est disponible qu\'à partir de la version 8.2 du serveur</string>
   <string name="share_add_user_or_group">Ajouter un Utilisateur ou un Groupe</string>
   <string name="share_via_link_section_title">Partager par lien public</string>
   <string name="share_via_link_expiration_date_label">Spécifier une date d\'expiration</string>
@@ -421,8 +421,9 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="manage_space_error">Certains fichiers n\'ont pu être supprimés.</string>
   <string name="permission_storage_access">Des permissions supplémentaires sont exigées pour téléverser &amp; télécharger des fichiers.</string>
   <string name="local_file_not_found_toast">Le fichier n\'a pas été trouvé sur le système de fichier local</string>
-  <string name="confirmation_remove_files_alert">Êtes-vous sur de vouloir supprimer ses objets?</string>
-  <string name="confirmation_remove_folders_alert">Êtes-vous sur de vouloir supprimer ses objets et leurs contenus?</string>
+  <string name="confirmation_remove_files_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ?</string>
+  <string name="confirmation_remove_folders_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ainsi que leurs contenus ?</string>
+  <string name="failed_upload_quota_exceeded_text">Espace insuffisant pour ce compte</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>
