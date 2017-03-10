@@ -326,6 +326,7 @@
   <string name="update_link_forbidden_permissions">që të përditësohet kjo ndarje</string>
   <string name="forbidden_permissions_create">për krijim kartele</string>
   <string name="uploader_upload_forbidden_permissions">për ngarkim në këtë dosje</string>
+  <string name="uploader_upload_forbidden">Ngarkimi s’u lejua</string>
   <string name="downloader_download_file_not_found">Kartela s\’gjendet më te shërbyesi</string>
   <string name="prefs_category_accounts">Llogari</string>
   <string name="prefs_add_account">Shtoni llogari</string>
@@ -427,6 +428,7 @@
   <string name="actionbar_privacy_policy">Rregulla privatësie</string>
   <string name="prefs_privacy_policy">Rregulla privatësie</string>
   <string name="privacy_policy_error">Ndodhi një gabim:</string>
+  <string name="service_unavailable">Shërbyesi s’është gati</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d i përzgjedhur</item>
     <item quantity="other">%d të përzgjedhur</item>
