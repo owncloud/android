@@ -83,7 +83,7 @@
   <string name="downloader_download_failed_content">Η λήψη του %1$s δεν μπόρεσε να ολοκληρωθεί</string>
   <string name="downloader_not_downloaded_yet">Δεν έχει ληφθεί ακόμα</string>
   <string name="common_choose_account">Επιλογή λογαριασμού</string>
-  <string name="sync_fail_ticker"> </string>
+  <string name="sync_fail_ticker"> Ο συγχρονισμός απέτυχε</string>
   <string name="sync_fail_content_unauthorized">Λάθος κωδικός για %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Βρέθηκαν συγκρούσεις</string>
   <string name="sync_conflicts_in_favourites_content">%1$d αρχεία σε αναμονή συγχρονισμού δεν μπόρεσαν να συγχρονιστούν</string>
@@ -231,5 +231,5 @@
   <string name="search_users_and_groups_hint">Αναζήτηση χρηστών και ομάδων</string>
   <string name="share_sharee_unavailable">Δεν επιτρέπεται ο διαμοιρασμός μεταξύ χρηστών μέσω εφαρμογής, σε αυτή την έκδοση.
 \nΕπικοινωνήστε με το διαχειριστή του συστήματος</string>
-  <string name="action_clear_successful_uploads"> </string>
+  <string name="action_clear_successful_uploads"> Επιτυχημένος καθαρισμός</string>
 </resources>
