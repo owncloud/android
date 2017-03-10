@@ -261,10 +261,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         Log_OC.v(TAG, "onStop");
 
         super.onStop();
-
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
     }
 
     /**

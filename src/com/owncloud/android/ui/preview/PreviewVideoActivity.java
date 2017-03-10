@@ -120,36 +120,26 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     public void onStart() {
         super.onStart();
         Log_OC.v(TAG, "onStart");
-        if (Util.SDK_INT > 23) {
-            preparePlayer();
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log_OC.v(TAG, "onResume");
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            preparePlayer();
-        }
+        preparePlayer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Log_OC.v(TAG, "onPause");
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
+        releasePlayer();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         Log_OC.v(TAG, "onStop");
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
     }
 
     // Handle full screen modes
