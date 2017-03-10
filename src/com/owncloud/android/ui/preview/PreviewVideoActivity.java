@@ -63,7 +63,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     /** Key to receive the position of the playback where the video should be put at start */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
-    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    private final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
     private Handler mainHandler;
     private SimpleExoPlayerView simpleExoPlayerView;
