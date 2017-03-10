@@ -22,7 +22,6 @@ package com.owncloud.android.ui.preview;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -37,32 +36,24 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.UnrecognizedInputFormatException;
 import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
-
-import java.net.UnknownHostException;
-import java.security.cert.CertificateException;
 
 /**
  * An activity that plays media using {@link SimpleExoPlayer}.
  */
-public class PreviewVideoActivity extends FileActivity implements ExoPlayer.EventListener {
+public class PreviewVideoActivity extends FileActivity implements ExoPlayer.EventListener,
+        PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
 
     private static final String TAG = PreviewVideoActivity.class.getSimpleName();
 
@@ -200,30 +191,19 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
         player.seekTo(mPlaybackPosition);
         player.setPlayWhenReady(mAutoplay);
 
-        try {
-
-            // If the file is already downloaded, reproduce it locally
-            Uri uri = getFile().isDown() ? getFile().getStorageUri() :
-                    Uri.parse(AccountUtils.constructFullURLForAccount(this, getAccount()) +
-                            Uri.encode(getFile().getRemotePath(), "/"));
-
-            DataSource.Factory mediaDataSourceFactory = PreviewVideoUtils.buildDataSourceFactory(true,
-                    this, getFile(), getAccount());
-
-            MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
-
-            player.prepare(mediaSource);
-
-            Log_OC.v(TAG, "playerPrepared");
-
-        } catch (AccountUtils.AccountNotFoundException e) {
-            Log_OC.e(TAG, "Account not found due to", e.getCause());
-        }
+        // Prepare video player asynchronously
+        new PrepareVideoPlayerAsyncTask(this, getFile(), getAccount(), mainHandler).execute();
     }
 
-    private MediaSource buildMediaSource(DataSource.Factory mediaDataSourceFactory, Uri uri) {
-        return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
-                mainHandler, null);
+    /**
+     * Called after preparing the player asynchronously
+     * @param mediaSource media to be played
+     */
+    @Override
+    public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
+        Log_OC.v(TAG, "playerPrepared");
+
+        player.prepare(mediaSource);
     }
 
     private void releasePlayer() {
@@ -253,7 +233,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
 
         Log_OC.v(TAG, "Error in video player, what = " + error);
 
-        showAlertDialog(PreviewVideoUtils.handlePreviewVideoError(error, this));
+        showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError(error, this));
     }
 
     /**

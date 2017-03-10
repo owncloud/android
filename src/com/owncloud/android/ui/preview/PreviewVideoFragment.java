@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -43,8 +42,6 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
@@ -52,14 +49,12 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
@@ -78,7 +73,8 @@ import com.owncloud.android.utils.DisplayUtils;
  * produce an {@link IllegalStateException}.
  *
  */
-public class PreviewVideoFragment extends FileFragment implements View.OnClickListener, ExoPlayer.EventListener {
+public class PreviewVideoFragment extends FileFragment implements View.OnClickListener,
+        ExoPlayer.EventListener {
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
@@ -449,34 +445,18 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         // Bind the player to the view.
         simpleExoPlayerView.setPlayer(player);
 
-        try {
-
-            // If the file is already downloaded, reproduce it locally, if not, do streaming
-            Uri uri = getFile().isDown() ? getFile().getStorageUri() :
-                    Uri.parse(AccountUtils.constructFullURLForAccount(getContext(), mAccount) +
-                            Uri.encode(getFile().getRemotePath(), "/"));
-
-            // Produces DataSource instances through which media data is loaded.
-            DataSource.Factory mediaDataSourceFactory = PreviewVideoUtils.buildDataSourceFactory(true,
-                    getContext(), getFile(), mAccount);
-
-            // This represents the media to be played.
-            MediaSource mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
-
-            // Prepare the player with the media source
-            player.prepare(mediaSource);
-
-            Log_OC.v(TAG, "playerPrepared");
-
-        } catch (AccountUtils.AccountNotFoundException e) {
-            Log_OC.e(TAG, "Account not found due to", e.getCause());
-        }
+        // Prepare video player asynchronously
+        new PrepareVideoPlayerAsyncTask(getActivity(), getFile(), mAccount, mainHandler).execute();
     }
 
+    /**
+     * Called after preparing the player asynchronously
+     * @param mediaSource media to be played
+     */
+    public void onPreparedVideoPlayer (MediaSource mediaSource) {
+        Log_OC.v(TAG, "playerPrepared");
 
-    private MediaSource buildMediaSource(DataSource.Factory mediaDataSourceFactory, Uri uri) {
-        return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
-                mainHandler, null);
+        player.prepare(mediaSource);
     }
 
     public void releasePlayer() {
@@ -500,7 +480,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         Log_OC.v(TAG, "Error in video player, what = " + error);
 
-        showAlertDialog(PreviewVideoUtils.handlePreviewVideoError(error, getContext()));
+        showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError(error, getContext()));
     }
 
     /**

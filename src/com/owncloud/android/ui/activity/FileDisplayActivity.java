@@ -52,6 +52,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.exoplayer2.source.MediaSource;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -81,6 +82,7 @@ import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
+import com.owncloud.android.ui.preview.PrepareVideoPlayerAsyncTask;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
@@ -102,7 +104,7 @@ import static com.owncloud.android.db.PreferenceManager.getSortOrder;
 
 public class FileDisplayActivity extends HookActivity
         implements FileFragment.ContainerActivity,
-        OnEnforceableRefreshListener {
+        OnEnforceableRefreshListener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener{
 
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private UploadBroadcastReceiver mUploadBroadcastReceiver;
@@ -877,6 +879,12 @@ public class FileDisplayActivity extends HookActivity
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
+        Fragment secondFragment = getSecondFragment();
+        ((PreviewVideoFragment) secondFragment).onPreparedVideoPlayer(mediaSource);
     }
 
 
