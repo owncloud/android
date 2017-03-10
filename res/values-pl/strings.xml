@@ -131,6 +131,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Błąd pliku</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Nie odnaleziono pliku lokalnego</string>
   <string name="uploads_view_upload_status_failed_permission_error">Błąd uprawnień</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Zabronione przez ustawienia firewalla.</string>
   <string name="uploads_view_upload_status_conflict">Konflikt</string>
   <string name="uploads_view_upload_status_service_interrupted">Program został zatrzymany</string>
   <string name="uploads_view_upload_status_unknown_fail">Nieznany błąd</string>
@@ -144,6 +145,7 @@
   <string name="downloader_download_failed_content">Pobieranie %1$s nie powiodło się</string>
   <string name="downloader_not_downloaded_yet">Jeszcze nie pobrane</string>
   <string name="downloader_download_failed_credentials_error">Błąd podczas pobierania, zaloguj się ponownie</string>
+  <string name="downloader_download_forbidden_permissions">ściągnąć ten plik</string>
   <string name="common_choose_account">Wybierz konto</string>
   <string name="sync_fail_ticker">Nieudana synchronizacja </string>
   <string name="sync_fail_ticker_unauthorized">Nieudana synchronizacja, zaloguj się ponownie</string>
@@ -252,6 +254,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopiowanie pliku z prywatnego zasobu</string>
   <string name="oauth_check_onoff">Loguj przez oAuth2</string>
   <string name="oauth_login_connection">Łączenie z serwerem oAuth2...</string>
+  <string name="ssl_validator_header">Nie można zweryfikować serwera</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Certyfikat serwera jest niezaufany</string>
   <string name="ssl_validator_reason_cert_expired">- Certyfikat serwera wygasł</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Certyfikat serwera jest wystawiony w przyszłości</string>
@@ -325,6 +328,7 @@
   <string name="update_link_forbidden_permissions">aby uaktualnić ten udział</string>
   <string name="forbidden_permissions_create">do utworzenia tego pliku</string>
   <string name="uploader_upload_forbidden_permissions">do wgrania tego folderu</string>
+  <string name="uploader_upload_forbidden">Upload nie jest możliwy</string>
   <string name="downloader_download_file_not_found">Ten plik nie jest już dostępny na serwerze</string>
   <string name="prefs_category_accounts">Konta</string>
   <string name="prefs_add_account">Dodaj konto</string>
@@ -383,6 +387,7 @@
   <string name="share_file">Współdziel %1$s</string>
   <string name="share_with_user_section_title">Współdziel z użytkownikami i grupami</string>
   <string name="share_no_users">Brak danych współdzielonych z użytkownikami</string>
+  <string name="share_incompatible_version">By podzielić się tym z innymi użytkownikami twój serwer musi być conajmniej w wersji 8.2</string>
   <string name="share_add_user_or_group">Dodaj użytkownika lub grupę</string>
   <string name="share_via_link_section_title">Udostępnij link</string>
   <string name="share_via_link_expiration_date_label">Ustaw datę wygaśnięcia</string>
@@ -420,12 +425,11 @@
   <string name="local_file_not_found_toast">Plik nie został znaleziony w lokalnym systemie plików</string>
   <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
-  <string name="maintenance_mode">Serwer znajduje się w trybie konserwacji</string>
   <string name="failed_upload_quota_exceeded_text">Brak wystarczającej ilości miejsca na koncie</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Pamięć nie dostępna</string>
   <string name="actionbar_privacy_policy">Polityka prywatności</string>
   <string name="prefs_privacy_policy">Polityka prywatności</string>
   <string name="privacy_policy_error">Wystąpił bład:</string>
+  <string name="service_unavailable">Serwer jest niedostępny</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>

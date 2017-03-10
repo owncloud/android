@@ -423,10 +423,8 @@
   <string name="local_file_not_found_toast">Filen hittades inte i det lokala filsystemet</string>
   <string name="confirmation_remove_files_alert">Vill du verkligen ta bort de markerade objekten?</string>
   <string name="confirmation_remove_folders_alert">Vill du verkligen ta bort de markerade objekten och deras innehåll?</string>
-  <string name="maintenance_mode">Server är i underhållsläge</string>
   <string name="failed_upload_quota_exceeded_text">Inte tillräckligt med utrymme på ditt konto</string>
   <string name="auth_forbidden">Förbjuden autentisering</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Lagring inte tillgänglig</string>
   <string name="actionbar_privacy_policy">Integritetspolicy</string>
   <string name="prefs_privacy_policy">Integritetspolicy</string>
   <string name="privacy_policy_error">Ett fel har inträffat:</string>

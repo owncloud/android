@@ -413,9 +413,7 @@
   <string name="permission_storage_access">Aukinna heimilda er krafist til að geta sent inn og sótt skrár.</string>
   <string name="confirmation_remove_files_alert">Ertu viss um að þú viljir fjarlægja valin atriði?</string>
   <string name="confirmation_remove_folders_alert">Ertu viss um að þú viljir fjarlægja valin atriði og innihald þeirra?</string>
-  <string name="maintenance_mode">Þjónn er í viðhaldsham</string>
   <string name="failed_upload_quota_exceeded_text">Not enough space in the account</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Geymsla ekki tiltæk</string>
   <string name="actionbar_privacy_policy">Persónuverndarákvæði</string>
   <string name="prefs_privacy_policy">Persónuverndarákvæði</string>
   <string name="privacy_policy_error">Villa kom upp:</string>
