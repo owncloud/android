@@ -835,6 +835,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         if (uri.length() != 0) {
             uri = stripIndexPhpOrAppsFiles(uri, mHostUrlInput);
+            uri = subdomainToLower(uri, mHostUrlInput);
 
             // Handle internationalized domain names
             try {
@@ -1205,6 +1206,32 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         return url;
     }
+
+
+    private String subdomainToLower(String url, EditText mHostUrlInput) {
+        if(url.toLowerCase().startsWith("http://") ||
+                url.toLowerCase().startsWith("https://")) {
+            if(url.indexOf("/", 8) != -1)
+                url = url.substring(0, url.indexOf("/", 8)).toLowerCase()
+                        + url.substring(url.indexOf("/", 8), url.length());
+            else
+                url = url.substring(0, url.length()).toLowerCase();
+
+            mHostUrlInput.setText(url);
+        }
+        else {
+            if(url.indexOf("/") != -1)
+                url = url.substring(0, url.indexOf("/")).toLowerCase()
+                        + url.substring(url.indexOf("/"), url.length());
+            else
+                url = url.substring(0, url.length()).toLowerCase();
+
+            mHostUrlInput.setText(url);
+        }
+
+        return url;
+    }
+
 
     // TODO remove, if possible
     private String trimUrlWebdav(String url){       
