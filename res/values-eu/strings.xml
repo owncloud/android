@@ -143,7 +143,10 @@
   <string name="downloader_download_failed_ticker">Deskargak huts egin du</string>
   <string name="downloader_download_failed_content">%1$s fitxategiaren deskarga ezin izan da burutu</string>
   <string name="downloader_not_downloaded_yet">Oraindik deskargatu gabe</string>
+  <string name="downloader_download_failed_credentials_error">Deskargak huts egin du, saioa hasi behar duzu berriro</string>
+  <string name="downloader_download_forbidden_permissions">deskargatzeko artxibo hau</string>
   <string name="common_choose_account">Hautatu kontua</string>
+  <string name="sync_fail_ticker">Sinkronizazioa huts egin du</string>
   <string name="sync_fail_content_unauthorized">Okerreko pasahitza %1$s-rako</string>
   <string name="sync_conflicts_in_favourites_ticker">Gatazkak aurkituak </string>
   <string name="sync_conflicts_in_favourites_content">sinkronizatu beharreko %1$d fitxategiak ezin dira sinkronizatu</string>

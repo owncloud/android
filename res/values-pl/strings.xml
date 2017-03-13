@@ -426,6 +426,7 @@
   <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
   <string name="failed_upload_quota_exceeded_text">Brak wystarczającej ilości miejsca na koncie</string>
+  <string name="auth_forbidden">Uwierzytelnienie zabronione</string>
   <string name="actionbar_privacy_policy">Polityka prywatności</string>
   <string name="prefs_privacy_policy">Polityka prywatności</string>
   <string name="privacy_policy_error">Wystąpił bład:</string>
