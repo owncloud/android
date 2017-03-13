@@ -128,7 +128,7 @@ public class PreviewVideoErrorAdapter {
             String message = error.getSourceException().getMessage();
 
             if (message == null) {
-                message = context.getString(R.string.streaming_common_error);
+                message = context.getString(R.string.previewing_video_common_error);
             }
 
             previewVideoError = new PreviewVideoError(message, false, false);
@@ -159,7 +159,7 @@ public class PreviewVideoErrorAdapter {
         } else {
 
             previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.streaming_common_error),
+                    context.getString(R.string.previewing_video_common_error),
                     false,
                     false);
 
@@ -189,7 +189,7 @@ public class PreviewVideoErrorAdapter {
         } else {
 
             previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.streaming_common_error),
+                    context.getString(R.string.previewing_video_common_error),
                     false,
                     false);
         }

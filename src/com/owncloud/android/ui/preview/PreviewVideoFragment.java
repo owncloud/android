@@ -244,8 +244,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         preparePlayer();
 
-        player.seekTo(mPlaybackPosition);
-        player.setPlayWhenReady(mAutoplay);
+        if (player != null) {
+            player.seekTo(mPlaybackPosition);
+            player.setPlayWhenReady(mAutoplay);
+        }
     }
 
     @Override
@@ -425,7 +427,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
     // Video player internal methods
-
     private void preparePlayer() {
 
         // Create a default TrackSelector
@@ -434,15 +435,27 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
-        // Create the player
-        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl());
-        player.addListener(this);
+        // Video streaming is only supported at Jelly Bean or higher Android versions (>= API 16)
+        if (Util.SDK_INT >= 16) {
 
-        // Bind the player to the view.
-        simpleExoPlayerView.setPlayer(player);
+            // Create the player
+            player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector,
+                    new DefaultLoadControl());
 
-        // Prepare video player asynchronously
-        new PrepareVideoPlayerAsyncTask(getActivity(), getFile(), mAccount, mainHandler).execute();
+            player.addListener(this);
+
+            // Bind the player to the view.
+            simpleExoPlayerView.setPlayer(player);
+
+            // Prepare video player asynchronously
+            new PrepareVideoPlayerAsyncTask(getActivity(), getFile(), mAccount, mainHandler)
+                    .execute();
+        } else {
+
+            // Show dialog with error and starts file download
+            showAlertDialog(new PreviewVideoError(getString(R.string.previewing_video_not_supported),
+                    true, false));
+        }
     }
 
     /**
