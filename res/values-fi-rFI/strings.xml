@@ -129,6 +129,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Tiedostovirhe</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Paikallista tiedostoa ei löydy</string>
   <string name="uploads_view_upload_status_failed_permission_error">Oikeusvirhe</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Estetty palomuurisäännön toimesta</string>
   <string name="uploads_view_upload_status_conflict">Ristiriita</string>
   <string name="uploads_view_upload_status_unknown_fail">Tuntematon virhe</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Odotetaan wifi-yhteyttä</string>
@@ -295,6 +296,7 @@
   <string name="activity_chooser_send_file_title">Lähetä</string>
   <string name="copy_link">Kopioi linkki</string>
   <string name="clipboard_text_copied">Kopioitu leikepöydälle</string>
+  <string name="clipboard_no_text_to_copy">Tekstiä ei vastaanotettua kopioitavaksi leikepöydälle</string>
   <string name="clipboard_uxexpected_error">Odottamaton virhe kopioitaessa leikepöydälle.</string>
   <string name="clipboard_label">Teksti koioitiin kohteesta %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kriittinen virhe: toimintoja ei voi suorittaa</string>
@@ -396,9 +398,11 @@
   <string name="local_file_not_found_toast">Tiedostoa ei löytynyt paikallisesta tiedostojärjestelmästä</string>
   <string name="confirmation_remove_files_alert">Haluatko varmasti poistaa valitut kohteet?</string>
   <string name="confirmation_remove_folders_alert">Haluatko varmasti poistaa valitut kohteet ja niiden sisällön?</string>
-  <string name="maintenance_mode">Palvelin on huoltotilassa</string>
   <string name="failed_upload_quota_exceeded_text">Tällä tilillä ei ole riittävästi tilaa käytettävissä</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Tallennustila ei ole käytettävissä</string>
+  <string name="actionbar_privacy_policy">Yksityisyyskäytäntö</string>
+  <string name="prefs_privacy_policy">Yksityisyyskäytäntö</string>
+  <string name="privacy_policy_error">Tapahtui virhe:</string>
+  <string name="service_unavailable">Palvelin ei ole käytettävissä</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valittu</item>
     <item quantity="other">%d valittu</item>

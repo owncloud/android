@@ -326,6 +326,7 @@
   <string name="update_link_forbidden_permissions">เพื่ออัพเดทการแชร์นี้</string>
   <string name="forbidden_permissions_create">เพื่อสร้างไฟล์</string>
   <string name="uploader_upload_forbidden_permissions">เพื่ออัพโหลดในโฟลเดอร์นี้</string>
+  <string name="uploader_upload_forbidden">ไม่อนุญาตให้อัพโหลด</string>
   <string name="downloader_download_file_not_found">ไฟล์ไม่พร้อมใช้งานบนเซิร์ฟเวอร์</string>
   <string name="prefs_category_accounts">บัญชี</string>
   <string name="prefs_add_account">เพิ่มบัญชี</string>
@@ -422,13 +423,12 @@
   <string name="local_file_not_found_toast">ไม่พบไฟล์ที่ไฟล์ระบบต้นทาง</string>
   <string name="confirmation_remove_files_alert">คุณมั่นใจว่าต้องการลบรายการที่เลือก?</string>
   <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>
-  <string name="maintenance_mode">เซิร์ฟเวอร์อยู่ในโหมดบำรุงรักษา</string>
   <string name="failed_upload_quota_exceeded_text">พื้นที่ในบัญชีไม่เพียงพอ</string>
   <string name="auth_forbidden">การรับรองความถูกต้องถูกห้าม</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">ไม่สามารถใช้พื้นที่จัดเก็บข้อมูลได้</string>
   <string name="actionbar_privacy_policy">นโยบายความเป็นส่วนตัว</string>
   <string name="prefs_privacy_policy">นโยบายความเป็นส่วนตัว</string>
   <string name="privacy_policy_error">เกิดข้อผิดพลาด:</string>
+  <string name="service_unavailable">เซิร์ฟเวอร์ไม่พร้อมใช้งาน</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>

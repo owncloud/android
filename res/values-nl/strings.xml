@@ -331,6 +331,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="update_link_forbidden_permissions">om deze share bij te werken</string>
   <string name="forbidden_permissions_create">om dit bestand te creëren</string>
   <string name="uploader_upload_forbidden_permissions">om dit bestand in deze map te uploaden</string>
+  <string name="uploader_upload_forbidden">Upload niet toegestaan</string>
   <string name="downloader_download_file_not_found">Dit bestand is niet langer beschikbaar op de server</string>
   <string name="prefs_category_accounts">Accounts</string>
   <string name="prefs_add_account">Toevoegen account</string>
@@ -427,13 +428,12 @@ Neem contact op met uw beheerder</string>
   <string name="local_file_not_found_toast">Het bestand is niet te vinden binnen het lokale bestandssysteem.</string>
   <string name="confirmation_remove_files_alert">Wilt u werkelijk de geselecteerde onderwerpen verwijderen?</string>
   <string name="confirmation_remove_folders_alert">Wilt u werkelijk de geselecteerde onderwerpen en de inhoud ervan verwijderen?</string>
-  <string name="maintenance_mode">Server in onderhoudsmodus</string>
   <string name="failed_upload_quota_exceeded_text">Niet genoeg ruimte in dit account</string>
   <string name="auth_forbidden">Verboden authenticatie</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Opslag niet beschikbaar</string>
   <string name="actionbar_privacy_policy">Privacybeleid</string>
   <string name="prefs_privacy_policy">Privacybeleid</string>
   <string name="privacy_policy_error">Er trad een fout op:</string>
+  <string name="service_unavailable">Server niet beschikbaar</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>

@@ -326,6 +326,7 @@
   <string name="update_link_forbidden_permissions">para atualizar esta partilha</string>
   <string name="forbidden_permissions_create">para criar o ficheiro</string>
   <string name="uploader_upload_forbidden_permissions">para enviar nesta pasta</string>
+  <string name="uploader_upload_forbidden">Upload não autorizado</string>
   <string name="downloader_download_file_not_found">O ficheiro não está mais disponível no servidor</string>
   <string name="prefs_category_accounts">Contas</string>
   <string name="prefs_add_account">Adicionar conta</string>
@@ -422,13 +423,12 @@
   <string name="local_file_not_found_toast">O ficheiro não foi encontrado no sistema de ficheiros local</string>
   <string name="confirmation_remove_files_alert">Tem a certeza que deseja remover os items selecionados?</string>
   <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os items selecionados e os seus respetivos conteúdos?</string>
-  <string name="maintenance_mode">O servidor encontra-se em manutenção</string>
   <string name="failed_upload_quota_exceeded_text">Não existe espaço suficiente na conta</string>
   <string name="auth_forbidden">Autenticação não permitida</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Armazenamento indisponível</string>
   <string name="actionbar_privacy_policy">Política de privacidade</string>
   <string name="prefs_privacy_policy">Política de privacidade</string>
   <string name="privacy_policy_error">Ocorreu um erro:</string>
+  <string name="service_unavailable">O servidor não está disponível</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

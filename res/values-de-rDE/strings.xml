@@ -328,6 +328,7 @@
   <string name="update_link_forbidden_permissions">zum Aktualisieren dieser Freigabe</string>
   <string name="forbidden_permissions_create">eine Datei zu erstellen</string>
   <string name="uploader_upload_forbidden_permissions">in diesem Order etwas hochzuladen</string>
+  <string name="uploader_upload_forbidden">Hochladen nicht erlaubt</string>
   <string name="downloader_download_file_not_found">Diese Datei steht auf dem Server nicht mehr zur Verfügung</string>
   <string name="prefs_category_accounts">Konten</string>
   <string name="prefs_add_account">Konto hinzufügen</string>
@@ -424,13 +425,12 @@
   <string name="local_file_not_found_toast">Die Datei wurde im lokalen Dateisystem nicht gefunden</string>
   <string name="confirmation_remove_files_alert">Möchten Sie die ausgewählten Elemente wirklich löschen?</string>
   <string name="confirmation_remove_folders_alert">Möchten Sie die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>
-  <string name="maintenance_mode">Server befindet sich im Wartungsmodus</string>
   <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
   <string name="auth_forbidden">Authentifizierung verweigert</string>
-  <string name="uploads_view_upload_status_failed_storage_not_available_error">Speicher nicht verfügbar</string>
   <string name="actionbar_privacy_policy">Datenschutzerklärung</string>
   <string name="prefs_privacy_policy">Datenschutzerklärung</string>
   <string name="privacy_policy_error">Es ist ein Fehler aufgetreten:</string>
+  <string name="service_unavailable">Server ist nicht verfügbar</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>
