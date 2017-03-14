@@ -118,7 +118,8 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
             try {
 
-                OwnCloudCredentials credentials = AccountUtils.getCredentialsForAccount(MainApp.getAppContext(), account);
+                OwnCloudCredentials credentials = AccountUtils.
+                        getCredentialsForAccount(MainApp.getAppContext(), account);
 
                 String login = credentials.getUsername();
                 String password = credentials.getAuthToken();
