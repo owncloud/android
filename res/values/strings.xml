@@ -480,7 +480,7 @@
     <string name="streaming_file_not_found_error">This video file is no longer available in the server</string>
     <string name="previewing_video_common_error">This video cannot be reproduced</string>
 
-    <string name="previewing_video_not_supported">Video previewing is not supported in your Android version. File download will start automatically and you will be able to open it with an external player</string>
+    <string name="previewing_video_not_supported">Video previewing is not supported in your Android version. File download will start automatically.</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
