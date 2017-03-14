@@ -22,8 +22,6 @@
 package com.owncloud.android.ui.preview;
 
 /**
- * Created by davidgonzalez on 9/3/17.
- *
  * Models the preview video error
  */
 
