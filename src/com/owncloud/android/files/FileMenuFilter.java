@@ -142,6 +142,8 @@ public class FileMenuFilter {
 
         boolean videoPreviewing = anyFileVideoPreviewing();
 
+        boolean videoStreaming = !anyFileDown() && anyFileVideoPreviewing();
+
         /// decision is taken for each possible action on a file in the menu
 
         // DOWNLOAD 
@@ -230,22 +232,21 @@ public class FileMenuFilter {
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));
-        if (!isSingleFile() || !sendAllowed || synchronizing ||
-                (!anyFileDown() && anyFileVideoPreviewing())) {
+        if (!isSingleFile() || !sendAllowed || synchronizing || videoStreaming) {
             toHide.add(R.id.action_send_file);
         } else {
             toShow.add(R.id.action_send_file);
         }
 
         // SET AS AVAILABLE OFFLINE
-        if (synchronizing || !anyUnfavorite() || (!anyFileDown() && anyFileVideoPreviewing())) {
+        if (synchronizing || !anyUnfavorite() || videoStreaming) {
             toHide.add(R.id.action_set_available_offline);
         } else {
             toShow.add(R.id.action_set_available_offline);
         }
 
         // UNSET AS AVAILABLE OFFLINE
-        if (!anyFavorite() || (!anyFileDown() && anyFileVideoPreviewing())) {
+        if (!anyFavorite() || videoStreaming) {
             toHide.add(R.id.action_unset_available_offline);
         } else {
             toShow.add(R.id.action_unset_available_offline);

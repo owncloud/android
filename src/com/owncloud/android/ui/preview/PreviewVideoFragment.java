@@ -512,6 +512,9 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
                                 }
 
+                                // This solution is not the best one but is an easy way to handle
+                                // SAML expiration error from here, without modifying so much code
+                                // or involving other parts
                                 if (previewVideoError.isParentFolderSyncNeeded()) {
                                     // Start to sync the parent file folder
                                     OCFile folder = new OCFile(getFile().getParentRemotePath());

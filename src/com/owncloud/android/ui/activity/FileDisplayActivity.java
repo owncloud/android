@@ -1613,9 +1613,9 @@ public class FileDisplayActivity extends HookActivity
 
     /**
      * Starts an operation to refresh the requested folder.
-     * <p/>
+     *
      * The operation is run in a new background thread created on the fly.
-     * <p/>
+     *
      * The refresh updates is a "light sync": properties of regular files in folder are updated (including
      * associated shares), but not their contents. Only the contents of files marked to be kept-in-sync are
      * synchronized too.
