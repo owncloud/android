@@ -182,7 +182,8 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
         player.setPlayWhenReady(mAutoplay);
 
         // Prepare video player asynchronously
-        new PrepareVideoPlayerAsyncTask(this, getFile(), getAccount(), mainHandler).execute();
+        new PrepareVideoPlayerAsyncTask(getApplicationContext(), this, getFile(), getAccount(),
+                mainHandler).execute();
     }
 
     /**

@@ -448,8 +448,9 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             simpleExoPlayerView.setPlayer(player);
 
             // Prepare video player asynchronously
-            new PrepareVideoPlayerAsyncTask(getActivity(), getFile(), mAccount, mainHandler)
-                    .execute();
+            new PrepareVideoPlayerAsyncTask(getActivity().getApplicationContext(),
+                    (PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener) getActivity(),
+                    getFile(), mAccount, mainHandler).execute();
         } else {
 
             // Show dialog with error and starts file download

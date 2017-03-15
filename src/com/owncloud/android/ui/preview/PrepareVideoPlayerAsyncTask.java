@@ -44,10 +44,10 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
 
-    public PrepareVideoPlayerAsyncTask(Activity activity, OCFile file, Account account,
-                                       Handler mainHandler) {
-        mContext = activity.getApplicationContext();
-        mListener = new WeakReference<>((OnPrepareVideoPlayerTaskListener)activity);
+    public PrepareVideoPlayerAsyncTask(Context context, OnPrepareVideoPlayerTaskListener listener,
+                                       OCFile file, Account account, Handler mainHandler) {
+        mContext = context;
+        mListener = new WeakReference<>(listener);
         mFile = file;
         mAccount = account;
         mHandler = mainHandler;
@@ -136,7 +136,8 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
                     params.put("Cookie", password);
                 }
 
-                return new CustomHttpDataSourceFactory(MainApp.getUserAgent(), bandwidthMeter, params);
+                return new CustomHttpDataSourceFactory(MainApp.getUserAgent(),
+                        bandwidthMeter, params);
 
             } catch (AuthenticatorException e) {
                 e.printStackTrace();
