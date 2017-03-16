@@ -941,6 +941,13 @@ public class FileUploader extends Service
 
                 mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);
 
+                if (!uploadResult.isSuccess() && uploadResult.getException() != null) {
+                    // 1. check network availabality
+                    // 2. if not available
+                    //  2.1 stop pending upload as failed due to network error (annoying? silent fail? new state? all-in for updated life cycle of uploads?)
+                    //  2.2 schedule future retry of failed uploads due to network error (valid even from Android 5!)
+                }
+
                 /// notify result
                 notifyUploadResult(mCurrentUpload, uploadResult);
 
