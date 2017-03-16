@@ -130,6 +130,12 @@
                 android:resource="@xml/syncadapter_files" />
         </service>
 
+        <service
+            android:name=".files.services.RetryUploadsJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true">
+        </service>
+
         <provider
             android:name=".providers.FileContentProvider"
             android:authorities="@string/authority"

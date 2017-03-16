@@ -30,6 +30,9 @@ import android.accounts.OnAccountsUpdateListener;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -39,6 +42,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.os.Process;
 import android.support.v4.app.NotificationCompat;
 import android.util.Pair;
@@ -61,11 +65,11 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.ui.notifications.NotificationUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
@@ -87,7 +91,8 @@ import java.util.Vector;
  * However, Intent keys (e.g., KEY_WIFI_ONLY) are obeyed.
  */
 public class FileUploader extends Service
-        implements OnDatatransferProgressListener, OnAccountsUpdateListener, UploadFileOperation.OnRenameListener {
+        implements OnDatatransferProgressListener, OnAccountsUpdateListener,
+        UploadFileOperation.OnRenameListener {
 
     private static final String TAG = FileUploader.class.getSimpleName();
 
@@ -168,6 +173,8 @@ public class FileUploader extends Service
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
+
+    private static int jobId = 0;
 
     public static String getUploadsAddedMessage() {
         return FileUploader.class.getName() + UPLOADS_ADDED_MESSAGE;
@@ -838,7 +845,7 @@ public class FileUploader extends Service
     /**
      * Upload worker. Performs the pending uploads in the order they were
      * requested.
-     * <p/>
+     *
      * Created with the Looper of a new thread, started in
      * {@link FileUploader#onCreate()}.
      */
@@ -946,6 +953,28 @@ public class FileUploader extends Service
                     // 2. if not available
                     //  2.1 stop pending upload as failed due to network error (annoying? silent fail? new state? all-in for updated life cycle of uploads?)
                     //  2.2 schedule future retry of failed uploads due to network error (valid even from Android 5!)
+
+                    if (uploadResult.getCode() == ResultCode.WRONG_CONNECTION) {
+
+                        ComponentName mServiceComponent = new ComponentName(this,
+
+                                RetryUploadsJobService.class);
+
+                        JobInfo.Builder builder;
+
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                            builder = new JobInfo.Builder(jobId, mServiceComponent);
+                            // require unmetered network
+                            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+                            PersistableBundle extras = new PersistableBundle();
+                            extras.putString(KEY_FILE, mCurrentUpload.getRemotePath());
+                            extras.putString(KEY_ACCOUNT, mCurrentAccount.name);
+                            builder.setExtras(extras);
+                            JobScheduler jobScheduler = (JobScheduler) getApplicationContext().
+                                    getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                            jobScheduler.schedule(builder.build());
+                        }
+                    }
                 }
 
                 /// notify result
