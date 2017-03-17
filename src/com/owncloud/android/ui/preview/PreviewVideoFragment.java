@@ -275,8 +275,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         outState.putParcelable(PreviewVideoFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewVideoFragment.EXTRA_ACCOUNT, mAccount);
-        outState.putBoolean(PreviewVideoFragment.EXTRA_AUTOPLAY, mAutoplay);
-        outState.putLong(PreviewVideoFragment.EXTRA_PLAY_POSITION, player.getCurrentPosition());
+        if (player!= null) {
+            outState.putBoolean(PreviewVideoFragment.EXTRA_AUTOPLAY, mAutoplay);
+            outState.putLong(PreviewVideoFragment.EXTRA_PLAY_POSITION, player.getCurrentPosition());
+        }
     }
 
     @Override
@@ -587,8 +589,11 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         // Reset the player with the updated file
         releasePlayer();
         preparePlayer();
-        mPlaybackPosition = 0;
-        player.setPlayWhenReady(mAutoplay);
+
+        if (player != null) {
+            mPlaybackPosition = 0;
+            player.setPlayWhenReady(mAutoplay);
+        }
     }
 
 
