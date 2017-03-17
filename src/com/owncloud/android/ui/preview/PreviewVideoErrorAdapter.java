@@ -110,7 +110,7 @@ public class PreviewVideoErrorAdapter {
 
             previewVideoError = new PreviewVideoError(
                     context.getString(R.string.streaming_unrecognized_input),
-                    false,
+                    true,
                     true);
 
         } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
@@ -131,7 +131,7 @@ public class PreviewVideoErrorAdapter {
                 message = context.getString(R.string.previewing_video_common_error);
             }
 
-            previewVideoError = new PreviewVideoError(message, false, false);
+            previewVideoError = new PreviewVideoError(message, true, false);
         }
 
         return previewVideoError;
