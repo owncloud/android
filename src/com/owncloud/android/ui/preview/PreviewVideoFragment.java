@@ -421,6 +421,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 mContainerActivity.getFileOperationsHelper().syncFile(getFile());
                 return true;
             }
+            case R.id.action_cancel_sync: {
+                ((FileDisplayActivity)mContainerActivity).cancelTransference(getFile());
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
