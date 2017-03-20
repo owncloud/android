@@ -35,6 +35,8 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -949,12 +951,15 @@ public class FileUploader extends Service
                 mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);
 
                 if (!uploadResult.isSuccess() && uploadResult.getException() != null) {
-                    // 1. check network availabality
-                    // 2. if not available
-                    //  2.1 stop pending upload as failed due to network error (annoying? silent fail? new state? all-in for updated life cycle of uploads?)
-                    //  2.2 schedule future retry of failed uploads due to network error (valid even from Android 5!)
 
-                    if (uploadResult.getCode() == ResultCode.WRONG_CONNECTION) {
+                    ConnectivityManager cm = (ConnectivityManager)getApplicationContext().
+                            getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+                    // Check network availabality (no info object implies no connectivity)
+                    if (activeNetwork == null || (activeNetwork!= null &&
+                            !activeNetwork.isConnectedOrConnecting())) {
 
                         ComponentName mServiceComponent = new ComponentName(this,
 
@@ -962,6 +967,7 @@ public class FileUploader extends Service
 
                         JobInfo.Builder builder;
 
+                        // Schedule future retry of failed upload due to network error from Android 5
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                             builder = new JobInfo.Builder(jobId, mServiceComponent);
                             // require unmetered network
