@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.source.UnrecognizedInputFormatException;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.owncloud.android.R;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.security.cert.CertificateException;
 
@@ -38,6 +39,7 @@ import java.security.cert.CertificateException;
 public class PreviewVideoErrorAdapter {
 
     private static final int NOT_FOUND_ERROR = 404;
+    private static final int TEMPORARY_REDIRECTION = 302;
 
     /**
      *
@@ -85,24 +87,27 @@ public class PreviewVideoErrorAdapter {
                                                              Context context) {
 
         PreviewVideoError previewVideoError;
+        IOException sourceException = error.getSourceException();
 
-        if (error.getSourceException().getCause() != null && error.getSourceException().getCause()
-                .getCause() instanceof CertificateException) { // Current certificate untrusted
+        if (sourceException.getCause() != null &&
+            sourceException.getCause().getCause() instanceof CertificateException) {
+                // Current certificate untrusted
 
             previewVideoError = new PreviewVideoError(
                     context.getString(R.string.streaming_certificate_error),
                     true,
                     false);
 
-        } else if (error.getSourceException().getCause() != null && error.getSourceException().
-                getCause() instanceof UnknownHostException) {  // Cannot connect with the server
+        } else if (sourceException.getCause() != null &&
+            sourceException.getCause() instanceof UnknownHostException) {
+                // Cannot connect with the server
 
             previewVideoError = new PreviewVideoError(
                     context.getString(R.string.network_error_socket_exception),
                     false,
                     false);
 
-        } else if (error.getSourceException() instanceof UnrecognizedInputFormatException) {
+        } else if (sourceException instanceof UnrecognizedInputFormatException) {
 
             // Unsupported video file format
             // Important: this error is also thrown when the saml session expires. In this case,
@@ -113,15 +118,26 @@ public class PreviewVideoErrorAdapter {
                     true,
                     true);
 
-        } else if (error.getSourceException() instanceof HttpDataSource.InvalidResponseCodeException
+        } else if (sourceException instanceof HttpDataSource.InvalidResponseCodeException
 
-                && ((HttpDataSource.InvalidResponseCodeException) error.getSourceException())
-
-                .responseCode == NOT_FOUND_ERROR) { // Video file no longer exists in the server
+                && ((HttpDataSource.InvalidResponseCodeException) sourceException)
+                        .responseCode == NOT_FOUND_ERROR) {
+                        // Video file no longer exists in the server
 
             previewVideoError = new PreviewVideoError(
                     context.getString(R.string.streaming_file_not_found_error),
                     false,
+                    false);
+
+        } else if (sourceException instanceof HttpDataSource.InvalidResponseCodeException
+
+                && ((HttpDataSource.InvalidResponseCodeException) sourceException)
+                    .responseCode == TEMPORARY_REDIRECTION) {
+                    // redirections are allowed, but crossed redirections not
+
+            previewVideoError = new PreviewVideoError(
+                    context.getString(R.string.streaming_crossed_redirection),
+                    true,
                     false);
         } else {
 
