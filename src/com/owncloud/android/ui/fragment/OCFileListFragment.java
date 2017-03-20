@@ -649,10 +649,18 @@ public class OCFileListFragment extends ExtendedListFragment {
 
                 } else if (PreviewVideoFragment.canBePreviewed(file) &&
                         !fileIsDownloading(file)) {
-                    // media preview
-                    ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
-                    // If the file is already downloaded sync it, just to update it if there is a
-                    // new available file version
+
+                    // Available offline exception, not initialize streaming
+                    if (!file.isDown() && file.isAvailableOffline()) {
+                        // sync file content, then open with external apps
+                        ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
+                    } else {
+                        // media preview
+                        ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
+                        // If the file is already downloaded sync it, just to update it if there is a
+                        // new available file version
+                    }
+
                     if(file.isDown()) {
                         mContainerActivity.getFileOperationsHelper().syncFile(file);
                     }
