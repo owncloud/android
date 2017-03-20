@@ -513,10 +513,9 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                if (previewVideoError.isFileSyncNeeded()) {
+                                if (previewVideoError.isFileSyncNeeded() && mContainerActivity!= null) {
                                     // Initialize the file download
                                     mContainerActivity.getFileOperationsHelper().syncFile(getFile());
-
                                 }
 
                                 // This solution is not the best one but is an easy way to handle
