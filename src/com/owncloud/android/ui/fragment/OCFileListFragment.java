@@ -657,10 +657,10 @@ public class OCFileListFragment extends ExtendedListFragment {
                     } else {
                         // media preview
                         ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
-                        // If the file is already downloaded sync it, just to update it if there is a
-                        // new available file version
                     }
 
+                    // If the file is already downloaded sync it, just to update it if there is a
+                    // new available file version
                     if(file.isDown()) {
                         mContainerActivity.getFileOperationsHelper().syncFile(file);
                     }
