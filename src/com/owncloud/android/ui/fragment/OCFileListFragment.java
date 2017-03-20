@@ -650,7 +650,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 } else if (PreviewVideoFragment.canBePreviewed(file) &&
                         !fileIsDownloading(file)) {
 
-                    // Available offline exception, not initialize streaming
+                    // Available offline exception, don't initialize streaming
                     if (!file.isDown() && file.isAvailableOffline()) {
                         // sync file content, then open with external apps
                         ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
