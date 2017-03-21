@@ -10,7 +10,7 @@ import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.OCUpload;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class RetryUploadsJobService extends JobService {
+public class RetryUploadJobService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {

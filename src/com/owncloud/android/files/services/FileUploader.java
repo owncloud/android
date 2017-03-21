@@ -35,8 +35,6 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -72,6 +70,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.notifications.NotificationUtils;
+import com.owncloud.android.utils.ConnectivityUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
@@ -952,18 +951,12 @@ public class FileUploader extends Service
 
                 if (!uploadResult.isSuccess() && uploadResult.getException() != null) {
 
-                    ConnectivityManager cm = (ConnectivityManager)getApplicationContext().
-                            getSystemService(Context.CONNECTIVITY_SERVICE);
-
-                    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-                    // Check network availabality (no info object implies no connectivity)
-                    if (activeNetwork == null || (activeNetwork!= null &&
-                            !activeNetwork.isConnectedOrConnecting())) {
+                    // Check network availabality
+                    if (ConnectivityUtils.isNetworkActive(getApplicationContext())) {
 
                         ComponentName mServiceComponent = new ComponentName(this,
 
-                                RetryUploadsJobService.class);
+                                RetryUploadJobService.class);
 
                         JobInfo.Builder builder;
 

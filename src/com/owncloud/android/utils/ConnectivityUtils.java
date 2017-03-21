@@ -44,4 +44,22 @@ public class ConnectivityUtils {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
+    public static boolean isNetworkActive(Context context) {
+
+        boolean isNetworkActive = true;
+
+        ConnectivityManager cm = (ConnectivityManager)context.
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        // Check network availabality (no info object implies no connectivity)
+        if (activeNetwork == null || (activeNetwork!= null &&
+                !activeNetwork.isConnectedOrConnecting())) {
+
+            isNetworkActive = false;
+        }
+
+        return isNetworkActive;
+    }
 }
