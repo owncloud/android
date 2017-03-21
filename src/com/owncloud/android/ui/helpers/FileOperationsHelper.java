@@ -434,7 +434,6 @@ public class FileOperationsHelper {
                 true
             );
             mFileActivity.startService(intent);
-
         }
     }
 

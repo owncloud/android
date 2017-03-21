@@ -485,6 +485,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 getActivity()
             );
             mf.filter(menu);
+
             return true;
         }
 
@@ -646,11 +647,23 @@ public class OCFileListFragment extends ExtendedListFragment {
                     ((FileDisplayActivity) mContainerActivity).startAudioPreview(file, 0);
                     mContainerActivity.getFileOperationsHelper().syncFile(file);
 
-                } else if (PreviewVideoFragment.canBePreviewed(file)) {
-                    // media preview
-                    ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
-                    mContainerActivity.getFileOperationsHelper().syncFile(file);
+                } else if (PreviewVideoFragment.canBePreviewed(file) &&
+                        !fileIsDownloading(file)) {
 
+                    // Available offline exception, don't initialize streaming
+                    if (!file.isDown() && file.isAvailableOffline()) {
+                        // sync file content, then open with external apps
+                        ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
+                    } else {
+                        // media preview
+                        ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
+                    }
+
+                    // If the file is already downloaded sync it, just to update it if there is a
+                    // new available file version
+                    if(file.isDown()) {
+                        mContainerActivity.getFileOperationsHelper().syncFile(file);
+                    }
                 } else {
                     // sync file content, then open with external apps
                     ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
@@ -662,6 +675,16 @@ public class OCFileListFragment extends ExtendedListFragment {
             Log_OC.d(TAG, "Null object in ListAdapter!!");
         }
 
+    }
+
+    /**
+     *
+     * @param file
+     * @return 'true' if the file is being downloaded, 'false' otherwise.
+     */
+    private boolean fileIsDownloading(OCFile file) {
+        return mContainerActivity.getFileDownloaderBinder().isDownloading(
+                ((FileActivity) mContainerActivity).getAccount(), file);
     }
 
     /**

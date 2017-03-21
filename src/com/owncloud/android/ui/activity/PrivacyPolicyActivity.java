@@ -36,8 +36,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.utils.DisplayUtils;
 
 /**
- * Created by davidgonzalez on 24/2/17.
- *
  * Activity to show the privacy policy to the user
  */
 public class PrivacyPolicyActivity extends ToolbarActivity  {

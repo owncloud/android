@@ -167,7 +167,6 @@ public class FileActivity extends DrawerActivity
             bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
                     Context.BIND_AUTO_CREATE);
         }
-
     }
 
     @Override
@@ -402,7 +401,6 @@ public class FileActivity extends DrawerActivity
         } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
             showSnackMessage(getString(R.string.auth_account_does_not_exist));
         }
-
     }
 
     /**

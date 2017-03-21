@@ -469,11 +469,20 @@
     <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
     <string name="failed_upload_quota_exceeded_text">Not enough space in the account</string>
     <string name="auth_forbidden">Forbidden authentication</string>
-
+    
     <string name="actionbar_privacy_policy">Privacy policy</string>
     <string name="prefs_privacy_policy">Privacy policy</string>
     <string name="privacy_policy_error">"An error has occurred: "</string>
     <string name="service_unavailable">Server is unavailable</string>
+
+    <string name="streaming_certificate_error">Streaming cannot be initialized because your server certificate is untrusted. File download will start automatically</string>
+    <string name="streaming_unrecognized_input">This video format is not supported</string>
+    <string name="streaming_file_not_found_error">This video file is no longer available in the server</string>
+    <string name="streaming_crossed_redirection">Streaming is not allowed via crossed redirections</string>
+    <string name="previewing_video_common_error">This video cannot be reproduced</string>
+
+    <string name="previewing_video_not_supported">Video previewing is not supported in your Android version. File download will start automatically.</string>
+    <string name="streaming_position_not_available">\"Position not available\"</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
