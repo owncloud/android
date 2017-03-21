@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.source.UnrecognizedInputFormatException;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.owncloud.android.R;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.security.cert.CertificateException;
@@ -110,8 +111,9 @@ public class PreviewVideoErrorAdapter {
         } else if (sourceException instanceof UnrecognizedInputFormatException) {
 
             // Unsupported video file format
-            // Important: this error is also thrown when the saml session expires. In this case,
-            // the parent folder starts to synchronize and login view is shown
+            // Important: this error is also thrown when the SAML session is expired an OC server
+            // redirects to the IDP.
+            // To handle this case, the parent folder is refreshed and login view is shown
 
             previewVideoError = new PreviewVideoError(
                     context.getString(R.string.streaming_unrecognized_input),
@@ -122,12 +124,25 @@ public class PreviewVideoErrorAdapter {
 
                 && ((HttpDataSource.InvalidResponseCodeException) sourceException)
                         .responseCode == NOT_FOUND_ERROR) {
-                        // Video file no longer exists in the server
+            // Video file no longer exists in the server
 
             previewVideoError = new PreviewVideoError(
-                    context.getString(R.string.streaming_file_not_found_error),
-                    false,
-                    false);
+                context.getString(R.string.streaming_file_not_found_error),
+                false,
+                false);
+
+        } else if (sourceException.getCause() != null &&
+            sourceException.getCause() instanceof EOFException) {
+
+            // trying to access to a part of the video not available now;
+            // ALSO: error obtained when (SAML) session expired while playing the video. To handle
+            // this case, the parent folder is refreshed and login view is shown
+
+            previewVideoError = new PreviewVideoError(
+                context.getString(R.string.streaming_position_not_available),
+                false,
+                true
+            );
 
         } else if (sourceException instanceof HttpDataSource.InvalidResponseCodeException
 
@@ -141,11 +156,7 @@ public class PreviewVideoErrorAdapter {
                     false);
         } else {
 
-            String message = error.getSourceException().getMessage();
-
-            if (message == null) {
-                message = context.getString(R.string.previewing_video_common_error);
-            }
+            String message = context.getString(R.string.previewing_video_common_error);
 
             previewVideoError = new PreviewVideoError(message, true, false);
         }
