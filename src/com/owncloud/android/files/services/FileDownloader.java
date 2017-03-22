@@ -441,6 +441,11 @@ public class FileDownloader extends Service
                                     mCurrentDownload.getRemotePath()
                             );
 
+                    if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
+
+
+                    }
+
                     /// notify result
                     notifyDownloadResult(mCurrentDownload, downloadResult);
 
