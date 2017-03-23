@@ -431,6 +431,7 @@
   <string name="prefs_privacy_policy">Política de Privacidade</string>
   <string name="privacy_policy_error">Ocorreu um erro:</string>
   <string name="service_unavailable">Servidor está indisponível</string>
+  <string name="streaming_certificate_error">A transmissão em sequência não pode ser inicializada porque o certificado do servidor não é fidedigno. O download do arquivo será iniciado automaticamente</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

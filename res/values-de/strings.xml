@@ -431,6 +431,13 @@
   <string name="prefs_privacy_policy">Datenschutzerklärung</string>
   <string name="privacy_policy_error">Es ist ein Fehler aufgetreten:</string>
   <string name="service_unavailable">Server ist nicht verfügbar</string>
+  <string name="streaming_certificate_error">Das Streaming kann nicht initialisiert werden, da dein Serverzertifikat nicht glaubwürdig ist. Das herunterladen der Datei startet automatisch</string>
+  <string name="streaming_unrecognized_input">Dieses Videoformat wird nicht unterstützt</string>
+  <string name="streaming_file_not_found_error">Dieses Video ist nicht länger auf dem Server verfügbar</string>
+  <string name="streaming_crossed_redirection">Streaming ist über gekreuzte Weiterleitungen nicht erlaubt</string>
+  <string name="previewing_video_common_error">Dieses Video kann nicht wiedergegeben werden</string>
+  <string name="previewing_video_not_supported">Die Videovorschau wird auf dieser Android-Version nicht unterstützt. Das Herunterladen der Datei startet automatisch.</string>
+  <string name="streaming_position_not_available">\"Position nicht verfügbar\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>

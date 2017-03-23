@@ -431,6 +431,7 @@
   <string name="prefs_privacy_policy">מדיניות הפרטיות</string>
   <string name="privacy_policy_error">התרחשה שגיאה</string>
   <string name="service_unavailable">השרת אינו זמין</string>
+  <string name="streaming_certificate_error">לא ניתן להתחיל את הזרמת מידע כיוון שתעודת אימות השרת אינה מהימנה. הורדת קובץ תחל באופן אוטומטי</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>

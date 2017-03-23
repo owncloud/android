@@ -431,6 +431,12 @@
   <string name="prefs_privacy_policy">Polityka prywatności</string>
   <string name="privacy_policy_error">Wystąpił bład:</string>
   <string name="service_unavailable">Serwer jest niedostępny</string>
+  <string name="streaming_certificate_error">Nie można zainicjować strumienowania, gdyż certyfikat serwera nie jest zaufany. Pobieranie pliku rozpocznie się automatycznie.</string>
+  <string name="streaming_unrecognized_input">Ten format wideo nie jest wspierany</string>
+  <string name="streaming_file_not_found_error">To wideo nie jest już dostępne na serwerze</string>
+  <string name="previewing_video_common_error">To wideo nie da się odtworzyć</string>
+  <string name="previewing_video_not_supported">Podgląd wideo nie jest wspierany w tej wersji systemu Android. Pobieranie pliku rozpocznie się automatycznie.</string>
+  <string name="streaming_position_not_available">\"Pozycja jest niedostępna\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>

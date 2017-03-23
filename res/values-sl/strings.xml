@@ -431,6 +431,7 @@
   <string name="prefs_privacy_policy">Določila zasebnosti</string>
   <string name="privacy_policy_error">Prišlo je do napake:</string>
   <string name="service_unavailable">Strežnik ni na voljo</string>
+  <string name="streaming_certificate_error">Pretakanja ni mogoče začeti, ker potrdilo strežnika ni vredno zaupanja. Prejem datoteke bo začet samodejno.</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>

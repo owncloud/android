@@ -429,6 +429,7 @@
   <string name="prefs_privacy_policy">Política de privacidade</string>
   <string name="privacy_policy_error">Ocorreu um erro:</string>
   <string name="service_unavailable">O servidor não está disponível</string>
+  <string name="streaming_certificate_error">A transmissão não pode ser iniciada pois o seu certificado de servidor não é fidedigno. Transferência de ficheiro irá começar automaticamente</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

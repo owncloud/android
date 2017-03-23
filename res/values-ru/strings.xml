@@ -431,6 +431,7 @@
   <string name="prefs_privacy_policy">Политика конфиденциальности</string>
   <string name="privacy_policy_error">Произошла ошибка:</string>
   <string name="service_unavailable">Сервер недоступен</string>
+  <string name="streaming_certificate_error">Не удалось запустить потоковую передачу, так как сертификат вашего сервера не является доверенным. Скачивание запустится автоматически</string>
   <plurals name="items_selected_count">
     <item quantity="one">Выбран %d</item>
     <item quantity="few">Выбрано %d</item>
