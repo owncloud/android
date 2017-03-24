@@ -432,6 +432,12 @@
   <string name="privacy_policy_error">Произошла ошибка:</string>
   <string name="service_unavailable">Сервер недоступен</string>
   <string name="streaming_certificate_error">Не удалось запустить потоковую передачу, так как сертификат вашего сервера не является доверенным. Скачивание запустится автоматически</string>
+  <string name="streaming_unrecognized_input">Этот формат видео не поддерживается</string>
+  <string name="streaming_file_not_found_error">Этот видеофайл больше не доступен на сервере</string>
+  <string name="streaming_crossed_redirection">Потоковая передача не разрешена через перекрёстные перенаправления</string>
+  <string name="previewing_video_common_error">Это видео невозможно воспроизвести</string>
+  <string name="previewing_video_not_supported">Предпросмотр видео не поддерживается в вашей версии Андроида. Скачивание файла начнётся автоматически.</string>
+  <string name="streaming_position_not_available">\"Позиция недоступна\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">Выбран %d</item>
     <item quantity="few">Выбрано %d</item>
