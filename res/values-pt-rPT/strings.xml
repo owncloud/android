@@ -430,6 +430,12 @@
   <string name="privacy_policy_error">Ocorreu um erro:</string>
   <string name="service_unavailable">O servidor não está disponível</string>
   <string name="streaming_certificate_error">A transmissão não pode ser iniciada pois o seu certificado de servidor não é fidedigno. Transferência de ficheiro irá começar automaticamente</string>
+  <string name="streaming_unrecognized_input">O formato do vídeo não é suportado</string>
+  <string name="streaming_file_not_found_error">O ficheiro de video não está mais disponivel no servidor</string>
+  <string name="streaming_crossed_redirection">Transmissões não são permitidas via redirecionamentos cruzados</string>
+  <string name="previewing_video_common_error">O vídeo não pôde ser reproduzido</string>
+  <string name="previewing_video_not_supported">Pré-visualização de vídeo não é suportada na sua versão de Android. A transferência do ficheiro irá começar automaticamente.</string>
+  <string name="streaming_position_not_available">\"Posição não disponível\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>
