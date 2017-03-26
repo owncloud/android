@@ -432,6 +432,12 @@
   <string name="privacy_policy_error">התרחשה שגיאה</string>
   <string name="service_unavailable">השרת אינו זמין</string>
   <string name="streaming_certificate_error">לא ניתן להתחיל את הזרמת מידע כיוון שתעודת אימות השרת אינה מהימנה. הורדת קובץ תחל באופן אוטומטי</string>
+  <string name="streaming_unrecognized_input">פורמט וידאו זה אינו נתמך</string>
+  <string name="streaming_file_not_found_error">קובץ וידאו זה אינו זמין יותר על השרת</string>
+  <string name="streaming_crossed_redirection">הזרמת מידע אינה אפשרית באמצעות הפניות חוזרות</string>
+  <string name="previewing_video_common_error">לא ניתן להפיק מחדש וידאו זה</string>
+  <string name="previewing_video_not_supported">הצגה מקדימה של וידאו אינה נתמכת בגרסת האנדרואיד שלך. הורדת קובץ תחל אוטומטית.</string>
+  <string name="streaming_position_not_available">\"מיקום אינו זמין\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>
