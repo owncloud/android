@@ -36,8 +36,10 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -76,6 +78,9 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.FileStorageUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.Vector;
@@ -173,13 +178,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     setAccount(accounts[0]);
                 }
             }
-
-        } else if (getIntent().getStringExtra(Intent.EXTRA_TEXT) != null) {
-            showErrorDialog(
-                R.string.uploader_error_message_received_piece_of_text,
-                R.string.uploader_error_title_no_file_to_upload
-            );
-
         } else {
             showErrorDialog(
                 R.string.uploader_error_message_no_file_to_upload,
@@ -352,8 +350,12 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 for (String p : mParents) {
                     mUploadPath += p + OCFile.PATH_SEPARATOR;
                 }
-                Log_OC.d(TAG, "Uploading file to dir " + mUploadPath);
-                uploadFiles();
+                if (!isPlainTextUpload()) {
+                    Log_OC.d(TAG, "Uploading file to dir " + mUploadPath);
+                    uploadFiles();
+                } else {
+                    showUploadTextDialog();
+                }
                 break;
 
             case R.id.uploader_cancel:
@@ -478,7 +480,18 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private boolean somethingToUpload() {
-        return (mStreamsToUpload != null && mStreamsToUpload.get(0) != null);
+        return (mStreamsToUpload != null && mStreamsToUpload.get(0) != null ||
+                isPlainTextUpload());
+    }
+
+    /**
+     * Checks if the intent contains plain text and no other stream has been added yet.
+     *
+     * @return true/false
+     */
+    private boolean isPlainTextUpload() {
+        return mStreamsToUpload.get(0) == null &&
+                getIntent().getStringExtra(Intent.EXTRA_TEXT) != null;
     }
 
     @SuppressLint("NewApi")
@@ -761,5 +774,61 @@ public class ReceiveExternalFilesActivity extends FileActivity
             }
         );
         errorDialog.show(getSupportFragmentManager(), FTAG_ERROR_FRAGMENT);
+    }
+
+    /**
+     * Show a dialog where the user can enter a filename for the file he wants to place the text in.
+     */
+    private void showUploadTextDialog() {
+        final AlertDialog.Builder builder = new Builder(this);
+        String fileName = getIntent().getStringExtra(Intent.EXTRA_SUBJECT);
+        if (fileName == null) fileName = getIntent().getStringExtra(Intent.EXTRA_TITLE);
+
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_upload_text, null);
+        final TextInputEditText input = (TextInputEditText) dialogView.findViewById(R.id.inputFileName);
+        if (fileName != null) {
+            input.setText(fileName + ".txt");
+            input.setSelection(0, fileName.length());
+        } else {
+            input.setText(".txt");
+        }
+
+        builder.setView(dialogView);
+        builder.setTitle(R.string.uploader_upload_text_dialog_title);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.uploader_btn_upload_text, new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String fileName = input.getText().toString();
+                Uri fileUri = savePlainTextToFile(fileName);
+                mStreamsToUpload.clear();
+                mStreamsToUpload.add(fileUri);
+                uploadFiles();
+            }
+        });
+        builder.setNegativeButton(R.string.common_cancel, null);
+        builder.create()
+                .show();
+    }
+
+    /**
+     * Store plain text from intent to a new file in cache dir.
+     *
+     * @param fileName The name of the file.
+     * @return Uri from created file.
+     */
+    private Uri savePlainTextToFile(String fileName) {
+        Uri uri = null;
+        String content = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+        try {
+            File tmpFile = new File(getCacheDir(), fileName);
+            FileOutputStream outputStream = new FileOutputStream(tmpFile);
+            outputStream.write(content.getBytes());
+            outputStream.close();
+            uri = Uri.fromFile(tmpFile);
+        } catch (IOException e) {
+            Log_OC.w(TAG, "Failed to create temp file for uploading plain text: " + e.getMessage());
+        }
+        return uri;
     }
 }
