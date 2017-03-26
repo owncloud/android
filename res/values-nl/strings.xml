@@ -435,6 +435,9 @@ Neem contact op met uw beheerder</string>
   <string name="privacy_policy_error">Er trad een fout op:</string>
   <string name="service_unavailable">Server niet beschikbaar</string>
   <string name="streaming_certificate_error">Streaming kan niet starten omdat het server certificaat niet vertrouwd wordt. De download start automatisch</string>
+  <string name="streaming_unrecognized_input">Dit videoformaar wordt niet ondersteund</string>
+  <string name="streaming_file_not_found_error">Dit videobestand is niet langer beschikbaar op de server</string>
+  <string name="streaming_position_not_available">\"Positie niet beschikbaar\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>
