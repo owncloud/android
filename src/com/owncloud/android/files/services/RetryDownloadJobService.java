@@ -25,6 +25,7 @@ public class RetryDownloadJobService extends JobService {
         String fileRemotePath = jobParameters.getExtras().getString(FileDownloader.
                 KEY_FILE_REMOTE_PATH);
 
+        // Get download file from database
         OCFile ocFile= fileDataStorageManager.getFileByPath(fileRemotePath);
 
         // Retry download

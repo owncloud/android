@@ -453,6 +453,7 @@ public class FileDownloader extends Service
 
                     if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
 
+                        // Check network availabality
                         if (!ConnectivityUtils.isNetworkActive(getApplicationContext())) {
 
                             ComponentName mServiceComponent = new ComponentName(this,

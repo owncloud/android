@@ -68,7 +68,7 @@ public class FileDataStorageManager {
     private Account mAccount;
 
     private static String TAG = FileDataStorageManager.class.getSimpleName();
-    
+
     public FileDataStorageManager(Account account, ContentResolver cr) {
         mContentProviderClient = null;
         mContentResolver = cr;
