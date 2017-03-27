@@ -136,6 +136,12 @@
             android:exported="true">
         </service>
 
+        <service
+            android:name=".files.services.RetryDownloadJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true">
+        </service>
+
         <provider
             android:name=".providers.FileContentProvider"
             android:authorities="@string/authority"

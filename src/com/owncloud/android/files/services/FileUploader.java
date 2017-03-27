@@ -952,7 +952,7 @@ public class FileUploader extends Service
                 if (!uploadResult.isSuccess() && uploadResult.getException() != null) {
 
                     // Check network availabality
-                    if (ConnectivityUtils.isNetworkActive(getApplicationContext())) {
+                    if (!ConnectivityUtils.isNetworkActive(getApplicationContext())) {
 
                         ComponentName mServiceComponent = new ComponentName(this,
 

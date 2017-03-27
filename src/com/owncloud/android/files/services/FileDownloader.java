@@ -26,6 +26,10 @@ import android.accounts.OnAccountsUpdateListener;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
@@ -33,6 +37,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.os.Process;
 import android.support.v4.app.NotificationCompat;
 import android.util.Pair;
@@ -50,13 +55,14 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
-import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.operations.DownloadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.utils.ConnectivityUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -80,6 +86,9 @@ public class FileDownloader extends Service
     public static final String EXTRA_LINKED_TO_PATH = "LINKED_TO";
     public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
 
+    public static final String KEY_FILE_REMOTE_PATH = "FILE_REMOTE_PATH";
+
+
     private static final String TAG = FileDownloader.class.getSimpleName();
 
     private Looper mServiceLooper;
@@ -97,6 +106,7 @@ public class FileDownloader extends Service
     private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
 
+    private static int jobId = 0;
 
     public static String getDownloadAddedMessage() {
         return FileDownloader.class.getName() + DOWNLOAD_ADDED_MESSAGE;
@@ -443,7 +453,31 @@ public class FileDownloader extends Service
 
                     if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
 
+                        if (!ConnectivityUtils.isNetworkActive(getApplicationContext())) {
 
+                            ComponentName mServiceComponent = new ComponentName(this,
+
+                                    RetryDownloadJobService.class);
+
+                            JobInfo.Builder builder;
+
+                            // Schedule future retry of failed download due to network error from Android 5
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                builder = new JobInfo.Builder(jobId, mServiceComponent);
+                                // require unmetered network
+                                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+
+                                // Extra data
+                                PersistableBundle extras = new PersistableBundle();
+                                extras.putString(KEY_FILE_REMOTE_PATH, mCurrentDownload.getFile()
+                                        .getRemotePath());
+
+                                builder.setExtras(extras);
+                                JobScheduler jobScheduler = (JobScheduler) getApplicationContext().
+                                        getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                                jobScheduler.schedule(builder.build());
+                            }
+                        }
                     }
 
                     /// notify result
