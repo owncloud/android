@@ -432,6 +432,12 @@
   <string name="privacy_policy_error">Ocorreu um erro:</string>
   <string name="service_unavailable">Servidor está indisponível</string>
   <string name="streaming_certificate_error">A transmissão em sequência não pode ser inicializada porque o certificado do servidor não é fidedigno. O download do arquivo será iniciado automaticamente</string>
+  <string name="streaming_unrecognized_input">Este formato de vídeo não é suportado</string>
+  <string name="streaming_file_not_found_error">Este vídeo não está mais disponível no servidor.</string>
+  <string name="streaming_crossed_redirection">A transmissão não é permitida através de redirecionamento cruzado</string>
+  <string name="previewing_video_common_error">Este vídeo não pode ser reproduzido</string>
+  <string name="previewing_video_not_supported">A pre-visualização não é suportada para esta versão do Android. O arquivo será baixado automaticamente</string>
+  <string name="streaming_position_not_available">\"Localização não disponível\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

@@ -430,6 +430,8 @@ správce systému.</string>
   <string name="prefs_privacy_policy">Zásady ochrany osobních údajů</string>
   <string name="privacy_policy_error">Došlo k chybě:</string>
   <string name="service_unavailable">Server není dostupný</string>
+  <string name="previewing_video_not_supported">Pro Vaši verzi Androidu je video náhled nedostupný. Stažení souboru se spustí automaticky.</string>
+  <string name="streaming_position_not_available">\"Pozice je nedostupná\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
