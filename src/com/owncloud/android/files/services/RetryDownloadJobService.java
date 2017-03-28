@@ -17,22 +17,30 @@ public class RetryDownloadJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
-        Account account = AccountUtils.getCurrentOwnCloudAccount(this);
+        String accountName = jobParameters.getExtras().getString(FileDownloader.
+                KEY_ACCOUNT_NAME);
 
-        FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(account,
-                getContentResolver());
+        Account account = AccountUtils.getOwnCloudAccountByName(this, accountName);
 
-        String fileRemotePath = jobParameters.getExtras().getString(FileDownloader.
-                KEY_FILE_REMOTE_PATH);
+        // Check if the account has been deleted after downloading the file and before
+        // retrying the download
+        if (account != null) {
 
-        // Get download file from database
-        OCFile ocFile= fileDataStorageManager.getFileByPath(fileRemotePath);
+            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(account,
+                    getContentResolver());
 
-        // Retry download
-        Intent i = new Intent(this, FileDownloader.class);
-        i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
-        i.putExtra(FileDownloader.EXTRA_FILE, ocFile);
-        this.startService(i);
+            String fileRemotePath = jobParameters.getExtras().getString(FileDownloader.
+                    KEY_FILE_REMOTE_PATH);
+
+            // Get download file from database
+            OCFile ocFile= fileDataStorageManager.getFileByPath(fileRemotePath);
+
+            // Retry download
+            Intent i = new Intent(this, FileDownloader.class);
+            i.putExtra(FileDownloader.EXTRA_ACCOUNT, account);
+            i.putExtra(FileDownloader.EXTRA_FILE, ocFile);
+            this.startService(i);
+        }
 
         return true;
     }

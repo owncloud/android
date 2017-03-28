@@ -87,6 +87,7 @@ public class FileDownloader extends Service
     public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
 
     public static final String KEY_FILE_REMOTE_PATH = "FILE_REMOTE_PATH";
+    public static final String KEY_ACCOUNT_NAME = "ACCOUNT_NAME";
 
 
     private static final String TAG = FileDownloader.class.getSimpleName();
@@ -472,6 +473,8 @@ public class FileDownloader extends Service
                                 PersistableBundle extras = new PersistableBundle();
                                 extras.putString(KEY_FILE_REMOTE_PATH, mCurrentDownload.getFile()
                                         .getRemotePath());
+
+                                extras.putString(KEY_ACCOUNT_NAME, mCurrentAccount.name);
 
                                 builder.setExtras(extras);
                                 JobScheduler jobScheduler = (JobScheduler) getApplicationContext().
