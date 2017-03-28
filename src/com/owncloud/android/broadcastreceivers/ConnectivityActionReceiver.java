@@ -171,12 +171,21 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
                 public void run() {
                     Log_OC.d(TAG, "Requesting retry of instant uploads (& friends)");
                     FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
-                    requester.retryFailedUploads(
-                        MainApp.getAppContext(),
-                        null,
-                        UploadResult.NETWORK_CONNECTION     // for the interrupted when Wifi fell, if any
-                        // (side effect: any upload failed due to network error will be retried too, instant or not)
-                    );
+
+                    //Avoid duplicate uploads, because uploads retry is also managed in FileUploader
+                    //by using jobs in versions 5 or higher
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+
+                        requester.retryFailedUploads(
+                                MainApp.getAppContext(),
+                                null,
+                                // for the interrupted when Wifi fell, if any
+                                // (side effect: any upload failed due to network error will be
+                                // retried too, instant or not)
+                                UploadResult.NETWORK_CONNECTION
+                        );
+                    }
+
                     requester.retryFailedUploads(
                         MainApp.getAppContext(),
                         null,
