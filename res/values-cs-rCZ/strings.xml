@@ -430,6 +430,11 @@ správce systému.</string>
   <string name="prefs_privacy_policy">Zásady ochrany osobních údajů</string>
   <string name="privacy_policy_error">Došlo k chybě:</string>
   <string name="service_unavailable">Server není dostupný</string>
+  <string name="streaming_certificate_error">Vysílání nelze inicializovat, protože váš certifikát serveru není důvěryhodný. Stahování souborů se spustí automaticky</string>
+  <string name="streaming_unrecognized_input">Tento video formát není podporovaný</string>
+  <string name="streaming_file_not_found_error">Tento video soubor již není na serveru k dispozici</string>
+  <string name="streaming_crossed_redirection">Vysílání není povoleno přes přesměrování</string>
+  <string name="previewing_video_common_error">Toto video nelze přehrát</string>
   <string name="previewing_video_not_supported">Pro Vaši verzi Androidu je video náhled nedostupný. Stažení souboru se spustí automaticky.</string>
   <string name="streaming_position_not_available">\"Pozice je nedostupná\"</string>
   <plurals name="items_selected_count">
