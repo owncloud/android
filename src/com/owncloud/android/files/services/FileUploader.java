@@ -954,14 +954,15 @@ public class FileUploader extends Service
                     // Check network availabality
                     if (!ConnectivityUtils.isNetworkActive(getApplicationContext())) {
 
-                        ComponentName mServiceComponent = new ComponentName(this,
-
-                                RetryUploadJobService.class);
-
-                        JobInfo.Builder builder;
-
                         // Schedule future retry of failed upload due to network error from Android 5
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+
+                            ComponentName mServiceComponent = new ComponentName(this,
+
+                                    RetryUploadJobService.class);
+
+                            JobInfo.Builder builder;
+
                             builder = new JobInfo.Builder(jobId, mServiceComponent);
                             // require unmetered network
                             builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
