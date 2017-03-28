@@ -26,6 +26,7 @@ package com.owncloud.android.lib.common.network;
 
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.auth.AuthChallengeParser;
@@ -33,6 +34,7 @@ import org.apache.commons.httpclient.auth.AuthScheme;
 import org.apache.commons.httpclient.auth.AuthenticationException;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.apache.commons.httpclient.auth.MalformedChallengeException;
+import org.apache.commons.httpclient.util.EncodingUtil;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 
@@ -218,9 +220,15 @@ public class BearerAuthScheme implements AuthScheme /*extends RFC2617Scheme*/ {
         }
         StringBuffer buffer = new StringBuffer();
         buffer.append(credentials.getAccessToken());
-        
-        //return "Bearer " + EncodingUtil.getAsciiString(EncodingUtil.getBytes(buffer.toString(), charset));
+
+        Log_OC.v(TAG, "OAUTH2: string to authorize: " + "Bearer " + buffer.toString());
         return "Bearer " + buffer.toString();
+        //return "Bearer " + EncodingUtil.getAsciiString(EncodingUtil.getBytes(buffer.toString(), charset));
+        /*return "Bearer " + EncodingUtil.getAsciiString(
+            Base64.encodeBase64(
+                EncodingUtil.getBytes(buffer.toString(), charset)
+            )
+        );*/
     }
 
     /**

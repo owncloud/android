@@ -48,6 +48,7 @@ public class AccountUtils {
     private static final String TAG = AccountUtils.class.getSimpleName();
 
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
+    public static final String ODAV_PATH = "/remote.php/webdav";
     public static final String STATUS_PATH = "/status.php";
 
     /**
@@ -171,7 +172,7 @@ public class AccountUtils {
                 AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
                 false);
 
-            credentials = OwnCloudCredentialsFactory.newBearerCredentials(accessToken);
+            credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken);
 
         } else if (isSamlSso) {
             String accessToken = am.blockingGetAuthToken(

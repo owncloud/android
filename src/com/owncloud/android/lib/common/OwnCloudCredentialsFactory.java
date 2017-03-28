@@ -40,8 +40,8 @@ public class OwnCloudCredentialsFactory {
         return new OwnCloudBasicCredentials(username, password, preemptiveMode);
     }
 
-    public static OwnCloudCredentials newBearerCredentials(String authToken) {
-        return new OwnCloudBearerCredentials(authToken);
+    public static OwnCloudCredentials newBearerCredentials(String username, String authToken) {
+        return new OwnCloudBearerCredentials(username, authToken);
     }
 
     public static OwnCloudCredentials newSamlSsoCredentials(String username, String sessionCookie) {

@@ -96,7 +96,7 @@ public class OwnCloudClientFactory {
                 false);
             
             client.setCredentials(
-                OwnCloudCredentialsFactory.newBearerCredentials(accessToken)
+                OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken)
     		);
         
         } else if (isSamlSso) {    // TODO avoid a call to getUserData here
@@ -161,7 +161,7 @@ public class OwnCloudClientFactory {
             String accessToken = result.getString(AccountManager.KEY_AUTHTOKEN);
             if (accessToken == null) throw new AuthenticatorException("WTF!");
             client.setCredentials(
-                OwnCloudCredentialsFactory.newBearerCredentials(accessToken)
+                OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken)
             );
 
         } else if (isSamlSso) {    // TODO avoid a call to getUserData here

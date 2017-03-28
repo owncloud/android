@@ -29,6 +29,8 @@ import java.util.List;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.auth.AuthState;
+import org.apache.commons.httpclient.auth.BasicScheme;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
@@ -50,6 +52,8 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
     @Override
     public void applyTo(OwnCloudClient client) {
+        AuthPolicy.registerAuthScheme(AuthState.PREEMPTIVE_AUTH_SCHEME, BasicScheme.class);
+
         List<String> authPrefs = new ArrayList<String>(1);
         authPrefs.add(AuthPolicy.BASIC);
         client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
