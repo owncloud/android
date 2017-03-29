@@ -413,6 +413,11 @@
   <string name="confirmation_remove_files_alert">确认删除选中的项目吗？</string>
   <string name="confirmation_remove_folders_alert">你真的要删除选定的项目及其内容吗？</string>
   <string name="failed_upload_quota_exceeded_text">该账户没有足够的空间</string>
+  <string name="actionbar_privacy_policy">隐私策略</string>
+  <string name="prefs_privacy_policy">隐私策略</string>
+  <string name="service_unavailable">服务不可用</string>
+  <string name="previewing_video_not_supported">当前 Android 版本不支持视频预览. 文件将自动下载.</string>
+  <string name="streaming_position_not_available">位置不可用</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已选择</item>
   </plurals>
