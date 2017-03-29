@@ -40,10 +40,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,6 +54,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.owncloud.android.MainApp;
@@ -781,34 +785,60 @@ public class ReceiveExternalFilesActivity extends FileActivity
      */
     private void showUploadTextDialog() {
         final AlertDialog.Builder builder = new Builder(this);
-        String fileName = getIntent().getStringExtra(Intent.EXTRA_SUBJECT);
-        if (fileName == null) fileName = getIntent().getStringExtra(Intent.EXTRA_TITLE);
 
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_upload_text, null);
-        final TextInputEditText input = (TextInputEditText) dialogView.findViewById(R.id.inputFileName);
-        if (fileName != null) {
-            input.setText(fileName + ".txt");
-            input.setSelection(0, fileName.length());
-        } else {
-            input.setText(".txt");
-        }
-
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_upload_text, null);
         builder.setView(dialogView);
         builder.setTitle(R.string.uploader_upload_text_dialog_title);
         builder.setCancelable(false);
-        builder.setPositiveButton(R.string.uploader_btn_upload_text, new OnClickListener() {
+        builder.setPositiveButton(R.string.uploader_btn_upload_text, null);
+        builder.setNegativeButton(R.string.common_cancel, null);
+
+        final TextInputEditText input = (TextInputEditText) dialogView.findViewById(R.id.inputFileName);
+        final TextInputLayout inputLayout = (TextInputLayout) dialogView.findViewById(R.id.inputTextLayout);
+
+        input.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                String fileName = input.getText().toString();
-                Uri fileUri = savePlainTextToFile(fileName);
-                mStreamsToUpload.clear();
-                mStreamsToUpload.add(fileUri);
-                uploadFiles();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                inputLayout.setError(null);
+                inputLayout.setErrorEnabled(false);
             }
         });
-        builder.setNegativeButton(R.string.common_cancel, null);
-        builder.create()
-                .show();
+        setFileNameFromIntent(input);
+
+        final AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String fileName = input.getText().toString();
+                        if (fileName.length() > 0) {
+                            Uri fileUri = savePlainTextToFile(fileName);
+                            mStreamsToUpload.clear();
+                            mStreamsToUpload.add(fileUri);
+                            uploadFiles();
+                        } else {
+                            inputLayout.setErrorEnabled(true);
+                            inputLayout.setError(getString(R.string.uploader_upload_text_dialog_error));
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
     }
 
     /**
@@ -830,5 +860,21 @@ public class ReceiveExternalFilesActivity extends FileActivity
             Log_OC.w(TAG, "Failed to create temp file for uploading plain text: " + e.getMessage());
         }
         return uri;
+    }
+
+    /**
+     * Suggest a filename based on the extras in the intent.
+     * @param input EditText The view where to place the filename in.
+     */
+    private void setFileNameFromIntent(EditText input) {
+        String fileName = getIntent().getStringExtra(Intent.EXTRA_SUBJECT);
+        if (fileName == null) fileName = getIntent().getStringExtra(Intent.EXTRA_TITLE);
+
+        if (fileName != null) {
+            input.setText(fileName + ".txt");
+            input.setSelection(0, fileName.length());
+        } else {
+            input.setText(".txt");
+        }
     }
 }

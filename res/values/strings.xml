@@ -120,6 +120,7 @@
     <string name="uploader_upload_failed_credentials_error">Upload failed, you need to log in again</string>
     <string name="uploader_upload_failed_ssl_certificate_not_trusted">Server certificate is not trusted</string>
     <string name="uploader_upload_text_dialog_title">Insert a name for the new file</string>
+    <string name="uploader_upload_text_dialog_error">Filename must not be empty</string>
     <string name="uploader_upload_text_filename_hint">Filename</string>
     <string name="ssl_certificate_not_trusted">Server certificate is not trusted</string>
     <string name="uploads_view_title">Uploads</string>
