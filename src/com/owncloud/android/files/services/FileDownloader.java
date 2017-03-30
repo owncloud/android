@@ -84,10 +84,7 @@ public class FileDownloader extends Service
     public static final String EXTRA_FILE_PATH = "FILE_PATH";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
     public static final String EXTRA_LINKED_TO_PATH = "LINKED_TO";
-    public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
-
-    public static final String KEY_FILE_REMOTE_PATH = "FILE_REMOTE_PATH";
-    public static final String KEY_ACCOUNT_NAME = "ACCOUNT_NAME";
+    public static final String EXTRA_ACCOUNT_NAME = "EXTRA_ACCOUNT_NAME";
 
 
     private static final String TAG = FileDownloader.class.getSimpleName();
@@ -106,8 +103,6 @@ public class FileDownloader extends Service
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
-
-    private static int jobId = 0;
 
     public static String getDownloadAddedMessage() {
         return FileDownloader.class.getName() + DOWNLOAD_ADDED_MESSAGE;
@@ -458,24 +453,34 @@ public class FileDownloader extends Service
                         if (!ConnectivityUtils.isNetworkActive(getApplicationContext())) {
 
                             // Schedule future retry of failed download due to network error from Android 5
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                            if (android.os.Build.VERSION.SDK_INT >=
+                                    android.os.Build.VERSION_CODES.LOLLIPOP) {
 
                                 ComponentName mServiceComponent = new ComponentName(this,
 
                                         RetryDownloadJobService.class);
 
                                 JobInfo.Builder builder;
+
+                                IndexedForest<FileDownloader> fileDownloaderIndexedForest =
+                                        new IndexedForest<>();
+
+                                int jobId = fileDownloaderIndexedForest.
+                                        buildKey(mCurrentAccount.name, mCurrentDownload.
+                                                getRemotePath()).
+                                        hashCode();
                                 
                                 builder = new JobInfo.Builder(jobId, mServiceComponent);
+
                                 // require unmetered network
                                 builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
 
                                 // Extra data
                                 PersistableBundle extras = new PersistableBundle();
-                                extras.putString(KEY_FILE_REMOTE_PATH, mCurrentDownload.getFile()
+                                extras.putString(EXTRA_REMOTE_PATH, mCurrentDownload.getFile()
                                         .getRemotePath());
 
-                                extras.putString(KEY_ACCOUNT_NAME, mCurrentAccount.name);
+                                extras.putString(EXTRA_ACCOUNT_NAME, mCurrentAccount.name);
 
                                 builder.setExtras(extras);
                                 JobScheduler jobScheduler = (JobScheduler) getApplicationContext().
@@ -667,7 +672,7 @@ public class FileDownloader extends Service
 
         Intent end = new Intent(getDownloadFinishMessage());
         end.putExtra(EXTRA_DOWNLOAD_RESULT, downloadResult.isSuccess());
-        end.putExtra(ACCOUNT_NAME, download.getAccount().name);
+        end.putExtra(EXTRA_ACCOUNT_NAME, download.getAccount().name);
         end.putExtra(EXTRA_REMOTE_PATH, download.getRemotePath());
         end.putExtra(EXTRA_FILE_PATH, download.getSavePath());
         if (unlinkedFromRemotePath != null) {
@@ -686,7 +691,7 @@ public class FileDownloader extends Service
     private void sendBroadcastNewDownload(DownloadFileOperation download,
                                           String linkedToRemotePath) {
         Intent added = new Intent(getDownloadAddedMessage());
-        added.putExtra(ACCOUNT_NAME, download.getAccount().name);
+        added.putExtra(EXTRA_ACCOUNT_NAME, download.getAccount().name);
         added.putExtra(EXTRA_REMOTE_PATH, download.getRemotePath());
         added.putExtra(EXTRA_FILE_PATH, download.getSavePath());
         added.putExtra(EXTRA_LINKED_TO_PATH, linkedToRemotePath);

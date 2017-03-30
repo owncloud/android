@@ -179,7 +179,7 @@ class SyncFolderHandler extends Handler {
      */
     private void sendBroadcastNewSyncFolder(Account account, String remotePath) {
         Intent added = new Intent(FileDownloader.getDownloadAddedMessage());
-        added.putExtra(FileDownloader.ACCOUNT_NAME, account.name);
+        added.putExtra(FileDownloader.EXTRA_ACCOUNT_NAME, account.name);
         added.putExtra(FileDownloader.EXTRA_REMOTE_PATH, remotePath);
         added.putExtra(FileDownloader.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name)
                 + remotePath);
@@ -193,7 +193,7 @@ class SyncFolderHandler extends Handler {
     private void sendBroadcastFinishedSyncFolder(Account account, String remotePath,
                                                  boolean success) {
         Intent finished = new Intent(FileDownloader.getDownloadFinishMessage());
-        finished.putExtra(FileDownloader.ACCOUNT_NAME, account.name);
+        finished.putExtra(FileDownloader.EXTRA_ACCOUNT_NAME, account.name);
         finished.putExtra(FileDownloader.EXTRA_REMOTE_PATH, remotePath);
         finished.putExtra(FileDownloader.EXTRA_FILE_PATH,
                 FileStorageUtils.getSavePath(account.name) + remotePath);

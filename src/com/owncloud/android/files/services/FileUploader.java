@@ -105,7 +105,7 @@ public class FileUploader extends Service
     public static final String EXTRA_OLD_REMOTE_PATH = "OLD_REMOTE_PATH";
     public static final String EXTRA_OLD_FILE_PATH = "OLD_FILE_PATH";
     public static final String EXTRA_LINKED_TO_PATH = "LINKED_TO";
-    public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
+    public static final String EXTRA_ACCOUNT_NAME = "EXTRA_ACCOUNT_NAME";
 
     public static final String KEY_FILE = "FILE";
     public static final String KEY_LOCAL_FILE = "LOCAL_FILE";
@@ -174,8 +174,6 @@ public class FileUploader extends Service
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
-
-    private static int jobId = 0;
 
     public static String getUploadsAddedMessage() {
         return FileUploader.class.getName() + UPLOADS_ADDED_MESSAGE;
@@ -963,6 +961,14 @@ public class FileUploader extends Service
 
                             JobInfo.Builder builder;
 
+                            IndexedForest<FileDownloader> fileDownloaderIndexedForest =
+                                    new IndexedForest<>();
+
+                            int jobId = fileDownloaderIndexedForest.
+                                    buildKey(mCurrentAccount.name, mCurrentUpload.
+                                            getRemotePath()).
+                                    hashCode();
+
                             builder = new JobInfo.Builder(jobId, mServiceComponent);
                             // require unmetered network
                             builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
@@ -1156,7 +1162,7 @@ public class FileUploader extends Service
         Intent start = new Intent(getUploadStartMessage());
         start.putExtra(EXTRA_REMOTE_PATH, upload.getRemotePath()); // real remote
         start.putExtra(EXTRA_OLD_FILE_PATH, upload.getOriginalStoragePath());
-        start.putExtra(ACCOUNT_NAME, upload.getAccount().name);
+        start.putExtra(EXTRA_ACCOUNT_NAME, upload.getAccount().name);
 
         sendStickyBroadcast(start);
     }
@@ -1186,7 +1192,7 @@ public class FileUploader extends Service
             end.putExtra(EXTRA_OLD_REMOTE_PATH, upload.getOldFile().getRemotePath());
         }
         end.putExtra(EXTRA_OLD_FILE_PATH, upload.getOriginalStoragePath());
-        end.putExtra(ACCOUNT_NAME, upload.getAccount().name);
+        end.putExtra(EXTRA_ACCOUNT_NAME, upload.getAccount().name);
         end.putExtra(EXTRA_UPLOAD_RESULT, uploadResult.isSuccess());
         if (unlinkedFromRemotePath != null) {
             end.putExtra(EXTRA_LINKED_TO_PATH, unlinkedFromRemotePath);

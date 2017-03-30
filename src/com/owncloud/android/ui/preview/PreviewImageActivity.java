@@ -31,7 +31,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -392,7 +391,7 @@ public class PreviewImageActivity extends FileActivity implements
     private class DownloadFinishReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String accountName = intent.getStringExtra(FileDownloader.ACCOUNT_NAME);
+            String accountName = intent.getStringExtra(FileDownloader.EXTRA_ACCOUNT_NAME);
             String downloadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
             if (getAccount().name.equals(accountName) && 
                     downloadedRemotePath != null) {

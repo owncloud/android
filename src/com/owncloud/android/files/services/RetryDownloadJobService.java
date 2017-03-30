@@ -18,7 +18,7 @@ public class RetryDownloadJobService extends JobService {
     public boolean onStartJob(JobParameters jobParameters) {
 
         String accountName = jobParameters.getExtras().getString(FileDownloader.
-                KEY_ACCOUNT_NAME);
+                EXTRA_ACCOUNT_NAME);
 
         Account account = AccountUtils.getOwnCloudAccountByName(this, accountName);
 
@@ -30,7 +30,7 @@ public class RetryDownloadJobService extends JobService {
                     getContentResolver());
 
             String fileRemotePath = jobParameters.getExtras().getString(FileDownloader.
-                    KEY_FILE_REMOTE_PATH);
+                    EXTRA_REMOTE_PATH);
 
             // Get download file from database
             OCFile ocFile= fileDataStorageManager.getFileByPath(fileRemotePath);

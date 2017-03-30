@@ -1044,7 +1044,7 @@ public class FileDisplayActivity extends HookActivity
         public void onReceive(Context context, Intent intent) {
             try {
                 String uploadedRemotePath = intent.getStringExtra(FileUploader.EXTRA_REMOTE_PATH);
-                String accountName = intent.getStringExtra(FileUploader.ACCOUNT_NAME);
+                String accountName = intent.getStringExtra(FileUploader.EXTRA_ACCOUNT_NAME);
                 boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
                 OCFile currentDir = getCurrentDir();
                 boolean isDescendant =
@@ -1201,7 +1201,7 @@ public class FileDisplayActivity extends HookActivity
         }
 
         private boolean isSameAccount(Intent intent) {
-            String accountName = intent.getStringExtra(FileDownloader.ACCOUNT_NAME);
+            String accountName = intent.getStringExtra(FileDownloader.EXTRA_ACCOUNT_NAME);
             return (accountName != null && getAccount() != null &&
                     accountName.equals(getAccount().name));
         }
