@@ -976,8 +976,8 @@ public class FileUploader extends Service
 
                             // Extra data
                             PersistableBundle extras = new PersistableBundle();
-                            extras.putString(KEY_FILE, mCurrentUpload.getRemotePath());
-                            extras.putString(KEY_ACCOUNT, mCurrentAccount.name);
+                            extras.putString(EXTRA_REMOTE_PATH, mCurrentUpload.getRemotePath());
+                            extras.putString(EXTRA_ACCOUNT_NAME, mCurrentAccount.name);
                             builder.setExtras(extras);
 
                             JobScheduler jobScheduler = (JobScheduler) this.

@@ -15,14 +15,14 @@ public class RetryUploadJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
-        String file = jobParameters.getExtras().getString(FileUploader.KEY_FILE);
-
-        String account = jobParameters.getExtras().getString(FileUploader.KEY_ACCOUNT);
-
         UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(getContentResolver());
 
+        String fileRemotePath = jobParameters.getExtras().getString(FileUploader.EXTRA_REMOTE_PATH);
+
+        String account = jobParameters.getExtras().getString(FileUploader.EXTRA_ACCOUNT_NAME);
+
         // Get upload to be retried
-        OCUpload ocUpload = uploadsStorageManager.getLastUploadFor(new OCFile(file), account);
+        OCUpload ocUpload = uploadsStorageManager.getLastUploadFor(new OCFile(fileRemotePath), account);
 
         FileUploader.UploadRequester uploadRequester = new FileUploader.UploadRequester();
 

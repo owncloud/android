@@ -477,8 +477,7 @@ public class FileDownloader extends Service
 
                                 // Extra data
                                 PersistableBundle extras = new PersistableBundle();
-                                extras.putString(EXTRA_REMOTE_PATH, mCurrentDownload.getFile()
-                                        .getRemotePath());
+                                extras.putString(EXTRA_REMOTE_PATH, mCurrentDownload.getRemotePath());
                                 extras.putString(EXTRA_ACCOUNT_NAME, mCurrentAccount.name);
                                 builder.setExtras(extras);
 
