@@ -970,12 +970,16 @@ public class FileUploader extends Service
                                     hashCode();
 
                             builder = new JobInfo.Builder(jobId, mServiceComponent);
+
                             // require unmetered network
-                            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+                            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
+
+                            // Extra data
                             PersistableBundle extras = new PersistableBundle();
                             extras.putString(KEY_FILE, mCurrentUpload.getRemotePath());
                             extras.putString(KEY_ACCOUNT, mCurrentAccount.name);
                             builder.setExtras(extras);
+
                             JobScheduler jobScheduler = (JobScheduler) getApplicationContext().
                                     getSystemService(Context.JOB_SCHEDULER_SERVICE);
                             jobScheduler.schedule(builder.build());

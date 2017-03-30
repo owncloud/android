@@ -473,16 +473,15 @@ public class FileDownloader extends Service
                                 builder = new JobInfo.Builder(jobId, mServiceComponent);
 
                                 // require unmetered network
-                                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+                                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
 
                                 // Extra data
                                 PersistableBundle extras = new PersistableBundle();
                                 extras.putString(EXTRA_REMOTE_PATH, mCurrentDownload.getFile()
                                         .getRemotePath());
-
                                 extras.putString(EXTRA_ACCOUNT_NAME, mCurrentAccount.name);
-
                                 builder.setExtras(extras);
+
                                 JobScheduler jobScheduler = (JobScheduler) getApplicationContext().
                                         getSystemService(Context.JOB_SCHEDULER_SERVICE);
                                 jobScheduler.schedule(builder.build());
