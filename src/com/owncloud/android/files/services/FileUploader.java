@@ -980,7 +980,7 @@ public class FileUploader extends Service
                             extras.putString(KEY_ACCOUNT, mCurrentAccount.name);
                             builder.setExtras(extras);
 
-                            JobScheduler jobScheduler = (JobScheduler) getApplicationContext().
+                            JobScheduler jobScheduler = (JobScheduler) this.
                                     getSystemService(Context.JOB_SCHEDULER_SERVICE);
                             jobScheduler.schedule(builder.build());
                         }
