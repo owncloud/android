@@ -961,13 +961,8 @@ public class FileUploader extends Service
 
                             JobInfo.Builder builder;
 
-                            IndexedForest<FileDownloader> fileDownloaderIndexedForest =
-                                    new IndexedForest<>();
-
-                            int jobId = fileDownloaderIndexedForest.
-                                    buildKey(mCurrentAccount.name, mCurrentUpload.
-                                            getRemotePath()).
-                                    hashCode();
+                            int jobId = mPendingUploads.buildKey(mCurrentAccount.name,
+                                    mCurrentUpload.getRemotePath()).hashCode();
 
                             builder = new JobInfo.Builder(jobId, mServiceComponent);
 

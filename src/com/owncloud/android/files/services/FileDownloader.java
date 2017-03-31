@@ -462,13 +462,8 @@ public class FileDownloader extends Service
 
                                 JobInfo.Builder builder;
 
-                                IndexedForest<FileDownloader> fileDownloaderIndexedForest =
-                                        new IndexedForest<>();
-
-                                int jobId = fileDownloaderIndexedForest.
-                                        buildKey(mCurrentAccount.name, mCurrentDownload.
-                                                getRemotePath()).
-                                        hashCode();
+                                int jobId = mPendingDownloads. buildKey(mCurrentAccount.name,
+                                        mCurrentDownload.getRemotePath()).hashCode();
                                 
                                 builder = new JobInfo.Builder(jobId, mServiceComponent);
 
