@@ -51,6 +51,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -814,10 +816,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 inputLayout.setErrorEnabled(false);
             }
         });
-        setFileNameFromIntent(input);
 
         final AlertDialog alertDialog = builder.create();
-
+        setFileNameFromIntent(alertDialog, input);
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -870,12 +871,22 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     /**
      * Suggest a filename based on the extras in the intent.
+     * Show soft keyboard when no filename could be suggested.
+     * @param alertDialog AlertDialog
      * @param input EditText The view where to place the filename in.
      */
-    private void setFileNameFromIntent(EditText input) {
-        String fileName = getIntent().getStringExtra(Intent.EXTRA_SUBJECT);
-        if (fileName == null) fileName = getIntent().getStringExtra(Intent.EXTRA_TITLE);
+    private void setFileNameFromIntent(AlertDialog alertDialog, EditText input) {
+        String subject = getIntent().getStringExtra(Intent.EXTRA_SUBJECT);
+        String title = getIntent().getStringExtra(Intent.EXTRA_TITLE);
+        String fileName = subject != null ? subject : title;
+
         input.setText(fileName);
         input.selectAll();
+
+        if (fileName == null) {
+            // Show soft keyboard
+            Window window = alertDialog.getWindow();
+            if (window != null) window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
     }
 }
