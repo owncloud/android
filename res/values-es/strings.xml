@@ -431,6 +431,12 @@
   <string name="privacy_policy_error">Ha ocurrido un error:</string>
   <string name="service_unavailable">Servidor no disponible</string>
   <string name="streaming_certificate_error">El streaming no puede inicializarse porque tu certificado del servidor no es confiable. La descarga del archivo comenzará automáticamente</string>
+  <string name="streaming_unrecognized_input">Formato de Video no soportado</string>
+  <string name="streaming_file_not_found_error">Este video ya no está disponible en el servidor</string>
+  <string name="streaming_crossed_redirection">No está permitido streaming con conexiones redirigidas</string>
+  <string name="previewing_video_common_error">Este video no puede ser reproducido</string>
+  <string name="previewing_video_not_supported">La previsualización no está soportada en su dispositivo Android. Se iniciara la descarga automáticamente</string>
+  <string name="streaming_position_not_available">\"Posición no disponible\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionado</item>
