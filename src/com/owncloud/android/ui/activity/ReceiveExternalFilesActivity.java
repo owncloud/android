@@ -826,6 +826,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     public void onClick(View view) {
                         String fileName = input.getText().toString();
                         if (fileName.length() > 0) {
+                            fileName += ".txt";
                             Uri fileUri = savePlainTextToFile(fileName);
                             mStreamsToUpload.clear();
                             mStreamsToUpload.add(fileUri);
@@ -869,12 +870,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private void setFileNameFromIntent(EditText input) {
         String fileName = getIntent().getStringExtra(Intent.EXTRA_SUBJECT);
         if (fileName == null) fileName = getIntent().getStringExtra(Intent.EXTRA_TITLE);
-
-        if (fileName != null) {
-            input.setText(fileName + ".txt");
-            input.setSelection(0, fileName.length());
-        } else {
-            input.setText(".txt");
-        }
+        input.setText(fileName);
+        input.selectAll();
     }
 }
