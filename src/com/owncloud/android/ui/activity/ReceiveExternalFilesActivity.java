@@ -116,6 +116,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private final static int DIALOG_MULTIPLE_ACCOUNT = 1;
 
     private final static int REQUEST_CODE__SETUP_ACCOUNT = REQUEST_CODE__LAST_SHARED + 1;
+    private final static int MAX_FILENAME_LENGTH = 223;
 
     private final static String KEY_PARENTS = "PARENTS";
     private final static String KEY_FILE = "FILE";
@@ -825,16 +826,20 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     @Override
                     public void onClick(View view) {
                         String fileName = input.getText().toString();
-                        if (fileName.length() > 0) {
+                        String error = null;
+                        if (fileName.length() > MAX_FILENAME_LENGTH) {
+                            error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max), MAX_FILENAME_LENGTH);
+                        } else if (fileName.length() == 0) {
+                            error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
+                        } else {
                             fileName += ".txt";
                             Uri fileUri = savePlainTextToFile(fileName);
                             mStreamsToUpload.clear();
                             mStreamsToUpload.add(fileUri);
                             uploadFiles();
-                        } else {
-                            inputLayout.setErrorEnabled(true);
-                            inputLayout.setError(getString(R.string.uploader_upload_text_dialog_error));
                         }
+                        inputLayout.setErrorEnabled(error != null);
+                        inputLayout.setError(error);
                     }
                 });
             }
