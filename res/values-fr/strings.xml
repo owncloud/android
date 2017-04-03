@@ -116,6 +116,8 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_upload_failed_ticker">Échec de l\'envoi</string>
   <string name="uploader_upload_failed_content_single">L\'envoi de %1$s a échoué</string>
   <string name="uploader_upload_failed_credentials_error">Le téléversement a échoué, vous devez vous reconnecter</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
+  <string name="ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
   <string name="uploads_view_title">Chargements</string>
   <string name="uploads_view_group_current_uploads">En ce moment</string>
   <string name="uploads_view_group_failed_uploads">Échoué (appuyer pour réessayer)</string>
@@ -130,6 +132,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploads_view_upload_status_failed_file_error">Erreur de fichier</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Fichier local non trouvé</string>
   <string name="uploads_view_upload_status_failed_permission_error">Erreur de permissions</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Interdit à cause d\'une règle du pare-feu</string>
   <string name="uploads_view_upload_status_conflict">Conflit</string>
   <string name="uploads_view_upload_status_service_interrupted">L\'application a été arrêté</string>
   <string name="uploads_view_upload_status_unknown_fail">Erreur inconnue </string>
@@ -143,6 +146,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="downloader_download_failed_content">Le téléchargement de %1$s a échoué</string>
   <string name="downloader_not_downloaded_yet">Pas encore téléchargé</string>
   <string name="downloader_download_failed_credentials_error">Le téléchargement a échoué, vous devez vous reconnecter</string>
+  <string name="downloader_download_forbidden_permissions">de télécharger ce fichier</string>
   <string name="common_choose_account">Choisissez un compte</string>
   <string name="sync_fail_ticker">La synchronisation a échoué</string>
   <string name="sync_fail_ticker_unauthorized">La synchronisation a échoué, vous devez vous reconnecter</string>
@@ -255,6 +259,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="wait_for_tmp_copy_from_private_storage">Copie du fichier depuis le stockage privé</string>
   <string name="oauth_check_onoff">Connexion avec oAuth2</string>
   <string name="oauth_login_connection">Connexion au serveur oAuth2…</string>
+  <string name="ssl_validator_header">L\'identité de ce serveur ne peut pas être vérifiée</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Le certificat du serveur n\'est pas sûr</string>
   <string name="ssl_validator_reason_cert_expired">- Le certificat du serveur a expiré</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Le certificat du serveur n\'est pas encore valide</string>
@@ -327,6 +332,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="update_link_forbidden_permissions">de modifier ce partage</string>
   <string name="forbidden_permissions_create">de créer ce fichier</string>
   <string name="uploader_upload_forbidden_permissions">de téléverser dans ce dossier</string>
+  <string name="uploader_upload_forbidden">Le téléversement n\'est pas autorisé</string>
   <string name="downloader_download_file_not_found">Ce fichier n’est plus disponible sur le serveur</string>
   <string name="prefs_category_accounts">Comptes</string>
   <string name="prefs_add_account">Ajouter un compte</string>
@@ -424,6 +430,18 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="confirmation_remove_files_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ?</string>
   <string name="confirmation_remove_folders_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ainsi que leurs contenus ?</string>
   <string name="failed_upload_quota_exceeded_text">Espace insuffisant pour ce compte</string>
+  <string name="auth_forbidden">Authentification interdite</string>
+  <string name="actionbar_privacy_policy">Politique de confidentialité</string>
+  <string name="prefs_privacy_policy">Politique de confidentialité</string>
+  <string name="privacy_policy_error">Une erreur s\'est produite : </string>
+  <string name="service_unavailable">Le serveur est indisponible</string>
+  <string name="streaming_certificate_error">La diffusion n\'a pas pu être initilisée parce que le certificat de votre serveur n\'est pas de confiance. Le téléchargement du fichier va démarrer automatiquement</string>
+  <string name="streaming_unrecognized_input">Ce format de vidéo n\'est pas supporté</string>
+  <string name="streaming_file_not_found_error">Cette vidéo n\'est plus disponible sur le serveur</string>
+  <string name="streaming_crossed_redirection">La diffusion n\'est pas autorisée via des redirections croisées</string>
+  <string name="previewing_video_common_error">Cette vidéo n\'a pas pu être chargée</string>
+  <string name="previewing_video_not_supported">La prévisualisation de vidéo n\'est pas supportée sur votre version d\'Android. Le téléchargement du fichier va démarrer automatiquement.</string>
+  <string name="streaming_position_not_available">\"Position non disponible\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>
