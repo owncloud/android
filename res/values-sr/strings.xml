@@ -101,6 +101,7 @@
   <string name="uploader_upload_failed_ticker">Отпремање није успело</string>
   <string name="uploader_upload_failed_content_single">Не могу да довршим отпремање %1$s</string>
   <string name="uploader_upload_failed_credentials_error">Отпремање није успело, морате поново да се пријавите</string>
+  <string name="uploader_upload_text_filename_hint">Назив фајла</string>
   <string name="uploads_view_title">Отпремања</string>
   <string name="uploads_view_group_current_uploads">Текуће</string>
   <string name="uploads_view_group_failed_uploads">Неуспело (тапните за понављање)</string>

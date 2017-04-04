@@ -116,6 +116,7 @@
   <string name="uploader_upload_failed_content_single">Wysyłanie %1$s nie powiodło się</string>
   <string name="uploader_upload_failed_credentials_error">Błąd przy wysyłaniu zaloguj się ponownie</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certyfikat serwera jest niezaufany</string>
+  <string name="uploader_upload_text_filename_hint">Nazwa pliku</string>
   <string name="ssl_certificate_not_trusted">Certyfikat serwera nie jest niezaufany</string>
   <string name="uploads_view_title">Wysłane</string>
   <string name="uploads_view_group_current_uploads">Obecny</string>

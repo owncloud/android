@@ -88,6 +88,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Enviado correctamente</string>
   <string name="uploader_upload_failed_ticker">Produciuse un fallou no envío</string>
   <string name="uploader_upload_failed_content_single">Non foi posíbel completar o envío de %1$s</string>
+  <string name="uploader_upload_text_filename_hint">Nome de ficheiro</string>
   <string name="uploads_view_title">Envíos</string>
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_finished_uploads">Enviado</string>

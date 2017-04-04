@@ -97,6 +97,7 @@
   <string name="uploader_upload_succeeded_ticker">A feltöltés sikerült</string>
   <string name="uploader_upload_failed_ticker">A feltöltés nem sikerült</string>
   <string name="uploader_upload_failed_content_single"> %1$s fájl feltöltése sikertelen</string>
+  <string name="uploader_upload_text_filename_hint">Fájlnév</string>
   <string name="uploads_view_title">Feltöltések</string>
   <string name="uploads_view_group_current_uploads">Jelenlegi</string>
   <string name="uploads_view_group_finished_uploads">Feltöltve</string>

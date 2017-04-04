@@ -116,6 +116,7 @@
   <string name="uploader_upload_failed_content_single">Ekki var hægt að ljúka innsendingu á %1$s</string>
   <string name="uploader_upload_failed_credentials_error">Innsending mistókst, þú verður að skrá þig inn aftur</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Skilríki þjónsins er ekki treyst</string>
+  <string name="uploader_upload_text_filename_hint">Filename</string>
   <string name="ssl_certificate_not_trusted">Skilríki þjónsins er ekki treyst</string>
   <string name="uploads_view_title">Innsendingar</string>
   <string name="uploads_view_group_current_uploads">Núverandi</string>

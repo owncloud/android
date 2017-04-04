@@ -114,6 +114,7 @@
   <string name="uploader_upload_failed_ticker">بارگذاری شکست خورد</string>
   <string name="uploader_upload_failed_content_single">بارگذاری %1$s نتوانست کامل شود</string>
   <string name="uploader_upload_failed_credentials_error">بارگذاری شکست خورد. نیاز است دوباره وارد شوید</string>
+  <string name="uploader_upload_text_filename_hint">نام فایل</string>
   <string name="uploads_view_title">بارگذاری‌ها</string>
   <string name="uploads_view_group_current_uploads">جاری</string>
   <string name="uploads_view_group_failed_uploads">شکست خورده (ضربه برای تلاش دوباره)</string>

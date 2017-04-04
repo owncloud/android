@@ -114,6 +114,7 @@
   <string name="uploader_upload_failed_ticker">Upload failed</string>
   <string name="uploader_upload_failed_content_single">Upload of %1$s could not be completed</string>
   <string name="uploader_upload_failed_credentials_error">Upload failed, you need to log in again</string>
+  <string name="uploader_upload_text_filename_hint">Filename</string>
   <string name="uploads_view_title">Uploads</string>
   <string name="uploads_view_group_current_uploads">Current</string>
   <string name="uploads_view_group_failed_uploads">Failed (tap to retry)</string>

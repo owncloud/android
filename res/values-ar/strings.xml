@@ -107,6 +107,7 @@
   <string name="uploader_upload_failed_ticker">فشل الرفع</string>
   <string name="uploader_upload_failed_content_single">لم يكتمل رفع  %1$s </string>
   <string name="uploader_upload_failed_credentials_error">فشل التحميل ، تحتاج للدخول مرة أخرى</string>
+  <string name="uploader_upload_text_filename_hint">اسم الملف</string>
   <string name="uploads_view_title">التحميلات</string>
   <string name="uploads_view_group_current_uploads">الحالي</string>
   <string name="uploads_view_group_failed_uploads">فشل (إلمس لإعادة المحاولة)</string>

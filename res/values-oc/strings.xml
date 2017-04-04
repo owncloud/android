@@ -108,6 +108,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="uploader_upload_succeeded_content_single">%1$s mandat</string>
   <string name="uploader_upload_failed_ticker">Fracàs del mandadís</string>
   <string name="uploader_upload_failed_content_single">Lo mandadís de %1$s a fracassat</string>
+  <string name="uploader_upload_text_filename_hint">Nom del fichièr</string>
   <string name="uploads_view_title">Cargaments</string>
   <string name="uploads_view_group_current_uploads">En cors</string>
   <string name="uploads_view_group_failed_uploads">Fracassat (quichar per tornar ensajar)</string>

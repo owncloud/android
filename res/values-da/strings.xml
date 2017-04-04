@@ -114,6 +114,7 @@
   <string name="uploader_upload_failed_ticker">Upload fejlede</string>
   <string name="uploader_upload_failed_content_single">Upload af %1$s kunne ikke gennemføres</string>
   <string name="uploader_upload_failed_credentials_error">Upload fejlet, du skal logge ind igen</string>
+  <string name="uploader_upload_text_filename_hint">Filnavn</string>
   <string name="uploads_view_title">Uploade filer</string>
   <string name="uploads_view_group_current_uploads">Nuværende</string>
   <string name="uploads_view_group_failed_uploads">Fejlet (tryk for at prøve igen)</string>

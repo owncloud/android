@@ -114,6 +114,7 @@
   <string name="uploader_upload_failed_ticker">上傳失敗</string>
   <string name="uploader_upload_failed_content_single">上傳 %1$s 未完成</string>
   <string name="uploader_upload_failed_credentials_error">上傳失敗，請重新登入。</string>
+  <string name="uploader_upload_text_filename_hint">檔案名稱</string>
   <string name="uploads_view_title">上傳</string>
   <string name="uploads_view_group_current_uploads">目前</string>
   <string name="uploads_view_group_failed_uploads">失敗 (輕觸可重試)</string>

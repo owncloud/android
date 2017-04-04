@@ -116,6 +116,7 @@
   <string name="uploader_upload_failed_ticker">アップロードに失敗</string>
   <string name="uploader_upload_failed_content_single">%1$s のアップロードが完了しませんでした</string>
   <string name="uploader_upload_failed_credentials_error">アップロードに失敗しました,ログインし直す必要があります</string>
+  <string name="uploader_upload_text_filename_hint">ファイル名</string>
   <string name="uploads_view_title">アップロード</string>
   <string name="uploads_view_group_current_uploads">現在</string>
   <string name="uploads_view_group_failed_uploads">失敗(タップして再試行)</string>

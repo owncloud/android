@@ -114,6 +114,7 @@
   <string name="uploader_upload_failed_ticker">Yükleme başarısız</string>
   <string name="uploader_upload_failed_content_single">%1$s yüklenmesi tamamlanamadı</string>
   <string name="uploader_upload_failed_credentials_error">Yükleme başarısız, tekrar oturum açmanız gerekli</string>
+  <string name="uploader_upload_text_filename_hint">Dosya adı</string>
   <string name="uploads_view_title">Yüklemeler</string>
   <string name="uploads_view_group_current_uploads">Geçerli</string>
   <string name="uploads_view_group_failed_uploads">Başarısız (tekrar denemek için dokun)</string>

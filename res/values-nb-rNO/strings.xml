@@ -114,6 +114,7 @@
   <string name="uploader_upload_failed_ticker">Opplasting feilet</string>
   <string name="uploader_upload_failed_content_single">Opplasting av %1$s kunne ikke fullføres</string>
   <string name="uploader_upload_failed_credentials_error">Opplasting feilet, du må logge inn på nytt</string>
+  <string name="uploader_upload_text_filename_hint">Filnavn</string>
   <string name="uploads_view_title">Opplastinger</string>
   <string name="uploads_view_group_current_uploads">Nåværende</string>
   <string name="uploads_view_group_failed_uploads">Feilet (trykk for å prøve igjen)</string>

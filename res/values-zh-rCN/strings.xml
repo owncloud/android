@@ -116,6 +116,7 @@
   <string name="uploader_upload_failed_content_single">%1$s 未能成功上传</string>
   <string name="uploader_upload_failed_credentials_error">上传失败，你需要重新登录</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">服务器证书不被信任</string>
+  <string name="uploader_upload_text_filename_hint">文件名</string>
   <string name="ssl_certificate_not_trusted">服务器证书不被信任</string>
   <string name="uploads_view_title">上传</string>
   <string name="uploads_view_group_current_uploads">当前</string>

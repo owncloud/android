@@ -98,6 +98,7 @@
   <string name="uploader_upload_succeeded_ticker">Üleslaadimine oli edukas</string>
   <string name="uploader_upload_failed_ticker">Üleslaadimine ebaõnnestus</string>
   <string name="uploader_upload_failed_content_single">%1$s üleslaadimise lõpetamine ebaõnnestus</string>
+  <string name="uploader_upload_text_filename_hint">Failinimi</string>
   <string name="uploads_view_title">Üleslaadimised</string>
   <string name="uploads_view_group_current_uploads">Praegune</string>
   <string name="uploads_view_group_finished_uploads">Üles laetud</string>

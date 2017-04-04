@@ -94,6 +94,7 @@
   <string name="uploader_upload_failed_ticker">Gagal mengunggah</string>
   <string name="uploader_upload_failed_content_single">Unggah %1$s tidak selesai</string>
   <string name="uploader_upload_failed_credentials_error">Mungunggah gagal, kamu harus masuk log lagi</string>
+  <string name="uploader_upload_text_filename_hint">Nama berkas</string>
   <string name="uploads_view_title">Unggah</string>
   <string name="uploads_view_group_current_uploads">Saat ini</string>
   <string name="uploads_view_group_finished_uploads">Terunggah</string>

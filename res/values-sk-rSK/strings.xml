@@ -98,6 +98,7 @@
   <string name="uploader_upload_failed_ticker">Odoslanie bolo neúspešné</string>
   <string name="uploader_upload_failed_content_single">Odoslanie %1$s nemohlo byť dokončené</string>
   <string name="uploader_upload_failed_credentials_error">Nahrávanie zlyhalo, je potrebné sa prihlásiť ešte raz</string>
+  <string name="uploader_upload_text_filename_hint">Názov súboru</string>
   <string name="uploads_view_title">Nahranie</string>
   <string name="uploads_view_group_current_uploads">Aktuálne</string>
   <string name="uploads_view_group_finished_uploads">Odoslané</string>

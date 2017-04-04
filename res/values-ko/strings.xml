@@ -110,6 +110,7 @@
   <string name="uploader_upload_failed_ticker">업로드 실패</string>
   <string name="uploader_upload_failed_content_single">%1$s을(를) 업로드할 수 없습니다</string>
   <string name="uploader_upload_failed_credentials_error">업로드가 실패하였습니다. 다시 로그인하십시오</string>
+  <string name="uploader_upload_text_filename_hint">파일 이름</string>
   <string name="uploads_view_title">업로드</string>
   <string name="uploads_view_group_current_uploads">현재</string>
   <string name="uploads_view_group_failed_uploads">실패함 (재시도 하려면 탭하시오)</string>

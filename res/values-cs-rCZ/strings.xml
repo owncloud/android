@@ -116,6 +116,7 @@
   <string name="uploader_upload_failed_content_single">Odesílání %1$s nemohlo být dokončeno</string>
   <string name="uploader_upload_failed_credentials_error">Nahrání selhalo, je třeba se znovu přihlásit</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
+  <string name="uploader_upload_text_filename_hint">Jméno souboru</string>
   <string name="ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
   <string name="uploads_view_title">Nahrání</string>
   <string name="uploads_view_group_current_uploads">Aktuální</string>

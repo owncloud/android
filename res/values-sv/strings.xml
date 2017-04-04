@@ -116,6 +116,7 @@
   <string name="uploader_upload_failed_content_single">Uppladdning av %1$s kunde inte slutföras</string>
   <string name="uploader_upload_failed_credentials_error">Uppladdningen misslyckades, du måste logga in igen</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Litar inte på servercertifikat</string>
+  <string name="uploader_upload_text_filename_hint">Filnamn</string>
   <string name="ssl_certificate_not_trusted">Litar inte på servercertifikat</string>
   <string name="uploads_view_title">Uppladdningar</string>
   <string name="uploads_view_group_current_uploads">Nuvarande</string>

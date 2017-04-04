@@ -117,6 +117,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_upload_failed_content_single">L\'envoi de %1$s a échoué</string>
   <string name="uploader_upload_failed_credentials_error">Le téléversement a échoué, vous devez vous reconnecter</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
+  <string name="uploader_upload_text_filename_hint">Nom du fichier</string>
   <string name="ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
   <string name="uploads_view_title">Chargements</string>
   <string name="uploads_view_group_current_uploads">En ce moment</string>

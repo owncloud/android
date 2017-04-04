@@ -82,6 +82,7 @@
   <string name="uploader_upload_failed_ticker">Alŝuto malsukcesis</string>
   <string name="uploader_upload_failed_content_single">Alŝuto de %1s ne eblis plenumiĝi</string>
   <string name="uploader_upload_failed_credentials_error">Alŝuto malsukcesis, vi devas ensaluti ree</string>
+  <string name="uploader_upload_text_filename_hint">Dosiernomo</string>
   <string name="uploads_view_title">Alŝutoj</string>
   <string name="uploads_view_group_current_uploads">Nuna</string>
   <string name="uploads_view_group_finished_uploads">Alŝutita</string>

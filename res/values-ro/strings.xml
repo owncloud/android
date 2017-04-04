@@ -106,6 +106,7 @@
   <string name="uploader_upload_failed_ticker">Încărcarea a eșuat</string>
   <string name="uploader_upload_failed_content_single">Încărcarea fișierului %1$s nu a putut fi încheiată</string>
   <string name="uploader_upload_failed_credentials_error">Incarcarea a eșuat, trebuie să te autentifici din nou</string>
+  <string name="uploader_upload_text_filename_hint">Nume fișier</string>
   <string name="uploads_view_title">Încărcări</string>
   <string name="uploads_view_group_current_uploads">Curent</string>
   <string name="uploads_view_group_finished_uploads">Încărcat</string>
