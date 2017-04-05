@@ -116,6 +116,9 @@
   <string name="uploader_upload_failed_content_single">Hochladen von  %1$s konnte nicht abgeschlossen werden</string>
   <string name="uploader_upload_failed_credentials_error">Hochladen fehlgeschlagen, du musst dich erneut anmelden</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
+  <string name="uploader_upload_text_dialog_title">Namen für die neue Datei eingeben</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Der Dateiname muss angegeben werden</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Der Dateiname darf nicht mehr als %d Zeichen haben</string>
   <string name="uploader_upload_text_filename_hint">Dateiname</string>
   <string name="ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="uploads_view_title">Uploads</string>
