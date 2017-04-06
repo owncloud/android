@@ -117,6 +117,9 @@
   <string name="uploader_upload_failed_content_single">Загрузка %1$s не может быть завершена</string>
   <string name="uploader_upload_failed_credentials_error">Загрузка не удалась, вам необходимо войти повторно.</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
+  <string name="uploader_upload_text_dialog_title">Укажите имя для нового файла</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Имя файла не должно быть пустым</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
   <string name="uploader_upload_text_filename_hint">Имя файла</string>
   <string name="ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
   <string name="uploads_view_title">Загрузки</string>
