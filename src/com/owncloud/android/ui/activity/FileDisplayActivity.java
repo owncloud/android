@@ -136,7 +136,7 @@ public class FileDisplayActivity extends HookActivity
     private boolean mSyncInProgress = false;
 
     private OCFile mWaitingToSend;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -886,7 +886,10 @@ public class FileDisplayActivity extends HookActivity
     @Override
     public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
         Fragment secondFragment = getSecondFragment();
-        ((PreviewVideoFragment) secondFragment).onPreparedVideoPlayer(mediaSource);
+        //Ensure the second fragment has not been changed to a different one
+        if (secondFragment instanceof PreviewVideoFragment) {
+            ((PreviewVideoFragment) secondFragment).onPreparedVideoPlayer(mediaSource);
+        }
     }
 
 

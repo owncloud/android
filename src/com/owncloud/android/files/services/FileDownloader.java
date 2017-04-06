@@ -551,6 +551,7 @@ public class FileDownloader extends Service
         } else {
             showDetailsIntent = new Intent(this, FileDisplayActivity.class);
         }
+
         showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, download.getFile());
         showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, download.getAccount());
         showDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
