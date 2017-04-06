@@ -103,8 +103,7 @@ import static com.owncloud.android.db.PreferenceManager.getSortOrder;
  */
 
 public class FileDisplayActivity extends HookActivity
-        implements FileFragment.ContainerActivity,
-        OnEnforceableRefreshListener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener{
+        implements FileFragment.ContainerActivity, OnEnforceableRefreshListener {
 
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private UploadBroadcastReceiver mUploadBroadcastReceiver;
@@ -882,16 +881,6 @@ public class FileDisplayActivity extends HookActivity
             return false;
         }
     }
-
-    @Override
-    public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
-        Fragment secondFragment = getSecondFragment();
-        //Ensure the second fragment has not been changed to a different one
-        if (secondFragment instanceof PreviewVideoFragment) {
-            ((PreviewVideoFragment) secondFragment).onPreparedVideoPlayer(mediaSource);
-        }
-    }
-
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {
 
