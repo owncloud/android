@@ -116,7 +116,12 @@
   <string name="uploader_upload_failed_ticker">アップロードに失敗</string>
   <string name="uploader_upload_failed_content_single">%1$s のアップロードが完了しませんでした</string>
   <string name="uploader_upload_failed_credentials_error">アップロードに失敗しました,ログインし直す必要があります</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">サーバー証明書は信頼されていません</string>
+  <string name="uploader_upload_text_dialog_title">新しいファイル名を入力してください</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">ファイル名を指定してください</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">ファイル名は %d 文字以下にしてください</string>
   <string name="uploader_upload_text_filename_hint">ファイル名</string>
+  <string name="ssl_certificate_not_trusted">サーバー証明書は信頼されていません</string>
   <string name="uploads_view_title">アップロード</string>
   <string name="uploads_view_group_current_uploads">現在</string>
   <string name="uploads_view_group_failed_uploads">失敗(タップして再試行)</string>
@@ -131,6 +136,7 @@
   <string name="uploads_view_upload_status_failed_file_error">ファイルエラー</string>
   <string name="uploads_view_upload_status_failed_localfile_error">ローカルファイルがありません</string>
   <string name="uploads_view_upload_status_failed_permission_error">権限エラー</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">ファイアウォールによりアクセスが禁止されました</string>
   <string name="uploads_view_upload_status_conflict">競合</string>
   <string name="uploads_view_upload_status_service_interrupted">強制終了されました</string>
   <string name="uploads_view_upload_status_unknown_fail">不明なエラー</string>
@@ -144,6 +150,7 @@
   <string name="downloader_download_failed_content">%1$s のダウンロードは完了しませんでした</string>
   <string name="downloader_not_downloaded_yet">未ダウンロード</string>
   <string name="downloader_download_failed_credentials_error">ダウンロードに失敗しました,ログインし直す必要があります</string>
+  <string name="downloader_download_forbidden_permissions">ファイルをダウンロード</string>
   <string name="common_choose_account">アカウントを選択</string>
   <string name="sync_fail_ticker">同期の失敗</string>
   <string name="sync_fail_ticker_unauthorized">同期に失敗しました,ログインし直す必要があります</string>
@@ -252,6 +259,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">プライベートストレージからファイルをコピー中</string>
   <string name="oauth_check_onoff">oAuth2でログイン</string>
   <string name="oauth_login_connection">oAuth2サーバーに接続中...</string>
+  <string name="ssl_validator_header">このサーバーは検証できませんでした。</string>
   <string name="ssl_validator_reason_cert_not_trusted">- サーバー証明書は信頼されていません</string>
   <string name="ssl_validator_reason_cert_expired">- サーバー証明書は有効期限切れです</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- サーバー証明書の有効期限は未来のものです</string>
@@ -325,6 +333,7 @@
   <string name="update_link_forbidden_permissions">共有を更新</string>
   <string name="forbidden_permissions_create">ファイルを作成</string>
   <string name="uploader_upload_forbidden_permissions">フォルダーをアップロード</string>
+  <string name="uploader_upload_forbidden">アップロードは許可されていません</string>
   <string name="downloader_download_file_not_found">ファイルはサーバー上で利用できません</string>
   <string name="prefs_category_accounts">アカウント</string>
   <string name="prefs_add_account">アカウントを追加</string>
@@ -383,6 +392,7 @@
   <string name="share_file">%1$s を共有</string>
   <string name="share_with_user_section_title">ユーザーとグループで共有</string>
   <string name="share_no_users">ユーザーと共有されているデータはありません</string>
+  <string name="share_incompatible_version">他のユーザーと共有するには、サーバーバージョンが 8.2 以上である必要があります。</string>
   <string name="share_add_user_or_group">ユーザーかグループを追加</string>
   <string name="share_via_link_section_title">URLで共有</string>
   <string name="share_via_link_expiration_date_label">有効期限を設定</string>
@@ -421,6 +431,17 @@
   <string name="confirmation_remove_files_alert">選択したものを削除してよろしいですか?</string>
   <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
   <string name="failed_upload_quota_exceeded_text">アカウントに十分なスペースがありません</string>
+  <string name="auth_forbidden">認証失敗</string>
+  <string name="actionbar_privacy_policy">プライバシーポリシー</string>
+  <string name="prefs_privacy_policy">プライバシーポリシー</string>
+  <string name="privacy_policy_error">エラーが発生しました：</string>
+  <string name="service_unavailable">サーバーは利用できません</string>
+  <string name="streaming_certificate_error">サーバー証明書が不正なため、ストリーミングは利用できません。ファイルは自動でダウンロードされます。</string>
+  <string name="streaming_unrecognized_input">サポートされていないフォーマットです</string>
+  <string name="streaming_file_not_found_error">この動画は利用できません</string>
+  <string name="streaming_crossed_redirection">クロスリダイレクションを利用したストリーミングは許可されていません</string>
+  <string name="previewing_video_common_error">この動画は再生できません</string>
+  <string name="previewing_video_not_supported">お使いの端末では動画のプレビューがサポートされていません。ファイルは自動でダウンロードされます。</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d個選択中</item>
   </plurals>

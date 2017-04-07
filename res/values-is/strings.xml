@@ -116,6 +116,9 @@
   <string name="uploader_upload_failed_content_single">Ekki var hægt að ljúka innsendingu á %1$s</string>
   <string name="uploader_upload_failed_credentials_error">Innsending mistókst, þú verður að skrá þig inn aftur</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Skilríki þjónsins er ekki treyst</string>
+  <string name="uploader_upload_text_dialog_title">Settu inn heiti á nýju skrána</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Skráarheiti má ekki vera tómt</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Skráarheiti má ekki vera fleiri en %d stafir</string>
   <string name="uploader_upload_text_filename_hint">Filename</string>
   <string name="ssl_certificate_not_trusted">Skilríki þjónsins er ekki treyst</string>
   <string name="uploads_view_title">Innsendingar</string>
@@ -433,6 +436,12 @@
   <string name="privacy_policy_error">Villa kom upp:</string>
   <string name="service_unavailable">Þjónninn er ekki tiltækur</string>
   <string name="streaming_certificate_error">Ekki var hægt að ræsa streymi, því skilríki þjónsins þíns er ekki treyst. Niðurhal á skrá fer því sjálfkrafa í gang</string>
+  <string name="streaming_unrecognized_input">Ekki er stuðningur við þetta snið myndskeiðs</string>
+  <string name="streaming_file_not_found_error">Þessi myndskeiðskrá er ekki lengur tiltæk á þjóninum</string>
+  <string name="streaming_crossed_redirection">Streyming er ekki leyfð um krossaðar endurbeiningar</string>
+  <string name="previewing_video_common_error">Ekki er hægt að birta þetta myndskeið</string>
+  <string name="previewing_video_not_supported">Forskoðun myndskeiða er ekki studd í þinni útgáfu af Android. Niðurhal á skrá fer því sjálfkrafa í gang.</string>
+  <string name="streaming_position_not_available">\"Staðsetning ekki tiltæk\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valið</item>
     <item quantity="other">%d valið</item>
