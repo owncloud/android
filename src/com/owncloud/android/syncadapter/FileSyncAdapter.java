@@ -4,7 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -35,8 +35,8 @@ import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.operations.SyncCapabilitiesOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.operations.UpdateOCVersionOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.ErrorsWhileCopyingHandlerActivity;
@@ -179,7 +179,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                                                                 // of the synchronization to the UI
         
         try {
-            updateOCVersion();
+            updateCapabilities();
             mCurrentSyncTime = System.currentTimeMillis();
             if (!mCancellation) {
                 synchronizeFolder(getStorageManager().getFileByPath(OCFile.ROOT_PATH), false);
@@ -234,17 +234,17 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     
     
     /**
-     * Updates the locally stored version value of the ownCloud server
+     * Updates the local copy of capabilities information of the ownCloud server
      */
-    private void updateOCVersion() {
-        UpdateOCVersionOperation update = new UpdateOCVersionOperation(getAccount(), getContext());
-        RemoteOperationResult result = update.execute(getClient());
+    private void updateCapabilities() {
+        SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
+        RemoteOperationResult  result = getCapabilities.execute(getStorageManager(), getContext());
         if (!result.isSuccess()) {
-            mLastFailedResult = result; 
+            mLastFailedResult = result;
         }
     }
-    
-    
+
+
     /**
      *  Synchronizes the list of files contained in a folder identified with its remote path.
      *  
