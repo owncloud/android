@@ -531,12 +531,14 @@ public class FileDisplayActivity extends HookActivity
             case android.R.id.home: {
                 FileFragment second = getSecondFragment();
                 OCFile currentDir = getCurrentDir();
-                if (isDrawerOpen()) {
-                    closeDrawer();
-                } else if ((currentDir != null && currentDir.getParentId() != 0) ||
-                        (second != null && second.getFile() != null)) {
-                    onBackPressed();
 
+                boolean inRootFolder = currentDir != null && currentDir.getParentId() == 0;
+                boolean fileFragmentVisible = second != null && second.getFile() != null;
+
+                if (!inRootFolder || (fileFragmentVisible && !mDualPane)) {
+                    onBackPressed();
+                } else if (isDrawerOpen()) {
+                    closeDrawer();
                 } else {
                     openDrawer();
                 }
