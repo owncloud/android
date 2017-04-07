@@ -4,7 +4,7 @@
  * @author masensio
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
- * Copyright (C) 2016 ownCloud GmbH.
+ * Copyright (C) 2017 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,6 +49,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
@@ -212,7 +213,8 @@ public class ShareFileFragment extends Fragment
             size.setText(DisplayUtils.bytesToHumanReadable(mFile.getFileLength(), getActivity()));
         }
 
-        final boolean shareWithUsersEnable = AccountUtils.hasSearchUsersSupport(mAccount);
+        OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
+        final boolean shareWithUsersEnable = (serverVersion != null && serverVersion.isSearchUsersSupported());
 
         TextView shareNoUsers = (TextView) view.findViewById(R.id.shareNoUsers);
 
@@ -516,7 +518,6 @@ public class ShareFileFragment extends Fragment
                             mFile,
                             isChecked
                     );
-            ;
 
             // undo the toggle to grant the view will be correct if the dialog is cancelled
             switchView.setOnCheckedChangeListener(null);
