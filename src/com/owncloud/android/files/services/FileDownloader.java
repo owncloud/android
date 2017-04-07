@@ -470,6 +470,9 @@ public class FileDownloader extends Service
                                 // require unmetered network
                                 builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
 
+                                // Persist job and prevent it from being deleted after a device restart
+                                builder.setPersisted(true);
+
                                 // Extra data
                                 PersistableBundle extras = new PersistableBundle();
                                 extras.putString(EXTRA_REMOTE_PATH, mCurrentDownload.getRemotePath());
