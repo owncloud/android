@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -47,42 +47,8 @@ public class AccountUtils {
 
     private static final String TAG = AccountUtils.class.getSimpleName();
 
-    public static final String WEBDAV_PATH_1_2 = "/webdav/owncloud.php";
-    public static final String WEBDAV_PATH_2_0 = "/files/webdav.php";
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
-    public static final String ODAV_PATH = "/remote.php/odav";
-    private static final String SAML_SSO_PATH = "/remote.php/webdav";
-    public static final String CARDDAV_PATH_2_0 = "/apps/contacts/carddav.php";
-    public static final String CARDDAV_PATH_4_0 = "/remote/carddav.php";
     public static final String STATUS_PATH = "/status.php";
-
-    /**
-     * Returns the proper URL path to access the WebDAV interface of an ownCloud server,
-     * according to its version and the authorization method used.
-     *
-     * @param supportsOAuth   If true, access with OAuth 2 authorization is considered.
-     * @param supportsSamlSso If true, and supportsOAuth is false, access with SAML-based single-sign-on is considered.
-     * @return WebDAV path for given OC version, null if OC version unknown
-     * @param    version Version of ownCloud server.
-     */
-    public static String getWebdavPath(OwnCloudVersion version, boolean supportsOAuth, boolean supportsSamlSso) {
-        if (version != null) {
-            if (supportsOAuth) {
-                return ODAV_PATH;
-            }
-            if (supportsSamlSso) {
-                return SAML_SSO_PATH;
-            }
-            if (version.compareTo(OwnCloudVersion.owncloud_v4) >= 0)
-                return WEBDAV_PATH_4_0;
-            if (version.compareTo(OwnCloudVersion.owncloud_v3) >= 0
-                || version.compareTo(OwnCloudVersion.owncloud_v2) >= 0)
-                return WEBDAV_PATH_2_0;
-            if (version.compareTo(OwnCloudVersion.owncloud_v1) >= 0)
-                return WEBDAV_PATH_1_2;
-        }
-        return null;
-    }
 
     /**
      * Constructs full url to host and webdav resource basing on host version
@@ -97,16 +63,10 @@ public class AccountUtils {
     public static String constructFullURLForAccount(Context context, Account account) throws AccountNotFoundException {
         AccountManager ama = AccountManager.get(context);
         String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
-        String version = ama.getUserData(account, Constants.KEY_OC_VERSION);
-        boolean supportsOAuth = (ama.getUserData(account, Constants.KEY_SUPPORTS_OAUTH2) != null);
-        boolean supportsSamlSso = (ama.getUserData(account, Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null);
-        OwnCloudVersion ver = new OwnCloudVersion(version);
-        String webdavpath = getWebdavPath(ver, supportsOAuth, supportsSamlSso);
-
-        if (baseurl == null || webdavpath == null)
+        if (baseurl == null) {
             throw new AccountNotFoundException(account, "Account not found", null);
-
-        return baseurl + webdavpath;
+        }
+        return baseurl + WEBDAV_PATH_4_0;
     }
 
     /**

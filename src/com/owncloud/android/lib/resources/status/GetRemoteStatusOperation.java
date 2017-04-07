@@ -115,30 +115,26 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                 } else {
                     String version = json.getString(NODE_VERSION);
                     OwnCloudVersion ocVersion = new OwnCloudVersion(version);
-                    if (!ocVersion.isVersionValid()) {
+                    /// the version object will be returned even if the version is invalid, no error code;
+                    /// every app will decide how to act if (ocVersion.isVersionValid() == false)
+
+                    if (isRedirectToNonSecureConnection) {
                         mLatestResult = new RemoteOperationResult(
-                            RemoteOperationResult.ResultCode.BAD_OC_VERSION);
-
+                            RemoteOperationResult.ResultCode.
+                                OK_REDIRECT_TO_NON_SECURE_CONNECTION
+                        );
                     } else {
-                        // success
-                        if (isRedirectToNonSecureConnection) {
-                            mLatestResult = new RemoteOperationResult(
-                                RemoteOperationResult.ResultCode.
-                                    OK_REDIRECT_TO_NON_SECURE_CONNECTION
-                            );
-                        } else {
-                            mLatestResult = new RemoteOperationResult(
-                                baseUrlSt.startsWith("https://") ?
-                                    RemoteOperationResult.ResultCode.OK_SSL :
-                                    RemoteOperationResult.ResultCode.OK_NO_SSL
-                            );
-                        }
-
-                        ArrayList<Object> data = new ArrayList<Object>();
-                        data.add(ocVersion);
-                        mLatestResult.setData(data);
-                        retval = true;
+                        mLatestResult = new RemoteOperationResult(
+                            baseUrlSt.startsWith("https://") ?
+                                RemoteOperationResult.ResultCode.OK_SSL :
+                                RemoteOperationResult.ResultCode.OK_NO_SSL
+                        );
                     }
+
+                    ArrayList<Object> data = new ArrayList<Object>();
+                    data.add(ocVersion);
+                    mLatestResult.setData(data);
+                    retval = true;
                 }
 
             } else {

@@ -26,16 +26,6 @@
 package com.owncloud.android.lib.resources.status;
 
 public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
-    public static final OwnCloudVersion owncloud_v1 = new OwnCloudVersion(
-            0x01000000);
-    public static final OwnCloudVersion owncloud_v2 = new OwnCloudVersion(
-            0x02000000);
-    public static final OwnCloudVersion owncloud_v3 = new OwnCloudVersion(
-            0x03000000);
-    public static final OwnCloudVersion owncloud_v4 = new OwnCloudVersion(
-            0x04000000);
-    public static final OwnCloudVersion owncloud_v4_5 = new OwnCloudVersion(
-            0x04050000);
 
     public static final int MINIMUN_VERSION_FOR_CHUNKED_UPLOADS = 0x04050000; // 4.5
 
@@ -56,7 +46,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     private static final int MINIMUM_VERSION_WITH_SESSION_MONITORING = 0x09010000;   // 9.1
 
     private static final int MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE = 0x09010301;
-      // 9.1.3.1, final 9.1.3: https://github.com/owncloud/core/commit/f9a867b70c217463289a741d4d26079eb2a80dfd
+    // 9.1.3.1, final 9.1.3: https://github.com/owncloud/core/commit/f9a867b70c217463289a741d4d26079eb2a80dfd
 
     private static final int MAX_DOTS = 3;
 
@@ -67,37 +57,47 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     private int mVersion;
     private boolean mIsValid;
 
-    protected OwnCloudVersion(int version) {
+    /**
+     *  @deprecated  Will be removed in version 1.0 of the library.
+     */
+    private OwnCloudVersion(int version) {
         mVersion = version;
         mIsValid = true;
     }
-    
-    public OwnCloudVersion(String version){
-    	 mVersion = 0;
-         mIsValid = false;
-         int countDots = version.length() - version.replace(".", "").length();
 
-         // Complete the version. Version must have 3 dots
-         for (int i = countDots; i < MAX_DOTS; i++) {
-        	 version = version + ".0";
-         }
-         
-         parseVersion(version);
+    public OwnCloudVersion(String version) {
+        mVersion = 0;
+        mIsValid = false;
+        int countDots = version.length() - version.replace(".", "").length();
+
+        // Complete the version. Version must have 3 dots
+        for (int i = countDots; i < MAX_DOTS; i++) {
+            version = version + ".0";
+        }
+
+        parseVersion(version);
 
     }
-    
+
     public String toString() {
-    	String versionToString = String.valueOf((mVersion >> (8*MAX_DOTS)) % 256);
-    	for (int i = MAX_DOTS - 1; i >= 0; i-- ) {
-    		versionToString = versionToString + "." + String.valueOf((mVersion >> (8*i)) % 256);
-    	}
+        String versionToString = String.valueOf((mVersion >> (8 * MAX_DOTS)) % 256);
+        for (int i = MAX_DOTS - 1; i >= 0; i--) {
+            versionToString = versionToString + "." + String.valueOf((mVersion >> (8 * i)) % 256);
+        }
+        if (!mIsValid) {
+            versionToString += " INVALID";
+        }
         return versionToString;
     }
-    
+
     public String getVersion() {
-    	return toString();
+        if (mIsValid) {
+            return toString();
+        } else {
+            return "0.0.0";
+        }
     }
-    
+
     public boolean isVersionValid() {
         return mIsValid;
     }
@@ -105,34 +105,37 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     @Override
     public int compareTo(OwnCloudVersion another) {
         return another.mVersion == mVersion ? 0
-                : another.mVersion < mVersion ? 1 : -1;
+            : another.mVersion < mVersion ? 1 : -1;
     }
 
     private void parseVersion(String version) {
-    	try {
-    		mVersion = getParsedVersion(version);
-    		mIsValid = true;
-    		
-    	} catch (Exception e) {
-    		mIsValid = false;
+        try {
+            mVersion = getParsedVersion(version);
+            mIsValid = true;
+
+        } catch (Exception e) {
+            mIsValid = false;
+            // if invalid, the instance will respond as if server is 8.1, minimum with capabilities API,
+            // and "dead" : https://github.com/owncloud/core/wiki/Maintenance-and-Release-Schedule
+            mVersion = MINIMUM_VERSION_CAPABILITIES_API;
         }
     }
-    
+
     private int getParsedVersion(String version) throws NumberFormatException {
-    	int versionValue = 0;
+        int versionValue = 0;
 
-    	// get only numeric part 
-    	version = version.replaceAll("[^\\d.]", "");
+        // get only numeric part
+        version = version.replaceAll("[^\\d.]", "");
 
-    	String[] nums = version.split("\\.");
-    	for (int i = 0; i < nums.length && i <= MAX_DOTS; i++) {
-    		versionValue += Integer.parseInt(nums[i]);
-    		if (i < nums.length - 1) {
-    			versionValue = versionValue << 8;
-    		}
-    	}
+        String[] nums = version.split("\\.");
+        for (int i = 0; i < nums.length && i <= MAX_DOTS; i++) {
+            versionValue += Integer.parseInt(nums[i]);
+            if (i < nums.length - 1) {
+                versionValue = versionValue << 8;
+            }
+        }
 
-    	return versionValue; 
+        return versionValue;
     }
 
 
@@ -141,7 +144,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     }
 
     public boolean isSharedSupported() {
-    	return (mVersion >= MINIMUM_VERSION_FOR_SHARING_API);
+        return (mVersion >= MINIMUM_VERSION_FOR_SHARING_API);
     }
 
     public boolean isVersionWithForbiddenCharacters() {
@@ -152,7 +155,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
         return (mVersion >= MINIMUM_SERVER_VERSION_FOR_REMOTE_THUMBNAILS);
     }
 
-    public boolean isAfter8Version(){
+    public boolean isAfter8Version() {
         return (mVersion >= VERSION_8);
     }
 
@@ -160,8 +163,8 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
         return (mVersion >= MINIMUM_VERSION_FOR_SEARCHING_USERS);
     }
 
-    public boolean isVersionWithCapabilitiesAPI(){
-        return (mVersion>= MINIMUM_VERSION_CAPABILITIES_API);
+    public boolean isVersionWithCapabilitiesAPI() {
+        return (mVersion >= MINIMUM_VERSION_CAPABILITIES_API);
     }
 
     public boolean isNotReshareableFederatedSupported() {
@@ -177,11 +180,11 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
      * mode of basic authentication is disabled. This changes in OC 9.1.3, where preemptive mode is compatible
      * with session tracking again.
      *
-     * @return      True for every version before 9.1 and from 9.1.3, false otherwise
+     * @return True for every version before 9.1 and from 9.1.3, false otherwise
      */
     public boolean isPreemptiveAuthenticationPreferred() {
         return (
-                (mVersion < MINIMUM_VERSION_WITH_SESSION_MONITORING) ||
+            (mVersion < MINIMUM_VERSION_WITH_SESSION_MONITORING) ||
                 (mVersion >= MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE)
         );
     }
