@@ -12,6 +12,7 @@
   <string name="actionbar_send_file">Αποστολή</string>
   <string name="actionbar_sort">Ταξινόμηση</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
+  <string name="actionbar_sort_by_name">A-Ω</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
@@ -37,6 +38,7 @@
   <string name="prefs_remember_last_upload_location_summary">Αποθήκευση τελευταίου σημείου διαμοιρασμού μεταφόρτωσης</string>
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
+  <string name="auth_check_server">Έλεγχος διακομιστή</string>
   <string name="auth_host_url">Διεύθυνση διακομιστή https://…</string>
   <string name="auth_username">Όνομα χρήστη</string>
   <string name="auth_password">Συνθηματικό</string>

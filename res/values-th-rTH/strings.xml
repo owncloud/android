@@ -116,6 +116,9 @@
   <string name="uploader_upload_failed_content_single">ไม่สามารถดำเนินการอัพโหลด %1$s ให้เสร็จสมบูรณ์ได้</string>
   <string name="uploader_upload_failed_credentials_error">การอัพโหลดล้มเหลว คุณจำเป็นต้องเข้าสู่ระบบใหม่อีกครั้ง</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
+  <string name="uploader_upload_text_dialog_title">ใส่ชื่อไฟล์ใหม่</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">ชื่อไฟล์ต้องไม่ว่างเปล่า</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">ชื่อไฟล์ต้องมีอักขระไม่เกิน %d ตัว</string>
   <string name="uploader_upload_text_filename_hint">ชื่อไฟล์</string>
   <string name="ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="uploads_view_title">อัพโหลด</string>
@@ -431,6 +434,12 @@
   <string name="privacy_policy_error">เกิดข้อผิดพลาด:</string>
   <string name="service_unavailable">เซิร์ฟเวอร์ไม่พร้อมใช้งาน</string>
   <string name="streaming_certificate_error">ไม่สามารถเริ่มต้นการสตรีมเนื่องจากใบรับรองเซิร์ฟเวอร์ของคุณไม่น่าเชื่อถือ การดาวน์โหลดไฟล์จะเริ่มขึ้นโดยอัตโนมัติ</string>
+  <string name="streaming_unrecognized_input">ไม่สนับสนุนรูปแบบวิดีโอนี้</string>
+  <string name="streaming_file_not_found_error">ไม่สามารถใช้งานไฟล์วิดีโอนี้ในเซิร์ฟเวอร์</string>
+  <string name="streaming_crossed_redirection">ไม่อนุญาตให้สตรีมมิ่งผ่านการเปลี่ยนเส้นทางแบบข้าม</string>
+  <string name="previewing_video_common_error">ไม่สามารถทำสำเนาวิดีโอนี้ได้</string>
+  <string name="previewing_video_not_supported">การดูตัวอย่างวิดีโอไม่ได้รับการสนับสนุนในเวอร์ชัน Android ของคุณ การดาวน์โหลดไฟล์จะเริ่มขึ้นโดยอัตโนมัติ</string>
+  <string name="streaming_position_not_available">\"ตำแหน่งไม่พร้อมใช้งาน\"</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>
