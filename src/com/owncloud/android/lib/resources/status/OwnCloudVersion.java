@@ -48,6 +48,8 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     private static final int MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE = 0x09010301;
     // 9.1.3.1, final 9.1.3: https://github.com/owncloud/core/commit/f9a867b70c217463289a741d4d26079eb2a80dfd
 
+    private static final String INVALID_ZERO_VERSION = "0.0.0";
+
     private static final int MAX_DOTS = 3;
 
     // format is in version
@@ -80,8 +82,11 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     }
 
     public String toString() {
+        // gets the first digit of version, shifting hexadecimal version to right 'til max position
         String versionToString = String.valueOf((mVersion >> (8 * MAX_DOTS)) % 256);
         for (int i = MAX_DOTS - 1; i >= 0; i--) {
+            // gets another digit of version, shifting hexadecimal version to right 8*i bits and...
+            // ...discarding left part with mod 256
             versionToString = versionToString + "." + String.valueOf((mVersion >> (8 * i)) % 256);
         }
         if (!mIsValid) {
@@ -94,7 +99,7 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
         if (mIsValid) {
             return toString();
         } else {
-            return "0.0.0";
+            return INVALID_ZERO_VERSION;
         }
     }
 

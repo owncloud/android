@@ -63,6 +63,8 @@ public class GetRemoteStatusOperation extends RemoteOperation {
 
     private static final String NODE_INSTALLED = "installed";
     private static final String NODE_VERSION = "version";
+    private static final String HTTPS_PREFIX = "https://";
+    private static final String HTTP_PREFIX = "http://";
 
     private RemoteOperationResult mLatestResult;
     private Context mContext;
@@ -93,8 +95,8 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                 && !mLatestResult.isSuccess()) {
 
                 isRedirectToNonSecureConnection |= (
-                    baseUrlSt.startsWith("https://") &&
-                        redirectedLocation.startsWith("http://")
+                    baseUrlSt.startsWith(HTTPS_PREFIX) &&
+                        redirectedLocation.startsWith(HTTP_PREFIX)
                 );
                 get.releaseConnection();
                 get = new GetMethod(redirectedLocation);
@@ -125,7 +127,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                         );
                     } else {
                         mLatestResult = new RemoteOperationResult(
-                            baseUrlSt.startsWith("https://") ?
+                            baseUrlSt.startsWith(HTTPS_PREFIX) ?
                                 RemoteOperationResult.ResultCode.OK_SSL :
                                 RemoteOperationResult.ResultCode.OK_NO_SSL
                         );
@@ -180,15 +182,15 @@ public class GetRemoteStatusOperation extends RemoteOperation {
             return new RemoteOperationResult(RemoteOperationResult.ResultCode.NO_NETWORK_CONNECTION);
         }
         String baseUriStr = client.getBaseUri().toString();
-        if (baseUriStr.startsWith("http://") || baseUriStr.startsWith("https://")) {
+        if (baseUriStr.startsWith(HTTP_PREFIX) || baseUriStr.startsWith(HTTPS_PREFIX)) {
             tryConnection(client);
 
         } else {
-            client.setBaseUri(Uri.parse("https://" + baseUriStr));
+            client.setBaseUri(Uri.parse(HTTPS_PREFIX + baseUriStr));
             boolean httpsSuccess = tryConnection(client);
             if (!httpsSuccess && !mLatestResult.isSslRecoverableException()) {
                 Log_OC.d(TAG, "establishing secure connection failed, trying non secure connection");
-                client.setBaseUri(Uri.parse("http://" + baseUriStr));
+                client.setBaseUri(Uri.parse(HTTP_PREFIX + baseUriStr));
                 tryConnection(client);
             }
         }
