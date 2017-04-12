@@ -32,6 +32,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -63,6 +64,7 @@ import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
 import com.owncloud.android.utils.ConnectivityUtils;
+import com.owncloud.android.utils.PowerUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -448,44 +450,32 @@ public class FileDownloader extends Service
                             );
 
                     if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
-
-                        // Check network availabality
-                        if (!ConnectivityUtils.isNetworkActive(getApplicationContext())) {
-
-                            // Schedule future retry of failed download due to network error from Android 5
-                            if (android.os.Build.VERSION.SDK_INT >=
-                                    android.os.Build.VERSION_CODES.LOLLIPOP) {
-
-                                ComponentName mServiceComponent = new ComponentName(this,
-
-                                        RetryDownloadJobService.class);
-
-                                JobInfo.Builder builder;
-
-                                int jobId = mPendingDownloads. buildKey(mCurrentAccount.name,
-                                        mCurrentDownload.getRemotePath()).hashCode();
-                                
-                                builder = new JobInfo.Builder(jobId, mServiceComponent);
-
-                                // require unmetered network
-                                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
-
-                                // Persist job and prevent it from being deleted after a device restart
-                                builder.setPersisted(true);
-
-                                // Extra data
-                                PersistableBundle extras = new PersistableBundle();
-                                extras.putString(EXTRA_REMOTE_PATH, mCurrentDownload.getRemotePath());
-                                extras.putString(EXTRA_ACCOUNT_NAME, mCurrentAccount.name);
-                                builder.setExtras(extras);
-
-                                JobScheduler jobScheduler = (JobScheduler) this.
-                                        getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                                jobScheduler.schedule(builder.build());
-
-                                downloadResult = new RemoteOperationResult(ResultCode.NO_NETWORK_CONNECTION);
-                            }
+                        // Check network availability
+                        if (!ConnectivityUtils.isNetworkActive(this) ||
+                            PowerUtils.isDeviceIdle(this)) {
+                            scheduleRetry();
+                            downloadResult = new RemoteOperationResult(
+                                ResultCode.NO_NETWORK_CONNECTION
+                            );
+                        } else {
+                            Log_OC.v(
+                                TAG,
+                                String.format(
+                                    "Exception in download, network is OK, no retry scheduled for %1s in %2s",
+                                    mCurrentDownload.getRemotePath(),
+                                    mCurrentAccount.name
+                                )
+                            );
                         }
+                    } else {
+                        Log_OC.v(
+                            TAG,
+                            String.format(
+                                "Success OR fail without exception for %1s in %2s",
+                                mCurrentDownload.getRemotePath(),
+                                mCurrentAccount.name
+                            )
+                        );
                     }
 
                     /// notify result
@@ -501,6 +491,49 @@ public class FileDownloader extends Service
                 cancelDownloadsForAccount(mCurrentDownload.getAccount());
 
             }
+        }
+    }
+
+    private void scheduleRetry() {
+
+        // Schedule future retry of failed download due to network error from Android 5
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            ComponentName serviceComponent = new ComponentName(
+                this,
+                RetryDownloadJobService.class
+            );
+
+            int jobId = mPendingDownloads. buildKey(
+                mCurrentAccount.name,
+                mCurrentDownload.getRemotePath()
+            ).hashCode();
+
+            JobInfo.Builder builder = new JobInfo.Builder(jobId, serviceComponent);
+
+            // require unmetered network ("free wifi")
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
+
+            // Persist job and prevent it from being deleted after a device restart
+            builder.setPersisted(true);
+
+            // Extra data
+            PersistableBundle extras = new PersistableBundle();
+            extras.putString(EXTRA_REMOTE_PATH, mCurrentDownload.getRemotePath());
+            extras.putString(EXTRA_ACCOUNT_NAME, mCurrentAccount.name);
+            builder.setExtras(extras);
+
+            JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            jobScheduler.schedule(builder.build());
+
+            Log_OC.d(
+                TAG,
+                String.format(
+                    "Scheduled download retry for %1s in %2s",
+                    mCurrentDownload.getRemotePath(),
+                    mCurrentAccount.name
+                )
+            );
         }
     }
 

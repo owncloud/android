@@ -71,6 +71,7 @@ import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.utils.ConnectivityUtils;
+import com.owncloud.android.utils.PowerUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
@@ -945,47 +946,26 @@ public class FileUploader extends Service
                     );
                 }
 
-                mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);
-
                 if (!uploadResult.isSuccess() && uploadResult.getException() != null) {
 
-                    // Check network availabality
-                    if (!ConnectivityUtils.isNetworkActive(getApplicationContext())) {
-
-                        // Schedule future retry of failed upload due to network error from Android 5
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-
-                            ComponentName mServiceComponent = new ComponentName(this,
-
-                                    RetryUploadJobService.class);
-
-                            JobInfo.Builder builder;
-
-                            int jobId = mPendingUploads.buildKey(mCurrentAccount.name,
-                                    mCurrentUpload.getRemotePath()).hashCode();
-
-                            builder = new JobInfo.Builder(jobId, mServiceComponent);
-
-                            // require unmetered network
-                            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
-
-                            // Persist job and prevent it from being deleted after a device restart
-                            builder.setPersisted(true);
-
-                            // Extra data
-                            PersistableBundle extras = new PersistableBundle();
-                            extras.putString(EXTRA_REMOTE_PATH, mCurrentUpload.getRemotePath());
-                            extras.putString(EXTRA_ACCOUNT_NAME, mCurrentAccount.name);
-                            builder.setExtras(extras);
-
-                            JobScheduler jobScheduler = (JobScheduler) this.
-                                    getSystemService(Context.JOB_SCHEDULER_SERVICE);
-                            jobScheduler.schedule(builder.build());
-
-                            uploadResult = new RemoteOperationResult(ResultCode.NO_NETWORK_CONNECTION);
-                        }
+                    // Check network availability
+                    if (!ConnectivityUtils.isNetworkActive(this) ||
+                        PowerUtils.isDeviceIdle(this)) {
+                        scheduleRetry();
+                        uploadResult = new RemoteOperationResult(ResultCode.NO_NETWORK_CONNECTION);
+                    } else {
+                        Log_OC.v(
+                            TAG,
+                            String.format(
+                                "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
+                                mCurrentUpload.getRemotePath(),
+                                mCurrentAccount.name
+                            )
+                        );
                     }
                 }
+
+                mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);
 
                 /// notify result
                 notifyUploadResult(mCurrentUpload, uploadResult);
@@ -996,6 +976,49 @@ public class FileUploader extends Service
 
         }
 
+    }
+
+    private void scheduleRetry() {
+
+        // Schedule future retry of failed upload due to network error from Android 5
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+
+            ComponentName serviceComponent = new ComponentName(
+                this,
+                RetryUploadJobService.class
+            );
+
+            int jobId = mPendingUploads.buildKey(
+                mCurrentAccount.name,
+                mCurrentUpload.getRemotePath()
+            ).hashCode();
+
+            JobInfo.Builder builder = new JobInfo.Builder(jobId, serviceComponent);
+
+            // require unmetered network ("free wifi")
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
+
+            // Persist job and prevent it from being deleted after a device restart
+            builder.setPersisted(true);
+
+            // Extra data
+            PersistableBundle extras = new PersistableBundle();
+            extras.putString(EXTRA_REMOTE_PATH, mCurrentUpload.getRemotePath());
+            extras.putString(EXTRA_ACCOUNT_NAME, mCurrentAccount.name);
+            builder.setExtras(extras);
+
+            JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            jobScheduler.schedule(builder.build());
+
+            Log_OC.d(
+                TAG,
+                String.format(
+                    "Scheduled download retry for %1s in %2s",
+                    mCurrentUpload.getRemotePath(),
+                    mCurrentAccount.name
+                )
+            );
+        }
     }
 
 

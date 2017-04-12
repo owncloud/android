@@ -33,6 +33,7 @@ public class RetryUploadJobService extends JobService {
             // Retry the upload
             FileUploader.UploadRequester uploadRequester = new FileUploader.UploadRequester();
             uploadRequester.retry(this, ocUpload);
+
         } else {
             // easy if the user deletes the upload in uploads view before recovering network
             Log_OC.w(
@@ -44,7 +45,8 @@ public class RetryUploadJobService extends JobService {
             );
         }
 
-        return true;
+        jobFinished(jobParameters, false);  // done here, real job was delegated to another castle
+        return true;    // TODO or false? what is the real effect, Google!?!?!?!?
     }
 
     @Override
