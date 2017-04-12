@@ -482,6 +482,8 @@ public class FileDownloader extends Service
                                 JobScheduler jobScheduler = (JobScheduler) this.
                                         getSystemService(Context.JOB_SCHEDULER_SERVICE);
                                 jobScheduler.schedule(builder.build());
+
+                                downloadResult = new RemoteOperationResult(ResultCode.NO_NETWORK_CONNECTION);
                             }
                         }
                     }

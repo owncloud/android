@@ -1267,25 +1267,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 }
                 break;
 
-            case NO_NETWORK_CONNECTION:
-                mServerStatusIcon = R.drawable.no_network;
-                mServerStatusText = getResources().getString(R.string.auth_no_net_conn_title);
-                break;
-
-            case SSL_RECOVERABLE_PEER_UNVERIFIED:
-                mServerStatusText = getResources().getString(R.string.auth_ssl_unverified_server_title);
-                break;
-            case TIMEOUT:
-                mServerStatusText = getResources().getString(R.string.auth_timeout_title);
-                break;
-            case HOST_NOT_AVAILABLE:
-                mServerStatusText = getResources().getString(R.string.auth_unknown_host_title);
-                break;
-            case UNHANDLED_HTTP_CODE:
             case OK_REDIRECT_TO_NON_SECURE_CONNECTION:
                 mServerStatusIcon = R.drawable.ic_lock_open;
-                mServerStatusText = getResources().getString(R.string.auth_redirect_non_secure_connection_title);
+                mServerStatusText = ErrorMessageAdapter.getErrorCauseMessage(result, null, getResources());
                 break;
+            case NO_NETWORK_CONNECTION:
+                mServerStatusIcon = R.drawable.no_network;
             default:
                 mServerStatusText = ErrorMessageAdapter.getErrorCauseMessage(result, null, getResources());
         }
@@ -1318,19 +1305,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             case NO_NETWORK_CONNECTION:
                 mAuthStatusIcon = R.drawable.no_network;
-                mAuthStatusText = getResources().getString(R.string.auth_no_net_conn_title);
-                break;
-
-            case SSL_RECOVERABLE_PEER_UNVERIFIED:
-                mAuthStatusText = getResources().getString(R.string.auth_ssl_unverified_server_title);
-                break;
-            case TIMEOUT:
-                mAuthStatusText = getResources().getString(R.string.auth_timeout_title);
-                break;
-            case HOST_NOT_AVAILABLE:
-                mAuthStatusText = getResources().getString(R.string.auth_unknown_host_title);
-                break;
-            case UNHANDLED_HTTP_CODE:
             default:
                 mAuthStatusText = ErrorMessageAdapter.getErrorCauseMessage(result, null, getResources());
         }

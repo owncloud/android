@@ -981,6 +981,8 @@ public class FileUploader extends Service
                             JobScheduler jobScheduler = (JobScheduler) this.
                                     getSystemService(Context.JOB_SCHEDULER_SERVICE);
                             jobScheduler.schedule(builder.build());
+
+                            uploadResult = new RemoteOperationResult(ResultCode.NO_NETWORK_CONNECTION);
                         }
                     }
                 }
