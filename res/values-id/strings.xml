@@ -99,6 +99,7 @@
   <string name="uploads_view_group_current_uploads">Saat ini</string>
   <string name="uploads_view_group_finished_uploads">Terunggah</string>
   <string name="uploads_view_upload_status_succeeded">Selesai</string>
+  <string name="uploads_view_upload_status_cancelled">Dibatalkan</string>
   <string name="uploads_view_upload_status_failed_credentials_error">Kesalahan Kredensial</string>
   <string name="uploads_view_upload_status_failed_folder_error">Kesalahan folder</string>
   <string name="uploads_view_upload_status_failed_file_error">Kesalahaan berkas</string>

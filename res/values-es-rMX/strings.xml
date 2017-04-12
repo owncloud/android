@@ -116,6 +116,10 @@
   <string name="uploader_upload_failed_content_single">La subida de %1$s no se pudo completar</string>
   <string name="uploader_upload_failed_credentials_error">Subida fallida, necesita volver a iniciar sesión</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">El certificado de servidor no es de confianza</string>
+  <string name="uploader_upload_text_dialog_title">Intorduzca el nombre para el nuevo archivo</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">El nombre de archivo no puede estar vacío</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">El nombre del archivo no puede ser mayor a %d caracteres</string>
+  <string name="uploader_upload_text_filename_hint">Nombre de archivo</string>
   <string name="ssl_certificate_not_trusted">El certificado de servidor no es de confianza</string>
   <string name="uploads_view_title">Subidas</string>
   <string name="uploads_view_group_current_uploads">Actual</string>
@@ -430,6 +434,9 @@
   <string name="prefs_privacy_policy">Politica de privacidad</string>
   <string name="privacy_policy_error">Ha ocurrido un error:</string>
   <string name="service_unavailable">Servidor no disponible</string>
+  <string name="streaming_unrecognized_input">Este formato de video no está soportado</string>
+  <string name="streaming_file_not_found_error">Este video ya no se encuentra disponible en este servidor</string>
+  <string name="previewing_video_common_error">Este video no puede ser reproducido</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionados</item>
