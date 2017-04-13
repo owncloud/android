@@ -117,6 +117,9 @@ Download hier: %2$s</string>
   <string name="uploader_upload_failed_content_single">Upload van %1$s kon niet voltooid worden</string>
   <string name="uploader_upload_failed_credentials_error">Upload mislukt, u moet opnieuw inloggen</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
+  <string name="uploader_upload_text_dialog_title">Voer de naam in van het nieuwe bestand</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Bestandsnaam mag niet leeg zijn</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">De bestandsnaam mag niet langer zijn dan %d tekens</string>
   <string name="uploader_upload_text_filename_hint">Bestandsnaam</string>
   <string name="ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
   <string name="uploads_view_title">Uploads</string>
@@ -438,6 +441,8 @@ Neem contact op met uw beheerder</string>
   <string name="streaming_certificate_error">Streaming kan niet starten omdat het server certificaat niet vertrouwd wordt. De download start automatisch</string>
   <string name="streaming_unrecognized_input">Dit videoformaar wordt niet ondersteund</string>
   <string name="streaming_file_not_found_error">Dit videobestand is niet langer beschikbaar op de server</string>
+  <string name="streaming_crossed_redirection">Streaming is niet toegestaan via gekruiste doorverwijzigen</string>
+  <string name="previewing_video_common_error">Deze video kan niet worden gereproduceerd</string>
   <string name="streaming_position_not_available">\"Positie niet beschikbaar\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>

@@ -54,6 +54,8 @@
   <string name="uploader_wrn_no_account_title">Δεν βρέθηκε λογαριασμός</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Ρύθμιση</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Έξοδος</string>
+  <string name="uploader_error_title_no_file_to_upload">Κανένα αρχείο προς μεταφόρτωση</string>
+  <string name="uploader_error_title_file_cannot_be_uploaded">Αδυναμία μεταφόρτωσης αρχείου</string>
   <string name="file_list_seconds_ago">δευτερόλεπτα πριν</string>
   <string name="file_list_empty">Δεν υπάρχει τίποτα εδώ. Μεταφορτώστε κάτι!</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
