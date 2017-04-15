@@ -417,7 +417,7 @@
   <string name="edit_share_done">ferdig</string>
   <string name="action_retry_uploads">Forsøkte igjen, feilet.</string>
   <string name="action_clear_failed_uploads">Sletting feilet</string>
-  <string name="action_clear_successful_uploads">Sletting vellykket</string>
+  <string name="action_clear_successful_uploads">Fjern vellykkede</string>
   <string name="action_clear_finished_uploads">Slett alle ferdige</string>
   <string name="action_switch_grid_view">Rutenett-visning</string>
   <string name="action_switch_list_view">Listevisning</string>
