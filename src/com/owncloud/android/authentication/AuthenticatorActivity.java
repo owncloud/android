@@ -5,7 +5,7 @@
  *   @author David A. Velasco
  *   @author masensio
  *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -937,8 +937,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     public void onOkClick() {
         // this check should be unnecessary
         if (mServerInfo.mVersion == null || 
-                !mServerInfo.mVersion.isVersionValid()  || 
-                mServerInfo.mBaseUrl == null || 
+                mServerInfo.mBaseUrl == null ||
                 mServerInfo.mBaseUrl.length() == 0) {
             mServerStatusIcon = R.drawable.common_error;
             mServerStatusText = getResources().getString(R.string.auth_wtf_reenter_URL);
