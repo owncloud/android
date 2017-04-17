@@ -204,7 +204,7 @@ public class ShareFileFragment extends Fragment
         }
         // Name
         TextView fileNameHeader = (TextView) view.findViewById(R.id.shareFileName);
-        fileNameHeader.setText(getResources().getString(R.string.share_file, mFile.getFileName()));
+        fileNameHeader.setText(mFile.getFileName());
         // Size
         TextView size = (TextView) view.findViewById(R.id.shareFileSize);
         if (mFile.isFolder()) {
