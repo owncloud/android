@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -219,7 +220,7 @@ public class ShareFileFragment extends Fragment
         TextView shareNoUsers = (TextView) view.findViewById(R.id.shareNoUsers);
 
         //  Add User Button
-        Button addUserGroupButton = (Button)
+        ImageButton addUserGroupButton = (ImageButton)
                 view.findViewById(R.id.addUserButton);
 
         // Change the sharing text depending on the server version (at least version 8.2 is needed
