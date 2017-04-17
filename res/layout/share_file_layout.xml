@@ -81,20 +81,36 @@
             android:id="@+id/shareWithUsersSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/standard_half_padding"
-            android:paddingRight="@dimen/standard_half_padding"
-            android:paddingTop="@dimen/standard_padding">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/shareWithUsersSectionTitle"
-                style="?android:attr/listSeparatorTextViewStyle"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/share_with_user_section_title"
-                android:textColor="@color/color_accent" />
-            
+                android:layout_height="match_parent"
+                android:background="@color/color_accent"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/shareWithUsersSectionTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:text="@string/share_with_user_section_title"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_add" />
+
+            </RelativeLayout>
+
             <ListView
                 android:id="@+id/shareUsersList"
                 android:layout_width="match_parent"
@@ -120,7 +136,8 @@
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="shareAddUserButton"
                 android:text="@string/share_add_user_or_group"
-                android:theme="@style/Button.Primary" />
+                android:theme="@style/Button.Primary"
+                android:visibility="gone" />
 
         </LinearLayout>
 
