@@ -82,8 +82,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/standard_padding"
-            android:paddingRight="@dimen/standard_padding"
+            android:paddingLeft="@dimen/standard_half_padding"
+            android:paddingRight="@dimen/standard_half_padding"
             android:paddingTop="@dimen/standard_padding">
 
             <TextView
@@ -130,8 +130,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="@dimen/standard_padding"
-            android:paddingLeft="@dimen/standard_padding"
-            android:paddingRight="@dimen/standard_padding">
+            android:paddingLeft="@dimen/standard_half_padding"
+            android:paddingRight="@dimen/standard_half_padding">
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/shareViaLinkSectionSwitch"
