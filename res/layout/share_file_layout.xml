@@ -128,6 +128,8 @@
                 android:text="@string/share_no_users"
                 android:textSize="12sp" />
 
+
+            <!-- DELETE -->
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/addUserButton"
                 style="@style/ownCloud.Button"
