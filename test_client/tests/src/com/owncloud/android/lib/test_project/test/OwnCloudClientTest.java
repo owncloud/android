@@ -296,9 +296,8 @@ public class OwnCloudClientTest extends AndroidTestCase {
 				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
 		client.setCredentials(OwnCloudCredentialsFactory.newBearerCredentials("fakeToken"));
 		Uri webdavUri = client.getWebdavUri();
-		assertTrue("WebDAV URI does not point to the right entry point for OAuth2 " +
-				"authenticated servers",
-				webdavUri.getPath().endsWith(AccountUtils.ODAV_PATH));
+		assertTrue("WebDAV URI does not point to the right entry point",
+				webdavUri.getPath().endsWith(AccountUtils.WEBDAV_PATH_4_0));
 		assertTrue("WebDAV URI is not a subpath of base URI", 
 				webdavUri.getAuthority().equals(mServerUri.getAuthority()) &&
 				webdavUri.getPath().startsWith(mServerUri.getPath()));
