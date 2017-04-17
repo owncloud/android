@@ -87,7 +87,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/color_accent"
-                android:weightSum="1">
+                android:paddingBottom="@dimen/standard_half_padding"
+                android:paddingTop="@dimen/standard_half_padding">
 
                 <TextView
                     android:id="@+id/shareWithUsersSectionTitle"
@@ -101,7 +102,7 @@
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/addUserButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -127,19 +128,6 @@
                 android:padding="@dimen/standard_half_padding"
                 android:text="@string/share_no_users"
                 android:textSize="12sp" />
-
-
-            <!-- DELETE -->
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/addUserButton"
-                style="@style/ownCloud.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:contentDescription="shareAddUserButton"
-                android:text="@string/share_add_user_or_group"
-                android:theme="@style/Button.Primary"
-                android:visibility="gone" />
 
         </LinearLayout>
 
