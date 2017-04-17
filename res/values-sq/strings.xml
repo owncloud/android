@@ -122,6 +122,7 @@
   <string name="uploads_view_group_current_uploads">Të tanishëm</string>
   <string name="uploads_view_group_failed_uploads">Dështoi (prekeni që të riprovohet)</string>
   <string name="uploads_view_group_finished_uploads">U ngarkua</string>
+  <string name="uploads_view_group_file_count">%d kartela</string>
   <string name="uploads_view_upload_status_succeeded">Të plotësuara</string>
   <string name="uploads_view_upload_status_cancelled">Anuluar</string>
   <string name="uploads_view_upload_status_paused">Pushuar</string>

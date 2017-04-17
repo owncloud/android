@@ -125,6 +125,7 @@
   <string name="uploads_view_group_current_uploads">Aktuell</string>
   <string name="uploads_view_group_failed_uploads">Fehlgeschlagen (Tippen zum Wiederholen)</string>
   <string name="uploads_view_group_finished_uploads">Hochgeladen</string>
+  <string name="uploads_view_group_file_count">%d Dateien</string>
   <string name="uploads_view_upload_status_succeeded">Fertiggestellt</string>
   <string name="uploads_view_upload_status_cancelled">Abgebrochen</string>
   <string name="uploads_view_upload_status_paused">Pausiert</string>

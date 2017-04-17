@@ -113,6 +113,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="uploads_view_group_current_uploads">En cors</string>
   <string name="uploads_view_group_failed_uploads">Fracassat (quichar per tornar ensajar)</string>
   <string name="uploads_view_group_finished_uploads">Mandat</string>
+  <string name="uploads_view_group_file_count">%d fichièrs</string>
   <string name="uploads_view_upload_status_succeeded">Acabat</string>
   <string name="uploads_view_upload_status_cancelled">Anullat</string>
   <string name="uploads_view_upload_status_paused">En pausa</string>

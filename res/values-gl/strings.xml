@@ -92,6 +92,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploads_view_title">Envíos</string>
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_finished_uploads">Enviado</string>
+  <string name="uploads_view_group_file_count">%d ficheiros</string>
   <string name="uploads_view_upload_status_succeeded">Completado</string>
   <string name="uploads_view_upload_status_failed_credentials_error">Produciuse un erro de credenciais</string>
   <string name="uploads_view_upload_status_failed_folder_error">Produciuse un erro de cartafol</string>

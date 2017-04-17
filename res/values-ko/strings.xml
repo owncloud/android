@@ -115,6 +115,7 @@
   <string name="uploads_view_group_current_uploads">현재</string>
   <string name="uploads_view_group_failed_uploads">실패함 (재시도 하려면 탭하시오)</string>
   <string name="uploads_view_group_finished_uploads">업로드됨</string>
+  <string name="uploads_view_group_file_count">파일 %d개</string>
   <string name="uploads_view_upload_status_succeeded">완료됨</string>
   <string name="uploads_view_upload_status_cancelled">취소됨</string>
   <string name="uploads_view_upload_status_paused">일시정지됨</string>

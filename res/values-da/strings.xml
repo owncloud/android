@@ -119,6 +119,7 @@
   <string name="uploads_view_group_current_uploads">Nuværende</string>
   <string name="uploads_view_group_failed_uploads">Fejlet (tryk for at prøve igen)</string>
   <string name="uploads_view_group_finished_uploads">Sendt</string>
+  <string name="uploads_view_group_file_count">%d filer</string>
   <string name="uploads_view_upload_status_succeeded">Fuldført</string>
   <string name="uploads_view_upload_status_cancelled">Annulléret</string>
   <string name="uploads_view_upload_status_paused">Pauset</string>

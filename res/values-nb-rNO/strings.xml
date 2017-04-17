@@ -125,6 +125,7 @@
   <string name="uploads_view_group_current_uploads">Nåværende</string>
   <string name="uploads_view_group_failed_uploads">Feilet (trykk for å prøve igjen)</string>
   <string name="uploads_view_group_finished_uploads">Opplastet</string>
+  <string name="uploads_view_group_file_count">%d filer</string>
   <string name="uploads_view_upload_status_succeeded">Ferdig</string>
   <string name="uploads_view_upload_status_cancelled">Avbrutt</string>
   <string name="uploads_view_upload_status_paused">Pauset</string>

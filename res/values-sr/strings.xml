@@ -106,6 +106,7 @@
   <string name="uploads_view_group_current_uploads">Текуће</string>
   <string name="uploads_view_group_failed_uploads">Неуспело (тапните за понављање)</string>
   <string name="uploads_view_group_finished_uploads">Отпремљено</string>
+  <string name="uploads_view_group_file_count">%d фајлова</string>
   <string name="uploads_view_upload_status_succeeded">Завршено</string>
   <string name="uploads_view_upload_status_cancelled">Отказано</string>
   <string name="uploads_view_upload_status_paused">Паузирано</string>

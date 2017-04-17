@@ -119,6 +119,7 @@
   <string name="uploads_view_group_current_uploads">Geçerli</string>
   <string name="uploads_view_group_failed_uploads">Başarısız (tekrar denemek için dokun)</string>
   <string name="uploads_view_group_finished_uploads">Yüklendi</string>
+  <string name="uploads_view_group_file_count">%d Dosya</string>
   <string name="uploads_view_upload_status_succeeded">Tamamlandı</string>
   <string name="uploads_view_upload_status_cancelled">İptal edildi</string>
   <string name="uploads_view_upload_status_paused">Durduruldu</string>

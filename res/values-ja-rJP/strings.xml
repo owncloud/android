@@ -126,6 +126,7 @@
   <string name="uploads_view_group_current_uploads">現在</string>
   <string name="uploads_view_group_failed_uploads">失敗(タップして再試行)</string>
   <string name="uploads_view_group_finished_uploads">アップロード済み</string>
+  <string name="uploads_view_group_file_count">%d 個のファイル</string>
   <string name="uploads_view_upload_status_succeeded">完了</string>
   <string name="uploads_view_upload_status_cancelled">キャンセル済</string>
   <string name="uploads_view_upload_status_paused">停止中</string>

@@ -122,6 +122,7 @@
   <string name="uploads_view_group_current_uploads">当前</string>
   <string name="uploads_view_group_failed_uploads">失败。(轻按以重试)</string>
   <string name="uploads_view_group_finished_uploads">已上传</string>
+  <string name="uploads_view_group_file_count">%d 个文件</string>
   <string name="uploads_view_upload_status_succeeded">完成</string>
   <string name="uploads_view_upload_status_cancelled">已取消</string>
   <string name="uploads_view_upload_status_paused">已暂停</string>

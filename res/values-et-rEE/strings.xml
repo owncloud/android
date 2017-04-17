@@ -102,6 +102,7 @@
   <string name="uploads_view_title">Üleslaadimised</string>
   <string name="uploads_view_group_current_uploads">Praegune</string>
   <string name="uploads_view_group_finished_uploads">Üles laetud</string>
+  <string name="uploads_view_group_file_count">%d faili</string>
   <string name="uploads_view_upload_status_succeeded">Lõpetatud</string>
   <string name="uploads_view_upload_status_cancelled">Tühistatud</string>
   <string name="uploads_view_upload_status_paused">Peatatud</string>
