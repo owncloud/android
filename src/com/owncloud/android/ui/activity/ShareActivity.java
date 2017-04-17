@@ -29,6 +29,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -45,11 +46,11 @@ import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.GetShareWithUsersAsyncTask;
 
 
@@ -76,6 +77,9 @@ public class ShareActivity extends FileActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.share_activity);
+
+        // Set back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
@@ -358,8 +362,18 @@ public class ShareActivity extends FileActivity
                 snackbar.show();
             }
         }
-
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean retval = true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                retval = super.onOptionsItemSelected(item);
+        }
+        return retval;
+    }
 }
