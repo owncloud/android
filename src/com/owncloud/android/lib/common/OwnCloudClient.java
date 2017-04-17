@@ -295,8 +295,6 @@ public class OwnCloudClient extends HttpClient {
                 }
                 if (destination != null) {
                     int suffixIndex = locationStr.lastIndexOf(
-                        (mCredentials instanceof OwnCloudBearerCredentials) ?
-                            AccountUtils.ODAV_PATH :
                             AccountUtils.WEBDAV_PATH_4_0
                     );
                     String redirectionBase = locationStr.substring(0, suffixIndex);
@@ -352,11 +350,7 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public Uri getWebdavUri() {
-        if (mCredentials instanceof OwnCloudBearerCredentials) {
-            return Uri.parse(mBaseUri + AccountUtils.ODAV_PATH);
-        } else {
-            return Uri.parse(mBaseUri + AccountUtils.WEBDAV_PATH_4_0);
-        }
+        return Uri.parse(mBaseUri + AccountUtils.WEBDAV_PATH_4_0);
     }
 
     /**
