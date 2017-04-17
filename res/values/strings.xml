@@ -128,6 +128,8 @@
     <string name="uploads_view_group_current_uploads">Current</string>
     <string name="uploads_view_group_failed_uploads">Failed (tap to retry)</string>
     <string name="uploads_view_group_finished_uploads">Uploaded</string>
+    <string name="uploads_view_group_file_count">%d Files</string>
+    <string name="uploads_view_group_file_count_single">%d File</string>
     <string name="uploads_view_upload_status_succeeded">Completed</string>
     <string name="uploads_view_upload_status_cancelled">Cancelled</string>
     <string name="uploads_view_upload_status_paused">Paused</string>
@@ -473,7 +475,7 @@
     <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
     <string name="failed_upload_quota_exceeded_text">Not enough space in the account</string>
     <string name="auth_forbidden">Forbidden authentication</string>
-    
+
     <string name="actionbar_privacy_policy">Privacy policy</string>
     <string name="prefs_privacy_policy">Privacy policy</string>
     <string name="privacy_policy_error">"An error has occurred: "</string>

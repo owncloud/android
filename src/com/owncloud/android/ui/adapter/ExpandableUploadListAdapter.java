@@ -90,6 +90,10 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             return name;
         }
 
+        public int getGroupCount() {
+            return items == null ? 0 : items.length;
+        }
+
         public Comparator<OCUpload> comparator = new Comparator<OCUpload>() {
 
             @Override
@@ -715,12 +719,19 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
         listView.setGroupIndicator(null);
         UploadGroup group = (UploadGroup) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater inflaInflater = (LayoutInflater) mParentActivity
+            LayoutInflater inflater = (LayoutInflater) mParentActivity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflaInflater.inflate(R.layout.upload_list_group, null);
+            convertView = inflater.inflate(R.layout.upload_list_group, null);
         }
-        TextView tv = (TextView) convertView.findViewById(R.id.uploadListGroupName);
-        tv.setText(group.getGroupName());
+        TextView tvGroupName = (TextView) convertView.findViewById(R.id.uploadListGroupName);
+        TextView tvFileCount = (TextView) convertView.findViewById(R.id.textViewFileCount);
+
+        int stringResFileCount = group.getGroupCount() == 1 ? R.string.uploads_view_group_file_count_single :
+                R.string.uploads_view_group_file_count;
+        String fileCountText = String.format(mParentActivity.getString(stringResFileCount), group.getGroupCount());
+
+        tvGroupName.setText(group.getGroupName());
+        tvFileCount.setText(fileCountText);
         return convertView;
     }
 
