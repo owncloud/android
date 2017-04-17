@@ -421,13 +421,13 @@
     <string name="pref_behaviour_entries_keep_file">kept in original folder</string>
     <string name="pref_behaviour_entries_move">moved to app folder</string>
 
-    <string name="share_dialog_title">Sharing</string>
+    <string name="share_dialog_title">Share</string>
     <string name="share_file">Share %1$s</string>
-    <string name="share_with_user_section_title">Share with users and groups</string>
+    <string name="share_with_user_section_title">Users and Groups</string>
     <string name="share_no_users">No data shared with users yet</string>
     <string name="share_incompatible_version">To share with other users, your server needs to be at least version 8.2</string>
     <string name="share_add_user_or_group">Add user or group</string>
-    <string name="share_via_link_section_title">Share link</string>
+    <string name="share_via_link_section_title">Public links</string>
     <string name="share_via_link_expiration_date_label">Set expiration date</string>
     <string name="share_via_link_password_label">Password protect</string>
     <string name="share_via_link_password_title">Secured</string>
