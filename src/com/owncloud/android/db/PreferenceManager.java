@@ -47,7 +47,9 @@ public abstract class PreferenceManager {
     private static final String PREF__INSTANT_PICTURE_ENABLED = "instant_uploading";
     private static final String PREF__INSTANT_VIDEO_ENABLED = "instant_video_uploading";
     private static final String PREF__INSTANT_PICTURE_WIFI_ONLY = "instant_upload_on_wifi";
+    private static final String PREF__INSTANT_PICTURE_NOTIFICATIONS = "instant_upload_notifications";
     private static final String PREF__INSTANT_VIDEO_WIFI_ONLY = "instant_video_upload_on_wifi";
+    private static final String PREF__INSTANT_VIDEO_NOTIFICATIONS = "instant_video_upload_notifications";
     private static final String PREF__INSTANT_UPLOAD_ACCOUNT_NAME = "instant_upload_account_name";  // NEW - not saved yet
     private static final String PREF__INSTANT_PICTURE_UPLOAD_PATH = "instant_upload_path";
     private static final String PREF__INSTANT_VIDEO_UPLOAD_PATH = "instant_video_upload_path";
@@ -66,8 +68,16 @@ public abstract class PreferenceManager {
         return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_PICTURE_WIFI_ONLY, false);
     }
 
+    public static boolean instantPictureUploadNotifications(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_PICTURE_NOTIFICATIONS, false);
+    }
+
     public static boolean instantVideoUploadViaWiFiOnly(Context context) {
         return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_VIDEO_WIFI_ONLY, false);
+    }
+
+    public static boolean instantVideoUploadNotifications(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_VIDEO_NOTIFICATIONS, false);
     }
 
     public static InstantUploadsConfiguration getInstantUploadsConfiguration(Context context) {
@@ -84,6 +94,12 @@ public abstract class PreferenceManager {
         );
         result.setWifiOnlyForVideos(
             prefs.getBoolean(PREF__INSTANT_VIDEO_WIFI_ONLY, false)
+        );
+        result.setNotificationsForPictures(
+            prefs.getBoolean(PREF__INSTANT_PICTURE_NOTIFICATIONS, true)
+        );
+        result.setNotificationsForVideos(
+            prefs.getBoolean(PREF__INSTANT_VIDEO_NOTIFICATIONS, true)
         );
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(context);
         result.setUploadAccountName(
@@ -216,6 +232,8 @@ public abstract class PreferenceManager {
         private boolean mEnabledForPictures;
         private boolean mEnabledForVideos;
         private boolean mWifiOnlyForPictures;
+        private boolean mNotificationsForPictures;
+        private boolean mNotificationsForVideos;
         private boolean mWifiOnlyForVideos;
         private String mUploadAccountName;      // same for both audio & video
         private String mUploadPathForPictures;
@@ -253,6 +271,22 @@ public abstract class PreferenceManager {
 
         public void setWifiOnlyForVideos(boolean wifiOnlyForVideos) {
             mWifiOnlyForVideos = wifiOnlyForVideos;
+        }
+
+        public boolean isNotificationsForPictures() {
+            return mNotificationsForPictures;
+        }
+
+        public void setNotificationsForPictures(boolean notificationsForPictures) {
+            mNotificationsForPictures = notificationsForPictures;
+        }
+
+        public boolean isNotificationsForVideos() {
+            return mNotificationsForVideos;
+        }
+
+        public void setNotificationsForVideos(boolean notificationsForVideos) {
+            mNotificationsForVideos = notificationsForVideos;
         }
 
         public String getUploadAccountName() {

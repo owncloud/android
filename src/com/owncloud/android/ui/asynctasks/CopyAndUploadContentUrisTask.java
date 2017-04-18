@@ -231,6 +231,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
             behaviour,
             mimeType,
             false,      // do not create parent folder if not existent
+            true,       // should notify
             UploadFileOperation.CREATED_BY_USER
         );
     }

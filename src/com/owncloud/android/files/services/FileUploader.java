@@ -61,11 +61,11 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.ui.notifications.NotificationUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
@@ -134,6 +134,10 @@ public class FileUploader extends Service
      */
     public static final String KEY_CREATE_REMOTE_FOLDER = "CREATE_REMOTE_FOLDER";
     /**
+     * Key to signal whether to post any notifications
+     */
+    public static final String KEY_SHOULD_NOTIFY = "SHOULD_NOTIFY";
+    /**
      * Key to signal what is the origin of the upload request
      */
     public static final String KEY_CREATED_BY = "CREATED_BY";
@@ -168,6 +172,7 @@ public class FileUploader extends Service
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
+    private boolean shouldNotify;
 
     public static String getUploadsAddedMessage() {
         return FileUploader.class.getName() + UPLOADS_ADDED_MESSAGE;
@@ -207,6 +212,7 @@ public class FileUploader extends Service
                 String[] mimeTypes,
                 Integer behaviour,
                 Boolean createRemoteFolder,
+                Boolean shouldNotify,
                 int createdBy
         ) {
             Intent intent = new Intent(context, FileUploader.class);
@@ -217,6 +223,7 @@ public class FileUploader extends Service
             intent.putExtra(FileUploader.KEY_MIME_TYPE, mimeTypes);
             intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
             intent.putExtra(FileUploader.KEY_CREATE_REMOTE_FOLDER, createRemoteFolder);
+            intent.putExtra(FileUploader.KEY_SHOULD_NOTIFY, shouldNotify);
             intent.putExtra(FileUploader.KEY_CREATED_BY, createdBy);
 
             context.startService(intent);
@@ -226,7 +233,7 @@ public class FileUploader extends Service
          * Call to upload a new single file
          */
         public void uploadNewFile(Context context, Account account, String localPath, String remotePath, int
-                behaviour, String mimeType, boolean createRemoteFile, int createdBy) {
+                behaviour, String mimeType, boolean createRemoteFile, boolean shouldNotify, int createdBy) {
 
             uploadNewFile(
                 context,
@@ -236,6 +243,7 @@ public class FileUploader extends Service
                 new String[]{mimeType},
                 behaviour,
                 createRemoteFile,
+                shouldNotify,
                 createdBy
             );
         }
@@ -401,6 +409,8 @@ public class FileUploader extends Service
 
         boolean retry = intent.getBooleanExtra(KEY_RETRY, false);
         AbstractList<String> requestedUploads = new Vector<String>();
+
+        shouldNotify = intent.getBooleanExtra(KEY_SHOULD_NOTIFY, true);
 
         if (!intent.hasExtra(KEY_ACCOUNT)) {
             Log_OC.e(TAG, "Not enough information provided in intent");
@@ -891,7 +901,9 @@ public class FileUploader extends Service
             /// OK, let's upload
             mUploadsStorageManager.updateDatabaseUploadStart(mCurrentUpload);
 
-            notifyUploadStart(mCurrentUpload);
+            if (shouldNotify) {
+                notifyUploadStart(mCurrentUpload);
+            }
 
             sendBroadcastUploadStarted(mCurrentUpload);
 
@@ -942,7 +954,9 @@ public class FileUploader extends Service
                 mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);
 
                 /// notify result
-                notifyUploadResult(mCurrentUpload, uploadResult);
+                if (shouldNotify){
+                    notifyUploadResult(mCurrentUpload, uploadResult);
+                }
 
                 sendBroadcastUploadFinished(mCurrentUpload, uploadResult, removeResult.second);
 
@@ -996,7 +1010,7 @@ public class FileUploader extends Service
     public void onTransferProgress(long progressRate, long totalTransferredSoFar,
                                    long totalToTransfer, String filePath) {
         int percent = (int) (100.0 * ((double) totalTransferredSoFar) / ((double) totalToTransfer));
-        if (percent != mLastPercent) {
+        if (percent != mLastPercent && shouldNotify) {
             mNotificationBuilder.setProgress(100, percent, false);
             String fileName = filePath.substring(filePath.lastIndexOf(FileUtils.PATH_SEPARATOR) + 1);
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
