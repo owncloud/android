@@ -87,8 +87,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/color_accent"
-                android:paddingBottom="@dimen/standard_half_padding"
-                android:paddingTop="@dimen/standard_half_padding">
+                android:paddingBottom="@dimen/standard_quarter_padding"
+                android:paddingTop="@dimen/standard_quarter_padding">
 
                 <TextView
                     android:id="@+id/shareWithUsersSectionTitle"
@@ -125,9 +125,11 @@
                 android:id="@+id/shareNoUsers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/standard_half_padding"
+                android:paddingBottom="@dimen/standard_padding"
+                android:paddingLeft="@dimen/standard_half_padding"
+                android:paddingTop="@dimen/standard_padding"
                 android:text="@string/share_no_users"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -136,10 +138,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/standard_padding"
-            android:paddingLeft="@dimen/standard_half_padding"
-            android:paddingRight="@dimen/standard_half_padding">
+            android:paddingBottom="@dimen/standard_padding">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_accent"
+                android:paddingBottom="@dimen/standard_quarter_padding"
+                android:paddingTop="@dimen/standard_quarter_padding">
+
+                <TextView
+                    android:id="@+id/shareWithPublicLinkTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:text="@string/share_via_link_section_title"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/addPublicLinkButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_add" />
+
+            </RelativeLayout>
+
+            <!--- DELETE -->
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/shareViaLinkSectionSwitch"
                 style="?android:attr/listSeparatorTextViewStyle"
@@ -150,7 +180,8 @@
                 android:checked="false"
                 android:paddingRight="@dimen/standard_half_padding"
                 android:text="@string/share_via_link_section_title"
-                android:textColor="@color/color_accent" />
+                android:textColor="@color/color_accent"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -216,7 +247,7 @@
                         android:paddingTop="@dimen/standard_half_padding"
                         android:text="@string/share_via_link_password_label"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/shareViaLinkPasswordValue"
@@ -264,7 +295,7 @@
                         android:paddingTop="@dimen/standard_half_padding"
                         android:text="@string/share_via_link_expiration_date_label"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/shareViaLinkExpirationValue"
@@ -282,6 +313,7 @@
 
                 </RelativeLayout>
 
+                <!-- DELETE -->
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/shareViaLinkGetLinkButton"
                     style="@style/ownCloud.Button"
@@ -290,7 +322,8 @@
                     android:layout_gravity="center_horizontal"
                     android:contentDescription="shareGetLinkButton"
                     android:text="@string/share_get_public_link_button"
-                    android:theme="@style/Button.Primary" />
+                    android:theme="@style/Button.Primary"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
