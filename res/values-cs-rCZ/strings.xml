@@ -126,6 +126,7 @@
   <string name="uploads_view_group_failed_uploads">Selhalo (dotykem opakovat)</string>
   <string name="uploads_view_group_finished_uploads">Odesláno</string>
   <string name="uploads_view_group_file_count">%d souborů</string>
+  <string name="uploads_view_group_file_count_single">%d Soubor</string>
   <string name="uploads_view_upload_status_succeeded">Dokončeno</string>
   <string name="uploads_view_upload_status_cancelled">Zrušeno</string>
   <string name="uploads_view_upload_status_paused">Pozastaveno</string>
