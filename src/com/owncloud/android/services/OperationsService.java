@@ -1,7 +1,8 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David A. Velasco
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -95,6 +96,7 @@ public class OperationsService extends Service {
     public static final String EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS = "SHARE_EXPIRATION_YEAR";
     public static final String EXTRA_SHARE_PERMISSIONS = "SHARE_PERMISSIONS";
     public static final String EXTRA_SHARE_PUBLIC_UPLOAD = "SHARE_PUBLIC_UPLOAD";
+    public static final String EXTRA_SHARE_NAME = "SHARE_NAME";
     public static final String EXTRA_SHARE_ID = "SHARE_ID";
     public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
     public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
@@ -575,6 +577,9 @@ public class OperationsService extends Service {
                     long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
                     if (remotePath != null && remotePath.length() > 0) {
                         operation = new UpdateShareViaLinkOperation(remotePath);
+
+                        String name = operationIntent.getStringExtra(EXTRA_SHARE_NAME);
+                        ((UpdateShareViaLinkOperation) operation).setName(name);
 
                         String password = operationIntent.getStringExtra(EXTRA_SHARE_PASSWORD);
                         ((UpdateShareViaLinkOperation) operation).setPassword(password);
