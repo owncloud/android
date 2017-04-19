@@ -4,7 +4,7 @@
  *   @author masensio
  *   @author David A. Velasco
  *   @author Juan Carlos González Cabrero
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -369,6 +369,57 @@ public class FileOperationsHelper {
                 OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
                 uploadPermission
         );
+        queueShareIntent(updateShareIntent);
+    }
+
+
+
+    /**
+     * Updates at once all the properties of a public share on a file.
+     * Starts a request to do it in {@link OperationsService}
+     *
+     * @param file                      File which public share will be updated.
+     * @param name                      Name to set for the link (ignored in servers < 10.0.0).
+     * @param password                  Password to set for the public link; null or empty string to clear
+     *                                  the current password. - TODO select value to leave unchanged?
+     * @param expirationTimeInMillis    Expiration date to set. A negative value clears the current expiration
+     *                                  date, leaving the link unrestricted. Zero makes no change.
+     * @param uploadToFolderPermission  New state of the permission for editing the folder shared via link.
+     *                                  Ignored if the file is not a folder. - TODO select value to leave unchanged?
+     */
+    public void updateShareViaLink(
+        OCFile file,
+        String name,
+        String password,
+        long expirationTimeInMillis,
+        boolean uploadToFolderPermission
+    ) {
+        // Set password updating share
+        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
+        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE);
+        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+        updateShareIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+
+        updateShareIntent.putExtra(
+            OperationsService.EXTRA_SHARE_NAME,
+            (name == null) ? "" : name
+        );
+
+        updateShareIntent.putExtra(
+            OperationsService.EXTRA_SHARE_PASSWORD,
+            (password == null) ? "" : password
+        );
+
+        updateShareIntent.putExtra(
+            OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
+            expirationTimeInMillis
+        );
+
+        updateShareIntent.putExtra(
+            OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
+            uploadToFolderPermission
+        );
+
         queueShareIntent(updateShareIntent);
     }
 
