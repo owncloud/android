@@ -294,6 +294,8 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="instant_upload_on_wifi">Загрузка изображений только через wifi</string>
+  <string name="instant_upload_notifications">Показывать уведомления о мгновенных загрузках изображений</string>
+  <string name="instant_video_upload_notifications">Показывать уведомления о мгновенных загрузках видео</string>
   <string name="instant_video_upload_on_wifi">Загрузка видео только через wifi</string>
   <string name="instant_upload_path">/InstantUpload</string>
   <string name="conflict_title">Конфликт файлов</string>

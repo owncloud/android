@@ -262,6 +262,12 @@ public class InstantUploadsHandler {
                 UploadFileOperation.CREATED_AS_INSTANT_VIDEO
             ;
 
+        boolean shouldNotify =
+            isImage ?
+                configuration.isNotificationsForPictures() :
+                configuration.isNotificationsForVideos()
+            ;
+
         FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
         requester.uploadNewFile(
             context,
@@ -271,6 +277,7 @@ public class InstantUploadsHandler {
             configuration.getBehaviourAfterUpload(),
             mimeType,
             true,           // create parent folder if not existent
+            shouldNotify,
             createdBy
         );
 

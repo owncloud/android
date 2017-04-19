@@ -166,6 +166,7 @@ public class UriUploader {
                 mBehaviour,
                 null,       // MIME type will be detected from file name
                 false,      // do not create parent folder if not existent
+                true,       // should notify
                 UploadFileOperation.CREATED_BY_USER
         );
     }
