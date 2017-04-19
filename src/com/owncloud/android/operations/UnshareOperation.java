@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -60,7 +60,7 @@ public class UnshareOperation extends SyncOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result  = null;
+        RemoteOperationResult result;
         
         // Get Share for a file
         OCShare share = getStorageManager().getFirstShareByPathAndType(mRemotePath,
@@ -76,8 +76,8 @@ public class UnshareOperation extends SyncOperation {
                 Log_OC.d(TAG, "Share id = " + share.getRemoteId() + " deleted");
 
                 if (ShareType.PUBLIC_LINK.equals(mShareType)) {
-                    file.setShareViaLink(false);
-                    file.setPublicLink("");
+                    file.setSharedViaLink(false);
+
                 } else if (ShareType.USER.equals(mShareType) || ShareType.GROUP.equals(mShareType)
                     || ShareType.FEDERATED.equals(mShareType)){
                     // Check if it is the last share
@@ -85,7 +85,7 @@ public class UnshareOperation extends SyncOperation {
                             getSharesWithForAFile(mRemotePath,
                             getStorageManager().getAccount().name);
                     if (sharesWith.size() == 1) {
-                        file.setShareWithSharee(false);
+                        file.setSharedWithSharee(false);
                     }
                 }
 
@@ -107,7 +107,7 @@ public class UnshareOperation extends SyncOperation {
     
     private boolean existsFile(OwnCloudClient client, String remotePath){
         ExistenceCheckRemoteOperation existsOperation =
-                new ExistenceCheckRemoteOperation(remotePath, mContext, false);
+                new ExistenceCheckRemoteOperation(remotePath, false);
         RemoteOperationResult result = existsOperation.execute(client);
         return result.isSuccess();
     }

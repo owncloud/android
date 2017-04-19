@@ -155,7 +155,7 @@ public class FileDataStorageManager {
             return getFolderContent(f.getFileId()/*, onlyOnDevice*/);
 
         } else {
-            return new Vector<OCFile>();
+            return new Vector<>();
         }
     }
 
@@ -166,7 +166,7 @@ public class FileDataStorageManager {
             // TODO better implementation, filtering in the access to database instead of here
             // TODO Enable when "On Device" is recovered ?
             Vector<OCFile> tmp = getFolderContent(folder/*, onlyOnDevice*/);
-            OCFile current = null;
+            OCFile current;
             for (int i=0; i<tmp.size(); i++) {
                 current = tmp.get(i);
                 if (current.isImage()) {
@@ -200,7 +200,6 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_TREE_ETAG, file.getTreeEtag());
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
-        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());
         cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.getPermissions());
         cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.getRemoteId());
         cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
@@ -309,7 +308,6 @@ public class FileDataStorageManager {
             cv.put(ProviderTableMeta.FILE_TREE_ETAG, file.getTreeEtag());
             cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
             cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
-            cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());
             cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.getPermissions());
             cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.getRemoteId());
             cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
@@ -388,7 +386,6 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_TREE_ETAG, folder.getTreeEtag());
         cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, folder.isSharedViaLink() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, folder.isSharedWithSharee() ? 1 : 0);
-        cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, folder.getPublicLink());
         cv.put(ProviderTableMeta.FILE_PERMISSIONS, folder.getPermissions());
         cv.put(ProviderTableMeta.FILE_REMOTE_ID, folder.getRemoteId());
 
@@ -1086,11 +1083,10 @@ public class FileDataStorageManager {
             );
             file.setEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG)));
             file.setTreeEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_TREE_ETAG)));
-            file.setShareViaLink(c.getInt(
+            file.setSharedViaLink(c.getInt(
                     c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_LINK)) == 1 ? true : false);
-            file.setShareWithSharee(c.getInt(
+            file.setSharedWithSharee(c.getInt(
                     c.getColumnIndex(ProviderTableMeta.FILE_SHARED_WITH_SHAREE)) == 1 ? true : false);
-            file.setPublicLink(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PUBLIC_LINK)));
             file.setPermissions(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PERMISSIONS)));
             file.setRemoteId(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID)));
             file.setNeedsUpdateThumbnail(c.getInt(
@@ -1123,6 +1119,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY, share.isFolder() ? 1 : 0);
         cv.put(ProviderTableMeta.OCSHARES_USER_ID, share.getUserId());
         cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, share.getRemoteId());
+        cv.put(ProviderTableMeta.OCSHARES_NAME, share.getName());
         cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, mAccount.name);
 
         if (shareExistsForRemoteId(share.getRemoteId())) {// for renamed files; no more delete and create
@@ -1350,9 +1347,15 @@ public class FileDataStorageManager {
                     .getColumnIndex(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME)));
             share.setIsFolder(c.getInt(
                     c.getColumnIndex(ProviderTableMeta.OCSHARES_IS_DIRECTORY)) == 1);
-            share.setUserId(c.getLong(c.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID)));
+            share.setUserId(c.getLong(
+                c.getColumnIndex(ProviderTableMeta.OCSHARES_USER_ID))
+            );
             share.setIdRemoteShared(c.getLong(
-                    c.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED)));
+                    c.getColumnIndex(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED))
+            );
+            share.setName(c.getString(
+                c.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)
+            ));
         }
         return share;
     }
@@ -1544,7 +1547,6 @@ public class FileDataStorageManager {
                 cv.put(ProviderTableMeta.FILE_TREE_ETAG, file.getTreeEtag());
                 cv.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, file.isSharedViaLink() ? 1 : 0);
                 cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, file.isSharedWithSharee() ? 1 : 0);
-                cv.put(ProviderTableMeta.FILE_PUBLIC_LINK, file.getPublicLink());
                 cv.put(ProviderTableMeta.FILE_PERMISSIONS, file.getPermissions());
                 cv.put(ProviderTableMeta.FILE_REMOTE_ID, file.getRemoteId());
                 cv.put(
@@ -1668,7 +1670,7 @@ public class FileDataStorageManager {
 //            OCFile file = getFileByPath(path);
 //            if (file != null) {
 //                if (share.getShareType().equals(ShareType.PUBLIC_LINK)) {
-//                    file.setShareViaLink(true);
+//                    file.setSharedViaLink(true);
 //                    sharedFiles.add(file);
 //                }
 //            }

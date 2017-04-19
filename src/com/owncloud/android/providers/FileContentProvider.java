@@ -5,7 +5,7 @@
  *   @author David A. Velasco
  *   @author masensio
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -39,6 +39,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.owncloud.android.MainApp;
@@ -71,12 +72,12 @@ public class FileContentProvider extends ContentProvider {
 
     private static final String TAG = FileContentProvider.class.getSimpleName();
 
-    private final String MAX_SUCCESSFUL_UPLOADS = "30";
+    private static final String MAX_SUCCESSFUL_UPLOADS = "30";
 
     private UriMatcher mUriMatcher;
 
     @Override
-    public int delete(Uri uri, String where, String[] whereArgs) {
+    public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
         //Log_OC.d(TAG, "Deleting " + uri + " at provider " + this);
         int count = 0;
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -186,7 +187,7 @@ public class FileContentProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (mUriMatcher.match(uri)) {
         case ROOT_DIRECTORY:
             return ProviderTableMeta.CONTENT_TYPE;
@@ -199,7 +200,7 @@ public class FileContentProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         Uri newUri = null;
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -251,7 +252,7 @@ public class FileContentProvider extends ContentProvider {
                 }
 
             case SHARES:
-                Uri insertedShareUri = null;
+                Uri insertedShareUri;
                 long rowId = db.insert(ProviderTableMeta.OCSHARES_TABLE_NAME, null, values);
                 if (rowId >0) {
                     insertedShareUri =
@@ -264,7 +265,7 @@ public class FileContentProvider extends ContentProvider {
                 return insertedShareUri;
 
             case CAPABILITIES:
-                Uri insertedCapUri = null;
+                Uri insertedCapUri;
                 long id = db.insert(ProviderTableMeta.CAPABILITIES_TABLE_NAME, null, values);
                 if (id >0) {
                     insertedCapUri =
@@ -341,11 +342,11 @@ public class FileContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(
-            Uri uri,
-            String[] projection,
-            String selection,
-            String[] selectionArgs,
-            String sortOrder
+        @NonNull Uri uri,
+        String[] projection,
+        String selection,
+        String[] selectionArgs,
+        String sortOrder
         ) {
 
         Cursor result = null;
@@ -440,7 +441,7 @@ public class FileContentProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         int count = 0;
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -488,8 +489,9 @@ public class FileContentProvider extends ContentProvider {
         }
     }
 
+    @NonNull
     @Override
-    public ContentProviderResult[] applyBatch (ArrayList<ContentProviderOperation> operations)
+    public ContentProviderResult[] applyBatch (@NonNull ArrayList<ContentProviderOperation> operations)
             throws OperationApplicationException {
         Log_OC.d("FileContentProvider", "applying batch in provider " + this +
                 " (temporary: " + isTemporary() + ")" );
@@ -512,9 +514,9 @@ public class FileContentProvider extends ContentProvider {
     }
 
 
-    class DataBaseHelper extends SQLiteOpenHelper {
+    private class DataBaseHelper extends SQLiteOpenHelper {
 
-        public DataBaseHelper(Context context) {
+        DataBaseHelper(Context context) {
             super(context, ProviderMeta.DB_NAME, null, ProviderMeta.DB_VERSION);
 
         }
@@ -796,9 +798,27 @@ public class FileContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
-            if (!upgraded)
+            if (oldVersion == 16 && newVersion >= 17) {
+                Log_OC.i("SQL", "Entering in the #17 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.OCSHARES_TABLE_NAME +
+                        " ADD COLUMN " + ProviderTableMeta.OCSHARES_NAME  + " TEXT " +
+                        " DEFAULT NULL");
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+
+                    // SQLite does not allow to drop a columns; ftm, we'll not recreate
+                    // the files table without the column, just forget about
+
+                } finally {
+                    db.endTransaction();
+                }
+            }
+            if (!upgraded) {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                     ", newVersion == " + newVersion);
+            }
 
 
         }
