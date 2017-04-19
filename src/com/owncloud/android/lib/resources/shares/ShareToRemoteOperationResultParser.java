@@ -94,6 +94,7 @@ public class ShareToRemoteOperationResultParser {
                                             share.getShareLink().length() <= 0) &&
                                     share.getToken().length() > 0
                                     ) {
+                                // TODO - deal with https://github.com/owncloud/android/issues/1811
                                 if (mServerBaseUri != null) {
                                     String sharingLinkPath = ShareUtils.getSharingLinkPath(mOwnCloudVersion);
                                     share.setShareLink(mServerBaseUri + sharingLinkPath + share.getToken());

@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -54,6 +55,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
 
     private static final String TAG = GetRemoteShareOperation.class.getSimpleName();
 
+    private static final String PARAM_NAME = "name";
     private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_EXPIRATION_DATE = "expireDate";
     private static final String PARAM_PERMISSIONS = "permissions";
@@ -87,6 +89,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
      * Upload permissions for the public link (only folders)
      */
     private Boolean mPublicUpload;
+    private String mName;
 
 
     /**
@@ -101,6 +104,17 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         mPublicUpload = null;
     }
 
+
+    /**
+     * Set name to update in Share resource. Ignored by servers previous to version 10.0.0
+     *
+     * @param name     Name to set to the target share.
+     *                 Empty string clears the current name.
+     *                 Null results in no update applied to the name.
+     */
+    public void setName(String name) {
+        this.mName = name;
+    }
 
     /**
      * Set password to update in Share resource.
@@ -150,38 +164,41 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        int status = -1;
+        int status;
 
         /// prepare array of parameters to update
-        List<Pair<String, String>> parametersToUpdate = new ArrayList<Pair<String, String>>();
+        List<Pair<String, String>> parametersToUpdate = new ArrayList<>();
+        if (mName != null) {
+            parametersToUpdate.add(new Pair<>(PARAM_NAME, mName));
+        }
         if (mPassword != null) {
-            parametersToUpdate.add(new Pair<String, String>(PARAM_PASSWORD, mPassword));
+            parametersToUpdate.add(new Pair<>(PARAM_PASSWORD, mPassword));
         }
         if (mExpirationDateInMillis < 0) {
             // clear expiration date
-            parametersToUpdate.add(new Pair(PARAM_EXPIRATION_DATE, ""));
+            parametersToUpdate.add(new Pair<>(PARAM_EXPIRATION_DATE, ""));
 
         } else if (mExpirationDateInMillis > 0) {
             // set expiration date
-            DateFormat dateFormat = new SimpleDateFormat(FORMAT_EXPIRATION_DATE);
+            DateFormat dateFormat = new SimpleDateFormat(FORMAT_EXPIRATION_DATE, Locale.GERMAN);
             Calendar expirationDate = Calendar.getInstance();
             expirationDate.setTimeInMillis(mExpirationDateInMillis);
             String formattedExpirationDate = dateFormat.format(expirationDate.getTime());
-            parametersToUpdate.add(new Pair(PARAM_EXPIRATION_DATE, formattedExpirationDate));
+            parametersToUpdate.add(new Pair<>(PARAM_EXPIRATION_DATE, formattedExpirationDate));
 
         } // else, ignore - no update
         if (mPermissions > 0) {
             // set permissions
-            parametersToUpdate.add(new Pair(PARAM_PERMISSIONS, Integer.toString(mPermissions)));
+            parametersToUpdate.add(new Pair<>(PARAM_PERMISSIONS, Integer.toString(mPermissions)));
         }
 
         if (mPublicUpload != null) {
-            parametersToUpdate.add(new Pair(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload)));
+            parametersToUpdate.add(new Pair<>(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload)));
         }
 
         /// perform required PUT requests
         PutMethod put = null;
-        String uriString = null;
+        String uriString;
 
         try {
             Uri requestUri = client.getBaseUri();
