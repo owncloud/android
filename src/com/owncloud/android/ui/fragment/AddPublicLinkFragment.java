@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.owncloud.android.R;
 
@@ -24,7 +25,7 @@ public class AddPublicLinkFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog);
+        setStyle(DialogFragment.STYLE_NORMAL, 0);
     }
 
     @Override
@@ -35,10 +36,24 @@ public class AddPublicLinkFragment extends DialogFragment {
         getDialog().setTitle(R.string.share_add_public_link_title);
 
         View v = inflater.inflate(R.layout.add_public_link, container, false);
-//        View tv = v.findViewById(R.id.text);
-//        ((TextView)tv).setText("Dialog #" + mNum + ": using style "
-//                + getNameForNum(mNum));
-//
+
+        // Confirm add public link
+        Button confirmAddPublicLinkButton = (Button)v.findViewById(R.id.confirmAddPublicLinkButton);
+        confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // When button is clicked, call up to owning activity.
+
+            }
+        });
+
+        // Cancel add public link
+        Button cancelAddPublicLinkButton = (Button)v.findViewById(R.id.cancelAddPublicLinkButton);
+        cancelAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
         return v;
     }
 }
