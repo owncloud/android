@@ -250,6 +250,18 @@ public class ShareFileFragment extends Fragment
         });
 
 
+        //  Add Public Link Button
+        ImageButton addPublicLinkButton = (ImageButton)
+                view.findViewById(R.id.addPublicLinkButton);
+
+        addPublicLinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    // Show Add Public Link Fragment
+                    mListener.showAddPublicLink();
+            }
+        });
+
         // Set listener for user actions on switch for sharing/unsharing via link
         initShareViaLinkListener(view);
 
