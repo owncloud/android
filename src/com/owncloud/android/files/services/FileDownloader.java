@@ -439,7 +439,7 @@ public class FileDownloader extends Service
                     if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
                         // if failed due to lack of connectivity, schedule an automatic retry
                         TransferRequester requester = new TransferRequester();
-                        if (requester.shouldScheduleRetry(this)) {
+                        if (requester.shouldScheduleRetry(this, downloadResult.getException())) {
                             int jobId = mPendingDownloads. buildKey(
                                 mCurrentAccount.name,
                                 mCurrentDownload.getRemotePath()

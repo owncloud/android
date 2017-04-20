@@ -802,7 +802,7 @@ public class FileUploader extends Service
 
                     // if failed due to lack of connectivity, schedule an automatic retry
                     TransferRequester requester = new TransferRequester();
-                    if (requester.shouldScheduleRetry(this)) {
+                    if (requester.shouldScheduleRetry(this, uploadResult.getException())) {
                         int jobId = mPendingUploads.buildKey(
                             mCurrentAccount.name,
                             mCurrentUpload.getRemotePath()

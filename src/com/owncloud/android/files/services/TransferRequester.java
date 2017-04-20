@@ -39,6 +39,8 @@ import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.PowerUtils;
 import com.owncloud.android.utils.Extras;
 
+import java.net.SocketTimeoutException;
+
 /**
  * Facade to start operations in transfer services without the verbosity of Android Intents.
  */
@@ -191,10 +193,11 @@ public class TransferRequester {
      * @param context       Caller {@link Context}
      * @return              'true' when conditions for a scheduled retry are met, 'false' otherwise.
      */
-    boolean shouldScheduleRetry(Context context) {
+    boolean shouldScheduleRetry(Context context, Exception exception) {
         return (
             !ConnectivityUtils.isNetworkActive(context) ||
-            PowerUtils.isDeviceIdle(context)
+            PowerUtils.isDeviceIdle(context) ||
+            exception instanceof SocketTimeoutException // TODO check if exception is the same in HTTP server
         );
     }
 
