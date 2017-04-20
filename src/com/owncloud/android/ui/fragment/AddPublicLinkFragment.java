@@ -9,10 +9,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 
 public class AddPublicLinkFragment extends DialogFragment {
+
+
+    /**
+     * Listener for user actions to set, update or clear password on public link
+     */
+    private OnPasswordInteractionListener mOnPasswordInteractionListener = null;
+
+    /**
+     * Listener for user actions to set, update or clear expiration date on public link
+     */
+    private OnExpirationDateInteractionListener mOnExpirationDateInteractionListener = null;
 
     /**
      * Create a new instance of MyDialogFragment, providing "num"
@@ -38,10 +51,10 @@ public class AddPublicLinkFragment extends DialogFragment {
         // Set title for this dialog
         getDialog().setTitle(R.string.share_add_public_link_title);
 
-        View v = inflater.inflate(R.layout.add_public_link, container, false);
+        View view = inflater.inflate(R.layout.add_public_link, container, false);
 
         // Confirm add public link
-        Button confirmAddPublicLinkButton = (Button)v.findViewById(R.id.confirmAddPublicLinkButton);
+        Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
 
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -51,7 +64,7 @@ public class AddPublicLinkFragment extends DialogFragment {
         });
 
         // Cancel add public link
-        Button cancelAddPublicLinkButton = (Button)v.findViewById(R.id.cancelAddPublicLinkButton);
+        Button cancelAddPublicLinkButton = (Button) view.findViewById(R.id.cancelAddPublicLinkButton);
 
         cancelAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -59,35 +72,172 @@ public class AddPublicLinkFragment extends DialogFragment {
             }
         });
 
+        // Set listener for user actions on password
+        initPasswordListener(view);
 
-        // Password toggle
-        SwitchCompat passwordToggle = ((SwitchCompat) v.findViewById(R.id.shareViaLinkPasswordSwitch));
+        // Set listener for user actions on expiration date
+        initExpirationListener(view);
 
-        // Password value
-        final EditText shareViaLinkPasswordValue = (EditText) v.findViewById(R.id.shareViaLinkPasswordValue);
+        return view;
+    }
 
-        passwordToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+    /**
+     * Binds listener for user actions that start any update on a password for the public link
+     * to the views receiving the user events.
+     *
+     * @param shareView Root view in the fragment.
+     */
+    private void initPasswordListener(View shareView) {
+        mOnPasswordInteractionListener = new OnPasswordInteractionListener();
+
+        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkPasswordSwitch)).
+                setOnCheckedChangeListener(mOnPasswordInteractionListener);
+    }
+
+
+    /**
+     * Listener for user actions that start any update on a password for the public link.
+     */
+    private class OnPasswordInteractionListener
+            implements CompoundButton.OnCheckedChangeListener {
+
+        /**
+         * Called by R.id.shareViaLinkPasswordSwitch to set or clear the password.
+         *
+         * @param switchView {@link SwitchCompat} toggled by the user, R.id.shareViaLinkPasswordSwitch
+         * @param isChecked  New switch state.
+         */
+        @Override
+        public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
+
+            EditText shareViaLinkPasswordValue = (EditText) getView().findViewById(R.id.shareViaLinkPasswordValue);
+
+            if (isChecked) {
 
                 // Show input to set the password
-                if (isChecked) {
+                shareViaLinkPasswordValue.setVisibility(View.VISIBLE);
 
-                    shareViaLinkPasswordValue.setVisibility(View.VISIBLE);
+                shareViaLinkPasswordValue.requestFocus();
 
-                    shareViaLinkPasswordValue.requestFocus();
+            } else {
 
-                } else {
+                shareViaLinkPasswordValue.setVisibility(View.GONE);
 
-                    shareViaLinkPasswordValue.setVisibility(View.GONE);
+                shareViaLinkPasswordValue.getText().clear();
 
-                    shareViaLinkPasswordValue.getText().clear();
-
-                }
             }
-        });
+        }
+    }
 
-        return v;
+    /**
+     * Binds listener for user actions that start any update on a expiration date
+     * for the public link to the views receiving the user events.
+     *
+     * @param shareView Root view in the fragment.
+     */
+    private void initExpirationListener(View shareView) {
+        mOnExpirationDateInteractionListener = new OnExpirationDateInteractionListener();
+
+        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkExpirationSwitch)).
+                setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
+
+        shareView.findViewById(R.id.shareViaLinkExpirationLabel).
+                setOnClickListener(mOnExpirationDateInteractionListener);
+
+        shareView.findViewById(R.id.shareViaLinkExpirationValue).
+                setOnClickListener(mOnExpirationDateInteractionListener);
+    }
+
+    /**
+     * Listener for user actions that start any update on the expiration date for the public link.
+     */
+    private class OnExpirationDateInteractionListener
+            implements CompoundButton.OnCheckedChangeListener, View.OnClickListener,
+            ExpirationDatePickerDialogFragment.DatePickerFragmentListener {
+
+        /**
+         * Called by R.id.shareViaLinkExpirationSwitch to set or clear the expiration date.
+         *
+         * @param switchView {@link SwitchCompat} toggled by the user, R.id.shareViaLinkExpirationSwitch
+         * @param isChecked  New switch state.
+         */
+        @Override
+        public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
+            if (!isResumed()) {
+                // very important, setCheched(...) is called automatically during
+                // Fragment recreation on device rotations
+                return;
+            }
+
+            ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
+                    newInstance(-1, this);
+
+
+            TextView shareViaLinkExpirationValue = (TextView) getView().findViewById(R.id.shareViaLinkExpirationValue);
+
+            if (isChecked) {
+
+                // Show calendar to set the expiration date
+                dialog.show(
+                        getActivity().getSupportFragmentManager(),
+                        ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
+                );
+
+            } else {
+
+                shareViaLinkExpirationValue.setVisibility(View.GONE);
+
+            }
+        }
+
+        /**
+         * Called by R.id.shareViaLinkExpirationLabel or R.id.shareViaLinkExpirationValue
+         * to change the current expiration date.
+         *
+         * @param expirationView Label or value view touched by the user.
+         */
+        @Override
+        public void onClick(View expirationView) {
+
+            ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
+                    newInstance(-1, this);
+
+            // Show calendar to set the expiration date
+            dialog.show(
+                    getActivity().getSupportFragmentManager(),
+                    ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
+            );
+        }
+
+        /**
+         * Update the selected date for the public link
+         *
+         * @param date date selected by the user
+         */
+        @Override
+        public void onDateSet(String date) {
+
+            TextView expirationDate = (TextView) getView().findViewById(R.id.shareViaLinkExpirationValue);
+
+            if (expirationDate.getVisibility() == View.GONE) {
+
+                expirationDate.setVisibility(View.VISIBLE);
+
+            }
+
+            expirationDate.setText(date);
+        }
+
+        @Override
+        public void onCancelDatePicker() {
+
+            SwitchCompat expirationToggle = ((SwitchCompat) getView().
+                    findViewById(R.id.shareViaLinkExpirationSwitch));
+
+            if (expirationToggle.isChecked()) {
+                expirationToggle.setChecked(false);
+            }
+        }
     }
 }
