@@ -428,6 +428,7 @@
     <string name="share_incompatible_version">To share with other users, your server needs to be at least version 8.2</string>
     <string name="share_add_user_or_group">Add user or group</string>
     <string name="share_via_link_section_title">Public links</string>
+    <string name="share_add_public_link_title">New public link</string>
     <string name="share_via_link_expiration_date_label">Set expiration date</string>
     <string name="share_via_link_password_label">Password protect</string>
     <string name="share_via_link_password_title">Secured</string>
