@@ -64,13 +64,13 @@ import java.util.Date;
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
  * a public link.
- * <p/>
+ *
  * A simple {@link Fragment} subclass.
- * <p/>
+ *
  * Activities that contain this fragment must implement the
  * {@link ShareFragmentListener} interface
  * to handle interaction events.
- * <p/>
+ *
  * Use the {@link ShareFileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -381,7 +381,7 @@ public class ShareFileFragment extends Fragment
             }
             if (isChecked) {
                 ExpirationDatePickerDialogFragment dialog =
-                        ExpirationDatePickerDialogFragment.newInstance(mFile, -1);
+                        ExpirationDatePickerDialogFragment.newInstance(-1, null);
                 dialog.show(
                         getActivity().getSupportFragmentManager(),
                         ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
@@ -413,8 +413,7 @@ public class ShareFileFragment extends Fragment
                 }
                 ExpirationDatePickerDialogFragment dialog =
                         ExpirationDatePickerDialogFragment.newInstance(
-                                mFile,
-                                chosenDateInMillis
+                                chosenDateInMillis, null
                         );
                 dialog.show(
                         getActivity().getSupportFragmentManager(),
