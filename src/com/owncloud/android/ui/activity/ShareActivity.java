@@ -139,7 +139,6 @@ public class ShareActivity extends FileActivity
         );
     }
 
-
     private int getAppropiatePermissions(ShareType shareType) {
 
         // check if the Share is FERERATED
