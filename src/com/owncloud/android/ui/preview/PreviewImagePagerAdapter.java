@@ -233,7 +233,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
             if (fragment instanceof FileDownloadFragment) {
                 // trigger the creation of new PreviewImageFragment to replace current FileDownloadFragment
                 notifyDataSetChanged();
-            } else {
+            } else if (fragment != null) {
                 fragment.onSyncEvent(action, success, null);
             }
         } else {
