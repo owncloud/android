@@ -1,3 +1,23 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * Copyright (C) 2017 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.ui.fragment;
 
 import android.os.Bundle;
@@ -15,7 +35,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 
 public class AddPublicLinkFragment extends DialogFragment {
-
 
     /**
      * Listener for user actions to set, update or clear password on public link
@@ -186,7 +205,7 @@ public class AddPublicLinkFragment extends DialogFragment {
 
             } else {
 
-                shareViaLinkExpirationValue.setVisibility(View.GONE);
+                shareViaLinkExpirationValue.setVisibility(View.INVISIBLE);
 
             }
         }
@@ -220,7 +239,7 @@ public class AddPublicLinkFragment extends DialogFragment {
 
             TextView expirationDate = (TextView) getView().findViewById(R.id.shareViaLinkExpirationValue);
 
-            if (expirationDate.getVisibility() == View.GONE) {
+            if (expirationDate.getVisibility() == View.INVISIBLE) {
 
                 expirationDate.setVisibility(View.VISIBLE);
 
