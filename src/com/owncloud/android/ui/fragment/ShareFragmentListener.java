@@ -38,4 +38,5 @@ public interface ShareFragmentListener {
     void showEditShare(OCShare share);
     void refreshUsersOrGroupsListFromServer();
     void unshareWith(OCShare share);
+    void showAddPublicLink();
 }
