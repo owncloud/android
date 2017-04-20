@@ -4,6 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/standard_half_padding"
+        android:text="@string/share_add_public_link_title"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +30,6 @@
             android:id="@+id/user_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/standard_half_padding"
             android:layout_marginRight="@dimen/standard_half_padding" />
 
     </LinearLayout>
@@ -150,5 +157,33 @@
             android:textSize="12sp" />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/standard_half_padding">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancelAddPublicLinkButton"
+            style="@style/ownCloud.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="shareAddPublicLinkCancelButton"
+            android:text="@string/share_cancel_public_link_button"
+            android:theme="@style/Button.Primary" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/confirmAddPublicLinkButton"
+            style="@style/ownCloud.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="shareAddPublicLinkConfirmButton"
+            android:text="@string/share_confirm_public_link_button"
+            android:theme="@style/Button.Primary" />
+
+    </LinearLayout>
 
 </LinearLayout>
