@@ -29,12 +29,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 
 public class AddPublicLinkFragment extends DialogFragment {
+
+    /**
+     * The fragment initialization parameters
+     */
+    private static final String ARG_FILE = "FILE";
 
     /**
      * Listener for user actions to set, update or clear password on public link
@@ -46,19 +53,28 @@ public class AddPublicLinkFragment extends DialogFragment {
      */
     private OnExpirationDateInteractionListener mOnExpirationDateInteractionListener = null;
 
+    private OCFile mFile;
+
     /**
      * Create a new instance of MyDialogFragment, providing "num"
      * as an argument.
      */
-    public static AddPublicLinkFragment newInstance() {
-        AddPublicLinkFragment addPublicLinkFragment = new AddPublicLinkFragment();
+    public static AddPublicLinkFragment newInstance(OCFile fileToShare) {
 
+        AddPublicLinkFragment addPublicLinkFragment = new AddPublicLinkFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_FILE, fileToShare);
+        addPublicLinkFragment.setArguments(args);
         return addPublicLinkFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            mFile = getArguments().getParcelable(ARG_FILE);
+        }
 
         setStyle(DialogFragment.STYLE_NORMAL, 0);
     }
@@ -71,6 +87,22 @@ public class AddPublicLinkFragment extends DialogFragment {
         getDialog().setTitle(R.string.share_add_public_link_title);
 
         View view = inflater.inflate(R.layout.add_public_link, container, false);
+
+        RelativeLayout editPermissionSection = (RelativeLayout) view.
+                findViewById(R.id.shareViaLinkEditPermissionSection);
+
+        if (mFile.isFolder()) {
+            editPermissionSection.setVisibility(View.VISIBLE);
+        } else {
+            editPermissionSection.setVisibility(View.GONE);
+        }
+
+        // Set listener for user actions on password
+        initPasswordListener(view);
+
+        // Set listener for user actions on expiration date
+        initExpirationListener(view);
+
 
         // Confirm add public link
         Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
@@ -90,12 +122,6 @@ public class AddPublicLinkFragment extends DialogFragment {
                 dismiss();
             }
         });
-
-        // Set listener for user actions on password
-        initPasswordListener(view);
-
-        // Set listener for user actions on expiration date
-        initExpirationListener(view);
 
         return view;
     }

@@ -214,7 +214,7 @@ public class ShareActivity extends FileActivity
     }
 
     @Override
-    public void showAddPublicLink() {
+    public void showAddPublicLink(OCFile mFile) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
@@ -226,7 +226,7 @@ public class ShareActivity extends FileActivity
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DialogFragment newFragment = AddPublicLinkFragment.newInstance();
+        DialogFragment newFragment = AddPublicLinkFragment.newInstance(mFile);
         newFragment.show(ft, TAG_ADD_PUBLIC_LINK_FRAGMENT);
     }
 
