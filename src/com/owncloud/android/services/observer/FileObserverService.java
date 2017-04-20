@@ -44,6 +44,7 @@ import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.SynchronizeFileOperation;
+import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 
 
@@ -449,7 +450,7 @@ public class FileObserverService extends Service {
         public void onReceive(Context context, Intent intent) {
             Log_OC.d(TAG, "Received broadcast intent " + intent);
 
-            File downloadedFile = new File(intent.getStringExtra(FileDownloader.EXTRA_FILE_PATH));
+            File downloadedFile = new File(intent.getStringExtra(Extras.EXTRA_FILE_PATH));
             String parentPath = downloadedFile.getParent();
             String topPath = FileStorageUtils.getDataFolder();
             AvailableOfflineObserver observer;

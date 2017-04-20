@@ -31,6 +31,7 @@ import android.support.v4.content.ContextCompat;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.db.PreferenceManager.InstantUploadsConfiguration;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.MimetypeIconUtil;
@@ -262,7 +263,7 @@ public class InstantUploadsHandler {
                 UploadFileOperation.CREATED_AS_INSTANT_VIDEO
             ;
 
-        FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+        TransferRequester requester = new TransferRequester();
         requester.uploadNewFile(
             context,
             account,

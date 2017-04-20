@@ -11,6 +11,7 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.Extras;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class RetryDownloadJobService extends JobService {
@@ -20,8 +21,7 @@ public class RetryDownloadJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
-        String accountName = jobParameters.getExtras().getString(FileDownloader.
-                EXTRA_ACCOUNT_NAME);
+        String accountName = jobParameters.getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
 
         Account account = AccountUtils.getOwnCloudAccountByName(this, accountName);
 
@@ -34,7 +34,7 @@ public class RetryDownloadJobService extends JobService {
             );
 
             String fileRemotePath = jobParameters.getExtras().getString(
-                FileDownloader.EXTRA_REMOTE_PATH
+                Extras.EXTRA_REMOTE_PATH
             );
 
             Log_OC.d(TAG, String.format("Retrying download of %1s in %2s", fileRemotePath, accountName));

@@ -52,7 +52,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.exoplayer2.source.MediaSource;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -61,6 +60,7 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -82,7 +82,6 @@ import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
-import com.owncloud.android.ui.preview.PrepareVideoPlayerAsyncTask;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
@@ -90,6 +89,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment;
 import com.owncloud.android.ui.preview.PreviewVideoActivity;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.DisplayUtils;
+import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PermissionUtil;
 
 import java.io.File;
@@ -680,7 +680,7 @@ public class FileDisplayActivity extends HookActivity
 
             int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) ? FileUploader
                     .LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
-            FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+            TransferRequester requester = new TransferRequester();
             requester.uploadNewFile(
                     this,
                     getAccount(),
@@ -1035,8 +1035,8 @@ public class FileDisplayActivity extends HookActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             try {
-                String uploadedRemotePath = intent.getStringExtra(FileUploader.EXTRA_REMOTE_PATH);
-                String accountName = intent.getStringExtra(FileUploader.EXTRA_ACCOUNT_NAME);
+                String uploadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH);
+                String accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME);
                 boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
                 OCFile currentDir = getCurrentDir();
                 boolean isDescendant =
@@ -1044,15 +1044,15 @@ public class FileDisplayActivity extends HookActivity
                     (uploadedRemotePath != null) &&
                     (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
                 boolean renamedInUpload = getFile().getRemotePath().equals(
-                    intent.getStringExtra(FileUploader.EXTRA_OLD_REMOTE_PATH)
+                    intent.getStringExtra(Extras.EXTRA_OLD_REMOTE_PATH)
                 );
                 boolean sameFile = renamedInUpload ||
                     getFile().getRemotePath().equals(uploadedRemotePath);
-                boolean success = intent.getBooleanExtra(FileUploader.EXTRA_UPLOAD_RESULT, false);
+                boolean success = intent.getBooleanExtra(Extras.EXTRA_UPLOAD_RESULT, false);
 
                 if (sameAccount && isDescendant) {
                     String linkedToRemotePath =
-                            intent.getStringExtra(FileUploader.EXTRA_LINKED_TO_PATH);
+                            intent.getStringExtra(Extras.EXTRA_LINKED_TO_PATH);
                     if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
                         refreshListOfFilesFragment(true);
                     }
@@ -1143,19 +1143,19 @@ public class FileDisplayActivity extends HookActivity
             try {
                 boolean sameAccount = isSameAccount(intent);
                 String downloadedRemotePath =
-                        intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
+                        intent.getStringExtra(Extras.EXTRA_REMOTE_PATH);
                 boolean isDescendant = isDescendant(downloadedRemotePath);
 
                 if (sameAccount && isDescendant) {
                     String linkedToRemotePath =
-                            intent.getStringExtra(FileDownloader.EXTRA_LINKED_TO_PATH);
+                            intent.getStringExtra(Extras.EXTRA_LINKED_TO_PATH);
                     if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
                         refreshListOfFilesFragment(true);
                     }
                     refreshSecondFragment(
                             intent.getAction(),
                             downloadedRemotePath,
-                            intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false)
+                            intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
                     );
                     invalidateOptionsMenu();
                 }
@@ -1193,7 +1193,7 @@ public class FileDisplayActivity extends HookActivity
         }
 
         private boolean isSameAccount(Intent intent) {
-            String accountName = intent.getStringExtra(FileDownloader.EXTRA_ACCOUNT_NAME);
+            String accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME);
             return (accountName != null && getAccount() != null &&
                     accountName.equals(getAccount().name));
         }

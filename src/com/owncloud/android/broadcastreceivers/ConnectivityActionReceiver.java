@@ -36,6 +36,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 /**
@@ -170,7 +171,7 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
                 @Override
                 public void run() {
                     Log_OC.d(TAG, "Requesting retry of instant uploads (& friends)");
-                    FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+                    TransferRequester requester = new TransferRequester();
 
                     //Avoid duplicate uploads, because uploads retry is also managed in FileUploader
                     //by using jobs in versions 5 or higher

@@ -56,6 +56,7 @@ import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.fragment.FileFragment;
+import com.owncloud.android.utils.Extras;
 
 
 /**
@@ -391,8 +392,8 @@ public class PreviewImageActivity extends FileActivity implements
     private class DownloadFinishReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String accountName = intent.getStringExtra(FileDownloader.EXTRA_ACCOUNT_NAME);
-            String downloadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
+            String accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME);
+            String downloadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH);
             if (getAccount().name.equals(accountName) && 
                     downloadedRemotePath != null) {
 
@@ -400,7 +401,7 @@ public class PreviewImageActivity extends FileActivity implements
                 mPreviewImagePagerAdapter.onDownloadEvent(
                     file,
                     intent.getAction(),
-                    intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false)
+                    intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
                 );
             }
             removeStickyBroadcast(intent);

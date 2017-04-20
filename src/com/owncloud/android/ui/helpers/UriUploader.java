@@ -26,6 +26,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -157,7 +158,7 @@ public class UriUploader {
      * @param remotePath    Absolute path in the current OC account to set to the uploaded file.
      */
     private void requestUpload(String localPath, String remotePath) {
-        FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+        TransferRequester requester = new TransferRequester();
         requester.uploadNewFile(
                 mActivity,
                 mAccount,

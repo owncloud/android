@@ -9,6 +9,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.utils.Extras;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class RetryUploadJobService extends JobService {
@@ -20,9 +21,9 @@ public class RetryUploadJobService extends JobService {
 
         UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(getContentResolver());
 
-        String fileRemotePath = jobParameters.getExtras().getString(FileUploader.EXTRA_REMOTE_PATH);
+        String fileRemotePath = jobParameters.getExtras().getString(Extras.EXTRA_REMOTE_PATH);
 
-        String accountName = jobParameters.getExtras().getString(FileUploader.EXTRA_ACCOUNT_NAME);
+        String accountName = jobParameters.getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
 
         Log_OC.d(TAG, String.format("Retrying upload of %1s in %2s", fileRemotePath, accountName));
 
@@ -31,8 +32,8 @@ public class RetryUploadJobService extends JobService {
 
         if (ocUpload != null) {
             // Retry the upload
-            FileUploader.UploadRequester uploadRequester = new FileUploader.UploadRequester();
-            uploadRequester.retry(this, ocUpload);
+            TransferRequester requester = new TransferRequester();
+            requester.retry(this, ocUpload);
 
         } else {
             // easy if the user deletes the upload in uploads view before recovering network
