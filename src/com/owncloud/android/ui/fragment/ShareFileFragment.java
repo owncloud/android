@@ -247,7 +247,7 @@ public class ShareFileFragment extends Fragment
             @Override
             public void onClick(View view) {
                 // Show Add Public Link Fragment
-                mListener.showAddPublicLink();
+                mListener.showAddPublicLink(mFile);
             }
         });
 
@@ -333,8 +333,8 @@ public class ShareFileFragment extends Fragment
     private void initEditPermissionListener(View shareView) {
         mOnEditPermissionInteractionListener = new OnEditPermissionInteractionListener();
 
-        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkEditPermissionSwitch)).
-                setOnCheckedChangeListener(mOnEditPermissionInteractionListener);
+//        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkEditPermissionSwitch)).
+//                setOnCheckedChangeListener(mOnEditPermissionInteractionListener);
 
     }
 
@@ -540,18 +540,21 @@ public class ShareFileFragment extends Fragment
             } else {
                 getEditPermissionSection().setVisibility(View.GONE);
             }
-            // GetLink button
-            AppCompatButton getLinkButton = getGetLinkButton();
-            getLinkButton.setVisibility(View.VISIBLE);
-            getLinkButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //GetLink from the server and show ShareLinkToDialog
-                    ((FileActivity) getActivity()).getFileOperationsHelper().
-                            getFileWithLink(mFile);
 
-                }
-            });
+
+            // TO DELETE
+            // GetLink button
+//            AppCompatButton getLinkButton = getGetLinkButton();
+//            getLinkButton.setVisibility(View.VISIBLE);
+//            getLinkButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //GetLink from the server and show ShareLinkToDialog
+//                    ((FileActivity) getActivity()).getFileOperationsHelper().
+//                            getFileWithLink(mFile);
+//
+//                }
+//            });
 
             /// update state of expiration date switch and message depending on expiration date
             SwitchCompat expirationDateSwitch = getExpirationDateSwitch();
@@ -622,7 +625,6 @@ public class ShareFileFragment extends Fragment
             getExpirationDateSection().setVisibility(View.GONE);
             getPasswordSection().setVisibility(View.GONE);
             getEditPermissionSection().setVisibility(View.GONE);
-            getGetLinkButton().setVisibility(View.GONE);
         }
     }
 
@@ -665,10 +667,6 @@ public class ShareFileFragment extends Fragment
         return (SwitchCompat) getView().findViewById(R.id.shareViaLinkEditPermissionSwitch);
     }
 
-    private AppCompatButton getGetLinkButton() {
-        return (AppCompatButton) getView().findViewById(R.id.shareViaLinkGetLinkButton);
-    }
-
     /**
      * Hides all the UI elements related to public share
      */
@@ -677,7 +675,6 @@ public class ShareFileFragment extends Fragment
         getExpirationDateSection().setVisibility(View.GONE);
         getPasswordSection().setVisibility(View.GONE);
         getEditPermissionSection().setVisibility(View.GONE);
-        getGetLinkButton().setVisibility(View.GONE);
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {

@@ -31,7 +31,8 @@
             android:id="@+id/user_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/standard_half_padding" />
+            android:layout_marginRight="@dimen/standard_half_padding"
+            android:textSize="15sp" />
 
     </LinearLayout>
 
@@ -39,7 +40,7 @@
         android:id="@+id/shareViaLinkEditPermissionSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/standard_half_margin"
+        android:layout_marginTop="@dimen/standard_margin"
         android:visibility="gone">
 
         <android.support.v7.widget.SwitchCompat
@@ -62,7 +63,7 @@
             android:padding="@dimen/standard_half_padding"
             android:text="@string/share_via_link_edit_permission_label"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 
@@ -70,7 +71,7 @@
         android:id="@+id/shareViaLinkPasswordSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_half_margin">
+        android:layout_marginTop="@dimen/standard_margin">
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/shareViaLinkPasswordSwitch"
@@ -111,7 +112,7 @@
         android:id="@+id/shareViaLinkExpirationSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_half_margin">
+        android:layout_marginTop="@dimen/standard_margin">
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/shareViaLinkExpirationSwitch"
@@ -157,7 +158,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_half_margin"
+        android:layout_marginTop="@dimen/standard_margin"
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatButton
