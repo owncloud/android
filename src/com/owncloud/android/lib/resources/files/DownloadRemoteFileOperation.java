@@ -35,7 +35,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 
@@ -60,7 +59,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
     private static final int FORBIDDEN_ERROR = 403;
     private static final int SERVICE_UNAVAILABLE_ERROR = 503;
 
-    private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<OnDatatransferProgressListener>();
+    private Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
     private long mModificationTimestamp = 0;
     private String mEtag = "";
@@ -76,7 +75,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
 
         /// download will be performed to a temporal file, then moved to the final location
         File tmpFile = new File(getTmpPath());
@@ -102,17 +101,18 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
         IOException, OperationCancelledException {
 
         RemoteOperationResult result;
-        int status = -1;
+        int status;
         boolean savedFile = false;
         mGet = new GetMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
-        Iterator<OnDatatransferProgressListener> it = null;
+        Iterator<OnDatatransferProgressListener> it;
 
         FileOutputStream fos = null;
+        BufferedInputStream bis = null;
         try {
             status = client.executeMethod(mGet);
             if (isSuccess(status)) {
                 targetFile.createNewFile();
-                BufferedInputStream bis = new BufferedInputStream(mGet.getResponseBodyAsStream());
+                bis = new BufferedInputStream(mGet.getResponseBodyAsStream());
                 fos = new FileOutputStream(targetFile);
                 long transferred = 0;
 
@@ -122,7 +122,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     Long.parseLong(contentLength.getValue()) : 0;
 
                 byte[] bytes = new byte[4096];
-                int readResult = 0;
+                int readResult;
                 while ((readResult = bis.read(bytes)) != -1) {
                     synchronized (mCancellationRequested) {
                         if (mCancellationRequested.get()) {
@@ -147,7 +147,7 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                         modificationTime = mGet.getResponseHeader("last-modified");
                     }
                     if (modificationTime != null) {
-                        Date d = WebdavUtils.parseResponseDate((String) modificationTime.getValue());
+                        Date d = WebdavUtils.parseResponseDate(modificationTime.getValue());
                         mModificationTimestamp = (d != null) ? d.getTime() : 0;
                     } else {
                         Log_OC.e(TAG, "Could not read modification time from response downloading " + mRemotePath);
@@ -163,15 +163,20 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
                     // TODO some kind of error control!
                 }
 
-            } else if (status != FORBIDDEN_ERROR && status != SERVICE_UNAVAILABLE_ERROR){
+            } else if (status != FORBIDDEN_ERROR && status != SERVICE_UNAVAILABLE_ERROR) {
                 client.exhaustResponse(mGet.getResponseBodyAsStream());
 
             } // else, body read by RemoteOeprationResult constructor
 
             result = new RemoteOperationResult(isSuccess(status), mGet);
 
+        /*} catch (Exception e) {
+            client.exhaustResponse(mGet.getResponseBodyAsStream());
+            throw e;*/
+
         } finally {
             if (fos != null) fos.close();
+            if (bis != null) bis.close();
             if (!savedFile && targetFile.exists()) {
                 targetFile.delete();
             }
