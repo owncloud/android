@@ -94,28 +94,22 @@
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/shareViaLinkPasswordValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/shareViaLinkPasswordLabel"
-            android:layout_toLeftOf="@id/shareViaLinkPasswordSwitch"
-            android:layout_toStartOf="@id/shareViaLinkPasswordSwitch"
-            android:paddingBottom="@dimen/standard_half_padding"
-            android:paddingLeft="@dimen/standard_half_padding"
-            android:paddingRight="@dimen/standard_half_padding"
-            android:text="@string/share_via_link_password_title"
-            android:textSize="12sp"
-            android:visibility="invisible" />
-
     </RelativeLayout>
+
+    <EditText
+        android:id="@+id/shareViaLinkPasswordValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/standard_half_margin"
+        android:layout_marginRight="@dimen/standard_half_margin"
+        android:inputType="textPassword"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/shareViaLinkExpirationSection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_half_margin">
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/shareViaLinkExpirationSwitch"
