@@ -1863,7 +1863,7 @@ public class FileDataStorageManager {
     public ArrayList<OCShare> getPublicSharesForAFile(String filePath, String accountName){
         // Condition
         String where = ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
-            + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?"+ "AND"
+            + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?"+ "AND "
             + ProviderTableMeta.OCSHARES_SHARE_TYPE + "=? ";
         String [] whereArgs = new String[]{ filePath, accountName ,
             Integer.toString(ShareType.PUBLIC_LINK.getValue())};
