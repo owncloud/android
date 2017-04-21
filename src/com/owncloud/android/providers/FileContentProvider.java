@@ -870,7 +870,8 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.OCSHARES_IS_DIRECTORY + " INTEGER, "  // boolean
                 + ProviderTableMeta.OCSHARES_USER_ID + " INTEGER, "
                 + ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " INTEGER,"
-                + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " TEXT );" );
+                + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " TEXT, "
+                + ProviderTableMeta.OCSHARES_NAME + " TEXT );" );
     }
 
     private void createCapabilitiesTable(SQLiteDatabase db){
