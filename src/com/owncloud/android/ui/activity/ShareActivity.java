@@ -262,7 +262,6 @@ public class ShareActivity extends FileActivity
                 && getEditShareFragment() != null && getEditShareFragment().isAdded()) {
             getEditShareFragment().onUpdateSharePermissionsFinished(result);
         }
-
     }
 
 
