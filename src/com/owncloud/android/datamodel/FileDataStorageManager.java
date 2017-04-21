@@ -1765,6 +1765,7 @@ public class FileDataStorageManager {
                 cv.put(ProviderTableMeta.OCSHARES_USER_ID, share.getUserId());
                 cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, share.getRemoteId());
                 cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, mAccount.name);
+                cv.put(ProviderTableMeta.OCSHARES_NAME, share.getName());
 
                 // adding a new share resource
                 operations.add(
