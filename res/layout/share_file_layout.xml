@@ -169,6 +169,25 @@
 
             </RelativeLayout>
 
+            <ListView
+                android:id="@+id/sharePublicLinksList"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/standard_half_padding"
+                android:scrollbars="vertical"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/shareNoPublicLinks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/standard_padding"
+                android:paddingLeft="@dimen/standard_half_padding"
+                android:paddingTop="@dimen/standard_padding"
+                android:text="@string/share_no_public_links"
+                android:textSize="15sp" />
+
             <!--- DELETE -->
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/shareViaLinkSectionSwitch"

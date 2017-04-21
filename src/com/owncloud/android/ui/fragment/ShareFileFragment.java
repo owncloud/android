@@ -47,7 +47,6 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
-import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -57,9 +56,7 @@ import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
@@ -75,7 +72,8 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class ShareFileFragment extends Fragment
-        implements ShareUserListAdapter.ShareUserAdapterListener {
+        implements ShareUserListAdapter.ShareUserAdapterListener, SharePublicLinkListAdapter.
+        SharePublicLinkAdapterListener{
 
     private static final String TAG = ShareFileFragment.class.getSimpleName();
 
@@ -116,7 +114,7 @@ public class ShareFileFragment extends Fragment
     /**
      *  List of public shares bound to the file
      */
-    private OCShare mPublicShare;
+    private ArrayList<OCShare> mPublicShares;
 
     /**
      * Adapter to show public shares
@@ -279,6 +277,21 @@ public class ShareFileFragment extends Fragment
         mOnShareViaLinkSwitchCheckedChangeListener = new OnShareViaLinkListener();
         SwitchCompat shareViaLinkSwitch = (SwitchCompat) shareView.findViewById(R.id.shareViaLinkSectionSwitch);
         shareViaLinkSwitch.setOnCheckedChangeListener(mOnShareViaLinkSwitchCheckedChangeListener);
+    }
+
+    @Override
+    public void getPublicLink() {
+
+    }
+
+    @Override
+    public void deletePublicLink(OCShare share) {
+
+    }
+
+    @Override
+    public void editPublicLink(OCShare share) {
+
     }
 
     /**
@@ -488,7 +501,7 @@ public class ShareFileFragment extends Fragment
     }
 
     /**
-     * Get public link from the DB to fill in the "Share link" section in the UI.
+     * Get public links from the DB to fill in the "Public links" section in the UI.
      *
      * Takes into account server capabilities before reading database.
      *
@@ -500,15 +513,15 @@ public class ShareFileFragment extends Fragment
             hidePublicShare();
 
         } else if (((FileActivity) mListener).getStorageManager() != null) {
+
             // Get public shares
-            mPublicShare = ((FileActivity) mListener).getStorageManager().getFirstShareByPathAndType(
+            mPublicShares = ((FileActivity) mListener).getStorageManager().getPublicSharesForAFile(
                     mFile.getRemotePath(),
-                    ShareType.PUBLIC_LINK,
-                    ""
+                    mAccount.name
             );
 
             // Update public share section
-            updatePublicShareSection();
+            updateListOfPublicLinks();
         }
     }
 
@@ -525,29 +538,57 @@ public class ShareFileFragment extends Fragment
      * Updates in the UI the section about public share with the information in the current
      * public share bound to mFile, if any
      */
-    private void updatePublicShareSection() {
-        if (mPublicShare != null && ShareType.PUBLIC_LINK.equals(mPublicShare.getShareType())) {
-            /// public share bound -> expand section
-            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
-            if (!shareViaLinkSwitch.isChecked()) {
-                // set null listener before setChecked() to prevent infinite loop of calls
-                shareViaLinkSwitch.setOnCheckedChangeListener(null);
-                shareViaLinkSwitch.setChecked(true);
-                shareViaLinkSwitch.setOnCheckedChangeListener(
-                        mOnShareViaLinkSwitchCheckedChangeListener
-                );
-            }
-            getExpirationDateSection().setVisibility(View.VISIBLE);
-            getPasswordSection().setVisibility(View.VISIBLE);
-            if (mFile.isFolder() && !mCapabilities.getFilesSharingPublicUpload().isFalse()) {
-                getEditPermissionSection().setVisibility(View.VISIBLE);
-            } else {
-                getEditPermissionSection().setVisibility(View.GONE);
-            }
+    private void updateListOfPublicLinks() {
 
+        mPublicLinksAdapter = new SharePublicLinkListAdapter (
+                getActivity(),
+                R.layout.share_public_link_item,
+                mPublicShares,
+                this
+        );
 
-            // TO MOVE OR DELETE
-            // GetLink button
+        // Show data
+        TextView noPublicLinks = (TextView) getView().findViewById(R.id.shareNoPublicLinks);
+        ListView publicLinksList = (ListView) getView().findViewById(R.id.sharePublicLinksList);
+
+        if (mPublicShares.size() > 0) {
+            noPublicLinks.setVisibility(View.GONE);
+            publicLinksList.setVisibility(View.VISIBLE);
+            publicLinksList.setAdapter(mPublicLinksAdapter);
+            setListViewHeightBasedOnChildren(publicLinksList);
+        } else {
+            noPublicLinks.setVisibility(View.VISIBLE);
+            publicLinksList.setVisibility(View.GONE);
+        }
+
+        // Set Scroll to initial position
+        ScrollView scrollView = (ScrollView) getView().findViewById(R.id.shareScroll);
+        scrollView.scrollTo(0, 0);
+
+//        if (mPublicShare != null && ShareType.PUBLIC_LINK.equals(mPublicShare.getShareType())) {
+//
+//
+//            /// public share bound -> expand section
+//            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
+//            if (!shareViaLinkSwitch.isChecked()) {
+//                // set null listener before setChecked() to prevent infinite loop of calls
+//                shareViaLinkSwitch.setOnCheckedChangeListener(null);
+//                shareViaLinkSwitch.setChecked(true);
+//                shareViaLinkSwitch.setOnCheckedChangeListener(
+//                        mOnShareViaLinkSwitchCheckedChangeListener
+//                );
+//            }
+//            getExpirationDateSection().setVisibility(View.VISIBLE);
+//            getPasswordSection().setVisibility(View.VISIBLE);
+//            if (mFile.isFolder() && !mCapabilities.getFilesSharingPublicUpload().isFalse()) {
+//                getEditPermissionSection().setVisibility(View.VISIBLE);
+//            } else {
+//                getEditPermissionSection().setVisibility(View.GONE);
+//            }
+//
+//
+//            // TO MOVE OR DELETE
+//            // GetLink button
 //            AppCompatButton getLinkButton = getGetLinkButton();
 //            getLinkButton.setVisibility(View.VISIBLE);
 //            getLinkButton.setOnClickListener(new View.OnClickListener() {
@@ -559,77 +600,77 @@ public class ShareFileFragment extends Fragment
 //
 //                }
 //            });
-
-            /// update state of expiration date switch and message depending on expiration date
-            SwitchCompat expirationDateSwitch = getExpirationDateSwitch();
-            // set null listener before setChecked() to prevent infinite loop of calls
-            expirationDateSwitch.setOnCheckedChangeListener(null);
-            long expirationDate = mPublicShare.getExpirationDate();
-            if (expirationDate > 0) {
-                if (!expirationDateSwitch.isChecked()) {
-                    expirationDateSwitch.toggle();
-                }
-                String formattedDate =
-                        SimpleDateFormat.getDateInstance().format(
-                                new Date(expirationDate)
-                        );
-                getExpirationDateValue().setText(formattedDate);
-            } else {
-                if (expirationDateSwitch.isChecked()) {
-                    expirationDateSwitch.toggle();
-                }
-                getExpirationDateValue().setText(R.string.empty);
-            }
-
-            /// update state of password switch and message depending on password protection
-            SwitchCompat passwordSwitch = getPasswordSwitch();
-            // set null listener before setChecked() to prevent infinite loop of calls
-            passwordSwitch.setOnCheckedChangeListener(null);
-            if (mPublicShare.isPasswordProtected()) {
-                if (!passwordSwitch.isChecked()) {
-                    passwordSwitch.toggle();
-                }
-                getPasswordValue().setVisibility(View.VISIBLE);
-            } else {
-                if (passwordSwitch.isChecked()) {
-                    passwordSwitch.toggle();
-                }
-                getPasswordValue().setVisibility(View.INVISIBLE);
-            }
-
-            /// update state of the edit permission switch
-            SwitchCompat editPermissionSwitch = getEditPermissionSwitch();
-
-            // set null listener before setChecked() to prevent infinite loop of calls
-            editPermissionSwitch.setOnCheckedChangeListener(null);
-            if (mPublicShare.getPermissions() > OCShare.READ_PERMISSION_FLAG) {
-                if (!editPermissionSwitch.isChecked()) {
-                    editPermissionSwitch.toggle();
-                }
-            } else {
-                if (editPermissionSwitch.isChecked()) {
-                    editPermissionSwitch.toggle();
-                }
-            }
-            // recover listener
-            editPermissionSwitch.setOnCheckedChangeListener(
-                    mOnEditPermissionInteractionListener
-            );
-
-        } else {
-            /// no public share -> collapse section
-            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
-            if (shareViaLinkSwitch.isChecked()) {
-                shareViaLinkSwitch.setOnCheckedChangeListener(null);
-                getShareViaLinkSwitch().setChecked(false);
-                shareViaLinkSwitch.setOnCheckedChangeListener(
-                        mOnShareViaLinkSwitchCheckedChangeListener
-                );
-            }
-            getExpirationDateSection().setVisibility(View.GONE);
-            getPasswordSection().setVisibility(View.GONE);
-            getEditPermissionSection().setVisibility(View.GONE);
-        }
+//
+//            /// update state of expiration date switch and message depending on expiration date
+//            SwitchCompat expirationDateSwitch = getExpirationDateSwitch();
+//            // set null listener before setChecked() to prevent infinite loop of calls
+//            expirationDateSwitch.setOnCheckedChangeListener(null);
+//            long expirationDate = mPublicShare.getExpirationDate();
+//            if (expirationDate > 0) {
+//                if (!expirationDateSwitch.isChecked()) {
+//                    expirationDateSwitch.toggle();
+//                }
+//                String formattedDate =
+//                        SimpleDateFormat.getDateInstance().format(
+//                                new Date(expirationDate)
+//                        );
+//                getExpirationDateValue().setText(formattedDate);
+//            } else {
+//                if (expirationDateSwitch.isChecked()) {
+//                    expirationDateSwitch.toggle();
+//                }
+//                getExpirationDateValue().setText(R.string.empty);
+//            }
+//
+//            /// update state of password switch and message depending on password protection
+//            SwitchCompat passwordSwitch = getPasswordSwitch();
+//            // set null listener before setChecked() to prevent infinite loop of calls
+//            passwordSwitch.setOnCheckedChangeListener(null);
+//            if (mPublicShare.isPasswordProtected()) {
+//                if (!passwordSwitch.isChecked()) {
+//                    passwordSwitch.toggle();
+//                }
+//                getPasswordValue().setVisibility(View.VISIBLE);
+//            } else {
+//                if (passwordSwitch.isChecked()) {
+//                    passwordSwitch.toggle();
+//                }
+//                getPasswordValue().setVisibility(View.INVISIBLE);
+//            }
+//
+//            /// update state of the edit permission switch
+//            SwitchCompat editPermissionSwitch = getEditPermissionSwitch();
+//
+//            // set null listener before setChecked() to prevent infinite loop of calls
+//            editPermissionSwitch.setOnCheckedChangeListener(null);
+//            if (mPublicShare.getPermissions() > OCShare.READ_PERMISSION_FLAG) {
+//                if (!editPermissionSwitch.isChecked()) {
+//                    editPermissionSwitch.toggle();
+//                }
+//            } else {
+//                if (editPermissionSwitch.isChecked()) {
+//                    editPermissionSwitch.toggle();
+//                }
+//            }
+//            // recover listener
+//            editPermissionSwitch.setOnCheckedChangeListener(
+//                    mOnEditPermissionInteractionListener
+//            );
+//
+//        } else {
+//            /// no public share -> collapse section
+//            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
+//            if (shareViaLinkSwitch.isChecked()) {
+//                shareViaLinkSwitch.setOnCheckedChangeListener(null);
+//                getShareViaLinkSwitch().setChecked(false);
+//                shareViaLinkSwitch.setOnCheckedChangeListener(
+//                        mOnShareViaLinkSwitchCheckedChangeListener
+//                );
+//            }
+//            getExpirationDateSection().setVisibility(View.GONE);
+//            getPasswordSection().setVisibility(View.GONE);
+//            getEditPermissionSection().setVisibility(View.GONE);
+//        }
     }
 
 
