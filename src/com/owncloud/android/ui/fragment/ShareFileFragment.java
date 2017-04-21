@@ -28,7 +28,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -429,7 +428,7 @@ public class ShareFileFragment extends Fragment
     public void refreshUsersOrGroupsListFromDB() {
         if (((FileActivity) mListener).getStorageManager() != null) {
             // Get Users and Groups
-            mPrivateShares = ((FileActivity) mListener).getStorageManager().getSharesWithForAFile(
+            mPrivateShares = ((FileActivity) mListener).getStorageManager().getPrivateSharesForAFile(
                     mFile.getRemotePath(),
                     mAccount.name
             );
