@@ -113,7 +113,4 @@ public class ShareUserListAdapter extends ArrayAdapter {
         void unshareButtonPressed(OCShare share);
         void editShare(OCShare share);
     }
-
-
-
 }
