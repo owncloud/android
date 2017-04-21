@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ import java.util.ArrayList;
  * Use the {@link SearchShareesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchShareesFragment extends Fragment implements ShareUserListAdapter.ShareUserAdapterListener {
+public class SearchShareesFragment extends DialogFragment implements ShareUserListAdapter.ShareUserAdapterListener {
     private static final String TAG = SearchShareesFragment.class.getSimpleName();
 
     // the fragment initialization parameters
@@ -104,6 +105,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
         }
 
+        setStyle(DialogFragment.STYLE_NORMAL, 0);
     }
 
     /**
@@ -139,6 +141,8 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
             }
         });
 
+        view.setMinimumWidth(R.dimen.share_user_groups_width);
+
         return view;
     }
 
@@ -146,8 +150,6 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        getActivity().setTitle(R.string.share_with_title);
 
         // Load data into the list
         refreshUsersOrGroupsListFromDB();
