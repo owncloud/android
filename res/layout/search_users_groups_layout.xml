@@ -22,7 +22,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/search_layout"
-    android:minWidth="200dp"
     android:layout_marginRight="@dimen/standard_margin"
     android:layout_marginBottom="@dimen/standard_half_margin"
     android:filterTouchesWhenObscured="true"

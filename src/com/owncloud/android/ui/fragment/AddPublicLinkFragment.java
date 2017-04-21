@@ -56,7 +56,7 @@ public class AddPublicLinkFragment extends DialogFragment {
     private OCFile mFile;
 
     /**
-     * Create a new instance of MyDialogFragment, providing "num"
+     * Create a new instance of AddPublicLinkFragment, providing fileToShare
      * as an argument.
      */
     public static AddPublicLinkFragment newInstance(OCFile fileToShare) {
