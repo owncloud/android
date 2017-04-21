@@ -116,6 +116,9 @@
   <string name="uploader_upload_failed_content_single">Ngarkimi i %1$s s\’u plotësua dot</string>
   <string name="uploader_upload_failed_credentials_error">Ngarkimi dështoi, lypset të bëni hyrjen sërish</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
+  <string name="uploader_upload_text_dialog_title">Jepni një emër për kartelën e re</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Emri i kartelës s’duhet të jetë i zbrazët</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s’duhet të jetë më shumë se %d shenja</string>
   <string name="uploader_upload_text_filename_hint">Emër kartele</string>
   <string name="ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="uploads_view_title">Ngarkime</string>
@@ -123,6 +126,7 @@
   <string name="uploads_view_group_failed_uploads">Dështoi (prekeni që të riprovohet)</string>
   <string name="uploads_view_group_finished_uploads">U ngarkua</string>
   <string name="uploads_view_group_file_count">%d kartela</string>
+  <string name="uploads_view_group_file_count_single">Kartelë %d</string>
   <string name="uploads_view_upload_status_succeeded">Të plotësuara</string>
   <string name="uploads_view_upload_status_cancelled">Anuluar</string>
   <string name="uploads_view_upload_status_paused">Pushuar</string>
