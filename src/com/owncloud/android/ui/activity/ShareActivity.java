@@ -149,25 +149,25 @@ public class ShareActivity extends FileActivity
 
         } else if (isFederated) {
             OwnCloudVersion serverVersion =
-                com.owncloud.android.authentication.AccountUtils.getServerVersion(getAccount());
+                    com.owncloud.android.authentication.AccountUtils.getServerVersion(getAccount());
             if (serverVersion != null && serverVersion.isNotReshareableFederatedSupported()) {
                 return (
-                    getFile().isFolder() ?
-                        OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 :
-                        OCShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
+                        getFile().isFolder() ?
+                                OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_AFTER_OC9 :
+                                OCShare.FEDERATED_PERMISSIONS_FOR_FILE_AFTER_OC9
                 );
             } else {
                 return (
-                    getFile().isFolder() ?
-                        OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 :
-                        OCShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
+                        getFile().isFolder() ?
+                                OCShare.FEDERATED_PERMISSIONS_FOR_FOLDER_UP_TO_OC9 :
+                                OCShare.FEDERATED_PERMISSIONS_FOR_FILE_UP_TO_OC9
                 );
             }
         } else {
             return (
-                getFile().isFolder() ?
-                    OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER :
-                    OCShare.MAXIMUM_PERMISSIONS_FOR_FILE
+                    getFile().isFolder() ?
+                            OCShare.MAXIMUM_PERMISSIONS_FOR_FOLDER :
+                            OCShare.MAXIMUM_PERMISSIONS_FOR_FILE
             );
         }
     }
@@ -175,12 +175,17 @@ public class ShareActivity extends FileActivity
 
     @Override
     public void showSearchUsersAndGroups() {
-        // replace ShareFragment with SearchFragment on demand
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment searchFragment = SearchShareesFragment.newInstance(getFile(), getAccount());
-        ft.replace(R.id.share_fragment_container, searchFragment, TAG_SEARCH_FRAGMENT);
-        ft.addToBackStack(null);    // BACK button will recover the ShareFragment
-        ft.commit();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_SEARCH_FRAGMENT);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = SearchShareesFragment.newInstance(getFile(), getAccount());
+        newFragment.show(ft, TAG_SEARCH_FRAGMENT);
     }
 
     @Override
@@ -332,20 +337,20 @@ public class ShareActivity extends FileActivity
             String username = AccountUtils.getUsernameForAccount(getAccount());
             if (username != null) {
                 intentToShareLink.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    getString(
-                        R.string.subject_user_shared_with_you,
-                        username,
-                        getFile().getFileName()
-                    )
+                        Intent.EXTRA_SUBJECT,
+                        getString(
+                                R.string.subject_user_shared_with_you,
+                                username,
+                                getFile().getFileName()
+                        )
                 );
             } else {
                 intentToShareLink.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    getString(
-                        R.string.subject_shared_with_you,
-                        getFile().getFileName()
-                    )
+                        Intent.EXTRA_SUBJECT,
+                        getString(
+                                R.string.subject_shared_with_you,
+                                getFile().getFileName()
+                        )
                 );
             }
 
@@ -356,24 +361,24 @@ public class ShareActivity extends FileActivity
         } else {
             // Detect Failure (403) --> maybe needs password
             String password = operation.getPassword();
-            if (result.getCode() == RemoteOperationResult.ResultCode.SHARE_FORBIDDEN    &&
-                    (password == null || password.length() == 0)                        &&
+            if (result.getCode() == RemoteOperationResult.ResultCode.SHARE_FORBIDDEN &&
+                    (password == null || password.length() == 0) &&
                     getCapabilities().getFilesSharingPublicEnabled().isUnknown()) {
-                    // Was tried without password, but not sure that it's optional.
+                // Was tried without password, but not sure that it's optional.
 
                 // Try with password before giving up; see also ShareFileFragment#OnShareViaLinkListener
                 ShareFileFragment shareFileFragment = getShareFileFragment();
                 if (shareFileFragment != null
-                    && shareFileFragment.isAdded()) {   // only if added to the view hierarchy!!
+                        && shareFileFragment.isAdded()) {   // only if added to the view hierarchy!!
 
                     shareFileFragment.requestPasswordForShareViaLink(true);
                 }
 
             } else {
                 Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                    Snackbar.LENGTH_LONG
+                        findViewById(android.R.id.content),
+                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
+                        Snackbar.LENGTH_LONG
                 );
                 snackbar.show();
             }

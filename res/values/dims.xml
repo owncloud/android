@@ -43,4 +43,6 @@
 
     <dimen name="two_line_primary_text_size">16sp</dimen>
     <dimen name="two_line_secondary_text_size">14sp</dimen>
+
+    <dimen name="share_user_groups_width">200dp</dimen>
 </resources>
