@@ -3,7 +3,7 @@
  *
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -68,7 +68,7 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         // Create public link if doesn't exist yet
         boolean publicShareExists = false;
         if (result.isSuccess()) {
-            OCShare share = null;
+            OCShare share;
             for (int i=0 ; i<result.getData().size(); i++) {
                 share = (OCShare) result.getData().get(i);
                 if (ShareType.PUBLIC_LINK.equals(share.getShareType())) {
@@ -132,8 +132,7 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         // Update OCFile with data from share: ShareByLink  and publicLink
         OCFile file = getStorageManager().getFileByPath(mPath);
         if (file!=null) {
-            file.setPublicLink(share.getShareLink());
-            file.setShareViaLink(true);
+            file.setSharedViaLink(true);
             getStorageManager().saveFile(file);
         }
     }

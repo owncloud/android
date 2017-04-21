@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -39,6 +39,7 @@ import com.owncloud.android.operations.common.SyncOperation;
 public class UpdateShareViaLinkOperation extends SyncOperation {
 
     private String mPath;
+    private String mName;
     private String mPassword;
     private Boolean mPublicUpload;
     private long mExpirationDateInMillis;
@@ -51,11 +52,23 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
     public UpdateShareViaLinkOperation(String path) {
 
         mPath = path;
+        mName = null;
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
     }
 
+
+    /**
+     * Set name to update in public link.
+     *
+     * @param name          Name to set to the public link.
+     *                      Empty string clears the current name.
+     *                      Null results in no update applied to the name.
+     */
+    public void setName(String name) {
+        mName = name;
+    }
 
     /**
      * Set password to update in public link.
@@ -112,6 +125,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         UpdateRemoteShareOperation updateOp = new UpdateRemoteShareOperation(
             publicShare.getRemoteId()
         );
+        updateOp.setName(mName);
         updateOp.setPassword(mPassword);
         updateOp.setExpirationDate(mExpirationDateInMillis);
         updateOp.setPublicUpload(mPublicUpload);
@@ -139,7 +153,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
     }
 
     private void updateData(OCShare share) {
-        // Update DB with the response
+        // undesired magic - TODO map remote OCShare class to proper local OCShare class
         share.setPath(mPath);
         if (mPath.endsWith(FileUtils.PATH_SEPARATOR)) {
             share.setIsFolder(true);
@@ -147,14 +161,15 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
             share.setIsFolder(false);
         }
 
-        getStorageManager().saveShare(share);   // TODO info about having a password? ask to Gonzalo
+        // Update DB with the response
+        getStorageManager().saveShare(share);
 
         // Update OCFile with data from share: ShareByLink  and publicLink
-        // TODO check & remove if not needed
+        // TODO check & remove if not needed; if needed, move into StorageManager
+        // TODO https://github.com/owncloud/android/issues/1811
         OCFile file = getStorageManager().getFileByPath(mPath);
         if (file != null) {
-            file.setPublicLink(share.getShareLink());
-            file.setShareViaLink(true);
+            file.setSharedViaLink(true);
             getStorageManager().saveFile(file);
         }
     }

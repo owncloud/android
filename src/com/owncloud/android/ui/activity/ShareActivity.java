@@ -29,6 +29,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
@@ -45,11 +46,12 @@ import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.ui.fragment.AddPublicLinkFragment;
 import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.GetShareWithUsersAsyncTask;
 
 
@@ -65,6 +67,7 @@ public class ShareActivity extends FileActivity
     private static final String TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT";
     private static final String TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT";
     private static final String TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT";
+    private static final String TAG_ADD_PUBLIC_LINK_FRAGMENT = "ADD_PUBLIC_LINK_FRAGMENT";
 
     /// Tags for dialog fragments
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
@@ -76,6 +79,9 @@ public class ShareActivity extends FileActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.share_activity);
+
+        // Set back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
@@ -132,7 +138,6 @@ public class ShareActivity extends FileActivity
                 getAppropiatePermissions(shareType)
         );
     }
-
 
     private int getAppropiatePermissions(ShareType shareType) {
 
@@ -208,6 +213,23 @@ public class ShareActivity extends FileActivity
         getTask.execute(params);
     }
 
+    @Override
+    public void showAddPublicLink(OCFile mFile) {
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_ADD_PUBLIC_LINK_FRAGMENT);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = AddPublicLinkFragment.newInstance(mFile);
+        newFragment.show(ft, TAG_ADD_PUBLIC_LINK_FRAGMENT);
+    }
+
     /**
      * Updates the view associated to the activity after the finish of some operation over files
      * in the current account.
@@ -254,7 +276,8 @@ public class ShareActivity extends FileActivity
                 && shareFileFragment.isAdded()) {   // only if added to the view hierarchy!!
             shareFileFragment.refreshCapabilitiesFromDB();
             shareFileFragment.refreshUsersOrGroupsListFromDB();
-            shareFileFragment.refreshPublicShareFromDB();
+            // IMPORTANT: Uncomment when UI is ready
+            // shareFileFragment.refreshPublicShareFromDB();
         }
 
         SearchShareesFragment searchShareesFragment = getSearchFragment();
@@ -358,8 +381,18 @@ public class ShareActivity extends FileActivity
                 snackbar.show();
             }
         }
-
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean retval = true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                retval = super.onOptionsItemSelected(item);
+        }
+        return retval;
+    }
 }

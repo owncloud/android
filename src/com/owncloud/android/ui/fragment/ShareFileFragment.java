@@ -4,17 +4,18 @@
  * @author masensio
  * @author David A. Velasco
  * @author Juan Carlos González Cabrero
+ * @author David González Verdugo
  * Copyright (C) 2017 ownCloud GmbH.
- * <p/>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p/>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,8 +33,8 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -52,7 +53,6 @@ import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
-import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
@@ -64,13 +64,13 @@ import java.util.Date;
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
  * a public link.
- * <p/>
+ *
  * A simple {@link Fragment} subclass.
- * <p/>
+ *
  * Activities that contain this fragment must implement the
  * {@link ShareFragmentListener} interface
  * to handle interaction events.
- * <p/>
+ *
  * Use the {@link ShareFileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -127,16 +127,6 @@ public class ShareFileFragment extends Fragment
      * Listener for changes on switch to share / unshare publicly
      */
     private CompoundButton.OnCheckedChangeListener mOnShareViaLinkSwitchCheckedChangeListener;
-
-    /**
-     * Listener for user actions to set, update or clear password on public link
-     */
-    private OnPasswordInteractionListener mOnPasswordInteractionListener = null;
-
-    /**
-     * Listener for user actions to set, update or clear expiration date on public link
-     */
-    private OnExpirationDateInteractionListener mOnExpirationDateInteractionListener = null;
 
     /**
      * Listener for user actions to set or unset edit permission on public link
@@ -204,7 +194,7 @@ public class ShareFileFragment extends Fragment
         }
         // Name
         TextView fileNameHeader = (TextView) view.findViewById(R.id.shareFileName);
-        fileNameHeader.setText(getResources().getString(R.string.share_file, mFile.getFileName()));
+        fileNameHeader.setText(mFile.getFileName());
         // Size
         TextView size = (TextView) view.findViewById(R.id.shareFileSize);
         if (mFile.isFolder()) {
@@ -219,7 +209,7 @@ public class ShareFileFragment extends Fragment
         TextView shareNoUsers = (TextView) view.findViewById(R.id.shareNoUsers);
 
         //  Add User Button
-        Button addUserGroupButton = (Button)
+        ImageButton addUserGroupButton = (ImageButton)
                 view.findViewById(R.id.addUserButton);
 
         // Change the sharing text depending on the server version (at least version 8.2 is needed
@@ -239,9 +229,9 @@ public class ShareFileFragment extends Fragment
                 } else {
                     String message = getString(R.string.share_sharee_unavailable);
                     Snackbar snackbar = Snackbar.make(
-                        getActivity().findViewById(android.R.id.content),
-                        message,
-                        Snackbar.LENGTH_LONG
+                            getActivity().findViewById(android.R.id.content),
+                            message,
+                            Snackbar.LENGTH_LONG
                     );
                     snackbar.show();
                 }
@@ -249,14 +239,20 @@ public class ShareFileFragment extends Fragment
         });
 
 
+        //  Add Public Link Button
+        ImageButton addPublicLinkButton = (ImageButton)
+                view.findViewById(R.id.addPublicLinkButton);
+
+        addPublicLinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Show Add Public Link Fragment
+                mListener.showAddPublicLink(mFile);
+            }
+        });
+
         // Set listener for user actions on switch for sharing/unsharing via link
         initShareViaLinkListener(view);
-
-        // Set listener for user actions on expiration date
-        initExpirationListener(view);
-
-        // Set listener for user actions on password
-        initPasswordListener(view);
 
         // Set listener for user actions on edit permission
         initEditPermissionListener(view);
@@ -328,157 +324,6 @@ public class ShareFileFragment extends Fragment
         }
     }
 
-
-    /**
-     * Binds listener for user actions that start any update on a expiration date
-     * for the public link to the views receiving the user events.
-     *
-     * @param shareView Root view in the fragment.
-     */
-    private void initExpirationListener(View shareView) {
-        mOnExpirationDateInteractionListener = new OnExpirationDateInteractionListener();
-
-        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkExpirationSwitch)).
-                setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
-
-        shareView.findViewById(R.id.shareViaLinkExpirationLabel).
-                setOnClickListener(mOnExpirationDateInteractionListener);
-
-        shareView.findViewById(R.id.shareViaLinkExpirationValue).
-                setOnClickListener(mOnExpirationDateInteractionListener);
-    }
-
-    /**
-     * Listener for user actions that start any update on the expiration date for the public link.
-     */
-    private class OnExpirationDateInteractionListener
-            implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
-
-        /**
-         * Called by R.id.shareViaLinkExpirationSwitch to set or clear the expiration date.
-         *
-         * @param switchView {@link SwitchCompat} toggled by the user, R.id.shareViaLinkExpirationSwitch
-         * @param isChecked  New switch state.
-         */
-        @Override
-        public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
-            if (!isResumed()) {
-                // very important, setCheched(...) is called automatically during
-                // Fragment recreation on device rotations
-                return;
-            }
-            if (isChecked) {
-                ExpirationDatePickerDialogFragment dialog =
-                        ExpirationDatePickerDialogFragment.newInstance(mFile, -1);
-                dialog.show(
-                        getActivity().getSupportFragmentManager(),
-                        ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
-                );
-
-            } else {
-                ((FileActivity) getActivity()).getFileOperationsHelper().
-                        setExpirationDateToShareViaLink(mFile, -1);
-            }
-
-            // undo the toggle to grant the view will be correct if the dialog is cancelled
-            switchView.setOnCheckedChangeListener(null);
-            switchView.toggle();
-            switchView.setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
-        }
-
-        /**
-         * Called by R.id.shareViaLinkExpirationLabel or R.id.shareViaLinkExpirationValue
-         * to change the current expiration date.
-         *
-         * @param expirationView Label or value view touched by the user.
-         */
-        @Override
-        public void onClick(View expirationView) {
-            if (mPublicShare != null && mPublicShare.getExpirationDate() > 0) {
-                long chosenDateInMillis = -1;
-                if (mPublicShare != null) {
-                    chosenDateInMillis = mPublicShare.getExpirationDate();
-                }
-                ExpirationDatePickerDialogFragment dialog =
-                        ExpirationDatePickerDialogFragment.newInstance(
-                                mFile,
-                                chosenDateInMillis
-                        );
-                dialog.show(
-                        getActivity().getSupportFragmentManager(),
-                        ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
-                );
-            }
-        }
-    }
-
-
-    /**
-     * Binds listener for user actions that start any update on a password for the public link
-     * to the views receiving the user events.
-     *
-     * @param shareView Root view in the fragment.
-     */
-    private void initPasswordListener(View shareView) {
-        mOnPasswordInteractionListener = new OnPasswordInteractionListener();
-
-        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkPasswordSwitch)).
-                setOnCheckedChangeListener(mOnPasswordInteractionListener);
-
-        shareView.findViewById(R.id.shareViaLinkPasswordLabel).
-                setOnClickListener(mOnPasswordInteractionListener);
-
-        shareView.findViewById(R.id.shareViaLinkPasswordValue).
-                setOnClickListener(mOnPasswordInteractionListener);
-    }
-
-
-    /**
-     * Listener for user actions that start any update on a password for the public link.
-     */
-    private class OnPasswordInteractionListener
-            implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
-
-        /**
-         * Called by R.id.shareViaLinkPasswordSwitch to set or clear the password.
-         *
-         * @param switchView {@link SwitchCompat} toggled by the user, R.id.shareViaLinkPasswordSwitch
-         * @param isChecked  New switch state.
-         */
-        @Override
-        public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
-            if (!isResumed()) {
-                // very important, setCheched(...) is called automatically during
-                // Fragment recreation on device rotations
-                return;
-            }
-            if (isChecked) {
-                requestPasswordForShareViaLink(false);
-            } else {
-                ((FileActivity) getActivity()).getFileOperationsHelper().
-                        setPasswordToShareViaLink(mFile, "");   // "" clears
-            }
-
-            // undo the toggle to grant the view will be correct if the dialog is cancelled
-            switchView.setOnCheckedChangeListener(null);
-            switchView.toggle();
-            switchView.setOnCheckedChangeListener(mOnPasswordInteractionListener);
-        }
-
-        /**
-         * Called by R.id.shareViaLinkPasswordLabel or R.id.shareViaLinkPasswordValue
-         * to change the current password.
-         *
-         * @param passwordView Label or value view touched by the user.
-         */
-        @Override
-        public void onClick(View passwordView) {
-            if (mPublicShare != null && mPublicShare.isPasswordProtected()) {
-                requestPasswordForShareViaLink(false);
-            }
-        }
-    }
-
     /**
      * Binds listener for user actions that start any update the edit permissions
      * for the public link to the views receiving the user events.
@@ -488,8 +333,8 @@ public class ShareFileFragment extends Fragment
     private void initEditPermissionListener(View shareView) {
         mOnEditPermissionInteractionListener = new OnEditPermissionInteractionListener();
 
-        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkEditPermissionSwitch)).
-                setOnCheckedChangeListener(mOnEditPermissionInteractionListener);
+//        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkEditPermissionSwitch)).
+//                setOnCheckedChangeListener(mOnEditPermissionInteractionListener);
 
     }
 
@@ -563,7 +408,7 @@ public class ShareFileFragment extends Fragment
 
     /**
      * Get known server capabilities from DB
-     * <p/>
+     *
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
@@ -577,7 +422,7 @@ public class ShareFileFragment extends Fragment
 
     /**
      * Get users and groups from the DB to fill in the "share with" list.
-     * <p/>
+     *
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
@@ -640,9 +485,9 @@ public class ShareFileFragment extends Fragment
 
     /**
      * Get public link from the DB to fill in the "Share link" section in the UI.
-     * <p/>
+     *
      * Takes into account server capabilities before reading database.
-     * <p/>
+     *
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
@@ -695,18 +540,21 @@ public class ShareFileFragment extends Fragment
             } else {
                 getEditPermissionSection().setVisibility(View.GONE);
             }
-            // GetLink button
-            AppCompatButton getLinkButton = getGetLinkButton();
-            getLinkButton.setVisibility(View.VISIBLE);
-            getLinkButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //GetLink from the server and show ShareLinkToDialog
-                    ((FileActivity) getActivity()).getFileOperationsHelper().
-                            getFileWithLink(mFile);
 
-                }
-            });
+
+            // TO DELETE
+            // GetLink button
+//            AppCompatButton getLinkButton = getGetLinkButton();
+//            getLinkButton.setVisibility(View.VISIBLE);
+//            getLinkButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //GetLink from the server and show ShareLinkToDialog
+//                    ((FileActivity) getActivity()).getFileOperationsHelper().
+//                            getFileWithLink(mFile);
+//
+//                }
+//            });
 
             /// update state of expiration date switch and message depending on expiration date
             SwitchCompat expirationDateSwitch = getExpirationDateSwitch();
@@ -728,10 +576,6 @@ public class ShareFileFragment extends Fragment
                 }
                 getExpirationDateValue().setText(R.string.empty);
             }
-            // recover listener
-            expirationDateSwitch.setOnCheckedChangeListener(
-                    mOnExpirationDateInteractionListener
-            );
 
             /// update state of password switch and message depending on password protection
             SwitchCompat passwordSwitch = getPasswordSwitch();
@@ -748,10 +592,6 @@ public class ShareFileFragment extends Fragment
                 }
                 getPasswordValue().setVisibility(View.INVISIBLE);
             }
-            // recover listener
-            passwordSwitch.setOnCheckedChangeListener(
-                    mOnPasswordInteractionListener
-            );
 
             /// update state of the edit permission switch
             SwitchCompat editPermissionSwitch = getEditPermissionSwitch();
@@ -785,7 +625,6 @@ public class ShareFileFragment extends Fragment
             getExpirationDateSection().setVisibility(View.GONE);
             getPasswordSection().setVisibility(View.GONE);
             getEditPermissionSection().setVisibility(View.GONE);
-            getGetLinkButton().setVisibility(View.GONE);
         }
     }
 
@@ -828,10 +667,6 @@ public class ShareFileFragment extends Fragment
         return (SwitchCompat) getView().findViewById(R.id.shareViaLinkEditPermissionSwitch);
     }
 
-    private AppCompatButton getGetLinkButton() {
-        return (AppCompatButton) getView().findViewById(R.id.shareViaLinkGetLinkButton);
-    }
-
     /**
      * Hides all the UI elements related to public share
      */
@@ -840,7 +675,6 @@ public class ShareFileFragment extends Fragment
         getExpirationDateSection().setVisibility(View.GONE);
         getPasswordSection().setVisibility(View.GONE);
         getEditPermissionSection().setVisibility(View.GONE);
-        getGetLinkButton().setVisibility(View.GONE);
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -869,9 +703,9 @@ public class ShareFileFragment extends Fragment
     /**
      * Starts a dialog that requests a password to the user to protect a share link.
      *
-     * @param   createShare     When 'true', the request for password will be followed by the creation of a new
-     *                          public link; when 'false', a public share is assumed to exist, and the password
-     *                          is bound to it.
+     * @param createShare When 'true', the request for password will be followed by the creation of a new
+     *                    public link; when 'false', a public share is assumed to exist, and the password
+     *                    is bound to it.
      */
     public void requestPasswordForShareViaLink(boolean createShare) {
         SharePasswordDialogFragment dialog = SharePasswordDialogFragment.newInstance(mFile, createShare);
@@ -880,6 +714,7 @@ public class ShareFileFragment extends Fragment
 
     /**
      * Hide share features sections that are not enabled
+     *
      * @param view
      */
     private void hideNotEnabledShareSections(View view) {

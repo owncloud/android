@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -58,7 +58,6 @@ public class OCFileUnitTest {
     private static final long LAST_SYNC_DATE_FOR_PROPERTIES = 5432109876L;
     private static final long LAST_SYNC_DATE_FOR_DATA = 4321098765L;
     private static final String ETAG = "adshfas98ferqw8f9yu2";
-    private static final String PUBLIC_LINK = "https://fake.url.net/owncloud/987427448712984sdas29";
     private static final String PERMISSIONS = "SRKNVD";
     private static final String REMOTE_ID = "jadñgiadf8203:9jrp98v2mn3er2089fh";
     private static final String ETAG_IN_CONFLICT = "2adshfas98ferqw8f9yu";
@@ -87,9 +86,8 @@ public class OCFileUnitTest {
         mFile.setLastSyncDateForData(LAST_SYNC_DATE_FOR_DATA);
         mFile.setAvailableOfflineStatus(OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE);
         mFile.setEtag(ETAG);
-        mFile.setShareViaLink(true);
-        mFile.setShareWithSharee(true);
-        mFile.setPublicLink(PUBLIC_LINK);
+        mFile.setSharedViaLink(true);
+        mFile.setSharedWithSharee(true);
         mFile.setPermissions(PERMISSIONS);
         mFile.setRemoteId(REMOTE_ID);
         mFile.setNeedsUpdateThumbnail(true);
@@ -127,7 +125,6 @@ public class OCFileUnitTest {
         assertThat(fileReadFromParcel.getEtag(), is(ETAG));
         assertThat(fileReadFromParcel.isSharedViaLink(), is(true));
         assertThat(fileReadFromParcel.isSharedWithSharee(), is(true));
-        assertThat(fileReadFromParcel.getPublicLink(), is(PUBLIC_LINK));
         assertThat(fileReadFromParcel.getPermissions(), is(PERMISSIONS));
         assertThat(fileReadFromParcel.getRemoteId(), is(REMOTE_ID));
         assertThat(fileReadFromParcel.needsUpdateThumbnail(), is(true));
