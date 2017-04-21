@@ -109,6 +109,8 @@ public class AddPublicLinkFragment extends DialogFragment {
 
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+
                 // When button is clicked, call up to owning activity.
 
             }

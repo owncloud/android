@@ -51,6 +51,7 @@ import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
 import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
@@ -108,19 +109,24 @@ public class ShareFileFragment extends Fragment
     private ArrayList<OCShare> mPrivateShares;
 
     /**
-     * Capabilities of the server
-     */
-    private OCCapability mCapabilities;
-
-    /**
      * Adapter to show private shares
      */
     private ShareUserListAdapter mUserGroupsAdapter = null;
 
     /**
-     * Public share bound to the file
+     *  List of public shares bound to the file
      */
     private OCShare mPublicShare;
+
+    /**
+     * Adapter to show public shares
+     */
+    private SharePublicLinkListAdapter mPublicLinksAdapter = null;
+
+    /**
+     * Capabilities of the server
+     */
+    private OCCapability mCapabilities;
 
     /**
      * Listener for changes on switch to share / unshare publicly
@@ -481,7 +487,6 @@ public class ShareFileFragment extends Fragment
         mListener.showEditShare(share);
     }
 
-
     /**
      * Get public link from the DB to fill in the "Share link" section in the UI.
      *
@@ -495,7 +500,7 @@ public class ShareFileFragment extends Fragment
             hidePublicShare();
 
         } else if (((FileActivity) mListener).getStorageManager() != null) {
-            // Get public share
+            // Get public shares
             mPublicShare = ((FileActivity) mListener).getStorageManager().getFirstShareByPathAndType(
                     mFile.getRemotePath(),
                     ShareType.PUBLIC_LINK,
