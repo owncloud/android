@@ -41,12 +41,12 @@ import java.lang.ref.WeakReference;
 /**
  * Async Task to get the users and groups which a file is shared with
  */
-public class GetShareWithUsersAsyncTask extends AsyncTask<Object, Void, Pair<RemoteOperation, RemoteOperationResult>> {
+public class GetSharesForFileAsyncTask extends AsyncTask<Object, Void, Pair<RemoteOperation, RemoteOperationResult>> {
 
-    private final String TAG = GetShareWithUsersAsyncTask.class.getSimpleName();
+    private final String TAG = GetSharesForFileAsyncTask.class.getSimpleName();
     private final WeakReference<OnRemoteOperationListener> mListener;
 
-    public GetShareWithUsersAsyncTask(OnRemoteOperationListener listener) {
+    public GetSharesForFileAsyncTask(OnRemoteOperationListener listener) {
         mListener = new WeakReference<OnRemoteOperationListener>(listener);
     }
 

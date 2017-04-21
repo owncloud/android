@@ -1817,7 +1817,7 @@ public class FileDataStorageManager {
 
     }
 
-    public ArrayList<OCShare> getSharesWithForAFile(String filePath, String accountName){
+    public ArrayList<OCShare> getPrivateSharesForAFile(String filePath, String accountName){
         // Condition
         String where = ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
                 + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?"+ "AND"
@@ -1829,7 +1829,7 @@ public class FileDataStorageManager {
                 Integer.toString(ShareType.GROUP.getValue()),
                 Integer.toString(ShareType.FEDERATED.getValue())};
 
-        Cursor c = null;
+        Cursor c;
         if (getContentResolver() != null) {
             c = getContentResolver().query(
                     ProviderTableMeta.CONTENT_URI_SHARE,
@@ -1845,20 +1845,59 @@ public class FileDataStorageManager {
                 c = null;
             }
         }
-        ArrayList<OCShare> shares = new ArrayList<OCShare>();
-        OCShare share = null;
+        ArrayList<OCShare> privateShares = new ArrayList<>();
+        OCShare privateShare;
         if (c != null) {
             if (c.moveToFirst()) {
                 do {
-                    share = createShareInstance(c);
-                    shares.add(share);
+                    privateShare = createShareInstance(c);
+                    privateShares.add(privateShare);
+                } while (c.moveToNext());
+            }
+            c.close();
+        }
+
+        return privateShares;
+    }
+
+    public ArrayList<OCShare> getPublicSharesForAFile(String filePath, String accountName){
+        // Condition
+        String where = ProviderTableMeta.OCSHARES_PATH + "=?" + " AND "
+            + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + "=?"+ "AND"
+            + ProviderTableMeta.OCSHARES_SHARE_TYPE + "=? ";
+        String [] whereArgs = new String[]{ filePath, accountName ,
+            Integer.toString(ShareType.PUBLIC_LINK.getValue())};
+
+        Cursor c;
+        if (getContentResolver() != null) {
+            c = getContentResolver().query(
+                ProviderTableMeta.CONTENT_URI_SHARE,
+                null, where, whereArgs, null);
+        } else {
+            try {
+                c = getContentProviderClient().query(
+                    ProviderTableMeta.CONTENT_URI_SHARE,
+                    null, where, whereArgs, null);
+
+            } catch (RemoteException e) {
+                Log_OC.e(TAG, "Could not get list of shares with: " + e.getMessage());
+                c = null;
+            }
+        }
+        ArrayList<OCShare> publicShares = new ArrayList<>();
+        OCShare publicShare;
+        if (c != null) {
+            if (c.moveToFirst()) {
+                do {
+                    publicShare = createShareInstance(c);
+                    publicShares.add(publicShare);
                     // }
                 } while (c.moveToNext());
             }
             c.close();
         }
 
-        return shares;
+        return publicShares;
     }
 
     public static void triggerMediaScan(String path) {

@@ -428,7 +428,7 @@ public class ShareFileFragment extends Fragment
     public void refreshUsersOrGroupsListFromDB() {
         if (((FileActivity) mListener).getStorageManager() != null) {
             // Get Users and Groups
-            mPrivateShares = ((FileActivity) mListener).getStorageManager().getSharesWithForAFile(
+            mPrivateShares = ((FileActivity) mListener).getStorageManager().getPrivateSharesForAFile(
                     mFile.getRemotePath(),
                     mAccount.name
             );
