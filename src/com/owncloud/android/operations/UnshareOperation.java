@@ -82,7 +82,7 @@ public class UnshareOperation extends SyncOperation {
                     || ShareType.FEDERATED.equals(mShareType)){
                     // Check if it is the last share
                     ArrayList <OCShare> sharesWith = getStorageManager().
-                            getSharesWithForAFile(mRemotePath,
+                        getPrivateSharesForAFile(mRemotePath,
                             getStorageManager().getAccount().name);
                     if (sharesWith.size() == 1) {
                         file.setSharedWithSharee(false);

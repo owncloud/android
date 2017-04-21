@@ -52,7 +52,7 @@ import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
-import com.owncloud.android.utils.GetShareWithUsersAsyncTask;
+import com.owncloud.android.utils.GetSharesForFileAsyncTask;
 
 
 /**
@@ -102,7 +102,7 @@ public class ShareActivity extends FileActivity
         refreshSharesFromStorageManager();
 
         // Request for a refresh of the data through the server (starts an Async Task)
-        refreshUsersOrGroupsListFromServer();
+        refreshSharesFromServer();
     }
 
 
@@ -204,13 +204,13 @@ public class ShareActivity extends FileActivity
      * Get users and groups from the server to fill in the "share with" list
      */
     @Override
-    public void refreshUsersOrGroupsListFromServer() {
+    public void refreshSharesFromServer() {
         // Show loading
         showLoadingDialog(R.string.common_loading);
         // Get Users and Groups
-        GetShareWithUsersAsyncTask getTask = new GetShareWithUsersAsyncTask(this);
+        GetSharesForFileAsyncTask getSharesForFileAsyncTask = new GetSharesForFileAsyncTask(this);
         Object[] params = {getFile(), getAccount(), getStorageManager()};
-        getTask.execute(params);
+        getSharesForFileAsyncTask.execute(params);
     }
 
     @Override
