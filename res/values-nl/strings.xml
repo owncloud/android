@@ -127,6 +127,7 @@ Download hier: %2$s</string>
   <string name="uploads_view_group_failed_uploads">Mislukt (tik om opnieuw te proberen)</string>
   <string name="uploads_view_group_finished_uploads">Geüpload</string>
   <string name="uploads_view_group_file_count">%d bestanden</string>
+  <string name="uploads_view_group_file_count_single">%d bestand</string>
   <string name="uploads_view_upload_status_succeeded">Afgerond</string>
   <string name="uploads_view_upload_status_cancelled">Geannuleerd</string>
   <string name="uploads_view_upload_status_paused">Gepauzeerd</string>

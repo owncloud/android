@@ -127,6 +127,7 @@
   <string name="uploads_view_group_failed_uploads">Не удалось (тапните для повторения)</string>
   <string name="uploads_view_group_finished_uploads">Загружено</string>
   <string name="uploads_view_group_file_count">%d Файла(ов)</string>
+  <string name="uploads_view_group_file_count_single">%d Файл</string>
   <string name="uploads_view_upload_status_succeeded">Завершённые</string>
   <string name="uploads_view_upload_status_cancelled">Отменён</string>
   <string name="uploads_view_upload_status_paused">На паузе</string>

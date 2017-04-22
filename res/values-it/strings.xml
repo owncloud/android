@@ -116,6 +116,7 @@
   <string name="uploader_upload_failed_content_single">Il caricamento di %1$s non può essere completato</string>
   <string name="uploader_upload_failed_credentials_error">Caricamento non riuscito, devi effettuare nuovamente l\'accesso</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Il nome del file non può essere vuoto</string>
   <string name="uploader_upload_text_filename_hint">Nome del file</string>
   <string name="ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
   <string name="uploads_view_title">Caricamenti</string>
@@ -123,6 +124,7 @@
   <string name="uploads_view_group_failed_uploads">Non riuscito (tocca per riprovare)</string>
   <string name="uploads_view_group_finished_uploads">Caricati</string>
   <string name="uploads_view_group_file_count">%d file</string>
+  <string name="uploads_view_group_file_count_single">%d file</string>
   <string name="uploads_view_upload_status_succeeded">Completati</string>
   <string name="uploads_view_upload_status_cancelled">Annullati</string>
   <string name="uploads_view_upload_status_paused">Sospesi</string>
@@ -426,6 +428,7 @@
   <string name="confirmation_remove_files_alert">Vuoi davvero rimuovere gli elementi selezionati?</string>
   <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
   <string name="failed_upload_quota_exceeded_text">Spazio insufficiente nell\'account</string>
+  <string name="privacy_policy_error">Si è verificato un errore:</string>
   <string name="streaming_unrecognized_input">Questo formato video non è supportato</string>
   <string name="streaming_file_not_found_error">Questo file video non è più disponibile sul server</string>
   <string name="previewing_video_common_error">Questo video non può essere riprodott1o</string>
