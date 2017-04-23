@@ -126,6 +126,7 @@
   <string name="uploads_view_group_failed_uploads">ล้มเหลว (แตะเพื่อลองอีกครั้ง)</string>
   <string name="uploads_view_group_finished_uploads">ถูกอัพโหลด</string>
   <string name="uploads_view_group_file_count">%d ไฟล์</string>
+  <string name="uploads_view_group_file_count_single">%d ไฟล์</string>
   <string name="uploads_view_upload_status_succeeded">เสร็จสมบูรณ์</string>
   <string name="uploads_view_upload_status_cancelled">ยกเลิกแล้ว</string>
   <string name="uploads_view_upload_status_paused">หยุดชั่วคราวแล้ว</string>

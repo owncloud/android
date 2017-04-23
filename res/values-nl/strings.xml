@@ -445,6 +445,7 @@ Neem contact op met uw beheerder</string>
   <string name="streaming_file_not_found_error">Dit videobestand is niet langer beschikbaar op de server</string>
   <string name="streaming_crossed_redirection">Streaming is niet toegestaan via gekruiste doorverwijzigen</string>
   <string name="previewing_video_common_error">Deze video kan niet worden gereproduceerd</string>
+  <string name="previewing_video_not_supported">Voorbeeldvideo wordt niet ondersteund in jouw Android versie. De download start automatisch</string>
   <string name="streaming_position_not_available">\"Positie niet beschikbaar\"</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
