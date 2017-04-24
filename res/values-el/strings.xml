@@ -274,6 +274,7 @@
   <string name="ssl_validator_label_validity_to">Μέχρι:</string>
   <string name="ssl_validator_label_signature">Υπογραφή:</string>
   <string name="ssl_validator_label_signature_algorithm">Αλγόριθμος:</string>
+  <string name="ssl_validator_label_certificate_fingerprint">Αποτύπωμα:</string>
   <string name="certificate_load_problem">Πρόβλημα φόρτωσης του πιστοποιητικού.</string>
   <string name="ssl_validator_null_cert">Δεν μπορεί να εμφανιστεί το πιστοποιητικό.</string>
   <string name="ssl_validator_no_info_about_error">- Καμμία πληροφορία σχετικά με το σφάλμα</string>
@@ -338,6 +339,7 @@
   <string name="move_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια μετακίνησης αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_move">για μετακίνηση αυτού του αρχείου</string>
   <string name="copy_file_not_found">Αδυναμία αντιγραφής. Παρακαλούμε ελέγξτε εάν υπάρχει το αρχείο</string>
+  <string name="copy_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια αντιγραφής αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_copy">για αντιγραφή αυτού του αρχείου</string>
   <string name="prefs_category_instant_uploading">Άμεσες μεταφορτώσεις</string>
   <string name="prefs_category_details">Λεπτομέρειες</string>
@@ -365,6 +367,7 @@
   <string name="upload_move_files">Μετακίνηση αρχείου</string>
   <string name="pref_behaviour_entries_keep_file">διατηρήθηκε στον αρχικό φάκελο</string>
   <string name="pref_behaviour_entries_move">μετακινήθηκε στον φάκελο εφαρμογών</string>
+  <string name="share_no_users">Δεν έχουν διαμοιραστεί ακόμα δεδομένα με τους χρήστες</string>
   <string name="share_add_user_or_group">Προσθήκη χρήστη ή ομάδας</string>
   <string name="share_via_link_section_title">Διαμοιρασμός συνδέσμου</string>
   <string name="share_via_link_expiration_date_label">Ορισμός ημ. λήξης</string>
@@ -394,6 +397,7 @@
   <string name="action_switch_list_view">Προβολή λίστας</string>
   <string name="manage_space_title">Διαχείριση χώρου</string>
   <string name="manage_space_clear_data">Εκκαθάριση δεδομένων</string>
+  <string name="manage_space_error">Μερικά αρχεία δεν μπορούν να διαγραφούν</string>
   <string name="failed_upload_quota_exceeded_text">Δεν υπάρχει αρκετός διαθέσιμος χώρος στον λογαριασμό</string>
   <string name="actionbar_privacy_policy">Πολιτική απορρήτου</string>
   <string name="prefs_privacy_policy">Πολιτική απορρήτου</string>
