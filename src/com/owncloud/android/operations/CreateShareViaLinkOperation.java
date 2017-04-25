@@ -1,22 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author masensio
- *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
+ * @author masensio
+ * @author David A. Velasco
+ * Copyright (C) 2017 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.operations;
@@ -42,21 +41,26 @@ import java.util.ArrayList;
 public class CreateShareViaLinkOperation extends SyncOperation {
 
     private String mPath;
+    private String mName;
     private String mPassword;
+    private Boolean mPublicUpload;
+    private long mExpirationDateInMillis;
 
     /**
      * Constructor
-     * @param path          Full path of the file/folder being shared. Mandatory argument
-     * @param password      Password to protect a public link share.
-     *                      Only available for public link shares
+     *
+     * @param path Full path of the file/folder being shared. Mandatory argument
+     *             Only available for public link shares
      */
     public CreateShareViaLinkOperation(
-            String path,
-            String password
+            String path
     ) {
 
         mPath = path;
-        mPassword = password;
+        mName = null;
+        mPassword = null;
+        mExpirationDateInMillis = 0;
+        mPublicUpload = null;
     }
 
     @Override
@@ -69,7 +73,7 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         boolean publicShareExists = false;
         if (result.isSuccess()) {
             OCShare share;
-            for (int i=0 ; i<result.getData().size(); i++) {
+            for (int i = 0; i < result.getData().size(); i++) {
                 share = (OCShare) result.getData().get(i);
                 if (ShareType.PUBLIC_LINK.equals(share.getShareType())) {
                     publicShareExists = true;
@@ -89,16 +93,16 @@ public class CreateShareViaLinkOperation extends SyncOperation {
             createOp.setGetShareDetails(true);
             result = createOp.execute(client);
         }
-        
+
         if (result.isSuccess()) {
             if (result.getData().size() > 0) {
                 Object item = result.getData().get(0);
-                if (item instanceof  OCShare) {
+                if (item instanceof OCShare) {
                     updateData((OCShare) item);
                 } else {
                     ArrayList<Object> data = result.getData();
                     result = new RemoteOperationResult(
-                        RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
+                            RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
                     );
                     result.setData(data);
                 }
@@ -106,16 +110,8 @@ public class CreateShareViaLinkOperation extends SyncOperation {
                 result = new RemoteOperationResult(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND);
             }
         }
-        
-        return result;
-    }
-    
-    public String getPath() {
-        return mPath;
-    }
 
-    public String getPassword() {
-        return mPassword;
+        return result;
     }
 
     private void updateData(OCShare share) {
@@ -128,13 +124,53 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         }
 
         getStorageManager().saveShare(share);
-        
+
         // Update OCFile with data from share: ShareByLink  and publicLink
         OCFile file = getStorageManager().getFileByPath(mPath);
-        if (file!=null) {
+        if (file != null) {
             file.setSharedViaLink(true);
             getStorageManager().saveFile(file);
         }
+    }
+
+    public void setPath(String mPath) {
+        this.mPath = mPath;
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    public void setPassword(String mPassword) {
+        this.mPassword = mPassword;
+    }
+
+    public void setPublicUpload(Boolean mPublicUpload) {
+        this.mPublicUpload = mPublicUpload;
+    }
+
+    public void setExpirationDateInMillis(long mExpirationDateInMillis) {
+        this.mExpirationDateInMillis = mExpirationDateInMillis;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public Boolean getPublicUpload() {
+        return mPublicUpload;
+    }
+
+    public long getExpirationDateInMillis() {
+        return mExpirationDateInMillis;
+    }
+
+    public String getPath() {
+        return mPath;
+    }
+
+    public String getPassword() {
+        return mPassword;
     }
 
 }
