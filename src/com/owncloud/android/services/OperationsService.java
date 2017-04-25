@@ -563,13 +563,30 @@ public class OperationsService extends Service {
                 
                 String action = operationIntent.getAction();
                 if (action.equals(ACTION_CREATE_SHARE_VIA_LINK)) {  // Create public share via link
+
                     String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    String password = operationIntent.getStringExtra(EXTRA_SHARE_PASSWORD);
-                    if (remotePath.length() > 0) {
-                        operation = new CreateShareViaLinkOperation(
-                                remotePath,
-                                password
-                        );
+
+                    if (remotePath != null && remotePath.length() > 0) {
+
+                        operation = new CreateShareViaLinkOperation(remotePath);
+
+                        String name = operationIntent.getStringExtra(EXTRA_SHARE_NAME);
+                        ((CreateShareViaLinkOperation) operation).setName(name);
+
+                        String password = operationIntent.getStringExtra(EXTRA_SHARE_PASSWORD);
+                        ((CreateShareViaLinkOperation) operation).setPassword(password);
+
+                        long expirationDateMillis = operationIntent.
+                                getLongExtra(EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS, 0);
+
+                        ((CreateShareViaLinkOperation) operation).
+                                setExpirationDateInMillis(expirationDateMillis);
+
+                        Boolean uploadToFolderPermission = operationIntent.
+                                getBooleanExtra(EXTRA_SHARE_PUBLIC_UPLOAD, false);
+
+                        ((CreateShareViaLinkOperation) operation).
+                                setPublicUpload(uploadToFolderPermission);
                     }
 
                 } else if (ACTION_UPDATE_SHARE.equals(action)) {
@@ -598,7 +615,7 @@ public class OperationsService extends Service {
                             );
                         }
 
-                    } else if (shareId > 0) {
+                    } else if (shareId > 0) { // For updating private links
                         operation = new UpdateSharePermissionsOperation(shareId);
                         int permissions = operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS, 1);
                         ((UpdateSharePermissionsOperation)operation).setPermissions(permissions);

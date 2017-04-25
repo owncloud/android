@@ -123,8 +123,8 @@ public class SharePasswordDialogFragment extends DialogFragment
 
                 if (mCreateShare) {
                     // Share the file
-                    ((FileActivity) getActivity()).getFileOperationsHelper().
-                            shareFileViaLink(mFile, encodedPassword);
+//                    ((FileActivity) getActivity()).getFileOperationsHelper().
+//                            shareFileViaLink(mFile, encodedPassword);
 
                 } else {
                     // updat existing link
