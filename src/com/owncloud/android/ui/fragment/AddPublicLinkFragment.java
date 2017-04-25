@@ -34,7 +34,16 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddPublicLinkFragment extends DialogFragment {
 
@@ -44,16 +53,14 @@ public class AddPublicLinkFragment extends DialogFragment {
     private static final String ARG_FILE = "FILE";
 
     /**
-     * Listener for user actions to set, update or clear password on public link
+     * File to share, received as a parameter in construction time
      */
-    private OnPasswordInteractionListener mOnPasswordInteractionListener = null;
+    private OCFile mFile;
 
     /**
-     * Listener for user actions to set, update or clear expiration date on public link
+     * Capabilities of the server
      */
-    private OnExpirationDateInteractionListener mOnExpirationDateInteractionListener = null;
-
-    private OCFile mFile;
+    private OCCapability mCapabilities;
 
     /**
      * Create a new instance of AddPublicLinkFragment, providing fileToShare
@@ -76,7 +83,7 @@ public class AddPublicLinkFragment extends DialogFragment {
             mFile = getArguments().getParcelable(ARG_FILE);
         }
 
-        setStyle(DialogFragment.STYLE_NORMAL, 0);
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
     @Override
@@ -91,6 +98,7 @@ public class AddPublicLinkFragment extends DialogFragment {
         RelativeLayout editPermissionSection = (RelativeLayout) view.
                 findViewById(R.id.shareViaLinkEditPermissionSection);
 
+        // Show or hide edit permission section
         if (mFile.isFolder()) {
             editPermissionSection.setVisibility(View.VISIBLE);
         } else {
@@ -103,16 +111,51 @@ public class AddPublicLinkFragment extends DialogFragment {
         // Set listener for user actions on expiration date
         initExpirationListener(view);
 
-
         // Confirm add public link
         Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
 
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                // TO DO
+//                if (mCapabilities != null &&
+//                        mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
+//                    // password enforced by server, request to the user before trying to create
+//                    requestPasswordForShareViaLink(true);
+//
+//                } else {
 
-                // When button is clicked, call up to owning activity.
+                String publicLinkName = getNameValue().getText().toString();
 
+                String publicLinkPassword = getPasswordValue().getText().toString();
+
+                String expirationDate = getExpirationDateValue().getText().toString();
+
+                long publicLinkExpirationDateMillis = 0;
+
+                // Parse expiration date and convert it to milliseconds
+                if (expirationDate != null) {
+
+                    DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
+
+                    try {
+                        publicLinkExpirationDateMillis = format.parse(getExpirationDateValue().
+                                getText().toString()).getTime();
+                    } catch (ParseException e) {
+                        // DO NOTHING
+                    }
+                }
+
+                Boolean publicLinkEditPermissions = getEditPermissionSwitch().isChecked();
+
+                ((FileActivity) getActivity()).getFileOperationsHelper().
+                        shareFileViaLink(
+                                mFile,
+                                publicLinkName,
+                                publicLinkPassword,
+                                publicLinkExpirationDateMillis,
+                                publicLinkEditPermissions
+                        );
             }
         });
 
@@ -136,7 +179,7 @@ public class AddPublicLinkFragment extends DialogFragment {
      * @param shareView Root view in the fragment.
      */
     private void initPasswordListener(View shareView) {
-        mOnPasswordInteractionListener = new OnPasswordInteractionListener();
+        OnPasswordInteractionListener mOnPasswordInteractionListener = new OnPasswordInteractionListener();
 
         ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkPasswordSwitch)).
                 setOnCheckedChangeListener(mOnPasswordInteractionListener);
@@ -184,7 +227,8 @@ public class AddPublicLinkFragment extends DialogFragment {
      * @param shareView Root view in the fragment.
      */
     private void initExpirationListener(View shareView) {
-        mOnExpirationDateInteractionListener = new OnExpirationDateInteractionListener();
+        OnExpirationDateInteractionListener mOnExpirationDateInteractionListener =
+                new OnExpirationDateInteractionListener();
 
         ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkExpirationSwitch)).
                 setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
@@ -220,9 +264,6 @@ public class AddPublicLinkFragment extends DialogFragment {
             ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
                     newInstance(-1, this);
 
-
-            TextView shareViaLinkExpirationValue = (TextView) getView().findViewById(R.id.shareViaLinkExpirationValue);
-
             if (isChecked) {
 
                 // Show calendar to set the expiration date
@@ -233,7 +274,7 @@ public class AddPublicLinkFragment extends DialogFragment {
 
             } else {
 
-                shareViaLinkExpirationValue.setVisibility(View.INVISIBLE);
+                getExpirationDateValue().setVisibility(View.INVISIBLE);
 
             }
         }
@@ -265,7 +306,7 @@ public class AddPublicLinkFragment extends DialogFragment {
         @Override
         public void onDateSet(String date) {
 
-            TextView expirationDate = (TextView) getView().findViewById(R.id.shareViaLinkExpirationValue);
+            TextView expirationDate = getExpirationDateValue();
 
             if (expirationDate.getVisibility() == View.INVISIBLE) {
 
@@ -286,5 +327,41 @@ public class AddPublicLinkFragment extends DialogFragment {
                 expirationToggle.setChecked(false);
             }
         }
+    }
+
+    private EditText getNameValue() {
+        return (EditText) getView().findViewById(R.id.shareViaLinkNameValue);
+    }
+
+    private View getPasswordSection() {
+        return getView().findViewById(R.id.shareViaLinkPasswordSection);
+    }
+
+    private SwitchCompat getPasswordSwitch() {
+        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkPasswordSwitch);
+    }
+
+    private TextView getPasswordValue() {
+        return (TextView) getView().findViewById(R.id.shareViaLinkPasswordValue);
+    }
+
+    private View getExpirationDateSection() {
+        return getView().findViewById(R.id.shareViaLinkExpirationSection);
+    }
+
+    private SwitchCompat getExpirationDateSwitch() {
+        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkExpirationSwitch);
+    }
+
+    private TextView getExpirationDateValue() {
+        return (TextView) getView().findViewById(R.id.shareViaLinkExpirationValue);
+    }
+
+    private View getEditPermissionSection() {
+        return getView().findViewById(R.id.shareViaLinkEditPermissionSection);
+    }
+
+    private SwitchCompat getEditPermissionSwitch() {
+        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkEditPermissionSwitch);
     }
 }

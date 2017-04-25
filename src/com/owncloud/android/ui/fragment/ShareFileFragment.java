@@ -112,9 +112,9 @@ public class ShareFileFragment extends Fragment
     private ShareUserListAdapter mUserGroupsAdapter = null;
 
     /**
-     *  List of public shares bound to the file
+     *  List of public links bound to the file
      */
-    private ArrayList<OCShare> mPublicShares;
+    private ArrayList<OCShare> mPublicLinks;
 
     /**
      * Adapter to show public shares
@@ -321,8 +321,8 @@ public class ShareFileFragment extends Fragment
 
                 } else {
                     // create without password if not enforced by server or we don't know if enforced;
-                    ((FileActivity) getActivity()).getFileOperationsHelper().
-                            shareFileViaLink(mFile, null);
+//                    ((FileActivity) getActivity()).getFileOperationsHelper().
+//                            shareFileViaLink(mFile, null);
 
                     // ShareActivity#onCreateShareViaLinkOperationFinish will take care if password
                     // is enforced by the server but app doesn't know, or if server version is
@@ -515,7 +515,7 @@ public class ShareFileFragment extends Fragment
         } else if (((FileActivity) mListener).getStorageManager() != null) {
 
             // Get public shares
-            mPublicShares = ((FileActivity) mListener).getStorageManager().getPublicSharesForAFile(
+            mPublicLinks = ((FileActivity) mListener).getStorageManager().getPublicSharesForAFile(
                     mFile.getRemotePath(),
                     mAccount.name
             );
@@ -543,7 +543,7 @@ public class ShareFileFragment extends Fragment
         mPublicLinksAdapter = new SharePublicLinkListAdapter (
                 getActivity(),
                 R.layout.share_public_link_item,
-                mPublicShares,
+                mPublicLinks,
                 this
         );
 
@@ -551,7 +551,7 @@ public class ShareFileFragment extends Fragment
         TextView noPublicLinks = (TextView) getView().findViewById(R.id.shareNoPublicLinks);
         ListView publicLinksList = (ListView) getView().findViewById(R.id.sharePublicLinksList);
 
-        if (mPublicShares.size() > 0) {
+        if (mPublicLinks.size() > 0) {
             noPublicLinks.setVisibility(View.GONE);
             publicLinksList.setVisibility(View.VISIBLE);
             publicLinksList.setAdapter(mPublicLinksAdapter);
