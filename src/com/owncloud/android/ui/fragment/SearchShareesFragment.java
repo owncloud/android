@@ -105,7 +105,7 @@ public class SearchShareesFragment extends DialogFragment implements ShareUserLi
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
         }
 
-        setStyle(DialogFragment.STYLE_NORMAL, 0);
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
     /**

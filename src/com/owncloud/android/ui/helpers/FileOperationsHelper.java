@@ -133,24 +133,64 @@ public class FileOperationsHelper {
         }
     }
 
+
+
     /**
      * Helper method to share a file via a public link. Starts a request to do it in {@link OperationsService}
      *
      * @param file          The file to share.
      * @param password      Optional password to protect the public share.
      */
-    public void shareFileViaLink(OCFile file, String password) {
+    public void shareFileViaLink(OCFile file,
+                                 String name,
+                                 String password,
+                                 long expirationTimeInMillis,
+                                 boolean uploadToFolderPermission)
+    {
+
         if (isSharedSupported()) {
             if (file != null) {
                 mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-                Intent service = new Intent(mFileActivity, OperationsService.class);
-                service.setAction(OperationsService.ACTION_CREATE_SHARE_VIA_LINK);
-                service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
+
+                Intent createShareFileViaLink = new Intent(mFileActivity, OperationsService.class);
+                createShareFileViaLink.setAction(OperationsService.ACTION_CREATE_SHARE_VIA_LINK);
+
+                createShareFileViaLink.putExtra(
+                        OperationsService.EXTRA_ACCOUNT,
+                        mFileActivity.getAccount()
+                );
+
+                createShareFileViaLink.putExtra(
+                        OperationsService.EXTRA_REMOTE_PATH,
+                        file.getRemotePath()
+                );
+
+                createShareFileViaLink.putExtra(
+                        OperationsService.EXTRA_SHARE_NAME,
+                        (name == null) ? "" : name
+                );
+
                 if (password != null && password.length() > 0) {
-                    service.putExtra(OperationsService.EXTRA_SHARE_PASSWORD, password);
+                    createShareFileViaLink.putExtra(
+                            OperationsService.EXTRA_SHARE_PASSWORD,
+                            password
+                    );
                 }
-                service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-                mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
+
+                if (expirationTimeInMillis > 0) {
+                    createShareFileViaLink.putExtra(
+                            OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
+                            expirationTimeInMillis
+                    );
+                }
+
+                createShareFileViaLink.putExtra(
+                        OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
+                        uploadToFolderPermission
+                );
+
+                mWaitingForOpId = mFileActivity.getOperationsServiceBinder().
+                        queueNewOperation(createShareFileViaLink);
 
             } else {
                 Log_OC.e(TAG, "Trying to share a NULL OCFile");
