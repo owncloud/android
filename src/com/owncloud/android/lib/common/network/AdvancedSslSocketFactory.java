@@ -229,9 +229,9 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
 
     /**
      * Verifies the identity of the server.
-     * <p>
+     *
      * The server certificate is verified first.
-     * <p>
+     *
      * Then, the host name is compared with the content of the server certificate using the current host name verifier,
      * if any.
      *
@@ -325,10 +325,10 @@ public class AdvancedSslSocketFactory implements SecureProtocolSocketFactory {
 
     /**
      * Grants that all protocols supported by the Security Provider in mSslContext are enabled in socket.
-     * <p>
+     *
      * Grants also that no unsupported protocol is tried to be enabled. That would trigger an exception, breaking
      * the connection process although some protocols are supported.
-     * <p>
+     *
      * This is not cosmetic: not all the supported protocols are enabled by default. Too see an overview of
      * supported and enabled protocols in the stock Security Provider in Android see the tables in
      * http://developer.android.com/reference/javax/net/ssl/SSLSocket.html.

@@ -166,13 +166,9 @@ public class DownloadRemoteFileOperation extends RemoteOperation {
             } else if (status != FORBIDDEN_ERROR && status != SERVICE_UNAVAILABLE_ERROR) {
                 client.exhaustResponse(mGet.getResponseBodyAsStream());
 
-            } // else, body read by RemoteOeprationResult constructor
+            } // else, body read by RemoteOperationResult constructor
 
             result = new RemoteOperationResult(isSuccess(status), mGet);
-
-        /*} catch (Exception e) {
-            client.exhaustResponse(mGet.getResponseBodyAsStream());
-            throw e;*/
 
         } finally {
             if (fos != null) fos.close();
