@@ -266,37 +266,20 @@ public class FileOperationsHelper {
 
 
     /**
-     * Helper method to unshare a file publicly shared via link.
+     * Helper method to remove an existing share, no matter if public or private.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param file      The file to unshare.
+     * @param share      The {@link OCShare} to remove (unshare).
      */
-    public void unshareFileViaLink(OCFile file) {
+    public void removeShare(OCShare share) {
 
-        // Unshare the file: Create the intent
         Intent unshareService = new Intent(mFileActivity, OperationsService.class);
         unshareService.setAction(OperationsService.ACTION_UNSHARE);
+        unshareService.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
         unshareService.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        unshareService.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-        unshareService.putExtra(OperationsService.EXTRA_SHARE_TYPE, ShareType.PUBLIC_LINK);
-        unshareService.putExtra(OperationsService.EXTRA_SHARE_WITH, "");
 
         queueShareIntent(unshareService);
     }
-
-    public void unshareFileWithUserOrGroup(OCFile file, ShareType shareType, String userOrGroup){
-
-        // Unshare the file: Create the intent
-        Intent unshareService = new Intent(mFileActivity, OperationsService.class);
-        unshareService.setAction(OperationsService.ACTION_UNSHARE);
-        unshareService.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        unshareService.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-        unshareService.putExtra(OperationsService.EXTRA_SHARE_TYPE, shareType);
-        unshareService.putExtra(OperationsService.EXTRA_SHARE_WITH, userOrGroup);
-
-        queueShareIntent(unshareService);
-    }
-
 
     private void queueShareIntent(Intent shareIntent){
         if (isSharedSupported()) {
