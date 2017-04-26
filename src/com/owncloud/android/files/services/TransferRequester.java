@@ -60,7 +60,7 @@ public class TransferRequester {
     /**
      * Call to upload several new files
      */
-    public void uploadNewFile(
+    public void uploadNewFiles(
         Context context,
         Account account,
         String[] localPaths,
@@ -89,7 +89,7 @@ public class TransferRequester {
     public void uploadNewFile(Context context, Account account, String localPath, String remotePath, int
         behaviour, String mimeType, boolean createRemoteFile, int createdBy) {
 
-        uploadNewFile(
+        uploadNewFiles(
             context,
             account,
             new String[]{localPath},
@@ -104,8 +104,8 @@ public class TransferRequester {
     /**
      * Call to update multiple files already uploaded
      */
-    private void uploadUpdate(Context context, Account account, OCFile[] existingFiles, Integer behaviour,
-                              Boolean forceOverwrite) {
+    private void uploadsUpdate(Context context, Account account, OCFile[] existingFiles, Integer behaviour,
+                               Boolean forceOverwrite) {
         Intent intent = new Intent(context, FileUploader.class);
 
         intent.putExtra(FileUploader.KEY_ACCOUNT, account);
@@ -122,7 +122,7 @@ public class TransferRequester {
     public void uploadUpdate(Context context, Account account, OCFile existingFile, Integer behaviour,
                              Boolean forceOverwrite) {
 
-        uploadUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite);
+        uploadsUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite);
     }
 
 
@@ -207,16 +207,16 @@ public class TransferRequester {
      *
      * @param context           Caller {@link Context}.
      * @param jobId             Identifier to set to the retry job.
-     * @param remotePath        Full path of the file to upload, relative to root of the OC account.
      * @param accountName       Local name of the OC account where the upload will be retried.
+     * @param remotePath        Full path of the file to upload, relative to root of the OC account.
      */
     void scheduleUpload(Context context, int jobId, String accountName, String remotePath) {
         boolean scheduled = scheduleTransfer(
             context,
             RetryUploadJobService.class,
             jobId,
-            remotePath,
-            accountName
+            accountName,
+            remotePath
         );
 
         if (scheduled) {
@@ -238,16 +238,16 @@ public class TransferRequester {
      *
      * @param context           Caller {@link Context}.
      * @param jobId             Identifier to set to the retry job.
-     * @param remotePath        Full path of the file to download, relative to root of the OC account.
      * @param accountName       Local name of the OC account where the download will be retried.
+     * @param remotePath        Full path of the file to download, relative to root of the OC account.
      */
-    void scheduleDownload(Context context, int jobId, String remotePath, String accountName) {
+    void scheduleDownload(Context context, int jobId, String accountName, String remotePath) {
         boolean scheduled = scheduleTransfer(
             context,
             RetryDownloadJobService.class,
             jobId,
-            remotePath,
-            accountName
+            accountName,
+            remotePath
         );
 
         if (scheduled) {
@@ -264,22 +264,22 @@ public class TransferRequester {
 
 
     /**
-     * Schedule a future trasnfer of an upload, to be done when a connection via an unmetered network (free Wifi)
+     * Schedule a future transfer of an upload, to be done when a connection via an unmetered network (free Wifi)
      * is available.
      *
      * @param context                   Caller {@link Context}.
      * @param scheduledRetryService     Class of the appropriate retry service, either to retry downloads
      *                                  or to retry uploads.
      * @param jobId                     Identifier to set to the retry job.
-     * @param remotePath                Full path of the file to upload, relative to root of the OC account.
      * @param accountName               Local name of the OC account where the upload will be retried.
+     * @param remotePath                Full path of the file to upload, relative to root of the OC account.
      */
     private boolean scheduleTransfer(
         Context context,
         Class<?> scheduledRetryService,
         int jobId,
-        String remotePath,
-        String accountName
+        String accountName,
+        String remotePath
     ) {
 
         // JobShceduler requires Android >= 5.0 ; do not remove this protection while minSdkVersion is lower

@@ -741,8 +741,11 @@ public class FileUploader extends Service
 
             /// Check account existence
             if (!AccountUtils.exists(mCurrentUpload.getAccount(), this)) {
-                Log_OC.w(TAG, "Account " + mCurrentUpload.getAccount().name +
-                        " does not exist anymore -> cancelling all its uploads");
+                Log_OC.w(
+                    TAG,
+                    "Account " + mCurrentUpload.getAccount().name +
+                    " does not exist anymore -> cancelling all its uploads"
+                );
                 cancelUploadsForAccount(mCurrentUpload.getAccount());
                 return;
             }
@@ -758,7 +761,8 @@ public class FileUploader extends Service
 
             try {
                 /// prepare client object to send the request to the ownCloud server
-                if (mCurrentAccount == null || !mCurrentAccount.equals(mCurrentUpload.getAccount())) {
+                if (mCurrentAccount == null ||
+                        !mCurrentAccount.equals(mCurrentUpload.getAccount())) {
                     mCurrentAccount = mCurrentUpload.getAccount();
                     mStorageManager = new FileDataStorageManager(
                             mCurrentAccount,
@@ -766,7 +770,7 @@ public class FileUploader extends Service
                     );
                 }   // else, reuse storage manager from previous operation
 
-                // always get client from client manager, to get fresh credentials in case of update
+                // always get client from client manager to get fresh credentials in case of update
                 OwnCloudAccount ocAccount = new OwnCloudAccount(
                         mCurrentAccount,
                         this
@@ -826,6 +830,15 @@ public class FileUploader extends Service
                             )
                         );
                     }
+                } else {
+                    Log_OC.v(
+                        TAG,
+                        String.format(
+                            "Success OR fail without exception for %1s in %2s",
+                            mCurrentUpload.getRemotePath(),
+                            mCurrentAccount.name
+                        )
+                    );
                 }
 
                 mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);

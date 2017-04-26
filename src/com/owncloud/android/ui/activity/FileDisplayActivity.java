@@ -681,7 +681,7 @@ public class FileDisplayActivity extends HookActivity
             int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) ? FileUploader
                     .LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
             TransferRequester requester = new TransferRequester();
-            requester.uploadNewFile(
+            requester.uploadNewFiles(
                     this,
                     getAccount(),
                     filePaths,

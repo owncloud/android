@@ -391,102 +391,103 @@ public class FileDownloader extends Service
         mCurrentDownload = mPendingDownloads.get(downloadKey);
 
         if (mCurrentDownload != null) {
-            // Detect if the account exists
-            if (AccountUtils.exists(mCurrentDownload.getAccount(), getApplicationContext())) {
-                Log_OC.d(TAG, "Account " + mCurrentDownload.getAccount().name + " exists");
 
-                notifyDownloadStart(mCurrentDownload);
+            /// Check account existence
+            if (!AccountUtils.exists(mCurrentDownload.getAccount(), this)) {
+                Log_OC.w(
+                    TAG,
+                    "Account " + mCurrentDownload.getAccount().name +
+                    " does not exist anymore -> cancelling all its downloads"
+                );
+                cancelDownloadsForAccount(mCurrentDownload.getAccount());
+                return;
+            }
 
-                RemoteOperationResult downloadResult = null;
-                try {
-                    /// prepare client object to send the request to the ownCloud server
-                    if (mCurrentAccount == null ||
-                            !mCurrentAccount.equals(mCurrentDownload.getAccount())) {
-                        mCurrentAccount = mCurrentDownload.getAccount();
-                        mStorageManager = new FileDataStorageManager(
-                                mCurrentAccount,
-                                getContentResolver()
-                        );
-                    }   // else, reuse storage manager from previous operation
+            notifyDownloadStart(mCurrentDownload);
 
-                    // always get client from client manager, to get fresh credentials in case
-                    // of update
-                    OwnCloudAccount ocAccount = new OwnCloudAccount(
+            RemoteOperationResult downloadResult = null;
+
+            try {
+                /// prepare client object to send the request to the ownCloud server
+                if (mCurrentAccount == null ||
+                        !mCurrentAccount.equals(mCurrentDownload.getAccount())) {
+                    mCurrentAccount = mCurrentDownload.getAccount();
+                    mStorageManager = new FileDataStorageManager(
                             mCurrentAccount,
-                            this
+                            getContentResolver()
                     );
-                    mDownloadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                            getClientFor(ocAccount, this);
+                }   // else, reuse storage manager from previous operation
 
+                // always get client from client manager to get fresh credentials in case of update
+                OwnCloudAccount ocAccount = new OwnCloudAccount(
+                        mCurrentAccount,
+                        this
+                );
+                mDownloadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                        getClientFor(ocAccount, this);
 
-                    /// perform the download
-                    downloadResult = mCurrentDownload.execute(mDownloadClient);
-                    if (downloadResult.isSuccess()) {
-                        saveDownloadedFile();
-                    }
+                /// perform the download
+                downloadResult = mCurrentDownload.execute(mDownloadClient);
+                if (downloadResult.isSuccess()) {
+                    saveDownloadedFile();
+                }
 
-                } catch (Exception e) {
-                    Log_OC.e(TAG, "Error downloading", e);
-                    downloadResult = new RemoteOperationResult(e);
+            } catch (Exception e) {
+                Log_OC.e(TAG, "Error downloading", e);
+                downloadResult = new RemoteOperationResult(e);
 
-                } finally {
-                    Pair<DownloadFileOperation, String> removeResult =
-                            mPendingDownloads.removePayload(
-                                    mCurrentAccount.name,
-                                    mCurrentDownload.getRemotePath()
-                            );
+            } finally {
+                Pair<DownloadFileOperation, String> removeResult =
+                    mPendingDownloads.removePayload(
+                            mCurrentAccount.name,
+                            mCurrentDownload.getRemotePath()
+                    );
 
-                    if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
-                        // if failed due to lack of connectivity, schedule an automatic retry
-                        TransferRequester requester = new TransferRequester();
-                        if (requester.shouldScheduleRetry(this, downloadResult.getException())) {
-                            int jobId = mPendingDownloads. buildKey(
-                                mCurrentAccount.name,
-                                mCurrentDownload.getRemotePath()
-                            ).hashCode();
-                            requester.scheduleDownload(
-                                this,
-                                jobId,
-                                mCurrentDownload.getRemotePath(),
-                                mCurrentAccount.name
-                            );
-                            downloadResult = new RemoteOperationResult(
-                                ResultCode.NO_NETWORK_CONNECTION
-                            );
-                        } else {
-                            Log_OC.v(
-                                TAG,
-                                String.format(
-                                    "Exception in download, network is OK, no retry scheduled for %1s in %2s",
-                                    mCurrentDownload.getRemotePath(),
-                                    mCurrentAccount.name
-                                )
-                            );
-                        }
+                if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
+
+                    // if failed due to lack of connectivity, schedule an automatic retry
+                    TransferRequester requester = new TransferRequester();
+                    if (requester.shouldScheduleRetry(this, downloadResult.getException())) {
+                        int jobId = mPendingDownloads. buildKey(
+                            mCurrentAccount.name,
+                            mCurrentDownload.getRemotePath()
+                        ).hashCode();
+                        requester.scheduleDownload(
+                            this,
+                            jobId,
+                            mCurrentAccount.name,
+                            mCurrentDownload.getRemotePath()
+                        );
+                        downloadResult = new RemoteOperationResult(
+                            ResultCode.NO_NETWORK_CONNECTION
+                        );
                     } else {
                         Log_OC.v(
                             TAG,
                             String.format(
-                                "Success OR fail without exception for %1s in %2s",
+                                "Exception in download, network is OK, no retry scheduled for %1s in %2s",
                                 mCurrentDownload.getRemotePath(),
                                 mCurrentAccount.name
                             )
                         );
                     }
-
-                    /// notify result
-                    notifyDownloadResult(mCurrentDownload, downloadResult);
-
-                    sendBroadcastDownloadFinished(mCurrentDownload, downloadResult, removeResult.second);
+                } else {
+                    Log_OC.v(
+                        TAG,
+                        String.format(
+                            "Success OR fail without exception for %1s in %2s",
+                            mCurrentDownload.getRemotePath(),
+                            mCurrentAccount.name
+                        )
+                    );
                 }
 
-            } else {
-                // Cancel the transfer
-                Log_OC.d(TAG, "Account " + mCurrentDownload.getAccount().toString() +
-                        " doesn't exist");
-                cancelDownloadsForAccount(mCurrentDownload.getAccount());
+                /// notify result
+                notifyDownloadResult(mCurrentDownload, downloadResult);
 
+                sendBroadcastDownloadFinished(mCurrentDownload, downloadResult, removeResult.second);
             }
+
         }
     }
 
