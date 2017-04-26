@@ -285,8 +285,10 @@ public class ShareFileFragment extends Fragment
     }
 
     @Override
-    public void deletePublicLink(OCShare share) {
-
+    public void removePublicLink(OCShare share) {
+        // Unshare
+        Log_OC.d(TAG, "Unsharing " + share.getName());
+        mListener.removeShare(share);
     }
 
     @Override
@@ -329,10 +331,8 @@ public class ShareFileFragment extends Fragment
                     // older than OwnCloudVersion#MINIMUM_VERSION_CAPABILITIES_API
                 }
 
-            } else {
-                ((FileActivity) getActivity()).getFileOperationsHelper().
-                        unshareFileViaLink(mFile);
-            }
+            }   // else  - nothing, unshare fully moved
+
 
             // undo the toggle to grant the view will be correct if any intermediate dialog is cancelled or
             // the create/delete operation fails
@@ -490,7 +490,7 @@ public class ShareFileFragment extends Fragment
     public void unshareButtonPressed(OCShare share) {
         // Unshare
         Log_OC.d(TAG, "Unsharing " + share.getSharedWithDisplayName());
-        mListener.unshareWith(share);
+        mListener.removeShare(share);
     }
 
     @Override
