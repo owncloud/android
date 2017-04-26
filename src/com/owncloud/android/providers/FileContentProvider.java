@@ -815,6 +815,23 @@ public class FileContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
+            if (oldVersion == 17 && newVersion >= 18) {
+                Log_OC.i("SQL", "Entering in the #18 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.OCSHARES_TABLE_NAME +
+                        " ADD COLUMN " + ProviderTableMeta.OCSHARES_URL  + " TEXT " +
+                        " DEFAULT NULL");
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+
+                    // SQLite does not allow to drop a columns; ftm, we'll not recreate
+                    // the files table without the column, just forget about
+
+                } finally {
+                    db.endTransaction();
+                }
+            }
             if (!upgraded) {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                     ", newVersion == " + newVersion);
@@ -871,6 +888,7 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.OCSHARES_USER_ID + " INTEGER, "
                 + ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " INTEGER,"
                 + ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " TEXT, "
+                + ProviderTableMeta.OCSHARES_URL + " TEXT, "
                 + ProviderTableMeta.OCSHARES_NAME + " TEXT );" );
     }
 
