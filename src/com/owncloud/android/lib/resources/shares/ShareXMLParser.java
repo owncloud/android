@@ -253,6 +253,9 @@ public class ShareXMLParser {
 				share.setIdRemoteShared(Integer.parseInt(value));
 
 			} else if (name.equalsIgnoreCase(NODE_URL)) {
+				// NOTE: this field is received in all the public shares from OC 9.0.0
+				// in previous versions, it's received in the result of POST requests, but not
+				// in GET requests
 				share.setShareType(ShareType.PUBLIC_LINK);
 				String value = readNode(parser, NODE_URL);
 				share.setShareLink(value);
