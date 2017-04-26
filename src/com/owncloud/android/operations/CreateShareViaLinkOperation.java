@@ -3,6 +3,7 @@
  *
  * @author masensio
  * @author David A. Velasco
+ * @author David González Verdugo
  * Copyright (C) 2017 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -43,8 +44,8 @@ public class CreateShareViaLinkOperation extends SyncOperation {
     private String mPath;
     private String mName;
     private String mPassword;
-    private Boolean mPublicUpload;
     private long mExpirationDateInMillis;
+    private Boolean mPublicUpload;
 
     /**
      * Constructor
@@ -61,6 +62,66 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
+    }
+
+    public void setPath(String mPath) {
+        this.mPath = mPath;
+    }
+
+    /**
+     * Set name to update in public link.
+     *
+     * @param name Name to set to the public link.
+     */
+    public void setName(String name) {
+        this.mName = name;
+    }
+
+    /**
+     * Set password to update in public link.
+     *
+     * @param password Password to set to the public link.
+     */
+    public void setPassword(String password) {
+        this.mPassword = password;
+    }
+
+    /**
+     * Set expiration date to update in Share resource.
+     *
+     * @param expirationDateInMillis    Expiration date to set to the public link.
+     */
+    public void setExpirationDateInMillis(long expirationDateInMillis) {
+        this.mExpirationDateInMillis = expirationDateInMillis;
+    }
+
+    /**
+     * Enable upload permissions to update in Share resource.
+     *
+     * @param publicUpload Upload Permission to set to the public link.
+     */
+    public void setPublicUpload(Boolean publicUpload) {
+        this.mPublicUpload = publicUpload;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public Boolean getPublicUpload() {
+        return mPublicUpload;
+    }
+
+    public long getExpirationDateInMillis() {
+        return mExpirationDateInMillis;
+    }
+
+    public String getPath() {
+        return mPath;
+    }
+
+    public String getPassword() {
+        return mPassword;
     }
 
     @Override
@@ -131,46 +192,6 @@ public class CreateShareViaLinkOperation extends SyncOperation {
             file.setSharedViaLink(true);
             getStorageManager().saveFile(file);
         }
-    }
-
-    public void setPath(String mPath) {
-        this.mPath = mPath;
-    }
-
-    public void setName(String mName) {
-        this.mName = mName;
-    }
-
-    public void setPassword(String mPassword) {
-        this.mPassword = mPassword;
-    }
-
-    public void setPublicUpload(Boolean mPublicUpload) {
-        this.mPublicUpload = mPublicUpload;
-    }
-
-    public void setExpirationDateInMillis(long mExpirationDateInMillis) {
-        this.mExpirationDateInMillis = mExpirationDateInMillis;
-    }
-
-    public String getName() {
-        return mName;
-    }
-
-    public Boolean getPublicUpload() {
-        return mPublicUpload;
-    }
-
-    public long getExpirationDateInMillis() {
-        return mExpirationDateInMillis;
-    }
-
-    public String getPath() {
-        return mPath;
-    }
-
-    public String getPassword() {
-        return mPassword;
     }
 
 }
