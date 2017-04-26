@@ -147,11 +147,13 @@ public class CreateShareViaLinkOperation extends SyncOperation {
                     mPath,
                     ShareType.PUBLIC_LINK,
                     "",
-                    false,
+                    mPublicUpload,
                     mPassword,
                     OCShare.DEFAULT_PERMISSION
             );
             createOp.setGetShareDetails(true);
+            createOp.setName(mName);
+            createOp.setExpirationDate(mExpirationDateInMillis);
             result = createOp.execute(client);
         }
 
