@@ -177,12 +177,10 @@ public class FileOperationsHelper {
                     );
                 }
 
-                if (expirationTimeInMillis > 0) {
-                    createShareFileViaLink.putExtra(
-                            OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
-                            expirationTimeInMillis
-                    );
-                }
+                createShareFileViaLink.putExtra(
+                        OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
+                        expirationTimeInMillis
+                );
 
                 createShareFileViaLink.putExtra(
                         OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
