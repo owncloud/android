@@ -131,7 +131,7 @@ public class AddPublicLinkFragment extends DialogFragment {
 
                 String expirationDate = getExpirationDateValue().getText().toString();
 
-                long publicLinkExpirationDateMillis = 0;
+                long publicLinkExpirationDateMillis = -1;
 
                 // Parse expiration date and convert it to milliseconds
                 if (expirationDate != null) {
