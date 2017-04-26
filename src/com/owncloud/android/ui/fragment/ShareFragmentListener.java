@@ -38,6 +38,6 @@ public interface ShareFragmentListener {
     void showSearchUsersAndGroups();
     void showEditShare(OCShare share);
     void refreshSharesFromServer();
-    void unshareWith(OCShare share);
+    void removeShare(OCShare share);
     void showAddPublicLink(OCFile mFile);
 }

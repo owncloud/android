@@ -42,7 +42,7 @@ import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CreateShareViaLinkOperation;
 import com.owncloud.android.operations.GetSharesForFileOperation;
-import com.owncloud.android.operations.UnshareOperation;
+import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
@@ -200,9 +200,8 @@ public class ShareActivity extends FileActivity
 
     @Override
     // Call to Unshare operation
-    public void unshareWith(OCShare share) {
-        OCFile file = getFile();
-        getFileOperationsHelper().unshareFileWithUserOrGroup(file, share.getShareType(), share.getShareWith());
+    public void removeShare(OCShare share) {
+        getFileOperationsHelper().removeShare(share);
     }
 
     /**
@@ -259,7 +258,7 @@ public class ShareActivity extends FileActivity
             onCreateShareViaLinkOperationFinish((CreateShareViaLinkOperation) operation, result);
         }
 
-        if (operation instanceof UnshareOperation && result.isSuccess() && getEditShareFragment() != null) {
+        if (operation instanceof RemoveShareOperation && result.isSuccess() && getEditShareFragment() != null) {
             getSupportFragmentManager().popBackStack();
         }
 
