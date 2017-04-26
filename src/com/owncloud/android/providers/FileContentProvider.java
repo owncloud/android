@@ -50,6 +50,7 @@ import com.owncloud.android.db.ProviderMeta;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.utils.FileStorageUtils;
 
@@ -316,7 +317,6 @@ public class FileContentProvider extends ContentProvider {
         };
         db.update(ProviderTableMeta.FILE_TABLE_NAME, fileValues, where, whereArgs);
     }
-
 
     @Override
     public boolean onCreate() {

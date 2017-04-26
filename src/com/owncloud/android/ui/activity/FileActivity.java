@@ -40,6 +40,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
 import com.owncloud.android.files.services.FileDownloader;
@@ -60,7 +61,6 @@ import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.services.OperationsService;
@@ -308,7 +308,7 @@ public class FileActivity extends DrawerActivity
 
         } else if (operation == null ||
                 operation instanceof CreateShareWithShareeOperation ||
-                operation instanceof UnshareOperation ||
+                operation instanceof RemoveShareOperation ||
                 operation instanceof SynchronizeFolderOperation ||
                 operation instanceof UpdateShareViaLinkOperation ||
                 operation instanceof UpdateSharePermissionsOperation
