@@ -236,7 +236,7 @@ public class SearchShareesFragment extends DialogFragment implements ShareUserLi
     public void editShare(OCShare share) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.getSharedWithDisplayName());
-        mListener.showEditShare(share);
+        mListener.showEditPrivateShare(share);
     }
 
 }

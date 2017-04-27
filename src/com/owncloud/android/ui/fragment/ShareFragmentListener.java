@@ -36,9 +36,10 @@ import com.owncloud.android.lib.resources.shares.OCShare;
  */
 public interface ShareFragmentListener {
     void showSearchUsersAndGroups();
-    void showEditShare(OCShare share);
+    void showEditPrivateShare(OCShare share);
     void refreshSharesFromServer();
     void removeShare(OCShare share);
-    void showAddPublicLink(OCFile mFile);
+    void showAddPublicShare(OCFile file);
+    void showEditPublicShare(OCShare share);
     void copyOrSendPublicLink(OCShare share);
 }
