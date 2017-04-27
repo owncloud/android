@@ -90,9 +90,6 @@ public class AddPublicLinkFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Set title for this dialog
-        getDialog().setTitle(R.string.share_add_public_link_title);
-
         View view = inflater.inflate(R.layout.add_public_link, container, false);
 
         RelativeLayout editPermissionSection = (RelativeLayout) view.
