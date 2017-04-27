@@ -85,7 +85,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
             getPublicLinkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.getPublicLink();
+                    mListener.copyOrSendPublicLink(mPublicLinks.get(position));
                 }
             });
 
@@ -112,7 +112,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
     }
 
     public interface SharePublicLinkAdapterListener {
-        void getPublicLink();
+        void copyOrSendPublicLink(OCShare share);
         void removePublicLink(OCShare share);
         void editPublicLink(OCShare share);
     }
