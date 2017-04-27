@@ -27,6 +27,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 
@@ -203,26 +204,49 @@ public class FileOperationsHelper {
         }
     }
 
-    public void getFileWithLink(OCFile file){
-        if (isSharedSupported()) {
-            if (file != null) {
-                mFileActivity.showLoadingDialog(R.string.wait_a_moment);
-
-                Intent service = new Intent(mFileActivity, OperationsService.class);
-                service.setAction(OperationsService.ACTION_CREATE_SHARE_VIA_LINK);
-                service.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-                service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-                mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-
-            } else {
-                Log_OC.e(TAG, "Trying to share a NULL OCFile");
-            }
-        } else {
-            // Show a Message
+    /**
+     * Show dialog to allow the user to choose an app to send the link of an {@link OCShare},
+     * or copy it to clipboard.
+     *
+     * @param share     {@link OCShare} which link will be sent to the app chosen by the user.
+     */
+    public void copyOrSendPublicLink(OCShare share) {
+        String link = share.getShareLink();
+        if (link.length() <= 0) {
             mFileActivity.showSnackMessage(
-                mFileActivity.getString(R.string.share_link_no_support_share_api)
+                mFileActivity.getString(R.string.share_no_link_in_this_share)
+            );
+            return;
+        }
+
+        Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
+        intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
+        intentToShareLink.setType("text/plain");
+        String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
+            mFileActivity.getAccount()
+        );
+        if (username != null) {
+            intentToShareLink.putExtra(
+                Intent.EXTRA_SUBJECT,
+                mFileActivity.getString(
+                    R.string.subject_user_shared_with_you,
+                    username,
+                    mFileActivity.getFile().getFileName()
+                )
+            );
+        } else {
+            intentToShareLink.putExtra(
+                Intent.EXTRA_SUBJECT,
+                mFileActivity.getString(
+                    R.string.subject_shared_with_you,
+                    mFileActivity.getFile().getFileName()
+                )
             );
         }
+
+        String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
+        DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
+        chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
     }
 
     /**
@@ -696,4 +720,5 @@ public class FileOperationsHelper {
 
         mFileActivity.showLoadingDialog(R.string.wait_checking_credentials);
     }
+
 }

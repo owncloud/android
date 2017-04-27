@@ -40,4 +40,5 @@ public interface ShareFragmentListener {
     void refreshSharesFromServer();
     void removeShare(OCShare share);
     void showAddPublicLink(OCFile mFile);
+    void copyOrSendPublicLink(OCShare share);
 }

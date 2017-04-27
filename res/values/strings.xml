@@ -493,6 +493,7 @@
     <string name="previewing_video_not_supported">Video previewing is not supported in your Android version. File download will start automatically.</string>
     <string name="streaming_position_not_available">\"Position not available\"</string>
     <string name="share_no_public_links">No public links created yet</string>
+    <string name="share_no_link_in_this_share">This share has no link</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
