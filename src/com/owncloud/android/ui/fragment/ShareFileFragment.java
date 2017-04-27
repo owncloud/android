@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -250,7 +249,7 @@ public class ShareFileFragment extends Fragment
             @Override
             public void onClick(View view) {
                 // Show Add Public Link Fragment
-                mListener.showAddPublicLink(mFile);
+                mListener.showAddPublicShare(mFile);
             }
         });
 
@@ -286,14 +285,14 @@ public class ShareFileFragment extends Fragment
     }
 
     @Override
-    public void removePublicLink(OCShare share) {
+    public void removePublicShare(OCShare share) {
         Log_OC.d(TAG, "Removing public share " + share.getName());
         mListener.removeShare(share);
     }
 
     @Override
-    public void editPublicLink(OCShare share) {
-
+    public void editPublicShare(OCShare share) {
+        mListener.showEditPublicShare(share);
     }
 
     /**
@@ -497,7 +496,7 @@ public class ShareFileFragment extends Fragment
     public void editShare(OCShare share) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.getSharedWithDisplayName());
-        mListener.showEditShare(share);
+        mListener.showEditPrivateShare(share);
     }
 
     /**
