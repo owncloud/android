@@ -94,7 +94,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
             deletePublicLinkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.removePublicLink(mPublicLinks.get(position));
+                    mListener.removePublicShare(mPublicLinks.get(position));
                 }
             });
 
@@ -103,7 +103,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
             editPublicLinkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.editPublicLink(mPublicLinks.get(position));
+                    mListener.editPublicShare(mPublicLinks.get(position));
                 }
             });
         }
@@ -113,7 +113,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
 
     public interface SharePublicLinkAdapterListener {
         void copyOrSendPublicLink(OCShare share);
-        void removePublicLink(OCShare share);
-        void editPublicLink(OCShare share);
+        void removePublicShare(OCShare share);
+        void editPublicShare(OCShare share);
     }
 }
