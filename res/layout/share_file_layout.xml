@@ -169,6 +169,19 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/shareWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/warning_background_color"
+                android:paddingLeft="@dimen/standard_half_padding"
+                android:paddingRight="@dimen/standard_half_padding"
+                android:paddingTop="@dimen/standard_padding"
+                android:paddingBottom="@dimen/standard_padding"
+                android:text="@string/share_warning_about_forwarding_public_links"
+                android:textSize="15sp"
+                />
+
             <ListView
                 android:id="@+id/sharePublicLinksList"
                 android:layout_width="match_parent"

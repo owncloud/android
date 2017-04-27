@@ -57,4 +57,7 @@
     <!-- Multiselect backgrounds -->
     <color name="selected_item_background">#ECECEC</color>
 
+    <!-- Warning message background -->
+    <color name="warning_background_color">#FFCDD2</color>
+
 </resources>
