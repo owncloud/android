@@ -33,7 +33,6 @@ import android.view.MenuItem;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -45,7 +44,6 @@ import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
-import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.AddPublicLinkFragment;
 import com.owncloud.android.ui.fragment.EditShareFragment;
@@ -70,7 +68,6 @@ public class ShareActivity extends FileActivity
     private static final String TAG_ADD_PUBLIC_LINK_FRAGMENT = "ADD_PUBLIC_LINK_FRAGMENT";
 
     /// Tags for dialog fragments
-    private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
     private static final String FTAG_SHARE_PASSWORD_DIALOG = "SHARE_PASSWORD_DIALOG";
 
 
@@ -234,6 +231,11 @@ public class ShareActivity extends FileActivity
         newFragment.show(ft, TAG_ADD_PUBLIC_LINK_FRAGMENT);
     }
 
+    @Override
+    public void copyOrSendPublicLink(OCShare share) {
+        getFileOperationsHelper().copyOrSendPublicLink(share);
+    }
+
     /**
      * Updates the view associated to the activity after the finish of some operation over files
      * in the current account.
@@ -328,34 +330,7 @@ public class ShareActivity extends FileActivity
         if (result.isSuccess()) {
             updateFileFromDB();
 
-            // Create dialog to allow the user choose an app to send the link
-            Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
-            String link = ((OCShare) (result.getData().get(0))).getShareLink();
-            intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
-            intentToShareLink.setType("text/plain");
-            String username = AccountUtils.getUsernameForAccount(getAccount());
-            if (username != null) {
-                intentToShareLink.putExtra(
-                        Intent.EXTRA_SUBJECT,
-                        getString(
-                                R.string.subject_user_shared_with_you,
-                                username,
-                                getFile().getFileName()
-                        )
-                );
-            } else {
-                intentToShareLink.putExtra(
-                        Intent.EXTRA_SUBJECT,
-                        getString(
-                                R.string.subject_shared_with_you,
-                                getFile().getFileName()
-                        )
-                );
-            }
-
-            String[] packagesToExclude = new String[]{getPackageName()};
-            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
-            chooserDialog.show(getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
 
         } else {
             // Detect Failure (403) --> maybe needs password

@@ -228,9 +228,8 @@ public class SearchShareesFragment extends DialogFragment implements ShareUserLi
 
     @Override
     public void unshareButtonPressed(OCShare share) {
-        // Unshare
+        Log_OC.d(TAG, "Removed private share with " + share.getSharedWithDisplayName());
         mListener.removeShare(share);
-        Log_OC.d(TAG, "Unshare - " + share.getSharedWithDisplayName());
     }
 
     @Override
