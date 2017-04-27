@@ -280,13 +280,15 @@ public class ShareFileFragment extends Fragment
     }
 
     @Override
-    public void getPublicLink() {
-
+    public void copyOrSendPublicLink(OCShare share) {
+        //GetLink from the server and show ShareLinkToDialog
+        mListener.copyOrSendPublicLink(share);
     }
 
     @Override
-    public void deletePublicLink(OCShare share) {
-
+    public void removePublicLink(OCShare share) {
+        Log_OC.d(TAG, "Removing public share " + share.getName());
+        mListener.removeShare(share);
     }
 
     @Override
@@ -329,10 +331,8 @@ public class ShareFileFragment extends Fragment
                     // older than OwnCloudVersion#MINIMUM_VERSION_CAPABILITIES_API
                 }
 
-            } else {
-                ((FileActivity) getActivity()).getFileOperationsHelper().
-                        unshareFileViaLink(mFile);
-            }
+            }   // else  - nothing, unshare fully moved
+
 
             // undo the toggle to grant the view will be correct if any intermediate dialog is cancelled or
             // the create/delete operation fails
@@ -489,8 +489,8 @@ public class ShareFileFragment extends Fragment
     @Override
     public void unshareButtonPressed(OCShare share) {
         // Unshare
-        Log_OC.d(TAG, "Unsharing " + share.getSharedWithDisplayName());
-        mListener.unshareWith(share);
+        Log_OC.d(TAG, "Removing private share with " + share.getSharedWithDisplayName());
+        mListener.removeShare(share);
     }
 
     @Override
@@ -586,20 +586,6 @@ public class ShareFileFragment extends Fragment
 //                getEditPermissionSection().setVisibility(View.GONE);
 //            }
 //
-//
-//            // TO MOVE OR DELETE
-//            // GetLink button
-//            AppCompatButton getLinkButton = getGetLinkButton();
-//            getLinkButton.setVisibility(View.VISIBLE);
-//            getLinkButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //GetLink from the server and show ShareLinkToDialog
-//                    ((FileActivity) getActivity()).getFileOperationsHelper().
-//                            getFileWithLink(mFile);
-//
-//                }
-//            });
 //
 //            /// update state of expiration date switch and message depending on expiration date
 //            SwitchCompat expirationDateSwitch = getExpirationDateSwitch();

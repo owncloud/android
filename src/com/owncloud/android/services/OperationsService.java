@@ -62,10 +62,10 @@ import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.OAuth2GetAccessToken;
 import com.owncloud.android.operations.RemoveFileOperation;
+import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -637,19 +637,9 @@ public class OperationsService extends Service {
                     }
 
                 } else if (action.equals(ACTION_UNSHARE)) {  // Unshare file
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                    ShareType shareType = (ShareType) operationIntent.
-                            getSerializableExtra(EXTRA_SHARE_TYPE);
-                    String shareWith = operationIntent.getStringExtra(EXTRA_SHARE_WITH);
-                    if (remotePath.length() > 0) {
-                        operation = new UnshareOperation(
-                                remotePath,
-                                shareType,
-                                shareWith,
-                                OperationsService.this
-                        );
-                    }
-                    
+                    long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
+                    operation = new RemoveShareOperation(shareId);
+
                 } else if (action.equals(ACTION_GET_SERVER_INFO)) { 
                     // check OC server and get basic information from it
                     operation = new GetServerInfoOperation(serverUrl, OperationsService.this);

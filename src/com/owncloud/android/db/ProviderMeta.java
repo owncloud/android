@@ -33,7 +33,7 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
-    public static final int DB_VERSION = 17;
+    public static final int DB_VERSION = 18;
 
     private ProviderMeta() {
     }
@@ -107,6 +107,7 @@ public class ProviderMeta {
         public static final String OCSHARES_ID_REMOTE_SHARED = "id_remote_shared";
         public static final String OCSHARES_ACCOUNT_OWNER = "owner_share";
         public static final String OCSHARES_NAME = "name";
+        public static final String OCSHARES_URL = "url";
 
         public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE 
                 + " collate nocase asc";

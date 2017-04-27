@@ -1120,6 +1120,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.OCSHARES_USER_ID, share.getUserId());
         cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, share.getRemoteId());
         cv.put(ProviderTableMeta.OCSHARES_NAME, share.getName());
+        cv.put(ProviderTableMeta.OCSHARES_URL, share.getShareLink());
         cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, mAccount.name);
 
         if (shareExistsForRemoteId(share.getRemoteId())) {// for renamed files; no more delete and create
@@ -1355,6 +1356,9 @@ public class FileDataStorageManager {
             );
             share.setName(c.getString(
                 c.getColumnIndex(ProviderTableMeta.OCSHARES_NAME)
+            ));
+            share.setShareLink(c.getString(
+                c.getColumnIndex(ProviderTableMeta.OCSHARES_URL)
             ));
         }
         return share;
@@ -1768,6 +1772,7 @@ public class FileDataStorageManager {
                 cv.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, share.getRemoteId());
                 cv.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, mAccount.name);
                 cv.put(ProviderTableMeta.OCSHARES_NAME, share.getName());
+                cv.put(ProviderTableMeta.OCSHARES_URL, share.getShareLink());
 
                 // adding a new share resource
                 operations.add(

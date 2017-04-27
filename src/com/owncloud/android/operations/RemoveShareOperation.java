@@ -1,7 +1,7 @@
 /**
  *   ownCloud Android client application
  *
- *   @author masensio
+ *   @author David A. Velasco
  *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -20,10 +20,7 @@
 
 package com.owncloud.android.operations;
 
-import android.content.Context;
-
 import com.owncloud.android.datamodel.OCFile;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -32,57 +29,51 @@ import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.RemoveRemoteShareOperation;
 import com.owncloud.android.lib.resources.shares.ShareType;
-
 import com.owncloud.android.operations.common.SyncOperation;
 
 import java.util.ArrayList;
 
 /**
- * Unshare file/folder
- * Save the data in Database
+ * Removes an existing OCShare, known it's LOCAL share id.
  */
-public class UnshareOperation extends SyncOperation {
+public class RemoveShareOperation extends SyncOperation {
 
-    private static final String TAG = UnshareOperation.class.getSimpleName();
-    
-    private String mRemotePath;
-    private ShareType mShareType;
-    private String mShareWith;
-    private Context mContext;
-    
-    public UnshareOperation(String remotePath, ShareType shareType, String shareWith,
-                                Context context) {
-        mRemotePath = remotePath;
-        mShareType = shareType;
-        mShareWith = shareWith;
-        mContext = context;
+    private static final String TAG = RemoveShareOperation.class.getSimpleName();
+
+    private long mLocalId;
+
+
+    public RemoveShareOperation(long localId) {
+        mLocalId = localId;
     }
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result;
         
-        // Get Share for a file
-        OCShare share = getStorageManager().getFirstShareByPathAndType(mRemotePath,
-                mShareType, mShareWith);
-        
+        // Get OCShare from local storage
+        OCShare share = getStorageManager().getShareById(mLocalId);
+
         if (share != null) {
-            OCFile file = getStorageManager().getFileByPath(mRemotePath);
+            // Delete remote share
             RemoveRemoteShareOperation operation =
                     new RemoveRemoteShareOperation((int) share.getRemoteId());
             result = operation.execute(client);
 
+            // Update local storage
+            OCFile file = getStorageManager().getFileByPath(share.getPath());
             if (result.isSuccess()) {
                 Log_OC.d(TAG, "Share id = " + share.getRemoteId() + " deleted");
 
-                if (ShareType.PUBLIC_LINK.equals(mShareType)) {
+                ShareType shareType = share.getShareType();
+                if (ShareType.PUBLIC_LINK.equals(shareType)) {
                     file.setSharedViaLink(false);
 
-                } else if (ShareType.USER.equals(mShareType) || ShareType.GROUP.equals(mShareType)
-                    || ShareType.FEDERATED.equals(mShareType)){
+                } else if (ShareType.USER.equals(shareType) || ShareType.GROUP.equals(shareType)
+                    || ShareType.FEDERATED.equals(shareType)){
                     // Check if it is the last share
                     ArrayList <OCShare> sharesWith = getStorageManager().
-                        getPrivateSharesForAFile(mRemotePath,
+                        getPrivateSharesForAFile(share.getPath(),
                             getStorageManager().getAccount().name);
                     if (sharesWith.size() == 1) {
                         file.setSharedWithSharee(false);
@@ -93,7 +84,7 @@ public class UnshareOperation extends SyncOperation {
                 getStorageManager().removeShare(share);
 
             } else if (result.getCode() != ResultCode.SERVICE_UNAVAILABLE &&
-                    !existsFile(client, file.getRemotePath())) {
+                    !existsFile(client, share.getPath())) {
                 // unshare failed because file was deleted before
                 getStorageManager().removeFile(file, true, true);
             }
