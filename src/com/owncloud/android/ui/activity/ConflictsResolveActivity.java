@@ -27,6 +27,7 @@ import android.os.Bundle;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
@@ -76,7 +77,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 return;
         }
 
-        FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+        TransferRequester requester = new TransferRequester();
         requester.uploadUpdate(this, getAccount(), getFile(), behaviour, forceOverwrite);
         finish();
     }

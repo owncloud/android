@@ -193,7 +193,6 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     @Override
     public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
         Log_OC.v(TAG, "playerPrepared");
-
         player.prepare(mediaSource);
     }
 

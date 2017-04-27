@@ -50,13 +50,14 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
-import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.operations.DownloadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.utils.Extras;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -74,11 +75,6 @@ public class FileDownloader extends Service
 
     private static final String DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED";
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
-    public static final String EXTRA_DOWNLOAD_RESULT = "RESULT";
-    public static final String EXTRA_FILE_PATH = "FILE_PATH";
-    public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
-    public static final String EXTRA_LINKED_TO_PATH = "LINKED_TO";
-    public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
 
     private static final String TAG = FileDownloader.class.getSimpleName();
 
@@ -89,14 +85,13 @@ public class FileDownloader extends Service
     private Account mCurrentAccount = null;
     private FileDataStorageManager mStorageManager;
 
-    private IndexedForest<DownloadFileOperation> mPendingDownloads = new IndexedForest<DownloadFileOperation>();
+    private IndexedForest<DownloadFileOperation> mPendingDownloads = new IndexedForest<>();
 
     private DownloadFileOperation mCurrentDownload = null;
 
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
-
 
     public static String getDownloadAddedMessage() {
         return FileDownloader.class.getName() + DOWNLOAD_ADDED_MESSAGE;
@@ -396,67 +391,105 @@ public class FileDownloader extends Service
         mCurrentDownload = mPendingDownloads.get(downloadKey);
 
         if (mCurrentDownload != null) {
-            // Detect if the account exists
-            if (AccountUtils.exists(mCurrentDownload.getAccount(), getApplicationContext())) {
-                Log_OC.d(TAG, "Account " + mCurrentDownload.getAccount().name + " exists");
 
-                notifyDownloadStart(mCurrentDownload);
+            /// Check account existence
+            if (!AccountUtils.exists(mCurrentDownload.getAccount(), this)) {
+                Log_OC.w(
+                    TAG,
+                    "Account " + mCurrentDownload.getAccount().name +
+                    " does not exist anymore -> cancelling all its downloads"
+                );
+                cancelDownloadsForAccount(mCurrentDownload.getAccount());
+                return;
+            }
 
-                RemoteOperationResult downloadResult = null;
-                try {
-                    /// prepare client object to send the request to the ownCloud server
-                    if (mCurrentAccount == null ||
-                            !mCurrentAccount.equals(mCurrentDownload.getAccount())) {
-                        mCurrentAccount = mCurrentDownload.getAccount();
-                        mStorageManager = new FileDataStorageManager(
-                                mCurrentAccount,
-                                getContentResolver()
-                        );
-                    }   // else, reuse storage manager from previous operation
+            notifyDownloadStart(mCurrentDownload);
 
-                    // always get client from client manager, to get fresh credentials in case
-                    // of update
-                    OwnCloudAccount ocAccount = new OwnCloudAccount(
+            RemoteOperationResult downloadResult = null;
+
+            try {
+                /// prepare client object to send the request to the ownCloud server
+                if (mCurrentAccount == null ||
+                        !mCurrentAccount.equals(mCurrentDownload.getAccount())) {
+                    mCurrentAccount = mCurrentDownload.getAccount();
+                    mStorageManager = new FileDataStorageManager(
                             mCurrentAccount,
-                            this
+                            getContentResolver()
                     );
-                    mDownloadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                            getClientFor(ocAccount, this);
+                }   // else, reuse storage manager from previous operation
 
+                // always get client from client manager to get fresh credentials in case of update
+                OwnCloudAccount ocAccount = new OwnCloudAccount(
+                        mCurrentAccount,
+                        this
+                );
+                mDownloadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                        getClientFor(ocAccount, this);
 
-                    /// perform the download
-                    downloadResult = mCurrentDownload.execute(mDownloadClient);
-                    if (downloadResult.isSuccess()) {
-                        saveDownloadedFile();
-                    }
-
-                } catch (Exception e) {
-                    Log_OC.e(TAG, "Error downloading", e);
-                    downloadResult = new RemoteOperationResult(e);
-
-                } finally {
-                    Pair<DownloadFileOperation, String> removeResult =
-                            mPendingDownloads.removePayload(
-                                    mCurrentAccount.name,
-                                    mCurrentDownload.getRemotePath()
-                            );
-
-                    /// notify result
-                    notifyDownloadResult(mCurrentDownload, downloadResult);
-
-                    sendBroadcastDownloadFinished(mCurrentDownload, downloadResult, removeResult.second);
+                /// perform the download
+                downloadResult = mCurrentDownload.execute(mDownloadClient);
+                if (downloadResult.isSuccess()) {
+                    saveDownloadedFile();
                 }
 
-            } else {
-                // Cancel the transfer
-                Log_OC.d(TAG, "Account " + mCurrentDownload.getAccount().toString() +
-                        " doesn't exist");
-                cancelDownloadsForAccount(mCurrentDownload.getAccount());
+            } catch (Exception e) {
+                Log_OC.e(TAG, "Error downloading", e);
+                downloadResult = new RemoteOperationResult(e);
 
+            } finally {
+                Pair<DownloadFileOperation, String> removeResult =
+                    mPendingDownloads.removePayload(
+                            mCurrentAccount.name,
+                            mCurrentDownload.getRemotePath()
+                    );
+
+                if (!downloadResult.isSuccess() && downloadResult.getException() != null) {
+
+                    // if failed due to lack of connectivity, schedule an automatic retry
+                    TransferRequester requester = new TransferRequester();
+                    if (requester.shouldScheduleRetry(this, downloadResult.getException())) {
+                        int jobId = mPendingDownloads. buildKey(
+                            mCurrentAccount.name,
+                            mCurrentDownload.getRemotePath()
+                        ).hashCode();
+                        requester.scheduleDownload(
+                            this,
+                            jobId,
+                            mCurrentAccount.name,
+                            mCurrentDownload.getRemotePath()
+                        );
+                        downloadResult = new RemoteOperationResult(
+                            ResultCode.NO_NETWORK_CONNECTION
+                        );
+                    } else {
+                        Log_OC.v(
+                            TAG,
+                            String.format(
+                                "Exception in download, network is OK, no retry scheduled for %1s in %2s",
+                                mCurrentDownload.getRemotePath(),
+                                mCurrentAccount.name
+                            )
+                        );
+                    }
+                } else {
+                    Log_OC.v(
+                        TAG,
+                        String.format(
+                            "Success OR fail without exception for %1s in %2s",
+                            mCurrentDownload.getRemotePath(),
+                            mCurrentAccount.name
+                        )
+                    );
+                }
+
+                /// notify result
+                notifyDownloadResult(mCurrentDownload, downloadResult);
+
+                sendBroadcastDownloadFinished(mCurrentDownload, downloadResult, removeResult.second);
             }
+
         }
     }
-
 
     /**
      * Updates the OC File after a successful download.
@@ -509,6 +542,7 @@ public class FileDownloader extends Service
         } else {
             showDetailsIntent = new Intent(this, FileDisplayActivity.class);
         }
+
         showDetailsIntent.putExtra(FileActivity.EXTRA_FILE, download.getFile());
         showDetailsIntent.putExtra(FileActivity.EXTRA_ACCOUNT, download.getAccount());
         showDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -622,12 +656,12 @@ public class FileDownloader extends Service
             String unlinkedFromRemotePath) {
 
         Intent end = new Intent(getDownloadFinishMessage());
-        end.putExtra(EXTRA_DOWNLOAD_RESULT, downloadResult.isSuccess());
-        end.putExtra(ACCOUNT_NAME, download.getAccount().name);
-        end.putExtra(EXTRA_REMOTE_PATH, download.getRemotePath());
-        end.putExtra(EXTRA_FILE_PATH, download.getSavePath());
+        end.putExtra(Extras.EXTRA_DOWNLOAD_RESULT, downloadResult.isSuccess());
+        end.putExtra(Extras.EXTRA_ACCOUNT_NAME, download.getAccount().name);
+        end.putExtra(Extras.EXTRA_REMOTE_PATH, download.getRemotePath());
+        end.putExtra(Extras.EXTRA_FILE_PATH, download.getSavePath());
         if (unlinkedFromRemotePath != null) {
-            end.putExtra(EXTRA_LINKED_TO_PATH, unlinkedFromRemotePath);
+            end.putExtra(Extras.EXTRA_LINKED_TO_PATH, unlinkedFromRemotePath);
         }
         sendStickyBroadcast(end);
     }
@@ -642,10 +676,10 @@ public class FileDownloader extends Service
     private void sendBroadcastNewDownload(DownloadFileOperation download,
                                           String linkedToRemotePath) {
         Intent added = new Intent(getDownloadAddedMessage());
-        added.putExtra(ACCOUNT_NAME, download.getAccount().name);
-        added.putExtra(EXTRA_REMOTE_PATH, download.getRemotePath());
-        added.putExtra(EXTRA_FILE_PATH, download.getSavePath());
-        added.putExtra(EXTRA_LINKED_TO_PATH, linkedToRemotePath);
+        added.putExtra(Extras.EXTRA_ACCOUNT_NAME, download.getAccount().name);
+        added.putExtra(Extras.EXTRA_REMOTE_PATH, download.getRemotePath());
+        added.putExtra(Extras.EXTRA_FILE_PATH, download.getSavePath());
+        added.putExtra(Extras.EXTRA_LINKED_TO_PATH, linkedToRemotePath);
         sendStickyBroadcast(added);
     }
 

@@ -45,6 +45,7 @@ import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -386,8 +387,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         public void onClick(View v) {
                             File file = new File(upload.getLocalPath());
                             if (file.exists()) {
-                                FileUploader.UploadRequester requester =
-                                    new FileUploader.UploadRequester();
+                                TransferRequester requester = new TransferRequester();
                                 requester.retry(mParentActivity, upload);
                                 refreshView();
                             } else {

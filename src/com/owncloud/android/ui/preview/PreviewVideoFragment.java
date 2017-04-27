@@ -74,7 +74,7 @@ import com.owncloud.android.utils.DisplayUtils;
  *
  */
 public class PreviewVideoFragment extends FileFragment implements View.OnClickListener,
-        ExoPlayer.EventListener {
+        ExoPlayer.EventListener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
@@ -454,8 +454,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             simpleExoPlayerView.setPlayer(player);
 
             // Prepare video player asynchronously
-            new PrepareVideoPlayerAsyncTask(getActivity().getApplicationContext(),
-                    (PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener) getActivity(),
+            new PrepareVideoPlayerAsyncTask(getActivity(), this,
                     getFile(), mAccount, mainHandler).execute();
         } else {
 
@@ -469,9 +468,9 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
      * Called after preparing the player asynchronously
      * @param mediaSource media to be played
      */
-    public void onPreparedVideoPlayer (MediaSource mediaSource) {
+    @Override
+    public void OnPrepareVideoPlayerTaskCallback(MediaSource mediaSource) {
         Log_OC.v(TAG, "playerPrepared");
-
         player.prepare(mediaSource);
     }
 
@@ -565,7 +564,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
 
     // File extra methods
-
     @Override
     public void onFileMetadataChanged(OCFile updatedFile) {
         if (updatedFile != null) {

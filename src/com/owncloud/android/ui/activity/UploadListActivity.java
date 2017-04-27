@@ -46,6 +46,7 @@ import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -192,7 +193,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                     openDrawer();
                 }
             case R.id.action_retry_uploads:
-                FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+                TransferRequester requester = new TransferRequester();
                 requester.retryFailedUploads(this, null, null);
                 break;
 
@@ -237,7 +238,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                 this,
                 data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
             );
-            FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+            TransferRequester requester = new TransferRequester();
             requester.retryFailedUploads(
                 this,
                 account,
@@ -263,7 +264,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
 
             } else {
                 // already updated -> just retry!
-                FileUploader.UploadRequester requester = new FileUploader.UploadRequester();
+                TransferRequester requester = new TransferRequester();
                 requester.retryFailedUploads(this, account, UploadResult.CREDENTIAL_ERROR);
             }
 

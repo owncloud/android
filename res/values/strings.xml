@@ -215,12 +215,9 @@
     <string name="auth_account_not_new">An account for the same user and server already exists in the device</string>
     <string name="auth_account_not_the_same">The entered user does not match the user of this account</string>
     <string name="auth_unknown_error_title">Unknown error occurred!</string>
-    <string name="auth_unknown_host_title">Couldn\'t find host</string>
     <string name="auth_incorrect_path_title">Server instance not found</string>
-    <string name="auth_timeout_title">The server took too long to respond</string>
     <string name="auth_incorrect_address_title">Wrong server address format</string>
     <string name="auth_ssl_general_error_title">SSL initialization failed</string>
-    <string name="auth_ssl_unverified_server_title">Couldn\'t verify SSL server\'s identity</string>
     <string name="auth_bad_oc_version_title">Unrecognized server version</string>
     <string name="auth_wrong_connection_title">Couldn\'t establish connection</string>
     <string name="auth_secure_connection">Secure connection established</string>
@@ -342,9 +339,9 @@
     <string name="error_cant_bind_to_operations_service">Critical error: cannot perform operations</string>
 
     <string name="network_error_socket_exception">An error occurred while connecting with the server.</string>
-    <string name="network_error_socket_timeout_exception">An error occurred while waiting for the server, the operation couldn\'t have been done</string>
-    <string name="network_error_connect_timeout_exception">An error occurred while waiting for the server, the operation couldn\'t have been done</string>
-    <string name="network_host_not_available">The operation couldn\'t be completed, server is unavailable</string>
+    <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
+    <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
+    <string name="network_host_not_available">Unknown host</string>
 
     <string name="forbidden_permissions">You do not have permission %s</string>
     <string name="forbidden_permissions_rename">to rename this file</string>
@@ -489,6 +486,7 @@
 
     <string name="previewing_video_not_supported">Video previewing is not supported in your Android version. File download will start automatically.</string>
     <string name="streaming_position_not_available">\"Position not available\"</string>
+    <string name="error_no_network_connection">Device is not connected to a network</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>

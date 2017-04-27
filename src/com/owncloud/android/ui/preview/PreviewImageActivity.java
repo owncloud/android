@@ -31,7 +31,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -57,6 +56,7 @@ import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.fragment.FileFragment;
+import com.owncloud.android.utils.Extras;
 
 
 /**
@@ -392,8 +392,8 @@ public class PreviewImageActivity extends FileActivity implements
     private class DownloadFinishReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String accountName = intent.getStringExtra(FileDownloader.ACCOUNT_NAME);
-            String downloadedRemotePath = intent.getStringExtra(FileDownloader.EXTRA_REMOTE_PATH);
+            String accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME);
+            String downloadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH);
             if (getAccount().name.equals(accountName) && 
                     downloadedRemotePath != null) {
 
@@ -401,7 +401,7 @@ public class PreviewImageActivity extends FileActivity implements
                 mPreviewImagePagerAdapter.onDownloadEvent(
                     file,
                     intent.getAction(),
-                    intent.getBooleanExtra(FileDownloader.EXTRA_DOWNLOAD_RESULT, false)
+                    intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
                 );
             }
             removeStickyBroadcast(intent);

@@ -333,13 +333,13 @@ public class ErrorMessageAdapter {
             if (result.getCode() == ResultCode.WRONG_CONNECTION) {
                 message = res.getString(R.string.network_error_socket_exception);
 
+            } else if (result.getCode() == ResultCode.NO_NETWORK_CONNECTION) {
+                message = res.getString(R.string.error_no_network_connection);
+
             } else if (result.getCode() == ResultCode.TIMEOUT) {
-                message = res.getString(R.string.network_error_socket_exception);
+                message = res.getString(R.string.network_error_socket_timeout_exception);
 
-                if (result.getException() instanceof SocketTimeoutException) {
-                    message = res.getString(R.string.network_error_socket_timeout_exception);
-
-                } else if (result.getException() instanceof ConnectTimeoutException) {
+                if (result.getException() instanceof ConnectTimeoutException) {
                     message = res.getString(R.string.network_error_connect_timeout_exception);
                 }
 
@@ -358,6 +358,7 @@ public class ErrorMessageAdapter {
                 message = res.getString(
                         R.string.auth_bad_oc_version_title
                 );
+
             } else if (result.getCode() == ResultCode.INCORRECT_ADDRESS) {
                 message = res.getString(
                         R.string.auth_incorrect_address_title
@@ -367,6 +368,7 @@ public class ErrorMessageAdapter {
                 message = res.getString(
                         R.string.auth_ssl_general_error_title
                 );
+
             } else if (result.getCode() == ResultCode.UNAUTHORIZED) {
                 message = res.getString(
                         R.string.auth_unauthorized
@@ -375,26 +377,34 @@ public class ErrorMessageAdapter {
                 message = res.getString(
                         R.string.auth_not_configured_title
                 );
+
             } else if (result.getCode() == ResultCode.FILE_NOT_FOUND) {
                 message = res.getString(
                         R.string.auth_incorrect_path_title
                 );
+
             } else if (result.getCode() == ResultCode.OAUTH2_ERROR) {
                 message = res.getString(
                     R.string.auth_oauth_error
                 );
+
             } else if (result.getCode() == ResultCode.OAUTH2_ERROR_ACCESS_DENIED) {
                 message = res.getString(
                         R.string.auth_oauth_error_access_denied
                 );
+
             } else if (result.getCode() == ResultCode.ACCOUNT_NOT_NEW) {
                 message = res.getString(
                         R.string.auth_account_not_new
                 );
+
             } else if (result.getCode() == ResultCode.ACCOUNT_NOT_THE_SAME) {
                 message = res.getString(
                         R.string.auth_account_not_the_same
                 );
+
+            } else if (result.getCode() == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION) {
+                message = res.getString(R.string.auth_redirect_non_secure_connection_title);
             }
 
             else if (result.getHttpPhrase() != null && result.getHttpPhrase().length() > 0) {

@@ -240,7 +240,7 @@ public class IndexedForest<V> {
      * @param accountName   Local name of the ownCloud account where the file to download is stored.
      * @param remotePath    Path of the file in the server.
      */
-    private String buildKey(String accountName, String remotePath) {
+    public String buildKey(String accountName, String remotePath) {
         return accountName + remotePath;
     }
 

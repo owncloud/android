@@ -30,7 +30,6 @@ import android.accounts.OnAccountsUpdateListener;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
@@ -61,11 +60,12 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.ui.notifications.NotificationUtils;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.UploadListActivity;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.ui.notifications.NotificationUtils;
+import com.owncloud.android.utils.Extras;
 
 import java.lang.ref.WeakReference;
 import java.util.AbstractList;
@@ -87,29 +87,24 @@ import java.util.Vector;
  * However, Intent keys (e.g., KEY_WIFI_ONLY) are obeyed.
  */
 public class FileUploader extends Service
-        implements OnDatatransferProgressListener, OnAccountsUpdateListener, UploadFileOperation.OnRenameListener {
+        implements OnDatatransferProgressListener, OnAccountsUpdateListener,
+        UploadFileOperation.OnRenameListener {
 
     private static final String TAG = FileUploader.class.getSimpleName();
 
     private static final String UPLOADS_ADDED_MESSAGE = "UPLOADS_ADDED";
     private static final String UPLOAD_START_MESSAGE = "UPLOAD_START";
     private static final String UPLOAD_FINISH_MESSAGE = "UPLOAD_FINISH";
-    public static final String EXTRA_UPLOAD_RESULT = "RESULT";
-    public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
-    public static final String EXTRA_OLD_REMOTE_PATH = "OLD_REMOTE_PATH";
-    public static final String EXTRA_OLD_FILE_PATH = "OLD_FILE_PATH";
-    public static final String EXTRA_LINKED_TO_PATH = "LINKED_TO";
-    public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
 
-    public static final String KEY_FILE = "FILE";
-    public static final String KEY_LOCAL_FILE = "LOCAL_FILE";
-    public static final String KEY_REMOTE_FILE = "REMOTE_FILE";
-    public static final String KEY_MIME_TYPE = "MIME_TYPE";
+    protected static final String KEY_FILE = "FILE";
+    protected static final String KEY_LOCAL_FILE = "LOCAL_FILE";
+    protected static final String KEY_REMOTE_FILE = "REMOTE_FILE";
+    protected static final String KEY_MIME_TYPE = "MIME_TYPE";
 
     /**
      * Call this Service with only this Intent key if all pending uploads are to be retried.
      */
-    private static final String KEY_RETRY = "KEY_RETRY";
+    protected static final String KEY_RETRY = "KEY_RETRY";
 //    /**
 //     * Call this Service with KEY_RETRY and KEY_RETRY_REMOTE_PATH to retry
 //     * upload of file identified by KEY_RETRY_REMOTE_PATH.
@@ -119,30 +114,30 @@ public class FileUploader extends Service
      * Call this Service with KEY_RETRY and KEY_RETRY_UPLOAD to retry
      * upload of file identified by KEY_RETRY_UPLOAD.
      */
-    private static final String KEY_RETRY_UPLOAD = "KEY_RETRY_UPLOAD";
+    protected static final String KEY_RETRY_UPLOAD = "KEY_RETRY_UPLOAD";
     /**
      * {@link Account} to which file is to be uploaded.
      */
-    public static final String KEY_ACCOUNT = "ACCOUNT";
+    protected static final String KEY_ACCOUNT = "ACCOUNT";
 
     /**
      * Set to true if remote file is to be overwritten. Default action is to upload with different name.
      */
-    public static final String KEY_FORCE_OVERWRITE = "KEY_FORCE_OVERWRITE";
+    protected static final String KEY_FORCE_OVERWRITE = "KEY_FORCE_OVERWRITE";
     /**
      * Set to true if remote folder is to be created if it does not exist.
      */
-    public static final String KEY_CREATE_REMOTE_FOLDER = "CREATE_REMOTE_FOLDER";
+    protected static final String KEY_CREATE_REMOTE_FOLDER = "CREATE_REMOTE_FOLDER";
     /**
      * Key to signal what is the origin of the upload request
      */
-    public static final String KEY_CREATED_BY = "CREATED_BY";
+    protected static final String KEY_CREATED_BY = "CREATED_BY";
     /**
      * Set to true if upload is to performed only when phone is being charged.
      */
-    public static final String KEY_WHILE_CHARGING_ONLY = "KEY_WHILE_CHARGING_ONLY";
+    protected static final String KEY_WHILE_CHARGING_ONLY = "KEY_WHILE_CHARGING_ONLY";
 
-    public static final String KEY_LOCAL_BEHAVIOUR = "BEHAVIOUR";
+    protected static final String KEY_LOCAL_BEHAVIOUR = "BEHAVIOUR";
 
     public static final int LOCAL_BEHAVIOUR_COPY = 0;
     public static final int LOCAL_BEHAVIOUR_MOVE = 1;
@@ -188,143 +183,7 @@ public class FileUploader extends Service
     }
 
 
-    /**
-     * Helper class providing methods to ease requesting commands to {@link FileUploader} .
-     *
-     * Avoids the need of checking once and again what extras are needed or optional
-     * in the {@link Intent} to pass to {@link Context#startService(Intent)}.
-     */
     public static class UploadRequester {
-
-        /**
-         * Call to upload several new files
-         */
-        public void uploadNewFile(
-                Context context,
-                Account account,
-                String[] localPaths,
-                String[] remotePaths,
-                String[] mimeTypes,
-                Integer behaviour,
-                Boolean createRemoteFolder,
-                int createdBy
-        ) {
-            Intent intent = new Intent(context, FileUploader.class);
-
-            intent.putExtra(FileUploader.KEY_ACCOUNT, account);
-            intent.putExtra(FileUploader.KEY_LOCAL_FILE, localPaths);
-            intent.putExtra(FileUploader.KEY_REMOTE_FILE, remotePaths);
-            intent.putExtra(FileUploader.KEY_MIME_TYPE, mimeTypes);
-            intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
-            intent.putExtra(FileUploader.KEY_CREATE_REMOTE_FOLDER, createRemoteFolder);
-            intent.putExtra(FileUploader.KEY_CREATED_BY, createdBy);
-
-            context.startService(intent);
-        }
-
-        /**
-         * Call to upload a new single file
-         */
-        public void uploadNewFile(Context context, Account account, String localPath, String remotePath, int
-                behaviour, String mimeType, boolean createRemoteFile, int createdBy) {
-
-            uploadNewFile(
-                context,
-                account,
-                new String[]{localPath},
-                new String[]{remotePath},
-                new String[]{mimeType},
-                behaviour,
-                createRemoteFile,
-                createdBy
-            );
-        }
-
-        /**
-         * Call to update multiple files already uploaded
-         */
-        public void uploadUpdate(Context context, Account account, OCFile[] existingFiles, Integer behaviour,
-                                        Boolean forceOverwrite) {
-            Intent intent = new Intent(context, FileUploader.class);
-
-            intent.putExtra(FileUploader.KEY_ACCOUNT, account);
-            intent.putExtra(FileUploader.KEY_FILE, existingFiles);
-            intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
-            intent.putExtra(FileUploader.KEY_FORCE_OVERWRITE, forceOverwrite);
-
-            context.startService(intent);
-        }
-
-        /**
-         * Call to update a dingle file already uploaded
-         */
-        public void uploadUpdate(Context context, Account account, OCFile existingFile, Integer behaviour,
-                                        Boolean forceOverwrite) {
-
-            uploadUpdate(context, account, new OCFile[]{existingFile}, behaviour, forceOverwrite);
-        }
-
-
-        /**
-         * Call to retry upload identified by remotePath
-         */
-        public void retry (Context context, OCUpload upload) {
-            if (upload != null && context != null) {
-                Account account = AccountUtils.getOwnCloudAccountByName(
-                    context,
-                    upload.getAccountName()
-                );
-                retry(context, account, upload);
-
-            } else {
-                throw new IllegalArgumentException("Null parameter!");
-            }
-        }
-
-
-        /**
-         * Retry a subset of all the stored failed uploads.
-         *
-         * @param context           Caller {@link Context}
-         * @param account           If not null, only failed uploads to this OC account will be retried; otherwise,
-         *                          uploads of all accounts will be retried.
-         * @param uploadResult      If not null, only failed uploads with the result specified will be retried;
-         *                          otherwise, failed uploads due to any result will be retried.
-         */
-        public void retryFailedUploads(Context context, Account account, UploadResult uploadResult) {
-            UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(context.getContentResolver());
-            OCUpload[] failedUploads = uploadsStorageManager.getFailedUploads();
-            Account currentAccount = null;
-            boolean resultMatch, accountMatch;
-            for ( OCUpload failedUpload: failedUploads) {
-                accountMatch = (account == null || account.name.equals(failedUpload.getAccountName()));
-                resultMatch = (uploadResult == null || uploadResult.equals(failedUpload.getLastResult()));
-                if (accountMatch && resultMatch) {
-                    if (currentAccount == null ||
-                            !currentAccount.name.equals(failedUpload.getAccountName())) {
-                        currentAccount = failedUpload.getAccount(context);
-                    }
-                    retry(context, currentAccount, failedUpload);
-                }
-            }
-        }
-
-        /**
-         * Private implementation of retry.
-         *
-         * @param context
-         * @param account
-         * @param upload
-         */
-        private void retry(Context context, Account account, OCUpload upload) {
-            if (upload != null) {
-                Intent i = new Intent(context, FileUploader.class);
-                i.putExtra(FileUploader.KEY_RETRY, true);
-                i.putExtra(FileUploader.KEY_ACCOUNT, account);
-                i.putExtra(FileUploader.KEY_RETRY_UPLOAD, upload);
-                context.startService(i);
-            }
-        }
 
     }
 
@@ -838,7 +697,7 @@ public class FileUploader extends Service
     /**
      * Upload worker. Performs the pending uploads in the order they were
      * requested.
-     * <p/>
+     *
      * Created with the Looper of a new thread, started in
      * {@link FileUploader#onCreate()}.
      */
@@ -882,8 +741,11 @@ public class FileUploader extends Service
 
             /// Check account existence
             if (!AccountUtils.exists(mCurrentUpload.getAccount(), this)) {
-                Log_OC.w(TAG, "Account " + mCurrentUpload.getAccount().name +
-                        " does not exist anymore -> cancelling all its uploads");
+                Log_OC.w(
+                    TAG,
+                    "Account " + mCurrentUpload.getAccount().name +
+                    " does not exist anymore -> cancelling all its uploads"
+                );
                 cancelUploadsForAccount(mCurrentUpload.getAccount());
                 return;
             }
@@ -899,7 +761,8 @@ public class FileUploader extends Service
 
             try {
                 /// prepare client object to send the request to the ownCloud server
-                if (mCurrentAccount == null || !mCurrentAccount.equals(mCurrentUpload.getAccount())) {
+                if (mCurrentAccount == null ||
+                        !mCurrentAccount.equals(mCurrentUpload.getAccount())) {
                     mCurrentAccount = mCurrentUpload.getAccount();
                     mStorageManager = new FileDataStorageManager(
                             mCurrentAccount,
@@ -907,7 +770,7 @@ public class FileUploader extends Service
                     );
                 }   // else, reuse storage manager from previous operation
 
-                // always get client from client manager, to get fresh credentials in case of update
+                // always get client from client manager to get fresh credentials in case of update
                 OwnCloudAccount ocAccount = new OwnCloudAccount(
                         mCurrentAccount,
                         this
@@ -939,6 +802,45 @@ public class FileUploader extends Service
                     );
                 }
 
+                if (!uploadResult.isSuccess() && uploadResult.getException() != null) {
+
+                    // if failed due to lack of connectivity, schedule an automatic retry
+                    TransferRequester requester = new TransferRequester();
+                    if (requester.shouldScheduleRetry(this, uploadResult.getException())) {
+                        int jobId = mPendingUploads.buildKey(
+                            mCurrentAccount.name,
+                            mCurrentUpload.getRemotePath()
+                        ).hashCode();
+                        requester.scheduleUpload(
+                            this,
+                            jobId,
+                            mCurrentAccount.name,
+                            mCurrentUpload.getRemotePath()
+                        );
+                        uploadResult = new RemoteOperationResult(
+                            ResultCode.NO_NETWORK_CONNECTION
+                        );
+                    } else {
+                        Log_OC.v(
+                            TAG,
+                            String.format(
+                                "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
+                                mCurrentUpload.getRemotePath(),
+                                mCurrentAccount.name
+                            )
+                        );
+                    }
+                } else {
+                    Log_OC.v(
+                        TAG,
+                        String.format(
+                            "Success OR fail without exception for %1s in %2s",
+                            mCurrentUpload.getRemotePath(),
+                            mCurrentAccount.name
+                        )
+                    );
+                }
+
                 mUploadsStorageManager.updateDatabaseUploadResult(uploadResult, mCurrentUpload);
 
                 /// notify result
@@ -951,7 +853,6 @@ public class FileUploader extends Service
         }
 
     }
-
 
     /**
      * Creates a status notification to show the upload progress
@@ -1118,9 +1019,9 @@ public class FileUploader extends Service
             UploadFileOperation upload) {
 
         Intent start = new Intent(getUploadStartMessage());
-        start.putExtra(EXTRA_REMOTE_PATH, upload.getRemotePath()); // real remote
-        start.putExtra(EXTRA_OLD_FILE_PATH, upload.getOriginalStoragePath());
-        start.putExtra(ACCOUNT_NAME, upload.getAccount().name);
+        start.putExtra(Extras.EXTRA_REMOTE_PATH, upload.getRemotePath()); // real remote
+        start.putExtra(Extras.EXTRA_OLD_FILE_PATH, upload.getOriginalStoragePath());
+        start.putExtra(Extras.EXTRA_ACCOUNT_NAME, upload.getAccount().name);
 
         sendStickyBroadcast(start);
     }
@@ -1141,19 +1042,19 @@ public class FileUploader extends Service
             String unlinkedFromRemotePath) {
 
         Intent end = new Intent(getUploadFinishMessage());
-        end.putExtra(EXTRA_REMOTE_PATH, upload.getRemotePath()); // real remote
+        end.putExtra(Extras.EXTRA_REMOTE_PATH, upload.getRemotePath()); // real remote
         // path, after
         // possible
         // automatic
         // renaming
         if (upload.wasRenamed()) {
-            end.putExtra(EXTRA_OLD_REMOTE_PATH, upload.getOldFile().getRemotePath());
+            end.putExtra(Extras.EXTRA_OLD_REMOTE_PATH, upload.getOldFile().getRemotePath());
         }
-        end.putExtra(EXTRA_OLD_FILE_PATH, upload.getOriginalStoragePath());
-        end.putExtra(ACCOUNT_NAME, upload.getAccount().name);
-        end.putExtra(EXTRA_UPLOAD_RESULT, uploadResult.isSuccess());
+        end.putExtra(Extras.EXTRA_OLD_FILE_PATH, upload.getOriginalStoragePath());
+        end.putExtra(Extras.EXTRA_ACCOUNT_NAME, upload.getAccount().name);
+        end.putExtra(Extras.EXTRA_UPLOAD_RESULT, uploadResult.isSuccess());
         if (unlinkedFromRemotePath != null) {
-            end.putExtra(EXTRA_LINKED_TO_PATH, unlinkedFromRemotePath);
+            end.putExtra(Extras.EXTRA_LINKED_TO_PATH, unlinkedFromRemotePath);
         }
 
         sendStickyBroadcast(end);
