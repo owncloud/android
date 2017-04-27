@@ -749,11 +749,13 @@ public class ShareFileFragment extends Fragment
      * @param view
      */
     private void hideNotEnabledShareSections(View view) {
-        LinearLayout shareWithUsersSection = (LinearLayout) view.findViewById(R.id.shareWithUsersSection);
-        LinearLayout shareViaLinkSection = (LinearLayout) view.findViewById(R.id.shareViaLinkSection);
+        View shareWithUsersSection = view.findViewById(R.id.shareWithUsersSection);
+        View shareViaLinkSection = view.findViewById(R.id.shareViaLinkSection);
+        View warningAboutPerilsOfSharingPublicStuff = view.findViewById(R.id.shareWarning);
 
         boolean shareViaLinkAllowed = getActivity().getResources().getBoolean(R.bool.share_via_link_feature);
         boolean shareWithUsersAllowed = getActivity().getResources().getBoolean(R.bool.share_with_users_feature);
+        boolean shareWarningAllowed = getActivity().getResources().getBoolean(R.bool.warning_sharing_public_link);
 
         // Hide share via link section if it is not enabled
         if (!shareViaLinkAllowed) {
@@ -763,6 +765,11 @@ public class ShareFileFragment extends Fragment
         // Hide share with users section if it is not enabled
         if (!shareWithUsersAllowed) {
             shareWithUsersSection.setVisibility(View.GONE);
+        }
+
+        // Hide warning about public links if not enabled
+        if (!shareWarningAllowed) {
+            warningAboutPerilsOfSharingPublicStuff.setVisibility(View.GONE);
         }
     }
 
