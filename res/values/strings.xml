@@ -492,6 +492,7 @@
     <string name="error_no_network_connection">Device is not connected to a network</string>
     <string name="share_no_public_links">No public links created yet</string>
     <string name="share_no_link_in_this_share">This share has no link</string>
+    <string name="share_warning_about_forwarding_public_links">If you share these links the recipient may forward them to anyone on the Internet.</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
