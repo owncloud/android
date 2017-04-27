@@ -42,15 +42,15 @@ import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
-public class AddPublicLinkFragment extends DialogFragment {
+public class PublicShareDialogFragment extends DialogFragment {
 
     /**
      * The fragment initialization parameters
      */
     private static final String ARG_FILE = "FILE";
+    private static final String ARG_SHARE = "SHARE";
 
     /**
      * File to share, received as a parameter in construction time
@@ -58,32 +58,70 @@ public class AddPublicLinkFragment extends DialogFragment {
     private OCFile mFile;
 
     /**
+     * Existing share to update. If NULL, the dialog will create a new share for mFile.
+     */
+    private OCShare mPublicShare;
+
+    /**
      * Capabilities of the server
      */
     private OCCapability mCapabilities;
 
     /**
-     * Create a new instance of AddPublicLinkFragment, providing fileToShare
+     * Create a new instance of PublicShareDialogFragment, providing fileToShare
      * as an argument.
+     *
+     * Dialog shown this way is intended to CREATE a new public share.
+     *
+     * @param   fileToShare     File to share with a new public share.
      */
-    public static AddPublicLinkFragment newInstance(OCFile fileToShare) {
-
-        AddPublicLinkFragment addPublicLinkFragment = new AddPublicLinkFragment();
+    public static PublicShareDialogFragment newInstanceToCreate(OCFile fileToShare) {
+        PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, fileToShare);
-        addPublicLinkFragment.setArguments(args);
-        return addPublicLinkFragment;
+        publicShareDialogFragment.setArguments(args);
+        return publicShareDialogFragment;
+    }
+
+    /**
+     * Create a new instance of PublicShareDialogFragment, providing publicShare
+     * as an argument.
+     *
+     * Dialog shown this way is intended to UPDATE an existing public share.
+     *
+     * @param   publicShare           Public share to update.
+     */
+    public static PublicShareDialogFragment newInstanceToUpdate(OCShare publicShare) {
+        PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_SHARE, publicShare);
+        publicShareDialogFragment.setArguments(args);
+        return publicShareDialogFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mFile = getArguments().getParcelable(ARG_FILE);
+        mFile = getArguments().getParcelable(ARG_FILE);
+        mPublicShare = getArguments().getParcelable(ARG_SHARE);
+
+        if (mFile == null && mPublicShare == null) {
+            throw new IllegalStateException("Both ARG_FILE and ARG_SHARE cannot be NULL");
         }
 
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+    }
+
+    private boolean updating() {
+        return (mPublicShare != null);
+    }
+
+    private boolean isSharedFolder() {
+        return (
+            (mFile != null && mFile.isFolder()) ||
+            (mPublicShare != null && mPublicShare.isFolder())
+        );
     }
 
     @Override
@@ -96,7 +134,7 @@ public class AddPublicLinkFragment extends DialogFragment {
                 findViewById(R.id.shareViaLinkEditPermissionSection);
 
         // Show or hide edit permission section
-        if (mFile.isFolder()) {
+        if (isSharedFolder()){
             editPermissionSection.setVisibility(View.VISIBLE);
         } else {
             editPermissionSection.setVisibility(View.GONE);
@@ -110,6 +148,9 @@ public class AddPublicLinkFragment extends DialogFragment {
 
         // Confirm add public link
         Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
+        if (updating()) {
+            confirmAddPublicLinkButton.setText(R.string.common_ok);
+        }
 
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
