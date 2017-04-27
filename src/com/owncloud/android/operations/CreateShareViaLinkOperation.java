@@ -130,19 +130,21 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         RemoteOperation operation = new GetRemoteSharesForFileOperation(mPath, false, false);
         RemoteOperationResult result = operation.execute(client);
 
+        // TO DO - Check using capabilities
         // Create public link if doesn't exist yet
-        boolean publicShareExists = false;
-        if (result.isSuccess()) {
-            OCShare share;
-            for (int i = 0; i < result.getData().size(); i++) {
-                share = (OCShare) result.getData().get(i);
-                if (ShareType.PUBLIC_LINK.equals(share.getShareType())) {
-                    publicShareExists = true;
-                    break;
-                }
-            }
-        }
-        if (!publicShareExists) {
+//        boolean publicShareExists = false;
+//        if (result.isSuccess()) {
+//            OCShare share;
+//            for (int i = 0; i < result.getData().size(); i++) {
+//                share = (OCShare) result.getData().get(i);
+//                if (ShareType.PUBLIC_LINK.equals(share.getShareType())) {
+//                    publicShareExists = true;
+//                    break;
+//                }
+//            }
+//        }
+
+//        if (!publicShareExists) {
             CreateRemoteShareOperation createOp = new CreateRemoteShareOperation(
                     mPath,
                     ShareType.PUBLIC_LINK,
@@ -155,7 +157,7 @@ public class CreateShareViaLinkOperation extends SyncOperation {
             createOp.setName(mName);
             createOp.setExpirationDate(mExpirationDateInMillis);
             result = createOp.execute(client);
-        }
+//        }
 
         if (result.isSuccess()) {
             if (result.getData().size() > 0) {
