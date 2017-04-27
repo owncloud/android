@@ -176,11 +176,8 @@
   <string name="auth_account_not_new">الحساب لنفس المستخدم والخادم موجود مسبقا على الجهاز </string>
   <string name="auth_account_not_the_same">المستخدم المدخل لا يتوافق مع المستخدم الموجود في الحساب </string>
   <string name="auth_unknown_error_title">حدث خطأ غير معروف !</string>
-  <string name="auth_unknown_host_title">فشل في العثور على المضيف</string>
   <string name="auth_incorrect_path_title">لم يتم إيجاد الخادم</string>
-  <string name="auth_timeout_title">الخادم أخذ كثيرا من الوقت للرد</string>
   <string name="auth_ssl_general_error_title">فشل في تهيئة SSL</string>
-  <string name="auth_ssl_unverified_server_title">لا يمكن التحقق من هوية خادم SSL</string>
   <string name="auth_bad_oc_version_title">إصدار الخادم غير معروف</string>
   <string name="auth_wrong_connection_title">لم ينجح الاتصال</string>
   <string name="auth_secure_connection">نجح الاتصال آمن</string>
@@ -258,9 +255,7 @@
   <string name="clipboard_text_copied">تم النسخ للحافظة</string>
   <string name="error_cant_bind_to_operations_service">خطأ حرج: لا يمكن تنفيذ العمليات</string>
   <string name="network_error_socket_exception">حدث خطأ أثناء الإتصال مع الخادم.</string>
-  <string name="network_error_socket_timeout_exception">حدث خطأ أثناء إنتظار الخادم، لم يكن من الممكن القيام بالعملية</string>
-  <string name="network_error_connect_timeout_exception">حدث خطأ أثناء إنتظار الخادم، لم يكن من الممكن القيام بالعملية</string>
-  <string name="network_host_not_available">تعذر إكمال العملية، الخادم غير متوفر</string>
+  <string name="network_error_socket_timeout_exception">الخادم أخذ كثيرا من الوقت للرد</string>
   <string name="prefs_category_accounts">حسابات</string>
   <string name="drawer_manage_accounts">إدارة الحسابات</string>
   <string name="actionbar_logger">سجل</string>

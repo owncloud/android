@@ -155,11 +155,8 @@ Descárgueo de aquí: %2$s</string>
   <string name="auth_account_not_new">Xa existe unha conta do mesmo usuario e servidor neste dispositivo</string>
   <string name="auth_account_not_the_same">O usuario que introduciu non coincide co usuario desta conta</string>
   <string name="auth_unknown_error_title">Produciuse un erro descoñecido!</string>
-  <string name="auth_unknown_host_title">Non foi posíbel atopar a máquina</string>
   <string name="auth_incorrect_path_title">Non se atopou unha instancia do servidor</string>
-  <string name="auth_timeout_title">O servidor tardou de máis en responder</string>
   <string name="auth_ssl_general_error_title">Produciuse un fallo ao preparar o SSL</string>
-  <string name="auth_ssl_unverified_server_title">Non foi posíbel verificar a identidade do servidor SSL</string>
   <string name="auth_bad_oc_version_title">Versión do servidor non recoñecida</string>
   <string name="auth_wrong_connection_title">Non é posíbel estabelecer a conexión</string>
   <string name="auth_secure_connection">Estabeleceuse unha conexión segura</string>
@@ -247,9 +244,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="clipboard_text_copied">Copiado no portapapeis.</string>
   <string name="error_cant_bind_to_operations_service">Produciuse un erro crítico: non é posíbel realizar as operacións</string>
   <string name="network_error_socket_exception">Produciuse un erro mentres conectaba co servidor.</string>
-  <string name="network_error_socket_timeout_exception">Produciuse un erro mentres agardaba polo servidor, a operación non se puido levar a fin</string>
-  <string name="network_error_connect_timeout_exception">Produciuse un erro mentres agardaba polo servidor, a operación non se puido levar a fin</string>
-  <string name="network_host_not_available">A operación non se completou, o servidor non está dispoñíbel</string>
+  <string name="network_error_socket_timeout_exception">O servidor tardou de máis en responder</string>
   <string name="forbidden_permissions">Non ten permisos %s</string>
   <string name="forbidden_permissions_rename">para renomear este ficheiro</string>
   <string name="forbidden_permissions_delete">para eliminar este ficheiro</string>

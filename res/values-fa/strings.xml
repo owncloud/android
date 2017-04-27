@@ -198,12 +198,9 @@
   <string name="auth_account_not_new">یک اکانت با همین نام کاربری و سرور بر روی این دستگاه موجود می‌باشد.</string>
   <string name="auth_account_not_the_same">نام کاربری وارد شده با نام کاربری این اکانت مطابقت ندارد</string>
   <string name="auth_unknown_error_title">خطای نامشخص رخ داده است!</string>
-  <string name="auth_unknown_host_title">میزبان را نمیتواند پیدا نماید.</string>
   <string name="auth_incorrect_path_title">نمونه ی سرور یافت نشد</string>
-  <string name="auth_timeout_title">زمان زیادی برای پاسخ سرور صورت گرفت.</string>
   <string name="auth_incorrect_address_title">فرمت آدرس سرور اشتباه است.</string>
   <string name="auth_ssl_general_error_title">مقداردهی SSL ناموفق بود.</string>
-  <string name="auth_ssl_unverified_server_title">نمی‌توان اصالت SSL سرور را احراز نمود</string>
   <string name="auth_bad_oc_version_title">نسخه ی سرور ناشناخته</string>
   <string name="auth_wrong_connection_title">نمیتوان ارتباط برقرار نمود.</string>
   <string name="auth_secure_connection">ایجاد ارتباط ایمن</string>
@@ -283,7 +280,7 @@
   <string name="activity_chooser_send_file_title">ارسال</string>
   <string name="copy_link">کپی کردن لینک</string>
   <string name="clipboard_text_copied">کپی به کلیپ بورد</string>
-  <string name="network_host_not_available">تکمیل عملیات امکانپذیر نمی باشد، سرور در دسترس نمی باشد</string>
+  <string name="network_error_socket_timeout_exception">زمان زیادی برای پاسخ سرور صورت گرفت.</string>
   <string name="forbidden_permissions">شما دسترسی %s را ندارید</string>
   <string name="forbidden_permissions_rename">برای تغییر نام این فایل</string>
   <string name="forbidden_permissions_delete">برای حذف این فایل</string>

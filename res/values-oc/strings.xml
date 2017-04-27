@@ -191,12 +191,9 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="auth_account_not_new">Un compte pels meteisses utilizaire e servidor existís ja sus aqueste aparelh</string>
   <string name="auth_account_not_the_same">L\'utilizaire entrat correspond pas a l\'utilizaire d\'aqueste compte</string>
   <string name="auth_unknown_error_title">Una error desconeguda s\'es produsida.</string>
-  <string name="auth_unknown_host_title">Impossible de trobar l\'òste</string>
   <string name="auth_incorrect_path_title">Cap d\'instància del servidor es pas estada trobada</string>
-  <string name="auth_timeout_title">Lo servidor a pres tròp de temps a respondre</string>
   <string name="auth_incorrect_address_title">Adreça del servidor pas valabla</string>
   <string name="auth_ssl_general_error_title">Fracàs de l\'inicializacion SSL</string>
-  <string name="auth_ssl_unverified_server_title">Impossible de verificar l\'identitat del servidor SSL</string>
   <string name="auth_bad_oc_version_title">La version del servidor es pas reconeguda</string>
   <string name="auth_wrong_connection_title">Impossible d\'establir la connexion</string>
   <string name="auth_secure_connection">Connexion securizada establida</string>
@@ -283,9 +280,7 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="clipboard_text_copied">Copiat dins lo quichapapièrs</string>
   <string name="error_cant_bind_to_operations_service">Error critica : impossible de realizar d\'operacions</string>
   <string name="network_error_socket_exception">Una error s\'es produita pendent la connexion al servidor.</string>
-  <string name="network_error_socket_timeout_exception">Una error s\'es produita pendent l\'espèra del servidor. L\'operacion a pas pogut èsser efectuada</string>
-  <string name="network_error_connect_timeout_exception">Una error s\'es produita pendent l\'espèra del servidor. L\'operacion a pas pogut èsser efectuada</string>
-  <string name="network_host_not_available">L\'operacion a pas pogut èsser acabada, lo servidor es pas disponible</string>
+  <string name="network_error_socket_timeout_exception">Lo servidor a pres tròp de temps a respondre</string>
   <string name="forbidden_permissions">Avètz pas la permission %s</string>
   <string name="forbidden_permissions_rename">de renomenar aqueste fichièr</string>
   <string name="forbidden_permissions_delete">d’escafar aqueste fichièr</string>

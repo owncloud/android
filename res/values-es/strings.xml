@@ -209,12 +209,9 @@
   <string name="auth_account_not_new">Ya existe una cuenta en este dispositivo con los mismos datos de Usuario y Servidor</string>
   <string name="auth_account_not_the_same">El usuario introducido no concuerda con el usuario de esta cuenta</string>
   <string name="auth_unknown_error_title">Ocurrió un error desconocido</string>
-  <string name="auth_unknown_host_title">Error: no se pudo encontrar el host</string>
   <string name="auth_incorrect_path_title">Instancia de servidor no encontrada</string>
-  <string name="auth_timeout_title">El servidor ha tardado demasiado en responder</string>
   <string name="auth_incorrect_address_title">Formato de dirección del servidor incorrecto</string>
   <string name="auth_ssl_general_error_title">Falló la inicialización SSL</string>
-  <string name="auth_ssl_unverified_server_title">No fue posible verificar la identidad del servidor SSL</string>
   <string name="auth_bad_oc_version_title">No se reconoce  la versión del servidor </string>
   <string name="auth_wrong_connection_title">No se ha podido establecer la conexión</string>
   <string name="auth_secure_connection">Conexión segura establecida</string>
@@ -323,9 +320,7 @@
   <string name="clipboard_label">Texto copiado de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error crítico: no es posible realizar operaciones</string>
   <string name="network_error_socket_exception">Ocurrió un error al conectarse con el servidor.</string>
-  <string name="network_error_socket_timeout_exception">Ocurrió un error al esperar la respuesta del servidor, la operación no se pudo realizar</string>
-  <string name="network_error_connect_timeout_exception">Ocurrió un error al esperar la respuesta del servidor, la operación no se pudo realizar</string>
-  <string name="network_host_not_available">La operación no se pudo completar; el servidor no está disponible</string>
+  <string name="network_error_socket_timeout_exception">El servidor ha tardado demasiado en responder</string>
   <string name="forbidden_permissions">No tiene permiso %s</string>
   <string name="forbidden_permissions_rename">para renombrar este archivo</string>
   <string name="forbidden_permissions_delete">para eliminar este archivo</string>

@@ -55,8 +55,6 @@
   <string name="auth_connection_established">සම්බන්ධතාවක් සාදන ලදී</string>
   <string name="auth_not_configured_title">විකෘතිවු හැඩගැසුමක්</string>
   <string name="auth_unknown_error_title">නොදන්නා දෝෂයක් ඇතිවිය</string>
-  <string name="auth_unknown_host_title">සේවාදායකයා සොයාගත නොහැක</string>
-  <string name="auth_timeout_title">සේවාදායකයා පිළිතුරු දීමට දිගු කාලයක් ගත්තේය</string>
   <string name="auth_ssl_general_error_title">SSL ආරම්භ කිරීම අසාර්ථකයි</string>
   <string name="auth_bad_oc_version_title">හඳුනාගත නොහැකි  අනුවාදයක්</string>
   <string name="auth_wrong_connection_title">සම්බන්ධයක් ඇතිකර ගැනීමට නොහැකි විය</string>
@@ -71,6 +69,7 @@
   <string name="filedisplay_unexpected_bad_get_content">නොසිතු ප්‍රශ්ණයක්; කරුණාකර වෙනත් යෙදුමක් භාවිතා කර ගොනුව තෝරන්න</string>
   <string name="filedisplay_no_file_selected">ගොනුවක් තෝරා නැත</string>
   <string name="ssl_validator_btn_details_hide">සඟවන්න</string>
+  <string name="network_error_socket_timeout_exception">සේවාදායකයා පිළිතුරු දීමට දිගු කාලයක් ගත්තේය</string>
   <string name="prefs_category_accounts">ගිණුම්</string>
   <string name="drawer_manage_accounts">ගිණුම් කළමනාකරනය</string>
   <string name="folder_picker_choose_button_text">තෝරන්න</string>

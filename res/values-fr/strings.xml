@@ -210,12 +210,9 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="auth_account_not_new">Un compte pour les mêmes utilisateur et serveur existe déjà sur cet appareil</string>
   <string name="auth_account_not_the_same">L\'utilisateur entré ne correspond pas à l\'utilisateur de ce compte</string>
   <string name="auth_unknown_error_title">Une erreur inconnue s\'est produite.</string>
-  <string name="auth_unknown_host_title">Impossible de trouver l\'hôte</string>
   <string name="auth_incorrect_path_title">Aucune instance du serveur n\'a été trouvée</string>
-  <string name="auth_timeout_title">Le serveur a pris trop de temps à répondre</string>
   <string name="auth_incorrect_address_title">Adresse du serveur non valable</string>
   <string name="auth_ssl_general_error_title">Échec de l\'initialisation SSL</string>
-  <string name="auth_ssl_unverified_server_title">Impossible de vérifier l\'identité du serveur SSL</string>
   <string name="auth_bad_oc_version_title">La version du serveur n\'est pas reconnue</string>
   <string name="auth_wrong_connection_title">Impossible d\'établir la connexion</string>
   <string name="auth_secure_connection">Connexion sécurisée établie</string>
@@ -323,9 +320,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="clipboard_label">Texte copié depuis %1$s</string>
   <string name="error_cant_bind_to_operations_service">Erreur critique : impossible de réaliser les opérations</string>
   <string name="network_error_socket_exception">Une erreur est survenue pendant la connexion au serveur.</string>
-  <string name="network_error_socket_timeout_exception">Une erreur est survenue pendant l\'attente du serveur. L\'opération n\'a pas pu être effectuée</string>
-  <string name="network_error_connect_timeout_exception">Une erreur est survenue pendant l\'attente du serveur. L\'opération n\'a pas pu être effectuée</string>
-  <string name="network_host_not_available">L\'opération n\'a pas pu être terminée, le serveur n\'est pas disponible</string>
+  <string name="network_error_socket_timeout_exception">Le serveur a pris trop de temps à répondre</string>
   <string name="forbidden_permissions">Vous n\'avez pas la permission %s</string>
   <string name="forbidden_permissions_rename">de renommer ce fichier</string>
   <string name="forbidden_permissions_delete">d’effacer ce fichier</string>

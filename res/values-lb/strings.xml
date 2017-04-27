@@ -185,12 +185,9 @@
   <string name="auth_account_not_new">E Konto fir de selwechte User existéiert schonns fir dest Gerät iwer de Server</string>
   <string name="auth_account_not_the_same">De Benotzer deen aginn gouf stëmmt net mam Benotzer vun dësem Konto iwwerteneen</string>
   <string name="auth_unknown_error_title">Et ass en onbekannte Feeler opgetrueden!</string>
-  <string name="auth_unknown_host_title">Server konnt net fonnt ginn</string>
   <string name="auth_incorrect_path_title">Server-Instanz net fonnt</string>
-  <string name="auth_timeout_title">De Server huet ze laang gebraucht fir ze äntweren</string>
   <string name="auth_incorrect_address_title">Falscht Format vun der Server Adress</string>
   <string name="auth_ssl_general_error_title">SSL-Initialiséierung feelgeschloen</string>
-  <string name="auth_ssl_unverified_server_title">Konnt d\'Identitéit vum SSL-Server net verifizéieren</string>
   <string name="auth_bad_oc_version_title">Onbekannte Server-Versioun</string>
   <string name="auth_wrong_connection_title">Konnt d\'Connectioun net hierstellen</string>
   <string name="auth_secure_connection">Sécher Connectioun hiergestallt</string>
@@ -291,9 +288,7 @@
   <string name="clipboard_label">Den Text vum %1$s ass kopéiert ginn</string>
   <string name="error_cant_bind_to_operations_service">Kritesche Feeler: D\'Operatioune konnten net ausgeféiert ginn</string>
   <string name="network_error_socket_exception">Bei der Connectioun mam Server ass e Feeler opgetrueden.</string>
-  <string name="network_error_socket_timeout_exception">Beim Waarden op de Server ass e Feeler opgetrueden, d\'Operatioun konnt net duerchgeféiert ginn</string>
-  <string name="network_error_connect_timeout_exception">Beim Waarden op de Server ass e Feeler opgetrueden, d\'Operatioun konnt net duerchgeféiert ginn</string>
-  <string name="network_host_not_available">D\'Operatioun konnt net ofgeschloss ginn, de Server ass net disponibel</string>
+  <string name="network_error_socket_timeout_exception">De Server huet ze laang gebraucht fir ze äntweren</string>
   <string name="forbidden_permissions">Du hues keng Berechtegung %s</string>
   <string name="forbidden_permissions_rename">fir dëse Fichier ëmzebenennen</string>
   <string name="forbidden_permissions_delete">fir dëse Fichier ze läschen</string>

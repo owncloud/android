@@ -139,11 +139,8 @@
   <string name="auth_account_not_new">Сметка за истиот корисник и сервер веќе постои на уредот</string>
   <string name="auth_account_not_the_same">Внесениот корисник не се совпаѓа со корисникот на оваа сметка</string>
   <string name="auth_unknown_error_title">Се појави непозната грешка!</string>
-  <string name="auth_unknown_host_title">Не можев да го најдам хостот</string>
   <string name="auth_incorrect_path_title">Серверската инстанца не е пронајдена</string>
-  <string name="auth_timeout_title">На серверот му треба премногу време за да одговори</string>
   <string name="auth_ssl_general_error_title">Неуспешна SSL иницијализација</string>
-  <string name="auth_ssl_unverified_server_title">Не можев да го проверам SSL серверскиот идентитет</string>
   <string name="auth_bad_oc_version_title">Верзијата на серверот не е препознаена</string>
   <string name="auth_wrong_connection_title">Не може да се воспостави конекција</string>
   <string name="auth_secure_connection">Воспоставена е безбедна конекција</string>
@@ -226,9 +223,7 @@
   <string name="clipboard_text_copied">Копирано во клипборд</string>
   <string name="error_cant_bind_to_operations_service">Критична грешка: не можам да ја извршам операцијата</string>
   <string name="network_error_socket_exception">Се случи грешка при конектирање со серверот.</string>
-  <string name="network_error_socket_timeout_exception">Се случи грешка при чекање на на серверот, операцијата не можеше да се изврши</string>
-  <string name="network_error_connect_timeout_exception">Се случи грешка при чекање на на серверот, операцијата не можеше да се изврши</string>
-  <string name="network_host_not_available">Операцијата не можеше да заврши, серверот не е достапен</string>
+  <string name="network_error_socket_timeout_exception">На серверот му треба премногу време за да одговори</string>
   <string name="forbidden_permissions">Немате дозвола %s</string>
   <string name="forbidden_permissions_rename">да ја преименувате датотеката</string>
   <string name="forbidden_permissions_delete">да ја избришете оваа датотека</string>

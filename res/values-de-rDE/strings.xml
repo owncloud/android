@@ -209,12 +209,9 @@
   <string name="auth_account_not_new">Ein Benutzerkonto für den gleichen Benutzer und Server existiert auf diesem Gerät bereits</string>
   <string name="auth_account_not_the_same">Der eingegebene Benutzer passt nicht zu dem Benutzer dieses Benutzerkontos</string>
   <string name="auth_unknown_error_title">Ein unbekannter Fehler ist aufgetreten!</string>
-  <string name="auth_unknown_host_title">Konnte den Host nicht finden.</string>
   <string name="auth_incorrect_path_title">Server-Installation nicht gefunden</string>
-  <string name="auth_timeout_title">Der Server braucht zu lange für eine Antwort.</string>
   <string name="auth_incorrect_address_title">Fehlerhaftes Format Ihrer Serveradresse</string>
   <string name="auth_ssl_general_error_title">SSL-Initialisierung fehlgeschlagen.</string>
-  <string name="auth_ssl_unverified_server_title">SSL-Server-Identität konnte nicht überprüft werden</string>
   <string name="auth_bad_oc_version_title">Unbekannte Server-Version</string>
   <string name="auth_wrong_connection_title">Konnte keine Verbindung aufbauen.</string>
   <string name="auth_secure_connection">Sichere Verbindung hergestellt</string>
@@ -323,9 +320,7 @@
   <string name="clipboard_label">Text von %1$s kopiert</string>
   <string name="error_cant_bind_to_operations_service">Kritischer Fehler: Operationen können nicht ausgeführt werden</string>
   <string name="network_error_socket_exception">Es ist ein Fehler bei der Verbindung mit dem Server aufgetreten.</string>
-  <string name="network_error_socket_timeout_exception">Es ist ein Fehler während des Wartens auf den Server aufgetreten, die Operation kann nicht ausgeführt werden</string>
-  <string name="network_error_connect_timeout_exception">Es ist ein Fehler während des Wartens auf den Server aufgetreten, die Operation kann nicht ausgeführt werden</string>
-  <string name="network_host_not_available">Die Operation kann nicht abgeschlossen werden, der Server ist nicht erreichbar</string>
+  <string name="network_error_socket_timeout_exception">Der Server braucht zu lange für eine Antwort.</string>
   <string name="forbidden_permissions">Sie haben keine Berechtigung %s</string>
   <string name="forbidden_permissions_rename">diese Datei umzubenennen</string>
   <string name="forbidden_permissions_delete">diese Datei zu löschen</string>

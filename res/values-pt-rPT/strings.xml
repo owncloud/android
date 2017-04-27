@@ -209,12 +209,9 @@
   <string name="auth_account_not_new">Uma conta para este utilizador e servidor já existe no dispositivo</string>
   <string name="auth_account_not_the_same">O utilizador que escreveu não coincide com o nome de utilizador desta conta</string>
   <string name="auth_unknown_error_title">Ocorreu um erro desconhecido!</string>
-  <string name="auth_unknown_host_title">Não foi possível encontrar o anfitrião</string>
   <string name="auth_incorrect_path_title">Instância do servidor não encontrada</string>
-  <string name="auth_timeout_title">O servidor demorou muito tempo a responder</string>
   <string name="auth_incorrect_address_title">Formato errado de endereço de servidor</string>
   <string name="auth_ssl_general_error_title">Inicialização de SSL falhou</string>
-  <string name="auth_ssl_unverified_server_title">Não foi possível verificar a identidade do servidor SSL</string>
   <string name="auth_bad_oc_version_title">Versão do servidor não reconhecida</string>
   <string name="auth_wrong_connection_title">Não consegue estabelecer ligação</string>
   <string name="auth_secure_connection">Ligação segura estabelecida</string>
@@ -321,9 +318,7 @@
   <string name="clipboard_label">Texto copiado a partir de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Erro crítico: não é possível executar as operações</string>
   <string name="network_error_socket_exception">Ocorreu um erro durante a ligação ao servidor.</string>
-  <string name="network_error_socket_timeout_exception">Ocorreu um erro durante a ligação ao servidor, não foi possível realizar a operação.</string>
-  <string name="network_error_connect_timeout_exception">Ocorreu um erro durante a ligação ao servidor, não foi possível realizar a operação.</string>
-  <string name="network_host_not_available">A operação não foi concluída, o servidor está inacessível.</string>
+  <string name="network_error_socket_timeout_exception">O servidor demorou muito tempo a responder</string>
   <string name="forbidden_permissions">Não tem permissão %s</string>
   <string name="forbidden_permissions_rename">para renomear este ficheiro</string>
   <string name="forbidden_permissions_delete">para apagar este ficheiro</string>

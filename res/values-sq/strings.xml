@@ -209,12 +209,9 @@
   <string name="auth_account_not_new">Në pajisje ka tashmë një llogari për të njëjtin përdorues dhe shërbyes</string>
   <string name="auth_account_not_the_same">Përdoruesi i dhënë s\’përputhet me përdoruesin e kësaj llogarie</string>
   <string name="auth_unknown_error_title">Ndodhi një gabim i panjohur!</string>
-  <string name="auth_unknown_host_title">S\’u gjet dot strehë</string>
   <string name="auth_incorrect_path_title">S\’u gjet dot instancë shërbyesi</string>
-  <string name="auth_timeout_title">Shërbyesit iu desh shumë kohë për përgjigje</string>
   <string name="auth_incorrect_address_title">Format adrese shërbyesi i gabuar</string>
   <string name="auth_ssl_general_error_title">Gatitja e SSL-së dështoi</string>
-  <string name="auth_ssl_unverified_server_title">S\’u verifikua dot identiteti i shërbyesit SSL</string>
   <string name="auth_bad_oc_version_title">Version i papranuar shërbyesi</string>
   <string name="auth_wrong_connection_title">S\’u vendos dot lidhja</string>
   <string name="auth_secure_connection">U vendos lidhje e sigurt</string>
@@ -321,9 +318,7 @@
   <string name="clipboard_label">Tekst i kopjuar prej %1$s</string>
   <string name="error_cant_bind_to_operations_service">Gabim kritik: nuk mund të kryhen veprime</string>
   <string name="network_error_socket_exception">Ndodhi një gabim teksa po lidhej me shërbyesin.</string>
-  <string name="network_error_socket_timeout_exception">Ndodhi një gabim teksa po pritej për shërbyesin, veprimi s\’u krye dot</string>
-  <string name="network_error_connect_timeout_exception">Ndodhi një gabim teksa po pritej për shërbyesin, veprimi s\’u krye dot</string>
-  <string name="network_host_not_available">Veprimi s\’u plotësua dot, shërbyesi është i pakapshëm</string>
+  <string name="network_error_socket_timeout_exception">Shërbyesit iu desh shumë kohë për përgjigje</string>
   <string name="forbidden_permissions">Nuk keni leje %s</string>
   <string name="forbidden_permissions_rename">për riemërtim të kësaj kartele</string>
   <string name="forbidden_permissions_delete">për fshirje të kësaj kartele</string>

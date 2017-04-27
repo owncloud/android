@@ -209,12 +209,9 @@
   <string name="auth_account_not_new">同じユーザーとサーバーのアカウントがデバイス上にすでに存在します</string>
   <string name="auth_account_not_the_same">入力されたユーザーはこのアカウントのユーザーと一致しません</string>
   <string name="auth_unknown_error_title">不明なエラーに発生しました</string>
-  <string name="auth_unknown_host_title">ホストが見つかりませんでした</string>
   <string name="auth_incorrect_path_title">サーバーのインスタンスが見つかりません</string>
-  <string name="auth_timeout_title">サーバーからの反応がありません</string>
   <string name="auth_incorrect_address_title">サーバーアドレス形式が不正です</string>
   <string name="auth_ssl_general_error_title">SSLの初期化に失敗しました</string>
-  <string name="auth_ssl_unverified_server_title">SSLサーバー識別子を確認できませんでした</string>
   <string name="auth_bad_oc_version_title">認識できないサーバーのバージョンです</string>
   <string name="auth_wrong_connection_title">接続を確立できませんでした</string>
   <string name="auth_secure_connection">暗号化通信を確立しました</string>
@@ -323,9 +320,7 @@
   <string name="clipboard_label">%1$s からテキストをコピー</string>
   <string name="error_cant_bind_to_operations_service">致命的なエラー：操作を実行できません</string>
   <string name="network_error_socket_exception">サーバーへの接続中にエラーが発生しました。</string>
-  <string name="network_error_socket_timeout_exception">サーバーからの応答を待っている間にエラーが発生しました。操作を完了することができません。</string>
-  <string name="network_error_connect_timeout_exception">サーバーからの応答を待っている間にエラーが発生しました。操作を完了することができません。</string>
-  <string name="network_host_not_available">操作を完了することができません。サーバーが利用できません。</string>
+  <string name="network_error_socket_timeout_exception">サーバーからの反応がありません</string>
   <string name="forbidden_permissions">権限 %s がありません</string>
   <string name="forbidden_permissions_rename">ファイル名の変更</string>
   <string name="forbidden_permissions_delete">ファイルを削除</string>

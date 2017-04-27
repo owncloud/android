@@ -206,12 +206,9 @@
   <string name="auth_account_not_new">Esiste già un account su questo dispositivo per lo stesso utente e server</string>
   <string name="auth_account_not_the_same">L\'utente digitato non corrisponde all\'utente di questo account</string>
   <string name="auth_unknown_error_title">Errore sconosciuto</string>
-  <string name="auth_unknown_host_title">Impossibile trovare l\'host</string>
   <string name="auth_incorrect_path_title">Istanza del server non trovata</string>
-  <string name="auth_timeout_title">Il server ha richiesto troppo tempo per rispondere</string>
   <string name="auth_incorrect_address_title">Formato indirizzo del server errato</string>
   <string name="auth_ssl_general_error_title">Inizializzazione  SSL non riuscita</string>
-  <string name="auth_ssl_unverified_server_title">Impossibile verificare l\'identità SSL del server</string>
   <string name="auth_bad_oc_version_title">Versione del server il server non riconosciuta</string>
   <string name="auth_wrong_connection_title">Impossibile stabilire la connessione</string>
   <string name="auth_secure_connection">Connessione sicura stabilita</string>
@@ -320,9 +317,7 @@
   <string name="clipboard_label">Testo copiato da %1$s</string>
   <string name="error_cant_bind_to_operations_service">Errore grave: impossibile eseguire le operazioni</string>
   <string name="network_error_socket_exception">Si è verificato un errore durante la connessione al server.</string>
-  <string name="network_error_socket_timeout_exception">Si è verificato un errore in attesa della risposta del server, l\'operazione non è stata completata</string>
-  <string name="network_error_connect_timeout_exception">Si è verificato un errore in attesa della risposta del server, l\'operazione non è stata completata</string>
-  <string name="network_host_not_available">L\'operazione non è stata completata, il server non è disponibile</string>
+  <string name="network_error_socket_timeout_exception">Il server ha richiesto troppo tempo per rispondere</string>
   <string name="forbidden_permissions">Non hai i permessi %s</string>
   <string name="forbidden_permissions_rename">per rinominare questo file</string>
   <string name="forbidden_permissions_delete">per eliminare questo file</string>

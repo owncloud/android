@@ -202,12 +202,9 @@
   <string name="auth_account_not_new">Профил за същия потребител на същия сървър е вече настроен на устройството.</string>
   <string name="auth_account_not_the_same">Въведният потребител не съвпада с потребителя на профила.</string>
   <string name="auth_unknown_error_title">Неизвестна грешка!</string>
-  <string name="auth_unknown_host_title">Неуспешно намиране на сървъра.</string>
   <string name="auth_incorrect_path_title">Сървърът не е открит.</string>
-  <string name="auth_timeout_title">Сървърът се забави прекалено много с отговора.</string>
   <string name="auth_incorrect_address_title">Грешен формат адрес на сървъра</string>
   <string name="auth_ssl_general_error_title">Неуспешна инициализация на SSL.</string>
-  <string name="auth_ssl_unverified_server_title">Неуспешна проверка на SSL самоличността на сървъра.</string>
   <string name="auth_bad_oc_version_title">Неизвестна версия на сървъра.</string>
   <string name="auth_wrong_connection_title">Неуспешно осъществяване на връзка</string>
   <string name="auth_secure_connection">Осъществена сигурна връзка.</string>
@@ -316,9 +313,7 @@
   <string name="clipboard_label">Текста е копиран от %1$s</string>
   <string name="error_cant_bind_to_operations_service">Критична грешка: не може да изпълни операциите</string>
   <string name="network_error_socket_exception">Настъпи грешка при свързването със сървъра.</string>
-  <string name="network_error_socket_timeout_exception">Настъпи грешка при свързването със сървъра, операцията не е изпълнена.</string>
-  <string name="network_error_connect_timeout_exception">Настъпи грешка при свързването със сървъра, операцията не е изпълнена.</string>
-  <string name="network_host_not_available">Неуспешно завършена операция, сървърът не е достъпен.</string>
+  <string name="network_error_socket_timeout_exception">Сървърът се забави прекалено много с отговора.</string>
   <string name="forbidden_permissions">Нямате разрешен достъп до %s</string>
   <string name="forbidden_permissions_rename">за преименуване на този файл</string>
   <string name="forbidden_permissions_delete">за изтриване на този файл</string>

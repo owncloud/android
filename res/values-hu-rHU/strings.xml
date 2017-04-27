@@ -161,11 +161,8 @@
   <string name="auth_account_not_new">Egy bejelentkezési beállítás már létezik ugyanehhez a kiszolgálóhoz és felhasználóhoz</string>
   <string name="auth_account_not_the_same">A megadott felhasználó nem azonos ezzel a belépési jogosultsággal</string>
   <string name="auth_unknown_error_title">Ismeretlen hiba történt!</string>
-  <string name="auth_unknown_host_title">A kiszolgáló nem található</string>
   <string name="auth_incorrect_path_title">Kiszolgáló nem található</string>
-  <string name="auth_timeout_title">A kiszolgáló túl sokára válaszolt</string>
   <string name="auth_ssl_general_error_title">Nem sikerült az SSL kapcsolat felépítése</string>
-  <string name="auth_ssl_unverified_server_title">Az SSL kiszolgáló tanúsítványát nem sikerült ellenőrizni</string>
   <string name="auth_bad_oc_version_title">Ismeretlen változat a kiszolgálón</string>
   <string name="auth_wrong_connection_title">A kapcsolat nem hozható létre</string>
   <string name="auth_secure_connection">Létrejött a titkosított kapcsolat</string>
@@ -241,6 +238,7 @@
   <string name="activity_chooser_send_file_title">Küldjük el</string>
   <string name="copy_link">Link másolása</string>
   <string name="clipboard_text_copied">Bemásolva a vágólapra</string>
+  <string name="network_error_socket_timeout_exception">A kiszolgáló túl sokára válaszolt</string>
   <string name="forbidden_permissions_rename">átnevezni ezt a fájlt</string>
   <string name="forbidden_permissions_delete">törölni ezt a fájlt</string>
   <string name="share_link_forbidden_permissions">megosztani ezt a fájlt</string>

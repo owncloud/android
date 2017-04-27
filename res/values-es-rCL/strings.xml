@@ -83,11 +83,8 @@
   <string name="auth_connection_established">Conexión establecida</string>
   <string name="auth_not_configured_title">La configuración del servidor está mal formada</string>
   <string name="auth_unknown_error_title">Ocurrió un error desconocido</string>
-  <string name="auth_unknown_host_title">No se puede encontrar el host</string>
   <string name="auth_incorrect_path_title">Instancia del servidor no encontrada</string>
-  <string name="auth_timeout_title">El servidor se demoro mucho en contestar</string>
   <string name="auth_ssl_general_error_title">Inicialización SSL fallida</string>
-  <string name="auth_ssl_unverified_server_title">No se pudo verificar la identidad SSL del servidor</string>
   <string name="auth_bad_oc_version_title">Versión del servidor no reconocida</string>
   <string name="auth_wrong_connection_title">No se pudo establecer la conexión</string>
   <string name="auth_secure_connection">Conexión segura establecida</string>
@@ -131,6 +128,7 @@
   <string name="ssl_validator_label_signature_algorithm">algoritmo</string>
   <string name="conflict_keep_both">Mantener ambos</string>
   <string name="error__upload__local_file_not_copied">%1$s no pudo ser copiado a la carpeta local %2$s</string>
+  <string name="network_error_socket_timeout_exception">El servidor se demoro mucho en contestar</string>
   <string name="prefs_category_accounts">Cuentas</string>
   <string name="folder_picker_choose_button_text">Choose</string>
   <string name="prefs_category_details">detalles</string>

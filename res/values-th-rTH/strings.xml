@@ -209,12 +209,9 @@
   <string name="auth_account_not_new">บัญชีผู้ใช้และเซิร์ฟเวอร์เดียวกันมีอยู่แล้วในเครื่อง</string>
   <string name="auth_account_not_the_same">ป้อนผู้ใช้ไม่ตรงกับบัญชีของผู้ใช้นี้</string>
   <string name="auth_unknown_error_title">เกิดข้อผิดพลาดโดยไม่ทราบสาเหตุ!</string>
-  <string name="auth_unknown_host_title">ไม่พบโฮสต์ที่ต้องการ</string>
   <string name="auth_incorrect_path_title">ไม่พบค่าตัวอย่างเซิร์ฟเวอร์</string>
-  <string name="auth_timeout_title">เซิร์ฟเวอร์ดังกล่าวใช้เวลาตอบสนองนานเกินไป</string>
   <string name="auth_incorrect_address_title">รูปแบบที่อยู่ของเซิร์ฟเวอร์ไม่ถูกต้อง</string>
   <string name="auth_ssl_general_error_title">การเตรียมใช้งาน SSL ล้มเหลว</string>
-  <string name="auth_ssl_unverified_server_title">ไม่สามารถตรวจสอบตัวตนของเซิร์ฟเวอร์ SSL</string>
   <string name="auth_bad_oc_version_title">ไม่รู้จักรุ่นของเซิร์ฟเวอร์</string>
   <string name="auth_wrong_connection_title">ไม่สามารถเชื่อมต่อได้</string>
   <string name="auth_secure_connection">เชื่อมต่อแบบปลอดภัยเสร็จสมบูรณ์</string>
@@ -321,9 +318,7 @@
   <string name="clipboard_label">คัดลอกข้อความจาก %1$s แล้ว</string>
   <string name="error_cant_bind_to_operations_service">ข้อผิดพลาด: ไม่สามารถดำเนินการได้</string>
   <string name="network_error_socket_exception">เกิดข้อผิดพลาดขณะกำลังเชื่อมต่อกับเซิร์ฟเวอร์</string>
-  <string name="network_error_socket_timeout_exception">เกิดข้อผิดพลาดขณะที่รอการดำเนินการจากเซิร์ฟเวอร์</string>
-  <string name="network_error_connect_timeout_exception">เกิดข้อผิดพลาดขณะที่รอการดำเนินการจากเซิร์ฟเวอร์</string>
-  <string name="network_host_not_available">การดำเนินการอาจยังไม่เสร็จสมบูรณ์ เซิร์ฟเวอร์ไม่สามารถใช้งานได้</string>
+  <string name="network_error_socket_timeout_exception">เซิร์ฟเวอร์ดังกล่าวใช้เวลาตอบสนองนานเกินไป</string>
   <string name="forbidden_permissions">คุณไม่ได้รับสิทธิ์ %s</string>
   <string name="forbidden_permissions_rename">เพื่อเปลี่ยนชื่อไฟล์นี้</string>
   <string name="forbidden_permissions_delete">เพื่อลบไฟล์นี้</string>

@@ -207,12 +207,9 @@
   <string name="auth_account_not_new">Aðgangur fyrir sama notanda og sama þjón er þegar fyrir hendi á tækinu</string>
   <string name="auth_account_not_the_same">Notandanafnið sem sett var inn samsvarar ekki notanda þessa aðgangs</string>
   <string name="auth_unknown_error_title">Óþekkt villa kom upp!</string>
-  <string name="auth_unknown_host_title">Fann ekki hýsilvél</string>
   <string name="auth_incorrect_path_title">Tilvik þjóns fannst ekki</string>
-  <string name="auth_timeout_title">Þjónninn var of lengi að svara</string>
   <string name="auth_incorrect_address_title">Rangt snið á vistfangi þjóns</string>
   <string name="auth_ssl_general_error_title">Mistókst að frumstilla SSL</string>
-  <string name="auth_ssl_unverified_server_title">Gat ekki sannreynt auðkenni SSL-þjóns</string>
   <string name="auth_bad_oc_version_title">Óþekkjanleg útgáfa af þjóni</string>
   <string name="auth_wrong_connection_title">Gat ekki komið á tengingu</string>
   <string name="auth_secure_connection">Öruggri tengingu komið á</string>
@@ -321,9 +318,7 @@
   <string name="clipboard_label">Texti afritaður úr %1$s</string>
   <string name="error_cant_bind_to_operations_service">Alvarleg villa: get ekki framkvæmt aðgerðir</string>
   <string name="network_error_socket_exception">Villa kom upp við að tengjast við þjóninn.</string>
-  <string name="network_error_socket_timeout_exception">Villa kom upp á meðan beðið var eftir þjóninum, aðgerðina hefði ekki verið hægt að framkvæma</string>
-  <string name="network_error_connect_timeout_exception">Villa kom upp á meðan beðið var eftir þjóninum, aðgerðina hefði ekki verið hægt að framkvæma</string>
-  <string name="network_host_not_available">Ekki er hægt að ljúka aðgerðinni, þjónninn er ekki tiltækur</string>
+  <string name="network_error_socket_timeout_exception">Þjónninn var of lengi að svara</string>
   <string name="forbidden_permissions">Þú hefur ekki heimild %s</string>
   <string name="forbidden_permissions_rename">til að endurnefna þessa skrá</string>
   <string name="forbidden_permissions_delete">til að eyða þessari skrá</string>

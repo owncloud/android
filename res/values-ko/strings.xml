@@ -192,11 +192,8 @@
   <string name="auth_account_not_new">같은 사용자와 서버에 대한 계정이 이미 존재합니다</string>
   <string name="auth_account_not_the_same">입력된 사용자가 이 계정의 사용자와 일치하지 않습니다</string>
   <string name="auth_unknown_error_title">알 수 없는 오류가 발생하였습니다!</string>
-  <string name="auth_unknown_host_title">호스트를 찾을 수 없음</string>
   <string name="auth_incorrect_path_title">서버 인스턴스를 찾을 수 없음</string>
-  <string name="auth_timeout_title">서버 응답 시간이 초과됨</string>
   <string name="auth_ssl_general_error_title">SSL 초기화 오류</string>
-  <string name="auth_ssl_unverified_server_title">SSL 서버의 신원을 확인할수 없습니다</string>
   <string name="auth_bad_oc_version_title">확인할 수 없는 서버 버전</string>
   <string name="auth_wrong_connection_title">연결을 수립할 수 없음</string>
   <string name="auth_secure_connection">암호화된 연결 사용 중</string>
@@ -287,9 +284,7 @@
   <string name="clipboard_text_copied">클립보드로 복사됨</string>
   <string name="error_cant_bind_to_operations_service">치명적 오류: 작업을 진행할 수 없음</string>
   <string name="network_error_socket_exception">서버에 연결하는 중 오류가 발생하였습니다.</string>
-  <string name="network_error_socket_timeout_exception">서버를 기다리는 중 오류가 발생하였습니다. 작업이 진행되지 않았을 수도 있습니다</string>
-  <string name="network_error_connect_timeout_exception">서버를 기다리는 중 오류가 발생하였습니다. 작업이 진행되지 않았을 수도 있습니다</string>
-  <string name="network_host_not_available">서버를 사용할 수 없어서 작업을 진행할 수 없습니다</string>
+  <string name="network_error_socket_timeout_exception">서버 응답 시간이 초과됨</string>
   <string name="forbidden_permissions">%s 권한이 없습니다</string>
   <string name="forbidden_permissions_rename">이 파일의 이름을 바꿀</string>
   <string name="forbidden_permissions_delete">이 파일을 삭제할</string>

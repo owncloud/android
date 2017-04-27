@@ -104,9 +104,7 @@
   <string name="auth_connection_established">Tilkopling oppretta</string>
   <string name="auth_not_configured_title">Ugyldig tenarkonfigurasjon</string>
   <string name="auth_unknown_error_title">Ein ukjend feil oppstod!</string>
-  <string name="auth_unknown_host_title">Klarte ikkje å finna tenaren</string>
   <string name="auth_incorrect_path_title">Tenarinstans vart ikkje funnen</string>
-  <string name="auth_timeout_title">Tenaren brukte for lang tid på å svara</string>
   <string name="auth_ssl_general_error_title">Feil ved SSL-oppstart</string>
   <string name="auth_wrong_connection_title">Klarte ikkje å oppretta ei tilkopling</string>
   <string name="auth_secure_connection">Trygg tilkopling oppretta</string>
@@ -126,6 +124,7 @@
   <string name="ssl_validator_not_saved">Klarte ikkje å lagra sertifikatet</string>
   <string name="ssl_validator_btn_details_see">Detaljar</string>
   <string name="activity_chooser_send_file_title">Send</string>
+  <string name="network_error_socket_timeout_exception">Tenaren brukte for lang tid på å svara</string>
   <string name="prefs_category_accounts">Kontoar</string>
   <string name="drawer_manage_accounts">Handter kontoar</string>
   <string name="actionbar_logger">Loggar</string>

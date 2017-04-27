@@ -132,11 +132,8 @@ Aşağıda göstərilən %5$s-də olan daxili və xarici fayl(lar) link edilmiş
   <string name="auth_account_not_new">Avadanlıqda eyni istifadəçi və server üçün artıq hesab mövcuddur</string>
   <string name="auth_account_not_the_same">Daxil edilən hesab bu hesabla üst-üstə düşmür</string>
   <string name="auth_unknown_error_title">Yalnış səhv baş verdi!</string>
-  <string name="auth_unknown_host_title">Host-u tapmaq mümkün olmadı</string>
   <string name="auth_incorrect_path_title">Server nüsxəsi tapılmadı</string>
-  <string name="auth_timeout_title">Server cavab üçün çox uzun müddət aldı</string>
   <string name="auth_ssl_general_error_title">SSL inisializasiyası səhvi</string>
-  <string name="auth_ssl_unverified_server_title">SSL serverin şəxsiliyini təyin etmək mümkün olmadı</string>
   <string name="auth_bad_oc_version_title">Təyin edilməyən server versiyası</string>
   <string name="auth_wrong_connection_title">Qoşulma yaratmaq mümkün olmadı</string>
   <string name="auth_secure_connection">Təhlükəsiz qoşulma yaradıldı</string>
@@ -217,9 +214,7 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="clipboard_text_copied">Mübadilə buferinə nüsxələndi</string>
   <string name="error_cant_bind_to_operations_service">Kritik səhv: əməliyyat yerinə yetirilə bilinmir</string>
   <string name="network_error_socket_exception">Serverlə əlaqəyə girdikdə səhv baş verdi.</string>
-  <string name="network_error_socket_timeout_exception">Serveri gözlədiyimiz müddətdə səhv baş verdi, əməliyyat bitə bilməz</string>
-  <string name="network_error_connect_timeout_exception">Serveri gözlədiyimiz müddətdə səhv baş verdi, əməliyyat bitə bilməz</string>
-  <string name="network_host_not_available">Əməliyyat bitə bilməz, serverə çatmaq mümkün deyil </string>
+  <string name="network_error_socket_timeout_exception">Server cavab üçün çox uzun müddət aldı</string>
   <string name="forbidden_permissions">Sizin yetkiniz yoxdur %s</string>
   <string name="forbidden_permissions_rename">faylın adını dəyişmək</string>
   <string name="forbidden_permissions_delete">bu faylı silmək üçün</string>

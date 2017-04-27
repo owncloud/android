@@ -185,11 +185,8 @@
   <string name="auth_account_not_new">Un cont pentru același utilizator și server există deja în dispozitiv</string>
   <string name="auth_account_not_the_same">Utilizatorul introdus nu se potrivește cu utilizatorul acestui cont</string>
   <string name="auth_unknown_error_title">A apărut o eroare necunoscută!</string>
-  <string name="auth_unknown_host_title">Nu a putut gasi host-ul</string>
   <string name="auth_incorrect_path_title">Instanța serverului nu a fost găsită</string>
-  <string name="auth_timeout_title">Server-ului i-a luat prea mult timp sa raspunda</string>
   <string name="auth_ssl_general_error_title">Inițializarea SSL a eșuat</string>
-  <string name="auth_ssl_unverified_server_title">Nu s-a putut verifica identitatea serverului SSL</string>
   <string name="auth_bad_oc_version_title">Versiune necunoscuta a serverului </string>
   <string name="auth_wrong_connection_title">Nu s-a putut stabili conexiunea</string>
   <string name="auth_secure_connection">Conexiune sigură stabilită</string>
@@ -275,9 +272,7 @@
   <string name="clipboard_text_copied">Copiat în clipboard</string>
   <string name="error_cant_bind_to_operations_service">Eroare critică: nu se pot executa operațiunile</string>
   <string name="network_error_socket_exception">A apărut o eroare în timp ce se conecta la server</string>
-  <string name="network_error_socket_timeout_exception">A apărut o eroare în timp ce se aștepta pentru server, operațiunea nu s-a executat</string>
-  <string name="network_error_connect_timeout_exception">A apărut o eroare în timp ce se aștepta pentru server, operațiunea nu s-a executat</string>
-  <string name="network_host_not_available">Operațiunea nu a putut fi finalizată, serverul este indisponibil</string>
+  <string name="network_error_socket_timeout_exception">Server-ului i-a luat prea mult timp sa raspunda</string>
   <string name="forbidden_permissions">Nu aveți permisiune %s</string>
   <string name="forbidden_permissions_rename">pentru a redenumi acest fișier</string>
   <string name="forbidden_permissions_delete">pentru a șterge acest fișier</string>

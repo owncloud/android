@@ -200,12 +200,9 @@
   <string name="auth_account_not_new">已經有相同使用者與伺服器的帳號存在於這個裝置</string>
   <string name="auth_account_not_the_same">輸入的使用者與這個帳戶的使用者不一致</string>
   <string name="auth_unknown_error_title">發生未知的錯誤！</string>
-  <string name="auth_unknown_host_title">找不到伺服器</string>
   <string name="auth_incorrect_path_title">找不到伺服器</string>
-  <string name="auth_timeout_title">伺服器回應逾時</string>
   <string name="auth_incorrect_address_title">伺服器地址格式錯誤</string>
   <string name="auth_ssl_general_error_title">SSL 初始化失敗</string>
-  <string name="auth_ssl_unverified_server_title">無法驗證 SSL 伺服器身份</string>
   <string name="auth_bad_oc_version_title">無法辨識的伺服器版本</string>
   <string name="auth_wrong_connection_title">無法建立連線</string>
   <string name="auth_secure_connection">安全連線已建立</string>
@@ -312,9 +309,7 @@
   <string name="clipboard_label">文字已由 %1$s 複製</string>
   <string name="error_cant_bind_to_operations_service">嚴重錯誤: 無法執行運算</string>
   <string name="network_error_socket_exception">在與伺服器連線時發生了錯誤.</string>
-  <string name="network_error_socket_timeout_exception">在等待伺服器回應時發生了錯誤, 這個操作將無法被完成</string>
-  <string name="network_error_connect_timeout_exception">在等待伺服器回應時發生了錯誤, 這個操作將無法被完成</string>
-  <string name="network_host_not_available">這個操作無法完成, 無法使用伺服器</string>
+  <string name="network_error_socket_timeout_exception">伺服器回應逾時</string>
   <string name="forbidden_permissions">您沒有權限 %s</string>
   <string name="forbidden_permissions_rename">重新命名檔案</string>
   <string name="forbidden_permissions_delete">刪除檔案</string>

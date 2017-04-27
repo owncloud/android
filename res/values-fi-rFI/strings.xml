@@ -195,12 +195,9 @@
   <string name="auth_account_not_new">Laitteella on jo tili samalle käyttäjälle ja palvelimelle</string>
   <string name="auth_account_not_the_same">Syötetty käyttäjä ei täsmää tämän tilin käyttäjän kanssa</string>
   <string name="auth_unknown_error_title">Tuntematon virhe</string>
-  <string name="auth_unknown_host_title">Isäntää ei löydy</string>
   <string name="auth_incorrect_path_title">Palvelin-instanssia ei löydetty</string>
-  <string name="auth_timeout_title">Palvelimen vastaus viipyy liian kauan</string>
   <string name="auth_incorrect_address_title">Palvelimen osoitteen muoto on virheellinen</string>
   <string name="auth_ssl_general_error_title">SSL:n alustus epäonnistui</string>
-  <string name="auth_ssl_unverified_server_title">SSL-palvelimen identiteettiä ei voitu varmistaa</string>
   <string name="auth_bad_oc_version_title">Tuntematon palvelimen versio</string>
   <string name="auth_wrong_connection_title">Yhteyden muodostus epäonnistui</string>
   <string name="auth_secure_connection">Salattu yhteys muodostettu</string>
@@ -303,9 +300,7 @@
   <string name="clipboard_label">Teksti koioitiin kohteesta %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kriittinen virhe: toimintoja ei voi suorittaa</string>
   <string name="network_error_socket_exception">Virhe palvelimeen yhdistäessä</string>
-  <string name="network_error_socket_timeout_exception">Virhe palvelimen vastausta odottaessa, toimintoa ei voitu suorittaa</string>
-  <string name="network_error_connect_timeout_exception">Virhe palvelimen vastausta odottaessa, toimintoa ei voitu suorittaa</string>
-  <string name="network_host_not_available">Toimintoa ei voi suorittaa loppuun, palvelin ei ole käytettävissä</string>
+  <string name="network_error_socket_timeout_exception">Palvelimen vastaus viipyy liian kauan</string>
   <string name="forbidden_permissions">Sinulla ei ole oikeutta %s</string>
   <string name="forbidden_permissions_rename">nimetä tiedostoa uudelleen</string>
   <string name="forbidden_permissions_delete">poistaa tiedostoa</string>

@@ -209,12 +209,9 @@
   <string name="auth_account_not_new">חשבון לאותו משתמש ושרת כבר קיים במכשיר זה</string>
   <string name="auth_account_not_the_same">שם המשתמש שהוכנס לא מתאים לשם המשתמש של חשבון זה</string>
   <string name="auth_unknown_error_title">אירעה שגיאה בלתי ידועה!</string>
-  <string name="auth_unknown_host_title">לא ניתן למצוא את המארח</string>
   <string name="auth_incorrect_path_title">לא נמצא מופע שרת</string>
-  <string name="auth_timeout_title">לשרת לקח יותר מדי זמן להגיב</string>
   <string name="auth_incorrect_address_title">פורמט כתובת שרת שגוי</string>
   <string name="auth_ssl_general_error_title">הפעלת ה־SSL נכשלה</string>
-  <string name="auth_ssl_unverified_server_title">זהות ה- SSL של השרת לא ניתנת לאימות</string>
   <string name="auth_bad_oc_version_title">גרסה השרת אינה מזוהה</string>
   <string name="auth_wrong_connection_title">לא ניתן ליצור את החיבור</string>
   <string name="auth_secure_connection">נוצר חיבור מאובטח</string>
@@ -323,9 +320,7 @@
   <string name="clipboard_label">טקסט הועתק מ- %1$s</string>
   <string name="error_cant_bind_to_operations_service">שגיאה קריטית: לא ניתן לבצע את הפעולות</string>
   <string name="network_error_socket_exception">שגיאה אירעה בזמן חיבור לשרת.</string>
-  <string name="network_error_socket_timeout_exception">שגיאה אירעה בזמן המתנה לשרת, הפעולה לא הייתה ניתנת להשלמה</string>
-  <string name="network_error_connect_timeout_exception">שגיאה אירעה בזמן המתנה לשרת, הפעולה לא הייתה ניתנת להשלמה</string>
-  <string name="network_host_not_available">לא ניתן להשלים את הפעולה, השרת אינו זמין</string>
+  <string name="network_error_socket_timeout_exception">לשרת לקח יותר מדי זמן להגיב</string>
   <string name="forbidden_permissions">אין לך הרשאות %s</string>
   <string name="forbidden_permissions_rename">לשנות שם לקובץ זה</string>
   <string name="forbidden_permissions_delete">למחוק קובץ זה</string>

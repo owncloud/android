@@ -122,6 +122,7 @@
   <string name="uploads_view_group_current_uploads">Trenutno</string>
   <string name="uploads_view_group_failed_uploads">Spodletelo (kliknite za ponovni poskus)</string>
   <string name="uploads_view_group_finished_uploads">Poslano</string>
+  <string name="uploads_view_group_file_count_single">Datoteka %d</string>
   <string name="uploads_view_upload_status_succeeded">Končano</string>
   <string name="uploads_view_upload_status_cancelled">Preklicano</string>
   <string name="uploads_view_upload_status_paused">V premoru</string>
@@ -204,12 +205,9 @@
   <string name="auth_account_not_new">Na napravi račun za istega uporabnika in strežnik že obstaja</string>
   <string name="auth_account_not_the_same">Vpisan uporabnik ni lastnik tega računa</string>
   <string name="auth_unknown_error_title">Prišlo je do neznane napake!</string>
-  <string name="auth_unknown_host_title">Gostitelja ni mogoče najti</string>
   <string name="auth_incorrect_path_title">Primerka strežnika ni mogoče najti</string>
-  <string name="auth_timeout_title">Odziv s strežnika je časovno pretekel</string>
   <string name="auth_incorrect_address_title">Napačen zapis naslova strežnika</string>
   <string name="auth_ssl_general_error_title">Začenjanje SSL je spodletelo</string>
-  <string name="auth_ssl_unverified_server_title">Ni mogoče overiti istovetnosti strežnika SSL</string>
   <string name="auth_bad_oc_version_title">Nepoznana različica strežnika</string>
   <string name="auth_wrong_connection_title">Ni mogoče vzpostaviti povezave</string>
   <string name="auth_secure_connection">Varna povezava je vzpostavljena</string>
@@ -318,9 +316,7 @@
   <string name="clipboard_label">Besedilo je kopirano iz %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritična napaka: opravil ni možno izvesti</string>
   <string name="network_error_socket_exception">Med povezovanjem s strežnikom je prišlo do napake.</string>
-  <string name="network_error_socket_timeout_exception">Med čakanjem na vzpostavitev povezave s strežnikom je prišlo do napake. Zahtevanega dejanja ni mogoče izvesti.</string>
-  <string name="network_error_connect_timeout_exception">Med čakanjem na vzpostavitev povezave s strežnikom je prišlo do napake. Zahtevanega dejanja ni bilo mogoče končati.</string>
-  <string name="network_host_not_available">Zahtevanega dejanja ni bilo mogoče končati. Strežnik ni dosegljiv.</string>
+  <string name="network_error_socket_timeout_exception">Odziv s strežnika je časovno pretekel</string>
   <string name="forbidden_permissions">Ni ustreznega dovoljenja %s</string>
   <string name="forbidden_permissions_rename">za preimenovanje datoteke.</string>
   <string name="forbidden_permissions_delete">za izbris datoteke.</string>

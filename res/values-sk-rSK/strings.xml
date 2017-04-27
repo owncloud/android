@@ -170,11 +170,8 @@
   <string name="auth_account_not_new">Účet pre tohoto používateľa a tento server už v tomto zariadení existuje</string>
   <string name="auth_account_not_the_same">Zadané prihlasovacie údaje používateľa sú nesprávne</string>
   <string name="auth_unknown_error_title">Nastala neznáma chyba!</string>
-  <string name="auth_unknown_host_title">Nemožno nájsť hosta</string>
   <string name="auth_incorrect_path_title">Inštancia servera nebola nájdená</string>
-  <string name="auth_timeout_title">Serveru trvá odpoveď príliš dlho</string>
   <string name="auth_ssl_general_error_title">Inicializácia SSL zlyhala</string>
-  <string name="auth_ssl_unverified_server_title">Nepodarilo sa overiť identitu servera SSL</string>
   <string name="auth_bad_oc_version_title">Nerozpoznaná verzia servera</string>
   <string name="auth_wrong_connection_title">Nie je možne vytvoriť spojenie</string>
   <string name="auth_secure_connection">Vytvorené zabezpečené spojenie</string>
@@ -265,9 +262,7 @@
   <string name="clipboard_text_copied">Skopírované do schránky</string>
   <string name="error_cant_bind_to_operations_service">Kritická chyba: operáciu nemožno vykonať</string>
   <string name="network_error_socket_exception">Pri pokuse o pripojenie na server nastala chyba.</string>
-  <string name="network_error_socket_timeout_exception">Pri čakaní na odpoveď servera nastala chyba, operácia nemohla byť dokončená</string>
-  <string name="network_error_connect_timeout_exception">Pri čakaní na odpoveď servera nastala chyba, operácia nemohla byť dokončená</string>
-  <string name="network_host_not_available">Operácia nemohla byť dokončená, server je nedostupný</string>
+  <string name="network_error_socket_timeout_exception">Serveru trvá odpoveď príliš dlho</string>
   <string name="forbidden_permissions">Nemáte oprávnenie %s</string>
   <string name="forbidden_permissions_rename">premenovať tento súbor</string>
   <string name="forbidden_permissions_delete">zmazať tento súbor</string>

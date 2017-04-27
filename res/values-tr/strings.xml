@@ -200,12 +200,9 @@
   <string name="auth_account_not_new">Cihazda aynı kullanıcı adı ve sunucu için bir hesap zaten mevcut</string>
   <string name="auth_account_not_the_same">Girilen kullanıcı bu hesabın kullanıcısı ile eşleşmiyor</string>
   <string name="auth_unknown_error_title">Bilinmeyen hata oluştu!</string>
-  <string name="auth_unknown_host_title">Ana makine bulunamadı</string>
   <string name="auth_incorrect_path_title">Sunucu örneği bulunamadı</string>
-  <string name="auth_timeout_title">Sunucu çok geç cevap veriyor</string>
   <string name="auth_incorrect_address_title">Yanlış sunucu adresi biçimi</string>
   <string name="auth_ssl_general_error_title">SSL başlatma başarısız</string>
-  <string name="auth_ssl_unverified_server_title">SSL sunucu kimliği doğrulanamadı</string>
   <string name="auth_bad_oc_version_title">Bilinmeyen sunucu sürümü</string>
   <string name="auth_wrong_connection_title">Bağlantı kurulamadı</string>
   <string name="auth_secure_connection">Güvenli bağlantı sağlandı</string>
@@ -311,9 +308,7 @@
   <string name="clipboard_label">%1$s metni kopyalandı</string>
   <string name="error_cant_bind_to_operations_service">Ciddi hata: işlem gerçekleştirilemiyor</string>
   <string name="network_error_socket_exception">Sunucuya bağlanılırken bir hata oluştu.</string>
-  <string name="network_error_socket_timeout_exception">Sunucu beklenirken bir hata oluştu, işlem yapılamadı</string>
-  <string name="network_error_connect_timeout_exception">Sunucu beklenirken bir hata oluştu, işlem yapılamadı</string>
-  <string name="network_host_not_available">İşlem tamamlanamadı, sunucu kullanılamıyor</string>
+  <string name="network_error_socket_timeout_exception">Sunucu çok geç cevap veriyor</string>
   <string name="forbidden_permissions">%s izniniz yok</string>
   <string name="forbidden_permissions_rename">Bu dosyayı adlandırmak için</string>
   <string name="forbidden_permissions_delete">Bu dosyayı silmek için</string>

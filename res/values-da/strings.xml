@@ -201,12 +201,9 @@
   <string name="auth_account_not_new">En konto for den samme bruger og server eksisterer allerede på enheden</string>
   <string name="auth_account_not_the_same">Den indtastede bruger passer ikke til brugeren for denne konto</string>
   <string name="auth_unknown_error_title">Ukendt fejl opstod!</string>
-  <string name="auth_unknown_host_title">Kunne ikke finde værten</string>
   <string name="auth_incorrect_path_title">Server instans blev ikke fundet</string>
-  <string name="auth_timeout_title">Serveren var for længe om at svare</string>
   <string name="auth_incorrect_address_title">Forkert serveradresse-format</string>
   <string name="auth_ssl_general_error_title">SSL-initialiseringen fejlede</string>
-  <string name="auth_ssl_unverified_server_title">Kunne ikke bekræfte SSl-serverens identitet</string>
   <string name="auth_bad_oc_version_title">Ikke genkendt serverversion</string>
   <string name="auth_wrong_connection_title">Kunne ikke oprette forbindelse</string>
   <string name="auth_secure_connection">Sikker forbindelse oprettet</string>
@@ -312,9 +309,7 @@
   <string name="clipboard_label">Tekst kopieret fra %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritisk fejl: kan ikke udføre handlingerne</string>
   <string name="network_error_socket_exception">Der opstod en fejl under tilslutningen til serveren.</string>
-  <string name="network_error_socket_timeout_exception">Der opstod en fejl mens vi ventede på serveren, handlingen kunne ikke gennemføres</string>
-  <string name="network_error_connect_timeout_exception">Der opstod en fejl mens vi ventede på serveren, handlingen kunne ikke gennemføres</string>
-  <string name="network_host_not_available">Handlingen kunne ikke gennemføres, serveren er utilgængelig</string>
+  <string name="network_error_socket_timeout_exception">Serveren var for længe om at svare</string>
   <string name="forbidden_permissions">Du har ikke rettigheden %s</string>
   <string name="forbidden_permissions_rename">til at omdøbe denne fil</string>
   <string name="forbidden_permissions_delete">til at slette denne fil</string>

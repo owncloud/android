@@ -205,12 +205,9 @@
   <string name="auth_account_not_new">En användare med samma namn och server finns redan i denna aparat</string>
   <string name="auth_account_not_the_same">Den angivna användaren matchar inte användaren för detta konto</string>
   <string name="auth_unknown_error_title">Okänt fel inträffade!</string>
-  <string name="auth_unknown_host_title">Kunde inte hitta server</string>
   <string name="auth_incorrect_path_title">Ingen version av server kan hittas</string>
-  <string name="auth_timeout_title">Servern svarar inte</string>
   <string name="auth_incorrect_address_title">Felaktigt server-adressformat</string>
   <string name="auth_ssl_general_error_title">Misslyckad initiering av SSL</string>
-  <string name="auth_ssl_unverified_server_title">Kunde inte identifiera SSL serverns identitet</string>
   <string name="auth_bad_oc_version_title">Okänd server serverversion</string>
   <string name="auth_wrong_connection_title">Kunde inte etablera anslutning</string>
   <string name="auth_secure_connection">Säker anslutning etablerad</string>
@@ -319,9 +316,7 @@
   <string name="clipboard_label">Text kopierad från %1$s</string>
   <string name="error_cant_bind_to_operations_service">Kritiskt fel: kan inte utföra åtgärden</string>
   <string name="network_error_socket_exception">Ett fel uppstod vid anslutning till servern.</string>
-  <string name="network_error_socket_timeout_exception">Ett fel uppstod i väntan på servern, operationen kunde inte ha gjorts</string>
-  <string name="network_error_connect_timeout_exception">Ett fel uppstod i väntan på servern, operationen kunde inte ha gjorts</string>
-  <string name="network_host_not_available">Åtgärden kunte inte slutföras, servern är ej tillgänglig</string>
+  <string name="network_error_socket_timeout_exception">Servern svarar inte</string>
   <string name="forbidden_permissions">Du har inga rättigheter %s</string>
   <string name="forbidden_permissions_rename">att döpa om denna fil</string>
   <string name="forbidden_permissions_delete">att radera denna fil</string>

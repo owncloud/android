@@ -127,9 +127,7 @@
   <string name="auth_testing_connection">Provante konekton</string>
   <string name="auth_not_configured_title">Malĝuste formita servilo-agordo</string>
   <string name="auth_unknown_error_title">Nekonata eraro okazis</string>
-  <string name="auth_unknown_host_title">Ne eblis trovi gastigon</string>
   <string name="auth_incorrect_path_title">Apero de servilo ne troviĝis</string>
-  <string name="auth_timeout_title">La servilo tro malfruis por respondi</string>
   <string name="auth_incorrect_address_title">Malĝusta formo de serviladreso</string>
   <string name="auth_ssl_general_error_title">SSL-ekigo malsukcesis</string>
   <string name="auth_bad_oc_version_title">Nerekonita eldono de servilo</string>
@@ -201,6 +199,7 @@
   <string name="copy_link">Kopii ligilon</string>
   <string name="clipboard_text_copied">Kopiita en la tondejon</string>
   <string name="network_error_socket_exception">Eraro okazis dum konekto al la servilo.</string>
+  <string name="network_error_socket_timeout_exception">La servilo tro malfruis por respondi</string>
   <string name="forbidden_permissions">Vi ne permesatas %s</string>
   <string name="forbidden_permissions_rename">por alinomigi ĉi tiun dosieron</string>
   <string name="forbidden_permissions_delete">por forigi ĉi tiun dosieron</string>

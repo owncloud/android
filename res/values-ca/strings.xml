@@ -195,12 +195,9 @@
   <string name="auth_account_not_new">Ja hi ha un compte al dispositiu pel mateix usuari i mateix servidor</string>
   <string name="auth_account_not_the_same">L\'usuari introduït no coincideix amb l\'usuari d\'aquest compte</string>
   <string name="auth_unknown_error_title">S\'ha produït un error desconegut</string>
-  <string name="auth_unknown_host_title">No s\'ha trobat el servidor</string>
   <string name="auth_incorrect_path_title">No s\'ha trobat la instància del servidor</string>
-  <string name="auth_timeout_title">El servidor ha trigat massa en respondre</string>
   <string name="auth_incorrect_address_title">Format de l\'adreça del servidor incorrecte</string>
   <string name="auth_ssl_general_error_title">La inicialització SSL ha fallat</string>
-  <string name="auth_ssl_unverified_server_title">No s\'ha pogut verificar la identitat SSL del servidor</string>
   <string name="auth_bad_oc_version_title">Versió del servidor desconeguda</string>
   <string name="auth_wrong_connection_title">No s\'ha pogut establir la connexió</string>
   <string name="auth_secure_connection">S\'ha establert la connexió segura</string>
@@ -299,9 +296,7 @@
   <string name="clipboard_label">Text copiat des de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error crític: no es poden realitzar operacions</string>
   <string name="network_error_socket_exception">Hi ha hagut un error mentre es connectava al servidor.</string>
-  <string name="network_error_socket_timeout_exception">Hi ha hagut un error esperant al servidor, l\'operació no s\'ha pogut realitzar</string>
-  <string name="network_error_connect_timeout_exception">Hi ha hagut un error esperant el servidor, l\'operació no s\'ha pogut realitzar</string>
-  <string name="network_host_not_available">La operació no s\'ha pogut completar, no es pot accedir al servidor</string>
+  <string name="network_error_socket_timeout_exception">El servidor ha trigat massa en respondre</string>
   <string name="forbidden_permissions">No teniu permisos %s</string>
   <string name="forbidden_permissions_rename">per canviar el nom d\'aquest fitxer</string>
   <string name="forbidden_permissions_delete">per eliminar aquest fitxer</string>

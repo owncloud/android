@@ -209,12 +209,9 @@
   <string name="auth_account_not_new">Ένας λογαριασμός για τον ίδιο χρήστη και διακομιστή υπάρχει ήδη στη συσκευή</string>
   <string name="auth_account_not_the_same">Ο χρήστης που εισάγατε δεν ταιριάζει με το χρήστη αυτού του λογαριασμού</string>
   <string name="auth_unknown_error_title">Παρουσιάστηκε άγνωστο σφάλμα!</string>
-  <string name="auth_unknown_host_title">Δεν βρέθηκε κόμβος</string>
   <string name="auth_incorrect_path_title">Δεν βρέθηκε εγκατεστημένος διακομιστής</string>
-  <string name="auth_timeout_title">Ο διακομιστής αργεί πολύ να απαντήσει</string>
   <string name="auth_incorrect_address_title">Λανθασμένη μορφή διεύθυνσης διακομιστή</string>
   <string name="auth_ssl_general_error_title">Η αρχικοποίηση του SLL απέτυχε</string>
-  <string name="auth_ssl_unverified_server_title">Αδυναμία επιβεβαίωσης της ταυτότητας του διακομιστή SSL </string>
   <string name="auth_bad_oc_version_title">Μη-αναγνωρίσιμη έκδοση διακομιστή</string>
   <string name="auth_wrong_connection_title">Δεν ήταν δυνατή η σύνδεση</string>
   <string name="auth_secure_connection">Επιτεύχθηκε ασφαλής σύνδεση</string>
@@ -307,9 +304,7 @@
   <string name="copy_link">Αντιγραφή συνδέσμου</string>
   <string name="clipboard_text_copied">Έχει αντιγραφεί στο πρόχειρο</string>
   <string name="network_error_socket_exception">Ένα σφάλμα προέκυψε κατά τη σύνδεση με το διακομιστή.</string>
-  <string name="network_error_socket_timeout_exception">Ένα σφάλμα προέκυψε κατά την αναμονή για το διακομιστή, η λειτουργία δεν ήταν επιτυχής</string>
-  <string name="network_error_connect_timeout_exception">Ένα σφάλμα προέκυψε κατά την αναμονή για το διακομιστή, η λειτουργία δεν ήταν επιτυχής</string>
-  <string name="network_host_not_available">Η λειτουργία δεν ήταν δυνατό να ολοκληρωθεί, ο διακομιστής δεν είναι διαθέσιμος</string>
+  <string name="network_error_socket_timeout_exception">Ο διακομιστής αργεί πολύ να απαντήσει</string>
   <string name="forbidden_permissions">Δεν έχετε πρόσβαση %s</string>
   <string name="forbidden_permissions_rename">για να μετονομάσετε αυτό το αρχείο</string>
   <string name="forbidden_permissions_delete">για να διαγράψετε αυτό το αρχείο</string>

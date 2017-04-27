@@ -205,12 +205,9 @@
   <string name="auth_account_not_new">此设备中已经存在同名同服务器的帐号</string>
   <string name="auth_account_not_the_same">输入用户与此帐户的用户不符</string>
   <string name="auth_unknown_error_title">发生未知错误！</string>
-  <string name="auth_unknown_host_title">无法找到主机</string>
   <string name="auth_incorrect_path_title">未发现服务器实例</string>
-  <string name="auth_timeout_title">看起来服务器不太给力</string>
   <string name="auth_incorrect_address_title">错误的服务器地址</string>
   <string name="auth_ssl_general_error_title">SSL初始化失败</string>
-  <string name="auth_ssl_unverified_server_title">无法验证 SSL 服务器的身份</string>
   <string name="auth_bad_oc_version_title">不可辨识的服务器服务器版本</string>
   <string name="auth_wrong_connection_title">无法建立连接</string>
   <string name="auth_secure_connection">安全连接已建立</string>
@@ -311,9 +308,7 @@
   <string name="clipboard_label">文本拷贝至 %1$s</string>
   <string name="error_cant_bind_to_operations_service">严重错误：无法执行操作</string>
   <string name="network_error_socket_exception">连接到服务器时发生了一个错误。</string>
-  <string name="network_error_socket_timeout_exception">等待服务器响应时发生了一个错误，此操作无法完成</string>
-  <string name="network_error_connect_timeout_exception">等待服务器响应时发生了一个错误，此操作无法完成</string>
-  <string name="network_host_not_available">服务器不可用，此操作无法完成</string>
+  <string name="network_error_socket_timeout_exception">看起来服务器不太给力</string>
   <string name="forbidden_permissions">你没有权限%s</string>
   <string name="forbidden_permissions_rename">重命名该文件</string>
   <string name="forbidden_permissions_delete">删除该文件</string>

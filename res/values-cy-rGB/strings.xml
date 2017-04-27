@@ -67,9 +67,7 @@
   <string name="auth_connection_established">Sefydlwyd y cysylltiad</string>
   <string name="auth_not_configured_title">Cyfluniad gweinydd wedi\'i gamffurfio</string>
   <string name="auth_unknown_error_title">Digwyddodd gwall anhysbys!</string>
-  <string name="auth_unknown_host_title">Methwyd canfod gwesteiwr</string>
   <string name="auth_incorrect_path_title">Enghraifft o\'r gweinydd heb ei ganfod</string>
-  <string name="auth_timeout_title">Cymrodd y gweinydd rhy hir i ymateb</string>
   <string name="auth_ssl_general_error_title">Methwyd ymgychwyn SSL</string>
   <string name="auth_bad_oc_version_title">Fersiwn gweinydd heb ei gydnabod</string>
   <string name="auth_wrong_connection_title">Methwyd creu cysylltiad</string>
@@ -111,6 +109,7 @@
   <string name="instant_upload_path">/LlwythoSyth</string>
   <string name="conflict_keep_both">Cadw\'r ddau</string>
   <string name="activity_chooser_send_file_title">Anfon</string>
+  <string name="network_error_socket_timeout_exception">Cymrodd y gweinydd rhy hir i ymateb</string>
   <string name="prefs_category_accounts">Cyfrifon</string>
   <string name="folder_picker_choose_button_text">Dewisiwch</string>
   <string name="prefs_category_details">Manylion</string>

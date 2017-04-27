@@ -131,11 +131,8 @@
   <string name="auth_account_not_new">Una cuenta para el mismo usuario y servidor ya existe en el dispositivo</string>
   <string name="auth_account_not_the_same">El usuario ingresado no concuerda con el usuario de esta cuenta</string>
   <string name="auth_unknown_error_title">¡Ocurrió un error desconocido!</string>
-  <string name="auth_unknown_host_title">No fue posible encontrar la dirección</string>
   <string name="auth_incorrect_path_title">Instancia de servidor no encontrada</string>
-  <string name="auth_timeout_title">El servidor tardó demasiado en responder</string>
   <string name="auth_ssl_general_error_title">Error al inicializar el SSL</string>
-  <string name="auth_ssl_unverified_server_title">No se ha podido verifica la identidad SSL del servidor</string>
   <string name="auth_bad_oc_version_title">No es posible reconocer la versión del servidor</string>
   <string name="auth_wrong_connection_title">No fue posible establecer la conexión</string>
   <string name="auth_secure_connection">Conexión segura establecida</string>
@@ -213,9 +210,7 @@
   <string name="clipboard_text_copied">Copiado al portapapeles</string>
   <string name="error_cant_bind_to_operations_service">Error critico: no se puede realizar operaciones</string>
   <string name="network_error_socket_exception">Un error ocurrió mientras se conectaba con el Servidor.</string>
-  <string name="network_error_socket_timeout_exception">Un error ocurrió mientras se conectaba con el Servidor. La operación no se realizó </string>
-  <string name="network_error_connect_timeout_exception">Un error ocurrió esperando al Servidor, la operación no se realizó</string>
-  <string name="network_host_not_available">Operación no completada, Servidor no disponible.</string>
+  <string name="network_error_socket_timeout_exception">El servidor tardó demasiado en responder</string>
   <string name="forbidden_permissions">Tu no tienes permiso %s</string>
   <string name="forbidden_permissions_rename">para renombrar este archivo</string>
   <string name="forbidden_permissions_delete">para borrar este archivo</string>

@@ -185,12 +185,9 @@
   <string name="auth_account_not_new">Налог са истим корисником и сервером већ постоји на уређају</string>
   <string name="auth_account_not_the_same">Унесени корисник се не поклапа са корисником овог налога</string>
   <string name="auth_unknown_error_title">Дошло је до непознате грешке!</string>
-  <string name="auth_unknown_host_title">Не могу да пронађем домаћина</string>
   <string name="auth_incorrect_path_title">Не могу да пронађем примерак сервера</string>
-  <string name="auth_timeout_title">Серверу је требало предуго да се одазове</string>
   <string name="auth_incorrect_address_title">Погрешан формат адресе сервера</string>
   <string name="auth_ssl_general_error_title">ССЛ иницијализација није успела</string>
-  <string name="auth_ssl_unverified_server_title">Не могу да проверим ССЛ идентитет сервера</string>
   <string name="auth_bad_oc_version_title">Непозната верзија сервера</string>
   <string name="auth_wrong_connection_title">Не могу да успоставим везу</string>
   <string name="auth_secure_connection">Безбедна веза је успостављена</string>
@@ -289,9 +286,7 @@
   <string name="clipboard_text_copied">Копирано у клипборд</string>
   <string name="error_cant_bind_to_operations_service">Критична грешка: не могу да радим</string>
   <string name="network_error_socket_exception">Дошло је до грешке при повезивању са сервером.</string>
-  <string name="network_error_socket_timeout_exception">Дошло је до грешке при чекању на сервер. Радња није могла бити урађена</string>
-  <string name="network_error_connect_timeout_exception">Дошло је до грешке при чекању на сервер. Радња није могла бити урађена</string>
-  <string name="network_host_not_available">Радња није могла бити довршена. Сервер је недоступан</string>
+  <string name="network_error_socket_timeout_exception">Серверу је требало предуго да се одазове</string>
   <string name="forbidden_permissions">Немате дозволу %s</string>
   <string name="forbidden_permissions_rename">да преименујете овај фајл</string>
   <string name="forbidden_permissions_delete">да обришете овај фајл</string>

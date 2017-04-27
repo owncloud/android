@@ -189,11 +189,8 @@
   <string name="auth_account_not_new">Erabiltzaile eta zerbitzari hauendako dagoeneko kontu bat  existitzen da gailu honetan</string>
   <string name="auth_account_not_the_same">Sartutako erabiltzaileak ez du bat egiten kontu honetako erabiltzailearekin</string>
   <string name="auth_unknown_error_title">Errore ezezagun bat gertatu da</string>
-  <string name="auth_unknown_host_title">Ezin izan da hostalaria aurkitu</string>
   <string name="auth_incorrect_path_title">ez da serveren instalaziorik aurkitu</string>
-  <string name="auth_timeout_title">Zerbitzariak denbora asko hartu du erantzuteko</string>
   <string name="auth_ssl_general_error_title">SSL abiaratzeak huts egin du</string>
-  <string name="auth_ssl_unverified_server_title">Ezin izan da SSL zerbitzariaren identitaea egiaztatu</string>
   <string name="auth_bad_oc_version_title">server zerbitzari bertsio ezezaguna</string>
   <string name="auth_wrong_connection_title">Ezin izan da konexioa egin</string>
   <string name="auth_secure_connection">Konexio segurua ezarri da</string>
@@ -272,9 +269,7 @@ Mesedez, baimendu berriz</string>
   <string name="clipboard_text_copied">Arbelera kopiatua</string>
   <string name="error_cant_bind_to_operations_service">Errore larria: ezin dira egin eragiketak</string>
   <string name="network_error_socket_exception">Errore bat gertatu da zerbitzariarekin konektatzean.</string>
-  <string name="network_error_socket_timeout_exception">Errore bat gertatu da zerbitzariaren zain egon bitartean, ezin izan da eragiketa burutu</string>
-  <string name="network_error_connect_timeout_exception">Errore bat gertatu da zerbitzariaren zain egon bitartean, ezin izan da eragiketa burutu</string>
-  <string name="network_host_not_available">Eragiketa ezin izan da burutu, zerbitzaria ez dago erabilgarri</string>
+  <string name="network_error_socket_timeout_exception">Zerbitzariak denbora asko hartu du erantzuteko</string>
   <string name="forbidden_permissions">Ez daukazu baimenik %s</string>
   <string name="forbidden_permissions_rename">fitxategia berrizendatzeko</string>
   <string name="forbidden_permissions_delete">fitxategia ezabatzeko</string>

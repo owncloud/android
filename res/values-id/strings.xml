@@ -164,11 +164,8 @@
   <string name="auth_account_not_new">Akun untuk pengguna dan server yang sama sudah ada dalam perangkat</string>
   <string name="auth_account_not_the_same">Pengguna yang dimasukkan tidak cocok dengan pengguna akun ini</string>
   <string name="auth_unknown_error_title">Terjadi kesalahan yang tidak diketahui!</string>
-  <string name="auth_unknown_host_title">Tidak menemukan host</string>
   <string name="auth_incorrect_path_title">Instansi server tidak ditemukan</string>
-  <string name="auth_timeout_title">Server terlalu lama merespon</string>
   <string name="auth_ssl_general_error_title">Menginisiasi SSL gagal</string>
-  <string name="auth_ssl_unverified_server_title">Tidak dapat memverifikasi identitas server SSL</string>
   <string name="auth_bad_oc_version_title">Versi server tidak dikenal</string>
   <string name="auth_wrong_connection_title">Tidak dapat membuat koneksi</string>
   <string name="auth_secure_connection">Sambungan aman dibuat</string>
@@ -256,9 +253,7 @@
   <string name="clipboard_text_copied">Disalin ke papan klip</string>
   <string name="error_cant_bind_to_operations_service">Kesalahan fatal: tidak dapat melakukan operasi</string>
   <string name="network_error_socket_exception">Terjadi kesalahan saat menghubungkan dengan server.</string>
-  <string name="network_error_socket_timeout_exception">Terjadi kesalahan saat menunggu balasan server, operasi tidak dapat diselesaikan</string>
-  <string name="network_error_connect_timeout_exception">Terjadi kesalahan saat menunggu balasan server, operasi tidak dapat diselesaikan</string>
-  <string name="network_host_not_available">Operasi tidak dapat diselesaikan, server tidak tersedia</string>
+  <string name="network_error_socket_timeout_exception">Server terlalu lama merespon</string>
   <string name="forbidden_permissions">Anda tidak memiliki izin %s</string>
   <string name="forbidden_permissions_rename">untuk mengubah nama berkas ini</string>
   <string name="forbidden_permissions_delete">untuk menghapus berkas ini</string>

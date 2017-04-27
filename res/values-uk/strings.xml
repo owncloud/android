@@ -204,12 +204,9 @@
   <string name="auth_account_not_new">Такий обліковий запис вже існує на пристрої</string>
   <string name="auth_account_not_the_same">Введений користувач не відповідає обліковому запису</string>
   <string name="auth_unknown_error_title">Виникла невідома помилка!</string>
-  <string name="auth_unknown_host_title">Не вдалося знайти хост</string>
   <string name="auth_incorrect_path_title">Не знайдено примірник сервер</string>
-  <string name="auth_timeout_title">Сервер занадто довго не відповідає</string>
   <string name="auth_incorrect_address_title">Хибний формат адреси сервера</string>
   <string name="auth_ssl_general_error_title">Помилка SSL ініціалізації</string>
-  <string name="auth_ssl_unverified_server_title">Неможливо перевірити SSL-сертифікат сервера</string>
   <string name="auth_bad_oc_version_title">Не вдалося визначити версію сервер серверу</string>
   <string name="auth_wrong_connection_title">Не вдалося встановити з\'єднання</string>
   <string name="auth_secure_connection">Встановлено захищене з\'єднання</string>
@@ -317,9 +314,7 @@
   <string name="clipboard_label">Скопійований текст з %1$s</string>
   <string name="error_cant_bind_to_operations_service">Критична помилка: виконання операції неможливе</string>
   <string name="network_error_socket_exception">Виникла помилка при підключені до сервера.</string>
-  <string name="network_error_socket_timeout_exception">Під час очікування на сервер виникла помилка, операцію неможливо завершити</string>
-  <string name="network_error_connect_timeout_exception">Під час очікування на сервер виникла помилка, операцію неможливо завершити</string>
-  <string name="network_host_not_available">Неможливо завершити операцію, сервер недоступний</string>
+  <string name="network_error_socket_timeout_exception">Сервер занадто довго не відповідає</string>
   <string name="forbidden_permissions">У вас немає повноважень %s</string>
   <string name="forbidden_permissions_rename">на перейменування цього файла</string>
   <string name="forbidden_permissions_delete">на видалення цього файла</string>
