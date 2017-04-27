@@ -34,6 +34,11 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * Creates a new share.  This allows sharing with a user or group or as a link.
  */
@@ -41,20 +46,45 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
     private static final String TAG = CreateRemoteShareOperation.class.getSimpleName();
 
+    private static final String PARAM_NAME = "name";
+    private static final String PARAM_PASSWORD = "password";
+    private static final String PARAM_EXPIRATION_DATE = "expireDate";
+    private static final String PARAM_PUBLIC_UPLOAD = "publicUpload";
     private static final String PARAM_PATH = "path";
     private static final String PARAM_SHARE_TYPE = "shareType";
     private static final String PARAM_SHARE_WITH = "shareWith";
-    private static final String PARAM_PUBLIC_UPLOAD = "publicUpload";
-    private static final String PARAM_PASSWORD = "password";
     private static final String PARAM_PERMISSIONS = "permissions";
+    private static final String FORMAT_EXPIRATION_DATE = "yyyy-MM-dd";
 
     private String mRemoteFilePath;
     private ShareType mShareType;
     private String mShareWith;
-    private boolean mPublicUpload;
-    private String mPassword;
-    private int mPermissions;
     private boolean mGetShareDetails;
+
+    /**
+     * Name to set for the public link
+     */
+    private String mName;
+
+    /**
+     * Password to set for the public link
+     */
+    private String mPassword;
+
+    /**
+     * Expiration date to set for the public link
+     */
+    private long mExpirationDateInMillis;
+
+    /**
+     * Access permissions for the file bound to the share
+     */
+    private int mPermissions;
+
+    /**
+     * Upload permissions for the public link (only folders)
+     */
+    private Boolean mPublicUpload;
 
     /**
      * Constructor
@@ -77,12 +107,12 @@ public class CreateRemoteShareOperation extends RemoteOperation {
      *                       For instance, for Re-Share, delete, read, update, add 16+8+2+1 = 27.
      */
     public CreateRemoteShareOperation(
-        String remoteFilePath,
-        ShareType shareType,
-        String shareWith,
-        boolean publicUpload,
-        String password,
-        int permissions
+            String remoteFilePath,
+            ShareType shareType,
+            String shareWith,
+            boolean publicUpload,
+            String password,
+            int permissions
     ) {
 
         mRemoteFilePath = remoteFilePath;
@@ -92,6 +122,56 @@ public class CreateRemoteShareOperation extends RemoteOperation {
         mPassword = password;
         mPermissions = permissions;
         mGetShareDetails = false;        // defaults to false for backwards compatibility
+    }
+
+
+    /**
+     * Set name to create in Share resource. Ignored by servers previous to version 10.0.0
+     *
+     * @param name Name to set to the target share.
+     */
+    public void setName(String name) {
+        this.mName = name;
+    }
+
+    /**
+     * Set password to create in Share resource.
+     *
+     * @param password Password to set to the target share.
+     */
+    public void setPassword(String password) {
+        mPassword = password;
+    }
+
+
+    /**
+     * Set expiration date to create in Share resource.
+     *
+     * @param expirationDateInMillis Expiration date to set to the target share.
+     */
+    public void setExpirationDate(long expirationDateInMillis) {
+        mExpirationDateInMillis = expirationDateInMillis;
+    }
+
+
+    /**
+     * Set permissions to create in Share resource.
+     *
+     * @param permissions Permissions to set to the target share.
+     *                    Values <= 0 result in no update applied to the permissions.
+     */
+    public void setPermissions(int permissions) {
+        mPermissions = permissions;
+    }
+
+    /**
+     * * Enable upload permissions to create in Share resource.
+     * *
+     * * @param publicUpload  Upload permission to set to the target share.
+     * *                      Null results in no update applied to the upload permission.
+     */
+    public void setPublicUpload(Boolean publicUpload) {
+        mPublicUpload = publicUpload;
     }
 
     public boolean isGettingShareDetails() {
@@ -114,11 +194,29 @@ public class CreateRemoteShareOperation extends RemoteOperation {
             post = new PostMethod(client.getBaseUri() + ShareUtils.SHARING_API_PATH);
 
             post.setRequestHeader("Content-Type",
-                "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
+                    "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
 
             post.addParameter(PARAM_PATH, mRemoteFilePath);
             post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
             post.addParameter(PARAM_SHARE_WITH, mShareWith);
+
+            if (mName != null) {
+                post.addParameter(PARAM_NAME, mName);
+            }
+
+            if (mExpirationDateInMillis < 0) {
+                // empty expiration date
+                post.addParameter(PARAM_EXPIRATION_DATE, "");
+
+            } else {
+
+                DateFormat dateFormat = new SimpleDateFormat(FORMAT_EXPIRATION_DATE, Locale.getDefault());
+                Calendar expirationDate = Calendar.getInstance();
+                expirationDate.setTimeInMillis(mExpirationDateInMillis);
+                String formattedExpirationDate = dateFormat.format(expirationDate.getTime());
+                post.addParameter(PARAM_EXPIRATION_DATE, formattedExpirationDate);
+            }
+
             if (mPublicUpload) {
                 post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(true));
             }
@@ -137,7 +235,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 String response = post.getResponseBodyAsString();
 
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
-                    new ShareXMLParser()
+                        new ShareXMLParser()
                 );
                 parser.setOneOrMoreSharesRequired(true);
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
@@ -148,7 +246,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                     // retrieve more info - POST only returns the index of the new share
                     OCShare emptyShare = (OCShare) result.getData().get(0);
                     GetRemoteShareOperation getInfo = new GetRemoteShareOperation(
-                        emptyShare.getRemoteId()
+                            emptyShare.getRemoteId()
                     );
                     result = getInfo.execute(client);
                 }
