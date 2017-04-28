@@ -334,7 +334,6 @@ public class FileOperationsHelper {
 
     }
 
-
     /**
      * Updates a public share on a file to set its password.
      * Starts a request to do it in {@link OperationsService}
@@ -452,7 +451,7 @@ public class FileOperationsHelper {
 
         updateShareIntent.putExtra(
             OperationsService.EXTRA_SHARE_PASSWORD,
-            (password == null) ? "" : password
+                password
         );
 
         updateShareIntent.putExtra(

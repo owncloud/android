@@ -89,6 +89,11 @@ public class PublicShareDialogFragment extends DialogFragment {
     private OCCapability mCapabilities;
 
     /**
+     * User has deleted or not the password when updating a public share
+     */
+    private boolean passwordDeleted;
+
+    /**
      * Create a new instance of PublicShareDialogFragment, providing fileToShare
      * as an argument.
      *
@@ -261,6 +266,17 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 } else { // Updating an existing public share
 
+                    // User has deleted the password
+                    if (!getPasswordSwitch(getView()).isChecked()) {
+
+                        publicLinkPassword = "";
+
+                    } else if (getPasswordValue(getView()).length() == 0) {
+
+                        // User has not added a new password, so do not update it
+                        publicLinkPassword = null;
+                    }
+
                     ((FileActivity) getActivity()).getFileOperationsHelper().
                             updateShareViaLink(
                                     mFile,
@@ -269,7 +285,6 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     publicLinkExpirationDateMillis,
                                     publicLinkEditPermissions
                             );
-
                 }
 
                 dismiss();
@@ -465,7 +480,7 @@ public class PublicShareDialogFragment extends DialogFragment {
             SwitchCompat expirationToggle = ((SwitchCompat) getView().
                     findViewById(R.id.shareViaLinkExpirationSwitch));
 
-            if (expirationToggle.isChecked()) {
+            if (expirationToggle.isChecked() && !updating()) {
                 expirationToggle.setChecked(false);
             }
         }
