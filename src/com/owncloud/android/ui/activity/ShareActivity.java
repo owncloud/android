@@ -226,8 +226,8 @@ public class ShareActivity extends FileActivity
         }
         ft.addToBackStack(null);
 
-        // Create and show the dialog.
-        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToCreate(mFile);
+        // Create and show the dialog
+        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToCreate(getFile(), getAccount());
         newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 
@@ -304,6 +304,12 @@ public class ShareActivity extends FileActivity
             searchShareesFragment.refreshUsersOrGroupsListFromDB();
         }
 
+        AddPublicLinkFragment addPublicLinkFragment = getAddPublicLinkFragment();
+        if (addPublicLinkFragment != null &&
+                addPublicLinkFragment.isAdded()) {  // only if added to the view hierarchy!!
+            addPublicLinkFragment.refreshCapabilitiesFromDB();
+        }
+
         EditShareFragment editShareFragment = getEditShareFragment();
         if (editShareFragment != null &&
                 editShareFragment.isAdded()) {
@@ -328,6 +334,15 @@ public class ShareActivity extends FileActivity
      */
     private SearchShareesFragment getSearchFragment() {
         return (SearchShareesFragment) getSupportFragmentManager().findFragmentByTag(TAG_SEARCH_FRAGMENT);
+    }
+
+    /**
+     * Shortcut to get access to the {@link AddPublicLinkFragment} instance, if any
+     *
+     * @return A {@link AddPublicLinkFragment} instance, or null
+     */
+    private AddPublicLinkFragment getAddPublicLinkFragment() {
+        return (AddPublicLinkFragment) getSupportFragmentManager().findFragmentByTag(TAG_ADD_PUBLIC_LINK_FRAGMENT);
     }
 
     /**
