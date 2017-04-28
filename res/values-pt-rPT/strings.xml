@@ -319,6 +319,8 @@
   <string name="error_cant_bind_to_operations_service">Erro crítico: não é possível executar as operações</string>
   <string name="network_error_socket_exception">Ocorreu um erro durante a ligação ao servidor.</string>
   <string name="network_error_socket_timeout_exception">O servidor demorou muito tempo a responder</string>
+  <string name="network_error_connect_timeout_exception">A ligação ao servidor está a demorar mais que o previsto</string>
+  <string name="network_host_not_available">Anfitrião desconhecido</string>
   <string name="forbidden_permissions">Não tem permissão %s</string>
   <string name="forbidden_permissions_rename">para renomear este ficheiro</string>
   <string name="forbidden_permissions_delete">para apagar este ficheiro</string>
@@ -437,6 +439,7 @@
   <string name="previewing_video_common_error">O vídeo não pôde ser reproduzido</string>
   <string name="previewing_video_not_supported">Pré-visualização de vídeo não é suportada na sua versão de Android. A transferência do ficheiro irá começar automaticamente.</string>
   <string name="streaming_position_not_available">\"Posição não disponível\"</string>
+  <string name="error_no_network_connection">O dispositivo não está ligado a uma rede</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>
