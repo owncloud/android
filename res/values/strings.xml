@@ -429,9 +429,10 @@
     <string name="share_add_user_or_group">Add user or group</string>
     <string name="share_via_link_section_title">Public links</string>
     <string name="share_via_link_create_title">Create link share</string>
+    <string name="share_via_link_edit_title">Edit link share</string>
     <string name="share_via_link_name_label">Link name</string>
     <string name="share_cancel_public_link_button">Cancel</string>
-    <string name="share_confirm_public_link_button">Create</string>
+    <string name="share_confirm_public_link_button">Save</string>
     <string name="share_via_link_expiration_date_label">Expiration</string>
     <string name="share_via_link_password_label">Password</string>
     <string name="share_via_link_password_title">Secured</string>

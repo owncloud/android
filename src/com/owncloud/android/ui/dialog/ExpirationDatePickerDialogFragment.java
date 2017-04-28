@@ -133,15 +133,15 @@ public class ExpirationDatePickerDialogFragment
         return dialog;
     }
 
-    //    /**
-//     * Called when the user choses an expiration date.
-//     *
-//     * @param view              View instance where the date was chosen
-//     * @param year              Year of the date chosen.
-//     * @param monthOfYear       Month of the date chosen [0, 11]
-//     * @param dayOfMonth        Day of the date chosen
-//     */
-//    @Override
+    /**
+     * Called when the user choses an expiration date.
+     *
+     * @param view              View instance where the date was chosen
+     * @param year              Year of the date chosen.
+     * @param monthOfYear       Month of the date chosen [0, 11]
+     * @param dayOfMonth        Day of the date chosen
+     */
+    @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
         Calendar chosenDate = Calendar.getInstance();
@@ -160,13 +160,10 @@ public class ExpirationDatePickerDialogFragment
     }
 
     public interface DatePickerFragmentListener {
-        public void onDateSet(String date);
 
-        public void onCancelDatePicker();
-    }
+        void onDateSet(String date);
 
-    public DatePickerFragmentListener getDatePickerListener() {
-        return this.datePickerListener;
+        void onCancelDatePicker();
     }
 
     public void setDatePickerListener(DatePickerFragmentListener listener) {
