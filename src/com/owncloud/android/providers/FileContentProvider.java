@@ -798,7 +798,7 @@ public class FileContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
-            if (oldVersion == 16 && newVersion >= 17) {
+            if (oldVersion <17 && newVersion >= 17) {
                 Log_OC.i("SQL", "Entering in the #17 ADD in onUpgrade");
                 db.beginTransaction();
                 try {
@@ -815,7 +815,7 @@ public class FileContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
-            if (oldVersion == 17 && newVersion >= 18) {
+            if (oldVersion < 18 && newVersion >= 18) {
                 Log_OC.i("SQL", "Entering in the #18 ADD in onUpgrade");
                 db.beginTransaction();
                 try {
