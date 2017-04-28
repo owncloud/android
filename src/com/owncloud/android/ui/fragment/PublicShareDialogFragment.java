@@ -114,9 +114,12 @@ public class PublicShareDialogFragment extends DialogFragment {
      *
      * @param   publicShare           Public share to update.
      */
-    public static PublicShareDialogFragment newInstanceToUpdate(OCShare publicShare, Account account) {
+    public static PublicShareDialogFragment newInstanceToUpdate(OCFile fileToShare,
+                                                                OCShare publicShare,
+                                                                Account account) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
+        args.putParcelable(ARG_FILE, fileToShare);
         args.putParcelable(ARG_SHARE, publicShare);
         args.putParcelable(ARG_ACCOUNT, account);
         publicShareDialogFragment.setArguments(args);
@@ -177,7 +180,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                 getPasswordValue(view).setVisibility(View.VISIBLE);
 
                 // Set an example password
-                getPasswordValue(view).setText("*****");
+                getPasswordValue(view).setHint(R.string.share_via_link_default_password);
             }
 
 
@@ -245,14 +248,29 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 Boolean publicLinkEditPermissions = getEditPermissionSwitch().isChecked();
 
-                ((FileActivity) getActivity()).getFileOperationsHelper().
-                        shareFileViaLink(
-                                mFile,
-                                publicLinkName,
-                                publicLinkPassword,
-                                publicLinkExpirationDateMillis,
-                                publicLinkEditPermissions
-                        );
+                if (!updating()) { // Creating a new public share
+
+                    ((FileActivity) getActivity()).getFileOperationsHelper().
+                            shareFileViaLink(
+                                    mFile,
+                                    publicLinkName,
+                                    publicLinkPassword,
+                                    publicLinkExpirationDateMillis,
+                                    publicLinkEditPermissions
+                            );
+
+                } else { // Updating an existing public share
+
+                    ((FileActivity) getActivity()).getFileOperationsHelper().
+                            updateShareViaLink(
+                                    mFile,
+                                    publicLinkName,
+                                    publicLinkPassword,
+                                    publicLinkExpirationDateMillis,
+                                    publicLinkEditPermissions
+                            );
+
+                }
 
                 dismiss();
             }
