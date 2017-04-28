@@ -65,7 +65,7 @@ public class ShareActivity extends FileActivity
     private static final String TAG_SHARE_FRAGMENT = "SHARE_FRAGMENT";
     private static final String TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT";
     private static final String TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT";
-    private static final String TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "ADD_PUBLIC_LINK_FRAGMENT";
+    private static final String TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT";
 
     /// Tags for dialog fragments
     private static final String FTAG_SHARE_PASSWORD_DIALOG = "SHARE_PASSWORD_DIALOG";
@@ -304,10 +304,10 @@ public class ShareActivity extends FileActivity
             searchShareesFragment.refreshUsersOrGroupsListFromDB();
         }
 
-        AddPublicLinkFragment addPublicLinkFragment = getAddPublicLinkFragment();
-        if (addPublicLinkFragment != null &&
-                addPublicLinkFragment.isAdded()) {  // only if added to the view hierarchy!!
-            addPublicLinkFragment.refreshCapabilitiesFromDB();
+        PublicShareDialogFragment publicShareDialogFragment = getAddPublicShareFragment();
+        if (publicShareDialogFragment != null &&
+                publicShareDialogFragment.isAdded()) {  // only if added to the view hierarchy!!
+            publicShareDialogFragment.refreshCapabilitiesFromDB();
         }
 
         EditShareFragment editShareFragment = getEditShareFragment();
@@ -337,12 +337,12 @@ public class ShareActivity extends FileActivity
     }
 
     /**
-     * Shortcut to get access to the {@link AddPublicLinkFragment} instance, if any
+     * Shortcut to get access to the {@link PublicShareDialogFragment} instance, if any
      *
-     * @return A {@link AddPublicLinkFragment} instance, or null
+     * @return A {@link PublicShareDialogFragment} instance, or null
      */
-    private AddPublicLinkFragment getAddPublicLinkFragment() {
-        return (AddPublicLinkFragment) getSupportFragmentManager().findFragmentByTag(TAG_ADD_PUBLIC_LINK_FRAGMENT);
+    private PublicShareDialogFragment getAddPublicShareFragment() {
+        return (PublicShareDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 
     /**
