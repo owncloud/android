@@ -42,9 +42,12 @@ import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class PublicShareDialogFragment extends DialogFragment {
@@ -111,10 +114,11 @@ public class PublicShareDialogFragment extends DialogFragment {
      *
      * @param   publicShare           Public share to update.
      */
-    public static PublicShareDialogFragment newInstanceToUpdate(OCShare publicShare) {
+    public static PublicShareDialogFragment newInstanceToUpdate(OCShare publicShare, Account account) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_SHARE, publicShare);
+        args.putParcelable(ARG_ACCOUNT, account);
         publicShareDialogFragment.setArguments(args);
         return publicShareDialogFragment;
     }
@@ -151,7 +155,54 @@ public class PublicShareDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.add_public_link, container, false);
+        View view = inflater.inflate(R.layout.share_public_dialog, container, false);
+
+        // Confirm add public link
+        Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
+
+        // If share is going to be updated
+        if (updating()) {
+
+            // Set dialog title to edit
+            getDialogTitle(view).setText(R.string.share_via_link_edit_title);
+
+            // Set existing share name
+            getNameValue(view).setText(mPublicShare.getName());
+
+            if (mPublicShare.isPasswordProtected()) {
+
+                // Switch on the password toggle
+                getPasswordSwitch(view).setChecked(true);
+
+                getPasswordValue(view).setVisibility(View.VISIBLE);
+
+                // Set an example password
+                getPasswordValue(view).setText("*****");
+            }
+
+
+            if (mPublicShare.getExpirationDate() != 0) {
+
+                // Switch on the expiration date toggle
+                getExpirationDateSwitch(view).setChecked(true);
+
+                String formattedDate =
+                        SimpleDateFormat.getDateInstance().format(
+                                new Date(mPublicShare.getExpirationDate())
+                        );
+
+                getExpirationDateValue(view).setVisibility(View.VISIBLE);
+
+                // Set the existing share expiration date
+                getExpirationDateValue(view).setText(formattedDate);
+            }
+        }
+
+        // Set listener for user actions on password
+        initPasswordListener(view);
+
+        // Set listener for user actions on expiration date
+        initExpirationListener(view);
 
         RelativeLayout editPermissionSection = (RelativeLayout) view.
                 findViewById(R.id.shareViaLinkEditPermissionSection);
@@ -163,18 +214,6 @@ public class PublicShareDialogFragment extends DialogFragment {
             editPermissionSection.setVisibility(View.GONE);
         }
 
-        // Set listener for user actions on password
-        initPasswordListener(view);
-
-        // Set listener for user actions on expiration date
-        initExpirationListener(view);
-
-        // Confirm add public link
-        Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
-        if (updating()) {
-            confirmAddPublicLinkButton.setText(R.string.common_ok);
-        }
-
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -183,11 +222,11 @@ public class PublicShareDialogFragment extends DialogFragment {
                         mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
                 }
 
-                String publicLinkName = getNameValue().getText().toString();
+                String publicLinkName = getNameValue(getView()).getText().toString();
 
-                String publicLinkPassword = getPasswordValue().getText().toString();
+                String publicLinkPassword = getPasswordValue(getView()).getText().toString();
 
-                String expirationDate = getExpirationDateValue().getText().toString();
+                String expirationDate = getExpirationDateValue(getView()).getText().toString();
 
                 long publicLinkExpirationDateMillis = -1;
 
@@ -197,7 +236,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                     DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
 
                     try {
-                        publicLinkExpirationDateMillis = format.parse(getExpirationDateValue().
+                        publicLinkExpirationDateMillis = format.parse(getExpirationDateValue(getView()).
                                 getText().toString()).getTime();
                     } catch (ParseException e) {
                         // DO NOTHING
@@ -285,7 +324,8 @@ public class PublicShareDialogFragment extends DialogFragment {
         @Override
         public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
 
-            EditText shareViaLinkPasswordValue = (EditText) getView().findViewById(R.id.shareViaLinkPasswordValue);
+            EditText shareViaLinkPasswordValue = (EditText) getView().
+                    findViewById(R.id.shareViaLinkPasswordValue);
 
             if (isChecked) {
 
@@ -358,7 +398,7 @@ public class PublicShareDialogFragment extends DialogFragment {
 
             } else {
 
-                getExpirationDateValue().setVisibility(View.INVISIBLE);
+                getExpirationDateValue(getView()).setVisibility(View.INVISIBLE);
 
             }
         }
@@ -390,7 +430,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         @Override
         public void onDateSet(String date) {
 
-            TextView expirationDate = getExpirationDateValue();
+            TextView expirationDate = getExpirationDateValue(getView());
 
             if (expirationDate.getVisibility() == View.INVISIBLE) {
 
@@ -426,32 +466,36 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
     }
 
-    private EditText getNameValue() {
-        return (EditText) getView().findViewById(R.id.shareViaLinkNameValue);
+    private TextView getDialogTitle (View view) {
+        return (TextView) view.findViewById(R.id.publicShareDialogTitle);
     }
 
-    private View getPasswordSection() {
-        return getView().findViewById(R.id.shareViaLinkPasswordSection);
+    private EditText getNameValue(View view) {
+        return (EditText) view.findViewById(R.id.shareViaLinkNameValue);
     }
 
-    private SwitchCompat getPasswordSwitch() {
-        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkPasswordSwitch);
+    private View getPasswordSection(View view) {
+        return view.findViewById(R.id.shareViaLinkPasswordSection);
     }
 
-    private TextView getPasswordValue() {
-        return (TextView) getView().findViewById(R.id.shareViaLinkPasswordValue);
+    private SwitchCompat getPasswordSwitch(View view) {
+        return (SwitchCompat) view.findViewById(R.id.shareViaLinkPasswordSwitch);
+    }
+
+    private TextView getPasswordValue(View view) {
+        return (TextView) view.findViewById(R.id.shareViaLinkPasswordValue);
     }
 
     private View getExpirationDateSection() {
         return getView().findViewById(R.id.shareViaLinkExpirationSection);
     }
 
-    private SwitchCompat getExpirationDateSwitch() {
-        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkExpirationSwitch);
+    private SwitchCompat getExpirationDateSwitch(View view) {
+        return (SwitchCompat) view.findViewById(R.id.shareViaLinkExpirationSwitch);
     }
 
-    private TextView getExpirationDateValue() {
-        return (TextView) getView().findViewById(R.id.shareViaLinkExpirationValue);
+    private TextView getExpirationDateValue(View view) {
+        return (TextView) view.findViewById(R.id.shareViaLinkExpirationValue);
     }
 
     private View getEditPermissionSection() {
