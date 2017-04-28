@@ -178,13 +178,9 @@ public class PublicShareDialogFragment extends DialogFragment {
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                // TO DO
+                // TO DO password enforced by server, request to the user before trying to create
                 if (mCapabilities != null &&
                         mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
-
-
-                    // password enforced by server, request to the user before trying to create
-                    String a = "";
                 }
 
                 String publicLinkName = getNameValue().getText().toString();
