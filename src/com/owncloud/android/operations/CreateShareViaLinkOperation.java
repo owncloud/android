@@ -197,5 +197,4 @@ public class CreateShareViaLinkOperation extends SyncOperation {
             getStorageManager().saveFile(file);
         }
     }
-
 }

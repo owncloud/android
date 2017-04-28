@@ -20,6 +20,8 @@
 
 package com.owncloud.android.ui.fragment;
 
+import android.accounts.Account;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.SwitchCompat;
@@ -34,6 +36,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -46,11 +49,16 @@ import java.util.Locale;
 
 public class PublicShareDialogFragment extends DialogFragment {
 
+    private static final String TAG = PublicShareDialogFragment.class.getSimpleName();
+
     /**
      * The fragment initialization parameters
      */
     private static final String ARG_FILE = "FILE";
+
     private static final String ARG_SHARE = "SHARE";
+
+    private static final String ARG_ACCOUNT = "ACCOUNT";
 
     /**
      * File to share, received as a parameter in construction time
@@ -61,6 +69,16 @@ public class PublicShareDialogFragment extends DialogFragment {
      * Existing share to update. If NULL, the dialog will create a new share for mFile.
      */
     private OCShare mPublicShare;
+
+    /*
+     * OC account holding the file to share, received as a parameter in construction time
+     */
+    private Account mAccount;
+
+    /**
+     * Reference to parent listener
+     */
+    private ShareFragmentListener mListener;
 
     /**
      * Capabilities of the server
@@ -74,17 +92,19 @@ public class PublicShareDialogFragment extends DialogFragment {
      * Dialog shown this way is intended to CREATE a new public share.
      *
      * @param   fileToShare     File to share with a new public share.
+     * @param   account         Account to get capabilities
      */
-    public static PublicShareDialogFragment newInstanceToCreate(OCFile fileToShare) {
+    public static PublicShareDialogFragment newInstanceToCreate(OCFile fileToShare, Account account) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, fileToShare);
+        args.putParcelable(ARG_ACCOUNT, account);
         publicShareDialogFragment.setArguments(args);
         return publicShareDialogFragment;
     }
 
     /**
-     * Create a new instance of PublicShareDialogFragment, providing publicShare
+     * Update an instance of PublicShareDialogFragment, providing publicShare
      * as an argument.
      *
      * Dialog shown this way is intended to UPDATE an existing public share.
@@ -103,8 +123,11 @@ public class PublicShareDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mFile = getArguments().getParcelable(ARG_FILE);
-        mPublicShare = getArguments().getParcelable(ARG_SHARE);
+        if (getArguments() != null) {
+            mFile = getArguments().getParcelable(ARG_FILE);
+            mAccount = getArguments().getParcelable(ARG_ACCOUNT);
+            mPublicShare = getArguments().getParcelable(ARG_SHARE);
+        }
 
         if (mFile == null && mPublicShare == null) {
             throw new IllegalStateException("Both ARG_FILE and ARG_SHARE cannot be NULL");
@@ -156,12 +179,13 @@ public class PublicShareDialogFragment extends DialogFragment {
             public void onClick(View v) {
 
                 // TO DO
-//                if (mCapabilities != null &&
-//                        mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
-//                    // password enforced by server, request to the user before trying to create
-//                    requestPasswordForShareViaLink(true);
-//
-//                } else {
+                if (mCapabilities != null &&
+                        mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
+
+
+                    // password enforced by server, request to the user before trying to create
+                    String a = "";
+                }
 
                 String publicLinkName = getNameValue().getText().toString();
 
@@ -194,6 +218,8 @@ public class PublicShareDialogFragment extends DialogFragment {
                                 publicLinkExpirationDateMillis,
                                 publicLinkEditPermissions
                         );
+
+                dismiss();
             }
         });
 
@@ -209,6 +235,31 @@ public class PublicShareDialogFragment extends DialogFragment {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log_OC.d(TAG, "onActivityCreated");
+
+        // Load known capabilities of the server from DB
+        refreshCapabilitiesFromDB();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (ShareFragmentListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnShareFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 
     /**
      * Binds listener for user actions that start any update on a password for the public link
@@ -222,7 +273,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkPasswordSwitch)).
                 setOnCheckedChangeListener(mOnPasswordInteractionListener);
     }
-
 
     /**
      * Listener for user actions that start any update on a password for the public link.
@@ -364,6 +414,19 @@ public class PublicShareDialogFragment extends DialogFragment {
             if (expirationToggle.isChecked()) {
                 expirationToggle.setChecked(false);
             }
+        }
+    }
+
+    /**
+     * Get known server capabilities from DB
+     *
+     * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
+     * instance ready to use. If not ready, does nothing.
+     */
+    public void refreshCapabilitiesFromDB() {
+        if (((FileActivity) mListener).getStorageManager() != null) {
+            mCapabilities = ((FileActivity) mListener).getStorageManager().
+                    getCapability(mAccount.name);
         }
     }
 
