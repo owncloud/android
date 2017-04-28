@@ -227,7 +227,8 @@ public class ShareActivity extends FileActivity
         ft.addToBackStack(null);
 
         // Create and show the dialog
-        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToCreate(getFile(), getAccount());
+        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToCreate(getFile(),
+                getAccount());
         newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 
@@ -241,7 +242,8 @@ public class ShareActivity extends FileActivity
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToUpdate(share, getAccount());
+        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToUpdate(getFile(), share,
+                getAccount());
         newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 
