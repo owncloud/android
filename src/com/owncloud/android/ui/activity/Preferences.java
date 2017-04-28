@@ -282,7 +282,6 @@ public class Preferences extends PreferenceActivity {
                             Intent intent = new Intent(Intent.ACTION_VIEW, uriUrl);
                             startActivity(intent);
                         }
-                        //ImprintDialog.newInstanceToCreate(true).show(preference.get, "IMPRINT_DIALOG");
                         return true;
                     }
                 });
