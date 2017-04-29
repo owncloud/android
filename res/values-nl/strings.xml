@@ -324,6 +324,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="error_cant_bind_to_operations_service">Kritieke fout: kan de acties niet uitvoeren</string>
   <string name="network_error_socket_exception">Er trad een fout op bij het verbinden met de server.</string>
   <string name="network_error_socket_timeout_exception">De server had te lang nodig om te reageren</string>
+  <string name="network_error_connect_timeout_exception">De server had te lang nodig om te verbinden</string>
+  <string name="network_host_not_available">Onbekende server</string>
   <string name="forbidden_permissions">U mist autorisatie %s</string>
   <string name="forbidden_permissions_rename">om dit bestand te hernoemen</string>
   <string name="forbidden_permissions_delete">om dit bestand te verwijderen</string>
@@ -442,6 +444,7 @@ Neem contact op met uw beheerder</string>
   <string name="previewing_video_common_error">Deze video kan niet worden gereproduceerd</string>
   <string name="previewing_video_not_supported">Voorbeeldvideo wordt niet ondersteund in jouw Android versie. De download start automatisch</string>
   <string name="streaming_position_not_available">\"Positie niet beschikbaar\"</string>
+  <string name="error_no_network_connection">Apparaat is niet verbonden met een netwerk</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>
