@@ -230,8 +230,10 @@
   <string name="auth_can_not_auth_against_server">Δεν είναι εφικτός ο έλεγχος ταυτότητας σε αυτόν τον διακομιστή</string>
   <string name="auth_account_does_not_exist">Ο λογαριασμός δεν υπάρχει ακόμη σε αυτή τη συσκευή</string>
   <string name="set_available_offline">Διαθέσιμο εκτός σύνδεσης</string>
+  <string name="unset_available_offline">Μη διαθέσιμο εκτός σύνδεσης</string>
   <string name="common_rename">Μετονομασία</string>
   <string name="common_remove">Αφαίρεση</string>
+  <string name="confirmation_remove_file_alert">Θέλετε στα αλήθεια να αφαιρέσετε το %1$s;</string>
   <string name="confirmation_remove_folder_alert">Θέλετε στ\' αλήθεια να διαγράψετε το %1$s και τα περιεχόμενά του;</string>
   <string name="confirmation_remove_local">Μόνο τοπικά</string>
   <string name="confirmation_remove_account_alert">Θέλετε να αφαιρέσετε τον λογαριασμό %1$s;</string>
@@ -255,6 +257,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Αντιγραφή αρχείου από ιδιωτικό αποθηκευτικό χώρο</string>
   <string name="oauth_check_onoff">Σύνδεση με oAuth2</string>
   <string name="oauth_login_connection">Σύνδεση με το διακομιστή oAuth2 σε εξέλιξη...</string>
+  <string name="ssl_validator_header">Δεν ήταν δυνατή η επαλήθευση της ταυτότητας του διακομιστή</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Το πιστοποιητικό του διακομιστή δεν είναι έμπιστο</string>
   <string name="ssl_validator_reason_cert_expired">- Το πιστοποιητικό του διακομιστή έχει λήξει</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Το πιστοποιητικό του διακομιστή είναι πολύ νέο</string>
@@ -276,6 +279,7 @@
   <string name="ssl_validator_label_validity_to">Μέχρι:</string>
   <string name="ssl_validator_label_signature">Υπογραφή:</string>
   <string name="ssl_validator_label_signature_algorithm">Αλγόριθμος:</string>
+  <string name="digest_algorithm_not_available">Αυτός ο αλγόριθμος αφομοίωσης δεν είναι διαθέσιμος στο τηλέφωνό σας.</string>
   <string name="ssl_validator_label_certificate_fingerprint">Αποτύπωμα:</string>
   <string name="certificate_load_problem">Πρόβλημα φόρτωσης του πιστοποιητικού.</string>
   <string name="ssl_validator_null_cert">Δεν μπορεί να εμφανιστεί το πιστοποιητικό.</string>
@@ -290,6 +294,7 @@
   <string name="instant_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
   <string name="instant_upload_path">/InstantUpload</string>
   <string name="conflict_title">Διένεξη αρχείου</string>
+  <string name="conflict_message">Ποια αρχεία θέλετε να διατηρήσετε; Αν επιλέξετε και τις δύο εκδόσεις, το τοπικό αρχείο θα έχει έναν αριθμό που έχει προστεθεί στο όνομά του.</string>
   <string name="conflict_keep_both">Διατήρηση και των δύο</string>
   <string name="conflict_use_local_version">τοπική έκδοση</string>
   <string name="conflict_use_server_version">έκδοση διακομιστή</string>
@@ -303,11 +308,15 @@
   <string name="share_link_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια διαμοιρασμού αυτού του αρχείου ή φακέλου</string>
   <string name="unshare_link_file_no_exist">Αδύνατη η διακοπή κοινής χρήσης.  Παρακαλώ ελέγξτε αν το αρχείο υπάρχει</string>
   <string name="unshare_link_file_error">Ένα σφάλμα προέκυψε κατά τη διάρκεια ακύρωσης διαμοιρασμού αυτού του αρχείου ή φακέλου</string>
+  <string name="update_link_file_no_exist">Αδυναμία ενημέρωσης. Παρακαλούμε ελέγξτε εάν υπάρχει το αρχείο</string>
+  <string name="update_link_file_error">Ένα σφάλμα προέκυψε κατά τη διάρκεια ενημέρωσης των κοινοχρήστων</string>
   <string name="share_link_password_title">Εισάγετε συνθηματικό</string>
   <string name="share_link_empty_password">Πρέπει να εισάγετε συνθηματικό</string>
   <string name="activity_chooser_send_file_title">Αποστολή</string>
   <string name="copy_link">Αντιγραφή συνδέσμου</string>
   <string name="clipboard_text_copied">Έχει αντιγραφεί στο πρόχειρο</string>
+  <string name="clipboard_no_text_to_copy">Δεν ελήφθη κείμενο για να αντιγραφεί στο πρόχειρο</string>
+  <string name="clipboard_uxexpected_error">Απρόσμενο σφάλμα κατά την αντιγραφή στο πρόχειρο</string>
   <string name="clipboard_label">Το κείμενο αντιγράφτηκε από %1$s</string>
   <string name="error_cant_bind_to_operations_service">Κρίσιμο σφάλμα: αδυναμία εκτέλεσης λειτουργιών</string>
   <string name="network_error_socket_exception">Ένα σφάλμα προέκυψε κατά τη σύνδεση με το διακομιστή.</string>
@@ -327,6 +336,7 @@
   <string name="prefs_category_accounts">Λογαριασμοί</string>
   <string name="prefs_add_account">Προσθήκη λογαριασμού</string>
   <string name="drawer_manage_accounts">Διαχείριση λογαριασμών</string>
+  <string name="auth_redirect_non_secure_connection_title">Η ασφαλή σύνδεση ανακατευθύνεται μέσω μιας μη ασφαλούς διαδρομής.</string>
   <string name="actionbar_logger">Αρχεία καταγραφών</string>
   <string name="log_send_history_button">Αποστολή ιστορικού</string>
   <string name="log_send_no_mail_app">Δεν βρέθηκε εφαρμογή για αποστολή ιστορικού. Παρακαλούμε εγκαταστήστε μια εφαρμογή αλληλογραφίας.</string>
@@ -343,14 +353,18 @@
   <string name="move_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια μετακίνησης αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_move">για μετακίνηση αυτού του αρχείου</string>
   <string name="copy_file_not_found">Αδυναμία αντιγραφής. Παρακαλούμε ελέγξτε εάν υπάρχει το αρχείο</string>
+  <string name="copy_file_invalid_into_descendent">Δεν είναι δυνατή η αντιγραφή ενός φακέλου σε έναν απογονικό</string>
   <string name="copy_file_invalid_overwrite">Το αρχείο υπάρχει ήδη στον φάκελο προορισμού</string>
   <string name="copy_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια αντιγραφής αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_copy">για αντιγραφή αυτού του αρχείου</string>
   <string name="prefs_category_instant_uploading">Άμεσες μεταφορτώσεις</string>
   <string name="prefs_category_details">Λεπτομέρειες</string>
   <string name="prefs_instant_video_upload_path_title">Διαδρομή μεταφόρτωσης βίντεο</string>
+  <string name="sync_folder_failed_content">Ο συγχρονισμός του φακέλου %1$s δεν μπορεί να ολοκληρωθεί</string>
   <string name="shared_subject_header">διαμοιρασμένα</string>
   <string name="with_you_subject_header">με εσάς</string>
+  <string name="subject_user_shared_with_you">%1$s μοιράστηκε \"%2$s\" μαζί σας</string>
+  <string name="subject_shared_with_you">\"%1$s\" μοιράστηκε μαζί σας</string>
   <string name="auth_refresh_button">Ανανέωση σύνδεσης</string>
   <string name="auth_host_address">Διεύθυνση διακομιστή</string>
   <string name="common_error_out_memory">Μη επαρκής μνήμη</string>
@@ -373,6 +387,7 @@
   <string name="pref_behaviour_entries_keep_file">διατηρήθηκε στον αρχικό φάκελο</string>
   <string name="pref_behaviour_entries_move">μετακινήθηκε στον φάκελο εφαρμογών</string>
   <string name="share_dialog_title">Διαμοιρασμός</string>
+  <string name="share_file">Διαμοιρασμός %1$s</string>
   <string name="share_with_user_section_title">Διαμοιρασμός με τους χρήστες και τις ομάδες</string>
   <string name="share_no_users">Δεν έχουν διαμοιραστεί ακόμα δεδομένα με τους χρήστες</string>
   <string name="share_incompatible_version">Για να γίνει διαμοιρασμός με άλλους χρήστες, ο διακομιστής πρέπει να είναι τουλάχιστον έκδοση 8.2</string>
@@ -380,6 +395,7 @@
   <string name="share_via_link_section_title">Διαμοιρασμός συνδέσμου</string>
   <string name="share_via_link_expiration_date_label">Ορισμός ημ. λήξης</string>
   <string name="share_via_link_password_label">Προστασία με συνθηματικό</string>
+  <string name="share_via_link_password_title">Ασφαλίστηκε</string>
   <string name="share_via_link_edit_permission_label">Επιτρέπεται η επεξεργασία</string>
   <string name="share_get_public_link_button">Λήψη συνδέσμου</string>
   <string name="share_with_title">Διαμοιρασμός με ...</string>
@@ -405,6 +421,7 @@
   <string name="action_switch_grid_view">Προβολή πλέγματος</string>
   <string name="action_switch_list_view">Προβολή λίστας</string>
   <string name="manage_space_title">Διαχείριση χώρου</string>
+  <string name="manage_space_description">Οι ρυθμίσεις, τα αρχεία βάσεων δεδομένων και οι διακομιστές από τα δεδομένα του %1$s θα διαγραφούν μόνιμα. \n\nΑναβαθμισμένα αρχεία θα παραμείνουν ανέγγιχτα. \n\nΗ διαδικασία αυτή μπορεί να διαρκέσει λίγο.</string>
   <string name="manage_space_clear_data">Εκκαθάριση δεδομένων</string>
   <string name="manage_space_error">Μερικά αρχεία δεν μπορούν να διαγραφούν</string>
   <string name="permission_storage_access">Επιπλέον δικαιώματα απαιτούνται για να μεταφορτώσετε &amp; κατεβάσετε αρχεία.</string>
@@ -421,6 +438,7 @@
 Δεν είναι δυνατή η προετοιμασία της ροής δεδομένων επειδή το πιστοποιητικό του διακομιστή σας δεν είναι αξιόπιστο. Η λήψη αρχείων θα ξεκινήσει αυτόματα</string>
   <string name="streaming_unrecognized_input">Αυτή η μορφή βίντεο δεν υποστηρίζεται</string>
   <string name="streaming_file_not_found_error">Αυτό το αρχείο βίντεο δεν είναι πλέον διαθέσιμο στον διακομιστή</string>
+  <string name="streaming_crossed_redirection">Η ροή δεν επιτρέπεται μέσω διασταυρούμενων ανακατευθύνσεων</string>
   <string name="previewing_video_common_error">Δε μπορεί να γίνει αναπαραγωγή του βίντεο</string>
   <string name="previewing_video_not_supported">Η έκδοση Android σας δεν υποστηρίζει την προεπισκόπηση βίντεο. Το αρχείο θα ληφθεί αυτόματα.</string>
   <string name="streaming_position_not_available">\"Η θέση δεν είναι διαθέσιμη\"</string>
