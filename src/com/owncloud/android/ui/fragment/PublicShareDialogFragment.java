@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,8 +41,7 @@ import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
-
-import org.w3c.dom.Text;
+import com.owncloud.android.utils.DateUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -108,6 +106,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, fileToShare);
         args.putParcelable(ARG_ACCOUNT, account);
+
         publicShareDialogFragment.setArguments(args);
         return publicShareDialogFragment;
     }
@@ -122,7 +121,8 @@ public class PublicShareDialogFragment extends DialogFragment {
      */
     public static PublicShareDialogFragment newInstanceToUpdate(OCFile fileToShare,
                                                                 OCShare publicShare,
-                                                                Account account) {
+                                                                Account account
+                                                                ) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, fileToShare);
@@ -147,6 +147,8 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
 
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+        refreshCapabilitiesFromDB();
     }
 
     private boolean updating() {
@@ -166,8 +168,22 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.share_public_dialog, container, false);
 
-        // Confirm add public link
-        Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
+        // Show default date set by the server
+        if (mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
+
+            getExpirationDateSwitch(view).setChecked(true);
+
+            String formattedDate = SimpleDateFormat.getDateInstance().format(
+                    DateUtils.addDaysToDate(
+                            new Date(),
+                            mCapabilities.getFilesSharingPublicExpireDateDays()
+                    )
+            );
+
+            getExpirationDateValue(view).setVisibility(View.VISIBLE);
+
+            getExpirationDateValue(view).setText(formattedDate);
+        }
 
         // If share is going to be updated
         if (updating()) {
@@ -188,7 +204,6 @@ public class PublicShareDialogFragment extends DialogFragment {
                 // Set an example password
                 getPasswordValue(view).setHint(R.string.share_via_link_default_password);
             }
-
 
             if (mPublicShare.getExpirationDate() != 0) {
 
@@ -222,6 +237,9 @@ public class PublicShareDialogFragment extends DialogFragment {
         } else {
             editPermissionSection.setVisibility(View.GONE);
         }
+
+        // Confirm add public link
+        Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
 
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -413,7 +431,7 @@ public class PublicShareDialogFragment extends DialogFragment {
             }
 
             ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
-                    newInstance(-1, this);
+                    newInstance(-1, getImposedExpirationDate(), this);
 
             if (isChecked) {
 
@@ -427,6 +445,7 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 getExpirationDateValue(getView()).setVisibility(View.INVISIBLE);
 
+                getExpirationDateValue(getView()).setText("");
             }
         }
 
@@ -440,7 +459,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         public void onClick(View expirationView) {
 
             ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
-                    newInstance(-1, this);
+                    newInstance(-1, getImposedExpirationDate(), this);
 
             // Show calendar to set the expiration date
             dialog.show(
@@ -470,7 +489,8 @@ public class PublicShareDialogFragment extends DialogFragment {
             SwitchCompat expirationToggle = ((SwitchCompat) getView().
                     findViewById(R.id.shareViaLinkExpirationSwitch));
 
-            if (expirationToggle.isChecked() && !updating()) {
+            // If the date has not been set yet, uncheck the toggle
+            if (expirationToggle.isChecked() && getExpirationDateValue(getView()).getText() == "") {
                 expirationToggle.setChecked(false);
             }
         }
@@ -497,6 +517,24 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         getErrorMessage().setVisibility(View.VISIBLE);
         getErrorMessage().setText(errorMessage);
+    }
+
+    /**
+     * Get expiration date imposed by the server, if any
+     */
+    public long getImposedExpirationDate () {
+
+        long imposedExpirationDate = -1;
+
+        if (mCapabilities.getFilesSharingPublicExpireDateEnforced().isTrue()) {
+
+            imposedExpirationDate = DateUtils.addDaysToDate(
+                    new Date(),
+                    mCapabilities.getFilesSharingPublicExpireDateDays()
+            ).getTime();
+        }
+
+        return imposedExpirationDate;
     }
 
     private TextView getDialogTitle (View view) {
