@@ -43,6 +43,7 @@ import com.owncloud.android.operations.CreateShareViaLinkOperation;
 import com.owncloud.android.operations.GetSharesForFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
+import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
@@ -276,6 +277,10 @@ public class ShareActivity extends FileActivity
             onCreateShareViaLinkOperationFinish((CreateShareViaLinkOperation) operation, result);
         }
 
+        if (operation instanceof UpdateShareViaLinkOperation) {
+            onUpdateShareViaLinkOperationFinish((UpdateShareViaLinkOperation) operation, result);
+        }
+
         if (operation instanceof RemoveShareOperation && result.isSuccess() && getEditShareFragment() != null) {
             getSupportFragmentManager().popBackStack();
         }
@@ -306,7 +311,7 @@ public class ShareActivity extends FileActivity
             searchShareesFragment.refreshUsersOrGroupsListFromDB();
         }
 
-        PublicShareDialogFragment publicShareDialogFragment = getAddPublicShareFragment();
+        PublicShareDialogFragment publicShareDialogFragment = getPublicShareFragment();
         if (publicShareDialogFragment != null &&
                 publicShareDialogFragment.isAdded()) {  // only if added to the view hierarchy!!
             publicShareDialogFragment.refreshCapabilitiesFromDB();
@@ -343,7 +348,7 @@ public class ShareActivity extends FileActivity
      *
      * @return A {@link PublicShareDialogFragment} instance, or null
      */
-    private PublicShareDialogFragment getAddPublicShareFragment() {
+    private PublicShareDialogFragment getPublicShareFragment() {
         return (PublicShareDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 
@@ -360,6 +365,8 @@ public class ShareActivity extends FileActivity
                                                      RemoteOperationResult result) {
         if (result.isSuccess()) {
             updateFileFromDB();
+
+            getPublicShareFragment().dismiss();
 
             getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
 
@@ -380,12 +387,44 @@ public class ShareActivity extends FileActivity
                 }
 
             } else {
-                Snackbar snackbar = Snackbar.make(
-                        findViewById(android.R.id.content),
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources()),
-                        Snackbar.LENGTH_LONG
+
+                getPublicShareFragment().showError(
+                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
                 );
-                snackbar.show();
+            }
+        }
+    }
+
+    private void onUpdateShareViaLinkOperationFinish(UpdateShareViaLinkOperation operation,
+                                                     RemoteOperationResult result) {
+        if (result.isSuccess()) {
+            updateFileFromDB();
+
+            getPublicShareFragment().dismiss();
+
+            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
+
+        } else {
+            // Detect Failure (403) --> maybe needs password
+            String password = operation.getPassword();
+            if (result.getCode() == RemoteOperationResult.ResultCode.SHARE_FORBIDDEN &&
+                    (password == null || password.length() == 0) &&
+                    getCapabilities().getFilesSharingPublicEnabled().isUnknown()) {
+                // Was tried without password, but not sure that it's optional.
+
+                // Try with password before giving up; see also ShareFileFragment#OnShareViaLinkListener
+                ShareFileFragment shareFileFragment = getShareFileFragment();
+                if (shareFileFragment != null
+                        && shareFileFragment.isAdded()) {   // only if added to the view hierarchy!!
+
+                    shareFileFragment.requestPasswordForShareViaLink(true);
+                }
+
+            } else {
+
+                getPublicShareFragment().showError(
+                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                );
             }
         }
     }
