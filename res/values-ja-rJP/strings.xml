@@ -412,9 +412,9 @@
   <string name="share_privilege_can_edit_delete">削除</string>
   <string name="edit_share_unshare">共有の停止</string>
   <string name="edit_share_done">完了</string>
-  <string name="action_retry_uploads">再試行に失敗</string>
-  <string name="action_clear_failed_uploads">クリアに失敗</string>
-  <string name="action_clear_successful_uploads">クリアに成功</string>
+  <string name="action_retry_uploads">失敗を再試行</string>
+  <string name="action_clear_failed_uploads">失敗をクリア</string>
+  <string name="action_clear_successful_uploads">成功をクリア</string>
   <string name="action_clear_finished_uploads">終了済をクリア</string>
   <string name="action_switch_grid_view">グリッド表示</string>
   <string name="action_switch_list_view">リスト表示</string>
