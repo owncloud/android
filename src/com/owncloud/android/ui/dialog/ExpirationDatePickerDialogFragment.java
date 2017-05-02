@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
+ * @author David González Verdugo
  * Copyright (C) 2016 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -58,9 +59,9 @@ public class ExpirationDatePickerDialogFragment
     private static final String ARG_CHOSEN_DATE_IN_MILLIS = "CHOSEN_DATE_IN_MILLIS";
 
     /**
-     * File to bind an expiration date
+     * Parameter constant for date chosen initially
      */
-    private OCFile mFile;
+    private static final String ARG_IMPOSED_EXPIRATION_DATE = "ARG_IMPOSED_EXPIRATION_DATE";
 
     private DatePickerFragmentListener datePickerListener;
 
@@ -71,9 +72,11 @@ public class ExpirationDatePickerDialogFragment
      * @return New dialog instance
      */
     public static ExpirationDatePickerDialogFragment newInstance(long chosenDateInMillis,
+                                                                 long imposedExpirationDate,
                                                                  DatePickerFragmentListener listener) {
         Bundle arguments = new Bundle();
         arguments.putLong(ARG_CHOSEN_DATE_IN_MILLIS, chosenDateInMillis);
+        arguments.putLong(ARG_IMPOSED_EXPIRATION_DATE, imposedExpirationDate);
 
         ExpirationDatePickerDialogFragment dialog = new ExpirationDatePickerDialogFragment();
         dialog.setDatePickerListener(listener);
@@ -88,13 +91,13 @@ public class ExpirationDatePickerDialogFragment
      */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Load arguments
-        mFile = getArguments().getParcelable(ARG_FILE);
 
         // Chosen date received as an argument must be later than tomorrow ; default to tomorrow in other case
         final Calendar chosenDate = Calendar.getInstance();
         long tomorrowInMillis = chosenDate.getTimeInMillis() + DateUtils.DAY_IN_MILLIS;
         long chosenDateInMillis = getArguments().getLong(ARG_CHOSEN_DATE_IN_MILLIS);
+        long imposedExpirationDate = getArguments().getLong(ARG_IMPOSED_EXPIRATION_DATE);
+
         if (chosenDateInMillis > tomorrowInMillis) {
             chosenDate.setTimeInMillis(chosenDateInMillis);
         } else {
@@ -124,6 +127,9 @@ public class ExpirationDatePickerDialogFragment
         // Prevent days in the past may be chosen
         DatePicker picker = dialog.getDatePicker();
         picker.setMinDate(tomorrowInMillis - 1000);
+        if (imposedExpirationDate != -1) {
+            picker.setMaxDate(imposedExpirationDate);
+        }
 
         // Enforce spinners view; ignored by MD-based theme in Android >=5, but calendar is REALLY buggy
         // in Android < 5, so let's be sure it never appears (in tablets both spinners and calendar are
