@@ -152,40 +152,58 @@
             android:paddingBottom="@dimen/standard_half_padding"
             android:paddingLeft="@dimen/standard_half_padding"
             android:paddingRight="@dimen/standard_half_padding"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_margin"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/cancelAddPublicLinkButton"
-            style="@style/ownCloud.Button"
+        <TextView
+            android:id="@+id/public_link_error_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="shareAddPublicLinkCancelButton"
-            android:text="@string/share_cancel_public_link_button"
-            android:theme="@style/Button.Primary" />
+            android:layout_marginBottom="10dp"
+            android:drawableLeft="@drawable/common_error"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/standard_half_padding"
+            android:paddingRight="@dimen/standard_half_padding"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="13sp"
+            android:visibility="gone" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/confirmAddPublicLinkButton"
-            style="@style/ownCloud.Button"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="shareAddPublicLinkConfirmButton"
-            android:text="@string/share_confirm_public_link_button"
-            android:theme="@style/Button.Primary" />
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/cancelAddPublicLinkButton"
+                style="@style/ownCloud.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="shareAddPublicLinkCancelButton"
+                android:text="@string/share_cancel_public_link_button"
+                android:theme="@style/Button.Primary" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/confirmAddPublicLinkButton"
+                style="@style/ownCloud.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="shareAddPublicLinkConfirmButton"
+                android:text="@string/share_confirm_public_link_button"
+                android:theme="@style/Button.Primary" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
 
 </LinearLayout>
