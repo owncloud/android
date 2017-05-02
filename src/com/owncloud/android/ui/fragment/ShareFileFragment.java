@@ -249,7 +249,7 @@ public class ShareFileFragment extends Fragment
             @Override
             public void onClick(View view) {
                 // Show Add Public Link Fragment
-                mListener.showAddPublicShare(mFile);
+                mListener.showAddPublicShare();
             }
         });
 
