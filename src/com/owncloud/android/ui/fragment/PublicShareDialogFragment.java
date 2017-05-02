@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -225,11 +226,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                // TO DO password enforced by server, request to the user before trying to create
-                if (mCapabilities != null &&
-                        mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
-                }
-
                 String publicLinkName = getNameValue(getView()).getText().toString();
 
                 String publicLinkPassword = getPasswordValue(getView()).getText().toString();
@@ -286,8 +282,6 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     publicLinkEditPermissions
                             );
                 }
-
-                dismiss();
             }
         });
 
@@ -465,11 +459,7 @@ public class PublicShareDialogFragment extends DialogFragment {
 
             TextView expirationDate = getExpirationDateValue(getView());
 
-            if (expirationDate.getVisibility() == View.INVISIBLE) {
-
-                expirationDate.setVisibility(View.VISIBLE);
-
-            }
+            expirationDate.setVisibility(View.VISIBLE);
 
             expirationDate.setText(date);
         }
@@ -497,6 +487,16 @@ public class PublicShareDialogFragment extends DialogFragment {
             mCapabilities = ((FileActivity) mListener).getStorageManager().
                     getCapability(mAccount.name);
         }
+    }
+
+    /**
+     * Show error when creating or updating the public share, if any
+     * @param errorMessage
+     */
+    public void showError (String errorMessage) {
+
+        getErrorMessage().setVisibility(View.VISIBLE);
+        getErrorMessage().setText(errorMessage);
     }
 
     private TextView getDialogTitle (View view) {
@@ -537,5 +537,9 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private SwitchCompat getEditPermissionSwitch() {
         return (SwitchCompat) getView().findViewById(R.id.shareViaLinkEditPermissionSwitch);
+    }
+
+    private TextView getErrorMessage () {
+        return (TextView) getView().findViewById(R.id.public_link_error_message);
     }
 }
