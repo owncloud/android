@@ -226,8 +226,8 @@ public class OCShare implements Parcelable, Serializable {
         if (mName.length() > 0) {
             return mName;
         }
-        if (mPath.length() > 0) {
-            return (new File(mPath)).getName();
+        if (mToken.length() > 0) {
+            return mToken;
         }
         return "";
     }
