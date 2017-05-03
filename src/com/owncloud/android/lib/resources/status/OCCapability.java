@@ -54,6 +54,7 @@ public class OCCapability {
     private CapabilityBooleanType mFilesSharingPublicExpireDateEnforced;
     private CapabilityBooleanType mFilesSharingPublicSendMail;
     private CapabilityBooleanType mFilesSharingPublicUpload;
+    private CapabilityBooleanType mFilesSharingPublicMultiple;
 
     private CapabilityBooleanType mFilesSharingUserSendMail;
 
@@ -67,7 +68,7 @@ public class OCCapability {
     private CapabilityBooleanType mFilesUndelete;
     private CapabilityBooleanType mFilesVersioning;
 
-    public OCCapability(){
+    public OCCapability() {
         mId = 0;
         mAccountName = "";
 
@@ -87,6 +88,7 @@ public class OCCapability {
         mFilesSharingPublicExpireDateEnforced = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicSendMail = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicUpload = CapabilityBooleanType.UNKNOWN;
+        mFilesSharingPublicMultiple = CapabilityBooleanType.UNKNOWN;
         mFilesSharingUserSendMail = CapabilityBooleanType.UNKNOWN;
         mFilesSharingResharing = CapabilityBooleanType.UNKNOWN;
         mFilesSharingFederationOutgoing = CapabilityBooleanType.UNKNOWN;
@@ -229,6 +231,14 @@ public class OCCapability {
         this.mFilesSharingPublicUpload = filesSharingPublicUpload;
     }
 
+    public CapabilityBooleanType getFilesSharingPublicMultiple() {
+        return mFilesSharingPublicMultiple;
+    }
+
+    public void setFilesSharingPublicMultiple(CapabilityBooleanType filesSharingPublicMultiple) {
+        this.mFilesSharingPublicMultiple = filesSharingPublicMultiple;
+    }
+
     public CapabilityBooleanType getFilesSharingUserSendMail() {
         return mFilesSharingUserSendMail;
     }
@@ -244,7 +254,7 @@ public class OCCapability {
     public void setFilesSharingResharing(CapabilityBooleanType filesSharingResharing) {
         this.mFilesSharingResharing = filesSharingResharing;
     }
-    
+
     public CapabilityBooleanType getFilesSharingFederationOutgoing() {
         return mFilesSharingFederationOutgoing;
     }
@@ -284,8 +294,4 @@ public class OCCapability {
     public void setFilesVersioning(CapabilityBooleanType filesVersioning) {
         this.mFilesVersioning = filesVersioning;
     }
-
-
-
-
 }
