@@ -322,6 +322,8 @@
   <string name="error_cant_bind_to_operations_service">Критическая ошибка: невозможно выполнить действия</string>
   <string name="network_error_socket_exception">При подключении к серверу возникла ошибка</string>
   <string name="network_error_socket_timeout_exception">Сервер слишком долго не отвечает</string>
+  <string name="network_error_connect_timeout_exception">Слишком много времени ушло на подключение к серверу</string>
+  <string name="network_host_not_available">Неизвестный узел сети</string>
   <string name="forbidden_permissions">У вас нет прав %s</string>
   <string name="forbidden_permissions_rename">для переименования этого файла</string>
   <string name="forbidden_permissions_delete">для удаления этого файла</string>
@@ -439,6 +441,7 @@
   <string name="previewing_video_common_error">Это видео невозможно воспроизвести</string>
   <string name="previewing_video_not_supported">Предпросмотр видео не поддерживается в вашей версии Андроида. Скачивание файла начнётся автоматически.</string>
   <string name="streaming_position_not_available">\"Позиция недоступна\"</string>
+  <string name="error_no_network_connection">Устройство не подключено к сети</string>
   <plurals name="items_selected_count">
     <item quantity="one">Выбран %d</item>
     <item quantity="few">Выбрано %d</item>
