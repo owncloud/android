@@ -76,9 +76,10 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
 
             OCShare share = mPublicLinks.get(position);
 
-            TextView userName = (TextView) view.findViewById(R.id.publicLinkName);
+            TextView shareName = (TextView) view.findViewById(R.id.publicLinkName);
 
-            userName.setText(share.getName());
+            // If there's no name, set the token as name
+            shareName.setText(share.getName().equals("") ? share.getToken() : share.getName());
 
             // bind listener to get link
             final ImageView getPublicLinkButton = (ImageView) view.findViewById(R.id.getPublicLinkButton);
