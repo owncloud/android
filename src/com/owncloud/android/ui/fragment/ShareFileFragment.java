@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -274,8 +275,8 @@ public class ShareFileFragment extends Fragment
      */
     private void initShareViaLinkListener(View shareView) {
         mOnShareViaLinkSwitchCheckedChangeListener = new OnShareViaLinkListener();
-        SwitchCompat shareViaLinkSwitch = (SwitchCompat) shareView.findViewById(R.id.shareViaLinkSectionSwitch);
-        shareViaLinkSwitch.setOnCheckedChangeListener(mOnShareViaLinkSwitchCheckedChangeListener);
+//        SwitchCompat shareViaLinkSwitch = (SwitchCompat) shareView.findViewById(R.id.shareViaLinkSectionSwitch);
+//        shareViaLinkSwitch.setOnCheckedChangeListener(mOnShareViaLinkSwitchCheckedChangeListener);
     }
 
     @Override
@@ -402,7 +403,7 @@ public class ShareFileFragment extends Fragment
         refreshUsersOrGroupsListFromDB();
 
         // Load data of public share, if exists
-        refreshPublicShareFromDB();
+        refreshPublicSharesListFromDB();
     }
 
     @Override
@@ -507,7 +508,7 @@ public class ShareFileFragment extends Fragment
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
-    public void refreshPublicShareFromDB() {
+    public void refreshPublicSharesListFromDB() {
         if (isPublicShareDisabled()) {
             hidePublicShare();
 
@@ -550,6 +551,7 @@ public class ShareFileFragment extends Fragment
         TextView noPublicLinks = (TextView) getView().findViewById(R.id.shareNoPublicLinks);
         ListView publicLinksList = (ListView) getView().findViewById(R.id.sharePublicLinksList);
 
+        // Show or hide public links and no public links message
         if (mPublicLinks.size() > 0) {
             noPublicLinks.setVisibility(View.GONE);
             publicLinksList.setVisibility(View.VISIBLE);
@@ -560,12 +562,25 @@ public class ShareFileFragment extends Fragment
             publicLinksList.setVisibility(View.GONE);
         }
 
+        // Show or hide button for adding a new public share depending on the capabilities and
+        // the server version
+        if (!enablemultiplePublicSharing()) {
+
+            if (mPublicLinks.size() == 0) {
+
+                getAddPublicLinkButton().setVisibility(View.VISIBLE);
+
+            } else if (mPublicLinks.size() >= 1) {
+
+                getAddPublicLinkButton().setVisibility(View.INVISIBLE);
+            }
+        }
+
         // Set Scroll to initial position
         ScrollView scrollView = (ScrollView) getView().findViewById(R.id.shareScroll);
         scrollView.scrollTo(0, 0);
 
 //        if (mPublicShare != null && ShareType.PUBLIC_LINK.equals(mPublicShare.getShareType())) {
-//
 //
 //            /// public share bound -> expand section
 //            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
@@ -661,8 +676,12 @@ public class ShareFileFragment extends Fragment
 
     /// BEWARE: next methods will failed with NullPointerException if called before onCreateView() finishes
 
-    private SwitchCompat getShareViaLinkSwitch() {
-        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkSectionSwitch);
+    private LinearLayout getShareViaLinkSection() {
+        return (LinearLayout) getView().findViewById(R.id.shareViaLinkSection);
+    }
+
+    private ImageButton getAddPublicLinkButton () {
+        return (ImageButton) getView().findViewById(R.id.addPublicLinkButton);
     }
 
     private View getExpirationDateSection() {
@@ -701,10 +720,9 @@ public class ShareFileFragment extends Fragment
      * Hides all the UI elements related to public share
      */
     private void hidePublicShare() {
-        getShareViaLinkSwitch().setVisibility(View.GONE);
-        getExpirationDateSection().setVisibility(View.GONE);
-        getPasswordSection().setVisibility(View.GONE);
-        getEditPermissionSection().setVisibility(View.GONE);
+
+        getShareViaLinkSection().setVisibility(View.GONE);
+
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -772,4 +790,31 @@ public class ShareFileFragment extends Fragment
         }
     }
 
+    /**
+     * Check if the multiple public sharing support should be enabled or not depending on the
+     * capabilities and server version
+     *
+     * @return true if should be enabled, false otherwise
+     */
+    private boolean enablemultiplePublicSharing () {
+
+        boolean enableMultiplePublicShare = true;
+
+        OwnCloudVersion serverVersion = null;
+
+        serverVersion = new OwnCloudVersion(mCapabilities.getVersionString());
+
+        // Server version <= 9.x, multiple public sharing not supported
+        if (!serverVersion.isMultiplePublicSharingSupported()) {
+
+            enableMultiplePublicShare = false;
+
+        } else if (mCapabilities.getFilesSharingPublicMultiple().isFalse()) {
+
+            // Server version >= 10, multiple public sharing supported but disabled
+            enableMultiplePublicShare = false;
+        }
+
+        return enableMultiplePublicShare;
+    }
 }

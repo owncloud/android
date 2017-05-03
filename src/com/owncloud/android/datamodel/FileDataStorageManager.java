@@ -2133,6 +2133,8 @@ public class FileDataStorageManager {
                 capability.getFilesSharingPublicSendMail().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD,
                 capability.getFilesSharingPublicUpload().getValue());
+        cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE,
+                capability.getFilesSharingPublicMultiple().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL,
                 capability.getFilesSharingUserSendMail().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING, capability.getFilesSharingResharing().getValue());
@@ -2270,6 +2272,8 @@ public class FileDataStorageManager {
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL))));
             capability.setFilesSharingPublicUpload(CapabilityBooleanType.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD))));
+            capability.setFilesSharingPublicMultiple(CapabilityBooleanType.fromValue(c.getInt(c
+                    .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE))));
             capability.setFilesSharingUserSendMail(CapabilityBooleanType.fromValue(c.getInt(c
                     .getColumnIndex(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL))));
             capability.setFilesSharingResharing(CapabilityBooleanType.fromValue(c.getInt(c

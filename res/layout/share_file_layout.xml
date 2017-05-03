@@ -201,20 +201,6 @@
                 android:text="@string/share_no_public_links"
                 android:textSize="15sp" />
 
-            <!--- DELETE -->
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/shareViaLinkSectionSwitch"
-                style="?android:attr/listSeparatorTextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="@dimen/standard_half_margin"
-                android:checked="false"
-                android:paddingRight="@dimen/standard_half_padding"
-                android:text="@string/share_via_link_section_title"
-                android:textColor="@color/color_accent"
-                android:visibility="gone" />
-
         </LinearLayout>
 
     </LinearLayout>
