@@ -223,13 +223,7 @@ public class OCShare implements Parcelable, Serializable {
     }
 
     public String getName() {
-        if (mName.length() > 0) {
-            return mName;
-        }
-        if (mToken.length() > 0) {
-            return mToken;
-        }
-        return "";
+        return mName;
     }
 
     public void setName(String name) {
