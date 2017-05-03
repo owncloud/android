@@ -832,6 +832,24 @@ public class FileContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
+            if (oldVersion < 19 && newVersion >= 19) {
+
+                Log_OC.i("SQL", "Entering in the #19 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                            " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
+                            + " INTEGER " + " DEFAULT 0");
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+
+                    // SQLite does not allow to drop a columns; ftm, we'll not recreate
+                    // the files table without the column, just forget about
+
+                } finally {
+                    db.endTransaction();
+                }
+            }
             if (!upgraded) {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                     ", newVersion == " + newVersion);
@@ -911,6 +929,7 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED + " INTEGER, " // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
