@@ -147,7 +147,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * Called when the ownCloud {@link Account} associated to the Activity was just updated.
-     * <p/>
+     *
      * Child classes must grant that state depending on the {@link Account} is updated.
      */
     protected void onAccountSet(boolean stateWasRecovered) {
