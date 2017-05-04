@@ -241,7 +241,6 @@ public class ShareFileFragment extends Fragment
             }
         });
 
-
         //  Add Public Link Button
         ImageButton addPublicLinkButton = (ImageButton)
                 view.findViewById(R.id.addPublicLinkButton);
@@ -682,38 +681,6 @@ public class ShareFileFragment extends Fragment
 
     private ImageButton getAddPublicLinkButton () {
         return (ImageButton) getView().findViewById(R.id.addPublicLinkButton);
-    }
-
-    private View getExpirationDateSection() {
-        return getView().findViewById(R.id.shareViaLinkExpirationSection);
-    }
-
-    private SwitchCompat getExpirationDateSwitch() {
-        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkExpirationSwitch);
-    }
-
-    private TextView getExpirationDateValue() {
-        return (TextView) getView().findViewById(R.id.shareViaLinkExpirationValue);
-    }
-
-    private View getPasswordSection() {
-        return getView().findViewById(R.id.shareViaLinkPasswordSection);
-    }
-
-    private SwitchCompat getPasswordSwitch() {
-        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkPasswordSwitch);
-    }
-
-    private TextView getPasswordValue() {
-        return (TextView) getView().findViewById(R.id.shareViaLinkPasswordValue);
-    }
-
-    private View getEditPermissionSection() {
-        return getView().findViewById(R.id.shareViaLinkEditPermissionSection);
-    }
-
-    private SwitchCompat getEditPermissionSwitch() {
-        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkEditPermissionSwitch);
     }
 
     /**
