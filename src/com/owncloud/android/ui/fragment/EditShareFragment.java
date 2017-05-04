@@ -462,7 +462,7 @@ public class EditShareFragment extends Fragment {
         int permissions = spb.build();
 
         ((FileActivity) getActivity()).getFileOperationsHelper().
-                setPermissionsToShare(
+            setPermissionsToShareWithSharee(
                         mShare,
                         permissions
                 )

@@ -67,9 +67,6 @@ public class ShareActivity extends FileActivity
     private static final String TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT";
     private static final String TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT";
 
-    /// Tags for dialog fragments
-    private static final String FTAG_SHARE_PASSWORD_DIALOG = "SHARE_PASSWORD_DIALOG";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -369,28 +366,9 @@ public class ShareActivity extends FileActivity
             getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
 
         } else {
-            // TODO Check this
-            // Detect Failure (403) --> maybe needs password
-            String password = operation.getPassword();
-            if (result.getCode() == RemoteOperationResult.ResultCode.SHARE_FORBIDDEN &&
-                    (password == null || password.length() == 0) &&
-                    getCapabilities().getFilesSharingPublicEnabled().isUnknown()) {
-                // Was tried without password, but not sure that it's optional.
-
-                // Try with password before giving up; see also ShareFileFragment#OnShareViaLinkListener
-                ShareFileFragment shareFileFragment = getShareFileFragment();
-                if (shareFileFragment != null
-                        && shareFileFragment.isAdded()) {   // only if added to the view hierarchy!!
-
-                    shareFileFragment.requestPasswordForShareViaLink(true);
-                }
-
-            } else {
-
-                getPublicShareFragment().showError(
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
-                );
-            }
+            getPublicShareFragment().showError(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+            );
         }
     }
 
@@ -404,27 +382,9 @@ public class ShareActivity extends FileActivity
             getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
 
         } else {
-            // Detect Failure (403) --> maybe needs password
-            String password = operation.getPassword();
-            if (result.getCode() == RemoteOperationResult.ResultCode.SHARE_FORBIDDEN &&
-                    (password == null || password.length() == 0) &&
-                    getCapabilities().getFilesSharingPublicEnabled().isUnknown()) {
-                // Was tried without password, but not sure that it's optional.
-
-                // Try with password before giving up; see also ShareFileFragment#OnShareViaLinkListener
-                ShareFileFragment shareFileFragment = getShareFileFragment();
-                if (shareFileFragment != null
-                        && shareFileFragment.isAdded()) {   // only if added to the view hierarchy!!
-
-                    shareFileFragment.requestPasswordForShareViaLink(true);
-                }
-
-            } else {
-
-                getPublicShareFragment().showError(
-                        ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
-                );
-            }
+            getPublicShareFragment().showError(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+            );
         }
     }
 

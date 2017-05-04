@@ -104,9 +104,10 @@ public class OperationsService extends Service {
     public static final String EXTRA_COOKIE = "COOKIE";
 
     public static final String ACTION_CREATE_SHARE_VIA_LINK = "CREATE_SHARE_VIA_LINK";
+    public static final String ACTION_UPDATE_SHARE_VIA_LINK = "UPDATE_SHARE_VIA_LINK";
     public static final String ACTION_CREATE_SHARE_WITH_SHAREE = "CREATE_SHARE_WITH_SHAREE";
+    public static final String ACTION_UPDATE_SHARE_WITH_SHAREE = "UPDATE_SHARE_WITH_SHAREE";
     public static final String ACTION_UNSHARE = "UNSHARE";
-    public static final String ACTION_UPDATE_SHARE = "UPDATE_SHARE";
     public static final String ACTION_GET_SERVER_INFO = "GET_SERVER_INFO";
     public static final String ACTION_OAUTH2_GET_ACCESS_TOKEN = "OAUTH2_GET_ACCESS_TOKEN";
     public static final String ACTION_GET_USER_NAME = "GET_USER_NAME";
@@ -589,37 +590,36 @@ public class OperationsService extends Service {
                                 setPublicUpload(uploadToFolderPermission);
                     }
 
-                } else if (ACTION_UPDATE_SHARE.equals(action)) {
-                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                } else if (ACTION_UPDATE_SHARE_VIA_LINK.equals(action)) {
                     long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
-                    if (remotePath != null && remotePath.length() > 0) {
-                        operation = new UpdateShareViaLinkOperation(remotePath);
+                    operation = new UpdateShareViaLinkOperation(shareId);
 
-                        String name = operationIntent.getStringExtra(EXTRA_SHARE_NAME);
-                        ((UpdateShareViaLinkOperation) operation).setName(name);
+                    String name = operationIntent.getStringExtra(EXTRA_SHARE_NAME);
+                    ((UpdateShareViaLinkOperation) operation).setName(name);
 
-                        String password = operationIntent.getStringExtra(EXTRA_SHARE_PASSWORD);
-                        ((UpdateShareViaLinkOperation) operation).setPassword(password);
+                    String password = operationIntent.getStringExtra(EXTRA_SHARE_PASSWORD);
+                    ((UpdateShareViaLinkOperation) operation).setPassword(password);
 
-                        long expirationDate = operationIntent.getLongExtra(
-                                EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
-                                0
+                    long expirationDate = operationIntent.getLongExtra(
+                            EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
+                            0
+                    );
+                    ((UpdateShareViaLinkOperation)operation).setExpirationDate(
+                            expirationDate
+                    );
+
+                    if (operationIntent.hasExtra(EXTRA_SHARE_PUBLIC_UPLOAD)) {
+                        ((UpdateShareViaLinkOperation) operation).setPublicUpload(
+                            operationIntent.getBooleanExtra(EXTRA_SHARE_PUBLIC_UPLOAD, false)
                         );
-                        ((UpdateShareViaLinkOperation)operation).setExpirationDate(
-                                expirationDate
-                        );
-
-                        if (operationIntent.hasExtra(EXTRA_SHARE_PUBLIC_UPLOAD)) {
-                            ((UpdateShareViaLinkOperation) operation).setPublicUpload(
-                                operationIntent.getBooleanExtra(EXTRA_SHARE_PUBLIC_UPLOAD, false)
-                            );
-                        }
-
-                    } else if (shareId > 0) { // For updating private links
-                        operation = new UpdateSharePermissionsOperation(shareId);
-                        int permissions = operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS, 1);
-                        ((UpdateSharePermissionsOperation)operation).setPermissions(permissions);
                     }
+
+                } else if (ACTION_UPDATE_SHARE_WITH_SHAREE.equals(action)) {
+                    // Update private share, only permissions
+                    long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);
+                    operation = new UpdateSharePermissionsOperation(shareId);
+                    int permissions = operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS, 1);
+                    ((UpdateSharePermissionsOperation)operation).setPermissions(permissions);
 
                 } else if (action.equals(ACTION_CREATE_SHARE_WITH_SHAREE)) {
                     // Create private share with user or group
