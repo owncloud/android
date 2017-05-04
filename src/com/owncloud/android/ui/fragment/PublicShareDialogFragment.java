@@ -62,6 +62,8 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private static final String ARG_ACCOUNT = "ACCOUNT";
 
+    private static final int CRUD_PERMISSIONS = 15;
+
     /**
      * File to share, received as a parameter in construction time
      */
@@ -93,7 +95,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     private boolean passwordDeleted;
 
     /**
-     * Create a new instance of PublicShareDialogFragment, providing fileToShare
+     * Create a new instance of PublicShareDialogFragment, providing fileToShare and account
      * as an argument.
      *
      * Dialog shown this way is intended to CREATE a new public share.
@@ -112,8 +114,8 @@ public class PublicShareDialogFragment extends DialogFragment {
     }
 
     /**
-     * Update an instance of PublicShareDialogFragment, providing publicShare
-     * as an argument.
+     * Update an instance of PublicShareDialogFragment, providing fileToShare, publicShare and
+     * account as arguments.
      *
      * Dialog shown this way is intended to UPDATE an existing public share.
      *
@@ -168,7 +170,14 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.share_public_dialog, container, false);
 
-        // Show default date set by the server
+        // Show or hide edit permission section
+        if (isSharedFolder()){
+            getEditPermissionSection(view).setVisibility(View.VISIBLE);
+        } else {
+            getEditPermissionSection(view).setVisibility(View.GONE);
+        }
+
+        // Show default date enforced by the server, if any
         if (mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
 
             getExpirationDateSwitch(view).setChecked(true);
@@ -185,7 +194,7 @@ public class PublicShareDialogFragment extends DialogFragment {
             getExpirationDateValue(view).setText(formattedDate);
         }
 
-        // If share is going to be updated
+        // Fill in the different fields if the share is being updated
         if (updating()) {
 
             // Set dialog title to edit
@@ -194,6 +203,12 @@ public class PublicShareDialogFragment extends DialogFragment {
             // Set existing share name
             getNameValue(view).setText(mPublicShare.getName());
 
+            // Set the edit permissions, if any
+            if (mPublicShare.getPermissions() == CRUD_PERMISSIONS) {
+                getEditPermissionSwitch(view).setChecked(true);
+            }
+
+            // Set password, if any
             if (mPublicShare.isPasswordProtected()) {
 
                 // Switch on the password toggle
@@ -205,6 +220,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                 getPasswordValue(view).setHint(R.string.share_via_link_default_password);
             }
 
+            //Set expiration date, if any
             if (mPublicShare.getExpirationDate() != 0) {
 
                 // Switch on the expiration date toggle
@@ -227,16 +243,6 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         // Set listener for user actions on expiration date
         initExpirationListener(view);
-
-        RelativeLayout editPermissionSection = (RelativeLayout) view.
-                findViewById(R.id.shareViaLinkEditPermissionSection);
-
-        // Show or hide edit permission section
-        if (isSharedFolder()){
-            editPermissionSection.setVisibility(View.VISIBLE);
-        } else {
-            editPermissionSection.setVisibility(View.GONE);
-        }
 
         // Confirm add public link
         Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
@@ -265,7 +271,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                     }
                 }
 
-                Boolean publicLinkEditPermissions = getEditPermissionSwitch().isChecked();
+                boolean publicLinkEditPermissions = getEditPermissionSwitch(getView()).isChecked();
 
                 if (!updating()) { // Creating a new public share
 
@@ -545,6 +551,14 @@ public class PublicShareDialogFragment extends DialogFragment {
         return (EditText) view.findViewById(R.id.shareViaLinkNameValue);
     }
 
+    private View getEditPermissionSection(View view) {
+        return view.findViewById(R.id.shareViaLinkEditPermissionSection);
+    }
+
+    private SwitchCompat getEditPermissionSwitch(View view) {
+        return (SwitchCompat) view.findViewById(R.id.shareViaLinkEditPermissionSwitch);
+    }
+
     private View getPasswordSection(View view) {
         return view.findViewById(R.id.shareViaLinkPasswordSection);
     }
@@ -557,24 +571,12 @@ public class PublicShareDialogFragment extends DialogFragment {
         return (TextView) view.findViewById(R.id.shareViaLinkPasswordValue);
     }
 
-    private View getExpirationDateSection() {
-        return getView().findViewById(R.id.shareViaLinkExpirationSection);
-    }
-
     private SwitchCompat getExpirationDateSwitch(View view) {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkExpirationSwitch);
     }
 
     private TextView getExpirationDateValue(View view) {
         return (TextView) view.findViewById(R.id.shareViaLinkExpirationValue);
-    }
-
-    private View getEditPermissionSection() {
-        return getView().findViewById(R.id.shareViaLinkEditPermissionSection);
-    }
-
-    private SwitchCompat getEditPermissionSwitch() {
-        return (SwitchCompat) getView().findViewById(R.id.shareViaLinkEditPermissionSwitch);
     }
 
     private TextView getErrorMessage () {

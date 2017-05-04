@@ -369,6 +369,7 @@ public class ShareActivity extends FileActivity
             getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
 
         } else {
+            // TODO Check this
             // Detect Failure (403) --> maybe needs password
             String password = operation.getPassword();
             if (result.getCode() == RemoteOperationResult.ResultCode.SHARE_FORBIDDEN &&
