@@ -114,6 +114,7 @@
   <string name="uploader_upload_failed_content_single">%1$s :n lähetys palvelimelle jäi kesken</string>
   <string name="uploader_upload_failed_credentials_error">Lähetys epäonnistui, kirjaudu sisään uudelleen</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Palvelimen varmenne ei ole luotettu</string>
+  <string name="uploader_upload_text_dialog_title">Anna uuden tiedoston nimi</string>
   <string name="uploader_upload_text_filename_hint">Tiedostonimi</string>
   <string name="ssl_certificate_not_trusted">Palvelimen varmenne ei ole luotettu</string>
   <string name="uploads_view_title">Lataukset</string>

@@ -116,7 +116,9 @@
   <string name="uploader_upload_failed_content_single">Il caricamento di %1$s non può essere completato</string>
   <string name="uploader_upload_failed_credentials_error">Caricamento non riuscito, devi effettuare nuovamente l\'accesso</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
+  <string name="uploader_upload_text_dialog_title">Inserisci un nome per il nuovo file</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Il nome del file non può essere vuoto</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Il nome del file non può contenere piu\' di %d caratteri</string>
   <string name="uploader_upload_text_filename_hint">Nome del file</string>
   <string name="ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
   <string name="uploads_view_title">Caricamenti</string>
@@ -135,6 +137,7 @@
   <string name="uploads_view_upload_status_failed_file_error">Errore di file</string>
   <string name="uploads_view_upload_status_failed_localfile_error">File locale non trovato</string>
   <string name="uploads_view_upload_status_failed_permission_error">Errore di permessi</string>
+  <string name="uploads_view_upload_status_failed_firewall_error">Azione non consentita dalle regole del firewall</string>
   <string name="uploads_view_upload_status_conflict">Conflitto</string>
   <string name="uploads_view_upload_status_service_interrupted">L\'applicazione è stata terminata</string>
   <string name="uploads_view_upload_status_unknown_fail">Errore sconosciuto</string>
@@ -318,6 +321,8 @@
   <string name="error_cant_bind_to_operations_service">Errore grave: impossibile eseguire le operazioni</string>
   <string name="network_error_socket_exception">Si è verificato un errore durante la connessione al server.</string>
   <string name="network_error_socket_timeout_exception">Il server ha richiesto troppo tempo per rispondere</string>
+  <string name="network_error_connect_timeout_exception">Il server impiega troppo tempo per connettersi</string>
+  <string name="network_host_not_available">Host sconosciuto</string>
   <string name="forbidden_permissions">Non hai i permessi %s</string>
   <string name="forbidden_permissions_rename">per rinominare questo file</string>
   <string name="forbidden_permissions_delete">per eliminare questo file</string>
@@ -326,6 +331,7 @@
   <string name="update_link_forbidden_permissions">per aggiornare questa condivisione</string>
   <string name="forbidden_permissions_create">per creare il file</string>
   <string name="uploader_upload_forbidden_permissions">per caricare in questa cartella</string>
+  <string name="uploader_upload_forbidden">Upload non consentito</string>
   <string name="downloader_download_file_not_found">Il file non è più disponibile sul server</string>
   <string name="prefs_category_accounts">Account</string>
   <string name="prefs_add_account">Aggiungi account</string>
@@ -423,7 +429,9 @@
   <string name="confirmation_remove_files_alert">Vuoi davvero rimuovere gli elementi selezionati?</string>
   <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
   <string name="failed_upload_quota_exceeded_text">Spazio insufficiente nell\'account</string>
+  <string name="auth_forbidden">Autenticazione non accettata</string>
   <string name="privacy_policy_error">Si è verificato un errore:</string>
+  <string name="service_unavailable">Il server non e\' accessibile</string>
   <string name="streaming_unrecognized_input">Questo formato video non è supportato</string>
   <string name="streaming_file_not_found_error">Questo file video non è più disponibile sul server</string>
   <string name="previewing_video_common_error">Questo video non può essere riprodott1o</string>

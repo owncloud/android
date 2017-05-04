@@ -116,6 +116,9 @@
   <string name="uploader_upload_failed_content_single">Wysyłanie %1$s nie powiodło się</string>
   <string name="uploader_upload_failed_credentials_error">Błąd przy wysyłaniu zaloguj się ponownie</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certyfikat serwera jest niezaufany</string>
+  <string name="uploader_upload_text_dialog_title">Wprowadź nazwę nowego pliku</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Nazwa pliku nie może być pusta</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Nazwa pliku nie może być dłuższa niż %d znaków</string>
   <string name="uploader_upload_text_filename_hint">Nazwa pliku</string>
   <string name="ssl_certificate_not_trusted">Certyfikat serwera nie jest niezaufany</string>
   <string name="uploads_view_title">Wysłane</string>
@@ -316,6 +319,8 @@
   <string name="error_cant_bind_to_operations_service">Błąd krytyczny: nie można wykonać operacji</string>
   <string name="network_error_socket_exception">Pojawił się błąd podczas łączenia z serwerem.</string>
   <string name="network_error_socket_timeout_exception">Serwer zbyt długo nie odpowiadał</string>
+  <string name="network_error_connect_timeout_exception">Zbyt długi czas łączenia z serwerem</string>
+  <string name="network_host_not_available">Nieznany host</string>
   <string name="forbidden_permissions">Nie masz uprawnień %s</string>
   <string name="forbidden_permissions_rename">do zmiany nazwy tego pliku</string>
   <string name="forbidden_permissions_delete">do usuwania tego pliku</string>
@@ -433,6 +438,7 @@
   <string name="previewing_video_common_error">To wideo nie da się odtworzyć</string>
   <string name="previewing_video_not_supported">Podgląd wideo nie jest wspierany w tej wersji systemu Android. Pobieranie pliku rozpocznie się automatycznie.</string>
   <string name="streaming_position_not_available">\"Pozycja jest niedostępna\"</string>
+  <string name="error_no_network_connection">Urządzenie nie jest podłączone do internetu</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>
