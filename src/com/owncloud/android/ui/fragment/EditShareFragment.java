@@ -23,6 +23,7 @@ package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 
-public class EditShareFragment extends Fragment {
+public class EditShareFragment extends DialogFragment {
 
     private static final String TAG = EditShareFragment.class.getSimpleName();
 
@@ -114,6 +115,8 @@ public class EditShareFragment extends Fragment {
                 mShare = savedInstanceState.getParcelable(ARG_SHARE);
             }
         }
+
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
 
