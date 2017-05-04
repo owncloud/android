@@ -41,10 +41,12 @@
             android:ellipsize="middle"
             />
 
+        <!-- for some reason the divider below is determining the width for the fragment;
+             so, leave it there, even if it's height is 0dp, we don't really want to see it -->
         <View
             android:id="@+id/share_header_divider"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="0dp"
             android:background="@color/owncloud_blue"
             />
     <LinearLayout
