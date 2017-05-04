@@ -184,12 +184,17 @@ public class ShareActivity extends FileActivity
 
     @Override
     public void showEditPrivateShare(OCShare share) {
-        // replace current fragment with EditShareFragment on demand
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment editShareFragment = EditShareFragment.newInstance(share, getFile(), getAccount());
-        ft.replace(R.id.share_fragment_container, editShareFragment, TAG_EDIT_SHARE_FRAGMENT);
-        ft.addToBackStack(null);    // BACK button will recover the previous fragment
-        ft.commit();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT);
+        if (prev != null) {
+            ft.remove(prev);    // BACK button will recover the previous fragment
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = EditShareFragment.newInstance(share, getFile(), getAccount());
+        newFragment.show(ft, TAG_EDIT_SHARE_FRAGMENT);
+
     }
 
     @Override
