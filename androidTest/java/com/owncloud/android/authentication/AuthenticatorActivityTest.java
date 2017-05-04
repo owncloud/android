@@ -176,7 +176,7 @@ public class AuthenticatorActivityTest {
 
             // Check that SSL server is not trusted
             onView(withId(R.id.server_status_text))
-                    .check(matches(withText(R.string.auth_ssl_unverified_server_title)));
+                    .check(matches(withText(R.string.ssl_certificate_not_trusted)));
 
             Log_OC.i(LOG_TAG, "Test not accept not secure passed");
 
@@ -545,7 +545,10 @@ public class AuthenticatorActivityTest {
 
         switch (trusted){
             case (-1):
-                onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
+                if (testServerURL.startsWith("http"))
+                    onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_connection_established)));
+                else
+                    onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
                 break;
             case (0):
                 onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
