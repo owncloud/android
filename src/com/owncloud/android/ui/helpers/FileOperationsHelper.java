@@ -27,7 +27,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 
@@ -335,59 +334,15 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Updates a public share on a file to set its password.
-     * Starts a request to do it in {@link OperationsService}
-     *
-     * @param file          File which public share will be protected with a password.
-     * @param password      Password to set for the public link; null or empty string to clear
-     *                      the current password
-     */
-    public void setPasswordToShareViaLink(OCFile file, String password) {
-        // Set password updating share
-        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
-        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE);
-        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        updateShareIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_PASSWORD,
-                (password == null) ? "" : password
-        );
-
-        queueShareIntent(updateShareIntent);
-    }
-
-
-    /**
-     * Updates a public share on a file to set its expiration date.
-     * Starts a request to do it in {@link OperationsService}
-     *
-     * @param file                      File which public share will be constrained with an expiration date.
-     * @param expirationTimeInMillis    Expiration date to set. A negative value clears the current expiration
-     *                                  date, leaving the link unrestricted. Zero makes no change.
-     */
-    public void setExpirationDateToShareViaLink(OCFile file, long expirationTimeInMillis) {
-        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
-        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE);
-        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        updateShareIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_EXPIRATION_DATE_IN_MILLIS,
-                expirationTimeInMillis
-        );
-        queueShareIntent(updateShareIntent);
-    }
-
-
-    /**
      * Updates a share on a file to set its access permissions.
      * Starts a request to do it in {@link OperationsService}
      *
      * @param share                     {@link OCShare} instance which permissions will be updated.
      * @param permissions               New permissions to set. A value <= 0 makes no update.
      */
-    public void setPermissionsToShare(OCShare share, int permissions) {
+    public void setPermissionsToShareWithSharee(OCShare share, int permissions) {
         Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
-        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE);
+        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE_WITH_SHAREE);
         updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
         updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
         updateShareIntent.putExtra(
@@ -398,31 +353,10 @@ public class FileOperationsHelper {
     }
 
     /**
-     * Updates a public share on a folder to set its editing permission.
-     * Starts a request to do it in {@link OperationsService}
-     *
-     * @param folder                     Folder which editing permission of his public share will be modified.
-     * @param uploadPermission          New state of the permission for editing the folder shared via link.
-     */
-    public void setUploadPermissionsToShare(OCFile folder, boolean uploadPermission) {
-        Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
-        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE);
-        updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        updateShareIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, folder.getRemotePath());
-        updateShareIntent.putExtra(
-                OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
-                uploadPermission
-        );
-        queueShareIntent(updateShareIntent);
-    }
-
-
-
-    /**
      * Updates at once all the properties of a public share on a file.
      * Starts a request to do it in {@link OperationsService}
      *
-     * @param file                      File which public share will be updated.
+     * @param share                     Public share to updated.
      * @param name                      Name to set for the link (ignored in servers < 10.0.0).
      * @param password                  Password to set for the public link; null or empty string to clear
      *                                  the current password. - TODO select value to leave unchanged?
@@ -432,7 +366,7 @@ public class FileOperationsHelper {
      *                                  Ignored if the file is not a folder. - TODO select value to leave unchanged?
      */
     public void updateShareViaLink(
-        OCFile file,
+        OCShare share,
         String name,
         String password,
         long expirationTimeInMillis,
@@ -440,9 +374,9 @@ public class FileOperationsHelper {
     ) {
         // Set password updating share
         Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
-        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE);
+        updateShareIntent.setAction(OperationsService.ACTION_UPDATE_SHARE_VIA_LINK);
         updateShareIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-        updateShareIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
+        updateShareIntent.putExtra(OperationsService.EXTRA_SHARE_ID, share.getId());
 
         updateShareIntent.putExtra(
             OperationsService.EXTRA_SHARE_NAME,

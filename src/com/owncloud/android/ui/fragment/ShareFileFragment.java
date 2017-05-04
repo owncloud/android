@@ -28,11 +28,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,7 +50,6 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
-import com.owncloud.android.ui.dialog.SharePasswordDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
@@ -82,9 +79,6 @@ public class ShareFileFragment extends Fragment
      */
     private static final String ARG_FILE = "FILE";
     private static final String ARG_ACCOUNT = "ACCOUNT";
-
-//    /** Tag for dialog */
-//    private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
 
     /**
      * File to share, received as a parameter in construction time
@@ -125,16 +119,6 @@ public class ShareFileFragment extends Fragment
      * Capabilities of the server
      */
     private OCCapability mCapabilities;
-
-    /**
-     * Listener for changes on switch to share / unshare publicly
-     */
-    private CompoundButton.OnCheckedChangeListener mOnShareViaLinkSwitchCheckedChangeListener;
-
-    /**
-     * Listener for user actions to set or unset edit permission on public link
-     */
-    private OnEditPermissionInteractionListener mOnEditPermissionInteractionListener = null;
 
 
     /**
@@ -253,30 +237,12 @@ public class ShareFileFragment extends Fragment
             }
         });
 
-        // Set listener for user actions on switch for sharing/unsharing via link
-        initShareViaLinkListener(view);
-
-        // Set listener for user actions on edit permission
-        initEditPermissionListener(view);
-
         // Hide share features sections that are not enabled
         hideNotEnabledShareSections(view);
 
         return view;
     }
 
-
-    /**
-     * Binds listener for user actions to create or delete a public share
-     * to the views receiving the user events.
-     *
-     * @param shareView Root view in the fragment.
-     */
-    private void initShareViaLinkListener(View shareView) {
-        mOnShareViaLinkSwitchCheckedChangeListener = new OnShareViaLinkListener();
-//        SwitchCompat shareViaLinkSwitch = (SwitchCompat) shareView.findViewById(R.id.shareViaLinkSectionSwitch);
-//        shareViaLinkSwitch.setOnCheckedChangeListener(mOnShareViaLinkSwitchCheckedChangeListener);
-    }
 
     @Override
     public void copyOrSendPublicLink(OCShare share) {
@@ -294,101 +260,6 @@ public class ShareFileFragment extends Fragment
     public void editPublicShare(OCShare share) {
         mListener.showEditPublicShare(share);
     }
-
-    /**
-     * Listener for user actions that create or delete a public share.
-     */
-    private class OnShareViaLinkListener
-            implements CompoundButton.OnCheckedChangeListener {
-
-        /**
-         * Called by R.id.shareViaLinkSectionSwitch to create or delete a public link.
-         *
-         * @param switchView {@link SwitchCompat} toggled by the user, R.id.shareViaLinkSectionSwitch
-         * @param isChecked  New switch state.
-         */
-        @Override
-        public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
-            if (!isResumed()) {
-                // very important, setCheched(...) is called automatically during
-                // Fragment recreation on device rotations
-                return;
-            }
-            if (isChecked) {
-                if (mCapabilities != null &&
-                        mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
-                    // password enforced by server, request to the user before trying to create
-                    requestPasswordForShareViaLink(true);
-
-                } else {
-                    // create without password if not enforced by server or we don't know if enforced;
-//                    ((FileActivity) getActivity()).getFileOperationsHelper().
-//                            shareFileViaLink(mFile, null);
-
-                    // ShareActivity#onCreateShareViaLinkOperationFinish will take care if password
-                    // is enforced by the server but app doesn't know, or if server version is
-                    // older than OwnCloudVersion#MINIMUM_VERSION_CAPABILITIES_API
-                }
-
-            }   // else  - nothing, unshare fully moved
-
-
-            // undo the toggle to grant the view will be correct if any intermediate dialog is cancelled or
-            // the create/delete operation fails
-            switchView.setOnCheckedChangeListener(null);
-            switchView.toggle();
-            switchView.setOnCheckedChangeListener(mOnShareViaLinkSwitchCheckedChangeListener);
-        }
-    }
-
-    /**
-     * Binds listener for user actions that start any update the edit permissions
-     * for the public link to the views receiving the user events.
-     *
-     * @param shareView Root view in the fragment.
-     */
-    private void initEditPermissionListener(View shareView) {
-        mOnEditPermissionInteractionListener = new OnEditPermissionInteractionListener();
-
-//        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkEditPermissionSwitch)).
-//                setOnCheckedChangeListener(mOnEditPermissionInteractionListener);
-
-    }
-
-    /**
-     * Listener for user actions that start any update on the edit permissions for the public link.
-     */
-    private class OnEditPermissionInteractionListener
-            implements CompoundButton.OnCheckedChangeListener {
-
-        /**
-         * Called by R.id.shareViaLinkEditPermissionSwitch to set or clear the edit permission.
-         *
-         * @param switchView {@link SwitchCompat} toggled by the user, R.id.shareViaLinkEditPermissionSwitch
-         * @param isChecked  New switch state.
-         */
-        @Override
-        public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
-            if (!isResumed()) {
-                // very important, setCheched(...) is called automatically during
-                // Fragment recreation on device rotations
-                return;
-            }
-
-            ((FileActivity) getActivity()).getFileOperationsHelper().
-                    setUploadPermissionsToShare(
-                            mFile,
-                            isChecked
-                    );
-
-            // undo the toggle to grant the view will be correct if the dialog is cancelled
-            switchView.setOnCheckedChangeListener(null);
-            switchView.toggle();
-            switchView.setOnCheckedChangeListener(mOnEditPermissionInteractionListener);
-        }
-
-    }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -578,98 +449,6 @@ public class ShareFileFragment extends Fragment
         // Set Scroll to initial position
         ScrollView scrollView = (ScrollView) getView().findViewById(R.id.shareScroll);
         scrollView.scrollTo(0, 0);
-
-//        if (mPublicShare != null && ShareType.PUBLIC_LINK.equals(mPublicShare.getShareType())) {
-//
-//            /// public share bound -> expand section
-//            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
-//            if (!shareViaLinkSwitch.isChecked()) {
-//                // set null listener before setChecked() to prevent infinite loop of calls
-//                shareViaLinkSwitch.setOnCheckedChangeListener(null);
-//                shareViaLinkSwitch.setChecked(true);
-//                shareViaLinkSwitch.setOnCheckedChangeListener(
-//                        mOnShareViaLinkSwitchCheckedChangeListener
-//                );
-//            }
-//            getExpirationDateSection().setVisibility(View.VISIBLE);
-//            getPasswordSection().setVisibility(View.VISIBLE);
-//            if (mFile.isFolder() && !mCapabilities.getFilesSharingPublicUpload().isFalse()) {
-//                getEditPermissionSection().setVisibility(View.VISIBLE);
-//            } else {
-//                getEditPermissionSection().setVisibility(View.GONE);
-//            }
-//
-//
-//            /// update state of expiration date switch and message depending on expiration date
-//            SwitchCompat expirationDateSwitch = getExpirationDateSwitch();
-//            // set null listener before setChecked() to prevent infinite loop of calls
-//            expirationDateSwitch.setOnCheckedChangeListener(null);
-//            long expirationDate = mPublicShare.getExpirationDate();
-//            if (expirationDate > 0) {
-//                if (!expirationDateSwitch.isChecked()) {
-//                    expirationDateSwitch.toggle();
-//                }
-//                String formattedDate =
-//                        SimpleDateFormat.getDateInstance().format(
-//                                new Date(expirationDate)
-//                        );
-//                getExpirationDateValue().setText(formattedDate);
-//            } else {
-//                if (expirationDateSwitch.isChecked()) {
-//                    expirationDateSwitch.toggle();
-//                }
-//                getExpirationDateValue().setText(R.string.empty);
-//            }
-//
-//            /// update state of password switch and message depending on password protection
-//            SwitchCompat passwordSwitch = getPasswordSwitch();
-//            // set null listener before setChecked() to prevent infinite loop of calls
-//            passwordSwitch.setOnCheckedChangeListener(null);
-//            if (mPublicShare.isPasswordProtected()) {
-//                if (!passwordSwitch.isChecked()) {
-//                    passwordSwitch.toggle();
-//                }
-//                getPasswordValue().setVisibility(View.VISIBLE);
-//            } else {
-//                if (passwordSwitch.isChecked()) {
-//                    passwordSwitch.toggle();
-//                }
-//                getPasswordValue().setVisibility(View.INVISIBLE);
-//            }
-//
-//            /// update state of the edit permission switch
-//            SwitchCompat editPermissionSwitch = getEditPermissionSwitch();
-//
-//            // set null listener before setChecked() to prevent infinite loop of calls
-//            editPermissionSwitch.setOnCheckedChangeListener(null);
-//            if (mPublicShare.getPermissions() > OCShare.READ_PERMISSION_FLAG) {
-//                if (!editPermissionSwitch.isChecked()) {
-//                    editPermissionSwitch.toggle();
-//                }
-//            } else {
-//                if (editPermissionSwitch.isChecked()) {
-//                    editPermissionSwitch.toggle();
-//                }
-//            }
-//            // recover listener
-//            editPermissionSwitch.setOnCheckedChangeListener(
-//                    mOnEditPermissionInteractionListener
-//            );
-//
-//        } else {
-//            /// no public share -> collapse section
-//            SwitchCompat shareViaLinkSwitch = getShareViaLinkSwitch();
-//            if (shareViaLinkSwitch.isChecked()) {
-//                shareViaLinkSwitch.setOnCheckedChangeListener(null);
-//                getShareViaLinkSwitch().setChecked(false);
-//                shareViaLinkSwitch.setOnCheckedChangeListener(
-//                        mOnShareViaLinkSwitchCheckedChangeListener
-//                );
-//            }
-//            getExpirationDateSection().setVisibility(View.GONE);
-//            getPasswordSection().setVisibility(View.GONE);
-//            getEditPermissionSection().setVisibility(View.GONE);
-//        }
     }
 
 
@@ -714,18 +493,6 @@ public class ShareFileFragment extends Fragment
         listView.requestLayout();
     }
 
-
-    /**
-     * Starts a dialog that requests a password to the user to protect a share link.
-     *
-     * @param createShare When 'true', the request for password will be followed by the creation of a new
-     *                    public link; when 'false', a public share is assumed to exist, and the password
-     *                    is bound to it.
-     */
-    public void requestPasswordForShareViaLink(boolean createShare) {
-        SharePasswordDialogFragment dialog = SharePasswordDialogFragment.newInstance(mFile, createShare);
-        dialog.show(getFragmentManager(), SharePasswordDialogFragment.PASSWORD_FRAGMENT);
-    }
 
     /**
      * Hide share features sections that are not enabled

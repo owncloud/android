@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
@@ -299,7 +298,7 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                     ((FileActivity) getActivity()).getFileOperationsHelper().
                             updateShareViaLink(
-                                    mFile,
+                                    mPublicShare,
                                     publicLinkName,
                                     publicLinkPassword,
                                     publicLinkExpirationDateMillis,
