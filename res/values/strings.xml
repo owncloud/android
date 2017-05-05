@@ -421,17 +421,22 @@
     <string name="pref_behaviour_entries_keep_file">kept in original folder</string>
     <string name="pref_behaviour_entries_move">moved to app folder</string>
 
-    <string name="share_dialog_title">Sharing</string>
+    <string name="share_dialog_title">Share</string>
     <string name="share_file">Share %1$s</string>
-    <string name="share_with_user_section_title">Share with users and groups</string>
+    <string name="share_with_user_section_title">Users and Groups</string>
     <string name="share_no_users">No data shared with users yet</string>
     <string name="share_incompatible_version">To share with other users, your server needs to be at least version 8.2</string>
     <string name="share_add_user_or_group">Add user or group</string>
-    <string name="share_via_link_section_title">Share link</string>
-    <string name="share_via_link_expiration_date_label">Set expiration date</string>
-    <string name="share_via_link_password_label">Password protect</string>
+    <string name="share_via_link_section_title">Public links</string>
+    <string name="share_via_link_create_title">Create link share</string>
+    <string name="share_via_link_edit_title">Edit link share</string>
+    <string name="share_via_link_name_label">Link name</string>
+    <string name="share_cancel_public_link_button">Cancel</string>
+    <string name="share_confirm_public_link_button">Save</string>
+    <string name="share_via_link_expiration_date_label">Expiration</string>
+    <string name="share_via_link_password_label">Password</string>
     <string name="share_via_link_password_title">Secured</string>
-    <string name="share_via_link_edit_permission_label">Allow editing</string>
+    <string name="share_via_link_edit_permission_label">Allow uploads</string>
     <string name="share_get_public_link_button">Get link</string>
     <string name="share_with_title">Share with &#8230;</string>
     <string name="share_with_edit_title">Share with %1$s</string>
@@ -487,6 +492,10 @@
     <string name="previewing_video_not_supported">Video previewing is not supported in your Android version. File download will start automatically.</string>
     <string name="streaming_position_not_available">\"Position not available\"</string>
     <string name="error_no_network_connection">Device is not connected to a network</string>
+    <string name="share_no_public_links">No public links created yet</string>
+    <string name="share_no_link_in_this_share">This share has no link</string>
+    <string name="share_warning_about_forwarding_public_links">If you share these links the recipient may forward them to anyone on the Internet.</string>
+    <string name="share_via_link_default_password">*****</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>

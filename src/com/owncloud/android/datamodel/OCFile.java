@@ -4,7 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.webkit.MimeTypeMap;
 
@@ -102,16 +103,12 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     private String mRemotePath;
     private String mLocalPath;
     private String mMimeType;
-    private boolean mNeedsUpdating;
     private long mLastSyncDateForProperties;
     private long mLastSyncDateForData;
     private AvailableOfflineStatus mAvailableOfflineStatus;
 
     private String mEtag;
     private String mTreeEtag;
-
-    private boolean mShareByLink;
-    private String mPublicLink;
 
     private String mPermissions;
     private String mRemoteId;
@@ -122,7 +119,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     private String mEtagInConflict;    // Save file etag in the server, when there is a conflict. No conflict =  null
 
-    private boolean mShareWithSharee;
+    private boolean mSharedByLink;
+    private boolean mSharedWithSharee;
 
     /**
      * URI to the local path of the file contents, if stored in the device; cached after first call
@@ -148,7 +146,6 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      */
     public OCFile(String path) {
         resetData();
-        mNeedsUpdating = false;
         if (path == null || path.length() <= 0 || !path.startsWith(PATH_SEPARATOR)) {
             throw new IllegalArgumentException("Trying to create a OCFile with a non valid remote path: " + path);
         }
@@ -170,7 +167,6 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mRemotePath = source.readString();
         mLocalPath = source.readString();
         mMimeType = source.readString();
-        mNeedsUpdating = source.readInt() == 0;
         try {
             mAvailableOfflineStatus = AvailableOfflineStatus.valueOf(source.readString());
         } catch (IllegalArgumentException x) {
@@ -180,14 +176,13 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mLastSyncDateForData = source.readLong();
         mEtag = source.readString();
         mTreeEtag = source.readString();
-        mShareByLink = source.readInt() == 1;
-        mPublicLink = source.readString();
+        mSharedByLink = source.readInt() == 1;
         mPermissions = source.readString();
         mRemoteId = source.readString();
         mNeedsUpdateThumbnail = source.readInt() == 1;
         mIsDownloading = source.readInt() == 1;
         mEtagInConflict = source.readString();
-        mShareWithSharee = source.readInt() == 1;
+        mSharedWithSharee = source.readInt() == 1;
 
     }
 
@@ -202,20 +197,18 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         dest.writeString(mRemotePath);
         dest.writeString(mLocalPath);
         dest.writeString(mMimeType);
-        dest.writeInt(mNeedsUpdating ? 1 : 0);
         dest.writeString(mAvailableOfflineStatus.name());
         dest.writeLong(mLastSyncDateForProperties);
         dest.writeLong(mLastSyncDateForData);
         dest.writeString(mEtag);
         dest.writeString(mTreeEtag);
-        dest.writeInt(mShareByLink ? 1 : 0);
-        dest.writeString(mPublicLink);
+        dest.writeInt(mSharedByLink ? 1 : 0);
         dest.writeString(mPermissions);
         dest.writeString(mRemoteId);
         dest.writeInt(mNeedsUpdateThumbnail ? 1 : 0);
         dest.writeInt(mIsDownloading ? 1 : 0);
         dest.writeString(mEtagInConflict);
-        dest.writeInt(mShareWithSharee ? 1 : 0);
+        dest.writeInt(mSharedWithSharee ? 1 : 0);
     }
 
     /**
@@ -451,17 +444,15 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mLastSyncDateForProperties = 0;
         mLastSyncDateForData = 0;
         mAvailableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
-        mNeedsUpdating = false;
         mEtag = "";
         mTreeEtag = "";
-        mShareByLink = false;
-        mPublicLink = null;
+        mSharedByLink = false;
         mPermissions = null;
         mRemoteId = null;
         mNeedsUpdateThumbnail = false;
         mIsDownloading = false;
         mEtagInConflict = null;
-        mShareWithSharee = false;
+        mSharedWithSharee = false;
     }
 
     /**
@@ -527,21 +518,12 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         return (parentPath.endsWith("/")) ? parentPath : (parentPath + "/");
     }
 
-    /**
-     * Check, if this file needs updating
-     *
-     * @return
-     */
-    public boolean needsUpdatingWhileSaving() {
-        return mNeedsUpdating;
-    }
-
     public boolean needsUpdateThumbnail() {
         return mNeedsUpdateThumbnail;
     }
 
     public void setNeedsUpdateThumbnail(boolean needsUpdateThumbnail) {
-        this.mNeedsUpdateThumbnail = needsUpdateThumbnail;
+        mNeedsUpdateThumbnail = needsUpdateThumbnail;
     }
 
     public long getLastSyncDateForProperties() {
@@ -581,7 +563,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     @Override
-    public int compareTo(OCFile another) {
+    public int compareTo(@NonNull OCFile another) {
         if (isFolder() && another.isFolder()) {
             return getRemotePath().toLowerCase().compareTo(another.getRemotePath().toLowerCase());
         } else if (isFolder()) {
@@ -596,11 +578,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public boolean equals(Object o) {
         if (o instanceof OCFile) {
             OCFile that = (OCFile) o;
-            if (that != null) {
-                return this.mId == that.mId;
-            }
+            return this.mId == that.mId;
         }
-
         return false;
     }
 
@@ -608,8 +587,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public String toString() {
         String asString = "[id=%s, name=%s,  etag=%s, tree_etag=%s, mime=%s, downloaded=%s, local=%s, remote=%s, " +
                 "parentId=%s, favorite=%s]";
-        asString = String.format(asString, Long.valueOf(mId), getFileName(), mEtag, mTreeEtag,
-                mMimeType, isDown(), mLocalPath, mRemotePath, Long.valueOf(mParentId),
+        asString = String.format(asString, mId, getFileName(), mEtag, mTreeEtag,
+                mMimeType, isDown(), mLocalPath, mRemotePath, mParentId,
                 mAvailableOfflineStatus
         );
         return asString;
@@ -620,7 +599,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     public void setEtag(String etag) {
-        this.mEtag = (etag != null ? etag : "");
+        mEtag = (etag != null ? etag : "");
     }
 
     public String getTreeEtag() {
@@ -632,19 +611,11 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     public boolean isSharedViaLink() {
-        return mShareByLink;
+        return mSharedByLink;
     }
 
-    public void setShareViaLink(boolean shareByLink) {
-        this.mShareByLink = shareByLink;
-    }
-
-    public String getPublicLink() {
-        return mPublicLink;
-    }
-
-    public void setPublicLink(String publicLink) {
-        this.mPublicLink = publicLink;
+    public void setSharedViaLink(boolean shareByLink) {
+        mSharedByLink = shareByLink;
     }
 
     public long getLocalModificationTimestamp() {
@@ -717,7 +688,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     public void setPermissions(String permissions) {
-        this.mPermissions = permissions;
+        mPermissions = permissions;
     }
 
     public String getRemoteId() {
@@ -725,7 +696,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     public void setRemoteId(String remoteId) {
-        this.mRemoteId = remoteId;
+        mRemoteId = remoteId;
     }
 
     public boolean isDownloading() {
@@ -733,7 +704,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     public void setDownloading(boolean isDownloading) {
-        this.mIsDownloading = isDownloading;
+        mIsDownloading = isDownloading;
     }
 
     public String getEtagInConflict() {
@@ -741,7 +712,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     public boolean isInConflict() {
-        return mEtagInConflict != null && mEtagInConflict != "";
+        return mEtagInConflict != null && mEtagInConflict.length() > 0;
     }
 
     public void setEtagInConflict(String etagInConflict) {
@@ -749,11 +720,11 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     public boolean isSharedWithSharee() {
-        return mShareWithSharee;
+        return mSharedWithSharee;
     }
 
-    public void setShareWithSharee(boolean shareWithSharee) {
-        this.mShareWithSharee = shareWithSharee;
+    public void setSharedWithSharee(boolean shareWithSharee) {
+        mSharedWithSharee = shareWithSharee;
     }
 
     public boolean isSharedWithMe() {
@@ -770,9 +741,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
             sourceFile.getModificationTimestampAtLastSyncForData()
         );
         setStoragePath(sourceFile.getStoragePath());
-        setPublicLink(sourceFile.getPublicLink());
-        setShareViaLink(sourceFile.isSharedViaLink());
-        setShareWithSharee(sourceFile.isSharedWithSharee());
+        setSharedViaLink(sourceFile.isSharedViaLink());
+        setSharedWithSharee(sourceFile.isSharedWithSharee());
         setTreeEtag(sourceFile.getTreeEtag());
         setEtagInConflict(sourceFile.getEtagInConflict());
     }

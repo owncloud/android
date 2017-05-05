@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ import java.util.ArrayList;
  * Use the {@link SearchShareesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchShareesFragment extends Fragment implements ShareUserListAdapter.ShareUserAdapterListener {
+public class SearchShareesFragment extends DialogFragment implements ShareUserListAdapter.ShareUserAdapterListener {
     private static final String TAG = SearchShareesFragment.class.getSimpleName();
 
     // the fragment initialization parameters
@@ -104,6 +105,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
         }
 
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
     /**
@@ -139,6 +141,8 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
             }
         });
 
+        view.setMinimumWidth(R.dimen.share_user_groups_width);
+
         return view;
     }
 
@@ -146,8 +150,6 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        getActivity().setTitle(R.string.share_with_title);
 
         // Load data into the list
         refreshUsersOrGroupsListFromDB();
@@ -163,7 +165,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     public void refreshUsersOrGroupsListFromDB (){
         // Get Users and Groups
         if (((FileActivity) mListener).getStorageManager() != null) {
-            mShares = ((FileActivity) mListener).getStorageManager().getSharesWithForAFile(
+            mShares = ((FileActivity) mListener).getStorageManager().getPrivateSharesForAFile(
                     mFile.getRemotePath(),
                     mAccount.name
             );
@@ -226,16 +228,15 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
 
     @Override
     public void unshareButtonPressed(OCShare share) {
-        // Unshare
-        mListener.unshareWith(share);
-        Log_OC.d(TAG, "Unshare - " + share.getSharedWithDisplayName());
+        Log_OC.d(TAG, "Removed private share with " + share.getSharedWithDisplayName());
+        mListener.removeShare(share);
     }
 
     @Override
     public void editShare(OCShare share) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.getSharedWithDisplayName());
-        mListener.showEditShare(share);
+        mListener.showEditPrivateShare(share);
     }
 
 }
