@@ -66,7 +66,7 @@ public class ShareActivity extends FileActivity
     private static final String TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT";
     private static final String TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT";
     private static final String TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT";
-
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,6 +292,37 @@ public class ShareActivity extends FileActivity
         }
     }
 
+    private void onCreateShareViaLinkOperationFinish(CreateShareViaLinkOperation operation,
+                                                     RemoteOperationResult result) {
+        if (result.isSuccess()) {
+            updateFileFromDB();
+
+            getPublicShareFragment().dismiss();
+
+            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
+
+        } else {
+            getPublicShareFragment().showError(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+            );
+        }
+    }
+
+    private void onUpdateShareViaLinkOperationFinish(UpdateShareViaLinkOperation operation,
+                                                     RemoteOperationResult result) {
+        if (result.isSuccess()) {
+            updateFileFromDB();
+
+            getPublicShareFragment().dismiss();
+
+            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
+
+        } else {
+            getPublicShareFragment().showError(
+                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+            );
+        }
+    }
 
     /**
      * Updates the view, reading data from {@link com.owncloud.android.datamodel.FileDataStorageManager}
@@ -359,38 +390,6 @@ public class ShareActivity extends FileActivity
      */
     private EditShareFragment getEditShareFragment() {
         return (EditShareFragment) getSupportFragmentManager().findFragmentByTag(TAG_EDIT_SHARE_FRAGMENT);
-    }
-
-    private void onCreateShareViaLinkOperationFinish(CreateShareViaLinkOperation operation,
-                                                     RemoteOperationResult result) {
-        if (result.isSuccess()) {
-            updateFileFromDB();
-
-            getPublicShareFragment().dismiss();
-
-            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
-
-        } else {
-            getPublicShareFragment().showError(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
-            );
-        }
-    }
-
-    private void onUpdateShareViaLinkOperationFinish(UpdateShareViaLinkOperation operation,
-                                                     RemoteOperationResult result) {
-        if (result.isSuccess()) {
-            updateFileFromDB();
-
-            getPublicShareFragment().dismiss();
-
-            getFileOperationsHelper().copyOrSendPublicLink((OCShare)result.getData().get(0));
-
-        } else {
-            getPublicShareFragment().showError(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
-            );
-        }
     }
 
     @Override
