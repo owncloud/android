@@ -71,7 +71,7 @@ public class GetSharesForFileOperation extends SyncOperation {
                 shares.add((OCShare) obj);
             }
 
-            getStorageManager().saveSharesDB(shares);
+            getStorageManager().saveShares(shares);
 
         } else if (result.getCode() == RemoteOperationResult.ResultCode.SHARE_NOT_FOUND) {
             // no share on the file - remove local shares

@@ -89,11 +89,6 @@ public class PublicShareDialogFragment extends DialogFragment {
     private OCCapability mCapabilities;
 
     /**
-     * User has deleted or not the password when updating a public share
-     */
-    private boolean passwordDeleted;
-
-    /**
      * Create a new instance of PublicShareDialogFragment, providing fileToShare and account
      * as an argument.
      *

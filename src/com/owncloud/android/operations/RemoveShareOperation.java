@@ -34,7 +34,7 @@ import com.owncloud.android.operations.common.SyncOperation;
 import java.util.ArrayList;
 
 /**
- * Removes an existing OCShare, known it's LOCAL share id.
+ * Removes an existing OCShare, known its LOCAL share id.
  */
 public class RemoveShareOperation extends SyncOperation {
 

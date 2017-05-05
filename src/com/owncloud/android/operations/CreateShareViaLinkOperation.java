@@ -64,10 +64,6 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         mPublicUpload = null;
     }
 
-    public void setPath(String mPath) {
-        this.mPath = mPath;
-    }
-
     /**
      * Set name to update in public link.
      *
@@ -126,38 +122,18 @@ public class CreateShareViaLinkOperation extends SyncOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        // Check if the share link already exists
-        RemoteOperation operation = new GetRemoteSharesForFileOperation(mPath, false, false);
-        RemoteOperationResult result = operation.execute(client);
-
-        // TO DO - Check using capabilities
-        // Create public link if doesn't exist yet
-//        boolean publicShareExists = false;
-//        if (result.isSuccess()) {
-//            OCShare share;
-//            for (int i = 0; i < result.getData().size(); i++) {
-//                share = (OCShare) result.getData().get(i);
-//                if (ShareType.PUBLIC_LINK.equals(share.getShareType())) {
-//                    publicShareExists = true;
-//                    break;
-//                }
-//            }
-//        }
-
-//        if (!publicShareExists) {
-            CreateRemoteShareOperation createOp = new CreateRemoteShareOperation(
-                    mPath,
-                    ShareType.PUBLIC_LINK,
-                    "",
-                    mPublicUpload,
-                    mPassword,
-                    OCShare.DEFAULT_PERMISSION
-            );
-            createOp.setGetShareDetails(true);
-            createOp.setName(mName);
-            createOp.setExpirationDate(mExpirationDateInMillis);
-            result = createOp.execute(client);
-//        }
+        CreateRemoteShareOperation createOp = new CreateRemoteShareOperation(
+                mPath,
+                ShareType.PUBLIC_LINK,
+                "",
+                mPublicUpload,
+                mPassword,
+                OCShare.DEFAULT_PERMISSION
+        );
+        createOp.setGetShareDetails(true);
+        createOp.setName(mName);
+        createOp.setExpirationDate(mExpirationDateInMillis);
+        RemoteOperationResult result = createOp.execute(client);
 
         if (result.isSuccess()) {
             if (result.getData().size() > 0) {
