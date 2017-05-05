@@ -30,8 +30,7 @@
     <string name = "send_files_to_other_apps" formatted="false">on</string>
     <bool name = "share_via_link_feature">true</bool>
     <bool name = "share_with_users_feature">true</bool>
-    <bool name = "warning_sharing_public_link" >false</bool>
-    
+
     <!-- Colors -->
     <color name="login_text_color">#000000</color>
     <color name="login_text_hint_color">#757575</color>
