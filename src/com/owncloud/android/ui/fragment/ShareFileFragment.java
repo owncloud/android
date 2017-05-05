@@ -238,7 +238,7 @@ public class ShareFileFragment extends Fragment
         });
 
         // Hide share features sections that are not enabled
-        hideNotEnabledShareSections(view);
+        hideSectionsDisabledInBuildTime(view);
 
         return view;
     }
@@ -410,6 +410,15 @@ public class ShareFileFragment extends Fragment
      */
     private void updateListOfPublicLinks() {
 
+        // Hide warning about public links if not enabled in server
+        boolean shouldDisplayPrivacyWarning = (
+            mCapabilities != null && mCapabilities.getFilesSharingPublicDisplayPrivacyWarning().isTrue()
+        );
+        if (!shouldDisplayPrivacyWarning) {
+            View warningAboutPerilsOfSharingPublicStuff = getView().findViewById(R.id.shareWarning);
+            warningAboutPerilsOfSharingPublicStuff.setVisibility(View.GONE);
+        }
+
         mPublicLinksAdapter = new SharePublicLinkListAdapter (
                 getActivity(),
                 R.layout.share_public_link_item,
@@ -434,7 +443,7 @@ public class ShareFileFragment extends Fragment
 
         // Show or hide button for adding a new public share depending on the capabilities and
         // the server version
-        if (!enablemultiplePublicSharing()) {
+        if (!enableMultiplePublicSharing()) {
 
             if (mPublicLinks.size() == 0) {
 
@@ -499,14 +508,12 @@ public class ShareFileFragment extends Fragment
      *
      * @param view
      */
-    private void hideNotEnabledShareSections(View view) {
+    private void hideSectionsDisabledInBuildTime(View view) {
         View shareWithUsersSection = view.findViewById(R.id.shareWithUsersSection);
         View shareViaLinkSection = view.findViewById(R.id.shareViaLinkSection);
-        View warningAboutPerilsOfSharingPublicStuff = view.findViewById(R.id.shareWarning);
 
         boolean shareViaLinkAllowed = getActivity().getResources().getBoolean(R.bool.share_via_link_feature);
         boolean shareWithUsersAllowed = getActivity().getResources().getBoolean(R.bool.share_with_users_feature);
-        boolean shareWarningAllowed = getActivity().getResources().getBoolean(R.bool.warning_sharing_public_link);
 
         // Hide share via link section if it is not enabled
         if (!shareViaLinkAllowed) {
@@ -517,11 +524,6 @@ public class ShareFileFragment extends Fragment
         if (!shareWithUsersAllowed) {
             shareWithUsersSection.setVisibility(View.GONE);
         }
-
-        // Hide warning about public links if not enabled
-        if (!shareWarningAllowed) {
-            warningAboutPerilsOfSharingPublicStuff.setVisibility(View.GONE);
-        }
     }
 
     /**
@@ -530,7 +532,7 @@ public class ShareFileFragment extends Fragment
      *
      * @return true if should be enabled, false otherwise
      */
-    private boolean enablemultiplePublicSharing () {
+    private boolean enableMultiplePublicSharing() {
 
         boolean enableMultiplePublicShare = true;
 
