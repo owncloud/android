@@ -66,7 +66,7 @@ public class ShareActivity extends FileActivity
     private static final String TAG_SEARCH_FRAGMENT = "SEARCH_USER_AND_GROUPS_FRAGMENT";
     private static final String TAG_EDIT_SHARE_FRAGMENT = "EDIT_SHARE_FRAGMENT";
     private static final String TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT";
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

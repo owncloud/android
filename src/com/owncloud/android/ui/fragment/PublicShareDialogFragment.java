@@ -558,10 +558,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkEditPermissionSwitch);
     }
 
-    private View getPasswordSection(View view) {
-        return view.findViewById(R.id.shareViaLinkPasswordSection);
-    }
-
     private SwitchCompat getPasswordSwitch(View view) {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkPasswordSwitch);
     }
