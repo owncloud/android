@@ -50,7 +50,6 @@ import com.owncloud.android.db.ProviderMeta;
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.utils.FileStorageUtils;
 
@@ -809,7 +808,7 @@ public class FileContentProvider extends ContentProvider {
                     db.setTransactionSuccessful();
 
                     // SQLite does not allow to drop a columns; ftm, we'll not recreate
-                    // the files table without the column, just forget about
+                    // the files table without the column FILE_PUBLIC_LINK, just forget about
 
                 } finally {
                     db.endTransaction();
@@ -825,9 +824,6 @@ public class FileContentProvider extends ContentProvider {
                     upgraded = true;
                     db.setTransactionSuccessful();
 
-                    // SQLite does not allow to drop a columns; ftm, we'll not recreate
-                    // the files table without the column, just forget about
-
                 } finally {
                     db.endTransaction();
                 }
@@ -839,12 +835,28 @@ public class FileContentProvider extends ContentProvider {
                 try {
                     db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
                             " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
-                            + " INTEGER " + " DEFAULT 0");
+                            + " INTEGER " + " DEFAULT -1");
                     upgraded = true;
                     db.setTransactionSuccessful();
 
-                    // SQLite does not allow to drop a columns; ftm, we'll not recreate
-                    // the files table without the column, just forget about
+                } finally {
+                    db.endTransaction();
+                }
+            }
+            if (!upgraded) {
+                Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
+                    ", newVersion == " + newVersion);
+            }
+            if (oldVersion < 20 && newVersion >= 20) {
+
+                Log_OC.i("SQL", "Entering in the #20 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                        " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_DISPLAY_PRIVACY_WARNING
+                        + " INTEGER " + " DEFAULT -1");
+                    upgraded = true;
+                    db.setTransactionSuccessful();
 
                 } finally {
                     db.endTransaction();
@@ -930,6 +942,7 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_DISPLAY_PRIVACY_WARNING+ " INTEGER, "     // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
