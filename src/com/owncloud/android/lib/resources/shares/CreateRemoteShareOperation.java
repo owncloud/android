@@ -64,7 +64,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
     /**
      * Name to set for the public link
      */
-    private String mName;
+    private String mName = "";
 
     /**
      * Password to set for the public link
@@ -74,7 +74,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
     /**
      * Expiration date to set for the public link
      */
-    private long mExpirationDateInMillis;
+    private long mExpirationDateInMillis = 0;
 
     /**
      * Access permissions for the file bound to the share
@@ -128,16 +128,18 @@ public class CreateRemoteShareOperation extends RemoteOperation {
     /**
      * Set name to create in Share resource. Ignored by servers previous to version 10.0.0
      *
-     * @param name Name to set to the target share.
+     * @param name     Name to set to the target share.
+     *                 Null or empty string result in no value set for the name.
      */
     public void setName(String name) {
-        this.mName = name;
+        this.mName = (name == null) ? "" : name;
     }
 
     /**
      * Set password to create in Share resource.
      *
      * @param password Password to set to the target share.
+     *                 Null or empty string result in no value set for the password.
      */
     public void setPassword(String password) {
         mPassword = password;
@@ -148,6 +150,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
      * Set expiration date to create in Share resource.
      *
      * @param expirationDateInMillis Expiration date to set to the target share.
+     *                               Zero or negative value results in no value sent for expiration date.
      */
     public void setExpirationDate(long expirationDateInMillis) {
         mExpirationDateInMillis = expirationDateInMillis;
@@ -158,7 +161,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
      * Set permissions to create in Share resource.
      *
      * @param permissions Permissions to set to the target share.
-     *                    Values <= 0 result in no update applied to the permissions.
+     *                    Values <= 0 result in value set  to the permissions.
      */
     public void setPermissions(int permissions) {
         mPermissions = permissions;
@@ -200,16 +203,11 @@ public class CreateRemoteShareOperation extends RemoteOperation {
             post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
             post.addParameter(PARAM_SHARE_WITH, mShareWith);
 
-            if (mName != null) {
+            if (mName.length() > 0) {
                 post.addParameter(PARAM_NAME, mName);
             }
 
-            if (mExpirationDateInMillis < 0) {
-                // empty expiration date
-                post.addParameter(PARAM_EXPIRATION_DATE, "");
-
-            } else {
-
+            if (mExpirationDateInMillis > 0) {
                 DateFormat dateFormat = new SimpleDateFormat(FORMAT_EXPIRATION_DATE, Locale.getDefault());
                 Calendar expirationDate = Calendar.getInstance();
                 expirationDate.setTimeInMillis(mExpirationDateInMillis);
