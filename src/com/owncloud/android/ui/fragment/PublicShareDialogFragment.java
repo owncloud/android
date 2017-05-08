@@ -61,9 +61,9 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private static final String ARG_ACCOUNT = "ACCOUNT";
 
-    private static final int CREATE_PERMISSION = 4;
+    private static final int CREATE_PERMISSION = OCShare.CREATE_PERMISSION_FLAG;
 
-    private static final int UPDATE_PERMISSION = 2;
+    private static final int UPDATE_PERMISSION = OCShare.UPDATE_PERMISSION_FLAG;
 
     /**
      * File to share, received as a parameter in construction time
