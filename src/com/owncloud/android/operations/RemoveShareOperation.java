@@ -67,14 +67,24 @@ public class RemoveShareOperation extends SyncOperation {
 
                 ShareType shareType = share.getShareType();
                 if (ShareType.PUBLIC_LINK.equals(shareType)) {
-                    file.setSharedViaLink(false);
+
+                    // Check if it is the last public share
+                    ArrayList<OCShare> publicShares = getStorageManager().
+                            getPublicSharesForAFile(share.getPath(),
+                                    getStorageManager().getAccount().name);
+
+                    if (publicShares.size() == 1) {
+                        file.setSharedViaLink(false);
+                    }
 
                 } else if (ShareType.USER.equals(shareType) || ShareType.GROUP.equals(shareType)
                     || ShareType.FEDERATED.equals(shareType)){
-                    // Check if it is the last share
+
+                    // Check if it is the last private share
                     ArrayList <OCShare> sharesWith = getStorageManager().
                         getPrivateSharesForAFile(share.getPath(),
                             getStorageManager().getAccount().name);
+
                     if (sharesWith.size() == 1) {
                         file.setSharedWithSharee(false);
                     }
