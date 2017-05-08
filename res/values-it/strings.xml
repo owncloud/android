@@ -430,12 +430,19 @@
   <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
   <string name="failed_upload_quota_exceeded_text">Spazio insufficiente nell\'account</string>
   <string name="auth_forbidden">Autenticazione non accettata</string>
+  <string name="actionbar_privacy_policy">Regole sulla Privacy</string>
+  <string name="prefs_privacy_policy">Regole sulla Privacy</string>
   <string name="privacy_policy_error">Si è verificato un errore:</string>
   <string name="service_unavailable">Il server non e\' accessibile</string>
+  <string name="streaming_certificate_error">Lo Streaming non può essere inizializzato perchè il certificato del tuo server non è affidabile.
+Il Download del file inizierà automaticamente</string>
   <string name="streaming_unrecognized_input">Questo formato video non è supportato</string>
   <string name="streaming_file_not_found_error">Questo file video non è più disponibile sul server</string>
+  <string name="streaming_crossed_redirection">Lo Streaming non è autorizzato attraverso una re-direzione incorciata</string>
   <string name="previewing_video_common_error">Questo video non può essere riprodott1o</string>
+  <string name="previewing_video_not_supported">L\'Anteprima del video non è supportata nella tua versione di Android. Il Download del file inizierà automaticamente.</string>
   <string name="streaming_position_not_available">\"Posizione non disponibile\"</string>
+  <string name="error_no_network_connection">Il dispositivo non è collegato a nessuna rete</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>
