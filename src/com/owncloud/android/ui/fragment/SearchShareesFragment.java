@@ -141,8 +141,6 @@ public class SearchShareesFragment extends DialogFragment implements ShareUserLi
             }
         });
 
-        view.setMinimumWidth(R.dimen.share_user_groups_width);
-
         return view;
     }
 

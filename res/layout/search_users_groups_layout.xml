@@ -16,38 +16,37 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/search_layout"
-    android:layout_marginRight="@dimen/standard_margin"
     android:layout_marginBottom="@dimen/standard_half_margin"
+    android:layout_marginRight="@dimen/standard_margin"
     android:filterTouchesWhenObscured="true"
-    >
+    android:minWidth="@dimen/share_user_groups_width"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/searchUserGroupsTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/standard_padding"
         android:text="@string/share_with_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:padding="@dimen/standard_padding"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
     <android.support.v7.widget.SearchView
+        android:id="@+id/searchView"
+        style="@style/ownCloud.SearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/searchView"
-        android:hint="@string/share_search"
-        style="@style/ownCloud.SearchView"/>
+        android:hint="@string/share_search" />
 
     <ListView
+        android:id="@+id/searchUsersListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/searchUsersListView"
-        android:scrollbars="vertical"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="@dimen/standard_half_margin"/>
+        android:layout_marginRight="@dimen/standard_half_margin"
+        android:scrollbars="vertical" />
 
 </LinearLayout>
