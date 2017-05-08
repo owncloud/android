@@ -61,7 +61,9 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private static final String ARG_ACCOUNT = "ACCOUNT";
 
-    private static final int CRUD_PERMISSIONS = 15;
+    private static final int CREATE_PERMISSION = 4;
+
+    private static final int UPDATE_PERMISSION = 2;
 
     /**
      * File to share, received as a parameter in construction time
@@ -178,8 +180,8 @@ public class PublicShareDialogFragment extends DialogFragment {
             // Set existing share name
             getNameValue(view).setText(mPublicShare.getName());
 
-            // Set the edit permissions, if any
-            if (mPublicShare.getPermissions() == CRUD_PERMISSIONS) {
+            // Set the upload permissions, if any
+            if ((mPublicShare.getPermissions() & (UPDATE_PERMISSION | CREATE_PERMISSION)) > 0) {
                 getEditPermissionSwitch(view).setChecked(true);
             }
 
@@ -235,16 +237,13 @@ public class PublicShareDialogFragment extends DialogFragment {
                 long publicLinkExpirationDateMillis = -1;
 
                 // Parse expiration date and convert it to milliseconds
-                if (expirationDate != null) {
+                DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
 
-                    DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
-
-                    try {
-                        publicLinkExpirationDateMillis = format.parse(getExpirationDateValue(getView()).
-                                getText().toString()).getTime();
-                    } catch (ParseException e) {
-                        // DO NOTHING
-                    }
+                try {
+                    publicLinkExpirationDateMillis = format.parse(getExpirationDateValue(getView()).
+                            getText().toString()).getTime();
+                } catch (ParseException e) {
+                    // DO NOTHING
                 }
 
                 boolean publicLinkEditPermissions = getEditPermissionSwitch(getView()).isChecked();
