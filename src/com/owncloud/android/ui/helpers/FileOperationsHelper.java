@@ -133,13 +133,12 @@ public class FileOperationsHelper {
         }
     }
 
-
-
     /**
-     * Helper method to share a file via a public link. Starts a request to do it in {@link OperationsService}
-     *
-     * @param file          The file to share.
-     * @param password      Optional password to protect the public share.
+     * @param file The file to share.
+     * @param name Optional public share name
+     * @param password Optional password to protect the public share
+     * @param expirationTimeInMillis Optional expiration time
+     * @param uploadToFolderPermission Optional permissions to upload files to the folder
      */
     public void shareFileViaLink(OCFile file,
                                  String name,

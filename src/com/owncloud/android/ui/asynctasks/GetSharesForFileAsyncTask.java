@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.utils;
+package com.owncloud.android.ui.asynctasks;
 
 import android.accounts.Account;
 import android.os.AsyncTask;

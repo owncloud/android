@@ -50,7 +50,7 @@ import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
-import com.owncloud.android.utils.GetSharesForFileAsyncTask;
+import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask;
 
 
 /**

@@ -310,8 +310,8 @@ public class PublicShareDialogFragment extends DialogFragment {
         super.onAttach(activity);
         try {
             mListener = (ShareFragmentListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+        } catch (IllegalStateException e) {
+            throw new IllegalStateException(activity.toString()
                     + " must implement OnShareFragmentInteractionListener");
         }
     }
@@ -518,11 +518,12 @@ public class PublicShareDialogFragment extends DialogFragment {
     /**
      * Get expiration date imposed by the server, if any
      */
-    public long getImposedExpirationDate () {
+    private long getImposedExpirationDate () {
 
         long imposedExpirationDate = -1;
 
-        if (mCapabilities.getFilesSharingPublicExpireDateEnforced().isTrue()) {
+        if (mCapabilities!= null && mCapabilities.
+                getFilesSharingPublicExpireDateEnforced().isTrue()) {
 
             imposedExpirationDate = DateUtils.addDaysToDate(
                     new Date(),
