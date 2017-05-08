@@ -143,8 +143,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
 
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-
-        refreshCapabilitiesFromDB();
     }
 
     private boolean updating() {
@@ -169,23 +167,6 @@ public class PublicShareDialogFragment extends DialogFragment {
             getEditPermissionSection(view).setVisibility(View.VISIBLE);
         } else {
             getEditPermissionSection(view).setVisibility(View.GONE);
-        }
-
-        // Show default date enforced by the server, if any
-        if (mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
-
-            getExpirationDateSwitch(view).setChecked(true);
-
-            String formattedDate = SimpleDateFormat.getDateInstance().format(
-                    DateUtils.addDaysToDate(
-                            new Date(),
-                            mCapabilities.getFilesSharingPublicExpireDateDays()
-                    )
-            );
-
-            getExpirationDateValue(view).setVisibility(View.VISIBLE);
-
-            getExpirationDateValue(view).setText(formattedDate);
         }
 
         // Fill in the different fields if the share is being updated
@@ -244,6 +225,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                // Get data filled by user
                 String publicLinkName = getNameValue(getView()).getText().toString();
 
                 String publicLinkPassword = getPasswordValue(getView()).getText().toString();
@@ -506,17 +488,32 @@ public class PublicShareDialogFragment extends DialogFragment {
         if (((FileActivity) mListener).getStorageManager() != null) {
             mCapabilities = ((FileActivity) mListener).getStorageManager().
                     getCapability(mAccount.name);
+
+            updateEnforcedExpirationDate();
         }
     }
 
     /**
-     * Show error when creating or updating the public share, if any
-     * @param errorMessage
+     * Update the enforced expiration date when creating a public share, if any
      */
-    public void showError (String errorMessage) {
+    private void updateEnforcedExpirationDate() {
 
-        getErrorMessage().setVisibility(View.VISIBLE);
-        getErrorMessage().setText(errorMessage);
+        // Show default date enforced by the server, if any
+        if (!updating() && mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
+
+            getExpirationDateSwitch(getView()).setChecked(true);
+
+            String formattedDate = SimpleDateFormat.getDateInstance().format(
+                    DateUtils.addDaysToDate(
+                            new Date(),
+                            mCapabilities.getFilesSharingPublicExpireDateDays()
+                    )
+            );
+
+            getExpirationDateValue(getView()).setVisibility(View.VISIBLE);
+
+            getExpirationDateValue(getView()).setText(formattedDate);
+        }
     }
 
     /**
@@ -535,6 +532,16 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
 
         return imposedExpirationDate;
+    }
+
+    /**
+     * Show error when creating or updating the public share, if any
+     * @param errorMessage
+     */
+    public void showError (String errorMessage) {
+
+        getErrorMessage().setVisibility(View.VISIBLE);
+        getErrorMessage().setText(errorMessage);
     }
 
     private TextView getDialogTitle (View view) {
