@@ -14,6 +14,7 @@
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle" />
 
     <LinearLayout
+        android:id="@+id/shareViaLinkNameSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/standard_half_margin"

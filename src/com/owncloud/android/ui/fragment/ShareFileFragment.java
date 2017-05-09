@@ -538,7 +538,7 @@ public class ShareFileFragment extends Fragment
 
         boolean enableMultiplePublicShare = true;
 
-        OwnCloudVersion serverVersion = null;
+        OwnCloudVersion serverVersion;
 
         serverVersion = new OwnCloudVersion(mCapabilities.getVersionString());
 

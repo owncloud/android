@@ -34,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
@@ -41,6 +42,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 import com.owncloud.android.utils.DateUtils;
@@ -508,7 +510,25 @@ public class PublicShareDialogFragment extends DialogFragment {
             mCapabilities = ((FileActivity) mListener).getStorageManager().
                     getCapability(mAccount.name);
 
+            hideLinkNameSection();
+
             updateEnforcedExpirationDate();
+        }
+    }
+
+    /**
+     * Hide link name section depending if multiple public share is supported or not
+     */
+    private void hideLinkNameSection() {
+
+        OwnCloudVersion serverVersion;
+
+        serverVersion = new OwnCloudVersion(mCapabilities.getVersionString());
+
+        // Server version <= 9.x, multiple public sharing not supported
+        if (!serverVersion.isMultiplePublicSharingSupported()) {
+
+            getNameSection(getView()).setVisibility(View.GONE);
         }
     }
 
@@ -566,6 +586,10 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private TextView getDialogTitle (View view) {
         return (TextView) view.findViewById(R.id.publicShareDialogTitle);
+    }
+
+    private LinearLayout getNameSection (View view) {
+        return (LinearLayout) view.findViewById(R.id.shareViaLinkNameSection);
     }
 
     private EditText getNameValue(View view) {
