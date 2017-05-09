@@ -512,7 +512,7 @@ public class PublicShareDialogFragment extends DialogFragment {
 
             hideLinkNameSection();
 
-            updateEnforcedExpirationDate();
+            updateInputFormAccordingToServerCapabilities();
         }
     }
 
@@ -534,13 +534,22 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     /**
      * Update the enforced expiration date when creating a public share, if any
+     * Updates the UI according to enforcements and allowances set by the server administrator.
+     *
+     * Includes:
+     *  - hide or show the switch to disable the password if it is enforced or not;
+     *  - hide or show the switch to disable the expiration date it it is enforced or not;
+     *  - show or hide the switch to allow public uploads if it is allowed or not;
+     *  - set the default value for expiration date if defined (only if creating a new share).
      */
-    private void updateEnforcedExpirationDate() {
+    private void updateInputFormAccordingToServerCapabilities() {
+
+        View rootView = getView();
 
         // Show default date enforced by the server, if any
         if (!updating() && mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
 
-            setExpirationDateSwitchChecked(true, getView());
+            setExpirationDateSwitchChecked(true, rootView);
 
             String formattedDate = SimpleDateFormat.getDateInstance().format(
                     DateUtils.addDaysToDate(
@@ -549,9 +558,36 @@ public class PublicShareDialogFragment extends DialogFragment {
                     )
             );
 
-            getExpirationDateValue(getView()).setVisibility(View.VISIBLE);
+            getExpirationDateValue(rootView).setVisibility(View.VISIBLE);
 
-            getExpirationDateValue(getView()).setText(formattedDate);
+            getExpirationDateValue(rootView).setText(formattedDate);
+        }
+
+        // hide expiration date switch if date is enforced to prevent it is removed
+        if (mCapabilities.getFilesSharingPublicExpireDateEnforced().isTrue()) {
+            getExpirationDateLabel(rootView).setText(
+                R.string.share_via_link_expiration_date_enforced_label
+            );
+            getExpirationDateSwitch(rootView).setVisibility(View.GONE);
+            getExpirationDateExplanation(rootView).setVisibility(View.VISIBLE);
+            getExpirationDateExplanation(rootView).setText(
+                getString(
+                    R.string.share_via_link_expiration_date_explanation_label,
+                    mCapabilities.getFilesSharingPublicExpireDateDays()
+                )
+            );
+        }
+
+        // hide password switch if password is enforced to prevent it is removed
+        if (mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
+            getPasswordLabel(rootView).setText(R.string.share_via_link_password_enforced_label);
+            getPasswordSwitch(rootView).setVisibility(View.GONE);
+            getPasswordValue(rootView).setVisibility(View.VISIBLE);
+        }
+
+        // hide password switch if password is enforced to prevent it is removed
+        if (mCapabilities.getFilesSharingPublicUpload().isFalse()) {
+            getEditPermissionSection(rootView).setVisibility(View.GONE);
         }
     }
 
@@ -604,6 +640,10 @@ public class PublicShareDialogFragment extends DialogFragment {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkEditPermissionSwitch);
     }
 
+    private TextView getPasswordLabel(View view) {
+        return (TextView) view.findViewById(R.id.shareViaLinkPasswordLabel);
+    }
+
     private SwitchCompat getPasswordSwitch(View view) {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkPasswordSwitch);
     }
@@ -619,6 +659,10 @@ public class PublicShareDialogFragment extends DialogFragment {
         return (TextView) view.findViewById(R.id.shareViaLinkPasswordValue);
     }
 
+    private TextView getExpirationDateLabel(View view) {
+        return (TextView) view.findViewById(R.id.shareViaLinkExpirationLabel);
+    }
+
     private SwitchCompat getExpirationDateSwitch(View view) {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkExpirationSwitch);
     }
@@ -632,6 +676,10 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private TextView getExpirationDateValue(View view) {
         return (TextView) view.findViewById(R.id.shareViaLinkExpirationValue);
+    }
+
+    private TextView getExpirationDateExplanation(View view) {
+        return (TextView) view.findViewById(R.id.shareViaLinkExpirationExplanationLabel);
     }
 
     private TextView getErrorMessage () {

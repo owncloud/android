@@ -165,6 +165,21 @@
                     android:textSize="12sp"
                     android:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/shareViaLinkExpirationExplanationLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/shareViaLinkExpirationValue"
+                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:paddingRight="@dimen/standard_half_padding"
+                    android:paddingTop="@dimen/standard_half_padding"
+                    android:text="@string/share_via_link_expiration_date_label"
+                    android:textColor="@color/half_black"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
             </RelativeLayout>
 
             <LinearLayout
