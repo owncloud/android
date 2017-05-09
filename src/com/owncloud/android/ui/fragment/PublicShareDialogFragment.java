@@ -186,13 +186,7 @@ public class PublicShareDialogFragment extends DialogFragment {
             getEditPermissionSection(view).setVisibility(View.GONE);
         }
 
-        if (!updating()) {
-
-            // Show keyboard to fill the public share name
-            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.
-                SOFT_INPUT_STATE_VISIBLE);
-
-        } else { // Fill in the different fields if the share is being updated
+        if (updating()) { // Fill in the different fields if the share is being updated
 
             // Set dialog title to edit
             getDialogTitle(view).setText(R.string.share_via_link_edit_title);
@@ -510,8 +504,6 @@ public class PublicShareDialogFragment extends DialogFragment {
             mCapabilities = ((FileActivity) mListener).getStorageManager().
                     getCapability(mAccount.name);
 
-            hideLinkNameSection();
-
             updateInputFormAccordingToServerCapabilities();
         }
     }
@@ -519,7 +511,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     /**
      * Hide link name section depending if multiple public share is supported or not
      */
-    private void hideLinkNameSection() {
+    private void updateLinkNameSection() {
 
         OwnCloudVersion serverVersion;
 
@@ -529,14 +521,21 @@ public class PublicShareDialogFragment extends DialogFragment {
         if (!serverVersion.isMultiplePublicSharingSupported()) {
 
             getNameSection(getView()).setVisibility(View.GONE);
+
+        } else if (!updating()) { // Only if the public share is being created for the first time
+
+            // Show keyboard to fill the public share name
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.
+                    SOFT_INPUT_STATE_VISIBLE);
         }
     }
 
     /**
-     * Update the enforced expiration date when creating a public share, if any
      * Updates the UI according to enforcements and allowances set by the server administrator.
      *
      * Includes:
+     *  - hide the link name section if multiple public share is not supported, showing the keyboard
+     *    to fill in the public share name otherwise
      *  - hide or show the switch to disable the password if it is enforced or not;
      *  - hide or show the switch to disable the expiration date it it is enforced or not;
      *  - show or hide the switch to allow public uploads if it is allowed or not;
@@ -545,6 +544,22 @@ public class PublicShareDialogFragment extends DialogFragment {
     private void updateInputFormAccordingToServerCapabilities() {
 
         View rootView = getView();
+
+        OwnCloudVersion serverVersion;
+
+        serverVersion = new OwnCloudVersion(mCapabilities.getVersionString());
+
+        // Server version <= 9.x, multiple public sharing not supported
+        if (!serverVersion.isMultiplePublicSharingSupported()) {
+
+            getNameSection(getView()).setVisibility(View.GONE);
+
+        } else if (!updating()) { // Only if the public share is being created for the first time
+
+            // Show keyboard to fill the public share name
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.
+                    SOFT_INPUT_STATE_VISIBLE);
+        }
 
         // Show default date enforced by the server, if any
         if (!updating() && mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
