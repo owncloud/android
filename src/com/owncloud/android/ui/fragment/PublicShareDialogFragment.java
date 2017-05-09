@@ -91,6 +91,16 @@ public class PublicShareDialogFragment extends DialogFragment {
     private OCCapability mCapabilities;
 
     /**
+     * Listener for changes in password switch
+     */
+    OnPasswordInteractionListener mOnPasswordInteractionListener;
+
+    /**
+     * Listener for changes in expiration date switch
+     */
+    OnExpirationDateInteractionListener mOnExpirationDateInteractionListener;
+
+    /**
      * Create a new instance of PublicShareDialogFragment, providing fileToShare and account
      * as an argument.
      *
@@ -189,7 +199,7 @@ public class PublicShareDialogFragment extends DialogFragment {
             if (mPublicShare.isPasswordProtected()) {
 
                 // Switch on the password toggle
-                getPasswordSwitch(view).setChecked(true);
+                setPasswordSwitchChecked(true, view);
 
                 getPasswordValue(view).setVisibility(View.VISIBLE);
 
@@ -201,7 +211,7 @@ public class PublicShareDialogFragment extends DialogFragment {
             if (mPublicShare.getExpirationDate() != 0) {
 
                 // Switch on the expiration date toggle
-                getExpirationDateSwitch(view).setChecked(true);
+                setExpirationDateSwitchChecked(true, view);
 
                 String formattedDate =
                         SimpleDateFormat.getDateInstance().format(
@@ -329,7 +339,7 @@ public class PublicShareDialogFragment extends DialogFragment {
      * @param shareView Root view in the fragment.
      */
     private void initPasswordListener(View shareView) {
-        OnPasswordInteractionListener mOnPasswordInteractionListener = new OnPasswordInteractionListener();
+        mOnPasswordInteractionListener = new OnPasswordInteractionListener();
 
         ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkPasswordSwitch)).
                 setOnCheckedChangeListener(mOnPasswordInteractionListener);
@@ -377,8 +387,7 @@ public class PublicShareDialogFragment extends DialogFragment {
      * @param shareView Root view in the fragment.
      */
     private void initExpirationListener(View shareView) {
-        OnExpirationDateInteractionListener mOnExpirationDateInteractionListener =
-                new OnExpirationDateInteractionListener();
+        mOnExpirationDateInteractionListener = new OnExpirationDateInteractionListener();
 
         ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkExpirationSwitch)).
                 setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
@@ -411,12 +420,12 @@ public class PublicShareDialogFragment extends DialogFragment {
                 return;
             }
 
-            ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
-                    newInstance(-1, getImposedExpirationDate(), this);
-
             if (isChecked) {
 
                 // Show calendar to set the expiration date
+                ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
+                    newInstance(-1, getImposedExpirationDate());
+                dialog.setDatePickerListener(this);
                 dialog.show(
                         getActivity().getSupportFragmentManager(),
                         ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
@@ -439,10 +448,10 @@ public class PublicShareDialogFragment extends DialogFragment {
         @Override
         public void onClick(View expirationView) {
 
-            ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
-                    newInstance(-1, getImposedExpirationDate(), this);
-
             // Show calendar to set the expiration date
+            ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
+                    newInstance(-1, getImposedExpirationDate());
+            dialog.setDatePickerListener(this);
             dialog.show(
                     getActivity().getSupportFragmentManager(),
                     ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
@@ -500,7 +509,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         // Show default date enforced by the server, if any
         if (!updating() && mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
 
-            getExpirationDateSwitch(getView()).setChecked(true);
+            setExpirationDateSwitchChecked(true, getView());
 
             String formattedDate = SimpleDateFormat.getDateInstance().format(
                     DateUtils.addDaysToDate(
@@ -564,12 +573,26 @@ public class PublicShareDialogFragment extends DialogFragment {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkPasswordSwitch);
     }
 
+    private void setPasswordSwitchChecked(boolean checked, View view) {
+        SwitchCompat theSwitch = getPasswordSwitch(view);
+        theSwitch.setOnCheckedChangeListener(null);
+        theSwitch.setChecked(checked);
+        theSwitch.setOnCheckedChangeListener(mOnPasswordInteractionListener);
+    }
+
     private TextView getPasswordValue(View view) {
         return (TextView) view.findViewById(R.id.shareViaLinkPasswordValue);
     }
 
     private SwitchCompat getExpirationDateSwitch(View view) {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkExpirationSwitch);
+    }
+
+    private void setExpirationDateSwitchChecked(boolean checked, View view) {
+        SwitchCompat theSwitch = getExpirationDateSwitch(view);
+        theSwitch.setOnCheckedChangeListener(null);
+        theSwitch.setChecked(checked);
+        theSwitch.setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
     }
 
     private TextView getExpirationDateValue(View view) {

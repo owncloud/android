@@ -72,14 +72,13 @@ public class ExpirationDatePickerDialogFragment
      * @return New dialog instance
      */
     public static ExpirationDatePickerDialogFragment newInstance(long chosenDateInMillis,
-                                                                 long imposedExpirationDate,
-                                                                 DatePickerFragmentListener listener) {
+                                                                 long imposedExpirationDate
+    ) {
         Bundle arguments = new Bundle();
         arguments.putLong(ARG_CHOSEN_DATE_IN_MILLIS, chosenDateInMillis);
         arguments.putLong(ARG_IMPOSED_EXPIRATION_DATE, imposedExpirationDate);
 
         ExpirationDatePickerDialogFragment dialog = new ExpirationDatePickerDialogFragment();
-        dialog.setDatePickerListener(listener);
         dialog.setArguments(arguments);
         return dialog;
     }
