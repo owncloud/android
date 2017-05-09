@@ -33,7 +33,7 @@ public class ConfirmationDialogFragment extends DialogFragment {
 
     public final static String ARG_MESSAGE_RESOURCE_ID = "resource_id";
     public final static String ARG_MESSAGE_ARGUMENTS = "string_array";
-    private static final String ARG_TITLE_ID = "title_id";
+    public static final String ARG_TITLE_ID = "title_id";
 
     public final static String ARG_POSITIVE_BTN_RES = "positive_btn_res";
     public final static String ARG_NEUTRAL_BTN_RES = "neutral_btn_res";

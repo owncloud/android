@@ -48,8 +48,10 @@ import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.activity.ShareActivity;
 import com.owncloud.android.ui.adapter.SharePublicLinkListAdapter;
 import com.owncloud.android.ui.adapter.ShareUserListAdapter;
+import com.owncloud.android.ui.dialog.RemoveShareDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
@@ -252,8 +254,8 @@ public class ShareFileFragment extends Fragment
 
     @Override
     public void removePublicShare(OCShare share) {
-        Log_OC.d(TAG, "Removing public share " + share.getName());
-        mListener.removeShare(share);
+        RemoveShareDialogFragment dialog = RemoveShareDialogFragment.newInstance(share);
+        dialog.show(getFragmentManager(), ShareActivity.TAG_REMOVE_SHARE_DIALOG_FRAGMENT);
     }
 
     @Override
