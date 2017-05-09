@@ -168,9 +168,10 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
 
         /// prepare array of parameters to update
         List<Pair<String, String>> parametersToUpdate = new ArrayList<>();
-        if (mName != null) {
+        if (mName.length() > 0) {
             parametersToUpdate.add(new Pair<>(PARAM_NAME, mName));
         }
+        
         if (mPassword != null) {
             parametersToUpdate.add(new Pair<>(PARAM_PASSWORD, mPassword));
         }
@@ -254,5 +255,4 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         }
         return result;
     }
-
 }
