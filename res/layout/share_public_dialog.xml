@@ -13,198 +13,211 @@
         android:text="@string/share_via_link_create_title"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle" />
 
-    <LinearLayout
-        android:id="@+id/shareViaLinkNameSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_half_margin"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/standard_half_padding"
-            android:text="@string/share_via_link_name_label"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-        <EditText
-            android:id="@+id/shareViaLinkNameValue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/standard_half_padding"
-            android:inputType="textNoSuggestions"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/shareViaLinkEditPermissionSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_margin"
-        android:visibility="gone">
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/shareViaLinkEditPermissionSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:padding="@dimen/standard_half_padding" />
-
-        <TextView
-            android:id="@+id/shareViaLinkEditPermissionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@id/shareViaLinkEditPermissionSwitch"
-            android:layout_toStartOf="@id/shareViaLinkEditPermissionSwitch"
-            android:padding="@dimen/standard_half_padding"
-            android:text="@string/share_via_link_edit_permission_label"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/shareViaLinkPasswordSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_margin">
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/shareViaLinkPasswordSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:padding="@dimen/standard_half_padding" />
-
-        <TextView
-            android:id="@+id/shareViaLinkPasswordLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@id/shareViaLinkPasswordSwitch"
-            android:layout_toStartOf="@id/shareViaLinkPasswordSwitch"
-            android:paddingLeft="@dimen/standard_half_padding"
-            android:paddingRight="@dimen/standard_half_padding"
-            android:paddingTop="@dimen/standard_half_padding"
-            android:text="@string/share_via_link_password_label"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-    </RelativeLayout>
-
-    <EditText
-        android:id="@+id/shareViaLinkPasswordValue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/standard_half_margin"
-        android:layout_marginRight="@dimen/standard_half_margin"
-        android:inputType="textPassword"
-        android:visibility="gone" />
-
-    <RelativeLayout
-        android:id="@+id/shareViaLinkExpirationSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_margin">
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/shareViaLinkExpirationSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:checked="false"
-            android:padding="@dimen/standard_half_padding" />
-
-        <TextView
-            android:id="@+id/shareViaLinkExpirationLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@id/shareViaLinkExpirationSwitch"
-            android:layout_toStartOf="@id/shareViaLinkExpirationSwitch"
-            android:paddingLeft="@dimen/standard_half_padding"
-            android:paddingRight="@dimen/standard_half_padding"
-            android:paddingTop="@dimen/standard_half_padding"
-            android:text="@string/share_via_link_expiration_date_label"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/shareViaLinkExpirationValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/shareViaLinkExpirationLabel"
-            android:layout_toLeftOf="@id/shareViaLinkExpirationSwitch"
-            android:layout_toStartOf="@id/shareViaLinkExpirationSwitch"
-            android:paddingBottom="@dimen/standard_half_padding"
-            android:paddingLeft="@dimen/standard_half_padding"
-            android:paddingRight="@dimen/standard_half_padding"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_margin"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/public_link_error_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:drawableLeft="@drawable/common_error"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/standard_half_padding"
-            android:paddingRight="@dimen/standard_half_padding"
-            android:textColor="@color/secondaryTextColor"
-            android:textSize="13sp"
-            android:visibility="gone" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/cancelAddPublicLinkButton"
-                style="@style/ownCloud.Button"
+            <LinearLayout
+                android:id="@+id/shareViaLinkNameSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="shareAddPublicLinkCancelButton"
-                android:text="@string/share_cancel_public_link_button"
-                android:theme="@style/Button.Primary" />
+                android:layout_marginTop="@dimen/standard_half_margin"
+                android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/confirmAddPublicLinkButton"
-                style="@style/ownCloud.Button"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/standard_half_padding"
+                    android:text="@string/share_via_link_name_label"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/shareViaLinkNameValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/standard_half_padding"
+                    android:inputType="textNoSuggestions"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/shareViaLinkEditPermissionSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="shareAddPublicLinkConfirmButton"
-                android:text="@string/share_confirm_public_link_button"
-                android:theme="@style/Button.Primary" />
+                android:layout_marginTop="@dimen/standard_margin"
+                android:visibility="gone">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/shareViaLinkEditPermissionSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:padding="@dimen/standard_half_padding" />
+
+                <TextView
+                    android:id="@+id/shareViaLinkEditPermissionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@id/shareViaLinkEditPermissionSwitch"
+                    android:layout_toStartOf="@id/shareViaLinkEditPermissionSwitch"
+                    android:padding="@dimen/standard_half_padding"
+                    android:text="@string/share_via_link_edit_permission_label"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/shareViaLinkPasswordSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_margin">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/shareViaLinkPasswordSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="@dimen/standard_half_padding" />
+
+                <TextView
+                    android:id="@+id/shareViaLinkPasswordLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@id/shareViaLinkPasswordSwitch"
+                    android:layout_toStartOf="@id/shareViaLinkPasswordSwitch"
+                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:paddingRight="@dimen/standard_half_padding"
+                    android:paddingTop="@dimen/standard_half_padding"
+                    android:text="@string/share_via_link_password_label"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/shareViaLinkPasswordValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/standard_half_margin"
+                android:layout_marginRight="@dimen/standard_half_margin"
+                android:inputType="textPassword"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/shareViaLinkExpirationSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_margin">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/shareViaLinkExpirationSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:checked="false"
+                    android:padding="@dimen/standard_half_padding" />
+
+                <TextView
+                    android:id="@+id/shareViaLinkExpirationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@id/shareViaLinkExpirationSwitch"
+                    android:layout_toStartOf="@id/shareViaLinkExpirationSwitch"
+                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:paddingRight="@dimen/standard_half_padding"
+                    android:paddingTop="@dimen/standard_half_padding"
+                    android:text="@string/share_via_link_expiration_date_label"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/shareViaLinkExpirationValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/shareViaLinkExpirationLabel"
+                    android:layout_toLeftOf="@id/shareViaLinkExpirationSwitch"
+                    android:layout_toStartOf="@id/shareViaLinkExpirationSwitch"
+                    android:paddingBottom="@dimen/standard_half_padding"
+                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:paddingRight="@dimen/standard_half_padding"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_margin"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/public_link_error_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:drawableLeft="@drawable/common_error"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/standard_half_padding"
+                    android:paddingRight="@dimen/standard_half_padding"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/cancelAddPublicLinkButton"
+                        style="@style/ownCloud.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:contentDescription="shareAddPublicLinkCancelButton"
+                        android:text="@string/share_cancel_public_link_button"
+                        android:theme="@style/Button.Primary" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/confirmAddPublicLinkButton"
+                        style="@style/ownCloud.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:contentDescription="shareAddPublicLinkConfirmButton"
+                        android:text="@string/share_confirm_public_link_button"
+                        android:theme="@style/Button.Primary" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
