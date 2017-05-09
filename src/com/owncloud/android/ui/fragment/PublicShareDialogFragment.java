@@ -22,12 +22,15 @@ package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -181,8 +184,13 @@ public class PublicShareDialogFragment extends DialogFragment {
             getEditPermissionSection(view).setVisibility(View.GONE);
         }
 
-        // Fill in the different fields if the share is being updated
-        if (updating()) {
+        if (!updating()) {
+
+            // Show keyboard to fill the public share name
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.
+                SOFT_INPUT_STATE_VISIBLE);
+
+        } else { // Fill in the different fields if the share is being updated
 
             // Set dialog title to edit
             getDialogTitle(view).setText(R.string.share_via_link_edit_title);
@@ -250,8 +258,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                 DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
 
                 try {
-                    publicLinkExpirationDateMillis = format.parse(getExpirationDateValue(getView()).
-                            getText().toString()).getTime();
+                    publicLinkExpirationDateMillis = format.parse(expirationDate).getTime();
                 } catch (ParseException e) {
                     // DO NOTHING
                 }
@@ -370,12 +377,16 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 shareViaLinkPasswordValue.requestFocus();
 
+                // Show keyboard to fill in the password
+                InputMethodManager mgr = (InputMethodManager)getActivity().getSystemService(Context.
+                        INPUT_METHOD_SERVICE);
+                mgr.showSoftInput(shareViaLinkPasswordValue, InputMethodManager.SHOW_IMPLICIT);
+
             } else {
 
                 shareViaLinkPasswordValue.setVisibility(View.GONE);
 
                 shareViaLinkPasswordValue.getText().clear();
-
             }
         }
     }
