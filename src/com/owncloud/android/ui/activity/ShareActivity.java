@@ -68,10 +68,14 @@ public class ShareActivity extends FileActivity
     private static final String TAG_PUBLIC_SHARE_DIALOG_FRAGMENT = "PUBLIC_SHARE_DIALOG_FRAGMENT";
     public static final String TAG_REMOVE_SHARE_DIALOG_FRAGMENT = "REMOVE_SHARE_DIALOG_FRAGMENT";
 
+    GetSharesForFileAsyncTask mGetSharesForFileAsyncTask;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mGetSharesForFileAsyncTask = null;
 
         setContentView(R.layout.share_activity);
 
@@ -119,6 +123,15 @@ public class ShareActivity extends FileActivity
 
         } else {
             Log_OC.e(TAG, "Unexpected intent " + intent.toString());
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mGetSharesForFileAsyncTask != null) {
+            mGetSharesForFileAsyncTask.cancel(true);
+            mGetSharesForFileAsyncTask = null;
         }
     }
 
@@ -212,9 +225,9 @@ public class ShareActivity extends FileActivity
         // Show loading
         showLoadingDialog(R.string.common_loading);
         // Get Users and Groups
-        GetSharesForFileAsyncTask getSharesForFileAsyncTask = new GetSharesForFileAsyncTask(this);
+        mGetSharesForFileAsyncTask = new GetSharesForFileAsyncTask(this);
         Object[] params = {getFile(), getAccount(), getStorageManager()};
-        getSharesForFileAsyncTask.execute(params);
+        mGetSharesForFileAsyncTask.execute(params);
     }
 
     @Override
@@ -276,6 +289,9 @@ public class ShareActivity extends FileActivity
                 ) {
             Log_OC.d(TAG, "Refreshing view on successful operation or finished refresh");
             refreshSharesFromStorageManager();
+            if (operation instanceof GetSharesForFileOperation) {
+                mGetSharesForFileAsyncTask = null;
+            }
         }
 
         if (operation instanceof CreateShareViaLinkOperation) {
