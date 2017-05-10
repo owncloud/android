@@ -343,7 +343,7 @@
     <string name="network_error_socket_exception">An error occurred while connecting with the server.</string>
     <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
     <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
-    <string name="network_host_not_available">Unknown host</string>
+    <string name="network_host_not_available">Server could not be reached</string>
 
     <string name="forbidden_permissions">You do not have permission %s</string>
     <string name="forbidden_permissions_rename">to rename this file</string>
