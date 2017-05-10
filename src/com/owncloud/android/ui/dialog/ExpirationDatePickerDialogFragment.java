@@ -25,6 +25,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
 import android.widget.DatePicker;
@@ -62,22 +63,26 @@ public class ExpirationDatePickerDialogFragment
     /**
      * Parameter constant for date chosen initially
      */
-    private static final String ARG_IMPOSED_EXPIRATION_DATE = "ARG_IMPOSED_EXPIRATION_DATE";
+    private static final String ARG_MAX_DATE_IN_MILLIS = "MAX_DATE_IN_MILLIS";
 
     private DatePickerFragmentListener datePickerListener;
 
     /**
      * Factory method to create new instances
      *
-     * @param chosenDateInMillis Date chosen when the dialog appears
+     * @param chosenDateInMillis    Date chosen when the dialog appears, in milliseconds elapsed
+     *                              since Jan 1, 1970. Needs to be after tomorrow, or tomorrow will be used
+     *                              instead.
+     * @param maxDateInMillis       Maximum date selectable, in milliseconds elapsed since Jan 1, 1970.
+     *                              Only will be set if greater or equals than chosenDateInMillis and tomorrow.
      * @return New dialog instance
      */
     public static ExpirationDatePickerDialogFragment newInstance(long chosenDateInMillis,
-                                                                 long imposedExpirationDate
+                                                                 long maxDateInMillis
     ) {
         Bundle arguments = new Bundle();
         arguments.putLong(ARG_CHOSEN_DATE_IN_MILLIS, chosenDateInMillis);
-        arguments.putLong(ARG_IMPOSED_EXPIRATION_DATE, imposedExpirationDate);
+        arguments.putLong(ARG_MAX_DATE_IN_MILLIS, maxDateInMillis);
 
         ExpirationDatePickerDialogFragment dialog = new ExpirationDatePickerDialogFragment();
         dialog.setArguments(arguments);
@@ -93,20 +98,19 @@ public class ExpirationDatePickerDialogFragment
      *
      * @return A new dialog to let the user choose an expiration date that will be bound to a share link.
      */
-    @Override
+    @Override @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // Chosen date received as an argument must be later than tomorrow ; default to tomorrow in other case
         final Calendar chosenDate = Calendar.getInstance();
         long tomorrowInMillis = chosenDate.getTimeInMillis() + DateUtils.DAY_IN_MILLIS;
         long chosenDateInMillis = getArguments().getLong(ARG_CHOSEN_DATE_IN_MILLIS);
-        long imposedExpirationDate = getArguments().getLong(ARG_IMPOSED_EXPIRATION_DATE);
+        long maxDateInMillis = getArguments().getLong(ARG_MAX_DATE_IN_MILLIS);
 
-        if (chosenDateInMillis > tomorrowInMillis) {
-            chosenDate.setTimeInMillis(chosenDateInMillis);
-        } else {
-            chosenDate.setTimeInMillis(tomorrowInMillis);
+        if (chosenDateInMillis < tomorrowInMillis) {
+            chosenDateInMillis = tomorrowInMillis;
         }
+        chosenDate.setTimeInMillis(chosenDateInMillis);
 
         // Create a new instance of DatePickerDialog
         DatePickerDialog dialog = new DatePickerDialog(
@@ -130,10 +134,12 @@ public class ExpirationDatePickerDialogFragment
 
         // Prevent days in the past may be chosen
         DatePicker picker = dialog.getDatePicker();
-        picker.setMinDate(tomorrowInMillis - 1000);
-        if (imposedExpirationDate != -1) {
-            picker.setMaxDate(imposedExpirationDate);
+        if (maxDateInMillis >= chosenDateInMillis) {
+            // the extra second (+1000) is required to prevent a bug of DatePicker that shows
+            // an extra header with the selected date if maxDateInMillis == chosenDateInMillis
+            picker.setMaxDate(maxDateInMillis + 1000);
         }
+        picker.setMinDate(tomorrowInMillis - 1000);
 
         // Enforce spinners view; ignored by MD-based theme in Android >=5, but calendar is REALLY buggy
         // in Android < 5, so let's be sure it never appears (in tablets both spinners and calendar are

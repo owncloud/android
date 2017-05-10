@@ -257,22 +257,7 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 String publicLinkPassword = getPasswordValue(getView()).getText().toString();
 
-                String expirationDate = getExpirationDateValue(getView()).getText().toString();
-
-                long publicLinkExpirationDateMillis = -1;
-
-                if (expirationDate.length() > 0) {
-                    // Parse expiration date and convert it to milliseconds
-                    try {
-                        publicLinkExpirationDateMillis =
-                            // remember: format is defined by date picker
-                            ExpirationDatePickerDialogFragment.getDateFormat().
-                                parse(expirationDate).getTime()
-                        ;
-                    } catch (ParseException e) {
-                        Log_OC.e(TAG, "Error reading expiration date from input field", e);
-                    }
-                }
+                long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
 
                 boolean publicLinkEditPermissions = getEditPermissionSwitch(getView()).isChecked();
 
@@ -283,7 +268,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     mFile,
                                     publicLinkName,
                                     publicLinkPassword,
-                                    publicLinkExpirationDateMillis,
+                                    publicLinkExpirationDateInMillis,
                                     publicLinkEditPermissions
                             );
 
@@ -305,7 +290,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     mPublicShare,
                                     publicLinkName,
                                     publicLinkPassword,
-                                    publicLinkExpirationDateMillis,
+                                    publicLinkExpirationDateInMillis,
                                     publicLinkEditPermissions
                             );
                 }
@@ -322,6 +307,24 @@ public class PublicShareDialogFragment extends DialogFragment {
         });
 
         return view;
+    }
+
+    private long getExpirationDateValueInMillis() {
+        long publicLinkExpirationDateInMillis = -1;
+        String expirationDate = getExpirationDateValue(getView()).getText().toString();
+        if (expirationDate.length() > 0) {
+            // Parse expiration date and convert it to milliseconds
+            try {
+                publicLinkExpirationDateInMillis =
+                    // remember: format is defined by date picker
+                    ExpirationDatePickerDialogFragment.getDateFormat().
+                        parse(expirationDate).getTime()
+                ;
+            } catch (ParseException e) {
+                Log_OC.e(TAG, "Error reading expiration date from input field", e);
+            }
+        }
+        return publicLinkExpirationDateInMillis;
     }
 
     @Override
@@ -446,7 +449,11 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 // Show calendar to set the expiration date
                 ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
-                    newInstance(-1, getImposedExpirationDate());
+                    newInstance(
+                        getExpirationDateValueInMillis(),
+                        getImposedExpirationDate()
+                    )
+                ;
                 dialog.setDatePickerListener(this);
                 dialog.show(
                         getActivity().getSupportFragmentManager(),
@@ -472,7 +479,11 @@ public class PublicShareDialogFragment extends DialogFragment {
 
             // Show calendar to set the expiration date
             ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
-                    newInstance(-1, getImposedExpirationDate());
+                newInstance(
+                    getExpirationDateValueInMillis(),
+                    getImposedExpirationDate()
+                )
+            ;
             dialog.setDatePickerListener(this);
             dialog.show(
                     getActivity().getSupportFragmentManager(),
@@ -520,28 +531,6 @@ public class PublicShareDialogFragment extends DialogFragment {
                     getCapability(mAccount.name);
 
             updateInputFormAccordingToServerCapabilities();
-        }
-    }
-
-    /**
-     * Hide link name section depending if multiple public share is supported or not
-     */
-    private void updateLinkNameSection() {
-
-        OwnCloudVersion serverVersion;
-
-        serverVersion = new OwnCloudVersion(mCapabilities.getVersionString());
-
-        // Server version <= 9.x, multiple public sharing not supported
-        if (!serverVersion.isMultiplePublicSharingSupported()) {
-
-            getNameSection(getView()).setVisibility(View.GONE);
-
-        } else if (!updating()) { // Only if the public share is being created for the first time
-
-            // Show keyboard to fill the public share name
-            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.
-                    SOFT_INPUT_STATE_VISIBLE);
         }
     }
 
