@@ -75,6 +75,8 @@ public class ShareFileFragment extends Fragment
         SharePublicLinkAdapterListener{
 
     private static final String TAG = ShareFileFragment.class.getSimpleName();
+    private static final String DEFAULT_NAME_REGEX_SUFFIX = " \\(\\d+\\)";
+    private static final String DEFAULT_NAME_SUFFIX = " (%1$d)";
 
     /**
      * The fragment initialization parameters
@@ -235,7 +237,7 @@ public class ShareFileFragment extends Fragment
             @Override
             public void onClick(View view) {
                 // Show Add Public Link Fragment
-                mListener.showAddPublicShare();
+                mListener.showAddPublicShare(getAvailableDefaultPublicName());
             }
         });
 
@@ -243,6 +245,26 @@ public class ShareFileFragment extends Fragment
         hideSectionsDisabledInBuildTime(view);
 
         return view;
+    }
+
+    private String getAvailableDefaultPublicName() {
+        if (mPublicLinks == null) {
+            return "";
+        }
+        int count = 0;
+        String defaultName = getString(R.string.share_via_link_default_name_template, mFile.getFileName());
+        String defaultNameNumberedRegex = defaultName + DEFAULT_NAME_REGEX_SUFFIX;
+        for (OCShare share: mPublicLinks) {
+            if (defaultName.equals(share.getName()) ||
+                share.getName().matches(defaultNameNumberedRegex)) {
+                count++;
+            }
+        }
+        if (count == 0) {
+            return defaultName;
+        } else {
+            return defaultName + String.format(DEFAULT_NAME_SUFFIX, count+1);
+        }
     }
 
 

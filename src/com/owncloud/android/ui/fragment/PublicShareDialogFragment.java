@@ -66,6 +66,8 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private static final String ARG_ACCOUNT = "ACCOUNT";
 
+    private static final String ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME";
+
     private static final int CREATE_PERMISSION = OCShare.CREATE_PERMISSION_FLAG;
 
     private static final int UPDATE_PERMISSION = OCShare.UPDATE_PERMISSION_FLAG;
@@ -114,11 +116,16 @@ public class PublicShareDialogFragment extends DialogFragment {
      * @param   fileToShare     File to share with a new public share.
      * @param   account         Account to get capabilities
      */
-    public static PublicShareDialogFragment newInstanceToCreate(OCFile fileToShare, Account account) {
+    public static PublicShareDialogFragment newInstanceToCreate(
+        OCFile fileToShare,
+        Account account,
+        String defaultLinkName
+    ) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, fileToShare);
         args.putParcelable(ARG_ACCOUNT, account);
+        args.putString(ARG_DEFAULT_LINK_NAME, defaultLinkName);
 
         publicShareDialogFragment.setArguments(args);
         return publicShareDialogFragment;
@@ -179,6 +186,8 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.share_public_dialog, container, false);
 
+        Log_OC.d(TAG, "onCreateView");
+
         // Show or hide edit permission section
         if (isSharedFolder()){
             getEditPermissionSection(view).setVisibility(View.VISIBLE);
@@ -227,6 +236,11 @@ public class PublicShareDialogFragment extends DialogFragment {
                 // Set the existing share expiration date
                 getExpirationDateValue(view).setText(formattedDate);
             }
+
+        } else {
+            // Set existing share name
+            getNameValue(view).setText(getArguments().getString(ARG_DEFAULT_LINK_NAME, ""));
+
         }
 
         // Set listener for user actions on password
@@ -315,7 +329,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         Log_OC.d(TAG, "onActivityCreated");
 
         // Load known capabilities of the server from DB
-        refreshCapabilitiesFromDB();
+        refreshModelFromStorageManager();
     }
 
     @Override
@@ -499,7 +513,7 @@ public class PublicShareDialogFragment extends DialogFragment {
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
-    public void refreshCapabilitiesFromDB() {
+    public void refreshModelFromStorageManager() {
         if (((FileActivity) mListener).getStorageManager() != null) {
             mCapabilities = ((FileActivity) mListener).getStorageManager().
                     getCapability(mAccount.name);
@@ -552,7 +566,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         // Server version <= 9.x, multiple public sharing not supported
         if (!serverVersion.isMultiplePublicSharingSupported()) {
 
-            getNameSection(getView()).setVisibility(View.GONE);
+            getNameSection(rootView).setVisibility(View.GONE);
 
         } else if (!updating()) { // Only if the public share is being created for the first time
 

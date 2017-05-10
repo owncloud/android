@@ -218,7 +218,7 @@ public class ShareActivity extends FileActivity
     }
 
     @Override
-    public void showAddPublicShare() {
+    public void showAddPublicShare(String defaultLinkName) {
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
         // dialog, so make our own transaction and take care of that here.
@@ -230,8 +230,11 @@ public class ShareActivity extends FileActivity
         ft.addToBackStack(null);
 
         // Create and show the dialog
-        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToCreate(getFile(),
-                getAccount());
+        DialogFragment newFragment = PublicShareDialogFragment.newInstanceToCreate(
+            getFile(),
+            getAccount(),
+            defaultLinkName
+        );
         newFragment.show(ft, TAG_PUBLIC_SHARE_DIALOG_FRAGMENT);
     }
 
@@ -347,7 +350,7 @@ public class ShareActivity extends FileActivity
         PublicShareDialogFragment publicShareDialogFragment = getPublicShareFragment();
         if (publicShareDialogFragment != null &&
                 publicShareDialogFragment.isAdded()) {  // only if added to the view hierarchy!!
-            publicShareDialogFragment.refreshCapabilitiesFromDB();
+            publicShareDialogFragment.refreshModelFromStorageManager();
         }
 
         EditShareFragment editShareFragment = getEditShareFragment();

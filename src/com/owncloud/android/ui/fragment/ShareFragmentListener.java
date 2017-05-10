@@ -39,7 +39,7 @@ public interface ShareFragmentListener {
     void showEditPrivateShare(OCShare share);
     void refreshSharesFromServer();
     void removeShare(OCShare share);
-    void showAddPublicShare();
+    void showAddPublicShare(String defaultLinkName);
     void showEditPublicShare(OCShare share);
     void copyOrSendPublicLink(OCShare share);
 }

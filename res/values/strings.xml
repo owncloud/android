@@ -501,6 +501,7 @@
     <string name="share_via_link_password_enforced_label">"Password *"</string>
     <string name="share_via_link_expiration_date_enforced_label">"Expiration *"</string>
     <string name="share_via_link_expiration_date_explanation_label">The public link will expire no later than %1$d days after it is created</string>
+    <string name="share_via_link_default_name_template">%1$s link</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
