@@ -168,7 +168,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
 
         /// prepare array of parameters to update
         List<Pair<String, String>> parametersToUpdate = new ArrayList<>();
-        if (mName.length() > 0) {
+        if (mName != null) {
             parametersToUpdate.add(new Pair<>(PARAM_NAME, mName));
         }
         
@@ -236,7 +236,11 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
                 } else {
                     result = new RemoteOperationResult(false, put);
                 }
-                if (!result.isSuccess()) {
+                if (!result.isSuccess() &&
+                    !PARAM_NAME.equals(parameter.first)
+                        // fail in "name" parameter will be ignored; requires OCX, will fail
+                        // fails in previous versions
+                    ) {
                     break;
                 }
             }
