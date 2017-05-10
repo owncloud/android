@@ -33,6 +33,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 
 import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -81,6 +82,10 @@ public class ExpirationDatePickerDialogFragment
         ExpirationDatePickerDialogFragment dialog = new ExpirationDatePickerDialogFragment();
         dialog.setArguments(arguments);
         return dialog;
+    }
+
+    public static DateFormat getDateFormat() {
+        return SimpleDateFormat.getDateInstance();
     }
 
     /**
@@ -155,10 +160,7 @@ public class ExpirationDatePickerDialogFragment
         chosenDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         long chosenDateInMillis = chosenDate.getTimeInMillis();
 
-        String formattedDate =
-                SimpleDateFormat.getDateInstance().format(
-                        new Date(chosenDateInMillis)
-                );
+        String formattedDate = getDateFormat().format(new Date(chosenDateInMillis));
 
         // Call the listener and pass the date back to it
         notifyDatePickerListener(formattedDate);

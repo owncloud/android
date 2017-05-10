@@ -226,14 +226,11 @@ public class PublicShareDialogFragment extends DialogFragment {
                 // Switch on the expiration date toggle
                 setExpirationDateSwitchChecked(true, view);
 
-                String formattedDate =
-                        SimpleDateFormat.getDateInstance().format(
-                                new Date(mPublicShare.getExpirationDate())
-                        );
-
+                // Set the existing share expiration date, with format defined by date picker
+                String formattedDate = ExpirationDatePickerDialogFragment.getDateFormat().format(
+                        new Date(mPublicShare.getExpirationDate())
+                );
                 getExpirationDateValue(view).setVisibility(View.VISIBLE);
-
-                // Set the existing share expiration date
                 getExpirationDateValue(view).setText(formattedDate);
             }
 
@@ -264,13 +261,17 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 long publicLinkExpirationDateMillis = -1;
 
-                // Parse expiration date and convert it to milliseconds
-                DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
-
-                try {
-                    publicLinkExpirationDateMillis = format.parse(expirationDate).getTime();
-                } catch (ParseException e) {
-                    // DO NOTHING
+                if (expirationDate.length() > 0) {
+                    // Parse expiration date and convert it to milliseconds
+                    try {
+                        publicLinkExpirationDateMillis =
+                            // remember: format is defined by date picker
+                            ExpirationDatePickerDialogFragment.getDateFormat().
+                                parse(expirationDate).getTime()
+                        ;
+                    } catch (ParseException e) {
+                        Log_OC.e(TAG, "Error reading expiration date from input field", e);
+                    }
                 }
 
                 boolean publicLinkEditPermissions = getEditPermissionSwitch(getView()).isChecked();
