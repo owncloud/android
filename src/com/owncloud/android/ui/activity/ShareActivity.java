@@ -183,17 +183,11 @@ public class ShareActivity extends FileActivity
 
     @Override
     public void showSearchUsersAndGroups() {
-
+        Fragment searchFragment = SearchShareesFragment.newInstance(getFile(), getAccount());
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(TAG_SEARCH_FRAGMENT);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = SearchShareesFragment.newInstance(getFile(), getAccount());
-        newFragment.show(ft, TAG_SEARCH_FRAGMENT);
+        ft.replace(R.id.share_fragment_container, searchFragment, TAG_SEARCH_FRAGMENT);
+        ft.addToBackStack(null);    // BACK button will recover the ShareFragment
+        ft.commit();
     }
 
     @Override
@@ -417,7 +411,9 @@ public class ShareActivity extends FileActivity
         boolean retval = true;
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (!getSupportFragmentManager().popBackStackImmediate()) {
+                    finish();
+                }
                 break;
             default:
                 retval = super.onOptionsItemSelected(item);

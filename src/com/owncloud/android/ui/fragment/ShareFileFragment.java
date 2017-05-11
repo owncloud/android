@@ -363,6 +363,8 @@ public class ShareFileFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         Log_OC.d(TAG, "onActivityCreated");
 
+        getActivity().setTitle(R.string.share_dialog_title);
+
         // Load known capabilities of the server from DB
         refreshCapabilitiesFromDB();
 

@@ -24,7 +24,6 @@ package com.owncloud.android.ui.fragment;
 import android.accounts.Account;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,7 +124,6 @@ public class EditShareFragment extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log_OC.d(TAG, "onActivityCreated");
-        getActivity().setTitle(mShare.getSharedWithDisplayName());
     }
 
 
@@ -158,7 +156,7 @@ public class EditShareFragment extends DialogFragment {
 
 
     /**
-     * Updates the UI with the current permissions in the edited {@OCShare}
+     * Updates the UI with the current permissions in the edited {@link OCShare}
      *
      * @param editShareView     Root view in the fragment.
      */

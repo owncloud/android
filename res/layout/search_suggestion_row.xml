@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ownCloud Android client application
+  Copyright (C) 2017 ownCloud GmbH.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="58dip"
+                style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown"
+    >
+
+    <ImageView
+        android:id="@android:id/icon1"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:scaleType="centerInside"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible"
+        style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Icon1" />
+
+    <ImageView
+        android:id="@+id/edit_query"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:scaleType="centerInside"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/selectableItemBackground"
+        android:visibility="gone"
+        style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Query" />
+
+    <ImageView
+        android:id="@id/android:icon2"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:scaleType="centerInside"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Icon2" />
+
+    <TextView android:id="@android:id/text2"
+              style="?android:attr/dropDownItemStyle"
+              android:textAppearance="?attr/textAppearanceSearchResultSubtitle"
+              android:maxLines="1"
+              android:layout_width="match_parent"
+              android:layout_height="29dip"
+              android:paddingBottom="4dip"
+              android:gravity="top"
+              android:layout_alignWithParentIfMissing="true"
+              android:layout_alignParentBottom="true"
+              android:visibility="gone" />
+
+    <TextView android:id="@android:id/text1"
+              style="?android:attr/dropDownItemStyle"
+              android:textAppearance="?attr/textAppearanceSearchResultTitle"
+              android:maxLines="1"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_centerVertical="true"
+              android:layout_toRightOf="@android:id/icon1"
+              android:layout_toEndOf="@android:id/icon1"
+        />
+
+</RelativeLayout>

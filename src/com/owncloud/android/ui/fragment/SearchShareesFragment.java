@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -57,7 +56,7 @@ import java.util.ArrayList;
  * Use the {@link SearchShareesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchShareesFragment extends DialogFragment implements ShareUserListAdapter.ShareUserAdapterListener {
+public class SearchShareesFragment extends Fragment implements ShareUserListAdapter.ShareUserAdapterListener {
     private static final String TAG = SearchShareesFragment.class.getSimpleName();
 
     // the fragment initialization parameters
@@ -104,8 +103,6 @@ public class SearchShareesFragment extends DialogFragment implements ShareUserLi
             mFile = getArguments().getParcelable(ARG_FILE);
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
         }
-
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
     /**
@@ -149,6 +146,8 @@ public class SearchShareesFragment extends DialogFragment implements ShareUserLi
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        getActivity().setTitle(R.string.share_with_title);
+
         // Load data into the list
         refreshUsersOrGroupsListFromDB();
     }
@@ -174,11 +173,11 @@ public class SearchShareesFragment extends DialogFragment implements ShareUserLi
     }
 
     private void updateListOfUserGroups() {
+
         // Update list of users/groups
-        // TODO Refactoring: create a new {@link ShareUserListAdapter} instance with every call should not be needed
         mUserGroupsAdapter = new ShareUserListAdapter(
-                getActivity().getApplicationContext(),
-                R.layout.share_user_item, mShares, this
+            getActivity().getApplicationContext(),
+            R.layout.share_user_item, mShares, this
         );
 
         // Show data
