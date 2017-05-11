@@ -496,7 +496,7 @@
     <string name="error_no_network_connection">Device is not connected to a network</string>
     <string name="share_no_public_links">No public links created yet</string>
     <string name="share_no_link_in_this_share">This share has no link</string>
-    <string name="share_warning_about_forwarding_public_links">If you share these links the recipient may forward them to anyone on the Internet.</string>
+    <string name="share_warning_about_forwarding_public_links">Anyone with the link has access to the file/folder</string>
     <string name="share_via_link_default_password">*****</string>
     <string name="share_via_link_password_enforced_label">"Password *"</string>
     <string name="share_via_link_expiration_date_enforced_label">"Expiration *"</string>

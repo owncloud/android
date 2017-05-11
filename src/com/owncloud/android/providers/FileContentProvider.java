@@ -847,25 +847,6 @@ public class FileContentProvider extends ContentProvider {
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                     ", newVersion == " + newVersion);
             }
-            if (oldVersion < 20 && newVersion >= 20) {
-
-                Log_OC.i("SQL", "Entering in the #20 ADD in onUpgrade");
-                db.beginTransaction();
-                try {
-                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
-                        " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_DISPLAY_PRIVACY_WARNING
-                        + " INTEGER " + " DEFAULT -1");
-                    upgraded = true;
-                    db.setTransactionSuccessful();
-
-                } finally {
-                    db.endTransaction();
-                }
-            }
-            if (!upgraded) {
-                Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
-                    ", newVersion == " + newVersion);
-            }
 
 
         }
@@ -942,7 +923,6 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL + " INTEGER, "    // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD + " INTEGER, "       // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE + " INTEGER, "     // boolean
-                + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_DISPLAY_PRIVACY_WARNING+ " INTEGER, "     // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL + " INTEGER, "      // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_RESHARING + " INTEGER, "           // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING + " INTEGER, "     // boolean
