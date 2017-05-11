@@ -67,7 +67,6 @@ public class OCCapability {
     private CapabilityBooleanType mFilesBigFileChuncking;
     private CapabilityBooleanType mFilesUndelete;
     private CapabilityBooleanType mFilesVersioning;
-    private CapabilityBooleanType mFilesSharingPublicDisplayPrivacyWarning;
 
     public OCCapability() {
         mId = 0;
@@ -90,7 +89,6 @@ public class OCCapability {
         mFilesSharingPublicSendMail = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicUpload = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicMultiple = CapabilityBooleanType.UNKNOWN;
-        mFilesSharingPublicDisplayPrivacyWarning = CapabilityBooleanType.UNKNOWN;
         mFilesSharingUserSendMail = CapabilityBooleanType.UNKNOWN;
         mFilesSharingResharing = CapabilityBooleanType.UNKNOWN;
         mFilesSharingFederationOutgoing = CapabilityBooleanType.UNKNOWN;
@@ -241,15 +239,6 @@ public class OCCapability {
         this.mFilesSharingPublicMultiple = filesSharingPublicMultiple;
     }
 
-    public CapabilityBooleanType getFilesSharingPublicDisplayPrivacyWarning() {
-        return mFilesSharingPublicDisplayPrivacyWarning;
-    }
-
-    public void setFilesSharingPublicDisplayPrivacyWarning(
-        CapabilityBooleanType filesSharingPublicDisplayPrivacyWarning
-    ) {
-        mFilesSharingPublicDisplayPrivacyWarning = filesSharingPublicDisplayPrivacyWarning;
-    }
     public CapabilityBooleanType getFilesSharingUserSendMail() {
         return mFilesSharingUserSendMail;
     }
@@ -305,5 +294,4 @@ public class OCCapability {
     public void setFilesVersioning(CapabilityBooleanType filesVersioning) {
         this.mFilesVersioning = filesVersioning;
     }
-
 }
