@@ -57,6 +57,7 @@ import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
@@ -76,8 +77,12 @@ public class ShareFileFragment extends Fragment
         SharePublicLinkAdapterListener{
 
     private static final String TAG = ShareFileFragment.class.getSimpleName();
-    private static final String DEFAULT_NAME_REGEX_SUFFIX = " \\(\\d+\\)";
     private static final String DEFAULT_NAME_SUFFIX = " (%1$d)";
+
+    private static final String DEFAULT_NAME_REGEX_SUFFIX = " \\((\\d+)\\)\\z";
+    // matches suffix (end of the string with \z) in the form "(X)", where X is an integer of any length;
+    // also captures the number to reference it later during the match;
+    // reference in https://developer.android.com/reference/java/util/regex/Pattern.html#sum
 
     /**
      * The fragment initialization parameters
@@ -253,91 +258,58 @@ public class ShareFileFragment extends Fragment
             return "";
         }
 
-        int count = 0;
-
         String defaultName = getString(R.string.share_via_link_default_name_template,
                 mFile.getFileName());
         String defaultNameNumberedRegex = defaultName + DEFAULT_NAME_REGEX_SUFFIX;
 
         // Array with numbers already set in public link names
-        ArrayList<Integer> numbers = new ArrayList<>();
+        ArrayList<Integer> usedNumbers = new ArrayList<>();
 
-        // Get already set numbers
+        // Inspect public links for default names already used
+        boolean isDefaultNameSet = false;
+        String number;
         for (OCShare share: mPublicLinks) {
-
-            if (share.getName().matches(defaultNameNumberedRegex)) {
-
-                String number = share.getName().replaceFirst(".*?(\\d+).*", "$1");
-
-                numbers.add(Integer.parseInt(number));
-            }
-        }
-
-        // Sort numbers in ascending order
-        Collections.sort(numbers);
-
-        // Get missingNumbers due to public links deletion
-        ArrayList<Integer> missingNumbers = new ArrayList<>();
-
-        // Missing numbers between 1 and numbers[0]
-        if (numbers.size() > 0) {
-            for (int i = 1; i < numbers.get(0); i++) {
-                missingNumbers.add(i);
-            }
-        }
-
-        for (int i = 1; i < numbers.size(); i++) {
-            //A number is missing if it is between numbers[i-1]+1 and numbers[i]-1
-            for (int j = 1 + numbers.get(i-1); j < numbers.get(i); j++) {
-                missingNumbers.add(j);
-            }
-        }
-
-        // If there's any missing number, set it
-        if (missingNumbers.size() > 0) {
-
-            boolean isDefaultNameSet = false;
-
-            for (OCShare share: mPublicLinks) {
-                if (defaultName.equals(share.getName())) {
-
-                    isDefaultNameSet = true;
-
-                    break;
+            if (defaultName.equals(share.getName())) {
+                isDefaultNameSet = true;
+            } else if (share.getName().matches(defaultNameNumberedRegex)) {
+                number = share.getName().replaceFirst(defaultNameNumberedRegex, "$1");
+                try {
+                    usedNumbers.add(Integer.parseInt(number));
+                } catch (Exception e) {
+                    Log_OC.e(TAG, "Wrong capture of number in share named " + share.getName(), e);
+                    return "";  // better not suggesting a name than crashing
                 }
             }
-
-            // If public link with default name has been deleted, set it again, set missing number
-            // otherwise
-            count = isDefaultNameSet ? missingNumbers.get(0) : 0;
-
-        } else if (numbers.size() == 0) { // For the first duplicated public share name, set (1)
-
-            count = 1;
-
-        } else if (numbers.size() > 0) { // If there's any number already set, calculate next one
-
-            boolean isDefaultNameSet = false;
-
-            for (OCShare share: mPublicLinks) {
-                if (defaultName.equals(share.getName())) {
-
-                    isDefaultNameSet = true;
-
-                    break;
-                }
-            }
-
-            // If public link with default name has been deleted, set it again, calculate next number
-            // otherwise
-            count = isDefaultNameSet ? Collections.max(numbers) + 1 : 0;
         }
 
-        if (count == 0) {
+        if (!isDefaultNameSet) {
             return defaultName;
-        } else {
-            return defaultName + String.format(DEFAULT_NAME_SUFFIX, count);
         }
+
+        // Sort used numbers in ascending order
+        Collections.sort(usedNumbers);
+
+        // Search for lowest unused number
+        int chosenNumber = -1;
+        if (usedNumbers.size() == 0 || usedNumbers.get(0) != 2 ) {
+            chosenNumber = 2;
+
+        } else {
+            for (int i = 0; i < usedNumbers.size() - 1; i++) {
+                int current = usedNumbers.get(i);
+                int next = usedNumbers.get(i+1);
+                if (next - current > 1) {
+                    chosenNumber = current + 1;
+                    break;
+                }
+            }
+            if (chosenNumber < 0) {
+                // no missing number in the list - take the next to the last one
+                chosenNumber = usedNumbers.get(usedNumbers.size() - 1) + 1;
+            }
+        }
+
+        return defaultName + String.format(Locale.getDefault(), DEFAULT_NAME_SUFFIX, chosenNumber);
     }
 
 
