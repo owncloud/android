@@ -56,6 +56,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
@@ -251,19 +252,91 @@ public class ShareFileFragment extends Fragment
         if (mPublicLinks == null) {
             return "";
         }
+
         int count = 0;
-        String defaultName = getString(R.string.share_via_link_default_name_template, mFile.getFileName());
+
+        String defaultName = getString(R.string.share_via_link_default_name_template,
+                mFile.getFileName());
         String defaultNameNumberedRegex = defaultName + DEFAULT_NAME_REGEX_SUFFIX;
+
+        // Array with numbers already set in public link names
+        ArrayList<Integer> numbers = new ArrayList<>();
+
+        // Get already set numbers
         for (OCShare share: mPublicLinks) {
-            if (defaultName.equals(share.getName()) ||
-                share.getName().matches(defaultNameNumberedRegex)) {
-                count++;
+
+            if (share.getName().matches(defaultNameNumberedRegex)) {
+
+                String number = share.getName().replaceFirst(".*?(\\d+).*", "$1");
+
+                numbers.add(Integer.parseInt(number));
             }
         }
+
+        // Sort numbers in ascending order
+        Collections.sort(numbers);
+
+        // Get missingNumbers due to public links deletion
+        ArrayList<Integer> missingNumbers = new ArrayList<>();
+
+        // Missing numbers between 1 and numbers[0]
+        if (numbers.size() > 0) {
+            for (int i = 1; i < numbers.get(0); i++) {
+                missingNumbers.add(i);
+            }
+        }
+
+        for (int i = 1; i < numbers.size(); i++) {
+            //A number is missing if it is between numbers[i-1]+1 and numbers[i]-1
+            for (int j = 1 + numbers.get(i-1); j < numbers.get(i); j++) {
+                missingNumbers.add(j);
+            }
+        }
+
+        // If there's any missing number, set it
+        if (missingNumbers.size() > 0) {
+
+            boolean isDefaultNameSet = false;
+
+            for (OCShare share: mPublicLinks) {
+                if (defaultName.equals(share.getName())) {
+
+                    isDefaultNameSet = true;
+
+                    break;
+                }
+            }
+
+            // If public link with default name has been deleted, set it again, set missing number
+            // otherwise
+            count = isDefaultNameSet ? missingNumbers.get(0) : 0;
+
+        } else if (numbers.size() == 0) { // For the first duplicated public share name, set (1)
+
+            count = 1;
+
+        } else if (numbers.size() > 0) { // If there's any number already set, calculate next one
+
+            boolean isDefaultNameSet = false;
+
+            for (OCShare share: mPublicLinks) {
+                if (defaultName.equals(share.getName())) {
+
+                    isDefaultNameSet = true;
+
+                    break;
+                }
+            }
+
+            // If public link with default name has been deleted, set it again, calculate next number
+            // otherwise
+            count = isDefaultNameSet ? Collections.max(numbers) + 1 : 0;
+        }
+
         if (count == 0) {
             return defaultName;
         } else {
-            return defaultName + String.format(DEFAULT_NAME_SUFFIX, count+1);
+            return defaultName + String.format(DEFAULT_NAME_SUFFIX, count);
         }
     }
 
