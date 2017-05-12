@@ -44,6 +44,8 @@ import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 
+import java.util.Locale;
+
 public class EditShareFragment extends DialogFragment {
 
     private static final String TAG = EditShareFragment.class.getSimpleName();
@@ -113,6 +115,7 @@ public class EditShareFragment extends DialogFragment {
             } else {
                 mShare = savedInstanceState.getParcelable(ARG_SHARE);
             }
+            Log_OC.e(TAG, String.format(Locale.getDefault(), "Share has id %1$d remoteId %2$d", mShare.getId(), mShare.getRemoteId()));
         }
 
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
@@ -439,7 +442,7 @@ public class EditShareFragment extends DialogFragment {
         FileDataStorageManager storageManager = ((FileActivity) getActivity()).getStorageManager();
         if (storageManager != null) {
             // Get edited share
-            mShare = storageManager.getShareById(mShare.getId());
+            mShare = storageManager.getShareByRemoteId(mShare.getRemoteId());
 
             // Updates UI with new state
             refreshUiFromState(editShareView);

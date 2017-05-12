@@ -1186,6 +1186,28 @@ public class FileDataStorageManager {
 
 
     /**
+     * Retrieves an stored {@link OCShare} given its id.
+     *
+     * @param id    Identifier of the share in OC server.
+     * @return      Stored {@link OCShare} given its remote id.
+     */
+    public OCShare getShareByRemoteId(long id) {
+        OCShare share = null;
+        Cursor c = getShareCursorForValue(
+            ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED,
+            String.valueOf(id)
+        );
+        if (c != null) {
+            if (c.moveToFirst()) {
+                share = createShareInstance(c);
+            }
+            c.close();
+        }
+        return share;
+    }
+
+
+    /**
      * Checks the existance of an stored {@link OCShare} matching the given remote id (not to be confused with
      * the local id) in the current account.
      *
