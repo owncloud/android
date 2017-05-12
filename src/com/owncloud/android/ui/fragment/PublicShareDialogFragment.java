@@ -47,11 +47,9 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 import com.owncloud.android.utils.DateUtils;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class PublicShareDialogFragment extends DialogFragment {
 
@@ -558,11 +556,13 @@ public class PublicShareDialogFragment extends DialogFragment {
 
             getNameSection(rootView).setVisibility(View.GONE);
 
-        } else if (!updating()) { // Only if the public share is being created for the first time
+        } else {
 
             // Show keyboard to fill the public share name
-            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.
-                    SOFT_INPUT_STATE_VISIBLE);
+            getDialog().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE |
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+            );
         }
 
         // Show default date enforced by the server, if any
