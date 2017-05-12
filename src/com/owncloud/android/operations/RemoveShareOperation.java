@@ -94,7 +94,7 @@ public class RemoveShareOperation extends SyncOperation {
                 getStorageManager().removeShare(share);
 
             } else if (result.getCode() != ResultCode.SERVICE_UNAVAILABLE &&
-                    !existsFile(client, share.getPath())) {
+                    notExistFile(client, share.getPath())) {
                 // unshare failed because file was deleted before
                 getStorageManager().removeFile(file, true, true);
             }
@@ -106,9 +106,9 @@ public class RemoveShareOperation extends SyncOperation {
         return result;
     }
     
-    private boolean existsFile(OwnCloudClient client, String remotePath){
+    private boolean notExistFile(OwnCloudClient client, String remotePath){
         ExistenceCheckRemoteOperation existsOperation =
-                new ExistenceCheckRemoteOperation(remotePath, false);
+                new ExistenceCheckRemoteOperation(remotePath, true);
         RemoteOperationResult result = existsOperation.execute(client);
         return result.isSuccess();
     }
