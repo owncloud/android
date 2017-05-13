@@ -818,12 +818,31 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 normalizeUrl(mHostUrlInput.getText().toString(), mServerInfo.mIsSslConn))) {
             // check server again only if the user changed something in the field
             checkOcServer();
+            extractCredentialsFromUrl();
         } else {
             mOkButton.setEnabled(mServerIsValid);
             showRefreshButton(!mServerIsValid);
         }
     }
 
+    private void extractCredentialsFromUrl() {
+        String uriInput = mHostUrlInput.getText().toString().trim();
+
+        if(uriInput.length() != 0) {
+            Uri uri = Uri.parse(uriInput);
+
+            String userInfo = uri.getUserInfo();
+            if(userInfo != null) {
+                String[] userInfoParts = userInfo.split(":", 2);
+                if(userInfoParts.length > 0 && userInfoParts[0].length() > 0) {
+                    mUsernameInput.setText(userInfoParts[0]);
+                }
+                if(userInfoParts.length > 1 && userInfoParts[1].length() > 0) {
+                    mPasswordInput.setText(userInfoParts[1]);
+                }
+            }
+        }
+    }
 
     private void checkOcServer() {
         String uri = mHostUrlInput.getText().toString().trim();
