@@ -70,6 +70,8 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private static final int UPDATE_PERMISSION = OCShare.UPDATE_PERMISSION_FLAG;
 
+    private static final String KEY_EXPIRATION_DATE = "EXPIRATION_DATE";
+
     /**
      * File to share, received as a parameter in construction time
      */
@@ -193,6 +195,15 @@ public class PublicShareDialogFragment extends DialogFragment {
             getEditPermissionSection(view).setVisibility(View.GONE);
         }
 
+        // Get and set the values saved previous to the screen rotation, if any
+        if (savedInstanceState != null) {
+            String expirationDate = savedInstanceState.getString(KEY_EXPIRATION_DATE);
+            if (expirationDate.length() > 0) {
+                getExpirationDateValue(view).setVisibility(View.VISIBLE);
+                getExpirationDateValue(view).setText(expirationDate);
+            }
+        }
+
         if (updating()) { // Fill in the different fields if the share is being updated
 
             // Set dialog title to edit
@@ -235,7 +246,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         } else {
             // Set existing share name
             getNameValue(view).setText(getArguments().getString(ARG_DEFAULT_LINK_NAME, ""));
-
         }
 
         // Set listener for user actions on password
@@ -332,6 +342,14 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         // Load known capabilities of the server from DB
         refreshModelFromStorageManager();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(KEY_EXPIRATION_DATE, getExpirationDateValue(getView()).getText().
+                toString());
     }
 
     @Override
