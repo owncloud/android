@@ -88,7 +88,8 @@ public class ShareToRemoteOperationResultParser {
                     if (shares != null) {
                         for (OCShare share : shares) {
                             resultData.add(share);
-                            // build the share link if not in the response (only received when the share is created)
+                            // build the share link if not in the response
+                            // (needed for OC servers < 9.0.0, see ShareXMLParser.java#line256)
                             if (share.getShareType() == ShareType.PUBLIC_LINK &&
                                     (share.getShareLink() == null ||
                                             share.getShareLink().length() <= 0) &&
@@ -98,7 +99,7 @@ public class ShareToRemoteOperationResultParser {
                                     String sharingLinkPath = ShareUtils.getSharingLinkPath(mOwnCloudVersion);
                                     share.setShareLink(mServerBaseUri + sharingLinkPath + share.getToken());
                                 } else {
-                                    Log_OC.e(TAG, "Couldn't build link for public share");
+                                    Log_OC.e(TAG, "Couldn't build link for public share :(");
                                 }
                             }
                         }
