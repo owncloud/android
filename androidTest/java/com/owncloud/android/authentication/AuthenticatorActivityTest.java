@@ -86,14 +86,41 @@ public class AuthenticatorActivityTest {
     private String testPassword = null;
     private String testPassword2 = null;
     private String testServerURL = null;
-    private int trusted = -1;
+    public enum ServerType {
+        /*
+         * Server with http
+         */
+        HTTP(1),
 
-    /*
-       trusted = -1 -> http
-       trusted = 0 -> https non secure
-       trusted = 1 -> https secure
-       trusted = 2 -> redirected non-secure to a non-secure
-     */
+        /*
+         * Server with https, but non-secure certificate
+         */
+        HTTPS_NON_SECURE(2),
+
+        /*
+         * Server with https
+         */
+        HTTPS_SECURE(3),
+
+        /*
+         * Server redirected to a non-secure server
+         */
+        REDIRECTED_NON_SECURE(4);
+
+        private final int status;
+
+        ServerType (int status) {
+            this.status = status;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+    }
+
+    private int trusted;
+    public ServerType servertype;
 
     @Rule
     public ActivityTestRule<AuthenticatorActivity> mActivityRule = new ActivityTestRule<AuthenticatorActivity>(
@@ -120,8 +147,18 @@ public class AuthenticatorActivityTest {
         testPassword2 = arguments.getString("TEST_PASSWORD2");
         testServerURL = arguments.getString("TEST_SERVER_URL");
         trusted = Integer.parseInt(arguments.getString("TRUSTED"));
+        switch (trusted) {
+            case (1): servertype = ServerType.HTTP;
+                break;
+            case (2): servertype = ServerType.HTTPS_NON_SECURE;
+                break;
+            case (3): servertype = ServerType.HTTPS_SECURE;
+                break;
+            case (4): servertype = ServerType.REDIRECTED_NON_SECURE;
+                break;
+        }
 
-         // UiDevice available form API level 17
+        // UiDevice available form API level 17
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
             /*Point[] coordinates = new Point[4];
@@ -152,7 +189,8 @@ public class AuthenticatorActivityTest {
 
         Log_OC.i(LOG_TAG, "Test not accept not secure start");
 
-        if (trusted == 0 || trusted == 2) {
+        if (servertype == ServerType.HTTPS_NON_SECURE ||
+                servertype == ServerType.REDIRECTED_NON_SECURE ) {
 
             // Check that login button is disabled
             onView(withId(R.id.buttonOK))
@@ -194,10 +232,10 @@ public class AuthenticatorActivityTest {
 
 
         Log_OC.i(LOG_TAG, "Test accept not secure start");
-
         // Get values passed
 
-        if (trusted == 0 || trusted == 2) {
+        if (servertype == ServerType.HTTPS_NON_SECURE ||
+                servertype == ServerType.REDIRECTED_NON_SECURE) {
 
             // Check that login button is disabled
             onView(withId(R.id.buttonOK))
@@ -543,20 +581,20 @@ public class AuthenticatorActivityTest {
      */
     private void checkStatusMessage(){
 
-        switch (trusted){
-            case (-1):
+        switch (servertype.getStatus()){
+            case (1):
                 if (testServerURL.startsWith("http"))
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_connection_established)));
                 else
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
                 break;
-            case (0):
-                onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
-                break;
-            case (1):
-                onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
-                break;
             case (2):
+                onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
+                break;
+            case (3):
+                onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
+                break;
+            case (4):
                 onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
                 break;
             default: break;
