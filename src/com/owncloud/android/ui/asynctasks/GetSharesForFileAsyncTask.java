@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.utils;
+package com.owncloud.android.ui.asynctasks;
 
 import android.accounts.Account;
 import android.os.AsyncTask;
@@ -41,12 +41,12 @@ import java.lang.ref.WeakReference;
 /**
  * Async Task to get the users and groups which a file is shared with
  */
-public class GetShareWithUsersAsyncTask extends AsyncTask<Object, Void, Pair<RemoteOperation, RemoteOperationResult>> {
+public class GetSharesForFileAsyncTask extends AsyncTask<Object, Void, Pair<RemoteOperation, RemoteOperationResult>> {
 
-    private final String TAG = GetShareWithUsersAsyncTask.class.getSimpleName();
+    private final String TAG = GetSharesForFileAsyncTask.class.getSimpleName();
     private final WeakReference<OnRemoteOperationListener> mListener;
 
-    public GetShareWithUsersAsyncTask(OnRemoteOperationListener listener) {
+    public GetSharesForFileAsyncTask(OnRemoteOperationListener listener) {
         mListener = new WeakReference<OnRemoteOperationListener>(listener);
     }
 
@@ -86,7 +86,9 @@ public class GetShareWithUsersAsyncTask extends AsyncTask<Object, Void, Pair<Rem
     @Override
     protected void onPostExecute(Pair<RemoteOperation, RemoteOperationResult> result) {
 
-        if (result!= null)
+        // a cancelled task shouldn't call the listener, even if the reference exists;
+        // the Activity responsible could be stopped, and its abilities to do things constrained
+        if (result!= null && !isCancelled())
         {
             OnRemoteOperationListener listener = mListener.get();
             if (listener!= null)

@@ -35,10 +35,10 @@ import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.DownloadFileOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
+import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
-import com.owncloud.android.operations.UnshareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.operations.UploadFileOperation;
@@ -230,7 +230,7 @@ public class ErrorMessageAdapter {
 
             }
 
-        } else if (operation instanceof UnshareOperation) {
+        } else if (operation instanceof RemoveShareOperation) {
 
             if (result.getData() != null && result.getData().size() > 0) {
                 message = (String) result.getData().get(0);     // share API sends its own error messages
@@ -453,7 +453,7 @@ public class ErrorMessageAdapter {
                 ) {
             message = res.getString(R.string.share_link_file_error);
 
-        } else if (operation instanceof UnshareOperation) {
+        } else if (operation instanceof RemoveShareOperation) {
             message = res.getString(R.string.unshare_link_file_error);
 
         } else if (operation instanceof UpdateShareViaLinkOperation ||

@@ -1,21 +1,21 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ * @author David A. Velasco
+ * @author David González Verdugo
+ * Copyright (C) 2016 ownCloud GmbH.
  *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.dialog;
@@ -25,72 +25,92 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
+import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.ui.activity.FileActivity;
 
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
- *  Dialog requesting a date after today.
+ * Dialog requesting a date after today.
  */
 public class ExpirationDatePickerDialogFragment
         extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
-    /** Tag for FragmentsManager */
+    /**
+     * Tag for FragmentsManager
+     */
     public static final String DATE_PICKER_DIALOG = "DATE_PICKER_DIALOG";
 
-    /** Parameter constant for {@link OCFile} instance to set the expiration date */
+    /**
+     * Parameter constant for {@link OCFile} instance to set the expiration date
+     */
     private static final String ARG_FILE = "FILE";
 
-    /** Parameter constant for date chosen initially */
+    /**
+     * Parameter constant for date chosen initially
+     */
     private static final String ARG_CHOSEN_DATE_IN_MILLIS = "CHOSEN_DATE_IN_MILLIS";
 
-    /** File to bind an expiration date */
-    private OCFile mFile;
+    /**
+     * Parameter constant for date chosen initially
+     */
+    private static final String ARG_MAX_DATE_IN_MILLIS = "MAX_DATE_IN_MILLIS";
+
+    private DatePickerFragmentListener datePickerListener;
 
     /**
-     *  Factory method to create new instances
+     * Factory method to create new instances
      *
-     *  @param file                 File to bind an expiration date
-     *  @param chosenDateInMillis   Date chosen when the dialog appears
-     *  @return                     New dialog instance
+     * @param chosenDateInMillis    Date chosen when the dialog appears, in milliseconds elapsed
+     *                              since Jan 1, 1970. Needs to be after tomorrow, or tomorrow will be used
+     *                              instead.
+     * @param maxDateInMillis       Maximum date selectable, in milliseconds elapsed since Jan 1, 1970.
+     *                              Only will be set if greater or equals than chosenDateInMillis and tomorrow.
+     * @return New dialog instance
      */
-    public static ExpirationDatePickerDialogFragment newInstance(OCFile file, long chosenDateInMillis) {
+    public static ExpirationDatePickerDialogFragment newInstance(long chosenDateInMillis,
+                                                                 long maxDateInMillis
+    ) {
         Bundle arguments = new Bundle();
-        arguments.putParcelable(ARG_FILE, file);
         arguments.putLong(ARG_CHOSEN_DATE_IN_MILLIS, chosenDateInMillis);
+        arguments.putLong(ARG_MAX_DATE_IN_MILLIS, maxDateInMillis);
 
         ExpirationDatePickerDialogFragment dialog = new ExpirationDatePickerDialogFragment();
         dialog.setArguments(arguments);
         return dialog;
     }
 
+    public static DateFormat getDateFormat() {
+        return SimpleDateFormat.getDateInstance();
+    }
+
     /**
      * {@inheritDoc}
      *
-     * @return      A new dialog to let the user choose an expiration date that will be bound to a share link.
+     * @return A new dialog to let the user choose an expiration date that will be bound to a share link.
      */
-    @Override
+    @Override @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Load arguments
-        mFile = getArguments().getParcelable(ARG_FILE);
 
         // Chosen date received as an argument must be later than tomorrow ; default to tomorrow in other case
         final Calendar chosenDate = Calendar.getInstance();
         long tomorrowInMillis = chosenDate.getTimeInMillis() + DateUtils.DAY_IN_MILLIS;
         long chosenDateInMillis = getArguments().getLong(ARG_CHOSEN_DATE_IN_MILLIS);
-        if (chosenDateInMillis > tomorrowInMillis) {
-            chosenDate.setTimeInMillis(chosenDateInMillis);
-        } else {
-            chosenDate.setTimeInMillis(tomorrowInMillis);
+        long maxDateInMillis = getArguments().getLong(ARG_MAX_DATE_IN_MILLIS);
+
+        if (chosenDateInMillis < tomorrowInMillis) {
+            chosenDateInMillis = tomorrowInMillis;
         }
+        chosenDate.setTimeInMillis(chosenDateInMillis);
 
         // Create a new instance of DatePickerDialog
         DatePickerDialog dialog = new DatePickerDialog(
@@ -101,8 +121,24 @@ public class ExpirationDatePickerDialogFragment
                 chosenDate.get(Calendar.DAY_OF_MONTH)
         );
 
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                getString(R.string.share_cancel_public_link_button),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_NEGATIVE) {
+                            // Do Stuff
+                            notifyDatePickerListener(null);
+                        }
+                    }
+                });
+
         // Prevent days in the past may be chosen
         DatePicker picker = dialog.getDatePicker();
+        if (maxDateInMillis >= chosenDateInMillis) {
+            // the extra second (+1000) is required to prevent a bug of DatePicker that shows
+            // an extra header with the selected date if maxDateInMillis == chosenDateInMillis
+            picker.setMaxDate(maxDateInMillis + 1000);
+        }
         picker.setMinDate(tomorrowInMillis - 1000);
 
         // Enforce spinners view; ignored by MD-based theme in Android >=5, but calendar is REALLY buggy
@@ -130,9 +166,37 @@ public class ExpirationDatePickerDialogFragment
         chosenDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         long chosenDateInMillis = chosenDate.getTimeInMillis();
 
-        ((FileActivity)getActivity()).getFileOperationsHelper().setExpirationDateToShareViaLink(
-                mFile,
-                chosenDateInMillis
-        );
+        String formattedDate = getDateFormat().format(new Date(chosenDateInMillis));
+
+        // Call the listener and pass the date back to it
+        notifyDatePickerListener(formattedDate);
     }
+
+    public interface DatePickerFragmentListener {
+
+        void onDateSet(String date);
+
+        void onCancelDatePicker();
+    }
+
+    public void setDatePickerListener(DatePickerFragmentListener listener) {
+        this.datePickerListener = listener;
+    }
+
+    /**
+     * Notify if date has been selected or not
+     *
+     * @param date
+     */
+    protected void notifyDatePickerListener(String date) {
+        if (this.datePickerListener != null) {
+
+            if (date != null) {
+                this.datePickerListener.onDateSet(date);
+            } else {
+                this.datePickerListener.onCancelDatePicker();
+            }
+        }
+    }
+
 }

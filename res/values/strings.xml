@@ -245,6 +245,8 @@
     <string name="confirmation_remove_folder_alert">"Do you really want to remove %1$s and its contents?"</string>
     <string name="confirmation_remove_local">Local only</string>
     <string name="confirmation_remove_account_alert">"Do you really want to remove the account %1$s?"</string>
+    <string name="confirmation_remove_public_share_title">Remove link</string>
+    <string name="confirmation_remove_public_share_message">"Do you really want to remove %1$s?"</string>
     <string name="remove_success_msg">"Removal succeeded"</string>
     <string name="remove_fail_msg">"Removal failed"</string>
     <string name="rename_dialog_title">Enter a new name</string>
@@ -341,7 +343,7 @@
     <string name="network_error_socket_exception">An error occurred while connecting with the server.</string>
     <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
     <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
-    <string name="network_host_not_available">Unknown host</string>
+    <string name="network_host_not_available">Server could not be reached</string>
 
     <string name="forbidden_permissions">You do not have permission %s</string>
     <string name="forbidden_permissions_rename">to rename this file</string>
@@ -421,17 +423,22 @@
     <string name="pref_behaviour_entries_keep_file">kept in original folder</string>
     <string name="pref_behaviour_entries_move">moved to app folder</string>
 
-    <string name="share_dialog_title">Sharing</string>
+    <string name="share_dialog_title">Share</string>
     <string name="share_file">Share %1$s</string>
-    <string name="share_with_user_section_title">Share with users and groups</string>
+    <string name="share_with_user_section_title">Users and Groups</string>
     <string name="share_no_users">No data shared with users yet</string>
     <string name="share_incompatible_version">To share with other users, your server needs to be at least version 8.2</string>
     <string name="share_add_user_or_group">Add user or group</string>
-    <string name="share_via_link_section_title">Share link</string>
-    <string name="share_via_link_expiration_date_label">Set expiration date</string>
-    <string name="share_via_link_password_label">Password protect</string>
+    <string name="share_via_link_section_title">Public links</string>
+    <string name="share_via_link_create_title">Create link share</string>
+    <string name="share_via_link_edit_title">Edit link share</string>
+    <string name="share_via_link_name_label">Link name</string>
+    <string name="share_cancel_public_link_button">Cancel</string>
+    <string name="share_confirm_public_link_button">Save</string>
+    <string name="share_via_link_expiration_date_label">Expiration</string>
+    <string name="share_via_link_password_label">Password</string>
     <string name="share_via_link_password_title">Secured</string>
-    <string name="share_via_link_edit_permission_label">Allow editing</string>
+    <string name="share_via_link_edit_permission_label">Allow uploads</string>
     <string name="share_get_public_link_button">Get link</string>
     <string name="share_with_title">Share with &#8230;</string>
     <string name="share_with_edit_title">Share with %1$s</string>
@@ -487,6 +494,14 @@
     <string name="previewing_video_not_supported">Video previewing is not supported in your Android version. File download will start automatically.</string>
     <string name="streaming_position_not_available">\"Position not available\"</string>
     <string name="error_no_network_connection">Device is not connected to a network</string>
+    <string name="share_no_public_links">No public links created yet</string>
+    <string name="share_no_link_in_this_share">This share has no link</string>
+    <string name="share_warning_about_forwarding_public_links">Anyone with the link has access to the file/folder</string>
+    <string name="share_via_link_default_password">*****</string>
+    <string name="share_via_link_password_enforced_label">"Password *"</string>
+    <string name="share_via_link_expiration_date_enforced_label">"Expiration *"</string>
+    <string name="share_via_link_expiration_date_explanation_label">The public link will expire no later than %1$d days after it is created</string>
+    <string name="share_via_link_default_name_template">%1$s link</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>

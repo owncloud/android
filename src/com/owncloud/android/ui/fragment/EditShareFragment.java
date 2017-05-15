@@ -23,7 +23,7 @@ package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +44,9 @@ import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
 
-public class EditShareFragment extends Fragment {
+import java.util.Locale;
+
+public class EditShareFragment extends DialogFragment {
 
     private static final String TAG = EditShareFragment.class.getSimpleName();
 
@@ -113,7 +115,10 @@ public class EditShareFragment extends Fragment {
             } else {
                 mShare = savedInstanceState.getParcelable(ARG_SHARE);
             }
+            Log_OC.e(TAG, String.format(Locale.getDefault(), "Share has id %1$d remoteId %2$d", mShare.getId(), mShare.getRemoteId()));
         }
+
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
 
@@ -122,7 +127,6 @@ public class EditShareFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log_OC.d(TAG, "onActivityCreated");
-        getActivity().setTitle(mShare.getSharedWithDisplayName());
     }
 
 
@@ -155,7 +159,7 @@ public class EditShareFragment extends Fragment {
 
 
     /**
-     * Updates the UI with the current permissions in the edited {@OCShare}
+     * Updates the UI with the current permissions in the edited {@link OCShare}
      *
      * @param editShareView     Root view in the fragment.
      */
@@ -438,7 +442,7 @@ public class EditShareFragment extends Fragment {
         FileDataStorageManager storageManager = ((FileActivity) getActivity()).getStorageManager();
         if (storageManager != null) {
             // Get edited share
-            mShare = storageManager.getShareById(mShare.getId());
+            mShare = storageManager.getShareByRemoteId(mShare.getRemoteId());
 
             // Updates UI with new state
             refreshUiFromState(editShareView);
@@ -462,7 +466,7 @@ public class EditShareFragment extends Fragment {
         int permissions = spb.build();
 
         ((FileActivity) getActivity()).getFileOperationsHelper().
-                setPermissionsToShare(
+            setPermissionsToShareWithSharee(
                         mShare,
                         permissions
                 )

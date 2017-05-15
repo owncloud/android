@@ -5,7 +5,7 @@
  *   @author David A. Velasco
  *   @author masensio
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -33,7 +33,7 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
-    public static final int DB_VERSION = 16;
+    public static final int DB_VERSION = 19;
 
     private ProviderMeta() {
     }
@@ -79,7 +79,6 @@ public class ProviderMeta {
         public static final String FILE_TREE_ETAG = "tree_etag";
         public static final String FILE_SHARED_VIA_LINK = "share_by_link";
         public static final String FILE_SHARED_WITH_SHAREE = "shared_via_users";
-        public static final String FILE_PUBLIC_LINK = "public_link";
         public static final String FILE_PERMISSIONS = "permissions";
         public static final String FILE_REMOTE_ID = "remote_id";
         public static final String FILE_UPDATE_THUMBNAIL = "update_thumbnail";
@@ -88,7 +87,10 @@ public class ProviderMeta {
 
         public static final String FILE_DEFAULT_SORT_ORDER = FILE_NAME
                 + " collate nocase asc";
-        
+
+        // @deprecated
+        public static final String FILE_PUBLIC_LINK = "public_link";
+
         // Columns of ocshares table
         public static final String OCSHARES_FILE_SOURCE = "file_source";
         public static final String OCSHARES_ITEM_SOURCE = "item_source";
@@ -104,7 +106,9 @@ public class ProviderMeta {
         public static final String OCSHARES_USER_ID = "user_id";
         public static final String OCSHARES_ID_REMOTE_SHARED = "id_remote_shared";
         public static final String OCSHARES_ACCOUNT_OWNER = "owner_share";
-        
+        public static final String OCSHARES_NAME = "name";
+        public static final String OCSHARES_URL = "url";
+
         public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE 
                 + " collate nocase asc";
 
@@ -127,6 +131,7 @@ public class ProviderMeta {
                 "sharing_public_expire_date_enforced";
         public static final String CAPABILITIES_SHARING_PUBLIC_SEND_MAIL = "sharing_public_send_mail";
         public static final String CAPABILITIES_SHARING_PUBLIC_UPLOAD = "sharing_public_upload";
+        public static final String CAPABILITIES_SHARING_PUBLIC_MULTIPLE = "sharing_public_multiple";
         public static final String CAPABILITIES_SHARING_USER_SEND_MAIL = "sharing_user_send_mail";
         public static final String CAPABILITIES_SHARING_RESHARING = "sharing_resharing";
         public static final String CAPABILITIES_SHARING_FEDERATION_OUTGOING = "sharing_federation_outgoing";

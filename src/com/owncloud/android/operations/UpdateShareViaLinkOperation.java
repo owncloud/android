@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -38,7 +38,8 @@ import com.owncloud.android.operations.common.SyncOperation;
 
 public class UpdateShareViaLinkOperation extends SyncOperation {
 
-    private String mPath;
+    private long mShareId;
+    private String mName;
     private String mPassword;
     private Boolean mPublicUpload;
     private long mExpirationDateInMillis;
@@ -46,16 +47,28 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
     /**
      * Constructor
      *
-     * @param path          Full path of the file/folder being shared. Mandatory argument
+     * @param shareId          Local id of public share to update.
      */
-    public UpdateShareViaLinkOperation(String path) {
+    public UpdateShareViaLinkOperation(long shareId) {
 
-        mPath = path;
+        mShareId = shareId;
+        mName = null;
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
     }
 
+
+    /**
+     * Set name to update in public link.
+     *
+     * @param name          Name to set to the public link.
+     *                      Empty string clears the current name.
+     *                      Null results in no update applied to the name.
+     */
+    public void setName(String name) {
+        mName = name;
+    }
 
     /**
      * Set password to update in public link.
@@ -95,23 +108,19 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
-        OCShare publicShare = getStorageManager().getFirstShareByPathAndType(
-                mPath,
-                ShareType.PUBLIC_LINK,
-                ""
-        );
+        OCShare storedShare = getStorageManager().getShareById(mShareId);
 
-        if (publicShare == null) {
-            // TODO try to get remote share before failing?
+        if (storedShare == null || !ShareType.PUBLIC_LINK.equals(storedShare.getShareType())) {
             return new RemoteOperationResult(
-                    RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
+                RemoteOperationResult.ResultCode.SHARE_NOT_FOUND
             );
         }
 
         // Update remote share with password
         UpdateRemoteShareOperation updateOp = new UpdateRemoteShareOperation(
-            publicShare.getRemoteId()
+            storedShare.getRemoteId()
         );
+        updateOp.setName(mName);
         updateOp.setPassword(mPassword);
         updateOp.setExpirationDate(mExpirationDateInMillis);
         updateOp.setPublicUpload(mPublicUpload);
@@ -119,42 +128,33 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
 
         if (result.isSuccess()) {
             // Retrieve updated share / save directly with password? -> no; the password is not to be saved
-            RemoteOperation getShareOp = new GetRemoteShareOperation(publicShare.getRemoteId());
+            RemoteOperation getShareOp = new GetRemoteShareOperation(storedShare.getRemoteId());
             result = getShareOp.execute(client);
             if (result.isSuccess()) {
-                OCShare share = (OCShare) result.getData().get(0);
-                updateData(share);
+                OCShare remoteShare = (OCShare) result.getData().get(0);
+                updateData(storedShare, remoteShare);
             }
         }
 
         return result;
     }
 
-    public String getPath() {
-        return mPath;
-    }
-
-    public String getPassword() {
-        return mPassword;
-    }
-
-    private void updateData(OCShare share) {
-        // Update DB with the response
-        share.setPath(mPath);
-        if (mPath.endsWith(FileUtils.PATH_SEPARATOR)) {
-            share.setIsFolder(true);
+    private void updateData(OCShare oldShare, OCShare newShare) {
+        // undesired magic - TODO map remote OCShare class to proper local OCShare class
+        newShare.setPath(oldShare.getPath());
+        if (oldShare.getPath().endsWith(FileUtils.PATH_SEPARATOR)) {
+            newShare.setIsFolder(true);
         } else {
-            share.setIsFolder(false);
+            newShare.setIsFolder(false);
         }
 
-        getStorageManager().saveShare(share);   // TODO info about having a password? ask to Gonzalo
+        // Update DB with the response
+        getStorageManager().saveShare(newShare);
 
-        // Update OCFile with data from share: ShareByLink  and publicLink
-        // TODO check & remove if not needed
-        OCFile file = getStorageManager().getFileByPath(mPath);
+        // Update OCFile with data from share
+        OCFile file = getStorageManager().getFileByPath(oldShare.getPath());
         if (file != null) {
-            file.setPublicLink(share.getShareLink());
-            file.setShareViaLink(true);
+            file.setSharedViaLink(true);
             getStorageManager().saveFile(file);
         }
     }

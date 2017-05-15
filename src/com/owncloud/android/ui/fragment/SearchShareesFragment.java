@@ -103,7 +103,6 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
             mFile = getArguments().getParcelable(ARG_FILE);
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
         }
-
     }
 
     /**
@@ -163,7 +162,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     public void refreshUsersOrGroupsListFromDB (){
         // Get Users and Groups
         if (((FileActivity) mListener).getStorageManager() != null) {
-            mShares = ((FileActivity) mListener).getStorageManager().getSharesWithForAFile(
+            mShares = ((FileActivity) mListener).getStorageManager().getPrivateSharesForAFile(
                     mFile.getRemotePath(),
                     mAccount.name
             );
@@ -174,11 +173,11 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     }
 
     private void updateListOfUserGroups() {
+
         // Update list of users/groups
-        // TODO Refactoring: create a new {@link ShareUserListAdapter} instance with every call should not be needed
         mUserGroupsAdapter = new ShareUserListAdapter(
-                getActivity().getApplicationContext(),
-                R.layout.share_user_item, mShares, this
+            getActivity().getApplicationContext(),
+            R.layout.share_user_item, mShares, this
         );
 
         // Show data
@@ -226,16 +225,15 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
 
     @Override
     public void unshareButtonPressed(OCShare share) {
-        // Unshare
-        mListener.unshareWith(share);
-        Log_OC.d(TAG, "Unshare - " + share.getSharedWithDisplayName());
+        Log_OC.d(TAG, "Removed private share with " + share.getSharedWithDisplayName());
+        mListener.removeShare(share);
     }
 
     @Override
     public void editShare(OCShare share) {
         // move to fragment to edit share
         Log_OC.d(TAG, "Editing " + share.getSharedWithDisplayName());
-        mListener.showEditShare(share);
+        mListener.showEditPrivateShare(share);
     }
 
 }
