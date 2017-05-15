@@ -347,16 +347,10 @@
   <string name="upload_move_files">Moure fitxer</string>
   <string name="pref_behaviour_entries_keep_file">conserva\'t en la carpeta original</string>
   <string name="pref_behaviour_entries_move">mogut a la carpeta de l\'aplicació</string>
-  <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Comparteix %1$s</string>
-  <string name="share_with_user_section_title">Comparteix amb usuaris i grups</string>
   <string name="share_no_users">No s\'han compartit dades amb usuaris encara</string>
   <string name="share_add_user_or_group">Afegeix usuari o group</string>
-  <string name="share_via_link_section_title">Comparteix l\'enllaç</string>
-  <string name="share_via_link_expiration_date_label">Estableix la data de venciment</string>
-  <string name="share_via_link_password_label">Protegir amb contrasenya</string>
   <string name="share_via_link_password_title">Assegurat</string>
-  <string name="share_via_link_edit_permission_label">Permetre edició</string>
   <string name="share_get_public_link_button">Obtén l\'enllaç</string>
   <string name="share_with_title">Comparteix amb ...</string>
   <string name="share_with_edit_title">Comparteix amb %1$s</string>

@@ -88,10 +88,11 @@
   <string name="folder_picker_choose_button_text">Auswählen</string>
   <string name="prefs_category_details">Details</string>
   <string name="auth_host_address">Adresse des Servers</string>
-  <string name="share_via_link_section_title">Link teilen</string>
-  <string name="share_via_link_expiration_date_label">Setze ein Ablaufdatum</string>
-  <string name="share_via_link_password_label">Passwortschutz</string>
-  <string name="share_via_link_edit_permission_label">Bearbeitung erlauben</string>
+  <string name="share_dialog_title">Teilen</string>
+  <string name="share_cancel_public_link_button">Abbrechen</string>
+  <string name="share_confirm_public_link_button">Speichern</string>
+  <string name="share_via_link_expiration_date_label">Ablaufdatum</string>
+  <string name="share_via_link_password_label">Passwort</string>
   <string name="share_search">Suche</string>
   <string name="share_privilege_can_share">Kann teilen</string>
   <string name="share_privilege_can_edit">Kann bearbeiten</string>

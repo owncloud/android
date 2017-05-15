@@ -242,8 +242,6 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="subject_user_shared_with_you">%1$s paylaşdı \"%2$s\" sizinlə</string>
   <string name="auth_refresh_button">Qoşulmanı yenilə</string>
   <string name="auth_host_address">Server ünvanı</string>
-  <string name="share_dialog_title">Paylaşılır</string>
-  <string name="share_via_link_section_title">Linki yayımla</string>
   <string name="share_search">Axtarış</string>
   <string name="share_privilege_can_share">yayımlaya bilərsiniz</string>
   <string name="share_privilege_can_edit">dəyişmək olar</string>

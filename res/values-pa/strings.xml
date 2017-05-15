@@ -175,10 +175,8 @@
   <string name="file_list__footer__file">1 ਫਾਈਲ</string>
   <string name="file_list__footer__file_and_folder">1 ਫਾਈਲ, 1 ਫੋਲਡਰ</string>
   <string name="file_list__footer__files">%1$d ਫਾਈਲਾਂ</string>
-  <string name="share_dialog_title">ਸਾਂਝ</string>
   <string name="share_file">%1$s ਸਾਂਝਾ ਕਰੋ</string>
   <string name="share_via_link_password_title">ਸੁਰੱਖਿਅਤ</string>
-  <string name="share_via_link_edit_permission_label">ਸੰਪਾਦਨ ਦੀ ਇਜ਼ਾਜਤ</string>
   <string name="share_get_public_link_button">ਲਿੰਕ ਪ੍ਰਾਪਤ ਕਰੋ</string>
   <string name="share_search">ਖੋਜ</string>
   <string name="share_privilege_can_edit_create">ਬਣਾਓ</string>

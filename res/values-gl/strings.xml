@@ -292,12 +292,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="file_list__footer__files">%1$d ficheiros</string>
   <string name="file_list__footer__files_and_folder">%1$d ficheiros, 1 cartafol</string>
   <string name="file_list__footer__files_and_folders">%1$d ficheiros, %2$d cartafoles</string>
-  <string name="share_dialog_title">Compartindo</string>
   <string name="share_no_users">Aínda non hai datos compartidos con usuarios</string>
-  <string name="share_via_link_section_title">Ligazón para compartir</string>
-  <string name="share_via_link_expiration_date_label">Definir a data de caducidade</string>
-  <string name="share_via_link_password_label">Protexido con contrasinal</string>
-  <string name="share_via_link_edit_permission_label">Permitir a edición</string>
   <string name="share_search">Buscar</string>
   <string name="search_users_and_groups_hint">Buscar usuarios e grupos</string>
   <string name="share_group_clarification">%1$s (grupo)</string>

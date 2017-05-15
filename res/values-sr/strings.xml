@@ -210,6 +210,7 @@
   <string name="confirmation_remove_file_alert">Желите да уклоните %1$s?</string>
   <string name="confirmation_remove_folder_alert">Желите да уклоните %1$s и њен садржај?</string>
   <string name="confirmation_remove_local">Само локално</string>
+  <string name="confirmation_remove_public_share_message">Желите да уклоните %1$s?</string>
   <string name="remove_success_msg">Уклањање успешно</string>
   <string name="remove_fail_msg">Уклањање неуспешно</string>
   <string name="rename_dialog_title">Унесите нов назив</string>
@@ -348,13 +349,12 @@
   <string name="pref_behaviour_entries_keep_file">остављен у изворној фасцикли</string>
   <string name="pref_behaviour_entries_move">премештен у фасциклу апликације</string>
   <string name="share_dialog_title">Дељење</string>
-  <string name="share_with_user_section_title">Дељење са корисницима и групама</string>
   <string name="share_add_user_or_group">Додај корисника или групу</string>
-  <string name="share_via_link_section_title">Веза дељења</string>
-  <string name="share_via_link_expiration_date_label">Постави датум истека</string>
-  <string name="share_via_link_password_label">Заштићено лозинком</string>
+  <string name="share_cancel_public_link_button">Откажи</string>
+  <string name="share_confirm_public_link_button">Сачувај</string>
+  <string name="share_via_link_expiration_date_label">Истиче</string>
+  <string name="share_via_link_password_label">Лозинка</string>
   <string name="share_via_link_password_title">Обезбеђен</string>
-  <string name="share_via_link_edit_permission_label">уређивање</string>
   <string name="share_get_public_link_button">Добави везу</string>
   <string name="share_search">Тражи</string>
   <string name="search_users_and_groups_hint">Претражи кориснике и групе</string>

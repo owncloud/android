@@ -27,9 +27,10 @@
   <string name="common_rename">نام بدلیں</string>
   <string name="activity_chooser_send_file_title">بھجیں</string>
   <string name="folder_picker_choose_button_text">منتخب کریں</string>
-  <string name="share_via_link_section_title">اشتراک لنک</string>
-  <string name="share_via_link_expiration_date_label">تاریخ معیاد سیٹ کریں</string>
-  <string name="share_via_link_password_label">محفوظ پاسورڈ</string>
+  <string name="share_dialog_title">اشتراک</string>
+  <string name="share_cancel_public_link_button">منسوخ کریں</string>
+  <string name="share_confirm_public_link_button">حفظ</string>
+  <string name="share_via_link_password_label">پاسورڈ</string>
   <string name="share_search">تلاش</string>
   <string name="share_privilege_can_edit">تبدیل کر سکے ھیں</string>
   <string name="share_privilege_can_edit_create">نیا بنائیں</string>

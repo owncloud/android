@@ -322,7 +322,6 @@
   <string name="network_error_socket_exception">Ένα σφάλμα προέκυψε κατά τη σύνδεση με το διακομιστή.</string>
   <string name="network_error_socket_timeout_exception">Ο διακομιστής αργεί πολύ να απαντήσει</string>
   <string name="network_error_connect_timeout_exception">Ο διακομιστής αργεί πολύ να συνδεθεί</string>
-  <string name="network_host_not_available">Άγνωστος κεντρικός υπολογιστής</string>
   <string name="forbidden_permissions">Δεν έχετε πρόσβαση %s</string>
   <string name="forbidden_permissions_rename">για να μετονομάσετε αυτό το αρχείο</string>
   <string name="forbidden_permissions_delete">για να διαγράψετε αυτό το αρχείο</string>
@@ -386,17 +385,11 @@
   <string name="upload_move_files">Μετακίνηση αρχείου</string>
   <string name="pref_behaviour_entries_keep_file">διατηρήθηκε στον αρχικό φάκελο</string>
   <string name="pref_behaviour_entries_move">μετακινήθηκε στον φάκελο εφαρμογών</string>
-  <string name="share_dialog_title">Διαμοιρασμός</string>
   <string name="share_file">Διαμοιρασμός %1$s</string>
-  <string name="share_with_user_section_title">Διαμοιρασμός με τους χρήστες και τις ομάδες</string>
   <string name="share_no_users">Δεν έχουν διαμοιραστεί ακόμα δεδομένα με τους χρήστες</string>
   <string name="share_incompatible_version">Για να γίνει διαμοιρασμός με άλλους χρήστες, ο διακομιστής πρέπει να είναι τουλάχιστον έκδοση 8.2</string>
   <string name="share_add_user_or_group">Προσθήκη χρήστη ή ομάδας</string>
-  <string name="share_via_link_section_title">Διαμοιρασμός συνδέσμου</string>
-  <string name="share_via_link_expiration_date_label">Ορισμός ημ. λήξης</string>
-  <string name="share_via_link_password_label">Προστασία με συνθηματικό</string>
   <string name="share_via_link_password_title">Ασφαλίστηκε</string>
-  <string name="share_via_link_edit_permission_label">Επιτρέπεται η επεξεργασία</string>
   <string name="share_get_public_link_button">Λήψη συνδέσμου</string>
   <string name="share_with_title">Διαμοιρασμός με ...</string>
   <string name="share_with_edit_title">Διαμοιρασμός με %1$s</string>

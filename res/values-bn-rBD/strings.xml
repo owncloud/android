@@ -138,6 +138,7 @@
   <string name="confirmation_remove_file_alert">আপনি কি সত্যিই %1$s অপসারণ করতে চান?</string>
   <string name="confirmation_remove_folder_alert">আপনি কি সত্যিই %1$s এবং এর কনটেন্ট অপসারণ করতে চান?</string>
   <string name="confirmation_remove_local">শুধুমাত্র লোকাল</string>
+  <string name="confirmation_remove_public_share_message">আপনি কি সত্যিই %1$s অপসারণ করতে চান?</string>
   <string name="remove_success_msg">অপসারণ সফল</string>
   <string name="remove_fail_msg">অপসারণ ব্যার্থ</string>
   <string name="rename_dialog_title">একটি নতুন নাম লিখুন</string>
@@ -216,10 +217,10 @@
   <string name="move_file_not_found">সরাতে ব্যার্থ হলো। ফাইলটি রয়েছে কিনা দেখুন।</string>
   <string name="prefs_category_details">বিস্তারিত</string>
   <string name="auth_host_address">সার্ভার ঠিকানা</string>
-  <string name="share_dialog_title">ভাগাভাগিরত</string>
-  <string name="share_via_link_section_title">লিংক ভাগাভাগি করেন</string>
-  <string name="share_via_link_expiration_date_label">মেয়াদোত্তীর্ণ হওয়ার তারিখ নির্ধারণ করুন</string>
-  <string name="share_via_link_password_label">কূটশব্দ সুরক্ষিত</string>
+  <string name="share_dialog_title">ভাগাভাগি কর</string>
+  <string name="share_cancel_public_link_button">বাতিল</string>
+  <string name="share_confirm_public_link_button">সংরক্ষণ</string>
+  <string name="share_via_link_password_label">কূটশব্দ</string>
   <string name="share_search">অনুসন্ধান</string>
   <string name="share_privilege_can_share">ভাগাভাগি করেত পারেন</string>
   <string name="share_privilege_can_edit">সম্পাদনা করতে পারবেন</string>

@@ -19,5 +19,8 @@
   <string name="uploader_info_dirname">ফোল্ডারের নাম</string>
   <string name="common_rename">পুনঃনামকরণ</string>
   <string name="common_remove">সরান</string>
+  <string name="share_dialog_title">শেয়ার</string>
+  <string name="share_cancel_public_link_button">বাতিল করা</string>
+  <string name="share_confirm_public_link_button">সেভ</string>
   <string name="share_search">অনুসন্ধান</string>
 </resources>

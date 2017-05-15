@@ -35,11 +35,6 @@
   <string name="saml_authentication_wrong_pass">ದುರ್ಬಲ ಗುಪ್ತಪದ</string>
   <string name="folder_picker_choose_button_text">﻿ಆಯ್ಕೆ</string>
   <string name="auth_host_address">﻿ಪರಿಚಾರಕ ಗಣಕಯಂತ್ರದ ವಿಳಾಸ</string>
-  <string name="share_dialog_title">﻿ಹಂಚಿಕೆ</string>
-  <string name="share_via_link_section_title">ಸಂಪರ್ಕ ಕೊಂಡಿಯನ್ನು  ﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು</string>
-  <string name="share_via_link_expiration_date_label">ಮುಕ್ತಾಯ ದಿನಾಂಕವನ್ನು ನಿರ್ದರಿಸಿ</string>
-  <string name="share_via_link_password_label">﻿ಗುಪ್ತಪದ ರಕ್ಷಿಸಿಕೂಳ್ಲಿ</string>
-  <string name="share_via_link_edit_permission_label">﻿ಸಂಪಾದನೆಗೆ ಅವಕಾಶ ಮಾಡಿಕೊಡಿ</string>
   <string name="share_search">﻿ಹುಡುಕು</string>
   <string name="share_privilege_can_share">﻿ಹಂಚಿಕೊಳ್ಳಬಹುದು</string>
   <string name="share_privilege_can_edit">﻿ಸಂಪಾದಿಸಬಹುದು</string>

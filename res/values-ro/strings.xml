@@ -204,6 +204,7 @@
   <string name="confirmation_remove_file_alert">Doriti sigur sa stergeti %1$s?</string>
   <string name="confirmation_remove_folder_alert">Sigur vrei să elimini %1$s și conținutul său?</string>
   <string name="confirmation_remove_local">Doar local</string>
+  <string name="confirmation_remove_public_share_message">Doriti sigur sa stergeti %1$s?</string>
   <string name="remove_success_msg">Eliminat cu succes</string>
   <string name="remove_fail_msg">Eliminarea nu a reușit</string>
   <string name="rename_dialog_title">Introduceţi un nou nume</string>
@@ -314,11 +315,11 @@
   <string name="file_list__footer__files">%1$d fișiere</string>
   <string name="file_list__footer__files_and_folder">%1$d fișiere, 1 folder</string>
   <string name="file_list__footer__files_and_folders">%1$d fișiere, %2$d foldere</string>
-  <string name="share_dialog_title">Partajare</string>
-  <string name="share_via_link_section_title">Partajază legătură</string>
-  <string name="share_via_link_expiration_date_label">Specifică data expirării</string>
-  <string name="share_via_link_password_label">Protejare cu parolă</string>
-  <string name="share_via_link_edit_permission_label">Permite editarea</string>
+  <string name="share_dialog_title">Partajează</string>
+  <string name="share_cancel_public_link_button">Anulează</string>
+  <string name="share_confirm_public_link_button">Salvează</string>
+  <string name="share_via_link_expiration_date_label">Expiră</string>
+  <string name="share_via_link_password_label">Parolă</string>
   <string name="share_search">Căutare</string>
   <string name="share_privilege_can_share">se poate partaja</string>
   <string name="share_privilege_can_edit">se poate edita</string>

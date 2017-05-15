@@ -324,15 +324,9 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="upload_move_files">Liiguta fail</string>
   <string name="pref_behaviour_entries_keep_file">hoitakse algses kaustas</string>
   <string name="pref_behaviour_entries_move">liigutatakse rakenduse kausta</string>
-  <string name="share_dialog_title">Jagamine</string>
-  <string name="share_with_user_section_title">Jaga kasutajate ja gruppidega</string>
   <string name="share_no_users">Kasutajatega pole veel midagi jagatud</string>
   <string name="share_add_user_or_group">Lisa kasutaja või grupp</string>
-  <string name="share_via_link_section_title">Jaga linki</string>
-  <string name="share_via_link_expiration_date_label">Määra aegumise kuupäev</string>
-  <string name="share_via_link_password_label">Parooliga kaitstud</string>
   <string name="share_via_link_password_title">Turvatud</string>
-  <string name="share_via_link_edit_permission_label">Luba muutmine</string>
   <string name="share_get_public_link_button">Hangi link</string>
   <string name="share_with_title">Jaga ...</string>
   <string name="share_search">Otsi</string>

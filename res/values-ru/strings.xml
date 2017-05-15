@@ -238,6 +238,8 @@
   <string name="confirmation_remove_folder_alert">Вы действительно хотите удалить %1$s и его содержимое?</string>
   <string name="confirmation_remove_local">Только локально</string>
   <string name="confirmation_remove_account_alert">Вы действительно хотите удалить аккаунт %1$s?</string>
+  <string name="confirmation_remove_public_share_title">Удалить ссылку</string>
+  <string name="confirmation_remove_public_share_message">Вы действительно хотите удалить %1$s?</string>
   <string name="remove_success_msg">Удаление завершено</string>
   <string name="remove_fail_msg">Ошибка удаления</string>
   <string name="rename_dialog_title">Введите новое имя</string>
@@ -323,7 +325,6 @@
   <string name="network_error_socket_exception">При подключении к серверу возникла ошибка</string>
   <string name="network_error_socket_timeout_exception">Сервер слишком долго не отвечает</string>
   <string name="network_error_connect_timeout_exception">Слишком много времени ушло на подключение к серверу</string>
-  <string name="network_host_not_available">Неизвестный узел сети</string>
   <string name="forbidden_permissions">У вас нет прав %s</string>
   <string name="forbidden_permissions_rename">для переименования этого файла</string>
   <string name="forbidden_permissions_delete">для удаления этого файла</string>
@@ -389,15 +390,15 @@
   <string name="pref_behaviour_entries_move">перемещен в папку приложения</string>
   <string name="share_dialog_title">Общий доступ</string>
   <string name="share_file">Поделиться %1$s</string>
-  <string name="share_with_user_section_title">Поделиться с пользователями и группами</string>
   <string name="share_no_users">Нет данных используемых совместно с другими пользователями</string>
   <string name="share_incompatible_version">Чтобы предоставлять доступ другим пользователям, ваш сервер должен как минимум иметь версию 8.2.</string>
   <string name="share_add_user_or_group">Добавить пользователя или группу</string>
-  <string name="share_via_link_section_title">Поделиться ссылкой</string>
-  <string name="share_via_link_expiration_date_label">Установить срок действия</string>
-  <string name="share_via_link_password_label">Защитить паролем</string>
+  <string name="share_cancel_public_link_button">Отмена</string>
+  <string name="share_confirm_public_link_button">Сохранить</string>
+  <string name="share_via_link_expiration_date_label">Срок действия</string>
+  <string name="share_via_link_password_label">Пароль</string>
   <string name="share_via_link_password_title">Безопасный</string>
-  <string name="share_via_link_edit_permission_label">Разрешить редактирование</string>
+  <string name="share_via_link_edit_permission_label">Разрешить загрузку</string>
   <string name="share_get_public_link_button">Получить ссылку</string>
   <string name="share_with_title">Поделиться с …</string>
   <string name="share_with_edit_title">Поделиться с %1$s</string>

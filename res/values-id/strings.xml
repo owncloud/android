@@ -184,6 +184,7 @@
   <string name="confirmation_remove_file_alert">Apakah Anda yakin ingin menghapus %1$s?</string>
   <string name="confirmation_remove_folder_alert">Apakah Anda yakin ingin menghapus %1$s dan isinya?</string>
   <string name="confirmation_remove_local">Lokal saja</string>
+  <string name="confirmation_remove_public_share_message">Apakah Anda yakin ingin menghapus %1$s?</string>
   <string name="remove_success_msg">Penghapusan berhasil</string>
   <string name="remove_fail_msg">Penghapusan gagal</string>
   <string name="rename_dialog_title">Masukkan nama baru</string>
@@ -300,12 +301,12 @@
   <string name="file_list__footer__files">%1$d berkas</string>
   <string name="file_list__footer__files_and_folder">%1$d berkas, 1 folder</string>
   <string name="file_list__footer__files_and_folders">%1$d berkas, %2$d folder</string>
-  <string name="share_dialog_title">Berbagi</string>
+  <string name="share_dialog_title">Bagikan</string>
   <string name="share_no_users">Tidak ada data yang dibagikan dengan pengguna</string>
-  <string name="share_via_link_section_title">Bagikan tautan</string>
-  <string name="share_via_link_expiration_date_label">Atur tanggal kedaluwarsa</string>
-  <string name="share_via_link_password_label">Lindungi dengan sandi</string>
-  <string name="share_via_link_edit_permission_label">Izinkan penyuntingan</string>
+  <string name="share_cancel_public_link_button">Batal</string>
+  <string name="share_confirm_public_link_button">Simpan</string>
+  <string name="share_via_link_expiration_date_label">Kedaluwarsa</string>
+  <string name="share_via_link_password_label">Kata Sandi</string>
   <string name="share_search">Cari</string>
   <string name="share_privilege_can_share">dapat berbagi</string>
   <string name="share_privilege_can_edit">dapat disunting</string>

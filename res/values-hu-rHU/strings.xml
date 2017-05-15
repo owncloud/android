@@ -269,13 +269,8 @@
   <string name="file_list__footer__files_and_folders">%1$d fájl, %2$d könyvtár</string>
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>
-  <string name="share_dialog_title">Megosztás</string>
   <string name="share_no_users">Nincs még semmi megosztva a felhasználókkal</string>
   <string name="share_add_user_or_group">Felhasználó, vagy csoport hozzáadása</string>
-  <string name="share_via_link_section_title">Megosztás hivatkozással</string>
-  <string name="share_via_link_expiration_date_label">Legyen lejárati idő</string>
-  <string name="share_via_link_password_label">Jelszóval is védem</string>
-  <string name="share_via_link_edit_permission_label">Szerkesztés engedélyezése</string>
   <string name="share_search">Keresés</string>
   <string name="share_privilege_can_share">megosztható</string>
   <string name="share_privilege_can_edit">módosíthat</string>

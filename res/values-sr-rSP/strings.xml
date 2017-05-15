@@ -87,10 +87,11 @@
   <string name="drawer_manage_accounts">Upravljaj nalozima</string>
   <string name="folder_picker_choose_button_text">Izaberi</string>
   <string name="prefs_category_details">Detaljnije</string>
-  <string name="share_via_link_section_title">Veza deljenja</string>
-  <string name="share_via_link_expiration_date_label">Datum isteka</string>
-  <string name="share_via_link_password_label">Zaštita lozinkom</string>
-  <string name="share_via_link_edit_permission_label">Dozvoli uređivanje</string>
+  <string name="share_dialog_title">Deljenje</string>
+  <string name="share_cancel_public_link_button">Odustani</string>
+  <string name="share_confirm_public_link_button">Sačuvaj</string>
+  <string name="share_via_link_expiration_date_label">Isticanje</string>
+  <string name="share_via_link_password_label">Lozinka</string>
   <string name="share_search">Traži</string>
   <string name="share_privilege_can_share">može da deli</string>
   <string name="share_privilege_can_edit">može da menja</string>

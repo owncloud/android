@@ -110,8 +110,6 @@
   <string name="folder_picker_choose_button_text">தெரிவுசெய்க </string>
   <string name="prefs_category_details">விவரங்கள்</string>
   <string name="auth_host_address">சேவையக முகவரி</string>
-  <string name="share_via_link_expiration_date_label">காலாவதி தேதியை குறிப்பிடுக</string>
-  <string name="share_via_link_password_label">கடவுச்சொல்லை பாதுகாத்தல்</string>
   <string name="share_search">தேடுதல்</string>
   <string name="share_privilege_can_edit">தொகுக்க முடியும்</string>
   <string name="share_privilege_can_edit_create">உருவவாக்கல்</string>

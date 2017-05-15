@@ -376,17 +376,11 @@
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">запази в оригиналната папка</string>
   <string name="pref_behaviour_entries_move">преместено в папка на приложението</string>
-  <string name="share_dialog_title">Споделяне</string>
   <string name="share_file">Сподели %1$s</string>
-  <string name="share_with_user_section_title">Споделяне с потребители и групаи</string>
   <string name="share_no_users">Все още няма споделени с потребители данни </string>
   <string name="share_incompatible_version">За да споделяте с други потребители, Вашият сървър трябва да бъде поне версия 8.2</string>
   <string name="share_add_user_or_group">Добави потребител или група</string>
-  <string name="share_via_link_section_title">Връзка за споделяне</string>
-  <string name="share_via_link_expiration_date_label">Задаване на дата на изтичане</string>
-  <string name="share_via_link_password_label">Защитено с парола</string>
   <string name="share_via_link_password_title">Подсигурен</string>
-  <string name="share_via_link_edit_permission_label">Позволяване на редактиране</string>
   <string name="share_get_public_link_button">Получаване на връзка</string>
   <string name="share_with_title">Споделено с ...</string>
   <string name="share_with_edit_title">Сподели с %1$s</string>

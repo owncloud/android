@@ -320,7 +320,6 @@
   <string name="network_error_socket_exception">Ocorreu um erro durante a ligação ao servidor.</string>
   <string name="network_error_socket_timeout_exception">O servidor demorou muito tempo a responder</string>
   <string name="network_error_connect_timeout_exception">A ligação ao servidor está a demorar mais que o previsto</string>
-  <string name="network_host_not_available">Anfitrião desconhecido</string>
   <string name="forbidden_permissions">Não tem permissão %s</string>
   <string name="forbidden_permissions_rename">para renomear este ficheiro</string>
   <string name="forbidden_permissions_delete">para apagar este ficheiro</string>
@@ -384,17 +383,11 @@
   <string name="upload_move_files">Mover ficheiro</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>
   <string name="pref_behaviour_entries_move">movido para pasta da aplicação</string>
-  <string name="share_dialog_title">Partilha</string>
   <string name="share_file">Partilhar %1$s</string>
-  <string name="share_with_user_section_title">Partilhar com utilizadores e grupos</string>
   <string name="share_no_users">Ainda não foram partilhados os dados com os utilizadores</string>
   <string name="share_incompatible_version">Para partilhar com outros utilizadores, o seu servidor deve estar pelo menos na versão 8.2</string>
   <string name="share_add_user_or_group">Adicionar utilizador ou grupo</string>
-  <string name="share_via_link_section_title">Compartilhar hiperligação</string>
-  <string name="share_via_link_expiration_date_label">Definir a data de expiração</string>
-  <string name="share_via_link_password_label">Proteger com Palavra-passe</string>
   <string name="share_via_link_password_title">Protegido</string>
-  <string name="share_via_link_edit_permission_label">Permitir edição</string>
   <string name="share_get_public_link_button">Obter ligação</string>
   <string name="share_with_title">Partilhar com ...</string>
   <string name="share_with_edit_title">Partilhar com %1$s</string>

@@ -258,15 +258,9 @@
   <string name="upload_move_files">Movi dosieron</string>
   <string name="pref_behaviour_entries_keep_file">konservita en origina dosierujo</string>
   <string name="pref_behaviour_entries_move">movita al aplikaĵa dosierujo</string>
-  <string name="share_dialog_title">Kunhavigo</string>
-  <string name="share_with_user_section_title">Kunhavigi kun uzantoj kaj grupoj</string>
   <string name="share_no_users">Nenio da datumoj kunhaviĝis kun uzantoj ankoraŭ</string>
   <string name="share_add_user_or_group">Aldoni uzanton aŭ grupon</string>
-  <string name="share_via_link_section_title">Kunhavigi ligilon</string>
-  <string name="share_via_link_expiration_date_label">Agordi limdaton</string>
-  <string name="share_via_link_password_label">Protekti per pasvorto</string>
   <string name="share_via_link_password_title">Sekurigita</string>
-  <string name="share_via_link_edit_permission_label">Permesi redakton</string>
   <string name="share_get_public_link_button">Ekhavi ligilon</string>
   <string name="share_search">Serĉi</string>
   <string name="search_users_and_groups_hint">Serĉi uzantojn kaj grupojn</string>

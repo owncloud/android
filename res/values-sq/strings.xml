@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="about_android">Aplikacion %1$s Android</string>
-  <string name="about_version">version %1$s</string>
-  <string name="actionbar_sync">Rifreskoni llogarinë</string>
+  <string name="about_version">versioni %1$s</string>
+  <string name="actionbar_sync">Freskoni llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
   <string name="actionbar_upload_from_apps">Lëndë nga aplikacione të tjera</string>
-  <string name="actionbar_upload_files">Kartela</string>
+  <string name="actionbar_upload_files">Kartelat</string>
   <string name="actionbar_open_with">Hape me</string>
   <string name="actionbar_mkdir">Dosje e re</string>
   <string name="actionbar_settings">Rregullime</string>
@@ -21,7 +21,7 @@
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
-  <string name="drawer_item_settings">Llogari</string>
+  <string name="drawer_item_settings">Parametra</string>
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>
   <string name="drawer_open">Hape</string>
@@ -73,14 +73,14 @@
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
   <string name="local_file_list_empty_just_folders">S’ka dosje brenda kësaj dosjeje.</string>
-  <string name="upload_list_empty">S’ka ngarkime gati.</string>
+  <string name="upload_list_empty">S’ka ngarkime te gatshme.</string>
   <string name="file_list_folder">dosje</string>
   <string name="file_list_folders">dosje</string>
   <string name="file_list_file">kartelë</string>
   <string name="file_list_files">kartela</string>
   <string name="filedetails_select_file">Prekni mbi një kartelë që të shfaqen të dhëna shtesë.</string>
-  <string name="filedetails_size">Madhësi:</string>
-  <string name="filedetails_type">Lloj:</string>
+  <string name="filedetails_size">Madhësia:</string>
+  <string name="filedetails_type">Lloji:</string>
   <string name="filedetails_created">Krijuar më:</string>
   <string name="filedetails_modified">Ndryshuar më:</string>
   <string name="filedetails_download">Shkarkoje</string>
@@ -115,7 +115,7 @@
   <string name="uploader_upload_failed_ticker">Ngarkimi dështoi</string>
   <string name="uploader_upload_failed_content_single">Ngarkimi i %1$s s\’u plotësua dot</string>
   <string name="uploader_upload_failed_credentials_error">Ngarkimi dështoi, lypset të bëni hyrjen sërish</string>
-  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certifikata e shërbyesit s\’është e besueshme</string>
   <string name="uploader_upload_text_dialog_title">Jepni një emër për kartelën e re</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Emri i kartelës s’duhet të jetë i zbrazët</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s’duhet të jetë më shumë se %d shenja</string>
@@ -159,7 +159,7 @@
   <string name="sync_fail_content_unauthorized">Fjalëkalim i pavlefshëm për %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">U hasën përplasje</string>
   <string name="sync_conflicts_in_favourites_content">%1$d kartela kept-in-sync s’u njëkohësuan dot</string>
-  <string name="sync_fail_in_favourites_ticker">Kartelat kept-in-sync dështuan</string>
+  <string name="sync_fail_in_favourites_ticker">Kartelat e mbajtura në njëkohësim dështuan</string>
   <string name="sync_fail_in_favourites_content">Lënda e %1$d kartelave s\’u njëkohësua dot (%2$d përplasje)</string>
   <string name="sync_foreign_files_forgotten_ticker">Disa kartela vendore u harruan</string>
   <string name="sync_foreign_files_forgotten_content">%1$d kartela nga dosja %2$s s\’u kopjuan dot</string>
@@ -236,6 +236,8 @@
   <string name="confirmation_remove_folder_alert">Doni vërtet të hiqet %1$s dhe lënda e tij?</string>
   <string name="confirmation_remove_local">Vetëm vendorja</string>
   <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
+  <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
+  <string name="confirmation_remove_public_share_message">Doni vërtet të hiqet %1$s?</string>
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
   <string name="rename_dialog_title">Jepni një emër të ri</string>
@@ -320,7 +322,6 @@
   <string name="network_error_socket_exception">Ndodhi një gabim teksa po lidhej me shërbyesin.</string>
   <string name="network_error_socket_timeout_exception">Shërbyesit iu desh shumë kohë për përgjigje</string>
   <string name="network_error_connect_timeout_exception">Shërbyesit iu desh shumë kohë për t’u lidhur</string>
-  <string name="network_host_not_available">Strehë e panjohur</string>
   <string name="forbidden_permissions">Nuk keni leje %s</string>
   <string name="forbidden_permissions_rename">për riemërtim të kësaj kartele</string>
   <string name="forbidden_permissions_delete">për fshirje të kësaj kartele</string>
@@ -384,17 +385,17 @@
   <string name="upload_move_files">Lëvize kartelën</string>
   <string name="pref_behaviour_entries_keep_file">mbajtur në dosjen origjinale</string>
   <string name="pref_behaviour_entries_move">u kalua te dosja e aplikacionit</string>
-  <string name="share_dialog_title">Ndarje me të tjerët</string>
+  <string name="share_dialog_title">Ndaje</string>
   <string name="share_file">Ndajeni %1$s</string>
-  <string name="share_with_user_section_title">Ndajeni me përdorues dhe grupe</string>
   <string name="share_no_users">Ende pa të dhëna të ndara me përdorues</string>
   <string name="share_incompatible_version">Që të ndahen gjëra me përdorues të tjerë, shërbyesi juaj lypset të jetë të paktën nën versionin 8.2</string>
   <string name="share_add_user_or_group">Shtoni përdorues ose grup</string>
-  <string name="share_via_link_section_title">Lidhje ndarjeje</string>
-  <string name="share_via_link_expiration_date_label">Caktoni datë skadimi</string>
-  <string name="share_via_link_password_label">Mbroje me fjalëkalim</string>
+  <string name="share_cancel_public_link_button">Anuloje</string>
+  <string name="share_confirm_public_link_button">Ruaje</string>
+  <string name="share_via_link_expiration_date_label">Skadim</string>
+  <string name="share_via_link_password_label">Fjalëkalim</string>
   <string name="share_via_link_password_title">E siguruar</string>
-  <string name="share_via_link_edit_permission_label">Lejo përpunim</string>
+  <string name="share_via_link_edit_permission_label">Lejo ngarkime</string>
   <string name="share_get_public_link_button">Merreni lidhjen</string>
   <string name="share_with_title">Ndajeni me …</string>
   <string name="share_with_edit_title">Ndajeni me %1$s</string>

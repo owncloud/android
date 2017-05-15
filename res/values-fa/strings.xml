@@ -215,6 +215,7 @@
   <string name="confirmation_remove_file_alert">آیا واقعا می‌خواهید %1$s حذف شود ؟</string>
   <string name="confirmation_remove_folder_alert">آیا واقعا می‌خواهید %1$s و محتوای درون آن حذف شود ؟</string>
   <string name="confirmation_remove_local">فقط محلی</string>
+  <string name="confirmation_remove_public_share_message">آیا واقعا می‌خواهید %1$s حذف شود ؟</string>
   <string name="remove_success_msg">حذف با موفقیت انجام شد</string>
   <string name="remove_fail_msg">حذف نا موفق بود</string>
   <string name="rename_dialog_title">نام جدید وارد کنید</string>
@@ -332,11 +333,11 @@
   <string name="upload_move_files">جابه‌جایی پرونده</string>
   <string name="share_dialog_title">اشتراک گذاری</string>
   <string name="share_file">هم‌رسانی %1$s</string>
-  <string name="share_via_link_section_title">اشتراک گذاشتن لینک</string>
-  <string name="share_via_link_expiration_date_label">تنظیم تاریخ انقضا</string>
-  <string name="share_via_link_password_label">نگهداری کردن رمز عبور</string>
+  <string name="share_cancel_public_link_button">لغو</string>
+  <string name="share_confirm_public_link_button">ذخیره</string>
+  <string name="share_via_link_expiration_date_label">تاریخ انقضا</string>
+  <string name="share_via_link_password_label">گذرواژه</string>
   <string name="share_via_link_password_title">امن شده</string>
-  <string name="share_via_link_edit_permission_label">اجازه‌ی ویرایش</string>
   <string name="share_get_public_link_button">گرفتن پیوند</string>
   <string name="share_with_title">هم‌رسانی با…</string>
   <string name="share_with_edit_title">هم‌رسانی با %1$s</string>

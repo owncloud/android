@@ -322,7 +322,6 @@
   <string name="network_error_socket_exception">שגיאה אירעה בזמן חיבור לשרת.</string>
   <string name="network_error_socket_timeout_exception">לשרת לקח יותר מדי זמן להגיב</string>
   <string name="network_error_connect_timeout_exception">לשרת לקח זמן רב מדי להתחבר</string>
-  <string name="network_host_not_available">מארח לא ידוע</string>
   <string name="forbidden_permissions">אין לך הרשאות %s</string>
   <string name="forbidden_permissions_rename">לשנות שם לקובץ זה</string>
   <string name="forbidden_permissions_delete">למחוק קובץ זה</string>
@@ -386,17 +385,11 @@
   <string name="upload_move_files">העברת קובץ</string>
   <string name="pref_behaviour_entries_keep_file">נשמר בתיקייה מקורית</string>
   <string name="pref_behaviour_entries_move">הועבר לתיקיית ישומים</string>
-  <string name="share_dialog_title">שיתוף</string>
   <string name="share_file">שיתוף %1$s</string>
-  <string name="share_with_user_section_title">שיתוף עם משתמשים וקבוצות</string>
   <string name="share_no_users">עדיין לא שותף מידע עם משתמשים</string>
   <string name="share_incompatible_version">לשיתוף עם משתמשים אחרים, גרסת השרת שלך חייבת להיות לפחות 8.2</string>
   <string name="share_add_user_or_group">הוספת משתמש או קבוצה</string>
-  <string name="share_via_link_section_title">קישור לשיתוף</string>
-  <string name="share_via_link_expiration_date_label">הגדרת תאריך תפוגה</string>
-  <string name="share_via_link_password_label">הגנה בססמה</string>
   <string name="share_via_link_password_title">מאובטח</string>
-  <string name="share_via_link_edit_permission_label">אישור עריכה</string>
   <string name="share_get_public_link_button">קבלת קישור</string>
   <string name="share_with_title">שיתף עם...</string>
   <string name="share_with_edit_title">שיתף עם %1$s</string>

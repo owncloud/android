@@ -235,6 +235,8 @@
   <string name="confirmation_remove_folder_alert">Ali res želite odstraniti %1$s skupaj s celotno vsebino?</string>
   <string name="confirmation_remove_local">Le krajevno</string>
   <string name="confirmation_remove_account_alert">Ali zares želite odstraniti račun %1$s?</string>
+  <string name="confirmation_remove_public_share_title">Odstrani povezavo</string>
+  <string name="confirmation_remove_public_share_message">Ali res želite odstraniti %1$s?</string>
   <string name="remove_success_msg">Odstranitev je uspešno končana</string>
   <string name="remove_fail_msg">Odstranjevanje je spodletelo</string>
   <string name="rename_dialog_title">Vnesite novo ime</string>
@@ -319,7 +321,6 @@
   <string name="error_cant_bind_to_operations_service">Kritična napaka: opravil ni možno izvesti</string>
   <string name="network_error_socket_exception">Med povezovanjem s strežnikom je prišlo do napake.</string>
   <string name="network_error_socket_timeout_exception">Odziv s strežnika je časovno pretekel</string>
-  <string name="network_host_not_available">Neznan gostitelj</string>
   <string name="forbidden_permissions">Ni ustreznega dovoljenja %s</string>
   <string name="forbidden_permissions_rename">za preimenovanje datoteke.</string>
   <string name="forbidden_permissions_delete">za izbris datoteke.</string>
@@ -385,15 +386,15 @@
   <string name="pref_behaviour_entries_move">Premakni v mapo programa</string>
   <string name="share_dialog_title">Souporaba</string>
   <string name="share_file">Omogoči souporabo %1$s</string>
-  <string name="share_with_user_section_title">Omogoči souporabo s skupino ali z uporabnikom</string>
   <string name="share_no_users">Ni datotek, ki bi jih omogočili za souporabo z drugimi</string>
   <string name="share_incompatible_version">Za souporabo z drugimi uporabniki mora biti na strežniku nameščena vsaj različica 8.2.</string>
   <string name="share_add_user_or_group">Dodaj uporabnika ali skupino</string>
-  <string name="share_via_link_section_title">Omogoči souporabo prek povezave</string>
-  <string name="share_via_link_expiration_date_label">Nastavi datum preteka</string>
-  <string name="share_via_link_password_label">Zaščiti z geslom</string>
+  <string name="share_cancel_public_link_button">Prekliči</string>
+  <string name="share_confirm_public_link_button">Shrani</string>
+  <string name="share_via_link_expiration_date_label">Datum preteka</string>
+  <string name="share_via_link_password_label">Geslo</string>
   <string name="share_via_link_password_title">Varovano</string>
-  <string name="share_via_link_edit_permission_label">Dovoli urejanje</string>
+  <string name="share_via_link_edit_permission_label">Dovoli pošiljanje datotek v oblak</string>
   <string name="share_get_public_link_button">Pridobi povezavo</string>
   <string name="share_with_title">Omogoči souporabo z ...</string>
   <string name="share_with_edit_title">Omogoči souporabo z %1$s</string>

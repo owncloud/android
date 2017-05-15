@@ -116,6 +116,9 @@
   <string name="uploader_upload_failed_content_single">%1$s 未能成功上传</string>
   <string name="uploader_upload_failed_credentials_error">上传失败，你需要重新登录</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">服务器证书不被信任</string>
+  <string name="uploader_upload_text_dialog_title">输入新文件的名称</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">文件名不能为空</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">文件名不能超过 %d 个字符</string>
   <string name="uploader_upload_text_filename_hint">文件名</string>
   <string name="ssl_certificate_not_trusted">服务器证书不被信任</string>
   <string name="uploads_view_title">上传</string>
@@ -230,6 +233,7 @@
   <string name="confirmation_remove_file_alert">你确定要删除 %1$s 吗？</string>
   <string name="confirmation_remove_folder_alert">您确定要删除 %1$s 及其内容吗？</string>
   <string name="confirmation_remove_local">仅本地</string>
+  <string name="confirmation_remove_account_alert">你确定要删除账户 %1$s 吗？</string>
   <string name="remove_success_msg">成功删除</string>
   <string name="remove_fail_msg">无法完成删除</string>
   <string name="rename_dialog_title">请输出新的名字</string>
@@ -317,6 +321,7 @@
   <string name="update_link_forbidden_permissions">更新共享</string>
   <string name="forbidden_permissions_create">创建文件</string>
   <string name="uploader_upload_forbidden_permissions">在此文件夹上传</string>
+  <string name="uploader_upload_forbidden">禁止上传</string>
   <string name="downloader_download_file_not_found">该文件在服务器上不可用</string>
   <string name="prefs_category_accounts">账号</string>
   <string name="prefs_add_account">添加账号</string>
@@ -371,16 +376,10 @@
   <string name="upload_move_files">移动文件</string>
   <string name="pref_behaviour_entries_keep_file">保留在原始文件夹</string>
   <string name="pref_behaviour_entries_move">移动到应用文件夹</string>
-  <string name="share_dialog_title">共享</string>
   <string name="share_file">分享 %1$s</string>
-  <string name="share_with_user_section_title">分享给其他用户或组</string>
   <string name="share_no_users">目前没有文件向您分享。</string>
   <string name="share_add_user_or_group">添加用户或组</string>
-  <string name="share_via_link_section_title">分享链接</string>
-  <string name="share_via_link_expiration_date_label">设置过期日期</string>
-  <string name="share_via_link_password_label">密码保护</string>
   <string name="share_via_link_password_title">安全</string>
-  <string name="share_via_link_edit_permission_label">允许编辑</string>
   <string name="share_get_public_link_button">获取链接</string>
   <string name="share_with_title">分享...</string>
   <string name="share_with_edit_title">与 %1$s 分享</string>
@@ -412,9 +411,12 @@
   <string name="failed_upload_quota_exceeded_text">该账户没有足够的空间</string>
   <string name="actionbar_privacy_policy">隐私策略</string>
   <string name="prefs_privacy_policy">隐私策略</string>
+  <string name="privacy_policy_error">发生了一个错误: </string>
   <string name="service_unavailable">服务不可用</string>
+  <string name="streaming_file_not_found_error">该视频文件在服务器上不可用</string>
   <string name="previewing_video_not_supported">当前 Android 版本不支持视频预览. 文件将自动下载.</string>
   <string name="streaming_position_not_available">位置不可用</string>
+  <string name="error_no_network_connection">设备未连接到网络</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已选择</item>
   </plurals>

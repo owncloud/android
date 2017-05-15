@@ -94,6 +94,7 @@
   <string name="confirmation_remove_file_alert">¿Realmente desea eliminar %1$s?</string>
   <string name="confirmation_remove_folder_alert">¿Realmente desea eliminar el archivo %1$s y su contenido?</string>
   <string name="confirmation_remove_local">Solo local</string>
+  <string name="confirmation_remove_public_share_message">¿Realmente desea eliminar %1$s?</string>
   <string name="remove_success_msg">Removido correctamente</string>
   <string name="remove_fail_msg">Fallo al remover</string>
   <string name="rename_dialog_title">ingresar un nuevo nombre</string>
@@ -132,4 +133,7 @@
   <string name="prefs_category_accounts">Cuentas</string>
   <string name="folder_picker_choose_button_text">Choose</string>
   <string name="prefs_category_details">detalles</string>
+  <string name="share_dialog_title">Compartir</string>
+  <string name="share_cancel_public_link_button">Cancelar</string>
+  <string name="share_via_link_password_label">Clave</string>
 </resources>

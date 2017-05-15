@@ -320,7 +320,6 @@
   <string name="network_error_socket_exception">Pojawił się błąd podczas łączenia z serwerem.</string>
   <string name="network_error_socket_timeout_exception">Serwer zbyt długo nie odpowiadał</string>
   <string name="network_error_connect_timeout_exception">Zbyt długi czas łączenia z serwerem</string>
-  <string name="network_host_not_available">Nieznany host</string>
   <string name="forbidden_permissions">Nie masz uprawnień %s</string>
   <string name="forbidden_permissions_rename">do zmiany nazwy tego pliku</string>
   <string name="forbidden_permissions_delete">do usuwania tego pliku</string>
@@ -384,17 +383,11 @@
   <string name="upload_move_files">Przenieś plik</string>
   <string name="pref_behaviour_entries_keep_file">zachowany w oryginalnym folderze</string>
   <string name="pref_behaviour_entries_move">przeniesiony do folderu aplikacji</string>
-  <string name="share_dialog_title">Udostępnianie</string>
   <string name="share_file">Współdziel %1$s</string>
-  <string name="share_with_user_section_title">Współdziel z użytkownikami i grupami</string>
   <string name="share_no_users">Brak danych współdzielonych z użytkownikami</string>
   <string name="share_incompatible_version">By podzielić się tym z innymi użytkownikami twój serwer musi być conajmniej w wersji 8.2</string>
   <string name="share_add_user_or_group">Dodaj użytkownika lub grupę</string>
-  <string name="share_via_link_section_title">Udostępnij link</string>
-  <string name="share_via_link_expiration_date_label">Ustaw datę wygaśnięcia</string>
-  <string name="share_via_link_password_label">Zabezpieczone hasłem</string>
   <string name="share_via_link_password_title">Zabezpieczone</string>
-  <string name="share_via_link_edit_permission_label">Pozwól na edycję</string>
   <string name="share_get_public_link_button">Pobierz link</string>
   <string name="share_with_title">Współdziel z ...</string>
   <string name="share_with_edit_title">Współdziel z %1$s</string>

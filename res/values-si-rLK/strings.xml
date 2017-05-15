@@ -74,9 +74,10 @@
   <string name="drawer_manage_accounts">ගිණුම් කළමනාකරනය</string>
   <string name="folder_picker_choose_button_text">තෝරන්න</string>
   <string name="auth_host_address">සේවාදායකයේ ලිපිනය</string>
-  <string name="share_dialog_title">හුවමාරු කිරීම</string>
-  <string name="share_via_link_expiration_date_label">කල් ඉකුත් විමේ දිනය දමන්න</string>
-  <string name="share_via_link_password_label">මුර පදයකින් ආරක්ශාකරන්න</string>
+  <string name="share_dialog_title">බෙදා හදා ගන්න</string>
+  <string name="share_cancel_public_link_button">එපා</string>
+  <string name="share_confirm_public_link_button">සුරකින්න</string>
+  <string name="share_via_link_password_label">මුර පදය</string>
   <string name="share_search">සොයන්න</string>
   <string name="share_privilege_can_edit">සංස්කරණය කළ හැක</string>
   <string name="share_privilege_can_edit_create">සදන්න</string>

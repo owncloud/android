@@ -378,17 +378,11 @@
   <string name="upload_move_files">Перемістити файл</string>
   <string name="pref_behaviour_entries_keep_file">залишено в оригінальній теці</string>
   <string name="pref_behaviour_entries_move">перенесено до теки програми</string>
-  <string name="share_dialog_title">Спільний доступ</string>
   <string name="share_file">Поділитися %1$s</string>
-  <string name="share_with_user_section_title">Поділитися з користувачами і групами</string>
   <string name="share_no_users">З користувачами ще нічим не поділилися</string>
   <string name="share_incompatible_version">Щоб надати доступ іншим користувачам Ваш сервер повинен мати версію не нижче 8.2</string>
   <string name="share_add_user_or_group">Додати користувача або групу</string>
-  <string name="share_via_link_section_title">Поділитись посиланням</string>
-  <string name="share_via_link_expiration_date_label">Встановити термін дії</string>
-  <string name="share_via_link_password_label">Захистити паролем</string>
   <string name="share_via_link_password_title">Забезпечено</string>
-  <string name="share_via_link_edit_permission_label">Дозволити редагування</string>
   <string name="share_get_public_link_button">Отримати посилання</string>
   <string name="share_with_title">Поділитися з</string>
   <string name="share_with_edit_title">Поділитися з %1$s</string>

@@ -338,14 +338,8 @@
   <string name="upload_move_files">파일 이동</string>
   <string name="pref_behaviour_entries_keep_file">원래 폴더에 유지</string>
   <string name="pref_behaviour_entries_move">앱 폴더로 이동되었습니다.</string>
-  <string name="share_dialog_title">공유</string>
-  <string name="share_with_user_section_title">유저와 그룹에 공유하기</string>
   <string name="share_no_users">No data shared with users yet</string>
-  <string name="share_via_link_section_title">링크 공유</string>
-  <string name="share_via_link_expiration_date_label">만료 날짜 설정</string>
-  <string name="share_via_link_password_label">암호 보호</string>
   <string name="share_via_link_password_title">보호됨</string>
-  <string name="share_via_link_edit_permission_label">편집 허용</string>
   <string name="share_get_public_link_button">링크 얻기</string>
   <string name="share_search">검색</string>
   <string name="search_users_and_groups_hint">유저와 그룹 검색하기</string>

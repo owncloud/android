@@ -346,16 +346,10 @@
   <string name="upload_move_files">Fichier réckelen</string>
   <string name="pref_behaviour_entries_keep_file">Am original Dossier gehalen</string>
   <string name="pref_behaviour_entries_move">An den App Fichier geréckelt</string>
-  <string name="share_dialog_title">Gedeelt</string>
   <string name="share_file">%1$s deelen</string>
-  <string name="share_with_user_section_title">Mat Benotzer a Gruppen deelen</string>
   <string name="share_no_users">Nach keng Donnéeë mat Benotzer gedeelt</string>
   <string name="share_add_user_or_group">Benotzer oder Grupp bäisetzen</string>
-  <string name="share_via_link_section_title">Link deelen</string>
-  <string name="share_via_link_expiration_date_label">Verfallsdatum setzen</string>
-  <string name="share_via_link_password_label">Passwuertgeschützt</string>
   <string name="share_via_link_password_title">Geséchert</string>
-  <string name="share_via_link_edit_permission_label">Beaarbechten erlaben</string>
   <string name="share_get_public_link_button">De Link kréien</string>
   <string name="share_with_title">Deele mat</string>
   <string name="share_with_edit_title">Mam %1$s deelen</string>

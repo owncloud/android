@@ -132,11 +132,11 @@
   <string name="folder_picker_choose_button_text">Vel</string>
   <string name="prefs_category_details">Detaljar</string>
   <string name="auth_host_address">Tenaradresse</string>
-  <string name="share_dialog_title">Deling</string>
-  <string name="share_via_link_section_title">Del lenkje</string>
-  <string name="share_via_link_expiration_date_label">Set utløpsdato</string>
-  <string name="share_via_link_password_label">Passordvern</string>
-  <string name="share_via_link_edit_permission_label">Tillat endring</string>
+  <string name="share_dialog_title">Del</string>
+  <string name="share_cancel_public_link_button">Avbryt</string>
+  <string name="share_confirm_public_link_button">Lagra</string>
+  <string name="share_via_link_expiration_date_label">Utløp</string>
+  <string name="share_via_link_password_label">Passord</string>
   <string name="share_search">Søk</string>
   <string name="share_privilege_can_share">kan dela</string>
   <string name="share_privilege_can_edit">kan endra</string>

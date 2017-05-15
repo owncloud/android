@@ -267,11 +267,6 @@
   <string name="copy_file_invalid_overwrite">الملف موجود بالفعل في المجلد الوجهة</string>
   <string name="prefs_category_details">تفاصيل</string>
   <string name="auth_host_address">عنوان الخادم</string>
-  <string name="share_dialog_title">مشاركة</string>
-  <string name="share_via_link_section_title">شارك الرابط</string>
-  <string name="share_via_link_expiration_date_label">تعيين تاريخ إنتهاء الصلاحية</string>
-  <string name="share_via_link_password_label">حماية كلمة السر</string>
-  <string name="share_via_link_edit_permission_label">السماح بالتعديلات</string>
   <string name="share_search">البحث</string>
   <string name="share_privilege_can_share">يمكن المشاركة</string>
   <string name="share_privilege_can_edit">يمكن التحرير</string>

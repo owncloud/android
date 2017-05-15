@@ -55,6 +55,10 @@
   <string name="activity_chooser_send_file_title">Hantar</string>
   <string name="prefs_category_accounts">Akaun</string>
   <string name="auth_host_address">Alamat pelayan</string>
+  <string name="share_dialog_title">Kongsi</string>
+  <string name="share_cancel_public_link_button">Batal</string>
+  <string name="share_confirm_public_link_button">Simpan</string>
+  <string name="share_via_link_password_label">Kata laluan</string>
   <string name="share_search">Cari</string>
   <string name="share_privilege_can_share">boleh berkongsi</string>
   <string name="share_privilege_can_edit">boleh mengubah</string>
