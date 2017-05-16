@@ -76,6 +76,10 @@
   <string name="folder_picker_choose_button_text">選擇</string>
   <string name="prefs_category_details">詳述</string>
   <string name="auth_host_address">伺服器地址</string>
+  <string name="share_dialog_title">分享</string>
+  <string name="share_cancel_public_link_button">取消</string>
+  <string name="share_confirm_public_link_button">儲存</string>
+  <string name="share_via_link_password_label">密碼</string>
   <string name="share_search">尋找</string>
   <string name="share_privilege_can_share">可分享</string>
   <string name="share_privilege_can_edit">可編輯</string>

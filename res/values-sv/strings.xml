@@ -233,6 +233,7 @@
   <string name="confirmation_remove_folder_alert">Vill du verkligen ta bort %1$s och dess innehåll?</string>
   <string name="confirmation_remove_local">Endast lokalt</string>
   <string name="confirmation_remove_account_alert">Vll du verkligen ta bort kontot %1$s?</string>
+  <string name="confirmation_remove_public_share_message">Vill du verkligen ta bort %1$s?</string>
   <string name="remove_success_msg">Lyckad radering</string>
   <string name="remove_fail_msg">Radering kunde inte slutföras</string>
   <string name="rename_dialog_title">Ange ett nytt namn</string>
@@ -380,10 +381,15 @@
   <string name="upload_move_files">Flytta fil</string>
   <string name="pref_behaviour_entries_keep_file">behållas i orginalmapp</string>
   <string name="pref_behaviour_entries_move">flyttas till ownCloudmapp</string>
+  <string name="share_dialog_title">Dela</string>
   <string name="share_file">Dela %1$s</string>
   <string name="share_no_users">Ingen data delar med användare än</string>
   <string name="share_incompatible_version">För att dela med andra användare behöver din server vara åtminstone version 8.2</string>
   <string name="share_add_user_or_group">Lägg till användare eller grupp</string>
+  <string name="share_cancel_public_link_button">Avbryt</string>
+  <string name="share_confirm_public_link_button">Spara</string>
+  <string name="share_via_link_expiration_date_label">Upphör</string>
+  <string name="share_via_link_password_label">Lösenord</string>
   <string name="share_via_link_password_title">Säkrad</string>
   <string name="share_get_public_link_button">Hämta länk</string>
   <string name="share_with_title">Dela med</string>

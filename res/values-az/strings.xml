@@ -151,6 +151,7 @@ Aşağıda göstərilən %5$s-də olan daxili və xarici fayl(lar) link edilmiş
   <string name="confirmation_remove_file_alert">Siz həqiqətən %1$s silmək istəyirsiniz?</string>
   <string name="confirmation_remove_folder_alert">Siz həqiqətəndə %1$s və onun kontentini silmək istəyirsiniz?</string>
   <string name="confirmation_remove_local">Yalnız daxili</string>
+  <string name="confirmation_remove_public_share_message">Siz həqiqətən %1$s silmək istəyirsiniz?</string>
   <string name="remove_success_msg">Silmə uğurlu oldu</string>
   <string name="remove_fail_msg">Silmək mümkün olmadı</string>
   <string name="rename_dialog_title">Yeni adı daxil edin</string>
@@ -242,6 +243,11 @@ inzibatçınızla əlaqə saxlayasınız.</string>
   <string name="subject_user_shared_with_you">%1$s paylaşdı \"%2$s\" sizinlə</string>
   <string name="auth_refresh_button">Qoşulmanı yenilə</string>
   <string name="auth_host_address">Server ünvanı</string>
+  <string name="share_dialog_title">Paylaş</string>
+  <string name="share_cancel_public_link_button">Dayandır</string>
+  <string name="share_confirm_public_link_button">Saxla</string>
+  <string name="share_via_link_expiration_date_label">Vaxtın bitməsi</string>
+  <string name="share_via_link_password_label">Şifrə</string>
   <string name="share_search">Axtarış</string>
   <string name="share_privilege_can_share">yayımlaya bilərsiniz</string>
   <string name="share_privilege_can_edit">dəyişmək olar</string>

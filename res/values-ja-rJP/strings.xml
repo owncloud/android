@@ -237,6 +237,8 @@
   <string name="confirmation_remove_folder_alert">本当に %1$s およびそのコンテンツを削除してもよろしいですか？</string>
   <string name="confirmation_remove_local">ローカルのみ</string>
   <string name="confirmation_remove_account_alert">本当にアカウント %1$s を削除しますか？</string>
+  <string name="confirmation_remove_public_share_title">リンクを削除</string>
+  <string name="confirmation_remove_public_share_message">本当に %1$s を削除しますか？</string>
   <string name="remove_success_msg">削除に成功しました</string>
   <string name="remove_fail_msg">削除を完了できませんでした</string>
   <string name="rename_dialog_title">新しい名前を入力</string>
@@ -384,11 +386,17 @@
   <string name="upload_move_files">ファイルを移動</string>
   <string name="pref_behaviour_entries_keep_file">元のフォルダーに保持</string>
   <string name="pref_behaviour_entries_move">アプリフォルダーに移動</string>
+  <string name="share_dialog_title">共有</string>
   <string name="share_file">%1$s を共有</string>
   <string name="share_no_users">ユーザーと共有されているデータはありません</string>
   <string name="share_incompatible_version">他のユーザーと共有するには、サーバーバージョンが 8.2 以上である必要があります。</string>
   <string name="share_add_user_or_group">ユーザーかグループを追加</string>
+  <string name="share_cancel_public_link_button">キャンセル</string>
+  <string name="share_confirm_public_link_button">保存</string>
+  <string name="share_via_link_expiration_date_label">期限切れ</string>
+  <string name="share_via_link_password_label">パスワード</string>
   <string name="share_via_link_password_title">セキュア</string>
+  <string name="share_via_link_edit_permission_label">アップロードを許可</string>
   <string name="share_get_public_link_button">リンクを取得</string>
   <string name="share_with_title">共有開始... </string>
   <string name="share_with_edit_title">%1$s と共有</string>

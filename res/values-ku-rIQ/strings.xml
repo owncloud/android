@@ -33,5 +33,9 @@
   <string name="uploader_info_dirname">ناوی بوخچه</string>
   <string name="prefs_category_accounts">هەژمارەکان</string>
   <string name="auth_host_address">ناونیشانی ڕاژه</string>
+  <string name="share_dialog_title">هاوبەشی کردن</string>
+  <string name="share_cancel_public_link_button">لابردن</string>
+  <string name="share_confirm_public_link_button">پاشکه‌وتکردن</string>
+  <string name="share_via_link_password_label">وشەی تێپەربو</string>
   <string name="share_search">بگەڕێ</string>
 </resources>

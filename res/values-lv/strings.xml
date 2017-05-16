@@ -163,6 +163,10 @@
   <string name="username">Lietotājvārds</string>
   <string name="file_list__footer__folder">1 mape</string>
   <string name="file_list__footer__file">1 datne</string>
+  <string name="share_dialog_title">Dalīties</string>
+  <string name="share_cancel_public_link_button">Atcelt</string>
+  <string name="share_confirm_public_link_button">Saglabāt</string>
+  <string name="share_via_link_password_label">Parole</string>
   <string name="share_search">Meklēt</string>
   <string name="share_privilege_can_share">Var dalīties</string>
   <string name="share_privilege_can_edit">var rediģēt</string>

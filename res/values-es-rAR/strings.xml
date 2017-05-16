@@ -149,6 +149,7 @@
   <string name="confirmation_remove_file_alert">¿Realmente quieres eliminar %1$s?</string>
   <string name="confirmation_remove_folder_alert">¿Realmente deseas eliminar %1$s y todo su contenido?</string>
   <string name="confirmation_remove_local">Sólo local</string>
+  <string name="confirmation_remove_public_share_message">¿Realmente quieres eliminar %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Ingrese un nombre</string>
@@ -236,6 +237,11 @@
   <string name="copy_file_invalid_overwrite">El archivo ya existe en la carpeta destino</string>
   <string name="prefs_category_details">Detalles</string>
   <string name="auth_host_address">Dirección del servidor</string>
+  <string name="share_dialog_title">Compartir</string>
+  <string name="share_cancel_public_link_button">Cancelar</string>
+  <string name="share_confirm_public_link_button">Guardar</string>
+  <string name="share_via_link_expiration_date_label">Vencimiento</string>
+  <string name="share_via_link_password_label">Contraseña</string>
   <string name="share_search">Buscar</string>
   <string name="share_privilege_can_share">puede compartir</string>
   <string name="share_privilege_can_edit">podés editar</string>

@@ -208,6 +208,7 @@ Mesedez, baimendu berriz</string>
   <string name="confirmation_remove_file_alert">Ziur zaude %1$s ezabatu nahi duzula?</string>
   <string name="confirmation_remove_folder_alert">Ziru zaude %1$s eta bere edukiak ezabatu nahi dituzula?</string>
   <string name="confirmation_remove_local">Bertakoa bakarrik</string>
+  <string name="confirmation_remove_public_share_message">Ziur zaude %1$s ezabatu nahi duzula?</string>
   <string name="remove_success_msg">Ongi ezabatu da</string>
   <string name="remove_fail_msg">Ezin izan da ezabaketa burutu</string>
   <string name="rename_dialog_title">Idatzi izen berri bat</string>
@@ -296,6 +297,11 @@ Mesedez, baimendu berriz</string>
   <string name="copy_file_invalid_overwrite">Fitxategia dagoeneko existitzen da helburuko karpetan</string>
   <string name="prefs_category_details">Xehetasunak</string>
   <string name="auth_host_address">Zerbitzariaren helbidea</string>
+  <string name="share_dialog_title">Partekatu</string>
+  <string name="share_cancel_public_link_button">Ezeztatu</string>
+  <string name="share_confirm_public_link_button">Gorde</string>
+  <string name="share_via_link_expiration_date_label">Iraungitzea</string>
+  <string name="share_via_link_password_label">Pasahitza</string>
   <string name="share_search">Bilatu</string>
   <string name="share_privilege_can_share">elkarbana dezake</string>
   <string name="share_privilege_can_edit">editatu dezake</string>

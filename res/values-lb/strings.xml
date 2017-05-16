@@ -210,6 +210,7 @@
   <string name="confirmation_remove_file_alert">Wëlls du %1$s wierklech läschen?</string>
   <string name="confirmation_remove_folder_alert">Wëlls du %1$s an de ganzen Inhalt wierklech läschen?</string>
   <string name="confirmation_remove_local">Nemme lokal</string>
+  <string name="confirmation_remove_public_share_message">Wëlls du %1$s wierklech läschen?</string>
   <string name="remove_success_msg">Erfollegräich geläscht</string>
   <string name="remove_fail_msg">Läsche feelgeschloen</string>
   <string name="rename_dialog_title">Gëff en neien Numm an</string>
@@ -346,9 +347,14 @@
   <string name="upload_move_files">Fichier réckelen</string>
   <string name="pref_behaviour_entries_keep_file">Am original Dossier gehalen</string>
   <string name="pref_behaviour_entries_move">An den App Fichier geréckelt</string>
+  <string name="share_dialog_title">Deelen</string>
   <string name="share_file">%1$s deelen</string>
   <string name="share_no_users">Nach keng Donnéeë mat Benotzer gedeelt</string>
   <string name="share_add_user_or_group">Benotzer oder Grupp bäisetzen</string>
+  <string name="share_cancel_public_link_button">Ofbriechen</string>
+  <string name="share_confirm_public_link_button">Späicheren</string>
+  <string name="share_via_link_expiration_date_label">Leeft of</string>
+  <string name="share_via_link_password_label">Passwuert</string>
   <string name="share_via_link_password_title">Geséchert</string>
   <string name="share_get_public_link_button">De Link kréien</string>
   <string name="share_with_title">Deele mat</string>

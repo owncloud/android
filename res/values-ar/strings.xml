@@ -195,6 +195,7 @@
   <string name="confirmation_remove_file_alert">هل تريد حقاً حذف %1$s ؟</string>
   <string name="confirmation_remove_folder_alert">هل ترغب في حذف %1$s و جهات الإتصال التابعة له؟ </string>
   <string name="confirmation_remove_local">محليا فقط</string>
+  <string name="confirmation_remove_public_share_message">هل تريد حقاً حذف %1$s ؟</string>
   <string name="remove_success_msg">تم الحذف بنجاح</string>
   <string name="remove_fail_msg">فشل الحذف</string>
   <string name="rename_dialog_title">أدخل اسما جديدا</string>
@@ -267,6 +268,11 @@
   <string name="copy_file_invalid_overwrite">الملف موجود بالفعل في المجلد الوجهة</string>
   <string name="prefs_category_details">تفاصيل</string>
   <string name="auth_host_address">عنوان الخادم</string>
+  <string name="share_dialog_title">شارك</string>
+  <string name="share_cancel_public_link_button">إلغاء</string>
+  <string name="share_confirm_public_link_button">حفظ</string>
+  <string name="share_via_link_expiration_date_label">إنتهاء</string>
+  <string name="share_via_link_password_label">كلمة السر</string>
   <string name="share_search">البحث</string>
   <string name="share_privilege_can_share">يمكن المشاركة</string>
   <string name="share_privilege_can_edit">يمكن التحرير</string>

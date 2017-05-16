@@ -143,6 +143,7 @@
   <string name="confirmation_remove_file_alert">Ĉu vi vere volas forigi %1$s?</string>
   <string name="confirmation_remove_folder_alert">Ĉu vi vere volas forigi %1$s kaj ĝia enhavo?</string>
   <string name="confirmation_remove_local">Nur loka</string>
+  <string name="confirmation_remove_public_share_message">Ĉu vi vere volas forigi %1$s?</string>
   <string name="remove_success_msg">Forigo sukcesis</string>
   <string name="remove_fail_msg">Forigo ne eblis plenumiĝi</string>
   <string name="rename_dialog_title">Enigu novan nomon</string>
@@ -258,8 +259,13 @@
   <string name="upload_move_files">Movi dosieron</string>
   <string name="pref_behaviour_entries_keep_file">konservita en origina dosierujo</string>
   <string name="pref_behaviour_entries_move">movita al aplikaĵa dosierujo</string>
+  <string name="share_dialog_title">Kunhavigi</string>
   <string name="share_no_users">Nenio da datumoj kunhaviĝis kun uzantoj ankoraŭ</string>
   <string name="share_add_user_or_group">Aldoni uzanton aŭ grupon</string>
+  <string name="share_cancel_public_link_button">Nuligi</string>
+  <string name="share_confirm_public_link_button">Konservi</string>
+  <string name="share_via_link_expiration_date_label">Eksvalidiĝo</string>
+  <string name="share_via_link_password_label">Pasvorto</string>
   <string name="share_via_link_password_title">Sekurigita</string>
   <string name="share_get_public_link_button">Ekhavi ligilon</string>
   <string name="share_search">Serĉi</string>

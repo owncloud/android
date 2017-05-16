@@ -20,5 +20,8 @@
   <string name="uploader_info_dirname">సంచయం పేరు</string>
   <string name="activity_chooser_send_file_title">పంపించు</string>
   <string name="auth_host_address">సేవకి చిరునామా</string>
+  <string name="share_cancel_public_link_button">రద్దుచేయి</string>
+  <string name="share_confirm_public_link_button">భద్రపరచు</string>
+  <string name="share_via_link_password_label">సంకేతపదం</string>
   <string name="share_privilege_can_edit_delete">తొలగించు</string>
 </resources>

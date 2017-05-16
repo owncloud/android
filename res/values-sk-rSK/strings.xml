@@ -190,6 +190,7 @@
   <string name="confirmation_remove_file_alert">Naozaj chcete odstrániť %1$s?</string>
   <string name="confirmation_remove_folder_alert">Naozaj chcete odstrániť %1$s a jeho obsah?</string>
   <string name="confirmation_remove_local">Iba lokálne</string>
+  <string name="confirmation_remove_public_share_message">Naozaj chcete odstrániť %1$s?</string>
   <string name="remove_success_msg">Úspešne odstránené</string>
   <string name="remove_fail_msg">Odstránenie zlyhalo</string>
   <string name="rename_dialog_title">Zadajte nové meno</string>
@@ -310,7 +311,12 @@
   <string name="file_list__footer__files">%1$d súb.</string>
   <string name="file_list__footer__files_and_folder">%1$d súb., 1 priečinok</string>
   <string name="file_list__footer__files_and_folders">%1$d súb., %2$d prieč.</string>
+  <string name="share_dialog_title">Zdieľať</string>
   <string name="share_no_users">Zatiaľ s používateľmi nezdieľate žiadne dáta.</string>
+  <string name="share_cancel_public_link_button">Zrušiť</string>
+  <string name="share_confirm_public_link_button">Uložiť</string>
+  <string name="share_via_link_expiration_date_label">Koniec platnosti</string>
+  <string name="share_via_link_password_label">Heslo</string>
   <string name="share_via_link_password_title">Zabezpečené</string>
   <string name="share_search">Hľadať</string>
   <string name="search_users_and_groups_hint">Vyhľadať používateľov alebo skupiny</string>

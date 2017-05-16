@@ -123,6 +123,11 @@
   <string name="folder_picker_choose_button_text">არჩევა</string>
   <string name="prefs_category_details">დეტალური ინფორმაცია</string>
   <string name="auth_host_address">სერვერის მისამართი</string>
+  <string name="share_dialog_title">გაზიარება</string>
+  <string name="share_cancel_public_link_button">უარყოფა</string>
+  <string name="share_confirm_public_link_button">შენახვა</string>
+  <string name="share_via_link_expiration_date_label">ვადის გასვლის დრო</string>
+  <string name="share_via_link_password_label">პაროლი</string>
   <string name="share_search">ძებნა</string>
   <string name="share_privilege_can_edit">შეგიძლია შეცვლა</string>
   <string name="share_privilege_can_edit_create">შექმნა</string>

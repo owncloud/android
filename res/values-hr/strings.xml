@@ -160,6 +160,11 @@
   <string name="folder_picker_choose_button_text">Odaberite</string>
   <string name="prefs_category_details">Detalji</string>
   <string name="auth_host_address">Adresa poslužitelja</string>
+  <string name="share_dialog_title">Dijeljenje</string>
+  <string name="share_cancel_public_link_button">Odustanite</string>
+  <string name="share_confirm_public_link_button">Spremi</string>
+  <string name="share_via_link_expiration_date_label">Istjeće</string>
+  <string name="share_via_link_password_label">Lozinka</string>
   <string name="share_search">pretraži</string>
   <string name="share_privilege_can_share">Dijeljenje moguće</string>
   <string name="share_privilege_can_edit">Uređivanje moguće</string>

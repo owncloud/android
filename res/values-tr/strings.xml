@@ -227,6 +227,7 @@
   <string name="confirmation_remove_file_alert">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
   <string name="confirmation_remove_folder_alert">Gerçekten %1$s ve içeriğini kaldırmak istediğinizden emin misiniz?</string>
   <string name="confirmation_remove_local">Sadece yerel</string>
+  <string name="confirmation_remove_public_share_message">Gerçekten %1$s dosyasını kaldırmak istiyor musunuz?</string>
   <string name="remove_success_msg">Kaldırma başarılı</string>
   <string name="remove_fail_msg">Kaldırma başarısız</string>
   <string name="rename_dialog_title">Yeni bir isim girin</string>
@@ -368,9 +369,14 @@
   <string name="upload_move_files">Dosyayı taşı</string>
   <string name="pref_behaviour_entries_keep_file">özgün klasöründe tutuldu</string>
   <string name="pref_behaviour_entries_move">app klasörüne taşındı</string>
+  <string name="share_dialog_title">Paylaş</string>
   <string name="share_file">%1$s paylaş</string>
   <string name="share_no_users">Henüz kullanıcılara paylaşılan veri yok</string>
   <string name="share_add_user_or_group">Kullanıcı veya grup ekle</string>
+  <string name="share_cancel_public_link_button">İptal</string>
+  <string name="share_confirm_public_link_button">Kaydet</string>
+  <string name="share_via_link_expiration_date_label">Bitiş</string>
+  <string name="share_via_link_password_label">Parola</string>
   <string name="share_via_link_password_title">Güvenli</string>
   <string name="share_get_public_link_button">Bağlantıyı al</string>
   <string name="share_with_title">Şununla paylaş...</string>

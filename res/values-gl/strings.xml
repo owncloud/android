@@ -175,6 +175,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="confirmation_remove_file_alert">Confirma que quere retirar %1$s?</string>
   <string name="confirmation_remove_folder_alert">Confirma que quere retirar %1$s e o seu contido?</string>
   <string name="confirmation_remove_local">Só local</string>
+  <string name="confirmation_remove_public_share_message">Confirma que quere retirar %1$s?</string>
   <string name="remove_success_msg">Retirado correctamente</string>
   <string name="remove_fail_msg">Non foi posíbel retiralo</string>
   <string name="rename_dialog_title">Introducir un novo nome</string>
@@ -292,7 +293,12 @@ Descárgueo de aquí: %2$s</string>
   <string name="file_list__footer__files">%1$d ficheiros</string>
   <string name="file_list__footer__files_and_folder">%1$d ficheiros, 1 cartafol</string>
   <string name="file_list__footer__files_and_folders">%1$d ficheiros, %2$d cartafoles</string>
+  <string name="share_dialog_title">Compartir</string>
   <string name="share_no_users">Aínda non hai datos compartidos con usuarios</string>
+  <string name="share_cancel_public_link_button">Cancelar</string>
+  <string name="share_confirm_public_link_button">Gardar</string>
+  <string name="share_via_link_expiration_date_label">Caducidade</string>
+  <string name="share_via_link_password_label">Contrasinal</string>
   <string name="share_search">Buscar</string>
   <string name="search_users_and_groups_hint">Buscar usuarios e grupos</string>
   <string name="share_group_clarification">%1$s (grupo)</string>

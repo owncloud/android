@@ -212,6 +212,8 @@
   <string name="confirmation_remove_file_alert">%1$s을(를) 삭제하시겠습니까?</string>
   <string name="confirmation_remove_folder_alert">%1$s 및 포함된 내용을 삭제하시겠습니까?</string>
   <string name="confirmation_remove_local">로컬만</string>
+  <string name="confirmation_remove_public_share_title">링크 삭제</string>
+  <string name="confirmation_remove_public_share_message">%1$s을(를) 삭제하시겠습니까?</string>
   <string name="remove_success_msg">성공적으로 삭제함</string>
   <string name="remove_fail_msg">삭제할 수 없음</string>
   <string name="rename_dialog_title">새 이름 입력</string>
@@ -338,8 +340,14 @@
   <string name="upload_move_files">파일 이동</string>
   <string name="pref_behaviour_entries_keep_file">원래 폴더에 유지</string>
   <string name="pref_behaviour_entries_move">앱 폴더로 이동되었습니다.</string>
+  <string name="share_dialog_title">공유</string>
   <string name="share_no_users">No data shared with users yet</string>
+  <string name="share_cancel_public_link_button">취소</string>
+  <string name="share_confirm_public_link_button">저장</string>
+  <string name="share_via_link_expiration_date_label">만료</string>
+  <string name="share_via_link_password_label">암호</string>
   <string name="share_via_link_password_title">보호됨</string>
+  <string name="share_via_link_edit_permission_label">업로드 허용</string>
   <string name="share_get_public_link_button">링크 얻기</string>
   <string name="share_search">검색</string>
   <string name="search_users_and_groups_hint">유저와 그룹 검색하기</string>

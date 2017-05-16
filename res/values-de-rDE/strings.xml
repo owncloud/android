@@ -324,6 +324,7 @@
   <string name="network_error_socket_exception">Es ist ein Fehler bei der Verbindung mit dem Server aufgetreten.</string>
   <string name="network_error_socket_timeout_exception">Der Server braucht zu lange für eine Antwort.</string>
   <string name="network_error_connect_timeout_exception">Der Server braucht zu lange zum Verbinden.</string>
+  <string name="network_host_not_available">Server konnte nicht erreicht werden</string>
   <string name="forbidden_permissions">Sie haben keine Berechtigung %s</string>
   <string name="forbidden_permissions_rename">diese Datei umzubenennen</string>
   <string name="forbidden_permissions_delete">diese Datei zu löschen</string>
@@ -389,9 +390,14 @@
   <string name="pref_behaviour_entries_move">in den App-Ordner verschoben</string>
   <string name="share_dialog_title">Teilen</string>
   <string name="share_file">%1$s teilen</string>
+  <string name="share_with_user_section_title">Nutzer und Gruppen</string>
   <string name="share_no_users">Bis jetzt hast du noch keine Dateien mit anderen geteilt</string>
   <string name="share_incompatible_version">Zum Teilen mit anderen Nutzern, muss sich auf dem Server mindestens die Version 8.2 befinden</string>
   <string name="share_add_user_or_group">Benutzer oder Gruppe hinzufügen</string>
+  <string name="share_via_link_section_title">Öffentliche Links</string>
+  <string name="share_via_link_create_title">Geteilten Link erstellen</string>
+  <string name="share_via_link_edit_title">Geteilten Link bearbeiten</string>
+  <string name="share_via_link_name_label">Name des Links</string>
   <string name="share_cancel_public_link_button">Abbrechen</string>
   <string name="share_confirm_public_link_button">Speichern</string>
   <string name="share_via_link_expiration_date_label">Ablaufdatum</string>
@@ -443,6 +449,14 @@
   <string name="previewing_video_not_supported">Die Videovorschau wird auf dieser Android-Version nicht unterstützt. Das Herunterladen der Datei startet automatisch.</string>
   <string name="streaming_position_not_available">\"Position nicht verfügbar\"</string>
   <string name="error_no_network_connection">Gerät ist mit keinem Netzwerk verbunden</string>
+  <string name="share_no_public_links">Bis jetzt kein öffentlicher Link erstellt</string>
+  <string name="share_no_link_in_this_share">Diese Freigabe hat keinen Link</string>
+  <string name="share_warning_about_forwarding_public_links">Jeder mit dem Link hat Zugriff auf die Datei/Ordner</string>
+  <string name="share_via_link_default_password">*****</string>
+  <string name="share_via_link_password_enforced_label">Passwort *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Ablaufdatum *</string>
+  <string name="share_via_link_expiration_date_explanation_label">Der öffentliche Link wird spätestens %1$d Tage nach seiner Erstellung ablaufen</string>
+  <string name="share_via_link_default_name_template">%1$s - Link</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>

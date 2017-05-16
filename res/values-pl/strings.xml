@@ -235,6 +235,8 @@
   <string name="confirmation_remove_folder_alert">Czy naprawdę chcesz usunąć %1$s i jego zawartość?</string>
   <string name="confirmation_remove_local">Tylko lokalnie</string>
   <string name="confirmation_remove_account_alert">Czy naprawdę chcesz usunąć konto %1$s?</string>
+  <string name="confirmation_remove_public_share_title">Usuń link</string>
+  <string name="confirmation_remove_public_share_message">Czy naprawdę chcesz usunąć %1$s?</string>
   <string name="remove_success_msg">Usunięto</string>
   <string name="remove_fail_msg">Nie można usunąć</string>
   <string name="rename_dialog_title">Wprowadź nową nazwę</string>
@@ -383,10 +385,15 @@
   <string name="upload_move_files">Przenieś plik</string>
   <string name="pref_behaviour_entries_keep_file">zachowany w oryginalnym folderze</string>
   <string name="pref_behaviour_entries_move">przeniesiony do folderu aplikacji</string>
+  <string name="share_dialog_title">Udostępnij</string>
   <string name="share_file">Współdziel %1$s</string>
   <string name="share_no_users">Brak danych współdzielonych z użytkownikami</string>
   <string name="share_incompatible_version">By podzielić się tym z innymi użytkownikami twój serwer musi być conajmniej w wersji 8.2</string>
   <string name="share_add_user_or_group">Dodaj użytkownika lub grupę</string>
+  <string name="share_cancel_public_link_button">Anuluj</string>
+  <string name="share_confirm_public_link_button">Zapisz</string>
+  <string name="share_via_link_expiration_date_label">Wygaśnięcie</string>
+  <string name="share_via_link_password_label">Hasło</string>
   <string name="share_via_link_password_title">Zabezpieczone</string>
   <string name="share_get_public_link_button">Pobierz link</string>
   <string name="share_with_title">Współdziel z ...</string>

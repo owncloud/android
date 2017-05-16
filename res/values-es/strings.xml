@@ -237,6 +237,8 @@
   <string name="confirmation_remove_folder_alert">¿Realmente desea eliminar %1$s y todo su contenido?</string>
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">¿Desea realmente eliminar la cuenta de %1$s?</string>
+  <string name="confirmation_remove_public_share_title">Eliminar link</string>
+  <string name="confirmation_remove_public_share_message">¿Realmente desea eliminar %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
   <string name="rename_dialog_title">Introduzca un nombre nuevo</string>
@@ -385,11 +387,17 @@
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>
   <string name="pref_behaviour_entries_move">movido a la carpeta apps</string>
+  <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_no_users">Aún no se ha compartido con ningún usuario.</string>
   <string name="share_incompatible_version">Para compartir con otros usuarios, la versión del servidor debe ser al menos la 8.2</string>
   <string name="share_add_user_or_group">Añadir usuario o grupo</string>
+  <string name="share_cancel_public_link_button">Cancelar</string>
+  <string name="share_confirm_public_link_button">Guardar</string>
+  <string name="share_via_link_expiration_date_label">Vencimiento</string>
+  <string name="share_via_link_password_label">Contraseña</string>
   <string name="share_via_link_password_title">Asegurado</string>
+  <string name="share_via_link_edit_permission_label">Se permiten subidas públicas</string>
   <string name="share_get_public_link_button">Obtener enlace</string>
   <string name="share_with_title">Compartir con...</string>
   <string name="share_with_edit_title">Compartir con %1$s</string>

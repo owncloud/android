@@ -236,6 +236,8 @@
   <string name="confirmation_remove_folder_alert">คุณต้องการที่จะลบ %1$s และเนื้อหาของมัน?</string>
   <string name="confirmation_remove_local">เฉพาะต้นทางเท่านั้น</string>
   <string name="confirmation_remove_account_alert">คุณต้องการลบบัญชี %1$s?</string>
+  <string name="confirmation_remove_public_share_title">ลบลิงค์</string>
+  <string name="confirmation_remove_public_share_message">คุณต้องการที่จะลบ %1$s?</string>
   <string name="remove_success_msg">ลบเรียบร้อยแล้ว</string>
   <string name="remove_fail_msg">ไม่สามารถลบได้</string>
   <string name="rename_dialog_title">กรอกชื่อใหม่</string>
@@ -383,11 +385,17 @@
   <string name="upload_move_files">ย้ายไฟล์</string>
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>
   <string name="pref_behaviour_entries_move">ถูกย้ายไปยังโฟลเดอร์แอพพลิเคชัน</string>
+  <string name="share_dialog_title">แชร์</string>
   <string name="share_file">แชร์ %1$s</string>
   <string name="share_no_users">ยังไม่มีข้อมูลที่แชร์กับผู้ใช้ในตอนนี้</string>
   <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่นๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นรุ่น 8.2 ขึ้นไป</string>
   <string name="share_add_user_or_group">เพิ่มชื่อผู้ใช้งาน หรือชื่อกลุ่ม</string>
+  <string name="share_cancel_public_link_button">ยกเลิก</string>
+  <string name="share_confirm_public_link_button">บันทึก</string>
+  <string name="share_via_link_expiration_date_label">การหมดอายุ</string>
+  <string name="share_via_link_password_label">รหัสผ่าน</string>
   <string name="share_via_link_password_title">ความปลอดภัย</string>
+  <string name="share_via_link_edit_permission_label">อนุญาตการอัพโหลด</string>
   <string name="share_get_public_link_button">รับลิงค์</string>
   <string name="share_with_title">แชร์กับ ...</string>
   <string name="share_with_edit_title">แชร์กับ %1$s</string>

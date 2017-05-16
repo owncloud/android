@@ -197,6 +197,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="confirmation_remove_file_alert">Oled sa kindel, et soovid %1$s eemaldada?</string>
   <string name="confirmation_remove_folder_alert">Kas sa tõesti soovid eemaldada %1$s ja selle sisu?</string>
   <string name="confirmation_remove_local">Ainult kohalik</string>
+  <string name="confirmation_remove_public_share_message">Oled sa kindel, et soovid %1$s eemaldada?</string>
   <string name="remove_success_msg">Eemaldamine oli edukas</string>
   <string name="remove_fail_msg">Eemaldamine ebaõnnestus</string>
   <string name="rename_dialog_title">Sisesta uus nimi</string>
@@ -324,8 +325,13 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="upload_move_files">Liiguta fail</string>
   <string name="pref_behaviour_entries_keep_file">hoitakse algses kaustas</string>
   <string name="pref_behaviour_entries_move">liigutatakse rakenduse kausta</string>
+  <string name="share_dialog_title">Jaga</string>
   <string name="share_no_users">Kasutajatega pole veel midagi jagatud</string>
   <string name="share_add_user_or_group">Lisa kasutaja või grupp</string>
+  <string name="share_cancel_public_link_button">Loobu</string>
+  <string name="share_confirm_public_link_button">Salvesta</string>
+  <string name="share_via_link_expiration_date_label">Aegumine</string>
+  <string name="share_via_link_password_label">Parool</string>
   <string name="share_via_link_password_title">Turvatud</string>
   <string name="share_get_public_link_button">Hangi link</string>
   <string name="share_with_title">Jaga ...</string>

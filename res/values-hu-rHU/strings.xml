@@ -178,6 +178,7 @@
   <string name="confirmation_remove_file_alert">Tényleg el akarod távolítani %1$s?</string>
   <string name="confirmation_remove_folder_alert">Tényleg el akarod távolítani a %1$s és tartalmát?</string>
   <string name="confirmation_remove_local">Csak a helyi példány</string>
+  <string name="confirmation_remove_public_share_message">Tényleg el akarod távolítani %1$s?</string>
   <string name="remove_success_msg">Az eltávolítás sikerült</string>
   <string name="remove_fail_msg">Az eltávolítás nem sikerült</string>
   <string name="rename_dialog_title">Adj meg egy új nevet</string>
@@ -269,8 +270,13 @@
   <string name="file_list__footer__files_and_folders">%1$d fájl, %2$d könyvtár</string>
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>
+  <string name="share_dialog_title">Megosztás</string>
   <string name="share_no_users">Nincs még semmi megosztva a felhasználókkal</string>
   <string name="share_add_user_or_group">Felhasználó, vagy csoport hozzáadása</string>
+  <string name="share_cancel_public_link_button">Mégsem</string>
+  <string name="share_confirm_public_link_button">Mentés</string>
+  <string name="share_via_link_expiration_date_label">Lejárat</string>
+  <string name="share_via_link_password_label">Jelszó</string>
   <string name="share_search">Keresés</string>
   <string name="share_privilege_can_share">megosztható</string>
   <string name="share_privilege_can_edit">módosíthat</string>

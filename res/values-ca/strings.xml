@@ -218,6 +218,7 @@
   <string name="confirmation_remove_file_alert">Esteu segur que voleu eliminar %1$s?</string>
   <string name="confirmation_remove_folder_alert">Estàs segur que vols esborrar %1$s i els seus continguts?</string>
   <string name="confirmation_remove_local">Només local</string>
+  <string name="confirmation_remove_public_share_message">Esteu segur que voleu eliminar %1$s?</string>
   <string name="remove_success_msg">L\'eliminació ha tingut èxit</string>
   <string name="remove_fail_msg">No s\'ha pogut completar l\'eliminació</string>
   <string name="rename_dialog_title">Introdueix un nom nou</string>
@@ -347,9 +348,14 @@
   <string name="upload_move_files">Moure fitxer</string>
   <string name="pref_behaviour_entries_keep_file">conserva\'t en la carpeta original</string>
   <string name="pref_behaviour_entries_move">mogut a la carpeta de l\'aplicació</string>
+  <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Comparteix %1$s</string>
   <string name="share_no_users">No s\'han compartit dades amb usuaris encara</string>
   <string name="share_add_user_or_group">Afegeix usuari o group</string>
+  <string name="share_cancel_public_link_button">Cancel·lar</string>
+  <string name="share_confirm_public_link_button">Desar</string>
+  <string name="share_via_link_expiration_date_label">Expiració</string>
+  <string name="share_via_link_password_label">Contrasenya</string>
   <string name="share_via_link_password_title">Assegurat</string>
   <string name="share_get_public_link_button">Obtén l\'enllaç</string>
   <string name="share_with_title">Comparteix amb ...</string>
