@@ -69,9 +69,9 @@ public class AuthenticatorActivityTest {
     public static final String EXTRA_ACTION = "ACTION";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
-    private static final int WAIT_INITIAL = 500;
-    private static final int WAIT_LOGIN = 4000;
-    private static final int WAIT_CONNECTION = 2000;
+    private static final int WAIT_INITIAL = 1000;
+    private static final int WAIT_LOGIN = 5000;
+    private static final int WAIT_CONNECTION = 2500;
 
     private static final String ERROR_MESSAGE = "Activity not finished";
     private static final String SUFFIX_BROWSER = "/index.php/apps/files/";
@@ -117,9 +117,22 @@ public class AuthenticatorActivityTest {
             return status;
         }
 
+        public static ServerType fromValue(int value) {
+            switch (value) {
+                case 1:
+                    return HTTP;
+                case 2:
+                    return HTTPS_NON_SECURE;
+                case 3:
+                    return HTTPS_SECURE;
+                case 4:
+                    return REDIRECTED_NON_SECURE;
+            }
+            return null;
+        }
+
     }
 
-    private int trusted;
     public ServerType servertype;
 
     @Rule
@@ -146,17 +159,7 @@ public class AuthenticatorActivityTest {
         testPassword = arguments.getString("TEST_PASSWORD");
         testPassword2 = arguments.getString("TEST_PASSWORD2");
         testServerURL = arguments.getString("TEST_SERVER_URL");
-        trusted = Integer.parseInt(arguments.getString("TRUSTED"));
-        switch (trusted) {
-            case (1): servertype = ServerType.HTTP;
-                break;
-            case (2): servertype = ServerType.HTTPS_NON_SECURE;
-                break;
-            case (3): servertype = ServerType.HTTPS_SECURE;
-                break;
-            case (4): servertype = ServerType.REDIRECTED_NON_SECURE;
-                break;
-        }
+        servertype = ServerType.fromValue(Integer.parseInt(arguments.getString("TRUSTED")));
 
         // UiDevice available form API level 17
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -581,20 +584,20 @@ public class AuthenticatorActivityTest {
      */
     private void checkStatusMessage(){
 
-        switch (servertype.getStatus()){
-            case (1):
+        switch (servertype){
+            case HTTP:
                 if (testServerURL.startsWith("http"))
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_connection_established)));
                 else
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
                 break;
-            case (2):
+            case HTTPS_NON_SECURE:
                 onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
                 break;
-            case (3):
+            case HTTPS_SECURE:
                 onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
                 break;
-            case (4):
+            case REDIRECTED_NON_SECURE:
                 onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
                 break;
             default: break;
