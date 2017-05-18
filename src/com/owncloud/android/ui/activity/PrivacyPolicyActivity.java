@@ -59,6 +59,10 @@ public class PrivacyPolicyActivity extends ToolbarActivity  {
         WebView webview = (WebView) findViewById(R.id.privacyPolicyWebview);
         webview.getSettings().setJavaScriptEnabled(true);
 
+        // next two settings grant that non-responsive webs are zoomed out when loaded
+        webview.getSettings().setUseWideViewPort(true);
+        webview.getSettings().setLoadWithOverviewMode(true);
+
         //Enable zoom but hide display zoom controls
         webview.getSettings().setBuiltInZoomControls(true);
         webview.getSettings().setDisplayZoomControls(false);
