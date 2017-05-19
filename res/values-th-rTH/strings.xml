@@ -322,6 +322,7 @@
   <string name="network_error_socket_exception">เกิดข้อผิดพลาดขณะกำลังเชื่อมต่อกับเซิร์ฟเวอร์</string>
   <string name="network_error_socket_timeout_exception">เซิร์ฟเวอร์ดังกล่าวใช้เวลาตอบสนองนานเกินไป</string>
   <string name="network_error_connect_timeout_exception">เซิร์ฟเวอร์ใช้เวลาเชื่อมต่อนานมาก</string>
+  <string name="network_host_not_available">ไม่สามารถเข้าถึงเซิร์ฟเวอร์</string>
   <string name="forbidden_permissions">คุณไม่ได้รับสิทธิ์ %s</string>
   <string name="forbidden_permissions_rename">เพื่อเปลี่ยนชื่อไฟล์นี้</string>
   <string name="forbidden_permissions_delete">เพื่อลบไฟล์นี้</string>
@@ -387,9 +388,14 @@
   <string name="pref_behaviour_entries_move">ถูกย้ายไปยังโฟลเดอร์แอพพลิเคชัน</string>
   <string name="share_dialog_title">แชร์</string>
   <string name="share_file">แชร์ %1$s</string>
+  <string name="share_with_user_section_title">ผู้ใช้และกลุ่ม</string>
   <string name="share_no_users">ยังไม่มีข้อมูลที่แชร์กับผู้ใช้ในตอนนี้</string>
   <string name="share_incompatible_version">เพื่อแชร์กับผู้ใช้อื่นๆ เซิร์ฟเวอร์ของคุณจะต้องเป็นรุ่น 8.2 ขึ้นไป</string>
   <string name="share_add_user_or_group">เพิ่มชื่อผู้ใช้งาน หรือชื่อกลุ่ม</string>
+  <string name="share_via_link_section_title">ลิงค์สาธารณะ</string>
+  <string name="share_via_link_create_title">สร้างแชร์ลิงค์</string>
+  <string name="share_via_link_edit_title">แก้ไขแชร์ลิงค์</string>
+  <string name="share_via_link_name_label">ชื่อลิงค์</string>
   <string name="share_cancel_public_link_button">ยกเลิก</string>
   <string name="share_confirm_public_link_button">บันทึก</string>
   <string name="share_via_link_expiration_date_label">การหมดอายุ</string>
@@ -441,6 +447,14 @@
   <string name="previewing_video_not_supported">การดูตัวอย่างวิดีโอไม่ได้รับการสนับสนุนในเวอร์ชัน Android ของคุณ การดาวน์โหลดไฟล์จะเริ่มขึ้นโดยอัตโนมัติ</string>
   <string name="streaming_position_not_available">\"ตำแหน่งไม่พร้อมใช้งาน\"</string>
   <string name="error_no_network_connection">อุปกรณ์ไม่ได้เชื่อมต่อกับเครือข่าย</string>
+  <string name="share_no_public_links">ลิงค์สาธารณะยังไม่ถูกสร้างขึ้น</string>
+  <string name="share_no_link_in_this_share">ไม่มีลิงค์การแชร์นี้</string>
+  <string name="share_warning_about_forwarding_public_links">ทุกคนที่มีลิงก์สามารถเข้าถึงไฟล์หรือโฟลเดอร์ได้</string>
+  <string name="share_via_link_default_password">*****</string>
+  <string name="share_via_link_password_enforced_label">รหัสผ่าน *</string>
+  <string name="share_via_link_expiration_date_enforced_label">หมดอายุ *</string>
+  <string name="share_via_link_expiration_date_explanation_label">ลิงค์สาธารณะจะหมดอายุไม่เกิน %1$d วันหลังจากถูกสร้างขึ้น</string>
+  <string name="share_via_link_default_name_template">%1$s ลิงค์</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>
