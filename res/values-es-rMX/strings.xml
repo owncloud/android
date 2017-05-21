@@ -125,6 +125,8 @@
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Fallido (presiona para reintentarlo)</string>
   <string name="uploads_view_group_finished_uploads">Subidos</string>
+  <string name="uploads_view_group_file_count">%d Archivos</string>
+  <string name="uploads_view_group_file_count_single">%d Archivo</string>
   <string name="uploads_view_upload_status_succeeded">Completada</string>
   <string name="uploads_view_upload_status_cancelled">Cancelado</string>
   <string name="uploads_view_upload_status_paused">Pausado</string>
@@ -235,6 +237,7 @@
   <string name="confirmation_remove_folder_alert">¿Realmente desea eliminar %1$s y todo su contenido?</string>
   <string name="confirmation_remove_local">Sólo local</string>
   <string name="confirmation_remove_account_alert">Realmente quiere eliminar la cuenta %1$s?</string>
+  <string name="confirmation_remove_public_share_title">Eliminar enlace</string>
   <string name="confirmation_remove_public_share_message">¿Realmente desea eliminar %1$s?</string>
   <string name="remove_success_msg">Borrado correctamente</string>
   <string name="remove_fail_msg">El borrado no pudo ser completado</string>
@@ -291,7 +294,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="instant_upload_on_wifi">Subir fotos por wifi únicamente</string>
   <string name="instant_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
-  <string name="instant_upload_path">/SubidasInstantáneas</string>
+  <string name="instant_upload_path">/Subidas Instantáneas</string>
   <string name="conflict_title">Conflicto con archivo</string>
   <string name="conflict_message">¿Cuáles archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
@@ -314,12 +317,13 @@
   <string name="activity_chooser_send_file_title">Enviar</string>
   <string name="copy_link">Copiar enlace</string>
   <string name="clipboard_text_copied">Copiado al portapapeles</string>
-  <string name="clipboard_no_text_to_copy">No se recibió ningún mensaje para copiar al portapapeles</string>
+  <string name="clipboard_no_text_to_copy">No se recibió ningún texto para copiar al portapapeles</string>
   <string name="clipboard_uxexpected_error">Error inesperado al copiar al portapapeles</string>
   <string name="clipboard_label">Texto copiado de %1$s</string>
   <string name="error_cant_bind_to_operations_service">Error crítico: no es posible realizar operaciones</string>
   <string name="network_error_socket_exception">Ocurrió un error al conectarse con el servidor.</string>
   <string name="network_error_socket_timeout_exception">El servidor ha tardado demasiado en responder</string>
+  <string name="network_error_connect_timeout_exception">El servidor esta tardando demasiado en conectarse</string>
   <string name="forbidden_permissions">No tiene permiso %s</string>
   <string name="forbidden_permissions_rename">para renombrar este archivo</string>
   <string name="forbidden_permissions_delete">para eliminar este archivo</string>
@@ -385,9 +389,11 @@
   <string name="pref_behaviour_entries_move">movido a la carpeta apps</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
+  <string name="share_with_user_section_title">Usuarios y Grupos</string>
   <string name="share_no_users">Aún no se ha compartido con ningún usuario.</string>
   <string name="share_incompatible_version">Para compartir con otros usuarios, su servidor debe tener al menos la versión 8.2</string>
   <string name="share_add_user_or_group">Añadir usuario o grupo</string>
+  <string name="share_via_link_section_title">Enlaces publicos</string>
   <string name="share_cancel_public_link_button">Cancelar</string>
   <string name="share_confirm_public_link_button">Guardar</string>
   <string name="share_via_link_expiration_date_label">Caducidad</string>
@@ -432,6 +438,10 @@
   <string name="streaming_unrecognized_input">Este formato de video no está soportado</string>
   <string name="streaming_file_not_found_error">Este video ya no se encuentra disponible en este servidor</string>
   <string name="previewing_video_common_error">Este video no puede ser reproducido</string>
+  <string name="error_no_network_connection">El dispositivo no está conectado a ninguna red</string>
+  <string name="share_via_link_password_enforced_label">Contraseña *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Caducidad *</string>
+  <string name="share_via_link_default_name_template">%1$s enlace</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionados</item>

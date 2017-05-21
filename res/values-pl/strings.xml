@@ -125,6 +125,8 @@
   <string name="uploads_view_group_current_uploads">Obecny</string>
   <string name="uploads_view_group_failed_uploads">Błąd (kliknij, by ponowić)</string>
   <string name="uploads_view_group_finished_uploads">Wysłane</string>
+  <string name="uploads_view_group_file_count">%d plików</string>
+  <string name="uploads_view_group_file_count_single">%d plik</string>
   <string name="uploads_view_upload_status_succeeded">Ukończono</string>
   <string name="uploads_view_upload_status_cancelled">Przerwano</string>
   <string name="uploads_view_upload_status_paused">Zatrzymano</string>
@@ -322,6 +324,7 @@
   <string name="network_error_socket_exception">Pojawił się błąd podczas łączenia z serwerem.</string>
   <string name="network_error_socket_timeout_exception">Serwer zbyt długo nie odpowiadał</string>
   <string name="network_error_connect_timeout_exception">Zbyt długi czas łączenia z serwerem</string>
+  <string name="network_host_not_available">Serwer jest nieosiągalny</string>
   <string name="forbidden_permissions">Nie masz uprawnień %s</string>
   <string name="forbidden_permissions_rename">do zmiany nazwy tego pliku</string>
   <string name="forbidden_permissions_delete">do usuwania tego pliku</string>
@@ -387,6 +390,7 @@
   <string name="pref_behaviour_entries_move">przeniesiony do folderu aplikacji</string>
   <string name="share_dialog_title">Udostępnij</string>
   <string name="share_file">Współdziel %1$s</string>
+  <string name="share_with_user_section_title">Użytkownicy i grupy</string>
   <string name="share_no_users">Brak danych współdzielonych z użytkownikami</string>
   <string name="share_incompatible_version">By podzielić się tym z innymi użytkownikami twój serwer musi być conajmniej w wersji 8.2</string>
   <string name="share_add_user_or_group">Dodaj użytkownika lub grupę</string>
@@ -439,6 +443,8 @@
   <string name="previewing_video_not_supported">Podgląd wideo nie jest wspierany w tej wersji systemu Android. Pobieranie pliku rozpocznie się automatycznie.</string>
   <string name="streaming_position_not_available">\"Pozycja jest niedostępna\"</string>
   <string name="error_no_network_connection">Urządzenie nie jest podłączone do internetu</string>
+  <string name="share_warning_about_forwarding_public_links">Każdy posiadający link ma dostęp do pliku/katalogu.</string>
+  <string name="share_via_link_password_enforced_label">Hasło *</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>

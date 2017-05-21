@@ -322,6 +322,7 @@
   <string name="network_error_socket_exception">Ndodhi një gabim teksa po lidhej me shërbyesin.</string>
   <string name="network_error_socket_timeout_exception">Shërbyesit iu desh shumë kohë për përgjigje</string>
   <string name="network_error_connect_timeout_exception">Shërbyesit iu desh shumë kohë për t’u lidhur</string>
+  <string name="network_host_not_available">S\’u kap dot shërbyesi</string>
   <string name="forbidden_permissions">Nuk keni leje %s</string>
   <string name="forbidden_permissions_rename">për riemërtim të kësaj kartele</string>
   <string name="forbidden_permissions_delete">për fshirje të kësaj kartele</string>
@@ -387,9 +388,12 @@
   <string name="pref_behaviour_entries_move">u kalua te dosja e aplikacionit</string>
   <string name="share_dialog_title">Ndaje</string>
   <string name="share_file">Ndajeni %1$s</string>
+  <string name="share_with_user_section_title">Përdorues dhe Grupe</string>
   <string name="share_no_users">Ende pa të dhëna të ndara me përdorues</string>
   <string name="share_incompatible_version">Që të ndahen gjëra me përdorues të tjerë, shërbyesi juaj lypset të jetë të paktën nën versionin 8.2</string>
   <string name="share_add_user_or_group">Shtoni përdorues ose grup</string>
+  <string name="share_via_link_section_title">Lidhje  publike</string>
+  <string name="share_via_link_name_label">Emër lidhjeje</string>
   <string name="share_cancel_public_link_button">Anuloje</string>
   <string name="share_confirm_public_link_button">Ruaje</string>
   <string name="share_via_link_expiration_date_label">Skadim</string>
@@ -441,6 +445,9 @@
   <string name="previewing_video_not_supported">Paraparja e videove nuk mbulohet nga versioni Android i juaji. Shkarkimi i kartelës do të fillojë vetvetiu.</string>
   <string name="streaming_position_not_available">\"Pozicion jo i mundshëm\"</string>
   <string name="error_no_network_connection">Pajisja s’është e lidhur në ndonjë rrjet</string>
+  <string name="share_via_link_default_password">*****</string>
+  <string name="share_via_link_password_enforced_label">Fjalëkalim *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Skadim *</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d i përzgjedhur</item>
     <item quantity="other">%d të përzgjedhur</item>

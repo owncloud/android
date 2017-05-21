@@ -14,21 +14,21 @@
   <string name="actionbar_sort">Trier</string>
   <string name="actionbar_sort_title">Trier</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Récent - Ancien</string>
-  <string name="actionbar_sort_by_size">Gros - Petit</string>
+  <string name="actionbar_sort_by_date">Plus récent - Plus ancien</string>
+  <string name="actionbar_sort_by_size">Plus grande taille - Plus petite taille</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tous les fichiers</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Paramètres</string>
-  <string name="drawer_item_uploads_list">Chargements</string>
+  <string name="drawer_item_uploads_list">Envois</string>
   <string name="drawer_close">Fermer</string>
   <string name="drawer_open">Ouvrir</string>
   <string name="prefs_category_general">Général</string>
   <string name="prefs_category_more">Plus</string>
   <string name="prefs_accounts">Comptes</string>
-  <string name="prefs_manage_accounts">Gestion des comptes utilisateur</string>
+  <string name="prefs_manage_accounts">Gérer les comptes utilisateurs</string>
   <string name="prefs_passcode">Code de sécurité</string>
   <string name="prefs_instant_upload">Téléversement immédiat des photos</string>
   <string name="prefs_instant_upload_summary">Téléverser immédiatement les photos prises par la caméra</string>
@@ -118,6 +118,8 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_upload_failed_credentials_error">Le téléversement a échoué, vous devez vous reconnecter</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
   <string name="uploader_upload_text_dialog_title">Saisissez le nom du nouveau fichier</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Le nom de fichier ne doit pas être vide</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Le nom de fichier ne doit pas contenir plus de %d caractères</string>
   <string name="uploader_upload_text_filename_hint">Nom du fichier</string>
   <string name="ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
   <string name="uploads_view_title">Chargements</string>
@@ -125,6 +127,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploads_view_group_failed_uploads">Échoué (appuyer pour réessayer)</string>
   <string name="uploads_view_group_finished_uploads">Téléversé</string>
   <string name="uploads_view_group_file_count">%d Fichiers</string>
+  <string name="uploads_view_group_file_count_single">%d fichiers</string>
   <string name="uploads_view_upload_status_succeeded">Terminé</string>
   <string name="uploads_view_upload_status_cancelled">Annulé</string>
   <string name="uploads_view_upload_status_paused">En pause</string>
@@ -324,6 +327,8 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="error_cant_bind_to_operations_service">Erreur critique : impossible de réaliser les opérations</string>
   <string name="network_error_socket_exception">Une erreur est survenue pendant la connexion au serveur.</string>
   <string name="network_error_socket_timeout_exception">Le serveur a pris trop de temps à répondre</string>
+  <string name="network_error_connect_timeout_exception">Le serveur a pris trop de temps pour se connecter</string>
+  <string name="network_host_not_available">Le serveur n\'a pas pu être joint</string>
   <string name="forbidden_permissions">Vous n\'avez pas la permission %s</string>
   <string name="forbidden_permissions_rename">de renommer ce fichier</string>
   <string name="forbidden_permissions_delete">d’effacer ce fichier</string>
@@ -389,9 +394,14 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="pref_behaviour_entries_move">déplacé vers le dossier de l\'application</string>
   <string name="share_dialog_title">Partager</string>
   <string name="share_file">Partager %1$s</string>
+  <string name="share_with_user_section_title">Utilisateurs et Groupes</string>
   <string name="share_no_users">Aucune donnée partagée avec des utilisateurs pour le moment</string>
   <string name="share_incompatible_version">Le partage n\'est disponible qu\'à partir de la version 8.2 du serveur</string>
   <string name="share_add_user_or_group">Ajouter un Utilisateur ou un Groupe</string>
+  <string name="share_via_link_section_title">Liens publics</string>
+  <string name="share_via_link_create_title">Créer un lien de partage</string>
+  <string name="share_via_link_edit_title">Modifier le lien de partage</string>
+  <string name="share_via_link_name_label">Nom du lien</string>
   <string name="share_cancel_public_link_button">Anuler</string>
   <string name="share_confirm_public_link_button">Enregistrer</string>
   <string name="share_via_link_expiration_date_label">Expiration</string>
@@ -442,6 +452,15 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="previewing_video_common_error">Cette vidéo n\'a pas pu être chargée</string>
   <string name="previewing_video_not_supported">La prévisualisation de vidéo n\'est pas supportée sur votre version d\'Android. Le téléchargement du fichier va démarrer automatiquement.</string>
   <string name="streaming_position_not_available">\"Position non disponible\"</string>
+  <string name="error_no_network_connection">L\'appareil n\'est connecté à aucun réseau</string>
+  <string name="share_no_public_links">Aucun lien public n\'a encore été créé </string>
+  <string name="share_no_link_in_this_share">Ce partage n\'a pas de lien</string>
+  <string name="share_warning_about_forwarding_public_links">Quiconque dispose du lien a accès aux fichiers/dossiers</string>
+  <string name="share_via_link_default_password">*****</string>
+  <string name="share_via_link_password_enforced_label">Mot de passe *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Date d\'expiration *</string>
+  <string name="share_via_link_expiration_date_explanation_label">Ce lien public expirera au plus tard %1$d jours après sa création</string>
+  <string name="share_via_link_default_name_template">lien %1$s</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>
