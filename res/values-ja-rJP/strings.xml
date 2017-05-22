@@ -127,6 +127,7 @@
   <string name="uploads_view_group_failed_uploads">失敗(タップして再試行)</string>
   <string name="uploads_view_group_finished_uploads">アップロード済み</string>
   <string name="uploads_view_group_file_count">%d 個のファイル</string>
+  <string name="uploads_view_group_file_count_single">%d 個のファイル</string>
   <string name="uploads_view_upload_status_succeeded">完了</string>
   <string name="uploads_view_upload_status_cancelled">キャンセル済</string>
   <string name="uploads_view_upload_status_paused">停止中</string>
@@ -323,6 +324,7 @@
   <string name="error_cant_bind_to_operations_service">致命的なエラー：操作を実行できません</string>
   <string name="network_error_socket_exception">サーバーへの接続中にエラーが発生しました。</string>
   <string name="network_error_socket_timeout_exception">サーバーからの反応がありません</string>
+  <string name="network_host_not_available">サーバーに接続できませんでした</string>
   <string name="forbidden_permissions">権限 %s がありません</string>
   <string name="forbidden_permissions_rename">ファイル名の変更</string>
   <string name="forbidden_permissions_delete">ファイルを削除</string>
@@ -388,9 +390,13 @@
   <string name="pref_behaviour_entries_move">アプリフォルダーに移動</string>
   <string name="share_dialog_title">共有</string>
   <string name="share_file">%1$s を共有</string>
+  <string name="share_with_user_section_title">ユーザーとグループ</string>
   <string name="share_no_users">ユーザーと共有されているデータはありません</string>
   <string name="share_incompatible_version">他のユーザーと共有するには、サーバーバージョンが 8.2 以上である必要があります。</string>
   <string name="share_add_user_or_group">ユーザーかグループを追加</string>
+  <string name="share_via_link_section_title">公開リンク</string>
+  <string name="share_via_link_create_title">共有リンクを作成</string>
+  <string name="share_via_link_name_label">リンク名</string>
   <string name="share_cancel_public_link_button">キャンセル</string>
   <string name="share_confirm_public_link_button">保存</string>
   <string name="share_via_link_expiration_date_label">期限切れ</string>
@@ -440,6 +446,11 @@
   <string name="streaming_crossed_redirection">クロスリダイレクションを利用したストリーミングは許可されていません</string>
   <string name="previewing_video_common_error">この動画は再生できません</string>
   <string name="previewing_video_not_supported">お使いの端末では動画のプレビューがサポートされていません。ファイルは自動でダウンロードされます。</string>
+  <string name="error_no_network_connection">ネットワークに接続されていません</string>
+  <string name="share_no_public_links">公開リンクが作成されていません</string>
+  <string name="share_via_link_default_password">*****</string>
+  <string name="share_via_link_password_enforced_label">パスワード *</string>
+  <string name="share_via_link_expiration_date_enforced_label">有効期限*</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d個選択中</item>
   </plurals>

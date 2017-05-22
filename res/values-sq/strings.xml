@@ -393,6 +393,8 @@
   <string name="share_incompatible_version">Që të ndahen gjëra me përdorues të tjerë, shërbyesi juaj lypset të jetë të paktën nën versionin 8.2</string>
   <string name="share_add_user_or_group">Shtoni përdorues ose grup</string>
   <string name="share_via_link_section_title">Lidhje  publike</string>
+  <string name="share_via_link_create_title">Krijoni ndarje lidhjesh</string>
+  <string name="share_via_link_edit_title">Përpunoni ndarje lidhjesh</string>
   <string name="share_via_link_name_label">Emër lidhjeje</string>
   <string name="share_cancel_public_link_button">Anuloje</string>
   <string name="share_confirm_public_link_button">Ruaje</string>
@@ -445,9 +447,14 @@
   <string name="previewing_video_not_supported">Paraparja e videove nuk mbulohet nga versioni Android i juaji. Shkarkimi i kartelës do të fillojë vetvetiu.</string>
   <string name="streaming_position_not_available">\"Pozicion jo i mundshëm\"</string>
   <string name="error_no_network_connection">Pajisja s’është e lidhur në ndonjë rrjet</string>
+  <string name="share_no_public_links">Ende s’janë krijuar lidhje publike</string>
+  <string name="share_no_link_in_this_share">Kjo ndarje nuk ka lidhje</string>
+  <string name="share_warning_about_forwarding_public_links">Cilido që zotëron lidhjen, ka hyrje te kartela/dosja</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Fjalëkalim *</string>
   <string name="share_via_link_expiration_date_enforced_label">Skadim *</string>
+  <string name="share_via_link_expiration_date_explanation_label">Lidhja publike do të skadojë jo më vonë se %1$d ditë pas krijimit</string>
+  <string name="share_via_link_default_name_template">Lidhje %1$s</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d i përzgjedhur</item>
     <item quantity="other">%d të përzgjedhur</item>

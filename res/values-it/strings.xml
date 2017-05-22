@@ -324,6 +324,7 @@
   <string name="network_error_socket_exception">Si è verificato un errore durante la connessione al server.</string>
   <string name="network_error_socket_timeout_exception">Il server ha richiesto troppo tempo per rispondere</string>
   <string name="network_error_connect_timeout_exception">Il server impiega troppo tempo per connettersi</string>
+  <string name="network_host_not_available">Non è possibile contattare il server</string>
   <string name="forbidden_permissions">Non hai i permessi %s</string>
   <string name="forbidden_permissions_rename">per rinominare questo file</string>
   <string name="forbidden_permissions_delete">per eliminare questo file</string>
@@ -389,9 +390,14 @@
   <string name="pref_behaviour_entries_move">spostato nella cartella dell\'applicazione</string>
   <string name="share_dialog_title">Condividi</string>
   <string name="share_file">Condividi %1$s</string>
+  <string name="share_with_user_section_title">Utenti e Gruppi</string>
   <string name="share_no_users">Ancora nessun dato condiviso con gli utenti </string>
   <string name="share_incompatible_version">Per condividere con altri utenti, il tuo server deve essere almeno alla versione 8.2</string>
   <string name="share_add_user_or_group">Aggiungi utente o gruppo</string>
+  <string name="share_via_link_section_title">Collegamenti pubblici</string>
+  <string name="share_via_link_create_title">Crea un collegamento condiviso</string>
+  <string name="share_via_link_edit_title">Modifica un collegamento condiviso</string>
+  <string name="share_via_link_name_label">Nome collegamento</string>
   <string name="share_cancel_public_link_button">Annulla</string>
   <string name="share_confirm_public_link_button">Salva</string>
   <string name="share_via_link_expiration_date_label">Scadenza</string>
@@ -444,6 +450,11 @@ Il Download del file inizierà automaticamente</string>
   <string name="previewing_video_not_supported">L\'Anteprima del video non è supportata nella tua versione di Android. Il Download del file inizierà automaticamente.</string>
   <string name="streaming_position_not_available">\"Posizione non disponibile\"</string>
   <string name="error_no_network_connection">Il dispositivo non è collegato a nessuna rete</string>
+  <string name="share_no_public_links">Ancora nessun collegamento pubblico è stato creato</string>
+  <string name="share_no_link_in_this_share">Questa condivisione non ha collegamenti</string>
+  <string name="share_via_link_default_password">******</string>
+  <string name="share_via_link_password_enforced_label">Password *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Scadenza *</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>

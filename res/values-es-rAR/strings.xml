@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">Aplicación de Android %1$s</string>
   <string name="about_version">versión %1$s</string>
   <string name="actionbar_sync">Actualizar cuenta</string>
   <string name="actionbar_upload">Subir</string>
@@ -13,23 +14,30 @@
   <string name="actionbar_sort">Orden</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Novedades - Más antiguo</string>
+  <string name="actionbar_sort_by_size">Más grande -  Mas pequeño</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_uploads_list">Subidas</string>
   <string name="drawer_close">Cerrar</string>
   <string name="drawer_open">Abrir</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
+  <string name="prefs_passcode">Bloqueo con clave</string>
   <string name="prefs_instant_upload">Subir fotos instantáneamente. </string>
   <string name="prefs_instant_upload_summary">Subir instantáneamente fotos tomadas por la cámara.</string>
   <string name="prefs_instant_video_upload">Subir videos instantáneamente. </string>
   <string name="prefs_instant_video_upload_summary">Subir instantáneamente videos tomados por la cámara.</string>
+  <string name="prefs_log_title">Activar bitacora</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
+  <string name="prefs_log_title_history">Historial de la bitacora</string>
   <string name="prefs_log_summary_history">Esto muestra los registros grabados</string>
+  <string name="prefs_log_delete_history_button">Eliminar historial</string>
   <string name="prefs_help">Ayuda</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Sugerencias</string>
@@ -38,6 +46,7 @@
   <string name="prefs_remember_last_upload_location_summary">Recordar la ultima ubicación compartida de subida</string>
   <string name="recommend_subject">¡Intento %1$s en tu teléfono inteligente!</string>
   <string name="recommend_text">Quiero invitarte a usar %1$s en tu teléfono inteligente!\nDescárgalo aquí: %2$s</string>
+  <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Dirección del servidor https://...</string>
   <string name="auth_username">Nombre de usuario</string>
   <string name="auth_password">Contraseña</string>
@@ -45,6 +54,7 @@
   <string name="sync_string_files">Archivos</string>
   <string name="setup_btn_connect">Conectar</string>
   <string name="uploader_btn_upload_text">Subir</string>
+  <string name="uploader_top_message">Sellecionar la carpeta de subida</string>
   <string name="uploader_wrn_no_account_title">No se encontraron cuentas</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Configurar</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Salir</string>
@@ -82,6 +92,7 @@
   <string name="uploader_upload_succeeded_ticker">Subido con éxito</string>
   <string name="uploader_upload_failed_ticker">Error al subir el archivo</string>
   <string name="uploader_upload_failed_content_single">No se pudo completar la subida de %1$s </string>
+  <string name="uploads_view_title">Subidas</string>
   <string name="uploads_view_group_finished_uploads">Subido</string>
   <string name="uploads_view_upload_status_failed_permission_error">Error de permisos</string>
   <string name="uploads_view_upload_status_unknown_fail">Error desconocido</string>
