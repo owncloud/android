@@ -1,0 +1,51 @@
+Umut Bozdoğan- Issue1: Çeşitli dosya türlerinin albümlerine göre dizilmesini sağlama, örneğin müzik dosyaları için; albüm kapağı olarak 
+şarkıların içerisindeki .bmp dosyalarını kullanmak. Başka bir örnek verecek olursak presentation ve excel dosyalarını da ayrı bir başlık 
+altında toplamak böylece hem mesleki hem de öğrencilere yönelik program oryantasyonunu sağlamak. Döküman ve makaleler için kullanılan 
+".txt, .docx,.pdf vs" dosyalarını da ayrı bir dosyalama işlemiyle tutmak, sonrasında bu dosyaların kolay erişimi için kullanıcıya "tag" 
+ekleme seçeneği verilmesi. Çeşitli dosya türlerinde bu oryantasyonlar sağlandıktan sonra Muzaffer Buğra Çelik'in yapacağı algoritma 
+düzenlemesini programın benim yaptığım kısımla entegrasyonunu sağlamak, böylece yapılan sorting algoritması için programın hızlı 
+çalışmasını sağlamak. Yani kısaca Muzaffer arkadaşımızın yapacağı dosya türü sıralama seçeneği içerisine daha da ayrıntılı bir sıralama 
+sağlamak, gerekirse kullanıcı arayüzüne, kullanıcının da kolaylıkla ekleyebileceği başka sıralamalar yapmasını sağlayacak bir feature.
+
+
+N.Denizhan Aydınlı-Issue2:  Facebook Login
+Günümüz mobil uygulamalarının hemen hepsinde bir giriş ekranı mevcuttur. Bu, girilen kullanıcı bilgilerinin var olan veri tabanındaki 
+verilerle eşleştirilmesiyle güvenli bir kullanım amacı sunmak içindir. Ayrıca, her kullanıcı farklı içerik ve kişiselleştirmelere sahip 
+olduğundan, kullanıcı giriş  yaparken tanınmalı ve ona özel olan içerik ve ayarlar sunulmalıdır. Bu hizmetin sağlanması için 
+uygulamanın giriş ekranında kullanıcı bilgileri istenilmektedir. Ancak, günümüz teknolojisinde hali hazırda pek çok bilgi girilerek 
+giriş yapılmış diğer uygulamalar bulunmaktadır. Bu uygulamalar çok sayıda insan tarafından kullanılmakta olduğundan, owncloud gibi 
+diğer uygulamalara girişte hazır olan kullanıcı bilgilerinin kullanıcının zahmetsizce uygulamaya kayıt olmasında kullanılabilir. 
+Facebook bu yaygın uygulamardan birdir ve geliştiricilere Facebook Login adında kullanıcı bilgisi erişimi sağlamaktadır. 
+Bu bilgiler kullanıcının izni dahilinde ve sınırlı bilgilerdir. Uygulamaya giriş için yeterli olabilecek kullanıcı adı, e-mail adresi 
+gibi bilgiler bu yolla edinilebilir. Ve kullanıcı tekrar tekrar aynı bilgileri girme zahmetinden kurtulmuş olur. Owncloud a Facebook 
+login ile giriş fikri bu şekilde çıkmıştır. Facebook'tan sağlanan ancak eksik kalan ve de gerekli olan bilgiler yine kullanıcıdan 
+istenecek ve bu sayede giriş işleminin daha hızlı ve zahmetsiz olması planlanmaktadır.
+
+Logout/Çıkış
+
+Projede logout yani çıkış butonu / seçeneği bulunmamaktadır. Çıkış işlemi güvenli uygulama kullanmanın önemli bir parçasıdır ve 
+owncloud gibi uzak sunuculara bağlanıp kişisel içerik tutma gibi işlevleri olan uygulamalar için gereklidir. Uygulamaya uygun bulunan 
+bir yerine, kullanıcı arayüz prensiplerine uygun olacak şekilde bir çıkış butonu eklenmesi fikri buradan çıkmıştır. Çıkış işlemi için 
+gerekli olacak back-end kodları var olan zaman aşımı ve ya hizmet sonlandırma  kodları ile birleşik bir şekilde çalışacak ve olmayan 
+bir özellik olarak değil var olan özelliklerin gelişmiş hali olarak entegre edilecektir.
+
+Emre Atcı- Issue3: TalkBack kör ve görme engelli kullanıcıların cihazlarıyla etkileşime yardımcı olan bir erişilebilirlik hizmetidir.
+Kullanıcı bu modu seçerse seçeneğe dokunduğunda titreşimle ve sesle geri bildirim alır.
+Özellikler Dokunularak keşfedilir.
+Aynı zamanda sanal klavye de dokunularak keşfedilebilir.Yazılmak istenen harf duyuluncaya kadar parmak basılı tutularak gezilir,
+bylununca parmak çekilir ve basılır.Böylece arama yapılabilir.
+Yazılan metin incelenebilir.Önceki karaktere gitmek için sesi aç tuşuna.Sonraki karakteri açmak için sesi kıs tuşuna basılır.
+Bu özellikleri uygulamaya entegre edersem görme engelliler de kullanabilir.Programdaki özelliklerin kullanılma şekli genişletilmiş olur.
+TalkBack kör ve görme engelli kullanıcıların cihazlarıyla etkileşime yardımcı olan bir erişilebilirlik hizmetidir.
+Kullanıcı bu modu seçerse seçeneğe dokunduğunda titreşimle ve sesle geri bildirim alır.
+Özellikler Dokunularak keşfedilir.Dokunulunca ne olduğu seslendirilir.
+Aynı zamanda sanal klavye de dokunularak keşfedilebilir.Yazılmak istenen harf duyuluncaya kadar parmak basılı tutularak gezilir,
+duyulunca parmak çekilir ve harf basılmış olur.Böylece arama yapılabilir.
+Yazılan metin incelenebilir.Önceki karaktere gitmek için sesi aç tuşuna.Sonraki karakteri açmak için sesi kıs tuşuna basılır.
+Bu özellikleri uygulamaya entegre edersem görme engelliler de kullanabilir.Programdaki özelliklerin kullanılma şekli genişletilmiş olur.
+
+M.Buğra Çelik-Issue4:Sorting algorithm fix yani ,algoritmanın çalışma zamanıyla alakalı iyileştirmeleri içerir.Örneğin ,kodda 
+kullanılan integer değişkenleri yerine ,bazı yerlerde byte kullanılabilir.Başka bir deyişle ,koddaki gereksiz ,hafızada fazla yer 
+tutan değişkenlere düzenleme getirir.Ayrıca standart uygulama dosyaları tarihine göre sort ederken,yapacağım issue de sadece tarihine 
+göre değil,dosyaları türüne göre de sıralayacaktır.Bu, sıralamadan sonra dosyaların daha düzenli durması için gereklidir.
+
