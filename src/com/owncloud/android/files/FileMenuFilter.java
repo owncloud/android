@@ -222,13 +222,6 @@ public class FileMenuFilter {
             toShow.add(R.id.action_share_file);
         }
 
-        // SEE DETAILS
-        if (!isSingleFile()) {
-            toHide.add(R.id.action_see_details);
-        } else {
-            toShow.add(R.id.action_see_details);
-        }
-
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));

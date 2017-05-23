@@ -714,13 +714,6 @@ public class OCFileListFragment extends ExtendedListFragment {
                     dialog.show(getFragmentManager(), FileDetailFragment.FTAG_RENAME_FILE);
                     return true;
                 }
-                case R.id.action_see_details: {
-                    if (mActiveActionMode != null) {
-                        mActiveActionMode.finish();
-                    }
-                    mContainerActivity.showDetails(singleFile);
-                    return true;
-                }
                 case R.id.action_send_file: {
                     // Obtain the file
                     if (!singleFile.isDown()) {  // Download the file

@@ -228,14 +228,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
 
         // additional restriction for this fragment 
-        MenuItem item = menu.findItem(R.id.action_see_details);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        // additional restriction for this fragment
-        item = menu.findItem(R.id.action_move);
+        MenuItem item = menu.findItem(R.id.action_move);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
