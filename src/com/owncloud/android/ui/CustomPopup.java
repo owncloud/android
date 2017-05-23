@@ -50,10 +50,10 @@ public class CustomPopup {
         mWindow.setTouchInterceptor(new OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                    CustomPopup.this.dismiss();
-                    return true;
-                }
+                // if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                //     CustomPopup.this.dismiss();
+                //     return true;
+                // }
                 return false;
             }
         });
