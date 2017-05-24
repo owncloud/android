@@ -72,7 +72,7 @@
   <string name="filedetails_created">Loodud:</string>
   <string name="filedetails_modified">Muudetud:</string>
   <string name="filedetails_download">Lae alla</string>
-  <string name="filedetails_sync_file">Sünrooni</string>
+  <string name="filedetails_sync_file">Sünkrooni</string>
   <string name="filedetails_renamed_in_upload_msg">Fail nimetati üleslaadimise käigus ümber %1$ </string>
   <string name="list_layout">Nimekiri</string>
   <string name="action_share">Jaga</string>
@@ -241,7 +241,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="ssl_validator_label_certificate_fingerprint">Sõrmejälg:</string>
   <string name="certificate_load_problem">Tekkis tõrge sertifikaadi laadimisel.</string>
   <string name="ssl_validator_null_cert">Ei suuda kuvada sertifikaati.</string>
-  <string name="ssl_validator_no_info_about_error">- Vea kohta puudub info</string>
+  <string name="ssl_validator_no_info_about_error">- Info vea kohta puudub</string>
   <string name="placeholder_sentence">See on kohahoidja</string>
   <string name="placeholder_filename">placeholder.txt</string>
   <string name="placeholder_filetype">PNG pilt</string>
