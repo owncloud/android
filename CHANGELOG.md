@@ -1,9 +1,10 @@
 ## 2.4.0 (May 2017)
-- Video streaming.
-- Multiple share links.
-- Share plain text.
+- Video streaming
+- Multiple public links per file (OC X required)
+- Share with custom groups (OC X required)
+- Share plain text
 - UI improvements:
-	- Section file count in uploads view.
+	- Section file count in uploads view
 	- Edit dialog margin
 - Bugs fixed, including:
 	- Interrupted uploads and downloads due to Doze in Android 6 and 7
