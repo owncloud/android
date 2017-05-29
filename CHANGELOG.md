@@ -2,20 +2,19 @@
 - Video streaming
 - Multiple public links per file (OC X required)
 - Share with custom groups (OC X required)
-- Share plain text
-- UI improvements:
-	- Section file count in uploads view
-	- Edit dialog margin
-- Bugs fixed, including:
-	- Interrupted uploads and downloads due to Doze in Android 6 and 7
-	- App is minimized with drawer button in tablets
+- Automated retry of failed transfers in Android 6 and 7
+- Save shared text as new file
+- File count per section in uploads view
+- UI improvements, including:
+  + Share view update
+- Bug fixes
 
 ## 2.3.0 (March 2017)
 - Included privacy policy.
 - Error messages improvement.
 - Design/UI improvement: snackbars replace toasts.
 - Bugs fixed, including:
-    - Crash when other app uses same account name.
+  + Crash when other app uses same account name.
 
 ## 2.2.0 (December 2016)
 - Set folders as Available Offline
