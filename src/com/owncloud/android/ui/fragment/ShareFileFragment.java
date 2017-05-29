@@ -79,6 +79,8 @@ public class ShareFileFragment extends Fragment
     private static final String TAG = ShareFileFragment.class.getSimpleName();
     private static final String DEFAULT_NAME_SUFFIX = " (%1$d)";
 
+    private static final String QUOTE_START = "\\Q";
+    private static final String QUOTE_END = "\\E";
     private static final String DEFAULT_NAME_REGEX_SUFFIX = " \\((\\d+)\\)\\z";
     // matches suffix (end of the string with \z) in the form "(X)", where X is an integer of any length;
     // also captures the number to reference it later during the match;
@@ -260,7 +262,7 @@ public class ShareFileFragment extends Fragment
 
         String defaultName = getString(R.string.share_via_link_default_name_template,
                 mFile.getFileName());
-        String defaultNameNumberedRegex = defaultName + DEFAULT_NAME_REGEX_SUFFIX;
+        String defaultNameNumberedRegex = QUOTE_START + defaultName + QUOTE_END + DEFAULT_NAME_REGEX_SUFFIX;
 
         // Array with numbers already set in public link names
         ArrayList<Integer> usedNumbers = new ArrayList<>();

@@ -167,8 +167,8 @@ public class PreviewAudioFragment extends FileFragment {
         Log_OC.v(TAG, "onActivityCreated");
 
         OCFile file;
+        Bundle args = getArguments();
         if (savedInstanceState == null) {
-            Bundle args = getArguments();
             file = args.getParcelable(PreviewAudioFragment.EXTRA_FILE);
             setFile(file);
             mAccount = args.getParcelable(PreviewAudioFragment.EXTRA_ACCOUNT);
@@ -179,8 +179,14 @@ public class PreviewAudioFragment extends FileFragment {
             file = savedInstanceState.getParcelable(PreviewAudioFragment.EXTRA_FILE);
             setFile(file);
             mAccount = savedInstanceState.getParcelable(PreviewAudioFragment.EXTRA_ACCOUNT);
-            mSavedPlaybackPosition = savedInstanceState.getInt(PreviewAudioFragment.EXTRA_PLAY_POSITION);
-            mAutoplay = savedInstanceState.getBoolean(PreviewAudioFragment.EXTRA_PLAYING);
+            mSavedPlaybackPosition = savedInstanceState.getInt(
+                PreviewAudioFragment.EXTRA_PLAY_POSITION,
+                args.getInt(PreviewAudioFragment.EXTRA_PLAY_POSITION)
+            );
+            mAutoplay = savedInstanceState.getBoolean(
+                PreviewAudioFragment.EXTRA_PLAYING,
+                args.getBoolean(PreviewAudioFragment.EXTRA_PLAYING)
+            );
         }
 
         if (file == null) {
@@ -234,8 +240,10 @@ public class PreviewAudioFragment extends FileFragment {
 
         outState.putParcelable(PreviewAudioFragment.EXTRA_FILE, getFile());
         outState.putParcelable(PreviewAudioFragment.EXTRA_ACCOUNT, mAccount);
-        outState.putInt(PreviewAudioFragment.EXTRA_PLAY_POSITION, mMediaServiceBinder.getCurrentPosition());
-        outState.putBoolean(PreviewAudioFragment.EXTRA_PLAYING, mMediaServiceBinder.isPlaying());
+        if (mMediaServiceBinder != null) {
+            outState.putInt(PreviewAudioFragment.EXTRA_PLAY_POSITION, mMediaServiceBinder.getCurrentPosition());
+            outState.putBoolean(PreviewAudioFragment.EXTRA_PLAYING, mMediaServiceBinder.isPlaying());
+        }
     }
 
 
