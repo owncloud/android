@@ -327,6 +327,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="network_error_socket_exception">Er trad een fout op bij het verbinden met de server.</string>
   <string name="network_error_socket_timeout_exception">De server had te lang nodig om te reageren</string>
   <string name="network_error_connect_timeout_exception">De server had te lang nodig om te verbinden</string>
+  <string name="network_host_not_available">Server kon niet worden bereikt</string>
   <string name="forbidden_permissions">U mist autorisatie %s</string>
   <string name="forbidden_permissions_rename">om dit bestand te hernoemen</string>
   <string name="forbidden_permissions_delete">om dit bestand te verwijderen</string>
@@ -392,9 +393,14 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pref_behaviour_entries_move">verplaatst naar app map</string>
   <string name="share_dialog_title">Deel</string>
   <string name="share_file">Deel %1$s</string>
+  <string name="share_with_user_section_title">Gebruikers en Groepen</string>
   <string name="share_no_users">Nog geen gegevens met gebruikers gedeeld</string>
   <string name="share_incompatible_version">Om te delen met andere gebruikers, moet de server minimaal versie 8.2 hebben</string>
   <string name="share_add_user_or_group">Voeg gebruiker of groep toe</string>
+  <string name="share_via_link_section_title">Openbare links</string>
+  <string name="share_via_link_create_title">Creëren link om te delen</string>
+  <string name="share_via_link_edit_title">Bewerk link om te delen</string>
+  <string name="share_via_link_name_label">Naam link</string>
   <string name="share_cancel_public_link_button">Annuleren</string>
   <string name="share_confirm_public_link_button">Opslaan</string>
   <string name="share_via_link_expiration_date_label">Vervaltermijn</string>
@@ -446,6 +452,14 @@ Neem contact op met uw beheerder</string>
   <string name="previewing_video_not_supported">Voorbeeldvideo wordt niet ondersteund in jouw Android versie. De download start automatisch</string>
   <string name="streaming_position_not_available">\"Positie niet beschikbaar\"</string>
   <string name="error_no_network_connection">Apparaat is niet verbonden met een netwerk</string>
+  <string name="share_no_public_links">Nog geen openbare links aangemaakt</string>
+  <string name="share_no_link_in_this_share">Deze share heeft geen link</string>
+  <string name="share_warning_about_forwarding_public_links">Iedereen met de link heeft toegang tot het bestand of de map</string>
+  <string name="share_via_link_default_password">*****</string>
+  <string name="share_via_link_password_enforced_label">Wachtwoord *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Vervaldatum *</string>
+  <string name="share_via_link_expiration_date_explanation_label">De openbare link vervalt niet eerder dan %1$d dagen na het aanmaken</string>
+  <string name="share_via_link_default_name_template">%1$s link</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>

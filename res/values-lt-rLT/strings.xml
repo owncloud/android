@@ -340,12 +340,15 @@
   <string name="pref_behaviour_entries_keep_file">paliktas pradiniame aplanke</string>
   <string name="pref_behaviour_entries_move">perkelti į app aplanką</string>
   <string name="share_dialog_title">Dalintis</string>
+  <string name="share_with_user_section_title">Naudotojai ir grupės</string>
   <string name="share_no_users">Su vartotojais niekuo nesidalinama</string>
+  <string name="share_via_link_section_title">Viešos nuorodos</string>
   <string name="share_cancel_public_link_button">Atšaukti</string>
   <string name="share_confirm_public_link_button">Išsaugoti</string>
   <string name="share_via_link_expiration_date_label">Galiojimo laikas</string>
   <string name="share_via_link_password_label">Slaptažodis</string>
   <string name="share_via_link_password_title">Apsaugota</string>
+  <string name="share_via_link_edit_permission_label">Leisti įkėlimus</string>
   <string name="share_get_public_link_button">Gauti nuorodą</string>
   <string name="share_search">Ieškoti</string>
   <string name="search_users_and_groups_hint">Surasti vartotoją ar grupę</string>
@@ -359,5 +362,8 @@
   <string name="share_privilege_can_edit_delete">ištrinti</string>
   <string name="action_clear_successful_uploads">išvalyta sėkmingai</string>
   <string name="failed_upload_quota_exceeded_text">Nepakanka vietos paskyroje</string>
+  <string name="service_unavailable">Serveris nepasiekiamas</string>
   <string name="streaming_certificate_error">Nepavyksta pradėti transliacijos nes serverio sertifikatas nėra patikimas. Failas bus automatiškai atsiųstas.</string>
+  <string name="share_via_link_password_enforced_label">Slaptažodis</string>
+  <string name="share_via_link_default_name_template">%1$s nuoroda</string>
 </resources>
