@@ -502,6 +502,7 @@
     <string name="share_via_link_expiration_date_enforced_label">"Expiration *"</string>
     <string name="share_via_link_expiration_date_explanation_label">The public link will expire no later than %1$d days after it is created</string>
     <string name="share_via_link_default_name_template">%1$s link</string>
+    <string name="private_link_info">This is a private link, only people who have access to the file/folder can use it. Use it as a permanent link for yourself or to point others to files within shares.</string>
 
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>

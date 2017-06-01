@@ -50,6 +50,7 @@
                 android:layout_marginRight="@dimen/standard_half_margin"
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/shareFileIcon"
+                android:layout_toLeftOf="@+id/getPrivateLinkButton"
                 android:layout_toRightOf="@+id/shareFileIcon"
                 android:ellipsize="middle"
                 android:singleLine="true"

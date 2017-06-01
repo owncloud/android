@@ -146,45 +146,20 @@ public class FileOperationsHelper {
     public void copyOrSendPrivateLink(Context context, Account account, OCFile file) {
 
         try {
-            Uri uri = Uri.parse(com.owncloud.android.lib.common.accounts.
-                    AccountUtils.constructFullURLForAccount(context, account));
 
+            // Parse remoteId
             String remoteId = file.getRemoteId();
 
             String parsedRemoteId = remoteId.substring(0, Math.min(remoteId.length(), 8));
 
             String fileId = parsedRemoteId.replaceAll("[0]","");
 
-            String link = file.getRemotePath();
+            Uri uri = Uri.parse(com.owncloud.android.lib.common.accounts.
+                    AccountUtils.getUrlForFile(context, account, fileId));
 
-            Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
-            intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
-            intentToShareLink.setType("text/plain");
-            String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
-                    mFileActivity.getAccount()
-            );
-            if (username != null) {
-                intentToShareLink.putExtra(
-                        Intent.EXTRA_SUBJECT,
-                        mFileActivity.getString(
-                                R.string.subject_user_shared_with_you,
-                                username,
-                                mFileActivity.getFile().getFileName()
-                        )
-                );
-            } else {
-                intentToShareLink.putExtra(
-                        Intent.EXTRA_SUBJECT,
-                        mFileActivity.getString(
-                                R.string.subject_shared_with_you,
-                                mFileActivity.getFile().getFileName()
-                        )
-                );
-            }
+            String link = uri.toString();
 
-            String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
-            chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+            shareLink(link);
 
         } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
             e.printStackTrace();
@@ -275,34 +250,7 @@ public class FileOperationsHelper {
             return;
         }
 
-        Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
-        intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
-        intentToShareLink.setType("text/plain");
-        String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
-            mFileActivity.getAccount()
-        );
-        if (username != null) {
-            intentToShareLink.putExtra(
-                Intent.EXTRA_SUBJECT,
-                mFileActivity.getString(
-                    R.string.subject_user_shared_with_you,
-                    username,
-                    mFileActivity.getFile().getFileName()
-                )
-            );
-        } else {
-            intentToShareLink.putExtra(
-                Intent.EXTRA_SUBJECT,
-                mFileActivity.getString(
-                    R.string.subject_shared_with_you,
-                    mFileActivity.getFile().getFileName()
-                )
-            );
-        }
-
-        String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-        DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
-        chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+        shareLink(link);
     }
 
     /**
@@ -709,5 +657,42 @@ public class FileOperationsHelper {
         mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
 
         mFileActivity.showLoadingDialog(R.string.wait_checking_credentials);
+    }
+
+    /**
+     * Share link with other apps
+     *
+     * @param link link to share
+     */
+    private void shareLink(String link) {
+
+        Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
+        intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
+        intentToShareLink.setType("text/plain");
+        String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
+                mFileActivity.getAccount()
+        );
+        if (username != null) {
+            intentToShareLink.putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    mFileActivity.getString(
+                            R.string.subject_user_shared_with_you,
+                            username,
+                            mFileActivity.getFile().getFileName()
+                    )
+            );
+        } else {
+            intentToShareLink.putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    mFileActivity.getString(
+                            R.string.subject_shared_with_you,
+                            mFileActivity.getFile().getFileName()
+                    )
+            );
+        }
+
+        String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
+        DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
+        chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
     }
 }

@@ -34,7 +34,7 @@ import com.owncloud.android.lib.resources.status.OCCapability;
  * fragment to allow an interaction in fragments handling {@link OCShare}s
  * to be communicated to the parent activity and potentially other fragments
  * contained in that activity.
- * <p/>
+ *
  * See the Android Training lesson <a href=
  * "http://developer.android.com/training/basics/fragments/communicating.html"
  * >Communicating with Other Fragments</a> for more information.
