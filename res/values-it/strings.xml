@@ -452,9 +452,12 @@ Il Download del file inizierà automaticamente</string>
   <string name="error_no_network_connection">Il dispositivo non è collegato a nessuna rete</string>
   <string name="share_no_public_links">Ancora nessun collegamento pubblico è stato creato</string>
   <string name="share_no_link_in_this_share">Questa condivisione non ha collegamenti</string>
+  <string name="share_warning_about_forwarding_public_links">Chiunque sia in possesso del collegamento ha accesso al file/cartella</string>
   <string name="share_via_link_default_password">******</string>
   <string name="share_via_link_password_enforced_label">Password *</string>
   <string name="share_via_link_expiration_date_enforced_label">Scadenza *</string>
+  <string name="share_via_link_expiration_date_explanation_label">Il collegamento pubblico scadrà non più tardi di %1$d giorni dopo la sua creazione</string>
+  <string name="share_via_link_default_name_template">collegamento %1$s</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>
