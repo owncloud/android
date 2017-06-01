@@ -70,7 +70,7 @@
                 android:textSize="12sp" />
 
             <ImageView
-                android:id="@+id/getPublicLinkButton"
+                android:id="@+id/getPrivateLinkButton"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_alignParentRight="true"

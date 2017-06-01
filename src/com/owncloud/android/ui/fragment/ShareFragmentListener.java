@@ -21,8 +21,13 @@
 
 package com.owncloud.android.ui.fragment;
 
+import android.accounts.Account;
+import android.content.Context;
+
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.status.OCCapability;
 
 /**
  * This interface must be implemented by activities that contain this
@@ -35,6 +40,7 @@ import com.owncloud.android.lib.resources.shares.OCShare;
  * >Communicating with Other Fragments</a> for more information.
  */
 public interface ShareFragmentListener {
+    void copyOrSendPrivateLink(Account account, OCFile file);
     void showSearchUsersAndGroups();
     void showEditPrivateShare(OCShare share);
     void refreshSharesFromServer();

@@ -22,7 +22,9 @@
 
 package com.owncloud.android.ui.activity;
 
+import android.accounts.Account;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -135,6 +138,11 @@ public class ShareActivity extends FileActivity
         }
     }
 
+    @Override
+    public void copyOrSendPrivateLink(Account account, OCFile file) {
+        getFileOperationsHelper().copyOrSendPrivateLink(this, account, file);
+    }
+
     private void doShareWith(String shareeName, String dataAuthority) {
 
         ShareType shareType = UsersAndGroupsSearchProvider.getShareType(dataAuthority);
@@ -179,7 +187,6 @@ public class ShareActivity extends FileActivity
             );
         }
     }
-
 
     @Override
     public void showSearchUsersAndGroups() {

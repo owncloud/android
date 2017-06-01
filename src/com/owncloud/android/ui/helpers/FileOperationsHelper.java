@@ -24,9 +24,11 @@ package com.owncloud.android.ui.helpers;
 
 import android.accounts.Account;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 
@@ -130,6 +132,62 @@ public class FileOperationsHelper {
 
         } else {
             Log_OC.e(TAG, "Trying to open a NULL OCFile");
+        }
+    }
+
+    /**
+     * Show dialog to allow the user to choose an app to send the private link of an {@link OCFile},
+     * or copy it to clipboard.
+     *
+     * @param context
+     * @param file @param file {@link OCFile} which will be shared with internal users
+     * @param account
+     */
+    public void copyOrSendPrivateLink(Context context, Account account, OCFile file) {
+
+        try {
+            Uri uri = Uri.parse(com.owncloud.android.lib.common.accounts.
+                    AccountUtils.constructFullURLForAccount(context, account));
+
+            String remoteId = file.getRemoteId();
+
+            String parsedRemoteId = remoteId.substring(0, Math.min(remoteId.length(), 8));
+
+            String fileId = parsedRemoteId.replaceAll("[0]","");
+
+            String link = file.getRemotePath();
+
+            Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
+            intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
+            intentToShareLink.setType("text/plain");
+            String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
+                    mFileActivity.getAccount()
+            );
+            if (username != null) {
+                intentToShareLink.putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        mFileActivity.getString(
+                                R.string.subject_user_shared_with_you,
+                                username,
+                                mFileActivity.getFile().getFileName()
+                        )
+                );
+            } else {
+                intentToShareLink.putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        mFileActivity.getString(
+                                R.string.subject_shared_with_you,
+                                mFileActivity.getFile().getFileName()
+                        )
+                );
+            }
+
+            String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
+            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
+            chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+
+        } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -652,5 +710,4 @@ public class FileOperationsHelper {
 
         mFileActivity.showLoadingDialog(R.string.wait_checking_credentials);
     }
-
 }

@@ -25,6 +25,7 @@ package com.owncloud.android.ui.fragment;
 import android.accounts.Account;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -202,12 +203,22 @@ public class ShareFileFragment extends Fragment
             size.setText(DisplayUtils.bytesToHumanReadable(mFile.getFileLength(), getActivity()));
         }
 
+        // Private link button
+        ImageView getPrivateLinkButton = (ImageView) view.findViewById(R.id.getPrivateLinkButton);
+
+        getPrivateLinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.copyOrSendPrivateLink(mAccount, mFile);
+            }
+        });
+
         OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
         final boolean shareWithUsersEnable = (serverVersion != null && serverVersion.isSearchUsersSupported());
 
         TextView shareNoUsers = (TextView) view.findViewById(R.id.shareNoUsers);
 
-        //  Add User Button
+        //  Add User/Groups Button
         ImageButton addUserGroupButton = (ImageButton)
                 view.findViewById(R.id.addUserButton);
 
@@ -313,7 +324,6 @@ public class ShareFileFragment extends Fragment
 
         return defaultName + String.format(Locale.getDefault(), DEFAULT_NAME_SUFFIX, chosenNumber);
     }
-
 
     @Override
     public void copyOrSendPublicLink(OCShare share) {
