@@ -152,7 +152,7 @@ public class FileOperationsHelper {
 
             String parsedRemoteId = remoteId.substring(0, Math.min(remoteId.length(), 8));
 
-            String fileId = parsedRemoteId.replaceAll("[0]","");
+            String fileId = Integer.valueOf(parsedRemoteId).toString();
 
             Uri uri = Uri.parse(com.owncloud.android.lib.common.accounts.
                     AccountUtils.getUrlForFile(context, account, fileId));
