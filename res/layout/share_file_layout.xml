@@ -69,6 +69,14 @@
                 android:text="@string/placeholder_filesize"
                 android:textSize="12sp" />
 
+            <ImageView
+                android:id="@+id/getPublicLinkButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/standard_half_padding"
+                android:src="@drawable/copy_link" />
+
         </RelativeLayout>
 
         <View
@@ -174,13 +182,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/warning_background_color"
+                android:paddingBottom="@dimen/standard_padding"
                 android:paddingLeft="@dimen/standard_half_padding"
                 android:paddingRight="@dimen/standard_half_padding"
                 android:paddingTop="@dimen/standard_padding"
-                android:paddingBottom="@dimen/standard_padding"
                 android:text="@string/share_warning_about_forwarding_public_links"
-                android:textSize="15sp"
-                />
+                android:textSize="15sp" />
 
             <ListView
                 android:id="@+id/sharePublicLinksList"
