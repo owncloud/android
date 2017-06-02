@@ -118,12 +118,14 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
   <string name="uploader_upload_text_dialog_title">Vpišite ime za novo datoteko</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Imena datoteke ni mogoče izpustiti</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Ime datoteke ne sme biti daljše od %d znakov</string>
   <string name="uploader_upload_text_filename_hint">Ime datoteke</string>
   <string name="ssl_certificate_not_trusted">Potrdilo strežnika ni vredno zaupanja</string>
   <string name="uploads_view_title">Poslano</string>
   <string name="uploads_view_group_current_uploads">Trenutno</string>
   <string name="uploads_view_group_failed_uploads">Spodletelo (kliknite za ponovni poskus)</string>
   <string name="uploads_view_group_finished_uploads">Poslano</string>
+  <string name="uploads_view_group_file_count">%d datotek</string>
   <string name="uploads_view_group_file_count_single">Datoteka %d</string>
   <string name="uploads_view_upload_status_succeeded">Končano</string>
   <string name="uploads_view_upload_status_cancelled">Preklicano</string>
@@ -321,6 +323,7 @@
   <string name="error_cant_bind_to_operations_service">Kritična napaka: opravil ni možno izvesti</string>
   <string name="network_error_socket_exception">Med povezovanjem s strežnikom je prišlo do napake.</string>
   <string name="network_error_socket_timeout_exception">Odziv s strežnika je časovno pretekel</string>
+  <string name="network_error_connect_timeout_exception">Povezovanje s strežnikom je preteklo</string>
   <string name="network_host_not_available">Povezava s strežnikom trenutno ni mogoča</string>
   <string name="forbidden_permissions">Ni ustreznega dovoljenja %s</string>
   <string name="forbidden_permissions_rename">za preimenovanje datoteke.</string>
@@ -392,6 +395,9 @@
   <string name="share_incompatible_version">Za souporabo z drugimi uporabniki mora biti na strežniku nameščena vsaj različica 8.2.</string>
   <string name="share_add_user_or_group">Dodaj uporabnika ali skupino</string>
   <string name="share_via_link_section_title">Javne povezave</string>
+  <string name="share_via_link_create_title">Ustvari povezavo za souporabo</string>
+  <string name="share_via_link_edit_title">Uredi povezavo za souporabo</string>
+  <string name="share_via_link_name_label">Naziv povezave</string>
   <string name="share_cancel_public_link_button">Prekliči</string>
   <string name="share_confirm_public_link_button">Shrani</string>
   <string name="share_via_link_expiration_date_label">Datum preteka</string>
@@ -439,6 +445,9 @@
   <string name="streaming_unrecognized_input">Ta zapis videa ni podprt</string>
   <string name="streaming_file_not_found_error">Video datoteka ni več na voljo</string>
   <string name="streaming_position_not_available">»Položaj ni na voljo«</string>
+  <string name="share_no_public_links">Ni še ustvarjenih javnih povezav</string>
+  <string name="share_no_link_in_this_share">Ustvarjen predmet souporabe je brez povezave</string>
+  <string name="share_warning_about_forwarding_public_links">Vsak, ki ima povezavo ima dostop do datoteke ali mape</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Geslo *</string>
   <string name="share_via_link_expiration_date_enforced_label">Datum preteka *</string>
