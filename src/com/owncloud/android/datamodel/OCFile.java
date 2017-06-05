@@ -23,8 +23,6 @@
 package com.owncloud.android.datamodel;
 
 
-import java.io.File;
-
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -40,6 +38,8 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.io.File;
 
 import third_parties.daveKoeller.AlphanumComparator;
 
@@ -137,7 +137,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * Cached after first call, until changed.
      */
     private Uri mExposedFileUri;
-
+    public static final String FILES_PATH = "/f";
 
     /**
      * Create new {@link OCFile} with given path.
@@ -751,9 +751,10 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Manipulate file remote id to get private link
+     *
      * @param context
      * @param account
-     * @return
+     * @return private link for the current file
      */
     public String getPrivateLink(Context context, Account account) {
 
@@ -762,13 +763,22 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
         String fileId = Integer.valueOf(parsedRemoteId).toString();
 
-        String link = null;
+        String privateLink = null;
+
         try {
-            link = AccountUtils.getUrlForFile(context, account, fileId);
+
+            String baseUrl = AccountUtils.getBaseUrlForAccount(context, account);
+
+            if (baseUrl == null)
+                throw new AccountUtils.AccountNotFoundException(account, "Account not found", null);
+
+            privateLink = baseUrl + AccountUtils.INDEX_PATH + FILES_PATH + "/" + fileId;
+
         } catch (AccountUtils.AccountNotFoundException e) {
-            Log_OC.e(TAG, e.toString());
+
+            Log_OC.d(TAG, e.toString());
         }
 
-        return link;
+        return privateLink;
     }
 }
