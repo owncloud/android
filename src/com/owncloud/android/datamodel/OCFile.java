@@ -62,6 +62,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     public static final String PATH_SEPARATOR = "/";
     public static final String ROOT_PATH = PATH_SEPARATOR;
+    private final static int FILE_ID_LENGTH = 8;
 
     public enum AvailableOfflineStatus {
 
@@ -759,7 +760,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     public String getPrivateLink(Context context, Account account) {
 
         // Parse remoteId
-        String parsedRemoteId = mRemoteId.substring(0, Math.min(mRemoteId.length(), 8));
+        String parsedRemoteId = mRemoteId.substring(0, FILE_ID_LENGTH);
 
         String fileId = Integer.valueOf(parsedRemoteId).toString();
 
