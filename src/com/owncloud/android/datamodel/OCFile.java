@@ -37,7 +37,7 @@ import android.support.v4.content.FileProvider;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
@@ -764,10 +764,9 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
         String link = null;
         try {
-            link = com.owncloud.android.lib.common.accounts.
-                    AccountUtils.getUrlForFile(context, account, fileId);
-        } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
-            e.printStackTrace();
+            link = AccountUtils.getUrlForFile(context, account, fileId);
+        } catch (AccountUtils.AccountNotFoundException e) {
+            Log_OC.e(TAG, e.toString());
         }
 
         return link;
