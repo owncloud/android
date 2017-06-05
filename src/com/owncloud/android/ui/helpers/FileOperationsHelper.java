@@ -24,11 +24,9 @@ package com.owncloud.android.ui.helpers;
 
 import android.accounts.Account;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 import android.webkit.MimeTypeMap;
 
@@ -56,7 +54,7 @@ import java.util.List;
 public class FileOperationsHelper {
 
     private static final String TAG = FileOperationsHelper.class.getSimpleName();
-    
+
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
 
     private FileActivity mFileActivity = null;
@@ -81,7 +79,7 @@ public class FileOperationsHelper {
             intentForSavedMimeType.setFlags(
                     Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             );
-            
+
             Intent intentForGuessedMimeType = null;
             if (storagePath.lastIndexOf('.') >= 0) {
                 String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
@@ -139,31 +137,22 @@ public class FileOperationsHelper {
      * Show dialog to allow the user to choose an app to send the private link of an {@link OCFile},
      * or copy it to clipboard.
      *
-     * @param context
-     * @param file @param file {@link OCFile} which will be shared with internal users
+     * @param file    @param file {@link OCFile} which will be shared with internal users
      * @param account
      */
-    public void copyOrSendPrivateLink(Context context, Account account, OCFile file) {
+    public void copyOrSendPrivateLink(Account account, OCFile file) {
 
-        try {
+        // Parse remoteId
+        String privateLink = file.getPrivateLink(mFileActivity, account);
 
-            // Parse remoteId
-            String remoteId = file.getRemoteId();
-
-            String parsedRemoteId = remoteId.substring(0, Math.min(remoteId.length(), 8));
-
-            String fileId = Integer.valueOf(parsedRemoteId).toString();
-
-            Uri uri = Uri.parse(com.owncloud.android.lib.common.accounts.
-                    AccountUtils.getUrlForFile(context, account, fileId));
-
-            String link = uri.toString();
-
-            shareLink(link);
-
-        } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
-            e.printStackTrace();
+        if (privateLink == null) {
+            mFileActivity.showSnackMessage(
+                    mFileActivity.getString(R.string.file_private_link_error)
+            );
+            return;
         }
+
+        shareLink(privateLink);
     }
 
     /**
@@ -524,7 +513,7 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
         service.putExtra(OperationsService.EXTRA_NEWNAME, newFilename);
         mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        
+
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
@@ -546,7 +535,7 @@ public class FileOperationsHelper {
             service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         }
-        
+
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
@@ -559,7 +548,7 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_REMOTE_PATH, remotePath);
         service.putExtra(OperationsService.EXTRA_CREATE_FULL_PATH, createFullPath);
         mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        
+
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 

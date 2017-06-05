@@ -22,12 +22,9 @@
 package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
-import android.content.Context;
 
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.resources.shares.OCShare;
-import com.owncloud.android.lib.resources.status.OCCapability;
 
 /**
  * This interface must be implemented by activities that contain this

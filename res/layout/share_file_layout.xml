@@ -52,6 +52,7 @@
                 android:layout_toEndOf="@+id/shareFileIcon"
                 android:layout_toLeftOf="@+id/getPrivateLinkButton"
                 android:layout_toRightOf="@+id/shareFileIcon"
+                android:layout_toStartOf="@+id/getPrivateLinkButton"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:text="@string/placeholder_filename"

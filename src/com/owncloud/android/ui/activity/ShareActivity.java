@@ -24,7 +24,6 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,13 +46,13 @@ import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
+import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
-import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask;
 
 
 /**
@@ -140,7 +139,7 @@ public class ShareActivity extends FileActivity
 
     @Override
     public void copyOrSendPrivateLink(Account account, OCFile file) {
-        getFileOperationsHelper().copyOrSendPrivateLink(this, account, file);
+        getFileOperationsHelper().copyOrSendPrivateLink(account, file);
     }
 
     private void doShareWith(String shareeName, String dataAuthority) {
