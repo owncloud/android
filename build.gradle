@@ -61,6 +61,9 @@ dependencies {
     // Espresso core
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
 
+    // Espresso web
+    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
+
     // UIAutomator - for cross-app UI tests, and to grant screen is turned on in Espresso tests
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 
@@ -90,6 +93,10 @@ android {
         testInstrumentationRunnerArgument "TEST_PASSWORD2", "\"$System.env.OCTEST_APP_PASSWORD2\""
         testInstrumentationRunnerArgument "TEST_SERVER_URL", "\"$System.env.OCTEST_SERVER_BASE_URL\""
         testInstrumentationRunnerArgument "TRUSTED", "\"$System.env.OCTEST_SERVER_TRUSTED\""
+        testInstrumentationRunnerArgument "TEST_USERNAME_ID", "\"$System.env.OCTEST_WEB_USERFIELD\""
+        testInstrumentationRunnerArgument "TEST_PASSWORD_ID", "\"$System.env.OCTEST_WEB_PASSFIELD\""
+        testInstrumentationRunnerArgument "TEST_SUBMIT_XPATH", "\"$System.env.OCTEST_WEB_SUBMITXPATH\""
+
 
         jackOptions {
             enabled false
