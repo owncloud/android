@@ -23,6 +23,7 @@ package com.owncloud.android.authentication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -50,6 +51,7 @@ import java.lang.reflect.Field;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -173,7 +175,7 @@ public class SAMLAuthenticatorActivityTest {
      *  Login with SAML. Supported with non-secured servers under https
      */
     @Test
-    public void test_check_login_saml()
+    public void test1_check_login_saml()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Start");
@@ -215,7 +217,6 @@ public class SAMLAuthenticatorActivityTest {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
         else {
-
             Field f = Activity.class.getDeclaredField(RESULT_CODE);
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
@@ -227,6 +228,63 @@ public class SAMLAuthenticatorActivityTest {
 
     }
 
+    @Test
+    public void test2_check_login_saml_orientation_changes()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test Check Login SAML Orientation Changes Start");
+
+        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+
+        onView(withId(R.id.hostUrlInput)).perform(replaceText(testServerURL));
+
+        //Set landscape
+        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        //Needed to click on the screen to validate the URL
+        onView(withId(R.id.thumbnail)).perform(closeSoftKeyboard(), click());
+
+        //Certificate acceptance in case of non-trusted or expirated
+        if (servertype == ServerType.NON_TRUSTED) {
+
+            SystemClock.sleep(WAIT_CONNECTION);
+            onView(withId(R.id.ok)).perform(click());
+        }
+
+        SystemClock.sleep(WAIT_CONNECTION);
+
+        //Check that the URL is valid
+        onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
+
+        //Go to idp webview
+        onView(withId(R.id.buttonOK)).perform(click());
+
+        SystemClock.sleep(WAIT_CONNECTION);
+
+        //Fill credentials on the WebView.
+        onWebView().withElement(findElement(Locator.NAME, webViewUsernameId)).perform(webKeys(testUser));
+        onWebView().withElement(findElement(Locator.NAME, webViewPasswordId)).perform(webKeys(testPassword));
+
+        //Set portrait
+        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        onWebView().withElement(findElement(Locator.XPATH, webViewSubmitXPath)).perform(webClick());
+
+        // Check that the Activity ends after clicking
+        SystemClock.sleep(WAIT_LOGIN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
+        else {
+            Field f = Activity.class.getDeclaredField(RESULT_CODE);
+            f.setAccessible(true);
+            int mResultCode = f.getInt(mActivityRule.getActivity());
+            assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
+
+        }
+
+        Log_OC.i(LOG_TAG, "Test Check Login SAML Orientation Changes Passed");
+
+    }
 
     @After
     public void tearDown() throws Exception {

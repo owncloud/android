@@ -51,7 +51,7 @@ public class AccountsManager {
 
         // obtaining an AccountManager instance
         AccountManager accountManager = AccountManager.get(context);
-        Account account = new Account(username+"@"+baseUrl, accountType);
+        Account account = new Account(username+"@"+regularURL(baseUrl), accountType);
         accountManager.addAccountExplicitly(account, password, null);
 
         // include account version, user, server version and token with the new account
@@ -97,4 +97,18 @@ public class AccountsManager {
             }
         }
     }
+
+
+    //To regularize the URL to build the URL inserted in the account device
+    public static String regularURL(String url){
+        String url_regularized = null;
+        if (url.startsWith("https://")){
+            url_regularized = url.substring(8, url.length()); //skipping the protocol
+        } else if (url.startsWith("http://")) {
+            url_regularized = url.substring(7, url.length()); //skipping the protocol
+        } else
+            return url;
+        return url_regularized;
+    }
+
 }
