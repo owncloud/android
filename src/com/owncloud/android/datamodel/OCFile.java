@@ -138,7 +138,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * Cached after first call, until changed.
      */
     private Uri mExposedFileUri;
-    public static final String FILES_PATH = "/f";
+    public static final String PRIVATE_LINK_PATH = "/index.php/f/";
 
     /**
      * Create new {@link OCFile} with given path.
@@ -777,7 +777,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
             if (baseUrl == null)
                 throw new AccountUtils.AccountNotFoundException(account, "Account not found", null);
 
-            privateLink = baseUrl + AccountUtils.INDEX_PATH + FILES_PATH + "/" + fileId;
+            privateLink = baseUrl + PRIVATE_LINK_PATH + fileId;
 
         } catch (AccountUtils.AccountNotFoundException e) {
 
