@@ -759,9 +759,13 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      */
     public String getPrivateLink(Context context, Account account) {
 
-        // Parse remoteId
+        /**
+         * File remote id looks like this: 00000003ocr2n5bhxjuy
+         * Only the FILE_ID_LENGTH first characters are needed, which correspond to fileId: 00000003
+         */
         String parsedRemoteId = mRemoteId.substring(0, FILE_ID_LENGTH);
 
+        // Delete leading zeros to get the file id itself and build properly the url
         String fileId = Integer.valueOf(parsedRemoteId).toString();
 
         String privateLink = null;
