@@ -72,6 +72,7 @@ public class AuthenticatorActivityTest {
     private static final int WAIT_INITIAL = 1000;
     private static final int WAIT_LOGIN = 5000;
     private static final int WAIT_CONNECTION = 2500;
+    private static final int WAIT_CHANGE = 1000;
 
     private static final String ERROR_MESSAGE = "Activity not finished";
     private static final String SUFFIX_BROWSER = "/index.php/apps/files/";
@@ -341,6 +342,7 @@ public class AuthenticatorActivityTest {
 
         //Set landscape
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        SystemClock.sleep(WAIT_CHANGE);
 
         onView(withId(R.id.hostUrlInput)).perform(closeSoftKeyboard(),
                 replaceText(testServerURL), closeSoftKeyboard());
@@ -351,6 +353,7 @@ public class AuthenticatorActivityTest {
 
         //Set portrait
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(WAIT_CHANGE);
 
         onView(withId(R.id.buttonOK)).perform(closeSoftKeyboard(), click());
 

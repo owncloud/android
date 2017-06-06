@@ -76,6 +76,7 @@ public class SAMLAuthenticatorActivityTest {
     private static final int WAIT_INITIAL = 1000;
     private static final int WAIT_LOGIN = 5000;
     private static final int WAIT_CONNECTION = 2500;
+    private static final int WAIT_CHANGE = 1000;
 
     private static final String ERROR_MESSAGE = "Activity not finished";
     private static final String RESULT_CODE = "mResultCode";
@@ -240,17 +241,12 @@ public class SAMLAuthenticatorActivityTest {
 
         //Set landscape
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        SystemClock.sleep(WAIT_CHANGE);
 
         //Needed to click on the screen to validate the URL
         onView(withId(R.id.thumbnail)).perform(closeSoftKeyboard(), click());
 
-        //Certificate acceptance in case of non-trusted or expirated
-        if (servertype == ServerType.NON_TRUSTED) {
-
-            SystemClock.sleep(WAIT_CONNECTION);
-            onView(withId(R.id.ok)).perform(click());
-        }
-
+        //Here we guess that the certificate was accepted in first test
         SystemClock.sleep(WAIT_CONNECTION);
 
         //Check that the URL is valid
@@ -267,6 +263,7 @@ public class SAMLAuthenticatorActivityTest {
 
         //Set portrait
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(WAIT_CHANGE);
 
         onWebView().withElement(findElement(Locator.XPATH, webViewSubmitXPath)).perform(webClick());
 
