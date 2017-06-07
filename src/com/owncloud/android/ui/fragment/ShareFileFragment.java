@@ -38,6 +38,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -74,7 +75,7 @@ import java.util.Locale;
  */
 public class ShareFileFragment extends Fragment
         implements ShareUserListAdapter.ShareUserAdapterListener, SharePublicLinkListAdapter.
-        SharePublicLinkAdapterListener{
+        SharePublicLinkAdapterListener {
 
     private static final String TAG = ShareFileFragment.class.getSimpleName();
     private static final String DEFAULT_NAME_SUFFIX = " (%1$d)";
@@ -202,12 +203,31 @@ public class ShareFileFragment extends Fragment
             size.setText(DisplayUtils.bytesToHumanReadable(mFile.getFileLength(), getActivity()));
         }
 
+        // Private link button
+        ImageView getPrivateLinkButton = (ImageView) view.findViewById(R.id.getPrivateLinkButton);
+
+        getPrivateLinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.copyOrSendPrivateLink(mAccount, mFile);
+            }
+        });
+
+        getPrivateLinkButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                // Show a toast message explaining what a private link is
+                Toast.makeText(getActivity(), R.string.private_link_info, Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
         OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
         final boolean shareWithUsersEnable = (serverVersion != null && serverVersion.isSearchUsersSupported());
 
         TextView shareNoUsers = (TextView) view.findViewById(R.id.shareNoUsers);
 
-        //  Add User Button
+        //  Add User/Groups Button
         ImageButton addUserGroupButton = (ImageButton)
                 view.findViewById(R.id.addUserButton);
 
@@ -270,7 +290,7 @@ public class ShareFileFragment extends Fragment
         // Inspect public links for default names already used
         boolean isDefaultNameSet = false;
         String number;
-        for (OCShare share: mPublicLinks) {
+        for (OCShare share : mPublicLinks) {
             if (defaultName.equals(share.getName())) {
                 isDefaultNameSet = true;
             } else if (share.getName().matches(defaultNameNumberedRegex)) {
@@ -293,13 +313,13 @@ public class ShareFileFragment extends Fragment
 
         // Search for lowest unused number
         int chosenNumber = -1;
-        if (usedNumbers.size() == 0 || usedNumbers.get(0) != 2 ) {
+        if (usedNumbers.size() == 0 || usedNumbers.get(0) != 2) {
             chosenNumber = 2;
 
         } else {
             for (int i = 0; i < usedNumbers.size() - 1; i++) {
                 int current = usedNumbers.get(i);
-                int next = usedNumbers.get(i+1);
+                int next = usedNumbers.get(i + 1);
                 if (next - current > 1) {
                     chosenNumber = current + 1;
                     break;
@@ -313,7 +333,6 @@ public class ShareFileFragment extends Fragment
 
         return defaultName + String.format(Locale.getDefault(), DEFAULT_NAME_SUFFIX, chosenNumber);
     }
-
 
     @Override
     public void copyOrSendPublicLink(OCShare share) {
@@ -483,7 +502,7 @@ public class ShareFileFragment extends Fragment
      */
     private void updateListOfPublicLinks() {
 
-        mPublicLinksAdapter = new SharePublicLinkListAdapter (
+        mPublicLinksAdapter = new SharePublicLinkListAdapter(
                 getActivity(),
                 R.layout.share_public_link_item,
                 mPublicLinks,
@@ -531,7 +550,7 @@ public class ShareFileFragment extends Fragment
         return (LinearLayout) getView().findViewById(R.id.shareViaLinkSection);
     }
 
-    private ImageButton getAddPublicLinkButton () {
+    private ImageButton getAddPublicLinkButton() {
         return (ImageButton) getView().findViewById(R.id.addPublicLinkButton);
     }
 

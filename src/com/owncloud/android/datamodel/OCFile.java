@@ -23,8 +23,7 @@
 package com.owncloud.android.datamodel;
 
 
-import java.io.File;
-
+import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -36,8 +35,11 @@ import android.support.v4.content.FileProvider;
 import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.R;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.io.File;
 
 import third_parties.daveKoeller.AlphanumComparator;
 
@@ -60,6 +62,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     public static final String PATH_SEPARATOR = "/";
     public static final String ROOT_PATH = PATH_SEPARATOR;
+    private final static int FILE_ID_LENGTH = 8;
 
     public enum AvailableOfflineStatus {
 
@@ -135,7 +138,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
      * Cached after first call, until changed.
      */
     private Uri mExposedFileUri;
-
+    public static final String PRIVATE_LINK_PATH = "/index.php/f/";
 
     /**
      * Create new {@link OCFile} with given path.
@@ -747,4 +750,40 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         setEtagInConflict(sourceFile.getEtagInConflict());
     }
 
+    /**
+     * Manipulate file remote id to get private link
+     *
+     * @param context
+     * @param account
+     * @return private link for the current file
+     */
+    public String getPrivateLink(Context context, Account account) {
+
+        /**
+         * File remote id looks like this: 00000003ocr2n5bhxjuy
+         * Only the FILE_ID_LENGTH first characters are needed, which correspond to fileId: 00000003
+         */
+        String parsedRemoteId = mRemoteId.substring(0, FILE_ID_LENGTH);
+
+        // Delete leading zeros to get the file id itself and build the private link properly
+        String fileId = Integer.valueOf(parsedRemoteId).toString();
+
+        String privateLink = null;
+
+        try {
+
+            String baseUrl = AccountUtils.getBaseUrlForAccount(context, account);
+
+            if (baseUrl == null)
+                throw new AccountUtils.AccountNotFoundException(account, "Account not found", null);
+
+            privateLink = baseUrl + PRIVATE_LINK_PATH + fileId;
+
+        } catch (AccountUtils.AccountNotFoundException e) {
+
+            Log_OC.d(TAG, e.toString());
+        }
+
+        return privateLink;
+    }
 }

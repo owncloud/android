@@ -22,6 +22,7 @@
 
 package com.owncloud.android.ui.activity;
 
+import android.accounts.Account;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,6 +33,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -44,13 +46,13 @@ import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.operations.UpdateShareViaLinkOperation;
 import com.owncloud.android.providers.UsersAndGroupsSearchProvider;
+import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.ui.fragment.EditShareFragment;
 import com.owncloud.android.ui.fragment.PublicShareDialogFragment;
 import com.owncloud.android.ui.fragment.SearchShareesFragment;
 import com.owncloud.android.ui.fragment.ShareFileFragment;
 import com.owncloud.android.ui.fragment.ShareFragmentListener;
-import com.owncloud.android.ui.asynctasks.GetSharesForFileAsyncTask;
 
 
 /**
@@ -135,6 +137,11 @@ public class ShareActivity extends FileActivity
         }
     }
 
+    @Override
+    public void copyOrSendPrivateLink(Account account, OCFile file) {
+        getFileOperationsHelper().copyOrSendPrivateLink(account, file);
+    }
+
     private void doShareWith(String shareeName, String dataAuthority) {
 
         ShareType shareType = UsersAndGroupsSearchProvider.getShareType(dataAuthority);
@@ -179,7 +186,6 @@ public class ShareActivity extends FileActivity
             );
         }
     }
-
 
     @Override
     public void showSearchUsersAndGroups() {

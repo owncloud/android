@@ -54,7 +54,7 @@ import java.util.List;
 public class FileOperationsHelper {
 
     private static final String TAG = FileOperationsHelper.class.getSimpleName();
-    
+
     private static final String FTAG_CHOOSER_DIALOG = "CHOOSER_DIALOG";
 
     private FileActivity mFileActivity = null;
@@ -79,7 +79,7 @@ public class FileOperationsHelper {
             intentForSavedMimeType.setFlags(
                     Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             );
-            
+
             Intent intentForGuessedMimeType = null;
             if (storagePath.lastIndexOf('.') >= 0) {
                 String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
@@ -131,6 +131,28 @@ public class FileOperationsHelper {
         } else {
             Log_OC.e(TAG, "Trying to open a NULL OCFile");
         }
+    }
+
+    /**
+     * Show dialog to allow the user to choose an app to send the private link of an {@link OCFile},
+     * or copy it to clipboard.
+     *
+     * @param file    @param file {@link OCFile} which will be shared with internal users
+     * @param account
+     */
+    public void copyOrSendPrivateLink(Account account, OCFile file) {
+
+        // Parse remoteId
+        String privateLink = file.getPrivateLink(mFileActivity, account);
+
+        if (privateLink == null) {
+            mFileActivity.showSnackMessage(
+                    mFileActivity.getString(R.string.file_private_link_error)
+            );
+            return;
+        }
+
+        shareLink(privateLink);
     }
 
     /**
@@ -217,34 +239,7 @@ public class FileOperationsHelper {
             return;
         }
 
-        Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
-        intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
-        intentToShareLink.setType("text/plain");
-        String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
-            mFileActivity.getAccount()
-        );
-        if (username != null) {
-            intentToShareLink.putExtra(
-                Intent.EXTRA_SUBJECT,
-                mFileActivity.getString(
-                    R.string.subject_user_shared_with_you,
-                    username,
-                    mFileActivity.getFile().getFileName()
-                )
-            );
-        } else {
-            intentToShareLink.putExtra(
-                Intent.EXTRA_SUBJECT,
-                mFileActivity.getString(
-                    R.string.subject_shared_with_you,
-                    mFileActivity.getFile().getFileName()
-                )
-            );
-        }
-
-        String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-        DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
-        chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+        shareLink(link);
     }
 
     /**
@@ -518,7 +513,7 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
         service.putExtra(OperationsService.EXTRA_NEWNAME, newFilename);
         mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        
+
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
@@ -540,7 +535,7 @@ public class FileOperationsHelper {
             service.putExtra(OperationsService.EXTRA_REMOVE_ONLY_LOCAL, onlyLocalCopy);
             mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
         }
-        
+
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
@@ -553,7 +548,7 @@ public class FileOperationsHelper {
         service.putExtra(OperationsService.EXTRA_REMOTE_PATH, remotePath);
         service.putExtra(OperationsService.EXTRA_CREATE_FULL_PATH, createFullPath);
         mWaitingForOpId =  mFileActivity.getOperationsServiceBinder().queueNewOperation(service);
-        
+
         mFileActivity.showLoadingDialog(R.string.wait_a_moment);
     }
 
@@ -653,4 +648,40 @@ public class FileOperationsHelper {
         mFileActivity.showLoadingDialog(R.string.wait_checking_credentials);
     }
 
+    /**
+     * Share link with other apps
+     *
+     * @param link link to share
+     */
+    private void shareLink(String link) {
+
+        Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
+        intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
+        intentToShareLink.setType("text/plain");
+        String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
+                mFileActivity.getAccount()
+        );
+        if (username != null) {
+            intentToShareLink.putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    mFileActivity.getString(
+                            R.string.subject_user_shared_with_you,
+                            username,
+                            mFileActivity.getFile().getFileName()
+                    )
+            );
+        } else {
+            intentToShareLink.putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    mFileActivity.getString(
+                            R.string.subject_shared_with_you,
+                            mFileActivity.getFile().getFileName()
+                    )
+            );
+        }
+
+        String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
+        DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
+        chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+    }
 }
