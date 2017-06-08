@@ -457,6 +457,8 @@
   <string name="share_via_link_expiration_date_enforced_label">Expiração *</string>
   <string name="share_via_link_expiration_date_explanation_label">O link público expirará até %1$d dias após sua criação</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
+  <string name="private_link_info">Este é um link privado, somente pessoas que tenham acesso ao arquivo/pasta podem usa-lo. Use isso como um link permanente para você mesmo ou apontar para outros arquivos contidos nesse compartilhamento.</string>
+  <string name="file_private_link_error">Ocorreu um erro ao tentar ter acesso ao link privado para este arquivo</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

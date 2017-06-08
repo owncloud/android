@@ -14,7 +14,7 @@
   <string name="actionbar_sort">Sırala</string>
   <string name="actionbar_sort_title">Şuna göre sırala</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">En Yeni-En Eski</string>
+  <string name="actionbar_sort_by_date">En Yeni - En Eski</string>
   <string name="actionbar_sort_by_size">En Büyük - En Küçük</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
@@ -220,7 +220,7 @@
         </string>
   <string name="auth_can_not_auth_against_server">Bu sunucuya karşı kimlik doğrulama yapılamaz</string>
   <string name="auth_account_does_not_exist">Hesap henüz cihazda mevcut değil</string>
-  <string name="set_available_offline">Çevrimdışı erişilebilir işaretle</string>
+  <string name="set_available_offline">Çevrimdışı erişilebilir olarak işaretle</string>
   <string name="unset_available_offline">Çevrimdışı erişimden kaldır</string>
   <string name="common_rename">Yeniden adlandır</string>
   <string name="common_remove">Kaldır</string>
