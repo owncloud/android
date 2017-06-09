@@ -135,7 +135,6 @@ public class SAMLAuthenticatorActivityTest {
                     .getTargetContext();
             Intent result = new Intent(targetContext, AuthenticatorActivity.class);
             result.putExtra(EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
-            result.putExtra(EXTRA_ACCOUNT, "");
             return result;
         }
     };

@@ -79,6 +79,7 @@ public class AuthenticatorActivityTest {
     private static final String RESULT_CODE = "mResultCode";
     private static final String LOG_TAG = "LoginSuite";
     private static final String USER_INEXISTENT = "userinexistent";
+    private static final String HTTP_SCHEME = "http://";
 
     private Context targetContext = null;
 
@@ -146,7 +147,6 @@ public class AuthenticatorActivityTest {
                     .getTargetContext();
             Intent result = new Intent(targetContext, AuthenticatorActivity.class);
             result.putExtra(EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
-            result.putExtra(EXTRA_ACCOUNT, "");
             return result;
         }
     };
@@ -583,7 +583,7 @@ public class AuthenticatorActivityTest {
 
         switch (servertype){
             case HTTP:
-                if (testServerURL.startsWith("http"))
+                if (testServerURL.startsWith(HTTP_SCHEME))
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_connection_established)));
                 else
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));
