@@ -69,15 +69,17 @@ public class AuthenticatorActivityTest {
     public static final String EXTRA_ACTION = "ACTION";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
-    private static final int WAIT_INITIAL = 1000;
-    private static final int WAIT_LOGIN = 5000;
-    private static final int WAIT_CONNECTION = 2500;
+    private static final int WAIT_INITIAL_MS = 1000;
+    private static final int WAIT_LOGIN_MS = 5000;
+    private static final int WAIT_CONNECTION_MS = 2500;
+    private static final int WAIT_CHANGE_MS = 1000;
 
     private static final String ERROR_MESSAGE = "Activity not finished";
     private static final String SUFFIX_BROWSER = "/index.php/apps/files/";
     private static final String RESULT_CODE = "mResultCode";
     private static final String LOG_TAG = "LoginSuite";
     private static final String USER_INEXISTENT = "userinexistent";
+    private static final String HTTP_SCHEME = "http://";
 
     private Context targetContext = null;
 
@@ -86,7 +88,7 @@ public class AuthenticatorActivityTest {
     private String testPassword = null;
     private String testPassword2 = null;
     private String testServerURL = null;
-    public enum ServerType {
+    private enum ServerType {
         /*
          * Server with http
          */
@@ -133,7 +135,7 @@ public class AuthenticatorActivityTest {
 
     }
 
-    public ServerType servertype;
+    private ServerType servertype;
 
     @Rule
     public ActivityTestRule<AuthenticatorActivity> mActivityRule = new ActivityTestRule<AuthenticatorActivity>(
@@ -145,7 +147,6 @@ public class AuthenticatorActivityTest {
                     .getTargetContext();
             Intent result = new Intent(targetContext, AuthenticatorActivity.class);
             result.putExtra(EXTRA_ACTION, AuthenticatorActivity.ACTION_CREATE);
-            result.putExtra(EXTRA_ACCOUNT, "");
             return result;
         }
     };
@@ -161,7 +162,7 @@ public class AuthenticatorActivityTest {
         testServerURL = arguments.getString("TEST_SERVER_URL");
         servertype = ServerType.fromValue(Integer.parseInt(arguments.getString("TRUSTED")));
 
-        // UiDevice available form API level 17
+        // UiDevice available from API level 17
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
             /*Point[] coordinates = new Point[4];
@@ -204,12 +205,12 @@ public class AuthenticatorActivityTest {
                     .perform(replaceText(testServerURL), closeSoftKeyboard());
             onView(withId(R.id.account_username)).perform(click());
 
-            SystemClock.sleep(WAIT_CONNECTION);
+            SystemClock.sleep(WAIT_CONNECTION_MS);
 
             //certif not accepted
             onView(withId(R.id.cancel)).perform(click());
 
-            SystemClock.sleep(WAIT_CONNECTION);
+            SystemClock.sleep(WAIT_CONNECTION_MS);
 
             // Check that login button keeps on being disabled
             onView(withId(R.id.buttonOK))
@@ -249,7 +250,7 @@ public class AuthenticatorActivityTest {
                     .perform(replaceText(testServerURL), closeSoftKeyboard());
             onView(withId(R.id.account_username)).perform(click());
 
-            SystemClock.sleep(WAIT_CONNECTION);
+            SystemClock.sleep(WAIT_CONNECTION_MS);
 
             //Check untrusted certificate, opening the details
             onView(withId(R.id.details_btn)).perform(click());
@@ -263,7 +264,7 @@ public class AuthenticatorActivityTest {
             //Closing the view
             onView(withId(R.id.ok)).perform(click());
 
-            SystemClock.sleep(WAIT_CONNECTION);
+            SystemClock.sleep(WAIT_CONNECTION_MS);
             //Check correct connection message
             onView(withId(R.id.server_status_text))
                     .check(matches(withText(R.string.auth_secure_connection)));
@@ -279,7 +280,7 @@ public class AuthenticatorActivityTest {
             onView(withId(R.id.buttonOK)).perform(click());
 
             // Check that the Activity ends after clicking
-            SystemClock.sleep(WAIT_LOGIN);
+            SystemClock.sleep(WAIT_LOGIN_MS);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
                 assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
             else {
@@ -287,7 +288,6 @@ public class AuthenticatorActivityTest {
                 f.setAccessible(true);
                 int mResultCode = f.getInt(mActivityRule.getActivity());
                 assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
-
             }
 
             Log_OC.i(LOG_TAG, "Test accept not secure passed");
@@ -306,7 +306,7 @@ public class AuthenticatorActivityTest {
         Log_OC.i(LOG_TAG, "Test Check Login Correct Start");
 
         //To avoid the short delay when the activity starts
-        SystemClock.sleep(WAIT_INITIAL);
+        SystemClock.sleep(WAIT_INITIAL_MS);
 
         // Check that login button is disabled
         onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
@@ -314,7 +314,7 @@ public class AuthenticatorActivityTest {
         setFields(testServerURL, testUser, testPassword);
 
         // Check that the Activity ends after clicking
-        SystemClock.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN_MS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
         else {
@@ -323,7 +323,6 @@ public class AuthenticatorActivityTest {
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
             assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
-
         }
 
         Log_OC.i(LOG_TAG, "Test Check Login Correct Passed");
@@ -341,6 +340,7 @@ public class AuthenticatorActivityTest {
 
         //Set landscape
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        SystemClock.sleep(WAIT_CHANGE_MS);
 
         onView(withId(R.id.hostUrlInput)).perform(closeSoftKeyboard(),
                 replaceText(testServerURL), closeSoftKeyboard());
@@ -351,11 +351,12 @@ public class AuthenticatorActivityTest {
 
         //Set portrait
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SystemClock.sleep(WAIT_CHANGE_MS);
 
         onView(withId(R.id.buttonOK)).perform(closeSoftKeyboard(), click());
 
         // Check that the Activity ends after clicking
-        SystemClock.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN_MS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
         else {
@@ -363,7 +364,6 @@ public class AuthenticatorActivityTest {
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
             assertTrue(ERROR_MESSAGE, mResultCode != Activity.RESULT_OK);
-
         }
 
         Log_OC.i(LOG_TAG, "Test Check Login Orientation Changes Passed");
@@ -384,7 +384,7 @@ public class AuthenticatorActivityTest {
         setFields(testServerURL, testUser2, testPassword2);
 
         // Check that the Activity ends after clicking
-        SystemClock.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN_MS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
         else {
@@ -393,7 +393,6 @@ public class AuthenticatorActivityTest {
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
             assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
-
         }
 
         Log_OC.i(LOG_TAG, "Test Check Login Special Characters Passed");
@@ -485,7 +484,7 @@ public class AuthenticatorActivityTest {
         setFields(testServerURL, UserBlanks, testPassword);
 
         // Check that the Activity ends after clicking
-        SystemClock.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN_MS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
         else {
@@ -493,7 +492,6 @@ public class AuthenticatorActivityTest {
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
             assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
-
         }
 
         Log_OC.i(LOG_TAG, "Test Check Trimmed Blanks Start");
@@ -517,7 +515,7 @@ public class AuthenticatorActivityTest {
         setFields(connectionString, testUser2, testPassword2);
 
         // Check that the Activity ends after clicking
-        SystemClock.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN_MS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
         else {
@@ -525,7 +523,6 @@ public class AuthenticatorActivityTest {
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
             assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
-
         }
 
         Log_OC.i(LOG_TAG, "Test Check URL Browser Passed");
@@ -545,7 +542,7 @@ public class AuthenticatorActivityTest {
                 .perform(replaceText(testServerURL.toUpperCase()), closeSoftKeyboard());
         onView(withId(R.id.account_username)).perform(click());
 
-        SystemClock.sleep(WAIT_CONNECTION);
+        SystemClock.sleep(WAIT_CONNECTION_MS);
 
         checkStatusMessage();
 
@@ -564,7 +561,7 @@ public class AuthenticatorActivityTest {
                 .perform(replaceText(connectionString), closeSoftKeyboard());
         onView(withId(R.id.account_username)).perform(click());
 
-        SystemClock.sleep(WAIT_CONNECTION);
+        SystemClock.sleep(WAIT_CONNECTION_MS);
 
         checkStatusMessage();
 
@@ -586,7 +583,7 @@ public class AuthenticatorActivityTest {
 
         switch (servertype){
             case HTTP:
-                if (testServerURL.startsWith("http"))
+                if (testServerURL.startsWith(HTTP_SCHEME))
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_connection_established)));
                 else
                     onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_nossl_plain_ok_title)));

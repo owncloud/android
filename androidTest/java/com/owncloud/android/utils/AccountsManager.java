@@ -45,13 +45,15 @@ public class AccountsManager {
     private static final String KEY_AUTH_TOKEN_TYPE = "AUTH_TOKEN_TYPE";
     private static final String KEY_AUTH_TOKEN = "AUTH_TOKEN";
     private static String version = "";
-    private static int WAIT_UNTIL_ACCOUNT_CREATED = 1000;
+    private static int WAIT_UNTIL_ACCOUNT_CREATED_MS = 1000;
+    private static final String HTTP_SCHEME = "http://";
+    private static final String HTTPS_SCHEME = "https://";
 
     public static void addAccount(Context context, String baseUrl, String username, String password) {
 
         // obtaining an AccountManager instance
         AccountManager accountManager = AccountManager.get(context);
-        Account account = new Account(username+"@"+baseUrl, accountType);
+        Account account = new Account(username+"@"+regularURL(baseUrl), accountType);
         accountManager.addAccountExplicitly(account, password, null);
 
         // include account version, user, server version and token with the new account
@@ -93,8 +95,22 @@ public class AccountsManager {
         for (int i=0;i<accounts.length;i++){
             if (accounts[i].type.compareTo(accountType)==0) {
                 accountManager.removeAccount(accounts[i], null, null);
-                SystemClock.sleep(WAIT_UNTIL_ACCOUNT_CREATED);
+                SystemClock.sleep(WAIT_UNTIL_ACCOUNT_CREATED_MS);
             }
         }
     }
+
+
+    //To regularize the URL to build the URL inserted in the account device
+    public static String regularURL(String url){
+        String url_regularized = null;
+        if (url.startsWith(HTTPS_SCHEME)){
+            url_regularized = url.substring(8, url.length()); //skipping the protocol
+        } else if (url.startsWith(HTTP_SCHEME)) {
+            url_regularized = url.substring(7, url.length()); //skipping the protocol
+        } else
+            return url;
+        return url_regularized;
+    }
+
 }
