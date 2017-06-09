@@ -155,6 +155,8 @@ public class SAMLAuthenticatorActivityTest {
         // UiDevice available from API level 17
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+            /* Code to unlock with a swipe. In local tests is not used, but with scheduled tests
+               maybe necessary */
             /*Point[] coordinates = new Point[4];
             coordinates[0] = new Point(248, 1020);
             coordinates[1] = new Point(248, 429);
