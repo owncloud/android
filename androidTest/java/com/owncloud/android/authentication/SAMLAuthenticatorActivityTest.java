@@ -73,10 +73,10 @@ public class SAMLAuthenticatorActivityTest {
     public static final String EXTRA_ACTION = "ACTION";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
 
-    private static final int WAIT_INITIAL = 1000;
-    private static final int WAIT_LOGIN = 5000;
-    private static final int WAIT_CONNECTION = 2500;
-    private static final int WAIT_CHANGE = 1000;
+    private static final int WAIT_INITIAL_MS = 1000;
+    private static final int WAIT_LOGIN_MS = 5000;
+    private static final int WAIT_CONNECTION_MS = 2500;
+    private static final int WAIT_CHANGE_MS = 1000;
 
     private static final String ERROR_MESSAGE = "Activity not finished";
     private static final String RESULT_CODE = "mResultCode";
@@ -90,7 +90,7 @@ public class SAMLAuthenticatorActivityTest {
     private String webViewPasswordId = null;
     private String webViewSubmitXPath = null;
 
-    public enum ServerType {
+    private enum ServerType {
         /*
          *  Server with trusted certificate
          */
@@ -123,7 +123,7 @@ public class SAMLAuthenticatorActivityTest {
 
     }
 
-    public ServerType servertype;
+    private ServerType servertype;
 
     @Rule
     public ActivityTestRule<AuthenticatorActivity> mActivityRule = new ActivityTestRule<AuthenticatorActivity>(
@@ -152,7 +152,7 @@ public class SAMLAuthenticatorActivityTest {
         webViewPasswordId = arguments.getString("TEST_PASSWORD_ID");
         webViewSubmitXPath = arguments.getString("TEST_SUBMIT_XPATH");
 
-        // UiDevice available form API level 17
+        // UiDevice available from API level 17
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
             /*Point[] coordinates = new Point[4];
@@ -181,7 +181,7 @@ public class SAMLAuthenticatorActivityTest {
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Start");
 
-        SystemClock.sleep(WAIT_INITIAL);
+        SystemClock.sleep(WAIT_INITIAL_MS);
 
         // Check that login button is disabled
         onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
@@ -194,11 +194,11 @@ public class SAMLAuthenticatorActivityTest {
         //Certificate acceptance in case of non-trusted or expirated
         if (servertype == ServerType.NON_TRUSTED) {
 
-            SystemClock.sleep(WAIT_CONNECTION);
+            SystemClock.sleep(WAIT_CONNECTION_MS);
             onView(withId(R.id.ok)).perform(click());
         }
 
-        SystemClock.sleep(WAIT_CONNECTION);
+        SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the URL is valid
         onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
@@ -206,7 +206,7 @@ public class SAMLAuthenticatorActivityTest {
         //Go to idp webview
         onView(withId(R.id.buttonOK)).perform(click());
 
-        SystemClock.sleep(WAIT_CONNECTION);
+        SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Fill credentials on the WebView.
         onWebView().withElement(findElement(Locator.NAME, webViewUsernameId)).perform(webKeys(testUser));
@@ -214,7 +214,7 @@ public class SAMLAuthenticatorActivityTest {
         onWebView().withElement(findElement(Locator.XPATH, webViewSubmitXPath)).perform(webClick());
 
         // Check that the Activity ends after clicking
-        SystemClock.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN_MS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
         else {
@@ -222,7 +222,6 @@ public class SAMLAuthenticatorActivityTest {
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
             assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
-
         }
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Passed");
@@ -241,13 +240,13 @@ public class SAMLAuthenticatorActivityTest {
 
         //Set landscape
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        SystemClock.sleep(WAIT_CHANGE);
+        SystemClock.sleep(WAIT_CHANGE_MS);
 
         //Needed to click on the screen to validate the URL
         onView(withId(R.id.thumbnail)).perform(closeSoftKeyboard(), click());
 
         //Here we guess that the certificate was accepted in first test
-        SystemClock.sleep(WAIT_CONNECTION);
+        SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the URL is valid
         onView(withId(R.id.server_status_text)).check(matches(withText(R.string.auth_secure_connection)));
@@ -255,7 +254,7 @@ public class SAMLAuthenticatorActivityTest {
         //Go to idp webview
         onView(withId(R.id.buttonOK)).perform(click());
 
-        SystemClock.sleep(WAIT_CONNECTION);
+        SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Fill credentials on the WebView.
         onWebView().withElement(findElement(Locator.NAME, webViewUsernameId)).perform(webKeys(testUser));
@@ -263,12 +262,12 @@ public class SAMLAuthenticatorActivityTest {
 
         //Set portrait
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        SystemClock.sleep(WAIT_CHANGE);
+        SystemClock.sleep(WAIT_CHANGE_MS);
 
         onWebView().withElement(findElement(Locator.XPATH, webViewSubmitXPath)).perform(webClick());
 
         // Check that the Activity ends after clicking
-        SystemClock.sleep(WAIT_LOGIN);
+        SystemClock.sleep(WAIT_LOGIN_MS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             assertTrue(ERROR_MESSAGE, mActivityRule.getActivity().isDestroyed());
         else {
@@ -276,7 +275,6 @@ public class SAMLAuthenticatorActivityTest {
             f.setAccessible(true);
             int mResultCode = f.getInt(mActivityRule.getActivity());
             assertTrue(ERROR_MESSAGE, mResultCode == Activity.RESULT_OK);
-
         }
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Orientation Changes Passed");
