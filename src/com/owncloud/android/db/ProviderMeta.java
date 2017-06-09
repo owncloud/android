@@ -132,6 +132,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_SHARING_PUBLIC_SEND_MAIL = "sharing_public_send_mail";
         public static final String CAPABILITIES_SHARING_PUBLIC_UPLOAD = "sharing_public_upload";
         public static final String CAPABILITIES_SHARING_PUBLIC_MULTIPLE = "sharing_public_multiple";
+        public static final String CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY = "supports_upload_only";
         public static final String CAPABILITIES_SHARING_USER_SEND_MAIL = "sharing_user_send_mail";
         public static final String CAPABILITIES_SHARING_RESHARING = "sharing_resharing";
         public static final String CAPABILITIES_SHARING_FEDERATION_OUTGOING = "sharing_federation_outgoing";

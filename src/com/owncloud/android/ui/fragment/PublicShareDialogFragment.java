@@ -622,6 +622,7 @@ public class PublicShareDialogFragment extends DialogFragment {
      * Includes:
      *  - hide the link name section if multiple public share is not supported, showing the keyboard
      *    to fill in the public share name otherwise
+     *  - hide show file listing option
      *  - hide or show the switch to disable the password if it is enforced or not;
      *  - hide or show the switch to disable the expiration date it it is enforced or not;
      *  - show or hide the switch to allow public uploads if it is allowed or not;
@@ -648,6 +649,10 @@ public class PublicShareDialogFragment extends DialogFragment {
                             WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
             );
         }
+
+//        if (mCapabilities) {
+//
+//        }
 
         // Show default date enforced by the server, if any
         if (!updating() && mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
