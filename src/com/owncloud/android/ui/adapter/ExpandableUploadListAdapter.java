@@ -613,6 +613,11 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         // it is not being saved in uploads storage
                         status = mParentActivity.getString(R.string.service_unavailable);
                         break;
+                    case SPECIFIC_UNSUPPORTED_MEDIA_TYPE:
+                        // We don't know the specific unsupported media type error message because
+                        // it is not being saved in uploads storage
+                        status = mParentActivity.getString(R.string.uploads_view_unsupported_media_type);
+                        break;
                     default:
                         status = "Naughty devs added a new fail result but no description for the user";
                         break;
