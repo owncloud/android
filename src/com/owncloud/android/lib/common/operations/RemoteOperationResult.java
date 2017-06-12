@@ -119,7 +119,8 @@ public class RemoteOperationResult implements Serializable {
         DELAYED_FOR_WIFI,
         LOCAL_FILE_NOT_FOUND,
         SERVICE_UNAVAILABLE,
-        SPECIFIC_SERVICE_UNAVAILABLE
+        SPECIFIC_SERVICE_UNAVAILABLE,
+        SPECIFIC_UNSUPPORTED_MEDIA_TYPE
     }
 
     private boolean mSuccess = false;
@@ -135,7 +136,7 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Public constructor from result code.
-     * <p>
+     *
      * To be used when the caller takes the responsibility of interpreting the result of a {@link RemoteOperation}
      *
      * @param code {@link ResultCode} decided by the caller.
@@ -150,9 +151,9 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Public constructor from exception.
-     * <p>
+     *
      * To be used when an exception prevented the end of the {@link RemoteOperation}.
-     * <p>
+     *
      * Determines a {@link ResultCode} depending on the type of the exception.
      *
      * @param e Exception that interrupted the {@link RemoteOperation}
@@ -209,9 +210,9 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Public constructor from separate elements of an HTTP or DAV response.
-     * <p>
+     *
      * To be used when the result needs to be interpreted from the response of an HTTP/DAV method.
-     * <p>
+     *
      * Determines a {@link ResultCode} from the already executed method received as a parameter. Generally,
      * will depend on the HTTP code and HTTP response headers received. In some cases will inspect also the
      * response body.
@@ -247,7 +248,7 @@ public class RemoteOperationResult implements Serializable {
             }
         }
 
-        if (mHttpCode == HttpStatus.SC_FORBIDDEN) {
+        if (mHttpCode == HttpStatus.SC_FORBIDDEN) {  // 403
             String bodyResponse = httpMethod.getResponseBodyAsString();
 
             if (bodyResponse != null && bodyResponse.length() > 0) {
@@ -266,7 +267,27 @@ public class RemoteOperationResult implements Serializable {
             }
         }
 
-        if (mHttpCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {
+        if (mHttpCode == HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE) {    // 415
+
+            String bodyResponse = httpMethod.getResponseBodyAsString();
+
+            if (bodyResponse != null && bodyResponse.length() > 0) {
+                InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
+                ErrorMessageParser xmlParser = new ErrorMessageParser();
+                try {
+                    String errorMessage = xmlParser.parseXMLResponse(is);
+                    if (errorMessage != null && errorMessage.length() > 0) {
+                        mCode = ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE;
+                        mHttpPhrase = errorMessage;
+                    }
+                } catch (Exception e) {
+                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
+                    // mCode stays as set in this(success, httpCode, headers)
+                }
+            }
+        }
+
+        if (mHttpCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {   // 503
             String bodyResponse = httpMethod.getResponseBodyAsString();
 
             if (bodyResponse != null && bodyResponse.length() > 0) {
@@ -288,13 +309,13 @@ public class RemoteOperationResult implements Serializable {
 
     /**
      * Public constructor from separate elements of an HTTP or DAV response.
-     * <p>
+     *
      * To be used when the result needs to be interpreted from HTTP response elements that could come from
      * different requests (WARNING: black magic, try to avoid).
-     * <p>
+     *
      * If all the fields come from the same HTTP/DAV response, {@link #RemoteOperationResult(boolean, HttpMethod)}
      * should be used instead.
-     * <p>
+     *
      * Determines a {@link ResultCode} depending on the HTTP code and HTTP response headers received.
      *
      * @param success     The operation was considered successful or not.
