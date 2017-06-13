@@ -455,6 +455,7 @@
   <string name="share_via_link_expiration_date_enforced_label">Expiração *</string>
   <string name="share_via_link_expiration_date_explanation_label">A hiperligação pública irá expirar, o mais tardar %1$d dias após a sua criação </string>
   <string name="share_via_link_default_name_template">%1$s hiperligação</string>
+  <string name="file_private_link_error">Ocorreu um erro a tentar obter a ligação privada do ficheiro</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>
