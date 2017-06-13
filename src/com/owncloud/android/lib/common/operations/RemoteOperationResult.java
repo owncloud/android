@@ -230,6 +230,7 @@ public class RemoteOperationResult implements Serializable {
         );
 
         if (mHttpCode == HttpStatus.SC_BAD_REQUEST) {   // 400
+
             String bodyResponse = httpMethod.getResponseBodyAsString();
             // do not get for other HTTP codes!; could not be available
 
@@ -249,60 +250,46 @@ public class RemoteOperationResult implements Serializable {
         }
 
         if (mHttpCode == HttpStatus.SC_FORBIDDEN) {  // 403
-            String bodyResponse = httpMethod.getResponseBodyAsString();
 
-            if (bodyResponse != null && bodyResponse.length() > 0) {
-                InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
-                ErrorMessageParser xmlParser = new ErrorMessageParser();
-                try {
-                    String errorMessage = xmlParser.parseXMLResponse(is);
-                    if (errorMessage != null && errorMessage.length() > 0) {
-                        mCode = ResultCode.SPECIFIC_FORBIDDEN;
-                        mHttpPhrase = errorMessage;
-                    }
-                } catch (Exception e) {
-                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
-                    // mCode stays as set in this(success, httpCode, headers)
-                }
-            }
+            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_FORBIDDEN);
         }
 
         if (mHttpCode == HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE) {    // 415
 
-            String bodyResponse = httpMethod.getResponseBodyAsString();
-
-            if (bodyResponse != null && bodyResponse.length() > 0) {
-                InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
-                ErrorMessageParser xmlParser = new ErrorMessageParser();
-                try {
-                    String errorMessage = xmlParser.parseXMLResponse(is);
-                    if (errorMessage != null && errorMessage.length() > 0) {
-                        mCode = ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE;
-                        mHttpPhrase = errorMessage;
-                    }
-                } catch (Exception e) {
-                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
-                    // mCode stays as set in this(success, httpCode, headers)
-                }
-            }
+            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE);
         }
 
         if (mHttpCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {   // 503
-            String bodyResponse = httpMethod.getResponseBodyAsString();
 
-            if (bodyResponse != null && bodyResponse.length() > 0) {
-                InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
-                ErrorMessageParser xmlParser = new ErrorMessageParser();
-                try {
-                    String errorMessage = xmlParser.parseXMLResponse(is);
-                    if (errorMessage != "" && errorMessage != null) {
-                        mCode = ResultCode.SPECIFIC_SERVICE_UNAVAILABLE;
-                        mHttpPhrase = errorMessage;
-                    }
-                } catch (Exception e) {
-                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
-                    // mCode stays as set in this(success, httpCode, headers)
+            parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_SERVICE_UNAVAILABLE);
+        }
+    }
+
+    /**
+     * Parse the error message included in the body response, if any, and set the specific result
+     * code
+     * @param httpMethod HTTP/DAV method already executed which response body will be parsed to get
+     *                   the specific error message
+     * @param resultCode specific result code
+     * @throws IOException
+     */
+    private void parseErrorMessageAndSetCode(HttpMethod httpMethod, ResultCode resultCode)
+            throws IOException {
+
+        String bodyResponse = httpMethod.getResponseBodyAsString();
+
+        if (bodyResponse != null && bodyResponse.length() > 0) {
+            InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
+            ErrorMessageParser xmlParser = new ErrorMessageParser();
+            try {
+                String errorMessage = xmlParser.parseXMLResponse(is);
+                if (errorMessage != "" && errorMessage != null) {
+                    mCode = resultCode;
+                    mHttpPhrase = errorMessage;
                 }
+            } catch (Exception e) {
+                Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
+                // mCode stays as set in this(success, httpCode, headers)
             }
         }
     }
