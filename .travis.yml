@@ -9,7 +9,7 @@ android:
 # second 'tools' updates SDK tools 'til last version ** in remote repository number 11 ** (current last one)
   - tools
   - platform-tools
-  - build-tools-25.0.2
+  - build-tools-26.0.0
   - android-24
   - sys-img-armeabi-v7a-android-24
 branches:
