@@ -88,6 +88,7 @@ public class AuthenticatorActivityTest {
     private String testPassword = null;
     private String testPassword2 = null;
     private String testServerURL = null;
+    private boolean isLookup = false;
     private enum ServerType {
         /*
          * Server with http
@@ -161,6 +162,7 @@ public class AuthenticatorActivityTest {
         testPassword2 = arguments.getString("TEST_PASSWORD2");
         testServerURL = arguments.getString("TEST_SERVER_URL");
         servertype = ServerType.fromValue(Integer.parseInt(arguments.getString("TRUSTED")));
+        isLookup = Boolean.parseBoolean(arguments.getString("TEST_LOOKUP"));
 
         // UiDevice available from API level 17
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -430,19 +432,22 @@ public class AuthenticatorActivityTest {
 
         Log_OC.i(LOG_TAG, "Test Check Existing Account Start");
 
-        //Add an account to the device
-        AccountsManager.addAccount(targetContext, testServerURL, testUser, testPassword);
+        //if server is look up, test skipped. TO DO: parameterize (user -> instance). Does it worth?
+        if (!isLookup) {
 
-        // Check that login button is disabled
-        onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
+            //Add an account to the device
+            AccountsManager.addAccount(targetContext, testServerURL, testUser, testPassword);
 
-        setFields(testServerURL, testUser, testPassword);
+            // Check that login button is disabled
+            onView(withId(R.id.buttonOK)).check(matches(not(isEnabled())));
 
-        //check that the credentials are already stored
-        onView(withId(R.id.auth_status_text)).check(matches(withText(R.string.auth_account_not_new)));
+            setFields(testServerURL, testUser, testPassword);
+
+            //check that the credentials are already stored
+            onView(withId(R.id.auth_status_text)).check(matches(withText(R.string.auth_account_not_new)));
+        }
 
         Log_OC.i(LOG_TAG, "Test Check Existing Account Passed");
-
 
     }
 

@@ -96,6 +96,7 @@ android {
         testInstrumentationRunnerArgument "TEST_USERNAME_ID", "\"$System.env.OCTEST_WEB_USERFIELD\""
         testInstrumentationRunnerArgument "TEST_PASSWORD_ID", "\"$System.env.OCTEST_WEB_PASSFIELD\""
         testInstrumentationRunnerArgument "TEST_SUBMIT_XPATH", "\"$System.env.OCTEST_WEB_SUBMITXPATH\""
+        testInstrumentationRunnerArgument "TEST_LOOKUP", "\"$System.env.OCTEST_SERVER_LOOKUP\""
 
 
         jackOptions {
