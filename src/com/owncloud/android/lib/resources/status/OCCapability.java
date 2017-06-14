@@ -90,6 +90,7 @@ public class OCCapability {
         mFilesSharingPublicSendMail = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicUpload = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicMultiple = CapabilityBooleanType.UNKNOWN;
+        mFilesSharingPublicSupportsUploadOnly = CapabilityBooleanType.UNKNOWN;
         mFilesSharingUserSendMail = CapabilityBooleanType.UNKNOWN;
         mFilesSharingResharing = CapabilityBooleanType.UNKNOWN;
         mFilesSharingFederationOutgoing = CapabilityBooleanType.UNKNOWN;
