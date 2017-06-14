@@ -1903,6 +1903,8 @@ public class FileDataStorageManager {
                 capability.getFilesSharingPublicUpload().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE,
                 capability.getFilesSharingPublicMultiple().getValue());
+        cv.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY,
+                capability.getFilesSharingPublicMultiple().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL,
                 capability.getFilesSharingUserSendMail().getValue());
         cv.put(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING, capability.getFilesSharingResharing().getValue());

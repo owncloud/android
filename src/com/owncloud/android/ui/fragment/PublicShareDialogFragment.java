@@ -193,16 +193,6 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         Log_OC.d(TAG, "onCreateView");
 
-        // Show or hide edit permission and show file listing switches
-        if (isSharedFolder()) {
-            getEditPermissionSection(view).setVisibility(View.VISIBLE);
-            //Check capabilities
-            getShowFileListingSection(view).setVisibility(View.VISIBLE);
-        } else {
-            getEditPermissionSection(view).setVisibility(View.GONE);
-            getShowFileListingSection(view).setVisibility(View.GONE);
-        }
-
         // Get and set the values saved previous to the screen rotation, if any
         if (savedInstanceState != null) {
             String expirationDate = savedInstanceState.getString(KEY_EXPIRATION_DATE);
@@ -650,9 +640,17 @@ public class PublicShareDialogFragment extends DialogFragment {
             );
         }
 
-//        if (mCapabilities) {
-//
-//        }
+        // Show allow editing option if corresponding capability is set
+        if (mCapabilities.getFilesSharingPublicUpload().isTrue() && isSharedFolder()) {
+            getEditPermissionSection(rootView).setVisibility(View.VISIBLE);
+        }
+
+        // Show file listing option if supports upload only capability is set, a folder is being
+        // shared and allow editing capability is set as well
+        if (mCapabilities.getFilesSharingPublicSupportsUploadOnly().isTrue() && isSharedFolder() &&
+                mCapabilities.getFilesSharingPublicUpload().isTrue()) {
+            getShowFileListingSection(rootView).setVisibility(View.VISIBLE);
+        }
 
         // Show default date enforced by the server, if any
         if (!updating() && mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
@@ -691,11 +689,6 @@ public class PublicShareDialogFragment extends DialogFragment {
             getPasswordLabel(rootView).setText(R.string.share_via_link_password_enforced_label);
             getPasswordSwitch(rootView).setVisibility(View.GONE);
             getPasswordValue(rootView).setVisibility(View.VISIBLE);
-        }
-
-        // hide password switch if password is enforced to prevent it is removed
-        if (mCapabilities.getFilesSharingPublicUpload().isFalse()) {
-            getEditPermissionSection(rootView).setVisibility(View.GONE);
         }
     }
 
