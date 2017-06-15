@@ -274,7 +274,23 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
 
+                // Allow editing option
                 boolean publicLinkEditPermissions = getEditPermissionSwitch(getView()).isChecked();
+
+                // Show file listing option
+                boolean publicLinkSupportOnlyUpload = !getShowFileListingSwitch(getView()).
+                        isChecked();
+
+                int publicLinkPermissions = OCShare.DEFAULT_PERMISSION;
+
+                if (publicLinkEditPermissions && publicLinkSupportOnlyUpload) {
+
+                    // If 'publicUpload' parameter is set to true, the server will set the read
+                    // permission and that is just the permission we don't want at this point
+                    publicLinkEditPermissions = false;
+
+                    publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
+                }
 
                 if (!updating()) { // Creating a new public share
 
@@ -284,7 +300,8 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     publicLinkName,
                                     publicLinkPassword,
                                     publicLinkExpirationDateInMillis,
-                                    publicLinkEditPermissions
+                                    publicLinkEditPermissions,
+                                    publicLinkPermissions
                             );
 
                 } else { // Updating an existing public share
