@@ -24,19 +24,17 @@ package com.owncloud.android.utils;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
-import android.accounts.AuthenticatorException;
 
-import com.owncloud.android.authentication.AccountAuthenticator;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.common.network.NetworkUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
+import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
-import com.owncloud.android.operations.DetectAuthenticationMethodOperation;
-import com.owncloud.android.operations.GetServerInfoOperation;
-import com.owncloud.android.lib.common.OwnCloudAccount;
 
 
 public class AccountsManager {
@@ -111,6 +109,18 @@ public class AccountsManager {
         } else
             return url;
         return url_regularized;
+    }
+
+    //Get the server version from capabilities
+    public static int getServerVersion (String server, String user, String pass){
+        GetRemoteCapabilitiesOperation getCapabilities = new GetRemoteCapabilitiesOperation();
+        OwnCloudClient client = new OwnCloudClient(Uri.parse(server),
+                NetworkUtils.getMultiThreadedConnManager());
+        client.setCredentials(
+                OwnCloudCredentialsFactory.newBasicCredentials(user, pass));
+        RemoteOperationResult result = getCapabilities.execute(client);
+        OCCapability capabilities = (OCCapability) result.getData().get(0);
+        return capabilities.getVersionMayor();
     }
 
 }
