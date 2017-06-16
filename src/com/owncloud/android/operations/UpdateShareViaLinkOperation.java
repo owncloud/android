@@ -43,6 +43,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
     private String mPassword;
     private Boolean mPublicUpload;
     private long mExpirationDateInMillis;
+    private int mPermissions;
 
     /**
      * Constructor
@@ -56,6 +57,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
+        mPermissions = OCShare.DEFAULT_PERMISSION;
     }
 
 
@@ -104,6 +106,15 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         mPublicUpload = publicUpload;
     }
 
+    /**
+     * Set permissions to allow or not specific actions in the share
+     *
+     * @param permissions permissions to set to the public link.
+     */
+    public void setPermissions (int permissions) {
+        this.mPermissions = permissions;
+    }
+
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
@@ -124,6 +135,7 @@ public class UpdateShareViaLinkOperation extends SyncOperation {
         updateOp.setPassword(mPassword);
         updateOp.setExpirationDate(mExpirationDateInMillis);
         updateOp.setPublicUpload(mPublicUpload);
+        updateOp.setPermissions(mPermissions);
         RemoteOperationResult result = updateOp.execute(client);
 
         if (result.isSuccess()) {

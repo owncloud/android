@@ -621,6 +621,13 @@ public class OperationsService extends Service {
                         );
                     }
 
+                    if (operationIntent.hasExtra(EXTRA_SHARE_PERMISSIONS)) {
+                        ((UpdateShareViaLinkOperation) operation).setPermissions(
+                                operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS,
+                                        OCShare.DEFAULT_PERMISSION)
+                        );
+                    }
+
                 } else if (ACTION_UPDATE_SHARE_WITH_SHAREE.equals(action)) {
                     // Update private share, only permissions
                     long shareId = operationIntent.getLongExtra(EXTRA_SHARE_ID, -1);

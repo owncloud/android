@@ -202,6 +202,12 @@ public class PublicShareDialogFragment extends DialogFragment {
             }
         }
 
+        // Check share file listing by default
+        getShowFileListingSwitch(view).setChecked(true);
+
+        //Disable show file listing by default
+        getShowFileListingSwitch(view).setEnabled(false);
+
         if (updating()) { // Fill in the different fields if the share is being updated
 
             // Set dialog title to edit
@@ -210,9 +216,16 @@ public class PublicShareDialogFragment extends DialogFragment {
             // Set existing share name
             getNameValue(view).setText(mPublicShare.getName());
 
-            // Set the upload permissions, if any
+            // Set the edit permission, if any
             if ((mPublicShare.getPermissions() & (UPDATE_PERMISSION | CREATE_PERMISSION)) > 0) {
                 getEditPermissionSwitch(view).setChecked(true);
+                // If allow editing switch is checked, show file listing switch should be enabled
+                getShowFileListingSwitch(view).setEnabled(true);
+            }
+
+            // Set the write only permission, if any
+            if (mPublicShare.getPermissions() == CREATE_PERMISSION) {
+                getShowFileListingSwitch(view).setChecked(false);
             }
 
             // Set password, if any
@@ -244,12 +257,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         } else {
             // Set existing share name
             getNameValue(view).setText(getArguments().getString(ARG_DEFAULT_LINK_NAME, ""));
-
-            // Check share file listing by default
-            getShowFileListingSwitch(view).setChecked(true);
-
-            //Disable share file listing by default
-            getShowFileListingSwitch(view).setEnabled(false);
         }
 
         // Set listener for user actions on allow editing
@@ -323,7 +330,8 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     publicLinkName,
                                     publicLinkPassword,
                                     publicLinkExpirationDateInMillis,
-                                    publicLinkEditPermissions
+                                    publicLinkEditPermissions,
+                                    publicLinkPermissions
                             );
                 }
             }
