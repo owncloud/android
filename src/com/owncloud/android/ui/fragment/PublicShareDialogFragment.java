@@ -292,8 +292,8 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 if (publicLinkEditPermissions && publicLinkSupportOnlyUpload) {
 
-                    // If 'publicUpload' parameter is set to true, the server will set the read
-                    // permission and that is just the permission we don't want at this point
+                    // If edit permissions are checked, the server will set the read permission
+                    // but we need create permissions at this point
                     publicLinkEditPermissions = false;
 
                     publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
@@ -439,11 +439,8 @@ public class PublicShareDialogFragment extends DialogFragment {
                 // If not, disable show file listing switch
                 getShowFileListingSwitch(getView()).setEnabled(false);
 
-                /**
-                 * If show listing file option has been unchecked if allow editing is also unchecked
-                 * check show listing file option by default
-                 */
-
+                // If show listing file option has been unchecked and allow editing is unchecked
+                // after that, check show listing file option by default
                 if (!getShowFileListingSwitch(getView()).isChecked()) {
 
                     getShowFileListingSwitch(getView()).setChecked(true);
