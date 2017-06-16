@@ -195,7 +195,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         }
 
         // IMPORTANT: permissions parameter needs to be updated after mPublicUpload parameter,
-        // otherwise they would be set as 1 (READ) in the server when mPublicUpload was updated
+        // otherwise they would be set always as 1 (READ) in the server when mPublicUpload was updated
         if (mPermissions > 0) {
             // set permissions
             parametersToUpdate.add(new Pair<>(PARAM_PERMISSIONS, Integer.toString(mPermissions)));
