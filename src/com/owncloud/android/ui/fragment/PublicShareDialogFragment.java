@@ -691,7 +691,7 @@ public class PublicShareDialogFragment extends DialogFragment {
             getExpirationDateValue(rootView).setText(formattedDate);
         }
 
-        // hide expiration date switch if date is enforced to prevent it is removed
+        // Hide expiration date switch if date is enforced to prevent it is removed
         if (mCapabilities.getFilesSharingPublicExpireDateEnforced().isTrue()) {
             getExpirationDateLabel(rootView).setText(
                     R.string.share_via_link_expiration_date_enforced_label
