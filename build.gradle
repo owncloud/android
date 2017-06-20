@@ -170,6 +170,10 @@ android {
                 signingConfig signingConfigs.release
             }
         }
+
+        beta {
+            applicationIdSuffix ".beta"
+        }
     }
 
     applicationVariants.all { variant ->
