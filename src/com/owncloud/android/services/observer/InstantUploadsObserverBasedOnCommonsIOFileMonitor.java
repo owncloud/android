@@ -133,10 +133,6 @@ public class InstantUploadsObserverBasedOnCommonsIOFileMonitor
 
     private class CameraFolderAlterationListener implements FileAlterationListener {
 
-        private static final int HANDLE_DELAY_IN_MS = 200;
-
-        private Handler mHandler = new Handler();
-
         @Override
         public void onStart(FileAlterationObserver observer) {
             Log_OC.v(TAG, "onStart called");
@@ -165,17 +161,7 @@ public class InstantUploadsObserverBasedOnCommonsIOFileMonitor
                     final String fileName = file.getAbsolutePath().substring(
                         mConfiguration.getSourcePath().length() + 1
                     );
-
-                    /// delay a bit the execution to deal with possible renames of files (for instance: Google Camera)
-                    mHandler.postDelayed(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                mInstantUploadsHandler.handleNewFile(fileName, mConfiguration, mContext);
-                            }
-                        },
-                        HANDLE_DELAY_IN_MS
-                    );
+                    mInstantUploadsHandler.handleNewFile(fileName, mConfiguration, mContext);
                 }
 
             } else {

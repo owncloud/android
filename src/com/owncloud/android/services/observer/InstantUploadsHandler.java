@@ -25,6 +25,8 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 
@@ -75,6 +77,9 @@ public class InstantUploadsHandler {
     private static int MAX_RECENTS = 30;
     private static Set<String> sRecentlyUploadedFilePaths = new HashSet<>(MAX_RECENTS);
 
+    private static final int HANDLE_DELAY_IN_MS = 200;
+
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     public boolean handleNewPictureAction(
         Intent intent,
@@ -157,12 +162,47 @@ public class InstantUploadsHandler {
      * Request the upload of a file just created if matches the criteria of the current
      * configuration for instant uploads.
      *
+     * Not run immediately - it delays the actual work to a private method, so that if the camera app saves
+     * a file and then renames it, the detection of the 'save' action can be silently ignored to prevent
+     * a failed upload.
+     *
      * @param fileName          Name of the file just created.
      * @param configuration     User configuration for instant uploads.
      * @param context           Valid Context, used to request to uploads service.
-     * @return                  'True' if an upload was requested, 'false' otherwise.
      */
-    public boolean handleNewFile(String fileName, InstantUploadsConfiguration configuration, Context context) {
+    public void handleNewFile(
+        final String fileName, final InstantUploadsConfiguration configuration, final Context context
+    ) {
+
+        /// delay a bit the execution to deal with possible renames of files (for instance: Google Camera);
+        /// method 'handleNewFileAfterDelay' checks if the file exists in disk before starting un upload,
+        /// and silently ignores files that do not exist
+        mHandler.postDelayed(
+            new Runnable() {
+                @Override
+                public void run() {
+                    handleNewFileAfterDelay(fileName, configuration, context);
+                }
+            },
+            HANDLE_DELAY_IN_MS
+        );
+
+    }
+
+
+    /**
+     * Request the upload of a file just created if matches the criteria of the current
+     * configuration for instant uploads.
+     *
+     * Discards the file is doesn't fit details of instant uploads configuration.
+     *
+     * @param fileName          Name of the file just created.
+     * @param configuration     User configuration for instant uploads.
+     * @param context           Valid Context, used to request to uploads service.
+     */
+    private void handleNewFileAfterDelay(
+        String fileName, InstantUploadsConfiguration configuration, Context context
+    ) {
         Log_OC.d(TAG, "New file " + fileName);
 
         /// check file type
@@ -172,29 +212,31 @@ public class InstantUploadsHandler {
 
         if (!isImage && !isVideo) {
             Log_OC.d(TAG, "Ignoring " + fileName);
-            return false;
+            return;
         }
 
         if (isImage && !configuration.isEnabledForPictures()) {
             Log_OC.d(TAG, "Instant upload disabled for images, ignoring " + fileName);
-            return false;
+            return;
         }
 
         if (isVideo && !configuration.isEnabledForVideos()) {
             Log_OC.d(TAG, "Instant upload disabled for videos, ignoring " + fileName);
-            return false;
+            return;
         }
 
         String localPath = configuration.getSourcePath() + File.separator + fileName;
         Log_OC.d(TAG, "Local path: " + localPath);
 
-        return handleNewMediaFile(fileName, localPath, mimeType, isImage, configuration, context);
+        handleNewMediaFile(fileName, localPath, mimeType, isImage, configuration, context);
     }
 
 
     /**
      * Request the upload of a file just created if matches the criteria of the current
      * configuration for instant uploads.
+     *
+     * Actual work.
      *
      * @param fileName          Name of the file just created.
      * @param configuration     User configuration for instant uploads.

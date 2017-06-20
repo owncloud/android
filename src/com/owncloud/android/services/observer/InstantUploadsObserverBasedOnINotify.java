@@ -45,10 +45,10 @@ public class InstantUploadsObserverBasedOnINotify extends FileObserver implement
             FileObserver.MOVED_TO
     );
 
+    // never use 0xffffffff ; that would include the bit 0x80000000, that means ONE_SHOT, and only one
+    // event occurrence would be received
     private static final int ALL_EVENTS_EVEN_THOSE_NOT_DOCUMENTED = 0x7fffffff;   // NEVER use 0xffffffff
     private static final int IN_IGNORE = 32768;
-
-    private static final int HANDLE_DELAY_IN_MS = 200;
 
     private final Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -106,14 +106,14 @@ public class InstantUploadsObserverBasedOnINotify extends FileObserver implement
                     // new file created, let's watch it; false -> not modified yet
                     mObservedChildren.put(path, false);
                 }
-                if ((   (event & FileObserver.MODIFY) != 0) &&
+                if (((event & FileObserver.MODIFY) != 0) &&
                         mObservedChildren.containsKey(path) &&
                         !mObservedChildren.get(path)
                     ) {
                     // watched file was written for the first time after creation
                     mObservedChildren.put(path, true);
                 }
-                if (   (event & FileObserver.CLOSE_WRITE) != 0 &&
+                if ((event & FileObserver.CLOSE_WRITE) != 0 &&
                         mObservedChildren.containsKey(path)    &&
                         mObservedChildren.get(path)
                     ) {
@@ -148,17 +148,7 @@ public class InstantUploadsObserverBasedOnINotify extends FileObserver implement
      * @param fileName      Name of the file just created
      */
     private void handleNewFile(final String fileName) {
-
-        /// delay a bit the execution to deal with possible renames of files (for instance: Google Camera)
-        mHandler.postDelayed(
-            new Runnable() {
-                @Override
-                public void run() {
-                    mInstantUploadsHandler.handleNewFile(fileName, mConfiguration, mContext);
-                }
-            },
-            HANDLE_DELAY_IN_MS
-        );
+        mInstantUploadsHandler.handleNewFile(fileName, mConfiguration, mContext);
     }
 
     /**

@@ -412,7 +412,7 @@ public class FileObserverService extends Service {
         PreferenceManager.InstantUploadsConfiguration config =
             PreferenceManager.getInstantUploadsConfiguration(this);
 
-        if ((   config.isEnabledForPictures() || config.isEnabledForVideos()) &&
+        if ((config.isEnabledForPictures() || config.isEnabledForVideos()) &&
                 mInstantUploadsObserver == null
             )  {
             // no current observer -> create it
@@ -422,14 +422,14 @@ public class FileObserverService extends Service {
             );
             mInstantUploadsObserver.startObserving();
 
-        } else if ( !config.isEnabledForPictures() && !config.isEnabledForVideos() &&
+        } else if (!config.isEnabledForPictures() && !config.isEnabledForVideos() &&
                     mInstantUploadsObserver != null
             ) {
             // nothing ot observe -> stop current observer
             mInstantUploadsObserver.stopObserving();
             mInstantUploadsObserver = null;
 
-        } else if ( mInstantUploadsObserver != null) {
+        } else if (mInstantUploadsObserver != null) {
             // observer exists and can handle changes in configuration -> update observer
             boolean configurationUpdated = mInstantUploadsObserver.updateConfiguration(config);
             if (!configurationUpdated) {
