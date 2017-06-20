@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -74,7 +75,8 @@ public class PreviewImageActivity extends FileActivity implements
     private PreviewImagePagerAdapter mPreviewImagePagerAdapter;
     private int mSavedPosition = 0;
     private boolean mHasSavedPosition = false;
-    
+
+    private LocalBroadcastManager mLocalBroadcastManager;
     private DownloadFinishReceiver mDownloadFinishReceiver;
     
     private View mFullScreenAnchorView;
@@ -118,6 +120,8 @@ public class PreviewImageActivity extends FileActivity implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.owncloud_blue_dark_transparent));
         }
+
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
     }
 
@@ -291,13 +295,13 @@ public class PreviewImageActivity extends FileActivity implements
         
         IntentFilter filter = new IntentFilter(FileDownloader.getDownloadFinishMessage());
         filter.addAction(FileDownloader.getDownloadAddedMessage());
-        registerReceiver(mDownloadFinishReceiver, filter);
+        mLocalBroadcastManager.registerReceiver(mDownloadFinishReceiver, filter);
     }
 
     @Override
     public void onPause() {
         if (mDownloadFinishReceiver != null){
-            unregisterReceiver(mDownloadFinishReceiver);
+            mLocalBroadcastManager.unregisterReceiver(mDownloadFinishReceiver);
             mDownloadFinishReceiver = null;
         }
         
@@ -404,7 +408,6 @@ public class PreviewImageActivity extends FileActivity implements
                     intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
                 );
             }
-            removeStickyBroadcast(intent);
         }
 
     }

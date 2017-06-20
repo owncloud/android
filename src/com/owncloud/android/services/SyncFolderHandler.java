@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -62,6 +63,7 @@ class SyncFolderHandler extends Handler {
     private Account mCurrentAccount = null;
     private FileDataStorageManager mStorageManager;
     private SynchronizeFolderOperation mCurrentSyncOperation;
+    private LocalBroadcastManager mLocalBroadcastManager;
 
 
     public SyncFolderHandler(Looper looper, OperationsService service) {
@@ -70,6 +72,9 @@ class SyncFolderHandler extends Handler {
             throw new IllegalArgumentException("Received invalid NULL in parameter 'service'");
         }
         mService = service;
+
+        // create manager for local broadcasts
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(mService);
     }
 
 
@@ -184,7 +189,7 @@ class SyncFolderHandler extends Handler {
         added.putExtra(Extras.EXTRA_REMOTE_PATH, remotePath);
         added.putExtra(Extras.EXTRA_FILE_PATH, FileStorageUtils.getSavePath(account.name)
                 + remotePath);
-        mService.sendStickyBroadcast(added);
+        mLocalBroadcastManager.sendBroadcast(added);
     }
 
     /**
@@ -199,7 +204,7 @@ class SyncFolderHandler extends Handler {
         finished.putExtra(Extras.EXTRA_FILE_PATH,
                 FileStorageUtils.getSavePath(account.name) + remotePath);
         finished.putExtra(Extras.EXTRA_DOWNLOAD_RESULT, success);
-        mService.sendStickyBroadcast(finished);
+        mLocalBroadcastManager.sendBroadcast(finished);
     }
 
 

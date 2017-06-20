@@ -35,6 +35,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import com.owncloud.android.R;
@@ -93,6 +94,8 @@ public class FileDownloader extends Service
     private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
 
+    private LocalBroadcastManager mLocalBroadcastManager;
+
     public static String getDownloadAddedMessage() {
         return FileDownloader.class.getName() + DOWNLOAD_ADDED_MESSAGE;
     }
@@ -119,6 +122,9 @@ public class FileDownloader extends Service
         // add AccountsUpdatedListener
         AccountManager am = AccountManager.get(getApplicationContext());
         am.addOnAccountsUpdatedListener(this, null, false);
+
+        // create manager for local broadcasts
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
 
@@ -663,7 +669,7 @@ public class FileDownloader extends Service
         if (unlinkedFromRemotePath != null) {
             end.putExtra(Extras.EXTRA_LINKED_TO_PATH, unlinkedFromRemotePath);
         }
-        sendStickyBroadcast(end);
+        mLocalBroadcastManager.sendBroadcast(end);
     }
 
 
@@ -680,7 +686,7 @@ public class FileDownloader extends Service
         added.putExtra(Extras.EXTRA_REMOTE_PATH, download.getRemotePath());
         added.putExtra(Extras.EXTRA_FILE_PATH, download.getSavePath());
         added.putExtra(Extras.EXTRA_LINKED_TO_PATH, linkedToRemotePath);
-        sendStickyBroadcast(added);
+        mLocalBroadcastManager.sendBroadcast(added);
     }
 
     /**

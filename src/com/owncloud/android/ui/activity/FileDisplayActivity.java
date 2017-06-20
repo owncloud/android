@@ -46,6 +46,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -135,6 +136,8 @@ public class FileDisplayActivity extends HookActivity
     private boolean mSyncInProgress = false;
 
     private OCFile mWaitingToSend;
+
+    private LocalBroadcastManager mLocalBroadcastManager;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +150,8 @@ public class FileDisplayActivity extends HookActivity
         if (savedInstanceState == null) {
             FileObserverService.initialize(this);
         }
+
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
@@ -829,22 +834,20 @@ public class FileDisplayActivity extends HookActivity
         syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED);
         syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED);
         mSyncBroadcastReceiver = new SyncBroadcastReceiver();
-        registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
-        //LocalBroadcastManager.getInstance(this).registerReceiver(mSyncBroadcastReceiver,
-        // syncIntentFilter);
+        mLocalBroadcastManager.registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
 
         // Listen for upload messages
         IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.getUploadFinishMessage());
         uploadIntentFilter.addAction(FileUploader.getUploadStartMessage());
         mUploadBroadcastReceiver = new UploadBroadcastReceiver();
-        registerReceiver(mUploadBroadcastReceiver, uploadIntentFilter);
+        mLocalBroadcastManager.registerReceiver(mUploadBroadcastReceiver, uploadIntentFilter);
 
         // Listen for download messages
         IntentFilter downloadIntentFilter = new IntentFilter(
                 FileDownloader.getDownloadAddedMessage());
         downloadIntentFilter.addAction(FileDownloader.getDownloadFinishMessage());
         mDownloadBroadcastReceiver = new DownloadBroadcastReceiver();
-        registerReceiver(mDownloadBroadcastReceiver, downloadIntentFilter);
+        mLocalBroadcastManager.registerReceiver(mDownloadBroadcastReceiver, downloadIntentFilter);
 
         Log_OC.v(TAG, "onResume() end");
 
@@ -855,16 +858,15 @@ public class FileDisplayActivity extends HookActivity
     protected void onPause() {
         Log_OC.v(TAG, "onPause() start");
         if (mSyncBroadcastReceiver != null) {
-            unregisterReceiver(mSyncBroadcastReceiver);
-            //LocalBroadcastManager.getInstance(this).unregisterReceiver(mSyncBroadcastReceiver);
+            mLocalBroadcastManager.unregisterReceiver(mSyncBroadcastReceiver);
             mSyncBroadcastReceiver = null;
         }
         if (mUploadBroadcastReceiver != null) {
-            unregisterReceiver(mUploadBroadcastReceiver);
+            mLocalBroadcastManager.unregisterReceiver(mUploadBroadcastReceiver);
             mUploadBroadcastReceiver = null;
         }
         if (mDownloadBroadcastReceiver != null) {
-            unregisterReceiver(mDownloadBroadcastReceiver);
+            mLocalBroadcastManager.unregisterReceiver(mDownloadBroadcastReceiver);
             mDownloadBroadcastReceiver = null;
         }
 
@@ -889,116 +891,109 @@ public class FileDisplayActivity extends HookActivity
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            try {
-                String event = intent.getAction();
-                Log_OC.d(TAG, "Received broadcast " + event);
-                String accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME);
+            String event = intent.getAction();
+            Log_OC.d(TAG, "Received broadcast " + event);
+            String accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME);
 
-                String synchFolderRemotePath =
-                        intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH);
-                RemoteOperationResult synchResult =
-                        (RemoteOperationResult) intent.getSerializableExtra(
-                                FileSyncAdapter.EXTRA_RESULT);
-                boolean sameAccount = (getAccount() != null &&
-                        accountName.equals(getAccount().name) && getStorageManager() != null);
+            String synchFolderRemotePath =
+                    intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH);
+            RemoteOperationResult synchResult =
+                    (RemoteOperationResult) intent.getSerializableExtra(
+                            FileSyncAdapter.EXTRA_RESULT);
+            boolean sameAccount = (getAccount() != null &&
+                    accountName.equals(getAccount().name) && getStorageManager() != null);
 
-                if (sameAccount) {
+            if (sameAccount) {
 
-                    if (FileSyncAdapter.EVENT_FULL_SYNC_START.equals(event)) {
-                        mSyncInProgress = true;
+                if (FileSyncAdapter.EVENT_FULL_SYNC_START.equals(event)) {
+                    mSyncInProgress = true;
+
+                } else {
+                    OCFile currentFile = (getFile() == null) ? null :
+                            getStorageManager().getFileByPath(getFile().getRemotePath());
+                    OCFile currentDir = (getCurrentDir() == null) ? null :
+                            getStorageManager().getFileByPath(getCurrentDir().getRemotePath());
+
+                    if (currentDir == null) {
+                        // current folder was removed from the server
+                        showSnackMessage(
+                            String.format(
+                                getString(R.string.sync_current_folder_was_removed),
+                                synchFolderRemotePath
+                            )
+                        );
+                        browseToRoot();
 
                     } else {
-                        OCFile currentFile = (getFile() == null) ? null :
-                                getStorageManager().getFileByPath(getFile().getRemotePath());
-                        OCFile currentDir = (getCurrentDir() == null) ? null :
-                                getStorageManager().getFileByPath(getCurrentDir().getRemotePath());
-
-                        if (currentDir == null) {
-                            // current folder was removed from the server
-                            showSnackMessage(
-                                String.format(
-                                    getString(R.string.sync_current_folder_was_removed),
-                                    synchFolderRemotePath
-                                )
-                            );
-                            browseToRoot();
-
-                        } else {
-                            if (currentFile == null && !getFile().isFolder()) {
-                                // currently selected file was removed in the server, and now we
-                                // know it
-                                cleanSecondFragment();
-                                currentFile = currentDir;
-                            }
-
-                            if (synchFolderRemotePath != null &&
-                                    currentDir.getRemotePath().equals(synchFolderRemotePath)) {
-                                OCFileListFragment fileListFragment = getListOfFilesFragment();
-                                if (fileListFragment != null) {
-                                    fileListFragment.listDirectory(true);
-                                    // TODO Enable when "On Device" is recovered ?
-                                    // fileListFragment.listDirectory(currentDir,
-                                    // MainApp.getOnlyOnDevice());
-                                }
-                            }
-                            setFile(currentFile);
+                        if (currentFile == null && !getFile().isFolder()) {
+                            // currently selected file was removed in the server, and now we
+                            // know it
+                            cleanSecondFragment();
+                            currentFile = currentDir;
                         }
 
-                        mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) &&
-                                !RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED
-                                        .equals(event));
-
-                        if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
-                            equals(event)) {
-
-                            if (synchResult != null && !synchResult.isSuccess()) {
-                                /// TODO refactor and make common
-
-                                if (ResultCode.UNAUTHORIZED.equals(synchResult.getCode()) ||
-                                    (synchResult.isException() && synchResult.getException()
-                                        instanceof AuthenticatorException)) {
-
-                                    requestCredentialsUpdate(context);
-
-                                } else if (RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
-                                    synchResult.getCode())) {
-
-                                    showUntrustedCertDialog(synchResult);
-                                }
-
-                            }
-
-                            if (synchFolderRemotePath.equals(OCFile.ROOT_PATH)) {
-                                setAccountInDrawer(getAccount());
+                        if (synchFolderRemotePath != null &&
+                                currentDir.getRemotePath().equals(synchFolderRemotePath)) {
+                            OCFileListFragment fileListFragment = getListOfFilesFragment();
+                            if (fileListFragment != null) {
+                                fileListFragment.listDirectory(true);
+                                // TODO Enable when "On Device" is recovered ?
+                                // fileListFragment.listDirectory(currentDir,
+                                // MainApp.getOnlyOnDevice());
                             }
                         }
-
+                        setFile(currentFile);
                     }
-                    removeStickyBroadcast(intent);
 
-                    OCFileListFragment fileListFragment = getListOfFilesFragment();
-                    if (fileListFragment != null) {
-                        fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
+                    mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) &&
+                            !RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED
+                                    .equals(event));
+
+                    if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
+                        equals(event)) {
+
+                        if (synchResult != null && !synchResult.isSuccess()) {
+                            /// TODO refactor and make common
+
+                            if (ResultCode.UNAUTHORIZED.equals(synchResult.getCode()) ||
+                                (synchResult.isException() && synchResult.getException()
+                                    instanceof AuthenticatorException)) {
+
+                                requestCredentialsUpdate(context);
+
+                            } else if (RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
+                                synchResult.getCode())) {
+
+                                showUntrustedCertDialog(synchResult);
+                            }
+
+                        }
+
+                        if (synchFolderRemotePath.equals(OCFile.ROOT_PATH)) {
+                            setAccountInDrawer(getAccount());
+                        }
                     }
-                    Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
 
-                    setBackgroundText();
                 }
 
-                if (synchResult != null) {
-                    if (synchResult.getCode().equals(
-                            RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED)) {
-                        mLastSslUntrustedServerResult = synchResult;
-                    } else if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE)) {
-                        showSnackMessage(
-                                ErrorMessageAdapter.getErrorCauseMessage(synchResult, null, getResources())
-                        );
-                    }
+                OCFileListFragment fileListFragment = getListOfFilesFragment();
+                if (fileListFragment != null) {
+                    fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
                 }
-            } catch (RuntimeException e) {
-                // avoid app crashes after changing the serial id of RemoteOperationResult
-                // in owncloud library with broadcast notifications pending to process
-                removeStickyBroadcast(intent);
+                Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
+
+                setBackgroundText();
+            }
+
+            if (synchResult != null) {
+                if (synchResult.getCode().equals(
+                        RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED)) {
+                    mLastSslUntrustedServerResult = synchResult;
+                } else if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE)) {
+                    showSnackMessage(
+                            ErrorMessageAdapter.getErrorCauseMessage(synchResult, null, getResources())
+                    );
+                }
             }
         }
     }
@@ -1034,56 +1029,48 @@ public class FileDisplayActivity extends HookActivity
         @SuppressLint("StringFormatInvalid")
         @Override
         public void onReceive(Context context, Intent intent) {
-            try {
-                String uploadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH);
-                String accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME);
-                boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
-                OCFile currentDir = getCurrentDir();
-                boolean isDescendant =
-                    (currentDir != null) &&
-                    (uploadedRemotePath != null) &&
-                    (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
-                boolean renamedInUpload = getFile().getRemotePath().equals(
-                    intent.getStringExtra(Extras.EXTRA_OLD_REMOTE_PATH)
-                );
-                boolean sameFile = renamedInUpload ||
-                    getFile().getRemotePath().equals(uploadedRemotePath);
-                boolean success = intent.getBooleanExtra(Extras.EXTRA_UPLOAD_RESULT, false);
+            String uploadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH);
+            String accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME);
+            boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
+            OCFile currentDir = getCurrentDir();
+            boolean isDescendant =
+                (currentDir != null) &&
+                (uploadedRemotePath != null) &&
+                (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
+            boolean renamedInUpload = getFile().getRemotePath().equals(
+                intent.getStringExtra(Extras.EXTRA_OLD_REMOTE_PATH)
+            );
+            boolean sameFile = renamedInUpload ||
+                getFile().getRemotePath().equals(uploadedRemotePath);
+            boolean success = intent.getBooleanExtra(Extras.EXTRA_UPLOAD_RESULT, false);
 
-                if (sameAccount && isDescendant) {
-                    String linkedToRemotePath =
-                            intent.getStringExtra(Extras.EXTRA_LINKED_TO_PATH);
-                    if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
-                        refreshListOfFilesFragment(true);
-                    }
-                }
-
-                if (sameAccount && sameFile) {
-                    if (success) {
-                        setFile(getStorageManager().getFileByPath(uploadedRemotePath));
-                    }
-                    refreshSecondFragment(
-                        intent.getAction(),
-                        success
-                    );
-                    if (renamedInUpload) {
-                        String newName = (new File(uploadedRemotePath)).getName();
-                        showSnackMessage(
-                            String.format(
-                                getString(R.string.filedetails_renamed_in_upload_msg),
-                                newName
-                            )
-                        );
-                        updateActionBarTitleAndHomeButton(getFile());
-                    }
-                }
-
-            } finally {
-                if (intent != null) {
-                    removeStickyBroadcast(intent);
+            if (sameAccount && isDescendant) {
+                String linkedToRemotePath =
+                        intent.getStringExtra(Extras.EXTRA_LINKED_TO_PATH);
+                if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
+                    refreshListOfFilesFragment(true);
                 }
             }
 
+            if (sameAccount && sameFile) {
+                if (success) {
+                    setFile(getStorageManager().getFileByPath(uploadedRemotePath));
+                }
+                refreshSecondFragment(
+                    intent.getAction(),
+                    success
+                );
+                if (renamedInUpload) {
+                    String newName = (new File(uploadedRemotePath)).getName();
+                    showSnackMessage(
+                        String.format(
+                            getString(R.string.filedetails_renamed_in_upload_msg),
+                            newName
+                        )
+                    );
+                    updateActionBarTitleAndHomeButton(getFile());
+                }
+            }
         }
 
         private void refreshSecondFragment(String uploadEvent, boolean success) {
@@ -1140,37 +1127,30 @@ public class FileDisplayActivity extends HookActivity
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            try {
-                boolean sameAccount = isSameAccount(intent);
-                String downloadedRemotePath =
-                        intent.getStringExtra(Extras.EXTRA_REMOTE_PATH);
-                boolean isDescendant = isDescendant(downloadedRemotePath);
+            boolean sameAccount = isSameAccount(intent);
+            String downloadedRemotePath =
+                    intent.getStringExtra(Extras.EXTRA_REMOTE_PATH);
+            boolean isDescendant = isDescendant(downloadedRemotePath);
 
-                if (sameAccount && isDescendant) {
-                    String linkedToRemotePath =
-                            intent.getStringExtra(Extras.EXTRA_LINKED_TO_PATH);
-                    if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
-                        refreshListOfFilesFragment(true);
-                    }
-                    refreshSecondFragment(
-                            intent.getAction(),
-                            downloadedRemotePath,
-                            intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
-                    );
-                    invalidateOptionsMenu();
+            if (sameAccount && isDescendant) {
+                String linkedToRemotePath =
+                        intent.getStringExtra(Extras.EXTRA_LINKED_TO_PATH);
+                if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
+                    refreshListOfFilesFragment(true);
                 }
+                refreshSecondFragment(
+                        intent.getAction(),
+                        downloadedRemotePath,
+                        intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
+                );
+                invalidateOptionsMenu();
+            }
 
-                if (mWaitingToSend != null) {
-                    mWaitingToSend =
-                            getStorageManager().getFileByPath(mWaitingToSend.getRemotePath());
-                    if (mWaitingToSend.isDown()) {
-                        sendDownloadedFile();
-                    }
-                }
-
-            } finally {
-                if (intent != null) {
-                    removeStickyBroadcast(intent);
+            if (mWaitingToSend != null) {
+                mWaitingToSend =
+                        getStorageManager().getFileByPath(mWaitingToSend.getRemotePath());
+                if (mWaitingToSend.isDown()) {
+                    sendDownloadedFile();
                 }
             }
         }

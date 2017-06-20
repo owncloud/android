@@ -34,6 +34,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -70,6 +71,8 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
 
     private UploadMessagesReceiver mUploadMessagesReceiver;
 
+    private LocalBroadcastManager mLocalBroadcastManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +96,8 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         } // else, the Fragment Manager makes the job on configuration changes
 
         getSupportActionBar().setTitle(getString(R.string.uploads_view_title));
+
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
     private void createUploadListFragment(){
@@ -114,7 +119,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         uploadIntentFilter.addAction(FileUploader.getUploadsAddedMessage());
         uploadIntentFilter.addAction(FileUploader.getUploadStartMessage());
         uploadIntentFilter.addAction(FileUploader.getUploadFinishMessage());
-        registerReceiver(mUploadMessagesReceiver, uploadIntentFilter);
+        mLocalBroadcastManager.registerReceiver(mUploadMessagesReceiver, uploadIntentFilter);
 
         Log_OC.v(TAG, "onResume() end");
 
@@ -124,7 +129,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
     protected void onPause() {
         Log_OC.v(TAG, "onPause() start");
         if (mUploadMessagesReceiver != null) {
-            unregisterReceiver(mUploadMessagesReceiver);
+            mLocalBroadcastManager.unregisterReceiver(mUploadMessagesReceiver);
             mUploadMessagesReceiver = null;
         }
         super.onPause();
@@ -326,17 +331,10 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            try {
-                UploadListFragment uploadListFragment =
-                    (UploadListFragment) getSupportFragmentManager().findFragmentByTag(TAG_UPLOAD_LIST_FRAGMENT);
+            UploadListFragment uploadListFragment =
+                (UploadListFragment) getSupportFragmentManager().findFragmentByTag(TAG_UPLOAD_LIST_FRAGMENT);
 
-                uploadListFragment.updateUploads();
-            } finally {
-                if (intent != null) {
-                    removeStickyBroadcast(intent);
-                }
-            }
-
+            uploadListFragment.updateUploads();
         }
     }
 
