@@ -307,6 +307,7 @@
   <string name="share_confirm_public_link_button">Simpan</string>
   <string name="share_via_link_expiration_date_label">Kedaluwarsa</string>
   <string name="share_via_link_password_label">Kata Sandi</string>
+  <string name="share_via_link_edit_permission_label">Izinkan penyuntingan</string>
   <string name="share_search">Cari</string>
   <string name="share_privilege_can_share">dapat berbagi</string>
   <string name="share_privilege_can_edit">dapat disunting</string>

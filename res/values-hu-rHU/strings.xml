@@ -277,6 +277,7 @@
   <string name="share_confirm_public_link_button">Mentés</string>
   <string name="share_via_link_expiration_date_label">Lejárat</string>
   <string name="share_via_link_password_label">Jelszó</string>
+  <string name="share_via_link_edit_permission_label">Szerkesztheti</string>
   <string name="share_search">Keresés</string>
   <string name="share_privilege_can_share">megosztható</string>
   <string name="share_privilege_can_edit">módosíthat</string>

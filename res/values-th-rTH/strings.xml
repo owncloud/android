@@ -401,7 +401,8 @@
   <string name="share_via_link_expiration_date_label">การหมดอายุ</string>
   <string name="share_via_link_password_label">รหัสผ่าน</string>
   <string name="share_via_link_password_title">ความปลอดภัย</string>
-  <string name="share_via_link_edit_permission_label">อนุญาตการอัพโหลด</string>
+  <string name="share_via_link_edit_permission_label">อนุญาตให้แก้ไข</string>
+  <string name="share_via_link_show_file_listing_label">แสดงรายชื่อไฟล์</string>
   <string name="share_get_public_link_button">รับลิงค์</string>
   <string name="share_with_title">แชร์กับ ...</string>
   <string name="share_with_edit_title">แชร์กับ %1$s</string>
@@ -455,6 +456,7 @@
   <string name="share_via_link_expiration_date_enforced_label">หมดอายุ *</string>
   <string name="share_via_link_expiration_date_explanation_label">ลิงค์สาธารณะจะหมดอายุไม่เกิน %1$d วันหลังจากถูกสร้างขึ้น</string>
   <string name="share_via_link_default_name_template">%1$s ลิงค์</string>
+  <string name="file_private_link_error">เกิดข้อผิดพลาดขณะพยายามดึงลิงก์ส่วนตัวสำหรับไฟล์</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>

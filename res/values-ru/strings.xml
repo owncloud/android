@@ -404,7 +404,8 @@
   <string name="share_via_link_expiration_date_label">Срок действия</string>
   <string name="share_via_link_password_label">Пароль</string>
   <string name="share_via_link_password_title">Безопасный</string>
-  <string name="share_via_link_edit_permission_label">Разрешить загрузку</string>
+  <string name="share_via_link_edit_permission_label">Разрешить редактирование</string>
+  <string name="share_via_link_show_file_listing_label">Показать список файлов</string>
   <string name="share_get_public_link_button">Получить ссылку</string>
   <string name="share_with_title">Поделиться с …</string>
   <string name="share_with_edit_title">Поделиться с %1$s</string>
@@ -457,6 +458,8 @@
   <string name="share_via_link_expiration_date_enforced_label">Срок действия</string>
   <string name="share_via_link_expiration_date_explanation_label">Общедоступная ссылка устареет не позднее, чем через %1$d дней после создания</string>
   <string name="share_via_link_default_name_template">Ссылка %1$s</string>
+  <string name="private_link_info">Это частная ссылка, её могут использовать только люди, у которых есть доступ к файлу или каталогу. Используйте её в качестве постоянной ссылки для себя или чтобы указать другим на файлы в совместном доступе.</string>
+  <string name="file_private_link_error">При получении частной ссылки на файл произошла ошибка</string>
   <plurals name="items_selected_count">
     <item quantity="one">Выбран %d</item>
     <item quantity="few">Выбрано %d</item>
