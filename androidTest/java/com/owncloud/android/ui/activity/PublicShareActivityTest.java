@@ -23,11 +23,14 @@ package com.owncloud.android.ui.activity;
 
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
@@ -69,6 +72,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -76,13 +80,10 @@ import static org.hamcrest.Matchers.not;
 
 public class PublicShareActivityTest {
 
-    public static final String EXTRA_ACTION = "ACTION";
-    public static final String EXTRA_ACCOUNT = "ACCOUNT";
-
     private static final int WAIT_INITIAL_MS = 4000;
     private static final int WAIT_CONNECTION_MS = 1500;
 
-    private static final String ERROR_MESSAGE = "Activity not finished";
+    private static final String ERROR_MESSAGE = "BAD LINK";
     private static final String RESULT_CODE = "mResultCode";
     private static final String LOG_TAG = "PublicShareSuite";
     private static final int VERSION_10 = 10;
@@ -90,7 +91,8 @@ public class PublicShareActivityTest {
     private Context targetContext = null;
     private static String folder = "Photos";
     private static String file = "ownCloud.pdf";
-    private static final String nameShare = "$%@&";
+    private static final String nameShare = "$%@rter";
+    private static final String nameShareEdited = "publicnameverylongtotest";
     private static final int GRANT_BUTTON_INDEX = 1;
     private int version = -1;
 
@@ -160,7 +162,6 @@ public class PublicShareActivityTest {
                     testPassword = arguments.getString("TEST_PASSWORD");
                     servertype = ServerType.fromValue(Integer.parseInt(arguments.getString("TRUSTED")));
 
-
                     //Add an account to the device in order to avoid login view
                     AccountsManager.addAccount(targetContext, testServerURL, testUser, testPassword);
 
@@ -210,10 +211,10 @@ public class PublicShareActivityTest {
 
 
     /**
-     *  Share publicly a folder (no options)
+     *  Share publicly a folder (default options)
      */
     @Test
-    public void test1_share_public()
+    public void test1_create_public_link()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Share Public Start");
@@ -226,22 +227,13 @@ public class PublicShareActivityTest {
 
         //Check that no links are already created
         onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
-        onView(withId(R.id.addPublicLinkButton)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
 
-        //if ownCloud >= 10, we can handle the link name
+        //Depending the server version, send a name or not.
         if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
-            onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShare));
+            publicShareCreationDefault(nameShare);
+        } else {
+            publicShareCreationDefault(null);
         }
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(),click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-        //Check that the sharing panel is displayed
-        onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
-        onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
-        pressBack();
-
-        SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check the name,only in the case of ownCloud >= 10
         if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
@@ -276,14 +268,58 @@ public class PublicShareActivityTest {
         //Check that the sharing panel is displayed
         onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
         onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
-        pressBack();
+
+        //Get text copied in the clipboard
+        onView(withText("Copy to clipboard")).perform(click());
+        String text = getTextFromClipboard();
+
+        //check if the copied link is correct
+        assertTrue(ERROR_MESSAGE, text.startsWith(testServerURL));
 
         Log_OC.i(LOG_TAG, "Test Get Link Passed");
 
     }
 
     @Test
-    public void test3_enable_allow_edit()
+    public void test3_edit_name() {
+
+        Log_OC.i(LOG_TAG, "Test Edit Link Name Start");
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //if ownCloud >= 10, we can handle the link name. If not... skipping test.
+        if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
+
+            //Select share option
+            onView(withText(folder)).perform(longClick());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+            selectOptionActionsMenu(R.string.action_share);
+
+            //Edit the link name
+            onView(withId(R.id.editPublicLinkButton)).perform(click());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+            onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(nameShareEdited));
+
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+            onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(),click());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+
+            //Check that the sharing panel is displayed
+            onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
+            onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
+            pressBack();
+
+            //Check the name,only in the case of ownCloud >= 10
+            if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
+                onView(withText(nameShareEdited)).check(matches(isDisplayed()));
+            }
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+        }
+
+        Log_OC.i(LOG_TAG, "Test Edit Link Name Passed");
+    }
+
+    @Test
+    public void test4_enable_allow_edit()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Allow Edit Start");
@@ -321,7 +357,7 @@ public class PublicShareActivityTest {
     }
 
     @Test
-    public void test4_enable_password()
+    public void test5_enable_password()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Password Start");
@@ -339,7 +375,8 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        //Setting a password...
+
+        //Setting a password... no matter which one
         onView(withId(R.id.shareViaLinkPasswordValue)).perform(replaceText("a"));
         onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -363,7 +400,7 @@ public class PublicShareActivityTest {
     }
 
     @Test
-    public void test5_enable_expiration()
+    public void test6_enable_expiration()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Expiration Start");
@@ -404,7 +441,7 @@ public class PublicShareActivityTest {
     }
 
     @Test
-    public void test6_unshare_public()
+    public void test7_unshare_public()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public Start");
@@ -432,10 +469,81 @@ public class PublicShareActivityTest {
 
     }
 
+    @Test
+    public void test8_share_multiple()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test Share Multiple Public Start");
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Select share option
+        onView(withText(folder)).perform(longClick());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        selectOptionActionsMenu(R.string.action_share);
+
+        if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
+            onView(withId(R.id.addPublicLinkButton)).check(matches(isDisplayed()));
+            for (int i = 0; i < 5 ; i++) {
+                publicShareCreationDefault(null);
+            }
+
+        } else {  //Servers < 10 hide the button
+            publicShareCreationDefault(null);
+            onView(withId(R.id.addPublicLinkButton))
+                    .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+        }
+
+        Log_OC.i(LOG_TAG, "Test Unshare Public Passed");
+
+    }
+
+
+
+    //To create a new public link
+    private void publicShareCreationDefault (String name) {
+
+        //Creation of the share link. Name only for servers >= 10
+        onView(withId(R.id.addPublicLinkButton)).perform(click());
+
+        //Check server version and parameter null (or not) to handle the link name
+        if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10
+                && name!=null) {
+            onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
+        }
+
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(),click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check that the sharing panel is displayed
+        onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
+        onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
+        pressBack();
+
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+    }
+
+
     //Returns the permission of writing in device storage
     private int grantedPermission () {
         return ContextCompat.checkSelfPermission(targetContext,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    //Get copied link from clipboard
+    private String getTextFromClipboard(){
+        //Clipboard can not be handled in thread without Looper
+        Looper.prepare();
+        ClipboardManager clipboard = (ClipboardManager)
+                targetContext.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = clipboard.getPrimaryClip();
+        if (clip != null) {
+            // Gets the first item from the clipboard data
+            ClipData.Item item = clip.getItemAt(0);
+            return item.getText().toString();
+        } else
+            return null;
     }
 
     //To select an option in files view
