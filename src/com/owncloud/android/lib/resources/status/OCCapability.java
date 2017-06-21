@@ -55,6 +55,7 @@ public class OCCapability {
     private CapabilityBooleanType mFilesSharingPublicSendMail;
     private CapabilityBooleanType mFilesSharingPublicUpload;
     private CapabilityBooleanType mFilesSharingPublicMultiple;
+    private CapabilityBooleanType mFilesSharingPublicSupportsUploadOnly;
 
     private CapabilityBooleanType mFilesSharingUserSendMail;
 
@@ -89,6 +90,7 @@ public class OCCapability {
         mFilesSharingPublicSendMail = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicUpload = CapabilityBooleanType.UNKNOWN;
         mFilesSharingPublicMultiple = CapabilityBooleanType.UNKNOWN;
+        mFilesSharingPublicSupportsUploadOnly = CapabilityBooleanType.UNKNOWN;
         mFilesSharingUserSendMail = CapabilityBooleanType.UNKNOWN;
         mFilesSharingResharing = CapabilityBooleanType.UNKNOWN;
         mFilesSharingFederationOutgoing = CapabilityBooleanType.UNKNOWN;
@@ -237,6 +239,15 @@ public class OCCapability {
 
     public void setFilesSharingPublicMultiple(CapabilityBooleanType filesSharingPublicMultiple) {
         this.mFilesSharingPublicMultiple = filesSharingPublicMultiple;
+    }
+
+    public CapabilityBooleanType getFilesSharingPublicSupportsUploadOnly() {
+        return mFilesSharingPublicSupportsUploadOnly;
+    }
+
+    public void setFilesSharingPublicSupportsUploadOnly(CapabilityBooleanType
+                                                                filesSharingPublicMultiple) {
+        this.mFilesSharingPublicSupportsUploadOnly = filesSharingPublicMultiple;
     }
 
     public CapabilityBooleanType getFilesSharingUserSendMail() {

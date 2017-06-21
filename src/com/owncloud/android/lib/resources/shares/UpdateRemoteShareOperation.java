@@ -102,6 +102,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         mPassword = null;               // no update
         mExpirationDateInMillis = 0;    // no update
         mPublicUpload = null;
+        mPermissions = OCShare.DEFAULT_PERMISSION;
     }
 
 
@@ -188,13 +189,16 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
             parametersToUpdate.add(new Pair<>(PARAM_EXPIRATION_DATE, formattedExpirationDate));
 
         } // else, ignore - no update
-        if (mPermissions > 0) {
-            // set permissions
-            parametersToUpdate.add(new Pair<>(PARAM_PERMISSIONS, Integer.toString(mPermissions)));
-        }
 
         if (mPublicUpload != null) {
             parametersToUpdate.add(new Pair<>(PARAM_PUBLIC_UPLOAD, Boolean.toString(mPublicUpload)));
+        }
+
+        // IMPORTANT: permissions parameter needs to be updated after mPublicUpload parameter,
+        // otherwise they would be set always as 1 (READ) in the server when mPublicUpload was updated
+        if (mPermissions > 0) {
+            // set permissions
+            parametersToUpdate.add(new Pair<>(PARAM_PERMISSIONS, Integer.toString(mPermissions)));
         }
 
         /// perform required PUT requests
