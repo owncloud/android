@@ -80,7 +80,6 @@ public class CreateShareWithShareeOperation extends SyncOperation {
         operation.setGetShareDetails(true);
         RemoteOperationResult result = operation.execute(client);
 
-        
         if (result.isSuccess()) {
             if (result.getData().size() > 0) {
                 OCShare share = (OCShare) result.getData().get(0);

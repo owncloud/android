@@ -41,8 +41,8 @@
                     android:id="@+id/shareViaLinkNameValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/standard_half_padding"
                     android:layout_marginEnd="@dimen/standard_half_padding"
+                    android:layout_marginRight="@dimen/standard_half_padding"
                     android:inputType="textNoSuggestions"
                     android:textSize="15sp" />
 
@@ -74,6 +74,37 @@
                     android:layout_toStartOf="@id/shareViaLinkEditPermissionSwitch"
                     android:padding="@dimen/standard_half_padding"
                     android:text="@string/share_via_link_edit_permission_label"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/shareViaShowFileListingSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/standard_margin"
+                android:visibility="gone">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/shareViaShowFileListingSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:padding="@dimen/standard_half_padding" />
+
+                <TextView
+                    android:id="@+id/shareViaShowFileListingLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@id/shareViaShowFileListingSwitch"
+                    android:layout_toStartOf="@id/shareViaShowFileListingSwitch"
+                    android:padding="@dimen/standard_half_padding"
+                    android:text="@string/share_via_link_show_file_listing_label"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
@@ -195,8 +226,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/common_error"
-                    android:drawableStart="@drawable/common_error"
                     android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/common_error"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/standard_half_padding"
                     android:paddingRight="@dimen/standard_half_padding"

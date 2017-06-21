@@ -161,12 +161,14 @@ public class FileOperationsHelper {
      * @param password Optional password to protect the public share
      * @param expirationTimeInMillis Optional expiration time
      * @param uploadToFolderPermission Optional permissions to upload files to the folder
+     * @param permissions Optional permissions to allow or not specific actions in the folder
      */
     public void shareFileViaLink(OCFile file,
                                  String name,
                                  String password,
                                  long expirationTimeInMillis,
-                                 boolean uploadToFolderPermission)
+                                 boolean uploadToFolderPermission,
+                                 int permissions)
     {
 
         if (isSharedSupported()) {
@@ -206,6 +208,11 @@ public class FileOperationsHelper {
                 createShareFileViaLink.putExtra(
                         OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
                         uploadToFolderPermission
+                );
+
+                createShareFileViaLink.putExtra(
+                        OperationsService.EXTRA_SHARE_PERMISSIONS,
+                        permissions
                 );
 
                 mWaitingForOpId = mFileActivity.getOperationsServiceBinder().
@@ -358,13 +365,15 @@ public class FileOperationsHelper {
      *                                  date, leaving the link unrestricted. Zero makes no change.
      * @param uploadToFolderPermission  New state of the permission for editing the folder shared via link.
      *                                  Ignored if the file is not a folder. - TODO select value to leave unchanged?
+     * @param permissions               Optional permissions to allow or not specific actions in the folder
      */
     public void updateShareViaLink(
         OCShare share,
         String name,
         String password,
         long expirationTimeInMillis,
-        boolean uploadToFolderPermission
+        boolean uploadToFolderPermission,
+        int permissions
     ) {
         // Set password updating share
         Intent updateShareIntent = new Intent(mFileActivity, OperationsService.class);
@@ -390,6 +399,11 @@ public class FileOperationsHelper {
         updateShareIntent.putExtra(
             OperationsService.EXTRA_SHARE_PUBLIC_UPLOAD,
             uploadToFolderPermission
+        );
+
+        updateShareIntent.putExtra(
+                OperationsService.EXTRA_SHARE_PERMISSIONS,
+                permissions
         );
 
         queueShareIntent(updateShareIntent);

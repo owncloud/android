@@ -98,6 +98,11 @@ public class PublicShareDialogFragment extends DialogFragment {
     private OCCapability mCapabilities;
 
     /**
+     * Listener for changes in allow editing switch
+     */
+    OnAllowEditingInteractionListener mOnAllowEditingInteractionListener;
+
+    /**
      * Listener for changes in password switch
      */
     OnPasswordInteractionListener mOnPasswordInteractionListener;
@@ -117,9 +122,9 @@ public class PublicShareDialogFragment extends DialogFragment {
      * @param   account         Account to get capabilities
      */
     public static PublicShareDialogFragment newInstanceToCreate(
-        OCFile fileToShare,
-        Account account,
-        String defaultLinkName
+            OCFile fileToShare,
+            Account account,
+            String defaultLinkName
     ) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
@@ -142,7 +147,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     public static PublicShareDialogFragment newInstanceToUpdate(OCFile fileToShare,
                                                                 OCShare publicShare,
                                                                 Account account
-                                                                ) {
+    ) {
         PublicShareDialogFragment publicShareDialogFragment = new PublicShareDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_FILE, fileToShare);
@@ -175,8 +180,8 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private boolean isSharedFolder() {
         return (
-            (mFile != null && mFile.isFolder()) ||
-            (mPublicShare != null && mPublicShare.isFolder())
+                (mFile != null && mFile.isFolder()) ||
+                        (mPublicShare != null && mPublicShare.isFolder())
         );
     }
 
@@ -188,13 +193,6 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         Log_OC.d(TAG, "onCreateView");
 
-        // Show or hide edit permission section
-        if (isSharedFolder()){
-            getEditPermissionSection(view).setVisibility(View.VISIBLE);
-        } else {
-            getEditPermissionSection(view).setVisibility(View.GONE);
-        }
-
         // Get and set the values saved previous to the screen rotation, if any
         if (savedInstanceState != null) {
             String expirationDate = savedInstanceState.getString(KEY_EXPIRATION_DATE);
@@ -204,6 +202,12 @@ public class PublicShareDialogFragment extends DialogFragment {
             }
         }
 
+        // Check share file listing by default
+        getShowFileListingSwitch(view).setChecked(true);
+
+        //Disable show file listing by default
+        getShowFileListingSwitch(view).setEnabled(false);
+
         if (updating()) { // Fill in the different fields if the share is being updated
 
             // Set dialog title to edit
@@ -212,9 +216,16 @@ public class PublicShareDialogFragment extends DialogFragment {
             // Set existing share name
             getNameValue(view).setText(mPublicShare.getName());
 
-            // Set the upload permissions, if any
+            // Set the edit permission, if any
             if ((mPublicShare.getPermissions() & (UPDATE_PERMISSION | CREATE_PERMISSION)) > 0) {
                 getEditPermissionSwitch(view).setChecked(true);
+                // If allow editing switch is checked, show file listing switch should be enabled
+                getShowFileListingSwitch(view).setEnabled(true);
+            }
+
+            // Set the write only permission, if any
+            if (mPublicShare.getPermissions() == CREATE_PERMISSION) {
+                getShowFileListingSwitch(view).setChecked(false);
             }
 
             // Set password, if any
@@ -248,6 +259,9 @@ public class PublicShareDialogFragment extends DialogFragment {
             getNameValue(view).setText(getArguments().getString(ARG_DEFAULT_LINK_NAME, ""));
         }
 
+        // Set listener for user actions on allow editing
+        initAllowEditingListener(view);
+
         // Set listener for user actions on password
         initPasswordListener(view);
 
@@ -267,7 +281,23 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
 
+                // Allow editing option
                 boolean publicLinkEditPermissions = getEditPermissionSwitch(getView()).isChecked();
+
+                // Show file listing option
+                boolean publicLinkSupportOnlyUpload = !getShowFileListingSwitch(getView()).
+                        isChecked();
+
+                int publicLinkPermissions = OCShare.DEFAULT_PERMISSION;
+
+                if (publicLinkEditPermissions && publicLinkSupportOnlyUpload) {
+
+                    // If edit permissions are checked, the server will set the read permission
+                    // but we need create permissions at this point
+                    publicLinkEditPermissions = false;
+
+                    publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
+                }
 
                 if (!updating()) { // Creating a new public share
 
@@ -277,7 +307,8 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     publicLinkName,
                                     publicLinkPassword,
                                     publicLinkExpirationDateInMillis,
-                                    publicLinkEditPermissions
+                                    publicLinkEditPermissions,
+                                    publicLinkPermissions
                             );
 
                 } else { // Updating an existing public share
@@ -299,7 +330,8 @@ public class PublicShareDialogFragment extends DialogFragment {
                                     publicLinkName,
                                     publicLinkPassword,
                                     publicLinkExpirationDateInMillis,
-                                    publicLinkEditPermissions
+                                    publicLinkEditPermissions,
+                                    publicLinkPermissions
                             );
                 }
             }
@@ -324,9 +356,9 @@ public class PublicShareDialogFragment extends DialogFragment {
             // Parse expiration date and convert it to milliseconds
             try {
                 publicLinkExpirationDateInMillis =
-                    // remember: format is defined by date picker
-                    ExpirationDatePickerDialogFragment.getDateFormat().
-                        parse(expirationDate).getTime()
+                        // remember: format is defined by date picker
+                        ExpirationDatePickerDialogFragment.getDateFormat().
+                                parse(expirationDate).getTime()
                 ;
             } catch (ParseException e) {
                 Log_OC.e(TAG, "Error reading expiration date from input field", e);
@@ -370,6 +402,54 @@ public class PublicShareDialogFragment extends DialogFragment {
     }
 
     /**
+     * Binds listener for user actions related to allow editing.
+     *
+     * @param shareView Root view in the fragment.
+     */
+    private void initAllowEditingListener(View shareView) {
+        mOnAllowEditingInteractionListener = new OnAllowEditingInteractionListener();
+
+        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkEditPermissionSwitch)).
+                setOnCheckedChangeListener(mOnAllowEditingInteractionListener);
+    }
+
+    /**
+     * Listener for user actions related to allow editing.
+     */
+    private class OnAllowEditingInteractionListener
+            implements CompoundButton.OnCheckedChangeListener {
+
+        /**
+         * Called by R.id.shareViaLinkEditPermissionSwitch
+         *
+         * @param switchView {@link SwitchCompat} toggled by the user,
+         *                                       R.id.shareViaLinkEditPermissionSwitch
+         * @param isChecked  New switch state.
+         */
+        @Override
+        public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
+
+            // If allow editing is checked, enable show file listing switch
+            if (isChecked) {
+
+                getShowFileListingSwitch(getView()).setEnabled(true);
+
+            } else {
+
+                // If not, disable show file listing switch
+                getShowFileListingSwitch(getView()).setEnabled(false);
+
+                // If show listing file option has been unchecked and allow editing is unchecked
+                // after that, check show listing file option by default
+                if (!getShowFileListingSwitch(getView()).isChecked()) {
+
+                    getShowFileListingSwitch(getView()).setChecked(true);
+                }
+            }
+        }
+    }
+
+    /**
      * Binds listener for user actions that start any update on a password for the public link
      * to the views receiving the user events.
      *
@@ -408,7 +488,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                 shareViaLinkPasswordValue.requestFocus();
 
                 // Show keyboard to fill in the password
-                InputMethodManager mgr = (InputMethodManager)getActivity().getSystemService(Context.
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.
                         INPUT_METHOD_SERVICE);
                 mgr.showSoftInput(shareViaLinkPasswordValue, InputMethodManager.SHOW_IMPLICIT);
 
@@ -465,11 +545,10 @@ public class PublicShareDialogFragment extends DialogFragment {
 
                 // Show calendar to set the expiration date
                 ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
-                    newInstance(
-                        getExpirationDateValueInMillis(),
-                        getImposedExpirationDate()
-                    )
-                ;
+                        newInstance(
+                                getExpirationDateValueInMillis(),
+                                getImposedExpirationDate()
+                        );
                 dialog.setDatePickerListener(this);
                 dialog.show(
                         getActivity().getSupportFragmentManager(),
@@ -495,11 +574,10 @@ public class PublicShareDialogFragment extends DialogFragment {
 
             // Show calendar to set the expiration date
             ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
-                newInstance(
-                    getExpirationDateValueInMillis(),
-                    getImposedExpirationDate()
-                )
-            ;
+                    newInstance(
+                            getExpirationDateValueInMillis(),
+                            getImposedExpirationDate()
+                    );
             dialog.setDatePickerListener(this);
             dialog.show(
                     getActivity().getSupportFragmentManager(),
@@ -556,6 +634,7 @@ public class PublicShareDialogFragment extends DialogFragment {
      * Includes:
      *  - hide the link name section if multiple public share is not supported, showing the keyboard
      *    to fill in the public share name otherwise
+     *  - hide show file listing option
      *  - hide or show the switch to disable the password if it is enforced or not;
      *  - hide or show the switch to disable the expiration date it it is enforced or not;
      *  - show or hide the switch to allow public uploads if it is allowed or not;
@@ -578,9 +657,21 @@ public class PublicShareDialogFragment extends DialogFragment {
 
             // Show keyboard to fill the public share name
             getDialog().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE |
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE |
+                            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
             );
+        }
+
+        // Show allow editing option if corresponding capability is set
+        if (mCapabilities.getFilesSharingPublicUpload().isTrue() && isSharedFolder()) {
+            getEditPermissionSection(rootView).setVisibility(View.VISIBLE);
+        }
+
+        // Show file listing option if supports upload only capability is set, a folder is being
+        // shared and allow editing capability is set as well
+        if (mCapabilities.getFilesSharingPublicSupportsUploadOnly().isTrue() && isSharedFolder() &&
+                mCapabilities.getFilesSharingPublicUpload().isTrue()) {
+            getShowFileListingSection(rootView).setVisibility(View.VISIBLE);
         }
 
         // Show default date enforced by the server, if any
@@ -600,18 +691,18 @@ public class PublicShareDialogFragment extends DialogFragment {
             getExpirationDateValue(rootView).setText(formattedDate);
         }
 
-        // hide expiration date switch if date is enforced to prevent it is removed
+        // Hide expiration date switch if date is enforced to prevent it is removed
         if (mCapabilities.getFilesSharingPublicExpireDateEnforced().isTrue()) {
             getExpirationDateLabel(rootView).setText(
-                R.string.share_via_link_expiration_date_enforced_label
+                    R.string.share_via_link_expiration_date_enforced_label
             );
             getExpirationDateSwitch(rootView).setVisibility(View.GONE);
             getExpirationDateExplanation(rootView).setVisibility(View.VISIBLE);
             getExpirationDateExplanation(rootView).setText(
-                getString(
-                    R.string.share_via_link_expiration_date_explanation_label,
-                    mCapabilities.getFilesSharingPublicExpireDateDays()
-                )
+                    getString(
+                            R.string.share_via_link_expiration_date_explanation_label,
+                            mCapabilities.getFilesSharingPublicExpireDateDays()
+                    )
             );
         }
 
@@ -621,21 +712,16 @@ public class PublicShareDialogFragment extends DialogFragment {
             getPasswordSwitch(rootView).setVisibility(View.GONE);
             getPasswordValue(rootView).setVisibility(View.VISIBLE);
         }
-
-        // hide password switch if password is enforced to prevent it is removed
-        if (mCapabilities.getFilesSharingPublicUpload().isFalse()) {
-            getEditPermissionSection(rootView).setVisibility(View.GONE);
-        }
     }
 
     /**
      * Get expiration date imposed by the server, if any
      */
-    private long getImposedExpirationDate () {
+    private long getImposedExpirationDate() {
 
         long imposedExpirationDate = -1;
 
-        if (mCapabilities!= null && mCapabilities.
+        if (mCapabilities != null && mCapabilities.
                 getFilesSharingPublicExpireDateEnforced().isTrue()) {
 
             imposedExpirationDate = DateUtils.addDaysToDate(
@@ -651,17 +737,17 @@ public class PublicShareDialogFragment extends DialogFragment {
      * Show error when creating or updating the public share, if any
      * @param errorMessage
      */
-    public void showError (String errorMessage) {
+    public void showError(String errorMessage) {
 
         getErrorMessage().setVisibility(View.VISIBLE);
         getErrorMessage().setText(errorMessage);
     }
 
-    private TextView getDialogTitle (View view) {
+    private TextView getDialogTitle(View view) {
         return (TextView) view.findViewById(R.id.publicShareDialogTitle);
     }
 
-    private LinearLayout getNameSection (View view) {
+    private LinearLayout getNameSection(View view) {
         return (LinearLayout) view.findViewById(R.id.shareViaLinkNameSection);
     }
 
@@ -673,8 +759,16 @@ public class PublicShareDialogFragment extends DialogFragment {
         return view.findViewById(R.id.shareViaLinkEditPermissionSection);
     }
 
+    private View getShowFileListingSection(View view) {
+        return view.findViewById(R.id.shareViaShowFileListingSection);
+    }
+
     private SwitchCompat getEditPermissionSwitch(View view) {
         return (SwitchCompat) view.findViewById(R.id.shareViaLinkEditPermissionSwitch);
+    }
+
+    private SwitchCompat getShowFileListingSwitch(View view) {
+        return (SwitchCompat) view.findViewById(R.id.shareViaShowFileListingSwitch);
     }
 
     private TextView getPasswordLabel(View view) {
@@ -719,7 +813,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         return (TextView) view.findViewById(R.id.shareViaLinkExpirationExplanationLabel);
     }
 
-    private TextView getErrorMessage () {
+    private TextView getErrorMessage() {
         return (TextView) getView().findViewById(R.id.public_link_error_message);
     }
 }

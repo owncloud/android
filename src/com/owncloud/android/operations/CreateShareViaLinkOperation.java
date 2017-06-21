@@ -46,6 +46,7 @@ public class CreateShareViaLinkOperation extends SyncOperation {
     private String mPassword;
     private long mExpirationDateInMillis;
     private Boolean mPublicUpload;
+    private int mPermissions;
 
     /**
      * Constructor
@@ -62,6 +63,7 @@ public class CreateShareViaLinkOperation extends SyncOperation {
         mPassword = null;
         mExpirationDateInMillis = 0;
         mPublicUpload = null;
+        mPermissions = OCShare.DEFAULT_PERMISSION;
     }
 
     /**
@@ -93,11 +95,19 @@ public class CreateShareViaLinkOperation extends SyncOperation {
 
     /**
      * Enable upload permissions to update in Share resource.
-     *
      * @param publicUpload Upload Permission to set to the public link.
      */
     public void setPublicUpload(Boolean publicUpload) {
         this.mPublicUpload = publicUpload;
+    }
+
+    /**
+     * Set permissions to allow or not specific actions in the share
+     *
+     * @param permissions permissions to set to the public link.
+     */
+    public void setPermissions (int permissions) {
+        this.mPermissions = permissions;
     }
 
     public String getName() {
@@ -106,6 +116,10 @@ public class CreateShareViaLinkOperation extends SyncOperation {
 
     public Boolean getPublicUpload() {
         return mPublicUpload;
+    }
+
+    public int getPermissions() {
+        return mPermissions;
     }
 
     public long getExpirationDateInMillis() {
@@ -128,10 +142,12 @@ public class CreateShareViaLinkOperation extends SyncOperation {
                 "",
                 mPublicUpload,
                 mPassword,
-                OCShare.DEFAULT_PERMISSION
+                mPermissions
         );
         createOp.setGetShareDetails(true);
         createOp.setName(mName);
+        createOp.setPublicUpload(mPublicUpload);
+        createOp.setPermissions(mPermissions);
         createOp.setExpirationDate(mExpirationDateInMillis);
         RemoteOperationResult result = createOp.execute(client);
 

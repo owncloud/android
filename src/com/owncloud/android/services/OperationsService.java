@@ -50,6 +50,7 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.shares.ShareType;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
@@ -588,6 +589,12 @@ public class OperationsService extends Service {
 
                         ((CreateShareViaLinkOperation) operation).
                                 setPublicUpload(uploadToFolderPermission);
+
+                        int permissions = operationIntent.
+                                getIntExtra(EXTRA_SHARE_PERMISSIONS, OCShare.DEFAULT_PERMISSION);
+
+                        ((CreateShareViaLinkOperation) operation).
+                                setPermissions(permissions);
                     }
 
                 } else if (ACTION_UPDATE_SHARE_VIA_LINK.equals(action)) {
@@ -611,6 +618,13 @@ public class OperationsService extends Service {
                     if (operationIntent.hasExtra(EXTRA_SHARE_PUBLIC_UPLOAD)) {
                         ((UpdateShareViaLinkOperation) operation).setPublicUpload(
                             operationIntent.getBooleanExtra(EXTRA_SHARE_PUBLIC_UPLOAD, false)
+                        );
+                    }
+
+                    if (operationIntent.hasExtra(EXTRA_SHARE_PERMISSIONS)) {
+                        ((UpdateShareViaLinkOperation) operation).setPermissions(
+                                operationIntent.getIntExtra(EXTRA_SHARE_PERMISSIONS,
+                                        OCShare.DEFAULT_PERMISSION)
                         );
                     }
 
