@@ -118,6 +118,16 @@ android {
             assets.srcDirs = ['assets']
         }
 
+        beta {
+            manifest.srcFile 'beta/AndroidManifest.xml'
+            java.srcDirs = ['beta/src']
+            resources.srcDirs = ['beta/src']
+            aidl.srcDirs = ['beta/src']
+            renderscript.srcDirs = ['beta/src']
+            res.srcDirs = ['beta/res']
+            assets.srcDirs = ['beta/assets']
+        }
+
 
         // move whole local unit tests structure as a whole from src/test/* to test/*
         test.setRoot('test')
@@ -172,6 +182,8 @@ android {
         }
 
         beta {
+            // This copies the debuggable attribute and debug signing configurations.
+            initWith debug
             applicationIdSuffix ".beta"
         }
     }
