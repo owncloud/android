@@ -26,7 +26,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -41,24 +40,11 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AuthenticatorActivityTest;
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.network.NetworkUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
-import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.utils.AccountsManager;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -70,7 +56,6 @@ import org.junit.runners.MethodSorters;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -101,7 +86,6 @@ public class PublicShareActivityTest {
     private static final String RESULT_CODE = "mResultCode";
     private static final String LOG_TAG = "PublicShareSuite";
     private static final int VERSION_10 = 10;
-    private static final String SHARE_OPTION_MENU = "Share";
 
     private Context targetContext = null;
     private static String folder = "Photos";
@@ -176,7 +160,6 @@ public class PublicShareActivityTest {
                     testPassword = arguments.getString("TEST_PASSWORD");
                     servertype = ServerType.fromValue(Integer.parseInt(arguments.getString("TRUSTED")));
 
-                    //targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
                     //Add an account to the device in order to avoid login view
                     AccountsManager.addAccount(targetContext, testServerURL, testUser, testPassword);
@@ -239,7 +222,7 @@ public class PublicShareActivityTest {
         //Select share option
         onView(withText(folder)).perform(longClick());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        selectOptionActionsMenu(SHARE_OPTION_MENU);
+        selectOptionActionsMenu(R.string.action_share);
 
         //Check that no links are already created
         onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
@@ -284,7 +267,7 @@ public class PublicShareActivityTest {
         //Select share option
         onView(withText(folder)).perform(longClick());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        selectOptionActionsMenu(SHARE_OPTION_MENU);
+        selectOptionActionsMenu(R.string.action_share);
 
         //Get public link
         onView(withId(R.id.getPublicLinkButton)).perform(click());
@@ -309,7 +292,7 @@ public class PublicShareActivityTest {
         //Select share option
         onView(withText(folder)).perform(longClick());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        selectOptionActionsMenu(SHARE_OPTION_MENU);
+        selectOptionActionsMenu(R.string.action_share);
 
         //Edit the link enabling tthe "allow edit option"
         onView(withId(R.id.editPublicLinkButton)).perform(click());
@@ -347,7 +330,7 @@ public class PublicShareActivityTest {
         //Select share option
         onView(withText(folder)).perform(longClick());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        selectOptionActionsMenu(SHARE_OPTION_MENU);
+        selectOptionActionsMenu(R.string.action_share);
 
         //Edit the link enabling the "enabling password"
         onView(withId(R.id.editPublicLinkButton)).perform(click());
@@ -389,7 +372,7 @@ public class PublicShareActivityTest {
         //Select share option
         onView(withText(folder)).perform(longClick());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        selectOptionActionsMenu(SHARE_OPTION_MENU);
+        selectOptionActionsMenu(R.string.action_share);
 
         //Edit the link enabling the "expiration date"
         onView(withId(R.id.editPublicLinkButton)).perform(click());
@@ -430,7 +413,7 @@ public class PublicShareActivityTest {
         //Select share option
         onView(withText(folder)).perform(longClick());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        selectOptionActionsMenu(SHARE_OPTION_MENU);
+        selectOptionActionsMenu(R.string.action_share);
 
         //Check that a public link exists
         onView(withId(R.id.shareNoPublicLinks))
@@ -456,12 +439,13 @@ public class PublicShareActivityTest {
     }
 
     //To select an option in files view
-    private void selectOptionActionsMenu (String option) {
-        if (!new UiObject(new UiSelector().description(option)).exists()) {
+    private void selectOptionActionsMenu (int option) {
+        String optionSelected = targetContext.getResources().getString(option);
+        if (!new UiObject(new UiSelector().description(optionSelected)).exists()) {
             onView(allOf(withContentDescription("More options"),
                     isDescendantOfA(withId(R.id.toolbar)))).perform(click());
             switch (option) {
-                case (SHARE_OPTION_MENU):
+                case R.string.action_share:
                     onView(withId(R.id.action_share_file)).perform(click());
                     break;
                 default:
@@ -470,7 +454,7 @@ public class PublicShareActivityTest {
 
         } else {
             switch (option) {
-                case (SHARE_OPTION_MENU):
+                case R.string.action_share:
                     onView(withId(R.id.action_share_file)).perform(click());
                     break;
                 default:
