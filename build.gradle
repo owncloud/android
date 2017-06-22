@@ -84,6 +84,9 @@ android {
     buildToolsVersion '25.0.2'
 
     defaultConfig {
+
+        manifestPlaceholders.versionName = "2.4.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // arguments to be passed to functional tests
@@ -97,7 +100,6 @@ android {
         testInstrumentationRunnerArgument "TEST_PASSWORD_ID", "\"$System.env.OCTEST_WEB_PASSFIELD\""
         testInstrumentationRunnerArgument "TEST_SUBMIT_XPATH", "\"$System.env.OCTEST_WEB_SUBMITXPATH\""
         testInstrumentationRunnerArgument "TEST_LOOKUP", "\"$System.env.OCTEST_SERVER_LOOKUP\""
-
 
         jackOptions {
             enabled false
@@ -169,6 +171,7 @@ android {
     }
 
     buildTypes {
+
         release {
             if (System.env.OC_RELEASE_KEYSTORE) {
                 signingConfig signingConfigs.release
@@ -178,9 +181,10 @@ android {
         beta {
             // This copies the debuggable attribute and debug signing configurations.
             initWith debug
+
+            manifestPlaceholders.versionName = "2.5.0-beta.1"
+
             applicationIdSuffix ".beta"
-            //It will be added to the version name set in the manifest file
-            versionNameSuffix "_beta"
         }
     }
 
