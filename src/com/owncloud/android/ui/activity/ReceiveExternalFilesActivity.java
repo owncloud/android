@@ -156,6 +156,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 EVENT_SINGLE_FOLDER_CONTENTS_SYNCED);
         syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED);
         mSyncBroadcastReceiver = new SyncBroadcastReceiver();
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
         mLocalBroadcastManager.registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
 
         // Init Fragment without UI to retain AsyncTask across configuration changes
