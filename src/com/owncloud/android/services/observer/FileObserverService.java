@@ -34,6 +34,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
 
 import com.owncloud.android.MainApp;
@@ -82,6 +83,8 @@ public class FileObserverService extends Service {
      * Map of observers watching for changes in available offline files in local 'ownCloud' folder
      */
     private Map<String, AvailableOfflineObserver> mAvailableOfflineObserversMap;
+
+    private LocalBroadcastManager mLocalBroadcastManager;
 
 
     /**
@@ -150,11 +153,12 @@ public class FileObserverService extends Service {
         Log_OC.d(TAG, "onCreate");
         super.onCreate();
 
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
         mDownloadReceiver = new DownloadCompletedReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(FileDownloader.getDownloadAddedMessage());
         filter.addAction(FileDownloader.getDownloadFinishMessage());
-        registerReceiver(mDownloadReceiver, filter);
+        mLocalBroadcastManager.registerReceiver(mDownloadReceiver, filter);
 
         mInstantUploadsObserver = null;
 
@@ -168,7 +172,8 @@ public class FileObserverService extends Service {
     public void onDestroy() {
         Log_OC.d(TAG, "onDestroy - finishing observation of favorite files");
 
-        unregisterReceiver(mDownloadReceiver);
+        mLocalBroadcastManager.unregisterReceiver(mDownloadReceiver);
+        mLocalBroadcastManager = null;
 
         for (AvailableOfflineObserver availableOfflineObserver : mAvailableOfflineObserversMap.values()) {
             availableOfflineObserver.stopWatching();

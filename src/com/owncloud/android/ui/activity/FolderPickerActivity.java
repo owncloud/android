@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
@@ -68,6 +69,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
 
+    private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private boolean mSyncInProgress = false;
 
@@ -95,6 +97,8 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         // sets message for empty list of folders
         setBackgroundText();
+
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         Log_OC.d(TAG, "onCreate() end");
     }
@@ -223,7 +227,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED);
         syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED);
         mSyncBroadcastReceiver = new SyncBroadcastReceiver();
-        registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
+        mLocalBroadcastManager.registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
         
         Log_OC.d(TAG, "onResume() end");
     }
@@ -232,8 +236,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     protected void onPause() {
         Log_OC.e(TAG, "onPause() start");
         if (mSyncBroadcastReceiver != null) {
-            unregisterReceiver(mSyncBroadcastReceiver);
-            //LocalBroadcastManager.getInstance(this).unregisterReceiver(mSyncBroadcastReceiver);
+            mLocalBroadcastManager.unregisterReceiver(mSyncBroadcastReceiver);
             mSyncBroadcastReceiver = null;
         }
         
@@ -412,91 +415,83 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            try {
-                String event = intent.getAction();
-                Log_OC.d(TAG, "Received broadcast " + event);
-                String accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME);
-                String synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH); 
-                RemoteOperationResult synchResult = (RemoteOperationResult)intent.
-                        getSerializableExtra(FileSyncAdapter.EXTRA_RESULT);
-                boolean sameAccount = (getAccount() != null && 
-                        accountName.equals(getAccount().name) && getStorageManager() != null); 
-    
-                if (sameAccount) {
-                    
-                    if (FileSyncAdapter.EVENT_FULL_SYNC_START.equals(event)) {
-                        mSyncInProgress = true;
-                        
+            String event = intent.getAction();
+            Log_OC.d(TAG, "Received broadcast " + event);
+            String accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME);
+            String synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH);
+            RemoteOperationResult synchResult = (RemoteOperationResult)intent.
+                    getSerializableExtra(FileSyncAdapter.EXTRA_RESULT);
+            boolean sameAccount = (getAccount() != null &&
+                    accountName.equals(getAccount().name) && getStorageManager() != null);
+
+            if (sameAccount) {
+
+                if (FileSyncAdapter.EVENT_FULL_SYNC_START.equals(event)) {
+                    mSyncInProgress = true;
+
+                } else {
+                    OCFile currentFile = (getFile() == null) ? null :
+                        getStorageManager().getFileByPath(getFile().getRemotePath());
+                    OCFile currentDir = (getCurrentFolder() == null) ? null :
+                        getStorageManager().getFileByPath(getCurrentFolder().getRemotePath());
+
+                    if (currentDir == null) {
+                        // current folder was removed from the server
+                        showSnackMessage(
+                            String.format(
+                                getString(R.string.sync_current_folder_was_removed),
+                                getCurrentFolder().getFileName()
+                            )
+                        );
+                        browseToRoot();
+
                     } else {
-                        OCFile currentFile = (getFile() == null) ? null : 
-                            getStorageManager().getFileByPath(getFile().getRemotePath());
-                        OCFile currentDir = (getCurrentFolder() == null) ? null : 
-                            getStorageManager().getFileByPath(getCurrentFolder().getRemotePath());
-    
-                        if (currentDir == null) {
-                            // current folder was removed from the server
-                            showSnackMessage(
-                                String.format(
-                                    getString(R.string.sync_current_folder_was_removed),
-                                    getCurrentFolder().getFileName()
-                                )
-                            );
-                            browseToRoot();
-                            
-                        } else {
-                            if (currentFile == null && !getFile().isFolder()) {
-                                // currently selected file was removed in the server, and now we know it
-                                currentFile = currentDir;
-                            }
-
-                            if (synchFolderRemotePath != null && currentDir.getRemotePath().
-                                    equals(synchFolderRemotePath)) {
-                                OCFileListFragment fileListFragment = getListOfFilesFragment();
-                                if (fileListFragment != null) {
-                                    fileListFragment.listDirectory(currentDir);
-                                    // TODO Enable when "On Device" is recovered ?
-                                    // fileListFragment.listDirectory(currentDir, false);
-                                }
-                            }
-                            setFile(currentFile);
+                        if (currentFile == null && !getFile().isFolder()) {
+                            // currently selected file was removed in the server, and now we know it
+                            currentFile = currentDir;
                         }
-                        
-                        mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) && 
-                                !RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED.equals(event));
-                                
-                        if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
-                                    equals(event) &&
-                                /// TODO refactor and make common
-                                synchResult != null && !synchResult.isSuccess()) {
 
-                            if(ResultCode.UNAUTHORIZED.equals(synchResult.getCode())   ||
-                                (synchResult.isException() && synchResult.getException()
-                                    instanceof AuthenticatorException)) {
-
-                                requestCredentialsUpdate(context);
-
-                            } else if(RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(synchResult.getCode())) {
-
-                                showUntrustedCertDialog(synchResult);
+                        if (synchFolderRemotePath != null && currentDir.getRemotePath().
+                                equals(synchFolderRemotePath)) {
+                            OCFileListFragment fileListFragment = getListOfFilesFragment();
+                            if (fileListFragment != null) {
+                                fileListFragment.listDirectory(currentDir);
+                                // TODO Enable when "On Device" is recovered ?
+                                // fileListFragment.listDirectory(currentDir, false);
                             }
-
                         }
-                    }
-                    removeStickyBroadcast(intent);
-                    Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
-
-                    OCFileListFragment fileListFragment = getListOfFilesFragment();
-                    if (fileListFragment != null) {
-                        fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
+                        setFile(currentFile);
                     }
 
-                    setBackgroundText();
+                    mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) &&
+                            !RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED.equals(event));
+
+                    if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
+                                equals(event) &&
+                            /// TODO refactor and make common
+                            synchResult != null && !synchResult.isSuccess()) {
+
+                        if(ResultCode.UNAUTHORIZED.equals(synchResult.getCode())   ||
+                            (synchResult.isException() && synchResult.getException()
+                                instanceof AuthenticatorException)) {
+
+                            requestCredentialsUpdate(context);
+
+                        } else if(RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(synchResult.getCode())) {
+
+                            showUntrustedCertDialog(synchResult);
+                        }
+
+                    }
                 }
-                
-            } catch (RuntimeException e) {
-                // avoid app crashes after changing the serial id of RemoteOperationResult 
-                // in owncloud library with broadcast notifications pending to process
-                removeStickyBroadcast(intent);
+                Log_OC.d(TAG, "Setting progress visibility to " + mSyncInProgress);
+
+                OCFileListFragment fileListFragment = getListOfFilesFragment();
+                if (fileListFragment != null) {
+                    fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
+                }
+
+                setBackgroundText();
             }
         }
     }

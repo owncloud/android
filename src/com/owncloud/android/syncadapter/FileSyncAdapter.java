@@ -53,6 +53,7 @@ import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
 
 /**
@@ -114,6 +115,9 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /** {@link SyncResult} instance to return to the system when the synchronization finish */
     private SyncResult mSyncResult;
 
+    /** To send broadcast messages not visible out of the app */
+    private LocalBroadcastManager mLocalBroadcastManager;
+
 
     /**
      * Creates a {@link FileSyncAdapter}
@@ -153,6 +157,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         mSyncResult = syncResult;
         mSyncResult.fullSyncRequested = false;
         mSyncResult.delayUntil = (System.currentTimeMillis()/1000) + 3*60*60; // avoid too many automatic synchronizations
+
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(getContext());
 
         this.setAccount(account);
         this.setContentProviderClient(providerClient);
@@ -387,8 +393,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         if (result != null) {
             intent.putExtra(FileSyncAdapter.EXTRA_RESULT, result);
         }
-        getContext().sendStickyBroadcast(intent);
-        //LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+        mLocalBroadcastManager.sendBroadcast(intent);
     }
 
     

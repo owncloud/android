@@ -19,7 +19,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.owncloud.android"
     android:versionCode="20400000"
-    android:versionName="2.4.0">
+    android:versionName="${versionName}">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -66,7 +66,7 @@
         android:name=".MainApp"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:manageSpaceActivity=".ui.activity.ManageSpaceActivity"
+        android:manageSpaceActivity="com.owncloud.android.ui.activity.ManageSpaceActivity"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false"
         android:theme="@style/Theme.ownCloud.Toolbar">

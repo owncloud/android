@@ -34,6 +34,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import com.owncloud.android.MainApp;
@@ -148,6 +149,8 @@ public class OperationsService extends Service {
     private OperationsServiceBinder mOperationsBinder;
     
     private SyncFolderHandler mSyncFolderHandler;
+
+    private LocalBroadcastManager mLocalBroadcastManager;
     
     /**
      * Service initialization
@@ -168,6 +171,9 @@ public class OperationsService extends Service {
         thread = new HandlerThread("Syncfolder thread", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         mSyncFolderHandler = new SyncFolderHandler(thread.getLooper(), this);
+
+        // create manager for local broadcasts
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
 
@@ -764,7 +770,7 @@ public class OperationsService extends Service {
         }
         //LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         //lbm.sendBroadcast(intent);
-        sendStickyBroadcast(intent);
+        mLocalBroadcastManager.sendBroadcast(intent);
     }
 
 
@@ -789,9 +795,7 @@ public class OperationsService extends Service {
         } else {
             intent.putExtra(EXTRA_SERVER_URL, target.mServerUrl);
         }
-        //LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        //lbm.sendBroadcast(intent);
-        sendStickyBroadcast(intent);
+        mLocalBroadcastManager.sendBroadcast(intent);
     }
 
 

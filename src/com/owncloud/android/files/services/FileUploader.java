@@ -40,6 +40,7 @@ import android.os.Message;
 import android.os.Parcelable;
 import android.os.Process;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import com.owncloud.android.R;
@@ -155,6 +156,8 @@ public class FileUploader extends Service
 
     private IndexedForest<UploadFileOperation> mPendingUploads = new IndexedForest<UploadFileOperation>();
 
+    private LocalBroadcastManager mLocalBroadcastManager;
+
     /**
      * {@link UploadFileOperation} object of ongoing upload. Can be null. Note: There can only be one concurrent upload!
      */
@@ -215,6 +218,9 @@ public class FileUploader extends Service
         // add AccountsUpdatedListener
         AccountManager am = AccountManager.get(getApplicationContext());
         am.addOnAccountsUpdatedListener(this, null, false);
+
+        // create manager for local broadcasts
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
 
@@ -1003,7 +1009,7 @@ public class FileUploader extends Service
     private void sendBroadcastUploadsAdded() {
         Intent start = new Intent(getUploadsAddedMessage());
         // nothing else needed right now
-        sendStickyBroadcast(start);
+        mLocalBroadcastManager.sendBroadcast(start);
     }
 
 
@@ -1023,7 +1029,7 @@ public class FileUploader extends Service
         start.putExtra(Extras.EXTRA_OLD_FILE_PATH, upload.getOriginalStoragePath());
         start.putExtra(Extras.EXTRA_ACCOUNT_NAME, upload.getAccount().name);
 
-        sendStickyBroadcast(start);
+        mLocalBroadcastManager.sendBroadcast(start);
     }
 
     /**
@@ -1057,7 +1063,7 @@ public class FileUploader extends Service
             end.putExtra(Extras.EXTRA_LINKED_TO_PATH, unlinkedFromRemotePath);
         }
 
-        sendStickyBroadcast(end);
+        mLocalBroadcastManager.sendBroadcast(end);
     }
 
     /**

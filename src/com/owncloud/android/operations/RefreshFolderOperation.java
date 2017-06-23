@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
@@ -84,6 +85,8 @@ public class RefreshFolderOperation extends SyncOperation {
     private boolean mIgnoreETag;    // TODO - use it prefetching ETag of folder; two PROPFINDS, but better
                                     // TODO -   performance with (big) unchanged folders
 
+    private LocalBroadcastManager mLocalBroadcastManager;
+
     /**
      * Creates a new instance of {@link RefreshFolderOperation}.
      * 
@@ -105,6 +108,7 @@ public class RefreshFolderOperation extends SyncOperation {
         mAccount = account;
         mContext = context;
         mIgnoreETag = ignoreETag;
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
     
     
@@ -226,8 +230,7 @@ public class RefreshFolderOperation extends SyncOperation {
             intent.putExtra(FileSyncAdapter.EXTRA_FOLDER_PATH, dirRemotePath);
         }
         intent.putExtra(FileSyncAdapter.EXTRA_RESULT, result);
-        mContext.sendStickyBroadcast(intent);
-        //LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        mLocalBroadcastManager.sendBroadcast(intent);
     }
 
 
