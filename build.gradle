@@ -220,7 +220,7 @@ def setOutputFileName(variant, appName, callerProject) {
         newName += callerProject.archivesBaseName
     }
 
-    newName += "_$variant.versionName"
+    newName += "_$variant.buildType.manifestPlaceholders.versionName"
 
     def buildNumber = System.env.OC_BUILD_NUMBER
     if (buildNumber) {
