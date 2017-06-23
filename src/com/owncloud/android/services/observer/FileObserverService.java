@@ -3,7 +3,7 @@
  *
  *   @author David A. Velasco
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -182,7 +182,7 @@ public class FileObserverService extends Service {
         mAvailableOfflineObserversMap = null;
 
         if (mInstantUploadsObserver != null) {
-            mInstantUploadsObserver.stopWatching();
+            mInstantUploadsObserver.stopObserving();
             mInstantUploadsObserver = null;
         }
 
@@ -412,31 +412,35 @@ public class FileObserverService extends Service {
         PreferenceManager.InstantUploadsConfiguration config =
             PreferenceManager.getInstantUploadsConfiguration(this);
 
-        if ((   config.isEnabledForPictures() || config.isEnabledForVideos()) &&
+        if ((config.isEnabledForPictures() || config.isEnabledForVideos()) &&
                 mInstantUploadsObserver == null
             )  {
             // no current observer -> create it
-            mInstantUploadsObserver = new InstantUploadsObserver(config, getApplicationContext());
-            mInstantUploadsObserver.startWatching();
+            mInstantUploadsObserver = InstantUploadsObserverFactory.newObserver(
+                config,
+                getApplicationContext()
+            );
+            mInstantUploadsObserver.startObserving();
 
-        } else if ( !config.isEnabledForPictures() && !config.isEnabledForVideos() &&
+        } else if (!config.isEnabledForPictures() && !config.isEnabledForVideos() &&
                     mInstantUploadsObserver != null
             ) {
             // nothing ot observe -> stop current observer
-            mInstantUploadsObserver.stopWatching();
+            mInstantUploadsObserver.stopObserving();
             mInstantUploadsObserver = null;
 
-        } else if ( mInstantUploadsObserver != null &&
-                    !mInstantUploadsObserver.getSourcePath().equals(config.getSourcePath())
-            ) {
-            // source path to watch was changed -> stop current observer, create a new one
-            mInstantUploadsObserver.stopWatching();
-            mInstantUploadsObserver = new InstantUploadsObserver(config, getApplicationContext());
-            mInstantUploadsObserver.startWatching();
-
-        } else if ( mInstantUploadsObserver != null) {
+        } else if (mInstantUploadsObserver != null) {
             // observer exists and can handle changes in configuration -> update observer
-            mInstantUploadsObserver.updateConfiguration(config);
+            boolean configurationUpdated = mInstantUploadsObserver.updateConfiguration(config);
+            if (!configurationUpdated) {
+                // current observe cannot handle this configuration change -> replace with a new one
+                mInstantUploadsObserver.stopObserving();
+                mInstantUploadsObserver = InstantUploadsObserverFactory.newObserver(
+                    config,
+                    getApplicationContext()
+                );
+                mInstantUploadsObserver.startObserving();
+            }
 
         } else {
             Log_OC.i(TAG, "Instant uploads are disabled, no current observer -> nothing to do");
