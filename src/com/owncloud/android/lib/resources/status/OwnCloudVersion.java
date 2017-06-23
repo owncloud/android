@@ -48,7 +48,9 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     private static final int MINIMUM_VERSION_WITH_SESSION_MONITORING_WORKING_IN_PREEMPTIVE_MODE = 0x09010301;
     // 9.1.3.1, final 9.1.3: https://github.com/owncloud/core/commit/f9a867b70c217463289a741d4d26079eb2a80dfd
 
-    private static final int MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING = 0xA000000;
+    private static final int MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING = 0xA000000; // 10.0.0
+
+    private static final int MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING = 0xA000100; // 10.0.1
 
     private static final String INVALID_ZERO_VERSION = "0.0.0";
 
@@ -198,5 +200,9 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
 
     public boolean isMultiplePublicSharingSupported() {
         return (mVersion >= MINIMUM_VERSION_WITH_MULTIPLE_PUBLIC_SHARING);
+    }
+
+    public boolean isPublicSharingWriteOnlySupported() {
+        return (mVersion >= MINIMUM_VERSION_WITH_WRITE_ONLY_PUBLIC_SHARING);
     }
 }
