@@ -1015,11 +1015,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         uriBuilder.appendQueryParameter(
                 OAuth2Constants.KEY_CLIENT_ID, getString(R.string.oauth2_client_id)
         );
-        /*
-        uriBuilder.appendQueryParameter(
-                OAuth2Constants.KEY_SCOPE, getString(R.string.oauth2_scope)
-        );
-        */
         uriBuilder.appendQueryParameter(
                 OAuth2Constants.KEY_STATE, "8alaf8s98lck47vim7sueqiku7"
         );
