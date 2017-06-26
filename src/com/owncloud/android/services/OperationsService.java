@@ -39,6 +39,7 @@ import android.util.Pair;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.OAuth2Constants;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -127,7 +128,6 @@ public class OperationsService extends Service {
             ".OPERATION_ADDED";
     public static final String ACTION_OPERATION_FINISHED = OperationsService.class.getName() +
             ".OPERATION_FINISHED";
-
 
     private ConcurrentMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>
             mUndispatchedFinishedOperations =
@@ -671,8 +671,8 @@ public class OperationsService extends Service {
                     operation = new OAuth2GetAccessToken(
                             getString(R.string.oauth2_client_id),
                             getString(R.string.oauth2_client_secret),
-                            getString(R.string.oauth2_redirect_uri),       
-                            getString(R.string.oauth2_grant_type),
+                            getString(R.string.oauth2_redirect_uri),
+                            OAuth2Constants.OAUTH2_GRANT_TYPE,
                             oauth2QueryParameters);
 
                 } else if (action.equals(ACTION_GET_USER_NAME)) {

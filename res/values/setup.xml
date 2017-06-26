@@ -85,8 +85,6 @@
     <!-- TOKEN ENDPOINT -->
     <string name="oauth2_url_endpoint_access">/index.php/apps/oauth2/api/v1/token</string>
     <string name="oauth2_scope">owncloud</string>
-    <string name="oauth2_grant_type">authorization_code</string>	<!-- the only one supported right now -->
-    <string name="oauth2_response_type">code</string>				<!-- depends on oauth2_grant_type -->
 
     <!-- values that should be pre-agreed between app and authorization server, but can be loaded without rebuilding the app -->
     <string name="oauth2_client_id">e4rAsNUSIUs0lF4nbv9FmCeUkTlV9GdgTLDH1b5uie7syb90SzEVrbN7HIpmWJeD</string>

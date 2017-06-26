@@ -1007,7 +1007,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         Uri uri = Uri.parse(mServerInfo.mBaseUrl + mOAuthAuthEndpointText.getText().toString().trim());
         Uri.Builder uriBuilder = uri.buildUpon();
         uriBuilder.appendQueryParameter(
-                OAuth2Constants.KEY_RESPONSE_TYPE, getString(R.string.oauth2_response_type)
+                OAuth2Constants.KEY_RESPONSE_TYPE, OAuth2Constants.OAUTH2_RESPONSE_TYPE
         );
         uriBuilder.appendQueryParameter(
                 OAuth2Constants.KEY_REDIRECT_URI, getString(R.string.oauth2_redirect_uri)
