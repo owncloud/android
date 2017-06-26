@@ -46,6 +46,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.utils.AccountsManager;
 
 import org.junit.After;
@@ -66,6 +67,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -82,6 +84,7 @@ public class PublicShareActivityTest {
 
     private static final int WAIT_INITIAL_MS = 4000;
     private static final int WAIT_CONNECTION_MS = 1500;
+    private static final int WAIT_CLIPBOARD_MS = 3000;
 
     private static final String ERROR_MESSAGE = "BAD LINK";
     private static final String RESULT_CODE = "mResultCode";
@@ -145,6 +148,7 @@ public class PublicShareActivityTest {
         }
     }
     private ServerType servertype;
+    private OCCapability capabilities;
 
     @Rule
     public ActivityTestRule<FileDisplayActivity> mActivityRule = new
@@ -164,6 +168,9 @@ public class PublicShareActivityTest {
 
                     //Add an account to the device in order to avoid login view
                     AccountsManager.addAccount(targetContext, testServerURL, testUser, testPassword);
+
+                    //Get Server Capabilities
+                    capabilities = AccountsManager.getCapabilities(testServerURL, testUser, testPassword);
 
                 }
             };
@@ -229,14 +236,14 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
 
         //Depending the server version, send a name or not.
-        if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
+        if (capabilities.getVersionMayor() >= VERSION_10) {
             publicShareCreationDefault(nameShare);
         } else {
             publicShareCreationDefault(null);
         }
 
         //Check the name,only in the case of ownCloud >= 10
-        if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
+        if (capabilities.getVersionMayor() >= VERSION_10) {
             onView(withText(nameShare)).check(matches(isDisplayed()));
         }
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -272,7 +279,7 @@ public class PublicShareActivityTest {
         //Get text copied in the clipboard
         onView(withText("Copy to clipboard")).perform(click());
         String text = getTextFromClipboard();
-
+        SystemClock.sleep(WAIT_CLIPBOARD_MS);
         //check if the copied link is correct
         assertTrue(ERROR_MESSAGE, text.startsWith(testServerURL));
 
@@ -287,7 +294,7 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //if ownCloud >= 10, we can handle the link name. If not... skipping test.
-        if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
+        if (capabilities.getVersionMayor() >= VERSION_10) {
 
             //Select share option
             onView(withText(folder)).perform(longClick());
@@ -309,7 +316,7 @@ public class PublicShareActivityTest {
             pressBack();
 
             //Check the name,only in the case of ownCloud >= 10
-            if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
+            if (capabilities.getVersionMayor() >= VERSION_10) {
                 onView(withText(nameShareEdited)).check(matches(isDisplayed()));
             }
             SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -330,9 +337,16 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
         selectOptionActionsMenu(R.string.action_share);
 
-        //Edit the link enabling tthe "allow edit option"
+        //Edit the link enabling the "allow edit option"
         onView(withId(R.id.editPublicLinkButton)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check file listing disabled + checked (default) if ownCloud >= 10
+        if (capabilities.getVersionMayor() >= VERSION_10) {
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isEnabled())));
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
+        }
+
         onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
@@ -347,6 +361,10 @@ public class PublicShareActivityTest {
 
         //Check the status of the sharing options
         onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(isChecked()));
+        if (capabilities.getVersionMayor() >= VERSION_10) {
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isEnabled()));
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
+        }
         onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
         onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
 
@@ -357,7 +375,78 @@ public class PublicShareActivityTest {
     }
 
     @Test
-    public void test5_enable_password()
+    public void test5_filelisting()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test File Listing Start");
+
+        //Select share option
+        onView(withText(folder)).perform(longClick());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        selectOptionActionsMenu(R.string.action_share);
+
+        //Edit the link disabling the "show file listing"
+        onView(withId(R.id.editPublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Only makes sense if ownCloud >= 10 and not 10.0.0
+        if (capabilities.getVersionMayor() >= VERSION_10 &&
+                (!(capabilities.getVersionMayor() == VERSION_10 &&
+                capabilities.getVersionMinor() == 0 &&
+                capabilities.getVersionMicro() == 0))) {
+
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isEnabled()));
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
+            //Switching off
+            onView(withId(R.id.shareViaShowFileListingSwitch)).perform(click());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+            onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+
+            //Skip the sharing panel
+            pressBack();
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+
+            onView(withId(R.id.editPublicLinkButton)).perform(click());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+
+            //Check options status
+            onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(isChecked()));
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isEnabled()));
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isChecked())));
+            onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
+            onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
+
+            onView(withId(R.id.cancelAddPublicLinkButton)).perform(scrollTo(), click());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+
+            onView(withId(R.id.editPublicLinkButton)).perform(click());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+
+            //Switching off to check "Show file listing" is checked and disabled
+            onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
+
+            //Check options status
+            onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(not(isChecked())));
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isEnabled())));
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
+            onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
+            onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
+
+            //Switch on to following tests
+            onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
+
+        } else {
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isDisplayed())));
+        }
+
+
+        Log_OC.i(LOG_TAG, "Test File Listing Passed");
+
+    }
+
+    @Test
+    public void test6_enable_password()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Password Start");
@@ -377,7 +466,7 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Setting a password... no matter which one
-        onView(withId(R.id.shareViaLinkPasswordValue)).perform(replaceText("a"));
+        onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
         onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
@@ -400,7 +489,7 @@ public class PublicShareActivityTest {
     }
 
     @Test
-    public void test6_enable_expiration()
+    public void test7_enable_expiration()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Expiration Start");
@@ -414,9 +503,9 @@ public class PublicShareActivityTest {
         //Edit the link enabling the "expiration date"
         onView(withId(R.id.editPublicLinkButton)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click());
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(android.R.id.button1)).perform(click());
         onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
@@ -441,7 +530,7 @@ public class PublicShareActivityTest {
     }
 
     @Test
-    public void test7_unshare_public()
+    public void test8_unshare_public()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public Start");
@@ -470,7 +559,7 @@ public class PublicShareActivityTest {
     }
 
     @Test
-    public void test8_share_multiple()
+    public void test9_share_multiple()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Share Multiple Public Start");
@@ -481,7 +570,7 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
         selectOptionActionsMenu(R.string.action_share);
 
-        if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10) {
+        if (capabilities.getVersionMayor() >= VERSION_10) {
             onView(withId(R.id.addPublicLinkButton)).check(matches(isDisplayed()));
             for (int i = 0; i < 5 ; i++) {
                 publicShareCreationDefault(null);
@@ -506,8 +595,7 @@ public class PublicShareActivityTest {
         onView(withId(R.id.addPublicLinkButton)).perform(click());
 
         //Check server version and parameter null (or not) to handle the link name
-        if (AccountsManager.getServerVersion(testServerURL, testUser, testPassword) >= VERSION_10
-                && name!=null) {
+        if (capabilities.getVersionMayor() >= VERSION_10 && name!=null) {
             onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
         }
 

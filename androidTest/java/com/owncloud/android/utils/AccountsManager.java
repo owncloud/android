@@ -111,16 +111,17 @@ public class AccountsManager {
         return url_regularized;
     }
 
-    //Get the server version from capabilities
-    public static int getServerVersion (String server, String user, String pass){
+
+    //Get server capabilities
+    public static OCCapability getCapabilities (String server, String user, String pass) {
         GetRemoteCapabilitiesOperation getCapabilities = new GetRemoteCapabilitiesOperation();
         OwnCloudClient client = new OwnCloudClient(Uri.parse(server),
                 NetworkUtils.getMultiThreadedConnManager());
         client.setCredentials(
                 OwnCloudCredentialsFactory.newBasicCredentials(user, pass));
         RemoteOperationResult result = getCapabilities.execute(client);
-        OCCapability capabilities = (OCCapability) result.getData().get(0);
-        return capabilities.getVersionMayor();
+        return (OCCapability) result.getData().get(0);
+
     }
 
 }
