@@ -72,6 +72,26 @@
     <!--Destination mail for sending log files -->
     <string name="mail_logger" formatted="false"></string>
 
+    <!-- OAuth2 -->
+
+    <!-- constants that must be respected by the authorization server; if changed, the app must be rebuild -->
+    <string name="oauth2_redirect_scheme">oc</string>
+    <string name="oauth2_redirect_uri">oc://android.owncloud.com</string>
+
+    <!-- values that should be provided by ownCloud server -->
+    <!-- AUTHORIZATION ENDPOINT -->
+    <string name="oauth2_url_endpoint_auth">/index.php/apps/oauth2/authorize</string>
+
+    <!-- TOKEN ENDPOINT -->
+    <string name="oauth2_url_endpoint_access">/index.php/apps/oauth2/api/v1/token</string>
+    <string name="oauth2_scope">owncloud</string>
+    <string name="oauth2_grant_type">authorization_code</string>	<!-- the only one supported right now -->
+    <string name="oauth2_response_type">code</string>				<!-- depends on oauth2_grant_type -->
+
+    <!-- values that should be pre-agreed between app and authorization server, but can be loaded without rebuilding the app -->
+    <string name="oauth2_client_id">e4rAsNUSIUs0lF4nbv9FmCeUkTlV9GdgTLDH1b5uie7syb90SzEVrbN7HIpmWJeD</string>
+    <string name="oauth2_client_secret">dInFYGV33xKzhbRmpqQltYNdfLdJIfJ9L5ISoKhNoT9qZftpdWSP71VrpGR9pmoD</string>
+
 </resources>
 
 
