@@ -449,6 +449,7 @@
   <string name="previewing_video_not_supported">お使いの端末では動画のプレビューがサポートされていません。ファイルは自動でダウンロードされます。</string>
   <string name="error_no_network_connection">ネットワークに接続されていません</string>
   <string name="share_no_public_links">公開リンクが作成されていません</string>
+  <string name="share_warning_about_forwarding_public_links">リンクを知っている人はファイル/フォルダにアクセスできます</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">パスワード *</string>
   <string name="share_via_link_expiration_date_enforced_label">有効期限*</string>
