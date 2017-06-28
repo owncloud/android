@@ -36,6 +36,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -152,7 +153,11 @@ public class LogHistoryActivity extends ToolbarActivity {
         {
             File logFile = new File(mLogPath, file);
             if (logFile.exists()) {
-                uris.add(Uri.fromFile(logFile));
+
+                Uri mExposedLogFileUri = FileProvider.getUriForFile(this, this.
+                        getString(R.string.file_provider_authority), logFile);
+
+                uris.add(mExposedLogFileUri);
             }
         }
 
