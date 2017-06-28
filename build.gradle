@@ -122,6 +122,7 @@ android {
 
         beta {
             res.srcDirs = ['beta/res']
+            java.srcDirs = ['beta/src']
         }
 
 
@@ -149,6 +150,7 @@ android {
 
     lintOptions {
         abortOnError false
+        checkReleaseBuilds false
     }
 
     packagingOptions {
@@ -179,8 +181,6 @@ android {
         }
 
         beta {
-            // This copies the debuggable attribute and debug signing configurations.
-            initWith debug
 
             manifestPlaceholders.versionName = "2.5.0-beta.1"
 
