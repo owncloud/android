@@ -122,7 +122,6 @@ android {
 
         beta {
             res.srcDirs = ['beta/res']
-            java.srcDirs = ['beta/src']
         }
 
 

@@ -58,6 +58,7 @@ public class MainApp extends Application {
     // TODO better place
     // private static boolean mOnlyOnDevice = false;
 
+    public static String BUILD_TYPE_BETA = "beta";
     
     public void onCreate(){
         super.onCreate();
@@ -77,7 +78,7 @@ public class MainApp extends Application {
         // initialise thumbnails cache on background thread
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
         
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals(BUILD_TYPE_BETA)) {
 
             String dataFolder = getDataFolder();
 
