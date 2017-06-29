@@ -49,6 +49,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.owncloud.android.BuildConfig;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.InstantUploadsConfiguration;
@@ -251,7 +252,8 @@ public class Preferences extends PreferenceActivity {
             }
         }
 
-        boolean loggerEnabled = getResources().getBoolean(R.bool.logger_enabled) || BuildConfig.DEBUG;
+        boolean loggerEnabled = getResources().getBoolean(R.bool.logger_enabled) ||
+                BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals(MainApp.BUILD_TYPE_BETA);
         Preference pLogger =  findPreference("logger");
         if (pLogger != null){
             if (loggerEnabled) {
