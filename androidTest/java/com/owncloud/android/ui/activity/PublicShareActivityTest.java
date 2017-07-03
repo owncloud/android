@@ -93,7 +93,7 @@ public class PublicShareActivityTest {
     private Context targetContext = null;
     private static String folder = "Photos";
     private static String folder2 = "Documents";
-    private static String file = "ownCloud.pdf";
+    private static String file = "ownCloud Manual.pdf";
     private static final String nameShare = "$%@rter";
     private static final String nameShareEdited = "publicnameverylongtotest";
     private static final int GRANT_BUTTON_INDEX = 1;
@@ -221,7 +221,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link created and visible in share view (message of "no links" does not appear)
      */
     @Test
-    public void test1_create_public_link()
+    public void test1_create_public_link_folder()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Share Public Start");
@@ -684,17 +684,9 @@ public class PublicShareActivityTest {
         //Disable capability "Allow users share via link"
         capabilities.setFilesSharingPublicEnabled(CapabilityBooleanType.FALSE);
 
-        //Refresh to get capability
-        //onView(withId(R.id.ListLayout)).perform(swipeDown());
-
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         AccountsManager.saveCapabilities(capabilities, testServerURL, testUser);
-
-        /*FileDataStorageManager fm = new FileDataStorageManager(
-                new Account(testUser+"@"+AccountsManager.regularURL(testServerURL), "owncloud"),
-                MainApp.getAppContext().getContentResolver());
-        fm.saveCapabilities (capabilities);*/
 
         //Select share option
         selectShare(folder2);
@@ -720,17 +712,9 @@ public class PublicShareActivityTest {
         //Disable capability "Allow users share via link"
         capabilities.setFilesSharingPublicUpload(CapabilityBooleanType.FALSE);
 
-        //Refresh to get capability
-        //onView(withId(R.id.ListLayout)).perform(swipeDown());
-
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         AccountsManager.saveCapabilities(capabilities, testServerURL, testUser);
-
-        /*FileDataStorageManager fm = new FileDataStorageManager(
-                new Account(testUser+"@"+AccountsManager.regularURL(testServerURL), "owncloud"),
-                MainApp.getAppContext().getContentResolver());
-        fm.saveCapabilities (capabilities);*/
 
         //Select share option
         selectShare(folder2);
@@ -746,6 +730,126 @@ public class PublicShareActivityTest {
         }
 
         Log_OC.i(LOG_TAG, "Test Capability Public Uploads Passed");
+
+    }
+
+    /**
+     *  TEST CASE: Share public a file (default options)
+     *  PASSED IF: Link created and visible in share view (message of "no links" does not appear)
+     */
+    @Test
+    public void test_14_create_public_link_file()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test Share Public File Start");
+        SystemClock.sleep(WAIT_INITIAL_MS);
+
+        //Select share option
+        selectShare(file);
+
+        //Check that no links are already created
+        onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
+
+        //Depending the server version, send a name or not.
+        if (capabilities.getVersionMayor() >= VERSION_10) {
+            publicShareCreationDefault(nameShare);
+        } else {
+            publicShareCreationDefault(null);
+        }
+
+        //Check the name,only in the case of ownCloud >= 10
+        if (capabilities.getVersionMayor() >= VERSION_10) {
+            onView(withText(nameShare)).check(matches(isDisplayed()));
+        }
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //The message of "not links created yet" is gone
+        onView(withId(R.id.shareNoPublicLinks))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        Log_OC.i(LOG_TAG, "Test Public Share File Passed");
+
+    }
+
+    /**
+     *  TEST CASE: Edit the public folder by enabling "Password" and "Expiration"
+     *  PASSED IF: "Password" and "Expiration" are enabled
+     *
+     */
+    @Test
+    public void test_15_edit_options_file()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test Enable Edit Options File Start");
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Select share option
+        selectShare(file);
+
+        //Edit the link
+        onView(withId(R.id.editPublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //By default, disabled
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
+
+        //Setting a password... no matter which one
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
+        onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
+
+        //Enable "expiration"
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Skip the sharing panel
+        pressBack();
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        onView(withId(R.id.editPublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check the status of the sharing options
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(isChecked()));
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isChecked()));
+
+        onView(withId(R.id.cancelAddPublicLinkButton)).perform(scrollTo(), click());
+
+        Log_OC.i(LOG_TAG, "Test Enable Edit Options File Passed");
+
+    }
+
+    /**
+     *  TEST CASE: Remove public link on a file
+     *  PASSED IF: No links in share view
+     */
+    @Test
+    public void test_16_unshare_public_file()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test Unshare Public File Start");
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Select share option
+        selectShare(file);
+
+        //Check that a public link exists
+        onView(withId(R.id.shareNoPublicLinks))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        //Delete link
+        onView(withId(R.id.deletePublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(android.R.id.button1)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check that there are no public links
+        onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
+
+        Log_OC.i(LOG_TAG, "Test Unshare Public File Passed");
 
     }
 
@@ -799,7 +903,7 @@ public class PublicShareActivityTest {
 
     //True if server supports File Listing option (only upload == false)
     private boolean isSupportedFileListing (){
-            return capabilities.getFilesSharingPublicSupportsUploadOnly() == CapabilityBooleanType.FALSE ? true : false;
+            return capabilities.getFilesSharingPublicSupportsUploadOnly() == CapabilityBooleanType.TRUE ? true : false;
     }
 
 
