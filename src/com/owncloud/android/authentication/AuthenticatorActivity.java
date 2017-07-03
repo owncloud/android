@@ -320,18 +320,19 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mAuthTokenType = chooseAuthTokenType(oAuthRequired, samlWebSsoRequired);
                 
             } else {
-                //TODO This option will not be longer brandeable
-//                boolean oAuthSupported = AUTH_ON.equals(getString(R.string.auth_method_oauth2));
-                boolean oAuthSupported = false;
                 boolean samlWebSsoSupported = 
                         AUTH_ON.equals(getString(R.string.auth_method_saml_web_sso));
-                mAuthTokenType = chooseAuthTokenType(oAuthSupported, samlWebSsoSupported);
+
+                if(samlWebSsoSupported) {
+                    mAuthTokenType = SAML_TOKEN_TYPE;
+                } else {
+                    // If SAML is not supported, OAuth will be the default authentication method
+                    mAuthTokenType = OAUTH_TOKEN_TYPE;
+                }
             }
         }
     }
 
-    // TODO Since oAuth brandeable option will not be longer available, if saml is not supported,
-    // TODO what authentication token should we return here? We will use BASIC at the moment
     private String chooseAuthTokenType(boolean oauth, boolean saml) {
         if (saml) {
             return SAML_TOKEN_TYPE;
@@ -953,11 +954,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).
                 equals(mAuthTokenType)) {
-            
             startOauthorization();
         } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
                 equals(mAuthTokenType)) {
-            
             startSamlBasedFederatedSingleSignOnAuthorization();
         } else {
             checkBasicAuthorization();
@@ -1135,7 +1134,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             //      4. we got the authentication method required by the server 
             mServerInfo = (GetServerInfoOperation.ServerInfo) (result.getData().get(0));
 
-            if (authSamlSupported(mServerInfo.mAuthMethods)) {
+            // Since basic and OAuth are supported by the app by default, check whether the app
+            // supports SAML when the server requires it
+            if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.SAML_WEB_SSO) &&
+                    !mAuthTokenType.equals(SAML_TOKEN_TYPE)) {
 
                 updateServerStatusIconNoRegularAuth();  // overrides updateServerStatusIconAndText()
                 mServerIsValid = false;
@@ -1158,28 +1160,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (result.getCode() == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
             showUntrustedCertDialog(result);
         }
-    }
-
-
-    /**
-     * Since basic and OAuth are supported by the app by default, check if app doesn't support SAML
-     * when the server requires it
-     * @param authServerMethods
-     * @return true if the app supports SAML when the server requires SAML to authenticate, false
-     * otherwise
-     */
-    private boolean authSamlSupported(ArrayList<AuthenticationMethod> authServerMethods) {
-
-        boolean isSamlSupported = true;
-
-        if (authServerMethods.contains(AuthenticationMethod.SAML_WEB_SSO) &&
-
-                !mAuthTokenType.equals(SAML_TOKEN_TYPE)) {
-
-            isSamlSupported = false;
-        }
-
-        return isSamlSupported;
     }
 
 
