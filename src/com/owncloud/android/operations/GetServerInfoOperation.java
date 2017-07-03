@@ -21,6 +21,7 @@
 package com.owncloud.android.operations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudClient;
@@ -88,8 +89,8 @@ public class GetServerInfoOperation extends RemoteOperation {
 
             // third: merge results
             if (detectAuthResult.isSuccess()) {
-                mResultData.mAuthMethod =
-                    (AuthenticationMethod) detectAuthResult.getData().get(0);
+                mResultData.mAuthMethods =
+                    (ArrayList<AuthenticationMethod>) detectAuthResult.getData().get(0);
                 ArrayList<Object> data = new ArrayList<Object>();
                 data.add(mResultData);
                 result.setData(data);
@@ -140,7 +141,8 @@ public class GetServerInfoOperation extends RemoteOperation {
     public static class ServerInfo {
         public OwnCloudVersion mVersion = null;
         public String mBaseUrl = "";
-        public AuthenticationMethod mAuthMethod = AuthenticationMethod.UNKNOWN;
+        public ArrayList<AuthenticationMethod> mAuthMethods = new
+                ArrayList<>(Arrays.asList(AuthenticationMethod.UNKNOWN));
         public boolean mIsSslConn = false;
     }
 
