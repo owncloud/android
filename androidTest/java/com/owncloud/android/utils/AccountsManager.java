@@ -27,6 +27,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.SystemClock;
 
+import com.owncloud.android.MainApp;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -122,6 +124,19 @@ public class AccountsManager {
         RemoteOperationResult result = getCapabilities.execute(client);
         return (OCCapability) result.getData().get(0);
 
+    }
+
+    //Save capabilities (in device DB)
+    public static void saveCapabilities (OCCapability capabilities, String server, String user){
+        FileDataStorageManager fm = new FileDataStorageManager(
+                new Account(buildAccountName(user, server), accountType),
+                MainApp.getAppContext().getContentResolver());
+        fm.saveCapabilities (capabilities);
+    }
+
+    //Build account name
+    private static String buildAccountName (String user, String server){
+        return user+"@"+regularURL(server);
     }
 
 }
