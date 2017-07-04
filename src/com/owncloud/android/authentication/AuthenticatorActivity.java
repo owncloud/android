@@ -68,6 +68,7 @@ import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.SsoWebViewClient.SsoWebViewClientListener;
+import com.owncloud.android.authentication.OAuthWebViewClient.OAuthWebViewClientListener;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
@@ -91,6 +92,7 @@ import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.CredentialsDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
+import com.owncloud.android.ui.dialog.OAuthWebViewDialog;
 import com.owncloud.android.ui.dialog.SamlWebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
@@ -98,7 +100,6 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -106,7 +107,7 @@ import java.util.Map;
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity
         implements  OnRemoteOperationListener, OnFocusChangeListener, OnEditorActionListener,
-        SsoWebViewClientListener, OnSslUntrustedCertListener,
+        SsoWebViewClientListener, OAuthWebViewClientListener, OnSslUntrustedCertListener,
         AuthenticatorAsyncTask.OnAuthenticatorTaskListener {
 
     private static final String TAG = AuthenticatorActivity.class.getSimpleName();
@@ -139,6 +140,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private static final String UNTRUSTED_CERT_DIALOG_TAG = "UNTRUSTED_CERT_DIALOG";
     private static final String SAML_DIALOG_TAG = "SAML_DIALOG";
+    private static final String OAUTH_DIALOG_TAG = "OAUTH_DIALOG";
     private static final String WAIT_DIALOG_TAG = "WAIT_DIALOG";
     private static final String CREDENTIALS_DIALOG_TAG = "CREDENTIALS_DIALOG";
     private static final String KEY_AUTH_IS_FIRST_ATTEMPT_TAG = "KEY_AUTH_IS_FIRST_ATTEMPT";
@@ -984,7 +986,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mAuthStatusText =  getResources().getString(R.string.oauth_login_connection);
         showAuthStatus();
 
-        // GET AUTHORIZATION request
+        // GET AUTHORIZATION CODE request
         Uri uri = Uri.parse(mServerInfo.mBaseUrl + mOAuthAuthEndpointText.trim());
         Uri.Builder uriBuilder = uri.buildUpon();
         uriBuilder.appendQueryParameter(
@@ -996,15 +998,27 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         uriBuilder.appendQueryParameter(
                 OAuth2Constants.KEY_CLIENT_ID, getString(R.string.oauth2_client_id)
         );
-        uriBuilder.appendQueryParameter(
-                OAuth2Constants.KEY_STATE, "8alaf8s98lck47vim7sueqiku7"
-        );
-        uri = uriBuilder.build();
-        Log_OC.d(TAG, "Starting browser to view " + uri.toString());
-        Intent i = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(i);
-    }
 
+        // TODO It could be deleted, optional param
+//        uriBuilder.appendQueryParameter(
+//                OAuth2Constants.KEY_STATE, "8alaf8s98lck47vim7sueqiku7"
+//        );
+
+        uri = uriBuilder.build();
+
+        // BROWSER
+//        Log_OC.d(TAG, "Starting browser to view " + uri.toString());
+//        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+//        startActivity(i);
+
+        // WEBVIEW
+        String targetUrl = uri.toString();
+
+        // Show OAuth web dialog
+        OAuthWebViewDialog oAuthWebViewDialog = OAuthWebViewDialog.newInstance(targetUrl,
+                getString(R.string.oauth2_redirect_uri));
+        oAuthWebViewDialog.show(getSupportFragmentManager(), OAUTH_DIALOG_TAG);
+    }
 
     /**
      * Starts the Web Single Sign On flow to get access to the root folder
@@ -1732,6 +1746,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // TODO - show fail
             Log_OC.d(TAG, "SSO failed");
         }
+    }
+
+    @Override
+    public void onGetOAuthorizationCode(String authorizationCode) {
 
     }
 
