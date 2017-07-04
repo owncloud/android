@@ -327,7 +327,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                     mAuthTokenType = SAML_TOKEN_TYPE;
                 } else {
                     // If SAML is not supported, OAuth will be the default authentication method
-                    mAuthTokenType = OAUTH_TOKEN_TYPE;
+                    mAuthTokenType = "";
                 }
             }
         }
@@ -1134,20 +1134,28 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             //      4. we got the authentication method required by the server 
             mServerInfo = (GetServerInfoOperation.ServerInfo) (result.getData().get(0));
 
-            // Since basic and OAuth are supported by the app by default, check whether the app
-            // supports SAML when the server requires it
-            if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.SAML_WEB_SSO) &&
-                    !mAuthTokenType.equals(SAML_TOKEN_TYPE)) {
+            mServerIsValid = true;
 
-                updateServerStatusIconNoRegularAuth();  // overrides updateServerStatusIconAndText()
-                mServerIsValid = false;
+            // Update mAuthTokenType depending on the server info
+            if (!mAuthTokenType.equals(SAML_TOKEN_TYPE)) {
 
-            } else {
+                if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BEARER_TOKEN)) {
 
-                mServerIsValid = true;
+                    mAuthTokenType = OAUTH_TOKEN_TYPE; // OAuth2
+
+                } else if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.BASIC_HTTP_AUTH)) {
+
+                    mAuthTokenType = BASIC_TOKEN_TYPE; // Basic
+
+                } else if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.SAML_WEB_SSO)) {
+
+                    updateServerStatusIconNoRegularAuth();  // overrides updateServerStatusIconAndText()
+                    mServerIsValid = false;
+                }
             }
             
         } else {
+
             mServerIsValid = false;
         }
 
