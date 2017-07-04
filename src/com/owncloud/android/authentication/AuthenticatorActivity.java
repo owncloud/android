@@ -181,8 +181,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     
     
     /// Authentication PRE-Fragment elements
-    private TextView mOAuthAuthEndpointText;
-    private TextView mOAuthTokenEndpointText;
     private EditText mUsernameInput;
     private EditText mPasswordInput;
     private View mOkButton;
@@ -207,6 +205,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private final String SAML_TOKEN_TYPE =
             AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType());
 
+    private String mOAuthAuthEndpointText = "";
+    private String mOAuthTokenEndpointText = "";
 
     /**
      * {@inheritDoc}
@@ -300,6 +300,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         
         /// initialize block to be moved to single Fragment to retrieve and validate credentials 
         initAuthorizationPreFragment(savedInstanceState);
+
+        mOAuthAuthEndpointText = getString(R.string.oauth2_url_endpoint_auth);
+
+        mOAuthTokenEndpointText = getString(R.string.oauth2_url_endpoint_access);
 
         //Log_OC.e(TAG,  "onCreate end");
     }
@@ -480,12 +484,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (
-                            AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(
-                                    MainApp.getAccountType()
-                            ).equals(mAuthTokenType) &&
-                                    mHostUrlInput.hasFocus()
-                            ) {
+                    if (mHostUrlInput.hasFocus()) {
                         checkOcServer();
                     }
                 }
@@ -507,8 +506,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void initAuthorizationPreFragment(Bundle savedInstanceState) {
         
         /// step 0 - get UI elements in layout
-        mOAuthAuthEndpointText = (TextView)findViewById(R.id.oAuthEntryPoint_1);
-        mOAuthTokenEndpointText = (TextView)findViewById(R.id.oAuthEntryPoint_2);
         mUsernameInput = (EditText) findViewById(R.id.account_username);
         mPasswordInput = (EditText) findViewById(R.id.account_password);
         mAuthStatusView = (TextView) findViewById(R.id.auth_status_text); 
@@ -573,8 +570,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
                 equals(mAuthTokenType)) {
             // SAML-based web Single Sign On
-            mOAuthAuthEndpointText.setVisibility(View.GONE);
-            mOAuthTokenEndpointText.setVisibility(View.GONE);
             mUsernameInput.setVisibility(View.GONE);
             mPasswordInput.setVisibility(View.GONE);
             
@@ -583,16 +578,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).
                     equals(mAuthTokenType)) {
                 // OAuth 2 authorization
-                
-                mOAuthAuthEndpointText.setVisibility(View.VISIBLE);
-                mOAuthTokenEndpointText.setVisibility(View.VISIBLE);
                 mUsernameInput.setVisibility(View.GONE);
                 mPasswordInput.setVisibility(View.GONE);
     
             } else {
                 // basic HTTP authorization
-                mOAuthAuthEndpointText.setVisibility(View.GONE);
-                mOAuthTokenEndpointText.setVisibility(View.GONE);
                 mUsernameInput.setVisibility(View.VISIBLE);
                 mPasswordInput.setVisibility(View.VISIBLE);
             }
@@ -766,7 +756,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         
         getServerInfoIntent.putExtra(
                 OperationsService.EXTRA_SERVER_URL,
-                mServerInfo.mBaseUrl + mOAuthTokenEndpointText.getText().toString().trim());
+                mServerInfo.mBaseUrl + mOAuthTokenEndpointText.trim());
         
         getServerInfoIntent.putExtra(
                 OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
@@ -995,7 +985,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showAuthStatus();
 
         // GET AUTHORIZATION request
-        Uri uri = Uri.parse(mServerInfo.mBaseUrl + mOAuthAuthEndpointText.getText().toString().trim());
+        Uri uri = Uri.parse(mServerInfo.mBaseUrl + mOAuthAuthEndpointText.trim());
         Uri.Builder uriBuilder = uri.buildUpon();
         uriBuilder.appendQueryParameter(
                 OAuth2Constants.KEY_RESPONSE_TYPE, OAuth2Constants.OAUTH2_RESPONSE_TYPE
