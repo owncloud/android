@@ -180,8 +180,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             new GetServerInfoOperation.ServerInfo();
     
     
-    /// Authentication PRE-Fragment elements 
-    private CheckBox mOAuth2Check;
+    /// Authentication PRE-Fragment elements
     private TextView mOAuthAuthEndpointText;
     private TextView mOAuthTokenEndpointText;
     private EditText mUsernameInput;
@@ -508,7 +507,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void initAuthorizationPreFragment(Bundle savedInstanceState) {
         
         /// step 0 - get UI elements in layout
-        mOAuth2Check = (CheckBox) findViewById(R.id.oauth_onOff_check);
         mOAuthAuthEndpointText = (TextView)findViewById(R.id.oAuthEntryPoint_1);
         mOAuthTokenEndpointText = (TextView)findViewById(R.id.oAuthEntryPoint_2);
         mUsernameInput = (EditText) findViewById(R.id.account_username);
@@ -533,9 +531,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         
         /// step 2 - set properties of UI elements (text, visibility, enabled...)
-        mOAuth2Check.setChecked(
-                AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType())
-                    .equals(mAuthTokenType));
         if (presetUserName != null) {
             mUsernameInput.setText(presetUserName);
         }
@@ -547,7 +542,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (isPasswordExposed) {
             showPassword();
         }
-        updateAuthenticationPreFragmentVisibility();
+//        updateAuthenticationPreFragmentVisibility();
         showAuthStatus();
         mOkButton.setEnabled(mServerIsValid);
 
@@ -578,19 +573,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
                 equals(mAuthTokenType)) {
             // SAML-based web Single Sign On
-            mOAuth2Check.setVisibility(View.GONE);
             mOAuthAuthEndpointText.setVisibility(View.GONE);
             mOAuthTokenEndpointText.setVisibility(View.GONE);
             mUsernameInput.setVisibility(View.GONE);
             mPasswordInput.setVisibility(View.GONE);
             
         } else {
-            if (mAction == ACTION_CREATE && 
-                    AUTH_OPTIONAL.equals(getString(R.string.auth_method_oauth2))) {
-                mOAuth2Check.setVisibility(View.VISIBLE);
-            } else {
-                mOAuth2Check.setVisibility(View.GONE);
-            }
             
             if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).
                     equals(mAuthTokenType)) {
@@ -1149,7 +1137,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
                 } else if (mServerInfo.mAuthMethods.contains(AuthenticationMethod.SAML_WEB_SSO)) {
 
-                    updateServerStatusIconNoRegularAuth();  // overrides updateServerStatusIconAndText()
+                    updateServerStatusIconNoRegularAuth(); // overrides updateServerStatusIconAndText()
                     mServerIsValid = false;
                 }
             }
@@ -1157,6 +1145,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         } else {
 
             mServerIsValid = false;
+        }
+
+        if (mServerIsValid) {
+            updateAuthenticationPreFragmentVisibility();
         }
 
         // refresh UI
@@ -1656,24 +1648,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             showPassword();
         }
         mPasswordInput.setSelection(selectionStart, selectionEnd);
-    }    
-
-
-    /**
-     * Called when the checkbox for OAuth authorization is clicked.
-     * 
-     * Hides or shows the input fields for user & password. 
-     * 
-     * @param view      'View password' 'button'
-     */
-    public void onCheckClick(View view) {
-        CheckBox oAuth2Check = (CheckBox)view;
-        if (oAuth2Check.isChecked()) {
-            mAuthTokenType = OAUTH_TOKEN_TYPE;
-        } else {
-            mAuthTokenType = BASIC_TOKEN_TYPE;
-        }
-        updateAuthenticationPreFragmentVisibility();
     }
 
 
