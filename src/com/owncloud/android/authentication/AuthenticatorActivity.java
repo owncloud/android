@@ -58,7 +58,6 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -675,20 +674,20 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     /**
-     * The redirection triggered by the OAuth authentication server as response to the 
+     * The redirection triggered by the OAuth authentication server as response to the
      * GET AUTHORIZATION request is caught here.
-     * 
-     * To make this possible, this activity needs to be qualified with android:launchMode = 
+     *
+     * To make this possible, this activity needs to be qualified with android:launchMode =
      * "singleTask" in the AndroidManifest.xml file.
      */
-    @Override
-    protected void onNewIntent (Intent intent) {
-        Log_OC.d(TAG, "onNewIntent()");
-        Uri data = intent.getData();
-        if (data != null && data.toString().startsWith(getString(R.string.oauth2_redirect_uri))) {
-            mNewCapturedUriFromOAuth2Redirection = data;
-        }
-    }
+//    @Override
+//    protected void onNewIntent (Intent intent) {
+//        Log_OC.d(TAG, "onNewIntent()");
+//        Uri data = intent.getData();
+//        if (data != null && data.toString().startsWith(getString(R.string.oauth2_redirect_uri))) {
+//            mNewCapturedUriFromOAuth2Redirection = data;
+//        }
+//    }
 
 
     /**
@@ -702,10 +701,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         // bound here to avoid spurious changes triggered by Android on device rotations
         mHostUrlInput.setOnFocusChangeListener(this);
         mHostUrlInput.addTextChangedListener(mHostUrlInputWatcher);
-        
-        if (mNewCapturedUriFromOAuth2Redirection != null) {
-            getOAuth2AccessTokenFromCapturedRedirection();
-        }
         
         if (mOperationsServiceBinder != null) {
             doOnResumeAndBound();
@@ -742,11 +737,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Parses the redirection with the response to the GET AUTHORIZATION request to the 
      * oAuth server and requests for the access token (GET ACCESS TOKEN)
+     * @param authorizationCodeQuery
      */
-    private void getOAuth2AccessTokenFromCapturedRedirection() {
-        /// Parse data from OAuth redirection
-        String queryParameters = mNewCapturedUriFromOAuth2Redirection.getQuery();
-        mNewCapturedUriFromOAuth2Redirection = null;
+    private void getOAuth2AccessTokenFromCapturedRedirection(String authorizationCodeQuery) {
 
         /// Showing the dialog with instructions for the user.
         LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
@@ -762,14 +755,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         
         getServerInfoIntent.putExtra(
                 OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
-                queryParameters);
+                authorizationCodeQuery);
         
         if (mOperationsServiceBinder != null) {
             //Log_OC.e(TAG, "getting access token..." );
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
         }
     }
-
 
 
     /**
@@ -1749,8 +1741,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     @Override
-    public void onGetOAuthorizationCode(String authorizationCode) {
+    public void onGetOAuthorizationCodeQuery(String authorizationCodeQuery) {
 
+        getOAuth2AccessTokenFromCapturedRedirection(authorizationCodeQuery);
     }
 
     @Override

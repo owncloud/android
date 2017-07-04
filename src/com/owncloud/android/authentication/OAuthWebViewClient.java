@@ -56,7 +56,7 @@ public class OAuthWebViewClient extends WebViewClient {
     private static final String TAG = OAuthWebViewClient.class.getSimpleName();
 
     public interface OAuthWebViewClientListener {
-        public void onGetOAuthorizationCode (String authorizationCode);
+        public void onGetOAuthorizationCodeQuery (String authorizationCodeQuery);
     }
 
     private Context mContext;
@@ -64,7 +64,6 @@ public class OAuthWebViewClient extends WebViewClient {
     private WeakReference<OAuthWebViewClientListener> mListenerRef;
     private String mTargetUrl;
     private String mLastReloadedUrlAtError;
-    private final String mAuthorizationCodeParam = "code";
 
 
     public OAuthWebViewClient(Context context, Handler listenerHandler,
@@ -125,9 +124,10 @@ public class OAuthWebViewClient extends WebViewClient {
             view.setVisibility(View.GONE);
 
             Uri uri = Uri.parse(url);
-            final String authorizationCode = uri.getQueryParameter("code");
 
-            Log_OC.d(TAG, "Authorization code: " + authorizationCode);
+            final String authorizationCodeQuery = uri.getQuery();
+
+            Log_OC.d(TAG, "Authorization code: " + uri.getQuery());
 
             if (mListenerHandler != null && mListenerRef != null) {
                 // this is good idea because onPageFinished is not running in the UI thread
@@ -137,7 +137,7 @@ public class OAuthWebViewClient extends WebViewClient {
                         OAuthWebViewClientListener listener = mListenerRef.get();
                         if (listener != null) {
                             // Send Cookies to the listener
-                            listener.onGetOAuthorizationCode(authorizationCode);
+                            listener.onGetOAuthorizationCodeQuery(authorizationCodeQuery);
                         }
                     }
                 });
