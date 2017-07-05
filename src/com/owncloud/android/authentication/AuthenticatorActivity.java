@@ -99,6 +99,7 @@ import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
 import com.owncloud.android.utils.DisplayUtils;
 
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -420,9 +421,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (ocVersion != null) {
                 mServerInfo.mVersion = new OwnCloudVersion(ocVersion);
             }
-//            mServerInfo.mAuthMethods = AuthenticationMethod.valueOf(
-//                    savedInstanceState.getStringArrayList(KEY_SERVER_AUTH_METHOD));
-            
+
+            ArrayList<String> authenticationMethodNames = savedInstanceState.
+                    getStringArrayList(KEY_SERVER_AUTH_METHOD);
+
+            for (String authenticationMethodName : authenticationMethodNames) {
+                mServerInfo.mAuthMethods.add(AuthenticationMethod.valueOf(authenticationMethodName));
+            }
         }
         
         /// step 2 - set properties of UI elements (text, visibility, enabled...)
@@ -620,7 +625,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mServerInfo.mVersion != null) {
             outState.putString(KEY_OC_VERSION, mServerInfo.mVersion.getVersion());
         }
-//        outState.putString(KEY_SERVER_AUTH_METHOD, mServerInfo.mAuthMethods.name());
+
+        ArrayList<String> authenticationMethodNames = new ArrayList<>();
+
+        for (AuthenticationMethod authenticationMethod : mServerInfo.mAuthMethods) {
+
+            authenticationMethodNames.add(authenticationMethod.name());
+        }
+
+        outState.putStringArrayList(KEY_SERVER_AUTH_METHOD, authenticationMethodNames);
 
         /// Authentication PRE-fragment state
         outState.putBoolean(KEY_PASSWORD_EXPOSED, isPasswordVisible());
@@ -719,13 +732,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     /**
      * Parses the redirection with the response to the GET AUTHORIZATION request to the 
-     * oAuth server and requests for the access token (GET ACCESS TOKEN)
-     * @param authorizationCodeQuery
+     * OAuth server and requests for the access token (GET ACCESS TOKEN)
+     * @param capturedUriFromOAuth2Redirection
      */
-    private void getOAuth2AccessTokenFromCapturedRedirection(Uri authorizationCodeQuery) {
+    private void getOAuth2AccessTokenFromCapturedRedirection(Uri capturedUriFromOAuth2Redirection) {
 
         // Parse data from OAuth redirection
-        String queryParameters = authorizationCodeQuery.getQuery();
+        String queryParameters = capturedUriFromOAuth2Redirection.getQuery();
 
         /// Showing the dialog with instructions for the user.
         LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
@@ -744,7 +757,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 queryParameters);
         
         if (mOperationsServiceBinder != null) {
-            //Log_OC.e(TAG, "getting access token..." );
+            Log_OC.e(TAG, "Getting OAuth access token..." );
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
         }
     }
@@ -1302,7 +1315,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * Processes the result of the request for and access token send 
      * to an OAuth authorization server.
      * 
-     * @param result        Result of the operation.
+     * @param result Result of the operation.
      */
     private void onGetOAuthAccessTokenFinish(RemoteOperationResult result) {
         mWaitingForOpId = Long.MAX_VALUE;
@@ -1317,7 +1330,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             @SuppressWarnings("unchecked")
             Map<String, String> tokens = (Map<String, String>)(result.getData().get(0));
             mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
-            Log_OC.d(TAG, "Got ACCESS TOKEN: " + mAuthToken);
+            Log_OC.d(TAG, "Got OAuth access token: " + mAuthToken);
             mUsernameInput.setText(tokens.get(OAuth2Constants.KEY_USER_ID));
 
             /// validate token accessing to root folder / getting session
