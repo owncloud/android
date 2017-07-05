@@ -794,6 +794,10 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(not(isChecked())));
         onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(not(isChecked())));
 
+        //Allow editing not available for files
+        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(not(isDisplayed())));
+
         //Setting a password... no matter which one
         onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
         onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
