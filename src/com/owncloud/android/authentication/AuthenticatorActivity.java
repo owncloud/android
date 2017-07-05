@@ -674,23 +674,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     /**
-     * The redirection triggered by the OAuth authentication server as response to the
-     * GET AUTHORIZATION request is caught here.
-     *
-     * To make this possible, this activity needs to be qualified with android:launchMode =
-     * "singleTask" in the AndroidManifest.xml file.
-     */
-//    @Override
-//    protected void onNewIntent (Intent intent) {
-//        Log_OC.d(TAG, "onNewIntent()");
-//        Uri data = intent.getData();
-//        if (data != null && data.toString().startsWith(getString(R.string.oauth2_redirect_uri))) {
-//            mNewCapturedUriFromOAuth2Redirection = data;
-//        }
-//    }
-
-
-    /**
      * The redirection triggered by the OAuth authentication server as response to the 
      * GET AUTHORIZATION, and deferred in {@link #onNewIntent(Intent)}, is processed here.
      */
@@ -739,7 +722,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * oAuth server and requests for the access token (GET ACCESS TOKEN)
      * @param authorizationCodeQuery
      */
-    private void getOAuth2AccessTokenFromCapturedRedirection(String authorizationCodeQuery) {
+    private void getOAuth2AccessTokenFromCapturedRedirection(Uri authorizationCodeQuery) {
+
+        // Parse data from OAuth redirection
+        String queryParameters = authorizationCodeQuery.getQuery();
 
         /// Showing the dialog with instructions for the user.
         LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
@@ -755,7 +741,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         
         getServerInfoIntent.putExtra(
                 OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
-                authorizationCodeQuery);
+                queryParameters);
         
         if (mOperationsServiceBinder != null) {
             //Log_OC.e(TAG, "getting access token..." );
@@ -991,10 +977,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 OAuth2Constants.KEY_CLIENT_ID, getString(R.string.oauth2_client_id)
         );
 
-        // TODO It could be deleted, optional param
-//        uriBuilder.appendQueryParameter(
-//                OAuth2Constants.KEY_STATE, "8alaf8s98lck47vim7sueqiku7"
-//        );
+        uriBuilder.appendQueryParameter(
+                OAuth2Constants.KEY_STATE, "8alaf8s98lck47vim7sueqiku7"
+        );
 
         uri = uriBuilder.build();
 
@@ -1741,9 +1726,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     @Override
-    public void onGetOAuthorizationCodeQuery(String authorizationCodeQuery) {
+    public void onGetCapturedUriFromOAuth2Redirection(Uri capturedUriFromOAuth2Redirection) {
 
-        getOAuth2AccessTokenFromCapturedRedirection(authorizationCodeQuery);
+        getOAuth2AccessTokenFromCapturedRedirection(capturedUriFromOAuth2Redirection);
     }
 
     @Override
