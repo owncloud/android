@@ -991,7 +991,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         );
 
         uriBuilder.appendQueryParameter(
-                OAuth2Constants.KEY_STATE, "8alaf8s98lck47vim7sueqiku7"
+                OAuth2Constants.KEY_STATE, getString(R.string.oauth2_key_state)
         );
 
         uri = uriBuilder.build();
@@ -1911,6 +1911,4 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         );
         snackbar.show();
     }
-
-
 }

@@ -232,6 +232,4 @@ public class RefreshFolderOperation extends SyncOperation {
         intent.putExtra(FileSyncAdapter.EXTRA_RESULT, result);
         mLocalBroadcastManager.sendBroadcast(intent);
     }
-
-
 }
