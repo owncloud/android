@@ -221,10 +221,10 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link created and visible in share view (message of "no links" does not appear)
      */
     @Test
-    public void test1_create_public_link_folder()
+    public void test_01_create_public_link_folder_defaults()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
-        Log_OC.i(LOG_TAG, "Test Share Public Start");
+        Log_OC.i(LOG_TAG, "Test Share Public Defaults Start");
         SystemClock.sleep(WAIT_INITIAL_MS);
 
         //Select share option
@@ -250,7 +250,68 @@ public class PublicShareActivityTest {
         onView(withId(R.id.shareNoPublicLinks))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
-        Log_OC.i(LOG_TAG, "Test Public Share Passed");
+        Log_OC.i(LOG_TAG, "Test Share Public Defaults Passed");
+
+    }
+
+    /**
+     *  TEST CASE: Share public a folder (all options enabled)
+     *  PASSED IF:
+     *              - Link created and visible in share view
+     *              - "Allow editing", "Show file listing" (oC >= 10.0.1), "Password" and "Expiration" are enabled
+     */
+    @Test
+    public void test_02_create_public_link_folder_all_enabled()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test Share Public All Enabled Start");
+        SystemClock.sleep(WAIT_INITIAL_MS);
+
+        //Select share option
+        selectShare(folder2);
+
+        //Check that no links are already created
+        onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
+
+        //Depending the server version, send a name or not.
+        if (capabilities.getVersionMayor() >= VERSION_10) {
+            publicShareCreationAllEnabled(nameShare);
+        } else {
+            publicShareCreationAllEnabled(null);
+        }
+
+        //Check the name,only in the case of ownCloud >= 10
+        if (capabilities.getVersionMayor() >= VERSION_10) {
+            onView(withText(nameShare)).check(matches(isDisplayed()));
+        }
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //The message of "not links created yet" is gone
+        onView(withId(R.id.shareNoPublicLinks))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        onView(withId(R.id.editPublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check the status of the sharing options
+        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).check(matches(isChecked()));
+        if (isSupportedFileListing()) {
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isEnabled()));
+            onView(withId(R.id.shareViaShowFileListingSwitch)).check(matches(isChecked()));
+        }
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).check(matches(isChecked()));
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).check(matches(isChecked()));
+
+        onView(withId(R.id.cancelAddPublicLinkButton)).perform(scrollTo(), click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Remove the link
+        onView(withId(R.id.deletePublicLinkButton)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(android.R.id.button1)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        Log_OC.i(LOG_TAG, "Test Share Public All Enabled Passed");
 
     }
 
@@ -259,7 +320,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link correctly copied in clipboard
      */
     @Test
-    public void test2_get_link()
+    public void test_03_get_link()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Get Link Start");
@@ -295,7 +356,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link has the new name in share view
      */
     @Test
-    public void test3_edit_name() {
+    public void test_04_edit_name() {
 
         Log_OC.i(LOG_TAG, "Test Edit Link Name Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -336,7 +397,7 @@ public class PublicShareActivityTest {
      *             - "Password" and "Expiration date" are disabled.
      */
     @Test
-    public void test4_enable_allow_edit()
+    public void test_05_enable_allow_edit()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Allow Edit Start");
@@ -392,7 +453,7 @@ public class PublicShareActivityTest {
      *              * "Show file listing" does not exist
      */
     @Test
-    public void test5_file_listing_disabled()
+    public void test_06_file_listing_disabled()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test File Listing Disable Start");
@@ -448,7 +509,7 @@ public class PublicShareActivityTest {
      *              * Test skipped
      */
     @Test
-    public void test6_file_listing_enabled()
+    public void test_07_file_listing_enabled()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test File Listing Enabled Start");
@@ -486,7 +547,7 @@ public class PublicShareActivityTest {
      *          - "Allow editing" and "Expiration" disabled
      */
     @Test
-    public void test7_enable_password()
+    public void test_08_enable_password()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Password Start");
@@ -533,7 +594,7 @@ public class PublicShareActivityTest {
      *          - "Allow editing" and "Password" disabled
      */
     @Test
-    public void test8_enable_expiration()
+    public void test_09_enable_expiration()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Expiration Start");
@@ -576,7 +637,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No links in share view
      */
     @Test
-    public void test9_unshare_public()
+    public void test_10_unshare_public()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public Start");
@@ -609,7 +670,7 @@ public class PublicShareActivityTest {
      *          - if oc < 10.0.1 = No option available for creating more than one link
      */
     @Test
-    public void test_10_share_multiple()
+    public void test_11_share_multiple()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Share Multiple Public Start");
@@ -639,7 +700,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link to the item in clipboard
      */
     @Test
-    public void test_11_permalink()
+    public void test_12_permalink()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Permalink Start");
@@ -676,7 +737,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No option to public in share view
      */
     @Test
-    public void test_12_capability_allow_public_links()
+    public void test_13_capability_allow_public_links()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Capability Public Links Start");
@@ -704,7 +765,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No option in public links to edit the content
      */
     @Test
-    public void test_13_capability_allow_public_uploads()
+    public void test_14_capability_allow_public_uploads()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Capability Public Uploads Start");
@@ -738,7 +799,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link created and visible in share view (message of "no links" does not appear)
      */
     @Test
-    public void test_14_create_public_link_file()
+    public void test_15_create_public_link_file()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Share Public File Start");
@@ -777,7 +838,7 @@ public class PublicShareActivityTest {
      *
      */
     @Test
-    public void test_15_edit_options_file()
+    public void test_16_edit_options_file()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Edit Options File Start");
@@ -831,7 +892,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No links in share view
      */
     @Test
-    public void test_16_unshare_public_file()
+    public void test_17_unshare_public_file()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public File Start");
@@ -858,7 +919,7 @@ public class PublicShareActivityTest {
     }
 
 
-    //To create a new public link
+    //To create a new public link with defaults
     private void publicShareCreationDefault (String name) {
 
         //Creation of the share link. Name only for servers >= 10
@@ -871,6 +932,36 @@ public class PublicShareActivityTest {
 
         SystemClock.sleep(WAIT_CONNECTION_MS);
         onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(),click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Check that the sharing panel is displayed
+        onView(withId(R.id.parentPanel)).check(matches(isDisplayed()));
+        onView(withId(R.id.alertTitle)).check(matches(isDisplayed()));
+        pressBack();
+
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+    }
+
+    //To create a new public link with all options enabled
+    private void publicShareCreationAllEnabled (String name) {
+
+        //Creation of the share link. Name only for servers >= 10
+        onView(withId(R.id.addPublicLinkButton)).perform(click());
+
+        //Check server version and parameter null (or not) to handle the link name
+        if (capabilities.getVersionMayor() >= VERSION_10 && name!=null) {
+            onView(withId(R.id.shareViaLinkNameValue)).perform(replaceText(name));
+        }
+
+        //Enable all options
+        onView(withId(R.id.shareViaLinkEditPermissionSwitch)).perform(click());
+        onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click());
+        onView(withId(R.id.shareViaLinkPasswordValue)).perform(scrollTo(), replaceText("a"));
+        onView(withId(R.id.shareViaLinkExpirationSwitch)).perform(scrollTo(), click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(android.R.id.button1)).perform(click());
+        onView(withId(R.id.confirmAddPublicLinkButton)).perform(scrollTo(), click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Check that the sharing panel is displayed
