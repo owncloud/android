@@ -64,6 +64,7 @@ public class OAuthWebViewClient extends WebViewClient {
     private WeakReference<OAuthWebViewClientListener> mListenerRef;
     private String mTargetUrl;
     private String mLastReloadedUrlAtError;
+    private boolean mCapturedUriFromOAuth2Redirection;
 
 
     public OAuthWebViewClient(Context context, Handler listenerHandler,
@@ -73,6 +74,8 @@ public class OAuthWebViewClient extends WebViewClient {
         mListenerRef = new WeakReference<>(listener);
         mTargetUrl = "fake://url.to.be.set";
         mLastReloadedUrlAtError = null;
+        mCapturedUriFromOAuth2Redirection = false;
+
     }
     
     public String getTargetUrl() {
@@ -120,11 +123,16 @@ public class OAuthWebViewClient extends WebViewClient {
         // TODO
         Log_OC.d(TAG, "onPageFinished : " + url);
         mLastReloadedUrlAtError = null;
-        if (url.startsWith(mTargetUrl)) {
+
+        if (url.startsWith(mTargetUrl) && !mCapturedUriFromOAuth2Redirection) {
+
             view.setVisibility(View.GONE);
 
-            final Uri uri = Uri.parse(url);
+            // Flag to avoid unneeded calls to the listener method once uri from oauth has been
+            // captured, which mess up the login process
+            mCapturedUriFromOAuth2Redirection = true;
 
+            final Uri uri = Uri.parse(url);
             Log_OC.d(TAG, "Authorization code included in: " + uri.getQuery());
 
             if (mListenerHandler != null && mListenerRef != null) {
