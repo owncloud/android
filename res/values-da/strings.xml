@@ -414,6 +414,7 @@
   <string name="local_file_not_found_toast">Filen blev ikke fundet i det lokale filsystem</string>
   <string name="confirmation_remove_files_alert">Ønsker du virkelig at fjerne de valgte enheder?</string>
   <string name="confirmation_remove_folders_alert">Ønsker du virkelig at fjerne de valgte emner og deres indhold?</string>
+  <string name="share_warning_about_forwarding_public_links">Alle med linket har adgang til filen/mappen</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valgt</item>
     <item quantity="other">%d valgte</item>
