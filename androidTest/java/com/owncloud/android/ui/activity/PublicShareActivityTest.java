@@ -40,8 +40,11 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.FailureHandler;
 import android.support.v4.content.ContextCompat;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -64,6 +67,7 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -71,8 +75,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.allOf;
+import org.hamcrest.Matcher;
 import static org.junit.Assert.assertTrue;
 import com.owncloud.android.utils.FileManager;
+import com.owncloud.android.utils.ServerType;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -88,7 +95,7 @@ public class PublicShareActivityTest {
     private static final String RESULT_CODE = "mResultCode";
     private static final String LOG_TAG = "PublicShareSuite";
     private static final int VERSION_10 = 10;
-    private static final int MULTIPLE_LINKS_TO_CREATE = 5;
+    private static final int MULTIPLE_LINKS = 5;
 
     private Context targetContext = null;
     private static String folder = "Photos";
@@ -96,57 +103,13 @@ public class PublicShareActivityTest {
     private static String file = "ownCloud Manual.pdf";
     private static final String nameShare = "$%@rter";
     private static final String nameShareEdited = "publicnameverylongtotest";
+    private static final String nameShareMultiple = "linkN";
     private static final int GRANT_BUTTON_INDEX = 1;
     private int version = -1;
 
     private String testUser = null;
     private String testPassword = null;
     private String testServerURL = null;
-    private enum ServerType {
-        /*
-         * Server with http
-         */
-        HTTP(1),
-
-        /*
-         * Server with https, but non-secure certificate
-         */
-        HTTPS_NON_SECURE(2),
-
-        /*
-         * Server with https
-         */
-        HTTPS_SECURE(3),
-
-        /*
-         * Server redirected to a non-secure server
-         */
-        REDIRECTED_NON_SECURE(4);
-
-        private final int status;
-
-        ServerType(int status) {
-            this.status = status;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public static ServerType fromValue(int value) {
-            switch (value) {
-                case 1:
-                    return HTTP;
-                case 2:
-                    return HTTPS_NON_SECURE;
-                case 3:
-                    return HTTPS_SECURE;
-                case 4:
-                    return REDIRECTED_NON_SECURE;
-            }
-            return null;
-        }
-    }
     private ServerType servertype;
     private OCCapability capabilities;
 
@@ -306,10 +269,7 @@ public class PublicShareActivityTest {
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         //Remove the link
-        onView(withId(R.id.deletePublicLinkButton)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(android.R.id.button1)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
+        deleteLink();
 
         Log_OC.i(LOG_TAG, "Test Share Public All Enabled Passed");
 
@@ -651,10 +611,7 @@ public class PublicShareActivityTest {
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         //Delete link
-        onView(withId(R.id.deletePublicLinkButton)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
-        onView(withId(android.R.id.button1)).perform(click());
-        SystemClock.sleep(WAIT_CONNECTION_MS);
+        deleteLink();
 
         //Check that there are no public links
         onView(withId(R.id.shareNoPublicLinks)).check(matches(isDisplayed()));
@@ -670,7 +627,7 @@ public class PublicShareActivityTest {
      *          - if oc < 10.0.1 = No option available for creating more than one link
      */
     @Test
-    public void test_11_share_multiple()
+    public void test_11_share_multiple_links()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Share Multiple Public Start");
@@ -681,8 +638,8 @@ public class PublicShareActivityTest {
 
         if (isSupportedMultipleLinks()) {
             onView(withId(R.id.addPublicLinkButton)).check(matches(isDisplayed()));
-            for (int i = 0; i < MULTIPLE_LINKS_TO_CREATE ; i++) {
-                publicShareCreationDefault(null);
+            for (int i = 0; i < MULTIPLE_LINKS ; i++) {
+                publicShareCreationDefault(nameShareMultiple+i);
             }
 
         } else {  //Servers < 10 hide the button
@@ -695,12 +652,37 @@ public class PublicShareActivityTest {
 
     }
 
+    @Test
+    public void test_12_remove_multiple_links()
+            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        Log_OC.i(LOG_TAG, "Test Remove Multiple Public Start");
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
+        //Select share option
+        selectShare(folder);
+
+        if (isSupportedMultipleLinks()) {
+            for (int i = 0; i < MULTIPLE_LINKS ; i++) {
+                deleteLink(nameShareMultiple+i);
+            }
+
+        } else {  //Servers < 10, only one link
+            deleteLink();
+            onView(withId(R.id.addPublicLinkButton))
+                    .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        }
+
+        Log_OC.i(LOG_TAG, "Test Remove Multiple Public Passed");
+
+    }
+
     /**
      *  TEST CASE: Check permalink
      *  PASSED IF: Link to the item in clipboard
      */
     @Test
-    public void test_12_permalink()
+    public void test_13_permalink()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Permalink Start");
@@ -737,7 +719,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No option to public in share view
      */
     @Test
-    public void test_13_capability_allow_public_links()
+    public void test_14_capability_allow_public_links()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Capability Public Links Start");
@@ -765,7 +747,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No option in public links to edit the content
      */
     @Test
-    public void test_14_capability_allow_public_uploads()
+    public void test_15_capability_allow_public_uploads()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Capability Public Uploads Start");
@@ -799,7 +781,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: Link created and visible in share view (message of "no links" does not appear)
      */
     @Test
-    public void test_15_create_public_link_file()
+    public void test_16_create_public_link_file()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Share Public File Start");
@@ -838,7 +820,7 @@ public class PublicShareActivityTest {
      *
      */
     @Test
-    public void test_16_edit_options_file()
+    public void test_17_edit_options_file()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Enable Edit Options File Start");
@@ -892,7 +874,7 @@ public class PublicShareActivityTest {
      *  PASSED IF: No links in share view
      */
     @Test
-    public void test_17_unshare_public_file()
+    public void test_18_unshare_public_file()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public File Start");
@@ -996,7 +978,7 @@ public class PublicShareActivityTest {
     }
 
 
-    //True if server supports File Listing option (only upload == false)
+    //True if server supports File Listing option
     private boolean isSupportedFileListing (){
             return capabilities.getFilesSharingPublicSupportsUploadOnly() == CapabilityBooleanType.TRUE ? true : false;
     }
@@ -1007,12 +989,43 @@ public class PublicShareActivityTest {
         return capabilities.getFilesSharingPublicMultiple()  == CapabilityBooleanType.TRUE ? true : false;
     }
 
-
-    //Select "Share" option on a item in file list
-    private void selectShare(String item){
-        onView(withText(item)).perform(longClick());
+    //Delete a link. For non multiple servers.
+    private void deleteLink(){
+        onView(withId(R.id.deletePublicLinkButton)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(android.R.id.button1)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+    }
+
+    //Delete a link which name is parameter
+    private void deleteLink(String linkName){
+        onView(allOf(withId(R.id.deletePublicLinkButton), hasSibling(withText(linkName)))).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+        onView(withId(android.R.id.button1)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+    }
+
+    //Select "Share" option on a item in file list. Repeats until long click works.
+    private void selectShare(String item){
+        while (!viewIsDisplayed(R.id.action_mode_close_button)){
+            onView(withText(item)).perform(longClick());
+            SystemClock.sleep(WAIT_CONNECTION_MS);
+        }
         FileManager.selectOptionActionsMenu(targetContext, R.string.action_share);
+    }
+
+    //Check if a view is displayed
+    public static boolean viewIsDisplayed(int viewId)  {
+        final boolean[] isDisplayed = {true};
+        onView(withId(viewId)).withFailureHandler(new FailureHandler()
+        {
+            @Override
+            public void handle(Throwable error, Matcher<View> viewMatcher)
+            {
+                isDisplayed[0] = false;
+            }
+        }).check(matches(isDisplayed()));
+        return isDisplayed[0];
     }
 
     @After
