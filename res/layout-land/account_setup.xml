@@ -135,48 +135,6 @@
                     android:text="@string/auth_testing_connection"
                     android:textColor="@color/login_text_color"/>
 
-                <CheckBox
-                    android:id="@+id/oauth_onOff_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:contentDescription="@string/oauth_check_onoff"
-                    android:onClick="onCheckClick"
-                    android:text="@string/oauth_check_onoff"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/primary"
-                    />
-
-                <EditText
-                    android:id="@+id/oAuthEntryPoint_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:enabled="false"
-                    android:inputType="textUri"
-                    android:singleLine="true"
-                    android:text="@string/oauth2_url_endpoint_auth"
-                    android:textColor="@color/login_text_color"
-                    android:textColorHint="@color/login_text_hint_color"
-                    android:visibility="gone">
-                </EditText>
-
-                <EditText
-                    android:id="@+id/oAuthEntryPoint_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:enabled="false"
-                    android:inputType="textUri"
-                    android:singleLine="true"
-                    android:text="@string/oauth2_url_endpoint_access"
-                    android:textColor="@color/login_text_color"
-                    android:textColorHint="@color/login_text_hint_color"
-                    android:visibility="gone">
-
-                    <requestFocus/>
-                </EditText>
-
                 <EditText
                     android:id="@+id/account_username"
                     android:layout_width="match_parent"
@@ -187,7 +145,7 @@
                     android:inputType="textNoSuggestions"
                     android:textColor="@color/login_text_color"
                     android:textColorHint="@color/login_text_hint_color"
-                    />
+                    android:visibility="gone" />
 
                 <EditText
                     android:id="@+id/account_password"
@@ -199,7 +157,7 @@
                     android:inputType="textPassword"
                     android:textColor="@color/login_text_color"
                     android:textColorHint="@color/login_text_hint_color"
-                    />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/auth_status_text"
@@ -211,7 +169,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/auth_unauthorized"
                     android:textColor="@color/login_text_color"
-                    />
+                    android:visibility="gone" />
 
             </LinearLayout>
 
