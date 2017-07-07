@@ -961,7 +961,8 @@ public class FileDisplayActivity extends HookActivity
 
                                 requestCredentialsUpdate(context);
 
-                            } else if (RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
+                            } else if (RemoteOperationResult.ResultCode.
+                                    SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
                                 synchResult.getCode())) {
 
                                 showUntrustedCertDialog(synchResult);

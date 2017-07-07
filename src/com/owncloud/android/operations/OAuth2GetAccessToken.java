@@ -82,7 +82,6 @@ public class OAuth2GetAccessToken extends RemoteOperation {
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
         PostMethod postMethod = null;
-        //GetMethod getMethod = null;
         
         try {
             parseAuthorizationResponse();
@@ -100,7 +99,7 @@ public class OAuth2GetAccessToken extends RemoteOperation {
                 nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CODE, mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_CODE));            
                 nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri);       
                 nameValuePairs[3] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
-                //nameValuePairs[4] = new NameValuePair(OAuth2Constants.KEY_SCOPE, mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_SCOPE));         
+                //nameValuePairs[4] = new NameValuePair(OAuth2Constants.KEY_SCOPE, mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_SCOPE));
 
                 Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
                 /*
@@ -127,11 +126,9 @@ public class OAuth2GetAccessToken extends RemoteOperation {
                 );
                 OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
                 int status = client.executeMethod(postMethod);
-                //int status = client.executeMethod(getMethod);
                 switchClientCredentials(oldCredentials);
 
                 String response = postMethod.getResponseBodyAsString();
-                //String response = getMethod.getResponseBodyAsString();
                 Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + response);
                 if (response != null && response.length() > 0) {
                     JSONObject tokenJson = new JSONObject(response);
@@ -142,7 +139,6 @@ public class OAuth2GetAccessToken extends RemoteOperation {
                     
                     } else {
                         result = new RemoteOperationResult(true, postMethod);
-                        //result = new RemoteOperationResult(true, getMethod);
                         ArrayList<Object> data = new ArrayList<>();
                         data.add(mResultTokenMap);
                         result.setData(data);
@@ -151,8 +147,6 @@ public class OAuth2GetAccessToken extends RemoteOperation {
                 } else {
                     result = new RemoteOperationResult(false, postMethod);
                     client.exhaustResponse(postMethod.getResponseBodyAsStream());
-                    /*result = new RemoteOperationResult(false, getMethod);
-                    client.exhaustResponse(getMethod.getResponseBodyAsStream());*/
                 }
             }
             
