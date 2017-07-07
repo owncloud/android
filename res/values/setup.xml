@@ -75,7 +75,6 @@
     <!-- OAuth2 -->
 
     <!-- constants that must be respected by the authorization server; if changed, the app must be rebuild -->
-    <string name="oauth2_redirect_scheme">oc</string>
     <string name="oauth2_redirect_uri">oc://android.owncloud.com</string>
 
     <!-- values that should be provided by ownCloud server -->
