@@ -64,6 +64,7 @@ import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.OAuth2GetAccessToken;
+import com.owncloud.android.operations.OAuth2RefreshAccessToken;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
@@ -666,13 +667,25 @@ public class OperationsService extends Service {
                     operation = new GetServerInfoOperation(serverUrl, OperationsService.this);
 
                 } else if (action.equals(ACTION_OAUTH2_GET_ACCESS_TOKEN)) {
-                    /// GET ACCESS TOKEN to the OAuth server
+                    // GET ACCESS TOKEN to the OAuth server
                     String oauth2QueryParameters =
                             operationIntent.getStringExtra(EXTRA_OAUTH2_QUERY_PARAMETERS);
                     operation = new OAuth2GetAccessToken(
                             getString(R.string.oauth2_client_id),
                             getString(R.string.oauth2_client_secret),
                             getString(R.string.oauth2_redirect_uri),
+                            OAuth2Constants.OAUTH2_GRANT_TYPE,
+                            oauth2QueryParameters);
+
+                } else if (action.equals(ACTION_OAUTH2_REFRESH_ACCESS_TOKEN)) {
+
+                    // GET NEW ACCESS TOKEN from REFRESH TOKEN
+                    String oauth2QueryParameters = operationIntent.
+                            getStringExtra(EXTRA_OAUTH2_QUERY_PARAMETERS);
+
+                    operation = new OAuth2RefreshAccessToken(
+                            getString(R.string.oauth2_client_id),
+                            getString(R.string.oauth2_client_secret),
                             OAuth2Constants.OAUTH2_GRANT_TYPE,
                             oauth2QueryParameters);
 

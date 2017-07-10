@@ -4,6 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   @author masensio
+ *   @author David González Verdugo
  *   Copyright (C) 2012  Bartek Przybylski
  *   Copyright (C) 2017 ownCloud GmbH.
  *
@@ -739,7 +740,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         // Parse data from OAuth redirection
         String queryParameters = capturedUriFromOAuth2Redirection.getQuery();
 
-        /// Showing the dialog with instructions for the user.
+        /// Showing the dialog with instructions for the user
         LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
         dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
 

@@ -86,7 +86,8 @@ public class OAuth2GetAccessToken extends RemoteOperation {
         try {
             parseAuthorizationResponse();
             if (mOAuth2ParsedAuthorizationResponse.keySet().contains(OAuth2Constants.KEY_ERROR)) {
-                if (OAuth2Constants.VALUE_ERROR_ACCESS_DENIED.equals(mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_ERROR))) {
+                if (OAuth2Constants.VALUE_ERROR_ACCESS_DENIED.equals(
+                        mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_ERROR))) {
                     result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR_ACCESS_DENIED);
                 } else {
                     result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR);
@@ -96,7 +97,8 @@ public class OAuth2GetAccessToken extends RemoteOperation {
             if (result == null) { 
                 NameValuePair[] nameValuePairs = new NameValuePair[4];
                 nameValuePairs[0] = new NameValuePair(OAuth2Constants.KEY_GRANT_TYPE, mGrantType);
-                nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CODE, mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_CODE));            
+                nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CODE,
+                        mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_CODE));
                 nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri);       
                 nameValuePairs[3] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
 
@@ -145,16 +147,25 @@ public class OAuth2GetAccessToken extends RemoteOperation {
                 postMethod.releaseConnection();    // let the connection available for other methods
 
             if (result.isSuccess()) {
-                Log_OC.i(TAG, "OAuth2 TOKEN REQUEST with auth code " + mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.getWebdavUri() + ": " + result.getLogMessage());
+                Log_OC.i(TAG, "OAuth2 TOKEN REQUEST with auth code " +
+                        mOAuth2ParsedAuthorizationResponse.get("code") + " to " +
+                        client.getWebdavUri() + ": " + result.getLogMessage());
             
             } else if (result.getException() != null) {
-                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " + mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.getWebdavUri() + ": " + result.getLogMessage(), result.getException());
+                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
+                        mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.
+                        getWebdavUri() + ": " + result.getLogMessage(), result.getException());
                 
             } else if (result.getCode() == ResultCode.OAUTH2_ERROR) {
-                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " + mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.getWebdavUri() + ": " + ((mResultTokenMap != null) ? mResultTokenMap.get(OAuth2Constants.KEY_ERROR) : "NULL"));
+                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
+                        mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.
+                        getWebdavUri() + ": " + ((mResultTokenMap != null) ? mResultTokenMap.
+                        get(OAuth2Constants.KEY_ERROR) : "NULL"));
                     
             } else {
-                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " + mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.getWebdavUri() + ": " + result.getLogMessage());
+                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
+                        mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.
+                        getWebdavUri() + ": " + result.getLogMessage());
             }
         }
         
@@ -201,32 +212,41 @@ public class OAuth2GetAccessToken extends RemoteOperation {
         mResultTokenMap = new HashMap<String, String>();
         
         if (tokenJson.has(OAuth2Constants.KEY_ACCESS_TOKEN)) {
-            mResultTokenMap.put(OAuth2Constants.KEY_ACCESS_TOKEN, tokenJson.getString(OAuth2Constants.KEY_ACCESS_TOKEN));
+            mResultTokenMap.put(OAuth2Constants.KEY_ACCESS_TOKEN, tokenJson.
+                    getString(OAuth2Constants.KEY_ACCESS_TOKEN));
         }
         if (tokenJson.has(OAuth2Constants.KEY_TOKEN_TYPE)) {
-            mResultTokenMap.put(OAuth2Constants.KEY_TOKEN_TYPE, tokenJson.getString(OAuth2Constants.KEY_TOKEN_TYPE));
+            mResultTokenMap.put(OAuth2Constants.KEY_TOKEN_TYPE, tokenJson.
+                    getString(OAuth2Constants.KEY_TOKEN_TYPE));
         }
         if (tokenJson.has(OAuth2Constants.KEY_EXPIRES_IN)) {
-            mResultTokenMap.put(OAuth2Constants.KEY_EXPIRES_IN, tokenJson.getString(OAuth2Constants.KEY_EXPIRES_IN));
+            mResultTokenMap.put(OAuth2Constants.KEY_EXPIRES_IN, tokenJson.
+                    getString(OAuth2Constants.KEY_EXPIRES_IN));
         }
         if (tokenJson.has(OAuth2Constants.KEY_REFRESH_TOKEN)) {
-            mResultTokenMap.put(OAuth2Constants.KEY_REFRESH_TOKEN, tokenJson.getString(OAuth2Constants.KEY_REFRESH_TOKEN));
+            mResultTokenMap.put(OAuth2Constants.KEY_REFRESH_TOKEN, tokenJson.
+                    getString(OAuth2Constants.KEY_REFRESH_TOKEN));
         }
         if (tokenJson.has(OAuth2Constants.KEY_SCOPE)) {
-            mResultTokenMap.put(OAuth2Constants.KEY_SCOPE, tokenJson.getString(OAuth2Constants.KEY_SCOPE));
+            mResultTokenMap.put(OAuth2Constants.KEY_SCOPE, tokenJson.
+                    getString(OAuth2Constants.KEY_SCOPE));
         }
         if (tokenJson.has(OAuth2Constants.KEY_ERROR)) {
-            mResultTokenMap.put(OAuth2Constants.KEY_ERROR, tokenJson.getString(OAuth2Constants.KEY_ERROR));
+            mResultTokenMap.put(OAuth2Constants.KEY_ERROR, tokenJson.
+                    getString(OAuth2Constants.KEY_ERROR));
         }
         if (tokenJson.has(OAuth2Constants.KEY_ERROR_DESCRIPTION)) {
-            mResultTokenMap.put(OAuth2Constants.KEY_ERROR_DESCRIPTION, tokenJson.getString(OAuth2Constants.KEY_ERROR_DESCRIPTION));
+            mResultTokenMap.put(OAuth2Constants.KEY_ERROR_DESCRIPTION, tokenJson.
+                    getString(OAuth2Constants.KEY_ERROR_DESCRIPTION));
         }
         if (tokenJson.has(OAuth2Constants.KEY_ERROR_URI)) {
-            mResultTokenMap.put(OAuth2Constants.KEY_ERROR_URI, tokenJson.getString(OAuth2Constants.KEY_ERROR_URI));
+            mResultTokenMap.put(OAuth2Constants.KEY_ERROR_URI, tokenJson.
+                    getString(OAuth2Constants.KEY_ERROR_URI));
         }
 
         if (tokenJson.has(OAuth2Constants.KEY_USER_ID)) {   // not standard
-            mResultTokenMap.put(OAuth2Constants.KEY_USER_ID, tokenJson.getString(OAuth2Constants.KEY_USER_ID));
+            mResultTokenMap.put(OAuth2Constants.KEY_USER_ID, tokenJson.
+                    getString(OAuth2Constants.KEY_USER_ID));
         }
     }
 
