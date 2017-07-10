@@ -40,9 +40,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.operations.RemoveShareOperation;
-import com.owncloud.android.operations.RenameFileOperation;
-import com.owncloud.android.ui.helpers.FileOperationsHelper;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
@@ -51,6 +48,7 @@ import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -59,6 +57,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetSharesForFileOperation;
+import com.owncloud.android.operations.RemoveShareOperation;
+import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.UpdateSharePermissionsOperation;
@@ -69,6 +69,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
+import com.owncloud.android.ui.helpers.FileOperationsHelper;
 
 
 /**
@@ -369,34 +370,51 @@ public class FileActivity extends DrawerActivity
             if (account == null) {
                 account = getAccount();
             }
-            OwnCloudClient client;
-            OwnCloudAccount ocAccount =
-                    new OwnCloudAccount(account, context);
-            client = (OwnCloudClientManagerFactory.getDefaultSingleton().
-                    removeClientFor(ocAccount));
-            if (client != null) {
-                OwnCloudCredentials cred = client.getCredentials();
-                if (cred != null) {
-                    AccountManager am = AccountManager.get(context);
-                    if (cred.authTokenExpires()) {
-                        am.invalidateAuthToken(
-                                account.type,
-                                cred.getAuthToken()
-                        );
-                    } else {
-                        am.clearPassword(account);
+
+            AccountManager mAccountManager = AccountManager.get(context);
+
+            String isOAuthStr = mAccountManager.getUserData(getAccount(),
+                    Constants.KEY_SUPPORTS_OAUTH2);
+
+            Boolean isOAuth = Boolean.valueOf(isOAuthStr);
+
+            //If OAuth, use refresh token to get a new access token
+            if (isOAuth) {
+
+
+
+
+            } else { // If not, request credentials again
+
+                OwnCloudClient client;
+                OwnCloudAccount ocAccount =
+                        new OwnCloudAccount(account, context);
+                client = (OwnCloudClientManagerFactory.getDefaultSingleton().
+                        removeClientFor(ocAccount));
+                if (client != null) {
+                    OwnCloudCredentials cred = client.getCredentials();
+                    if (cred != null) {
+                        AccountManager am = AccountManager.get(context);
+                        if (cred.authTokenExpires()) {
+                            am.invalidateAuthToken(
+                                    account.type,
+                                    cred.getAuthToken()
+                            );
+                        } else {
+                            am.clearPassword(account);
+                        }
                     }
                 }
-            }
 
-            /// step 2 - request credentials to user
-            Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-            updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
-            updateAccountCredentials.putExtra(
-                    AuthenticatorActivity.EXTRA_ACTION,
-                    AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
-            updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
+                /// step 2 - request credentials to user
+                Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
+                updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+                updateAccountCredentials.putExtra(
+                        AuthenticatorActivity.EXTRA_ACTION,
+                        AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
+                updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
+            }
 
         } catch (com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException e) {
             showSnackMessage(getString(R.string.auth_account_does_not_exist));

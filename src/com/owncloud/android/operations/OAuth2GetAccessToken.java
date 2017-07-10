@@ -99,24 +99,9 @@ public class OAuth2GetAccessToken extends RemoteOperation {
                 nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CODE, mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_CODE));            
                 nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri);       
                 nameValuePairs[3] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
-                //nameValuePairs[4] = new NameValuePair(OAuth2Constants.KEY_SCOPE, mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_SCOPE));
 
                 Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
-                /*
-                uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_GRANT_TYPE, mGrantType
-                );
-                uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_CODE, mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_CODE)
-                );
-                uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri
-                );
-                uriBuilder.appendQueryParameter(
-                    OAuth2Constants.KEY_CLIENT_ID, mClientId
-                );
-                */
-                //getMethod = new GetMethod(uriBuilder.build().toString());
+
                 postMethod = new PostMethod(uriBuilder.build().toString());
                 postMethod.setRequestBody(nameValuePairs);
 
@@ -125,6 +110,8 @@ public class OAuth2GetAccessToken extends RemoteOperation {
                     mSecretId
                 );
                 OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
+
+                // TODO Handle this status
                 int status = client.executeMethod(postMethod);
                 switchClientCredentials(oldCredentials);
 
@@ -156,8 +143,6 @@ public class OAuth2GetAccessToken extends RemoteOperation {
         } finally {
             if (postMethod != null)
                 postMethod.releaseConnection();    // let the connection available for other methods
-            /*if (getMethod != null)
-                getMethod.releaseConnection(); */   // let the connection available for other methods
 
             if (result.isSuccess()) {
                 Log_OC.i(TAG, "OAuth2 TOKEN REQUEST with auth code " + mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.getWebdavUri() + ": " + result.getLogMessage());

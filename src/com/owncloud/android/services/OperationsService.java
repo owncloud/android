@@ -113,6 +113,7 @@ public class OperationsService extends Service {
     public static final String ACTION_UNSHARE = "UNSHARE";
     public static final String ACTION_GET_SERVER_INFO = "GET_SERVER_INFO";
     public static final String ACTION_OAUTH2_GET_ACCESS_TOKEN = "OAUTH2_GET_ACCESS_TOKEN";
+    public static final String ACTION_OAUTH2_REFRESH_ACCESS_TOKEN = "OAUTH2_REFRESH_ACCESS_TOKEN";
     public static final String ACTION_GET_USER_NAME = "GET_USER_NAME";
     public static final String ACTION_GET_USER_AVATAR = "GET_USER_AVATAR";
     public static final String ACTION_RENAME = "RENAME";
