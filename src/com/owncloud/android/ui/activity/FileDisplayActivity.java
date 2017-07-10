@@ -23,6 +23,7 @@ package com.owncloud.android.ui.activity;
 
 import android.Manifest;
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -62,6 +63,7 @@ import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.files.services.TransferRequester;
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -138,7 +140,7 @@ public class FileDisplayActivity extends HookActivity
     private OCFile mWaitingToSend;
 
     private LocalBroadcastManager mLocalBroadcastManager;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -959,8 +961,22 @@ public class FileDisplayActivity extends HookActivity
                                 (synchResult.isException() && synchResult.getException()
                                     instanceof AuthenticatorException)) {
 
-                                requestCredentialsUpdate(context);
+                                AccountManager mAccountManager = AccountManager.get(getApplicationContext());
 
+                                String isOAuthStr = mAccountManager.getUserData(getAccount(),
+                                        Constants.KEY_SUPPORTS_SAML_WEB_SSO);
+
+                                Boolean isOAuth = Boolean.valueOf(isOAuthStr);
+
+                                //If OAuth, use refresh token to get a new access token
+                                if (isOAuth) {
+
+                                    
+
+                                } else { // If not, request credentials agai
+
+                                    requestCredentialsUpdate(context);
+                                }
                             } else if (RemoteOperationResult.ResultCode.
                                     SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
                                 synchResult.getCode())) {

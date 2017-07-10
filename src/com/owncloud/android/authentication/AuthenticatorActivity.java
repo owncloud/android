@@ -680,7 +680,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 );
             } else if (OAUTH_TOKEN_TYPE.equals(mAuthTokenType)) {
                 credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, mAuthToken);
-
             }
             accessRootFolder(credentials);
         }
@@ -1426,7 +1425,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * Sets the proper response so that the AccountAuthenticator that started this activity
      * saves a new authorization token for mAccount.
      *
-     * Kills the session kept by OwnCloudClientManager so that a new one will created with
+     * Kills the session kept by OwnCloudClientManager so that a new one will be created with
      * the new credentials when needed.
      */
     private void updateAccountAuthentication() throws AccountNotFoundException {
@@ -1436,21 +1435,21 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         response.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccount.type);
 
         if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).
-                equals(mAuthTokenType)) {
+                equals(mAuthTokenType)) { // OAuth
             response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
             // the next line is necessary, notifications are calling directly to the 
             // AuthenticatorActivity to update, without AccountManager intervention
             mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
 
         } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
-                equals(mAuthTokenType)) {
+                equals(mAuthTokenType)) { // SAML
 
             response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
             // the next line is necessary; by now, notifications are calling directly to the 
             // AuthenticatorActivity to update, without AccountManager intervention
             mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
 
-        } else {
+        } else { // BASIC
             response.putString(AccountManager.KEY_AUTHTOKEN, mPasswordInput.getText().toString());
             mAccountMgr.setPassword(mAccount, mPasswordInput.getText().toString());
         }
@@ -1463,7 +1462,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         final Intent intent = new Intent();
         intent.putExtras(response);
         setResult(RESULT_OK, intent);
-
     }
 
 
