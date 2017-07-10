@@ -194,6 +194,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private int mAuthStatusIcon = 0;
     
     private String mAuthToken = "";
+    private String mRefreshToken = "";
     private AuthenticatorAsyncTask mAsyncTask;
 
     private boolean mIsFirstAuthAttempt;
@@ -1331,6 +1332,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Map<String, String> tokens = (Map<String, String>)(result.getData().get(0));
             mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
             Log_OC.d(TAG, "Got OAuth access token: " + mAuthToken);
+
+            mRefreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
+            Log_OC.d(TAG, "Got OAuth refresh token: " + mAuthToken);
+
             mUsernameInput.setText(tokens.get(OAuth2Constants.KEY_USER_ID));
 
             /// validate token accessing to root folder / getting session
@@ -1560,7 +1565,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             if (isSaml) {
                 mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "TRUE"); 
             } else if (isOAuth) {
-                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");  
+                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
+                mAccountMgr.setUserData(mAccount, Constants.KEY_OAUTH2_REFRESH_TOKEN, mRefreshToken);
             }
 
             setAccountAuthenticatorResult(intent.getExtras());

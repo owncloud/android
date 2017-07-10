@@ -382,7 +382,8 @@ public class FileActivity extends DrawerActivity
             //If OAuth, use refresh token to get a new access token
             if (isOAuth) {
 
-
+                String refreshToken = mAccountManager.getUserData(getAccount(),
+                        Constants.KEY_OAUTH2_REFRESH_TOKEN);
 
 
             } else { // If not, request credentials again
