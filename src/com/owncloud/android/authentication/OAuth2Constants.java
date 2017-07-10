@@ -55,7 +55,9 @@ public class OAuth2Constants {
     public static final String KEY_USER_ID = "user_id";
 
     /// The only one supported right now
-    public static final String OAUTH2_GRANT_TYPE = "authorization_code";
+    public static final String OAUTH2_AUTH_CODE_GRANT_TYPE = "authorization_code";
+    public static final String OAUTH2_REFRESH_TOKEN_GRANT_TYPE = "refresh_token";
+
 
     /// Depends on oauth2 grant type
     public static final String OAUTH2_RESPONSE_TYPE = "code";

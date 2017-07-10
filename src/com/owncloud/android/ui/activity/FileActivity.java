@@ -385,6 +385,22 @@ public class FileActivity extends DrawerActivity
                 String refreshToken = mAccountManager.getUserData(getAccount(),
                         Constants.KEY_OAUTH2_REFRESH_TOKEN);
 
+                /// GET ACCESS TOKEN to the oAuth server
+                Intent getNewAccessTokenIntent = new Intent();
+
+                getNewAccessTokenIntent.setAction(OperationsService.
+                        ACTION_OAUTH2_REFRESH_ACCESS_TOKEN);
+
+                getNewAccessTokenIntent.putExtra(OperationsService.EXTRA_ACCOUNT, getAccount());
+
+                getNewAccessTokenIntent.putExtra(
+                        OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
+                        "refresh_token=" + refreshToken);
+
+                if (mOperationsServiceBinder != null) {
+                    Log_OC.e(TAG, "Refreshing OAuth access token..." );
+                    mOperationsServiceBinder.queueNewOperation(getNewAccessTokenIntent);
+                }
 
             } else { // If not, request credentials again
 

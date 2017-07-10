@@ -181,7 +181,7 @@ public class OperationsService extends Service {
 
     /**
      * Entry point to add a new operation to the queue of operations.
-     * <p/>
+     *
      * New operations are added calling to startService(), resulting in a call to this method.
      * This ensures the service will keep on working although the caller activity goes away.
      */
@@ -674,7 +674,7 @@ public class OperationsService extends Service {
                             getString(R.string.oauth2_client_id),
                             getString(R.string.oauth2_client_secret),
                             getString(R.string.oauth2_redirect_uri),
-                            OAuth2Constants.OAUTH2_GRANT_TYPE,
+                            OAuth2Constants.OAUTH2_AUTH_CODE_GRANT_TYPE,
                             oauth2QueryParameters);
 
                 } else if (action.equals(ACTION_OAUTH2_REFRESH_ACCESS_TOKEN)) {
@@ -686,7 +686,7 @@ public class OperationsService extends Service {
                     operation = new OAuth2RefreshAccessToken(
                             getString(R.string.oauth2_client_id),
                             getString(R.string.oauth2_client_secret),
-                            OAuth2Constants.OAUTH2_GRANT_TYPE,
+                            OAuth2Constants.OAUTH2_AUTH_CODE_GRANT_TYPE,
                             oauth2QueryParameters);
 
                 } else if (action.equals(ACTION_GET_USER_NAME)) {
