@@ -56,6 +56,7 @@ import com.owncloud.android.utils.ServerType;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
@@ -179,6 +180,12 @@ public class PublicShareActivityTest {
     }
 
 
+    @BeforeClass
+    public static void before(){
+        //Needed to use clipboard
+        Looper.prepare();
+    }
+
     /**
      *  TEST CASE: Share public a folder (default options)
      *  PASSED IF: Link created and visible in share view (message of "no links" does not appear)
@@ -300,8 +307,6 @@ public class PublicShareActivityTest {
         //Get text copied in the clipboard
         onView(withText(R.string.copy_link)).perform(click());
 
-        //Needed to use clipboard
-        Looper.prepare();
         String text = getTextFromClipboard();
         SystemClock.sleep(WAIT_CLIPBOARD_MS);
         //check if the copied link is correct
