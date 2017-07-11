@@ -39,7 +39,8 @@ public enum UploadResult {
     QUOTA_EXCEEDED(12),
     SSL_RECOVERABLE_PEER_UNVERIFIED(13),
     SPECIFIC_FORBIDDEN(14),
-    SPECIFIC_SERVICE_UNAVAILABLE(15);
+    SPECIFIC_SERVICE_UNAVAILABLE(15),
+    SPECIFIC_UNSUPPORTED_MEDIA_TYPE(16);
 
     private final int value;
 
@@ -86,6 +87,8 @@ public enum UploadResult {
                 return SPECIFIC_FORBIDDEN;
             case 15:
                 return SPECIFIC_SERVICE_UNAVAILABLE;
+            case 16:
+                return SPECIFIC_UNSUPPORTED_MEDIA_TYPE;
         }
         return null;
     }
@@ -129,6 +132,8 @@ public enum UploadResult {
                 return SPECIFIC_FORBIDDEN;
             case SPECIFIC_SERVICE_UNAVAILABLE:
                 return SPECIFIC_SERVICE_UNAVAILABLE;
+            case SPECIFIC_UNSUPPORTED_MEDIA_TYPE:
+                return SPECIFIC_UNSUPPORTED_MEDIA_TYPE;
             case UNKNOWN_ERROR:
                 if (result.getException() instanceof java.io.FileNotFoundException) {
                     return FILE_ERROR;
