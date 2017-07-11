@@ -686,7 +686,7 @@ public class OperationsService extends Service {
                     operation = new OAuth2RefreshAccessToken(
                             getString(R.string.oauth2_client_id),
                             getString(R.string.oauth2_client_secret),
-                            OAuth2Constants.OAUTH2_AUTH_CODE_GRANT_TYPE,
+                            OAuth2Constants.OAUTH2_REFRESH_TOKEN_GRANT_TYPE,
                             oauth2QueryParameters);
 
                 } else if (action.equals(ACTION_GET_USER_NAME)) {

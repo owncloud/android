@@ -45,7 +45,7 @@ public class OAuth2GetAccessToken extends RemoteOperation {
     private static final String TAG = OAuth2GetAccessToken.class.getSimpleName();
     
     private String mClientId;
-    private String mSecretId;
+    private String mClientSecret;
     private String mRedirectUri;
     private String mGrantType;
     
@@ -62,11 +62,11 @@ public class OAuth2GetAccessToken extends RemoteOperation {
         String oAuth2AuthorizationResponse
     ) {
         mClientId = clientId;
-        mSecretId = secretId;
+        mClientSecret = secretId;
         mRedirectUri = redirectUri;
         mGrantType = grantType;
         mOAuth2AuthorizationResponse = oAuth2AuthorizationResponse;
-        mOAuth2ParsedAuthorizationResponse = new HashMap<String, String>();
+        mOAuth2ParsedAuthorizationResponse = new HashMap<>();
         mResultTokenMap = null;
     }
 
@@ -107,7 +107,7 @@ public class OAuth2GetAccessToken extends RemoteOperation {
 
                 OwnCloudCredentials oauthCredentials = new OwnCloudBasicCredentials(
                     mClientId,
-                    mSecretId
+                        mClientSecret
                 );
                 OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
 
@@ -247,5 +247,4 @@ public class OAuth2GetAccessToken extends RemoteOperation {
                     getString(OAuth2Constants.KEY_USER_ID));
         }
     }
-
 }

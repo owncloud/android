@@ -21,6 +21,8 @@
 
 package com.owncloud.android.operations;
 
+import android.net.Uri;
+
 import com.owncloud.android.authentication.OAuth2Constants;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -28,8 +30,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class OAuth2RefreshAccessToken extends RemoteOperation {
@@ -37,25 +44,28 @@ public class OAuth2RefreshAccessToken extends RemoteOperation {
     private static final String TAG = OAuth2GetAccessToken.class.getSimpleName();
 
     private String mClientId;
-    private String mSecretId;
+    private String mClientSecret;
     private String mGrantType;
-    private String mRefreshToken;
 
     private String mOAuth2RefreshAccessTokenQueryParams;
 
     private Map<String, String> mOAuth2ParsedRefreshAccessTokenQueryParams;
 
+    private Map<String, String> mResultTokenMap;
+
     public OAuth2RefreshAccessToken(
             String clientId,
             String secretId,
             String grantType,
-            String refreshToken
+            String oAuth2RefreshAccessTokenQueryParams
     ) {
 
         mClientId = clientId;
-        mSecretId = secretId;
+        mClientSecret = secretId;
         mGrantType = grantType;
-        mRefreshToken = refreshToken;
+        mOAuth2RefreshAccessTokenQueryParams = oAuth2RefreshAccessTokenQueryParams;
+        mOAuth2ParsedRefreshAccessTokenQueryParams = new HashMap<>();
+        mResultTokenMap = null;
     }
 
     @Override
@@ -76,51 +86,45 @@ public class OAuth2RefreshAccessToken extends RemoteOperation {
                     result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR);
                 }
             }
-//
-//            if (result == null) {
-//                NameValuePair[] nameValuePairs = new NameValuePair[4];
-//                nameValuePairs[0] = new NameValuePair(OAuth2Constants.KEY_GRANT_TYPE, mGrantType);
-//                nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CODE,
-//                        mOAuth2ParsedAuthorizationResponse.get(OAuth2Constants.KEY_CODE));
-//                nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REDIRECT_URI, mRedirectUri);
-//                nameValuePairs[3] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
-//
-//                Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
-//
-//                postMethod = new PostMethod(uriBuilder.build().toString());
-//                postMethod.setRequestBody(nameValuePairs);
-//
-//                OwnCloudCredentials oauthCredentials = new OwnCloudBasicCredentials(
-//                        mClientId,
-//                        mSecretId
-//                );
-//                OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
-//
-//                // TODO Handle this status
-//                int status = client.executeMethod(postMethod);
-//                switchClientCredentials(oldCredentials);
-//
-//                String response = postMethod.getResponseBodyAsString();
-//                Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + response);
-//                if (response != null && response.length() > 0) {
-//                    JSONObject tokenJson = new JSONObject(response);
-//                    parseAccessTokenResult(tokenJson);
-//                    if (mResultTokenMap.get(OAuth2Constants.KEY_ERROR) != null ||
-//                            mResultTokenMap.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null) {
-//                        result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR);
-//
-//                    } else {
-//                        result = new RemoteOperationResult(true, postMethod);
-//                        ArrayList<Object> data = new ArrayList<>();
-//                        data.add(mResultTokenMap);
-//                        result.setData(data);
-//                    }
-//
-//                } else {
-//                    result = new RemoteOperationResult(false, postMethod);
-//                    client.exhaustResponse(postMethod.getResponseBodyAsStream());
-//                }
-//            }
+
+            if (result == null) {
+                NameValuePair[] nameValuePairs = new NameValuePair[4];
+                nameValuePairs[0] = new NameValuePair(OAuth2Constants.KEY_GRANT_TYPE, mGrantType);
+                nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
+                nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_CLIENT_SECRET, mClientSecret);
+                nameValuePairs[3] = new NameValuePair(OAuth2Constants.KEY_REFRESH_TOKEN,
+                        mOAuth2ParsedRefreshAccessTokenQueryParams.get(OAuth2Constants.KEY_REFRESH_TOKEN));
+
+
+                Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
+
+                postMethod = new PostMethod(uriBuilder.build().toString());
+                postMethod.setRequestBody(nameValuePairs);
+
+                // TODO Handle this status
+                int status = client.executeMethod(postMethod);
+
+                String response = postMethod.getResponseBodyAsString();
+                Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + response);
+                if (response != null && response.length() > 0) {
+                    JSONObject tokenJson = new JSONObject(response);
+                    parseNewAccessTokenResult(tokenJson);
+                    if (mResultTokenMap.get(OAuth2Constants.KEY_ERROR) != null ||
+                            mResultTokenMap.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null) {
+                        result = new RemoteOperationResult(ResultCode.OAUTH2_ERROR);
+
+                    } else {
+                        result = new RemoteOperationResult(true, postMethod);
+                        ArrayList<Object> data = new ArrayList<>();
+                        data.add(mResultTokenMap);
+                        result.setData(data);
+                    }
+
+                } else {
+                    result = new RemoteOperationResult(false, postMethod);
+                    client.exhaustResponse(postMethod.getResponseBodyAsStream());
+                }
+            }
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
@@ -179,6 +183,48 @@ public class OAuth2RefreshAccessToken extends RemoteOperation {
                 j++;
             }
             i++;
+        }
+    }
+
+    private void parseNewAccessTokenResult(JSONObject tokenJson) throws JSONException {
+        mResultTokenMap = new HashMap<String, String>();
+
+        if (tokenJson.has(OAuth2Constants.KEY_ACCESS_TOKEN)) {
+            mResultTokenMap.put(OAuth2Constants.KEY_ACCESS_TOKEN, tokenJson.
+                    getString(OAuth2Constants.KEY_ACCESS_TOKEN));
+        }
+        if (tokenJson.has(OAuth2Constants.KEY_TOKEN_TYPE)) {
+            mResultTokenMap.put(OAuth2Constants.KEY_TOKEN_TYPE, tokenJson.
+                    getString(OAuth2Constants.KEY_TOKEN_TYPE));
+        }
+        if (tokenJson.has(OAuth2Constants.KEY_EXPIRES_IN)) {
+            mResultTokenMap.put(OAuth2Constants.KEY_EXPIRES_IN, tokenJson.
+                    getString(OAuth2Constants.KEY_EXPIRES_IN));
+        }
+        if (tokenJson.has(OAuth2Constants.KEY_REFRESH_TOKEN)) {
+            mResultTokenMap.put(OAuth2Constants.KEY_REFRESH_TOKEN, tokenJson.
+                    getString(OAuth2Constants.KEY_REFRESH_TOKEN));
+        }
+        if (tokenJson.has(OAuth2Constants.KEY_SCOPE)) {
+            mResultTokenMap.put(OAuth2Constants.KEY_SCOPE, tokenJson.
+                    getString(OAuth2Constants.KEY_SCOPE));
+        }
+        if (tokenJson.has(OAuth2Constants.KEY_ERROR)) {
+            mResultTokenMap.put(OAuth2Constants.KEY_ERROR, tokenJson.
+                    getString(OAuth2Constants.KEY_ERROR));
+        }
+        if (tokenJson.has(OAuth2Constants.KEY_ERROR_DESCRIPTION)) {
+            mResultTokenMap.put(OAuth2Constants.KEY_ERROR_DESCRIPTION, tokenJson.
+                    getString(OAuth2Constants.KEY_ERROR_DESCRIPTION));
+        }
+        if (tokenJson.has(OAuth2Constants.KEY_ERROR_URI)) {
+            mResultTokenMap.put(OAuth2Constants.KEY_ERROR_URI, tokenJson.
+                    getString(OAuth2Constants.KEY_ERROR_URI));
+        }
+
+        if (tokenJson.has(OAuth2Constants.KEY_USER_ID)) {   // not standard
+            mResultTokenMap.put(OAuth2Constants.KEY_USER_ID, tokenJson.
+                    getString(OAuth2Constants.KEY_USER_ID));
         }
     }
 }

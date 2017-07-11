@@ -38,6 +38,10 @@ public class OAuth2Constants {
     /// Additional parameters to send to the Token Endpoint
     public static final String KEY_GRANT_TYPE = "grant_type";
     public static final String KEY_CODE = "code";
+
+    // Used to get the Access Token using Refresh Token
+    public static final String KEY_CLIENT_SECRET = "client_secret";
+    public static final String OAUTH2_REFRESH_TOKEN_GRANT_TYPE = "refresh_token";
     
     /// Parameters received in an OK response from the Token Endpoint 
     public static final String KEY_ACCESS_TOKEN = "access_token";
@@ -54,10 +58,7 @@ public class OAuth2Constants {
     /// Extra not standard
     public static final String KEY_USER_ID = "user_id";
 
-    /// The only one supported right now
     public static final String OAUTH2_AUTH_CODE_GRANT_TYPE = "authorization_code";
-    public static final String OAUTH2_REFRESH_TOKEN_GRANT_TYPE = "refresh_token";
-
 
     /// Depends on oauth2 grant type
     public static final String OAUTH2_RESPONSE_TYPE = "code";
