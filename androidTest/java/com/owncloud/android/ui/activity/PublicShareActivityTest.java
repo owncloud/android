@@ -34,14 +34,13 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.FailureHandler;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.FailureHandler;
 import android.support.v4.content.ContextCompat;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
@@ -51,7 +50,10 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.CapabilityBooleanType;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.utils.AccountsManager;
+import com.owncloud.android.utils.FileManager;
+import com.owncloud.android.utils.ServerType;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -71,15 +73,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.allOf;
-import org.hamcrest.Matcher;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
-import com.owncloud.android.utils.FileManager;
-import com.owncloud.android.utils.ServerType;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -1007,9 +1007,15 @@ public class PublicShareActivityTest {
 
     //Select "Share" option on a item in file list. Repeats until long click works.
     private void selectShare(String item){
-        while (!viewIsDisplayed(R.id.action_mode_close_button)){
+        boolean longClicked = false;
+        while (!longClicked) {
             onView(withText(item)).perform(longClick());
             SystemClock.sleep(WAIT_CONNECTION_MS);
+            if (!viewIsDisplayed(R.id.action_share_file)) {
+                onView(withContentDescription("Navigate up")).perform(click());
+            } else {
+                longClicked = true;
+            }
         }
         FileManager.selectOptionActionsMenu(targetContext, R.string.action_share);
     }
