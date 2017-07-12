@@ -40,7 +40,6 @@ public class OAuth2Constants {
     public static final String KEY_CODE = "code";
 
     // Used to get the Access Token using Refresh Token
-    public static final String KEY_CLIENT_SECRET = "client_secret";
     public static final String OAUTH2_REFRESH_TOKEN_GRANT_TYPE = "refresh_token";
     
     /// Parameters received in an OK response from the Token Endpoint 

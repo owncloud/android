@@ -2,6 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author David González Verdugo
  *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -64,7 +65,7 @@ import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.OAuth2GetAccessToken;
-import com.owncloud.android.operations.OAuth2RefreshAccessToken;
+import com.owncloud.android.operations.OAuth2GetRefreshedAccessToken;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
@@ -683,7 +684,7 @@ public class OperationsService extends Service {
                     String oauth2QueryParameters = operationIntent.
                             getStringExtra(EXTRA_OAUTH2_QUERY_PARAMETERS);
 
-                    operation = new OAuth2RefreshAccessToken(
+                    operation = new OAuth2GetRefreshedAccessToken(
                             getString(R.string.oauth2_client_id),
                             getString(R.string.oauth2_client_secret),
                             OAuth2Constants.OAUTH2_REFRESH_TOKEN_GRANT_TYPE,

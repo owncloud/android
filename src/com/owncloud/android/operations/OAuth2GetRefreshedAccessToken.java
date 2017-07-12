@@ -24,7 +24,9 @@ package com.owncloud.android.operations;
 import android.net.Uri;
 
 import com.owncloud.android.authentication.OAuth2Constants;
+import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -39,7 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OAuth2RefreshAccessToken extends RemoteOperation {
+public class OAuth2GetRefreshedAccessToken extends RemoteOperation {
 
     private static final String TAG = OAuth2GetAccessToken.class.getSimpleName();
 
@@ -53,7 +55,7 @@ public class OAuth2RefreshAccessToken extends RemoteOperation {
 
     private Map<String, String> mResultTokenMap;
 
-    public OAuth2RefreshAccessToken(
+    public OAuth2GetRefreshedAccessToken(
             String clientId,
             String secretId,
             String grantType,
@@ -88,11 +90,10 @@ public class OAuth2RefreshAccessToken extends RemoteOperation {
             }
 
             if (result == null) {
-                NameValuePair[] nameValuePairs = new NameValuePair[4];
+                NameValuePair[] nameValuePairs = new NameValuePair[3];
                 nameValuePairs[0] = new NameValuePair(OAuth2Constants.KEY_GRANT_TYPE, mGrantType);
                 nameValuePairs[1] = new NameValuePair(OAuth2Constants.KEY_CLIENT_ID, mClientId);
-                nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_CLIENT_SECRET, mClientSecret);
-                nameValuePairs[3] = new NameValuePair(OAuth2Constants.KEY_REFRESH_TOKEN,
+                nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REFRESH_TOKEN,
                         mOAuth2ParsedRefreshAccessTokenQueryParams.get(OAuth2Constants.KEY_REFRESH_TOKEN));
 
 
@@ -101,8 +102,15 @@ public class OAuth2RefreshAccessToken extends RemoteOperation {
                 postMethod = new PostMethod(uriBuilder.build().toString());
                 postMethod.setRequestBody(nameValuePairs);
 
+                OwnCloudCredentials oauthCredentials = new OwnCloudBasicCredentials(
+                        mClientId,
+                        mClientSecret
+                );
+                OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
+
                 // TODO Handle this status
                 int status = client.executeMethod(postMethod);
+                switchClientCredentials(oldCredentials);
 
                 String response = postMethod.getResponseBodyAsString();
                 Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + response);
@@ -130,33 +138,40 @@ public class OAuth2RefreshAccessToken extends RemoteOperation {
             result = new RemoteOperationResult(e);
 
         } finally {
-//            if (postMethod != null)
-//                postMethod.releaseConnection();    // let the connection available for other methods
-//
-//            if (result.isSuccess()) {
-//                Log_OC.i(TAG, "OAuth2 TOKEN REQUEST with auth code " +
-//                        mOAuth2ParsedAuthorizationResponse.get("code") + " to " +
-//                        client.getWebdavUri() + ": " + result.getLogMessage());
-//
-//            } else if (result.getException() != null) {
-//                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
-//                        mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.
-//                        getWebdavUri() + ": " + result.getLogMessage(), result.getException());
-//
-//            } else if (result.getCode() == ResultCode.OAUTH2_ERROR) {
-//                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
-//                        mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.
-//                        getWebdavUri() + ": " + ((mResultTokenMap != null) ? mResultTokenMap.
-//                        get(OAuth2Constants.KEY_ERROR) : "NULL"));
-//
-//            } else {
-//                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
-//                        mOAuth2ParsedAuthorizationResponse.get("code") + " to " + client.
-//                        getWebdavUri() + ": " + result.getLogMessage());
-//            }
+            if (postMethod != null)
+                postMethod.releaseConnection();    // let the connection available for other methods
+
+            if (result.isSuccess()) {
+                Log_OC.i(TAG, "OAuth2 TOKEN REQUEST with auth code " +
+                        mOAuth2ParsedRefreshAccessTokenQueryParams.get("code") + " to " +
+                        client.getWebdavUri() + ": " + result.getLogMessage());
+
+            } else if (result.getException() != null) {
+                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
+                        mOAuth2ParsedRefreshAccessTokenQueryParams.get("code") + " to " + client.
+                        getWebdavUri() + ": " + result.getLogMessage(), result.getException());
+
+            } else if (result.getCode() == ResultCode.OAUTH2_ERROR) {
+                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
+                        mOAuth2ParsedRefreshAccessTokenQueryParams.get("code") + " to " + client.
+                        getWebdavUri() + ": " + ((mResultTokenMap != null) ? mResultTokenMap.
+                        get(OAuth2Constants.KEY_ERROR) : "NULL"));
+
+            } else {
+                Log_OC.e(TAG, "OAuth2 TOKEN REQUEST with auth code " +
+                        mOAuth2ParsedRefreshAccessTokenQueryParams.get("code") + " to " + client.
+                        getWebdavUri() + ": " + result.getLogMessage());
+            }
         }
 
         return result;
+    }
+
+    private OwnCloudCredentials switchClientCredentials(OwnCloudCredentials newCredentials) {
+        // work-around for POC with owncloud/oauth2 app, that doesn't allow client
+        OwnCloudCredentials previousCredentials = getClient().getCredentials();
+        getClient().setCredentials(newCredentials);
+        return previousCredentials;
     }
 
     private void parseAuthorizationResponse() {

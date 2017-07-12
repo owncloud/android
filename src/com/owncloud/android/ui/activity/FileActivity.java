@@ -367,7 +367,7 @@ public class FileActivity extends DrawerActivity
     protected void requestCredentialsUpdate(Context context, Account account) {
 
         try {
-            /// step 1 - invalidate credentials of current account
+
             if (account == null) {
                 account = getAccount();
             }
@@ -385,13 +385,18 @@ public class FileActivity extends DrawerActivity
                 String refreshToken = mAccountManager.getUserData(getAccount(),
                         Constants.KEY_OAUTH2_REFRESH_TOKEN);
 
-                /// GET ACCESS TOKEN to the oAuth server
+                /// GET NEW ACCESS TOKEN from the oAuth server using REFRESH TOKEN
                 Intent getNewAccessTokenIntent = new Intent();
 
                 getNewAccessTokenIntent.setAction(OperationsService.
                         ACTION_OAUTH2_REFRESH_ACCESS_TOKEN);
 
-                getNewAccessTokenIntent.putExtra(OperationsService.EXTRA_ACCOUNT, getAccount());
+                String baseUrl = mAccountManager.getUserData(getAccount(),
+                        Constants.KEY_OC_BASE_URL);
+
+                getNewAccessTokenIntent.putExtra(
+                        OperationsService.EXTRA_SERVER_URL,
+                        baseUrl + getString(R.string.oauth2_url_endpoint_access));
 
                 getNewAccessTokenIntent.putExtra(
                         OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
@@ -404,6 +409,7 @@ public class FileActivity extends DrawerActivity
 
             } else { // If not, request credentials again
 
+                /// step 1 - invalidate credentials of current account
                 OwnCloudClient client;
                 OwnCloudAccount ocAccount =
                         new OwnCloudAccount(account, context);

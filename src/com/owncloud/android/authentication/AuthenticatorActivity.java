@@ -746,20 +746,20 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
 
         /// GET ACCESS TOKEN to the oAuth server
-        Intent getServerInfoIntent = new Intent();
-        getServerInfoIntent.setAction(OperationsService.ACTION_OAUTH2_GET_ACCESS_TOKEN);
+        Intent getAccessTokenIntent = new Intent();
+        getAccessTokenIntent.setAction(OperationsService.ACTION_OAUTH2_GET_ACCESS_TOKEN);
         
-        getServerInfoIntent.putExtra(
+        getAccessTokenIntent.putExtra(
                 OperationsService.EXTRA_SERVER_URL,
                 mServerInfo.mBaseUrl + mOAuthTokenEndpointText.trim());
         
-        getServerInfoIntent.putExtra(
+        getAccessTokenIntent.putExtra(
                 OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
                 queryParameters);
         
         if (mOperationsServiceBinder != null) {
             Log_OC.e(TAG, "Getting OAuth access token..." );
-            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getServerInfoIntent);
+            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getAccessTokenIntent);
         }
     }
 
