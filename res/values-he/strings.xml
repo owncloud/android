@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">שגיאה בלתי ידועה</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">מחכה לחיבור WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">ממתין להעלאה</string>
+  <string name="uploads_view_unsupported_media_type">סוג מדיה לא נתמך</string>
   <string name="downloader_download_in_progress_ticker">בהורדה …</string>
   <string name="downloader_download_in_progress_content">%1$d%% בהורדה %2$s</string>
   <string name="downloader_download_succeeded_ticker">ההורדה הצליחה</string>

@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Unbekannter Fehler</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Warte auf die drahtlose Verbindung</string>
   <string name="uploads_view_later_waiting_to_upload">Warten auf das Hochladen</string>
+  <string name="uploads_view_unsupported_media_type">Nicht unterstützter Medientyp</string>
   <string name="downloader_download_in_progress_ticker">Herunterladen...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Herunterladen %2$s</string>
   <string name="downloader_download_succeeded_ticker">Herunterladen erfolgreich</string>
