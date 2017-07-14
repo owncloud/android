@@ -108,8 +108,7 @@ public class OAuth2GetRefreshedAccessToken extends RemoteOperation {
                 );
                 OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
 
-                // TODO Handle this status
-                int status = client.executeMethod(postMethod);
+                client.executeMethod(postMethod);
                 switchClientCredentials(oldCredentials);
 
                 String response = postMethod.getResponseBodyAsString();
@@ -202,7 +201,7 @@ public class OAuth2GetRefreshedAccessToken extends RemoteOperation {
     }
 
     private void parseNewAccessTokenResult(JSONObject tokenJson) throws JSONException {
-        mResultTokenMap = new HashMap<String, String>();
+        mResultTokenMap = new HashMap<>();
 
         if (tokenJson.has(OAuth2Constants.KEY_ACCESS_TOKEN)) {
             mResultTokenMap.put(OAuth2Constants.KEY_ACCESS_TOKEN, tokenJson.

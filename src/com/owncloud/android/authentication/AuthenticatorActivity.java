@@ -997,12 +997,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         uri = uriBuilder.build();
 
-        // BROWSER
-//        Log_OC.d(TAG, "Starting browser to view " + uri.toString());
-//        Intent i = new Intent(Intent.ACTION_VIEW, uri);
-//        startActivity(i);
-
-        // WEBVIEW
         String targetUrl = uri.toString();
 
         // Show OAuth web dialog
