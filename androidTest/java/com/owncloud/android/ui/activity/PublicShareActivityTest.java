@@ -133,9 +133,6 @@ public class PublicShareActivityTest {
                     //Add an account to the device in order to avoid login view
                     AccountsManager.addAccount(targetContext, testServerURL, testUser, testPassword);
 
-                    //Get Server Capabilities
-                    capabilities = AccountsManager.getCapabilities(testServerURL, testUser, testPassword);
-
                 }
             };
 
@@ -175,6 +172,9 @@ public class PublicShareActivityTest {
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
         }
+
+        //Get Server Capabilities
+        capabilities = AccountsManager.getCapabilities(testServerURL, testUser, testPassword);
 
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
