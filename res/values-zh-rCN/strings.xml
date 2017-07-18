@@ -394,6 +394,7 @@
   <string name="share_via_link_password_label">密码</string>
   <string name="share_via_link_password_title">安全</string>
   <string name="share_via_link_edit_permission_label">允许编辑</string>
+  <string name="share_via_link_show_file_listing_label">显示文件列表</string>
   <string name="share_get_public_link_button">获取链接</string>
   <string name="share_with_title">分享...</string>
   <string name="share_with_edit_title">与 %1$s 分享</string>
@@ -435,6 +436,7 @@
   <string name="streaming_position_not_available">位置不可用</string>
   <string name="error_no_network_connection">设备未连接到网络</string>
   <string name="share_no_public_links">还没有创建公开链接</string>
+  <string name="share_warning_about_forwarding_public_links">任何查看此链接的人都可以访问文件、文件夹</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">密码 *</string>
   <string name="share_via_link_default_name_template">%1$s链接</string>
