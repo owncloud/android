@@ -91,6 +91,7 @@ public class PublicShareActivityTest {
     private static final int WAIT_INITIAL_MS = 4000;
     private static final int WAIT_CONNECTION_MS = 1500;
     private static final int WAIT_CLIPBOARD_MS = 3000;
+    private static final int WAIT_CERTIF_MS = 4000;
 
     private static final String ERROR_MESSAGE = "BAD LINK";
     private static final String RESULT_CODE = "mResultCode";
@@ -162,7 +163,7 @@ public class PublicShareActivityTest {
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
                         .findObject(new UiSelector().clickable(true).index(GRANT_BUTTON_INDEX)).click();
 
-                SystemClock.sleep(WAIT_CONNECTION_MS);
+                SystemClock.sleep(WAIT_CERTIF_MS);
                 //Accept the untrusted certificate
                 if (servertype == ServerType.HTTPS_NON_SECURE) {
                     onView(withId(R.id.ok)).perform(click());
