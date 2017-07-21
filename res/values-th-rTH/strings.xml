@@ -37,7 +37,7 @@
   <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูล</string>
   <string name="prefs_log_summary">นี้จะใช้เพื่อบันทึกปัญหาที่เกิดขึ้น</string>
   <string name="prefs_log_title_history">ประวัติย้อนหลังการเข้าใช้งาน</string>
-  <string name="prefs_log_summary_history">สิ่งนี้จะแสดง log ที่ถูกบันทึกไว้</string>
+  <string name="prefs_log_summary_history">สิ่งนี้จะแสดงบันทึกที่ถูกบันทึกไว้</string>
   <string name="prefs_log_delete_history_button">ลบประวัติย้อนหลัง</string>
   <string name="prefs_help">ช่วยเหลือ</string>
   <string name="prefs_recommend">แนะนำให้เพื่อน</string>
@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">กำลังรอการเชื่อมต่อ WiFi</string>
   <string name="uploads_view_later_waiting_to_upload">กำลังรอที่จะอัพโหลด</string>
+  <string name="uploads_view_unsupported_media_type">ประเภทของสื่อไม่ได้รับการสนับสนุน</string>
   <string name="downloader_download_in_progress_ticker">กำลังดาวน์โหลด ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% กำลังดาวน์โหลด %2$s</string>
   <string name="downloader_download_succeeded_ticker">ดาวน์โหลดเสร็จสิ้น</string>
