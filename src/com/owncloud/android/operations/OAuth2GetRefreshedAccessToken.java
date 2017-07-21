@@ -23,7 +23,7 @@ package com.owncloud.android.operations;
 
 import android.net.Uri;
 
-import com.owncloud.android.authentication.OAuth2Constants;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
@@ -43,7 +43,7 @@ import java.util.Map;
 
 public class OAuth2GetRefreshedAccessToken extends RemoteOperation {
 
-    private static final String TAG = OAuth2GetAccessToken.class.getSimpleName();
+    private static final String TAG = OAuth2GetRefreshedAccessToken.class.getSimpleName();
 
     private String mClientId;
     private String mClientSecret;

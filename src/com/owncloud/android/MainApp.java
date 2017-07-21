@@ -32,6 +32,9 @@ import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2ClientConfiguration;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2ProvidersRegistry;
+import com.owncloud.android.lib.common.network.authentication.oauth.OwnCloudOAuth2Provider;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 
@@ -74,6 +77,26 @@ public class MainApp extends Application {
                 Policy.SINGLE_SESSION_PER_ACCOUNT_IF_SERVER_SUPPORTS_SERVER_MONITORING
             );
         }
+
+        OwnCloudOAuth2Provider oauth2Provider = new OwnCloudOAuth2Provider();
+        oauth2Provider.setAuthorizationCodeEndpointPath(
+            getString(R.string.oauth2_url_endpoint_auth)
+        );
+        oauth2Provider.setAccessTokenEndpointPath(
+            getString(R.string.oauth2_url_endpoint_access)
+        );
+        oauth2Provider.setClientConfiguration(
+            new OAuth2ClientConfiguration(
+                getString(R.string.oauth2_client_id),
+                getString(R.string.oauth2_client_secret),
+                getString(R.string.oauth2_redirect_uri)
+            )
+        );
+
+        OAuth2ProvidersRegistry.getInstance().registerProvider(
+            OwnCloudOAuth2Provider.NAME,
+            oauth2Provider
+        );
 
         // initialise thumbnails cache on background thread
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
@@ -184,7 +207,7 @@ public class MainApp extends Application {
         String packageName = getAppContext().getPackageName();
         String version = "";
 
-        PackageInfo pInfo = null;
+        PackageInfo pInfo;
         try {
             pInfo = getAppContext().getPackageManager().getPackageInfo(packageName, 0);
             if (pInfo != null) {
@@ -195,8 +218,6 @@ public class MainApp extends Application {
         }
 
         // Mozilla/5.0 (Android) ownCloud-android/1.7.0
-        String userAgent = String.format(appString, version);
-
-        return userAgent;
+        return String.format(appString, version);
     }
 }

@@ -77,6 +77,12 @@ import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2Constants;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2GrantType;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2QueryParser;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2RequestBuilder;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2Provider;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2ProvidersRegistry;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -87,7 +93,7 @@ import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
 import com.owncloud.android.operations.DetectAuthenticationMethodOperation.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
-import com.owncloud.android.operations.OAuth2GetAccessToken;
+import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2GetAccessToken;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.CredentialsDialogFragment;
@@ -133,7 +139,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_AUTH_TOKEN = "AUTH_TOKEN";
 
     private static final String AUTH_ON = "on";
-    private static final String AUTH_OPTIONAL = "optional";
 
     public static final byte ACTION_CREATE = 0;
     public static final byte ACTION_UPDATE_TOKEN = 1;               // requested by the user
@@ -161,7 +166,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private ServiceConnection mOperationsServiceConnection = null;
     private OperationsServiceBinder mOperationsServiceBinder = null;
     private AccountManager mAccountMgr;
-    private Uri mNewCapturedUriFromOAuth2Redirection;
 
 
     /// Server PRE-Fragment elements 
@@ -209,9 +213,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private final String SAML_TOKEN_TYPE =
             AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType());
 
-    private String mOAuthAuthEndpointText = "";
-    private String mOAuthTokenEndpointText = "";
-
     /**
      * {@inheritDoc}
      * 
@@ -254,8 +255,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         /// init activity state
         mAccountMgr = AccountManager.get(this);
-        mNewCapturedUriFromOAuth2Redirection = null;
-        
+
         /// get input values
         mAction = getIntent().getByteExtra(EXTRA_ACTION, ACTION_CREATE); 
         mAccount = getIntent().getExtras().getParcelable(EXTRA_ACCOUNT);
@@ -304,10 +304,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         
         /// initialize block to be moved to single Fragment to retrieve and validate credentials 
         initAuthorizationPreFragment(savedInstanceState);
-
-        mOAuthAuthEndpointText = getString(R.string.oauth2_url_endpoint_auth);
-
-        mOAuthTokenEndpointText = getString(R.string.oauth2_url_endpoint_access);
 
         //Log_OC.e(TAG,  "onCreate end");
     }
@@ -602,10 +598,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Saves relevant state before {@link #onPause()}
      * 
-     * Do NOT save {@link #mNewCapturedUriFromOAuth2Redirection}; it keeps a temporal flag, 
-     * intended to defer the processing of the redirection caught in 
-     * {@link #onNewIntent(Intent)} until {@link #onResume()} 
-     * 
      * See {@link super#onSaveInstanceState(Bundle)}
      */
     @Override
@@ -734,32 +726,53 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     /**
      * Parses the redirection with the response to the GET AUTHORIZATION request to the 
      * OAuth server and requests for the access token (GET ACCESS TOKEN)
-     * @param capturedUriFromOAuth2Redirection
+     *
+     * @param capturedUriFromOAuth2Redirection      Redirection after authorization code request ends
      */
     private void getOAuth2AccessTokenFromCapturedRedirection(Uri capturedUriFromOAuth2Redirection) {
 
         // Parse data from OAuth redirection
         String queryParameters = capturedUriFromOAuth2Redirection.getQuery();
+        Map<String, String> parsedQuery = new OAuth2QueryParser().parse(queryParameters);
 
-        /// Showing the dialog with instructions for the user
-        LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
-        dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
+        if (parsedQuery.keySet().contains(OAuth2Constants.KEY_ERROR)) {
+            // did not obtain authorization code
 
-        /// GET ACCESS TOKEN to the oAuth server
-        Intent getAccessTokenIntent = new Intent();
-        getAccessTokenIntent.setAction(OperationsService.ACTION_OAUTH2_GET_ACCESS_TOKEN);
-        
-        getAccessTokenIntent.putExtra(
+            if (OAuth2Constants.VALUE_ERROR_ACCESS_DENIED.equals(
+                parsedQuery.get(OAuth2Constants.KEY_ERROR))) {
+                    onGetOAuthAccessTokenFinish(
+                        new RemoteOperationResult(ResultCode.OAUTH2_ERROR_ACCESS_DENIED)
+                    );
+            } else {
+                onGetOAuthAccessTokenFinish(
+                    new RemoteOperationResult(ResultCode.OAUTH2_ERROR)
+                );
+            }
+
+        } else {
+
+            /// Showing the dialog with instructions for the user
+            LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
+            dialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
+
+            /// CREATE ACCESS TOKEN to the oAuth server
+            Intent getAccessTokenIntent = new Intent();
+            getAccessTokenIntent.setAction(OperationsService.ACTION_OAUTH2_GET_ACCESS_TOKEN);
+
+            getAccessTokenIntent.putExtra(
                 OperationsService.EXTRA_SERVER_URL,
-                mServerInfo.mBaseUrl + mOAuthTokenEndpointText.trim());
-        
-        getAccessTokenIntent.putExtra(
-                OperationsService.EXTRA_OAUTH2_QUERY_PARAMETERS,
-                queryParameters);
-        
-        if (mOperationsServiceBinder != null) {
-            Log_OC.e(TAG, "Getting OAuth access token..." );
-            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getAccessTokenIntent);
+                mServerInfo.mBaseUrl
+            );
+
+            getAccessTokenIntent.putExtra(
+                OperationsService.EXTRA_OAUTH2_AUTHORIZATION_CODE,
+                parsedQuery.get(OAuth2Constants.KEY_CODE)
+            );
+
+            if (mOperationsServiceBinder != null) {
+                Log_OC.e(TAG, "Getting OAuth access token...");
+                mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getAccessTokenIntent);
+            }
         }
     }
 
@@ -978,30 +991,21 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         mAuthStatusText =  getResources().getString(R.string.oauth_login_connection);
         showAuthStatus();
 
-        // GET AUTHORIZATION CODE request
-        Uri uri = Uri.parse(mServerInfo.mBaseUrl + mOAuthAuthEndpointText.trim());
-        Uri.Builder uriBuilder = uri.buildUpon();
-        uriBuilder.appendQueryParameter(
-                OAuth2Constants.KEY_RESPONSE_TYPE, OAuth2Constants.OAUTH2_RESPONSE_TYPE
-        );
-        uriBuilder.appendQueryParameter(
-                OAuth2Constants.KEY_REDIRECT_URI, getString(R.string.oauth2_redirect_uri)
-        );   
-        uriBuilder.appendQueryParameter(
-                OAuth2Constants.KEY_CLIENT_ID, getString(R.string.oauth2_client_id)
-        );
+        // GET AUTHORIZATION CODE URI to open in WebView
+        OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
+        oAuth2Provider.setAuthorizationServerUri(mServerInfo.mBaseUrl);
 
-        uriBuilder.appendQueryParameter(
-                OAuth2Constants.KEY_STATE, getString(R.string.oauth2_key_state)
-        );
+        OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
+        builder.setGrantType(OAuth2GrantType.AUTHORIZATION_CODE);
+        builder.setRequest(OAuth2RequestBuilder.OAuthRequest.GET_AUTHORIZATION_CODE);
 
-        uri = uriBuilder.build();
-
-        String targetUrl = uri.toString();
+        String authorizationCodeUri = builder.buildUri();
 
         // Show OAuth web dialog
-        OAuthWebViewDialog oAuthWebViewDialog = OAuthWebViewDialog.newInstance(targetUrl,
-                getString(R.string.oauth2_redirect_uri));
+        OAuthWebViewDialog oAuthWebViewDialog = OAuthWebViewDialog.newInstance(
+            authorizationCodeUri,
+            getString(R.string.oauth2_redirect_uri) // target URI
+        );
         oAuthWebViewDialog.show(getSupportFragmentManager(), OAUTH_DIALOG_TAG);
     }
 
@@ -1204,7 +1208,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mHostUrlInput.setText(url);
         }
         else {
-            if(url.indexOf("/") != -1)
+            if(url.contains("/"))
                 url = url.substring(0, url.indexOf("/")).toLowerCase()
                         + url.substring(url.indexOf("/"), url.length());
             else
@@ -1591,7 +1595,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      *
      */
     private void showServerStatus() {
-        if (mServerStatusIcon == 0 && mServerStatusText == "") {
+        if (mServerStatusIcon == 0 && (mServerStatusText == null || mServerStatusText.length() == 0)) {
             mServerStatusView.setVisibility(View.INVISIBLE);
 
         } else {
@@ -1608,7 +1612,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * to the interactions with the OAuth authorization server.
      */
     private void showAuthStatus() {
-        if (mAuthStatusIcon == 0 && mAuthStatusText == "") {
+        if (mAuthStatusIcon == 0 && (mAuthStatusText == null || mAuthStatusText.length() == 0)) {
             mAuthStatusView.setVisibility(View.INVISIBLE);
 
         } else {
