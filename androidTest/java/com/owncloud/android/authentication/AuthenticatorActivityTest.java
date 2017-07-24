@@ -37,6 +37,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.AccountsManager;
+import com.owncloud.android.utils.ServerType;
 
 import org.junit.After;
 import org.junit.Before;
@@ -89,53 +90,6 @@ public class AuthenticatorActivityTest {
     private String testPassword2 = null;
     private String testServerURL = null;
     private boolean isLookup = false;
-    private enum ServerType {
-        /*
-         * Server with http
-         */
-        HTTP(1),
-
-        /*
-         * Server with https, but non-secure certificate
-         */
-        HTTPS_NON_SECURE(2),
-
-        /*
-         * Server with https
-         */
-        HTTPS_SECURE(3),
-
-        /*
-         * Server redirected to a non-secure server
-         */
-        REDIRECTED_NON_SECURE(4);
-
-        private final int status;
-
-        ServerType (int status) {
-            this.status = status;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public static ServerType fromValue(int value) {
-            switch (value) {
-                case 1:
-                    return HTTP;
-                case 2:
-                    return HTTPS_NON_SECURE;
-                case 3:
-                    return HTTPS_SECURE;
-                case 4:
-                    return REDIRECTED_NON_SECURE;
-            }
-            return null;
-        }
-
-    }
-
     private ServerType servertype;
 
     @Rule
