@@ -141,7 +141,7 @@ public class PublicShareActivityTest {
     @Before
     public void init() {
 
-        // UiDevice available form API level 17
+        // UiDevice available from API level 17
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             UiDevice uiDevice =
@@ -188,7 +188,7 @@ public class PublicShareActivityTest {
     }
 
     /**
-     *  TEST CASE: Share public a folder (default options)
+     *  TEST CASE: Share publicly a folder (default options)
      *  PASSED IF: Link created and visible in share view (message of "no links" does not appear)
      */
     @Test
@@ -226,7 +226,7 @@ public class PublicShareActivityTest {
     }
 
     /**
-     *  TEST CASE: Share public a folder (all options enabled)
+     *  TEST CASE: Share publicly a folder (all options enabled)
      *  PASSED IF:
      *              - Link created and visible in share view
      *              - "Allow editing", "Show file listing" (oC >= 10.0.1), "Password" and "Expiration" are enabled
