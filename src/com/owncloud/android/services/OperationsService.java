@@ -39,8 +39,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.R;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -68,7 +66,6 @@ import com.owncloud.android.operations.CreateShareViaLinkOperation;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
-import com.owncloud.android.operations.OAuth2GetRefreshedAccessToken;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
@@ -119,7 +116,6 @@ public class OperationsService extends Service {
     public static final String ACTION_UNSHARE = "UNSHARE";
     public static final String ACTION_GET_SERVER_INFO = "GET_SERVER_INFO";
     public static final String ACTION_OAUTH2_GET_ACCESS_TOKEN = "OAUTH2_GET_ACCESS_TOKEN";
-    public static final String ACTION_OAUTH2_REFRESH_ACCESS_TOKEN = "OAUTH2_REFRESH_ACCESS_TOKEN";
     public static final String ACTION_GET_USER_NAME = "GET_USER_NAME";
     public static final String ACTION_GET_USER_AVATAR = "GET_USER_AVATAR";
     public static final String ACTION_RENAME = "RENAME";
@@ -669,18 +665,6 @@ public class OperationsService extends Service {
                     builder.setAuthorizationCode(code);
 
                     operation = builder.buildOperation();
-
-                } else if (action.equals(ACTION_OAUTH2_REFRESH_ACCESS_TOKEN)) {
-
-                    // GET NEW ACCESS TOKEN from REFRESH TOKEN
-                    String oauth2QueryParameters = operationIntent.
-                            getStringExtra(EXTRA_OAUTH2_QUERY_PARAMETERS);
-
-                    operation = new OAuth2GetRefreshedAccessToken(
-                            getString(R.string.oauth2_client_id),
-                            getString(R.string.oauth2_client_secret),
-                            OAuth2Constants.OAUTH2_REFRESH_TOKEN_GRANT_TYPE,
-                            oauth2QueryParameters);
 
                 } else if (action.equals(ACTION_GET_USER_NAME)) {
                     // Get User Name

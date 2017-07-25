@@ -54,7 +54,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetSharesForFileOperation;
-import com.owncloud.android.operations.OAuth2GetRefreshedAccessToken;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
@@ -338,10 +337,6 @@ public class FileActivity extends DrawerActivity
 
             result.getData();
 
-        } else if (operation instanceof OAuth2GetRefreshedAccessToken) {
-
-            onGetOAuthRefreshedAccessTokenFinish(result);
-
         }
     }
 
@@ -558,21 +553,6 @@ public class FileActivity extends DrawerActivity
     @Override
     public void onCancelCertificate() {
         // nothing to do
-    }
-
-    /**
-     * Processes the result of the request for a new access token send from an OAuth authorization
-     * server using a refresh token
-     *
-     * @param result Result of the operation.
-     */
-    private void onGetOAuthRefreshedAccessTokenFinish(RemoteOperationResult result) {
-
-        /// validate token accessing to root folder / getting session
-//        OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
-//                tokens.get(OAuth2Constants.KEY_USER_ID),
-//                mAuthToken
-//        );
     }
 
     /**

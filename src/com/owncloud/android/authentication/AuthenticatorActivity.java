@@ -1332,7 +1332,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Log_OC.d(TAG, "Got OAuth access token: " + mAuthToken);
 
             mRefreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
-            Log_OC.d(TAG, "Got OAuth refresh token: " + mAuthToken);
+            Log_OC.d(TAG, "Got OAuth refresh token: " + mRefreshToken);
 
             mUsernameInput.setText(tokens.get(OAuth2Constants.KEY_USER_ID));
 
