@@ -68,7 +68,7 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
         switch(mRequest) {
             case CREATE_ACCESS_TOKEN:
                 OAuth2ClientConfiguration clientConfiguration = mOAuth2Provider.getClientConfiguration();
-                return new OAuth2GetAccessToken(
+                return new OAuth2GetAccessTokenOperation(
                     mGrantType.getValue(),
                     mCode,
                     clientConfiguration.getClientId(),

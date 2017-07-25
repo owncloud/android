@@ -95,6 +95,13 @@ public abstract class RemoteOperation implements Runnable {
 
 
     /**
+     * Counter to establish the number of times a failed operation will be repeated due to
+     * an authorization error
+     */
+    private int MAX_REPEAT_COUNTER = 1;
+
+
+    /**
      * Abstract method to implement the operation in derived classes.
      */
     protected abstract RemoteOperationResult run(OwnCloudClient client);
@@ -235,8 +242,11 @@ public abstract class RemoteOperation implements Runnable {
     @Override
     public final void run() {
         RemoteOperationResult result = null;
-        boolean repeat = false;
+        boolean repeat;
+        int repeatCounter = 0;
         do {
+            repeat = false;
+
             try {
                 grantOwnCloudClient();
                 result = run(mClient);
@@ -249,12 +259,16 @@ public abstract class RemoteOperation implements Runnable {
             if (shouldInvalidateAccountCredentials(result)) {
                 boolean invalidated = invalidateAccountCredentials();
                 if (invalidated &&
-                    mClient.getCredentials().authTokenCanBeRefreshed()) {
-                        mClient = null;
-                        repeat = true;
-                        // this will result in a new loop, and grantOwnCloudClient() will
-                        // create a new instance for mClient, refreshing the token via the account
-                        // manager
+                    mClient.getCredentials().authTokenCanBeRefreshed() &&
+                        repeatCounter < MAX_REPEAT_COUNTER) {
+
+                    mClient = null;
+                    repeat = true;
+                    repeatCounter++;
+
+                    // this will result in a new loop, and grantOwnCloudClient() will
+                    // create a new instance for mClient, refreshing the token via the account
+                    // manager
                 }
                 // else: operation will finish with ResultCode.UNAUTHORIZED
             }
@@ -297,8 +311,8 @@ public abstract class RemoteOperation implements Runnable {
 
         boolean should = ResultCode.UNAUTHORIZED.equals(result.getCode());  // invalid credentials
 
-        should &= (mClient.getCredentials() != null && !        // real credentials
-            (mClient.getCredentials() instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
+        should &= (mClient.getCredentials() != null &&         // real credentials
+            !(mClient.getCredentials() instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
 
         should &= (mAccount != null && mContext != null);   // have all the needed to effectively invalidate
 

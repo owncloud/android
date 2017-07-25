@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class OAuth2GetAccessToken extends RemoteOperation {
+public class OAuth2GetAccessTokenOperation extends RemoteOperation {
     
     private String mGrantType;
     private String mCode;
@@ -57,7 +57,7 @@ public class OAuth2GetAccessToken extends RemoteOperation {
     private Map<String, String> mResultTokenMap;
 
 
-    public OAuth2GetAccessToken(
+    public OAuth2GetAccessTokenOperation(
         String grantType,
         String code,
         String clientId,
