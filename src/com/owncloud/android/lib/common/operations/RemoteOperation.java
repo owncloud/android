@@ -29,15 +29,12 @@ import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -241,7 +238,7 @@ public abstract class RemoteOperation implements Runnable {
      */
     @Override
     public final void run() {
-        RemoteOperationResult result = null;
+        RemoteOperationResult result;
         boolean repeat;
         int repeatCounter = 0;
         do {
@@ -267,8 +264,10 @@ public abstract class RemoteOperation implements Runnable {
                     repeatCounter++;
 
                     // this will result in a new loop, and grantOwnCloudClient() will
-                    // create a new instance for mClient, refreshing the token via the account
-                    // manager
+                    // create a new instance for mClient, getting a new fresh token in the
+                    // way, in the AccountAuthenticator * ;
+                    // this, unfortunately, is a hidden runtime dependency back to the app;
+                    // we should fix it ASAP
                 }
                 // else: operation will finish with ResultCode.UNAUTHORIZED
             }
@@ -293,7 +292,8 @@ public abstract class RemoteOperation implements Runnable {
         }
     }
 
-    private void grantOwnCloudClient() throws AccountUtils.AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {
+    private void grantOwnCloudClient() throws
+        AccountUtils.AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {
         if (mClient == null) {
             if (mAccount != null && mContext != null) {
                 OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
