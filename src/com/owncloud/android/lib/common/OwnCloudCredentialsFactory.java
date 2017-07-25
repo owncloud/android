@@ -77,6 +77,11 @@ public class OwnCloudCredentialsFactory {
         }
 
         @Override
+        public boolean authTokenCanBeRefreshed() {
+            return false;
+        }
+
+        @Override
         public String getUsername() {
             // no user name
             return null;

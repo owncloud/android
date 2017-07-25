@@ -26,12 +26,13 @@ package com.owncloud.android.lib.common;
 
 public interface OwnCloudCredentials {
 
-	public void applyTo(OwnCloudClient ownCloudClient);
+    void applyTo(OwnCloudClient ownCloudClient);
 
-	public String getUsername();
-	
-	public String getAuthToken();
-	
-	public boolean authTokenExpires();
-	
+    String getUsername();
+
+    String getAuthToken();
+
+    boolean authTokenExpires();
+
+    boolean authTokenCanBeRefreshed();
 }

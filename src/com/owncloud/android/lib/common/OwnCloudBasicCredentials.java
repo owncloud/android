@@ -81,4 +81,9 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         return false;
     }
 
+    @Override
+    public boolean authTokenCanBeRefreshed() {
+        return false;
+    }
+
 }

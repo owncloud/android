@@ -76,4 +76,9 @@ public class OwnCloudBearerCredentials implements OwnCloudCredentials {
         return true;
     }
 
+    @Override
+    public boolean authTokenCanBeRefreshed() {
+        return true;
+    }
+
 }
