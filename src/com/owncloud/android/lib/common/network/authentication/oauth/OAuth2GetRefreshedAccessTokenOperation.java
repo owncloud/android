@@ -40,9 +40,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OAuth2GetRefreshedAccessToken extends RemoteOperation {
+public class OAuth2GetRefreshedAccessTokenOperation extends RemoteOperation {
 
-    private static final String TAG = OAuth2GetRefreshedAccessToken.class.getSimpleName();
+    private static final String TAG = OAuth2GetRefreshedAccessTokenOperation.class.getSimpleName();
 
     private String mClientId;
     private String mClientSecret;
@@ -54,7 +54,7 @@ public class OAuth2GetRefreshedAccessToken extends RemoteOperation {
 
     private Map<String, String> mResultTokenMap;
 
-    public OAuth2GetRefreshedAccessToken(
+    public OAuth2GetRefreshedAccessTokenOperation(
             String clientId,
             String secretId,
             String grantType,
