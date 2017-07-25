@@ -189,6 +189,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_AUTHTOKEN, accessToken);
             return result;
         }
+
+        //Create clients object
         
         /// if not stored, return Intent to access the AuthenticatorActivity and UPDATE the token for the account
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
