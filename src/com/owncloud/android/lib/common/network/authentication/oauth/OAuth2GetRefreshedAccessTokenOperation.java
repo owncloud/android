@@ -87,13 +87,16 @@ public class OAuth2GetRefreshedAccessTokenOperation extends RemoteOperation {
                     mClientId,
                     mClientSecret
             );
+
             OwnCloudCredentials oldCredentials = switchClientCredentials(oauthCredentials);
 
             client.executeMethod(postMethod);
+
             switchClientCredentials(oldCredentials);
 
             String response = postMethod.getResponseBodyAsString();
             Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + response);
+
             if (response != null && response.length() > 0) {
                 JSONObject tokenJson = new JSONObject(response);
                 parseNewAccessTokenResult(tokenJson);

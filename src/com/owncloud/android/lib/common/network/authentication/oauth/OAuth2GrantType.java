@@ -28,6 +28,7 @@ package com.owncloud.android.lib.common.network.authentication.oauth;
 
 public enum OAuth2GrantType {
     AUTHORIZATION_CODE("authorization_code"),
+    REFRESH_TOKEN("refresh_token"),
     IMPLICIT("implicit"),
     PASSWORD("password"),
     CLIENT_CREDENTIAL("client_credentials");
