@@ -190,6 +190,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         if (authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType()))) {
             accessToken = am.getPassword(account);
         } else {
+            // Gets an auth token from the AccountManager's cache. If no auth token is cached for
+            // this account, null will be returned
             accessToken = am.peekAuthToken(account, authTokenType);
             if (accessToken == null &&
                 canBeRefreshed(authTokenType)) {
@@ -335,17 +337,19 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     private boolean canBeRefreshed(String authTokenType) {
-        return (authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType())));
+        return (authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.
+                getAccountType())));
     }
 
     private String refreshToken(Account account, String authTokenType, AccountManager accountManager) {
 
-        String accessToken = null;
+        String accessToken;
         try {
             String refreshToken = accountManager.getUserData(
                 account,
                 AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
             );
+
             if (refreshToken == null || refreshToken.length() <= 0) {
                 Log_OC.w(TAG, "No refresh token stored for silent renewal of access token");
                 return null;
@@ -354,7 +358,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             OAuth2GetRefreshedAccessTokenOperation operation = new OAuth2GetRefreshedAccessTokenOperation(
                 mContext.getString(R.string.oauth2_client_id),
                 mContext.getString(R.string.oauth2_client_secret),
-                OAuth2GrantType.AUTHORIZATION_CODE.getValue(),
+                OAuth2GrantType.REFRESH_TOKEN.getValue(),
                 refreshToken
             );
 
@@ -370,14 +374,22 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 return null;
             }
 
+            // Get new access and refresh tokens
+
             Map<String, String> tokens = (Map<String, String>) (result.getData().get(0));
+
             accessToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
+
             Log_OC.d(TAG, "Got OAuth2 access token: " + accessToken);
 
+            accountManager.setAuthToken(account, authTokenType, accessToken);
+
+            Log_OC.d(TAG, "Set OAuth2 new access token in account: " + accessToken);
+
             refreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
+
             Log_OC.d(TAG, "Got OAuth2 refresh token: " + refreshToken);
 
-            accountManager.setAuthToken(account, authTokenType, accessToken);
             accountManager.setUserData(
                 account,
                 AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
