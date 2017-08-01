@@ -1664,7 +1664,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         } else if (actionId == EditorInfo.IME_ACTION_NEXT && inputField != null && 
                 inputField.equals(mHostUrlInput)) {
-            if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
+            if (!AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType()).
                     equals(mAuthTokenType)) {
                 checkOcServer();
             }
