@@ -65,10 +65,12 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
 
     @Override
     public RemoteOperation buildOperation() {
-        if (OAuth2GrantType.AUTHORIZATION_CODE != mGrantType) {
+        if (mGrantType != OAuth2GrantType.AUTHORIZATION_CODE &&
+                mGrantType != OAuth2GrantType.REFRESH_TOKEN) {
             throw new UnsupportedOperationException(
                 "Unsupported grant type. Only " +
-                    OAuth2GrantType.AUTHORIZATION_CODE.getValue() + " is supported"
+                    OAuth2GrantType.AUTHORIZATION_CODE.getValue() + " and " +
+                        OAuth2GrantType.REFRESH_TOKEN + " are supported"
             );
         }
         OAuth2ClientConfiguration clientConfiguration = mOAuth2Provider.getClientConfiguration();
