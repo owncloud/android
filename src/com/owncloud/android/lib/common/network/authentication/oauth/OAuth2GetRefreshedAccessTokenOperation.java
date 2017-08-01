@@ -44,26 +44,34 @@ public class OAuth2GetRefreshedAccessTokenOperation extends RemoteOperation {
 
     private static final String TAG = OAuth2GetRefreshedAccessTokenOperation.class.getSimpleName();
 
+    private String mGrantType;
     private String mClientId;
     private String mClientSecret;
-    private String mGrantType;
-
     private String mRefreshToken;
-
     private Map<String, String> mResultTokenMap;
 
+    private final String mAccessTokenEndpointPath;
+
+
     public OAuth2GetRefreshedAccessTokenOperation(
+            String grantType,
             String clientId,
             String secretId,
-            String grantType,
-            String refreshToken
+            String refreshToken,
+            String accessTokenEndpointPath
     ) {
 
+        mGrantType = grantType;
         mClientId = clientId;
         mClientSecret = secretId;
-        mGrantType = grantType;
         mRefreshToken = refreshToken;
         mResultTokenMap = null;
+
+        mAccessTokenEndpointPath =
+                accessTokenEndpointPath != null ?
+                        accessTokenEndpointPath :
+                        OwnCloudOAuth2Provider.ACCESS_TOKEN_ENDPOINT_PATH
+        ;
     }
 
     @Override
@@ -79,6 +87,7 @@ public class OAuth2GetRefreshedAccessTokenOperation extends RemoteOperation {
             nameValuePairs[2] = new NameValuePair(OAuth2Constants.KEY_REFRESH_TOKEN, mRefreshToken);
 
             Uri.Builder uriBuilder = client.getBaseUri().buildUpon();
+            uriBuilder.appendEncodedPath(mAccessTokenEndpointPath);
 
             postMethod = new PostMethod(uriBuilder.build().toString());
             postMethod.setRequestBody(nameValuePairs);

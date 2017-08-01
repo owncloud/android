@@ -31,7 +31,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 public interface OAuth2RequestBuilder {
 
     enum OAuthRequest {
-        GET_AUTHORIZATION_CODE, CREATE_ACCESS_TOKEN
+        GET_AUTHORIZATION_CODE, CREATE_ACCESS_TOKEN, REFRESH_ACCESS_TOKEN
     }
 
     void setRequest(OAuthRequest operation);
@@ -40,8 +40,9 @@ public interface OAuth2RequestBuilder {
 
     void setAuthorizationCode(String code);
 
+    void setRefreshToken(String refreshToken);
+
     RemoteOperation buildOperation();
 
     String buildUri();
-
 }

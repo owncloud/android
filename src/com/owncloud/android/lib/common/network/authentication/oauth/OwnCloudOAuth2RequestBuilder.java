@@ -37,6 +37,7 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
     private OAuthRequest mRequest;
     private OAuth2GrantType mGrantType = OAuth2GrantType.AUTHORIZATION_CODE;
     private String mCode;
+    private String mRefreshToken;
 
     public OwnCloudOAuth2RequestBuilder(OwnCloudOAuth2Provider ownCloudOAuth2Provider) {
         mOAuth2Provider = ownCloudOAuth2Provider;
@@ -58,6 +59,11 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
     }
 
     @Override
+    public void setRefreshToken(String refreshToken) {
+        mRefreshToken = refreshToken;
+    }
+
+    @Override
     public RemoteOperation buildOperation() {
         if (OAuth2GrantType.AUTHORIZATION_CODE != mGrantType) {
             throw new UnsupportedOperationException(
@@ -65,9 +71,10 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
                     OAuth2GrantType.AUTHORIZATION_CODE.getValue() + " is supported"
             );
         }
+        OAuth2ClientConfiguration clientConfiguration = mOAuth2Provider.getClientConfiguration();
+
         switch(mRequest) {
             case CREATE_ACCESS_TOKEN:
-                OAuth2ClientConfiguration clientConfiguration = mOAuth2Provider.getClientConfiguration();
                 return new OAuth2GetAccessTokenOperation(
                     mGrantType.getValue(),
                     mCode,
@@ -75,6 +82,15 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
                     clientConfiguration.getClientSecret(),
                     clientConfiguration.getRedirectUri(),
                     mOAuth2Provider.getAccessTokenEndpointPath()
+                );
+
+            case REFRESH_ACCESS_TOKEN:
+                return new OAuth2GetRefreshedAccessTokenOperation(
+                        mGrantType.getValue(),
+                        clientConfiguration.getClientId(),
+                        clientConfiguration.getClientSecret(),
+                        mRefreshToken,
+                        mOAuth2Provider.getAccessTokenEndpointPath()
                 );
             default:
                 throw new UnsupportedOperationException(
