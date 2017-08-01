@@ -42,6 +42,7 @@ import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2GrantT
 import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2ProvidersRegistry;
 import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2RequestBuilder;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
@@ -365,7 +366,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             builder.setRequest(OAuth2RequestBuilder.OAuthRequest.REFRESH_ACCESS_TOKEN);
             builder.setRefreshToken(refreshToken);
 
-            OAuth2GetRefreshedAccessTokenOperation operation =
+            OAuth2GetRefreshedAccessTokenOperation oAuth2GetRefreshedAccessTokenOperation =
                     (OAuth2GetRefreshedAccessTokenOperation) builder.buildOperation();
 
             OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
@@ -374,14 +375,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 true
             );
 
-            RemoteOperationResult result = operation.execute(client);
+            RemoteOperationResult result = oAuth2GetRefreshedAccessTokenOperation.execute(client);
             if (!result.isSuccess()) {
                 Log_OC.e(TAG, "Failed to refresh access token");
                 return null;
             }
 
             // Get new access and refresh tokens
-
             Map<String, String> tokens = (Map<String, String>) (result.getData().get(0));
 
             accessToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
