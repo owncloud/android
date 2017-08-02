@@ -134,7 +134,8 @@ public abstract class RemoteOperation implements Runnable {
             Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
             return new RemoteOperationResult(e);
         }
-        return run(mClient);
+
+        return runOperationRetryingItIfNeeded();
     }
 
 
@@ -152,7 +153,8 @@ public abstract class RemoteOperation implements Runnable {
             throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
                     "OwnCloudClient");
         mClient = client;
-        return run(client);
+
+        return runOperationRetryingItIfNeeded();
     }
 
 
@@ -223,7 +225,6 @@ public abstract class RemoteOperation implements Runnable {
             mListenerHandler = listenerHandler;
         }
 
-
         Thread runnerThread = new Thread(this);
         runnerThread.start();
         return runnerThread;
@@ -238,9 +239,37 @@ public abstract class RemoteOperation implements Runnable {
      */
     @Override
     public final void run() {
+
+        if (mAccount != null && mContext != null) {
+            // Save Client Cookies
+            AccountUtils.saveClient(mClient, mAccount, mContext);
+        }
+
+        final RemoteOperationResult resultToSend = runOperationRetryingItIfNeeded();;
+        if (mListenerHandler != null && mListener != null) {
+            mListenerHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
+                }
+            });
+        } else if (mListener != null) {
+            mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
+        }
+    }
+
+    /**
+     * Run operation after asynchronous or synchronous executions. If the account credentials are
+     * invalidated, the operation will be retried with new valid credentials
+     *
+     * @return remote operation result
+     */
+    private RemoteOperationResult runOperationRetryingItIfNeeded () {
+
         RemoteOperationResult result;
         boolean repeat;
         int repeatCounter = 0;
+
         do {
             repeat = false;
 
@@ -256,7 +285,7 @@ public abstract class RemoteOperation implements Runnable {
             if (shouldInvalidateAccountCredentials(result)) {
                 boolean invalidated = invalidateAccountCredentials();
                 if (invalidated &&
-                    mClient.getCredentials().authTokenCanBeRefreshed() &&
+                        mClient.getCredentials().authTokenCanBeRefreshed() &&
                         repeatCounter < MAX_REPEAT_COUNTER) {
 
                     mClient = null;
@@ -274,23 +303,9 @@ public abstract class RemoteOperation implements Runnable {
 
         } while (repeat);
 
-        if (mAccount != null && mContext != null) {
-            // Save Client Cookies
-            AccountUtils.saveClient(mClient, mAccount, mContext);
-        }
-
-        final RemoteOperationResult resultToSend = result;
-        if (mListenerHandler != null && mListener != null) {
-            mListenerHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
-                }
-            });
-        } else if (mListener != null) {
-            mListener.onRemoteOperationFinish(RemoteOperation.this, resultToSend);
-        }
+        return result;
     }
+
 
     private void grantOwnCloudClient() throws
         AccountUtils.AccountNotFoundException, OperationCanceledException, AuthenticatorException, IOException {
