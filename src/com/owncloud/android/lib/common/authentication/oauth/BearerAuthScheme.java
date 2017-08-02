@@ -22,11 +22,10 @@
  *
  */
 
-package com.owncloud.android.lib.common.network;
+package com.owncloud.android.lib.common.authentication.oauth;
 
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.auth.AuthChallengeParser;
@@ -34,7 +33,6 @@ import org.apache.commons.httpclient.auth.AuthScheme;
 import org.apache.commons.httpclient.auth.AuthenticationException;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.apache.commons.httpclient.auth.MalformedChallengeException;
-import org.apache.commons.httpclient.util.EncodingUtil;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 

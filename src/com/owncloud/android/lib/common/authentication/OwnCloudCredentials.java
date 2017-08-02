@@ -1,7 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *
- *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +22,19 @@
  *
  */
 
-package com.owncloud.android.lib.common.network.authentication.oauth;
+package com.owncloud.android.lib.common.authentication;
 
-import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.OwnCloudClient;
 
-public interface OAuth2RequestBuilder {
+public interface OwnCloudCredentials {
 
-    enum OAuthRequest {
-        GET_AUTHORIZATION_CODE, CREATE_ACCESS_TOKEN, REFRESH_ACCESS_TOKEN
-    }
+    void applyTo(OwnCloudClient ownCloudClient);
 
-    void setRequest(OAuthRequest operation);
+    String getUsername();
 
-    void setGrantType(OAuth2GrantType grantType);
+    String getAuthToken();
 
-    void setAuthorizationCode(String code);
+    boolean authTokenExpires();
 
-    void setRefreshToken(String refreshToken);
-
-    RemoteOperation buildOperation();
-
-    String buildUri();
+    boolean authTokenCanBeRefreshed();
 }

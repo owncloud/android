@@ -21,7 +21,7 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.common;
+package com.owncloud.android.lib.common.authentication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +30,9 @@ import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.auth.AuthState;
 
-import com.owncloud.android.lib.common.network.BearerAuthScheme;
-import com.owncloud.android.lib.common.network.BearerCredentials;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.authentication.oauth.BearerAuthScheme;
+import com.owncloud.android.lib.common.authentication.oauth.BearerCredentials;
 
 public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 

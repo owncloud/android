@@ -22,7 +22,9 @@
  *
  */
 
-package com.owncloud.android.lib.common;
+package com.owncloud.android.lib.common.authentication;
+
+import com.owncloud.android.lib.common.OwnCloudClient;
 
 public class OwnCloudCredentialsFactory {
 

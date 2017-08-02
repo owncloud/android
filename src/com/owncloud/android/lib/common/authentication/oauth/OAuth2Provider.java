@@ -24,22 +24,43 @@
  *
  */
 
-package com.owncloud.android.lib.common.network.authentication.oauth;
+package com.owncloud.android.lib.common.authentication.oauth;
 
-public enum OAuth2GrantType {
-    AUTHORIZATION_CODE("authorization_code"),
-    REFRESH_TOKEN("refresh_token"),
-    IMPLICIT("implicit"),
-    PASSWORD("password"),
-    CLIENT_CREDENTIAL("client_credentials");
+public interface OAuth2Provider {
 
-    private String mValue;
+    /**
+     * {@link OAuth2RequestBuilder} implementation for this provider.
+     *
+     * @return      {@link OAuth2RequestBuilder} implementation.
+     */
+    OAuth2RequestBuilder getOperationBuilder();
 
-    OAuth2GrantType(String value) {
-        mValue = value;
-    }
 
-    public String getValue() {
-        return mValue;
-    }
+    /**
+     * Set configuration of the client that will use this {@link OAuth2Provider}
+     * @param oAuth2ClientConfiguration     Configuration of the client that will use this {@link OAuth2Provider}
+     */
+    void setClientConfiguration(OAuth2ClientConfiguration oAuth2ClientConfiguration);
+
+    /**
+     * Configuration of the client that is using this {@link OAuth2Provider}
+     * return                   Configuration of the client that is usinng this {@link OAuth2Provider}
+     */
+    OAuth2ClientConfiguration getClientConfiguration();
+
+
+    /**
+     * Set base URI to authorization server.
+     *
+     * @param authorizationServerUri        Set base URL to authorization server.
+     */
+    void setAuthorizationServerUri(String authorizationServerUri);
+
+    /**
+     * base URI to authorization server.
+     *
+     * @return      Base URL to authorization server.
+     */
+    String getAuthorizationServerUri();
+
 }

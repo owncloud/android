@@ -25,7 +25,6 @@
 package com.owncloud.android.lib.common.operations;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
@@ -35,9 +34,7 @@ import android.os.Handler;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.IOException;
@@ -90,6 +87,16 @@ public abstract class RemoteOperation implements Runnable {
      */
     private Handler mListenerHandler = null;
 
+    /**
+     * When 'true', the operation tries to silently refresh credentials if fails due to lack of authorization.
+     *
+     * Valid for 'execute methods' receiving an {@link Account} instance as parameter, but not for those
+     * receiving an {@link OwnCloudClient}. This is, valid for:
+     *  -- {@link RemoteOperation#execute(Account, Context)}
+     *  -- {@link RemoteOperation#execute(Account, Context, OnRemoteOperationListener, Handler)}
+     */
+    private boolean mSilentRefreshOfAccountCredentials = false;
+
 
     /**
      * Counter to establish the number of times a failed operation will be repeated due to
@@ -135,7 +142,7 @@ public abstract class RemoteOperation implements Runnable {
             return new RemoteOperationResult(e);
         }
 
-        return runOperationRetryingItIfNeeded();
+        return runOperation();
     }
 
 
@@ -153,8 +160,9 @@ public abstract class RemoteOperation implements Runnable {
             throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
                     "OwnCloudClient");
         mClient = client;
+        mSilentRefreshOfAccountCredentials = false;
 
-        return runOperationRetryingItIfNeeded();
+        return runOperation();
     }
 
 
@@ -225,6 +233,8 @@ public abstract class RemoteOperation implements Runnable {
             mListenerHandler = listenerHandler;
         }
 
+        mSilentRefreshOfAccountCredentials = false;
+
         Thread runnerThread = new Thread(this);
         runnerThread.start();
         return runnerThread;
@@ -240,12 +250,13 @@ public abstract class RemoteOperation implements Runnable {
     @Override
     public final void run() {
 
+        final RemoteOperationResult resultToSend = runOperation();
+
         if (mAccount != null && mContext != null) {
             // Save Client Cookies
             AccountUtils.saveClient(mClient, mAccount, mContext);
         }
 
-        final RemoteOperationResult resultToSend = runOperationRetryingItIfNeeded();;
         if (mListenerHandler != null && mListener != null) {
             mListenerHandler.post(new Runnable() {
                 @Override
@@ -259,12 +270,15 @@ public abstract class RemoteOperation implements Runnable {
     }
 
     /**
-     * Run operation after asynchronous or synchronous executions. If the account credentials are
-     * invalidated, the operation will be retried with new valid credentials
+     * Run operation for asynchronous or synchronous 'execute' method.
      *
-     * @return remote operation result
+     * Considers and performs silent refresh of account credentials if possible, and if
+     * {@link RemoteOperation#setSilentRefreshOfAccountCredentials(boolean)} was called with
+     * parameter 'true' before the execution.
+     *
+     * @return      Remote operation result
      */
-    private RemoteOperationResult runOperationRetryingItIfNeeded () {
+    private RemoteOperationResult runOperation() {
 
         RemoteOperationResult result;
         boolean repeat;
@@ -282,8 +296,18 @@ public abstract class RemoteOperation implements Runnable {
                 result = new RemoteOperationResult(e);
             }
 
-            if (shouldInvalidateAccountCredentials(result)) {
-                boolean invalidated = invalidateAccountCredentials();
+            if (mSilentRefreshOfAccountCredentials &&
+                AccountUtils.shouldInvalidateAccountCredentials(
+                    result,
+                    mClient,
+                    mAccount,
+                    mContext)
+                ) {
+                boolean invalidated = AccountUtils.invalidateAccountCredentials(
+                    mClient,
+                    mAccount,
+                    mContext
+                );
                 if (invalidated &&
                         mClient.getCredentials().authTokenCanBeRefreshed() &&
                         repeatCounter < MAX_REPEAT_COUNTER) {
@@ -322,37 +346,6 @@ public abstract class RemoteOperation implements Runnable {
         }
     }
 
-    private boolean shouldInvalidateAccountCredentials(RemoteOperationResult result) {
-
-        boolean should = ResultCode.UNAUTHORIZED.equals(result.getCode());  // invalid credentials
-
-        should &= (mClient.getCredentials() != null &&         // real credentials
-            !(mClient.getCredentials() instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
-
-        should &= (mAccount != null && mContext != null);   // have all the needed to effectively invalidate
-
-        return should;
-    }
-
-    private boolean invalidateAccountCredentials() {
-        try {
-            OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
-            OwnCloudClientManagerFactory.getDefaultSingleton().
-                removeClientFor(ocAccount);    // to prevent nobody else is provided this client
-            AccountManager am = AccountManager.get(mContext);
-            am.invalidateAuthToken(
-                mAccount.type,
-                mClient.getCredentials().getAuthToken()
-            );
-            am.clearPassword(mAccount); // being strict, only needed for Basic Auth credentials
-            return true;
-
-        } catch (AccountUtils.AccountNotFoundException e) {
-            Log_OC.e(TAG, "Account was deleted from AccountManager, cannot invalidate its token", e);
-            return false;
-        }
-    }
-
     /**
      * Returns the current client instance to access the remote server.
      *
@@ -360,5 +353,27 @@ public abstract class RemoteOperation implements Runnable {
      */
     public final OwnCloudClient getClient() {
         return mClient;
+    }
+
+
+    /**
+     * Enables or disables silent refresh of credentials, if supported by credentials itself.
+     *
+     * Will have effect if called before:
+     *  -- {@link RemoteOperation#execute(Account, Context)}
+     *  -- {@link RemoteOperation#execute(Account, Context, OnRemoteOperationListener, Handler)}
+     *
+     * Will have NO effect if called before:
+     *  -- {@link RemoteOperation#execute(OwnCloudClient)}
+     *  -- {@link RemoteOperation#execute(OwnCloudClient, OnRemoteOperationListener, Handler)}
+     *
+     * @param silentRefreshOfAccountCredentials     'True' enables silent refresh, 'false' disables it.
+     */
+    public void setSilentRefreshOfAccountCredentials(boolean silentRefreshOfAccountCredentials) {
+        mSilentRefreshOfAccountCredentials = silentRefreshOfAccountCredentials;
+    }
+
+    public boolean getSilentRefreshOfAccountCredentials() {
+        return mSilentRefreshOfAccountCredentials;
     }
 }

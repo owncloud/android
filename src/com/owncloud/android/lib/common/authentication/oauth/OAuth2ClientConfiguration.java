@@ -1,5 +1,7 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *
+ *   @author David A. Velasco
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +24,43 @@
  *
  */
 
-package com.owncloud.android.lib.common;
+package com.owncloud.android.lib.common.authentication.oauth;
 
-public interface OwnCloudCredentials {
+public class OAuth2ClientConfiguration {
 
-    void applyTo(OwnCloudClient ownCloudClient);
+    private String mClientId;
 
-    String getUsername();
+    private String mClientSecret;
 
-    String getAuthToken();
+    private String mRedirectUri;
 
-    boolean authTokenExpires();
+    public OAuth2ClientConfiguration(String clientId, String clientSecret, String redirectUri) {
+        mClientId = (clientId == null) ? "" : clientId;
+        mClientSecret = (clientSecret == null) ? "" : clientSecret;
+        mRedirectUri = (redirectUri == null) ? "" : redirectUri;
+    }
 
-    boolean authTokenCanBeRefreshed();
+    public String getClientId() {
+        return mClientId;
+    }
+
+    public void setClientId(String clientId) {
+        mClientId = clientId;
+    }
+
+    public String getClientSecret() {
+        return mClientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        mClientSecret = clientSecret;
+    }
+
+    public String getRedirectUri() {
+        return mRedirectUri;
+    }
+
+    public void setRedirectUri(String redirectUri) {
+        this.mRedirectUri = redirectUri;
+    }
 }

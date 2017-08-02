@@ -24,7 +24,7 @@
  *
  */
 
-package com.owncloud.android.lib.common.network.authentication.oauth;
+package com.owncloud.android.lib.common.authentication.oauth;
 
 import com.owncloud.android.lib.common.utils.Log_OC;
 

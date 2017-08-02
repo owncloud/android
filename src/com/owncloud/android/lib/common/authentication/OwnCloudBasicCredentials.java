@@ -21,7 +21,9 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.common;
+package com.owncloud.android.lib.common.authentication;
+
+import com.owncloud.android.lib.common.OwnCloudClient;
 
 import java.util.ArrayList;
 import java.util.List;

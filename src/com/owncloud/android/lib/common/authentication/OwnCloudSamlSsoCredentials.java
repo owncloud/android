@@ -21,12 +21,14 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.common;
+package com.owncloud.android.lib.common.authentication;
 
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 
 import android.net.Uri;
+
+import com.owncloud.android.lib.common.OwnCloudClient;
 
 public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 

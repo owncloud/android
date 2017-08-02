@@ -24,43 +24,25 @@
  *
  */
 
-package com.owncloud.android.lib.common.network.authentication.oauth;
+package com.owncloud.android.lib.common.authentication.oauth;
 
-public class OAuth2ClientConfiguration {
+import com.owncloud.android.lib.common.operations.RemoteOperation;
 
-    private String mClientId;
+public interface OAuth2RequestBuilder {
 
-    private String mClientSecret;
-
-    private String mRedirectUri;
-
-    public OAuth2ClientConfiguration(String clientId, String clientSecret, String redirectUri) {
-        mClientId = (clientId == null) ? "" : clientId;
-        mClientSecret = (clientSecret == null) ? "" : clientSecret;
-        mRedirectUri = (redirectUri == null) ? "" : redirectUri;
+    enum OAuthRequest {
+        GET_AUTHORIZATION_CODE, CREATE_ACCESS_TOKEN, REFRESH_ACCESS_TOKEN
     }
 
-    public String getClientId() {
-        return mClientId;
-    }
+    void setRequest(OAuthRequest operation);
 
-    public void setClientId(String clientId) {
-        mClientId = clientId;
-    }
+    void setGrantType(OAuth2GrantType grantType);
 
-    public String getClientSecret() {
-        return mClientSecret;
-    }
+    void setAuthorizationCode(String code);
 
-    public void setClientSecret(String clientSecret) {
-        mClientSecret = clientSecret;
-    }
+    void setRefreshToken(String refreshToken);
 
-    public String getRedirectUri() {
-        return mRedirectUri;
-    }
+    RemoteOperation buildOperation();
 
-    public void setRedirectUri(String redirectUri) {
-        this.mRedirectUri = redirectUri;
-    }
+    String buildUri();
 }
