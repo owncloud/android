@@ -34,6 +34,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AuthenticatorActivity;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.SyncCapabilitiesOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
@@ -84,8 +85,10 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     public static final String EXTRA_FOLDER_PATH = FileSyncAdapter.class.getName() +
             ".EXTRA_FOLDER_PATH";
     public static final String EXTRA_RESULT = FileSyncAdapter.class.getName() + ".EXTRA_RESULT";
-    
-    
+
+    private static final int MAX_REPEAT_COUNTER = 1;
+
+
     /** Time stamp for the current synchronization process, used to distinguish fresh data */
     private long mCurrentSyncTime;
     
@@ -166,20 +169,14 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         
         try {
             this.initClientForCurrentAccount();
-        } catch (IOException e) {
-            /// the account is unknown for the Synchronization Manager, unreachable this context,
-            // or can not be authenticated; don't try this again
-            mSyncResult.tooManyRetries = true;
-            notifyFailedSynchronization();
-            return;
-        } catch (AccountsException e) {
+        } catch (IOException | AccountsException e) {
             /// the account is unknown for the Synchronization Manager, unreachable this context,
             // or can not be authenticated; don't try this again
             mSyncResult.tooManyRetries = true;
             notifyFailedSynchronization();
             return;
         }
-        
+
         Log_OC.d(TAG, "Synchronization of ownCloud account " + account.name + " starting");
         sendLocalBroadcast(EVENT_FULL_SYNC_START, null, null);  // message to signal the start
                                                                 // of the synchronization to the UI
@@ -244,6 +241,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      */
     private void updateCapabilities() {
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
+        getCapabilities.setSilentRefreshOfAccountCredentials(true);
         RemoteOperationResult  result = getCapabilities.execute(getStorageManager(), getContext());
         if (!result.isSuccess()) {
             mLastFailedResult = result;
@@ -280,7 +278,58 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             true,       // sync full account
             false       // only sync contents of available offline files
         );
-        RemoteOperationResult result = synchFolderOp.execute(getClient(), getStorageManager());
+
+        RemoteOperationResult result;
+        boolean repeat;
+        int repeatCounter = 0;
+        do {
+            repeat = false;
+
+            result = synchFolderOp.execute(getClient(), getStorageManager());
+
+            if (com.owncloud.android.lib.common.accounts.AccountUtils.
+                shouldInvalidateAccountCredentials(
+                    result,
+                    getClient(),
+                    getAccount(),
+                    getContext())
+                ) {
+                boolean invalidated = com.owncloud.android.lib.common.accounts.AccountUtils.
+                    invalidateAccountCredentials(
+                        getClient(),
+                        getAccount(),
+                        getContext()
+                    );
+                if (invalidated &&
+                    getClient().getCredentials().authTokenCanBeRefreshed() &&
+                    repeatCounter < MAX_REPEAT_COUNTER) {
+
+                    try {
+                        initClientForCurrentAccount();
+
+                    } catch (AccountsException e) {
+                        /// the account is unknown for the Synchronization Manager, unreachable this context,
+                        // or can not be authenticated; don't try this again
+                        mSyncResult.tooManyRetries = true;
+                        mLastFailedResult = new RemoteOperationResult(e);
+                        return;
+
+                    } catch (IOException e) {
+                        /// the account is unknown for the Synchronization Manager, unreachable this context,
+                        // or can not be authenticated; don't try this again
+                        mSyncResult.tooManyRetries = true;
+                        mLastFailedResult = new RemoteOperationResult(
+                            ResultCode.ACCOUNT_EXCEPTION
+                        );
+                        return;
+                    }
+                    repeat = true;
+                    repeatCounter++;
+                }
+                // else: operation will finish with ResultCode.UNAUTHORIZED
+            }
+
+        } while (repeat);
 
         // synchronized folder -> notice to UI - ALWAYS, although !result.isSuccess
         sendLocalBroadcast(EVENT_FULL_SYNC_FOLDER_CONTENTS_SYNCED, folder.getRemotePath(), result);
@@ -336,7 +385,10 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             return (code.equals(RemoteOperationResult.ResultCode.SSL_ERROR) ||
                     code.equals(RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) ||
                     code.equals(RemoteOperationResult.ResultCode.BAD_OC_VERSION) ||
-                    code.equals(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED));
+                    code.equals(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED) ||
+                    code.equals(ResultCode.ACCOUNT_NOT_FOUND) ||
+                    code.equals(ResultCode.ACCOUNT_EXCEPTION)
+            );
         }
         return false;
     }

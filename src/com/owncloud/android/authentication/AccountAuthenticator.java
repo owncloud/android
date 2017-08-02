@@ -36,13 +36,12 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.accounts.*;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2Constants;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2GetRefreshedAccessTokenOperation;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2GrantType;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2Provider;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2ProvidersRegistry;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2RequestBuilder;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2GetRefreshedAccessTokenOperation;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
@@ -347,6 +346,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     private String refreshToken(Account account, String authTokenType, AccountManager accountManager) {
 
+        Log_OC.v(TAG, "Refreshing token!");
         String accessToken;
         try {
             String refreshToken = accountManager.getUserData(
@@ -401,6 +401,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
                 refreshToken
             );
+
 
         } catch (Exception e) {
             Log_OC.e(TAG, "Failed to store refreshed access token");

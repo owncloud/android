@@ -460,6 +460,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             getAccount(),
             getApplicationContext()
         );
+        synchFolderOp.setSilentRefreshOfAccountCredentials(true);
         synchFolderOp.execute(getStorageManager(), this, null, null);
     }
 

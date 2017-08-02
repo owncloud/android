@@ -346,6 +346,7 @@ public class AvailableOfflineObserver extends FileObserver {
         } else {
             SynchronizeFileOperation sfo =
                 new SynchronizeFileOperation(file, null, mAccount, false, mContext);
+            sfo.setSilentRefreshOfAccountCredentials(true);
             RemoteOperationResult result = sfo.execute(storageManager, mContext);
             if (result.getCode() == ResultCode.SYNC_CONFLICT) {
                 // ISSUE 5: if the user is not running the app (this is a service!),

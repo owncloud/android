@@ -32,9 +32,9 @@ import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory.Policy;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2ClientConfiguration;
-import com.owncloud.android.lib.common.network.authentication.oauth.OAuth2ProvidersRegistry;
-import com.owncloud.android.lib.common.network.authentication.oauth.OwnCloudOAuth2Provider;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfiguration;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
+import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 
