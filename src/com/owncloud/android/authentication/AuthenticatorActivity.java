@@ -67,22 +67,23 @@ import android.widget.Toast;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.SsoWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.authentication.OAuthWebViewClient.OAuthWebViewClientListener;
+import com.owncloud.android.authentication.SsoWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
-import com.owncloud.android.lib.common.network.CertificateCombinedException;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2GetAccessTokenOperation;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2QueryParser;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2QueryParser;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -93,7 +94,6 @@ import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
 import com.owncloud.android.operations.DetectAuthenticationMethodOperation.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2GetAccessTokenOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.CredentialsDialogFragment;
@@ -727,7 +727,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * Parses the redirection with the response to the GET AUTHORIZATION request to the 
      * OAuth server and requests for the access token (GET ACCESS TOKEN)
      *
-     * @param capturedUriFromOAuth2Redirection      Redirection after authorization code request ends
+     * @param capturedUriFromOAuth2Redirection Redirection after authorization code request ends
      */
     private void getOAuth2AccessTokenFromCapturedRedirection(Uri capturedUriFromOAuth2Redirection) {
 
@@ -1054,11 +1054,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (result.isSuccess()) {
             boolean success = false;
             String username = ((UserInfo) result.getData().get(0)).mDisplayName;
+
             if ( mAction == ACTION_CREATE) {
                 mUsernameInput.setText(username);
                 success = createAccount(result);
-            } else {
 
+            } else {
                 if (!mUsernameInput.getText().toString().trim().equals(username)) {
                     // fail - not a new account, but an existing one; disallow
                     result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME);
@@ -1066,6 +1067,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                     updateAuthStatusIconAndText(result);
                     showAuthStatus();
                     Log_OC.d(TAG, result.getLogMessage());
+
                 } else {
                     try {
                         updateAccountAuthentication();
@@ -1090,7 +1092,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             showAuthStatus();
             Log_OC.e(TAG, "Access to user name failed: " + result.getLogMessage());
         }
-
     }
 
     /**
@@ -1311,8 +1312,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     /**
-     * Processes the result of the request for and access token send 
-     * to an OAuth authorization server.
+     * Processes the result of the request for an access token sent to an OAuth authorization server
      * 
      * @param result Result of the operation.
      */
@@ -1334,13 +1334,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mRefreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
             Log_OC.d(TAG, "Got OAuth refresh token: " + mRefreshToken);
 
-            mUsernameInput.setText(tokens.get(OAuth2Constants.KEY_USER_ID));
-
             /// validate token accessing to root folder / getting session
             OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
                 tokens.get(OAuth2Constants.KEY_USER_ID),
                 mAuthToken
             );
+
             accessRootFolder(credentials);
 
         } else {
@@ -1368,21 +1367,35 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Log_OC.d(TAG, "Successful access - time to save the account");
 
             boolean success = false;
+            String username = ((UserInfo) result.getData().get(0)).mDisplayName;
 
             if (mAction == ACTION_CREATE) {
                 success = createAccount(result);
 
             } else {
-                try {
-                    updateAccountAuthentication();
-                    success = true;
 
-                } catch (AccountNotFoundException e) {
-                    Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
-                    Toast.makeText(this, R.string.auth_account_does_not_exist,
-                            Toast.LENGTH_SHORT).show();
-                        // do not use a Snackbar, finishing right now!
-                    finish();
+                if (!mUsernameInput.getText().toString().trim().equals(username)) {
+                    // fail - not a new account, but an existing one; disallow
+                    result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME);
+                    mAuthToken = "";
+                    updateAuthStatusIconAndText(result);
+                    showAuthStatus();
+                    Log_OC.d(TAG, result.getLogMessage());
+
+                    dismissDialog(OAUTH_DIALOG_TAG);
+
+                } else {
+                    try {
+                        updateAccountAuthentication();
+                        success = true;
+
+                    } catch (AccountNotFoundException e) {
+                        Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
+                        Toast.makeText(this, R.string.auth_account_does_not_exist,
+                                Toast.LENGTH_SHORT).show();
+                        // don't use a Snackbar, finishing right now
+                        finish();
+                    }
                 }
             }
 
@@ -1419,9 +1432,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Log_OC.d(TAG, "Access failed: " + result.getLogMessage());
         }
     }
-
-
-
 
     /**
      * Updates the authentication token.
@@ -1714,6 +1724,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         getUserNameIntent.setAction(OperationsService.ACTION_GET_USER_NAME);
         getUserNameIntent.putExtra(OperationsService.EXTRA_SERVER_URL, mServerInfo.mBaseUrl);
         getUserNameIntent.putExtra(OperationsService.EXTRA_COOKIE, sessionCookie);
+
         
         if (mOperationsServiceBinder != null) {
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUserNameIntent);
