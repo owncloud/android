@@ -1055,32 +1055,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             boolean success = false;
             String username = ((UserInfo) result.getData().get(0)).mDisplayName;
 
-            if ( mAction == ACTION_CREATE) {
+            if (mAction == ACTION_CREATE) {
                 mUsernameInput.setText(username);
                 success = createAccount(result);
 
             } else {
-                if (!mUsernameInput.getText().toString().trim().equals(username)) {
-                    // fail - not a new account, but an existing one; disallow
-                    result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME);
-                    mAuthToken = "";
-                    updateAuthStatusIconAndText(result);
-                    showAuthStatus();
-                    Log_OC.d(TAG, result.getLogMessage());
-
-                } else {
-                    try {
-                        updateAccountAuthentication();
-                        success = true;
-
-                    } catch (AccountNotFoundException e) {
-                        Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
-                        Toast.makeText(this, R.string.auth_account_does_not_exist,
-                                Toast.LENGTH_SHORT).show();
-                            // don't use a Snackbar, finishing right now
-                        finish();
-                    }
-                }
+                success = updateAccount(username);
             }
 
             if (success)
@@ -1373,30 +1353,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 success = createAccount(result);
 
             } else {
-
-                if (!mUsernameInput.getText().toString().trim().equals(username)) {
-                    // fail - not a new account, but an existing one; disallow
-                    result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME);
-                    mAuthToken = "";
-                    updateAuthStatusIconAndText(result);
-                    showAuthStatus();
-                    Log_OC.d(TAG, result.getLogMessage());
-
-                    dismissDialog(OAUTH_DIALOG_TAG);
-
-                } else {
-                    try {
-                        updateAccountAuthentication();
-                        success = true;
-
-                    } catch (AccountNotFoundException e) {
-                        Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
-                        Toast.makeText(this, R.string.auth_account_does_not_exist,
-                                Toast.LENGTH_SHORT).show();
-                        // don't use a Snackbar, finishing right now
-                        finish();
-                    }
-                }
+                success = updateAccount(username);
             }
 
             if (success) {
@@ -1432,52 +1389,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Log_OC.d(TAG, "Access failed: " + result.getLogMessage());
         }
     }
-
-    /**
-     * Updates the authentication token.
-     *
-     * Sets the proper response so that the AccountAuthenticator that started this activity
-     * saves a new authorization token for mAccount.
-     *
-     * Kills the session kept by OwnCloudClientManager so that a new one will be created with
-     * the new credentials when needed.
-     */
-    private void updateAccountAuthentication() throws AccountNotFoundException {
-
-        Bundle response = new Bundle();
-        response.putString(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
-        response.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccount.type);
-
-        if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).
-                equals(mAuthTokenType)) { // OAuth
-            response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
-            // the next line is necessary, notifications are calling directly to the 
-            // AuthenticatorActivity to update, without AccountManager intervention
-            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
-
-        } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
-                equals(mAuthTokenType)) { // SAML
-
-            response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
-            // the next line is necessary; by now, notifications are calling directly to the 
-            // AuthenticatorActivity to update, without AccountManager intervention
-            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
-
-        } else { // BASIC
-            response.putString(AccountManager.KEY_AUTHTOKEN, mPasswordInput.getText().toString());
-            mAccountMgr.setPassword(mAccount, mPasswordInput.getText().toString());
-        }
-
-        // remove managed clients for this account to enforce creation with fresh credentials
-        OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, this);
-        OwnCloudClientManagerFactory.getDefaultSingleton().removeClientFor(ocAccount);
-
-        setAccountAuthenticatorResult(response);
-        final Intent intent = new Intent();
-        intent.putExtras(response);
-        setResult(RESULT_OK, intent);
-    }
-
 
     /**
      * Creates a new account through the Account Authenticator that started this activity. 
@@ -1582,6 +1493,89 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             return true;
         }
+    }
+
+    /**
+     * Update an existing account
+     *
+     * Check if the username of the account to update is the same as the username in the current
+     * account, calling {@link #updateAccountAuthentication()} if so and showing an error otherwise
+     *
+     * @param username in the server
+     * @return true if account is properly update, false otherwise
+     */
+    private boolean updateAccount(String username) {
+
+        boolean success = false;
+
+        RemoteOperationResult result;
+        if (!mUsernameInput.getText().toString().trim().equals(username)) {
+            // fail - not a new account, but an existing one; disallow
+            result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME);
+            mAuthToken = "";
+            updateAuthStatusIconAndText(result);
+            showAuthStatus();
+            Log_OC.d(TAG, result.getLogMessage());
+
+        } else {
+            try {
+                updateAccountAuthentication();
+                success = true;
+
+            } catch (AccountNotFoundException e) {
+                Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
+                Toast.makeText(this, R.string.auth_account_does_not_exist,
+                        Toast.LENGTH_SHORT).show();
+                // don't use a Snackbar, finishing right now
+                finish();
+            }
+        }
+        return success;
+    }
+
+    /**
+     * Updates the authentication token.
+     *
+     * Sets the proper response so that the AccountAuthenticator that started this activity
+     * saves a new authorization token for mAccount.
+     *
+     * Kills the session kept by OwnCloudClientManager so that a new one will be created with
+     * the new credentials when needed.
+     */
+    private void updateAccountAuthentication() throws AccountNotFoundException {
+
+        Bundle response = new Bundle();
+        response.putString(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
+        response.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccount.type);
+
+        if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).
+                equals(mAuthTokenType)) { // OAuth
+            response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
+            // the next line is necessary, notifications are calling directly to the
+            // AuthenticatorActivity to update, without AccountManager intervention
+            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
+
+        } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
+                equals(mAuthTokenType)) { // SAML
+
+            response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
+            // the next line is necessary; by now, notifications are calling directly to the
+            // AuthenticatorActivity to update, without AccountManager intervention
+            mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
+
+        } else { // BASIC
+            response.putString(AccountManager.KEY_AUTHTOKEN, mPasswordInput.getText().toString());
+            mAccountMgr.setPassword(mAccount, mPasswordInput.getText().toString());
+        }
+
+        // remove managed clients for this account to enforce creation with fresh credentials
+        OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, this);
+        OwnCloudClientManagerFactory.getDefaultSingleton().removeClientFor(ocAccount);
+
+        setAccountAuthenticatorResult(response);
+        final Intent intent = new Intent();
+        intent.putExtras(response);
+        setResult(RESULT_OK, intent);
     }
 
 
