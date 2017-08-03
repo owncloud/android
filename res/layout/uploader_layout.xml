@@ -67,7 +67,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:text="@string/common_cancel"
-            android:theme="@style/Button"
+            android:theme="@style/Button.Secondary"
             />
 
         <android.support.v7.widget.AppCompatButton

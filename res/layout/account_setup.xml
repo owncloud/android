@@ -19,6 +19,7 @@
 -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -55,7 +56,7 @@
             android:layout_marginBottom="10dp"
             android:contentDescription="@string/auth_check_server"
             android:text="@string/auth_check_server"
-            android:theme="@style/Button"
+            android:theme="@style/Button.Secondary"
             android:visibility="gone"/>
 
         <TextView
@@ -166,9 +167,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/setup_btn_connect"
-            android:enabled="false"
+            android:enabled="true"
             android:text="@string/setup_btn_connect"
-            android:theme="@style/Button.Primary"/>
+            android:theme="@style/Button.Primary"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -18,50 +18,51 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-	<style name="Animations" />
 
-	<!-- THEMES: styles for whole APP or individual ACTIVITIES -->
+    <style name="Animations"/>
 
-	<!-- General ownCloud app style.
-		 To apply directly only on Activities that cannot extend ToolbarActivity;
-		 otherwise, prefer Theme.ownCloud.Toolbar -->
-	<style name="Theme.ownCloud" parent="Theme.AppCompat.Light.DarkActionBar">
-		<item name="android:windowBackground">@color/background_color</item>
+    <!-- THEMES: styles for whole APP or individual ACTIVITIES -->
 
-		<!-- theme for the app bar (both for old actionbar and new toolbar) -->
-		<item name="actionBarTheme">@style/ownCloud.Appbar</item>
+    <!-- General ownCloud app style.
+         To apply directly only on Activities that cannot extend ToolbarActivity;
+         otherwise, prefer Theme.ownCloud.Toolbar -->
+    <style name="Theme.ownCloud" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/background_color</item>
 
-		<!-- properties for action mode -->
-		<item name="windowActionModeOverlay">true</item>
-		<item name="actionModeBackground">@color/action_mode_background</item>
+        <!-- theme for the app bar (both for old actionbar and new toolbar) -->
+        <item name="actionBarTheme">@style/ownCloud.Appbar</item>
 
-		<!-- colors, Material Design way -->
-		<item name="colorPrimary">@color/primary</item>
-		<item name="colorPrimaryDark">@color/primary_dark</item>
-		<item name="colorAccent">@color/color_accent</item>
+        <!-- properties for action mode -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/action_mode_background</item>
 
-		<!-- default theme for alert dialogs -->
-		<item name="alertDialogTheme">@style/Theme.ownCloud.AlertDialog</item>
+        <!-- colors, Material Design way -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
 
-		<!-- style for search view -->
-		<item name="searchViewStyle">@style/ownCloud.SearchView</item>
-	</style>
+        <!-- default theme for alert dialogs -->
+        <item name="alertDialogTheme">@style/Theme.ownCloud.AlertDialog</item>
 
-	<!-- Extends Theme.ownCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->
-	<style name="Theme.ownCloud.Toolbar">
-		<item name="windowNoTitle">true</item>
-		<item name="windowActionBar">false</item>
-	</style>
+        <!-- style for search view -->
+        <item name="searchViewStyle">@style/ownCloud.SearchView</item>
+    </style>
 
-	<!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawwer; needed for v21+ theming -->
-	<style name="Theme.ownCloud.Toolbar.Drawer">
-	</style>
+    <!-- Extends Theme.ownCloud to remove legacy ActionBar from the window and add, via layouts, a Toolbar -->
+    <style name="Theme.ownCloud.Toolbar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
 
-	<!-- Extends Theme.ownCloud to make LEGACY ActionBar both OVERLAY and TRANSPARENT -->
-	<style name="Theme.ownCloud.Overlay" >
-		<item name="windowActionBarOverlay">true</item>
-		<item name="actionBarTheme">@style/ownCloud.Appbar.Transparent</item>
-	</style>
+    <!-- Extends Theme.ownCloud.Toolbar for Drawer activities including Drawwer; needed for v21+ theming -->
+    <style name="Theme.ownCloud.Toolbar.Drawer">
+    </style>
+
+    <!-- Extends Theme.ownCloud to make LEGACY ActionBar both OVERLAY and TRANSPARENT -->
+    <style name="Theme.ownCloud.Overlay">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="actionBarTheme">@style/ownCloud.Appbar.Transparent</item>
+    </style>
 
     <!-- Extends Theme.ownCloud for video in full screen mode -->
     <style name="Theme.ownCloud.Fullscreen">
@@ -84,166 +85,168 @@
     </style>
 
     <!-- USED IN SHAREACTIVITY!! !! -->
-    <style name="Theme.ownCloud.AlertDialog.NoTitle" >
+    <style name="Theme.ownCloud.AlertDialog.NoTitle">
         <item name="windowNoTitle">true</item>
     </style>
 
 
     <!-- APP BAR styles -->
 
-	<!-- Regular style for the app bar (both for old actionbar and new toolbar);
-	 	overrides colorPrimary to allow customization of the app bar color,
-	 	independent of Material Design guidelines, if desired
-	-->
-	<style name="ownCloud.Appbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-		<item name="colorPrimary">@color/actionbar_start_color</item>
-	</style>
+    <!-- Regular style for the app bar (both for old actionbar and new toolbar);
+         overrides colorPrimary to allow customization of the app bar color,
+         independent of Material Design guidelines, if desired
+    -->
+    <style name="ownCloud.Appbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/actionbar_start_color</item>
+    </style>
 
-	<!-- Transparent style for the app bar -->
-	<style name="ownCloud.Appbar.Transparent" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-		<item name="colorPrimary">@color/owncloud_blue_transparent</item>
-	</style>
+    <!-- Transparent style for the app bar -->
+    <style name="ownCloud.Appbar.Transparent" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/owncloud_blue_transparent</item>
+    </style>
 
 
     <!-- MORE styles -->
 
     <style name="ownCloud.SearchView" parent="Widget.AppCompat.SearchView">
-		<!-- Close button icon -->
-		<item name="closeIcon">@drawable/ic_close</item>
-		<!-- Search button icon -->
-		<item name="searchIcon">@drawable/ic_search</item>
-		<!-- Layout for query suggestion rows -->
-		<item name="suggestionRowLayout">@layout/search_suggestion_row</item>>
-	</style>
+        <!-- Close button icon -->
+        <item name="closeIcon">@drawable/ic_close</item>
+        <!-- Search button icon -->
+        <item name="searchIcon">@drawable/ic_search</item>
+        <!-- Layout for query suggestion rows -->
+        <item name="suggestionRowLayout">@layout/search_suggestion_row</item>>
+    </style>
 
-	<style name="ownCloud.Button" parent="Widget.AppCompat.Button">
-		<item name="colorButtonNormal">@color/primary</item>
-	</style>
+    <style name="ownCloud.Button" parent="Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/primary</item>
+    </style>
 
-	<style name="Button" parent="Base.Widget.AppCompat.Button">
-		<item name="colorButtonNormal">@color/secondary_button_background_color</item>
-		<item name="android:textColor">@color/secondary_button_text_color</item>
-	</style>
+    <style name="Button.Secondary" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/secondary_button_background_color</item>
+        <item name="colorAccent">@color/secondary_button_background_color</item>
+        <item name="android:textColor">@color/secondary_button_text_color</item>
+    </style>
 
-	<style name="Button.Primary" parent="Button">
-		<item name="colorButtonNormal">@color/primary_button_background_color</item>
-		<item name="android:textColor">@color/primary_button_text_color</item>
-	</style>
+    <style name="Button.Primary" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/primary_button_background_color</item>
+        <item name="colorAccent">@color/primary_button_background_color</item>
+        <item name="android:textColor">@color/primary_button_text_color</item>
+    </style>
 
-	<style name="Button.Borderless" parent="Base.Widget.AppCompat.Button.Borderless">
-		<item name="android:textColor">@color/color_accent</item>
-	</style>
+    <style name="Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/color_accent</item>
+    </style>
 
-	<!-- Style for top progress bar -->
-	<style name="Widget.ownCloud.TopProgressBar" parent="style/Widget.AppCompat.ProgressBar.Horizontal">
-		<!-- for a custom color independent of @color/primary,
-		change value of actionbar_start_color in setup.xml, don't modify here -->
-		<item name="android:background">@color/actionbar_start_color</item>
-		<item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
-		<item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
-	</style>
+    <!-- Style for top progress bar -->
+    <style name="Widget.ownCloud.TopProgressBar" parent="style/Widget.AppCompat.ProgressBar.Horizontal">
+        <!-- for a custom color independent of @color/primary,
+        change value of actionbar_start_color in setup.xml, don't modify here -->
+        <item name="android:background">@color/actionbar_start_color</item>
+        <item name="android:progressDrawable">@drawable/top_progress_bar_determinate</item>
+        <item name="android:indeterminateDrawable">@drawable/top_progress_bar_indeterminate</item>
+    </style>
 
-	<!-- Dialogs -->
-	<style name="menu_labels_style">
-		<item name="android:background">@drawable/fab_label_background</item>
-		<item name="android:textColor">@color/fab_white</item>
-	</style>
+    <!-- Dialogs -->
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/fab_white</item>
+    </style>
 
-	<style name="NavigationView_ItemTextAppearance">
-		<item name="android:ellipsize">end</item>
-		<item name="android:listDivider">@color/transparent</item>
-	</style>
+    <style name="NavigationView_ItemTextAppearance">
+        <item name="android:ellipsize">end</item>
+        <item name="android:listDivider">@color/transparent</item>
+    </style>
 
-	<!-- Button Bar hack due to Lollipop bug:
-		https://code.google.com/p/android/issues/detail?id=78302
-	fix see:
-		http://stackoverflow.com/questions/27187353/dialog-buttons-with-long-text-not-wrapping-squeezed-out-material-theme-on-an
-	 -->
-	<style name="Theme.ownCloud.Dialog.ButtonBar" parent="style/Widget.AppCompat.ButtonBar.AlertDialog">
-		<!-- Making sure, the button bar uses parent width and is not restricted in height -->
-		<item name="android:layout_width">match_parent</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:height">@null</item>
-		<item name="android:minHeight">@null</item>
-	</style>
+    <!-- Button Bar hack due to Lollipop bug:
+        https://code.google.com/p/android/issues/detail?id=78302
+    fix see:
+        http://stackoverflow.com/questions/27187353/dialog-buttons-with-long-text-not-wrapping-squeezed-out-material-theme-on-an
+     -->
+    <style name="Theme.ownCloud.Dialog.ButtonBar" parent="style/Widget.AppCompat.ButtonBar.AlertDialog">
+        <!-- Making sure, the button bar uses parent width and is not restricted in height -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:height">@null</item>
+        <item name="android:minHeight">@null</item>
+    </style>
 
-	<style name="Theme.ownCloud.Dialog.ButtonBar.Button" parent="style/Widget.AppCompat.Button.Borderless.Colored">
-		<!-- Setting the weight as follows should result in equally wide buttons filling the alert dialog width,
-			but instead they span further out of the dialog, breaking in multiple lines though -->
-		<item name="android:layout_width">0dp</item>
-		<item name="android:layout_weight">1</item>
-		<!-- setting a fixed width as follows results in narrow buttons with line breaks, but of course this is not a solution -->
-		<!-- <item name="android:width">100dp</item> -->
-	</style>
-	
-	<!-- PopDownMenu -->
-	<style name="Animations.PopDownMenu" />
-	
-	<style name="Animations.PopDownMenu.Center">
-		<item name="@android:windowEnterAnimation">@anim/grow_from_top</item>
-		<item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>
-	</style>
-	
-	<style name="Animations.PopDownMenu.Left">
-		<item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
-		<item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
-	</style>
-	
-	<style name="Animations.PopDownMenu.Right">
-		<item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
-		<item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
-	</style>
-	
-	<style name="Animations.PopDownMenu.Reflect">
-		<item name="@android:windowEnterAnimation">@anim/pump_top</item>
-		<item name="@android:windowExitAnimation">@anim/disappear</item>
-	</style>
-	
-	<!-- PopUpMenu -->
-	<style name="Animations.PopUpMenu" />
-	
-	<style name="Animations.PopUpMenu.Center">
-		<item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
-		<item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
-	</style>
-	
-	<style name="Animations.PopUpMenu.Left">
-		<item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
-		<item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
-	</style>
-	
-	<style name="Animations.PopUpMenu.Right">
-		<item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
-		<item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
-	</style>
-	
-	<style name="Animations.PopUpMenu.Reflect">
-		<item name="@android:windowEnterAnimation">@anim/pump_bottom</item>
-		<item name="@android:windowExitAnimation">@anim/disappear</item>
-	</style>
-	
-	<style name="PassCodeStyle">
-		<item name="android:layout_width">50dp</item>
-		<item name="android:layout_height">50dp</item>
-		<item name="android:gravity">center</item>
-		<item name="android:layout_margin">10dp</item>
-		<item name="android:inputType">numberDecimal</item>
-		<item name="android:numeric">decimal</item>
-		<item name="android:digits">1234567890</item>
-		<item name="android:maxLength">1</item>
-		<item name="android:password">true</item>
-		<item name="android:singleLine">true</item>
-	</style>
+    <style name="Theme.ownCloud.Dialog.ButtonBar.Button" parent="style/Widget.AppCompat.Button.Borderless.Colored">
+        <!-- Setting the weight as follows should result in equally wide buttons filling the alert dialog width,
+            but instead they span further out of the dialog, breaking in multiple lines though -->
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <!-- setting a fixed width as follows results in narrow buttons with line breaks, but of course this is not a solution -->
+        <!-- <item name="android:width">100dp</item> -->
+    </style>
+
+    <!-- PopDownMenu -->
+    <style name="Animations.PopDownMenu"/>
+
+    <style name="Animations.PopDownMenu.Center">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_top</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Left">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Right">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Reflect">
+        <item name="@android:windowEnterAnimation">@anim/pump_top</item>
+        <item name="@android:windowExitAnimation">@anim/disappear</item>
+    </style>
+
+    <!-- PopUpMenu -->
+    <style name="Animations.PopUpMenu"/>
+
+    <style name="Animations.PopUpMenu.Center">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Left">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Right">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Reflect">
+        <item name="@android:windowEnterAnimation">@anim/pump_bottom</item>
+        <item name="@android:windowExitAnimation">@anim/disappear</item>
+    </style>
+
+    <style name="PassCodeStyle">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:numeric">decimal</item>
+        <item name="android:digits">1234567890</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:password">true</item>
+        <item name="android:singleLine">true</item>
+    </style>
 
     <!-- Notifications -->
-    <style 	name="Theme.ownCloud.NotificationText.Title"
-              parent="@android:style/TextAppearance.StatusBar.EventContent.Title" >
+    <style name="Theme.ownCloud.NotificationText.Title"
+           parent="@android:style/TextAppearance.StatusBar.EventContent.Title">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style 	name="Theme.ownCloud.NotificationText.Content"
-              parent="@android:style/TextAppearance.StatusBar.EventContent"	>
+    <style name="Theme.ownCloud.NotificationText.Content"
+           parent="@android:style/TextAppearance.StatusBar.EventContent">
         <item name="android:textSize">16sp</item>
     </style>
 
