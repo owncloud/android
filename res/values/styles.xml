@@ -117,10 +117,6 @@
         <item name="suggestionRowLayout">@layout/search_suggestion_row</item>>
     </style>
 
-    <style name="ownCloud.Button" parent="Widget.AppCompat.Button">
-        <item name="colorButtonNormal">@color/primary</item>
-    </style>
-
     <style name="Button.Secondary" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/secondary_button_background_color</item>
         <item name="colorAccent">@color/secondary_button_background_color</item>
