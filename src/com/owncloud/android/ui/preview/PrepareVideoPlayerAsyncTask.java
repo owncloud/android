@@ -62,7 +62,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
         try {
             // If the file is already downloaded, reproduce it locally, if not, do streaming
             uri = mFile.isDown() ? mFile.getStorageUri() :
-                    Uri.parse(AccountUtils.constructFullURLForAccount(mContext, mAccount) +
+                    Uri.parse(AccountUtils.getWebDavUrlForAccount(mContext, mAccount) +
                             Uri.encode(mFile.getRemotePath(), "/"));
 
             boolean useBandwidthMeter = true;
