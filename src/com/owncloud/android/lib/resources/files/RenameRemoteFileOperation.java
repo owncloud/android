@@ -24,6 +24,8 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import android.os.RemoteException;
+
 import java.io.File;
 
 import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
@@ -101,8 +103,7 @@ public class RenameRemoteFileOperation extends RemoteOperation {
                     return new RemoteOperationResult(ResultCode.OK);
                 }
 
-                // check if a file with the new name already exists
-                if (client.existsFile(mNewRemotePath)) {
+                if (targetPathIsUsed(client)) {
                     return new RemoteOperationResult(ResultCode.INVALID_OVERWRITE);
                 }
 
@@ -132,6 +133,18 @@ public class RenameRemoteFileOperation extends RemoteOperation {
         }
 
         return result;
+    }
+
+    /**
+     * Checks if a file with the new name already exists.
+     *
+     * @return      'True' if the target path is already used by an existing file.
+     */
+    private boolean targetPathIsUsed(OwnCloudClient client) {
+        ExistenceCheckRemoteOperation existenceCheckRemoteOperation =
+            new ExistenceCheckRemoteOperation(mNewRemotePath, false);
+        RemoteOperationResult exists = existenceCheckRemoteOperation.run(client);
+        return exists.isSuccess();
     }
 
     /**

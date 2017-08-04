@@ -145,28 +145,6 @@ public class OwnCloudClient extends HttpClient {
     }
 
     /**
-     * Check if a file exists in the OC server
-     *
-     * @return 'true' if the file exists; 'false' it doesn't exist
-     * @throws Exception When the existence could not be determined
-     * @deprecated Use ExistenceCheckOperation instead
-     */
-    @Deprecated
-    public boolean existsFile(String path) throws IOException, HttpException {
-        HeadMethod head = new HeadMethod(getWebdavUri() + WebdavUtils.encodePath(path));
-        try {
-            int status = executeMethod(head);
-            Log_OC.d(TAG, "HEAD to " + path + " finished with HTTP status " + status +
-                ((status != HttpStatus.SC_OK) ? "(FAIL)" : ""));
-            exhaustResponse(head.getResponseBodyAsStream());
-            return (status == HttpStatus.SC_OK);
-
-        } finally {
-            head.releaseConnection();    // let the connection available for other methods
-        }
-    }
-
-    /**
      * Requests the received method with the received timeout (milliseconds).
      *
      * Executes the method through the inherited HttpClient.executedMethod(method).

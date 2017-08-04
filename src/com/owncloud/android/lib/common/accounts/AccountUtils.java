@@ -51,51 +51,30 @@ public class AccountUtils {
     private static final String TAG = AccountUtils.class.getSimpleName();
 
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
-    public static final String ODAV_PATH = "/remote.php/webdav";
     public static final String STATUS_PATH = "/status.php";
 
     /**
      * Constructs full url to host and webdav resource basing on host version
      *
-     * @param context
-     * @param account
-     * @return url or null on failure
+     * @param context               Valid Android {@link Context}, needed to access the {@link AccountManager}
+     * @param account               A stored ownCloud {@link Account}
+     * @return                      Full URL to WebDAV endpoint in the server corresponding to 'account'.
      * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
-     * @deprecated To be removed in release 1.0.
      */
-    @Deprecated
-    public static String constructFullURLForAccount(Context context, Account account) throws AccountNotFoundException {
-        AccountManager ama = AccountManager.get(context);
-        String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
-        if (baseurl == null) {
-            throw new AccountNotFoundException(account, "Account not found", null);
-        }
-        return baseurl + WEBDAV_PATH_4_0;
-    }
-
-    /**
-     * Extracts url server from the account
-     *
-     * @param context
-     * @param account
-     * @return url server or null on failure
-     * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
-     * @deprecated This method will be removed in version 1.0.
-     * Use {@link #getBaseUrlForAccount(Context, Account)}
-     * instead.
-     */
-    @Deprecated
-    public static String constructBasicURLForAccount(Context context, Account account)
+    public static String getWebDavUrlForAccount(Context context, Account account)
         throws AccountNotFoundException {
-        return getBaseUrlForAccount(context, account);
+
+        return getBaseUrlForAccount(context, account) + WEBDAV_PATH_4_0;
     }
+
 
     /**
      * Extracts url server from the account
      *
-     * @param context
-     * @param account
-     * @return url server or null on failure
+     * @param context               Valid Android {@link Context}, needed to access the {@link AccountManager}
+     * @param account               A stored ownCloud {@link Account}
+     * @return                      Full URL to the server corresponding to 'account', ending in the base path
+     *                              common to all API endpoints.
      * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
      */
     public static String getBaseUrlForAccount(Context context, Account account)
@@ -371,15 +350,6 @@ public class AccountUtils {
 
     public static class Constants {
         /**
-         * Value under this key should handle path to webdav php script. Will be
-         * removed and usage should be replaced by combining
-         * {@link #KEY_OC_BASE_URL } and
-         * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
-         *
-         * @deprecated
-         */
-        public static final String KEY_OC_URL = "oc_url";
-        /**
          * Version should be 3 numbers separated by dot so it can be parsed by
          * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
          */
@@ -397,12 +367,6 @@ public class AccountUtils {
          * Flag signaling if the ownCloud server can be accessed with session cookies from SAML-based web single-sign-on.
          */
         public static final String KEY_SUPPORTS_SAML_WEB_SSO = "oc_supports_saml_web_sso";
-        /**
-         * Flag signaling if the ownCloud server supports Share API"
-         *
-         * @deprecated
-         */
-        public static final String KEY_SUPPORTS_SHARE_API = "oc_supports_share_api";
         /**
          * OC account cookies
          */

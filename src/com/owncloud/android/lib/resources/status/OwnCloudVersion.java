@@ -63,14 +63,6 @@ public class OwnCloudVersion implements Comparable<OwnCloudVersion> {
     private int mVersion;
     private boolean mIsValid;
 
-    /**
-     *  @deprecated  Will be removed in version 1.0 of the library.
-     */
-    private OwnCloudVersion(int version) {
-        mVersion = version;
-        mIsValid = true;
-    }
-
     public OwnCloudVersion(String version) {
         mVersion = 0;
         mIsValid = false;
