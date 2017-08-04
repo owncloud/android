@@ -37,7 +37,7 @@ import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.accounts.*;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2GetRefreshedAccessTokenOperation;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2RefreshAccessTokenOperation;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
@@ -362,20 +362,19 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
 
             OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
-            builder.setGrantType(OAuth2GrantType.REFRESH_TOKEN);
             builder.setRequest(OAuth2RequestBuilder.OAuthRequest.REFRESH_ACCESS_TOKEN);
             builder.setRefreshToken(refreshToken);
 
-            OAuth2GetRefreshedAccessTokenOperation oAuth2GetRefreshedAccessTokenOperation =
-                    (OAuth2GetRefreshedAccessTokenOperation) builder.buildOperation();
+            OAuth2RefreshAccessTokenOperation oAuth2RefreshAccessTokenOperation =
+                    (OAuth2RefreshAccessTokenOperation) builder.buildOperation();
 
             OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
                 Uri.parse(accountManager.getUserData(account, AccountUtils.Constants.KEY_OC_BASE_URL)),
-                mContext.getApplicationContext(),
+                mContext,
                 true
             );
 
-            RemoteOperationResult result = oAuth2GetRefreshedAccessTokenOperation.execute(client);
+            RemoteOperationResult result = oAuth2RefreshAccessTokenOperation.execute(client);
             if (!result.isSuccess()) {
                 Log_OC.e(TAG, "Failed to refresh access token");
                 return null;
