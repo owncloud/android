@@ -1006,7 +1006,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             authorizationCodeUri,
             getString(R.string.oauth2_redirect_uri) // target URI
         );
+
         oAuthWebViewDialog.show(getSupportFragmentManager(), OAUTH_DIALOG_TAG);
+    }
+
+    @Override
+    public void OAuthWebViewDialogFragmentDetached() {
+        mAuthStatusIcon = 0;
+        mAuthStatusText = "";
+        showAuthStatus();
     }
 
     /**
@@ -1675,7 +1683,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         return false;   // always return false to grant that the software keyboard is hidden anyway
     }
-
 
     private abstract static class RightDrawableOnTouchListener implements OnTouchListener  {
 

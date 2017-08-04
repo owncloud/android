@@ -57,6 +57,7 @@ public class OAuthWebViewClient extends WebViewClient {
 
     public interface OAuthWebViewClientListener {
         void onGetCapturedUriFromOAuth2Redirection (Uri capturedUriFromOAuth2Redirection);
+        void OAuthWebViewDialogFragmentDetached();
     }
 
     private Context mContext;

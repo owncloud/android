@@ -1,21 +1,20 @@
 /**
- *   ownCloud Android client application
+ * ownCloud Android client application
  *
- *   @author David González Verdugo
- *   Copyright (C) 2017 ownCloud GmbH.
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License version 2,
- *   as published by the Free Software Foundation.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * @author David González Verdugo
+ * Copyright (C) 2017 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.dialog;
@@ -50,9 +49,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
  */
 public class OAuthWebViewDialog extends DialogFragment {
 
-    public final String SAML_DIALOG_TAG = "OAuthWebViewDialog";
-
-    private final static String TAG =  OAuthWebViewDialog.class.getSimpleName();
+    private final static String TAG = OAuthWebViewDialog.class.getSimpleName();
 
     private static final String ARG_INITIAL_URL = "INITIAL_URL";
     private static final String ARG_TARGET_URL = "TARGET_URL";
@@ -73,7 +70,7 @@ public class OAuthWebViewDialog extends DialogFragment {
      * @param url           Url to open at WebView
      * @param targetUrl     mBaseUrl + AccountUtils.getWebdavPath(mDiscoveredVersion, m
      *                      CurrentAuthTokenType)
-     * @return              New dialog instance, ready to show.
+     * @return New dialog instance, ready to show.
      */
     public static OAuthWebViewDialog newInstance(String url, String targetUrl) {
         OAuthWebViewDialog fragment = new OAuthWebViewDialog();
@@ -88,32 +85,33 @@ public class OAuthWebViewDialog extends DialogFragment {
     public OAuthWebViewDialog() {
         super();
     }
-    
-    
+
+
     @Override
     public void onAttach(Activity activity) {
+
         Log_OC.v(TAG, "onAttach");
         super.onAttach(activity);
         try {
             mOAuthWebViewClientListener = (OAuthWebViewClientListener) activity;
             mHandler = new Handler();
             mWebViewClient = new OAuthWebViewClient(activity, mHandler, mOAuthWebViewClientListener);
-            
-       } catch (ClassCastException e) {
+
+        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement " +
                     OAuthWebViewClientListener.class.getSimpleName());
         }
     }
 
-    
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate, savedInstanceState is " + savedInstanceState);
         super.onCreate(savedInstanceState);
-        
+
         setRetainInstance(true);
-        
+
         CookieSyncManager.createInstance(getActivity().getApplicationContext());
 
         if (savedInstanceState == null) {
@@ -123,28 +121,28 @@ public class OAuthWebViewDialog extends DialogFragment {
             mInitialUrl = savedInstanceState.getString(ARG_INITIAL_URL);
             mTargetUrl = savedInstanceState.getString(ARG_TARGET_URL);
         }
-        
+
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
-    
+
     @SuppressWarnings("deprecation")
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreateView, savedInsanceState is " + savedInstanceState);
-        
+
         // Inflate layout of the dialog  
         RelativeLayout ssoRootView = (RelativeLayout) inflater.inflate(R.layout.sso_dialog,
                 container, false);  // null parent view because it will go in the dialog layout
-        
+
         if (mOauthWebView == null) {
             // initialize the WebView
             mOauthWebView = new SsoWebView(getActivity().getApplicationContext());
             mOauthWebView.setFocusable(true);
             mOauthWebView.setFocusableInTouchMode(true);
             mOauthWebView.setClickable(true);
-            
+
             WebSettings webSettings = mOauthWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webSettings.setSavePassword(false);
@@ -162,21 +160,21 @@ public class OAuthWebViewDialog extends DialogFragment {
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.setAcceptCookie(true);
             cookieManager.removeAllCookie();
-            
+
             mOauthWebView.loadUrl(mInitialUrl);
         }
-        
+
         mWebViewClient.setTargetUrl(mTargetUrl);
         mOauthWebView.setWebViewClient(mWebViewClient);
-        
+
         // add the webview into the layout
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT
-                );
+        );
         ssoRootView.addView(mOauthWebView, layoutParams);
         ssoRootView.requestLayout();
-        
+
         return ssoRootView;
     }
 
@@ -184,7 +182,7 @@ public class OAuthWebViewDialog extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         Log_OC.v(TAG, "onSaveInstanceState being CALLED");
         super.onSaveInstanceState(outState);
-        
+
         // save URLs
         outState.putString(ARG_INITIAL_URL, mInitialUrl);
         outState.putString(ARG_TARGET_URL, mTargetUrl);
@@ -193,22 +191,22 @@ public class OAuthWebViewDialog extends DialogFragment {
     @Override
     public void onDestroyView() {
         Log_OC.v(TAG, "onDestroyView");
-        
+
         if ((ViewGroup) mOauthWebView.getParent() != null) {
             ((ViewGroup) mOauthWebView.getParent()).removeView(mOauthWebView);
         }
-        
+
         mOauthWebView.setWebViewClient(null);
-        
+
         // Work around bug: http://code.google.com/p/android/issues/detail?id=17423
         Dialog dialog = getDialog();
         if ((dialog != null)) {
             dialog.setOnDismissListener(null);
         }
-        
+
         super.onDestroyView();
     }
-    
+
     @Override
     public void onDestroy() {
         Log_OC.v(TAG, "onDestroy");
@@ -218,23 +216,18 @@ public class OAuthWebViewDialog extends DialogFragment {
     @Override
     public void onDetach() {
         Log_OC.v(TAG, "onDetach");
+        mOAuthWebViewClientListener.OAuthWebViewDialogFragmentDetached();
         mOAuthWebViewClientListener = null;
         mWebViewClient = null;
         super.onDetach();
     }
-    
+
     @Override
-    public void onCancel (DialogInterface dialog) {
+    public void onCancel(DialogInterface dialog) {
         Log_OC.d(TAG, "onCancel");
         super.onCancel(dialog);
     }
-    
-    @Override
-    public void onDismiss (DialogInterface dialog) {
-        Log_OC.d(TAG, "onDismiss");
-        super.onDismiss(dialog);
-    }
-    
+
     @Override
     public void onStart() {
         Log_OC.v(TAG, "onStart");
@@ -260,17 +253,22 @@ public class OAuthWebViewDialog extends DialogFragment {
         mOauthWebView.onPause();
         super.onPause();
     }
-    
+
     @Override
-    public int show (FragmentTransaction transaction, String tag) {
+    public void onDismiss(DialogInterface dialog) {
+        Log_OC.d(TAG, "onDismiss");
+        super.onDismiss(dialog);
+    }
+
+    @Override
+    public int show(FragmentTransaction transaction, String tag) {
         Log_OC.v(TAG, "show (transaction)");
         return super.show(transaction, tag);
     }
 
     @Override
-    public void show (FragmentManager manager, String tag) {
+    public void show(FragmentManager manager, String tag) {
         Log_OC.v(TAG, "show (manager)");
         super.show(manager, tag);
     }
-    
 }
