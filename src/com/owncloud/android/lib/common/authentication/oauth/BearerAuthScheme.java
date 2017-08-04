@@ -34,8 +34,6 @@ import org.apache.commons.httpclient.auth.AuthenticationException;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.apache.commons.httpclient.auth.MalformedChallengeException;
 
-import com.owncloud.android.lib.common.utils.Log_OC;
-
 
 
 /**
@@ -125,9 +123,7 @@ public class BearerAuthScheme implements AuthScheme /*extends RFC2617Scheme*/ {
      * @return  A bearer authorization string
      */
     public String authenticate(Credentials credentials, String method, String uri) throws AuthenticationException {
-        Log_OC.d(TAG, "enter BearerScheme.authenticate(Credentials, String, String)");
-
-        BearerCredentials bearer = null;
+        BearerCredentials bearer;
         try {
             bearer = (BearerCredentials) credentials;
         } catch (ClassCastException e) {
@@ -160,8 +156,6 @@ public class BearerAuthScheme implements AuthScheme /*extends RFC2617Scheme*/ {
      * @return a basic authorization string
      */
     public String authenticate(Credentials credentials, HttpMethod method) throws AuthenticationException {
-        Log_OC.d(TAG, "enter BearerScheme.authenticate(Credentials, HttpMethod)");
-
         if (method == null) {
             throw new IllegalArgumentException("Method may not be null");
         }
@@ -202,7 +196,6 @@ public class BearerAuthScheme implements AuthScheme /*extends RFC2617Scheme*/ {
      * @since 3.0
      */
     public static String authenticate(BearerCredentials credentials, String charset) {
-        Log_OC.d(TAG, "enter BearerAuthScheme.authenticate(BearerCredentials, String)");
 
         if (credentials == null) {
             throw new IllegalArgumentException("Credentials may not be null"); 
@@ -213,14 +206,7 @@ public class BearerAuthScheme implements AuthScheme /*extends RFC2617Scheme*/ {
         StringBuffer buffer = new StringBuffer();
         buffer.append(credentials.getAccessToken());
 
-        Log_OC.v(TAG, "OAUTH2: string to authorize: " + "Bearer " + buffer.toString());
         return "Bearer " + buffer.toString();
-        //return "Bearer " + EncodingUtil.getAsciiString(EncodingUtil.getBytes(buffer.toString(), charset));
-        /*return "Bearer " + EncodingUtil.getAsciiString(
-            Base64.encodeBase64(
-                EncodingUtil.getBytes(buffer.toString(), charset)
-            )
-        );*/
     }
 
     /**

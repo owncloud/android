@@ -189,10 +189,10 @@ public abstract class RemoteOperation implements Runnable {
         if (context == null)
             throw new IllegalArgumentException
                     ("Trying to execute a remote operation with a NULL Context");
+        // mAccount and mContext in the runnerThread to create below
         mAccount = account;
         mContext = context.getApplicationContext();
         mClient = null;     // the client instance will be created from
-        // mAccount and mContext in the runnerThread to create below
 
         mListener = listener;
 

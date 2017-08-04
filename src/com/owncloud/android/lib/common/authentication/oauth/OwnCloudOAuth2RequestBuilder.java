@@ -87,8 +87,7 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
                 );
 
             case REFRESH_ACCESS_TOKEN:
-                return new OAuth2GetRefreshedAccessTokenOperation(
-                        mGrantType.getValue(),
+                return new OAuth2RefreshAccessTokenOperation(
                         clientConfiguration.getClientId(),
                         clientConfiguration.getClientSecret(),
                         mRefreshToken,

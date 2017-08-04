@@ -28,10 +28,11 @@ package com.owncloud.android.lib.common.authentication.oauth;
 
 public enum OAuth2GrantType {
     AUTHORIZATION_CODE("authorization_code"),
-    REFRESH_TOKEN("refresh_token"),
     IMPLICIT("implicit"),
     PASSWORD("password"),
-    CLIENT_CREDENTIAL("client_credentials");
+    CLIENT_CREDENTIAL("client_credentials"),
+    REFRESH_TOKEN("refresh_token")  // not a grant type conceptually, but used as such to refresh access tokens
+    ;
 
     private String mValue;
 

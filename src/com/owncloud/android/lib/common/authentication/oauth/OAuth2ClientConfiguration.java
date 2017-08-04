@@ -45,7 +45,7 @@ public class OAuth2ClientConfiguration {
     }
 
     public void setClientId(String clientId) {
-        mClientId = clientId;
+        mClientId = (clientId == null) ? "" : clientId;
     }
 
     public String getClientSecret() {
@@ -53,7 +53,7 @@ public class OAuth2ClientConfiguration {
     }
 
     public void setClientSecret(String clientSecret) {
-        mClientSecret = clientSecret;
+        mClientSecret = (clientSecret == null) ? "" : clientSecret;
     }
 
     public String getRedirectUri() {
@@ -61,6 +61,6 @@ public class OAuth2ClientConfiguration {
     }
 
     public void setRedirectUri(String redirectUri) {
-        this.mRedirectUri = redirectUri;
+        this.mRedirectUri = (redirectUri == null) ? "" : redirectUri;
     }
 }
