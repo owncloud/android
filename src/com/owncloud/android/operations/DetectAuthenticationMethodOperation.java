@@ -21,6 +21,7 @@ package com.owncloud.android.operations;
 
 import android.net.Uri;
 
+import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -53,7 +54,19 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
         NONE,
         BASIC_HTTP_AUTH,
         SAML_WEB_SSO,
-        BEARER_TOKEN
+        BEARER_TOKEN;
+
+        public int getValue() {
+            return ordinal();
+        }
+
+        public static AuthenticationMethod fromValue(int value) {
+            if (value > -1 && value < values().length) {
+                return values()[value];
+            } else {
+                return null;
+            }
+        }
     }
 
     /**

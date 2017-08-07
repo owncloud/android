@@ -959,7 +959,7 @@ public class FileDisplayActivity extends HookActivity
                                 (synchResult.isException() && synchResult.getException()
                                     instanceof AuthenticatorException)) {
 
-                                requestCredentialsUpdate(context);
+                                requestCredentialsUpdate();
 
                             } else if (RemoteOperationResult.ResultCode.
                                     SSL_RECOVERABLE_PEER_UNVERIFIED.equals(

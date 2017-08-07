@@ -2,7 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -21,7 +21,6 @@
 package com.owncloud.android.authentication;
 
 import java.io.ByteArrayInputStream;
-import java.lang.ref.WeakReference;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -34,53 +33,46 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.http.SslCertificate;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.KeyEvent;
-import android.view.View;
-import android.webkit.CookieManager;
+import android.support.annotation.RequiresApi;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebResourceResponse;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
 /**
- * Custom {@link WebViewClient} client aimed to catch the end of a single-sign-on process 
- * running in the {@link WebView} that is attached to.
- * 
- * Assumes that the single-sign-on is kept thanks to a cookie set at the end of the
- * authentication process.
+ * Custom {@link WebViewClient} client aimed to catch the end of an authentication
+ * process running in the {@link WebView} that is attached to.
+ *
+ * Assumes that the authentication process is successful when the {@link WebView} loads
+ * a URL matching a target URL set initially.
  */
-public class SsoWebViewClient extends WebViewClient {
-        
-    private static final String TAG = SsoWebViewClient.class.getSimpleName();
-    
-    public interface SsoWebViewClientListener {
-        public void onSsoFinished(String sessionCookie);
-    }
-    
+public abstract class BaseWebViewClient extends WebViewClient {
+
+    private static final String TAG = SAMLWebViewClient.class.getSimpleName();
+
     private Context mContext;
-    private Handler mListenerHandler;
-    private WeakReference<SsoWebViewClientListener> mListenerRef;
+    Handler mListenerHandler;
     private String mTargetUrl;
     private String mLastReloadedUrlAtError;
 
-    
-    public SsoWebViewClient (Context context, Handler listenerHandler, SsoWebViewClientListener listener) {
+    public BaseWebViewClient (Context context, Handler listenerHandler) {
         mContext = context;
         mListenerHandler = listenerHandler;
-        mListenerRef = new WeakReference<SsoWebViewClient.SsoWebViewClientListener>(listener);
         mTargetUrl = "fake://url.to.be.set";
         mLastReloadedUrlAtError = null;
     }
-    
+
     public String getTargetUrl() {
         return mTargetUrl;
     }
-    
+
     public void setTargetUrl(String targetUrl) {
         mTargetUrl = targetUrl;
     }
@@ -91,7 +83,7 @@ public class SsoWebViewClient extends WebViewClient {
         view.clearCache(true);
         super.onPageStarted(view, url, favicon);
     }
-    
+
     @Override
     public void onFormResubmission (WebView view, Message dontResend, Message resend) {
         Log_OC.d(TAG, "onFormResubMission ");
@@ -100,12 +92,17 @@ public class SsoWebViewClient extends WebViewClient {
         resend.sendToTarget();
     }
 
-    @Override
+    @Override @SuppressWarnings("deprecation")
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         return false;
     }
-    
-    @Override
+
+    @Override @RequiresApi(Build.VERSION_CODES.N)
+    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        return false;
+    }
+
+    @Override @SuppressWarnings("deprecation")
     public void onReceivedError (WebView view, int errorCode, String description, String failingUrl) {
         Log_OC.e(TAG, "onReceivedError : " + failingUrl + ", code " + errorCode + ", description: " + description);
         if (!failingUrl.equals(mLastReloadedUrlAtError)) {
@@ -116,54 +113,42 @@ public class SsoWebViewClient extends WebViewClient {
             super.onReceivedError(view, errorCode, description, failingUrl);
         }
     }
-    
-    @Override
-    public void onPageFinished (WebView view, String url) {
-        Log_OC.d(TAG, "onPageFinished : " + url);
-        mLastReloadedUrlAtError = null;
-        if (url.startsWith(mTargetUrl)) {
-            view.setVisibility(View.GONE);
-            CookieManager cookieManager = CookieManager.getInstance();
-            final String cookies = cookieManager.getCookie(url);
-            //Log_OC.d(TAG, "Cookies: " + cookies);
-            if (mListenerHandler != null && mListenerRef != null) {
-                // this is good idea because onPageFinished is not running in the UI thread
-                mListenerHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        SsoWebViewClientListener listener = mListenerRef.get();
-                        if (listener != null) {
-                        	// Send Cookies to the listener
-                            listener.onSsoFinished(cookies);
-                        }
-                    }
-                });
-            }
-        } 
+
+    @Override @RequiresApi(Build.VERSION_CODES.M)
+    public void onReceivedError (WebView view, WebResourceRequest request, WebResourceError error) {
+        String failingUrl = request.getUrl().toString();
+        Log_OC.e(TAG, "onReceivedError : " + failingUrl + ", code " + error.getErrorCode() + ", description: " + error.getDescription());
+        if (!failingUrl.equals(mLastReloadedUrlAtError)) {
+            view.reload();
+            mLastReloadedUrlAtError = failingUrl;
+        } else {
+            mLastReloadedUrlAtError = null;
+            super.onReceivedError(view, request, error);
+        }
     }
-    
+
     @Override
     public void onReceivedSslError (final WebView view, final SslErrorHandler handler, SslError error) {
         Log_OC.e(TAG, "onReceivedSslError : " + error);
         // Test 1
         X509Certificate x509Certificate = getX509CertificateFromError(error);
         boolean isKnownServer = false;
-        
+
         if (x509Certificate != null) {
             try {
-                isKnownServer = NetworkUtils.isCertInKnownServersStore((Certificate) x509Certificate, mContext);
+                isKnownServer = NetworkUtils.isCertInKnownServersStore(x509Certificate, mContext);
             } catch (Exception e) {
                 Log_OC.e(TAG, "Exception: " + e.getMessage());
             }
         }
-        
-         if (isKnownServer) {
-             handler.proceed();
-         } else {
-             ((AuthenticatorActivity)mContext).showUntrustedCertDialog(x509Certificate, error, handler);
-         }
+
+        if (isKnownServer) {
+            handler.proceed();
+        } else {
+            ((AuthenticatorActivity)mContext).showUntrustedCertDialog(x509Certificate, error, handler);
+        }
     }
-    
+
     /**
      * Obtain the X509Certificate from SslError
      * @param   error     SslError
@@ -183,15 +168,27 @@ public class SsoWebViewClient extends WebViewClient {
             } catch (CertificateException e) {
                 x509Certificate = null;
             }
-        }        
+        }
         return x509Certificate;
     }
-    
+
     @Override
     public void onReceivedHttpAuthRequest (WebView view, HttpAuthHandler handler, String host, String realm) {
         Log_OC.d(TAG, "onReceivedHttpAuthRequest : " + host);
 
         ((AuthenticatorActivity)mContext).createAuthenticationDialog(view, handler);
     }
+
+
+    @Override
+    public void onPageFinished (WebView view, String url) {
+        Log_OC.d(TAG, "onPageFinished : " + url);
+        mLastReloadedUrlAtError = null;
+        if (url.startsWith(getTargetUrl())) {
+            onTargetUrlFinished(view, url);
+        }
+    }
+
+    protected abstract void onTargetUrlFinished(WebView view, String url);
 
 }

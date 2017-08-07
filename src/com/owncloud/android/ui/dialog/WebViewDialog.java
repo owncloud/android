@@ -3,7 +3,8 @@
  *
  *   @author Maria Asensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -41,52 +42,64 @@ import android.widget.RelativeLayout;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.SsoWebViewClient;
-import com.owncloud.android.authentication.SsoWebViewClient.SsoWebViewClientListener;
+import com.owncloud.android.authentication.BaseWebViewClient;
+import com.owncloud.android.authentication.OAuthWebViewClient;
+import com.owncloud.android.authentication.OAuthWebViewClient.OAuthWebViewClientListener;
+import com.owncloud.android.authentication.SAMLWebViewClient;
+import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.operations.DetectAuthenticationMethodOperation.AuthenticationMethod;
 
 
 /**
- * Dialog to show the WebView for SAML Authentication
+ * Dialog to show the WebView for SAML or OAuth authentication
  */
-public class SamlWebViewDialog extends DialogFragment {
+public class WebViewDialog extends DialogFragment {
 
-    public final String SAML_DIALOG_TAG = "SamlWebViewDialog";
-    
-    private final static String TAG =  SamlWebViewDialog.class.getSimpleName();
+    private final static String TAG =  WebViewDialog.class.getSimpleName();
 
     private static final String ARG_INITIAL_URL = "INITIAL_URL";
     private static final String ARG_TARGET_URL = "TARGET_URL";
-    
-    private WebView mSsoWebView;
-    private SsoWebViewClient mWebViewClient;
-    
+    private static final String ARG_AUTHENTICATION_METHOD = "AUTHENTICATION_METHOD";
+
+    private WebView mWebView;
+    private BaseWebViewClient mWebViewClient;
+
     private String mInitialUrl;
     private String mTargetUrl;
-    
-    private Handler mHandler;
 
     private SsoWebViewClientListener mSsoWebViewClientListener;
+    private OAuthWebViewClientListener mOAuthWebViewClientListener;
 
     /**
      * Public factory method to get dialog instances.
      *
-     * @param url           Url to open at WebView
-     * @param targetUrl     mBaseUrl + AccountUtils.getWebdavPath(mDiscoveredVersion, m
-     *                      CurrentAuthTokenType)
+     * @param url           Url to open at WebView.
+     * @param targetUrl     Url signaling the success of the authentication, when loaded.
      * @return              New dialog instance, ready to show.
      */
-    public static SamlWebViewDialog newInstance(String url, String targetUrl) {
-        SamlWebViewDialog fragment = new SamlWebViewDialog();
+    public static WebViewDialog newInstance(
+        String url,
+        String targetUrl,
+        AuthenticationMethod authenticationMethod
+    ) {
+        if (AuthenticationMethod.BEARER_TOKEN != authenticationMethod &&
+            AuthenticationMethod.SAML_WEB_SSO != authenticationMethod) {
+            throw new IllegalArgumentException(
+                "Only SAML_WEB_SSO and BEARER_TOKEN authentication methods are supported"
+            );
+        }
+        WebViewDialog fragment = new WebViewDialog();
         Bundle args = new Bundle();
         args.putString(ARG_INITIAL_URL, url);
         args.putString(ARG_TARGET_URL, targetUrl);
+        args.putInt(ARG_AUTHENTICATION_METHOD, authenticationMethod.getValue());
         fragment.setArguments(args);
         return fragment;
     }
     
     
-    public SamlWebViewDialog() {
+    public WebViewDialog() {
         super();
     }
     
@@ -96,13 +109,31 @@ public class SamlWebViewDialog extends DialogFragment {
         Log_OC.v(TAG, "onAttach");
         super.onAttach(activity);
         try {
-            mSsoWebViewClientListener = (SsoWebViewClientListener) activity;
-            mHandler = new Handler();
-            mWebViewClient = new SsoWebViewClient(activity, mHandler, mSsoWebViewClientListener);
-            
+            AuthenticationMethod authenticationMethod = AuthenticationMethod.fromValue(
+                getArguments().getInt(ARG_AUTHENTICATION_METHOD)
+            );
+            if (authenticationMethod == null) {
+                throw new IllegalStateException("Null authentication method got to onAttach");
+            }
+            Handler handler = new Handler();
+            switch (authenticationMethod) {
+                case BEARER_TOKEN:
+                    mOAuthWebViewClientListener = (OAuthWebViewClientListener) activity;
+                    mWebViewClient = new OAuthWebViewClient(activity, handler, mOAuthWebViewClientListener);
+                    break;
+                case SAML_WEB_SSO:
+                    mSsoWebViewClientListener = (SsoWebViewClientListener) activity;
+                    mWebViewClient = new SAMLWebViewClient(activity, handler, mSsoWebViewClientListener);
+                    break;
+                default:
+                    throw new IllegalStateException("Invalid authentication method got to onAttach");
+            }
+
        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement " +
-                    SsoWebViewClientListener.class.getSimpleName());
+                SsoWebViewClientListener.class.getSimpleName() +
+                " and " + OAuthWebViewClientListener.class.getSimpleName()
+            );
         }
     }
 
@@ -139,14 +170,14 @@ public class SamlWebViewDialog extends DialogFragment {
         RelativeLayout ssoRootView = (RelativeLayout) inflater.inflate(R.layout.sso_dialog,
                 container, false);  // null parent view because it will go in the dialog layout
         
-        if (mSsoWebView == null) {
+        if (mWebView == null) {
             // initialize the WebView
-            mSsoWebView = new SsoWebView(getActivity().getApplicationContext());
-            mSsoWebView.setFocusable(true);
-            mSsoWebView.setFocusableInTouchMode(true);
-            mSsoWebView.setClickable(true);
+            mWebView = new SsoWebView(getActivity().getApplicationContext());
+            mWebView.setFocusable(true);
+            mWebView.setFocusableInTouchMode(true);
+            mWebView.setClickable(true);
             
-            WebSettings webSettings = mSsoWebView.getSettings();
+            WebSettings webSettings = mWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webSettings.setSavePassword(false);
             webSettings.setUserAgentString(MainApp.getUserAgent());
@@ -164,18 +195,18 @@ public class SamlWebViewDialog extends DialogFragment {
             cookieManager.setAcceptCookie(true);
             cookieManager.removeAllCookie();
             
-            mSsoWebView.loadUrl(mInitialUrl);
+            mWebView.loadUrl(mInitialUrl);
         }
         
         mWebViewClient.setTargetUrl(mTargetUrl);
-        mSsoWebView.setWebViewClient(mWebViewClient);
+        mWebView.setWebViewClient(mWebViewClient);
         
         // add the webview into the layout
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT
                 );
-        ssoRootView.addView(mSsoWebView, layoutParams);
+        ssoRootView.addView(mWebView, layoutParams);
         ssoRootView.requestLayout();
         
         return ssoRootView;
@@ -195,11 +226,11 @@ public class SamlWebViewDialog extends DialogFragment {
     public void onDestroyView() {
         Log_OC.v(TAG, "onDestroyView");
         
-        if ((ViewGroup)mSsoWebView.getParent() != null) {
-            ((ViewGroup)mSsoWebView.getParent()).removeView(mSsoWebView);
+        if (mWebView.getParent() != null) {
+            ((ViewGroup) mWebView.getParent()).removeView(mWebView);
         }
         
-        mSsoWebView.setWebViewClient(null);
+        mWebView.setWebViewClient(null);
         
         // Work around bug: http://code.google.com/p/android/issues/detail?id=17423
         Dialog dialog = getDialog();
@@ -219,6 +250,10 @@ public class SamlWebViewDialog extends DialogFragment {
     @Override
     public void onDetach() {
         Log_OC.v(TAG, "onDetach");
+        if (mOAuthWebViewClientListener != null) {
+            mOAuthWebViewClientListener.onOAuthWebViewDialogFragmentDetached();
+            mOAuthWebViewClientListener = null;
+        }
         mSsoWebViewClientListener = null;
         mWebViewClient = null;
         super.onDetach();
@@ -252,13 +287,13 @@ public class SamlWebViewDialog extends DialogFragment {
     public void onResume() {
         Log_OC.v(TAG, "onResume");
         super.onResume();
-        mSsoWebView.onResume();
+        mWebView.onResume();
     }
 
     @Override
     public void onPause() {
         Log_OC.v(TAG, "onPause");
-        mSsoWebView.onPause();
+        mWebView.onPause();
         super.onPause();
     }
     

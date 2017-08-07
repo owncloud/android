@@ -476,7 +476,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                             (synchResult.isException() && synchResult.getException()
                                 instanceof AuthenticatorException)) {
 
-                            requestCredentialsUpdate(context);
+                            requestCredentialsUpdate();
 
                         } else if(RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(synchResult.getCode())) {
 

@@ -722,7 +722,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                                     (synchResult.isException() && synchResult.getException()
                                             instanceof AuthenticatorException)) {
 
-                            requestCredentialsUpdate(context);
+                            requestCredentialsUpdate();
 
                         } else if(RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(synchResult.getCode())) {
 

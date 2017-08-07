@@ -292,7 +292,7 @@ public class FileActivity extends DrawerActivity
                 (result.isException() && result.getException() instanceof AuthenticatorException)
                 )) {
 
-            requestCredentialsUpdate(this);
+            requestCredentialsUpdate();
 
             if (result.getCode() == ResultCode.UNAUTHORIZED) {
                 showSnackMessage(
@@ -344,48 +344,33 @@ public class FileActivity extends DrawerActivity
      * Invalidates the credentials stored for the current OC account and requests new credentials to the user,
      * navigating to {@link AuthenticatorActivity}
      *
-     * Equivalent to call requestCredentialsUpdate(context, null);
-     *
-     * @param context   Android Context needed to access the {@link AccountManager}. Received as a parameter
-     *                  to make the method accessible to {@link android.content.BroadcastReceiver}s.
+     * Equivalent to call requestCredentialsUpdate(null);
      */
-    protected void requestCredentialsUpdate(Context context) {
-        requestCredentialsUpdate(context, null);
+    protected void requestCredentialsUpdate() {
+        requestCredentialsUpdate(null);
     }
 
     /**
      * Invalidates the credentials stored for the given OC account and requests new credentials to the user,
      * navigating to {@link AuthenticatorActivity}
      *
-     * @param context   Android Context needed to access the {@link AccountManager}. Received as a parameter
-     *                  to make the method accessible to {@link android.content.BroadcastReceiver}s.
      * @param account   Stored OC account to request credentials update for. If null, current account will
      *                  be used.
      */
-    protected void requestCredentialsUpdate(Context context, Account account) {
+    protected void requestCredentialsUpdate(Account account) {
 
         if (account == null) {
             account = getAccount();
         }
 
-        AccountManager mAccountManager = AccountManager.get(context);
-
-        String isOAuthStr = mAccountManager.getUserData(getAccount(),
-                Constants.KEY_SUPPORTS_OAUTH2);
-
-        Boolean isOAuth = Boolean.valueOf(isOAuthStr);
-
-        if (!isOAuth) { // If not OAuth, request credentials again
-
-            /// step 2 - request credentials to user
-            Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
-            updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
-            updateAccountCredentials.putExtra(
-                    AuthenticatorActivity.EXTRA_ACTION,
-                    AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
-            updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
-        }
+        /// request credentials to user
+        Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
+        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        updateAccountCredentials.putExtra(
+                AuthenticatorActivity.EXTRA_ACTION,
+                AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
+        updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS);
     }
 
     /**

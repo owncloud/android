@@ -68,7 +68,7 @@ import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.OAuthWebViewClient.OAuthWebViewClientListener;
-import com.owncloud.android.authentication.SsoWebViewClient.SsoWebViewClientListener;
+import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
@@ -98,8 +98,7 @@ import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.CredentialsDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
-import com.owncloud.android.ui.dialog.OAuthWebViewDialog;
-import com.owncloud.android.ui.dialog.SamlWebViewDialog;
+import com.owncloud.android.ui.dialog.WebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -543,7 +542,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (isPasswordExposed) {
             showPassword();
         }
-//        updateAuthenticationPreFragmentVisibility();
+        updateAuthenticationPreFragmentVisibility();
         showAuthStatus();
         mOkButton.setEnabled(mServerIsValid);
 
@@ -571,25 +570,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * the current authorization method.
      */
     private void updateAuthenticationPreFragmentVisibility () {
-        if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
-                equals(mAuthTokenType)) {
-            // SAML-based web Single Sign On
+        if (AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType()).
+            equals(mAuthTokenType)) {
+            // basic HTTP authorization
+            mUsernameInput.setVisibility(View.VISIBLE);
+            mPasswordInput.setVisibility(View.VISIBLE);
+
+        } else {
             mUsernameInput.setVisibility(View.GONE);
             mPasswordInput.setVisibility(View.GONE);
-            
-        } else {
-            
-            if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).
-                    equals(mAuthTokenType)) {
-                // OAuth 2 authorization
-                mUsernameInput.setVisibility(View.GONE);
-                mPasswordInput.setVisibility(View.GONE);
-    
-            } else {
-                // basic HTTP authorization
-                mUsernameInput.setVisibility(View.VISIBLE);
-                mPasswordInput.setVisibility(View.VISIBLE);
-            }
         }
     }
 
@@ -1002,16 +991,17 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String authorizationCodeUri = builder.buildUri();
 
         // Show OAuth web dialog
-        OAuthWebViewDialog oAuthWebViewDialog = OAuthWebViewDialog.newInstance(
+        WebViewDialog oAuthWebViewDialog = WebViewDialog.newInstance(
             authorizationCodeUri,
-            getString(R.string.oauth2_redirect_uri) // target URI
+            getString(R.string.oauth2_redirect_uri), // target URI
+            AuthenticationMethod.BEARER_TOKEN
         );
 
         oAuthWebViewDialog.show(getSupportFragmentManager(), OAUTH_DIALOG_TAG);
     }
 
     @Override
-    public void OAuthWebViewDialogFragmentDetached() {
+    public void onOAuthWebViewDialogFragmentDetached() {
         mAuthStatusIcon = 0;
         mAuthStatusText = "";
         showAuthStatus();
@@ -1030,7 +1020,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// Show SAML-based SSO web dialog
         String targetUrl = mServerInfo.mBaseUrl
                 + AccountUtils.getWebdavPath(mServerInfo.mVersion, mAuthTokenType);
-        SamlWebViewDialog dialog = SamlWebViewDialog.newInstance(targetUrl, targetUrl);
+        WebViewDialog dialog = WebViewDialog.newInstance(
+            targetUrl,
+            targetUrl,
+            AuthenticationMethod.SAML_WEB_SSO
+        );
         dialog.show(getSupportFragmentManager(), SAML_DIALOG_TAG);
     }
 
@@ -1317,10 +1311,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             @SuppressWarnings("unchecked")
             Map<String, String> tokens = (Map<String, String>)(result.getData().get(0));
             mAuthToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
-            Log_OC.d(TAG, "Got OAuth access token: " + mAuthToken);
 
             mRefreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
-            Log_OC.d(TAG, "Got OAuth refresh token: " + mRefreshToken);
 
             /// validate token accessing to root folder / getting session
             OwnCloudCredentials credentials = OwnCloudCredentialsFactory.newBearerCredentials(
