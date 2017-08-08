@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Neznámá chyba</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Čekání na wifi připojení</string>
   <string name="uploads_view_later_waiting_to_upload">Čekání na nahrávání</string>
+  <string name="uploads_view_unsupported_media_type">Nepodporovaný typ média</string>
   <string name="downloader_download_in_progress_ticker">Stahuji ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Stahuji %2$s</string>
   <string name="downloader_download_succeeded_ticker">Stažení úspěšné</string>
@@ -457,6 +458,8 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_enforced_label">Konec platnosti</string>
   <string name="share_via_link_expiration_date_explanation_label">Platnost tohoto veřejného odkazu skončí nejpozději %1$d dní po jeho vytvoření</string>
   <string name="share_via_link_default_name_template">%1$s odkaz</string>
+  <string name="private_link_info">Toto je soukromý odkaz, pouze osoby s přístupem k souboru/složce jej mohou použít. Použijte jej jako trvalý odkaz pro sebe nebo přejděte k souborům v rámci sdílených souborů</string>
+  <string name="file_private_link_error">Při pokusu o získání soukromého odkazu na soubor došlo k chybě</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
