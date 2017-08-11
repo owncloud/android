@@ -442,16 +442,24 @@
   <string name="prefs_privacy_policy">隐私策略</string>
   <string name="privacy_policy_error">发生了一个错误: </string>
   <string name="service_unavailable">服务不可用</string>
+  <string name="streaming_certificate_error">由于您的服务器证书不被信任,媒体流无法开始,文件将自动开始下载</string>
   <string name="streaming_unrecognized_input">不支持该视频格式</string>
   <string name="streaming_file_not_found_error">该视频文件在服务器上不可用</string>
+  <string name="streaming_crossed_redirection">由于交叉重定位中无法使用媒体流</string>
+  <string name="previewing_video_common_error">这个视频无法被重新产生</string>
   <string name="previewing_video_not_supported">当前 Android 版本不支持视频预览. 文件将自动下载.</string>
   <string name="streaming_position_not_available">位置不可用</string>
   <string name="error_no_network_connection">设备未连接到网络</string>
   <string name="share_no_public_links">还没有创建公开链接</string>
+  <string name="share_no_link_in_this_share">分项内容中没有链接</string>
   <string name="share_warning_about_forwarding_public_links">任何查看此链接的人都可以访问文件、文件夹</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">密码 *</string>
+  <string name="share_via_link_expiration_date_enforced_label">过期日期*</string>
+  <string name="share_via_link_expiration_date_explanation_label">公开链接将会在创建之后%1$d天过期</string>
   <string name="share_via_link_default_name_template">%1$s链接</string>
+  <string name="private_link_info">这是一个私有链接,只有有权访问该文件/文件夹的人才可以使用它。将其作为给您自己或者其他人分享文件的永久链接。</string>
+  <string name="file_private_link_error">获得文件的私有链接时发生错误</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已选择</item>
   </plurals>

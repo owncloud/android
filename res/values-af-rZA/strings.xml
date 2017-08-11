@@ -5,10 +5,13 @@
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_close">Sluit</string>
+  <string name="prefs_category_more">Nog</string>
   <string name="prefs_help">Hulp</string>
   <string name="auth_username">Gebruikersnaam</string>
   <string name="auth_password">Wagwoord</string>
   <string name="file_list_seconds_ago">sekondes gelede</string>
+  <string name="filedetails_download">Laai Af</string>
   <string name="action_share">Deel</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nee</string>
