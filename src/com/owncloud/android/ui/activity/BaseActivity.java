@@ -257,7 +257,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Log_OC.e(TAG, "Account creation callback with null bundle");
             }
             if (mMandatoryCreation && !accountWasSet) {
-                moveTaskToBack(true);
+                finish();
             }
         }
     }
