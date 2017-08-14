@@ -176,6 +176,7 @@ public class OwnCloudClientFactory {
         OwnCloudClient client = new OwnCloudClient(uri, NetworkUtils.getMultiThreadedConnManager());
         client.setDefaultTimeouts(DEFAULT_DATA_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
         client.setFollowRedirects(followRedirects);
+        client.setContext(context);
         
         return client;
     }

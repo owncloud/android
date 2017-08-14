@@ -90,10 +90,14 @@ public abstract class RemoteOperation implements Runnable {
     /**
      * When 'true', the operation tries to silently refresh credentials if fails due to lack of authorization.
      *
-     * Valid for 'execute methods' receiving an {@link Account} instance as parameter, but not for those
-     * receiving an {@link OwnCloudClient}. This is, valid for:
+     * Valid for 'execute methods' receiving an {@link Account} instance as parameter, out of the box:
      *  -- {@link RemoteOperation#execute(Account, Context)}
      *  -- {@link RemoteOperation#execute(Account, Context, OnRemoteOperationListener, Handler)}
+     *
+     * Valid for 'execute methods' receiving an {@link OwnCloudClient}, as long as it returns non null values
+     * to its methods {@link OwnCloudClient#getContext()} && {@link OwnCloudClient#getAccount()}:
+     *  -- {@link RemoteOperation#execute(OwnCloudClient)}
+     *  -- {@link RemoteOperation#execute(OwnCloudClient, OnRemoteOperationListener, Handler)}
      */
     private boolean mSilentRefreshOfAccountCredentials = false;
 
@@ -160,7 +164,10 @@ public abstract class RemoteOperation implements Runnable {
             throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
                     "OwnCloudClient");
         mClient = client;
-        mSilentRefreshOfAccountCredentials = false;
+        if (client.getAccount() != null) {
+            mAccount = client.getAccount().getSavedAccount();
+        }
+        mContext = client.getContext();
 
         return runOperation();
     }
@@ -221,6 +228,10 @@ public abstract class RemoteOperation implements Runnable {
                     ("Trying to execute a remote operation with a NULL OwnCloudClient");
         }
         mClient = client;
+        if (client.getAccount() != null) {
+            mAccount = client.getAccount().getSavedAccount();
+        }
+        mContext = client.getContext();
 
         if (listener == null) {
             throw new IllegalArgumentException
@@ -232,8 +243,6 @@ public abstract class RemoteOperation implements Runnable {
         if (listenerHandler != null) {
             mListenerHandler = listenerHandler;
         }
-
-        mSilentRefreshOfAccountCredentials = false;
 
         Thread runnerThread = new Thread(this);
         runnerThread.start();
@@ -359,7 +368,7 @@ public abstract class RemoteOperation implements Runnable {
     /**
      * Enables or disables silent refresh of credentials, if supported by credentials itself.
      *
-     * Will have effect if called before:
+     * Will have effect if called before in all cases:
      *  -- {@link RemoteOperation#execute(Account, Context)}
      *  -- {@link RemoteOperation#execute(Account, Context, OnRemoteOperationListener, Handler)}
      *
@@ -367,7 +376,8 @@ public abstract class RemoteOperation implements Runnable {
      *  -- {@link RemoteOperation#execute(OwnCloudClient)}
      *  -- {@link RemoteOperation#execute(OwnCloudClient, OnRemoteOperationListener, Handler)}
      *
-     * @param silentRefreshOfAccountCredentials     'True' enables silent refresh, 'false' disables it.
+     *  ... UNLESS the passed {@link OwnCloudClient} returns non-NULL values for
+     *  {@link OwnCloudClient#getAccount()} && {@link OwnCloudClient#getContext()}
      */
     public void setSilentRefreshOfAccountCredentials(boolean silentRefreshOfAccountCredentials) {
         mSilentRefreshOfAccountCredentials = silentRefreshOfAccountCredentials;

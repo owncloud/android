@@ -33,7 +33,6 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpStatus;
@@ -41,10 +40,10 @@ import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 
+import android.content.Context;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
@@ -52,7 +51,6 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.RedirectionPath;
-import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
@@ -74,6 +72,11 @@ public class OwnCloudClient extends HttpClient {
     private Uri mBaseUri;
 
     private OwnCloudVersion mVersion = null;
+
+    /// next too attributes are a very ugly dependency, added to grant silent retry of OAuth token when needed ;
+    /// see {} for more details
+    private Context mContext;
+    private OwnCloudAccount mAccount;
 
     /**
      * Constructor
@@ -448,4 +451,21 @@ public class OwnCloudClient extends HttpClient {
     public OwnCloudVersion getOwnCloudVersion() {
         return mVersion;
     }
+
+    public void setContext(Context context) {
+        this.mContext = context;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public void setAccount(OwnCloudAccount account) {
+        this.mAccount = account;
+    }
+
+    public OwnCloudAccount getAccount() {
+        return mAccount;
+    }
+
 }

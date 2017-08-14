@@ -287,7 +287,9 @@ public class AccountUtils {
         should &= (client.getCredentials() != null &&         // real credentials
             !(client.getCredentials() instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
 
-        should &= (account != null && context != null);   // have all the needed to effectively invalidate
+        // test if have all the needed to effectively invalidate ...
+        should &= ((account != null && context != null) || // ... either directly, or ...
+                    client.getAccount() != null && client.getContext() != null)  ;   // ... indirectly
 
         return should;
     }
@@ -310,16 +312,25 @@ public class AccountUtils {
         Account account,
         Context context
     ) {
+        Account checkedAccount = (account == null) ? client.getAccount().getSavedAccount() : account;
+        if (checkedAccount == null) {
+            throw new IllegalArgumentException("Account cannot be null both in parameter and in client");
+        }
+        Context checkedContext = (context == null) ? client.getContext() : context;
+        if (checkedContext == null) {
+            throw new IllegalArgumentException("Context cannot be null both in parameter and in client");
+        }
+
         try {
-            OwnCloudAccount ocAccount = new OwnCloudAccount(account, context);
+            OwnCloudAccount ocAccount = new OwnCloudAccount(checkedAccount, checkedContext);
             OwnCloudClientManagerFactory.getDefaultSingleton().
                 removeClientFor(ocAccount);    // to prevent nobody else is provided this client
-            AccountManager am = AccountManager.get(context);
+            AccountManager am = AccountManager.get(checkedContext);
             am.invalidateAuthToken(
-                account.type,
+                checkedAccount.type,
                 client.getCredentials().getAuthToken()
             );
-            am.clearPassword(account); // being strict, only needed for Basic Auth credentials
+            am.clearPassword(checkedAccount); // being strict, only needed for Basic Auth credentials
             return true;
 
         } catch (AccountUtils.AccountNotFoundException e) {

@@ -116,6 +116,7 @@ public class SingleSessionManager implements OwnCloudClientManager {
                 context.getApplicationContext(),
                 true);    // TODO remove dependency on OwnCloudClientFactory
             client.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
+            client.setAccount(account);
             // enable cookie tracking
 
             AccountUtils.restoreCookies(account.getSavedAccount(), client, context);
