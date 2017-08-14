@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="actionbar_upload_files">Lêers</string>
   <string name="actionbar_settings">Instellings</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
@@ -10,6 +11,7 @@
   <string name="prefs_help">Hulp</string>
   <string name="auth_username">Gebruikersnaam</string>
   <string name="auth_password">Wagwoord</string>
+  <string name="sync_string_files">Lêers</string>
   <string name="file_list_seconds_ago">sekondes gelede</string>
   <string name="filedetails_download">Laai Af</string>
   <string name="action_share">Deel</string>
@@ -18,7 +20,9 @@
   <string name="common_ok">OK</string>
   <string name="common_cancel">Kanseleer</string>
   <string name="common_error">Fout</string>
+  <string name="change_password">Verander wagwoord</string>
   <string name="activity_chooser_send_file_title">Stuur</string>
+  <string name="saml_authentication_wrong_pass">Verkeerde wagwoord</string>
   <string name="folder_picker_choose_button_text">Kies</string>
   <string name="share_dialog_title">Deel</string>
   <string name="share_cancel_public_link_button">Kanselleer</string>
