@@ -1046,15 +1046,26 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             onGetOAuthAccessTokenFinish(result);
 
         } else if (operation instanceof GetRemoteUserInfoOperation) {
+            // this path is only walked by SAML authentication
             onGetUserNameFinish(result);
         }
 
     }
 
+    /**
+     * WARNING: this method is only called in SAML authentication; rest of authentication paths
+     * get their userId in {@link AuthenticatorAsyncTask}, that calls back here via
+     * {@link #onAuthenticatorTaskCallback(RemoteOperationResult)}
+     *
+     * @param result    Result of {@link GetRemoteUserInfoOperation} performed.
+     */
     private void onGetUserNameFinish(RemoteOperationResult result) {
         mWaitingForOpId = Long.MAX_VALUE;
         if (result.isSuccess()) {
             boolean success = false;
+            // WARNING: using mDisplayName was a path used because, in the past, mId was not avialable
+            // in servers with SAML; now seems that changed, and this needs to be updated. Meanwhile,
+            // for any other authentication method, please 
             String username = ((UserInfo) result.getData().get(0)).mDisplayName;
 
             if (mAction == ACTION_CREATE) {
@@ -1347,9 +1358,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Log_OC.d(TAG, "Successful access - time to save the account");
 
             boolean success = false;
-            String username = ((UserInfo) result.getData().get(0)).mDisplayName;
+            String username = ((UserInfo) result.getData().get(0)).mId;
 
             if (mAction == ACTION_CREATE) {
+                mUsernameInput.setText(username);
                 success = createAccount(result);
 
             } else {
