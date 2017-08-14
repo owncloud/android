@@ -250,6 +250,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         }
 
         ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
+        readFolderOperation.setSilentRefreshOfAccountCredentials(true);
         return readFolderOperation.execute(client);
     }
 

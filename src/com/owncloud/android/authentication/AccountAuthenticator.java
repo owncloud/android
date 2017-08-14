@@ -38,7 +38,6 @@ import com.owncloud.android.lib.common.accounts.*;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2RefreshAccessTokenOperation;
-import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;

@@ -141,6 +141,7 @@ public class RefreshFolderOperation extends SyncOperation {
             false,
             false
         );
+        syncOp.setSilentRefreshOfAccountCredentials(getSilentRefreshOfAccountCredentials());
         result = syncOp.execute(client, getStorageManager());
 
         sendLocalBroadcast(
@@ -199,6 +200,7 @@ public class RefreshFolderOperation extends SyncOperation {
         // remote request 
         GetRemoteSharesForFileOperation operation = 
                 new GetRemoteSharesForFileOperation(mLocalFolder.getRemotePath(), true, true);
+        operation.setSilentRefreshOfAccountCredentials(getSilentRefreshOfAccountCredentials());
         result = operation.execute(client);
         
         if (result.isSuccess()) {
