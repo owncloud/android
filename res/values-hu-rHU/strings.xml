@@ -14,6 +14,8 @@
   <string name="actionbar_sort">Rendezés</string>
   <string name="actionbar_sort_title">Rendezés elve</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Újabb - régebbi</string>
+  <string name="actionbar_sort_by_size">Nagyobb - kisebb</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Összes fájl</string>
@@ -27,6 +29,7 @@
   <string name="prefs_category_more">Több</string>
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
+  <string name="prefs_passcode">Jelszavas lezárás</string>
   <string name="prefs_instant_upload">Azonnali képfeltöltések</string>
   <string name="prefs_instant_upload_summary">Kamera által készítette képek azonnali feltöltése</string>
   <string name="prefs_instant_video_upload">Azonnali video feltöltések</string>
@@ -41,6 +44,7 @@
   <string name="prefs_feedback">Visszajelzés</string>
   <string name="prefs_imprint">Impresszum</string>
   <string name="prefs_remember_last_share_location">Emlékezzen a megosztás helyére</string>
+  <string name="prefs_remember_last_upload_location_summary">Jegyezze meg az utolsó megosztás feltöltési helyét</string>
   <string name="recommend_subject">Próbálja ki %1$s-t az okostelefonján!</string>
   <string name="recommend_text">Szeretnélek meghívni, hogy használd %1$s alkalmazást az okostelefonodon!\nTölts le innen: %2$s
 	</string>
@@ -61,7 +65,9 @@
   <string name="file_list_seconds_ago">pár másodperce</string>
   <string name="file_list_empty">Itt nincs semmi. Töltsön fel valamit!</string>
   <string name="file_list_loading">Betöltés...</string>
+  <string name="file_list_no_app_for_file_type">Nem található alkalmazás a fájltípushoz</string>
   <string name="local_file_list_empty">Nincs fájl ebben a mappában.</string>
+  <string name="upload_list_empty">Nem találhatók feltöltések</string>
   <string name="file_list_folder">mappa</string>
   <string name="file_list_folders">mappák</string>
   <string name="file_list_file">fájl</string>
@@ -78,6 +84,9 @@
   <string name="common_yes">Igen</string>
   <string name="common_no">Nem</string>
   <string name="common_ok">OK</string>
+  <string name="common_remove_upload">Feltöltés eltávolítása</string>
+  <string name="common_retry_upload">Feltöltés ismétlése</string>
+  <string name="common_cancel_sync">Szinkronizálás megszakítása</string>
   <string name="common_cancel">Mégsem</string>
   <string name="common_back">Vissza</string>
   <string name="common_save_exit">Mentés &amp; kilépés</string>
