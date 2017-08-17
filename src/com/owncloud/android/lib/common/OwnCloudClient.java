@@ -93,7 +93,7 @@ public class OwnCloudClient extends HttpClient {
      */
     private boolean mSilentRefreshOfAccountCredentials = true;
 
-
+    private String mRedirectedLocation;
 
     /**
      * Constructor
@@ -278,6 +278,7 @@ public class OwnCloudClient extends HttpClient {
         int redirectionsCount = 0;
         int status = method.getStatusCode();
         RedirectionPath result = new RedirectionPath(status, MAX_REDIRECTIONS_COUNT);
+
         while (redirectionsCount < MAX_REDIRECTIONS_COUNT &&
             (status == HttpStatus.SC_MOVED_PERMANENTLY ||
                 status == HttpStatus.SC_MOVED_TEMPORARILY ||
@@ -294,6 +295,8 @@ public class OwnCloudClient extends HttpClient {
 
                 String locationStr = location.getValue();
                 result.addLocation(locationStr);
+
+                mRedirectedLocation = locationStr;
 
                 // Release the connection to avoid reach the max number of connections per host
                 // due to it will be set a different url
@@ -568,7 +571,7 @@ public class OwnCloudClient extends HttpClient {
      */
     private boolean shouldInvalidateAccountCredentials(int httpStatusCode) {
 
-        boolean should = (httpStatusCode == HttpStatus.SC_UNAUTHORIZED);   // invalid credentials
+        boolean should = (httpStatusCode == HttpStatus.SC_UNAUTHORIZED || isIdPRedirection());   // invalid credentials
 
         should &= (mCredentials != null &&         // real credentials
             !(mCredentials instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
@@ -605,4 +608,13 @@ public class OwnCloudClient extends HttpClient {
         mOwnCloudClientManager = clientManager;
     }
 
+    /**
+     * Check if the redirection is to an identity provider such as SAML or wayf
+     * @return true if the redirection location includes SAML or wayf, false otherwise
+     */
+    private boolean isIdPRedirection() {
+        return (mRedirectedLocation != null &&
+                (mRedirectedLocation.toUpperCase().contains("SAML") ||
+                        mRedirectedLocation.toLowerCase().contains("wayf")));
+    }
 }
