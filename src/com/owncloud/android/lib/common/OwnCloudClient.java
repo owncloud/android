@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2017 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -229,6 +229,8 @@ public class OwnCloudClient extends HttpClient {
 
             status = super.executeMethod(method);
 
+            checkFirstRedirection(method);
+
             if (mFollowRedirects) {
                 status = followRedirection(method).getLastStatus();
             }
@@ -245,6 +247,18 @@ public class OwnCloudClient extends HttpClient {
         //logSetCookiesAtResponse(method.getResponseHeaders());
 
         return status;
+    }
+
+    private void checkFirstRedirection(HttpMethod method) {
+        Header[] httpHeaders = method.getResponseHeaders();
+
+        for (Header httpHeader : httpHeaders) {
+
+            if ("location".equals(httpHeader.getName().toLowerCase())) {
+                mRedirectedLocation = httpHeader.getValue();
+                break;
+            }
+        }
     }
 
     /**
@@ -290,13 +304,12 @@ public class OwnCloudClient extends HttpClient {
                 location = method.getResponseHeader("location");
             }
             if (location != null) {
-                Log_OC.d(TAG + " #" + mInstanceNumber,
-                    "Location to redirect: " + location.getValue());
-
                 String locationStr = location.getValue();
-                result.addLocation(locationStr);
 
-                mRedirectedLocation = locationStr;
+                Log_OC.d(TAG + " #" + mInstanceNumber,
+                    "Location to redirect: " + locationStr);
+
+                result.addLocation(locationStr);
 
                 // Release the connection to avoid reach the max number of connections per host
                 // due to it will be set a different url

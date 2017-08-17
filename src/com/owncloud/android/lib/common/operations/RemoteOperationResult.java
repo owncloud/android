@@ -313,15 +313,13 @@ public class RemoteOperationResult implements Serializable {
     public RemoteOperationResult(boolean success, int httpCode, String httpPhrase, Header[] httpHeaders) {
         this(success, httpCode, httpPhrase);
         if (httpHeaders != null) {
-            Header current;
             for (Header httpHeader : httpHeaders) {
-                current = httpHeader;
-                if ("location".equals(current.getName().toLowerCase())) {
-                    mRedirectedLocation = current.getValue();
+                if ("location".equals(httpHeader.getName().toLowerCase())) {
+                    mRedirectedLocation = httpHeader.getValue();
                     continue;
                 }
-                if ("www-authenticate".equals(current.getName().toLowerCase())) {
-                    mAuthenticate.add(current.getValue().toLowerCase());
+                if ("www-authenticate".equals(httpHeader.getName().toLowerCase())) {
+                    mAuthenticate.add(httpHeader.getValue().toLowerCase());
                 }
             }
         }
