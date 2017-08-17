@@ -88,28 +88,6 @@ public abstract class RemoteOperation implements Runnable {
     private Handler mListenerHandler = null;
 
     /**
-     * When 'true', the operation tries to silently refresh credentials if fails due to lack of authorization.
-     *
-     * Valid for 'execute methods' receiving an {@link Account} instance as parameter, out of the box:
-     *  -- {@link RemoteOperation#execute(Account, Context)}
-     *  -- {@link RemoteOperation#execute(Account, Context, OnRemoteOperationListener, Handler)}
-     *
-     * Valid for 'execute methods' receiving an {@link OwnCloudClient}, as long as it returns non null values
-     * to its methods {@link OwnCloudClient#getContext()} && {@link OwnCloudClient#getAccount()}:
-     *  -- {@link RemoteOperation#execute(OwnCloudClient)}
-     *  -- {@link RemoteOperation#execute(OwnCloudClient, OnRemoteOperationListener, Handler)}
-     */
-    private boolean mSilentRefreshOfAccountCredentials = false;
-
-
-    /**
-     * Counter to establish the number of times a failed operation will be repeated due to
-     * an authorization error
-     */
-    private int MAX_REPEAT_COUNTER = 1;
-
-
-    /**
      * Abstract method to implement the operation in derived classes.
      */
     protected abstract RemoteOperationResult run(OwnCloudClient client);
@@ -137,14 +115,6 @@ public abstract class RemoteOperation implements Runnable {
                     "Context");
         mAccount = account;
         mContext = context.getApplicationContext();
-        try {
-            OwnCloudAccount ocAccount = new OwnCloudAccount(mAccount, mContext);
-            mClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                    getClientFor(ocAccount, mContext);
-        } catch (Exception e) {
-            Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
-            return new RemoteOperationResult(e);
-        }
 
         return runOperation();
     }
@@ -290,51 +260,15 @@ public abstract class RemoteOperation implements Runnable {
     private RemoteOperationResult runOperation() {
 
         RemoteOperationResult result;
-        boolean repeat;
-        int repeatCounter = 0;
 
-        do {
-            repeat = false;
+        try {
+            grantOwnCloudClient();
+            result = run(mClient);
 
-            try {
-                grantOwnCloudClient();
-                result = run(mClient);
-
-            } catch (AccountsException | IOException e) {
-                Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
-                result = new RemoteOperationResult(e);
-            }
-
-            if (mSilentRefreshOfAccountCredentials &&
-                AccountUtils.shouldInvalidateAccountCredentials(
-                    result,
-                    mClient,
-                    mAccount,
-                    mContext)
-                ) {
-                boolean invalidated = AccountUtils.invalidateAccountCredentials(
-                    mClient,
-                    mAccount,
-                    mContext
-                );
-                if (invalidated &&
-                        mClient.getCredentials().authTokenCanBeRefreshed() &&
-                        repeatCounter < MAX_REPEAT_COUNTER) {
-
-                    mClient = null;
-                    repeat = true;
-                    repeatCounter++;
-
-                    // this will result in a new loop, and grantOwnCloudClient() will
-                    // create a new instance for mClient, getting a new fresh token in the
-                    // way, in the AccountAuthenticator * ;
-                    // this, unfortunately, is a hidden runtime dependency back to the app;
-                    // we should fix it ASAP
-                }
-                // else: operation will finish with ResultCode.UNAUTHORIZED
-            }
-
-        } while (repeat);
+        } catch (AccountsException | IOException e) {
+            Log_OC.e(TAG, "Error while trying to access to " + mAccount.name, e);
+            result = new RemoteOperationResult(e);
+        }
 
         return result;
     }
@@ -364,26 +298,4 @@ public abstract class RemoteOperation implements Runnable {
         return mClient;
     }
 
-
-    /**
-     * Enables or disables silent refresh of credentials, if supported by credentials itself.
-     *
-     * Will have effect if called before in all cases:
-     *  -- {@link RemoteOperation#execute(Account, Context)}
-     *  -- {@link RemoteOperation#execute(Account, Context, OnRemoteOperationListener, Handler)}
-     *
-     * Will have NO effect if called before:
-     *  -- {@link RemoteOperation#execute(OwnCloudClient)}
-     *  -- {@link RemoteOperation#execute(OwnCloudClient, OnRemoteOperationListener, Handler)}
-     *
-     *  ... UNLESS the passed {@link OwnCloudClient} returns non-NULL values for
-     *  {@link OwnCloudClient#getAccount()} && {@link OwnCloudClient#getContext()}
-     */
-    public void setSilentRefreshOfAccountCredentials(boolean silentRefreshOfAccountCredentials) {
-        mSilentRefreshOfAccountCredentials = silentRefreshOfAccountCredentials;
-    }
-
-    public boolean getSilentRefreshOfAccountCredentials() {
-        return mSilentRefreshOfAccountCredentials;
-    }
 }

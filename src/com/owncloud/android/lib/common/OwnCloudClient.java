@@ -43,6 +43,8 @@ import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountsException;
 import android.content.Context;
 import android.net.Uri;
 
@@ -57,7 +59,8 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 public class OwnCloudClient extends HttpClient {
 
     private static final String TAG = OwnCloudClient.class.getSimpleName();
-    public static final int MAX_REDIRECTIONS_COUNT = 3;
+    private static final int MAX_REDIRECTIONS_COUNT = 3;
+    private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
     private static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
     private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
@@ -74,9 +77,23 @@ public class OwnCloudClient extends HttpClient {
     private OwnCloudVersion mVersion = null;
 
     /// next too attributes are a very ugly dependency, added to grant silent retry of OAuth token when needed ;
-    /// see {} for more details
+    /// see #shouldInvalidateCredentials and #invalidateCredentials for more details
     private Context mContext;
     private OwnCloudAccount mAccount;
+
+    /**
+     * {@link @OwnCloudClientManager} holding a reference to this object and delivering it to callers; might be
+     * NULL
+     */
+    private OwnCloudClientManager mOwnCloudClientManager = null;
+
+    /**
+     * When 'true', the method {@link #executeMethod(HttpMethod)}  tries to silently refresh credentials
+     * if fails due to lack of authorization, if credentials support authorization refresh.
+     */
+    private boolean mSilentRefreshOfAccountCredentials = true;
+
+
 
     /**
      * Constructor
@@ -190,25 +207,38 @@ public class OwnCloudClient extends HttpClient {
      */
     @Override
     public int executeMethod(HttpMethod method) throws IOException {
-        // Update User Agent
-        HttpParams params = method.getParams();
-        String userAgent = OwnCloudClientManagerFactory.getUserAgent();
-        params.setParameter(HttpMethodParams.USER_AGENT, userAgent);
 
-        preventCrashDueToInvalidPort(method);
+        boolean repeatWithFreshCredentials;
+        int repeatCounter = 0;
+        int status;
 
-        Log_OC.d(TAG + " #" + mInstanceNumber, "REQUEST " +
+        do {
+            // Update User Agent
+            HttpParams params = method.getParams();
+            String userAgent = OwnCloudClientManagerFactory.getUserAgent();
+            params.setParameter(HttpMethodParams.USER_AGENT, userAgent);
+
+            preventCrashDueToInvalidPort(method);
+
+            Log_OC.d(TAG + " #" + mInstanceNumber, "REQUEST " +
             method.getName() + " " + method.getPath());
 
-        //logCookiesAtRequest(method.getRequestHeaders(), "before");
-        //logCookiesAtState("before");
-        method.setFollowRedirects(false);
+            //logCookiesAtRequest(method.getRequestHeaders(), "before");
+            //logCookiesAtState("before");
+            method.setFollowRedirects(false);
 
-        int status = super.executeMethod(method);
+            status = super.executeMethod(method);
 
-        if (mFollowRedirects) {
-            status = followRedirection(method).getLastStatus();
-        }
+            if (mFollowRedirects) {
+                status = followRedirection(method).getLastStatus();
+            }
+
+            repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
+            if (repeatWithFreshCredentials) {
+                repeatCounter++;
+            }
+
+        } while (repeatWithFreshCredentials);
 
         //logCookiesAtRequest(method.getRequestHeaders(), "after");
         //logCookiesAtState("after");
@@ -216,7 +246,6 @@ public class OwnCloudClient extends HttpClient {
 
         return status;
     }
-
 
     /**
      * Fix for https://github.com/owncloud/android/issues/1847#issuecomment-267558274
@@ -466,6 +495,114 @@ public class OwnCloudClient extends HttpClient {
 
     public OwnCloudAccount getAccount() {
         return mAccount;
+    }
+
+    /**
+     * Enables or disables silent refresh of credentials, if supported by credentials themselves.
+     */
+    public void setSilentRefreshOfAccountCredentials(boolean silentRefreshOfAccountCredentials) {
+        mSilentRefreshOfAccountCredentials = silentRefreshOfAccountCredentials;
+    }
+
+    public boolean getSilentRefreshOfAccountCredentials() {
+        return mSilentRefreshOfAccountCredentials;
+    }
+
+
+    /**
+     * Checks the status code of an execution and decides if should be repeated with fresh credentials.
+     *
+     * Invalidates current credentials if the request failed as anauthorized.
+     *
+     * Refresh current credentials if possible, and marks a retry.
+     *
+     * @param status
+     * @param repeatCounter
+     * @return
+     */
+    private boolean checkUnauthorizedAccess(int status, int repeatCounter) {
+        boolean credentialsWereRefreshed = false;
+
+        if (shouldInvalidateAccountCredentials(status)) {
+            boolean invalidated = invalidateAccountCredentials();
+
+            if (invalidated) {
+                if (getCredentials().authTokenCanBeRefreshed() &&
+                    repeatCounter < MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS) {
+
+                    try {
+                        mAccount.loadCredentials(mContext);
+                        // if mAccount.getCredentials().length() == 0 --> refresh failed
+                        setCredentials(mAccount.getCredentials());
+                        credentialsWereRefreshed = true;
+
+                    } catch (AccountsException | IOException e) {
+                        Log_OC.e(
+                            TAG,
+                            "Error while trying to refresh auth token for " + mAccount.getSavedAccount().name,
+                            e
+                        );
+                    }
+                }
+
+                if (!credentialsWereRefreshed && mOwnCloudClientManager != null) {
+                    // if credentials are not refreshed, client must be removed
+                    // from the OwnCloudClientManager to prevent it is reused once and again
+                    mOwnCloudClientManager.removeClientFor(mAccount);
+                }
+            }
+            // else: execute will finish with status 401
+        }
+
+        return credentialsWereRefreshed;
+    }
+
+    /**
+     * Determines if credentials should be invalidated according the to the HTTPS status
+     * of a network request just performed.
+     *
+     * @param httpStatusCode    Result of the last request ran with the 'credentials' belows.
+
+     * @return                  'True' if credentials should and might be invalidated, 'false' if shouldn't or
+     *                          cannot be invalidated with the given arguments.
+     */
+    private boolean shouldInvalidateAccountCredentials(int httpStatusCode) {
+
+        boolean should = (httpStatusCode == HttpStatus.SC_UNAUTHORIZED);   // invalid credentials
+
+        should &= (mCredentials != null &&         // real credentials
+            !(mCredentials instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
+
+        // test if have all the needed to effectively invalidate ...
+        should &= (mAccount != null && mAccount.getSavedAccount() != null && mContext != null);
+
+        return should;
+    }
+
+    /**
+     * Invalidates credentials stored for the given account in the system  {@link AccountManager} and in
+     * current {@link OwnCloudClientManagerFactory#getDefaultSingleton()} instance.
+     *
+     * {@link #shouldInvalidateAccountCredentials(int)} should be called first.
+     *
+     * @return                  'True' if invalidation was successful, 'false' otherwise.
+     */
+    private boolean invalidateAccountCredentials() {
+        AccountManager am = AccountManager.get(mContext);
+        am.invalidateAuthToken(
+            mAccount.getSavedAccount().type,
+            mCredentials.getAuthToken()
+        );
+        am.clearPassword(mAccount.getSavedAccount()); // being strict, only needed for Basic Auth credentials
+        return true;
+    }
+
+    public OwnCloudClientManager getOwnCloudClientManager() {
+        return mOwnCloudClientManager;
+    }
+
+    void setOwnCloudClientManager(OwnCloudClientManager clientManager) {
+        mOwnCloudClientManager = clientManager;
     }
 
 }

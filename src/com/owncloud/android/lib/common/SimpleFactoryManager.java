@@ -63,6 +63,8 @@ public class SimpleFactoryManager implements OwnCloudClientManager {
         }
         client.setCredentials(account.getCredentials());
         client.setAccount(account);
+        client.setContext(context);
+        client.setOwnCloudClientManager(this);
         return client;
     }
 

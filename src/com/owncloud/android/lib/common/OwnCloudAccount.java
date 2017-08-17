@@ -124,10 +124,10 @@ public class OwnCloudAccount {
             throw new IllegalArgumentException("Parameter 'context' cannot be null");
         }
 
-		if (mSavedAccount != null) {
-			mCredentials = AccountUtils.getCredentialsForAccount(context, mSavedAccount);
-		}
-	}
+        if (mSavedAccount != null) {
+            mCredentials = AccountUtils.getCredentialsForAccount(context, mSavedAccount);
+        }
+    }
 
     public Uri getBaseUri() {
         return mBaseUri;

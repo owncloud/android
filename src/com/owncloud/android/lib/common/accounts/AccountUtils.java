@@ -28,6 +28,7 @@ package com.owncloud.android.lib.common.accounts;
 import java.io.IOException;
 
 import org.apache.commons.httpclient.Cookie;
+import org.apache.commons.httpclient.HttpStatus;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -259,83 +260,6 @@ public class AccountUtils {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Determines if credentials should be invalidated for the given account, according the to the result
-     * of an operation just run through the given client.
-     *
-     * @param result            Result of the last remote operation ran through 'client' below.
-     * @param client            {@link OwnCloudClient} that run last remote operation, resulting in 'result' above.
-     * @param account           {@link Account} storing credentials used to run the last operation.
-     * @param context           Android context, needed to access {@link AccountManager}; method will return false
-     *                          if NULL, since invalidation of credentials is just not possible if no context is
-     *                          available.
-     * @return                  'True' if credentials should and might be invalidated, 'false' if shouldn't or
-     *                          cannot be invalidated with the given arguments.
-     */
-    public static boolean shouldInvalidateAccountCredentials(
-        RemoteOperationResult result,
-        OwnCloudClient client,
-        Account account,
-        Context context) {
-
-        boolean should = RemoteOperationResult.ResultCode.UNAUTHORIZED.equals(result.getCode());
-            // invalid credentials
-
-        should &= (client.getCredentials() != null &&         // real credentials
-            !(client.getCredentials() instanceof OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials));
-
-        // test if have all the needed to effectively invalidate ...
-        should &= ((account != null && context != null) || // ... either directly, or ...
-                    client.getAccount() != null && client.getContext() != null)  ;   // ... indirectly
-
-        return should;
-    }
-
-    /**
-     * Invalidates credentials stored for the given account in the system  {@link AccountManager} and in
-     * current {@link OwnCloudClientManagerFactory#getDefaultSingleton()} instance.
-     *
-     * {@link AccountUtils#shouldInvalidateAccountCredentials(RemoteOperationResult, OwnCloudClient, Account, Context)}
-     * should be called first.
-     *
-     * @param client            {@link OwnCloudClient} that run last remote operation.
-     * @param account           {@link Account} storing credentials to invalidate.
-     * @param context           Android context, needed to access {@link AccountManager}.
-     *
-     * @return                  'True' if invalidation was successful, 'false' otherwise.
-     */
-    public static boolean invalidateAccountCredentials(
-        OwnCloudClient client,
-        Account account,
-        Context context
-    ) {
-        Account checkedAccount = (account == null) ? client.getAccount().getSavedAccount() : account;
-        if (checkedAccount == null) {
-            throw new IllegalArgumentException("Account cannot be null both in parameter and in client");
-        }
-        Context checkedContext = (context == null) ? client.getContext() : context;
-        if (checkedContext == null) {
-            throw new IllegalArgumentException("Context cannot be null both in parameter and in client");
-        }
-
-        try {
-            OwnCloudAccount ocAccount = new OwnCloudAccount(checkedAccount, checkedContext);
-            OwnCloudClientManagerFactory.getDefaultSingleton().
-                removeClientFor(ocAccount);    // to prevent nobody else is provided this client
-            AccountManager am = AccountManager.get(checkedContext);
-            am.invalidateAuthToken(
-                checkedAccount.type,
-                client.getCredentials().getAuthToken()
-            );
-            am.clearPassword(checkedAccount); // being strict, only needed for Basic Auth credentials
-            return true;
-
-        } catch (AccountUtils.AccountNotFoundException e) {
-            Log_OC.e(TAG, "Account was deleted from AccountManager, cannot invalidate its token", e);
-            return false;
         }
     }
 
