@@ -78,7 +78,6 @@ public class FileDownloader extends Service
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
 
     private static final String TAG = FileDownloader.class.getSimpleName();
-    private static final int MAX_REPEAT_COUNTER = 1;
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
@@ -425,49 +424,19 @@ public class FileDownloader extends Service
                     );
                 }   // else, reuse storage manager from previous operation
 
-                boolean repeat;
-                int repeatCounter = 0;
-                do {
-                    repeat = false;
+                // always get client from client manager to get fresh credentials in case of update
+                OwnCloudAccount ocAccount = new OwnCloudAccount(
+                        mCurrentAccount,
+                        this
+                );
+                mDownloadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                        getClientFor(ocAccount, this);
 
-                    // always get client from client manager to get fresh credentials in case of update
-                    OwnCloudAccount ocAccount = new OwnCloudAccount(
-                            mCurrentAccount,
-                            this
-                    );
-                    mDownloadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                            getClientFor(ocAccount, this);
-
-                    /// perform the download
-                    downloadResult = mCurrentDownload.execute(mDownloadClient);
-                    if (downloadResult.isSuccess()) {
-                        saveDownloadedFile();
-                    } else {
-                        if (com.owncloud.android.lib.common.accounts.AccountUtils.
-                            shouldInvalidateAccountCredentials(
-                                downloadResult,
-                                mDownloadClient,
-                                mCurrentAccount,
-                                this)
-                            ) {
-                            boolean invalidated = com.owncloud.android.lib.common.accounts.AccountUtils.
-                                invalidateAccountCredentials(
-                                    mDownloadClient,
-                                    mCurrentAccount,
-                                    this
-                                );
-                            if (invalidated &&
-                                mDownloadClient.getCredentials().authTokenCanBeRefreshed() &&
-                                repeatCounter < MAX_REPEAT_COUNTER) {
-
-                                repeat = true;
-                                repeatCounter++;
-                            }
-                            // else: operation will finish with ResultCode.UNAUTHORIZED
-                        }
-                    }
-
-                } while (repeat);
+                /// perform the download
+                downloadResult = mCurrentDownload.execute(mDownloadClient);
+                if (downloadResult.isSuccess()) {
+                    saveDownloadedFile();
+                }
 
             } catch (Exception e) {
                 Log_OC.e(TAG, "Error downloading", e);

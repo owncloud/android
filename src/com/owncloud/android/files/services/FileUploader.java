@@ -166,7 +166,6 @@ public class FileUploader extends Service
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mNotificationBuilder;
     private int mLastPercent;
-    private static final int MAX_REPEAT_COUNTER = 1;
 
     public static String getUploadsAddedMessage() {
         return FileUploader.class.getName() + UPLOADS_ADDED_MESSAGE;
@@ -777,46 +776,16 @@ public class FileUploader extends Service
                     );
                 }   // else, reuse storage manager from previous operation
 
-                boolean repeat;
-                int repeatCounter = 0;
-                do {
-                    repeat = false;
+                // always get client from client manager to get fresh credentials in case of update
+                OwnCloudAccount ocAccount = new OwnCloudAccount(
+                        mCurrentAccount,
+                        this
+                );
+                mUploadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
+                        getClientFor(ocAccount, this);
 
-                    // always get client from client manager to get fresh credentials in case of update
-                    OwnCloudAccount ocAccount = new OwnCloudAccount(
-                            mCurrentAccount,
-                            this
-                    );
-                    mUploadClient = OwnCloudClientManagerFactory.getDefaultSingleton().
-                            getClientFor(ocAccount, this);
-
-                    /// perform the upload
-                    uploadResult = mCurrentUpload.execute(mUploadClient, mStorageManager);
-
-                    if (com.owncloud.android.lib.common.accounts.AccountUtils.
-                        shouldInvalidateAccountCredentials(
-                            uploadResult,
-                            mUploadClient,
-                            mCurrentAccount,
-                            this)
-                        ) {
-                        boolean invalidated = com.owncloud.android.lib.common.accounts.AccountUtils.
-                            invalidateAccountCredentials(
-                                mUploadClient,
-                                mCurrentAccount,
-                                this
-                            );
-                        if (invalidated &&
-                            mUploadClient.getCredentials().authTokenCanBeRefreshed() &&
-                            repeatCounter < MAX_REPEAT_COUNTER) {
-
-                            repeat = true;
-                            repeatCounter++;
-                        }
-                        // else: operation will finish with ResultCode.UNAUTHORIZED
-                    }
-
-                } while (repeat);
+                /// perform the upload
+                uploadResult = mCurrentUpload.execute(mUploadClient, mStorageManager);
 
             } catch (Exception e) {
                 Log_OC.e(TAG, "Error uploading", e);

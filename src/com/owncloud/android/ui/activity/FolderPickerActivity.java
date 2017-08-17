@@ -202,7 +202,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             getAccount(),
             getApplicationContext()
         );
-        synchFolderOp.setSilentRefreshOfAccountCredentials(true);
         synchFolderOp.execute(getStorageManager(), this, null, null);
 
         OCFileListFragment fileListFragment = getListOfFilesFragment();

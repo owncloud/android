@@ -1618,7 +1618,6 @@ public class FileDisplayActivity extends HookActivity
                             getAccount(),
                             getApplicationContext()
                         );
-                        synchFolderOp.setSilentRefreshOfAccountCredentials(true);
                         synchFolderOp.execute(
                             getStorageManager(),
                             MainApp.getAppContext(),

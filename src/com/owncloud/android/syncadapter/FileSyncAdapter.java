@@ -241,7 +241,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      */
     private void updateCapabilities() {
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
-        getCapabilities.setSilentRefreshOfAccountCredentials(true);
         RemoteOperationResult  result = getCapabilities.execute(getStorageManager(), getContext());
         if (!result.isSuccess()) {
             mLastFailedResult = result;
@@ -286,48 +285,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             repeat = false;
 
             result = synchFolderOp.execute(getClient(), getStorageManager());
-
-            if (com.owncloud.android.lib.common.accounts.AccountUtils.
-                shouldInvalidateAccountCredentials(
-                    result,
-                    getClient(),
-                    getAccount(),
-                    getContext())
-                ) {
-                boolean invalidated = com.owncloud.android.lib.common.accounts.AccountUtils.
-                    invalidateAccountCredentials(
-                        getClient(),
-                        getAccount(),
-                        getContext()
-                    );
-                if (invalidated &&
-                    getClient().getCredentials().authTokenCanBeRefreshed() &&
-                    repeatCounter < MAX_REPEAT_COUNTER) {
-
-                    try {
-                        initClientForCurrentAccount();
-
-                    } catch (AccountsException e) {
-                        /// the account is unknown for the Synchronization Manager, unreachable this context,
-                        // or can not be authenticated; don't try this again
-                        mSyncResult.tooManyRetries = true;
-                        mLastFailedResult = new RemoteOperationResult(e);
-                        return;
-
-                    } catch (IOException e) {
-                        /// the account is unknown for the Synchronization Manager, unreachable this context,
-                        // or can not be authenticated; don't try this again
-                        mSyncResult.tooManyRetries = true;
-                        mLastFailedResult = new RemoteOperationResult(
-                            ResultCode.ACCOUNT_EXCEPTION
-                        );
-                        return;
-                    }
-                    repeat = true;
-                    repeatCounter++;
-                }
-                // else: operation will finish with ResultCode.UNAUTHORIZED
-            }
 
         } while (repeat);
 

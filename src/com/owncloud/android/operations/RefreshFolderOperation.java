@@ -141,7 +141,6 @@ public class RefreshFolderOperation extends SyncOperation {
             false,
             false
         );
-        syncOp.setSilentRefreshOfAccountCredentials(getSilentRefreshOfAccountCredentials());
         result = syncOp.execute(client, getStorageManager());
 
         sendLocalBroadcast(
@@ -163,7 +162,6 @@ public class RefreshFolderOperation extends SyncOperation {
 
     private void syncUserProfile() {
         GetUserProfileOperation update = new GetUserProfileOperation();
-        update.setSilentRefreshOfAccountCredentials(getSilentRefreshOfAccountCredentials());
         RemoteOperationResult result = update.execute(getStorageManager(), mContext);
         if (!result.isSuccess()) {
             Log_OC.w(TAG, "Couldn't update user profile from server");
@@ -175,7 +173,6 @@ public class RefreshFolderOperation extends SyncOperation {
     private OwnCloudVersion syncCapabilitiesAndGetServerVersion() {
         OwnCloudVersion serverVersion;
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
-        getCapabilities.setSilentRefreshOfAccountCredentials(getSilentRefreshOfAccountCredentials());
         RemoteOperationResult result = getCapabilities.execute(getStorageManager(), mContext);
         if (result.isSuccess()) {
             OCCapability capability = (OCCapability) result.getData().get(0);
@@ -200,7 +197,6 @@ public class RefreshFolderOperation extends SyncOperation {
         // remote request 
         GetRemoteSharesForFileOperation operation = 
                 new GetRemoteSharesForFileOperation(mLocalFolder.getRemotePath(), true, true);
-        operation.setSilentRefreshOfAccountCredentials(getSilentRefreshOfAccountCredentials());
         result = operation.execute(client);
         
         if (result.isSuccess()) {

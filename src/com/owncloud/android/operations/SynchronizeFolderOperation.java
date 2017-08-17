@@ -250,7 +250,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
         }
 
         ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
-        readFolderOperation.setSilentRefreshOfAccountCredentials(true);
         return readFolderOperation.execute(client);
     }
 
@@ -467,7 +466,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
             }
-            op.setSilentRefreshOfAccountCredentials(getSilentRefreshOfAccountCredentials());
             contentsResult = op.execute(getStorageManager(), mContext);
             if (!contentsResult.isSuccess()) {
                 if (contentsResult.getCode() == ResultCode.SYNC_CONFLICT) {
