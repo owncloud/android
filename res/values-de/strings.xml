@@ -132,7 +132,7 @@
   <string name="uploads_view_upload_status_paused">pausiert</string>
   <string name="uploads_view_upload_status_failed_connection_error">Verbindungs Fehler</string>
   <string name="uploads_view_upload_status_failed_retry">Der Upload wird in Kürze erneut versucht</string>
-  <string name="uploads_view_upload_status_failed_credentials_error">Zugangsdaten ffalsch</string>
+  <string name="uploads_view_upload_status_failed_credentials_error">Zugangsdaten falsch</string>
   <string name="uploads_view_upload_status_failed_folder_error">Ziel-Ordner fehlt</string>
   <string name="uploads_view_upload_status_failed_file_error">Dateifehler</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Lokale Datei nicht gefunden</string>
