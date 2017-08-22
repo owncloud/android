@@ -2,7 +2,10 @@
 <resources>
   <string name="actionbar_upload">Laai Op</string>
   <string name="actionbar_upload_files">Lêers</string>
+  <string name="actionbar_mkdir">Nuwe vouer</string>
   <string name="actionbar_settings">Instellings</string>
+  <string name="actionbar_sort">Sorteer</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
@@ -16,6 +19,10 @@
   <string name="sync_string_files">Lêers</string>
   <string name="uploader_btn_upload_text">Laai Op</string>
   <string name="file_list_seconds_ago">sekondes gelede</string>
+  <string name="file_list_folder">vouer</string>
+  <string name="file_list_folders">vouers</string>
+  <string name="file_list_file">lêer</string>
+  <string name="file_list_files">lêers</string>
   <string name="filedetails_download">Laai Af</string>
   <string name="action_share">Deel</string>
   <string name="common_yes">Ja</string>
@@ -25,10 +32,13 @@
   <string name="common_error">Fout</string>
   <string name="about_title">Oor</string>
   <string name="change_password">Verander wagwoord</string>
+  <string name="delete_account">Verwyder rekening</string>
+  <string name="uploader_upload_text_filename_hint">Lêernaam</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_upload_status_succeeded">Afgehandel</string>
   <string name="common_rename">Hernoem</string>
   <string name="common_remove">Verwyder</string>
+  <string name="ssl_validator_label_L">Ligging:</string>
   <string name="activity_chooser_send_file_title">Stuur</string>
   <string name="saml_authentication_wrong_pass">Verkeerde wagwoord</string>
   <string name="actionbar_move">Skuif</string>
