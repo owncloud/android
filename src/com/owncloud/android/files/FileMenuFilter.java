@@ -215,8 +215,12 @@ public class FileMenuFilter {
                 (capability.getFilesSharingApiEnabled().isTrue() ||
                         capability.getFilesSharingApiEnabled().isUnknown()
                 );
+
+        boolean allowResharing = isSingleSelection() && anyFileSharedWithMe() &&
+                capability != null && capability.getFilesSharingResharing().isTrue();
+
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
-                !shareApiEnabled) {
+                !shareApiEnabled || !allowResharing) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);
@@ -357,4 +361,12 @@ public class FileMenuFilter {
         return false;
     }
 
+    private boolean anyFileSharedWithMe() {
+        for(OCFile file: mFiles) {
+            if(file.isSharedWithMe()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
