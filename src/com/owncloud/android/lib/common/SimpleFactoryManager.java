@@ -36,44 +36,47 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import java.io.IOException;
 
 public class SimpleFactoryManager implements OwnCloudClientManager {
-    
-	private static final String TAG = SimpleFactoryManager.class.getSimpleName();
 
-	@Override
-	public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
-            throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
-            IOException {
+    private static final String TAG = SimpleFactoryManager.class.getSimpleName();
 
-		Log_OC.d(TAG, "getClientFor(OwnCloudAccount ... : ");
+    @Override
+    public OwnCloudClient getClientFor(OwnCloudAccount account, Context context)
+        throws AccountNotFoundException, OperationCanceledException, AuthenticatorException,
+        IOException {
 
-		OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
-				account.getBaseUri(), 
-				context.getApplicationContext(),
-				true);
+        Log_OC.d(TAG, "getClientFor(OwnCloudAccount ... : ");
 
-		Log_OC.v(TAG, "    new client {" +
-				(account.getName() != null ?
-						account.getName() :
-						AccountUtils.buildAccountName(account.getBaseUri(), "")
+        OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
+            account.getBaseUri(),
+            context.getApplicationContext(),
+            true);
 
-                ) + ", " + client.hashCode() + "}");
+        Log_OC.v(TAG, "    new client {" +
+            (account.getName() != null ?
+                account.getName() :
+                AccountUtils.buildAccountName(account.getBaseUri(), "")
+
+            ) + ", " + client.hashCode() + "}");
 
         if (account.getCredentials() == null) {
             account.loadCredentials(context);
         }
         client.setCredentials(account.getCredentials());
-		return client;
-	}
+        client.setAccount(account);
+        client.setContext(context);
+        client.setOwnCloudClientManager(this);
+        return client;
+    }
 
-	@Override
-	public OwnCloudClient removeClientFor(OwnCloudAccount account) {
-		// nothing to do - not taking care of tracking instances!
-		return null;
-	}
+    @Override
+    public OwnCloudClient removeClientFor(OwnCloudAccount account) {
+        // nothing to do - not taking care of tracking instances!
+        return null;
+    }
 
-	@Override
-	public void saveAllClients(Context context, String accountType) {
-		// nothing to do - not taking care of tracking instances!
-	}
+    @Override
+    public void saveAllClients(Context context, String accountType) {
+        // nothing to do - not taking care of tracking instances!
+    }
 
 }

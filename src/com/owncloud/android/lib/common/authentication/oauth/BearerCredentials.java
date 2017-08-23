@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.common.network;
+package com.owncloud.android.lib.common.authentication.oauth;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.util.LangUtils;

@@ -28,6 +28,7 @@ package com.owncloud.android.lib.common.accounts;
 import java.io.IOException;
 
 import org.apache.commons.httpclient.Cookie;
+import org.apache.commons.httpclient.HttpStatus;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -37,9 +38,12 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
+import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudCredentials;
-import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
@@ -53,45 +57,25 @@ public class AccountUtils {
     /**
      * Constructs full url to host and webdav resource basing on host version
      *
-     * @param context
-     * @param account
-     * @return url or null on failure
+     * @param context               Valid Android {@link Context}, needed to access the {@link AccountManager}
+     * @param account               A stored ownCloud {@link Account}
+     * @return                      Full URL to WebDAV endpoint in the server corresponding to 'account'.
      * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
-     * @deprecated To be removed in release 1.0.
      */
-    @Deprecated
-    public static String constructFullURLForAccount(Context context, Account account) throws AccountNotFoundException {
-        AccountManager ama = AccountManager.get(context);
-        String baseurl = ama.getUserData(account, Constants.KEY_OC_BASE_URL);
-        if (baseurl == null) {
-            throw new AccountNotFoundException(account, "Account not found", null);
-        }
-        return baseurl + WEBDAV_PATH_4_0;
-    }
-
-    /**
-     * Extracts url server from the account
-     *
-     * @param context
-     * @param account
-     * @return url server or null on failure
-     * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
-     * @deprecated This method will be removed in version 1.0.
-     * Use {@link #getBaseUrlForAccount(Context, Account)}
-     * instead.
-     */
-    @Deprecated
-    public static String constructBasicURLForAccount(Context context, Account account)
+    public static String getWebDavUrlForAccount(Context context, Account account)
         throws AccountNotFoundException {
-        return getBaseUrlForAccount(context, account);
+
+        return getBaseUrlForAccount(context, account) + WEBDAV_PATH_4_0;
     }
+
 
     /**
      * Extracts url server from the account
      *
-     * @param context
-     * @param account
-     * @return url server or null on failure
+     * @param context               Valid Android {@link Context}, needed to access the {@link AccountManager}
+     * @param account               A stored ownCloud {@link Account}
+     * @return                      Full URL to the server corresponding to 'account', ending in the base path
+     *                              common to all API endpoints.
      * @throws AccountNotFoundException When 'account' is unknown for the AccountManager
      */
     public static String getBaseUrlForAccount(Context context, Account account)
@@ -171,7 +155,7 @@ public class AccountUtils {
                 AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
                 false);
 
-            credentials = OwnCloudCredentialsFactory.newBearerCredentials(accessToken);
+            credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken);
 
         } else if (isSamlSso) {
             String accessToken = am.blockingGetAuthToken(
@@ -301,15 +285,6 @@ public class AccountUtils {
 
     public static class Constants {
         /**
-         * Value under this key should handle path to webdav php script. Will be
-         * removed and usage should be replaced by combining
-         * {@link #KEY_OC_BASE_URL } and
-         * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
-         *
-         * @deprecated
-         */
-        public static final String KEY_OC_URL = "oc_url";
-        /**
          * Version should be 3 numbers separated by dot so it can be parsed by
          * {@link com.owncloud.android.lib.resources.status.OwnCloudVersion}
          */
@@ -328,12 +303,6 @@ public class AccountUtils {
          */
         public static final String KEY_SUPPORTS_SAML_WEB_SSO = "oc_supports_saml_web_sso";
         /**
-         * Flag signaling if the ownCloud server supports Share API"
-         *
-         * @deprecated
-         */
-        public static final String KEY_SUPPORTS_SHARE_API = "oc_supports_share_api";
-        /**
          * OC account cookies
          */
         public static final String KEY_COOKIES = "oc_account_cookies";
@@ -347,6 +316,11 @@ public class AccountUtils {
          * User's display name
          */
         public static final String KEY_DISPLAY_NAME = "oc_display_name";
+
+        /**
+         * OAuth2 refresh token
+         **/
+        public static final String KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token";
 
     }
 

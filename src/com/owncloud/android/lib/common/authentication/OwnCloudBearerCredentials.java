@@ -21,60 +21,65 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.common;
+package com.owncloud.android.lib.common.authentication;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.auth.AuthState;
 
-public class OwnCloudBasicCredentials implements OwnCloudCredentials {
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.authentication.oauth.BearerAuthScheme;
+import com.owncloud.android.lib.common.authentication.oauth.BearerCredentials;
+
+public class OwnCloudBearerCredentials implements OwnCloudCredentials {
 
     private String mUsername;
-    private String mPassword;
-    private boolean mAuthenticationPreemptive;
+    private String mAccessToken;
 
-    public OwnCloudBasicCredentials(String username, String password) {
+    public OwnCloudBearerCredentials(String username, String accessToken) {
         mUsername = username != null ? username : "";
-        mPassword = password != null ? password : "";
-        mAuthenticationPreemptive = true;
-    }
-
-    public OwnCloudBasicCredentials(String username, String password, boolean preemptiveMode) {
-        mUsername = username != null ? username : "";
-        mPassword = password != null ? password : "";
-        mAuthenticationPreemptive = preemptiveMode;
+        mAccessToken = accessToken != null ? accessToken : "";
     }
 
     @Override
     public void applyTo(OwnCloudClient client) {
-        List<String> authPrefs = new ArrayList<String>(1);
-        authPrefs.add(AuthPolicy.BASIC);
+        AuthPolicy.registerAuthScheme(BearerAuthScheme.AUTH_POLICY, BearerAuthScheme.class);
+        AuthPolicy.registerAuthScheme(AuthState.PREEMPTIVE_AUTH_SCHEME, BearerAuthScheme.class);
+
+        List<String> authPrefs = new ArrayList<>(1);
+        authPrefs.add(BearerAuthScheme.AUTH_POLICY);
         client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
 
-        client.getParams().setAuthenticationPreemptive(mAuthenticationPreemptive);
+        client.getParams().setAuthenticationPreemptive(true);    // true enforces BASIC AUTH ; library is stupid
         client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
         client.getState().setCredentials(
             AuthScope.ANY,
-            new UsernamePasswordCredentials(mUsername, mPassword)
+            new BearerCredentials(mAccessToken)
         );
     }
 
     @Override
     public String getUsername() {
+        // not relevant for authentication, but relevant for informational purposes
         return mUsername;
     }
 
     @Override
     public String getAuthToken() {
-        return mPassword;
+        return mAccessToken;
     }
 
     @Override
     public boolean authTokenExpires() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public boolean authTokenCanBeRefreshed() {
+        return true;
     }
 
 }

@@ -43,9 +43,9 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudCredentials;
-import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.test_project.R;
 import com.owncloud.android.lib.test_project.SelfSignedConfidentSslSocketFactory;
@@ -130,7 +130,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		client.setCredentials(credentials);
 		assertEquals("Basic credentials not set", credentials, client.getCredentials());
 		
-		credentials = OwnCloudCredentialsFactory.newBearerCredentials("bearerToken");
+		credentials = OwnCloudCredentialsFactory.newBearerCredentials("user", "bearerToken");
 		client.setCredentials(credentials);
 		assertEquals("Bearer credentials not set", credentials, client.getCredentials());
 
@@ -294,7 +294,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 	public void testGetWebdavUri() {
 		OwnCloudClient client = 
 				new OwnCloudClient(mServerUri, NetworkUtils.getMultiThreadedConnManager());
-		client.setCredentials(OwnCloudCredentialsFactory.newBearerCredentials("fakeToken"));
+		client.setCredentials(OwnCloudCredentialsFactory.newBearerCredentials("user", "fakeToken"));
 		Uri webdavUri = client.getWebdavUri();
 		assertTrue("WebDAV URI does not point to the right entry point",
 				webdavUri.getPath().endsWith(AccountUtils.WEBDAV_PATH_4_0));

@@ -29,6 +29,8 @@ import java.io.IOException;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -122,10 +124,10 @@ public class OwnCloudAccount {
             throw new IllegalArgumentException("Parameter 'context' cannot be null");
         }
 
-		if (mSavedAccount != null) {
-			mCredentials = AccountUtils.getCredentialsForAccount(context, mSavedAccount);
-		}
-	}
+        if (mSavedAccount != null) {
+            mCredentials = AccountUtils.getCredentialsForAccount(context, mSavedAccount);
+        }
+    }
 
     public Uri getBaseUri() {
         return mBaseUri;

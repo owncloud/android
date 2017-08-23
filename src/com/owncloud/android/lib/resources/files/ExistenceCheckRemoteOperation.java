@@ -71,19 +71,6 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         mSuccessIfAbsent = successIfAbsent;
     }
 
-    /**
-     * Full constructor. Success of the operation will depend upon the value of successIfAbsent.
-     * 
-     * @param remotePath        Path to append to the URL owned by the client instance.
-     * @param context           Android application context.
-     * @param successIfAbsent   When 'true', the operation finishes in success if the path does
-     *                          NOT exist in the remote server (HTTP 404).
-     * @deprecated
-     */
-    public ExistenceCheckRemoteOperation(String remotePath, Context context, boolean successIfAbsent) {
-        this(remotePath, successIfAbsent);
-    }
-
     @Override
 	protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;

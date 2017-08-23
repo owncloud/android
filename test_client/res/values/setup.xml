@@ -25,9 +25,9 @@
  
 <resources>
     <string name="build_number"></string>
-    <string name="server_base_url"></string>
-    <string name="server_base_url_2"></string>
-    <string name="username"></string>
-    <string name="password"></string>
+    <string name="server_base_url">https://qa.oc.solidgear.es</string>
+    <string name="server_base_url_2">https://qa2.oc.solidgear.es</string>
+    <string name="username">android-library-test</string>
+    <string name="password">letitgo,letitgo,thatperfectappisgone</string>
     <string name ="user_agent">Mozilla/5.0 (Android) ownCloud test project</string>
 </resources>
