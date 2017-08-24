@@ -4,6 +4,7 @@
   <string name="actionbar_upload_files">Lêers</string>
   <string name="actionbar_mkdir">Nuwe vouer</string>
   <string name="actionbar_settings">Instellings</string>
+  <string name="actionbar_send_file">Stuur</string>
   <string name="actionbar_sort">Sorteer</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
@@ -12,13 +13,17 @@
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Instellings</string>
   <string name="drawer_close">Sluit</string>
+  <string name="drawer_open">Open</string>
   <string name="prefs_category_more">Nog</string>
   <string name="prefs_help">Hulp</string>
+  <string name="prefs_imprint">Afdruk</string>
   <string name="auth_username">Gebruikersnaam</string>
   <string name="auth_password">Wagwoord</string>
   <string name="sync_string_files">Lêers</string>
+  <string name="setup_btn_connect">Verbind</string>
   <string name="uploader_btn_upload_text">Laai Op</string>
   <string name="file_list_seconds_ago">sekondes gelede</string>
+  <string name="file_list_loading">Laai tans…</string>
   <string name="file_list_folder">vouer</string>
   <string name="file_list_folders">vouers</string>
   <string name="file_list_file">lêer</string>
@@ -30,12 +35,14 @@
   <string name="common_ok">OK</string>
   <string name="common_cancel">Kanseleer</string>
   <string name="common_error">Fout</string>
+  <string name="common_error_unknown">Onbekende fout</string>
   <string name="about_title">Oor</string>
   <string name="change_password">Verander wagwoord</string>
   <string name="delete_account">Verwyder rekening</string>
   <string name="uploader_upload_text_filename_hint">Lêernaam</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_upload_status_succeeded">Afgehandel</string>
+  <string name="uploads_view_upload_status_unknown_fail">Onbekende fout</string>
   <string name="common_rename">Hernoem</string>
   <string name="common_remove">Verwyder</string>
   <string name="ssl_validator_label_L">Ligging:</string>
