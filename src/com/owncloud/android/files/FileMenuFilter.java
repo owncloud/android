@@ -216,7 +216,7 @@ public class FileMenuFilter {
                         capability.getFilesSharingApiEnabled().isUnknown()
                 );
 
-        boolean notAllowResharing = isSingleSelection() && anyFileSharedWithMe() &&
+        boolean notAllowResharing = anyFileSharedWithMe() &&
                 capability != null && capability.getFilesSharingResharing().isFalse();
 
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
