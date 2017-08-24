@@ -590,7 +590,7 @@ public class UploadFileOperation extends SyncOperation {
 
     private boolean existsFile(OwnCloudClient client, String remotePath){
         ExistenceCheckRemoteOperation existsOperation =
-                new ExistenceCheckRemoteOperation(remotePath, mContext, false);
+                new ExistenceCheckRemoteOperation(remotePath, false);
         RemoteOperationResult result = existsOperation.execute(client);
         return result.isSuccess();
     }

@@ -138,7 +138,7 @@ public class FileDisplayActivity extends HookActivity
     private OCFile mWaitingToSend;
 
     private LocalBroadcastManager mLocalBroadcastManager;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -959,9 +959,10 @@ public class FileDisplayActivity extends HookActivity
                                 (synchResult.isException() && synchResult.getException()
                                     instanceof AuthenticatorException)) {
 
-                                requestCredentialsUpdate(context);
+                                requestCredentialsUpdate();
 
-                            } else if (RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
+                            } else if (RemoteOperationResult.ResultCode.
+                                    SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
                                 synchResult.getCode())) {
 
                                 showUntrustedCertDialog(synchResult);

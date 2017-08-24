@@ -787,7 +787,6 @@ public class FileUploader extends Service
                 /// perform the upload
                 uploadResult = mCurrentUpload.execute(mUploadClient, mStorageManager);
 
-
             } catch (Exception e) {
                 Log_OC.e(TAG, "Error uploading", e);
                 uploadResult = new RemoteOperationResult(e);

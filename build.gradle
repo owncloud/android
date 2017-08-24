@@ -17,11 +17,15 @@ buildscript {
 apply plugin: 'com.android.application'
 
 ext {
-    supportLibraryVersion = '24.2.1'
+    supportLibraryVersion = '25.4.0'
 }
 
 repositories {
     jcenter()
+
+    maven {
+        url "https://maven.google.com"
+    }
 
     flatDir {
         dirs 'libs'
@@ -178,12 +182,17 @@ android {
             }
         }
 
+        debug {
+            applicationIdSuffix ".debug"
+        }
+
         beta {
 
             manifestPlaceholders.versionName = "2.5.0-beta.1"
 
             applicationIdSuffix ".beta"
         }
+
     }
 
     applicationVariants.all { variant ->

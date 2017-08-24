@@ -171,7 +171,7 @@ public class RefreshFolderOperation extends SyncOperation {
     }
 
     private OwnCloudVersion syncCapabilitiesAndGetServerVersion() {
-        OwnCloudVersion serverVersion = null;
+        OwnCloudVersion serverVersion;
         SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
         RemoteOperationResult result = getCapabilities.execute(getStorageManager(), mContext);
         if (result.isSuccess()) {
@@ -232,6 +232,4 @@ public class RefreshFolderOperation extends SyncOperation {
         intent.putExtra(FileSyncAdapter.EXTRA_RESULT, result);
         mLocalBroadcastManager.sendBroadcast(intent);
     }
-
-
 }

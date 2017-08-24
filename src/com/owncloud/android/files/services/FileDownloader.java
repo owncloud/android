@@ -166,7 +166,7 @@ public class FileDownloader extends Service
         } else {
             final Account account = intent.getParcelableExtra(EXTRA_ACCOUNT);
             final OCFile file = intent.getParcelableExtra(EXTRA_FILE);
-            AbstractList<String> requestedDownloads = new Vector<String>();
+            AbstractList<String> requestedDownloads = new Vector<>();
             try {
                 DownloadFileOperation newDownload = new DownloadFileOperation(account, file);
                 newDownload.addDatatransferProgressListener(this);
@@ -241,7 +241,7 @@ public class FileDownloader extends Service
          * instance.
          */
         private Map<Long, WeakReference<OnDatatransferProgressListener>> mBoundListeners =
-                new HashMap<Long, WeakReference<OnDatatransferProgressListener>>();
+                new HashMap<>();
 
 
         /**

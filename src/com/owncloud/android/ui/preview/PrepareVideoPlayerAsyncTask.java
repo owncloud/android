@@ -3,7 +3,6 @@ package com.owncloud.android.ui.preview;
 import android.accounts.Account;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -20,9 +19,9 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.lib.common.OwnCloudBasicCredentials;
-import com.owncloud.android.lib.common.OwnCloudCredentials;
-import com.owncloud.android.lib.common.OwnCloudSamlSsoCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudSamlSsoCredentials;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 
 import java.io.IOException;
@@ -63,7 +62,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
         try {
             // If the file is already downloaded, reproduce it locally, if not, do streaming
             uri = mFile.isDown() ? mFile.getStorageUri() :
-                    Uri.parse(AccountUtils.constructFullURLForAccount(mContext, mAccount) +
+                    Uri.parse(AccountUtils.getWebDavUrlForAccount(mContext, mAccount) +
                             Uri.encode(mFile.getRemotePath(), "/"));
 
             boolean useBandwidthMeter = true;

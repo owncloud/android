@@ -265,7 +265,8 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             dismissLoadingDialog();
             Account account = (Account) result.getData().get(0);
             if (!result.isSuccess()) {
-                requestCredentialsUpdate(this, account);
+
+                requestCredentialsUpdate();
 
             } else {
                 // already updated -> just retry!
