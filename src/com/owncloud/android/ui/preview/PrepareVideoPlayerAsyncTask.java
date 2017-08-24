@@ -19,10 +19,11 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudSamlSsoCredentials;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -125,14 +126,16 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
                 Map<String, String> params = new HashMap<String, String>(1);
 
-                if (credentials instanceof OwnCloudBasicCredentials) {
-                    // Basic auth
+                if (credentials instanceof OwnCloudBasicCredentials) { // Basic auth
                     String cred = login + ":" + password;
                     String auth = "Basic " + Base64.encodeToString(cred.getBytes(), Base64.URL_SAFE);
                     params.put("Authorization", auth);
-                } else if (credentials instanceof OwnCloudSamlSsoCredentials) {
-                    // SAML SSO
+                } else if (credentials instanceof OwnCloudSamlSsoCredentials) { // SAML SSO auth
                     params.put("Cookie", password);
+                } else if (credentials instanceof OwnCloudBearerCredentials) { // OAuth
+                    String bearerToken = credentials.getAuthToken();
+                    String auth = "Bearer " + bearerToken;
+                    params.put("Authorization", auth);
                 }
 
                 return new CustomHttpDataSourceFactory(MainApp.getUserAgent(),
