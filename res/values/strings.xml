@@ -268,7 +268,7 @@
     <string name="wait_for_tmp_copy_from_private_storage">Copying file from private storage</string>
 
     <string name="oauth_check_onoff">Login with oAuth2</string>
-    <string name="oauth_login_connection">Connecting to oAuth2 server…</string>
+    <string name="oauth_login_connection">Connecting to OAuth2 server…</string>
 
     <string name="ssl_validator_header">The identity of the server could not be verified</string>
     <string name="ssl_validator_reason_cert_not_trusted">- The server certificate is not trusted</string>
