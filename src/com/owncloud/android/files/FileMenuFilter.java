@@ -216,11 +216,11 @@ public class FileMenuFilter {
                         capability.getFilesSharingApiEnabled().isUnknown()
                 );
 
-        boolean allowResharing = isSingleSelection() && anyFileSharedWithMe() &&
-                capability != null && capability.getFilesSharingResharing().isTrue();
+        boolean notAllowResharing = isSingleSelection() && anyFileSharedWithMe() &&
+                capability != null && capability.getFilesSharingResharing().isFalse();
 
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
-                !shareApiEnabled || !allowResharing) {
+                !shareApiEnabled || notAllowResharing) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);
