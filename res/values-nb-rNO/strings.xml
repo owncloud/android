@@ -423,8 +423,8 @@
   <string name="share_privilege_can_edit_delete">slett</string>
   <string name="edit_share_unshare">Avslutt deling</string>
   <string name="edit_share_done">ferdig</string>
-  <string name="action_retry_uploads">Forsøkte igjen, feilet.</string>
-  <string name="action_clear_failed_uploads">Sletting feilet</string>
+  <string name="action_retry_uploads">Forsøk feilede på ny</string>
+  <string name="action_clear_failed_uploads">Fjern feilede</string>
   <string name="action_clear_successful_uploads">Fjern vellykkede</string>
   <string name="action_clear_finished_uploads">Slett alle ferdige</string>
   <string name="action_switch_grid_view">Rutenett-visning</string>
