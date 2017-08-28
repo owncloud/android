@@ -1560,6 +1560,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         response.putString(AccountManager.KEY_ACCOUNT_NAME, mAccount.name);
         response.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccount.type);
 
+        String OAuthSupported = mAccountMgr.getUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2);
+        String SAMLSupported = mAccountMgr.getUserData(mAccount, Constants.
+                KEY_SUPPORTS_SAML_WEB_SSO);
+
         if (AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.getAccountType()).
                 equals(mAuthTokenType)) { // OAuth
             response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
@@ -1567,8 +1571,28 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // AuthenticatorActivity to update, without AccountManager intervention
             mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
 
+            if (OAuthSupported == null || OAuthSupported != null && OAuthSupported.equals("FALSE")) {
+
+                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "TRUE");
+            }
+
+            if (SAMLSupported != null && SAMLSupported.equals("TRUE")) {
+
+                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "FALSE");
+            }
+
         } else if (AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType()).
                 equals(mAuthTokenType)) { // SAML
+
+            if (SAMLSupported == null || SAMLSupported != null && SAMLSupported.equals("FALSE")) {
+
+                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "TRUE");
+            }
+
+            if (OAuthSupported != null && OAuthSupported.equals("TRUE")) {
+
+                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "FALSE");
+            }
 
             response.putString(AccountManager.KEY_AUTHTOKEN, mAuthToken);
             // the next line is necessary; by now, notifications are calling directly to the
@@ -1576,6 +1600,17 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mAccountMgr.setAuthToken(mAccount, mAuthTokenType, mAuthToken);
 
         } else { // BASIC
+
+            if (SAMLSupported != null && SAMLSupported.equals("TRUE")) {
+
+                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_SAML_WEB_SSO, "FALSE");
+            }
+
+            if (OAuthSupported != null && OAuthSupported.equals("TRUE")) {
+
+                mAccountMgr.setUserData(mAccount, Constants.KEY_SUPPORTS_OAUTH2, "FALSE");
+            }
+
             response.putString(AccountManager.KEY_AUTHTOKEN, mPasswordInput.getText().toString());
             mAccountMgr.setPassword(mAccount, mPasswordInput.getText().toString());
         }
