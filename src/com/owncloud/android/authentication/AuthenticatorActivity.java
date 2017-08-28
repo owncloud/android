@@ -70,6 +70,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.OAuthWebViewClient.OAuthWebViewClientListener;
 import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.OwnCloudAccount;
+import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
@@ -675,11 +676,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     protected void onResume() {
         super.onResume();
-        
+
         // bound here to avoid spurious changes triggered by Android on device rotations
         mHostUrlInput.setOnFocusChangeListener(this);
         mHostUrlInput.addTextChangedListener(mHostUrlInputWatcher);
-        
+
         if (mOperationsServiceBinder != null) {
             doOnResumeAndBound();
         }
@@ -724,21 +725,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String queryParameters = capturedUriFromOAuth2Redirection.getQuery();
         Map<String, String> parsedQuery = new OAuth2QueryParser().parse(queryParameters);
 
-        if (parsedQuery.keySet().contains(OAuth2Constants.KEY_ERROR)) {
-            // did not obtain authorization code
-
-            if (OAuth2Constants.VALUE_ERROR_ACCESS_DENIED.equals(
-                parsedQuery.get(OAuth2Constants.KEY_ERROR))) {
-                    onGetOAuthAccessTokenFinish(
-                        new RemoteOperationResult(ResultCode.OAUTH2_ERROR_ACCESS_DENIED)
-                    );
-            } else {
-                onGetOAuthAccessTokenFinish(
-                    new RemoteOperationResult(ResultCode.OAUTH2_ERROR)
-                );
-            }
-
-        } else {
+        if (parsedQuery.keySet().contains(OAuth2Constants.KEY_CODE)) {
 
             /// Showing the dialog with instructions for the user
             LoadingDialog dialog = LoadingDialog.newInstance(R.string.auth_getting_authorization, true);
@@ -759,9 +746,26 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             );
 
             if (mOperationsServiceBinder != null) {
-                Log_OC.e(TAG, "Getting OAuth access token...");
+                Log_OC.i(TAG, "Getting OAuth access token...");
                 mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getAccessTokenIntent);
             }
+
+        } else {
+            // did not obtain authorization code
+
+            if (parsedQuery.keySet().contains(OAuth2Constants.KEY_ERROR) &&
+                (OAuth2Constants.VALUE_ERROR_ACCESS_DENIED.equals(parsedQuery.get(OAuth2Constants.KEY_ERROR))))
+            {
+                onGetOAuthAccessTokenFinish(
+                    new RemoteOperationResult(ResultCode.OAUTH2_ERROR_ACCESS_DENIED)
+                );
+
+            } else {
+                onGetOAuthAccessTokenFinish(
+                    new RemoteOperationResult(ResultCode.OAUTH2_ERROR)
+                );
+            }
+
         }
     }
 
@@ -991,9 +995,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         String authorizationCodeUri = builder.buildUri();
 
         // Show OAuth web dialog
+        ArrayList<String> targetUrls = new ArrayList<>();
+        targetUrls.add(getString(R.string.oauth2_redirect_uri));    // target URI for successful authorization
+        targetUrls.add(mServerInfo.mBaseUrl + OwnCloudClient.FILES_WEB_PATH);
+
         WebViewDialog oAuthWebViewDialog = WebViewDialog.newInstance(
             authorizationCodeUri,
-            getString(R.string.oauth2_redirect_uri), // target URI
+            targetUrls,
             AuthenticationMethod.BEARER_TOKEN
         );
 
@@ -1002,9 +1010,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     @Override
     public void onOAuthWebViewDialogFragmentDetached() {
-        mAuthStatusIcon = 0;
-        mAuthStatusText = "";
-        showAuthStatus();
+        if (mAuthStatusIcon == R.drawable.progress_small) {
+            mAuthStatusIcon = 0;
+            mAuthStatusText = "";
+            showAuthStatus();
+        }
     }
 
     /**
@@ -1018,11 +1028,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         showAuthStatus();
 
         /// Show SAML-based SSO web dialog
-        String targetUrl = mServerInfo.mBaseUrl
-                + AccountUtils.getWebdavPath(mServerInfo.mVersion, mAuthTokenType);
+        ArrayList<String> targetUrls = new ArrayList<>();
+        targetUrls.add(
+            mServerInfo.mBaseUrl
+                + AccountUtils.getWebdavPath(mServerInfo.mVersion, mAuthTokenType)
+        );
         WebViewDialog dialog = WebViewDialog.newInstance(
-            targetUrl,
-            targetUrl,
+            targetUrls.get(0),
+            targetUrls,
             AuthenticationMethod.SAML_WEB_SSO
         );
         dialog.show(getSupportFragmentManager(), SAML_DIALOG_TAG);
@@ -1794,7 +1807,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     @Override
     public void onGetCapturedUriFromOAuth2Redirection(Uri capturedUriFromOAuth2Redirection) {
-
+        dismissDialog(OAUTH_DIALOG_TAG);
         getOAuth2AccessTokenFromCapturedRedirection(capturedUriFromOAuth2Redirection);
     }
 

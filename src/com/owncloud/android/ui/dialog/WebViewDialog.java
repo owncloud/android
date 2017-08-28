@@ -50,6 +50,9 @@ import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientLis
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.DetectAuthenticationMethodOperation.AuthenticationMethod;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Dialog to show the WebView for SAML or OAuth authentication
@@ -59,14 +62,14 @@ public class WebViewDialog extends DialogFragment {
     private final static String TAG =  WebViewDialog.class.getSimpleName();
 
     private static final String ARG_INITIAL_URL = "INITIAL_URL";
-    private static final String ARG_TARGET_URL = "TARGET_URL";
+    private static final String ARG_TARGET_URLS = "TARGET_URLS";
     private static final String ARG_AUTHENTICATION_METHOD = "AUTHENTICATION_METHOD";
 
     private WebView mWebView;
     private BaseWebViewClient mWebViewClient;
 
     private String mInitialUrl;
-    private String mTargetUrl;
+    private List<String> mTargetUrls;
 
     private SsoWebViewClientListener mSsoWebViewClientListener;
     private OAuthWebViewClientListener mOAuthWebViewClientListener;
@@ -75,12 +78,12 @@ public class WebViewDialog extends DialogFragment {
      * Public factory method to get dialog instances.
      *
      * @param url           Url to open at WebView.
-     * @param targetUrl     Url signaling the success of the authentication, when loaded.
+     * @param targetUrls     Url signaling the success of the authentication, when loaded.
      * @return              New dialog instance, ready to show.
      */
     public static WebViewDialog newInstance(
         String url,
-        String targetUrl,
+        ArrayList<String> targetUrls,
         AuthenticationMethod authenticationMethod
     ) {
         if (AuthenticationMethod.BEARER_TOKEN != authenticationMethod &&
@@ -92,7 +95,7 @@ public class WebViewDialog extends DialogFragment {
         WebViewDialog fragment = new WebViewDialog();
         Bundle args = new Bundle();
         args.putString(ARG_INITIAL_URL, url);
-        args.putString(ARG_TARGET_URL, targetUrl);
+        args.putStringArrayList(ARG_TARGET_URLS, targetUrls);
         args.putInt(ARG_AUTHENTICATION_METHOD, authenticationMethod.getValue());
         fragment.setArguments(args);
         return fragment;
@@ -148,14 +151,9 @@ public class WebViewDialog extends DialogFragment {
         
         CookieSyncManager.createInstance(getActivity().getApplicationContext());
 
-        if (savedInstanceState == null) {
-            mInitialUrl = getArguments().getString(ARG_INITIAL_URL);
-            mTargetUrl = getArguments().getString(ARG_TARGET_URL);
-        } else {
-            mInitialUrl = savedInstanceState.getString(ARG_INITIAL_URL);
-            mTargetUrl = savedInstanceState.getString(ARG_TARGET_URL);
-        }
-        
+        mInitialUrl = getArguments().getString(ARG_INITIAL_URL);
+        mTargetUrls = getArguments().getStringArrayList(ARG_TARGET_URLS);
+
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
     
@@ -198,7 +196,7 @@ public class WebViewDialog extends DialogFragment {
             mWebView.loadUrl(mInitialUrl);
         }
         
-        mWebViewClient.setTargetUrl(mTargetUrl);
+        mWebViewClient.addTargetUrls(mTargetUrls);
         mWebView.setWebViewClient(mWebViewClient);
         
         // add the webview into the layout
@@ -210,16 +208,6 @@ public class WebViewDialog extends DialogFragment {
         ssoRootView.requestLayout();
         
         return ssoRootView;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log_OC.v(TAG, "onSaveInstanceState being CALLED");
-        super.onSaveInstanceState(outState);
-        
-        // save URLs
-        outState.putString(ARG_INITIAL_URL, mInitialUrl);
-        outState.putString(ARG_TARGET_URL, mTargetUrl);
     }
 
     @Override
