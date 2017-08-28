@@ -138,13 +138,13 @@ public class AccountUtils {
         OwnCloudCredentials credentials = null;
         AccountManager am = AccountManager.get(context);
 
-        boolean isOauth2 = am.getUserData(
-            account,
-            AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
+        String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
+        boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals("TRUE");
 
-        boolean isSamlSso = am.getUserData(
-            account,
-            AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
+        String supportsSamlSSo = am.getUserData(account,
+                AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO);
+
+        boolean isSamlSso = supportsSamlSSo != null && supportsSamlSSo.equals("TRUE");
 
         String username = AccountUtils.getUsernameForAccount(account);
         OwnCloudVersion version = new OwnCloudVersion(am.getUserData(account, Constants.KEY_OC_VERSION));
