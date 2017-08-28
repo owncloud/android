@@ -78,7 +78,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         GetMethod get = null;
         String baseUrlSt = client.getBaseUri().toString();
         try {
-            get = new GetMethod(baseUrlSt + AccountUtils.STATUS_PATH);
+            get = new GetMethod(baseUrlSt + OwnCloudClient.STATUS_PATH);
 
             HttpParams params = get.getParams().getDefaultParams();
             params.setParameter(HttpMethodParams.USER_AGENT,

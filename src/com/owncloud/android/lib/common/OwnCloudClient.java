@@ -58,6 +58,10 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 public class OwnCloudClient extends HttpClient {
 
+    public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
+    public static final String STATUS_PATH = "/status.php";
+    public static final String FILES_WEB_PATH = "/index.php/apps/files";
+
     private static final String TAG = OwnCloudClient.class.getSimpleName();
     private static final int MAX_REDIRECTIONS_COUNT = 3;
     private static final int MAX_REPEAT_COUNT_WITH_FRESH_CREDENTIALS = 1;
@@ -322,9 +326,7 @@ public class OwnCloudClient extends HttpClient {
                     destination = method.getRequestHeader("destination");
                 }
                 if (destination != null) {
-                    int suffixIndex = locationStr.lastIndexOf(
-                            AccountUtils.WEBDAV_PATH_4_0
-                    );
+                    int suffixIndex = locationStr.lastIndexOf(WEBDAV_PATH_4_0);
                     String redirectionBase = locationStr.substring(0, suffixIndex);
 
                     String destinationStr = destination.getValue();
@@ -378,7 +380,7 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public Uri getWebdavUri() {
-        return Uri.parse(mBaseUri + AccountUtils.WEBDAV_PATH_4_0);
+        return Uri.parse(mBaseUri + WEBDAV_PATH_4_0);
     }
 
     /**

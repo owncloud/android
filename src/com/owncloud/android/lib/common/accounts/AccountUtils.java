@@ -51,9 +51,6 @@ public class AccountUtils {
 
     private static final String TAG = AccountUtils.class.getSimpleName();
 
-    public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
-    public static final String STATUS_PATH = "/status.php";
-
     /**
      * Constructs full url to host and webdav resource basing on host version
      *
@@ -65,7 +62,7 @@ public class AccountUtils {
     public static String getWebDavUrlForAccount(Context context, Account account)
         throws AccountNotFoundException {
 
-        return getBaseUrlForAccount(context, account) + WEBDAV_PATH_4_0;
+        return getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_PATH_4_0;
     }
 
 
