@@ -28,12 +28,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
@@ -165,7 +167,7 @@ public class WebViewDialog extends DialogFragment {
         Log_OC.v(TAG, "onCreateView, savedInsanceState is " + savedInstanceState);
         
         // Inflate layout of the dialog  
-        RelativeLayout ssoRootView = (RelativeLayout) inflater.inflate(R.layout.sso_dialog,
+        RelativeLayout ssoRootView = (RelativeLayout) inflater.inflate(R.layout.webview_dialog,
                 container, false);  // null parent view because it will go in the dialog layout
         
         if (mWebView == null) {
@@ -208,6 +210,15 @@ public class WebViewDialog extends DialogFragment {
         ssoRootView.requestLayout();
         
         return ssoRootView;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.getWindow().setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        return dialog;
     }
 
     @Override
