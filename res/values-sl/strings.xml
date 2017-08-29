@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Neznana napaka</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Čakanje na povezavo WiFi ...</string>
   <string name="uploads_view_later_waiting_to_upload">Čakanje na pošiljanje</string>
+  <string name="uploads_view_unsupported_media_type">Nepodprta vrsta predstavne vsebine</string>
   <string name="downloader_download_in_progress_ticker">Prejemanje …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Prejemanje %2$s</string>
   <string name="downloader_download_succeeded_ticker">Prejemanje je uspešno končano</string>
@@ -446,12 +447,14 @@
   <string name="streaming_unrecognized_input">Ta zapis videa ni podprt</string>
   <string name="streaming_file_not_found_error">Video datoteka ni več na voljo</string>
   <string name="streaming_position_not_available">»Položaj ni na voljo«</string>
+  <string name="error_no_network_connection">Naprava ni povezana v omrežje</string>
   <string name="share_no_public_links">Ni še ustvarjenih javnih povezav</string>
   <string name="share_no_link_in_this_share">Ustvarjen predmet souporabe je brez povezave</string>
   <string name="share_warning_about_forwarding_public_links">Vsak, ki ima povezavo ima dostop do datoteke ali mape</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Geslo *</string>
   <string name="share_via_link_expiration_date_enforced_label">Datum preteka *</string>
+  <string name="share_via_link_default_name_template">Povezava %1$s</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>

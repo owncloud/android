@@ -16,6 +16,7 @@
   <string name="drawer_open">Open</string>
   <string name="prefs_category_more">Nog</string>
   <string name="prefs_help">Hulp</string>
+  <string name="prefs_feedback">Terugvoer</string>
   <string name="prefs_imprint">Afdruk</string>
   <string name="auth_username">Gebruikersnaam</string>
   <string name="auth_password">Wagwoord</string>
@@ -51,6 +52,7 @@
   <string name="saml_authentication_wrong_pass">Verkeerde wagwoord</string>
   <string name="actionbar_move">Skuif</string>
   <string name="folder_picker_choose_button_text">Kies</string>
+  <string name="shared_subject_header">gedeel</string>
   <string name="share_dialog_title">Deel</string>
   <string name="share_cancel_public_link_button">Kanselleer</string>
   <string name="share_confirm_public_link_button">Bewaar</string>
