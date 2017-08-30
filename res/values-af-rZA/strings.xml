@@ -53,6 +53,7 @@
   <string name="actionbar_move">Skuif</string>
   <string name="folder_picker_choose_button_text">Kies</string>
   <string name="shared_subject_header">gedeel</string>
+  <string name="auth_host_address">Bedieneradres</string>
   <string name="share_dialog_title">Deel</string>
   <string name="share_cancel_public_link_button">Kanselleer</string>
   <string name="share_confirm_public_link_button">Bewaar</string>
