@@ -51,9 +51,6 @@ public class AccountUtils {
 
     private static final String TAG = AccountUtils.class.getSimpleName();
 
-    public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
-    public static final String STATUS_PATH = "/status.php";
-
     /**
      * Constructs full url to host and webdav resource basing on host version
      *
@@ -65,7 +62,7 @@ public class AccountUtils {
     public static String getWebDavUrlForAccount(Context context, Account account)
         throws AccountNotFoundException {
 
-        return getBaseUrlForAccount(context, account) + WEBDAV_PATH_4_0;
+        return getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_PATH_4_0;
     }
 
 
@@ -138,13 +135,13 @@ public class AccountUtils {
         OwnCloudCredentials credentials = null;
         AccountManager am = AccountManager.get(context);
 
-        boolean isOauth2 = am.getUserData(
-            account,
-            AccountUtils.Constants.KEY_SUPPORTS_OAUTH2) != null;
+        String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
+        boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals("TRUE");
 
-        boolean isSamlSso = am.getUserData(
-            account,
-            AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO) != null;
+        String supportsSamlSSo = am.getUserData(account,
+                AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO);
+
+        boolean isSamlSso = supportsSamlSSo != null && supportsSamlSSo.equals("TRUE");
 
         String username = AccountUtils.getUsernameForAccount(account);
         OwnCloudVersion version = new OwnCloudVersion(am.getUserData(account, Constants.KEY_OC_VERSION));

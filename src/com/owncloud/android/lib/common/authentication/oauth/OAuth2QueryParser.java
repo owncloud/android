@@ -45,26 +45,28 @@ public class OAuth2QueryParser {
     public Map<String, String> parse(String query) {
         mOAuth2ParsedAuthorizationResponse.clear();
 
-        String[] pairs = query.split("&");
-        int i = 0;
-        String key = "";
-        String value;
-        while (pairs.length > i) {
-            int j = 0;
-            String[] part = pairs[i].split("=");
-            while (part.length > j) {
-                String p = part[j];
-                if (j == 0) {
-                    key = p;
-                } else if (j == 1) {
-                    value = p;
-                    mOAuth2ParsedAuthorizationResponse.put(key, value);
-                }
+        if (query != null) {
+            String[] pairs = query.split("&");
+            int i = 0;
+            String key = "";
+            String value;
+            while (pairs.length > i) {
+                int j = 0;
+                String[] part = pairs[i].split("=");
+                while (part.length > j) {
+                    String p = part[j];
+                    if (j == 0) {
+                        key = p;
+                    } else if (j == 1) {
+                        value = p;
+                        mOAuth2ParsedAuthorizationResponse.put(key, value);
+                    }
 
-                Log_OC.v(TAG, "[" + i + "," + j + "] = " + p);
-                j++;
+                    Log_OC.v(TAG, "[" + i + "," + j + "] = " + p);
+                    j++;
+                }
+                i++;
             }
-            i++;
         }
 
         return mOAuth2ParsedAuthorizationResponse;
