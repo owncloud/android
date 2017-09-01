@@ -297,7 +297,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 		client.setCredentials(OwnCloudCredentialsFactory.newBearerCredentials("user", "fakeToken"));
 		Uri webdavUri = client.getWebdavUri();
 		assertTrue("WebDAV URI does not point to the right entry point",
-				webdavUri.getPath().endsWith(AccountUtils.WEBDAV_PATH_4_0));
+				webdavUri.getPath().endsWith(OwnCloudClient.WEBDAV_PATH_4_0));
 		assertTrue("WebDAV URI is not a subpath of base URI", 
 				webdavUri.getAuthority().equals(mServerUri.getAuthority()) &&
 				webdavUri.getPath().startsWith(mServerUri.getPath()));
@@ -306,7 +306,7 @@ public class OwnCloudClientTest extends AndroidTestCase {
 				mUsername, mPassword));
 		webdavUri = client.getWebdavUri();
 		assertTrue("WebDAV URI does not point to the right entry point",
-				webdavUri.getPath().endsWith(AccountUtils.WEBDAV_PATH_4_0));
+				webdavUri.getPath().endsWith(OwnCloudClient.WEBDAV_PATH_4_0));
 		PropFindMethod propfind = null;
 		try {
 			propfind = new PropFindMethod(webdavUri + "/",
