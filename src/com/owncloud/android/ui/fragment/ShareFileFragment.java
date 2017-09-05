@@ -6,16 +6,16 @@
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
  * Copyright (C) 2017 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,6 +28,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
+import com.owncloud.android.lib.resources.status.CapabilityBooleanType;
+import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -76,23 +79,19 @@ import java.util.Locale;
 public class ShareFileFragment extends Fragment
         implements ShareUserListAdapter.ShareUserAdapterListener, SharePublicLinkListAdapter.
         SharePublicLinkAdapterListener {
-
     private static final String TAG = ShareFileFragment.class.getSimpleName();
     private static final String DEFAULT_NAME_SUFFIX = " (%1$d)";
-
     private static final String QUOTE_START = "\\Q";
     private static final String QUOTE_END = "\\E";
     private static final String DEFAULT_NAME_REGEX_SUFFIX = " \\((\\d+)\\)\\z";
-    // matches suffix (end of the string with \z) in the form "(X)", where X is an integer of any length;
-    // also captures the number to reference it later during the match;
-    // reference in https://developer.android.com/reference/java/util/regex/Pattern.html#sum
-
     /**
      * The fragment initialization parameters
      */
     private static final String ARG_FILE = "FILE";
+    // matches suffix (end of the string with \z) in the form "(X)", where X is an integer of any length;
+    // also captures the number to reference it later during the match;
+    // reference in https://developer.android.com/reference/java/util/regex/Pattern.html#sum
     private static final String ARG_ACCOUNT = "ACCOUNT";
-
     /**
      * File to share, received as a parameter in construction time
      */
@@ -133,6 +132,13 @@ public class ShareFileFragment extends Fragment
      */
     private OCCapability mCapabilities;
 
+    /**
+     * Required empty public constructor
+     */
+
+    private boolean flag = false;
+    public ShareFileFragment() {
+    }
 
     /**
      * Public factory method to create new ShareFileFragment instances.
@@ -150,10 +156,26 @@ public class ShareFileFragment extends Fragment
         return fragment;
     }
 
-    /**
-     * Required empty public constructor
-     */
-    public ShareFileFragment() {
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0) {
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
     /**
@@ -162,10 +184,12 @@ public class ShareFileFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        refreshCapabilitiesFromDB();
         Log_OC.d(TAG, "onCreate");
         if (getArguments() != null) {
             mFile = getArguments().getParcelable(ARG_FILE);
             mAccount = getArguments().getParcelable(ARG_ACCOUNT);
+
         }
     }
 
@@ -176,10 +200,8 @@ public class ShareFileFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log_OC.d(TAG, "onCreateView");
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.share_file_layout, container, false);
-
         // Setup layout
         // Image
         ImageView icon = (ImageView) view.findViewById(R.id.shareFileIcon);
@@ -223,8 +245,7 @@ public class ShareFileFragment extends Fragment
         });
 
         OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
-        final boolean shareWithUsersEnable = (serverVersion != null && serverVersion.isSearchUsersSupported());
-
+        final boolean shareWithUsersEnable = true;// (serverVersion != null && serverVersion.isSearchUsersSupported());
         TextView shareNoUsers = (TextView) view.findViewById(R.id.shareNoUsers);
 
         //  Add User/Groups Button
@@ -233,16 +254,29 @@ public class ShareFileFragment extends Fragment
 
         // Change the sharing text depending on the server version (at least version 8.2 is needed
         // for sharing with other users)
-        if (!shareWithUsersEnable) {
-            shareNoUsers.setText(R.string.share_incompatible_version);
-            shareNoUsers.setGravity(View.TEXT_ALIGNMENT_CENTER);
-            addUserGroupButton.setVisibility(View.GONE);
-        }
+        try {
 
+            if (!shareWithUsersEnable) {
+                shareNoUsers.setText(R.string.share_incompatible_version);
+                shareNoUsers.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                addUserGroupButton.setVisibility(View.GONE);
+            } else if ( flag && !mFile.isFolder()) {
+                Toast.makeText(getContext(), "ggg", Toast.LENGTH_SHORT).show();
+                shareNoUsers.setText("Individual files cannot be shared among users and groups..");
+                shareNoUsers.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                addUserGroupButton.setVisibility(View.GONE);
+
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error in capapilites:" + e, Toast.LENGTH_SHORT).show();
+            Log_OC.d("ddd ss",mListener.toString());
+
+        }
         addUserGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (shareWithUsersEnable) {
+
+                if (shareWithUsersEnable && mFile.isFolder()) {
                     // Show Search Fragment
                     mListener.showSearchUsersAndGroups();
                 } else {
@@ -360,12 +394,14 @@ public class ShareFileFragment extends Fragment
 
         // Load known capabilities of the server from DB
         refreshCapabilitiesFromDB();
+        Log_OC.d("OnActivityCreated", flag+"");
 
         // Load data into the list of private shares
         refreshUsersOrGroupsListFromDB();
 
         // Load data of public share, if exists
         refreshPublicSharesListFromDB();
+
     }
 
     @Override
@@ -373,6 +409,7 @@ public class ShareFileFragment extends Fragment
         super.onAttach(activity);
         try {
             mListener = (ShareFragmentListener) activity;
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnShareFragmentInteractionListener");
@@ -385,7 +422,6 @@ public class ShareFileFragment extends Fragment
         mListener = null;
     }
 
-
     /**
      * Get known server capabilities from DB
      *
@@ -393,12 +429,18 @@ public class ShareFileFragment extends Fragment
      * instance ready to use. If not ready, does nothing.
      */
     public void refreshCapabilitiesFromDB() {
-        if (((FileActivity) mListener).getStorageManager() != null) {
+       if (((FileActivity) mListener).getStorageManager() != null) {
             mCapabilities = ((FileActivity) mListener).getStorageManager().
                     getCapability(mAccount.name);
-        }
-    }
+           flag = restrictShare();
 
+
+
+       }
+       else
+           Log_OC.d("ddd","Not init");
+
+    }
 
     /**
      * Get users and groups from the DB to fill in the "share with" list.
@@ -496,6 +538,9 @@ public class ShareFileFragment extends Fragment
         );
     }
 
+
+    /// BEWARE: next methods will failed with NullPointerException if called before onCreateView() finishes
+
     /**
      * Updates in the UI the section about public share with the information in the current
      * public share bound to mFile, if any
@@ -543,9 +588,6 @@ public class ShareFileFragment extends Fragment
         scrollView.scrollTo(0, 0);
     }
 
-
-    /// BEWARE: next methods will failed with NullPointerException if called before onCreateView() finishes
-
     private LinearLayout getShareViaLinkSection() {
         return (LinearLayout) getView().findViewById(R.id.shareViaLinkSection);
     }
@@ -562,29 +604,6 @@ public class ShareFileFragment extends Fragment
         getShareViaLinkSection().setVisibility(View.GONE);
 
     }
-
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0) {
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
-
 
     /**
      * Hide share features sections that are not enabled
@@ -642,5 +661,10 @@ public class ShareFileFragment extends Fragment
         }
 
         return enableMultiplePublicShare;
+    }
+
+
+    private boolean restrictShare(){
+        return mCapabilities.getmIndividualFileSharingRestriction().isTrue();
     }
 }
