@@ -52,10 +52,10 @@ public class SAMLWebViewClient extends BaseWebViewClient {
     }
 
     @Override
-    protected void onTargetUrlFinished(WebView view, String url) {
+    protected void onTargetUrlFinished(WebView view, String targetUrl, String loadedUrl) {
         view.setVisibility(View.GONE);
         CookieManager cookieManager = CookieManager.getInstance();
-        final String cookies = cookieManager.getCookie(url);
+        final String cookies = cookieManager.getCookie(loadedUrl);
         if (mListenerHandler != null && mListenerRef != null) {
             // this is good idea because onPageFinished is not running in the UI thread
             mListenerHandler.post(new Runnable() {

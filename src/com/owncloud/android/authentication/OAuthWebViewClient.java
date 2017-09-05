@@ -58,7 +58,7 @@ public class OAuthWebViewClient extends BaseWebViewClient {
 
 
     @Override
-    protected void onTargetUrlFinished(WebView view, String url) {
+    protected void onTargetUrlFinished(WebView view, String targetUrl, String loadedUrl) {
         if (!mCapturedUriFromOAuth2Redirection) {
 
             view.setVisibility(View.GONE);
@@ -67,7 +67,7 @@ public class OAuthWebViewClient extends BaseWebViewClient {
             // captured, which mess up the login process
             mCapturedUriFromOAuth2Redirection = true;
 
-            final Uri uri = Uri.parse(url);
+            final Uri uri = Uri.parse(loadedUrl);
 
             if (mListenerHandler != null && mListenerRef != null) {
                 // this is good idea because onPageFinished is not running in the UI thread
@@ -76,7 +76,8 @@ public class OAuthWebViewClient extends BaseWebViewClient {
                     public void run() {
                         OAuthWebViewClientListener listener = mListenerRef.get();
                         if (listener != null) {
-                            // Send Cookies to the listener
+                            // Send full URI to the listener, including query,
+                            // where relevant information is if everything was fine
                             listener.onGetCapturedUriFromOAuth2Redirection(uri);
                         }
                     }

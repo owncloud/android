@@ -25,6 +25,8 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -55,26 +57,22 @@ import android.webkit.WebViewClient;
  */
 public abstract class BaseWebViewClient extends WebViewClient {
 
-    private static final String TAG = SAMLWebViewClient.class.getSimpleName();
+    private static final String TAG = BaseWebViewClient.class.getSimpleName();
 
     private Context mContext;
     Handler mListenerHandler;
-    private String mTargetUrl;
+    private List<String> mTargetUrls;
     private String mLastReloadedUrlAtError;
 
-    public BaseWebViewClient (Context context, Handler listenerHandler) {
+    BaseWebViewClient (Context context, Handler listenerHandler) {
         mContext = context;
         mListenerHandler = listenerHandler;
-        mTargetUrl = "fake://url.to.be.set";
+        mTargetUrls = new ArrayList<>();
         mLastReloadedUrlAtError = null;
     }
 
-    public String getTargetUrl() {
-        return mTargetUrl;
-    }
-
-    public void setTargetUrl(String targetUrl) {
-        mTargetUrl = targetUrl;
+    public void addTargetUrls(List<String> targetUrl) {
+        mTargetUrls.addAll(targetUrl);
     }
 
     @Override
@@ -184,11 +182,14 @@ public abstract class BaseWebViewClient extends WebViewClient {
     public void onPageFinished (WebView view, String url) {
         Log_OC.d(TAG, "onPageFinished : " + url);
         mLastReloadedUrlAtError = null;
-        if (url.startsWith(getTargetUrl())) {
-            onTargetUrlFinished(view, url);
+        for (String targetUrl: mTargetUrls) {
+            if (url.startsWith(targetUrl)) {
+                onTargetUrlFinished(view, targetUrl, url);
+                break;
+            }
         }
     }
 
-    protected abstract void onTargetUrlFinished(WebView view, String url);
+    protected abstract void onTargetUrlFinished(WebView view, String targetUrl, String loadedUrl);
 
 }
