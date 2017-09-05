@@ -258,7 +258,6 @@
   <string name="activity_chooser_title">ส่งลิงค์ไปยัง ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">คัดลอกไฟล์จากพื้นที่จัดเก็บส่วนตัว</string>
   <string name="oauth_check_onoff">เข้าสู่ระบบด้วย oAuth2</string>
-  <string name="oauth_login_connection">เชื่อมต่อกับเซิร์ฟเวอร์ oAuth2 ...</string>
   <string name="ssl_validator_header">ไม่สามารถตรวจสอบตัวตนของเซิร์ฟเวอร์</string>
   <string name="ssl_validator_reason_cert_not_trusted">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="ssl_validator_reason_cert_expired">- ใบรับรองความปลอดภัยของเซิร์ฟเวอร์หมดอายุแล้ว</string>

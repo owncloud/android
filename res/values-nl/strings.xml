@@ -262,7 +262,6 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="activity_chooser_title">Verstuur link naar ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopiëren bestand vanaf privéopslag</string>
   <string name="oauth_check_onoff">Inloggen met oAuth2</string>
-  <string name="oauth_login_connection">Verbinden met oAuth2-server.</string>
   <string name="ssl_validator_header">De identiteit van deze server kon niet worden geverifieerd</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Het server certificaat wordt niet vertrouwd</string>
   <string name="ssl_validator_reason_cert_expired">- Het server certificaat is verlopen</string>

@@ -237,7 +237,6 @@
   <string name="activity_chooser_title">Envia l\'enllaç a...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copiant fitxer des de emmagatzemament privat</string>
   <string name="oauth_check_onoff">Accés amb oAuth2</string>
-  <string name="oauth_login_connection">Connectant amb el servidor oAuth2...</string>
   <string name="ssl_validator_reason_cert_not_trusted">- El certificat del servidor no està autenticat</string>
   <string name="ssl_validator_reason_cert_expired">- El certificat del servidor ha expirat</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- El certificat del servidor és massa jove</string>

@@ -259,7 +259,6 @@
   <string name="activity_chooser_title">Send lenke til ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierer fil fra privat lager</string>
   <string name="oauth_check_onoff">Logg inn med oAuth2</string>
-  <string name="oauth_login_connection">Kobler til oAuth2 server...</string>
   <string name="ssl_validator_header">Kunne ikke verifisere dentiteten til serveren</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Serverens sertifikat er ikke til å stole på</string>
   <string name="ssl_validator_reason_cert_expired">- Serverens sertifikat er utløpt</string>

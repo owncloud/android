@@ -258,7 +258,6 @@
   <string name="activity_chooser_title">Sänd länk till ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierar fil från privat lagring</string>
   <string name="oauth_check_onoff">Logga in med oAuth2.</string>
-  <string name="oauth_login_connection">Ansluter till oAuth2 servern…</string>
   <string name="ssl_validator_header">Identiteten av servern kunde inte verifieras</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Servercertifikatet är inte tillförlitligt</string>
   <string name="ssl_validator_reason_cert_expired">- Servercertifikatet har gått ut</string>
