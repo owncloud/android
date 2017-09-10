@@ -1,20 +1,35 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="about_android">%1$s Android-toep</string>
+  <string name="about_version">weergawe %1$s</string>
+  <string name="actionbar_sync">Verfris rekening</string>
   <string name="actionbar_upload">Laai Op</string>
+  <string name="actionbar_upload_from_apps">Inhoud van ander toeps</string>
   <string name="actionbar_upload_files">Lêers</string>
+  <string name="actionbar_open_with">Open met</string>
   <string name="actionbar_mkdir">Nuwe vouer</string>
   <string name="actionbar_settings">Instellings</string>
+  <string name="actionbar_see_details">Details</string>
   <string name="actionbar_send_file">Stuur</string>
   <string name="actionbar_sort">Sorteer</string>
+  <string name="actionbar_sort_title">Sorteer volgens</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Nuutste - Oudste</string>
+  <string name="actionbar_sort_by_size">Grootste - Kleinste</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
+  <string name="drawer_item_all_files">Alle lêers</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Instellings</string>
+  <string name="drawer_item_uploads_list">Oplaaie</string>
   <string name="drawer_close">Sluit</string>
   <string name="drawer_open">Open</string>
+  <string name="prefs_category_general">Algemeen</string>
   <string name="prefs_category_more">Nog</string>
+  <string name="prefs_accounts">Rekeninge</string>
+  <string name="prefs_manage_accounts">Bestuur rekeninge</string>
+  <string name="prefs_passcode">Wagkodeslot</string>
   <string name="prefs_help">Hulp</string>
   <string name="prefs_feedback">Terugvoer</string>
   <string name="prefs_imprint">Afdruk</string>
@@ -43,16 +58,21 @@
   <string name="delete_account">Verwyder rekening</string>
   <string name="create_account">Skep rekening</string>
   <string name="uploader_upload_text_filename_hint">Lêernaam</string>
+  <string name="uploads_view_title">Oplaaie</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_upload_status_succeeded">Afgehandel</string>
   <string name="uploads_view_upload_status_unknown_fail">Onbekende fout</string>
   <string name="common_rename">Hernoem</string>
   <string name="common_remove">Verwyder</string>
+  <string name="ssl_validator_btn_details_see">Details</string>
   <string name="ssl_validator_label_L">Ligging:</string>
   <string name="activity_chooser_send_file_title">Stuur</string>
+  <string name="prefs_category_accounts">Rekeninge</string>
+  <string name="drawer_manage_accounts">Bestuur rekeninge</string>
   <string name="saml_authentication_wrong_pass">Verkeerde wagwoord</string>
   <string name="actionbar_move">Skuif</string>
   <string name="folder_picker_choose_button_text">Kies</string>
+  <string name="prefs_category_details">Details</string>
   <string name="shared_subject_header">gedeel</string>
   <string name="auth_host_address">Bedieneradres</string>
   <string name="share_dialog_title">Deel</string>

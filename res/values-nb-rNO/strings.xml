@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Kontoer</string>
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
-  <string name="prefs_instant_upload">Umiddelbare bildeopplastninger</string>
-  <string name="prefs_instant_upload_summary">Last opp bilder tatt av kameraet umiddelbart</string>
-  <string name="prefs_instant_video_upload">Umiddelbare video-opplastninger</string>
-  <string name="prefs_instant_video_upload_summary">Last opp videoer tatt opp av kameraet umiddelbart</string>
+  <string name="prefs_instant_upload">Direkte bildeopplastninger</string>
+  <string name="prefs_instant_upload_summary">Last opp bilder tatt med kameraet direkte</string>
+  <string name="prefs_instant_video_upload">Direkte video-opplastninger</string>
+  <string name="prefs_instant_video_upload_summary">Last opp videoer tatt opp med kameraet direkte</string>
   <string name="prefs_log_title">Aktiver loggføring</string>
   <string name="prefs_log_summary">Denne er brukt til å loggføre problemer</string>
   <string name="prefs_log_title_history">Loggføringshistorikk</string>
@@ -259,6 +259,7 @@
   <string name="activity_chooser_title">Send lenke til ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierer fil fra privat lager</string>
   <string name="oauth_check_onoff">Logg inn med oAuth2</string>
+  <string name="oauth_login_connection">Kobler til OAuth2-server...</string>
   <string name="ssl_validator_header">Kunne ikke verifisere dentiteten til serveren</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Serverens sertifikat er ikke til å stole på</string>
   <string name="ssl_validator_reason_cert_expired">- Serverens sertifikat er utløpt</string>
@@ -359,7 +360,7 @@
   <string name="copy_file_invalid_overwrite">Filen finnes allerede i målmappen</string>
   <string name="copy_file_error">En feil oppstod ved kopiering av denne filen eller mappen</string>
   <string name="forbidden_permissions_copy">å kopiere denne filen</string>
-  <string name="prefs_category_instant_uploading">Umiddelbare opplastinger</string>
+  <string name="prefs_category_instant_uploading">Direkte opplastinger</string>
   <string name="prefs_category_details">Detaljer</string>
   <string name="prefs_instant_video_upload_path_title">Sti til video-opplasting</string>
   <string name="sync_folder_failed_content">Synkronisering av %1$s mappe kunne ikke fullføres</string>
