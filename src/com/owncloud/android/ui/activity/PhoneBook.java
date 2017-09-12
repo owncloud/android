@@ -16,7 +16,7 @@ public class PhoneBook extends AppCompatActivity {
         WebView webView = (WebView) findViewById(R.id.Phonebook);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
-        webView.loadUrl("http://m.web.cern.ch/m/#phonebook");
+        webView.loadUrl("https://phonebook.cern.ch/phonebook/");
 
 
     }
