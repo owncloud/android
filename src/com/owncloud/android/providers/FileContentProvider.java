@@ -836,6 +836,8 @@ public class FileContentProvider extends ContentProvider {
                     db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
                             " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
                             + " INTEGER " + " DEFAULT -1");
+
+
                     upgraded = true;
                     db.setTransactionSuccessful();
 
@@ -843,15 +845,19 @@ public class FileContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
-            if (oldVersion < 20 && newVersion >= 20) {
+            if (oldVersion <= 20 && newVersion >= 21) {
 
                 Log_OC.i("SQL", "Entering in the #20 ADD in onUpgrade");
                 db.beginTransaction();
                 try {
-                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+/*                    db.execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
                             " ADD COLUMN " + ProviderTableMeta.
                             CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER " +
-                            " DEFAULT -1");
+                            " DEFAULT -1");*/
+
+                    db .execSQL("ALTER TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME +
+                            " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_INDIVIDUAL_RESTRICTION + " INTEGER " +
+                            " DEFAULT 0");
                     upgraded = true;
                     db.setTransactionSuccessful();
 
@@ -931,6 +937,7 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.CAPABILITIES_VERSION_EDITION + " TEXT, "
                 + ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL + " INTEGER, "
                 + ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED + " INTEGER, " // boolean
+                + ProviderTableMeta.CAPABILITIES_SHARING_INDIVIDUAL_RESTRICTION + " INTEGER, "
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED + " INTEGER, "  // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED + " INTEGER, "    // boolean
                 + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED + " INTEGER, "  // boolean

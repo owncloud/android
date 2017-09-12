@@ -28,7 +28,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,15 +39,12 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
-import com.owncloud.android.lib.resources.status.CapabilityBooleanType;
-import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -66,13 +62,13 @@ import java.util.Locale;
 /**
  * Fragment for Sharing a file with sharees (users or groups) or creating
  * a public link.
- *
+ * <p>
  * A simple {@link Fragment} subclass.
- *
+ * <p>
  * Activities that contain this fragment must implement the
  * {@link ShareFragmentListener} interface
  * to handle interaction events.
- *
+ * <p>
  * Use the {@link ShareFileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -118,7 +114,7 @@ public class ShareFileFragment extends Fragment
     private ShareUserListAdapter mUserGroupsAdapter = null;
 
     /**
-     *  List of public links bound to the file
+     * List of public links bound to the file
      */
     private ArrayList<OCShare> mPublicLinks;
 
@@ -135,8 +131,6 @@ public class ShareFileFragment extends Fragment
     /**
      * Required empty public constructor
      */
-
-    private boolean flag = false;
     public ShareFileFragment() {
     }
 
@@ -184,7 +178,6 @@ public class ShareFileFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        refreshCapabilitiesFromDB();
         Log_OC.d(TAG, "onCreate");
         if (getArguments() != null) {
             mFile = getArguments().getParcelable(ARG_FILE);
@@ -214,6 +207,7 @@ public class ShareFileFragment extends Fragment
                 icon.setImageBitmap(thumbnail);
             }
         }
+
         // Name
         TextView fileNameHeader = (TextView) view.findViewById(R.id.shareFileName);
         fileNameHeader.setText(mFile.getFileName());
@@ -245,7 +239,7 @@ public class ShareFileFragment extends Fragment
         });
 
         OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
-        final boolean shareWithUsersEnable = true;// (serverVersion != null && serverVersion.isSearchUsersSupported());
+        final boolean shareWithUsersEnable = (serverVersion != null && serverVersion.isSearchUsersSupported());
         TextView shareNoUsers = (TextView) view.findViewById(R.id.shareNoUsers);
 
         //  Add User/Groups Button
@@ -260,16 +254,11 @@ public class ShareFileFragment extends Fragment
                 shareNoUsers.setText(R.string.share_incompatible_version);
                 shareNoUsers.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 addUserGroupButton.setVisibility(View.GONE);
-            } else if ( flag && !mFile.isFolder()) {
-                Toast.makeText(getContext(), "ggg", Toast.LENGTH_SHORT).show();
-                shareNoUsers.setText("Individual files cannot be shared among users and groups..");
-                shareNoUsers.setGravity(View.TEXT_ALIGNMENT_CENTER);
-                addUserGroupButton.setVisibility(View.GONE);
 
             }
+
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Error in capapilites:" + e, Toast.LENGTH_SHORT).show();
-            Log_OC.d("ddd ss",mListener.toString());
+            Toast.makeText(getContext(), "Error in capabilities:" + e, Toast.LENGTH_SHORT).show();
 
         }
         addUserGroupButton.setOnClickListener(new View.OnClickListener() {
@@ -302,7 +291,6 @@ public class ShareFileFragment extends Fragment
                 mListener.showAddPublicShare(getAvailableDefaultPublicName());
             }
         });
-
         // Hide share features sections that are not enabled
         hideSectionsDisabledInBuildTime(view);
 
@@ -394,7 +382,6 @@ public class ShareFileFragment extends Fragment
 
         // Load known capabilities of the server from DB
         refreshCapabilitiesFromDB();
-        Log_OC.d("OnActivityCreated", flag+"");
 
         // Load data into the list of private shares
         refreshUsersOrGroupsListFromDB();
@@ -410,6 +397,7 @@ public class ShareFileFragment extends Fragment
         try {
             mListener = (ShareFragmentListener) activity;
 
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnShareFragmentInteractionListener");
@@ -424,27 +412,36 @@ public class ShareFileFragment extends Fragment
 
     /**
      * Get known server capabilities from DB
-     *
+     * <p>
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
     public void refreshCapabilitiesFromDB() {
-       if (((FileActivity) mListener).getStorageManager() != null) {
+        if (((FileActivity) mListener).getStorageManager() != null) {
             mCapabilities = ((FileActivity) mListener).getStorageManager().
                     getCapability(mAccount.name);
-           flag = restrictShare();
+
+            if (mCapabilities.getmIndividualFileSharingRestriction().isTrue() && !mFile.isFolder()) {
+
+                // show data
+                ImageButton addUserGroupButton = (ImageButton) getView().findViewById(R.id.addUserButton);
+                TextView shareNoUsers = (TextView) getView().findViewById(R.id.shareNoUsers);
+
+                shareNoUsers.setText("Individual files cannot be shared among users and groups. Please use PUBLIC LINKS below");
+                shareNoUsers.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                addUserGroupButton.setVisibility(View.GONE);
+
+            }
 
 
+        }
 
-       }
-       else
-           Log_OC.d("ddd","Not init");
 
     }
 
     /**
      * Get users and groups from the DB to fill in the "share with" list.
-     *
+     * <p>
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
@@ -506,9 +503,9 @@ public class ShareFileFragment extends Fragment
 
     /**
      * Get public links from the DB to fill in the "Public links" section in the UI.
-     *
+     * <p>
      * Takes into account server capabilities before reading database.
-     *
+     * <p>
      * Depends on the parent Activity provides a {@link com.owncloud.android.datamodel.FileDataStorageManager}
      * instance ready to use. If not ready, does nothing.
      */
@@ -664,7 +661,4 @@ public class ShareFileFragment extends Fragment
     }
 
 
-    private boolean restrictShare(){
-        return mCapabilities.getmIndividualFileSharingRestriction().isTrue();
-    }
 }
