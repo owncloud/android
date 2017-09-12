@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Erro desconhecido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Aguardando conexão wi-fi</string>
   <string name="uploads_view_later_waiting_to_upload">Aguardando para enviar</string>
+  <string name="uploads_view_unsupported_media_type">Tipo de mídia não suportada</string>
   <string name="downloader_download_in_progress_ticker">Baixando …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Baixando %2$s</string>
   <string name="downloader_download_succeeded_ticker">Download bem sucedido</string>
@@ -258,7 +259,7 @@
   <string name="activity_chooser_title">Enviar o link para</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copiando o arquivo de armazenagem privada</string>
   <string name="oauth_check_onoff">Login com oAuth2</string>
-  <string name="oauth_login_connection">Conectando-se a oAuth2 servidor ...</string>
+  <string name="oauth_login_connection">Conectando ao servidor OAuth2…</string>
   <string name="ssl_validator_header">A identidade do servidor não pôde ser verificada</string>
   <string name="ssl_validator_reason_cert_not_trusted">- O certificado do servidor não é confiável</string>
   <string name="ssl_validator_reason_cert_expired">- O certificado do servidor expirou</string>

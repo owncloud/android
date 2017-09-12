@@ -177,7 +177,6 @@
   <string name="activity_chooser_title">Пратете линк на ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копирам датотека од приватното складиште</string>
   <string name="oauth_check_onoff">Најави се со oAuth2</string>
-  <string name="oauth_login_connection">Се поврзувам со серверот на oAuth2</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Сертификатот на серверот не е доверлив</string>
   <string name="ssl_validator_reason_cert_expired">- Сетификатот на серверот е истечен</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Датумите на сертификатот се од иднината</string>

@@ -27,12 +27,24 @@ import com.owncloud.android.R;
 import android.accounts.*;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.accounts.*;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2Constants;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2RefreshAccessTokenOperation;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.util.Map;
 
 
 /**
@@ -180,7 +192,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         if (authTokenType.equals(AccountTypeUtils.getAuthTokenTypePass(MainApp.getAccountType()))) {
             accessToken = am.getPassword(account);
         } else {
+            // Gets an auth token from the AccountManager's cache. If no auth token is cached for
+            // this account, null will be returned
             accessToken = am.peekAuthToken(account, authTokenType);
+            if (accessToken == null &&
+                canBeRefreshed(authTokenType)) {
+                accessToken = refreshToken(account, authTokenType, am);
+            }
         }
         if (accessToken != null) {
             final Bundle result = new Bundle();
@@ -189,7 +207,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_AUTHTOKEN, accessToken);
             return result;
         }
-        
+
         /// if not stored, return Intent to access the AuthenticatorActivity and UPDATE the token for the account
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
@@ -319,4 +337,76 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         private static final long serialVersionUID = 1L;
 
     }
+
+    private boolean canBeRefreshed(String authTokenType) {
+        return (authTokenType.equals(AccountTypeUtils.getAuthTokenTypeAccessToken(MainApp.
+                getAccountType())));
+    }
+
+    private String refreshToken(Account account, String authTokenType, AccountManager accountManager) {
+
+        Log_OC.v(TAG, "Refreshing token!");
+        String accessToken;
+        try {
+            String refreshToken = accountManager.getUserData(
+                account,
+                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN
+            );
+
+            if (refreshToken == null || refreshToken.length() <= 0) {
+                Log_OC.w(TAG, "No refresh token stored for silent renewal of access token");
+                return null;
+            }
+
+            OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
+
+            OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
+            builder.setRequest(OAuth2RequestBuilder.OAuthRequest.REFRESH_ACCESS_TOKEN);
+            builder.setRefreshToken(refreshToken);
+
+            OAuth2RefreshAccessTokenOperation oAuth2RefreshAccessTokenOperation =
+                    (OAuth2RefreshAccessTokenOperation) builder.buildOperation();
+
+            OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(
+                Uri.parse(accountManager.getUserData(account, AccountUtils.Constants.KEY_OC_BASE_URL)),
+                mContext,
+                true
+            );
+
+            RemoteOperationResult result = oAuth2RefreshAccessTokenOperation.execute(client);
+            if (!result.isSuccess()) {
+                Log_OC.e(TAG, "Failed to refresh access token");
+                return null;
+            }
+
+            // Get new access and refresh tokens
+            Map<String, String> tokens = (Map<String, String>) (result.getData().get(0));
+
+            accessToken = tokens.get(OAuth2Constants.KEY_ACCESS_TOKEN);
+
+            Log_OC.d(TAG, "Got OAuth2 access token: " + accessToken);
+
+            accountManager.setAuthToken(account, authTokenType, accessToken);
+
+            Log_OC.d(TAG, "Set OAuth2 new access token in account: " + accessToken);
+
+            refreshToken = tokens.get(OAuth2Constants.KEY_REFRESH_TOKEN);
+
+            Log_OC.d(TAG, "Got OAuth2 refresh token: " + refreshToken);
+
+            accountManager.setUserData(
+                account,
+                AccountUtils.Constants.KEY_OAUTH2_REFRESH_TOKEN,
+                refreshToken
+            );
+
+
+        } catch (Exception e) {
+            Log_OC.e(TAG, "Failed to store refreshed access token");
+            return null;
+        }
+
+        return accessToken;
+    }
+
 }

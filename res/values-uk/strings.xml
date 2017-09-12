@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Невідома помилка</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Очікування на безпровідний зв\'язок </string>
   <string name="uploads_view_later_waiting_to_upload">Очікування відвантаження</string>
+  <string name="uploads_view_unsupported_media_type">Тип носія не підтримується</string>
   <string name="downloader_download_in_progress_ticker">Завантаження …</string>
   <string name="downloader_download_in_progress_content">%1$d%% Завантаження %2$s</string>
   <string name="downloader_download_succeeded_ticker">Успішно завантажено</string>
@@ -258,7 +259,6 @@
   <string name="activity_chooser_title">Надіслати посилання...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Копіювання файлу з приватного сховища</string>
   <string name="oauth_check_onoff">Увійти через oAuth2</string>
-  <string name="oauth_login_connection">Підключення до серверу oAuth2...</string>
   <string name="ssl_validator_header">Справжність сервера не може бути перевірена</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Не довірений сертифікат серверу</string>
   <string name="ssl_validator_reason_cert_expired">- Сертифікат серверу втратив чинність</string>
@@ -404,6 +404,7 @@
   <string name="share_via_link_password_label">Пароль</string>
   <string name="share_via_link_password_title">Забезпечено</string>
   <string name="share_via_link_edit_permission_label">Дозволити редагування</string>
+  <string name="share_via_link_show_file_listing_label">Показати список файлів</string>
   <string name="share_get_public_link_button">Отримати посилання</string>
   <string name="share_with_title">Поділитися з</string>
   <string name="share_with_edit_title">Поділитися з %1$s</string>
@@ -457,6 +458,8 @@
   <string name="share_via_link_expiration_date_enforced_label">Термін дії *</string>
   <string name="share_via_link_expiration_date_explanation_label">Публічне посилання спливатиме не пізніше ніж за %1$d днів, після того, як буде створено</string>
   <string name="share_via_link_default_name_template">%1$s посилання</string>
+  <string name="private_link_info">Це приватне посилання, його можуть використовувати лише люди, які мають доступ до файлу/папки. Використовуйте його як постійне посилання для себе або для того, щоб вказати іншим посилання на файли.</string>
+  <string name="file_private_link_error">Під час спроби отримати приватне посилання на файл сталася помилка</string>
   <plurals name="items_selected_count">
     <item quantity="one">Вибрано %d</item>
     <item quantity="few">Вибрано %d</item>

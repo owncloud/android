@@ -131,7 +131,6 @@
   <string name="filedisplay_no_file_selected">Ֆայլ չի նշվել</string>
   <string name="activity_chooser_title">Ուղարկել հղումը…</string>
   <string name="oauth_check_onoff">Մուտք oAuth2ի միջոցով</string>
-  <string name="oauth_login_connection">Միանում եմ oAuth2 սերվերին…</string>
   <string name="ssl_validator_btn_details_see">Մանրամասներ</string>
   <string name="ssl_validator_btn_details_hide">Թաքցնել</string>
   <string name="ssl_validator_label_O">Կազմակերպություն.</string>

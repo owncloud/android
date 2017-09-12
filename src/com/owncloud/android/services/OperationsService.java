@@ -2,6 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author David González Verdugo
  *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -38,15 +39,18 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Pair;
 
 import com.owncloud.android.MainApp;
-import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.OwnCloudCredentials;
-import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2GrantType;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2RequestBuilder;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2Provider;
+import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -62,7 +66,6 @@ import com.owncloud.android.operations.CreateShareViaLinkOperation;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
-import com.owncloud.android.operations.OAuth2GetAccessToken;
 import com.owncloud.android.operations.RemoveFileOperation;
 import com.owncloud.android.operations.RemoveShareOperation;
 import com.owncloud.android.operations.RenameFileOperation;
@@ -84,7 +87,8 @@ public class OperationsService extends Service {
 
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
-    public static final String EXTRA_OAUTH2_QUERY_PARAMETERS = "OAUTH2_QUERY_PARAMETERS";
+    public static final String EXTRA_OAUTH2_AUTHORIZATION_CODE = "OAUTH2_AUTHORIZATION_CODE";
+    public static final String EXTRA_OAUTH2_QUERY_PARAMETERS = "OAUTH2_AUTHORIZATION_QUERY_PARAMETERS";
     public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
     public static final String EXTRA_NEWNAME = "NEWNAME";
     public static final String EXTRA_REMOVE_ONLY_LOCAL = "REMOVE_LOCAL_COPY";
@@ -128,10 +132,9 @@ public class OperationsService extends Service {
     public static final String ACTION_OPERATION_FINISHED = OperationsService.class.getName() +
             ".OPERATION_FINISHED";
 
-
     private ConcurrentMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>
             mUndispatchedFinishedOperations =
-            new ConcurrentHashMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>();
+            new ConcurrentHashMap<>();
 
     private static class Target {
         public Uri mServerUrl = null;
@@ -179,7 +182,7 @@ public class OperationsService extends Service {
 
     /**
      * Entry point to add a new operation to the queue of operations.
-     * <p/>
+     *
      * New operations are added calling to startService(), resulting in a call to this method.
      * This ensures the service will keep on working although the caller activity goes away.
      */
@@ -198,7 +201,7 @@ public class OperationsService extends Service {
             Account account = intent.getParcelableExtra(EXTRA_ACCOUNT);
             String remotePath = intent.getStringExtra(EXTRA_REMOTE_PATH);
 
-            Pair<Account, String> itemSyncKey =  new Pair<Account , String>(account, remotePath);
+            Pair<Account, String> itemSyncKey =  new Pair<>(account, remotePath);
 
             Pair<Target, RemoteOperation> itemToQueue = newOperation(intent);
             if (itemToQueue != null) {
@@ -228,13 +231,9 @@ public class OperationsService extends Service {
                     saveAllClients(this, MainApp.getAccountType());
 
             // TODO - get rid of these exceptions
-        } catch (AccountNotFoundException e) {
-            e.printStackTrace();
-        } catch (AuthenticatorException e) {
-            e.printStackTrace();
-        } catch (OperationCanceledException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (
+            AccountNotFoundException | AuthenticatorException |
+                OperationCanceledException | IOException e) {
             e.printStackTrace();
         }
 
@@ -283,7 +282,7 @@ public class OperationsService extends Service {
          * {@link OperationsServiceBinder} instance
          */
         private final ConcurrentMap<OnRemoteOperationListener, Handler> mBoundListeners =
-                new ConcurrentHashMap<OnRemoteOperationListener, Handler>();
+                new ConcurrentHashMap<>();
 
         private ServiceHandler mServiceHandler = null;
 
@@ -415,14 +414,14 @@ public class OperationsService extends Service {
 
 
         private ConcurrentLinkedQueue<Pair<Target, RemoteOperation>> mPendingOperations =
-                new ConcurrentLinkedQueue<Pair<Target, RemoteOperation>>();
+                new ConcurrentLinkedQueue<>();
         private RemoteOperation mCurrentOperation = null;
         private Target mLastTarget = null;
         private OwnCloudClient mOwnCloudClient = null;
         private FileDataStorageManager mStorageManager;
         
         
-        public ServiceHandler(Looper looper, OperationsService service) {
+        ServiceHandler(Looper looper, OperationsService service) {
             super(looper);
             if (service == null) {
                 throw new IllegalArgumentException("Received invalid NULL in parameter 'service'");
@@ -445,7 +444,7 @@ public class OperationsService extends Service {
             
             //Log_OC.e(TAG, "nextOperation init" );
             
-            Pair<Target, RemoteOperation> next = null;
+            Pair<Target, RemoteOperation> next;
             synchronized(mPendingOperations) {
                 next = mPendingOperations.peek();
             }
@@ -499,7 +498,7 @@ public class OperationsService extends Service {
                         result = mCurrentOperation.execute(mOwnCloudClient);
                     }
 
-                } catch (AccountsException e) {
+                } catch (AccountsException | IOException e) {
                     if (mLastTarget.mAccount == null) {
                         Log_OC.e(TAG, "Error while trying to get authorization for a NULL account",
                                 e);
@@ -509,15 +508,6 @@ public class OperationsService extends Service {
                     }
                     result = new RemoteOperationResult(e);
                     
-                } catch (IOException e) {
-                    if (mLastTarget.mAccount == null) {
-                        Log_OC.e(TAG, "Error while trying to get authorization for a NULL account",
-                                e);
-                    } else {
-                        Log_OC.e(TAG, "Error while trying to get authorization for " +
-                                mLastTarget.mAccount.name, e);
-                    }
-                    result = new RemoteOperationResult(e);
                 } catch (Exception e) {
                     if (mLastTarget.mAccount == null) {
                         Log_OC.e(TAG, "Unexpected error for a NULL account", e);
@@ -665,14 +655,16 @@ public class OperationsService extends Service {
                     operation = new GetServerInfoOperation(serverUrl, OperationsService.this);
 
                 } else if (action.equals(ACTION_OAUTH2_GET_ACCESS_TOKEN)) {
-                    /// GET ACCESS TOKEN to the OAuth server
-                    String oauth2QueryParameters =
-                            operationIntent.getStringExtra(EXTRA_OAUTH2_QUERY_PARAMETERS);
-                    operation = new OAuth2GetAccessToken(
-                            getString(R.string.oauth2_client_id), 
-                            getString(R.string.oauth2_redirect_uri),       
-                            getString(R.string.oauth2_grant_type),
-                            oauth2QueryParameters);
+                    // CREATE ACCESS TOKEN to the OAuth server
+                    String code = operationIntent.getStringExtra(EXTRA_OAUTH2_AUTHORIZATION_CODE);
+
+                    OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
+                    OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
+                    builder.setGrantType(OAuth2GrantType.AUTHORIZATION_CODE);
+                    builder.setRequest(OAuth2RequestBuilder.OAuthRequest.CREATE_ACCESS_TOKEN);
+                    builder.setAuthorizationCode(code);
+
+                    operation = builder.buildOperation();
 
                 } else if (action.equals(ACTION_GET_USER_NAME)) {
                     // Get User Name
@@ -745,7 +737,7 @@ public class OperationsService extends Service {
         }
 
         if (operation != null) {
-            return new Pair<Target , RemoteOperation>(target, operation);  
+            return new Pair<>(target, operation);
         } else {
             return null;
         }
@@ -826,7 +818,7 @@ public class OperationsService extends Service {
         }
         if (count == 0) {
             Pair<RemoteOperation, RemoteOperationResult> undispatched =
-                    new Pair<RemoteOperation, RemoteOperationResult>(operation, result);
+                    new Pair<>(operation, result);
             mUndispatchedFinishedOperations.put(((Runnable) operation).hashCode(), undispatched);
         }
         Log_OC.d(TAG, "Called " + count + " listeners");

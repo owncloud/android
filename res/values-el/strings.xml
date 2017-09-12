@@ -258,7 +258,6 @@
   <string name="activity_chooser_title">Αποστολή συνδέσμου σε ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Αντιγραφή αρχείου από ιδιωτικό αποθηκευτικό χώρο</string>
   <string name="oauth_check_onoff">Σύνδεση με oAuth2</string>
-  <string name="oauth_login_connection">Σύνδεση με το διακομιστή oAuth2 σε εξέλιξη...</string>
   <string name="ssl_validator_header">Δεν ήταν δυνατή η επαλήθευση της ταυτότητας του διακομιστή</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Το πιστοποιητικό του διακομιστή δεν είναι έμπιστο</string>
   <string name="ssl_validator_reason_cert_expired">- Το πιστοποιητικό του διακομιστή έχει λήξει</string>

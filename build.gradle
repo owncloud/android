@@ -10,18 +10,22 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 
 apply plugin: 'com.android.application'
 
 ext {
-    supportLibraryVersion = '24.2.1'
+    supportLibraryVersion = '25.4.0'
 }
 
 repositories {
     jcenter()
+
+    maven {
+        url "https://maven.google.com"
+    }
 
     flatDir {
         dirs 'libs'
@@ -85,6 +89,7 @@ android {
 
     defaultConfig {
 
+        manifestPlaceholders.versionCode = "20400000"
         manifestPlaceholders.versionName = "2.4.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -178,14 +183,18 @@ android {
             }
         }
 
-        beta {
-            // This copies the debuggable attribute and debug signing configurations.
-            initWith debug
+        debug {
+            applicationIdSuffix ".debug"
+        }
 
-            manifestPlaceholders.versionName = "2.5.0-beta.1"
+        beta {
+
+            manifestPlaceholders.versionCode = "20400001"
+            manifestPlaceholders.versionName = "2.5.0-beta.2"
 
             applicationIdSuffix ".beta"
         }
+
     }
 
     applicationVariants.all { variant ->

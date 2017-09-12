@@ -667,10 +667,16 @@ public class PublicShareDialogFragment extends DialogFragment {
             getEditPermissionSection(rootView).setVisibility(View.VISIBLE);
         }
 
-        // Show file listing option if supports upload only capability is set, a folder is being
-        // shared and allow editing capability is set as well
-        if (mCapabilities.getFilesSharingPublicSupportsUploadOnly().isTrue() && isSharedFolder() &&
+        // Show file listing option if all the following is true:
+        //  - The file to share is a folder
+        //  - Upload only is supported by the server version
+        //  - Upload only capability is set
+        //  - Allow editing capability is set
+        if (isSharedFolder() &&
+                serverVersion.isPublicSharingWriteOnlySupported() &&
+                mCapabilities.getFilesSharingPublicSupportsUploadOnly().isTrue() &&
                 mCapabilities.getFilesSharingPublicUpload().isTrue()) {
+
             getShowFileListingSection(rootView).setVisibility(View.VISIBLE);
         }
 

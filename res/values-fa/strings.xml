@@ -215,6 +215,7 @@
   <string name="auth_oauth_error">اجازه ناموفق</string>
   <string name="auth_oauth_error_access_denied">دسترسی توسط سرور احراز هویت رد شده است.</string>
   <string name="auth_expired_oauth_token_toast">احراز هویت شما منقضی شده است. لطفا، مجددا احراز هویت فرمایید.</string>
+  <string name="auth_expired_basic_auth_toast">لطفا رمز عبور فعلی را وارد نمایید</string>
   <string name="auth_unsupported_auth_method">سرور این نوع احراز هویت را پشتیبانی نمی‌کند</string>
   <string name="auth_unsupported_multiaccount">%1$s چند اکانته بودن را پشتیبانی نمی‌کند</string>
   <string name="common_rename">تغییرنام</string>
@@ -222,6 +223,7 @@
   <string name="confirmation_remove_file_alert">آیا واقعا می‌خواهید %1$s حذف شود ؟</string>
   <string name="confirmation_remove_folder_alert">آیا واقعا می‌خواهید %1$s و محتوای درون آن حذف شود ؟</string>
   <string name="confirmation_remove_local">فقط محلی</string>
+  <string name="confirmation_remove_public_share_title">حذف لینک</string>
   <string name="confirmation_remove_public_share_message">آیا واقعا می‌خواهید %1$s حذف شود ؟</string>
   <string name="remove_success_msg">حذف با موفقیت انجام شد</string>
   <string name="remove_fail_msg">حذف نا موفق بود</string>
@@ -240,7 +242,6 @@
   <string name="activity_chooser_title">ارسال لینک به ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">کپی کردن فایل از حافظه خصوصی</string>
   <string name="oauth_check_onoff">ورود با oAuth2   </string>
-  <string name="oauth_login_connection">اتصال به سرور oAuth2 ...</string>
   <string name="ssl_validator_reason_cert_not_trusted">- گواهی سرور نامعتبر است</string>
   <string name="ssl_validator_reason_cert_expired">- گواهی سرور انقضا یافته</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">زمان اعتبار گواهی نامه سرویس دهنده فرانرسیده است</string>
@@ -340,6 +341,7 @@
   <string name="upload_move_files">جابه‌جایی پرونده</string>
   <string name="share_dialog_title">اشتراک گذاری</string>
   <string name="share_file">هم‌رسانی %1$s</string>
+  <string name="share_via_link_name_label">نام لینک</string>
   <string name="share_cancel_public_link_button">لغو</string>
   <string name="share_confirm_public_link_button">ذخیره</string>
   <string name="share_via_link_expiration_date_label">تاریخ انقضا</string>
@@ -370,6 +372,12 @@
   <string name="manage_space_title">مدیریت فضا</string>
   <string name="manage_space_clear_data">پاک‌سازی داده</string>
   <string name="manage_space_error">برخی پرونده‌ها نمي‌توانند حذف شوند.</string>
+  <string name="actionbar_privacy_policy">سیاست حفظ حریم خصوصی</string>
+  <string name="prefs_privacy_policy">سیاست حفظ حریم خصوصی</string>
+  <string name="privacy_policy_error">خطایی رخ داد:</string>
+  <string name="service_unavailable">سرور در دسترس نیست</string>
+  <string name="share_via_link_password_enforced_label">رمز عبور *</string>
+  <string name="share_via_link_expiration_date_enforced_label">تاریخ انقضا *</string>
   <plurals name="items_selected_count">
     <item quantity="other">‫%d گزیده</item>
   </plurals>
