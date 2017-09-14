@@ -451,14 +451,14 @@
   <string name="error_no_network_connection">อุปกรณ์ไม่ได้เชื่อมต่อกับเครือข่าย</string>
   <string name="share_no_public_links">ลิงค์สาธารณะยังไม่ถูกสร้างขึ้น</string>
   <string name="share_no_link_in_this_share">ไม่มีลิงค์การแชร์นี้</string>
-  <string name="share_warning_about_forwarding_public_links">ทุกคนที่มีลิงก์สามารถเข้าถึงไฟล์หรือโฟลเดอร์ได้</string>
+  <string name="share_warning_about_forwarding_public_links">ทุกคนที่มีลิงค์สามารถเข้าถึงไฟล์หรือโฟลเดอร์ได้</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">รหัสผ่าน *</string>
   <string name="share_via_link_expiration_date_enforced_label">หมดอายุ *</string>
   <string name="share_via_link_expiration_date_explanation_label">ลิงค์สาธารณะจะหมดอายุไม่เกิน %1$d วันหลังจากถูกสร้างขึ้น</string>
   <string name="share_via_link_default_name_template">%1$s ลิงค์</string>
-  <string name="private_link_info">นี่เป็นลิงก์ส่วนตัวเฉพาะคุณเท่านั้นที่จะสามารถเข้าถึงไฟล์หรือโฟลเดอร์ได้ ใช้เป็นลิงก์ถาวรสำหรับตัวคุณเอง</string>
-  <string name="file_private_link_error">เกิดข้อผิดพลาดขณะพยายามดึงลิงก์ส่วนตัวสำหรับไฟล์</string>
+  <string name="private_link_info">นี่เป็นลิงค์ส่วนตัวเฉพาะคุณเท่านั้นที่จะสามารถเข้าถึงไฟล์หรือโฟลเดอร์ได้ ใช้เป็นลิงค์ถาวรสำหรับตัวคุณเอง</string>
+  <string name="file_private_link_error">เกิดข้อผิดพลาดขณะพยายามดึงลิงค์ส่วนตัวสำหรับไฟล์</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>
