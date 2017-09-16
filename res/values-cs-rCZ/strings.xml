@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s aplikace pro Android</string>
+  <string name="about_android">%1$s Aplikace pro Android</string>
   <string name="about_version">verze %1$s</string>
   <string name="actionbar_sync">Obnovit účet</string>
   <string name="actionbar_upload">Nahrát</string>
@@ -258,6 +258,7 @@
   <string name="activity_chooser_title">Odeslat odkaz ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopírování souboru z privátního úložiště</string>
   <string name="oauth_check_onoff">Přihlásit se s oAuth2</string>
+  <string name="oauth_login_connection">Připojování k OAuth2 server</string>
   <string name="ssl_validator_header">Identitu serveru nebylo možné ověřit</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Certifikát serveru je nedůvěryhodný</string>
   <string name="ssl_validator_reason_cert_expired">- Certifikátu serveru vypršela platnost</string>
