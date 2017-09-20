@@ -8,6 +8,11 @@ android {
     compileSdkVersion 24
     buildToolsVersion '25.0.2'
 
+    defaultConfig {
+        versionCode = 100036
+        versionName = "1.0.36"
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
