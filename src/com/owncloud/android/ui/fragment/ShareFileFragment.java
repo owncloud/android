@@ -204,6 +204,9 @@ public class ShareFileFragment extends Fragment
         }
 
         // Private link button
+        /*
+        Disabled until https://github.com/owncloud/android/issues/2032 is done
+
         ImageView getPrivateLinkButton = (ImageView) view.findViewById(R.id.getPrivateLinkButton);
 
         getPrivateLinkButton.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +224,7 @@ public class ShareFileFragment extends Fragment
                 return true;
             }
         });
+        */
 
         OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
         final boolean shareWithUsersEnable = (serverVersion != null && serverVersion.isSearchUsersSupported());
