@@ -204,27 +204,29 @@ public class ShareFileFragment extends Fragment
         }
 
         // Private link button
-        /*
-        Disabled until https://github.com/owncloud/android/issues/2032 is done
-
         ImageView getPrivateLinkButton = (ImageView) view.findViewById(R.id.getPrivateLinkButton);
+        if (mFile.getPrivateLink() == null || mFile.getPrivateLink().isEmpty()) {
+            getPrivateLinkButton.setVisibility(View.INVISIBLE);
 
-        getPrivateLinkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.copyOrSendPrivateLink(mAccount, mFile);
-            }
-        });
+        } else {
+            getPrivateLinkButton.setVisibility(View.VISIBLE);
 
-        getPrivateLinkButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                // Show a toast message explaining what a private link is
-                Toast.makeText(getActivity(), R.string.private_link_info, Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
-        */
+            getPrivateLinkButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.copyOrSendPrivateLink(mFile);
+                }
+            });
+
+            getPrivateLinkButton.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    // Show a toast message explaining what a private link is
+                    Toast.makeText(getActivity(), R.string.private_link_info, Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
+        }
 
         OwnCloudVersion serverVersion = AccountUtils.getServerVersion(mAccount);
         final boolean shareWithUsersEnable = (serverVersion != null && serverVersion.isSearchUsersSupported());

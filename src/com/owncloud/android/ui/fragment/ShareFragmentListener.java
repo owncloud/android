@@ -37,7 +37,7 @@ import com.owncloud.android.lib.resources.shares.OCShare;
  * >Communicating with Other Fragments</a> for more information.
  */
 public interface ShareFragmentListener {
-    void copyOrSendPrivateLink(Account account, OCFile file);
+    void copyOrSendPrivateLink(OCFile file);
     void showSearchUsersAndGroups();
     void showEditPrivateShare(OCShare share);
     void refreshSharesFromServer();
