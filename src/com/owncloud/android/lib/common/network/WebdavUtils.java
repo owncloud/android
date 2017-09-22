@@ -107,6 +107,8 @@ public class WebdavUtils {
                 Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
         propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
                 Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PRIVATE_LINK,
+            Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
 
         return propSet;
     }
@@ -130,6 +132,10 @@ public class WebdavUtils {
                 Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
         propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
                 Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_SIZE,
+            Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
+        propSet.add(WebdavEntry.EXTENDED_PROPERTY_NAME_PRIVATE_LINK,
+            Namespace.getNamespace(WebdavEntry.NAMESPACE_OC));
 
         return propSet;
     }

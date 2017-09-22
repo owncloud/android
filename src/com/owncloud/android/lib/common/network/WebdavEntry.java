@@ -41,21 +41,22 @@ public class WebdavEntry {
 
     private static final String TAG = WebdavEntry.class.getSimpleName();
 
-	public static final String NAMESPACE_OC = "http://owncloud.org/ns";
-	public static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
-	public static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
+    public static final String NAMESPACE_OC = "http://owncloud.org/ns";
+    public static final String EXTENDED_PROPERTY_NAME_PERMISSIONS = "permissions";
+    public static final String EXTENDED_PROPERTY_NAME_REMOTE_ID = "id";
     public static final String EXTENDED_PROPERTY_NAME_SIZE = "size";
+    public static final String EXTENDED_PROPERTY_NAME_PRIVATE_LINK = "privatelink";
 
     public static final String PROPERTY_QUOTA_USED_BYTES = "quota-used-bytes";
     public static final String PROPERTY_QUOTA_AVAILABLE_BYTES = "quota-available-bytes";
 
     private static final int CODE_PROP_NOT_FOUND = 404;
 
-	private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId;
-	private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
+    private String mName, mPath, mUri, mContentType, mEtag, mPermissions, mRemoteId, mPrivateLink;
+    private long mContentLength, mCreateTimestamp, mModifiedTimestamp, mSize;
     private BigDecimal mQuotaUsedBytes, mQuotaAvailableBytes;
 
-	public WebdavEntry(MultiStatusResponse ms, String splitElement) {
+    public WebdavEntry(MultiStatusResponse ms, String splitElement) {
         resetData();
         if (ms.getStatus().length != 0) {
             mUri = ms.getHref();
@@ -63,7 +64,7 @@ public class WebdavEntry {
             mPath = mUri.split(splitElement, 2)[1];
 
             int status = ms.getStatus()[0].getStatusCode();
-            if ( status == CODE_PROP_NOT_FOUND ) {
+            if (status == CODE_PROP_NOT_FOUND) {
                 status = ms.getStatus()[1].getStatusCode();
             }
             DavPropertySet propSet = ms.getProperties(status);
@@ -71,9 +72,8 @@ public class WebdavEntry {
             DavProperty prop = propSet.get(DavPropertyName.DISPLAYNAME);
             if (prop != null) {
                 mName = (String) prop.getName().toString();
-                mName = mName.substring(1, mName.length()-1);
-            }
-            else {
+                mName = mName.substring(1, mName.length() - 1);
+            } else {
                 String[] tmp = mPath.split("/");
                 if (tmp.length > 0)
                     mName = tmp[tmp.length - 1];
@@ -91,17 +91,17 @@ public class WebdavEntry {
                     mContentType = mContentType.substring(0, mContentType.indexOf(";"));
                 }
             }
-            
+
             // check if it's a folder in the standard way: see RFC2518 12.2 . RFC4918 14.3
             // {DAV:}resourcetype
             prop = propSet.get(DavPropertyName.RESOURCETYPE);
-            if (prop!= null) {
+            if (prop != null) {
                 Object value = prop.getValue();
                 if (value != null) {
                     mContentType = "DIR";   // a specific attribute would be better,
-                                            // but this is enough;
-                                            // unless while we have no reason to distinguish
-                                            // MIME types for folders
+                    // but this is enough;
+                    // unless while we have no reason to distinguish
+                    // MIME types for folders
                 }
             }
 
@@ -114,14 +114,14 @@ public class WebdavEntry {
             prop = propSet.get(DavPropertyName.GETLASTMODIFIED);
             if (prop != null) {
                 Date d = WebdavUtils
-                        .parseResponseDate((String) prop.getValue());
+                    .parseResponseDate((String) prop.getValue());
                 mModifiedTimestamp = (d != null) ? d.getTime() : 0;
             }
 
             prop = propSet.get(DavPropertyName.CREATIONDATE);
             if (prop != null) {
                 Date d = WebdavUtils
-                        .parseResponseDate((String) prop.getValue());
+                    .parseResponseDate((String) prop.getValue());
                 mCreateTimestamp = (d != null) ? d.getTime() : 0;
             }
 
@@ -140,10 +140,10 @@ public class WebdavEntry {
                     mQuotaUsedBytes = new BigDecimal(quotaUsedBytesSt);
                 } catch (NumberFormatException e) {
                     Log_OC.w(TAG, "No value for QuotaUsedBytes - NumberFormatException");
-                } catch (NullPointerException e ){
+                } catch (NullPointerException e) {
                     Log_OC.w(TAG, "No value for QuotaUsedBytes - NullPointerException");
                 }
-                Log_OC.d(TAG , "QUOTA_USED_BYTES " + quotaUsedBytesSt );
+                Log_OC.d(TAG, "QUOTA_USED_BYTES " + quotaUsedBytesSt);
             }
 
             // {DAV:}quota-available-bytes
@@ -154,47 +154,54 @@ public class WebdavEntry {
                     mQuotaAvailableBytes = new BigDecimal(quotaAvailableBytesSt);
                 } catch (NumberFormatException e) {
                     Log_OC.w(TAG, "No value for QuotaAvailableBytes - NumberFormatException");
-                } catch (NullPointerException e ){
+                } catch (NullPointerException e) {
                     Log_OC.w(TAG, "No value for QuotaAvailableBytes");
                 }
-                Log_OC.d(TAG , "QUOTA_AVAILABLE_BYTES " + quotaAvailableBytesSt );
+                Log_OC.d(TAG, "QUOTA_AVAILABLE_BYTES " + quotaAvailableBytesSt);
             }
 
             // OC permissions property <oc:permissions>
             prop = propSet.get(
-            		EXTENDED_PROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC)
-    		);
+                EXTENDED_PROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC)
+            );
             if (prop != null) {
                 mPermissions = prop.getValue().toString();
             }
 
             // OC remote id property <oc:id>
             prop = propSet.get(
-            		EXTENDED_PROPERTY_NAME_REMOTE_ID, Namespace.getNamespace(NAMESPACE_OC)
-    		);
+                EXTENDED_PROPERTY_NAME_REMOTE_ID, Namespace.getNamespace(NAMESPACE_OC)
+            );
             if (prop != null) {
                 mRemoteId = prop.getValue().toString();
             }
 
-            // TODO: is it necessary?
             // OC size property <oc:size>
             prop = propSet.get(
-            		EXTENDED_PROPERTY_NAME_SIZE, Namespace.getNamespace(NAMESPACE_OC)
-    		);
+                EXTENDED_PROPERTY_NAME_SIZE, Namespace.getNamespace(NAMESPACE_OC)
+            );
             if (prop != null) {
                 mSize = Long.parseLong((String) prop.getValue());
             }
 
+            // OC privatelink property <oc:privatelink>
+            prop = propSet.get(
+                EXTENDED_PROPERTY_NAME_PRIVATE_LINK, Namespace.getNamespace(NAMESPACE_OC)
+            );
+            if (prop != null) {
+                mPrivateLink = prop.getValue().toString();
+            }
+
         } else {
             Log_OC.e("WebdavEntry",
-                    "General fuckup, no status for webdav response");
+                "General fuckup, no status for webdav response");
         }
     }
 
     public String path() {
         return mPath;
     }
-    
+
     public String decodedPath() {
         return Uri.decode(mPath);
     }
@@ -226,7 +233,7 @@ public class WebdavEntry {
     public long modifiedTimestamp() {
         return mModifiedTimestamp;
     }
-    
+
     public String etag() {
         return mEtag;
     }
@@ -239,7 +246,7 @@ public class WebdavEntry {
         return mRemoteId;
     }
 
-    public long size(){
+    public long size() {
         return mSize;
     }
 
@@ -251,11 +258,17 @@ public class WebdavEntry {
         return mQuotaAvailableBytes;
     }
 
+    public String privateLink() {
+        return mPrivateLink;
+    }
+
     private void resetData() {
-        mName = mUri = mContentType = mPermissions = null; mRemoteId = null;
+        mName = mUri = mContentType = mPermissions = null;
+        mRemoteId = null;
         mContentLength = mCreateTimestamp = mModifiedTimestamp = 0;
         mSize = 0;
         mQuotaUsedBytes = null;
         mQuotaAvailableBytes = null;
+        mPrivateLink = null;
     }
 }
