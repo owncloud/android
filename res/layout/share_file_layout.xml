@@ -77,8 +77,7 @@
                 android:layout_height="36dp"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/standard_half_padding"
-                android:src="@drawable/copy_link"
-                android:visibility="invisible"/>
+                android:src="@drawable/copy_link" />
 
         </RelativeLayout>
 

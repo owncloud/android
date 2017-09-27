@@ -687,7 +687,6 @@ public class PublicShareActivityTest {
      *  TEST CASE: Check permalink
      *  PASSED IF: Link to the item in clipboard
      */
-    /* Disabled until https://github.com/owncloud/android/issues/2032 is done
     @Test
     public void test_13_permalink()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -719,7 +718,7 @@ public class PublicShareActivityTest {
         Log_OC.i(LOG_TAG, "Test Permalink Passed");
 
     }
-    */
+
 
     /**
      *  TEST CASE: Capability "Allow public links" disabled
