@@ -1374,13 +1374,26 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             String username = ((UserInfo) result.getData().get(0)).mId;
 
             if (mAction == ACTION_CREATE) {
+
+                if (!BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
+                    mUsernameInput.setText(username);
+                }
+
                 success = createAccount(result);
 
             } else {
 
                 try {
-                    updateAccountAuthentication();
-                    success = true;
+
+                    if (BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
+
+                        updateAccountAuthentication();
+                        success = true;
+
+                    } else {
+
+                        success = updateAccount(username);
+                    }
 
                 } catch (AccountNotFoundException e) {
                     Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
