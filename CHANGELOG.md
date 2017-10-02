@@ -4,7 +4,7 @@
 - First approach to fix instant uploads
 - UI improvements, including:
   + Hide share icon when resharing is forbidden
-  + Improve feedback when finding infected file
+  + Improve feedback when uploading infected files
 - Bug fixes
 
 ## 2.4.0 (May 2017)
