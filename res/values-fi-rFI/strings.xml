@@ -222,6 +222,7 @@
   <string name="confirmation_remove_folder_alert">Haluatko varmasti poistaa kohteen %1$s ja sen sisällön?</string>
   <string name="confirmation_remove_local">Vain paikallinen</string>
   <string name="confirmation_remove_account_alert">Haluatko varmasti poistaa tilin %1$s?</string>
+  <string name="confirmation_remove_public_share_title">Poista linkki</string>
   <string name="confirmation_remove_public_share_message">Haluatko varmasti poistaa kohteen %1$s?</string>
   <string name="remove_success_msg">Poistettu onnistuneesti</string>
   <string name="remove_fail_msg">Poistamista ei voitu suorittaa loppuun asti</string>
@@ -241,6 +242,7 @@
   <string name="activity_chooser_title">Lähetä linkki…</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopioidaan tiedostoa yksityisestä tallennustilasta</string>
   <string name="oauth_check_onoff">Kirjaudu oAuth2:lla</string>
+  <string name="oauth_login_connection">Yhdistetään OAuth2-palvelimeen…</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Palvelimen varmenteeseen ei luoteta</string>
   <string name="ssl_validator_reason_cert_expired">- Palvelimen varmenne on vanhentunut</string>
   <string name="ssl_validator_reason_cert_not_yet_valid">- Palvelimen varmenteen kelvolliset päivät ovat tulevaisuudessa</string>
@@ -302,6 +304,8 @@
   <string name="error_cant_bind_to_operations_service">Kriittinen virhe: toimintoja ei voi suorittaa</string>
   <string name="network_error_socket_exception">Virhe palvelimeen yhdistäessä</string>
   <string name="network_error_socket_timeout_exception">Palvelimen vastaus viipyy liian kauan</string>
+  <string name="network_error_connect_timeout_exception">Palvelimeen yhdistäminen kesti liian kauan</string>
+  <string name="network_host_not_available">Palvelinta ei tavoitettu</string>
   <string name="forbidden_permissions">Sinulla ei ole oikeutta %s</string>
   <string name="forbidden_permissions_rename">nimetä tiedostoa uudelleen</string>
   <string name="forbidden_permissions_delete">poistaa tiedostoa</string>
@@ -361,14 +365,18 @@
   <string name="pref_behaviour_entries_move">siirretään sovelluskansioon</string>
   <string name="share_dialog_title">Jaa</string>
   <string name="share_file">Jaa %1$s</string>
+  <string name="share_with_user_section_title">Käyttäjät ja ryhmät</string>
   <string name="share_incompatible_version">Muiden käyttäjien kanssa jakaminen vaatii palvelimen version olevan vähintään 8.2</string>
   <string name="share_add_user_or_group">Lisää käyttäjä tai ryhmä</string>
+  <string name="share_via_link_section_title">Julkiset linkit</string>
+  <string name="share_via_link_name_label">Linkin nimi</string>
   <string name="share_cancel_public_link_button">Peruuta</string>
   <string name="share_confirm_public_link_button">Tallenna</string>
   <string name="share_via_link_expiration_date_label">Erääntyminen</string>
   <string name="share_via_link_password_label">Salasana</string>
   <string name="share_via_link_password_title">Turvattu</string>
   <string name="share_via_link_edit_permission_label">Salli muokkaus</string>
+  <string name="share_via_link_show_file_listing_label">Näytä tiedostolistaus</string>
   <string name="share_get_public_link_button">Hanki linkki</string>
   <string name="share_with_title">Jaa…</string>
   <string name="share_with_edit_title">Jaa käyttäjän %1$s kanssa</string>
@@ -401,6 +409,12 @@
   <string name="prefs_privacy_policy">Yksityisyyskäytäntö</string>
   <string name="privacy_policy_error">Tapahtui virhe:</string>
   <string name="service_unavailable">Palvelin ei ole käytettävissä</string>
+  <string name="streaming_unrecognized_input">Tämä videomuoto ei ole tuettu</string>
+  <string name="streaming_file_not_found_error">Tämä videotiedosto ei ole enää käytettävissä palvelimella</string>
+  <string name="error_no_network_connection">Laite ei ole yhteydessä verkkoon</string>
+  <string name="share_no_public_links">Julkisia linkkejä ei ole vielä luotu</string>
+  <string name="share_via_link_password_enforced_label">Salasana *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Vanheneminen *</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valittu</item>
     <item quantity="other">%d valittu</item>
