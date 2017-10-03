@@ -36,7 +36,7 @@
   <string name="prefs_instant_video_upload_summary">Okamžitě odesílat nahrané video</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
-  <string name="prefs_log_title_history">Historie logu</string>
+  <string name="prefs_log_title_history">Historie logování</string>
   <string name="prefs_log_summary_history">Zobrazuje zaznamenané logy</string>
   <string name="prefs_log_delete_history_button">Smazat historii</string>
   <string name="prefs_help">Nápověda</string>
