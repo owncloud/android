@@ -1,3 +1,12 @@
+## 2.5.0 (October 2017)
+- OAuth2 support
+- Show file listing option (anonymous upload) when sharing a folder (OC X required)
+- First approach to fix instant uploads
+- UI improvements, including:
+  + Hide share icon when resharing is forbidden
+  + Improve feedback when uploading infected files
+- Bug fixes
+
 ## 2.4.0 (May 2017)
 - Video streaming
 - Multiple public links per file (OC X required)

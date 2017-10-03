@@ -71,7 +71,7 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
 
     private static final int SEARCH = 1;
 
-    private static final int RESULTS_PER_PAGE = 50;
+    private static final int RESULTS_PER_PAGE = 30;
     private static final int REQUESTED_PAGE = 1;
 
     public static final String CONTENT = "content";
@@ -162,7 +162,6 @@ public class UsersAndGroupsSearchProvider extends ContentProvider {
 
     private Cursor searchForUsersOrGroups(Uri uri) {
         MatrixCursor response = null;
-
 
         String userQuery = uri.getLastPathSegment().toLowerCase();
 

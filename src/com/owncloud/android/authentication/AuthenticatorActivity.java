@@ -1374,11 +1374,34 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             String username = ((UserInfo) result.getData().get(0)).mId;
 
             if (mAction == ACTION_CREATE) {
-                mUsernameInput.setText(username);
+
+                if (!BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
+                    mUsernameInput.setText(username);
+                }
+
                 success = createAccount(result);
 
             } else {
-                success = updateAccount(username);
+
+                try {
+
+                    if (BASIC_TOKEN_TYPE.equals(mAuthTokenType)) {
+
+                        updateAccountAuthentication();
+                        success = true;
+
+                    } else {
+
+                        success = updateAccount(username);
+                    }
+
+                } catch (AccountNotFoundException e) {
+                    Log_OC.e(TAG, "Account " + mAccount + " was removed!", e);
+                    Toast.makeText(this, R.string.auth_account_does_not_exist,
+                            Toast.LENGTH_SHORT).show();
+                    // do not use a Snackbar, finishing right now!
+                    finish();
+                }
             }
 
             if (success) {
@@ -1534,6 +1557,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         boolean success = false;
 
         RemoteOperationResult result;
+
         if (!mUsernameInput.getText().toString().trim().equals(username)) {
             // fail - not a new account, but an existing one; disallow
             result = new RemoteOperationResult(ResultCode.ACCOUNT_NOT_THE_SAME);
