@@ -117,7 +117,6 @@ public class AuthenticatorActivityTest {
         testServerURL = arguments.getString("TEST_SERVER_URL");
         servertype = ServerType.fromValue(Integer.parseInt(arguments.getString("TRUSTED")));
         isLookup = Boolean.parseBoolean(arguments.getString("TEST_LOOKUP"));
-
         // UiDevice available from API level 17
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -135,6 +134,12 @@ public class AuthenticatorActivityTest {
                 e.printStackTrace();
             }
         }
+
+        //Check that credentials fields are initially hidden
+        onView(withId(R.id.account_username)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.account_password)).check(matches(not(isDisplayed())));
+
+
     }
 
     /**
@@ -159,8 +164,7 @@ public class AuthenticatorActivityTest {
             // Type server url
             onView(withId(R.id.hostUrlInput))
                     .perform(replaceText(testServerURL), closeSoftKeyboard());
-            onView(withId(R.id.account_username)).perform(click());
-
+            onView(withId(R.id.scroll)).perform(click());
             SystemClock.sleep(WAIT_CONNECTION_MS);
 
             //certif not accepted
@@ -204,8 +208,7 @@ public class AuthenticatorActivityTest {
             // Type server url
             onView(withId(R.id.hostUrlInput))
                     .perform(replaceText(testServerURL), closeSoftKeyboard());
-            onView(withId(R.id.account_username)).perform(click());
-
+            onView(withId(R.id.scroll)).perform(click());
             SystemClock.sleep(WAIT_CONNECTION_MS);
 
             //Check untrusted certificate, opening the details
@@ -300,6 +303,9 @@ public class AuthenticatorActivityTest {
 
         onView(withId(R.id.hostUrlInput)).perform(closeSoftKeyboard(),
                 replaceText(testServerURL), closeSoftKeyboard());
+        onView(withId(R.id.scroll)).perform(click());
+        SystemClock.sleep(WAIT_CONNECTION_MS);
+
         onView(withId(R.id.account_username)).perform(click(),
                 replaceText(testUser), closeSoftKeyboard());
         onView(withId(R.id.account_password)).perform(click(),
@@ -499,8 +505,7 @@ public class AuthenticatorActivityTest {
 
         onView(withId(R.id.hostUrlInput))
                 .perform(replaceText(testServerURL.toUpperCase()), closeSoftKeyboard());
-        onView(withId(R.id.account_username)).perform(click());
-
+        onView(withId(R.id.scroll)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         checkStatusMessage();
@@ -518,8 +523,7 @@ public class AuthenticatorActivityTest {
         // Type server url
         onView(withId(R.id.hostUrlInput))
                 .perform(replaceText(connectionString), closeSoftKeyboard());
-        onView(withId(R.id.account_username)).perform(click());
-
+        onView(withId(R.id.scroll)).perform(click());
         SystemClock.sleep(WAIT_CONNECTION_MS);
 
         checkStatusMessage();
