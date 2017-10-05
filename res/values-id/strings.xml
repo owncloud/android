@@ -228,16 +228,22 @@
   <string name="auth_unsupported_multiaccount">%1$s tidak mendukung banyak akun </string>
   <string name="auth_fail_get_user_name">Server Anda tidak membalas id pengguna dengan banar, Sialakn hubungi Administrator
 	</string>
+  <string name="auth_can_not_auth_against_server">Tidak dapat mengotentikasi server ini</string>
   <string name="auth_account_does_not_exist">Akun tidak ada di perangkat ini</string>
+  <string name="set_available_offline">Jadikan tersedia saat offline</string>
+  <string name="unset_available_offline">Jadikan tidak tersedia saat offline</string>
   <string name="common_rename">Ubah nama</string>
   <string name="common_remove">Hapus</string>
   <string name="confirmation_remove_file_alert">Apakah Anda yakin ingin menghapus %1$s?</string>
   <string name="confirmation_remove_folder_alert">Apakah Anda yakin ingin menghapus %1$s dan isinya?</string>
   <string name="confirmation_remove_local">Lokal saja</string>
+  <string name="confirmation_remove_account_alert">Apakah anda serius ingin menghapus akun %1$s ?</string>
+  <string name="confirmation_remove_public_share_title">Hapus tautan</string>
   <string name="confirmation_remove_public_share_message">Apakah Anda yakin ingin menghapus %1$s?</string>
   <string name="remove_success_msg">Penghapusan berhasil</string>
   <string name="remove_fail_msg">Penghapusan gagal</string>
   <string name="rename_dialog_title">Masukkan nama baru</string>
+  <string name="available_offline_inherited_msg">Folder yang berisi file ini tersedia offline</string>
   <string name="rename_local_fail_msg">Salinan lokal tidak dapat diubah nama, coba dengan nama yang berbeda</string>
   <string name="rename_server_fail_msg">Mengubah nama tidak selesai</string>
   <string name="sync_file_fail_msg">Berkas jauh tidak dapat diperiksa</string>
