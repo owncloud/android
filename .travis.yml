@@ -9,7 +9,7 @@ android:
 # second 'tools' updates SDK tools 'til last version ** in remote repository number 11 ** (current last one)
   - tools
   - platform-tools
-  - build-tools-26.0.0
+  - build-tools-26.0.2
   - android-24
   - extra-android-m2repository
 # INSTRUMENTED TESTS ARE DISABLED - until Google or Travis fix the mess with emulation, only local tests are enabled
