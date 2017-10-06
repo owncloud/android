@@ -12,6 +12,10 @@ android:
 # INSTRUMENTED TESTS ARE DISABLED - until Google or Travis fix the mess with emulation, only local tests are enabled
 #  - sys-img-armeabi-v7a-android-24
 before_install:
+# Travis still uses 'android' command behind the 'components' section update.
+# That command is obsolete and cannot update Android SDK Tools after 25.2.5.
+# Let's solve it here with the new command 'sdkmanager'
+  - sdkmanager --install tools
 #  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
 #  - emulator -avd test -no-skin -no-audio -no-window &
 #  - chmod +x ./wait_for_emulator.sh
