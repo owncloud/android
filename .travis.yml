@@ -6,7 +6,7 @@ android:
   components:
   - tools
   - platform-tools
-  - build-tools-26.0.0
+  - build-tools-26.0.2
   - android-24
   - sys-img-armeabi-v7a-android-24
 branches:
@@ -16,13 +16,17 @@ before_install:
 # After Travis updated image with Android base environment, building via ant is not possible anymore.
 # Library tests are old-style tests, and trust on legacy Android ant environment.
 # Need to disable tests until they are ported to JUnit 4 and gradle build.
-#- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  -c 20M
+#- echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
 #- emulator -avd test -no-window &
 - rm pom.xml
 #- android update project -p .
 #- chmod +x ./wait_for_emulator.sh
 #- ./wait_for_emulator.sh
+# 
+# On the other hand, Travis still uses 'android' command behind the 'components' section update. 
+# That command is obsolete and cannot update Android SDK Tools after 25.2.5.
+# Let's solve it here with the new command 'sdkmanager'
+- yes | sdkmanager --verbose tools
 script:
 #- ant clean
 #- ant debug
