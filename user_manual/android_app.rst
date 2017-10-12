@@ -92,6 +92,10 @@ Initially the path to this section isn't visible.
 To get to it, first click the down arrow, in the user details section, which
 will replace the "All files" and "Uploads" buttons with "Add account" and
 "Manage accounts". 
+
+.. figure:: images/manage-user-accounts.png
+   :alt: Manage user accounts   
+
 Then, click "Manage accounts". 
 From there, you can see all of the currently active user accounts, along with a button to add a new account.
 
