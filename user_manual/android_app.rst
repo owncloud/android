@@ -139,7 +139,7 @@ You can find them in the public partition.
    all your files on your Android device. 
 
 Add Account
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^
 
 To add a new account is identical to creating the first account. 
 Click "Add account", and then follow the instructions in `Connecting to Your ownCloud Server`_.
@@ -200,7 +200,7 @@ gives you the option to sort your files by date, or alphabetically.
 .. figure:: images/android-6.png
    :alt: Top-right menu.   
   
-Sharing files
+Sharing Files
 ^^^^^^^^^^^^^
 
 You can share with other ownCloud users and groups, and create public share
