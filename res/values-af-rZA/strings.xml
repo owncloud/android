@@ -55,6 +55,7 @@
   <string name="common_back">Terug</string>
   <string name="common_error">Fout</string>
   <string name="common_error_unknown">Onbekende fout</string>
+  <string name="common_pending">Hangend</string>
   <string name="about_title">Oor</string>
   <string name="change_password">Verander wagwoord</string>
   <string name="delete_account">Verwyder rekening</string>
