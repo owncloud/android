@@ -43,8 +43,8 @@ public class RemoteFile implements Parcelable, Serializable {
     /**
      * Generated - should be refreshed every time the class changes!!
      */
-    private static final long serialVersionUID = 3130865437811248451L;
-
+    private static final long serialVersionUID = -8965995357413958539L;
+    
     private String mRemotePath;
     private String mMimeType;
     private long mLength;
@@ -169,19 +169,19 @@ public class RemoteFile implements Parcelable, Serializable {
         mRemotePath = path;
     }
 
-    public RemoteFile(WebdavEntry we) {
-        this(we.decodedPath());
-        this.setCreationTimestamp(we.createTimestamp());
-        this.setLength(we.contentLength());
-        this.setMimeType(we.contentType());
-        this.setModifiedTimestamp(we.modifiedTimestamp());
-        this.setEtag(we.etag());
-        this.setPermissions(we.permissions());
-        this.setRemoteId(we.remoteId());
-        this.setSize(we.size());
-        this.setQuotaUsedBytes(we.quotaUsedBytes());
-        this.setQuotaAvailableBytes(we.quotaAvailableBytes());
-        this.setPrivateLink(we.privateLink());
+    public RemoteFile(WebdavEntry webdavEntry) {
+        this(webdavEntry.decodedPath());
+        this.setCreationTimestamp(webdavEntry.createTimestamp());
+        this.setLength(webdavEntry.contentLength());
+        this.setMimeType(webdavEntry.contentType());
+        this.setModifiedTimestamp(webdavEntry.modifiedTimestamp());
+        this.setEtag(webdavEntry.etag());
+        this.setPermissions(webdavEntry.permissions());
+        this.setRemoteId(webdavEntry.remoteId());
+        this.setSize(webdavEntry.size());
+        this.setQuotaUsedBytes(webdavEntry.quotaUsedBytes());
+        this.setQuotaAvailableBytes(webdavEntry.quotaAvailableBytes());
+        this.setPrivateLink(webdavEntry.privateLink());
     }
 
     /**
