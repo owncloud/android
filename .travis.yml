@@ -11,8 +11,8 @@ before_install:
 # Let's solve it here with the new command 'sdkmanager'
 # Check list installed and available packages
 - yes | sdkmanager --verbose "build-tools;26.0.2"
-- yes | sdkmanager --verbose "platform-tools;26.0.1"
-- yes | sdkmanager --verbose "tools:26.1.1"
+- yes | sdkmanager --verbose "platform-tools"
+- yes | sdkmanager --verbose "tools"
 - yes | sdkmanager --verbose "platforms;android-24"
 - yes | sdkmanager --verbose "extras;android;m2repository"
 
