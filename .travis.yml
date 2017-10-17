@@ -5,7 +5,7 @@ jdk:
 
 # INSTRUMENTED TESTS ARE DISABLED - until Google or Travis fix the mess with emulation, only local tests are enabled
 #  - sys-img-armeabi-v7a-android-24
-before_install:
+install:
 # Travis still uses 'android' command behind the 'components' section update.
 # That command is obsolete and cannot update Android SDK Tools after 25.2.5.
 # Let's solve it here with the new command 'sdkmanager'
