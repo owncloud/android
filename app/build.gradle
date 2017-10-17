@@ -1,0 +1,152 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        manifestPlaceholders.versionCode = "20500000"
+        manifestPlaceholders.versionName = "2.5.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // arguments to be passed to functional tests
+        testInstrumentationRunnerArgument "TEST_USER", "\"$System.env.OCTEST_APP_USERNAME\""
+        testInstrumentationRunnerArgument "TEST_PASSWORD", "\"$System.env.OCTEST_APP_PASSWORD\""
+        testInstrumentationRunnerArgument "TEST_USER2", "\"$System.env.OCTEST_APP_USERNAME2\""
+        testInstrumentationRunnerArgument "TEST_PASSWORD2", "\"$System.env.OCTEST_APP_PASSWORD2\""
+        testInstrumentationRunnerArgument "TEST_SERVER_URL", "\"$System.env.OCTEST_SERVER_BASE_URL\""
+        testInstrumentationRunnerArgument "TRUSTED", "\"$System.env.OCTEST_SERVER_TRUSTED\""
+        testInstrumentationRunnerArgument "TEST_USERNAME_ID", "\"$System.env.OCTEST_WEB_USERFIELD\""
+        testInstrumentationRunnerArgument "TEST_PASSWORD_ID", "\"$System.env.OCTEST_WEB_PASSFIELD\""
+        testInstrumentationRunnerArgument "TEST_SUBMIT_XPATH", "\"$System.env.OCTEST_WEB_SUBMITXPATH\""
+        testInstrumentationRunnerArgument "TEST_LOOKUP", "\"$System.env.OCTEST_SERVER_LOOKUP\""
+
+        multiDexEnabled true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+    }
+
+    adbOptions {
+        timeOutInMs(20 * 60 * 1000)
+    }
+
+    signingConfigs {
+        release {
+            if (System.env.OC_RELEASE_KEYSTORE) {
+                storeFile file(System.env.OC_RELEASE_KEYSTORE)  // use an absolute path
+                storePassword System.env.OC_RELEASE_KEYSTORE_PASSWORD
+                keyAlias System.env.OC_RELEASE_KEY_ALIAS
+                keyPassword System.env.OC_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            if (System.env.OC_RELEASE_KEYSTORE) {
+                signingConfig signingConfigs.release
+            }
+        }
+        debug {
+            applicationIdSuffix ".debug"
+        }
+        beta {
+            manifestPlaceholders.versionCode = "20400001"
+            manifestPlaceholders.versionName = "2.5.0-beta.2"
+            applicationIdSuffix ".beta"
+        }
+    }
+
+    // Updates output file names of a given variant to format
+    // eg owncloud-android.2.5.0-debug.apk [appName].[variant.versionName]-[variant.name].apk
+    // no clue where [OC_BUILD_NUMBER] comes from
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+
+            logger.info("Setting new name for output of variant $variant.name")
+            def appName = System.env.OC_APP_NAME
+            def originalFile = variant.outputs[0].outputFile;
+            def originalName = originalFile.name;
+            logger.info("$variant.name: originalName is $originalName")
+
+            def newName = ""
+
+            if (appName) {
+                newName += appName
+            }
+
+            def versionName = "$variant.mergedFlavor.versionName"
+            if (variant.mergedFlavor.manifestPlaceholders.versionName != null) {
+                versionName = "$variant.mergedFlavor.manifestPlaceholders.versionName"
+            }
+            if (variant.buildType.manifestPlaceholders.versionName != null) {
+                versionName = "$variant.buildType.manifestPlaceholders.versionName"
+            }
+            newName += "$versionName"
+
+            def buildNumber = System.env.OC_BUILD_NUMBER
+            if (buildNumber) {
+                newName += ".$buildNumber"
+            }
+
+            outputFileName = "owncloud-android." + newName + "-" + variant.buildType.name + ".apk"
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile project(':owncloud-android-library')
+    compile "com.android.support:support-v4:${supportLibraryVersion}"
+    compile "com.android.support:design:${supportLibraryVersion}"
+    compile 'com.jakewharton:disklrucache:2.0.2'
+    compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
+    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    compile 'com.getbase:floatingactionbutton:1.10.1'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+
+    /// dependencies for local unit tests
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+
+    /// dependencies for instrumented tests
+    // JUnit4 Rules
+    androidTestCompile 'com.android.support.test:rules:0.5'
+
+    // Android JUnit Runner
+    androidTestCompile 'com.android.support.test:runner:0.5'
+
+    // Espresso core
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+
+    // Espresso web
+    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
+
+    // UIAutomator - for cross-app UI tests, and to grant screen is turned on in Espresso tests
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
+    // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
+    androidTestCompile "com.android.support:support-annotations:${supportLibraryVersion}"
+}
+
+tasks.withType(Test) {
+    /// increased logging for tests
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
