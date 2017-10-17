@@ -9,12 +9,14 @@ before_install:
 # Travis still uses 'android' command behind the 'components' section update.
 # That command is obsolete and cannot update Android SDK Tools after 25.2.5.
 # Let's solve it here with the new command 'sdkmanager'
-# Check list installed and available packages
 - yes | sdkmanager --verbose "build-tools;26.0.2"
 - yes | sdkmanager --verbose "platform-tools"
 - yes | sdkmanager --verbose "tools"
 - yes | sdkmanager --verbose "platforms;android-24"
 - yes | sdkmanager --verbose "extras;android;m2repository"
+
+# Check list installed and available packages
+- yes | sdkmanager --list
 
 #  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
 #  - emulator -avd test -no-skin -no-audio -no-window &
