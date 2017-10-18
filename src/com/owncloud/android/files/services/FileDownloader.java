@@ -23,6 +23,7 @@ package com.owncloud.android.files.services;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -77,6 +78,8 @@ public class FileDownloader extends Service
     private static final String DOWNLOAD_ADDED_MESSAGE = "DOWNLOAD_ADDED";
     private static final String DOWNLOAD_FINISH_MESSAGE = "DOWNLOAD_FINISH";
 
+    private static final String DOWNLOAD_NOTIFICATION_CHANNEL_ID = "DOWNLOAD_NOTIFICATION_CHANNEL";
+
     private static final String TAG = FileDownloader.class.getSimpleName();
 
     private Looper mServiceLooper;
@@ -112,6 +115,23 @@ public class FileDownloader extends Service
         super.onCreate();
         Log_OC.d(TAG, "Creating service");
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        // Configure notification channel
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mNotificationChannel;
+            // The user-visible name of the channel.
+            CharSequence name = getString(R.string.download_notification_channel_name);
+            // The user-visible description of the channel.
+            String description = getString(R.string.download_notification_channel_description);
+            // Set importance low: show the notification everywhere but with no sound
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            mNotificationChannel = new NotificationChannel(DOWNLOAD_NOTIFICATION_CHANNEL_ID,
+                    name, importance);
+            // Configure the notification channel.
+            mNotificationChannel.setDescription(description);
+            mNotificationManager.createNotificationChannel(mNotificationChannel);
+        }
+
         HandlerThread thread = new HandlerThread("FileDownloaderThread",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
@@ -526,10 +546,10 @@ public class FileDownloader extends Service
      * @param download Download operation starting.
      */
     private void notifyDownloadStart(DownloadFileOperation download) {
+
         /// create status notification with a progress bar
         mLastPercent = 0;
-        mNotificationBuilder =
-                NotificationUtils.newNotificationBuilder(this);
+        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
         mNotificationBuilder
                 .setSmallIcon(R.drawable.notification_icon)
                 .setTicker(getString(R.string.downloader_download_in_progress_ticker))
@@ -538,8 +558,8 @@ public class FileDownloader extends Service
                 .setProgress(100, 0, download.getSize() < 0)
                 .setContentText(
                         String.format(getString(R.string.downloader_download_in_progress_content), 0,
-                                new File(download.getSavePath()).getName())
-                );
+                                new File(download.getSavePath()).getName()))
+                .setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);
 
         /// includes a pending intent in the notification showing the details view of the file
         Intent showDetailsIntent = null;
@@ -573,6 +593,7 @@ public class FileDownloader extends Service
             String fileName = filePath.substring(filePath.lastIndexOf(FileUtils.PATH_SEPARATOR) + 1);
             String text = String.format(getString(R.string.downloader_download_in_progress_content), percent, fileName);
             mNotificationBuilder.setContentText(text);
+            mNotificationBuilder.setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);
             mNotificationManager.notify(R.string.downloader_download_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
@@ -633,6 +654,7 @@ public class FileDownloader extends Service
                     ErrorMessageAdapter.getErrorCauseMessage(downloadResult, download,
                             getResources())
             );
+            mNotificationBuilder.setChannelId(DOWNLOAD_NOTIFICATION_CHANNEL_ID);
             mNotificationManager.notify(tickerId, mNotificationBuilder.build());
 
             // Remove success notification
