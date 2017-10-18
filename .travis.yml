@@ -2,19 +2,22 @@ sudo: false
 language: android
 jdk:
   - oraclejdk8
-android:
-  components:
-# first 'tools' updates SDK tools 'til last version ** in remote repository number 10 **
-  - tools
-# second 'tools' updates SDK tools 'til last version ** in remote repository number 11 ** (current last one)
-  - tools
-  - platform-tools
-  - build-tools-25.0.2
-  - android-24
-  - extra-android-m2repository
+
 # INSTRUMENTED TESTS ARE DISABLED - until Google or Travis fix the mess with emulation, only local tests are enabled
 #  - sys-img-armeabi-v7a-android-24
-before_install:
+install:
+# Travis still uses 'android' command behind the 'components' section update.
+# That command is obsolete and cannot update Android SDK Tools after 25.2.5.
+# Let's solve it here with the new command 'sdkmanager'
+- yes | sdkmanager --verbose "build-tools;26.0.2"
+- yes | sdkmanager --verbose "platform-tools"
+- yes | sdkmanager --verbose "tools"
+- yes | sdkmanager --verbose "platforms;android-24"
+- yes | sdkmanager --verbose "extras;android;m2repository"
+
+# Check tools and dependencies installed
+- yes | sdkmanager --list
+
 #  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
 #  - emulator -avd test -no-skin -no-audio -no-window &
 #  - chmod +x ./wait_for_emulator.sh
