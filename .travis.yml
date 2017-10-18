@@ -12,7 +12,7 @@ install:
 - yes | sdkmanager --verbose "build-tools;26.0.2"
 - yes | sdkmanager --verbose "platform-tools"
 - yes | sdkmanager --verbose "tools"
-- yes | sdkmanager --verbose "platforms;android-24"
+- yes | sdkmanager --verbose "platforms;android-26"
 - yes | sdkmanager --verbose "extras;android;m2repository"
 
 # Check tools and dependencies installed
