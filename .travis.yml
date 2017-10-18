@@ -43,7 +43,7 @@ env:
   #   via the "travis encrypt" command using the project repo's public key
   - secure: epTZ0zZGDbHL3o6vSC9uNkZsi5j5SA6O/tvQBH7QW/dluuzIJxIjfhNbZHDyBReYDleirLzUFQpdWAUdvulCMLs/qZdIzFGlYXZSpxEnvPYMGQcilwADdJcxLw8L+3+ET5hSexxhjrTGw427IljkqGUpqQTxaLwFdFu98lDWSbc=
   matrix:
-  - ANDROID_TARGET=android-24 ANDROID_ABI=armeabi-v7a
+  - ANDROID_TARGET=android-26 ANDROID_ABI=armeabi-v7a
 addons:
   coverity_scan:
     project:
