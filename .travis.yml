@@ -15,7 +15,7 @@ install:
 - yes | sdkmanager --verbose "platforms;android-24"
 - yes | sdkmanager --verbose "extras;android;m2repository"
 
-# Check list installed and available packages
+# Check tools and dependencies installed
 - yes | sdkmanager --list
 
 #  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 20M
