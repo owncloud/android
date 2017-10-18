@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Errore sconosciuto</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">In attesa della connettività wifi</string>
   <string name="uploads_view_later_waiting_to_upload">In attesa di caricamento</string>
+  <string name="uploads_view_unsupported_media_type">Formato non supportato</string>
   <string name="downloader_download_in_progress_ticker">Scaricamento in corso...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Scaricamento di %2$s</string>
   <string name="downloader_download_succeeded_ticker">Scaricamento effettuato</string>
@@ -258,6 +259,7 @@
   <string name="activity_chooser_title">Invia collegamento a...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copia file dall\'archiviazione privata</string>
   <string name="oauth_check_onoff">Accesso con oAuth2.</string>
+  <string name="oauth_login_connection">Connessione al server OAuth2...</string>
   <string name="ssl_validator_header">L\'identità del server non può essere verificata</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Il certificato del server non è affidabile</string>
   <string name="ssl_validator_reason_cert_expired">- Il certificato del server è scaduto</string>
