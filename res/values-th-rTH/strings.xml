@@ -399,7 +399,7 @@
   <string name="share_via_link_name_label">ชื่อลิงค์</string>
   <string name="share_cancel_public_link_button">ยกเลิก</string>
   <string name="share_confirm_public_link_button">บันทึก</string>
-  <string name="share_via_link_expiration_date_label">การหมดอายุ</string>
+  <string name="share_via_link_expiration_date_label">กำหนดวันที่หมดอายุ</string>
   <string name="share_via_link_password_label">รหัสผ่าน</string>
   <string name="share_via_link_password_title">ความปลอดภัย</string>
   <string name="share_via_link_edit_permission_label">อนุญาตให้แก้ไข</string>
