@@ -225,6 +225,7 @@
   <string name="confirmation_remove_folder_alert">您真的要移除 %1$s 與裡頭的檔案?</string>
   <string name="confirmation_remove_local">只有本地</string>
   <string name="confirmation_remove_account_alert">你是否真的要移除這個帳號 %1$s?</string>
+  <string name="confirmation_remove_public_share_title">移除連結</string>
   <string name="confirmation_remove_public_share_message">您真的要移除 %1$s ?</string>
   <string name="remove_success_msg">成功地移除</string>
   <string name="remove_fail_msg">刪除失敗</string>
@@ -306,6 +307,7 @@
   <string name="network_error_socket_exception">在與伺服器連線時發生了錯誤.</string>
   <string name="network_error_socket_timeout_exception">伺服器回應逾時</string>
   <string name="update_link_forbidden_permissions">更新這個分享</string>
+  <string name="uploader_upload_forbidden">您沒有權限上傳</string>
   <string name="prefs_category_accounts">帳號</string>
   <string name="drawer_manage_accounts">管理帳號</string>
   <string name="auth_redirect_non_secure_connection_title">加密的連線是由一個未加密的連線轉向過來的.</string>
@@ -352,8 +354,12 @@
   <string name="pref_behaviour_entries_move">移動到應用程式資料夾</string>
   <string name="share_dialog_title">分享</string>
   <string name="share_file">分享 %1$s</string>
+  <string name="share_with_user_section_title">使用者及群組</string>
   <string name="share_no_users">目前沒有任何您分享的內容</string>
   <string name="share_add_user_or_group">加入使用者或群組</string>
+  <string name="share_via_link_section_title">公共連結</string>
+  <string name="share_via_link_create_title">建立連結分享</string>
+  <string name="share_via_link_edit_title">編輯連結分享</string>
   <string name="share_cancel_public_link_button">取消</string>
   <string name="share_confirm_public_link_button">儲存</string>
   <string name="share_via_link_expiration_date_label">過期</string>
@@ -391,6 +397,8 @@
   <string name="local_file_not_found_toast">在本地的檔案系統中找不到這個檔案</string>
   <string name="confirmation_remove_files_alert">您真的要移除所選取的項目?</string>
   <string name="confirmation_remove_folders_alert">您真的要移除所選取的項目與裡面的文件?</string>
+  <string name="failed_upload_quota_exceeded_text">此帳戶無足夠儲存空間</string>
+  <string name="streaming_certificate_error">串流不能被初始化，因為您的伺服器的憑證不被信任。檔案下載會自動開始。</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已選取</item>
   </plurals>
