@@ -71,7 +71,7 @@ public class InstantUploadsObserverBasedOnINotify extends FileObserver implement
      */
     public InstantUploadsObserverBasedOnINotify(InstantUploadsConfiguration configuration, Context context) {
         super(configuration.getSourcePath(), CREATE_MASK);
-
+        
         if (context == null) {
             throw new IllegalArgumentException("NULL context argument received");
         }
