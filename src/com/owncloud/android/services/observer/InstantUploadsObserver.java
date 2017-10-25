@@ -47,6 +47,4 @@ interface InstantUploadsObserver {
      *                          'false' otherwise.
      */
     boolean updateConfiguration(InstantUploadsConfiguration configuration);
-
-
 }

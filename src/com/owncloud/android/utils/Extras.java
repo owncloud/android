@@ -36,5 +36,6 @@ public class Extras {
     public static final String EXTRA_OLD_FILE_PATH = "OLD_FILE_PATH";
     public static final String EXTRA_UPLOAD_RESULT = "RESULT";
 
-
+    // from Camera folder
+    public static final String EXTRA_LOCAL_CAMERA_PATH = "LOCAL_CAMERA_PATH";
 }

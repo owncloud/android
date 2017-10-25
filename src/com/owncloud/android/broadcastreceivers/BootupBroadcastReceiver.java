@@ -54,5 +54,4 @@ public class BootupBroadcastReceiver extends BroadcastReceiver {
         Log_OC.d(TAG, "Starting file observer service...");
         FileObserverService.initialize(context);
     }
-
 }

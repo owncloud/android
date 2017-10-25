@@ -484,7 +484,5 @@ public class FileObserverService extends Service {
                 parentPath = new File(parentPath).getParent();
             }
         }
-
     }
-
 }
