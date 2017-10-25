@@ -142,6 +142,12 @@
             android:exported="true">
         </service>
 
+        <service
+            android:name=".services.observer.SyncCameraFolderJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true">
+        </service>
+
         <provider
             android:name=".providers.FileContentProvider"
             android:authorities="@string/authority"

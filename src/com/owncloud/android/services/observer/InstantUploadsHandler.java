@@ -334,5 +334,4 @@ public class InstantUploadsHandler {
         );
         return true;
     }
-
 }

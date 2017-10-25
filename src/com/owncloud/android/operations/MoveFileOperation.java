@@ -110,6 +110,7 @@ public class MoveFileOperation extends SyncOperation {
             // adjust available offline status after move resume observation of file after rename
             OCFile updatedFile = getStorageManager().getFileById(mFile.getFileId());
             OCFile.AvailableOfflineStatus updatedAvOffStatus = updatedFile.getAvailableOfflineStatus();
+
             if (updatedAvOffStatus == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
                 resumeObservation(targetPath);
 
