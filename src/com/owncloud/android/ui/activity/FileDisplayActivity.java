@@ -26,6 +26,8 @@ import android.accounts.Account;
 import android.accounts.AuthenticatorException;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -41,6 +43,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -57,10 +60,12 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.services.observer.SyncCameraFolderJobService;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -149,6 +154,35 @@ public class FileDisplayActivity extends HookActivity
         /// grant that FileObserverService is watching favorite files
         if (savedInstanceState == null) {
             FileObserverService.initialize(this);
+        }
+
+        PreferenceManager.InstantUploadsConfiguration config =
+                PreferenceManager.getInstantUploadsConfiguration(this);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP &&
+                (config.isEnabledForPictures() || config.isEnabledForVideos())) {
+
+            ComponentName serviceComponent = new ComponentName(this, SyncCameraFolderJobService.class);
+            JobInfo.Builder builder = null;
+
+            builder = new JobInfo.Builder(0, serviceComponent);
+
+            builder.setPersisted(true);
+
+            builder.setMinimumLatency(0);
+            builder.setPeriodic(5*1000);
+
+            // Extra data
+            PersistableBundle extras = new PersistableBundle();
+            extras.putString(Extras.EXTRA_LOCAL_CAMERA_PATH, config.getSourcePath());
+
+            builder.setExtras(extras);
+
+            //builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED); // require unmetered network
+            //builder.setRequiresDeviceIdle(true); // device should be idle
+            //builder.setRequiresCharging(false); // we don't care if the device is charging or not
+            JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            jobScheduler.schedule(builder.build());
         }
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
