@@ -24,6 +24,7 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -72,12 +73,14 @@ public class UploadFilesActivity extends FileActivity implements
 
     private static final String WAIT_DIALOG_TAG = "WAIT";
     private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
+    private static final int CAMERA_REQUEST = 1888;
 
     private ArrayAdapter<String> mDirectories;
     private File mCurrentDir = null;
     private LocalFileListFragment mFileListFragment;
     private Button mCancelBtn;
     private Button mUploadBtn;
+    private Button mCameraUploadBtn;
     private Account mAccountOnCreation;
     private DialogFragment mCurrentDialog;
 
@@ -123,6 +126,8 @@ public class UploadFilesActivity extends FileActivity implements
         mCancelBtn.setOnClickListener(this);
         mUploadBtn = (Button) findViewById(R.id.upload_files_btn_upload);
         mUploadBtn.setOnClickListener(this);
+        mCameraUploadBtn = (Button) findViewById(R.id.upload_file_from_camera);
+        mCameraUploadBtn.setOnClickListener(this);
 
         SharedPreferences appPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
@@ -326,6 +331,18 @@ public class UploadFilesActivity extends FileActivity implements
             
         } else if (v.getId() == R.id.upload_files_btn_upload) {
             new CheckAvailableSpaceTask().execute();
+        }
+        else if(v.getId() == R.id.upload_file_from_camera){
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            //Send Photo to upload activity
         }
     }
 
