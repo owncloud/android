@@ -37,7 +37,8 @@ public class RetryDownloadJobService extends JobService {
                 Extras.EXTRA_REMOTE_PATH
             );
 
-            Log_OC.d(TAG, String.format("Retrying download of %1s in %2s", fileRemotePath, accountName));
+            Log_OC.d(TAG, String.format("Retrying download of %1s in %2s", fileRemotePath,
+                    accountName));
 
             // Get download file from database
             OCFile ocFile = fileDataStorageManager.getFileByPath(fileRemotePath);
@@ -76,5 +77,4 @@ public class RetryDownloadJobService extends JobService {
     public boolean onStopJob(JobParameters jobParameters) {
         return true;
     }
-
 }

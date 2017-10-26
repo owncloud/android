@@ -64,6 +64,7 @@ import com.owncloud.android.operations.CopyFileOperation;
 import com.owncloud.android.operations.CreateFolderOperation;
 import com.owncloud.android.operations.CreateShareViaLinkOperation;
 import com.owncloud.android.operations.CreateShareWithShareeOperation;
+import com.owncloud.android.operations.GetFolderFilesOperation;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.operations.MoveFileOperation;
 import com.owncloud.android.operations.RemoveFileOperation;
@@ -126,6 +127,7 @@ public class OperationsService extends Service {
     public static final String ACTION_MOVE_FILE = "MOVE_FILE";
     public static final String ACTION_COPY_FILE = "COPY_FILE";
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
+    public static final String ACTION_GET_FOLDER_FILES = "GET_FOLDER_FILES";
 
     public static final String ACTION_OPERATION_ADDED = OperationsService.class.getName() +
             ".OPERATION_ADDED";
@@ -526,9 +528,6 @@ public class OperationsService extends Service {
                 mService.dispatchResultToOperationListeners(mCurrentOperation, result);
             }
         }
-
-
-
     }
 
 
@@ -728,6 +727,11 @@ public class OperationsService extends Service {
                 } else if (action.equals(ACTION_CHECK_CURRENT_CREDENTIALS)) {
                     // Check validity of currently stored credentials for a given account
                     operation = new CheckCurrentCredentialsOperation(account);
+
+                } else if (action.equals(ACTION_GET_FOLDER_FILES)) {
+                    // Get the list of files contained in a given folder
+                    String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
+                    operation = new GetFolderFilesOperation(remotePath);
                 }
             }
                 
@@ -823,5 +827,4 @@ public class OperationsService extends Service {
         }
         Log_OC.d(TAG, "Called " + count + " listeners");
     }
-
 }

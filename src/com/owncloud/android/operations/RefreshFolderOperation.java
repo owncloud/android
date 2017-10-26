@@ -42,7 +42,6 @@ import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 
 
-
 /**
  *  Operation performing a REFRESH on a folder, conceived to be triggered by an action started
  *  FROM THE USER INTERFACE.
