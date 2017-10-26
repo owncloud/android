@@ -440,5 +440,4 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         }
         return files;
     }
-
 }
