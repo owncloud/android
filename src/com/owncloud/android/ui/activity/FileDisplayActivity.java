@@ -156,6 +156,7 @@ public class FileDisplayActivity extends HookActivity
             FileObserverService.initialize(this);
         }
 
+        /// Schedule a job to check pictures to be uploaded
         PreferenceManager.InstantUploadsConfiguration config =
                 PreferenceManager.getInstantUploadsConfiguration(this);
 
@@ -175,6 +176,9 @@ public class FileDisplayActivity extends HookActivity
             // Extra data
             PersistableBundle extras = new PersistableBundle();
             extras.putString(Extras.EXTRA_LOCAL_CAMERA_PATH, config.getSourcePath());
+            extras.putString(Extras.EXTRA_UPLOAD_PICTURES_PATH, config.getUploadPathForPictures());
+            extras.putString(Extras.EXTRA_UPLOAD_VIDEOS_PATH, config.getUploadPathForVideos());
+            extras.putString(Extras.EXTRA_ACCOUNT_NAME, getAccount().name);
 
             builder.setExtras(extras);
 
