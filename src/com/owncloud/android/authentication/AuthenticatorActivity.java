@@ -242,11 +242,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
         // bind to Operations Service
         mOperationsServiceConnection = new OperationsServiceConnection();
-        if (!bindService(new Intent(this, OperationsService.class), 
-                mOperationsServiceConnection, 
+        if (!bindService(new Intent(this, OperationsService.class),
+                mOperationsServiceConnection,
                 Context.BIND_AUTO_CREATE)) {
-            Toast.makeText(this, 
-                    R.string.error_cant_bind_to_operations_service, 
+            Toast.makeText(this,
+                    R.string.error_cant_bind_to_operations_service,
                     Toast.LENGTH_LONG)
                         .show();
                 //  do not use a Snackbar, finishing right now!
@@ -684,7 +684,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mOperationsServiceBinder != null) {
             doOnResumeAndBound();
         }
-        
     }
 
     
@@ -1959,7 +1958,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 mOperationsServiceBinder = null;
             }
         }
-    
     }
 
     /**
