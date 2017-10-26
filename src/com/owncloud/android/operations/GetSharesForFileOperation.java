@@ -81,5 +81,4 @@ public class GetSharesForFileOperation extends SyncOperation {
 
         return result;
     }
-
 }

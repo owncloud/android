@@ -61,5 +61,4 @@ public class CheckCurrentCredentialsOperation extends SyncOperation {
         }
         return result;
     }
-
 }
