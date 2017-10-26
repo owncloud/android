@@ -80,7 +80,6 @@ public class UploadFilesActivity extends FileActivity implements
     private LocalFileListFragment mFileListFragment;
     private Button mCancelBtn;
     private Button mUploadBtn;
-    private Button mCameraUploadBtn;
     private Account mAccountOnCreation;
     private DialogFragment mCurrentDialog;
 
@@ -126,8 +125,6 @@ public class UploadFilesActivity extends FileActivity implements
         mCancelBtn.setOnClickListener(this);
         mUploadBtn = (Button) findViewById(R.id.upload_files_btn_upload);
         mUploadBtn.setOnClickListener(this);
-        mCameraUploadBtn = (Button) findViewById(R.id.upload_file_from_camera);
-        mCameraUploadBtn.setOnClickListener(this);
 
         SharedPreferences appPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
@@ -332,20 +329,7 @@ public class UploadFilesActivity extends FileActivity implements
         } else if (v.getId() == R.id.upload_files_btn_upload) {
             new CheckAvailableSpaceTask().execute();
         }
-        else if(v.getId() == R.id.upload_file_from_camera){
-            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, CAMERA_REQUEST);
-        }
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            //Send Photo to upload activity
-        }
-    }
-
 
     /**
      * Asynchronous task checking if there is space enough to copy all the files chosen
