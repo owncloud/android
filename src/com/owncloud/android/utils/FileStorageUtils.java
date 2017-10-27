@@ -20,27 +20,27 @@
 
 package com.owncloud.android.utils;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Vector;
-
-import third_parties.daveKoeller.AlphanumComparator;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.StatFs;
+import android.preference.PreferenceManager;
+import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 
-import android.accounts.Account;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.StatFs;
-import android.webkit.MimeTypeMap;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
+
+import third_parties.daveKoeller.AlphanumComparator;
 
 
 /**
@@ -161,6 +161,23 @@ public class FileStorageUtils {
         file.setRemoteId(remote.getRemoteId());
         file.setPrivateLink(remote.getPrivateLink());
         return file;
+    }
+
+    /**
+     * Creates and populates a list of new {@link OCFile} objects with the data read from the server.
+     *
+     * @param remoteFiles remote files read from the server (remote files or folders)
+     * @return New OCFile list instance representing the remote resource described by remote.
+     */
+    public static ArrayList<OCFile> createOCFilesFromRemoteFilesList(ArrayList<RemoteFile>
+                                                                             remoteFiles) {
+        ArrayList<OCFile> files = new ArrayList<>();
+
+        for (RemoteFile remoteFile : remoteFiles) {
+            files.add(createOCFileFrom(remoteFile));
+        }
+
+        return files;
     }
     
     /**
