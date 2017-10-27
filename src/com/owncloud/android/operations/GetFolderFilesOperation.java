@@ -44,6 +44,10 @@ public class GetFolderFilesOperation extends RemoteOperation {
         mRemotePath = remotePath;
     }
 
+    public String getRemotePath() {
+        return mRemotePath;
+    }
+
     /**
      * Performs the operation.
      *
@@ -54,24 +58,9 @@ public class GetFolderFilesOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
-        RemoteOperationResult result = null;
-
-        try {
-
-            ReadRemoteFolderOperation readRemoteFolder = new ReadRemoteFolderOperation(mRemotePath);
-            RemoteOperationResult remoteResult = readRemoteFolder.execute(client);
-            if (remoteResult.isSuccess()) {
-
-            } else {
-                result = remoteResult;
-            }
-
-        } catch (Exception e) {
-            Log_OC.e(TAG, "Exception while getting user profile: ", e);
-            result = new RemoteOperationResult(e);
-        }
+        ReadRemoteFolderOperation readRemoteFolder = new ReadRemoteFolderOperation(mRemotePath);
+        RemoteOperationResult result = readRemoteFolder.execute(client);
 
         return result;
     }
-
 }
