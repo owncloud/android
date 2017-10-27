@@ -65,7 +65,6 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.services.observer.SyncCameraFolderJobService;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -80,6 +79,7 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.services.SyncCameraFolderJobService;
 import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -182,6 +182,7 @@ public class FileDisplayActivity extends HookActivity
             if (config.isEnabledForVideos()) {
                 extras.putString(Extras.EXTRA_UPLOAD_VIDEOS_PATH, config.getUploadPathForVideos());
             }
+            extras.putInt(Extras.EXTRA_BEHAVIOR_AFTER_UPLOAD, config.getBehaviourAfterUpload());
             extras.putString(Extras.EXTRA_ACCOUNT_NAME, getAccount().name);
 
             builder.setExtras(extras);
