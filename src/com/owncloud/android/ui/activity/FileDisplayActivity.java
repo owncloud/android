@@ -170,14 +170,18 @@ public class FileDisplayActivity extends HookActivity
 
             builder.setPersisted(true);
 
-            builder.setMinimumLatency(0);
-            builder.setPeriodic(5*1000);
+            // Execute job every 30 seconds
+            builder.setPeriodic(30000);
 
             // Extra data
             PersistableBundle extras = new PersistableBundle();
             extras.putString(Extras.EXTRA_LOCAL_CAMERA_PATH, config.getSourcePath());
-            extras.putString(Extras.EXTRA_UPLOAD_PICTURES_PATH, config.getUploadPathForPictures());
-            extras.putString(Extras.EXTRA_UPLOAD_VIDEOS_PATH, config.getUploadPathForVideos());
+            if (config.isEnabledForPictures()) {
+                extras.putString(Extras.EXTRA_UPLOAD_PICTURES_PATH, config.getUploadPathForPictures());
+            }
+            if (config.isEnabledForVideos()) {
+                extras.putString(Extras.EXTRA_UPLOAD_VIDEOS_PATH, config.getUploadPathForVideos());
+            }
             extras.putString(Extras.EXTRA_ACCOUNT_NAME, getAccount().name);
 
             builder.setExtras(extras);
