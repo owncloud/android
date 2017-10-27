@@ -1,4 +1,4 @@
-package com.owncloud.android.services.observer;
+package com.owncloud.android.services;
 
 import android.accounts.Account;
 import android.app.job.JobParameters;
@@ -14,13 +14,18 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.GetFolderFilesOperation;
-import com.owncloud.android.services.OperationsService;
+import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.Extras;
+import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,6 +44,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     private long mWaitingForOpId = Long.MAX_VALUE;
 
     private JobParameters mJobParameters;
+    private Account mAccount;
 
     private String mUploadedPicturesPath;
     private String mUploadedVideosPath;
@@ -52,6 +58,10 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         Log.d(TAG, "Starting job to sync camera folder");
 
         mJobParameters = jobParameters;
+
+        String accountName = mJobParameters.getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
+
+        mAccount = AccountUtils.getOwnCloudAccountByName(this, accountName);
 
         mGetRemotePicturesCompleted = false;
         mGetRemoteVideosCompleted = false;
@@ -90,10 +100,6 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             mOperationsServiceBinder.dispatchResultIfFinished((int)mWaitingForOpId, this);
         }
 
-        String accountName = mJobParameters.getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
-
-        Account account = AccountUtils.getOwnCloudAccountByName(this, accountName);
-
         mUploadedPicturesPath = mJobParameters.getExtras().getString(Extras.
                 EXTRA_UPLOAD_PICTURES_PATH);
 
@@ -105,7 +111,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             Intent getUploadedPicturesIntent = new Intent();
             getUploadedPicturesIntent.setAction(OperationsService.ACTION_GET_FOLDER_FILES);
             getUploadedPicturesIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, mUploadedPicturesPath);
-            getUploadedPicturesIntent.putExtra(OperationsService.EXTRA_ACCOUNT, account);
+            getUploadedPicturesIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUploadedPicturesIntent);
         }
 
@@ -114,7 +120,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             Intent getUploadedVideosIntent = new Intent();
             getUploadedVideosIntent.setAction(OperationsService.ACTION_GET_FOLDER_FILES);
             getUploadedVideosIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, mUploadedVideosPath);
-            getUploadedVideosIntent.putExtra(OperationsService.EXTRA_ACCOUNT, account);
+            getUploadedVideosIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUploadedVideosIntent);
         }
     }
@@ -149,6 +155,15 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
 
+        ArrayList<Object> remoteObjects = result.getData();
+
+        // Casting to remote files
+        // TODO Move to a utils class
+        ArrayList<RemoteFile> remoteFiles = new ArrayList<>(remoteObjects.size());
+        for (Object object : remoteObjects) {
+            remoteFiles.add((RemoteFile) object);
+        }
+
         String remotePath = ((GetFolderFilesOperation) operation).getRemotePath();
 
         // Result contains remote pictures
@@ -156,7 +171,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
             Log.d(TAG, "Receiving pictures uploaded");
 
-            uploadNewFiles(result.getData());
+            compareWithLocalFiles(remoteFiles);
 
             mGetRemotePicturesCompleted = true;
         }
@@ -198,16 +213,85 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         }
     }
 
-    private void uploadNewFiles(ArrayList<Object> remoteFiles) {
+    private void compareWithLocalFiles (ArrayList<RemoteFile> remoteFiles) {
 
         //Get local folder images
         String localCameraPath = mJobParameters.getExtras().getString(Extras.EXTRA_LOCAL_CAMERA_PATH);
 
-        File cameraFolderFiles[] = new File[0];
+        File localFolderFiles[] = new File[0];
 
         if (localCameraPath != null) {
             File cameraFolder = new File(localCameraPath);
-            cameraFolderFiles = cameraFolder.listFiles();
+            localFolderFiles = cameraFolder.listFiles();
         }
+
+        ArrayList<OCFile> remoteFolderFiles = FileStorageUtils.
+                createOCFilesFromRemoteFilesList(remoteFiles);
+
+        for (File localFile : localFolderFiles) {
+
+            boolean isAlreadyUpdated = false;
+
+            for (OCFile ocFile : remoteFolderFiles) {
+
+                if (localFile.getName().equals(ocFile.getFileName())) {
+
+                    isAlreadyUpdated = true;
+
+                    break;
+                }
+            }
+
+            if (!isAlreadyUpdated) {
+
+                // Upload file
+                handleNewFile(localFile);
+
+            }
+        }
+    }
+
+    private void handleNewFile(File localFile) {
+
+        String fileName = localFile.getName();
+
+        String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
+        boolean isImage = mimeType.startsWith("image/");
+        boolean isVideo = mimeType.startsWith("video/");
+
+        if (!isImage && !isVideo) {
+            Log_OC.d(TAG, "Ignoring " + fileName);
+            return;
+        }
+
+        if (isImage && mUploadedPicturesPath == null) {
+            Log_OC.d(TAG, "Instant upload disabled for images, ignoring " + fileName);
+            return;
+        }
+
+        if (isVideo && mUploadedVideosPath == null) {
+            Log_OC.d(TAG, "Instant upload disabled for videos, ignoring " + fileName);
+            return;
+        }
+
+        String remotePath = (isImage ? mUploadedPicturesPath : mUploadedVideosPath) + fileName;
+
+        int createdBy = isImage ? UploadFileOperation.CREATED_AS_INSTANT_PICTURE :
+                        UploadFileOperation.CREATED_AS_INSTANT_VIDEO;
+
+        String localPath = mJobParameters.getExtras().getString(Extras.EXTRA_LOCAL_CAMERA_PATH)
+                + File.separator + fileName;
+
+        TransferRequester requester = new TransferRequester();
+        requester.uploadNewFile(
+                this,
+                mAccount,
+                localFile.getPath(),
+                remotePath,
+                mJobParameters.getExtras().getInt(Extras.EXTRA_BEHAVIOR_AFTER_UPLOAD),
+                mimeType,
+                true,           // create parent folder if not existent
+                createdBy
+        );
     }
 }
