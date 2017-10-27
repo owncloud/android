@@ -1061,7 +1061,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // this path is only walked by SAML authentication
             onGetUserNameFinish(result);
         }
-
     }
 
     /**
