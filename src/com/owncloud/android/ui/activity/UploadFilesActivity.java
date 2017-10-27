@@ -22,10 +22,12 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -57,9 +59,11 @@ import com.owncloud.android.ui.fragment.LocalFileListFragment;
 import com.owncloud.android.utils.DialogMenuItem;
 import com.owncloud.android.utils.FileStorageUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import static android.R.attr.data;
+import static android.R.string.no;
 
 
 /**
@@ -355,23 +359,27 @@ public class UploadFilesActivity extends FileActivity implements
             Toast.makeText(getApplicationContext(),"No Camera Present in the device",Toast.LENGTH_SHORT).show();
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this).setPositiveButton("Picture", new DialogInterface.OnClickListener() {
+        String[] mediaTypes = {"Image","Video"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select the type of media")
+                .setItems(mediaTypes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(pictureIntent.resolveActivity(getPackageManager()) != null){
-                    startActivityForResult(pictureIntent,REQUEST_IMAGE_CAPTURE);
+                if(i==0) {
+                    Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE);
+                    }
                 }
+                else if(i==1){
+                    Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    if(videoIntent.resolveActivity(getPackageManager()) != null){
+                        startActivityForResult(videoIntent,REQUEST_VIDEO_CAPTURE);
+                    }
             }
-        }).setPositiveButton("Video", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                if(videoIntent.resolveActivity(getPackageManager()) != null){
-                    startActivityForResult(videoIntent,REQUEST_VIDEO_CAPTURE);
-                }
-            }
+        }
         });
+        builder.show();
     }
 
     @Override
@@ -379,10 +387,65 @@ public class UploadFilesActivity extends FileActivity implements
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             Bundle capturedImageData = capturedData.getExtras();
             Bitmap capturedImage = (Bitmap) capturedImageData.get("data");
+            Uri capturedImageUri = getImageUri(getApplicationContext(),capturedImage);
+            String capturedImagePath = getRealPathFromUri(capturedImageUri);
+            File capturedImageFile = new File(capturedImagePath);
+            String[] capturedImagePathArray = {capturedImagePath};
+            if(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= capturedImageFile.length()){
+                uploadCameraCapturedFile(capturedImagePathArray);
+            }
+            else{
+                noSpaceMessage();
+            }
         }
         else if(requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
             Uri capturedVideoUri = capturedData.getData();
+            String capturedVideoPath = capturedVideoUri.getPath();
+            File capturedVideoFile = new File(capturedVideoPath);
+            String[] capturedVideoPathArray = {capturedVideoPath};
+            if(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= capturedVideoFile.length()){
+                uploadCameraCapturedFile(capturedVideoPathArray);
+            }
+            else{
+                noSpaceMessage();
+            }
         }
+    }
+
+    private void uploadCameraCapturedFile(String[] capturedMediaData){
+        Intent data = new Intent();
+        data.putExtra(EXTRA_CHOSEN_FILES,capturedMediaData);
+        setResult(RESULT_OK_AND_MOVE, data);
+        SharedPreferences.Editor appPreferencesEditor = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext()).edit();
+        appPreferencesEditor.putInt("prefs_uploader_behaviour",
+                FileUploader.LOCAL_BEHAVIOUR_MOVE);
+        appPreferencesEditor.apply();
+        finish();
+    }
+
+    private void noSpaceMessage(){
+        String[] args = {getString(R.string.app_name)};
+        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
+                R.string.upload_query_move_foreign_files, args, 0, R.string.common_yes, -1,
+                R.string.common_no
+        );
+        dialog.setOnConfirmationListener(UploadFilesActivity.this);
+        dialog.show(getSupportFragmentManager(), QUERY_TO_MOVE_DIALOG_TAG);
+    }
+
+    private Uri getImageUri(Context context,Bitmap capturedImage){
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        capturedImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(),capturedImage,"Captured Image",null);
+        return Uri.parse(path);
+    }
+
+    private String getRealPathFromUri(Uri capturedPictureUri){
+        Cursor cursor = getContentResolver().query(capturedPictureUri,null,null,null,null);
+        cursor.moveToFirst();
+        int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(index);
     }
 
     private boolean checkCameraHardware(){
