@@ -22,15 +22,21 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +45,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
@@ -47,9 +54,12 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
+import com.owncloud.android.utils.DialogMenuItem;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
+
+import static android.R.attr.data;
 
 
 /**
@@ -74,12 +84,15 @@ public class UploadFilesActivity extends FileActivity implements
     private static final String WAIT_DIALOG_TAG = "WAIT";
     private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
     private static final int CAMERA_REQUEST = 1888;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_VIDEO_CAPTURE = 2;
 
     private ArrayAdapter<String> mDirectories;
     private File mCurrentDir = null;
     private LocalFileListFragment mFileListFragment;
     private Button mCancelBtn;
     private Button mUploadBtn;
+    private Button mCameraUploadBtn;
     private Account mAccountOnCreation;
     private DialogFragment mCurrentDialog;
 
@@ -125,6 +138,8 @@ public class UploadFilesActivity extends FileActivity implements
         mCancelBtn.setOnClickListener(this);
         mUploadBtn = (Button) findViewById(R.id.upload_files_btn_upload);
         mUploadBtn.setOnClickListener(this);
+        mCameraUploadBtn = (Button) findViewById(R.id.camera_upload);
+        mCameraUploadBtn.setOnClickListener(this);
 
         SharedPreferences appPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
@@ -326,10 +341,59 @@ public class UploadFilesActivity extends FileActivity implements
             setResult(RESULT_CANCELED);
             finish();
             
-        } else if (v.getId() == R.id.upload_files_btn_upload) {
+        }
+        else if (v.getId() == R.id.upload_files_btn_upload) {
             new CheckAvailableSpaceTask().execute();
         }
+        else if(v.getId() == R.id.camera_upload){
+            uploadFromCamera();
+        }
     }
+
+    private void uploadFromCamera(){
+        if(!checkCameraHardware()){
+            Toast.makeText(getApplicationContext(),"No Camera Present in the device",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setPositiveButton("Picture", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(pictureIntent.resolveActivity(getPackageManager()) != null){
+                    startActivityForResult(pictureIntent,REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }).setPositiveButton("Video", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                if(videoIntent.resolveActivity(getPackageManager()) != null){
+                    startActivityForResult(videoIntent,REQUEST_VIDEO_CAPTURE);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent capturedData){
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Bundle capturedImageData = capturedData.getExtras();
+            Bitmap capturedImage = (Bitmap) capturedImageData.get("data");
+        }
+        else if(requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
+            Uri capturedVideoUri = capturedData.getData();
+        }
+    }
+
+    private boolean checkCameraHardware(){
+        if(getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
     /**
      * Asynchronous task checking if there is space enough to copy all the files chosen

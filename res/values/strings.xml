@@ -13,6 +13,7 @@
     <string name="actionbar_see_details">Details</string>
     <string name="actionbar_send_file">Send</string>
     <string name="actionbar_sort">Sort</string>
+    <string name="button_text_camera">Camera</string>
     <string name="actionbar_sort_title">Sort by</string>
     <string name="actionbar_sort_by_name">A-Z</string>
     <string name="actionbar_sort_by_date">Newest - Oldest</string>
