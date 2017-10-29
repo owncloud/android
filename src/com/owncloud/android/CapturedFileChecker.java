@@ -54,6 +54,7 @@ public class CapturedFileChecker extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = setIntentMediaType();
                 setResult(CANCEL_CODE,intent);
+                finish();
             }
         });
 
@@ -62,6 +63,7 @@ public class CapturedFileChecker extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = setIntentMediaType();
                 setResult(UPLOAD_CODE,intent);
+                finish();
             }
         });
     }
