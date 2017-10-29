@@ -49,6 +49,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.owncloud.android.CapturedFileChecker;
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -90,6 +91,8 @@ public class UploadFilesActivity extends FileActivity implements
     private static final int CAMERA_REQUEST = 1888;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_VIDEO_CAPTURE = 2;
+    private static final int CAPTURED_IMAGE_CHECK = 80;
+    private static final int CAPTURED_VIDEO_CHECK = 81;
 
     private ArrayAdapter<String> mDirectories;
     private File mCurrentDir = null;
@@ -387,27 +390,49 @@ public class UploadFilesActivity extends FileActivity implements
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             Bundle capturedImageData = capturedData.getExtras();
             Bitmap capturedImage = (Bitmap) capturedImageData.get("data");
-            Uri capturedImageUri = getImageUri(getApplicationContext(),capturedImage);
-            String capturedImagePath = getRealPathFromUri(capturedImageUri);
-            File capturedImageFile = new File(capturedImagePath);
-            String[] capturedImagePathArray = {capturedImagePath};
-            if(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= capturedImageFile.length()){
-                uploadCameraCapturedFile(capturedImagePathArray);
-            }
-            else{
-                noSpaceMessage();
-            }
+            Intent intent = new Intent(getApplicationContext(), CapturedFileChecker.class);
+            intent.putExtra("capturedImage",capturedImage);
+            intent.putExtra("mediaTypeCode",1);
+            startActivityForResult(intent,CAPTURED_IMAGE_CHECK);
         }
         else if(requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
             Uri capturedVideoUri = capturedData.getData();
-            String capturedVideoPath = capturedVideoUri.getPath();
-            File capturedVideoFile = new File(capturedVideoPath);
-            String[] capturedVideoPathArray = {capturedVideoPath};
-            if(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= capturedVideoFile.length()){
-                uploadCameraCapturedFile(capturedVideoPathArray);
+            Intent intent = new Intent(getApplicationContext(),CapturedFileChecker.class);
+            intent.putExtra("capturedVideo",capturedVideoUri);
+            intent.putExtra("mediaTypeCode",2);
+            startActivityForResult(intent,CAPTURED_VIDEO_CHECK);
+        }
+        else if(requestCode == 100 && requestCode == RESULT_OK){
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+        else if(requestCode == 101 && requestCode == RESULT_OK){
+            Bundle extras = capturedData.getExtras();
+            int mediaTypeCode = extras.getInt("mediaTypeCode");
+            if(mediaTypeCode == 1){
+                Bitmap capturedImage = (Bitmap) extras.get("capturedImage");
+                Uri capturedImageUri = getImageUri(getApplicationContext(),capturedImage);
+                String capturedImagePath = getRealPathFromUri(capturedImageUri);
+                File capturedImageFile = new File(capturedImagePath);
+                String[] capturedImagePathArray = {capturedImagePath};
+                if(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= capturedImageFile.length()){
+                    uploadCameraCapturedFile(capturedImagePathArray);
+                }
+                else{
+                    noSpaceMessage();
+                }
             }
-            else{
-                noSpaceMessage();
+            else if(mediaTypeCode == 2){
+                Uri capturedVideoUri = (Uri) extras.get("capturedVideo");
+                String capturedVideoPath = capturedVideoUri.getPath();
+                File capturedVideoFile = new File(capturedVideoPath);
+                String[] capturedVideoPathArray = {capturedVideoPath};
+                if(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= capturedVideoFile.length()){
+                    uploadCameraCapturedFile(capturedVideoPathArray);
+                }
+                else{
+                    noSpaceMessage();
+                }
             }
         }
     }
