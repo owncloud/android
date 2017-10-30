@@ -225,7 +225,7 @@ public class FileObserverService extends Service {
             );
 
         } else if (ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS.equals(intent.getAction())) {
-            updateInstantUploadsObservers();
+//            updateInstantUploadsObservers();
 
         } else {
             Log_OC.e(TAG, "Unknown action received; ignoring it: " + intent.getAction());
@@ -262,7 +262,7 @@ public class FileObserverService extends Service {
         }
 
         // watch for instant uploads
-        updateInstantUploadsObservers();
+//        updateInstantUploadsObservers();
 
         // service does not stopSelf() ; that way it tries to be alive forever
     }
