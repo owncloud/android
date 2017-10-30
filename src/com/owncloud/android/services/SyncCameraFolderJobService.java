@@ -29,6 +29,8 @@ import com.owncloud.android.utils.MimetypeIconUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class SyncCameraFolderJobService extends JobService implements OnRemoteOperationListener {
@@ -51,6 +53,9 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
     private boolean mGetRemotePicturesCompleted;
     private boolean mGetRemoteVideosCompleted;
+
+    private static int MAX_RECENTS = 30;
+    private static Set<String> sRecentlyUploadedFilePaths = new HashSet<>(MAX_RECENTS);
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -97,7 +102,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         mOperationsServiceBinder.addOperationListener(this, mHandler);
 
         if (mWaitingForOpId <= Integer.MAX_VALUE) {
-            mOperationsServiceBinder.dispatchResultIfFinished((int)mWaitingForOpId, this);
+            mOperationsServiceBinder.dispatchResultIfFinished((int) mWaitingForOpId, this);
         }
 
         mUploadedPicturesPath = mJobParameters.getExtras().getString(Extras.
@@ -155,80 +160,104 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     @Override
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
 
-        ArrayList<Object> remoteObjects = result.getData();
+        //Get local folder images
+        String localCameraPath = mJobParameters.getExtras().getString(Extras.EXTRA_LOCAL_CAMERA_PATH);
 
-        // Casting to remote files
-        // TODO Move to a utils class
-        ArrayList<RemoteFile> remoteFiles = new ArrayList<>(remoteObjects.size());
-        for (Object object : remoteObjects) {
-            remoteFiles.add((RemoteFile) object);
+        File localFiles[] = new File[0];
+
+        if (localCameraPath != null) {
+            File cameraFolder = new File(localCameraPath);
+            localFiles = cameraFolder.listFiles();
         }
 
-        String remotePath = ((GetFolderFilesOperation) operation).getRemotePath();
+        if (!result.isSuccess()) {
 
-        // Result contains remote pictures
-        if (mUploadedPicturesPath != null && mUploadedPicturesPath.equals(remotePath)) {
+            Log.d(TAG, "Remote folder does not exist yet, trying to upload the files for the " +
+                    "first time");
 
-            Log.d(TAG, "Receiving pictures uploaded");
+            // Remote camera folder doesn't exist yet, first local files upload
+            if (result.getCode() == RemoteOperationResult.ResultCode.FILE_NOT_FOUND) {
 
-            compareWithLocalFiles(remoteFiles);
+                for (File localFile : localFiles) {
+                    handleNewFile(localFile);
+                }
+            }
 
-            mGetRemotePicturesCompleted = true;
+        } else {
+
+            ArrayList<Object> remoteObjects = result.getData();
+
+            // Casting to remote files
+            // TODO Move to a utils class
+            ArrayList<RemoteFile> remoteFiles = new ArrayList<>(remoteObjects.size());
+            for (Object object : remoteObjects) {
+                remoteFiles.add((RemoteFile) object);
+            }
+
+            String remotePath = ((GetFolderFilesOperation) operation).getRemotePath();
+
+            // Result contains remote pictures
+            if (mUploadedPicturesPath != null && mUploadedPicturesPath.equals(remotePath)) {
+
+                Log.d(TAG, "Receiving pictures uploaded");
+
+                compareWithLocalFiles(localFiles, remoteFiles);
+            }
+
+            // Result contains remote videos
+            if (mUploadedVideosPath != null && mUploadedVideosPath.equals(remotePath)) {
+
+                Log.d(TAG, "Receiving videos uploaded");
+
+            }
         }
 
-        // Result contains remote videos
-        if (mUploadedVideosPath != null && mUploadedVideosPath.equals(remotePath)) {
-
-            Log.d(TAG, "Receiving videos uploaded");
-
-            mGetRemoteVideosCompleted = true;
+        if (mOperationsServiceBinder != null) {
+            mOperationsServiceBinder.removeOperationListener(this);
         }
+
+        if (mOperationsServiceConnection != null) {
+            unbindService(mOperationsServiceConnection);
+            mOperationsServiceBinder = null;
+        }
+
+        jobFinished(mJobParameters, false);
 
         // We have to unbind the service to get remote images/videos and finish the job when
         // requested operations finish
 
         // User only requests pictures upload
-        boolean mOnlyGetPicturesFinished = mGetRemotePicturesCompleted && mUploadedVideosPath == null;
-
-        // User only requests videos upload
-        boolean mOnlyGetVideosFinished = mGetRemoteVideosCompleted && mUploadedPicturesPath == null ;
-
-        // User requests pictures & videos upload
-        boolean mGetPicturesVideosFinished = mGetRemotePicturesCompleted && mGetRemoteVideosCompleted;
-
-        if (mOnlyGetPicturesFinished || mOnlyGetVideosFinished || mGetPicturesVideosFinished) {
-
-            Log.d(TAG, "Finishing camera folder sync job");
-
-            if (mOperationsServiceBinder != null) {
-                mOperationsServiceBinder.removeOperationListener(this);
-            }
-
-            if (mOperationsServiceConnection != null) {
-                unbindService(mOperationsServiceConnection);
-                mOperationsServiceBinder = null;
-            }
-
-            jobFinished(mJobParameters, false);
-        }
+//        boolean mOnlyGetPicturesFinished = mGetRemotePicturesCompleted && mUploadedVideosPath == null;
+//
+//        // User only requests videos upload
+//        boolean mOnlyGetVideosFinished = mGetRemoteVideosCompleted && mUploadedPicturesPath == null ;
+//
+//        // User requests pictures & videos upload
+//        boolean mGetPicturesVideosFinished = mGetRemotePicturesCompleted && mGetRemoteVideosCompleted;
+//
+//        if (mOnlyGetPicturesFinished || mOnlyGetVideosFinished || mGetPicturesVideosFinished) {
+//
+//            Log.d(TAG, "Finishing camera folder sync job");
+//
+//            if (mOperationsServiceBinder != null) {
+//                mOperationsServiceBinder.removeOperationListener(this);
+//            }
+//
+//            if (mOperationsServiceConnection != null) {
+//                unbindService(mOperationsServiceConnection);
+//                mOperationsServiceBinder = null;
+//            }
+//
+//            jobFinished(mJobParameters, false);
+//        }
     }
 
-    private void compareWithLocalFiles (ArrayList<RemoteFile> remoteFiles) {
-
-        //Get local folder images
-        String localCameraPath = mJobParameters.getExtras().getString(Extras.EXTRA_LOCAL_CAMERA_PATH);
-
-        File localFolderFiles[] = new File[0];
-
-        if (localCameraPath != null) {
-            File cameraFolder = new File(localCameraPath);
-            localFolderFiles = cameraFolder.listFiles();
-        }
+    private void compareWithLocalFiles(File[] localFiles, ArrayList<RemoteFile> remoteFiles) {
 
         ArrayList<OCFile> remoteFolderFiles = FileStorageUtils.
                 createOCFilesFromRemoteFilesList(remoteFiles);
 
-        for (File localFile : localFolderFiles) {
+        for (File localFile : localFiles) {
 
             boolean isAlreadyUpdated = false;
 
@@ -251,7 +280,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         }
     }
 
-    private void handleNewFile(File localFile) {
+    private synchronized void handleNewFile(File localFile) {
 
         String fileName = localFile.getName();
 
@@ -277,21 +306,43 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         String remotePath = (isImage ? mUploadedPicturesPath : mUploadedVideosPath) + fileName;
 
         int createdBy = isImage ? UploadFileOperation.CREATED_AS_INSTANT_PICTURE :
-                        UploadFileOperation.CREATED_AS_INSTANT_VIDEO;
+                UploadFileOperation.CREATED_AS_INSTANT_VIDEO;
 
         String localPath = mJobParameters.getExtras().getString(Extras.EXTRA_LOCAL_CAMERA_PATH)
                 + File.separator + fileName;
+
+        /// check duplicated detection
+        if (sRecentlyUploadedFilePaths.contains(localPath)) {
+            Log_OC.i(TAG, "Duplicate detection of " + localPath + ", ignoring");
+            return;
+        }
 
         TransferRequester requester = new TransferRequester();
         requester.uploadNewFile(
                 this,
                 mAccount,
-                localFile.getPath(),
+                localPath,
                 remotePath,
                 mJobParameters.getExtras().getInt(Extras.EXTRA_BEHAVIOR_AFTER_UPLOAD),
                 mimeType,
                 true,           // create parent folder if not existent
                 createdBy
+        );
+
+        if (sRecentlyUploadedFilePaths.size() >= MAX_RECENTS) {
+            // remove first path inserted
+            sRecentlyUploadedFilePaths.remove(sRecentlyUploadedFilePaths.iterator().next());
+        }
+        sRecentlyUploadedFilePaths.add(localPath);
+
+        Log_OC.i(
+                TAG,
+                String.format(
+                        "Requested upload of %1s to %2s in %3s",
+                        localPath,
+                        remotePath,
+                        mAccount.name
+                )
         );
     }
 }
