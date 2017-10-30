@@ -590,7 +590,7 @@ public class Preferences extends PreferenceActivity {
     @Override
     protected void onStop() {
         // let the observer service applies any change in instant upload configuration
-        FileObserverService.updateInstantUploadsObservers(Preferences.this);
+//        FileObserverService.updateInstantUploadsObservers(Preferences.this);
         super.onStop();
         getDelegate().onStop();
     }
