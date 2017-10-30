@@ -506,6 +506,14 @@
     <string name="share_via_link_default_name_template">%1$s link</string>
     <string name="private_link_info">This is a private link, only people who have access to the file/folder can use it. Use it as a permanent link for yourself or to point others to files within shares.</string>
     <string name="file_private_link_error">There was an error while trying to get the private link for the file</string>
+    <string name="download_notification_channel_name">Downloads</string>
+    <string name="download_notification_channel_description">See the download file name and progress</string>
+    <string name="upload_notification_channel_name">Uploads</string>
+    <string name="upload_notification_channel_description">See the upload file name and progress</string>
+    <string name="media_service_notification_channel_name">Music player</string>
+    <string name="media_service_notification_channel_description">See music player</string>
+    <string name="file_sync_notification_channel_name">File sync</string>
+    <string name="file_sync_notification_channel_description">See file sync result</string>
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
         <item quantity="other">%d selected</item>
