@@ -159,7 +159,7 @@ public class FileDisplayActivity extends HookActivity
             FileObserverService.initialize(this);
         }
 
-        /// Schedule a job to check pictures to be uploaded
+        // Schedule a job to check pictures to be uploaded
         PreferenceManager.InstantUploadsConfiguration config =
                 PreferenceManager.getInstantUploadsConfiguration(this);
 
