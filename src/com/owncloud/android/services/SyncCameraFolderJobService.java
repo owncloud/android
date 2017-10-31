@@ -1,3 +1,22 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author David González Verdugo
+ * Copyright (C) 2017 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.services;
 
 import android.accounts.Account;
@@ -21,7 +40,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.operations.GetFolderFilesOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -51,8 +69,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     private String mUploadedPicturesPath;
     private String mUploadedVideosPath;
 
-    private boolean mGetRemotePicturesCompleted;
-    private boolean mGetRemoteVideosCompleted;
+    private int mPerformedOperationsCounter = 0;
 
     private static int MAX_RECENTS = 30;
     private static Set<String> sRecentlyUploadedFilePaths = new HashSet<>(MAX_RECENTS);
@@ -60,7 +77,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
-        Log.d(TAG, "Starting job to sync camera folder");
+        Log_OC.d(TAG, "Starting job to sync camera folder");
 
         mJobParameters = jobParameters;
 
@@ -68,66 +85,12 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         mAccount = AccountUtils.getOwnCloudAccountByName(this, accountName);
 
-        mGetRemotePicturesCompleted = false;
-        mGetRemoteVideosCompleted = false;
-
-        // bind to Operations Service
+        // Bind to Operations Service
         mOperationsServiceConnection = new OperationsServiceConnection();
         bindService(new Intent(this, OperationsService.class), mOperationsServiceConnection,
                 Context.BIND_AUTO_CREATE);
 
-        return true; // True because we have a thread still running requesting stuff to the server
-    }
-
-    @Override
-    /**
-     * Called by the system if the job is cancelled before being finished
-     */
-    public boolean onStopJob(JobParameters jobParameters) {
-
-        if (mOperationsServiceConnection != null) {
-            unbindService(mOperationsServiceConnection);
-            mOperationsServiceBinder = null;
-        }
-
-        return true;
-    }
-
-    /**
-     * Get remote pictures and videos contained in upload folders
-     */
-    private void getUploadedPicturesAndVideos() {
-
-        // Registering to listen for operation callbacks
-        mOperationsServiceBinder.addOperationListener(this, mHandler);
-
-        if (mWaitingForOpId <= Integer.MAX_VALUE) {
-            mOperationsServiceBinder.dispatchResultIfFinished((int) mWaitingForOpId, this);
-        }
-
-        mUploadedPicturesPath = mJobParameters.getExtras().getString(Extras.
-                EXTRA_UPLOAD_PICTURES_PATH);
-
-        mUploadedVideosPath = mJobParameters.getExtras().getString(Extras.
-                EXTRA_UPLOAD_VIDEOS_PATH);
-
-        if (mUploadedPicturesPath != null) {
-            // Get remote pictures
-            Intent getUploadedPicturesIntent = new Intent();
-            getUploadedPicturesIntent.setAction(OperationsService.ACTION_GET_FOLDER_FILES);
-            getUploadedPicturesIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, mUploadedPicturesPath);
-            getUploadedPicturesIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
-            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUploadedPicturesIntent);
-        }
-
-        if (mUploadedVideosPath != null) {
-            // Get remote videos
-            Intent getUploadedVideosIntent = new Intent();
-            getUploadedVideosIntent.setAction(OperationsService.ACTION_GET_FOLDER_FILES);
-            getUploadedVideosIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, mUploadedVideosPath);
-            getUploadedVideosIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
-            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUploadedVideosIntent);
-        }
+        return true; // True because we have a thread still running and requesting stuff to the server
     }
 
     /**
@@ -142,7 +105,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             )) {
                 mOperationsServiceBinder = (OperationsService.OperationsServiceBinder) service;
 
-                getUploadedPicturesAndVideos();
+                getPicturesVideosFromServer();
             }
         }
 
@@ -157,7 +120,48 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         }
     }
 
+    /**
+     * Get remote pictures and videos contained in the server using
+     * {@link OperationsService.OperationsServiceBinder}
+     **/
+    private void getPicturesVideosFromServer() {
+
+        // Registering to listen for operation callbacks
+        mOperationsServiceBinder.addOperationListener(this, mHandler);
+
+        if (mWaitingForOpId <= Integer.MAX_VALUE) {
+            mOperationsServiceBinder.dispatchResultIfFinished((int) mWaitingForOpId, this);
+        }
+
+        mUploadedPicturesPath = mJobParameters.getExtras().getString(Extras.
+                EXTRA_UPLOAD_PICTURES_PATH);
+
+        mUploadedVideosPath = mJobParameters.getExtras().getString(Extras.
+                EXTRA_UPLOAD_VIDEOS_PATH);
+
+        // Auto uploads enabled for pictures
+        if (mUploadedPicturesPath != null) {
+            // Get remote pictures
+            Intent getUploadedPicturesIntent = new Intent();
+            getUploadedPicturesIntent.setAction(OperationsService.ACTION_GET_FOLDER_FILES);
+            getUploadedPicturesIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, mUploadedPicturesPath);
+            getUploadedPicturesIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
+            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUploadedPicturesIntent);
+        }
+
+        // Auto uploads enabled for videos
+        if (mUploadedVideosPath != null) {
+            // Get remote videos
+            Intent getUploadedVideosIntent = new Intent();
+            getUploadedVideosIntent.setAction(OperationsService.ACTION_GET_FOLDER_FILES);
+            getUploadedVideosIntent.putExtra(OperationsService.EXTRA_REMOTE_PATH, mUploadedVideosPath);
+            getUploadedVideosIntent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
+            mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUploadedVideosIntent);
+        }
+    }
+
     @Override
+    // Called once for pictures (if enabled) and again for videos (if enabled)
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
 
         //Get local folder images
@@ -172,10 +176,10 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         if (!result.isSuccess()) {
 
-            Log.d(TAG, "Remote folder does not exist yet, trying to upload the files for the " +
+            Log_OC.d(TAG, "Remote folder does not exist yet, uploading the files for the " +
                     "first time");
 
-            // Remote camera folder doesn't exist yet, first local files upload
+            // Remote folder doesn't exist yet, first local files upload
             if (result.getCode() == RemoteOperationResult.ResultCode.FILE_NOT_FOUND) {
 
                 for (File localFile : localFiles) {
@@ -194,74 +198,45 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
                 remoteFiles.add((RemoteFile) object);
             }
 
-            String remotePath = ((GetFolderFilesOperation) operation).getRemotePath();
-
-            // Result contains remote pictures
-            if (mUploadedPicturesPath != null && mUploadedPicturesPath.equals(remotePath)) {
-
-                Log.d(TAG, "Receiving pictures uploaded");
-
-                compareWithLocalFiles(localFiles, remoteFiles);
-            }
-
-            // Result contains remote videos
-            if (mUploadedVideosPath != null && mUploadedVideosPath.equals(remotePath)) {
-
-                Log.d(TAG, "Receiving videos uploaded");
-
-            }
+            compareLocalRemoteFiles(localFiles, remoteFiles);
         }
-
-        if (mOperationsServiceBinder != null) {
-            mOperationsServiceBinder.removeOperationListener(this);
-        }
-
-        if (mOperationsServiceConnection != null) {
-            unbindService(mOperationsServiceConnection);
-            mOperationsServiceBinder = null;
-        }
-
-        jobFinished(mJobParameters, false);
 
         // We have to unbind the service to get remote images/videos and finish the job when
         // requested operations finish
 
-        // User only requests pictures upload
-//        boolean mOnlyGetPicturesFinished = mGetRemotePicturesCompleted && mUploadedVideosPath == null;
-//
-//        // User only requests videos upload
-//        boolean mOnlyGetVideosFinished = mGetRemoteVideosCompleted && mUploadedPicturesPath == null ;
-//
-//        // User requests pictures & videos upload
-//        boolean mGetPicturesVideosFinished = mGetRemotePicturesCompleted && mGetRemoteVideosCompleted;
-//
-//        if (mOnlyGetPicturesFinished || mOnlyGetVideosFinished || mGetPicturesVideosFinished) {
-//
-//            Log.d(TAG, "Finishing camera folder sync job");
-//
-//            if (mOperationsServiceBinder != null) {
-//                mOperationsServiceBinder.removeOperationListener(this);
-//            }
-//
-//            if (mOperationsServiceConnection != null) {
-//                unbindService(mOperationsServiceConnection);
-//                mOperationsServiceBinder = null;
-//            }
-//
-//            jobFinished(mJobParameters, false);
-//        }
+        mPerformedOperationsCounter++;
+
+        // User only requested upload pictures or videos
+        boolean mOnlyPicturesOrVideos = mUploadedPicturesPath == null || mUploadedVideosPath == null;
+
+        // User requested upload both pictures and videos
+        boolean mPicturesAndVideos = mUploadedPicturesPath != null && mUploadedVideosPath != null;
+
+        // Check if requested operations have been performed
+        if (mOnlyPicturesOrVideos && mPerformedOperationsCounter == 1 ||
+                mPicturesAndVideos && mPerformedOperationsCounter == 2) {
+
+            finish();
+        }
     }
 
-    private void compareWithLocalFiles(File[] localFiles, ArrayList<RemoteFile> remoteFiles) {
+    /**
+     * Compare files (images or videos) contained in local camera folder with the ones already
+     * uploaded to the server
+     *
+     * @param localFiles  images or videos contained in local camera folder
+     * @param remoteFiles images or videos already uploaded to the server
+     */
+    private void compareLocalRemoteFiles(File[] localFiles, ArrayList<RemoteFile> remoteFiles) {
 
-        ArrayList<OCFile> remoteFolderFiles = FileStorageUtils.
+        ArrayList<OCFile> ocFiles = FileStorageUtils.
                 createOCFilesFromRemoteFilesList(remoteFiles);
 
         for (File localFile : localFiles) {
 
             boolean isAlreadyUpdated = false;
 
-            for (OCFile ocFile : remoteFolderFiles) {
+            for (OCFile ocFile : ocFiles) {
 
                 if (localFile.getName().equals(ocFile.getFileName())) {
 
@@ -280,6 +255,12 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         }
     }
 
+    /**
+     * Request the upload of a file just created if matches the criteria of the current
+     * configuration for instant uploads.
+     *
+     * @param localFile image or video to upload to the server
+     */
     private synchronized void handleNewFile(File localFile) {
 
         String fileName = localFile.getName();
@@ -311,7 +292,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         String localPath = mJobParameters.getExtras().getString(Extras.EXTRA_LOCAL_CAMERA_PATH)
                 + File.separator + fileName;
 
-        /// check duplicated detection
+        // Check duplicated detection
         if (sRecentlyUploadedFilePaths.contains(localPath)) {
             Log_OC.i(TAG, "Duplicate detection of " + localPath + ", ignoring");
             return;
@@ -344,5 +325,41 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
                         mAccount.name
                 )
         );
+    }
+
+    /**
+     * Unbind the service used for getting the pictures and videos from the server and notify the
+     * system that the job has finished
+     */
+    private void finish() {
+
+        Log_OC.d(TAG, "Finishing camera folder sync job");
+
+        if (mOperationsServiceBinder != null) {
+            mOperationsServiceBinder.removeOperationListener(this);
+        }
+
+        if (mOperationsServiceConnection != null) {
+            unbindService(mOperationsServiceConnection);
+            mOperationsServiceBinder = null;
+        }
+
+        jobFinished(mJobParameters, false);
+    }
+
+    @Override
+    /**
+     * Called by the system if the job is cancelled before being finished
+     */
+    public boolean onStopJob(JobParameters jobParameters) {
+
+        Log_OC.d(TAG, "Job " + TAG + " was cancelled before finishing.");
+
+        if (mOperationsServiceConnection != null) {
+            unbindService(mOperationsServiceConnection);
+            mOperationsServiceBinder = null;
+        }
+
+        return true;
     }
 }
