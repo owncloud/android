@@ -243,5 +243,4 @@ public class IndexedForest<V> {
     public String buildKey(String accountName, String remotePath) {
         return accountName + remotePath;
     }
-
 }
