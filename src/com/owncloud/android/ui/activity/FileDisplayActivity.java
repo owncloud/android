@@ -65,6 +65,7 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.files.services.IndexedForest;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -144,6 +145,8 @@ public class FileDisplayActivity extends HookActivity
 
     private LocalBroadcastManager mLocalBroadcastManager;
 
+    private IndexedForest<FileDisplayActivity> mPendingInstantUploads = new IndexedForest<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -164,33 +167,30 @@ public class FileDisplayActivity extends HookActivity
                 (config.isEnabledForPictures() || config.isEnabledForVideos())) {
 
             ComponentName serviceComponent = new ComponentName(this, SyncCameraFolderJobService.class);
-            JobInfo.Builder builder = null;
+            JobInfo.Builder builder;
 
-            builder = new JobInfo.Builder(0, serviceComponent);
+            int jobId = mPendingInstantUploads.buildKey(getAccount().name, config.getSourcePath()).
+                    hashCode();
+
+            builder = new JobInfo.Builder(jobId, serviceComponent);
 
             builder.setPersisted(true);
 
-            // Execute job every 30 seconds
+            // Execute job every 10 seconds
             builder.setPeriodic(10000);
 
             // Extra data
             PersistableBundle extras = new PersistableBundle();
-            extras.putString(Extras.EXTRA_LOCAL_CAMERA_PATH, config.getSourcePath());
-            if (config.isEnabledForPictures()) {
-                extras.putString(Extras.EXTRA_UPLOAD_PICTURES_PATH, config.getUploadPathForPictures());
-            }
-            if (config.isEnabledForVideos()) {
-                extras.putString(Extras.EXTRA_UPLOAD_VIDEOS_PATH, config.getUploadPathForVideos());
-            }
-            extras.putInt(Extras.EXTRA_BEHAVIOR_AFTER_UPLOAD, config.getBehaviourAfterUpload());
-            extras.putString(Extras.EXTRA_ACCOUNT_NAME, getAccount().name);
+
+            extras.putInt(Extras.EXTRA_SYNC_CAMERA_FOLDER_JOB_ID, jobId);
 
             builder.setExtras(extras);
 
             //builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED); // require unmetered network
             //builder.setRequiresDeviceIdle(true); // device should be idle
             //builder.setRequiresCharging(false); // we don't care if the device is charging or not
-            JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.
+                    JOB_SCHEDULER_SERVICE);
             jobScheduler.schedule(builder.build());
         }
 
