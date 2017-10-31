@@ -204,15 +204,18 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         mPerformedOperationsCounter++;
 
-        // User only requested upload pictures or videos
-        boolean mOnlyPicturesOrVideos = mConfig.isEnabledForPictures() ||
-                mConfig.isEnabledForVideos();
+        // User only requested to upload pictures
+        boolean mOnlyPictures = mConfig.isEnabledForPictures() && !mConfig.isEnabledForVideos();
+
+        // User only requested to upload videos
+        boolean mOnlyVideos = mConfig.isEnabledForVideos() && !mConfig.isEnabledForPictures();
 
         // User requested upload both pictures and videos
         boolean mPicturesAndVideos = mConfig.isEnabledForPictures() && mConfig.isEnabledForVideos();
 
         // Check if requested operations have been performed
-        if (mOnlyPicturesOrVideos && mPerformedOperationsCounter == 1 ||
+        if (mOnlyPictures && mPerformedOperationsCounter == 1 ||
+                mOnlyVideos && mPerformedOperationsCounter == 1 ||
                 mPicturesAndVideos && mPerformedOperationsCounter == 2) {
 
             finish();
