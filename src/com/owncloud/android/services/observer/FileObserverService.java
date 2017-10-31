@@ -94,11 +94,6 @@ public class FileObserverService extends Service {
     private DownloadCompletedReceiver mDownloadReceiver;
 
     /**
-     * Observer for camera folder
-     */
-    private InstantUploadsObserver mInstantUploadsObserver;
-
-    /**
      * Requests an ACTION_START_OBSERVE command to (re)initialize the observer service.
      * 
      * @param context   Android context of the caller component.
@@ -160,8 +155,6 @@ public class FileObserverService extends Service {
         filter.addAction(FileDownloader.getDownloadFinishMessage());
         mLocalBroadcastManager.registerReceiver(mDownloadReceiver, filter);
 
-        mInstantUploadsObserver = null;
-
         mAvailableOfflineObserversMap = new HashMap<>();
     }
 
@@ -180,11 +173,6 @@ public class FileObserverService extends Service {
         }
         mAvailableOfflineObserversMap.clear();
         mAvailableOfflineObserversMap = null;
-
-        if (mInstantUploadsObserver != null) {
-            mInstantUploadsObserver.stopObserving();
-            mInstantUploadsObserver = null;
-        }
 
         super.onDestroy();
     }
@@ -400,50 +388,6 @@ public class FileObserverService extends Service {
                 entry.getValue().stopWatching();
                 iterator.remove();
             }
-        }
-    }
-
-
-    /**
-     * Requests the update of the observers responsible to watch folders where new files
-     * should be automatically added to OC, according to changes in instant upload settings.
-     */
-    private void updateInstantUploadsObservers() {
-        PreferenceManager.InstantUploadsConfiguration config =
-            PreferenceManager.getInstantUploadsConfiguration(this);
-
-        if ((config.isEnabledForPictures() || config.isEnabledForVideos()) &&
-                mInstantUploadsObserver == null
-            )  {
-            // no current observer -> create it
-            mInstantUploadsObserver = InstantUploadsObserverFactory.newObserver(
-                config,
-                getApplicationContext()
-            );
-            mInstantUploadsObserver.startObserving();
-
-        } else if (!config.isEnabledForPictures() && !config.isEnabledForVideos() &&
-                    mInstantUploadsObserver != null
-            ) {
-            // nothing ot observe -> stop current observer
-            mInstantUploadsObserver.stopObserving();
-            mInstantUploadsObserver = null;
-
-        } else if (mInstantUploadsObserver != null) {
-            // observer exists and can handle changes in configuration -> update observer
-            boolean configurationUpdated = mInstantUploadsObserver.updateConfiguration(config);
-            if (!configurationUpdated) {
-                // current observe cannot handle this configuration change -> replace with a new one
-                mInstantUploadsObserver.stopObserving();
-                mInstantUploadsObserver = InstantUploadsObserverFactory.newObserver(
-                    config,
-                    getApplicationContext()
-                );
-                mInstantUploadsObserver.startObserving();
-            }
-
-        } else {
-            Log_OC.i(TAG, "Instant uploads are disabled, no current observer -> nothing to do");
         }
     }
 
