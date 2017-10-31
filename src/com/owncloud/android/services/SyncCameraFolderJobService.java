@@ -142,7 +142,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             mOperationsServiceBinder.dispatchResultIfFinished((int) mWaitingForOpId, this);
         }
 
-        // Insta uploads enabled for pictures
+        // Instant uploads enabled for pictures
         if (mConfig.isEnabledForPictures()) {
             // Get remote pictures
             Intent getUploadedPicturesIntent = new Intent();
@@ -153,8 +153,11 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUploadedPicturesIntent);
         }
 
-        // Insta uploads enabled for videos
-        if (mConfig.isEnabledForVideos()) {
+        // Instant uploads enabled for videos,
+        // Note: does not try to get remote videos if the upload path for videos is the same as the
+        // upload path for images. In this case, remote videos have been retrieved above
+        if (mConfig.isEnabledForVideos() && !mConfig.getUploadPathForPictures()
+                .equals(mConfig.getUploadPathForVideos())) {
             // Get remote videos
             Intent getUploadedVideosIntent = new Intent();
             getUploadedVideosIntent.setAction(OperationsService.ACTION_GET_FOLDER_FILES);
@@ -196,8 +199,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
             ArrayList<Object> remoteObjects = result.getData();
 
-            compareFiles(localFiles, FileStorageUtils.
-                    castObjectsIntoRemoteFiles(remoteObjects));
+            compareFiles(localFiles, FileStorageUtils.castObjectsIntoRemoteFiles(remoteObjects));
         }
 
         // We have to unbind the service to get remote images/videos and finish the job when
@@ -217,6 +219,9 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         // Check if requested operations have been performed
         if (mOnlyPictures && mPerformedOperationsCounter == 1 ||
                 mOnlyVideos && mPerformedOperationsCounter == 1 ||
+                mPicturesAndVideos && mConfig.getUploadPathForPictures().
+                        equals(mConfig.getUploadPathForVideos()) &&
+                        mPerformedOperationsCounter == 1 ||
                 mPicturesAndVideos && mPerformedOperationsCounter == 2) {
 
             finish();
@@ -232,7 +237,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
      */
     private void compareFiles(File[] localFiles, ArrayList<RemoteFile> remoteFiles) {
 
-        Log_OC.d(TAG, "Comparing local files with the ones already uploaded");
+        Log_OC.d(TAG, "Comparing local files with already uploaded ones");
 
         ArrayList<OCFile> ocFiles = FileStorageUtils.
                 createOCFilesFromRemoteFilesList(remoteFiles);
