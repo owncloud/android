@@ -233,19 +233,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".broadcastreceivers.InstantUploadBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.hardware.action.NEW_PICTURE" />
-
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.hardware.action.NEW_VIDEO" />
-
-                <data android:mimeType="video/*" />
-            </intent-filter>
-        </receiver>
-
         <service android:name=".services.observer.FileObserverService" />
 
         <activity
