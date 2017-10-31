@@ -177,7 +177,11 @@ public class FileDisplayActivity extends HookActivity
             builder.setPersisted(true);
 
             // Execute job every 15 seconds
-            builder.setPeriodic(15000);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                builder.setMinimumLatency(15000);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder.setPeriodic(15000);
+            }
 
             // Extra data
             PersistableBundle extras = new PersistableBundle();
