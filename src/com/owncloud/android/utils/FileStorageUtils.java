@@ -179,6 +179,24 @@ public class FileStorageUtils {
 
         return files;
     }
+
+    /**
+     * Cast list of objects into a list of {@link RemoteFile}
+     *
+     * @param remoteObjects objects to cast into remote files
+     * @return New remote files list
+     */
+    public static ArrayList<RemoteFile> castObjectsIntoRemoteFiles (ArrayList<Object>
+                                                                         remoteObjects) {
+
+        ArrayList<RemoteFile> remoteFiles = new ArrayList<>(remoteObjects.size());
+
+        for (Object object : remoteObjects) {
+            remoteFiles.add((RemoteFile) object);
+        }
+
+        return  remoteFiles;
+    }
     
     /**
      * Creates and populates a new {@link RemoteFile} object with the data read from an {@link OCFile}.
