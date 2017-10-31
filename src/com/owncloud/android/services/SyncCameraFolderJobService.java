@@ -83,6 +83,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         mConfig = PreferenceManager.getInstantUploadsConfiguration(this);
 
+        // Check if instant uploads have been disabled
         if (!mConfig.isEnabledForPictures() && !mConfig.isEnabledForVideos()) {
 
             cancelPeriodicJob();
@@ -181,7 +182,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         if (!result.isSuccess()) {
 
             Log_OC.d(TAG, "Remote folder does not exist yet, uploading the files for the " +
-                    "first time");
+                    "first time, if any");
 
             // Remote folder doesn't exist yet, first local files upload
             if (result.getCode() == RemoteOperationResult.ResultCode.FILE_NOT_FOUND) {
@@ -230,6 +231,8 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
      * @param remoteFiles images or videos already uploaded to the server
      */
     private void compareFiles(File[] localFiles, ArrayList<RemoteFile> remoteFiles) {
+
+        Log_OC.d(TAG, "Comparing local files with the ones already uploaded");
 
         ArrayList<OCFile> ocFiles = FileStorageUtils.
                 createOCFilesFromRemoteFilesList(remoteFiles);
@@ -361,7 +364,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         jobScheduler.cancel(jobId);
 
-        Log_OC.d(TAG, "Instant uploads disabled, cancel the periodic job");
+        Log_OC.d(TAG, "Instant uploads disabled, cancelling the periodic job");
     }
 
     @Override
