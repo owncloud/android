@@ -99,7 +99,7 @@
   <string name="common_save_exit">Αποθήκευση &amp; συντομογραφία;έξοδος</string>
   <string name="common_error">Σφάλμα</string>
   <string name="common_loading">Φόρτωση ...</string>
-  <string name="common_unknown">Άγνωστο</string>
+  <string name="common_unknown">Αγνωστο</string>
   <string name="common_error_unknown">Άγνωστο σφάλμα</string>
   <string name="common_pending">Εκκρεμεί</string>
   <string name="about_title">Σχετικά</string>
@@ -188,7 +188,7 @@
   <string name="media_err_nothing_to_play">Δεν βρέθηκε αρχείο πολυμέσων</string>
   <string name="media_err_no_account">Δεν δόθηκε λογαριασμός</string>
   <string name="media_err_not_in_owncloud">Το αρχείο δεν βρίσκεται σε έγκυρο λογαριασμό</string>
-  <string name="media_err_unsupported">Αυτή η μορφή κωδικοποίησης πολυμέσων δεν υποστηρίζεται</string>
+  <string name="media_err_unsupported">Αυτή η μορφή κωδικοποιήσης πολυμέσων δεν υποστηρίζεται</string>
   <string name="media_err_io">Το αρχείο πολυμέσων δεν μπόρεσε να διαβαστεί</string>
   <string name="media_err_malformed">Το αρχείο πολυμέσων δεν είναι κωδικοποιημένο σωστά </string>
   <string name="media_err_timeout">Λήξη χρόνου κατά την προσπάθεια αναπαραγωγής</string>
@@ -286,7 +286,7 @@
   <string name="ssl_validator_label_certificate_fingerprint">Αποτύπωμα:</string>
   <string name="certificate_load_problem">Πρόβλημα φόρτωσης του πιστοποιητικού.</string>
   <string name="ssl_validator_null_cert">Δεν μπορεί να εμφανιστεί το πιστοποιητικό.</string>
-  <string name="ssl_validator_no_info_about_error">- Καμία πληροφορία σχετικά με το σφάλμα</string>
+  <string name="ssl_validator_no_info_about_error">- Καμμία πληροφορία σχετικά με το σφάλμα</string>
   <string name="placeholder_sentence">Αυτό είναι ένα σημείο κράτησης θέσης</string>
   <string name="placeholder_filename">placeholder.txt</string>
   <string name="placeholder_filetype">Εικόνα PNG</string>
@@ -339,7 +339,7 @@
   <string name="prefs_category_accounts">Λογαριασμοί</string>
   <string name="prefs_add_account">Προσθήκη λογαριασμού</string>
   <string name="drawer_manage_accounts">Διαχείριση λογαριασμών</string>
-  <string name="auth_redirect_non_secure_connection_title">Η ασφαλής σύνδεση ανακατευθύνεται μέσω μιας μη ασφαλούς διαδρομής.</string>
+  <string name="auth_redirect_non_secure_connection_title">Η ασφαλή σύνδεση ανακατευθύνεται μέσω μιας μη ασφαλούς διαδρομής.</string>
   <string name="actionbar_logger">Αρχεία καταγραφών</string>
   <string name="log_send_history_button">Αποστολή ιστορικού</string>
   <string name="log_send_no_mail_app">Δεν βρέθηκε εφαρμογή για αποστολή ιστορικού. Παρακαλούμε εγκαταστήστε μια εφαρμογή αλληλογραφίας.</string>
