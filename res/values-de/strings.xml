@@ -461,6 +461,9 @@
   <string name="share_via_link_default_name_template">%1$s - Link</string>
   <string name="private_link_info">Dies ist ein privater Link, nur Personen die Zugriff auf diese Datei/Ordner haben, können dies nutzen. Nutze dies als permanenten Link für sich selbst oder um andere auf bestimmte Dateien innerhalb der Freigaben hinzuweisen.</string>
   <string name="file_private_link_error">Es ist ein Fehler beim Zugriff auf den privaten Link für diese Datei aufgetreten.</string>
+  <string name="download_notification_channel_name">Heruntergeladenes</string>
+  <string name="download_notification_channel_description">Name der herunterzuladenden Datei und Fortschritt anzeigen</string>
+  <string name="upload_notification_channel_name">Hochgeladenes</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>
