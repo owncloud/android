@@ -52,9 +52,8 @@ import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.db.PreferenceManager.InstantUploadsConfiguration;
+import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.utils.DisplayUtils;
 
 import java.io.File;
@@ -660,7 +659,7 @@ public class Preferences extends PreferenceActivity {
             PreferenceManager.getDefaultSharedPreferences(this);
         mSourcePath = appPrefs.getString(
             "instant_upload_source_path",
-            InstantUploadsConfiguration.DEFAULT_SOURCE_PATH
+            CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
         );
         if (mPrefInstantUploadSourcePath != null) {
             mPrefInstantUploadSourcePath.setSummary(

@@ -71,8 +71,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class UploadFileOperation extends SyncOperation {
 
     public static final int CREATED_BY_USER = 0;
-    public static final int CREATED_AS_INSTANT_PICTURE = 1;
-    public static final int CREATED_AS_INSTANT_VIDEO = 2;
+    public static final int CREATED_AS_PICTURE = 1;
+    public static final int CREATED_AS_VIDEO = 2;
 
     public static OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType) {
 
@@ -227,7 +227,7 @@ public class UploadFileOperation extends SyncOperation {
 
     public void setCreatedBy(int createdBy) {
         mCreatedBy = createdBy;
-        if (createdBy < CREATED_BY_USER || CREATED_AS_INSTANT_VIDEO < createdBy) {
+        if (createdBy < CREATED_BY_USER || CREATED_AS_VIDEO < createdBy) {
             mCreatedBy = CREATED_BY_USER;
         }
     }
@@ -237,11 +237,11 @@ public class UploadFileOperation extends SyncOperation {
     }
 
     public boolean isInstantPicture() {
-        return mCreatedBy == CREATED_AS_INSTANT_PICTURE;
+        return mCreatedBy == CREATED_AS_PICTURE;
     }
 
     public boolean isInstantVideo() {
-        return mCreatedBy == CREATED_AS_INSTANT_VIDEO;
+        return mCreatedBy == CREATED_AS_VIDEO;
     }
 
     public void setOCUploadId(long id){

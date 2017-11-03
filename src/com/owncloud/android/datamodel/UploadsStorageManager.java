@@ -547,5 +547,4 @@ public class UploadsStorageManager extends Observable {
         }
         return result;
     }
-
 }
