@@ -41,7 +41,6 @@ import java.io.File;
 /**
  * Stores all information in order to start upload operations. PersistentUploadObject can
  * be stored persistently by {@link UploadsStorageManager}.
- * 
  */
 public class OCUpload implements Parcelable {
 

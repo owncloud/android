@@ -3,6 +3,7 @@
  *
  *  @author Bartek Przybylski
  *  @author David A. Velasco
+ *  @author David González Verdugo
  *  Copyright (C) 2011  Bartek Przybylski
  *  Copyright (C) 2016 ownCloud GmbH.
  *
@@ -58,8 +59,10 @@ import android.view.View;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -147,6 +150,9 @@ public class FileDisplayActivity extends HookActivity
 
     private IndexedForest<FileDisplayActivity> mPendingInstantUploads = new IndexedForest<>();
 
+    // DB connection
+    private CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -160,8 +166,8 @@ public class FileDisplayActivity extends HookActivity
         }
 
         // Schedule a job to check pictures to be uploaded
-        PreferenceManager.InstantUploadsConfiguration config =
-                PreferenceManager.getInstantUploadsConfiguration(this);
+        PreferenceManager.CameraUploadsConfiguration config =
+                PreferenceManager.getCameraUploadsConfiguration(this);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP &&
                 (config.isEnabledForPictures() || config.isEnabledForVideos())) {
@@ -177,11 +183,7 @@ public class FileDisplayActivity extends HookActivity
             builder.setPersisted(true);
 
             // Execute job every 15 seconds
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                builder.setMinimumLatency(15000);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder.setPeriodic(15000);
-            }
+            builder.setPeriodic(15000);
 
             // Extra data
             PersistableBundle extras = new PersistableBundle();
@@ -196,6 +198,14 @@ public class FileDisplayActivity extends HookActivity
             JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.
                     JOB_SCHEDULER_SERVICE);
             jobScheduler.schedule(builder.build());
+
+            // If there's no synchronization timestamp for pictures/videos in database, initialize it
+            mCameraUploadsSyncStorageManager = new
+                    CameraUploadsSyncStorageManager(getContentResolver());
+
+            OCCameraUploadSync ocCameraUploadSync = new OCCameraUploadSync(12,12);
+
+            mCameraUploadsSyncStorageManager.storeCameraUploadSync(ocCameraUploadSync);
         }
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
