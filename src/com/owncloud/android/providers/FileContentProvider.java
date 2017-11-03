@@ -4,6 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   @author masensio
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2017 ownCloud GmbH.
  *
@@ -69,6 +70,7 @@ public class FileContentProvider extends ContentProvider {
     private static final int SHARES = 4;
     private static final int CAPABILITIES = 5;
     private static final int UPLOADS = 6;
+    private static final int CAMERA_UPLOADS = 7;
 
     private static final String TAG = FileContentProvider.class.getSimpleName();
 
@@ -179,6 +181,9 @@ public class FileContentProvider extends ContentProvider {
             case UPLOADS:
                 count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs);
                 break;
+            case CAMERA_UPLOADS:
+                count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs);
+                break;
             default:
                 //Log_OC.e(TAG, "Unknown uri " + uri);
                 throw new IllegalArgumentException("Unknown uri: " + uri.toString());
@@ -277,9 +282,9 @@ public class FileContentProvider extends ContentProvider {
                 return insertedCapUri;
 
             case UPLOADS:
-                Uri insertedUploadUri = null;
+                Uri insertedUploadUri;
                 long uploadId = db.insert(ProviderTableMeta.UPLOADS_TABLE_NAME, null, values);
-                if (uploadId >0) {
+                if (uploadId > 0) {
                     insertedUploadUri =
                             ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_UPLOADS, uploadId);
                     trimSuccessfulUploads(db);
@@ -288,6 +293,20 @@ public class FileContentProvider extends ContentProvider {
 
                 }
                 return insertedUploadUri;
+
+            case CAMERA_UPLOADS:
+                Uri insertedCameraUploadUri;
+                long cameraUploadId = db.insert(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, null,
+                        values);
+                if (cameraUploadId > 0) {
+                    insertedCameraUploadUri =
+                            ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS,
+                                    cameraUploadId);
+                } else {
+                    throw new SQLException("ERROR " + uri);
+                }
+                return insertedCameraUploadUri;
+
             default:
                 throw new IllegalArgumentException("Unknown uri id: " + uri);
         }
@@ -334,6 +353,8 @@ public class FileContentProvider extends ContentProvider {
         mUriMatcher.addURI(authority, "capabilities/#", CAPABILITIES);
         mUriMatcher.addURI(authority, "uploads/", UPLOADS);
         mUriMatcher.addURI(authority, "uploads/#", UPLOADS);
+        mUriMatcher.addURI(authority, "cameraUploads/", CAMERA_UPLOADS);
+        mUriMatcher.addURI(authority, "cameraUploads/#", CAMERA_UPLOADS);
 
         return true;
     }
@@ -408,6 +429,13 @@ public class FileContentProvider extends ContentProvider {
                             + uri.getPathSegments().get(1));
                 }
                 break;
+            case CAMERA_UPLOADS:
+                sqlQuery.setTables(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME);
+                if (uri.getPathSegments().size() > 1) {
+                    sqlQuery.appendWhere(ProviderTableMeta._ID + "="
+                            + uri.getPathSegments().get(1));
+                }
+                break;
             default:
                 throw new IllegalArgumentException("Unknown uri id: " + uri);
         }
@@ -454,8 +482,6 @@ public class FileContentProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
     }
-
-
 
     private int update(
             SQLiteDatabase db,
@@ -537,6 +563,9 @@ public class FileContentProvider extends ContentProvider {
 
             // Create user profiles table
             createUserProfilesTable(db);
+
+            // Create camera upload sync table
+            createCameraUploadsSyncTable(db);
         }
 
         @Override
@@ -859,18 +888,13 @@ public class FileContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
-            if (!upgraded) {
-                Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
-                    ", newVersion == " + newVersion);
-            }
-
             if (oldVersion < 21 && newVersion >= 21) {
                 Log_OC.i("SQL", "Entering in the #21 ADD in onUpgrade");
                 db.beginTransaction();
                 try {
                     db .execSQL("ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
-                        " ADD COLUMN " + ProviderTableMeta.FILE_PRIVATE_LINK + " TEXT " +
-                        " DEFAULT NULL");
+                            " ADD COLUMN " + ProviderTableMeta.FILE_PRIVATE_LINK + " TEXT " +
+                            " DEFAULT NULL");
 
                     upgraded = true;
                     db.setTransactionSuccessful();
@@ -880,8 +904,23 @@ public class FileContentProvider extends ContentProvider {
             }
             if (!upgraded)
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
+                        ", newVersion == " + newVersion);
+            if (oldVersion < 22 && newVersion >= 22) {
+                Log_OC.i("SQL", "Entering in the #22 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    // Create camera uploads sync table
+                    createCameraUploadsSyncTable(db);
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+            if (!upgraded) {
+                Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                     ", newVersion == " + newVersion);
-
+            }
         }
     }
 
@@ -937,7 +976,7 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.OCSHARES_NAME + " TEXT );" );
     }
 
-    private void createCapabilitiesTable(SQLiteDatabase db){
+    private void createCapabilitiesTable(SQLiteDatabase db) {
         // Create capabilities table
         db.execSQL("CREATE TABLE " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + "("
                 + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
@@ -964,7 +1003,7 @@ public class FileContentProvider extends ContentProvider {
                 + ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING + " INTEGER, "     // boolean
                 + ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING + " INTEGER, "   // boolean
                 + ProviderTableMeta.CAPABILITIES_FILES_UNDELETE + " INTEGER, "  // boolean
-                + ProviderTableMeta.CAPABILITIES_FILES_VERSIONING + " INTEGER );" );   // boolean
+                + ProviderTableMeta.CAPABILITIES_FILES_VERSIONING + " INTEGER );");   // boolean
     }
 
     private void createUploadsTable(SQLiteDatabase db){
@@ -996,7 +1035,13 @@ public class FileContentProvider extends ContentProvider {
         );
     }
 
-
+    private void createCameraUploadsSyncTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME + "("
+                + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
+                + ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP + " INTEGER,"
+                + ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP + " INTEGER);"
+        );
+    }
 
     /**
      * Version 10 of database does not modify its scheme. It coincides with the upgrade of the ownCloud account names
@@ -1149,6 +1194,4 @@ public class FileContentProvider extends ContentProvider {
             }
         }
     }
-
-
 }

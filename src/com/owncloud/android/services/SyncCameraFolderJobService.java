@@ -33,6 +33,7 @@ import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.TransferRequester;
@@ -67,12 +68,15 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     private JobParameters mJobParameters;
     private Account mAccount;
 
-    PreferenceManager.InstantUploadsConfiguration mConfig;
+    PreferenceManager.CameraUploadsConfiguration mConfig;
 
     private int mPerformedOperationsCounter = 0;
 
     private static int MAX_RECENTS = 30;
     private static Set<String> sRecentlyUploadedFilePaths = new HashSet<>(MAX_RECENTS);
+
+    // DB connection
+    private CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = null;
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -81,9 +85,9 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         mJobParameters = jobParameters;
 
-        mConfig = PreferenceManager.getInstantUploadsConfiguration(this);
+        mConfig = PreferenceManager.getCameraUploadsConfiguration(this);
 
-        // Check if instant uploads have been disabled
+        // Check if camera uploads have been disabled
         if (!mConfig.isEnabledForPictures() && !mConfig.isEnabledForVideos()) {
 
             cancelPeriodicJob();
@@ -97,6 +101,8 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         mOperationsServiceConnection = new OperationsServiceConnection();
         bindService(new Intent(this, OperationsService.class), mOperationsServiceConnection,
                 Context.BIND_AUTO_CREATE);
+
+        mCameraUploadsSyncStorageManager = new CameraUploadsSyncStorageManager(getContentResolver());
 
         return true; // True because we have a thread still running and requesting stuff to the server
     }
@@ -142,7 +148,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             mOperationsServiceBinder.dispatchResultIfFinished((int) mWaitingForOpId, this);
         }
 
-        // Instant uploads enabled for pictures
+        // Camera uploads enabled for pictures
         if (mConfig.isEnabledForPictures()) {
             // Get remote pictures
             Intent getUploadedPicturesIntent = new Intent();
@@ -153,7 +159,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             mWaitingForOpId = mOperationsServiceBinder.queueNewOperation(getUploadedPicturesIntent);
         }
 
-        // Instant uploads enabled for videos,
+        // Camera uploads enabled for videos,
         // Note: does not try to get remote videos if the upload path for videos is the same as the
         // upload path for images. In this case, remote videos have been retrieved above
         if (mConfig.isEnabledForVideos() && !mConfig.getUploadPathForPictures()
@@ -267,7 +273,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
     /**
      * Request the upload of a file just created if matches the criteria of the current
-     * configuration for instant uploads.
+     * configuration for camera uploads.
      *
      * @param localFile image or video to upload to the server
      */
@@ -285,20 +291,20 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         }
 
         if (isImage && !mConfig.isEnabledForPictures()) {
-            Log_OC.d(TAG, "Instant upload disabled for images, ignoring " + fileName);
+            Log_OC.d(TAG, "Camera uploads disabled for images, ignoring " + fileName);
             return;
         }
 
         if (isVideo && !mConfig.isEnabledForVideos()) {
-            Log_OC.d(TAG, "Instant upload disabled for videos, ignoring " + fileName);
+            Log_OC.d(TAG, "Camera uploads disabled for videos, ignoring " + fileName);
             return;
         }
 
         String remotePath = (isImage ? mConfig.getUploadPathForPictures() :
                 mConfig.getUploadPathForVideos()) + fileName;
 
-        int createdBy = isImage ? UploadFileOperation.CREATED_AS_INSTANT_PICTURE :
-                UploadFileOperation.CREATED_AS_INSTANT_VIDEO;
+        int createdBy = isImage ? UploadFileOperation.CREATED_AS_PICTURE :
+                UploadFileOperation.CREATED_AS_VIDEO;
 
         String localPath = mConfig.getSourcePath() + File.separator + fileName;
 
@@ -369,7 +375,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         jobScheduler.cancel(jobId);
 
-        Log_OC.d(TAG, "Instant uploads disabled, cancelling the periodic job");
+        Log_OC.d(TAG, "Camera uploads disabled, cancelling the periodic job");
     }
 
     @Override
