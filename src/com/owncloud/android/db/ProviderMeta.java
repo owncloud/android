@@ -4,6 +4,7 @@
  *   @author Bartek Przybylski
  *   @author David A. Velasco
  *   @author masensio
+ *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2017 ownCloud GmbH.
  *
@@ -33,7 +34,7 @@ import com.owncloud.android.MainApp;
 public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
-    public static final int DB_VERSION = 21;
+    public static final int DB_VERSION = 22;
 
     private ProviderMeta() {
     }
@@ -44,6 +45,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
         public static final String UPLOADS_TABLE_NAME = "list_of_uploads";
         public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
+        public static final String CAMERA_UPLOADS_SYNC_TABLE_NAME = "camera_uploads_sync";
 
         public static final Uri CONTENT_URI = Uri.parse("content://"
                 + MainApp.getAuthority() + "/");
@@ -57,6 +59,8 @@ public class ProviderMeta {
                 + MainApp.getAuthority() + "/capabilities");
         public static final Uri CONTENT_URI_UPLOADS = Uri.parse("content://"
                 + MainApp.getAuthority() + "/uploads");
+        public static final Uri CONTENT_URI_CAMERA_UPLOADS = Uri.parse("content://"
+                + MainApp.getAuthority() + "/cameraUploads");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";
@@ -167,5 +171,9 @@ public class ProviderMeta {
         public static final String USER_AVATARS__CACHE_KEY = "cache_key";
         public static final String USER_AVATARS__ETAG = "etag";
         public static final String USER_AVATARS__MIME_TYPE = "mime_type";
+
+        // Columns of camera upload table
+        public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";
+        public static final String VIDEOS_LAST_SYNC_TIMESTAMP = "videos_last_sync_date";
     }
 }
