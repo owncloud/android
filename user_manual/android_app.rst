@@ -10,7 +10,7 @@ interface:
 
 * A simplified interface that fits nicely on a tablet or smartphone
 * Automatic synchronization of your files
-* Share files with other ownCloud users and groups, and create public share links
+* Share files with other ownCloud users and groups, and create multiple public share links
 * Instant uploads of photos or videos recorded on your Android device
 * Easily add files from your device to ownCloud
 * Two-factor authentication
@@ -207,33 +207,36 @@ gives you the option to sort your files by date, or alphabetically.
 Sharing Files
 ^^^^^^^^^^^^^
 
-You can share with other ownCloud users and groups, and create public share
-links. 
+You can share with other ownCloud users and groups, and create public share links. 
+
+.. note:: Multiple public links per/file is only available with ownCloud X.
+
 To share a file, you first need to either:
 
 1. Long-click its name, and click the share icon at the top of the screen 
-2. Click its name and then click  the share icon at the top of the screen
+2. Click its name and then click the share icon at the top of the screen
 
-The dialog which appears shows a list of users with whom the file is already
-shared. 
+The dialog which appears shows a list of users and groups with whom the file is already
+shared, as well as a list of one or more public links. 
 
-.. figure:: images/android-12.png
-   :alt: Sharing files.
+.. figure:: images/multiple_share_link.png
+   :alt: File Shares.
 
 From here you can:
 
 - Share the file with one or more users and groups
-- Share a link to the file via a range of options
+- Share one or more links to the file via a range of options
 - Enable password protection
 - Set a share expiration date
 
-To share the file with a new user or group, click "Add User Or Group", where
-you will be able to enter their details. 
+To share the file with a new user or group, click the plus sign next to "Users and Groups", where
+you will be able to find and add them to the share list.
+After a user or group has been added, you can adjust the editing and on-sharing options available for them.
 
 .. NOTE:: 
    If your ownCloud server administrator has enabled username auto-completion,
    when you start typing user or group names they will auto-complete. 
-   
+
 You can create a Federated Share Link by entering the username and remote URL
 of the person you want to share with in this format: ``user@domain.com``. 
 You don't have to guess; the Personal page in the ownCloud Web GUI tells the
@@ -242,6 +245,47 @@ Just ask them to copy and paste and send it to you.
 
 .. figure:: images/android-14.png
    :alt: Federated share creation.
+
+To create a public link, click the plus symbol next to "Public Links". 
+This will display the options available for that link, including "Allow editing", "Password", and "Expiration".
+After the options have been suitably configured, click "Save" to create the link.
+If you do not want to create the public link, click "Cancel".
+   
+Working With Multiple Files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Android application can perform some operations on multiple files simultaneously, such as refreshing and deleting. 
+To select multiple files, long select the first file that you want to work with; you will see a checkbox appear on the far right-hand side. 
+After that, check the checkbox next to all the other files that you want to perform the same operation on, and then perform the operation.
+
+.. figure:: images/android-select-multiple-files.png
+   :alt: Select multiple files.
+   
+Uploading Files Taken From the Camera
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pictures and videos can be uploaded from your smartphone after choosing the
+folder where they are stored.
+To specify where they are located, in the "Settings" options, first enable one of "Instant picture uploads" or "Instant video uploads". 
+After that, a further option called "Camera folder" will become visible, as in the screenshot below. 
+
+.. figure:: images/specify-camera-folder.png
+   :alt: Specify camera folder.
+   
+Make Folders Available Offline 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Folders can be made available when no internet or mobile connectivity is available.
+Doing so caches a copy of the folder and its contents locally to the device, assuming that sufficient disc space is available.
+Making folders available offline works slightly differently, depending on the number of folders selected for offline availability. 
+
+- **A single folder:** When a single folder is selected, click the More options menu, which opens a popup menu, and then select the first option, labeled: "Set as available offline".
+- **Multiple folders:** When multiple folders are selected, click the down arrow icon near the top of the screen.
+
+When the folders have been locally cached, the icon will change to have a yellow, down-arrow icon in the bottom right-hand corner, as in the screenshot below.
+
+.. figure:: images/file-folders-view.png
+   :alt: Make folders available offline.
    
 Application Settings
 ~~~~~~~~~~~~~~~~~~~~
@@ -282,7 +326,7 @@ to create a new one.
 To change the upload location, tap on **"Upload path"** under either photos or
 videos, and choose one of the folders which is displayed. 
 
-To create a new folder, click the three dots in the top right-hand corner. 
+To create a new folder, click the More options menu, in the top right-hand corner. 
 This will display the menu option: **"New folder"**. 
 Tap it and enter the name of the new folder in the **"Folder name"** dialog.
 Then, tap the newly created folder and tap **"Choose"** in the bottom right-hand
