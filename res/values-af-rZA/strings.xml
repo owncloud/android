@@ -65,6 +65,7 @@
   <string name="uploads_view_title">Oplaaie</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_upload_status_succeeded">Afgehandel</string>
+  <string name="uploads_view_upload_status_cancelled">Gekanselleer</string>
   <string name="uploads_view_upload_status_failed_folder_error">Vouerfout</string>
   <string name="uploads_view_upload_status_failed_permission_error">Toestemmingfout</string>
   <string name="uploads_view_upload_status_unknown_fail">Onbekende fout</string>
