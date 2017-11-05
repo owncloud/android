@@ -80,6 +80,7 @@
   <string name="share_link_password_title">Voer ’n wagwoord in</string>
   <string name="share_link_empty_password">U moet ’n wagwoord invoer</string>
   <string name="activity_chooser_send_file_title">Stuur</string>
+  <string name="clipboard_text_copied">Gekopieer na knipbord</string>
   <string name="uploader_upload_forbidden">Oplaai nie toegestaan nie</string>
   <string name="prefs_category_accounts">Rekeninge</string>
   <string name="drawer_manage_accounts">Bestuur rekeninge</string>

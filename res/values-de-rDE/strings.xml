@@ -464,6 +464,11 @@
   <string name="download_notification_channel_name">Heruntergeladenes</string>
   <string name="download_notification_channel_description">Name der herunterzuladenden Datei und Fortschritt anzeigen</string>
   <string name="upload_notification_channel_name">Hochgeladenes</string>
+  <string name="upload_notification_channel_description">Fortschritt und Dateiname der hochzuladenden Datei anzeigen</string>
+  <string name="media_service_notification_channel_name">Musik-Player</string>
+  <string name="media_service_notification_channel_description">Musik-Player anzeigen</string>
+  <string name="file_sync_notification_channel_name">Datei - Synchronisation</string>
+  <string name="file_sync_notification_channel_description">Ergebnis der Datei - Synchronisation anzeigen</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>
