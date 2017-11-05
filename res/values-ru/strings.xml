@@ -461,6 +461,14 @@
   <string name="share_via_link_default_name_template">Ссылка %1$s</string>
   <string name="private_link_info">Это частная ссылка, её могут использовать только люди, у которых есть доступ к файлу или каталогу. Используйте её в качестве постоянной ссылки для себя или чтобы указать другим на файлы в совместном доступе.</string>
   <string name="file_private_link_error">При получении частной ссылки на файл произошла ошибка</string>
+  <string name="download_notification_channel_name">Скачивания</string>
+  <string name="download_notification_channel_description">Просмотр имени скачиваемого файла и процесса</string>
+  <string name="upload_notification_channel_name">Закачки</string>
+  <string name="upload_notification_channel_description">Просмотр имени закачиваемого файла и процесса</string>
+  <string name="media_service_notification_channel_name">Проигрыватель музыки</string>
+  <string name="media_service_notification_channel_description">Просмотр проигрывателя музыки</string>
+  <string name="file_sync_notification_channel_name">Синхронизация файлов</string>
+  <string name="file_sync_notification_channel_description">Просмотр результатов синхронизации файлов</string>
   <plurals name="items_selected_count">
     <item quantity="one">Выбран %d</item>
     <item quantity="few">Выбрано %d</item>

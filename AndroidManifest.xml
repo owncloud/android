@@ -23,7 +23,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="24" />
+        android:targetSdkVersion="26" />
 
     <!--
          GET_ACCOUNTS is needed for API < 23.

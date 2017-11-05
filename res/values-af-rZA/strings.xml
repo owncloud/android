@@ -65,12 +65,14 @@
   <string name="uploads_view_title">Oplaaie</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
   <string name="uploads_view_upload_status_succeeded">Afgehandel</string>
+  <string name="uploads_view_upload_status_cancelled">Gekanselleer</string>
   <string name="uploads_view_upload_status_failed_folder_error">Vouerfout</string>
   <string name="uploads_view_upload_status_failed_permission_error">Toestemmingfout</string>
   <string name="uploads_view_upload_status_unknown_fail">Onbekende fout</string>
   <string name="auth_expired_saml_sso_token_toast">U sessie het verstryk. Verbind asb. weer</string>
   <string name="common_rename">Hernoem</string>
   <string name="common_remove">Verwyder</string>
+  <string name="confirmation_remove_public_share_title">Verwyder skakel</string>
   <string name="filename_forbidden_charaters_from_server">Lêernaam bevat ten minste een ongeldige karakter</string>
   <string name="ssl_validator_btn_details_see">Details</string>
   <string name="ssl_validator_label_L">Ligging:</string>
@@ -78,6 +80,7 @@
   <string name="share_link_password_title">Voer ’n wagwoord in</string>
   <string name="share_link_empty_password">U moet ’n wagwoord invoer</string>
   <string name="activity_chooser_send_file_title">Stuur</string>
+  <string name="clipboard_text_copied">Gekopieer na knipbord</string>
   <string name="uploader_upload_forbidden">Oplaai nie toegestaan nie</string>
   <string name="prefs_category_accounts">Rekeninge</string>
   <string name="drawer_manage_accounts">Bestuur rekeninge</string>
@@ -105,4 +108,5 @@
   <string name="share_privilege_can_edit_change">verander</string>
   <string name="share_privilege_can_edit_delete">uitvee</string>
   <string name="failed_upload_quota_exceeded_text">Nie genoeg spasie in die rekening</string>
+  <string name="share_warning_about_forwarding_public_links">Enigeen met die skakel het toegang tot die lêer/vouer</string>
 </resources>

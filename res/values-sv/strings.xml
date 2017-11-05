@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Okänt fel</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Väntar på anslutning till trådlöst nätverk</string>
   <string name="uploads_view_later_waiting_to_upload">Väntar på att ladda upp</string>
+  <string name="uploads_view_unsupported_media_type">Saknar stöd för denna mediatyp</string>
   <string name="downloader_download_in_progress_ticker">Laddar ner ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Laddar ner %2$s</string>
   <string name="downloader_download_succeeded_ticker">Nedladdning klar</string>
@@ -258,6 +259,7 @@
   <string name="activity_chooser_title">Sänd länk till ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierar fil från privat lagring</string>
   <string name="oauth_check_onoff">Logga in med oAuth2.</string>
+  <string name="oauth_login_connection">Ansluter till OAuth2 autentiseringsservern...</string>
   <string name="ssl_validator_header">Identiteten av servern kunde inte verifieras</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Servercertifikatet är inte tillförlitligt</string>
   <string name="ssl_validator_reason_cert_expired">- Servercertifikatet har gått ut</string>
@@ -443,6 +445,7 @@
   <string name="streaming_unrecognized_input">Videoformatet stöds inte</string>
   <string name="streaming_file_not_found_error">Viden finns inte längre på servern</string>
   <string name="previewing_video_common_error">Videon kan inte återskapas</string>
+  <string name="previewing_video_not_supported">Videoförhandsvisning är inte tillgänglig för din Androidversion. Nedladdning av filen startar automatiskt.</string>
   <string name="streaming_position_not_available">\"Position ej tillgänglig\"</string>
   <string name="error_no_network_connection">Enheten är inte ansluten till ett nätverk</string>
   <string name="share_no_public_links">Inga publika länkar ännu</string>
@@ -450,7 +453,13 @@
   <string name="share_warning_about_forwarding_public_links">Vem som helst med länken kan komma åt filen eller mappen</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Lösenord *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Upphör</string>
   <string name="share_via_link_default_name_template">%1$s länk</string>
+  <string name="download_notification_channel_name">Nedladdningar</string>
+  <string name="upload_notification_channel_name">Uppladdningar</string>
+  <string name="media_service_notification_channel_name">Musikspelare</string>
+  <string name="file_sync_notification_channel_name">Filsynkronisering</string>
+  <string name="file_sync_notification_channel_description">Se filsynkronseringsresultat </string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vald</item>
     <item quantity="other">%d valda</item>
