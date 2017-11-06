@@ -30,8 +30,8 @@
   <string name="prefs_accounts">Rekeninge</string>
   <string name="prefs_manage_accounts">Bestuur rekeninge</string>
   <string name="prefs_passcode">Wagkodeslot</string>
-  <string name="prefs_instant_upload">Kitsbeeldoplaai</string>
-  <string name="prefs_instant_upload_summary">Laai kamerabeelde in ’n japtrap op</string>
+  <string name="prefs_camera_picture_upload">Kitsbeeldoplaai</string>
+  <string name="prefs_camera_picture_upload_summary">Laai kamerabeelde in ’n japtrap op</string>
   <string name="prefs_help">Hulp</string>
   <string name="prefs_feedback">Terugvoer</string>
   <string name="prefs_imprint">Afdruk</string>
@@ -79,7 +79,7 @@
   <string name="ssl_validator_btn_details_see">Details</string>
   <string name="ssl_validator_label_C">Land:</string>
   <string name="ssl_validator_label_L">Ligging:</string>
-  <string name="prefs_instant_upload_path_title">Oplaaipad</string>
+  <string name="prefs_camera_upload_path_title">Oplaaipad</string>
   <string name="share_link_password_title">Voer ’n wagwoord in</string>
   <string name="share_link_empty_password">U moet ’n wagwoord invoer</string>
   <string name="activity_chooser_send_file_title">Stuur</string>

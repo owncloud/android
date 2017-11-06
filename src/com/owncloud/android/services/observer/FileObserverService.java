@@ -128,19 +128,6 @@ public class FileObserverService extends Service {
 
 
     /**
-     * Requests the update of the observers responsible to watch folders where new files
-     * should be automatically added to OC, according to changes in instant upload settings.
-     *
-     * @param context       Android context of the caller component.
-     */
-    public static void updateInstantUploadsObservers(Context context) {
-        Intent intent = new Intent(context, FileObserverService.class);
-        intent.setAction(FileObserverService.ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS);
-        context.startService(intent);
-    }
-
-
-    /**
      * Initialize the service. 
      */
     @Override
@@ -248,9 +235,6 @@ public class FileObserverService extends Service {
             }
             addObservedFile(file, account);
         }
-
-        // watch for instant uploads
-//        updateInstantUploadsObservers();
 
         // service does not stopSelf() ; that way it tries to be alive forever
     }

@@ -30,17 +30,17 @@ import com.owncloud.android.ui.fragment.OCFileListFragment;
 public class UploadPathActivity extends FolderPickerActivity implements FileFragment.ContainerActivity,
         OnClickListener, OnEnforceableRefreshListener {
 
-    public static final String KEY_INSTANT_UPLOAD_PATH = "INSTANT_UPLOAD_PATH";
+    public static final String KEY_CAMERA_UPLOAD_PATH = "CAMERA_UPLOAD_PATH";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String instantUploadPath = getIntent().getStringExtra(KEY_INSTANT_UPLOAD_PATH);
+        String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
 
         // The caller activity (Preferences) is not a FileActivity, so it has no OCFile, only a path.
-        OCFile folder = new OCFile(instantUploadPath);
+        OCFile folder = new OCFile(cameraUploadPath);
 
         setFile(folder);
     }
