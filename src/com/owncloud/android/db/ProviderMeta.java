@@ -59,8 +59,8 @@ public class ProviderMeta {
                 + MainApp.getAuthority() + "/capabilities");
         public static final Uri CONTENT_URI_UPLOADS = Uri.parse("content://"
                 + MainApp.getAuthority() + "/uploads");
-        public static final Uri CONTENT_URI_CAMERA_UPLOADS = Uri.parse("content://"
-                + MainApp.getAuthority() + "/cameraUploads");
+        public static final Uri CONTENT_URI_CAMERA_UPLOADS_SYNC = Uri.parse("content://"
+                + MainApp.getAuthority() + "/cameraUploadsSync");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";
@@ -163,7 +163,8 @@ public class ProviderMeta {
         public static final String UPLOADS_LAST_RESULT = "last_result";
         public static final String UPLOADS_CREATED_BY = "created_by";
 
-        public static final String UPLOADS_DEFAULT_SORT_ORDER = ProviderTableMeta._ID  + " collate nocase desc";
+        public static final String UPLOADS_DEFAULT_SORT_ORDER =
+                ProviderTableMeta._ID  + " collate nocase desc";
 
 
         // Columns of user_avatars table
@@ -175,5 +176,7 @@ public class ProviderMeta {
         // Columns of camera upload table
         public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";
         public static final String VIDEOS_LAST_SYNC_TIMESTAMP = "videos_last_sync_date";
+        public static final String CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER =
+                ProviderTableMeta._ID  + " collate nocase asc";
     }
 }

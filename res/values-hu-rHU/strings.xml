@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas lezárás</string>
-  <string name="prefs_instant_upload">Azonnali képfeltöltések</string>
-  <string name="prefs_instant_upload_summary">Kamera által készítette képek azonnali feltöltése</string>
-  <string name="prefs_instant_video_upload">Azonnali video feltöltések</string>
-  <string name="prefs_instant_video_upload_summary">Kamera által készített videó azonnali feltöltése</string>
+  <string name="prefs_camera_picture_upload">Azonnali képfeltöltések</string>
+  <string name="prefs_camera_picture_upload_summary">Kamera által készítette képek azonnali feltöltése</string>
+  <string name="prefs_camera_video_upload">Azonnali video feltöltések</string>
+  <string name="prefs_camera_video_upload_summary">Kamera által készített videó azonnali feltöltése</string>
   <string name="prefs_log_title">Naplózás engedélyezése</string>
   <string name="prefs_log_summary">Ez használható a problémák naplózásához</string>
   <string name="prefs_log_title_history">Naplózás előzménye</string>
@@ -235,7 +235,7 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_path">/InstantUpload</string>
+  <string name="camera_upload_path">/InstantUpload</string>
   <string name="conflict_keep_both">Mindkettő megtartása</string>
   <string name="conflict_use_local_version">helyi verzió</string>
   <string name="conflict_use_server_version">szerver verzió</string>

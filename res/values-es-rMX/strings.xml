@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Contraseña</string>
-  <string name="prefs_instant_upload">Subida instantánea de imágenes</string>
-  <string name="prefs_instant_upload_summary">Sube instantáneamente las fotos tomadas con la cámara</string>
-  <string name="prefs_instant_video_upload">Subidas instantáneas de video</string>
-  <string name="prefs_instant_video_upload_summary">Sube instantáneamente los vídeos grabados con la cámara</string>
+  <string name="prefs_camera_picture_upload">Subida instantánea de imágenes</string>
+  <string name="prefs_camera_picture_upload_summary">Sube instantáneamente las fotos tomadas con la cámara</string>
+  <string name="prefs_camera_video_upload">Subidas instantáneas de video</string>
+  <string name="prefs_camera_video_upload_summary">Sube instantáneamente los vídeos grabados con la cámara</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -293,9 +293,9 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Subir fotos por wifi únicamente</string>
-  <string name="instant_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
-  <string name="instant_upload_path">/Subidas Instantáneas</string>
+  <string name="camera_picture_upload_on_wifi">Subir fotos por wifi únicamente</string>
+  <string name="camera_video_upload_on_wifi">Subir archivos por wifi únicamente</string>
+  <string name="camera_upload_path">/Subidas Instantáneas</string>
   <string name="conflict_title">Conflicto con archivo</string>
   <string name="conflict_message">¿Cuáles archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
@@ -304,7 +304,7 @@
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
   <string name="error__upload__local_file_not_copied">%1$s se pudo copiar a la carpeta local %2$s</string>
-  <string name="prefs_instant_upload_path_title">Ruta de subida</string>
+  <string name="prefs_camera_upload_path_title">Ruta de subida</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
   <string name="share_link_file_no_exist">No se puede compartir. Revise si el archivo existe</string>
@@ -360,9 +360,9 @@
   <string name="copy_file_invalid_overwrite">El fichero ya existe en el directorio de destino</string>
   <string name="copy_file_error">Hubo un error al tratar de copiar este archivo o carpeta</string>
   <string name="forbidden_permissions_copy">para copiar este archivo</string>
-  <string name="prefs_category_instant_uploading">Subidas instantáneas</string>
+  <string name="prefs_category_camera_upload">Subidas instantáneas</string>
   <string name="prefs_category_details">Detalles</string>
-  <string name="prefs_instant_video_upload_path_title">Ruta de subida de vídeo </string>
+  <string name="prefs_camera_video_upload_path_title">Ruta de subida de vídeo </string>
   <string name="sync_folder_failed_content">La sincronización de la carpeta %1$s no se pudo completar</string>
   <string name="shared_subject_header">compartido</string>
   <string name="with_you_subject_header">con usted</string>
@@ -380,11 +380,11 @@
   <string name="file_list__footer__files">%1$d archivos</string>
   <string name="file_list__footer__files_and_folder">%1$d archivos, 1 carpeta</string>
   <string name="file_list__footer__files_and_folders">%1$d archivos, %2$d carpetas</string>
-  <string name="prefs_instant_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">requerido</string>
-  <string name="prefs_instant_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_instant_behaviour_dialogTitle">El archivo original será...</string>
-  <string name="prefs_instant_behaviour_title">El archivo original será...</string>
+  <string name="prefs_camera_upload_source_path_title">Carpeta de la Camera (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">requerido</string>
+  <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">El archivo original será...</string>
+  <string name="prefs_camera_upload_behaviour_title">El archivo original será...</string>
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>

@@ -27,10 +27,10 @@
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konte geréieren</string>
   <string name="prefs_passcode">Passwuert gespaart</string>
-  <string name="prefs_instant_upload">Biller direkt eroplueden</string>
-  <string name="prefs_instant_upload_summary">Biller vum Fotoapparat direkt eroplueden</string>
-  <string name="prefs_instant_video_upload">Videoen direkt eroplueden</string>
-  <string name="prefs_instant_video_upload_summary">Biller vun der Kamera direkt eroplueden</string>
+  <string name="prefs_camera_picture_upload">Biller direkt eroplueden</string>
+  <string name="prefs_camera_picture_upload_summary">Biller vum Fotoapparat direkt eroplueden</string>
+  <string name="prefs_camera_video_upload">Videoen direkt eroplueden</string>
+  <string name="prefs_camera_video_upload_summary">Biller vun der Kamera direkt eroplueden</string>
   <string name="prefs_log_title">Logging aschalten</string>
   <string name="prefs_log_summary">Heiduerch gi Problemer protokolléiert</string>
   <string name="prefs_log_title_history">Logging Historique</string>
@@ -260,8 +260,8 @@
   <string name="placeholder_filesize">389kB</string>
   <string name="placeholder_timestamp">18.05.2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">D\'Biller nëmmen iwwer WiFi eroplueden</string>
-  <string name="instant_video_upload_on_wifi">D\'Videoen nëmmen iwwer WiFi eroplueden</string>
+  <string name="camera_picture_upload_on_wifi">D\'Biller nëmmen iwwer WiFi eroplueden</string>
+  <string name="camera_video_upload_on_wifi">D\'Videoen nëmmen iwwer WiFi eroplueden</string>
   <string name="conflict_title">Fichier-Konflikt</string>
   <string name="conflict_message">Wéi eng Fichiere wëlls de halen? Wann s de déi zwou Versiounen auswiels kritt d\' kopéierte Fichier eng Nummer bei den Numm derbäi gesat</string>
   <string name="conflict_keep_both">Béid halen</string>
@@ -270,7 +270,7 @@
   <string name="preview_image_description">Biller-Virschau</string>
   <string name="preview_image_error_unknown_format">Dëst Bild kann net ugewise ginn</string>
   <string name="error__upload__local_file_not_copied">%1$s konnt net an de lokalen Dossier %2$s kopéiert ginn</string>
-  <string name="prefs_instant_upload_path_title">Pad eroplueden</string>
+  <string name="prefs_camera_upload_path_title">Pad eroplueden</string>
   <string name="share_link_no_support_share_api">Pardon, Deelen ass net erlaabt op ärem Server. W.e.g. kontaktéier däin Administrateur.</string>
   <string name="share_link_file_no_exist">Konnt net gedeelt ginn. Kontrolléier w.e.g. ob de Fichier existéiert</string>
   <string name="share_link_file_error">Beim Deele vun dësem Fichier oder Dossier ass e Feeler opgetrueden</string>
@@ -320,9 +320,9 @@
   <string name="copy_file_invalid_overwrite">De Fichier existéiert schonn am Zildossier</string>
   <string name="copy_file_error">Beim Versuch dëse Fichier oder Dossier ze kopéieren ass e Feeler opgetrueden</string>
   <string name="forbidden_permissions_copy">Fir dese Fichier ze kopéieren</string>
-  <string name="prefs_category_instant_uploading">Direkt eropgeluede Fichieren</string>
+  <string name="prefs_category_camera_upload">Direkt eropgeluede Fichieren</string>
   <string name="prefs_category_details">Detailer</string>
-  <string name="prefs_instant_video_upload_path_title">Video Pad eroplueden</string>
+  <string name="prefs_camera_video_upload_path_title">Video Pad eroplueden</string>
   <string name="sync_folder_failed_content">Synchroniséierung vum %1$s Dossier konnt net ofgeschloss ginn</string>
   <string name="shared_subject_header">gedeelt</string>
   <string name="with_you_subject_header">Mat dir</string>
@@ -340,8 +340,8 @@
   <string name="file_list__footer__files">%1$d Fichieren</string>
   <string name="file_list__footer__files_and_folder">1 Fichier, %1$d Dossieren</string>
   <string name="file_list__footer__files_and_folders">%1$d Fichieren, %2$d Dossieren</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Den original Fichier gëtt ...</string>
-  <string name="prefs_instant_behaviour_title">Den original Fichier gëtt ...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Den original Fichier gëtt ...</string>
+  <string name="prefs_camera_upload_behaviour_title">Den original Fichier gëtt ...</string>
   <string name="upload_copy_files">Fichier kopéieren</string>
   <string name="upload_move_files">Fichier réckelen</string>
   <string name="pref_behaviour_entries_keep_file">Am original Dossier gehalen</string>

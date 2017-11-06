@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerenciar contas</string>
   <string name="prefs_passcode">Bloqueio de senha</string>
-  <string name="prefs_instant_upload">Envio instantâneo de imagem</string>
-  <string name="prefs_instant_upload_summary">Enviar instantaneamente fotos tiradas com a câmera</string>
-  <string name="prefs_instant_video_upload">Envio instantâneo de vídeos</string>
-  <string name="prefs_instant_video_upload_summary">Enviar instantaneamente vídeos feitos com a câmera</string>
+  <string name="prefs_camera_picture_upload">Envio instantâneo de imagem</string>
+  <string name="prefs_camera_picture_upload_summary">Enviar instantaneamente fotos tiradas com a câmera</string>
+  <string name="prefs_camera_video_upload">Envio instantâneo de vídeos</string>
+  <string name="prefs_camera_video_upload_summary">Enviar instantaneamente vídeos feitos com a câmera</string>
   <string name="prefs_log_title">Habilitar login</string>
   <string name="prefs_log_summary">Isto é usado para registrar(log) os problemas</string>
   <string name="prefs_log_title_history">História de logins</string>
@@ -293,9 +293,9 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Envio de fotos apenas por wifi</string>
-  <string name="instant_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
-  <string name="instant_upload_path">/Upload instantâneo</string>
+  <string name="camera_picture_upload_on_wifi">Envio de fotos apenas por wifi</string>
+  <string name="camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
+  <string name="camera_upload_path">/Upload instantâneo</string>
   <string name="conflict_title">Conflito de arquivo</string>
   <string name="conflict_message">Quais arquivos você deseja manter? Se você selecionar ambas as versões, o arquivo local terá um número adicionado ao seu nome.</string>
   <string name="conflict_keep_both">Manter ambos</string>
@@ -304,7 +304,7 @@
   <string name="preview_image_description">Pré-visualização da imagem</string>
   <string name="preview_image_error_unknown_format">Esta imagem não pode ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s não pôde ser copiado para pasta local %2$s</string>
-  <string name="prefs_instant_upload_path_title">Caminho para envio</string>
+  <string name="prefs_camera_upload_path_title">Caminho para envio</string>
   <string name="share_link_no_support_share_api">Desculpe, o compartilhamento não está habilitado em seu servidor. Entre em contato com seu 
 ⇥⇥ administrador.</string>
   <string name="share_link_file_no_exist">Não é possível compartilhar. Por favor verifique se o arquivo existe</string>
@@ -360,9 +360,9 @@
   <string name="copy_file_invalid_overwrite">O arquivo já existe na pasta de destino</string>
   <string name="copy_file_error">Ocorreu um erro ao tentar copiar este arquivo ou pasta</string>
   <string name="forbidden_permissions_copy">para copiar este arquivo</string>
-  <string name="prefs_category_instant_uploading">Envio instantâneo</string>
+  <string name="prefs_category_camera_upload">Envio instantâneo</string>
   <string name="prefs_category_details">Detalhes</string>
-  <string name="prefs_instant_video_upload_path_title">Enviar caminho do vídeo</string>
+  <string name="prefs_camera_video_upload_path_title">Enviar caminho do vídeo</string>
   <string name="sync_folder_failed_content">A sincronização da pasta %1$s não pode ser finalizada</string>
   <string name="shared_subject_header">compartilhado</string>
   <string name="with_you_subject_header">com você</string>
@@ -380,11 +380,11 @@
   <string name="file_list__footer__files">%1$d arquivos</string>
   <string name="file_list__footer__files_and_folder">%1$d arquivos, 1 pasta</string>
   <string name="file_list__footer__files_and_folders">%1$d arquivos, %2$d pastas</string>
-  <string name="prefs_instant_upload_source_path_title">Pasta da câmera (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">exigido</string>
-  <string name="prefs_instant_upload_source_path_title_optional">opcional</string>
-  <string name="prefs_instant_behaviour_dialogTitle">O arquivo original será...</string>
-  <string name="prefs_instant_behaviour_title">O arquivo original será...</string>
+  <string name="prefs_camera_upload_source_path_title">Pasta da câmera (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">exigido</string>
+  <string name="prefs_camera_upload_source_path_title_optional">opcional</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">O arquivo original será...</string>
+  <string name="prefs_camera_upload_behaviour_title">O arquivo original será...</string>
   <string name="upload_copy_files">Copiar o arquivo</string>
   <string name="upload_move_files">Mover o arquivo</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>

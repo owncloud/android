@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Kontoar</string>
   <string name="prefs_manage_accounts">Handter kontoar</string>
   <string name="prefs_passcode">Passkodelås</string>
-  <string name="prefs_instant_upload">Last opp bilete omgåande</string>
-  <string name="prefs_instant_upload_summary">Last opp bilete når du tek dei med kameraet</string>
-  <string name="prefs_instant_video_upload">Last opp film</string>
-  <string name="prefs_instant_video_upload_summary">Last opp film med ein gong du tar dei med kameraet</string>
+  <string name="prefs_camera_picture_upload">Last opp bilete omgåande</string>
+  <string name="prefs_camera_picture_upload_summary">Last opp bilete når du tek dei med kameraet</string>
+  <string name="prefs_camera_video_upload">Last opp film</string>
+  <string name="prefs_camera_video_upload_summary">Last opp film med ein gong du tar dei med kameraet</string>
   <string name="prefs_log_title">Skru på logging</string>
   <string name="prefs_log_summary">Brukt til å logga problem</string>
   <string name="prefs_log_title_history">Logghistorikk</string>
@@ -240,9 +240,9 @@
   <string name="ssl_validator_btn_details_see">Detaljar</string>
   <string name="placeholder_timestamp">18.05.2012 12:23 </string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Last opp kun med trådlaust nett</string>
-  <string name="instant_video_upload_on_wifi">Last opp video kun med trådlaust nett</string>
-  <string name="instant_upload_path">/Umiddelbar opplasting</string>
+  <string name="camera_picture_upload_on_wifi">Last opp kun med trådlaust nett</string>
+  <string name="camera_video_upload_on_wifi">Last opp video kun med trådlaust nett</string>
+  <string name="camera_upload_path">/Umiddelbar opplasting</string>
   <string name="conflict_title">Fil konflikt</string>
   <string name="conflict_keep_both">Behald båe</string>
   <string name="conflict_use_local_version">lokal versjon</string>
@@ -250,7 +250,7 @@
   <string name="preview_image_description">Førehandsvisning av bilde</string>
   <string name="preview_image_error_unknown_format">Dette bilete kan ikkje bli vist</string>
   <string name="error__upload__local_file_not_copied">%1$s kan ikke bli kopiert til lokal katalog %2$s</string>
-  <string name="prefs_instant_upload_path_title">Sti for opplasting</string>
+  <string name="prefs_camera_upload_path_title">Sti for opplasting</string>
   <string name="activity_chooser_send_file_title">Send</string>
   <string name="network_error_socket_timeout_exception">Tenaren brukte for lang tid på å svara</string>
   <string name="prefs_category_accounts">Kontoar</string>

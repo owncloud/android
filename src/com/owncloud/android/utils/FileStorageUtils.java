@@ -114,7 +114,7 @@ public class FileStorageUtils {
 
     public static String getInstantUploadFilePath(Context context, String fileName) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String uploadPathdef = context.getString(R.string.instant_upload_path);
+        String uploadPathdef = context.getString(R.string.camera_upload_path);
         String uploadPath = pref.getString("instant_upload_path", uploadPathdef);
         String value = uploadPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;
@@ -128,7 +128,7 @@ public class FileStorageUtils {
      */
     public static String getInstantVideoUploadFilePath(Context context, String fileName) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String uploadVideoPathdef = context.getString(R.string.instant_upload_path);
+        String uploadVideoPathdef = context.getString(R.string.camera_upload_path);
         String uploadVideoPath = pref.getString("instant_video_upload_path", uploadVideoPathdef);
         String value = uploadVideoPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;

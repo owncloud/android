@@ -460,10 +460,10 @@ public class UploadFileOperation extends SyncOperation {
      */
     private boolean delayForWifi() {
         boolean delayInstantPicture = (
-            isInstantPicture() &&  PreferenceManager.instantPictureUploadViaWiFiOnly(mContext)
+            isInstantPicture() &&  PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext)
         );
         boolean delayInstantVideo = (
-            isInstantVideo() && PreferenceManager.instantVideoUploadViaWiFiOnly(mContext)
+            isInstantVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext)
         );
         return (
             (delayInstantPicture || delayInstantVideo) &&
