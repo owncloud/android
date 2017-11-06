@@ -2,17 +2,18 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
- * Copyright (C) 2016 ownCloud GmbH.
- * <p/>
+ * @author David González Verdugo
+ * Copyright (C) 2017 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p/>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -44,77 +45,77 @@ public abstract class PreferenceManager {
     private static final String AUTO_PREF__SORT_ORDER = "sortOrder";
     private static final String AUTO_PREF__SORT_ASCENDING = "sortAscending";
 
-    private static final String PREF__INSTANT_PICTURE_ENABLED = "instant_uploading";
-    private static final String PREF__INSTANT_VIDEO_ENABLED = "instant_video_uploading";
-    private static final String PREF__INSTANT_PICTURE_WIFI_ONLY = "instant_upload_on_wifi";
-    private static final String PREF__INSTANT_VIDEO_WIFI_ONLY = "instant_video_upload_on_wifi";
-    private static final String PREF__INSTANT_UPLOAD_ACCOUNT_NAME = "instant_upload_account_name";  // NEW - not saved yet
-    private static final String PREF__INSTANT_PICTURE_UPLOAD_PATH = "instant_upload_path";
-    private static final String PREF__INSTANT_VIDEO_UPLOAD_PATH = "instant_video_upload_path";
-    private static final String PREF__INSTANT_UPLOAD_BEHAVIOUR = "prefs_instant_behaviour";
-    private static final String PREF__INSTANT_UPLOAD_SOURCE = "instant_upload_source_path";
+    private static final String PREF__CAMERA_PICTURE_UPLOADS_ENABLED = "camera_picture_uploads";
+    private static final String PREF__CAMERA_VIDEO_UPLOADS_ENABLED = "camera_video_uploads";
+    private static final String PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY = "camera_picture_uploads_on_wifi";
+    private static final String PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY = "camera_video_uploads_on_wifi";
+    private static final String PREF__CAMERA_UPLOADS_ACCOUNT_NAME = "camera_uploads_account_name";  // NEW - not saved yet
+    private static final String PREF__CAMERA_PICTURE_UPLOADS_PATH = "camera_picture_uploads_path";
+    private static final String PREF__CAMERA_VIDEO_UPLOADS_PATH = "camera_video_uploads_path";
+    private static final String PREF__CAMERA_UPLOADS_BEHAVIOUR = "camera_uploads_behaviour";
+    private static final String PREF__CAMERA_UPLOADS_SOURCE = "camera_uploads_source_path";
 
-    public static boolean instantPictureUploadEnabled(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_PICTURE_ENABLED, false);
+    public static boolean cameraPictureUploadEnabled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false);
     }
 
-    public static boolean instantVideoUploadEnabled(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_VIDEO_ENABLED, false);
+    public static boolean cameraVideoUploadEnabled(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false);
     }
 
-    public static boolean instantPictureUploadViaWiFiOnly(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_PICTURE_WIFI_ONLY, false);
+    public static boolean cameraPictureUploadViaWiFiOnly(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY, false);
     }
 
-    public static boolean instantVideoUploadViaWiFiOnly(Context context) {
-        return getDefaultSharedPreferences(context).getBoolean(PREF__INSTANT_VIDEO_WIFI_ONLY, false);
+    public static boolean cameraVideoUploadViaWiFiOnly(Context context) {
+        return getDefaultSharedPreferences(context).getBoolean(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY, false);
     }
 
     public static CameraUploadsConfiguration getCameraUploadsConfiguration(Context context) {
         CameraUploadsConfiguration result = new CameraUploadsConfiguration();
         SharedPreferences prefs = getDefaultSharedPreferences(context);
         result.setEnabledForPictures(
-            prefs.getBoolean(PREF__INSTANT_PICTURE_ENABLED, false)
+            prefs.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
         );
         result.setEnabledForVideos(
-            prefs.getBoolean(PREF__INSTANT_VIDEO_ENABLED, false)
+            prefs.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)
         );
         result.setWifiOnlyForPictures(
-            prefs.getBoolean(PREF__INSTANT_PICTURE_WIFI_ONLY, false)
+            prefs.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY, false)
         );
         result.setWifiOnlyForVideos(
-            prefs.getBoolean(PREF__INSTANT_VIDEO_WIFI_ONLY, false)
+            prefs.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY, false)
         );
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(context);
         result.setUploadAccountName(
             prefs.getString(
-                PREF__INSTANT_UPLOAD_ACCOUNT_NAME,
+                    PREF__CAMERA_UPLOADS_ACCOUNT_NAME,
                 (currentAccount == null) ? "" : currentAccount.name
             )
         );
         String uploadPath = prefs.getString(
-            PREF__INSTANT_PICTURE_UPLOAD_PATH,
-            context.getString(R.string.instant_upload_path) + OCFile.PATH_SEPARATOR
+                PREF__CAMERA_PICTURE_UPLOADS_PATH,
+            context.getString(R.string.camera_upload_path) + OCFile.PATH_SEPARATOR
         );
         result.setUploadPathForPictures(
             uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
         );
         uploadPath = prefs.getString(
-            PREF__INSTANT_VIDEO_UPLOAD_PATH,
-            context.getString(R.string.instant_upload_path) + OCFile.PATH_SEPARATOR
+                PREF__CAMERA_VIDEO_UPLOADS_PATH,
+            context.getString(R.string.camera_upload_path) + OCFile.PATH_SEPARATOR
         );
         result.setUploadPathForVideos(
             uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
         );
         result.setBehaviourAfterUpload(
             prefs.getString(
-                PREF__INSTANT_UPLOAD_BEHAVIOUR,
+                    PREF__CAMERA_UPLOADS_BEHAVIOUR,
                 context.getResources().getStringArray(R.array.pref_behaviour_entryValues)[0]
             )
         );
         result.setSourcePath(
             prefs.getString(
-                PREF__INSTANT_UPLOAD_SOURCE,
+                    PREF__CAMERA_UPLOADS_SOURCE,
                 CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
             )
         );
@@ -297,6 +298,5 @@ public abstract class PreferenceManager {
         public void setSourcePath(String sourcePath) {
             mSourcePath = sourcePath;
         }
-
     }
 }

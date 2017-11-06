@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
   <string name="prefs_passcode">Захистити паролем</string>
-  <string name="prefs_instant_upload">Миттєве завантаження зображення</string>
-  <string name="prefs_instant_upload_summary">Миттєве завантаження зображення з камери</string>
-  <string name="prefs_instant_video_upload">Миттєве завантаження відео</string>
-  <string name="prefs_instant_video_upload_summary">Миттєве завантаження відео з камери</string>
+  <string name="prefs_camera_picture_upload">Миттєве завантаження зображення</string>
+  <string name="prefs_camera_picture_upload_summary">Миттєве завантаження зображення з камери</string>
+  <string name="prefs_camera_video_upload">Миттєве завантаження відео</string>
+  <string name="prefs_camera_video_upload_summary">Миттєве завантаження відео з камери</string>
   <string name="prefs_log_title">Ввімкнути журналювання</string>
   <string name="prefs_log_summary">Використовується для реєстрації помилок</string>
   <string name="prefs_log_title_history">Історія журналювання</string>
@@ -292,9 +292,9 @@
   <string name="placeholder_filesize">389 КБ</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
-  <string name="instant_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
-  <string name="instant_upload_path">/InstantUpload</string>
+  <string name="camera_picture_upload_on_wifi">Завантажувати картинки лише за наявності WiFi</string>
+  <string name="camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
+  <string name="camera_upload_path">/InstantUpload</string>
   <string name="conflict_title">Конфлікт файлу</string>
   <string name="conflict_message">Які файли Ви хочете залишити? Якщо Ви оберете обидві версії, локальний файл матиме номер, що додається до його імені.</string>
   <string name="conflict_keep_both">Залишити обидва</string>
@@ -303,7 +303,7 @@
   <string name="preview_image_description">Попередній перегляд зображення</string>
   <string name="preview_image_error_unknown_format">Не вдалося показати зображення</string>
   <string name="error__upload__local_file_not_copied">%1$s неможливо скопіювати до %2$s</string>
-  <string name="prefs_instant_upload_path_title">Шлях завантаження</string>
+  <string name="prefs_camera_upload_path_title">Шлях завантаження</string>
   <string name="share_link_no_support_share_api">На жаль, обмін не включений на вашому сервері. Будь ласка, зв\'яжіться з вашим адмінистратором.</string>
   <string name="share_link_file_no_exist">Неможливо поділитися. Будь ласка, перевірте, чи існує файл</string>
   <string name="share_link_file_error">Виникла помилка при спробі поділитися файлом або текою</string>
@@ -358,9 +358,9 @@
   <string name="copy_file_invalid_overwrite">Файл вже існує в теці призначення</string>
   <string name="copy_file_error">Виникла помилка під час спроби скопіювати даний файл чи папку</string>
   <string name="forbidden_permissions_copy">скопіювати даний файл</string>
-  <string name="prefs_category_instant_uploading">Швидке надсилання</string>
+  <string name="prefs_category_camera_upload">Швидке надсилання</string>
   <string name="prefs_category_details">Деталі</string>
-  <string name="prefs_instant_video_upload_path_title">Шлях до надсилання відео</string>
+  <string name="prefs_camera_video_upload_path_title">Шлях до надсилання відео</string>
   <string name="sync_folder_failed_content">Синхронізація теки %1$s неможливо завершити</string>
   <string name="shared_subject_header">поширений</string>
   <string name="with_you_subject_header">з Вами</string>
@@ -378,11 +378,11 @@
   <string name="file_list__footer__files">%1$d файлів</string>
   <string name="file_list__footer__files_and_folder">%1$d файлів, 1 тека</string>
   <string name="file_list__footer__files_and_folders">%1$d файлів, %2$d тек</string>
-  <string name="prefs_instant_upload_source_path_title">Тека камери (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">вимагається</string>
-  <string name="prefs_instant_upload_source_path_title_optional">необов\'язково</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Оригінальний файл буде...</string>
-  <string name="prefs_instant_behaviour_title">
+  <string name="prefs_camera_upload_source_path_title">Тека камери (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">вимагається</string>
+  <string name="prefs_camera_upload_source_path_title_optional">необов\'язково</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Оригінальний файл буде...</string>
+  <string name="prefs_camera_upload_behaviour_title">
 Оригінальний файл буде...</string>
   <string name="upload_copy_files">Копіювати файл</string>
   <string name="upload_move_files">Перемістити файл</string>

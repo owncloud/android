@@ -31,10 +31,10 @@
     <string name="prefs_accounts">Accounts</string>
     <string name="prefs_manage_accounts">Manage accounts</string>
     <string name="prefs_passcode">Passcode lock</string>
-    <string name="prefs_instant_upload">Instant picture uploads</string>
-    <string name="prefs_instant_upload_summary">Instantly upload pictures taken by camera</string>
-    <string name="prefs_instant_video_upload">Instant video uploads</string>
-    <string name="prefs_instant_video_upload_summary">Instantly upload videos recorded by camera</string>
+    <string name="prefs_camera_picture_upload">Picture uploads</string>
+    <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
+    <string name="prefs_camera_video_upload">Video uploads</string>
+    <string name="prefs_camera_video_upload_summary">Automatically upload videos recorded by camera</string>
     <string name="prefs_log_title">Enable logging</string>
     <string name="prefs_log_summary">This is used to log problems</string>
     <string name="prefs_log_title_history">Logging history</string>
@@ -305,9 +305,9 @@
     <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
     <string name="placeholder_media_time">12:23:45</string>
 
-    <string name="instant_upload_on_wifi">Upload pictures via wifi only</string>
-    <string name="instant_video_upload_on_wifi">Upload videos via wifi only</string>
-    <string name="instant_upload_path">/InstantUpload</string>
+    <string name="camera_picture_upload_on_wifi">Upload pictures via wifi only</string>
+    <string name="camera_video_upload_on_wifi">Upload videos via wifi only</string>
+    <string name="camera_upload_path">/CameraUpload</string>
     <string name="conflict_title">File conflict</string>
     <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
     <string name="conflict_keep_both">Keep both</string>
@@ -318,7 +318,7 @@
     <string name="preview_image_error_unknown_format">This image cannot be shown</string>
 
     <string name="error__upload__local_file_not_copied">%1$s could not be copied to %2$s local folder</string>
-    <string name="prefs_instant_upload_path_title">Upload path</string>
+    <string name="prefs_camera_upload_path_title">Upload path</string>
 
 	<string name="share_link_no_support_share_api">Sorry, sharing is not enabled on your server. Please contact your
 		administrator.</string>
@@ -387,10 +387,10 @@
     <string name="copy_file_error">An error occurred while trying to copy this file or folder</string>
     <string name="forbidden_permissions_copy">to copy this file</string>
 
-    <string name="prefs_category_instant_uploading">Instant uploads</string>
+    <string name="prefs_category_camera_upload">Camera uploads</string>
     <string name="prefs_category_details">Details</string>
 
-    <string name="prefs_instant_video_upload_path_title">Upload video path</string>
+    <string name="prefs_camera_video_upload_path_title">Upload video path</string>
     <string name="sync_folder_failed_content">Synchronization of %1$s folder could not be completed</string>
 
     <string name="shared_subject_header">shared</string>
@@ -413,11 +413,11 @@
     <string name="file_list__footer__files">%1$d files</string>
     <string name="file_list__footer__files_and_folder">%1$d files, 1 folder</string>
     <string name="file_list__footer__files_and_folders">%1$d files, %2$d folders</string>
-    <string name="prefs_instant_upload_source_path_title">Camera folder (%1$s)</string>
-    <string name="prefs_instant_upload_source_path_title_required">required</string>
-    <string name="prefs_instant_upload_source_path_title_optional">optional</string>
-    <string name="prefs_instant_behaviour_dialogTitle">Original file will be...</string>
-    <string name="prefs_instant_behaviour_title">Original file will be...</string>
+    <string name="prefs_camera_upload_source_path_title">Camera folder (%1$s)</string>
+    <string name="prefs_camera_upload_source_path_title_required">required</string>
+    <string name="prefs_camera_upload_source_path_title_optional">optional</string>
+    <string name="prefs_camera_upload_behaviour_dialogTitle">Original file will be...</string>
+    <string name="prefs_camera_upload_behaviour_title">Original file will be...</string>
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>
 

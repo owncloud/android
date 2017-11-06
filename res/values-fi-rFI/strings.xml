@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Tilit</string>
   <string name="prefs_manage_accounts">Tilien hallinta</string>
   <string name="prefs_passcode">Suojakoodilukitus</string>
-  <string name="prefs_instant_upload">Kuvien välitön lähetys</string>
-  <string name="prefs_instant_upload_summary">Lähetä kameralla otetut kuvat välittömästi</string>
-  <string name="prefs_instant_video_upload">Välittömät videolähetykset</string>
-  <string name="prefs_instant_video_upload_summary">Lähetä kameralla kuvatut videot välittömästi</string>
+  <string name="prefs_camera_picture_upload">Kuvien välitön lähetys</string>
+  <string name="prefs_camera_picture_upload_summary">Lähetä kameralla otetut kuvat välittömästi</string>
+  <string name="prefs_camera_video_upload">Välittömät videolähetykset</string>
+  <string name="prefs_camera_video_upload_summary">Lähetä kameralla kuvatut videot välittömästi</string>
   <string name="prefs_log_title">Käytä lokitusta</string>
   <string name="prefs_log_summary">Tätä käytetään ongelmien lokitukseen</string>
   <string name="prefs_log_title_history">Lokihistoria</string>
@@ -274,9 +274,9 @@
   <string name="placeholder_filesize">389 kt</string>
   <string name="placeholder_timestamp">18.5.2012 12.23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
-  <string name="instant_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
-  <string name="instant_upload_path">/InstantUpload</string>
+  <string name="camera_picture_upload_on_wifi">Lähetä kuvat vain wifi-yhteyden kautta</string>
+  <string name="camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
+  <string name="camera_upload_path">/InstantUpload</string>
   <string name="conflict_title">Tiedoston ristiriita</string>
   <string name="conflict_message">Mitkä tiedostot haluat säilyttää? Jos valitset kummatkin versiot, paikallisen version tiedoston nimeen lisätään numero.</string>
   <string name="conflict_keep_both">Säilytä molemmat</string>
@@ -284,7 +284,7 @@
   <string name="conflict_use_server_version">palvelimen versio</string>
   <string name="preview_image_description">Kuvan esikatselu</string>
   <string name="preview_image_error_unknown_format">Tätä kuvaa ei voi näyttää</string>
-  <string name="prefs_instant_upload_path_title">Lähetyspolku</string>
+  <string name="prefs_camera_upload_path_title">Lähetyspolku</string>
   <string name="share_link_no_support_share_api">Jakaminen ei ole käytössä palvelimellasi. Ota yhteys
 		ylläpitäjään.</string>
   <string name="share_link_file_no_exist">Jakaminen epäonnistui. Varmista, että tiedosto on olemassa</string>
@@ -334,9 +334,9 @@
   <string name="copy_file_not_found">Kopiointi epäonnistui. Tarkista onko tiedostoa olemassa</string>
   <string name="copy_file_invalid_overwrite">Tiedosto on jo kohdekansiossa.</string>
   <string name="copy_file_error">Tätä tiedostoa tai kansiota kopioitaessa tapahtui virhe</string>
-  <string name="prefs_category_instant_uploading">Välittömät lähetykset</string>
+  <string name="prefs_category_camera_upload">Välittömät lähetykset</string>
   <string name="prefs_category_details">Tiedot</string>
-  <string name="prefs_instant_video_upload_path_title">Videoiden lähetyspolku</string>
+  <string name="prefs_camera_video_upload_path_title">Videoiden lähetyspolku</string>
   <string name="sync_folder_failed_content">Kansion %1$s synkronointia ei voitu suorittaa kokonaan</string>
   <string name="shared_subject_header">jaettu</string>
   <string name="with_you_subject_header">kanssasi</string>
@@ -354,11 +354,11 @@
   <string name="file_list__footer__files">%1$d tiedostoa</string>
   <string name="file_list__footer__files_and_folder">%1$d tiedostoa, 1 kansio</string>
   <string name="file_list__footer__files_and_folders">%1$d tiedostoa, %2$d kansiota</string>
-  <string name="prefs_instant_upload_source_path_title">Kamerakansio (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">vaadittu</string>
-  <string name="prefs_instant_upload_source_path_title_optional">valinnainen</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Alkuperäinen tiedosto...</string>
-  <string name="prefs_instant_behaviour_title">Alkuperäinen tiedosto...</string>
+  <string name="prefs_camera_upload_source_path_title">Kamerakansio (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">vaadittu</string>
+  <string name="prefs_camera_upload_source_path_title_optional">valinnainen</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Alkuperäinen tiedosto...</string>
+  <string name="prefs_camera_upload_behaviour_title">Alkuperäinen tiedosto...</string>
   <string name="upload_copy_files">Kopioi tiedosto</string>
   <string name="upload_move_files">Siirrä tiedosto</string>
   <string name="pref_behaviour_entries_keep_file">pidetään alkuperäisessä kansiossa</string>

@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Korisnički računi</string>
   <string name="prefs_manage_accounts">Upravljaj računima</string>
   <string name="prefs_passcode">Zaključavanje zaporkom</string>
-  <string name="prefs_instant_upload">Trenutni upload slika</string>
-  <string name="prefs_instant_upload_summary">Trenutni upload slika snimljenih kamerom</string>
-  <string name="prefs_instant_video_upload">Trenutni upload videa</string>
-  <string name="prefs_instant_video_upload_summary">Trenutni upload videa snimljen kamerom</string>
+  <string name="prefs_camera_picture_upload">Trenutni upload slika</string>
+  <string name="prefs_camera_picture_upload_summary">Trenutni upload slika snimljenih kamerom</string>
+  <string name="prefs_camera_video_upload">Trenutni upload videa</string>
+  <string name="prefs_camera_video_upload_summary">Trenutni upload videa snimljen kamerom</string>
   <string name="prefs_log_title">Uključi zapisivanje</string>
   <string name="prefs_log_summary">Koristi se za zapisivanje problema</string>
   <string name="prefs_log_title_history">Prošlost zapisa</string>

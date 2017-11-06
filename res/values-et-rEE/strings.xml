@@ -28,10 +28,10 @@
   <string name="prefs_accounts">Kontod</string>
   <string name="prefs_manage_accounts">Halda kontosid</string>
   <string name="prefs_passcode">Parooli lukk</string>
-  <string name="prefs_instant_upload">Piltide kohene üleslaadimine</string>
-  <string name="prefs_instant_upload_summary">Laadi koheselt üles kaameraga tehtud pildid</string>
-  <string name="prefs_instant_video_upload">Videote kohene üleslaadimine</string>
-  <string name="prefs_instant_video_upload_summary">Laadi koheselt üles kaameraga tehtud videod</string>
+  <string name="prefs_camera_picture_upload">Piltide kohene üleslaadimine</string>
+  <string name="prefs_camera_picture_upload_summary">Laadi koheselt üles kaameraga tehtud pildid</string>
+  <string name="prefs_camera_video_upload">Videote kohene üleslaadimine</string>
+  <string name="prefs_camera_video_upload_summary">Laadi koheselt üles kaameraga tehtud videod</string>
   <string name="prefs_log_title">Luba logimine</string>
   <string name="prefs_log_summary">Kasutatakse probleemide logimiseks</string>
   <string name="prefs_log_title_history">Logimise ajalugu</string>
@@ -247,7 +247,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_path">/InstantUpload</string>
+  <string name="camera_upload_path">/InstantUpload</string>
   <string name="conflict_title">Failikonflikt</string>
   <string name="conflict_message">Millist faili sa soovid säilitada? Kui valid mõlemad versioonid, siis lisatakse kohaliku faili nimele number.</string>
   <string name="conflict_keep_both">Säilita mõlemad</string>
@@ -301,7 +301,7 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="copy_file_invalid_overwrite">See fail on juba sihtkaustas olemas</string>
   <string name="copy_file_error">Selle faili või kausta kopeerimisel tekkis tõrge</string>
   <string name="forbidden_permissions_copy">et kopeerida seda faili</string>
-  <string name="prefs_category_instant_uploading">Kohesed üleslaadimised</string>
+  <string name="prefs_category_camera_upload">Kohesed üleslaadimised</string>
   <string name="prefs_category_details">Üksikasjad</string>
   <string name="shared_subject_header">jagatud</string>
   <string name="with_you_subject_header">sinuga</string>
@@ -319,8 +319,8 @@ Allpool on loend kohalikest failidest ning serveris asuvatest failidest %5$s, mi
   <string name="file_list__footer__files">%1$d faili</string>
   <string name="file_list__footer__files_and_folder">%1$d faili, 1 kaust</string>
   <string name="file_list__footer__files_and_folders">%1$d faili, %2$d kausta</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Algne fail...</string>
-  <string name="prefs_instant_behaviour_title">Algne fail...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Algne fail...</string>
+  <string name="prefs_camera_upload_behaviour_title">Algne fail...</string>
   <string name="upload_copy_files">Kopeeri fail</string>
   <string name="upload_move_files">Liiguta fail</string>
   <string name="pref_behaviour_entries_keep_file">hoitakse algses kaustas</string>

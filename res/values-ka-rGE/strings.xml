@@ -114,7 +114,7 @@
   <string name="ssl_validator_label_validity_to">ვისზე:</string>
   <string name="ssl_validator_label_signature">სიგნატურა:</string>
   <string name="ssl_validator_label_signature_algorithm">ალგორითმი:</string>
-  <string name="instant_upload_path">/ეგრევე ატვირთვა</string>
+  <string name="camera_upload_path">/ეგრევე ატვირთვა</string>
   <string name="conflict_keep_both">დატოვე ორივე</string>
   <string name="activity_chooser_send_file_title">გაგზავნა</string>
   <string name="clipboard_text_copied">კოპირებულია კლიპბორდში</string>
