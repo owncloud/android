@@ -35,6 +35,7 @@ import android.support.annotation.RequiresApi;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
@@ -76,7 +77,8 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     private static Set<String> sRecentlyUploadedFilePaths = new HashSet<>(MAX_RECENTS);
 
     // DB connection
-    private CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = null;
+    private CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager;
+    private OCCameraUploadSync mOOCCameraUploadSync;
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -178,6 +180,8 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     // Called once for pictures (if enabled) and again for videos (if enabled)
     public void onRemoteOperationFinish(RemoteOperation operation, RemoteOperationResult result) {
 
+        mOOCCameraUploadSync = mCameraUploadsSyncStorageManager.getCameraUploadSync(null,null,null);
+
         //Get local folder images
         String localCameraPath = mConfig.getSourcePath();
 
@@ -197,6 +201,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
             if (result.getCode() == RemoteOperationResult.ResultCode.FILE_NOT_FOUND) {
 
                 for (File localFile : localFiles) {
+
                     handleNewFile(localFile);
                 }
             }
@@ -207,9 +212,6 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
             compareFiles(localFiles, FileStorageUtils.castObjectsIntoRemoteFiles(remoteObjects));
         }
-
-        // We have to unbind the service to get remote images/videos and finish the job when
-        // requested operations finish
 
         mPerformedOperationsCounter++;
 
@@ -307,6 +309,13 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
                 UploadFileOperation.CREATED_AS_VIDEO;
 
         String localPath = mConfig.getSourcePath() + File.separator + fileName;
+
+        // Check file timestamp
+        if (isImage && localFile.lastModified() <= mOOCCameraUploadSync.getPicturesLastSync() ||
+                isVideo && localFile.lastModified() <= mOOCCameraUploadSync.getVideosLastSync()) {
+            Log_OC.i(TAG, "File " + localPath + " too old, ignoring");
+            return;
+        }
 
         // Check duplicated detection
         if (sRecentlyUploadedFilePaths.contains(localPath)) {
