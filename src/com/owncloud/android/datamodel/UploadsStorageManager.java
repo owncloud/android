@@ -152,7 +152,7 @@ public class UploadsStorageManager extends Observable {
             new String[]{String.valueOf(ocUpload.getUploadId())}
         );
 
-        Log_OC.d(TAG, "updateUpload returns with: " + result + " for file: " + ocUpload.getLocalPath());
+        Log_OC.d(TAG, "updateCameraUploadSync returns with: " + result + " for file: " + ocUpload.getLocalPath());
         if (result != 1) {
             Log_OC.e(TAG, "Failed to update item " + ocUpload.getLocalPath() + " into upload db.");
         } else {
@@ -334,7 +334,6 @@ public class UploadsStorageManager extends Observable {
                     list[c.getPosition()] = upload;
                 }
             } while (c.moveToNext());
-
         }
         c.close();
 

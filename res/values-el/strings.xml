@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Λογαριασμοί</string>
   <string name="prefs_manage_accounts">Διαχείριση λογαριασμών</string>
   <string name="prefs_passcode">Κλείδωμα κωδικού πρόσβασης</string>
-  <string name="prefs_instant_upload">Στιγμιαίες μεταφορτώσεις εικόνων</string>
-  <string name="prefs_instant_upload_summary">Μεταφορτώστε απευθείας φωτογραφίες από την κάμερα</string>
-  <string name="prefs_instant_video_upload">Στιγμιαίες μεταφορτώσεις βίντεο</string>
-  <string name="prefs_instant_video_upload_summary">Άμεση μεταφόρτωση των βίντεο από την φωτογραφική μηχανή</string>
+  <string name="prefs_camera_picture_upload">Στιγμιαίες μεταφορτώσεις εικόνων</string>
+  <string name="prefs_camera_picture_upload_summary">Μεταφορτώστε απευθείας φωτογραφίες από την κάμερα</string>
+  <string name="prefs_camera_video_upload">Στιγμιαίες μεταφορτώσεις βίντεο</string>
+  <string name="prefs_camera_video_upload_summary">Άμεση μεταφόρτωση των βίντεο από την φωτογραφική μηχανή</string>
   <string name="prefs_log_title">Σύνδεση εφικτή</string>
   <string name="prefs_log_summary">Χρησιμοποιείται για την καταγραφή προβλημάτων</string>
   <string name="prefs_log_title_history">Φόρτωση ιστορικού</string>
@@ -293,9 +293,9 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Μεταφόρτωση φωτογραφιών μόνο μέσω wifi</string>
-  <string name="instant_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
-  <string name="instant_upload_path">/InstantUpload</string>
+  <string name="camera_picture_upload_on_wifi">Μεταφόρτωση φωτογραφιών μόνο μέσω wifi</string>
+  <string name="camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
+  <string name="camera_upload_path">/InstantUpload</string>
   <string name="conflict_title">Διένεξη αρχείου</string>
   <string name="conflict_message">Ποια αρχεία θέλετε να διατηρήσετε; Αν επιλέξετε και τις δύο εκδόσεις, το τοπικό αρχείο θα έχει έναν αριθμό που έχει προστεθεί στο όνομά του.</string>
   <string name="conflict_keep_both">Διατήρηση και των δύο</string>
@@ -304,7 +304,7 @@
   <string name="preview_image_description">Προεπισκόπηση εικόνας</string>
   <string name="preview_image_error_unknown_format">Αυτή η εικόνα δεν μπορεί να προβληθεί</string>
   <string name="error__upload__local_file_not_copied">Το %1$s δεν μπόρεσε να αντιγραφεί στον τοπικό φάκελο %2$s</string>
-  <string name="prefs_instant_upload_path_title">Διαδρομή μεταφόρτωσης</string>
+  <string name="prefs_camera_upload_path_title">Διαδρομή μεταφόρτωσης</string>
   <string name="share_link_no_support_share_api">Λυπούμαστε, ο διαμοιρασμός δεν επιτρέπεται στο διακομιστή σας. Παρακαλούμε επικοινωνείστε με το
 		διαχειριστή σας.</string>
   <string name="share_link_file_no_exist">Αδύνατη η κοινή χρήση. Παρακαλώ ελέγξτε αν ο φάκελος υπάρχει</string>
@@ -360,9 +360,9 @@
   <string name="copy_file_invalid_overwrite">Το αρχείο υπάρχει ήδη στον φάκελο προορισμού</string>
   <string name="copy_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια αντιγραφής αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_copy">για αντιγραφή αυτού του αρχείου</string>
-  <string name="prefs_category_instant_uploading">Άμεσες μεταφορτώσεις</string>
+  <string name="prefs_category_camera_upload">Άμεσες μεταφορτώσεις</string>
   <string name="prefs_category_details">Λεπτομέρειες</string>
-  <string name="prefs_instant_video_upload_path_title">Διαδρομή μεταφόρτωσης βίντεο</string>
+  <string name="prefs_camera_video_upload_path_title">Διαδρομή μεταφόρτωσης βίντεο</string>
   <string name="sync_folder_failed_content">Ο συγχρονισμός του φακέλου %1$s δεν μπορεί να ολοκληρωθεί</string>
   <string name="shared_subject_header">διαμοιρασμένα</string>
   <string name="with_you_subject_header">με εσάς</string>
@@ -380,11 +380,11 @@
   <string name="file_list__footer__files">%1$d αρχεία</string>
   <string name="file_list__footer__files_and_folder">%1$d αρχεία, 1 φάκελος</string>
   <string name="file_list__footer__files_and_folders">%1$d αρχεία, %2$d φάκελοι</string>
-  <string name="prefs_instant_upload_source_path_title">Φάκελος κάμερας (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">απαιτείται</string>
-  <string name="prefs_instant_upload_source_path_title_optional">προαιρετικό</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Το αρχικό αρχείο θα είναι ...</string>
-  <string name="prefs_instant_behaviour_title">Το αρχικό αρχείο θα είναι ...</string>
+  <string name="prefs_camera_upload_source_path_title">Φάκελος κάμερας (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">απαιτείται</string>
+  <string name="prefs_camera_upload_source_path_title_optional">προαιρετικό</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Το αρχικό αρχείο θα είναι ...</string>
+  <string name="prefs_camera_upload_behaviour_title">Το αρχικό αρχείο θα είναι ...</string>
   <string name="upload_copy_files">Αντιγραφή αρχείου</string>
   <string name="upload_move_files">Μετακίνηση αρχείου</string>
   <string name="pref_behaviour_entries_keep_file">διατηρήθηκε στον αρχικό φάκελο</string>

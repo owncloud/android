@@ -21,6 +21,7 @@ package com.owncloud.android.datamodel;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 
 import com.owncloud.android.db.OCCameraUploadSync;
@@ -43,10 +44,10 @@ public class CameraUploadsSyncStorageManager extends Observable{
     }
 
     /**
-     * Stores an camera upload sync object in DB.
+     * Stores an camera upload sync object in DB
      *
      * @param ocCameraUploadSync      Camera upload sync object to store
-     * @return camera upload sync id, -1 if the insert process fails.
+     * @return camera upload sync id, -1 if the insert process fails
      */
     public long storeCameraUploadSync(OCCameraUploadSync ocCameraUploadSync) {
         Log_OC.v(TAG, "Inserting camera upload sync with timestamp of last pictures synchronization "
@@ -59,7 +60,8 @@ public class CameraUploadsSyncStorageManager extends Observable{
         cv.put(ProviderMeta.ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP, ocCameraUploadSync.
                 getVideosLastSync());
 
-        Uri result = getDB().insert(ProviderMeta.ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS, cv);
+        Uri result = getDB().insert(ProviderMeta.ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
+                cv);
 
         Log_OC.d(TAG, "storeUpload returns with: " + result + " for camera upload sync " +
                 ocCameraUploadSync.getId());
@@ -73,6 +75,85 @@ public class CameraUploadsSyncStorageManager extends Observable{
             notifyObserversNow();
             return new_id;
         }
+    }
+
+    /**
+     * Update a camera upload sync object in DB.
+     *
+     * @param ocCameraUploadSync Camera upload sync object with state to update
+     * @return num of updated camera upload sync
+     */
+    public int updateCameraUploadSync(OCCameraUploadSync ocCameraUploadSync) {
+        Log_OC.v(TAG, "Updating " + ocCameraUploadSync.getId());
+
+        ContentValues cv = new ContentValues();
+        cv.put(ProviderMeta.ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP, ocCameraUploadSync.
+                getPicturesLastSync());
+        cv.put(ProviderMeta.ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP, ocCameraUploadSync.
+                getVideosLastSync());
+
+        int result = getDB().update(ProviderMeta.ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
+                cv,
+                ProviderMeta.ProviderTableMeta._ID + "=?",
+                new String[]{String.valueOf(ocCameraUploadSync.getId())}
+        );
+
+        Log_OC.d(TAG, "updateCameraUploadSync returns with: " + result + " for camera upload sync: " +
+                ocCameraUploadSync.getId());
+        if (result != 1) {
+            Log_OC.e(TAG, "Failed to update item " + ocCameraUploadSync.getId() + " into " +
+                    "camera upload sync db.");
+        } else {
+            notifyObserversNow();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves a camera upload sync object from DB
+     * @param selection filter declaring which rows to return, formatted as an SQL WHERE clause
+     * @param selectionArgs include ?s in selection, which will be replaced by the values from here
+     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause
+     * @return camera upload sync object
+     */
+    public OCCameraUploadSync getCameraUploadSync(String selection, String[] selectionArgs,
+                                                   String sortOrder) {
+        Cursor c = getDB().query(
+                ProviderMeta.ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
+                null,
+                selection,
+                selectionArgs,
+                sortOrder
+        );
+
+        OCCameraUploadSync ocCameraUploadSync = null;
+
+        if (c.moveToFirst()) {
+            ocCameraUploadSync = createOCCameraUploadSyncFromCursor(c);
+            if (ocCameraUploadSync == null) {
+                Log_OC.e(TAG, "Camera upload sync could not be created from cursor");
+            }
+        }
+
+        c.close();
+
+        return ocCameraUploadSync;
+    }
+
+    private OCCameraUploadSync createOCCameraUploadSyncFromCursor(Cursor c) {
+        OCCameraUploadSync cameraUploadSync = null;
+        if (c != null) {
+            long picturesLastSync = c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta.
+                    PICTURES_LAST_SYNC_TIMESTAMP));
+            long videosLastSync = c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta.
+                    VIDEOS_LAST_SYNC_TIMESTAMP));
+
+            cameraUploadSync = new OCCameraUploadSync(picturesLastSync, videosLastSync);
+
+            cameraUploadSync.setId(c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta._ID)));
+        }
+        return cameraUploadSync;
     }
 
     private ContentResolver getDB() {

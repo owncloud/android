@@ -70,7 +70,7 @@ public class FileContentProvider extends ContentProvider {
     private static final int SHARES = 4;
     private static final int CAPABILITIES = 5;
     private static final int UPLOADS = 6;
-    private static final int CAMERA_UPLOADS = 7;
+    private static final int CAMERA_UPLOADS_SYNC = 7;
 
     private static final String TAG = FileContentProvider.class.getSimpleName();
 
@@ -181,7 +181,7 @@ public class FileContentProvider extends ContentProvider {
             case UPLOADS:
                 count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs);
                 break;
-            case CAMERA_UPLOADS:
+            case CAMERA_UPLOADS_SYNC:
                 count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs);
                 break;
             default:
@@ -294,13 +294,13 @@ public class FileContentProvider extends ContentProvider {
                 }
                 return insertedUploadUri;
 
-            case CAMERA_UPLOADS:
+            case CAMERA_UPLOADS_SYNC:
                 Uri insertedCameraUploadUri;
                 long cameraUploadId = db.insert(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, null,
                         values);
                 if (cameraUploadId > 0) {
                     insertedCameraUploadUri =
-                            ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS,
+                            ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
                                     cameraUploadId);
                 } else {
                     throw new SQLException("ERROR " + uri);
@@ -353,8 +353,8 @@ public class FileContentProvider extends ContentProvider {
         mUriMatcher.addURI(authority, "capabilities/#", CAPABILITIES);
         mUriMatcher.addURI(authority, "uploads/", UPLOADS);
         mUriMatcher.addURI(authority, "uploads/#", UPLOADS);
-        mUriMatcher.addURI(authority, "cameraUploads/", CAMERA_UPLOADS);
-        mUriMatcher.addURI(authority, "cameraUploads/#", CAMERA_UPLOADS);
+        mUriMatcher.addURI(authority, "cameraUploadsSync/", CAMERA_UPLOADS_SYNC);
+        mUriMatcher.addURI(authority, "cameraUploadsSync/#", CAMERA_UPLOADS_SYNC);
 
         return true;
     }
@@ -429,7 +429,7 @@ public class FileContentProvider extends ContentProvider {
                             + uri.getPathSegments().get(1));
                 }
                 break;
-            case CAMERA_UPLOADS:
+            case CAMERA_UPLOADS_SYNC:
                 sqlQuery.setTables(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME);
                 if (uri.getPathSegments().size() > 1) {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
@@ -451,6 +451,9 @@ public class FileContentProvider extends ContentProvider {
                     break;
                 case UPLOADS:
                     order = ProviderTableMeta.UPLOADS_DEFAULT_SORT_ORDER;
+                    break;
+                case CAMERA_UPLOADS_SYNC:
+                    order = ProviderTableMeta.CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER;
                     break;
                 default: // Files
                     order = ProviderTableMeta.FILE_DEFAULT_SORT_ORDER;
@@ -507,6 +510,10 @@ public class FileContentProvider extends ContentProvider {
                 );
                 trimSuccessfulUploads(db);
                 return ret;
+            case CAMERA_UPLOADS_SYNC:
+                return db.update(
+                        ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection,
+                        selectionArgs);
             default:
                 return db.update(
                         ProviderTableMeta.FILE_TABLE_NAME, values, selection, selectionArgs

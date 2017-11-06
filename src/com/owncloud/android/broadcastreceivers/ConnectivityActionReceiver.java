@@ -160,10 +160,10 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
     private void wifiConnected(Context context) {
         // for the moment, only recovery of instant uploads, similar to behaviour in release 1.9.1
         if (
-                (PreferenceManager.instantPictureUploadEnabled(context) &&
-                        PreferenceManager.instantPictureUploadViaWiFiOnly(context)) ||
-                (PreferenceManager.instantVideoUploadEnabled(context) &&
-                        PreferenceManager.instantVideoUploadViaWiFiOnly(context))
+                (PreferenceManager.cameraPictureUploadEnabled(context) &&
+                        PreferenceManager.cameraPictureUploadViaWiFiOnly(context)) ||
+                (PreferenceManager.cameraVideoUploadEnabled(context) &&
+                        PreferenceManager.cameraVideoUploadViaWiFiOnly(context))
                 ) {
 
             Handler h = new Handler(Looper.getMainLooper());
