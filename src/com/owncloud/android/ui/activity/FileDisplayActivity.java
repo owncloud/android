@@ -59,10 +59,8 @@ import android.view.View;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -150,9 +148,6 @@ public class FileDisplayActivity extends HookActivity
 
     private IndexedForest<FileDisplayActivity> mPendingInstantUploads = new IndexedForest<>();
 
-    // DB connection
-    private CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -198,14 +193,6 @@ public class FileDisplayActivity extends HookActivity
             JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.
                     JOB_SCHEDULER_SERVICE);
             jobScheduler.schedule(builder.build());
-
-            // If there's no synchronization timestamp for pictures/videos in database, initialize it
-            mCameraUploadsSyncStorageManager = new
-                    CameraUploadsSyncStorageManager(getContentResolver());
-
-            OCCameraUploadSync ocCameraUploadSync = new OCCameraUploadSync(12,12);
-
-            mCameraUploadsSyncStorageManager.storeCameraUploadSync(ocCameraUploadSync);
         }
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);

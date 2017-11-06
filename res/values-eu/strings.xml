@@ -29,10 +29,10 @@
   <string name="prefs_category_more">Gehiago</string>
   <string name="prefs_accounts">Kontuak</string>
   <string name="prefs_manage_accounts">Kontuak kudeatu</string>
-  <string name="prefs_instant_upload">Uneko irudi igoerak</string>
-  <string name="prefs_instant_upload_summary">Igo berehala kamerak ateratako argazkiak</string>
-  <string name="prefs_instant_video_upload">Uneko bideo igoerak</string>
-  <string name="prefs_instant_video_upload_summary">Igo berehala kamerak filmatutako bideoak</string>
+  <string name="prefs_camera_picture_upload">Uneko irudi igoerak</string>
+  <string name="prefs_camera_picture_upload_summary">Igo berehala kamerak ateratako argazkiak</string>
+  <string name="prefs_camera_video_upload">Uneko bideo igoerak</string>
+  <string name="prefs_camera_video_upload_summary">Igo berehala kamerak filmatutako bideoak</string>
   <string name="prefs_log_title">Gaitu erregistroa</string>
   <string name="prefs_log_summary">Arazoen erregistroa gordetzeko erabiltzen da</string>
   <string name="prefs_log_title_history">Saio historia</string>
@@ -270,7 +270,7 @@ Mesedez, baimendu berriz</string>
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_path">/BerehalakoIgoerak</string>
+  <string name="camera_upload_path">/BerehalakoIgoerak</string>
   <string name="conflict_keep_both">Mantendu biak</string>
   <string name="preview_image_description">Irudi aurreikuspena</string>
   <string name="preview_image_error_unknown_format">Ezin da irudi hau erakutsi</string>

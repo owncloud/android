@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Hesaplar</string>
   <string name="prefs_manage_accounts">Hesapları yönet</string>
   <string name="prefs_passcode">Parola kod kilidi</string>
-  <string name="prefs_instant_upload">Anında fotoğraf yüklemeleri</string>
-  <string name="prefs_instant_upload_summary">Kamera ile çekilen fotoğrafları anında yükle</string>
-  <string name="prefs_instant_video_upload">Anında video yüklemeleri</string>
-  <string name="prefs_instant_video_upload_summary">Kamera ile çekilen videoları anında yükle</string>
+  <string name="prefs_camera_picture_upload">Anında fotoğraf yüklemeleri</string>
+  <string name="prefs_camera_picture_upload_summary">Kamera ile çekilen fotoğrafları anında yükle</string>
+  <string name="prefs_camera_video_upload">Anında video yüklemeleri</string>
+  <string name="prefs_camera_video_upload_summary">Kamera ile çekilen videoları anında yükle</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>
@@ -288,9 +288,9 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 ÖS</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Fotoğrafları sadece kablosuz bağlantıda (WiFi) yükle</string>
-  <string name="instant_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
-  <string name="instant_upload_path">/AnındaYükle</string>
+  <string name="camera_picture_upload_on_wifi">Fotoğrafları sadece kablosuz bağlantıda (WiFi) yükle</string>
+  <string name="camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
+  <string name="camera_upload_path">/AnındaYükle</string>
   <string name="conflict_title">Dosya çakışması</string>
   <string name="conflict_message">Hangi dosyaları saklamak istiyorsunuz? Her ikisini de saklamayı seçerseniz yerel dosyanın adına bir sayı eklenecek.</string>
   <string name="conflict_keep_both">İkisini de koru</string>
@@ -299,7 +299,7 @@
   <string name="preview_image_description">Resim önizleme</string>
   <string name="preview_image_error_unknown_format">Bu resim gösterilemiyor</string>
   <string name="error__upload__local_file_not_copied">%1$s, %2$s yerel klasörüne kopyalanamadı</string>
-  <string name="prefs_instant_upload_path_title">Yükleme yolu</string>
+  <string name="prefs_camera_upload_path_title">Yükleme yolu</string>
   <string name="share_link_no_support_share_api">Üzgünüz, paylaşım sunucunuzda etkin değil. Lütfen yöneticinizle
                 iletişime geçin.</string>
   <string name="share_link_file_no_exist">Paylaşma başarısız. Lütfen dosyanın mevcut olup olmadığını denetleyin</string>
@@ -355,9 +355,9 @@
   <string name="copy_file_invalid_overwrite">Dosya zaten hedef klasörde mevcut</string>
   <string name="copy_file_error">Bu dosya veya klasörü kopyalamaya çalışılırken bir hata oluştu</string>
   <string name="forbidden_permissions_copy">bu dosyayı kopyalamak için</string>
-  <string name="prefs_category_instant_uploading">Anında yüklemeler</string>
+  <string name="prefs_category_camera_upload">Anında yüklemeler</string>
   <string name="prefs_category_details">Ayrıntılar</string>
-  <string name="prefs_instant_video_upload_path_title">Video yükleme yolu</string>
+  <string name="prefs_camera_video_upload_path_title">Video yükleme yolu</string>
   <string name="sync_folder_failed_content">%1$s klasörünün eşitlemesi tamamlanamadı</string>
   <string name="shared_subject_header">sizinle</string>
   <string name="with_you_subject_header">paylaştı</string>
@@ -375,10 +375,10 @@
   <string name="file_list__footer__files">%1$d dosya</string>
   <string name="file_list__footer__files_and_folder">%1$d dosya, 1 klasör</string>
   <string name="file_list__footer__files_and_folders">%1$d dosya, %2$d klasör</string>
-  <string name="prefs_instant_upload_source_path_title_required">gerekli</string>
-  <string name="prefs_instant_upload_source_path_title_optional">isteğe bağlı</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Özgün dosya...</string>
-  <string name="prefs_instant_behaviour_title">Özgün dosya...</string>
+  <string name="prefs_camera_upload_source_path_title_required">gerekli</string>
+  <string name="prefs_camera_upload_source_path_title_optional">isteğe bağlı</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Özgün dosya...</string>
+  <string name="prefs_camera_upload_behaviour_title">Özgün dosya...</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>
   <string name="pref_behaviour_entries_keep_file">özgün klasöründe tutuldu</string>

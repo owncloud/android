@@ -26,8 +26,8 @@
   <string name="prefs_category_more">Pli</string>
   <string name="prefs_accounts">Kontoj</string>
   <string name="prefs_manage_accounts">Administri kontojn</string>
-  <string name="prefs_instant_upload">Tujaj bildalŝutoj</string>
-  <string name="prefs_instant_video_upload">Tujaj videalŝutoj</string>
+  <string name="prefs_camera_picture_upload">Tujaj bildalŝutoj</string>
+  <string name="prefs_camera_video_upload">Tujaj videalŝutoj</string>
   <string name="prefs_log_delete_history_button">Forviŝi historion</string>
   <string name="prefs_help">Helpo</string>
   <string name="prefs_recommend">Rekomendi al amiko</string>
@@ -192,7 +192,7 @@
   <string name="preview_image_description">Antaŭvido de bildo</string>
   <string name="preview_image_error_unknown_format">Ĉi tiu bildo ne povas montriĝi</string>
   <string name="error__upload__local_file_not_copied">%1$s ne povis kopiiĝi al la loka dosierujo %2$s</string>
-  <string name="prefs_instant_upload_path_title">Alŝutovojo</string>
+  <string name="prefs_camera_upload_path_title">Alŝutovojo</string>
   <string name="share_link_password_title">Enigu pasvorton</string>
   <string name="share_link_empty_password">Vi devas enigi pasvorton</string>
   <string name="activity_chooser_send_file_title">Sendi</string>
@@ -232,9 +232,9 @@
   <string name="copy_file_invalid_overwrite">La dosiero jam ekzistas en la cela dosierujo</string>
   <string name="copy_file_error">Eraro okazis, dum provo kopii ĉi tiun dosieron aŭ dosierujon</string>
   <string name="forbidden_permissions_copy">por kopii ĉi tiun dosieron</string>
-  <string name="prefs_category_instant_uploading">Tujaj alŝutoj</string>
+  <string name="prefs_category_camera_upload">Tujaj alŝutoj</string>
   <string name="prefs_category_details">Detaloj</string>
-  <string name="prefs_instant_video_upload_path_title">Videalŝutovojo</string>
+  <string name="prefs_camera_video_upload_path_title">Videalŝutovojo</string>
   <string name="sync_folder_failed_content">Sinkronigo de dosierujo %1$s ne povis plenumiĝi</string>
   <string name="shared_subject_header">kunhavata</string>
   <string name="with_you_subject_header">kun vi</string>
@@ -252,8 +252,8 @@
   <string name="file_list__footer__files">%1$d dosieroj</string>
   <string name="file_list__footer__files_and_folder">%1$d dosieroj, 1 dosierujo</string>
   <string name="file_list__footer__files_and_folders">%1$d dosieroj, %2$d dosierujoj</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Origina dosiero estos...</string>
-  <string name="prefs_instant_behaviour_title">Origina dosiero estos...</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Origina dosiero estos...</string>
+  <string name="prefs_camera_upload_behaviour_title">Origina dosiero estos...</string>
   <string name="upload_copy_files">Kopii dosieron</string>
   <string name="upload_move_files">Movi dosieron</string>
   <string name="pref_behaviour_entries_keep_file">konservita en origina dosierujo</string>
