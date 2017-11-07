@@ -27,7 +27,7 @@
             android:title="@string/prefs_camera_picture_upload" />
         <com.owncloud.android.ui.PreferenceWithLongSummary
             android:key="camera_picture_uploads_path"
-            android:title="@string/prefs_camera_upload_path_title" />
+            android:title="@string/prefs_camera_picture_upload_path_title" />
         <com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle
             android:key="camera_picture_uploads_on_wifi"
             android:title="@string/camera_picture_upload_on_wifi" />
