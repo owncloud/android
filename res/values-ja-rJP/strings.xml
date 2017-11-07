@@ -303,7 +303,7 @@
   <string name="preview_image_description">イメージプレビュー</string>
   <string name="preview_image_error_unknown_format">この画像は表示できません</string>
   <string name="error__upload__local_file_not_copied">%1$s は、ローカルフォルダー %2$s  にコピーできませんでした。</string>
-  <string name="prefs_camera_upload_path_title">アップロードパス</string>
+  <string name="prefs_camera_picture_upload_path_title">アップロードパス</string>
   <string name="share_link_no_support_share_api">すみませんが、サーバーで共有が有効になっていません。
 		管理者に問い合わせてください。</string>
   <string name="share_link_file_no_exist">共有できません。ファイルがあるか確認してください。</string>

@@ -288,7 +288,7 @@
   <string name="preview_image_description">圖片預覽</string>
   <string name="preview_image_error_unknown_format">無法顯示圖片</string>
   <string name="error__upload__local_file_not_copied">%1$s 無法被複製到本地資料夾 %2$s</string>
-  <string name="prefs_camera_upload_path_title">上傳路徑</string>
+  <string name="prefs_camera_picture_upload_path_title">上傳路徑</string>
   <string name="share_link_no_support_share_api">很抱歉, 您的伺服器並未開啟分享的功能. 請聯絡您的
 		伺服器管理員.</string>
   <string name="share_link_file_error">在分享檔案或資料夾時發生了錯誤</string>
