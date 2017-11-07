@@ -210,6 +210,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
                     handleNewFile(localFile);
                 }
+
             }
 
         } else {
