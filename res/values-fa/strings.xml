@@ -303,7 +303,7 @@
   <string name="preview_image_description">پیش نمایش تصویر</string>
   <string name="preview_image_error_unknown_format">نمایش این عکس امکانپذیر نمی باشد</string>
   <string name="error__upload__local_file_not_copied">کپی %1$s به پوشه محلی %2$s امکان پذیر نیست</string>
-  <string name="prefs_camera_upload_path_title">مسیر بارگذاری</string>
+  <string name="prefs_camera_picture_upload_path_title">مسیر بارگذاری</string>
   <string name="share_link_file_error">در حین اشتراک گذاری این فایل یا پوشه خطایی رخ داده است</string>
   <string name="unshare_link_file_error">در حین حذف اشتراک گذاری این فایل یا پوشه خطایی رخ داده است</string>
   <string name="share_link_password_title">یک رمزعبور را وارد کنید</string>

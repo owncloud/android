@@ -80,6 +80,9 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     private CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager;
     private OCCameraUploadSync mOOCCameraUploadSync;
 
+    private boolean mFirstPictureEnqueued;
+    private boolean mFirstVideoEnqueued;
+
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
@@ -105,6 +108,9 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
                 Context.BIND_AUTO_CREATE);
 
         mCameraUploadsSyncStorageManager = new CameraUploadsSyncStorageManager(getContentResolver());
+
+        mFirstPictureEnqueued = false;
+        mFirstVideoEnqueued = false;
 
         return true; // True because we have a thread still running and requesting stuff to the server
     }
@@ -194,11 +200,11 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         if (!result.isSuccess()) {
 
-            Log_OC.d(TAG, "Remote folder does not exist yet, uploading the files for the " +
-                    "first time, if any");
-
             // Remote folder doesn't exist yet, first local files upload
             if (result.getCode() == RemoteOperationResult.ResultCode.FILE_NOT_FOUND) {
+
+                Log_OC.d(TAG, "Remote folder does not exist yet, uploading the files for the " +
+                        "first time, if any");
 
                 for (File localFile : localFiles) {
 
@@ -215,25 +221,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
 
         mPerformedOperationsCounter++;
 
-        // User only requested to upload pictures
-        boolean mOnlyPictures = mConfig.isEnabledForPictures() && !mConfig.isEnabledForVideos();
-
-        // User only requested to upload videos
-        boolean mOnlyVideos = mConfig.isEnabledForVideos() && !mConfig.isEnabledForPictures();
-
-        // User requested upload both pictures and videos
-        boolean mPicturesAndVideos = mConfig.isEnabledForPictures() && mConfig.isEnabledForVideos();
-
-        // Check if requested operations have been performed
-        if (mOnlyPictures && mPerformedOperationsCounter == 1 ||
-                mOnlyVideos && mPerformedOperationsCounter == 1 ||
-                mPicturesAndVideos && mConfig.getUploadPathForPictures().
-                        equals(mConfig.getUploadPathForVideos()) &&
-                        mPerformedOperationsCounter == 1 ||
-                mPicturesAndVideos && mPerformedOperationsCounter == 2) {
-
-            finish();
-        }
+        finishIfOperationsCompleted();
     }
 
     /**
@@ -313,7 +301,7 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         // Check file timestamp
         if (isImage && localFile.lastModified() <= mOOCCameraUploadSync.getPicturesLastSync() ||
                 isVideo && localFile.lastModified() <= mOOCCameraUploadSync.getVideosLastSync()) {
-            Log_OC.i(TAG, "File " + localPath + " too old, ignoring");
+            Log_OC.i(TAG, "File " + localPath + " created before period to check, ignoring");
             return;
         }
 
@@ -321,6 +309,11 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
         if (sRecentlyUploadedFilePaths.contains(localPath)) {
             Log_OC.i(TAG, "Duplicate detection of " + localPath + ", ignoring");
             return;
+        }
+
+        // Update timestamps once the first picture/video has been enqueued
+        if (!mFirstPictureEnqueued || !mFirstVideoEnqueued) {
+            updateTimestamps(isImage, isVideo);
         }
 
         TransferRequester requester = new TransferRequester();
@@ -353,23 +346,79 @@ public class SyncCameraFolderJobService extends JobService implements OnRemoteOp
     }
 
     /**
-     * Unbind the service used for getting the pictures and videos from the server and notify the
-     * system that the job has finished
+     * Update pictures and videos timestamps to upload only the pictures and videos taken later
+     * than those timestamps
+     * @param isImage true if file is an image, false otherwise
+     * @param isVideo true if file is a video, false otherwise
      */
-    private void finish() {
+    private void updateTimestamps(boolean isImage, boolean isVideo) {
 
-        Log_OC.d(TAG, "Finishing camera folder sync job");
+        long picturesTimestamp = mOOCCameraUploadSync.getPicturesLastSync();
+        long videosTimestamp = mOOCCameraUploadSync.getVideosLastSync();
 
-        if (mOperationsServiceBinder != null) {
-            mOperationsServiceBinder.removeOperationListener(this);
+        if (isImage && !mFirstPictureEnqueued) {
+
+            Log_OC.d(TAG, "Updating timestamp for pictures");
+
+            picturesTimestamp = System.currentTimeMillis();
+
+            mFirstPictureEnqueued = true;
         }
 
-        if (mOperationsServiceConnection != null) {
-            unbindService(mOperationsServiceConnection);
-            mOperationsServiceBinder = null;
+        if (isVideo && !mFirstVideoEnqueued) {
+
+            Log_OC.d(TAG, "Updating timestamp for videos");
+
+            videosTimestamp = System.currentTimeMillis();
+
+            mFirstVideoEnqueued = true;
         }
 
-        jobFinished(mJobParameters, false);
+        OCCameraUploadSync newOCCameraUploadSync = new OCCameraUploadSync(picturesTimestamp,
+                videosTimestamp);
+
+        newOCCameraUploadSync.setId(mOOCCameraUploadSync.getId());
+
+        mCameraUploadsSyncStorageManager.updateCameraUploadSync(newOCCameraUploadSync);
+    }
+
+    /**
+     * Check if requested operations have finished. If so, unbind the service used for getting
+     * the pictures and videos from the server and finish the job
+     */
+    private void finishIfOperationsCompleted() {
+
+        // User only requested to upload pictures
+        boolean mOnlyPictures = mConfig.isEnabledForPictures() && !mConfig.isEnabledForVideos();
+
+        // User only requested to upload videos
+        boolean mOnlyVideos = mConfig.isEnabledForVideos() && !mConfig.isEnabledForPictures();
+
+        // User requested upload both pictures and videos
+        boolean mPicturesAndVideos = mConfig.isEnabledForPictures() && mConfig.isEnabledForVideos();
+
+        // Check if requested operations have been performed
+        if (mOnlyPictures && mPerformedOperationsCounter == 1 ||
+                mOnlyVideos && mPerformedOperationsCounter == 1 ||
+                mPicturesAndVideos && mConfig.getUploadPathForPictures().
+                        equals(mConfig.getUploadPathForVideos()) &&
+                        mPerformedOperationsCounter == 1 ||
+                mPicturesAndVideos && mPerformedOperationsCounter == 2) {
+
+            Log_OC.d(TAG, "Finishing camera folder sync job");
+
+            if (mOperationsServiceBinder != null) {
+                mOperationsServiceBinder.removeOperationListener(this);
+            }
+
+            if (mOperationsServiceConnection != null) {
+                unbindService(mOperationsServiceConnection);
+                mOperationsServiceBinder = null;
+            }
+
+            // Notify the system that the job has finished
+            jobFinished(mJobParameters, false);
+        }
     }
 
     /**

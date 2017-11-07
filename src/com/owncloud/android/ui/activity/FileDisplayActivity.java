@@ -177,8 +177,8 @@ public class FileDisplayActivity extends HookActivity
 
             builder.setPersisted(true);
 
-            // Execute job every 15 seconds
-            builder.setPeriodic(15000);
+            // Execute job every 30 seconds
+            builder.setPeriodic(30000);
 
             // Extra data
             PersistableBundle extras = new PersistableBundle();

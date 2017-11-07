@@ -270,7 +270,7 @@
   <string name="preview_image_description">Biller-Virschau</string>
   <string name="preview_image_error_unknown_format">Dëst Bild kann net ugewise ginn</string>
   <string name="error__upload__local_file_not_copied">%1$s konnt net an de lokalen Dossier %2$s kopéiert ginn</string>
-  <string name="prefs_camera_upload_path_title">Pad eroplueden</string>
+  <string name="prefs_camera_picture_upload_path_title">Pad eroplueden</string>
   <string name="share_link_no_support_share_api">Pardon, Deelen ass net erlaabt op ärem Server. W.e.g. kontaktéier däin Administrateur.</string>
   <string name="share_link_file_no_exist">Konnt net gedeelt ginn. Kontrolléier w.e.g. ob de Fichier existéiert</string>
   <string name="share_link_file_error">Beim Deele vun dësem Fichier oder Dossier ass e Feeler opgetrueden</string>
