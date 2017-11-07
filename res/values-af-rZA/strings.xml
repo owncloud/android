@@ -64,6 +64,7 @@
   <string name="uploader_upload_text_filename_hint">Lêernaam</string>
   <string name="uploads_view_title">Oplaaie</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
+  <string name="uploads_view_group_finished_uploads">Opgelaai</string>
   <string name="uploads_view_upload_status_succeeded">Afgehandel</string>
   <string name="uploads_view_upload_status_cancelled">Gekanselleer</string>
   <string name="uploads_view_upload_status_failed_folder_error">Vouerfout</string>
