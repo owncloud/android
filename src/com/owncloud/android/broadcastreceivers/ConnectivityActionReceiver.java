@@ -170,7 +170,7 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log_OC.d(TAG, "Requesting retry of instant uploads (& friends)");
+                    Log_OC.d(TAG, "Requesting retry of camera uploads (& friends)");
                     TransferRequester requester = new TransferRequester();
 
                     //Avoid duplicate uploads, because uploads retry is also managed in FileUploader
