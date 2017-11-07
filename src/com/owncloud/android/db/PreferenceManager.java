@@ -75,49 +75,49 @@ public abstract class PreferenceManager {
         CameraUploadsConfiguration result = new CameraUploadsConfiguration();
         SharedPreferences prefs = getDefaultSharedPreferences(context);
         result.setEnabledForPictures(
-            prefs.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
+                prefs.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_ENABLED, false)
         );
         result.setEnabledForVideos(
-            prefs.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)
+                prefs.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_ENABLED, false)
         );
         result.setWifiOnlyForPictures(
-            prefs.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY, false)
+                prefs.getBoolean(PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY, false)
         );
         result.setWifiOnlyForVideos(
-            prefs.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY, false)
+                prefs.getBoolean(PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY, false)
         );
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(context);
         result.setUploadAccountName(
-            prefs.getString(
-                    PREF__CAMERA_UPLOADS_ACCOUNT_NAME,
-                (currentAccount == null) ? "" : currentAccount.name
-            )
+                prefs.getString(
+                        PREF__CAMERA_UPLOADS_ACCOUNT_NAME,
+                        (currentAccount == null) ? "" : currentAccount.name
+                )
         );
         String uploadPath = prefs.getString(
                 PREF__CAMERA_PICTURE_UPLOADS_PATH,
-            context.getString(R.string.camera_upload_path) + OCFile.PATH_SEPARATOR
+                context.getString(R.string.camera_upload_path) + OCFile.PATH_SEPARATOR
         );
         result.setUploadPathForPictures(
-            uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
+                uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
         );
         uploadPath = prefs.getString(
                 PREF__CAMERA_VIDEO_UPLOADS_PATH,
-            context.getString(R.string.camera_upload_path) + OCFile.PATH_SEPARATOR
+                context.getString(R.string.camera_upload_path) + OCFile.PATH_SEPARATOR
         );
         result.setUploadPathForVideos(
-            uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
+                uploadPath.endsWith(File.separator) ? uploadPath : uploadPath + File.separator
         );
         result.setBehaviourAfterUpload(
-            prefs.getString(
-                    PREF__CAMERA_UPLOADS_BEHAVIOUR,
-                context.getResources().getStringArray(R.array.pref_behaviour_entryValues)[0]
-            )
+                prefs.getString(
+                        PREF__CAMERA_UPLOADS_BEHAVIOUR,
+                        context.getResources().getStringArray(R.array.pref_behaviour_entryValues)[0]
+                )
         );
         result.setSourcePath(
-            prefs.getString(
-                    PREF__CAMERA_UPLOADS_SOURCE,
-                CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
-            )
+                prefs.getString(
+                        PREF__CAMERA_UPLOADS_SOURCE,
+                        CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
+                )
         );
         return result;
     }

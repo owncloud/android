@@ -304,7 +304,7 @@
   <string name="preview_image_description">Podgląd</string>
   <string name="preview_image_error_unknown_format">Ten obrazek nie może zostać wyświetlony</string>
   <string name="error__upload__local_file_not_copied">%1$s nie może zostać skopiowany do lokalnego folderu %2$s</string>
-  <string name="prefs_camera_upload_path_title">Ścieżka wysyłania</string>
+  <string name="prefs_camera_picture_upload_path_title">Ścieżka wysyłania</string>
   <string name="share_link_no_support_share_api">Przepraszamy, ale współdzielenie nie jest włączone na Twoim serwerze. Proszę skontaktuj się z
 		administratorem.</string>
   <string name="share_link_file_no_exist">Nie można udostępnić. Proszę sprawdzić, czy plik istnieje</string>

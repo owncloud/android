@@ -301,7 +301,7 @@
   <string name="preview_image_description">Paraparje figure</string>
   <string name="preview_image_error_unknown_format">Kjo figurë nuk mund të shfaqet</string>
   <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s</string>
-  <string name="prefs_camera_upload_path_title">Shteg ngarkimesh</string>
+  <string name="prefs_camera_picture_upload_path_title">Shteg ngarkimesh</string>
   <string name="share_link_no_support_share_api">Na ndjeni, ndarja me të tjerët s\’është e aktivizuar te shërbyesi juaj. Ju lutemi, lidhuni me përgjegjësin tuaj.</string>
   <string name="share_link_file_no_exist">S\’arrihet të ndahet me të tjerët. Ju lutemi, kontrolloni nëse ekziston apo jo kartela</string>
   <string name="share_link_file_error">Ndodhi një gabim teksa përpiqej të ndahej me të tjerët kjo kartelë apo dosje</string>

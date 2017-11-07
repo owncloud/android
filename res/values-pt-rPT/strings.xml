@@ -302,7 +302,7 @@
   <string name="preview_image_description">Pré-Visualizar imagem</string>
   <string name="preview_image_error_unknown_format">Esta imagem não pode ser mostrada</string>
   <string name="error__upload__local_file_not_copied">Não foi possível copiar %1$s para a pasta local %2$s</string>
-  <string name="prefs_camera_upload_path_title">Caminho de envio</string>
+  <string name="prefs_camera_picture_upload_path_title">Caminho de envio</string>
   <string name="share_link_no_support_share_api">Lamentamos mas não é possível partilhar através do seu servidor. Por favor contacte o seu administrador.</string>
   <string name="share_link_file_no_exist">Não é possível partilhar. Por favor verifique se o ficheiro existe</string>
   <string name="share_link_file_error">Ocorreu um erro enquanto tentava partilhar este ficheiro ou pasta</string>

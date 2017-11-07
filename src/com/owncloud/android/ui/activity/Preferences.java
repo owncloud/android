@@ -317,17 +317,17 @@ public class Preferences extends PreferenceActivity {
         mPrefCameraPictureUploadsWiFi = findPreference("camera_picture_uploads_on_wifi");
         mPrefCameraPictureUploads = findPreference("camera_picture_uploads");
 
-        toggleInstantPictureOptions(((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+        toggleCameraUploadsPictureOptions(((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
 
         mPrefCameraPictureUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                boolean enableInstantPicture = (Boolean) newValue;
-                toggleInstantPictureOptions(enableInstantPicture);
-                toggleInstantUploadCommonOptions(
+                boolean enableCameraUploadsPicture = (Boolean) newValue;
+                toggleCameraUploadsPictureOptions(enableCameraUploadsPicture);
+                toggleCameraUploadsCommonOptions(
                         ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
-                        enableInstantPicture
+                        enableCameraUploadsPicture
                 );
                 return true;
             }
@@ -353,14 +353,14 @@ public class Preferences extends PreferenceActivity {
 
         mPrefCameraVideoUploadsWiFi = findPreference("camera_video_uploads_on_wifi");
         mPrefCameraVideoUploads = findPreference("camera_video_uploads");
-        toggleInstantVideoOptions(((CheckBoxPreference) mPrefCameraVideoUploads).isChecked());
+        toggleCameraUploadsVideoOptions(((CheckBoxPreference) mPrefCameraVideoUploads).isChecked());
 
         mPrefCameraVideoUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                toggleInstantVideoOptions((Boolean) newValue);
-                toggleInstantUploadCommonOptions(
+                toggleCameraUploadsVideoOptions((Boolean) newValue);
+                toggleCameraUploadsCommonOptions(
                         (Boolean) newValue,
                         ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
                 return true;
@@ -384,11 +384,11 @@ public class Preferences extends PreferenceActivity {
                 }
             });
         } else {
-            Log_OC.e(TAG, "Lost preference instant_upload_source_path");
+            Log_OC.e(TAG, "Lost preference camera_uploads_source_path");
         }
 
         mPrefCameraUploadsBehaviour = findPreference("camera_uploads_behaviour");
-        toggleInstantUploadCommonOptions(
+        toggleCameraUploadsCommonOptions(
                 ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
                 ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
 
@@ -402,13 +402,13 @@ public class Preferences extends PreferenceActivity {
             pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
         }
 
-        loadInstantUploadPath();
-        loadInstantUploadVideoPath();
-        loadInstantUploadSourcePath();
+        loadCameraUploadsPicturePath();
+        loadCameraUploadsVideoPath();
+        loadCameraUploadsSourcePath();
 
     }
 
-    private void toggleInstantPictureOptions(Boolean value) {
+    private void toggleCameraUploadsPictureOptions(Boolean value) {
         if (value) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
@@ -418,7 +418,7 @@ public class Preferences extends PreferenceActivity {
         }
     }
 
-    private void toggleInstantVideoOptions(Boolean value) {
+    private void toggleCameraUploadsVideoOptions(Boolean value) {
         if (value) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
@@ -428,7 +428,7 @@ public class Preferences extends PreferenceActivity {
         }
     }
 
-    private void toggleInstantUploadCommonOptions(Boolean video, Boolean picture) {
+    private void toggleCameraUploadsCommonOptions(Boolean video, Boolean picture) {
         if (picture || video) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraUploadsSourcePath);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraUploadsBehaviour);
@@ -482,7 +482,7 @@ public class Preferences extends PreferenceActivity {
             mPrefCameraPictureUploadsPath.setSummary(
                     DisplayUtils.getPathWithoutLastSlash(mUploadPath)
             );
-            saveInstantUploadPathOnPreferences();
+            saveCameraUploadsPicturePathOnPreferences();
 
         } else if (requestCode == ACTION_SELECT_UPLOAD_VIDEO_PATH && resultCode == RESULT_OK) {
 
@@ -491,7 +491,7 @@ public class Preferences extends PreferenceActivity {
             mPrefCameraVideoUploadsPath.setSummary(
                     DisplayUtils.getPathWithoutLastSlash(mUploadVideoPath)
             );
-            saveInstantUploadVideoPathOnPreferences();
+            saveCameraUploadsVideoPathOnPreferences();
 
         } else if (requestCode == ACTION_SELECT_SOURCE_PATH && resultCode == RESULT_OK) {
 
@@ -499,7 +499,7 @@ public class Preferences extends PreferenceActivity {
             mPrefCameraUploadsSourcePath.setSummary(
                     DisplayUtils.getPathWithoutLastSlash(mSourcePath)
             );
-            saveInstantUploadSourcePathOnPreferences();
+            saveCameraUploadsSourcePathOnPreferences();
 
         } else if (requestCode == ACTION_REQUEST_PASSCODE && resultCode == RESULT_OK) {
 
@@ -679,59 +679,59 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Load upload path set on preferences
+     * Load upload picture path set on preferences
      */
-    private void loadInstantUploadPath() {
+    private void loadCameraUploadsPicturePath() {
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mUploadPath = appPrefs.getString("instant_upload_path", getString(R.string.camera_upload_path));
+        mUploadPath = appPrefs.getString("camera_picture_uploads_path", getString(R.string.camera_upload_path));
         mPrefCameraPictureUploadsPath.setSummary(
                 DisplayUtils.getPathWithoutLastSlash(mUploadPath)
         );
     }
 
     /**
-     * Save the "Instant Upload Path" on preferences
+     * Save the "Upload picture path" on preferences
      */
-    private void saveInstantUploadPathOnPreferences() {
+    private void saveCameraUploadsPicturePathOnPreferences() {
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = appPrefs.edit();
-        editor.putString("instant_upload_path", mUploadPath);
+        editor.putString("camera_picture_uploads_path", mUploadPath);
         editor.commit();
     }
 
     /**
      * Load upload video path set on preferences
      */
-    private void loadInstantUploadVideoPath() {
+    private void loadCameraUploadsVideoPath() {
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mUploadVideoPath = appPrefs.getString("instant_video_upload_path", getString(R.string.camera_upload_path));
+        mUploadVideoPath = appPrefs.getString("camera_video_uploads_path", getString(R.string.camera_upload_path));
         mPrefCameraVideoUploadsPath.setSummary(
                 DisplayUtils.getPathWithoutLastSlash(mUploadVideoPath)
         );
     }
 
     /**
-     * Save the "Instant Video Upload Path" on preferences
+     * Save the "Upload video path" on preferences
      */
-    private void saveInstantUploadVideoPathOnPreferences() {
+    private void saveCameraUploadsVideoPathOnPreferences() {
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = appPrefs.edit();
-        editor.putString("instant_video_upload_path", mUploadVideoPath);
+        editor.putString("camera_video_uploads_path", mUploadVideoPath);
         editor.commit();
     }
 
     /**
      * Load source path set on preferences
      */
-    private void loadInstantUploadSourcePath() {
+    private void loadCameraUploadsSourcePath() {
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(this);
         mSourcePath = appPrefs.getString(
-                "instant_upload_source_path",
+                "camera_uploads_source_path",
                 CameraUploadsConfiguration.DEFAULT_SOURCE_PATH
         );
         if (mPrefCameraUploadsSourcePath != null) {
@@ -751,13 +751,13 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Save the "Instant Video Upload Path" on preferences
+     * Save the "Camera folder" path on preferences
      */
-    private void saveInstantUploadSourcePathOnPreferences() {
+    private void saveCameraUploadsSourcePathOnPreferences() {
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = appPrefs.edit();
-        editor.putString("instant_upload_source_path", mSourcePath);
+        editor.putString("camera_uploads_source_path", mSourcePath);
         editor.commit();
     }
 

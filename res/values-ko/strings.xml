@@ -303,7 +303,7 @@
   <string name="preview_image_description">사진 미리 보기</string>
   <string name="preview_image_error_unknown_format">이 사진을 미리 볼 수 없습니다</string>
   <string name="error__upload__local_file_not_copied">%1$s을(를) 로컬 폴더 %2$s(으)로 복사할 수 없습니다</string>
-  <string name="prefs_camera_upload_path_title">업로드 경로</string>
+  <string name="prefs_camera_picture_upload_path_title">업로드 경로</string>
   <string name="share_link_no_support_share_api">서버에서 공유가 비활성화되어 있습니다. 관리자에게 연락하십시오.</string>
   <string name="share_link_file_no_exist">공유할 수 없습니다. 파일이 있는지 확인하십시오</string>
   <string name="share_link_file_error">이 파일이나 폴더를 공유하는 중 오류 발생</string>

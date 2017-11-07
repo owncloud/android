@@ -79,7 +79,7 @@
   <string name="ssl_validator_btn_details_see">Details</string>
   <string name="ssl_validator_label_C">Land:</string>
   <string name="ssl_validator_label_L">Ligging:</string>
-  <string name="prefs_camera_upload_path_title">Oplaaipad</string>
+  <string name="prefs_camera_picture_upload_path_title">Oplaaipad</string>
   <string name="share_link_password_title">Voer ’n wagwoord in</string>
   <string name="share_link_empty_password">U moet ’n wagwoord invoer</string>
   <string name="activity_chooser_send_file_title">Stuur</string>
