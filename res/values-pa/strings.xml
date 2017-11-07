@@ -159,7 +159,7 @@
   <string name="conflict_title">ਫਾਈਲ ਅਪਵਾਦ</string>
   <string name="conflict_keep_both">ਦੋਵੇਂ ਰੱਖੋ</string>
   <string name="preview_image_description">ਚਿੱਤਰ ਝਲਕ</string>
-  <string name="prefs_camera_upload_path_title">ਅੱਪਲੋਡ ਮਾਰਗ</string>
+  <string name="prefs_camera_picture_upload_path_title">ਅੱਪਲੋਡ ਮਾਰਗ</string>
   <string name="share_link_password_title">ਇੱਕ ਪਾਸਵਰਡ ਭਰੋ</string>
   <string name="share_link_empty_password">ਤੁਹਾਨੂੰ ਇੱਕ ਪਾਸਵਰਡ ਦੇਣਾ ਪਵੇਗਾ</string>
   <string name="activity_chooser_send_file_title">ਭੇਜੋ</string>

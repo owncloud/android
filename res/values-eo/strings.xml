@@ -192,7 +192,7 @@
   <string name="preview_image_description">Antaŭvido de bildo</string>
   <string name="preview_image_error_unknown_format">Ĉi tiu bildo ne povas montriĝi</string>
   <string name="error__upload__local_file_not_copied">%1$s ne povis kopiiĝi al la loka dosierujo %2$s</string>
-  <string name="prefs_camera_upload_path_title">Alŝutovojo</string>
+  <string name="prefs_camera_picture_upload_path_title">Alŝutovojo</string>
   <string name="share_link_password_title">Enigu pasvorton</string>
   <string name="share_link_empty_password">Vi devas enigi pasvorton</string>
   <string name="activity_chooser_send_file_title">Sendi</string>

@@ -302,7 +302,7 @@
   <string name="preview_image_description">Forskoðun myndar</string>
   <string name="preview_image_error_unknown_format">Ekki er hægt að birta myndina</string>
   <string name="error__upload__local_file_not_copied">%1$s var ekki hægt að afrita í staðværu %2$s möppuna</string>
-  <string name="prefs_camera_upload_path_title">Innsendingarslóð</string>
+  <string name="prefs_camera_picture_upload_path_title">Innsendingarslóð</string>
   <string name="share_link_no_support_share_api">Því miður, deiling gagna er ekki virk á þjóninum. Hafðu samband við
 		kerfisstjóra.</string>
   <string name="share_link_file_no_exist">Get ekki deilt. Athugaðu hvort skráin sé til</string>

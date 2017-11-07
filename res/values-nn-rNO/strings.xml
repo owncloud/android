@@ -250,7 +250,7 @@
   <string name="preview_image_description">Førehandsvisning av bilde</string>
   <string name="preview_image_error_unknown_format">Dette bilete kan ikkje bli vist</string>
   <string name="error__upload__local_file_not_copied">%1$s kan ikke bli kopiert til lokal katalog %2$s</string>
-  <string name="prefs_camera_upload_path_title">Sti for opplasting</string>
+  <string name="prefs_camera_picture_upload_path_title">Sti for opplasting</string>
   <string name="activity_chooser_send_file_title">Send</string>
   <string name="network_error_socket_timeout_exception">Tenaren brukte for lang tid på å svara</string>
   <string name="prefs_category_accounts">Kontoar</string>

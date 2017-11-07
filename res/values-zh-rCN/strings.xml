@@ -304,7 +304,7 @@
   <string name="preview_image_description">图片预览</string>
   <string name="preview_image_error_unknown_format">无法显示图片</string>
   <string name="error__upload__local_file_not_copied">无法复制 %1$s 到本地目录 %2$s</string>
-  <string name="prefs_camera_upload_path_title">上传路径</string>
+  <string name="prefs_camera_picture_upload_path_title">上传路径</string>
   <string name="share_link_no_support_share_api">抱歉，共享功能未启用。请联系管理员。</string>
   <string name="share_link_file_no_exist">无法共享。请检查文件是否存在</string>
   <string name="share_link_file_error">共享文件或目录出错</string>
