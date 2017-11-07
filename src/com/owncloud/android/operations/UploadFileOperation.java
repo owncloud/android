@@ -236,11 +236,11 @@ public class UploadFileOperation extends SyncOperation {
         return mCreatedBy;
     }
 
-    public boolean isInstantPicture() {
+    public boolean isCameraUploadsPicture() {
         return mCreatedBy == CREATED_AS_PICTURE;
     }
 
-    public boolean isInstantVideo() {
+    public boolean isCameraUploadsVideo() {
         return mCreatedBy == CREATED_AS_VIDEO;
     }
 
@@ -459,14 +459,14 @@ public class UploadFileOperation extends SyncOperation {
      * @return      'True' if the upload was delayed until WiFi connectivity is available, 'false' otherwise.
      */
     private boolean delayForWifi() {
-        boolean delayInstantPicture = (
-            isInstantPicture() &&  PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext)
+        boolean delayCameraUploadsPicture = (
+            isCameraUploadsPicture() &&  PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext)
         );
-        boolean delayInstantVideo = (
-            isInstantVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext)
+        boolean delayCameraUploadsVideo = (
+            isCameraUploadsVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext)
         );
         return (
-            (delayInstantPicture || delayInstantVideo) &&
+            (delayCameraUploadsPicture || delayCameraUploadsVideo) &&
             !ConnectivityUtils.isAppConnectedViaWiFi(mContext)
         );
     }
