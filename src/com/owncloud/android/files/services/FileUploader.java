@@ -907,7 +907,7 @@ public class FileUploader extends Service
         mNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, (int) System.currentTimeMillis(),
             showUploadListIntent, 0));
 
-        if (!upload.isInstantPicture() && !upload.isInstantVideo()) {
+        if (!upload.isCameraUploadsPicture() && !upload.isCameraUploadsVideo()) {
             mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
         }   // else wait until the upload really start (onTransferProgress is called), so that if it's discarded
         // due to lack of Wifi, no notification is shown

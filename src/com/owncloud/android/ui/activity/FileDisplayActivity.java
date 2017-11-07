@@ -177,8 +177,8 @@ public class FileDisplayActivity extends HookActivity
 
             builder.setPersisted(true);
 
-            // Execute job every 30 seconds
-            builder.setPeriodic(30000);
+            // Execute job every 15 minutes
+            builder.setPeriodic(900000);
 
             // Extra data
             PersistableBundle extras = new PersistableBundle();
@@ -186,6 +186,8 @@ public class FileDisplayActivity extends HookActivity
             extras.putInt(Extras.EXTRA_SYNC_CAMERA_FOLDER_JOB_ID, jobId);
 
             builder.setExtras(extras);
+
+            Log_OC.d(TAG, "Scheduling a SyncCameraFolderJobService");
 
             //builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED); // require unmetered network
             //builder.setRequiresDeviceIdle(true); // device should be idle
