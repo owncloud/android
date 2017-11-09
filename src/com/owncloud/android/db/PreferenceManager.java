@@ -206,7 +206,7 @@ public abstract class PreferenceManager {
     }
 
     /**
-     * Aggregates preferences related to instant uploads in a single object.
+     * Aggregates preferences related to camera uploads in a single object.
      */
     public static class CameraUploadsConfiguration {
 
