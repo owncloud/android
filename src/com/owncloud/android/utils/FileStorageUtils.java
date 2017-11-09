@@ -112,14 +112,6 @@ public class FileStorageUtils {
         return Environment.getExternalStorageDirectory() + File.separator + MainApp.getDataFolder() + File.separator + "log";
     }
 
-    public static String getInstantUploadFilePath(Context context, String fileName) {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String uploadPathdef = context.getString(R.string.camera_upload_path);
-        String uploadPath = pref.getString("instant_upload_path", uploadPathdef);
-        String value = uploadPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
-        return value;
-    }
-
     /**
      * Gets the composed path when video is or must be stored
      * @param context
