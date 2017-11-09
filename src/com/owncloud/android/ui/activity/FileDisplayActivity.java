@@ -256,7 +256,7 @@ public class FileDisplayActivity extends HookActivity
     /**
      * Initialize the timestamps for upload pictures/videos. These timestamps define the start of the
      * period in which to check the pictures/videos saved, discarding those created before enabling
-     * this option
+     * Camera Uploads feature
      */
     private void initializeCameraUploadSync(PreferenceManager.CameraUploadsConfiguration config) {
 
