@@ -509,7 +509,8 @@ public class Preferences extends PreferenceActivity {
                         .getDefaultSharedPreferences(getApplicationContext()).edit();
 
                 for (int i = 1; i <= 4; ++i) {
-                    appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, passcode.substring(i - 1, i));
+                    appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE_D + i,
+                            passcode.substring(i - 1, i));
                 }
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
                 appPrefs.commit();
@@ -594,77 +595,8 @@ public class Preferences extends PreferenceActivity {
     @Override
     protected void onStop() {
 
-        // Initialize synchronization timestamps for pictures/videos
-        initializeCameraUploadSync();
-
         super.onStop();
         getDelegate().onStop();
-    }
-
-    /**
-     * Update the timestamps for upload pictures/videos. These timestamps define the start of the
-     * period in which to check the pictures/videos saved, discarding those created before enabling
-     * this option
-     */
-    private void initializeCameraUploadSync() {
-
-        boolean isPicturesUploadEnabled = ((CheckBoxPreferenceWithLongTitle)
-                mPrefCameraPictureUploads).isChecked();
-
-        boolean isVideosUploadEnabled = ((CheckBoxPreferenceWithLongTitle)
-                mPrefCameraVideoUploads).isChecked();
-
-        // Set synchronization timestamps not needed
-        if (!isPicturesUploadEnabled && !isVideosUploadEnabled) {
-            return;
-        }
-
-        // DB connection
-        CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
-                CameraUploadsSyncStorageManager(getContentResolver());
-
-        OCCameraUploadSync ocCameraUploadSync = mCameraUploadsSyncStorageManager.
-                getCameraUploadSync(null, null, null);
-
-        long timeStamp = System.currentTimeMillis();
-
-        if (ocCameraUploadSync == null) { // No synchronization timestamp for pictures/videos yet
-
-            long firstPicturesTimeStamp = isPicturesUploadEnabled ? timeStamp : 0;
-            long firstVideosTimeStamp = isVideosUploadEnabled ? timeStamp : 0;
-
-            // Initialize synchronization timestamp for pictures or videos in database
-            OCCameraUploadSync firstOcCameraUploadSync = new OCCameraUploadSync(firstPicturesTimeStamp,
-                    firstVideosTimeStamp);
-
-            mCameraUploadsSyncStorageManager.storeCameraUploadSync(firstOcCameraUploadSync);
-
-        } else {
-
-            if (ocCameraUploadSync.getPicturesLastSync() != 0 &&
-                    ocCameraUploadSync.getVideosLastSync() != 0) {
-
-                // Synchronization timestamps already initialized
-                return;
-            }
-
-
-            if (ocCameraUploadSync.getPicturesLastSync() == 0 && isPicturesUploadEnabled) {
-
-                // Pictures synchronization timestamp not initialized yet, initialize it
-
-                ocCameraUploadSync.setPicturesLastSync(timeStamp);
-            }
-
-            if (ocCameraUploadSync.getVideosLastSync() == 0 && isVideosUploadEnabled) {
-
-                // Videos synchronization timestamp not initialized yet, initialize it
-
-                ocCameraUploadSync.setVideosLastSync(timeStamp);
-            }
-
-            mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
-        }
     }
 
     public void invalidateOptionsMenu() {

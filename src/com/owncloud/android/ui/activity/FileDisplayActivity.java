@@ -59,8 +59,10 @@ import android.view.View;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
@@ -81,7 +83,7 @@ import com.owncloud.android.operations.RenameFileOperation;
 import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.services.SyncCameraFolderJobService;
+import com.owncloud.android.services.CameraUploadsSyncJobService;
 import com.owncloud.android.services.observer.FileObserverService;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -160,42 +162,7 @@ public class FileDisplayActivity extends HookActivity
             FileObserverService.initialize(this);
         }
 
-        // Schedule a job to check pictures to be uploaded
-        PreferenceManager.CameraUploadsConfiguration config =
-                PreferenceManager.getCameraUploadsConfiguration(this);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP &&
-                (config.isEnabledForPictures() || config.isEnabledForVideos())) {
-
-            ComponentName serviceComponent = new ComponentName(this, SyncCameraFolderJobService.class);
-            JobInfo.Builder builder;
-
-            int jobId = mPendingInstantUploads.buildKey(getAccount().name, config.getSourcePath()).
-                    hashCode();
-
-            builder = new JobInfo.Builder(jobId, serviceComponent);
-
-            builder.setPersisted(true);
-
-            // Execute job every 15 minutes
-            builder.setPeriodic(900000);
-
-            // Extra data
-            PersistableBundle extras = new PersistableBundle();
-
-            extras.putInt(Extras.EXTRA_SYNC_CAMERA_FOLDER_JOB_ID, jobId);
-
-            builder.setExtras(extras);
-
-            Log_OC.d(TAG, "Scheduling a SyncCameraFolderJobService");
-
-            //builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED); // require unmetered network
-            //builder.setRequiresDeviceIdle(true); // device should be idle
-            //builder.setRequiresCharging(false); // we don't care if the device is charging or not
-            JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.
-                    JOB_SCHEDULER_SERVICE);
-            jobScheduler.schedule(builder.build());
-        }
+        scheduleCameraUploadsSyncJob();
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -241,6 +208,110 @@ public class FileDisplayActivity extends HookActivity
         }   // else, Fragment already created and retained across configuration change
 
         Log_OC.v(TAG, "onCreate() end");
+    }
+
+    /**
+     * Schedule a job to check pictures ande videos to be uploaded
+     */
+    private void scheduleCameraUploadsSyncJob() {
+
+        PreferenceManager.CameraUploadsConfiguration config =
+                PreferenceManager.getCameraUploadsConfiguration(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                (config.isEnabledForPictures() || config.isEnabledForVideos())) {
+
+            // Initialize synchronization timestamps for pictures/videos
+            initializeCameraUploadSync(config);
+
+            ComponentName serviceComponent = new ComponentName(this, CameraUploadsSyncJobService.class);
+            JobInfo.Builder builder;
+
+            int jobId = mPendingInstantUploads.buildKey(getAccount().name, config.getSourcePath()).
+                    hashCode();
+
+            builder = new JobInfo.Builder(jobId, serviceComponent);
+
+            builder.setPersisted(true);
+
+            // Execute job every 15 minutes
+            builder.setPeriodic(900000);
+
+            // Extra data
+            PersistableBundle extras = new PersistableBundle();
+
+            extras.putInt(Extras.EXTRA_SYNC_CAMERA_FOLDER_JOB_ID, jobId);
+
+            builder.setExtras(extras);
+
+            Log_OC.d(TAG, "Scheduling a CameraUploadsSyncJobService");
+
+            JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.
+                    JOB_SCHEDULER_SERVICE);
+
+            jobScheduler.schedule(builder.build());
+        }
+    }
+
+    /**
+     * Initialize the timestamps for upload pictures/videos. These timestamps define the start of the
+     * period in which to check the pictures/videos saved, discarding those created before enabling
+     * this option
+     */
+    private void initializeCameraUploadSync(PreferenceManager.CameraUploadsConfiguration config) {
+
+        // Set synchronization timestamps not needed
+        if (!config.isEnabledForPictures() && !config.isEnabledForVideos()) {
+            return;
+        }
+
+        // DB connection
+        CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
+                CameraUploadsSyncStorageManager(getContentResolver());
+
+        OCCameraUploadSync ocCameraUploadSync = mCameraUploadsSyncStorageManager.
+                getCameraUploadSync(null, null, null);
+
+        long timeStamp = System.currentTimeMillis();
+
+        if (ocCameraUploadSync == null) { // No synchronization timestamp for pictures/videos yet
+
+            long firstPicturesTimeStamp = config.isEnabledForPictures() ? timeStamp : 0;
+            long firstVideosTimeStamp = config.isEnabledForVideos() ? timeStamp : 0;
+
+            // Initialize synchronization timestamp for pictures or videos in database
+            OCCameraUploadSync firstOcCameraUploadSync = new OCCameraUploadSync(firstPicturesTimeStamp,
+                    firstVideosTimeStamp);
+
+            Log_OC.d(TAG, "Storing synchronization timestamp in database");
+
+            mCameraUploadsSyncStorageManager.storeCameraUploadSync(firstOcCameraUploadSync);
+
+        } else {
+
+            if (ocCameraUploadSync.getPicturesLastSync() != 0 &&
+                    ocCameraUploadSync.getVideosLastSync() != 0) {
+
+                // Synchronization timestamps already initialized
+                return;
+            }
+
+            if (ocCameraUploadSync.getPicturesLastSync() == 0 && config.isEnabledForPictures()) {
+
+                // Pictures synchronization timestamp not initialized yet, initialize it
+
+                ocCameraUploadSync.setPicturesLastSync(timeStamp);
+            }
+
+            if (ocCameraUploadSync.getVideosLastSync() == 0 && config.isEnabledForVideos()) {
+
+                // Videos synchronization timestamp not initialized yet, initialize it
+
+                ocCameraUploadSync.setVideosLastSync(timeStamp);
+            }
+
+            mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
+        }
     }
 
     @Override
