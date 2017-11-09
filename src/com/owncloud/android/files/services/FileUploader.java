@@ -188,11 +188,9 @@ public class FileUploader extends Service
         sendBroadcastUploadStarted(mCurrentUpload);
     }
 
-
     public static class UploadRequester {
 
     }
-
 
     /**
      * Service initialization
