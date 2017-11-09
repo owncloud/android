@@ -71,8 +71,6 @@ public class FileObserverService extends Service {
         MY_NAME + ".action.ADD_OBSERVED_FILE";
     private final static String ACTION_DEL_OBSERVED_FILE =
         MY_NAME + ".action.DEL_OBSERVED_FILE";
-    private final static String ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS =
-        MY_NAME + ".action.UPDATE_AUTO_UPLOAD_OBSERVERS";
 
     private final static String ARG_FILE = "ARG_FILE";
     private final static String ARG_ACCOUNT = "ARG_ACCOUNT";
@@ -198,9 +196,6 @@ public class FileObserverService extends Service {
                 (OCFile) intent.getParcelableExtra(ARG_FILE),
                 (Account) intent.getParcelableExtra(ARG_ACCOUNT)
             );
-
-        } else if (ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS.equals(intent.getAction())) {
-//            updateInstantUploadsObservers();
 
         } else {
             Log_OC.e(TAG, "Unknown action received; ignoring it: " + intent.getAction());

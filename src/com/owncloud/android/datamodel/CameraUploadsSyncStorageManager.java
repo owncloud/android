@@ -30,7 +30,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.util.Observable;
 
-public class CameraUploadsSyncStorageManager extends Observable{
+public class CameraUploadsSyncStorageManager extends Observable {
 
     private ContentResolver mContentResolver;
 
