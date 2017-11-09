@@ -148,7 +148,7 @@ public class FileDisplayActivity extends HookActivity
 
     private LocalBroadcastManager mLocalBroadcastManager;
 
-    private IndexedForest<FileDisplayActivity> mPendingInstantUploads = new IndexedForest<>();
+    private IndexedForest<FileDisplayActivity> mPendingCameraUploads = new IndexedForest<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,7 +211,7 @@ public class FileDisplayActivity extends HookActivity
     }
 
     /**
-     * Schedule a job to check pictures ande videos to be uploaded
+     * Schedule a job to check pictures and videos to be uploaded
      */
     private void scheduleCameraUploadsSyncJob() {
 
@@ -227,7 +227,7 @@ public class FileDisplayActivity extends HookActivity
             ComponentName serviceComponent = new ComponentName(this, CameraUploadsSyncJobService.class);
             JobInfo.Builder builder;
 
-            int jobId = mPendingInstantUploads.buildKey(getAccount().name, config.getSourcePath()).
+            int jobId = mPendingCameraUploads.buildKey(getAccount().name, config.getSourcePath()).
                     hashCode();
 
             builder = new JobInfo.Builder(jobId, serviceComponent);

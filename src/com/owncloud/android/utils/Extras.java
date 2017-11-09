@@ -36,6 +36,6 @@ public class Extras {
     public static final String EXTRA_OLD_FILE_PATH = "OLD_FILE_PATH";
     public static final String EXTRA_UPLOAD_RESULT = "RESULT";
 
-    // for Instant Uploads
+    // for Camera uploads
     public static final String EXTRA_SYNC_CAMERA_FOLDER_JOB_ID = "SYNC_CAMERA_FOLDER_JOB_ID";
 }
