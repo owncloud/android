@@ -41,6 +41,9 @@ import com.owncloud.android.utils.Extras;
 
 import java.net.SocketTimeoutException;
 
+import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_PICTURE;
+import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_VIDEO;
+
 /**
  * Facade to start operations in transfer services without the verbosity of Android Intents.
  */
@@ -80,7 +83,14 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_CREATE_REMOTE_FOLDER, createRemoteFolder);
         intent.putExtra(FileUploader.KEY_CREATED_BY, createdBy);
 
-        context.startService(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (createdBy == CREATED_AS_PICTURE ||
+                createdBy == CREATED_AS_VIDEO)) {
+            // Since in Android O the apps in background are not allowed to start background
+            // services and camera uploads feature may try to do it, this is the way to proceed
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
     /**
