@@ -203,6 +203,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
         cv.put(ProviderTableMeta.FILE_IS_DOWNLOADING, file.isDownloading());
         cv.put(ProviderTableMeta.FILE_ETAG_IN_CONFLICT, file.getEtagInConflict());
+        cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, file.getPrivateLink());
 
         boolean sameRemotePath = fileExists(file.getRemotePath());
         if (sameRemotePath ||
@@ -311,6 +312,7 @@ public class FileDataStorageManager {
             cv.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, file.needsUpdateThumbnail());
             cv.put(ProviderTableMeta.FILE_IS_DOWNLOADING, file.isDownloading());
             cv.put(ProviderTableMeta.FILE_ETAG_IN_CONFLICT, file.getEtagInConflict());
+            cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, file.getPrivateLink());
 
             boolean existsByPath = fileExists(file.getRemotePath());
             if (existsByPath || fileExists(file.getFileId())) {
@@ -386,6 +388,7 @@ public class FileDataStorageManager {
         cv.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, folder.isSharedWithSharee() ? 1 : 0);
         cv.put(ProviderTableMeta.FILE_PERMISSIONS, folder.getPermissions());
         cv.put(ProviderTableMeta.FILE_REMOTE_ID, folder.getRemoteId());
+        cv.put(ProviderTableMeta.FILE_PRIVATE_LINK, folder.getPrivateLink());
 
         operations.add(ContentProviderOperation.newUpdate(ProviderTableMeta.CONTENT_URI).
                 withValues(cv).
@@ -1092,6 +1095,7 @@ public class FileDataStorageManager {
             file.setDownloading(c.getInt(
                     c.getColumnIndex(ProviderTableMeta.FILE_IS_DOWNLOADING)) == 1 ? true : false);
             file.setEtagInConflict(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG_IN_CONFLICT)));
+            file.setPrivateLink(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PRIVATE_LINK)));
 
         }
         return file;

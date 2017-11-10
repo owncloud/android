@@ -864,6 +864,23 @@ public class FileContentProvider extends ContentProvider {
                     ", newVersion == " + newVersion);
             }
 
+            if (oldVersion < 21 && newVersion >= 21) {
+                Log_OC.i("SQL", "Entering in the #21 ADD in onUpgrade");
+                db.beginTransaction();
+                try {
+                    db .execSQL("ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
+                        " ADD COLUMN " + ProviderTableMeta.FILE_PRIVATE_LINK + " TEXT " +
+                        " DEFAULT NULL");
+
+                    upgraded = true;
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+            if (!upgraded)
+                Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
+                    ", newVersion == " + newVersion);
 
         }
     }
@@ -893,7 +910,8 @@ public class FileContentProvider extends ContentProvider {
                         + ProviderTableMeta.FILE_UPDATE_THUMBNAIL + " INTEGER," //boolean
                         + ProviderTableMeta.FILE_IS_DOWNLOADING + " INTEGER," //boolean
                         + ProviderTableMeta.FILE_ETAG_IN_CONFLICT + " TEXT,"
-                        + ProviderTableMeta.FILE_SHARED_WITH_SHAREE + " INTEGER);"
+                        + ProviderTableMeta.FILE_SHARED_WITH_SHAREE + " INTEGER,"
+                        + ProviderTableMeta.FILE_PRIVATE_LINK + " TEXT );"
         );
     }
 
