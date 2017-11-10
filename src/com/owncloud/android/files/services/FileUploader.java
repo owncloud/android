@@ -99,7 +99,6 @@ public class FileUploader extends Service
     private static final String UPLOAD_FINISH_MESSAGE = "UPLOAD_FINISH";
     private static final String UPLOAD_NOTIFICATION_CHANNEL_ID = "UPLOAD_NOTIFICATION_CHANNEL";
 
-
     protected static final String KEY_FILE = "FILE";
     protected static final String KEY_LOCAL_FILE = "LOCAL_FILE";
     protected static final String KEY_REMOTE_FILE = "REMOTE_FILE";
@@ -146,7 +145,6 @@ public class FileUploader extends Service
     public static final int LOCAL_BEHAVIOUR_COPY = 0;
     public static final int LOCAL_BEHAVIOUR_MOVE = 1;
     public static final int LOCAL_BEHAVIOUR_FORGET = 2;
-
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
@@ -199,10 +197,14 @@ public class FileUploader extends Service
     public void onCreate() {
         super.onCreate();
         Log_OC.d(TAG, "Creating service");
+
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
 
         // Configure notification channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
             NotificationChannel mNotificationChannel;
             // The user-visible name of the channel.
             CharSequence name = getString(R.string.upload_notification_channel_name);
@@ -215,6 +217,12 @@ public class FileUploader extends Service
             // Configure the notification channel.
             mNotificationChannel.setDescription(description);
             mNotificationManager.createNotificationChannel(mNotificationChannel);
+
+            /**
+             * After calling startForegroundService method from {@link TransferRequester} we have
+             * to call this within five seconds after the service is created to avoid an error
+             */
+            startForeground(1, mNotificationBuilder.build());
         }
 
         HandlerThread thread = new HandlerThread("FileUploaderThread",
@@ -885,8 +893,6 @@ public class FileUploader extends Service
     private void notifyUploadStart(UploadFileOperation upload) {
         // / create status notification with a progress bar
         mLastPercent = 0;
-        mNotificationBuilder =
-                NotificationUtils.newNotificationBuilder(this);
         mNotificationBuilder
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.notification_icon)
@@ -906,8 +912,9 @@ public class FileUploader extends Service
             showUploadListIntent, 0));
 
         if (!upload.isCameraUploadsPicture() && !upload.isCameraUploadsVideo()) {
-            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
-        }   // else wait until the upload really start (onTransferProgress is called), so that if it's discarded
+            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker,
+                    mNotificationBuilder.build());
+        }// else wait until the upload really start (onTransferProgress is called), so that if it's discarded
         // due to lack of Wifi, no notification is shown
         // TODO generalize for automated uploads
     }
@@ -925,6 +932,7 @@ public class FileUploader extends Service
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
             mNotificationBuilder.setContentText(text);
             mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
+
             mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
@@ -1004,6 +1012,7 @@ public class FileUploader extends Service
 
             mNotificationBuilder.setContentText(content);
             mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
+
             mNotificationManager.notify(tickerId, mNotificationBuilder.build());
 
             if (uploadResult.isSuccess()) {
@@ -1093,5 +1102,4 @@ public class FileUploader extends Service
         mPendingUploads.remove(account.name);
         mUploadsStorageManager.removeUploads(account.name);
     }
-
 }
