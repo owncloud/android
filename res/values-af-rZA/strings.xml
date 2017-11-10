@@ -61,6 +61,7 @@
   <string name="change_password">Verander wagwoord</string>
   <string name="delete_account">Verwyder rekening</string>
   <string name="create_account">Skep rekening</string>
+  <string name="uploader_info_dirname">Vouernaam</string>
   <string name="uploader_upload_text_filename_hint">Lêernaam</string>
   <string name="uploads_view_title">Oplaaie</string>
   <string name="uploads_view_group_current_uploads">Huidige</string>
