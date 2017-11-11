@@ -460,7 +460,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Den offentlige linken utløper senest %1$d dager etter den ble opprettet</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="private_link_info">Privat lenke: Bare personer som har tilgang til filen/mappen kan bruke den. Bruk dette som en permanent lenke for din egen bruk eller for å lede andre til filer innenfor delinger</string>
-  <string name="file_private_link_error">En feil oppstod ved opprettingen av en privat link for filen</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valgt</item>
     <item quantity="other">%d valgte</item>

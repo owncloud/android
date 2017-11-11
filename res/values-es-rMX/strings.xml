@@ -459,7 +459,6 @@
   <string name="share_via_link_expiration_date_explanation_label">El enlace público expirará no más tarde de %1$d días después de su creación</string>
   <string name="share_via_link_default_name_template">%1$s enlace</string>
   <string name="private_link_info">Este es un enlace privado, solo las personas que tienen acceso al archivo/carpeta pueden usarlo. Úsalo como un enlace permanente para ti mismo o para señalar a otros a los archivos dentro de las acciones.</string>
-  <string name="file_private_link_error">Se produjo un error al intentar obtener el enlace privado para el archivo</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionados</item>

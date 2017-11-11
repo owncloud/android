@@ -447,7 +447,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Tautan publik akan kadaluwarsa tidak lebih dari %1$d hari setelah dibuat</string>
   <string name="share_via_link_default_name_template">%1$s tautan</string>
   <string name="private_link_info">Ini adalah tautan privat, hanya orang yang punya akses ke berkas/ folder dapat menggunakannya. Gunakan sebagai tautan permanen untuk diri sendiri, atau arahkan kepada lainnya untuk file yang dibagi</string>
-  <string name="file_private_link_error">Terjadi kesalahan saat mendapatkan tautan privat berkas</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d terpilih</item>
   </plurals>

@@ -460,7 +460,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Javna povezava bo potekla %1$d dni po ustvarjanju.</string>
   <string name="share_via_link_default_name_template">Povezava %1$s</string>
   <string name="private_link_info">Ustvarjena je zasebna povezava, do katere imajo dostop le uporabniki z dovoljenji. Uporabite jo kot trajno povezavo zase ali za souporabo z drugimi uporabniki.</string>
-  <string name="file_private_link_error">Prišlo je do napake med pridobivanjem zasebne povezave za datoteko</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d izbrana</item>
     <item quantity="two">%d izbrani</item>
