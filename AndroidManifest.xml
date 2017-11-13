@@ -143,7 +143,7 @@
         </service>
 
         <service
-            android:name=".services.CameraUploadsSyncJobService"
+            android:name=".files.services.CameraUploadsSyncJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="true">
         </service>

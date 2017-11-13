@@ -71,8 +71,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class UploadFileOperation extends SyncOperation {
 
     public static final int CREATED_BY_USER = 0;
-    public static final int CREATED_AS_PICTURE = 1;
-    public static final int CREATED_AS_VIDEO = 2;
+    public static final int CREATED_AS_CAMERA_UPLOAD_PICTURE = 1;
+    public static final int CREATED_AS_CAMERA_UPLOAD_VIDEO = 2;
 
     public static OCFile obtainNewOCFileToUpload(String remotePath, String localPath, String mimeType) {
 
@@ -173,7 +173,7 @@ public class UploadFileOperation extends SyncOperation {
         mOriginalStoragePath = mFile.getStoragePath();
         mContext = context;
         mOCUploadId = upload.getUploadId();
-        mCreatedBy = upload.getCreadtedBy();
+        mCreatedBy = upload.getCreatedBy();
         mRemoteFolderToBeCreated = upload.isCreateRemoteFolder();
     }
 
@@ -227,7 +227,7 @@ public class UploadFileOperation extends SyncOperation {
 
     public void setCreatedBy(int createdBy) {
         mCreatedBy = createdBy;
-        if (createdBy < CREATED_BY_USER || CREATED_AS_VIDEO < createdBy) {
+        if (createdBy < CREATED_BY_USER || CREATED_AS_CAMERA_UPLOAD_VIDEO < createdBy) {
             mCreatedBy = CREATED_BY_USER;
         }
     }
@@ -237,11 +237,11 @@ public class UploadFileOperation extends SyncOperation {
     }
 
     public boolean isCameraUploadsPicture() {
-        return mCreatedBy == CREATED_AS_PICTURE;
+        return mCreatedBy == CREATED_AS_CAMERA_UPLOAD_PICTURE;
     }
 
     public boolean isCameraUploadsVideo() {
-        return mCreatedBy == CREATED_AS_VIDEO;
+        return mCreatedBy == CREATED_AS_CAMERA_UPLOAD_VIDEO;
     }
 
     public void setOCUploadId(long id){

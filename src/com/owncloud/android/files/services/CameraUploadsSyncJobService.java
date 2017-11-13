@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.services;
+package com.owncloud.android.files.services;
 
 import android.accounts.Account;
 import android.app.job.JobParameters;
@@ -32,7 +32,6 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager;
-import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.Extras;
@@ -169,8 +168,8 @@ public class CameraUploadsSyncJobService extends JobService {
             String remotePath = (isImage ? mConfig.getUploadPathForPictures() :
                     mConfig.getUploadPathForVideos()) + fileName;
 
-            int createdBy = isImage ? UploadFileOperation.CREATED_AS_PICTURE :
-                    UploadFileOperation.CREATED_AS_VIDEO;
+            int createdBy = isImage ? UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE :
+                    UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO;
 
             String localPath = mConfig.getSourcePath() + File.separator + fileName;
 
