@@ -189,11 +189,19 @@ public class TransferRequester {
      */
     private void retry(Context context, Account account, OCUpload upload) {
         if (upload != null) {
-            Intent i = new Intent(context, FileUploader.class);
-            i.putExtra(FileUploader.KEY_RETRY, true);
-            i.putExtra(FileUploader.KEY_ACCOUNT, account);
-            i.putExtra(FileUploader.KEY_RETRY_UPLOAD, upload);
-            context.startService(i);
+            Intent intent = new Intent(context, FileUploader.class);
+            intent.putExtra(FileUploader.KEY_RETRY, true);
+            intent.putExtra(FileUploader.KEY_ACCOUNT, account);
+            intent.putExtra(FileUploader.KEY_RETRY_UPLOAD, upload);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (upload.getCreadtedBy() ==
+                    CREATED_AS_PICTURE || upload.getCreadtedBy() == CREATED_AS_VIDEO)) {
+                // Since in Android O the apps in background are not allowed to start background
+                // services and camera uploads feature may try to do it, this is the way to proceed
+                context.startForegroundService(intent);
+            } else {
+                context.startService(intent);
+            }
         }
     }
 
