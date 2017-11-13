@@ -297,7 +297,7 @@ public class OCUpload implements Parcelable {
         mCreatedBy = createdBy;
     }
 
-    public int getCreadtedBy() {
+    public int getCreatedBy() {
         return mCreatedBy;
     }
 
