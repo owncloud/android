@@ -1,4 +1,4 @@
-## 2.5.1 Beta (November 2017)
+## 2.5.1 beta v1 (November 2017)
 - Camera uploads (replacing instant uploads)
 - Android O support
 - Notification channels (Android O required)
