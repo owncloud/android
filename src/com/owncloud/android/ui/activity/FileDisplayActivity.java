@@ -127,6 +127,7 @@ public class FileDisplayActivity extends HookActivity
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
     private static final String KEY_WAITING_TO_SEND = "WAITING_TO_SEND";
+    private static final long  MILLISECONDS_INTERVAL_CAMERA_UPLOAD = 900000;
 
     public static final String ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS";
 
@@ -235,7 +236,7 @@ public class FileDisplayActivity extends HookActivity
             builder.setPersisted(true);
 
             // Execute job every 15 minutes
-            builder.setPeriodic(15000);
+            builder.setPeriodic(MILLISECONDS_INTERVAL_CAMERA_UPLOAD);
 
             // Extra data
             PersistableBundle extras = new PersistableBundle();
