@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <com.ortiz.touch.TouchImageView 
+        android:id="@+id/img"
+        android:scaleType="center"
+        android:src="@drawable/nature_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
+    <TextView
+	    android:text="@string/switch_scaletype_text"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerHorizontal="true"
+	    android:padding="5dp"
+	    android:layout_marginTop="10dp"
+	    android:background="@android:color/black"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content" />
+    
+</RelativeLayout>
