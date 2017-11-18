@@ -70,7 +70,10 @@
   <string name="uploads_view_upload_status_cancelled">Gekanselleer</string>
   <string name="uploads_view_upload_status_failed_folder_error">Vouerfout</string>
   <string name="uploads_view_upload_status_failed_permission_error">Toestemmingfout</string>
+  <string name="uploads_view_upload_status_conflict">Konflik</string>
   <string name="uploads_view_upload_status_unknown_fail">Onbekende fout</string>
+  <string name="pass_code_removed">Wagkode is verwyder</string>
+  <string name="pass_code_stored">Wagkode is bewaar</string>
   <string name="auth_expired_saml_sso_token_toast">U sessie het verstryk. Verbind asb. weer</string>
   <string name="common_rename">Hernoem</string>
   <string name="common_remove">Verwyder</string>
@@ -83,6 +86,7 @@
   <string name="share_link_password_title">Voer ’n wagwoord in</string>
   <string name="share_link_empty_password">U moet ’n wagwoord invoer</string>
   <string name="activity_chooser_send_file_title">Stuur</string>
+  <string name="copy_link">Kopieer skakel</string>
   <string name="clipboard_text_copied">Gekopieer na knipbord</string>
   <string name="uploader_upload_forbidden">Oplaai nie toegestaan nie</string>
   <string name="prefs_category_accounts">Rekeninge</string>
@@ -98,6 +102,8 @@
   <string name="share_dialog_title">Deel</string>
   <string name="share_with_user_section_title">Gebruikers en Groepe</string>
   <string name="share_via_link_section_title">Openbare skakels</string>
+  <string name="share_via_link_create_title">Skep deelskakel</string>
+  <string name="share_via_link_edit_title">Wysig deelskakel</string>
   <string name="share_cancel_public_link_button">Kanselleer</string>
   <string name="share_confirm_public_link_button">Bewaar</string>
   <string name="share_via_link_expiration_date_label">Verval</string>
