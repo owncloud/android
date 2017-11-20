@@ -461,7 +461,12 @@
   <string name="share_via_link_expiration_date_explanation_label">Ο δημόσιος σύνδεσμος θα απενεργοποιηθεί το πολύ %1$d ημέρες μετά την δημιουργία του</string>
   <string name="share_via_link_default_name_template">%1$s σύνδεσμος</string>
   <string name="private_link_info">Αυτός είναι ένας ιδιωτικός σύνδεσμος, μόνο τα άτομα που έχουν πρόσβαση στο αρχείο / φάκελο μπορούν να το χρησιμοποιήσουν. Χρησιμοποιήστε το ως μόνιμο σύνδεσμο για τον εαυτό σας ή για να τοποθετήσετε τους άλλους σε αρχεία μέσα στα κοινόχρηστα.</string>
-  <string name="file_private_link_error">Παρουσιάστηκε σφάλμα κατά την προσπάθεια λήψης του ιδιωτικού συνδέσμου για το αρχείο</string>
+  <string name="download_notification_channel_name">Λήψεις</string>
+  <string name="upload_notification_channel_name">Μεταφορτώσεις</string>
+  <string name="media_service_notification_channel_name">Αναπαραγωγή μουσικής</string>
+  <string name="media_service_notification_channel_description">Δείτε το πρόγραμμα αναπαραγωγής μουσικής</string>
+  <string name="file_sync_notification_channel_name">Συγχρονισμός αρχείου</string>
+  <string name="file_sync_notification_channel_description">Δείτε το αποτέλεσμα συγχρονισμού αρχείου</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d επιλέχτηκε</item>
     <item quantity="other">%d επιλέχτηκαν</item>

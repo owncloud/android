@@ -460,7 +460,6 @@
   <string name="share_via_link_expiration_date_explanation_label">הקישור הציבורי יפוג לא יותר מ- %1$d ימים לאחר שנוצר</string>
   <string name="share_via_link_default_name_template">קישור %1$s</string>
   <string name="private_link_info">זה קישור פרטי, רק אנשים שיש להם גישה לקובץ/תיקייה יכולים להשתמש בו. ניתן להשתמש בו כקישור קבוע לעצמך או לצורך הפניית אחרים לקבצים מתוך שיתופים.</string>
-  <string name="file_private_link_error">אירעה שגיאה בזמן ניסיון לקבל את הקישור הפרטי לקובץ</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>

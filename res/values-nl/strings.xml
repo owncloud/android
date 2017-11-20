@@ -462,7 +462,6 @@ Neem contact op met uw beheerder</string>
   <string name="share_via_link_expiration_date_explanation_label">De openbare link vervalt niet eerder dan %1$d dagen na het aanmaken</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="private_link_info">Dit is een privélink, alleen mensen met toegang tot het bestand/map kunnen hem gebruiken. Gebruik het als een permanente link voor uwzelf of om andere naar bestanden de wijzen in gedeelde mappen.</string>
-  <string name="file_private_link_error">Er is een fout opgetreden tijdens het verkrijgen van de privélink van het betand.</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>

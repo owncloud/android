@@ -458,7 +458,6 @@
   <string name="share_via_link_expiration_date_explanation_label">Opinberi tengillinn rennur út eigi síðar en %1$d dögum eftir að hann er útbúinn</string>
   <string name="share_via_link_default_name_template">%1$s tengill</string>
   <string name="private_link_info">Þetta er einkatengilll, aðeins fólk sem hefur aðgang að skránni/möppunni getur notað hann. Notaðu hann sem varanlegan tengil fyrir sjálfan þig eða til að beina öðrum á skrár innan sameigna.</string>
-  <string name="file_private_link_error">Það kom upp villa við að nálgast einkatengil fyrir skrána</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valið</item>
     <item quantity="other">%d valið</item>

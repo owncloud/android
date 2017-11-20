@@ -458,7 +458,7 @@
   <string name="share_via_link_expiration_date_explanation_label">ลิงค์สาธารณะจะหมดอายุไม่เกิน %1$d วันหลังจากถูกสร้างขึ้น</string>
   <string name="share_via_link_default_name_template">%1$s ลิงค์</string>
   <string name="private_link_info">นี่เป็นลิงค์ส่วนตัวเฉพาะคุณเท่านั้นที่จะสามารถเข้าถึงไฟล์หรือโฟลเดอร์ได้ ใช้เป็นลิงค์ถาวรสำหรับตัวคุณเอง</string>
-  <string name="file_private_link_error">เกิดข้อผิดพลาดขณะพยายามดึงลิงค์ส่วนตัวสำหรับไฟล์</string>
+  <string name="file_private_link_error">ลิงก์ส่วนตัวใช้ไม่ได้กับไฟล์นี้</string>
   <string name="download_notification_channel_name">ดาวน์โหลด</string>
   <string name="download_notification_channel_description">ดูชื่อไฟล์และความคืบหน้าในการดาวน์โหลด</string>
   <string name="upload_notification_channel_name">อัพโหลด</string>

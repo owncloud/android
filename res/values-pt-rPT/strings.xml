@@ -143,6 +143,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Erro desconhecido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">A aguardar pela ligação wi-fi</string>
   <string name="uploads_view_later_waiting_to_upload">A aguardar para enviar</string>
+  <string name="uploads_view_unsupported_media_type">Tipo de mídia não suportado</string>
   <string name="downloader_download_in_progress_ticker">A transferir…</string>
   <string name="downloader_download_in_progress_content">%1$d%% A transferir %2$s</string>
   <string name="downloader_download_succeeded_ticker">Transferência bem sucedida</string>
@@ -456,7 +457,11 @@
   <string name="share_via_link_expiration_date_enforced_label">Expiração *</string>
   <string name="share_via_link_expiration_date_explanation_label">A hiperligação pública irá expirar, o mais tardar %1$d dias após a sua criação </string>
   <string name="share_via_link_default_name_template">%1$s hiperligação</string>
-  <string name="file_private_link_error">Ocorreu um erro a tentar obter a ligação privada do ficheiro</string>
+  <string name="download_notification_channel_name">Transferências</string>
+  <string name="media_service_notification_channel_name">Reprodutor de música</string>
+  <string name="media_service_notification_channel_description">Ver reprodutor de música</string>
+  <string name="file_sync_notification_channel_name">Sincronização do(s) ficheiro(s)</string>
+  <string name="file_sync_notification_channel_description">Mostrar resultado da sincronização do(s) ficheiro(s)</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>

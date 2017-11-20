@@ -464,7 +464,15 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="share_via_link_expiration_date_explanation_label">Ce lien public expirera au plus tard %1$d jours après sa création</string>
   <string name="share_via_link_default_name_template">lien %1$s</string>
   <string name="private_link_info">Ceci est un lien privé ; seules les personnes ayant accès à ce fichier/dossier peuvent l\'utiliser. Utilisez-le comme lien permanent pour vous-même ou pour pointer sur ce fichier/dossier dans le partage avec d\'autres utilisateur.</string>
-  <string name="file_private_link_error">Une erreur s\'est produite en essayant d\'obtenir le lien privé pour ce fichier.</string>
+  <string name="file_private_link_error">Le lien privé n\'est pas disponible pour ce fichier</string>
+  <string name="download_notification_channel_name">Téléchargements</string>
+  <string name="download_notification_channel_description">Voir le nom du fichier téléchargé et sa progression</string>
+  <string name="upload_notification_channel_name">Téléversements</string>
+  <string name="upload_notification_channel_description">Voir le nom du fichier téléverser et sa progression</string>
+  <string name="media_service_notification_channel_name">lecteur de musique</string>
+  <string name="media_service_notification_channel_description">Voir le lecteur de musique</string>
+  <string name="file_sync_notification_channel_name">synchronisation de fichier</string>
+  <string name="file_sync_notification_channel_description">Voir le résultat de la synchronisation de fichier</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>

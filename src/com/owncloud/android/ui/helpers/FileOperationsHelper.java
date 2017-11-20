@@ -138,14 +138,13 @@ public class FileOperationsHelper {
      * or copy it to clipboard.
      *
      * @param file    @param file {@link OCFile} which will be shared with internal users
-     * @param account
      */
-    public void copyOrSendPrivateLink(Account account, OCFile file) {
+    public void copyOrSendPrivateLink(OCFile file) {
 
         // Parse remoteId
-        String privateLink = file.getPrivateLink(mFileActivity, account);
+        String privateLink = file.getPrivateLink();
 
-        if (privateLink == null) {
+        if (privateLink == null || privateLink.isEmpty()) {
             mFileActivity.showSnackMessage(
                     mFileActivity.getString(R.string.file_private_link_error)
             );

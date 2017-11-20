@@ -460,7 +460,15 @@
   <string name="share_via_link_expiration_date_explanation_label">Den offentlige linken utløper senest %1$d dager etter den ble opprettet</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="private_link_info">Privat lenke: Bare personer som har tilgang til filen/mappen kan bruke den. Bruk dette som en permanent lenke for din egen bruk eller for å lede andre til filer innenfor delinger</string>
-  <string name="file_private_link_error">En feil oppstod ved opprettingen av en privat link for filen</string>
+  <string name="file_private_link_error">Privat link er ikke tilgjengelig for denne fil</string>
+  <string name="download_notification_channel_name">Last ned</string>
+  <string name="download_notification_channel_description">Se filnavn og framdrift for nedlasting</string>
+  <string name="upload_notification_channel_name">Last opp</string>
+  <string name="upload_notification_channel_description">Se filnavn og framdrift for opplasting</string>
+  <string name="media_service_notification_channel_name">Musikk spiller</string>
+  <string name="media_service_notification_channel_description">Se musikk spiller</string>
+  <string name="file_sync_notification_channel_name">Fil synkronisering</string>
+  <string name="file_sync_notification_channel_description">Se resultat av fil synkronisering</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valgt</item>
     <item quantity="other">%d valgte</item>

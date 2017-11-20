@@ -457,7 +457,6 @@
   <string name="share_via_link_expiration_date_explanation_label">이 공개 링크는 %1$d일 후에 만료 됩니다</string>
   <string name="share_via_link_default_name_template">%1$s링크</string>
   <string name="private_link_info">이 링크른 비공개 링크로, 파일/폴더ㅔ 접근할 수 있는 사람만 사용할 수 있습니다. 자신을 위한 영구 링크 또는 다른 사람들을 위한 공유 지점으로 사용하십시오.</string>
-  <string name="file_private_link_error">이 파일의 개인 링크 생성에 오류가 발생 하였습니다</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d선택됨</item>
   </plurals>
