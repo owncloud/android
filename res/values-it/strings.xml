@@ -47,7 +47,7 @@
   <string name="prefs_remember_last_upload_location_summary">Ricorda l\'ultima posizione di caricamento della condivisione</string>
   <string name="recommend_subject">Prova %1$s sul tuo smartphone!</string>
   <string name="recommend_text">Vorrei invitarti a usare %1$s sul tuo smartphone!\nScarica qui: %2$s</string>
-  <string name="auth_check_server">Controlla server</string>
+  <string name="auth_check_server">Controlla il server</string>
   <string name="auth_host_url">Indirizzo server https://...</string>
   <string name="auth_username">Nome utente</string>
   <string name="auth_password">Password</string>
@@ -70,7 +70,7 @@
   <string name="file_list_seconds_ago">secondi fa</string>
   <string name="file_list_empty">Non c\'è niente qui. Carica qualcosa!</string>
   <string name="file_list_loading">Caricamento in corso...</string>
-  <string name="file_list_no_app_for_file_type">Nessuna applicazione trovata per il tipo di file</string>
+  <string name="file_list_no_app_for_file_type">Nessuna applicazione trovata per questo tipo di file</string>
   <string name="local_file_list_empty">Non ci sono file in questa cartella.</string>
   <string name="local_file_list_empty_just_folders">Non ci sono cartelle in questa cartella.</string>
   <string name="upload_list_empty">Nessun caricamento disponibile.</string>
@@ -461,6 +461,15 @@ Il Download del file inizierà automaticamente</string>
   <string name="share_via_link_expiration_date_explanation_label">Il collegamento pubblico scadrà non più tardi di %1$d giorni dopo la sua creazione</string>
   <string name="share_via_link_default_name_template">collegamento %1$s</string>
   <string name="private_link_info">Questo è un link privato, solo le persone che hanno accesso al file/cartella lo possono usare. Usalo come link permanente per te o per puntare altri file senza condivisioni. </string>
+  <string name="file_private_link_error">Il link privato non è disponibile per questo file</string>
+  <string name="download_notification_channel_name">Download</string>
+  <string name="download_notification_channel_description">Visualizza il nome dei file scaricati e i progressi</string>
+  <string name="upload_notification_channel_name">Upload</string>
+  <string name="upload_notification_channel_description">Visualizza il nome dei file caricati e i progressi</string>
+  <string name="media_service_notification_channel_name">Lettore musicale</string>
+  <string name="media_service_notification_channel_description">Visualizza il lettore musicale</string>
+  <string name="file_sync_notification_channel_name">Sincronizzazione dei file</string>
+  <string name="file_sync_notification_channel_description">Visualizza i risultati della sincronizzazione</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>
