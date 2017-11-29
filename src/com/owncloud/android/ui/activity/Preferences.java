@@ -611,7 +611,7 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Load upload picture path set on preferences
+     * Load picture upload path set on preferences
      */
     private void loadCameraUploadsPicturePath() {
         SharedPreferences appPrefs =
@@ -623,7 +623,7 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Save the "Upload picture path" on preferences
+     * Save the "Picture upload path" on preferences
      */
     private void saveCameraUploadsPicturePathOnPreferences() {
         SharedPreferences appPrefs =
@@ -634,7 +634,7 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Load upload video path set on preferences
+     * Load video upload path set on preferences
      */
     private void loadCameraUploadsVideoPath() {
         SharedPreferences appPrefs =
@@ -646,7 +646,7 @@ public class Preferences extends PreferenceActivity {
     }
 
     /**
-     * Save the "Upload video path" on preferences
+     * Save the "Video upload path" on preferences
      */
     private void saveCameraUploadsVideoPathOnPreferences() {
         SharedPreferences appPrefs =
