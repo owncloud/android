@@ -51,12 +51,10 @@ import android.view.ViewGroup;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
+import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.CheckBoxPreferenceWithLongTitle;
 import com.owncloud.android.utils.DisplayUtils;
 
 import java.io.File;
@@ -594,6 +592,11 @@ public class Preferences extends PreferenceActivity {
 
     @Override
     protected void onStop() {
+
+        CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
+                getCameraUploadsConfiguration(this);
+
+        CameraUploadsHandler.scheduleCameraUploadsSyncJob(configuration, this);
 
         super.onStop();
         getDelegate().onStop();
