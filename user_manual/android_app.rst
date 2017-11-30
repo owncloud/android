@@ -96,29 +96,28 @@ will replace the "All files" and "Uploads" buttons with "Add account" and
 .. figure:: images/manage-user-accounts.png
    :alt: Manage user accounts   
 
-Then, click "Manage accounts". 
+Then, click "*Manage accounts*". 
 From there, you can see all of the currently active user accounts, along with a button to add a new account.
 
 User Accounts
 ^^^^^^^^^^^^^
 
-After clicking "Manage Accounts", you will see a list of the currently active
-accounts in the application, as in the screenshot below. 
+After clicking "*Manage Accounts*", you will see a list of the currently active accounts in the application, as in the screenshot below. 
 Each entry in the list has shortcuts to:
 
 - Viewing the user's files
 - Changing the user's password
 - Removing the account
 
-.. figure:: images/android-6.png
-   :alt: Top-right menu.   
+.. figure:: images/android-manage-accounts.jpg
+   :alt: Manage user accounts.   
 
 Change User Password
 ^^^^^^^^^^^^^^^^^^^^
 
 To change a user's password, click the key icon, next to the user's details. 
 This will display the user details page, with the ownCloud server URI and user account, pre-filled.
-Enter a new password, and click "Connect", and the password will be updated.
+Enter a new password, and click "*Connect*", and the password will be updated.
 
 .. figure:: images/android-13.png
    :alt: Change password or remove account dialog.
@@ -130,13 +129,14 @@ Removing An Account / Logging Out
 
 To remove an account, click the rubbish bin icon, next to the key icon. 
 This will display a confirmation dialog, asking if you want to remove the account.
-If you click "Yes", the account will be removed. 
+If you click "*Yes*", the account will be removed. 
+
 This action logs you out of the server deletes the database with the list of files. 
-But, any files that were downloaded onto the device at the moment of the removal will still be there afterwards
+However, any files downloaded onto the device prior to removal will still be there afterwards.
 You can find them in the public partition.
 
-.. figure:: images/android-6.png
-   :alt: Top-right menu.   
+.. figure:: images/android-remove-account-confirmation.jpg
+   :alt: Confirm account removal
 
 .. NOTE:: 
    There is no logout function that both logs out of your account **and** leaves
@@ -155,20 +155,19 @@ The Uploads page displays the status of files currently uploading, a list of you
 If credentials to access the file have changed, you'll see a credentials error. 
 Tap the file to retry, and you'll get a login screen to enter the new credentials. 
 
-If the upload fails because you're trying to upload to a folder that you do not have permission to access, you will see a "Permissions error." 
+If the upload fails because you're trying to upload to a folder that you do not have permission to access, you will see a "*Permissions error*". 
 Change the permissions on the folder and retry the upload, or cancel and then upload the file to a different folder.
 
-.. figure:: images/android-15.png
+.. figure:: images/current-uploads.png
    :alt: Top-left menu.
 
 All Files
 ~~~~~~~~~
 
-When you are on the All Files view, all files that you have permission to
-access on your ownCloud server are displayed in your Android app. 
-But, they are not downloaded until you click on them. 
-Downloaded files are marked with a green tick, on the top-right of the file's
-icon.
+When you are in the "*All Files*" view, all files that you have permission to access on your ownCloud server are displayed in your Android app. 
+
+However, they are not downloaded until you click on them. 
+Downloaded files are marked with a green tick, on the top-right of the file's icon.
 
 .. figure:: images/android-all-files-view.jpg
    :alt: Downloaded files are marked with green ticks.
@@ -180,8 +179,9 @@ managing your file.
 .. figure:: images/android-file-overflow-menu.jpg
    :alt: File management options.
    
-When you are on your main Files page, a long press on any file or folder
-displays a list of options, which you can see in the image below. 
+When you are on your main Files page and you long press on any file or folder a list of options appears, which you can see in the image below. 
+Some of them appear in the top bar. 
+The ones that don't fit in the top bar, appear in the list of options when pressing the overflow button.
 
 .. figure:: images/android-file-list-overflow-menu.jpg
    :alt: Folder and file management options.
@@ -275,9 +275,9 @@ After that, a further option called "Camera folder" will become visible, as in t
 Make Folders Available Offline 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Folders can be made available when no internet or mobile connectivity is available.
-Doing so caches a copy of the folder and its contents locally to the device, assuming that sufficient disc space is available.
-Making folders available offline works slightly differently, depending on the number of folders selected for offline availability. 
+Folders can be made available for when no internet or mobile connectivity is available.
+Doing so caches a copy of the folder and its contents locally to the device (assuming that sufficient disc space is available).
+Depending on the number of folders selected for offline availability, how folders are made available offline works slightly differently. 
 
 - **A single folder:** When a single folder is selected, click the More options menu, which opens a popup menu, and then select the first option, labeled: "Set as available offline".
 - **Multiple folders:** When multiple folders are selected, click the down arrow icon near the top of the screen.
