@@ -258,7 +258,7 @@ The Android application can perform some operations on multiple files simultaneo
 To select multiple files, long select the first file that you want to work with; you will see a checkbox appear on the far right-hand side. 
 After that, check the checkbox next to all the other files that you want to perform the same operation on, and then perform the operation.
 
-.. figure:: images/android-select-multiple-files.png
+.. figure:: images/select-multiple-files.png
    :alt: Select multiple files.
    
 Uploading Files Taken From the Camera
@@ -284,7 +284,7 @@ Making folders available offline works slightly differently, depending on the nu
 
 When the folders have been locally cached, the icon will change to have a yellow, down-arrow icon in the bottom right-hand corner, as in the screenshot below.
 
-.. figure:: images/file-folders-view.png
+.. figure:: images/files_folders_view.png
    :alt: Make folders available offline.
    
 Application Settings
