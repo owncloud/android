@@ -459,7 +459,6 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_explanation_label">Platnost tohoto veřejného odkazu skončí nejpozději %1$d dní po jeho vytvoření</string>
   <string name="share_via_link_default_name_template">%1$s odkaz</string>
   <string name="private_link_info">Toto je soukromý odkaz, pouze osoby s přístupem k souboru/složce jej mohou použít. Použijte jej jako trvalý odkaz pro sebe nebo přejděte k souborům v rámci sdílených souborů</string>
-  <string name="file_private_link_error">Při pokusu o získání soukromého odkazu na soubor došlo k chybě</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>

@@ -138,8 +138,8 @@ public class ShareActivity extends FileActivity
     }
 
     @Override
-    public void copyOrSendPrivateLink(Account account, OCFile file) {
-        getFileOperationsHelper().copyOrSendPrivateLink(account, file);
+    public void copyOrSendPrivateLink(OCFile file) {
+        getFileOperationsHelper().copyOrSendPrivateLink(file);
     }
 
     private void doShareWith(String shareeName, String dataAuthority) {

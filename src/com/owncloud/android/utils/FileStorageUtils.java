@@ -159,6 +159,7 @@ public class FileStorageUtils {
         file.setEtag(remote.getEtag());
         file.setPermissions(remote.getPermissions());
         file.setRemoteId(remote.getRemoteId());
+        file.setPrivateLink(remote.getPrivateLink());
         return file;
     }
     
@@ -177,6 +178,7 @@ public class FileStorageUtils {
         file.setEtag(ocFile.getEtag());
         file.setPermissions(ocFile.getPermissions());
         file.setRemoteId(ocFile.getRemoteId());
+        file.setPrivateLink(ocFile.getPrivateLink());
         return file;
     }
     

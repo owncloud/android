@@ -459,7 +459,15 @@
   <string name="share_via_link_expiration_date_explanation_label">El enlace público no expirará antes de %1$d dias despues de ser creado</string>
   <string name="share_via_link_default_name_template">%1$s enlace</string>
   <string name="private_link_info">Esto es un enlace privado, sólo las personas que tienen acceso al archivo/carpeta pueden usarlo. Úsalo como enlace permanente o dirigir a otros hacia archivos dentro de compartidos.</string>
-  <string name="file_private_link_error">Hubo un error mientras trataba de obtener un enlace privado para el archivo</string>
+  <string name="file_private_link_error">El enlace privado no está disponible para este archivo</string>
+  <string name="download_notification_channel_name">Descargas</string>
+  <string name="download_notification_channel_description">Ver el nombre y progreso del archivo de descargar</string>
+  <string name="upload_notification_channel_name">Cargas</string>
+  <string name="upload_notification_channel_description">Ver el nombre y progreso del archivo de subir</string>
+  <string name="media_service_notification_channel_name">Reproductor de música</string>
+  <string name="media_service_notification_channel_description">Ver reproductor de música</string>
+  <string name="file_sync_notification_channel_name">Sincronizado de archivo</string>
+  <string name="file_sync_notification_channel_description">Ver el resultado de sincronizado de archivo</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionado</item>
