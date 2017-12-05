@@ -596,7 +596,9 @@ public class Preferences extends PreferenceActivity {
         CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
                 getCameraUploadsConfiguration(this);
 
-        CameraUploadsHandler.scheduleCameraUploadsSyncJob(configuration, this);
+        CameraUploadsHandler cameraUploadsHandler = new CameraUploadsHandler(configuration, this);
+
+        cameraUploadsHandler.scheduleCameraUploadsSyncJob();
 
         super.onStop();
         getDelegate().onStop();
