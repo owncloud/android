@@ -460,6 +460,8 @@
   <string name="share_via_link_expiration_date_explanation_label">Link publiczny wygaśnie nie później niż %1$d dni od jego utworzenia</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="private_link_info">To jest link prywatny. Tylko użytkownicy, którzy mają przyznany dostęp do folderów lub plików mogą z niego skorzystać. Użyj go jako linka bezpośredniego dla siebie lub jako odnośnik dla użytkowników, którym udostępniasz.</string>
+  <string name="file_private_link_error">Link prywatny nie jest dostępny dla tego pliku</string>
+  <string name="file_sync_notification_channel_description">Zobacz wynik synchronizacji plików</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
     <item quantity="few">wybrano: %d</item>
