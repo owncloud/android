@@ -42,26 +42,32 @@ public class CameraUploadsHandler {
     private static IndexedForest<CameraUploadsHandler> mPendingCameraUploads = new IndexedForest<>();
     private static final long MILLISECONDS_INTERVAL_CAMERA_UPLOAD = 900000;
 
+    private CameraUploadsConfiguration mCameraUploadsConfiguration; // Camera uploads configuration, set by the user
+    private Context mContext;
+
+    public CameraUploadsHandler(CameraUploadsConfiguration cameraUploadsConfiguration, Context context) {
+        mCameraUploadsConfiguration = cameraUploadsConfiguration;
+        mContext = context;
+    }
+
     /**
      * Schedule a periodic job to check pictures and videos to be uploaded
-     * @param configuration camera uploads configuration, set by the user
-     * @param context
      */
-    public static void scheduleCameraUploadsSyncJob(CameraUploadsConfiguration configuration,
-                                                    Context context) {
+    public void scheduleCameraUploadsSyncJob() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                (configuration.isEnabledForPictures() || configuration.isEnabledForVideos())) {
+                (mCameraUploadsConfiguration.isEnabledForPictures() || mCameraUploadsConfiguration.
+                        isEnabledForVideos())) {
 
             // Initialize synchronization timestamps for pictures/videos, if needed
-            initializeCameraUploadSync(configuration, context);
+            initializeCameraUploadSync();
 
-            ComponentName serviceComponent = new ComponentName(context,
+            ComponentName serviceComponent = new ComponentName(mContext,
                     CameraUploadsSyncJobService.class);
             JobInfo.Builder builder;
 
-            int jobId = mPendingCameraUploads.buildKey(configuration.getUploadAccountName(),
-                    configuration.getSourcePath()).hashCode();
+            int jobId = mPendingCameraUploads.buildKey(mCameraUploadsConfiguration.getUploadAccountName(),
+                    mCameraUploadsConfiguration.getSourcePath()).hashCode();
 
             builder = new JobInfo.Builder(jobId, serviceComponent);
 
@@ -79,7 +85,7 @@ public class CameraUploadsHandler {
 
             Log_OC.d(TAG, "Scheduling a CameraUploadsSyncJobService");
 
-            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.
+            JobScheduler jobScheduler = (JobScheduler) mContext.getSystemService(Context.
                     JOB_SCHEDULER_SERVICE);
 
             jobScheduler.schedule(builder.build());
@@ -92,17 +98,16 @@ public class CameraUploadsHandler {
      * period in which to check the pictures/videos saved, discarding those created before enabling
      * Camera Uploads feature
      */
-    private static void initializeCameraUploadSync(CameraUploadsConfiguration configuration,
-                                                   Context context) {
+    private void initializeCameraUploadSync() {
 
         // Set synchronization timestamps not needed
-        if (!configuration.isEnabledForPictures() && !configuration.isEnabledForVideos()) {
+        if (!mCameraUploadsConfiguration.isEnabledForPictures() && !mCameraUploadsConfiguration.isEnabledForVideos()) {
             return;
         }
 
         // DB connection
         CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
-                CameraUploadsSyncStorageManager(context.getContentResolver());
+                CameraUploadsSyncStorageManager(mContext.getContentResolver());
 
         OCCameraUploadSync ocCameraUploadSync = mCameraUploadsSyncStorageManager.
                 getCameraUploadSync(null, null, null);
@@ -111,8 +116,8 @@ public class CameraUploadsHandler {
 
         if (ocCameraUploadSync == null) { // No synchronization timestamp for pictures/videos yet
 
-            long firstPicturesTimeStamp = configuration.isEnabledForPictures() ? timeStamp : 0;
-            long firstVideosTimeStamp = configuration.isEnabledForVideos() ? timeStamp : 0;
+            long firstPicturesTimeStamp = mCameraUploadsConfiguration.isEnabledForPictures() ? timeStamp : 0;
+            long firstVideosTimeStamp = mCameraUploadsConfiguration.isEnabledForVideos() ? timeStamp : 0;
 
             // Initialize synchronization timestamp for pictures or videos in database
             OCCameraUploadSync firstOcCameraUploadSync = new OCCameraUploadSync(firstPicturesTimeStamp,
@@ -131,13 +136,13 @@ public class CameraUploadsHandler {
                 return;
             }
 
-            if (ocCameraUploadSync.getPicturesLastSync() == 0 && configuration.isEnabledForPictures()) {
+            if (ocCameraUploadSync.getPicturesLastSync() == 0 && mCameraUploadsConfiguration.isEnabledForPictures()) {
 
                 // Pictures synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setPicturesLastSync(timeStamp);
             }
 
-            if (ocCameraUploadSync.getVideosLastSync() == 0 && configuration.isEnabledForVideos()) {
+            if (ocCameraUploadSync.getVideosLastSync() == 0 && mCameraUploadsConfiguration.isEnabledForVideos()) {
 
                 // Videos synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setVideosLastSync(timeStamp);
