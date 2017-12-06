@@ -38,5 +38,10 @@ public class Extras {
     public static final String EXTRA_UPLOAD_RESULT = "RESULT";
 
     // for Camera uploads
-    public static final String EXTRA_SYNC_CAMERA_FOLDER_JOB_ID = "SYNC_CAMERA_FOLDER_JOB_ID";
+    public static final String EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID = "EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID";
+    public static final String EXTRA_CAMERA_UPLOADS_PICTURES_PATH = "EXTRA_CAMERA_UPLOADS_PICTURES_PATH";
+    public static final String EXTRA_CAMERA_UPLOADS_VIDEOS_PATH = "EXTRA_CAMERA_UPLOADS_VIDEOS_PATH";
+    public static final String EXTRA_CAMERA_UPLOADS_SOURCE_PATH = "EXTRA_CAMERA_UPLOADS_SOURCE_PATH";
+    public static final String EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD =
+            "EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD";
 }
