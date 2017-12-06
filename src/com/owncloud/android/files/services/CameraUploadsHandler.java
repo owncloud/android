@@ -42,11 +42,11 @@ public class CameraUploadsHandler {
     private static IndexedForest<CameraUploadsHandler> mPendingCameraUploads = new IndexedForest<>();
     private static final long MILLISECONDS_INTERVAL_CAMERA_UPLOAD = 900000;
 
-    private CameraUploadsConfiguration mCameraUploadsConfiguration; // Camera uploads configuration, set by the user
+    private CameraUploadsConfiguration mCameraUploadsConfig; // Camera uploads configuration, set by the user
     private Context mContext;
 
     public CameraUploadsHandler(CameraUploadsConfiguration cameraUploadsConfiguration, Context context) {
-        mCameraUploadsConfiguration = cameraUploadsConfiguration;
+        mCameraUploadsConfig = cameraUploadsConfiguration;
         mContext = context;
     }
 
@@ -56,7 +56,7 @@ public class CameraUploadsHandler {
     public void scheduleCameraUploadsSyncJob() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                (mCameraUploadsConfiguration.isEnabledForPictures() || mCameraUploadsConfiguration.
+                (mCameraUploadsConfig.isEnabledForPictures() || mCameraUploadsConfig.
                         isEnabledForVideos())) {
 
             // Initialize synchronization timestamps for pictures/videos, if needed
@@ -66,8 +66,8 @@ public class CameraUploadsHandler {
                     CameraUploadsSyncJobService.class);
             JobInfo.Builder builder;
 
-            int jobId = mPendingCameraUploads.buildKey(mCameraUploadsConfiguration.getUploadAccountName(),
-                    mCameraUploadsConfiguration.getSourcePath()).hashCode();
+            int jobId = mPendingCameraUploads.buildKey(mCameraUploadsConfig.getUploadAccountName(),
+                    mCameraUploadsConfig.getSourcePath()).hashCode();
 
             builder = new JobInfo.Builder(jobId, serviceComponent);
 
@@ -79,7 +79,24 @@ public class CameraUploadsHandler {
             // Extra data
             PersistableBundle extras = new PersistableBundle();
 
-            extras.putInt(Extras.EXTRA_SYNC_CAMERA_FOLDER_JOB_ID, jobId);
+            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID, jobId);
+
+            extras.putString(Extras.EXTRA_ACCOUNT_NAME, mCameraUploadsConfig.getUploadAccountName());
+
+            if (mCameraUploadsConfig.isEnabledForPictures()) {
+                extras.putString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_PATH, mCameraUploadsConfig.
+                        getUploadPathForPictures());
+            }
+
+            if (mCameraUploadsConfig.isEnabledForVideos()) {
+                extras.putString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_PATH, mCameraUploadsConfig.
+                        getUploadPathForVideos());
+            }
+
+            extras.putString(Extras.EXTRA_CAMERA_UPLOADS_SOURCE_PATH, mCameraUploadsConfig.getSourcePath());
+
+            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD, mCameraUploadsConfig.
+                    getBehaviourAfterUpload());
 
             builder.setExtras(extras);
 
@@ -101,7 +118,7 @@ public class CameraUploadsHandler {
     private void initializeCameraUploadSync() {
 
         // Set synchronization timestamps not needed
-        if (!mCameraUploadsConfiguration.isEnabledForPictures() && !mCameraUploadsConfiguration.isEnabledForVideos()) {
+        if (!mCameraUploadsConfig.isEnabledForPictures() && !mCameraUploadsConfig.isEnabledForVideos()) {
             return;
         }
 
@@ -116,8 +133,8 @@ public class CameraUploadsHandler {
 
         if (ocCameraUploadSync == null) { // No synchronization timestamp for pictures/videos yet
 
-            long firstPicturesTimeStamp = mCameraUploadsConfiguration.isEnabledForPictures() ? timeStamp : 0;
-            long firstVideosTimeStamp = mCameraUploadsConfiguration.isEnabledForVideos() ? timeStamp : 0;
+            long firstPicturesTimeStamp = mCameraUploadsConfig.isEnabledForPictures() ? timeStamp : 0;
+            long firstVideosTimeStamp = mCameraUploadsConfig.isEnabledForVideos() ? timeStamp : 0;
 
             // Initialize synchronization timestamp for pictures or videos in database
             OCCameraUploadSync firstOcCameraUploadSync = new OCCameraUploadSync(firstPicturesTimeStamp,
@@ -136,13 +153,13 @@ public class CameraUploadsHandler {
                 return;
             }
 
-            if (ocCameraUploadSync.getPicturesLastSync() == 0 && mCameraUploadsConfiguration.isEnabledForPictures()) {
+            if (ocCameraUploadSync.getPicturesLastSync() == 0 && mCameraUploadsConfig.isEnabledForPictures()) {
 
                 // Pictures synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setPicturesLastSync(timeStamp);
             }
 
-            if (ocCameraUploadSync.getVideosLastSync() == 0 && mCameraUploadsConfiguration.isEnabledForVideos()) {
+            if (ocCameraUploadSync.getVideosLastSync() == 0 && mCameraUploadsConfig.isEnabledForVideos()) {
 
                 // Videos synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setVideosLastSync(timeStamp);
