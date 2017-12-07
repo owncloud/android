@@ -45,8 +45,6 @@ public class CameraUploadsSyncJobService extends JobService {
 
     private static final String TAG = CameraUploadsSyncJobService.class.getName();
 
-    private JobParameters mJobParameters;
-
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
@@ -92,8 +90,7 @@ public class CameraUploadsSyncJobService extends JobService {
             syncFiles();
 
             if (mCameraUploadsPicturesPath == null && mCameraUploadsVideosPath == null) {
-
-                cancelPeriodicJob(jobParams);
+                cancelPeriodicJob(jobParams[0].getJobId());
             }
 
             return jobParams[0];
@@ -119,14 +116,18 @@ public class CameraUploadsSyncJobService extends JobService {
                 localFiles = cameraFolder.listFiles();
             }
 
-            localFiles = orderFilesByCreationTimestamp(localFiles);
+            if (localFiles != null) {
 
-            for (File localFile : localFiles) {
+                localFiles = orderFilesByCreationTimestamp(localFiles);
 
-                handleFile(localFile);
+                for (File localFile : localFiles) {
+
+                    handleFile(localFile);
+                }
             }
 
             Log_OC.d(TAG, "All files synced, finishing job");
+
         }
 
         private File[] orderFilesByCreationTimestamp(File[] localFiles) {
@@ -250,12 +251,10 @@ public class CameraUploadsSyncJobService extends JobService {
         }
 
         /**
-         * Cancel the current periodic job
-         * @param jobParams
+         * Cancel the periodic job
+         * @param jobId id of the job to cancel
          */
-        private void cancelPeriodicJob(JobParameters[] jobParams) {
-
-            int jobId = jobParams[0].getExtras().getInt(Extras.EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID);
+        private void cancelPeriodicJob(int jobId) {
 
             JobScheduler jobScheduler = (JobScheduler)mCameraUploadsSyncJobService.getSystemService(
                     Context.JOB_SCHEDULER_SERVICE);
