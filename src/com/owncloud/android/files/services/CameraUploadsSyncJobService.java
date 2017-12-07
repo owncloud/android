@@ -31,6 +31,8 @@ import android.support.annotation.RequiresApi;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
 import com.owncloud.android.db.OCCameraUploadSync;
+import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.Extras;
@@ -89,7 +91,11 @@ public class CameraUploadsSyncJobService extends JobService {
 
             syncFiles();
 
-            if (mCameraUploadsPicturesPath == null && mCameraUploadsVideosPath == null) {
+            CameraUploadsConfiguration mCameraUploadsConfiguration = PreferenceManager.
+                    getCameraUploadsConfiguration(mCameraUploadsSyncJobService);
+
+            if (!mCameraUploadsConfiguration.isEnabledForPictures() &&
+                    !mCameraUploadsConfiguration.isEnabledForPictures()) {
                 cancelPeriodicJob(jobParams[0].getJobId());
             }
 
