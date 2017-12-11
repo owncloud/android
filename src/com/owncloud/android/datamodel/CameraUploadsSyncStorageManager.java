@@ -1,20 +1,20 @@
 /**
- *  ownCloud Android client application
+ * ownCloud Android client application
  *
- *  @author David González Verdugo
- *  Copyright (C) 2017 ownCloud GmbH.
+ * @author David González Verdugo
+ * Copyright (C) 2017 ownCloud GmbH.
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License version 2,
- *  as published by the Free Software Foundation.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.datamodel;
@@ -28,9 +28,7 @@ import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.ProviderMeta;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import java.util.Observable;
-
-public class CameraUploadsSyncStorageManager extends Observable {
+public class CameraUploadsSyncStorageManager {
 
     private ContentResolver mContentResolver;
 
@@ -46,25 +44,26 @@ public class CameraUploadsSyncStorageManager extends Observable {
     /**
      * Stores an camera upload sync object in DB
      *
-     * @param ocCameraUploadSync      Camera upload sync object to store
+     * @param ocCameraUploadSync Camera upload sync object to store
      * @return camera upload sync id, -1 if the insert process fails
      */
     public long storeCameraUploadSync(OCCameraUploadSync ocCameraUploadSync) {
-        Log_OC.v(TAG, "Inserting camera upload sync with timestamp of last pictures synchronization "
-                + ocCameraUploadSync.getPicturesLastSync() + " and timestamp of last videos " +
-                "synchronzization" + ocCameraUploadSync.getVideosLastSync());
+        Log_OC.v(TAG, "Inserting camera upload sync with timestamp from which start pictures synchronization "
+                + ocCameraUploadSync.getStartPicturesSyncMs() + " and timestamp from which start videos " +
+                "synchronization" + ocCameraUploadSync.getStartVideosSyncMs());
 
         ContentValues cv = new ContentValues();
-        cv.put(ProviderMeta.ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP, ocCameraUploadSync.
-                getPicturesLastSync());
-        cv.put(ProviderMeta.ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP, ocCameraUploadSync.
-                getVideosLastSync());
+        cv.put(ProviderMeta.ProviderTableMeta.START_PICTURES_SYNC_MS, ocCameraUploadSync.getStartPicturesSyncMs());
+        cv.put(ProviderMeta.ProviderTableMeta.START_VIDEOS_SYNC_MS, ocCameraUploadSync.getStartVideosSyncMs());
+        cv.put(ProviderMeta.ProviderTableMeta.FINISH_PICTURES_SYNC_MS, ocCameraUploadSync.getFinishPicturesSyncMs());
+        cv.put(ProviderMeta.ProviderTableMeta.FINISH_VIDEOS_SYNC_MS, ocCameraUploadSync.getFinishVideosSyncMs());
 
         Uri result = getDB().insert(ProviderMeta.ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
                 cv);
 
         Log_OC.d(TAG, "storeUpload returns with: " + result + " for camera upload sync " +
                 ocCameraUploadSync.getId());
+
         if (result == null) {
             Log_OC.e(TAG, "Failed to insert camera upload sync " + ocCameraUploadSync.getId()
                     + " into camera uploads sync db.");
@@ -72,7 +71,6 @@ public class CameraUploadsSyncStorageManager extends Observable {
         } else {
             long new_id = Long.parseLong(result.getPathSegments().get(1));
             ocCameraUploadSync.setId(new_id);
-            notifyObserversNow();
             return new_id;
         }
     }
@@ -87,10 +85,10 @@ public class CameraUploadsSyncStorageManager extends Observable {
         Log_OC.v(TAG, "Updating " + ocCameraUploadSync.getId());
 
         ContentValues cv = new ContentValues();
-        cv.put(ProviderMeta.ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP, ocCameraUploadSync.
-                getPicturesLastSync());
-        cv.put(ProviderMeta.ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP, ocCameraUploadSync.
-                getVideosLastSync());
+        cv.put(ProviderMeta.ProviderTableMeta.START_PICTURES_SYNC_MS, ocCameraUploadSync.getStartPicturesSyncMs());
+        cv.put(ProviderMeta.ProviderTableMeta.START_VIDEOS_SYNC_MS, ocCameraUploadSync.getStartVideosSyncMs());
+        cv.put(ProviderMeta.ProviderTableMeta.FINISH_PICTURES_SYNC_MS, ocCameraUploadSync.getFinishPicturesSyncMs());
+        cv.put(ProviderMeta.ProviderTableMeta.FINISH_VIDEOS_SYNC_MS, ocCameraUploadSync.getFinishVideosSyncMs());
 
         int result = getDB().update(ProviderMeta.ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
                 cv,
@@ -103,8 +101,6 @@ public class CameraUploadsSyncStorageManager extends Observable {
         if (result != 1) {
             Log_OC.e(TAG, "Failed to update item " + ocCameraUploadSync.getId() + " into " +
                     "camera upload sync db.");
-        } else {
-            notifyObserversNow();
         }
 
         return result;
@@ -118,7 +114,7 @@ public class CameraUploadsSyncStorageManager extends Observable {
      * @return camera upload sync object
      */
     public OCCameraUploadSync getCameraUploadSync(String selection, String[] selectionArgs,
-                                                   String sortOrder) {
+                                                  String sortOrder) {
         Cursor c = getDB().query(
                 ProviderMeta.ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
                 null,
@@ -144,12 +140,18 @@ public class CameraUploadsSyncStorageManager extends Observable {
     private OCCameraUploadSync createOCCameraUploadSyncFromCursor(Cursor c) {
         OCCameraUploadSync cameraUploadSync = null;
         if (c != null) {
-            long picturesLastSync = c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta.
-                    PICTURES_LAST_SYNC_TIMESTAMP));
-            long videosLastSync = c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta.
-                    VIDEOS_LAST_SYNC_TIMESTAMP));
+            long startPicturesSyncMs = c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta.
+                    START_PICTURES_SYNC_MS));
+            long startVIdeosSyncMs = c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta.
+                    START_VIDEOS_SYNC_MS));
+            long finishPicturesSyncMs = c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta.
+                    FINISH_PICTURES_SYNC_MS));
+            long finishVideosSyncMs = c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta.FINISH_VIDEOS_SYNC_MS));
 
-            cameraUploadSync = new OCCameraUploadSync(picturesLastSync, videosLastSync);
+            cameraUploadSync = new OCCameraUploadSync(startPicturesSyncMs, startVIdeosSyncMs);
+
+            cameraUploadSync.setFinishPicturesSyncMs(finishPicturesSyncMs);
+            cameraUploadSync.setFinishVideosSyncMs(finishVideosSyncMs);
 
             cameraUploadSync.setId(c.getLong(c.getColumnIndex(ProviderMeta.ProviderTableMeta._ID)));
         }
@@ -158,15 +160,5 @@ public class CameraUploadsSyncStorageManager extends Observable {
 
     private ContentResolver getDB() {
         return mContentResolver;
-    }
-
-    /**
-     * Should be called when some value of this DB was changed. All observers
-     * are informed.
-     */
-    public void notifyObserversNow() {
-        Log_OC.d(TAG, "notifyObserversNow");
-        setChanged();
-        notifyObservers();
     }
 }

@@ -32,32 +32,34 @@ public class OCCameraUploadSync implements Parcelable {
 
     private long mId;
 
-    // Timestamp (milliseconds) of last pictures synchronization
-    private long mPicturesLastSync;
+    // Unix timestamp (milliseconds) from which start pictures synchronization
+    private long mStartPicturesSyncMs;
 
-    // Timestamp (milliseconds) of last videos synchronization
-    private long mVideosLastSync;
+    // Unix timestamp (milliseconds) from which start videos synchronization
+    private long mStartVideosSyncMs;
+
+    // Unix timestamp (milliseconds) till which continue pictures synchronization
+    private long mFinishPicturesSyncMs;
+
+    // Unix timestamp (milliseconds) till which continue videos synchronization
+    private long mFinishVideosSyncMs;
 
     /**
-
      * Main constructor
-     *
-     * @param picturesLastSync
-     * @param videosLastSync
+     * @param startPicturesSyncMs
+     * @param startVideosSyncMs
      */
-    public OCCameraUploadSync(long picturesLastSync, long videosLastSync) {
+    public OCCameraUploadSync(long startPicturesSyncMs, long startVideosSyncMs) {
 
-        if (picturesLastSync < 0) {
-            throw new IllegalArgumentException("Pictures last sync must be a positive long");
+        if (startPicturesSyncMs < 0) {
+            throw new IllegalArgumentException("Pictures start sync must be a positive long");
         }
 
-        if (videosLastSync < 0) {
-            throw new IllegalArgumentException("Videos last sync must be a positive long");
-
+        if (startVideosSyncMs < 0) {
+            throw new IllegalArgumentException("Videos start sync must be a positive long");
         }
-
-        this.mPicturesLastSync = picturesLastSync;
-        this.mVideosLastSync = videosLastSync;
+        this.mStartPicturesSyncMs = startPicturesSyncMs;
+        this.mStartVideosSyncMs = startVideosSyncMs;
     }
 
     protected OCCameraUploadSync(Parcel source) {
@@ -66,8 +68,10 @@ public class OCCameraUploadSync implements Parcelable {
 
     public void readFromParcel(Parcel source) {
         mId = source.readLong();
-        mPicturesLastSync = source.readLong();
-        mVideosLastSync = source.readLong();
+        mStartPicturesSyncMs = source.readLong();
+        mStartVideosSyncMs = source.readLong();
+        mFinishPicturesSyncMs = source.readLong();
+        mFinishVideosSyncMs = source.readLong();
     }
 
     public static final Creator<OCCameraUploadSync> CREATOR = new Creator<OCCameraUploadSync>() {
@@ -91,8 +95,10 @@ public class OCCameraUploadSync implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeLong(mId);
-        dest.writeLong(mPicturesLastSync);
-        dest.writeLong(mVideosLastSync);
+        dest.writeLong(mStartPicturesSyncMs);
+        dest.writeLong(mStartVideosSyncMs);
+        dest.writeLong(mFinishPicturesSyncMs);
+        dest.writeLong(mFinishVideosSyncMs);
     }
 
     public long getId() {
@@ -103,19 +109,35 @@ public class OCCameraUploadSync implements Parcelable {
         this.mId = id;
     }
 
-    public long getPicturesLastSync() {
-        return mPicturesLastSync;
+    public long getStartPicturesSyncMs() {
+        return mStartPicturesSyncMs;
     }
 
-    public void setPicturesLastSync(long picturesLastSync) {
-        this.mPicturesLastSync = picturesLastSync;
+    public long getStartVideosSyncMs() {
+        return mStartVideosSyncMs;
     }
 
-    public long getVideosLastSync() {
-        return mVideosLastSync;
+    public long getFinishPicturesSyncMs() {
+        return mFinishPicturesSyncMs;
     }
 
-    public void setVideosLastSync(long videosLastSync) {
-        this.mVideosLastSync = videosLastSync;
+    public long getFinishVideosSyncMs() {
+        return mFinishVideosSyncMs;
+    }
+
+    public void setStartPicturesSyncMs(long startPicturesSyncMs) {
+        this.mStartPicturesSyncMs = startPicturesSyncMs;
+    }
+
+    public void setStartVideosSyncMs(long startVideosSyncMs) {
+        this.mStartVideosSyncMs = startVideosSyncMs;
+    }
+
+    public void setFinishPicturesSyncMs(long finishPicturesSyncMs) {
+        this.mFinishPicturesSyncMs = finishPicturesSyncMs;
+    }
+
+    public void setFinishVideosSyncMs(long finishVideosSyncMs) {
+        this.mFinishVideosSyncMs = finishVideosSyncMs;
     }
 }
