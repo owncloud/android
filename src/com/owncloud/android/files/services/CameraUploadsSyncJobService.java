@@ -190,10 +190,20 @@ public class CameraUploadsSyncJobService extends JobService {
                 Log_OC.d(TAG, "There's no timestamp to compare with in database yet, not continue");
             }
 
-            // Check file timestamp
-            if (isImage && localFile.lastModified() <= mOCCameraUploadSync.getPicturesLastSync() ||
-                    isVideo && localFile.lastModified() <= mOCCameraUploadSync.getVideosLastSync()) {
+            // Check if the file was created before period to check
+            if (isImage && localFile.lastModified() <= mOCCameraUploadSync.getStartPicturesSyncMs() ||
+                    isVideo && localFile.lastModified() <= mOCCameraUploadSync.getStartVideosSyncMs()) {
                 Log_OC.i(TAG, "File " + localPath + " created before period to check, ignoring");
+                return;
+            }
+
+            // Check if the file was created after period to check
+            if (isImage && mOCCameraUploadSync.getFinishPicturesSyncMs() > 0 && localFile.lastModified() >=
+                    mOCCameraUploadSync.getFinishPicturesSyncMs() ||
+                    isVideo && mOCCameraUploadSync.getFinishVideosSyncMs() > 0 && localFile.lastModified() >=
+                            mOCCameraUploadSync.getFinishVideosSyncMs()) {
+                Log_OC.i(TAG, "File " + localPath + " created after period to check, ignoring");
+                updateTimestamps(isImage, isVideo, localFile.lastModified());
                 return;
             }
 
@@ -209,7 +219,7 @@ public class CameraUploadsSyncJobService extends JobService {
                     createdBy
             );
 
-            // Update timestamps once the first picture/video has been enqueued
+            // Update start synchronization timestamps once the first picture/video has been enqueued
             updateTimestamps(isImage, isVideo, localFile.lastModified());
 
             Log_OC.i(
@@ -231,27 +241,32 @@ public class CameraUploadsSyncJobService extends JobService {
          */
         private void updateTimestamps(boolean isImage, boolean isVideo, long fileTimestamp) {
 
-            long picturesTimestamp = mOCCameraUploadSync.getPicturesLastSync();
-            long videosTimestamp = mOCCameraUploadSync.getVideosLastSync();
+            long startPicturesSyncMs = mOCCameraUploadSync.getStartPicturesSyncMs();
+            long startVideosSyncMs = mOCCameraUploadSync.getStartVideosSyncMs();
+            long finishPicturesSyncMs = mOCCameraUploadSync.getFinishPicturesSyncMs();
+            long finishVideosSyncMs = mOCCameraUploadSync.getFinishVideosSyncMs();
 
             if (isImage) {
 
                 Log_OC.d(TAG, "Updating timestamp for pictures");
 
-                picturesTimestamp = fileTimestamp;
+                startPicturesSyncMs = fileTimestamp;
             }
 
             if (isVideo) {
 
                 Log_OC.d(TAG, "Updating timestamp for videos");
 
-                videosTimestamp = fileTimestamp;
+                startVideosSyncMs = fileTimestamp;
             }
 
-            OCCameraUploadSync newOCCameraUploadSync = new OCCameraUploadSync(picturesTimestamp,
-                    videosTimestamp);
+            OCCameraUploadSync newOCCameraUploadSync = new OCCameraUploadSync(startPicturesSyncMs, startVideosSyncMs);
 
             newOCCameraUploadSync.setId(mOCCameraUploadSync.getId());
+
+            newOCCameraUploadSync.setFinishPicturesSyncMs(finishPicturesSyncMs);
+
+            newOCCameraUploadSync.setFinishVideosSyncMs(finishVideosSyncMs);
 
             mCameraUploadsSyncStorageManager.updateCameraUploadSync(newOCCameraUploadSync);
         }
