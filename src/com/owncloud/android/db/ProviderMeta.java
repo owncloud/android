@@ -174,8 +174,10 @@ public class ProviderMeta {
         public static final String USER_AVATARS__MIME_TYPE = "mime_type";
 
         // Columns of camera upload table
-        public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";
-        public static final String VIDEOS_LAST_SYNC_TIMESTAMP = "videos_last_sync_date";
+        public static final String START_PICTURES_SYNC_MS = "start_pictures_sync_ms";
+        public static final String START_VIDEOS_SYNC_MS = "start_videos_sync_ms";
+        public static final String FINISH_PICTURES_SYNC_MS = "finish_pictures_sync_ms";
+        public static final String FINISH_VIDEOS_SYNC_MS = "finish_videos_sync_ms";
         public static final String CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER =
                 ProviderTableMeta._ID  + " collate nocase asc";
     }

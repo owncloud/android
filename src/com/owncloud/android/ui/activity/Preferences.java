@@ -53,7 +53,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
-import com.owncloud.android.files.services.CameraUploadsHandler;
+import com.owncloud.android.files.services.CameraUploadsSyncHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 
@@ -596,9 +596,9 @@ public class Preferences extends PreferenceActivity {
         CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
                 getCameraUploadsConfiguration(this);
 
-        CameraUploadsHandler cameraUploadsHandler = new CameraUploadsHandler(configuration, this);
+        CameraUploadsSyncHandler cameraUploadsSyncHandler = new CameraUploadsSyncHandler(configuration, this);
 
-        cameraUploadsHandler.scheduleCameraUploadsSyncJob();
+        cameraUploadsSyncHandler.scheduleCameraUploadsSyncJob();
 
         super.onStop();
         getDelegate().onStop();

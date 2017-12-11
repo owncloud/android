@@ -1045,8 +1045,10 @@ public class FileContentProvider extends ContentProvider {
     private void createCameraUploadsSyncTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME + "("
                 + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
-                + ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP + " INTEGER,"
-                + ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP + " INTEGER);"
+                + ProviderTableMeta.START_PICTURES_SYNC_MS + " INTEGER,"
+                + ProviderTableMeta.START_VIDEOS_SYNC_MS + " INTEGER,"
+                + ProviderTableMeta.FINISH_PICTURES_SYNC_MS + " INTEGER,"
+                + ProviderTableMeta.FINISH_VIDEOS_SYNC_MS + " INTEGER );"
         );
     }
 
