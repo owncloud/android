@@ -40,7 +40,7 @@ public class CameraUploadsSyncHandler {
 
     private static final String TAG = CameraUploadsSyncHandler.class.getSimpleName();
     private static IndexedForest<CameraUploadsSyncHandler> mPendingCameraUploads = new IndexedForest<>();
-    private static final long MILLISECONDS_INTERVAL_CAMERA_UPLOAD = 120000;
+    private static final long MILLISECONDS_INTERVAL_CAMERA_UPLOAD = 900000;
 
     private CameraUploadsConfiguration mCameraUploadsConfig; // Camera uploads configuration, set by the user
     private Context mContext;
