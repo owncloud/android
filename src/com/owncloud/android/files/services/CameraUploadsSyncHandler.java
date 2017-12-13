@@ -142,7 +142,7 @@ public class CameraUploadsSyncHandler {
 
         } else {
 
-            if (ocCameraUploadSync.getStartPicturesSyncMs() == 0 && mCameraUploadsConfig.isEnabledForPictures()) {
+            if (mCameraUploadsConfig.isEnabledForPictures()) {
 
                 // Start pictures synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setStartPicturesSyncMs(unixTimeStamp);
@@ -150,7 +150,7 @@ public class CameraUploadsSyncHandler {
                 Log_OC.d(TAG, "Initializing start sync timestamp for picture uploads in database");
             }
 
-            if (ocCameraUploadSync.getStartVideosSyncMs() == 0 && mCameraUploadsConfig.isEnabledForVideos()) {
+            if (mCameraUploadsConfig.isEnabledForVideos()) {
 
                 // Start videos synchronization timestamp not initialized yet, initialize it
                 ocCameraUploadSync.setStartVideosSyncMs(unixTimeStamp);
