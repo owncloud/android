@@ -22,14 +22,23 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.hardware.Camera;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,7 +47,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.owncloud.android.CapturedFileChecker;
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -46,9 +57,14 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
+import com.owncloud.android.utils.DialogMenuItem;
 import com.owncloud.android.utils.FileStorageUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+
+import static android.R.attr.data;
+import static android.R.string.no;
 
 
 /**
@@ -72,12 +88,18 @@ public class UploadFilesActivity extends FileActivity implements
 
     private static final String WAIT_DIALOG_TAG = "WAIT";
     private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_VIDEO_CAPTURE = 2;
+    private static final int CAPTURED_IMAGE_CHECK = 80;
+    private static final int CAPTURED_VIDEO_CHECK = 81;
 
     private ArrayAdapter<String> mDirectories;
     private File mCurrentDir = null;
     private LocalFileListFragment mFileListFragment;
     private Button mCancelBtn;
     private Button mUploadBtn;
+    private Button mCameraUploadBtn;
     private Account mAccountOnCreation;
     private DialogFragment mCurrentDialog;
 
@@ -123,6 +145,8 @@ public class UploadFilesActivity extends FileActivity implements
         mCancelBtn.setOnClickListener(this);
         mUploadBtn = (Button) findViewById(R.id.upload_files_btn_upload);
         mUploadBtn.setOnClickListener(this);
+        mCameraUploadBtn = (Button) findViewById(R.id.camera_upload);
+        mCameraUploadBtn.setOnClickListener(this);
 
         SharedPreferences appPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
@@ -324,8 +348,137 @@ public class UploadFilesActivity extends FileActivity implements
             setResult(RESULT_CANCELED);
             finish();
             
-        } else if (v.getId() == R.id.upload_files_btn_upload) {
+        }
+        else if (v.getId() == R.id.upload_files_btn_upload) {
             new CheckAvailableSpaceTask().execute();
+        }
+        else if(v.getId() == R.id.camera_upload){
+            uploadFromCamera();
+        }
+    }
+
+    private void uploadFromCamera(){
+        if(!checkCameraHardware()){
+            Toast.makeText(getApplicationContext(),"No Camera Present in the device",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String[] mediaTypes = {"Image","Video"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select the type of media")
+                .setItems(mediaTypes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(i==0) {
+                    Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE);
+                    }
+                }
+                else if(i==1){
+                    Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    if(videoIntent.resolveActivity(getPackageManager()) != null){
+                        startActivityForResult(videoIntent,REQUEST_VIDEO_CAPTURE);
+                    }
+            }
+        }
+        });
+        builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent capturedData){
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Bundle capturedImageData = capturedData.getExtras();
+            Bitmap capturedImage = (Bitmap) capturedImageData.get("data");
+            Intent intent = new Intent(getApplicationContext(), CapturedFileChecker.class);
+            intent.putExtra("capturedImage",capturedImage);
+            intent.putExtra("mediaTypeCode",1);
+            startActivityForResult(intent,CAPTURED_IMAGE_CHECK);
+        }
+        else if(requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
+            Uri capturedVideoUri = capturedData.getData();
+            Intent intent = new Intent(getApplicationContext(),CapturedFileChecker.class);
+            intent.putExtra("capturedVideo",capturedVideoUri);
+            intent.putExtra("mediaTypeCode",2);
+            startActivityForResult(intent,CAPTURED_VIDEO_CHECK);
+        }
+        else if(requestCode == 100 && requestCode == RESULT_OK){
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+        else if(requestCode == 101 && requestCode == RESULT_OK){
+            Bundle extras = capturedData.getExtras();
+            int mediaTypeCode = extras.getInt("mediaTypeCode");
+            if(mediaTypeCode == 1){
+                Bitmap capturedImage = (Bitmap) extras.get("capturedImage");
+                Uri capturedImageUri = getImageUri(getApplicationContext(),capturedImage);
+                String capturedImagePath = getRealPathFromUri(capturedImageUri);
+                File capturedImageFile = new File(capturedImagePath);
+                String[] capturedImagePathArray = {capturedImagePath};
+                if(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= capturedImageFile.length()){
+                    uploadCameraCapturedFile(capturedImagePathArray);
+                }
+                else{
+                    noSpaceMessage();
+                }
+            }
+            else if(mediaTypeCode == 2){
+                Uri capturedVideoUri = (Uri) extras.get("capturedVideo");
+                String capturedVideoPath = capturedVideoUri.getPath();
+                File capturedVideoFile = new File(capturedVideoPath);
+                String[] capturedVideoPathArray = {capturedVideoPath};
+                if(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= capturedVideoFile.length()){
+                    uploadCameraCapturedFile(capturedVideoPathArray);
+                }
+                else{
+                    noSpaceMessage();
+                }
+            }
+        }
+    }
+
+    private void uploadCameraCapturedFile(String[] capturedMediaData){
+        Intent data = new Intent();
+        data.putExtra(EXTRA_CHOSEN_FILES,capturedMediaData);
+        setResult(RESULT_OK_AND_MOVE, data);
+        SharedPreferences.Editor appPreferencesEditor = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext()).edit();
+        appPreferencesEditor.putInt("prefs_uploader_behaviour",
+                FileUploader.LOCAL_BEHAVIOUR_MOVE);
+        appPreferencesEditor.apply();
+        finish();
+    }
+
+    private void noSpaceMessage(){
+        String[] args = {getString(R.string.app_name)};
+        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
+                R.string.upload_query_move_foreign_files, args, 0, R.string.common_yes, -1,
+                R.string.common_no
+        );
+        dialog.setOnConfirmationListener(UploadFilesActivity.this);
+        dialog.show(getSupportFragmentManager(), QUERY_TO_MOVE_DIALOG_TAG);
+    }
+
+    private Uri getImageUri(Context context,Bitmap capturedImage){
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        capturedImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(),capturedImage,"Captured Image",null);
+        return Uri.parse(path);
+    }
+
+    private String getRealPathFromUri(Uri capturedPictureUri){
+        Cursor cursor = getContentResolver().query(capturedPictureUri,null,null,null,null);
+        cursor.moveToFirst();
+        int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(index);
+    }
+
+    private boolean checkCameraHardware(){
+        if(getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
