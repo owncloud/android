@@ -70,7 +70,8 @@ public class FileContentProvider extends ContentProvider {
     private static final int SHARES = 4;
     private static final int CAPABILITIES = 5;
     private static final int UPLOADS = 6;
-    private static final int CAMERA_UPLOADS_SYNC = 7;
+    private static final int CAMERA_UPLOADS_PICTURES_SYNC = 7;
+    private static final int CAMERA_UPLOADS_VIDEOS_SYNC = 8;
 
     private static final String TAG = FileContentProvider.class.getSimpleName();
 
@@ -181,8 +182,11 @@ public class FileContentProvider extends ContentProvider {
             case UPLOADS:
                 count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs);
                 break;
-            case CAMERA_UPLOADS_SYNC:
-                count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs);
+            case CAMERA_UPLOADS_PICTURES_SYNC:
+                count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_PICTURES_SYNC_TABLE_NAME, where, whereArgs);
+                break;
+            case CAMERA_UPLOADS_VIDEOS_SYNC:
+                count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_VIDEOS_SYNC_TABLE_NAME, where, whereArgs);
                 break;
             default:
                 //Log_OC.e(TAG, "Unknown uri " + uri);
@@ -294,18 +298,31 @@ public class FileContentProvider extends ContentProvider {
                 }
                 return insertedUploadUri;
 
-            case CAMERA_UPLOADS_SYNC:
-                Uri insertedCameraUploadUri;
-                long cameraUploadId = db.insert(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, null,
+            case CAMERA_UPLOADS_PICTURES_SYNC:
+                Uri insertedCameraUploadPicturesUri;
+                long cameraUploadPicturesId = db.insert(ProviderTableMeta.CAMERA_UPLOADS_PICTURES_SYNC_TABLE_NAME, null,
                         values);
-                if (cameraUploadId > 0) {
-                    insertedCameraUploadUri =
-                            ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_SYNC,
-                                    cameraUploadId);
+                if (cameraUploadPicturesId > 0) {
+                    insertedCameraUploadPicturesUri =
+                            ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_PICTURES_SYNC,
+                                    cameraUploadPicturesId);
                 } else {
                     throw new SQLException("ERROR " + uri);
                 }
-                return insertedCameraUploadUri;
+                return insertedCameraUploadPicturesUri;
+
+            case CAMERA_UPLOADS_VIDEOS_SYNC:
+                Uri insertedCameraUploadVideosUri;
+                long cameraUploadVideosId = db.insert(ProviderTableMeta.CAMERA_UPLOADS_VIDEOS_SYNC_TABLE_NAME, null,
+                        values);
+                if (cameraUploadVideosId > 0) {
+                    insertedCameraUploadVideosUri =
+                            ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_CAMERA_UPLOADS_VIDEOS_SYNC,
+                                    cameraUploadVideosId);
+                } else {
+                    throw new SQLException("ERROR " + uri);
+                }
+                return insertedCameraUploadVideosUri;
 
             default:
                 throw new IllegalArgumentException("Unknown uri id: " + uri);
@@ -353,8 +370,8 @@ public class FileContentProvider extends ContentProvider {
         mUriMatcher.addURI(authority, "capabilities/#", CAPABILITIES);
         mUriMatcher.addURI(authority, "uploads/", UPLOADS);
         mUriMatcher.addURI(authority, "uploads/#", UPLOADS);
-        mUriMatcher.addURI(authority, "cameraUploadsSync/", CAMERA_UPLOADS_SYNC);
-        mUriMatcher.addURI(authority, "cameraUploadsSync/#", CAMERA_UPLOADS_SYNC);
+        mUriMatcher.addURI(authority, "cameraUploadsPicturesSync/", CAMERA_UPLOADS_PICTURES_SYNC);
+        mUriMatcher.addURI(authority, "cameraUploadsVideosSync/", CAMERA_UPLOADS_VIDEOS_SYNC);
 
         return true;
     }
@@ -429,8 +446,15 @@ public class FileContentProvider extends ContentProvider {
                             + uri.getPathSegments().get(1));
                 }
                 break;
-            case CAMERA_UPLOADS_SYNC:
-                sqlQuery.setTables(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME);
+            case CAMERA_UPLOADS_PICTURES_SYNC:
+                sqlQuery.setTables(ProviderTableMeta.CAMERA_UPLOADS_PICTURES_SYNC_TABLE_NAME);
+                if (uri.getPathSegments().size() > 1) {
+                    sqlQuery.appendWhere(ProviderTableMeta._ID + "="
+                            + uri.getPathSegments().get(1));
+                }
+                break;
+            case CAMERA_UPLOADS_VIDEOS_SYNC:
+                sqlQuery.setTables(ProviderTableMeta.CAMERA_UPLOADS_VIDEOS_SYNC_TABLE_NAME);
                 if (uri.getPathSegments().size() > 1) {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
@@ -452,8 +476,11 @@ public class FileContentProvider extends ContentProvider {
                 case UPLOADS:
                     order = ProviderTableMeta.UPLOADS_DEFAULT_SORT_ORDER;
                     break;
-                case CAMERA_UPLOADS_SYNC:
-                    order = ProviderTableMeta.CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER;
+                case CAMERA_UPLOADS_PICTURES_SYNC:
+                    order = ProviderTableMeta.CAMERA_UPLOADS_PICTURES_SYNC_DEFAULT_SORT_ORDER;
+                    break;
+                case CAMERA_UPLOADS_VIDEOS_SYNC:
+                    order = ProviderTableMeta.CAMERA_UPLOADS_VIDEOS_SYNC_DEFAULT_SORT_ORDER;
                     break;
                 default: // Files
                     order = ProviderTableMeta.FILE_DEFAULT_SORT_ORDER;
@@ -510,9 +537,13 @@ public class FileContentProvider extends ContentProvider {
                 );
                 trimSuccessfulUploads(db);
                 return ret;
-            case CAMERA_UPLOADS_SYNC:
+            case CAMERA_UPLOADS_PICTURES_SYNC:
                 return db.update(
-                        ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection,
+                        ProviderTableMeta.CAMERA_UPLOADS_PICTURES_SYNC_TABLE_NAME, values, selection,
+                        selectionArgs);
+            case CAMERA_UPLOADS_VIDEOS_SYNC:
+                return db.update(
+                        ProviderTableMeta.CAMERA_UPLOADS_VIDEOS_SYNC_TABLE_NAME, values, selection,
                         selectionArgs);
             default:
                 return db.update(
@@ -571,8 +602,11 @@ public class FileContentProvider extends ContentProvider {
             // Create user profiles table
             createUserProfilesTable(db);
 
-            // Create camera upload sync table
-            createCameraUploadsSyncTable(db);
+            // Create camera uploads pictures sync table
+            createCameraUploadsPicturesSyncTable(db);
+
+            // Create camera uploads pictures sync table
+            createCameraUploadsVideosSyncTable(db);
         }
 
         @Override
@@ -916,8 +950,9 @@ public class FileContentProvider extends ContentProvider {
                 Log_OC.i("SQL", "Entering in the #22 ADD in onUpgrade");
                 db.beginTransaction();
                 try {
-                    // Create camera uploads sync table
-                    createCameraUploadsSyncTable(db);
+                    // Create camera uploads pictures sync table
+                    createCameraUploadsPicturesSyncTable(db);
+                    createCameraUploadsVideosSyncTable(db);
                     upgraded = true;
                     db.setTransactionSuccessful();
                 } finally {
@@ -1042,12 +1077,18 @@ public class FileContentProvider extends ContentProvider {
         );
     }
 
-    private void createCameraUploadsSyncTable(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME + "("
+    private void createCameraUploadsPicturesSyncTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + ProviderTableMeta.CAMERA_UPLOADS_PICTURES_SYNC_TABLE_NAME + "("
                 + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
                 + ProviderTableMeta.START_PICTURES_SYNC_MS + " INTEGER,"
+                + ProviderTableMeta.FINISH_PICTURES_SYNC_MS + " INTEGER );"
+        );
+    }
+
+    private void createCameraUploadsVideosSyncTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + ProviderTableMeta.CAMERA_UPLOADS_VIDEOS_SYNC_TABLE_NAME + "("
+                + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
                 + ProviderTableMeta.START_VIDEOS_SYNC_MS + " INTEGER,"
-                + ProviderTableMeta.FINISH_PICTURES_SYNC_MS + " INTEGER,"
                 + ProviderTableMeta.FINISH_VIDEOS_SYNC_MS + " INTEGER );"
         );
     }
