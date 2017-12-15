@@ -53,7 +53,8 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
-import com.owncloud.android.files.services.CameraUploadsSyncHandler;
+import com.owncloud.android.files.services.CameraUploadsPicturesHandler;
+import com.owncloud.android.files.services.CameraUploadsVideosHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 
@@ -93,6 +94,11 @@ public class Preferences extends PreferenceActivity {
     private Preference mPrefCameraVideoUploadsWiFi;
     private Preference mPrefCameraUploadsSourcePath;
     private Preference mPrefCameraUploadsBehaviour;
+
+    private boolean enablingCameraUploadsPictures = false;
+    private boolean enablingCameraUploadsVideos = false;
+    private boolean disablingCameraUploadsPictures = false;
+    private boolean disablingCameraUploadsVideos = false;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -243,7 +249,6 @@ public class Preferences extends PreferenceActivity {
                     public boolean onPreferenceClick(Preference preference) {
                         Intent privacyPolicyIntent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
                         startActivity(privacyPolicyIntent);
-
                         return true;
                     }
                 });
@@ -327,6 +332,8 @@ public class Preferences extends PreferenceActivity {
                         ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
                         enableCameraUploadsPicture
                 );
+                enablingCameraUploadsPictures = enableCameraUploadsPicture;
+                disablingCameraUploadsPictures = !enableCameraUploadsPicture;
                 return true;
             }
         });
@@ -357,10 +364,13 @@ public class Preferences extends PreferenceActivity {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                toggleCameraUploadsVideoOptions((Boolean) newValue);
+                boolean enableCameraUploadsVideo = (Boolean) newValue;
+                toggleCameraUploadsVideoOptions(enableCameraUploadsVideo);
                 toggleCameraUploadsCommonOptions(
                         (Boolean) newValue,
                         ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+                enablingCameraUploadsVideos = enableCameraUploadsVideo;
+                disablingCameraUploadsVideos = !enableCameraUploadsVideo;
                 return true;
             }
         });
@@ -592,16 +602,63 @@ public class Preferences extends PreferenceActivity {
 
     @Override
     protected void onStop() {
+        super.onStop();
+        getDelegate().onStop();
+
+        handleCameraUploads();
+    }
+
+    /**
+     * Schedule camera uploads jobs and update needed params
+     */
+    private void handleCameraUploads() {
 
         CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
                 getCameraUploadsConfiguration(this);
 
-        CameraUploadsSyncHandler cameraUploadsSyncHandler = new CameraUploadsSyncHandler(configuration, this);
+        CameraUploadsPicturesHandler cameraUploadsPicturesHandler = new CameraUploadsPicturesHandler(configuration,
+                this);
 
-        cameraUploadsSyncHandler.scheduleCameraUploadsSyncJob();
+        // Schedule a job only if the camera uploads for pictures feature changes from disabled to enabled, not if
+        // was already enabled
+        if(enablingCameraUploadsPictures) {
 
-        super.onStop();
-        getDelegate().onStop();
+            cameraUploadsPicturesHandler.scheduleCameraUploadsPicturesJob();
+
+            Log_OC.d(TAG, "Resetting finish sync timestamp for picture uploads in database");
+
+            cameraUploadsPicturesHandler.updateFinishPicturesSyncTimeStamps(0);
+        }
+
+        if (disablingCameraUploadsPictures) {
+
+            Log_OC.d(TAG, "Updating finish sync timestamp for camera uploads in database");
+
+            long unixTimeStamp = System.currentTimeMillis();
+
+            cameraUploadsPicturesHandler.updateFinishPicturesSyncTimeStamps(unixTimeStamp);
+        }
+
+        CameraUploadsVideosHandler cameraUploadsVideosHandler = new CameraUploadsVideosHandler(configuration,
+                this);
+
+        if(enablingCameraUploadsVideos) {
+
+            cameraUploadsVideosHandler.scheduleCameraUploadsVideosSyncJob();
+
+            Log_OC.d(TAG, "Resetting finish sync timestamp for picture uploads in database");
+
+            cameraUploadsVideosHandler.updateFinishVideosSyncTimeStamps(0);
+        }
+
+        if (disablingCameraUploadsVideos) {
+
+            Log_OC.d(TAG, "Updating finish sync timestamp for video uploads in database");
+
+            long unixTimeStamp = System.currentTimeMillis();
+
+            cameraUploadsVideosHandler.updateFinishVideosSyncTimeStamps(unixTimeStamp);
+        }
     }
 
     public void invalidateOptionsMenu() {
