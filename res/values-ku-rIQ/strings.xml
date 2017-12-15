@@ -8,9 +8,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">بیکەوە</string>
-  <string name="prefs_category_general">گشتی</string>
-  <string name="prefs_accounts">هەژمارەکان</string>
-  <string name="prefs_help">یارمەتی</string>
+    <string name="prefs_help">یارمەتی</string>
   <string name="auth_username">ناوی به‌کارهێنه‌ر</string>
   <string name="auth_password">وشەی تێپەربو</string>
   <string name="sync_string_files">په‌ڕگەکان</string>
@@ -29,10 +27,8 @@
   <string name="common_no">نەخێر</string>
   <string name="common_ok">باشە</string>
   <string name="common_cancel">لابردن</string>
-  <string name="common_error">هه‌ڵه</string>
-  <string name="uploader_info_dirname">ناوی بوخچه</string>
-  <string name="prefs_category_accounts">هەژمارەکان</string>
-  <string name="auth_host_address">ناونیشانی ڕاژه</string>
+    <string name="uploader_info_dirname">ناوی بوخچه</string>
+    <string name="auth_host_address">ناونیشانی ڕاژه</string>
   <string name="share_dialog_title">هاوبەشی کردن</string>
   <string name="share_cancel_public_link_button">لابردن</string>
   <string name="share_confirm_public_link_button">پاشکه‌وتکردن</string>

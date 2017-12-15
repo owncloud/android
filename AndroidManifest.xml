@@ -134,11 +134,11 @@
         <service
             android:name=".files.services.RetryUploadJobService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".files.services.RetryDownloadJobService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider
             android:name=".providers.FileContentProvider"
@@ -267,8 +267,9 @@
         <activity
             android:name=".ui.preview.PreviewVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/Theme.ownCloud.Fullscreen"></activity>
-        <activity android:name=".ui.activity.CapturedFileChecker"></activity>
+            android:theme="@style/Theme.ownCloud.Fullscreen" />
+        <activity android:name=".ui.activity.CapturedFileChecker" />
+        <activity android:name=".ui.activity.Camera" />
     </application>
 
 </manifest>

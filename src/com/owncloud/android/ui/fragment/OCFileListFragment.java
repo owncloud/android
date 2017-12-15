@@ -90,6 +90,10 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
     private static final String KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED";
+    private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int CAPTURED_IMAGE_CHECK = 80;
 
     private static final String GRID_IS_PREFERED_PREFERENCE = "gridIsPrefered";
 
@@ -238,6 +242,8 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUpload().setTitle(getResources().getString(R.string.actionbar_upload));
         getFabMkdir().setTitle(getResources().getString(R.string.actionbar_mkdir));
         getFabUploadFromApp().setTitle(getResources().getString(R.string.actionbar_upload_from_apps));
+        getmFabCameraUpload().setTitle(getResources().getString(R.string.camera_upload_fab_title));
+
     }
 
     /**
@@ -247,6 +253,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         registerFabUploadListeners();
         registerFabMkDirListeners();
         registerFabUploadFromAppListeners();
+        registerFabCameraUploadListeners();
     }
 
     /**
@@ -268,6 +275,29 @@ public class OCFileListFragment extends ExtendedListFragment {
             @Override
             public boolean onLongClick(View v) {
                 showSnackMessage(R.string.actionbar_upload);
+                return true;
+            }
+        });
+    }
+
+    /**
+     * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
+     * on the 'Camera Upload' mini FAB for the linked action and {@link Snackbar} showing the underlying action.
+     */
+    private void registerFabCameraUploadListeners(){
+        getmFabCameraUpload().setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                UploadFilesActivity.startUploadActivityForResult(getActivity(),((FileActivity) getActivity()).getAccount(),
+                        FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                getFabMain().collapse();
+                recordMiniFabClick();
+            }
+        });
+        getmFabCameraUpload().setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v){
+                showSnackMessage(R.string.camera_upload_fab_title);
                 return true;
             }
         });
@@ -353,11 +383,14 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUpload().setTitle(null);
         getFabMkdir().setTitle(null);
         getFabUploadFromApp().setTitle(null);
+        getmFabCameraUpload().setTitle(null);
         ((TextView) getFabUpload().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
         ((TextView) getFabMkdir().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
         ((TextView) getFabUploadFromApp().getTag(
+                com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
+        ((TextView) getmFabCameraUpload().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 
@@ -1027,5 +1060,4 @@ public class OCFileListFragment extends ExtendedListFragment {
         );
         snackbar.show();
     }
-
 }

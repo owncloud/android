@@ -74,6 +74,7 @@ public class ExtendedListFragment extends Fragment
     private FloatingActionButton mFabUpload;
     private FloatingActionButton mFabMkdir;
     private FloatingActionButton mFabUploadFromApp;
+    private FloatingActionButton mFabCameraUpload;
 
     // Save the state of the scroll in browsing
     private ArrayList<Integer> mIndexes;
@@ -115,6 +116,10 @@ public class ExtendedListFragment extends Fragment
 
     public FloatingActionsMenu getFabMain() {
         return mFabMain;
+    }
+
+    public FloatingActionButton getmFabCameraUpload(){
+        return mFabCameraUpload;
     }
 
     public void switchToGridView() {
@@ -178,6 +183,7 @@ public class ExtendedListFragment extends Fragment
         mFabUpload = (FloatingActionButton) v.findViewById(R.id.fab_upload);
         mFabMkdir = (FloatingActionButton) v.findViewById(R.id.fab_mkdir);
         mFabUploadFromApp = (FloatingActionButton) v.findViewById(R.id.fab_upload_from_app);
+        mFabCameraUpload = (FloatingActionButton) v.findViewById(R.id.fab_camera_upload);
 
         mCurrentListView = mListView;   // list by default
         if (savedInstanceState != null) {
