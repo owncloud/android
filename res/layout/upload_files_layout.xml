@@ -104,15 +104,6 @@
             android:layout_weight="1"
             android:text="@string/uploader_btn_upload_text" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/camera_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_text_camera"
-            android:theme="@style/Button.Secondary"
-            />
-
     </LinearLayout>
 
 </LinearLayout>
