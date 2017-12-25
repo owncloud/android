@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="@dimen/standard_padding"
+    android:filterTouchesWhenObscured="true">
+
+    <TextView
+        android:id="@+id/header_pattern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pass_code_enter_pass_code"
+        android:textColor="@android:color/black"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/explanation_pattern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pattern_configure_your_pattern_explanation"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:gravity="center_horizontal"
+        android:textSize="14sp"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.andrognito.patternlockview.PatternLockView
+            android:id="@+id/pattern_lock_view"
+            android:layout_width="250dp"
+            android:focusable="true"
+            app:dotCount="3"
+            app:normalStateColor="@color/primary"
+            app:correctStateColor="@color/primary"
+            app:wrongStateColor="@color/primary"
+            android:layout_height="250dp">
+            <requestFocus/>
+        </com.andrognito.patternlockview.PatternLockView>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancel_pattern"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/common_cancel"
+            android:theme="@style/Button.Primary" />
+
+    </RelativeLayout>
+
+</LinearLayout>

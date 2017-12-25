@@ -61,6 +61,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MainApp"
@@ -102,7 +104,7 @@
         </activity>
         <activity
             android:name=".ui.activity.Preferences"
-            android:theme="@style/Theme.ownCloud"></activity>
+            android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".ui.preview.PreviewImageActivity"
             android:theme="@style/Theme.ownCloud.Overlay" />
@@ -129,18 +131,14 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter_files" />
         </service>
-
         <service
             android:name=".files.services.RetryUploadJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true">
-        </service>
-
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".files.services.RetryDownloadJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true">
-        </service>
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <service
             android:name=".files.services.CameraUploadsSyncJobService"
@@ -221,13 +219,12 @@
             android:name=".broadcastreceivers.ConnectivityActionReceiver"
             android:enabled="true"
             android:label="ConnectivityActionReceiver">
-
             <intent-filter>
+
                 <!-- action android:name="android.net.conn.CONNECTIVITY_CHANGE"/ -->
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".broadcastreceivers.BootupBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -261,11 +258,14 @@
             android:name=".ui.activity.ManageSpaceActivity"
             android:label="@string/manage_space_title"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".ui.activity.PrivacyPolicyActivity"></activity>
-        <activity android:name=".ui.preview.PreviewVideoActivity"
+        <activity android:name=".ui.activity.PrivacyPolicyActivity" />
+        <activity
+            android:name=".ui.preview.PreviewVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/Theme.ownCloud.Fullscreen">
-        </activity>
+            android:theme="@style/Theme.ownCloud.Fullscreen" />
+        <activity android:name=".ui.activity.CapturedFileChecker" />
+        <activity android:name=".ui.activity.Camera" />
+        <activity android:name=".ui.activity.PatternLockActivity" />
     </application>
 
 </manifest>

@@ -95,6 +95,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
                     .getDefaultSharedPreferences(getApplicationContext());
 
             boolean passCodeEnable = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+            boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
 
             String passCodeDigits[] = new String[4];
             if (passCodeEnable) {
@@ -102,6 +103,10 @@ public class ManageSpaceActivity extends AppCompatActivity {
                 passCodeDigits[1] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D2, null);
                 passCodeDigits[2] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D3, null);
                 passCodeDigits[3] = appPrefs.getString(PassCodeActivity.PREFERENCE_PASSCODE_D4, null);
+            }
+            String patternValue = new String();
+            if(patternEnabled){
+                patternValue = appPrefs.getString(PatternLockActivity.KEY_PATTERN,null);
             }
 
             // Clear data
@@ -121,8 +126,12 @@ public class ManageSpaceActivity extends AppCompatActivity {
                 appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D3, passCodeDigits[2]);
                 appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D4, passCodeDigits[3]);
             }
+            if(patternEnabled){
+                appPrefsEditor.putString(PatternLockActivity.KEY_PATTERN,patternValue);
+            }
 
             appPrefsEditor.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, passCodeEnable);
+            appPrefsEditor.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,patternEnabled);
             result = result && appPrefsEditor.commit();
 
             return result;
@@ -133,9 +142,9 @@ public class ManageSpaceActivity extends AppCompatActivity {
             super.onPostExecute(result);
             if (!result) {
                 Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    R.string.manage_space_clear_data,
-                    Snackbar.LENGTH_LONG
+                        findViewById(android.R.id.content),
+                        R.string.manage_space_clear_data,
+                        Snackbar.LENGTH_LONG
                 );
                 snackbar.show();
 
