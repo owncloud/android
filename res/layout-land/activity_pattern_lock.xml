@@ -48,8 +48,7 @@
             android:id="@+id/cancel_pattern"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/pattern_lock_view"
             android:layout_centerVertical="true"
             android:text="@string/common_cancel"
             android:theme="@style/Button.Primary" />

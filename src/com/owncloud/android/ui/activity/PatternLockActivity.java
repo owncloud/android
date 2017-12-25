@@ -35,10 +35,15 @@ public class PatternLockActivity extends AppCompatActivity {
 
     private static String KEY_CONFIRMING_PATTERN = "CONFIRMING_PATTERN";
     private static String KEY_PATTERN_STRING = "PATTERN_STRING";
+    private static String PATTERN_HEADER_VIEW_TEXT = "PATTERN_HEADER_VIEW_TEXT";
+    private static String PATTERN_EXP_VIEW_STATE = "PATTERN_EXP_VIEW_STATE";
+    private static String COUNT_VALUE = "COUNT_VALUE";
 
     private boolean patternPresent = false;
+    private boolean patternExpViewState = false;
     private String patternValue;
     private String newPatternValue;
+    private String patternHeaderViewText;
     private int count = 0;
 
     private TextView patternHeaderView;
@@ -67,8 +72,15 @@ public class PatternLockActivity extends AppCompatActivity {
             if(savedInstanceState != null){
                 patternPresent = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN);
                 patternValue = savedInstanceState.getString(KEY_PATTERN_STRING);
+                patternHeaderViewText = savedInstanceState.getString(PATTERN_HEADER_VIEW_TEXT);
+                patternExpViewState = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE);
+                count = savedInstanceState.getInt(COUNT_VALUE);
             }
             if(patternPresent){
+                patternHeaderView.setText(patternHeaderViewText);
+                if(!patternExpViewState){
+                    patternExpView.setVisibility(View.INVISIBLE);
+                }
                 checkPattern();
             }
             else{
@@ -172,6 +184,14 @@ public class PatternLockActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_CONFIRMING_PATTERN,patternPresent);
         outState.putString(KEY_PATTERN_STRING,patternValue);
+        outState.putString(PATTERN_HEADER_VIEW_TEXT,patternHeaderView.getText().toString());
+        if(patternExpView.getVisibility() == View.VISIBLE){
+            outState.putBoolean(PATTERN_EXP_VIEW_STATE,true);
+        }
+        else{
+            outState.putBoolean(PATTERN_EXP_VIEW_STATE,false);
+        }
+        outState.putInt(COUNT_VALUE,count);
     }
 
     protected void savePatternAndExit(){
@@ -210,7 +230,7 @@ public class PatternLockActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG
         );
         snackbar.show();
-        patternHeaderView.setText(headerMessage);                // TODO check if really needed
+        patternHeaderView.setText(headerMessage);             // TODO check if really needed
         patternExpView.setVisibility(explanationVisibility); // TODO check if really needed
     }
 
@@ -245,5 +265,6 @@ public class PatternLockActivity extends AppCompatActivity {
             cancelButton.setOnClickListener(null);
         }
     }
+
 
 }
