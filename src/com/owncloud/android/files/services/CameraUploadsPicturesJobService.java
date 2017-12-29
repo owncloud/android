@@ -77,6 +77,17 @@ public class CameraUploadsPicturesJobService extends JobService {
         @Override
         protected JobParameters doInBackground(JobParameters... jobParams) {
 
+            // Cancel periodic job if feature is disabled
+            CameraUploadsConfiguration mCameraUploadsConfiguration = PreferenceManager.
+                    getCameraUploadsConfiguration(mCameraUploadsPicturesJobService);
+
+            if (!mCameraUploadsConfiguration.isEnabledForPictures() &&
+                    !mCameraUploadsConfiguration.isEnabledForPictures()) {
+                cancelPeriodicJob(jobParams[0].getJobId());
+
+                return jobParams[0];
+            }
+
             String accountName = jobParams[0].getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
             mAccount = AccountUtils.getOwnCloudAccountByName(mCameraUploadsPicturesJobService, accountName);
             mCameraUploadPicturesStorageManager = new CameraUploadPicturesStorageManager(
@@ -88,13 +99,6 @@ public class CameraUploadsPicturesJobService extends JobService {
                     getInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD);
 
             syncFiles();
-
-            CameraUploadsConfiguration mCameraUploadsConfiguration = PreferenceManager.
-                    getCameraUploadsConfiguration(mCameraUploadsPicturesJobService);
-
-            if (!mCameraUploadsConfiguration.isEnabledForPictures()) {
-                cancelPeriodicJob(jobParams[0].getJobId());
-            }
 
             return jobParams[0];
         }
