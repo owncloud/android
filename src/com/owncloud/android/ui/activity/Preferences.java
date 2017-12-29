@@ -21,6 +21,8 @@
  */
 package com.owncloud.android.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -320,14 +322,14 @@ public class Preferences extends PreferenceActivity {
         mPrefCameraPictureUploadsWiFi = findPreference("camera_picture_uploads_on_wifi");
         mPrefCameraPictureUploads = findPreference("camera_picture_uploads");
 
-        toggleCameraUploadsPictureOptions(((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+        toggleCameraUploadsPictureOptions(true, ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
 
         mPrefCameraPictureUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean enableCameraUploadsPicture = (Boolean) newValue;
-                toggleCameraUploadsPictureOptions(enableCameraUploadsPicture);
+                toggleCameraUploadsPictureOptions(false, enableCameraUploadsPicture);
                 toggleCameraUploadsCommonOptions(
                         ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
                         enableCameraUploadsPicture
@@ -358,19 +360,16 @@ public class Preferences extends PreferenceActivity {
 
         mPrefCameraVideoUploadsWiFi = findPreference("camera_video_uploads_on_wifi");
         mPrefCameraVideoUploads = findPreference("camera_video_uploads");
-        toggleCameraUploadsVideoOptions(((CheckBoxPreference) mPrefCameraVideoUploads).isChecked());
+        toggleCameraUploadsVideoOptions(true, ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked());
 
         mPrefCameraVideoUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                boolean enableCameraUploadsVideo = (Boolean) newValue;
-                toggleCameraUploadsVideoOptions(enableCameraUploadsVideo);
+                toggleCameraUploadsVideoOptions(false, (Boolean) newValue);
                 toggleCameraUploadsCommonOptions(
                         (Boolean) newValue,
                         ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
-                enablingCameraUploadsVideos = enableCameraUploadsVideo;
-                disablingCameraUploadsVideos = !enableCameraUploadsVideo;
                 return true;
             }
         });
@@ -413,26 +412,99 @@ public class Preferences extends PreferenceActivity {
         loadCameraUploadsPicturePath();
         loadCameraUploadsVideoPath();
         loadCameraUploadsSourcePath();
-
     }
 
-    private void toggleCameraUploadsPictureOptions(Boolean value) {
-        if (value) {
+    /**
+     * Handle the toggles from the different camera uploads for pictures options
+     *
+     * @param initializing to trigger different behavior depending on whether the preference is being initialized or
+     *                     updated
+     * @param isChecked    camera uploads for pictures is checked
+     */
+    private void toggleCameraUploadsPictureOptions(Boolean initializing, Boolean isChecked) {
+        if (isChecked) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
+
         } else {
-            mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
-            mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
+
+            if (!initializing) {
+
+                final AlertDialog builder = new AlertDialog.Builder(this).create();
+                builder.setTitle(R.string.confirmation_disable_camera_uploads_title);
+                builder.setMessage(getString(R.string.confirmation_disable_pictures_upload_message));
+                builder.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ((CheckBoxPreference) mPrefCameraPictureUploads).setChecked(true);
+                                mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
+                                mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
+                                builder.dismiss();
+                            }
+                        });
+                builder.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
+                                mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
+                                builder.dismiss();
+                            }
+                        });
+                builder.show();
+
+            } else {
+                mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
+                mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
+            }
         }
     }
 
-    private void toggleCameraUploadsVideoOptions(Boolean value) {
-        if (value) {
+
+    /**
+     * Handle the toggles from the different camera uploads for videos options
+     *
+     * @param initializing to trigger different behavior depending on whether the preference is being initialized or
+     *                     updated
+     * @param isChecked    camera uploads for videos is checked
+     */
+    private void toggleCameraUploadsVideoOptions(Boolean initializing, Boolean isChecked) {
+        if (isChecked) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
         } else {
-            mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
-            mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
+
+            if (!initializing) {
+
+                final AlertDialog builder = new AlertDialog.Builder(this).create();
+                builder.setTitle(R.string.confirmation_disable_camera_uploads_title);
+                builder.setMessage(getString(R.string.confirmation_disable_videos_upload_message));
+                builder.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ((CheckBoxPreference) mPrefCameraVideoUploads).setChecked(true);
+                                mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
+                                mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
+                                builder.dismiss();
+                            }
+                        });
+                builder.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
+                                mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
+                                builder.dismiss();
+                            }
+                        });
+                builder.show();
+
+            } else {
+                mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
+                mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
+            }
         }
     }
 
