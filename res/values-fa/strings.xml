@@ -363,6 +363,7 @@
   <string name="upload_move_files">جابه‌جایی پرونده</string>
   <string name="share_dialog_title">اشتراک گذاری</string>
   <string name="share_file">هم‌رسانی %1$s</string>
+  <string name="share_with_user_section_title">کاربران و گروه ها</string>
   <string name="share_via_link_name_label">نام لینک</string>
   <string name="share_cancel_public_link_button">لغو</string>
   <string name="share_confirm_public_link_button">ذخیره</string>
@@ -370,6 +371,7 @@
   <string name="share_via_link_password_label">گذرواژه</string>
   <string name="share_via_link_password_title">امن شده</string>
   <string name="share_via_link_edit_permission_label">اجازه‌ی ویرایش</string>
+  <string name="share_via_link_show_file_listing_label">نمایش فهرست نویسی پرونده</string>
   <string name="share_get_public_link_button">گرفتن پیوند</string>
   <string name="share_with_title">هم‌رسانی با…</string>
   <string name="share_with_edit_title">هم‌رسانی با %1$s</string>
@@ -398,6 +400,7 @@
   <string name="prefs_privacy_policy">سیاست حفظ حریم خصوصی</string>
   <string name="privacy_policy_error">خطایی رخ داد:</string>
   <string name="service_unavailable">سرور در دسترس نیست</string>
+  <string name="share_warning_about_forwarding_public_links">هر کسی با پیوند به پرونده/پوشه دسترسی دارد</string>
   <string name="share_via_link_password_enforced_label">رمز عبور *</string>
   <string name="share_via_link_expiration_date_enforced_label">تاریخ انقضا *</string>
   <plurals name="items_selected_count">
