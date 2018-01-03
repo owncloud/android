@@ -138,6 +138,9 @@ Downloaded files are marked with a green tick, on the top-right of the file's ic
 .. figure:: images/android-all-files-view.jpg
    :alt: Downloaded files are marked with green ticks.
 
+.. note:: 
+   Videos don’t need to be downloaded before they can be viewed, as they can be streamed to the device from your ownCloud server.
+
 Download and view a file with a short press on the file's name or icon.  
 Then, a short press on the overflow button opens a menu with options for managing your file.
 
@@ -225,7 +228,7 @@ Uploading Files Taken From the Camera
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pictures and videos can be uploaded from your smartphone after choosing the folder where they are stored.
-To specify where they are located, in the *"Settings"* options, first enable one of *"Instant picture uploads"* or *"Instant video uploads"*. 
+To specify where they are located, in the *"Settings"* options, under `Instant Uploads`_, enable one of *"Instant picture uploads"* or *"Instant video uploads"*. 
 After that, a further option called *"Camera folder"* will become visible, as in the screenshot below. 
 
 .. figure:: images/specify-camera-folder.png
