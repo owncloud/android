@@ -45,7 +45,7 @@ public class CameraUploadsHandler {
     private CameraUploadsConfiguration mCameraUploadsConfig; // Camera uploads configuration, set by the user
     private Context mContext;
 
-    public CameraUploadsHandler(CameraUploadsConfiguration cameraUploadsConfiguration, Context context) {
+    public CameraUploadsHandler(Context context, CameraUploadsConfiguration cameraUploadsConfiguration) {
         mCameraUploadsConfig = cameraUploadsConfiguration;
         mContext = context;
     }
@@ -55,9 +55,7 @@ public class CameraUploadsHandler {
      */
     public void scheduleCameraUploadsSyncJob() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                (mCameraUploadsConfig.isEnabledForPictures() || mCameraUploadsConfig.
-                        isEnabledForVideos())) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             // Initialize synchronization timestamps for pictures/videos, if needed
             initializeCameraUploadSync();
@@ -153,6 +151,7 @@ public class CameraUploadsHandler {
                 return;
             }
 
+
             if (ocCameraUploadSync.getPicturesLastSync() == 0 && mCameraUploadsConfig.isEnabledForPictures()) {
 
                 // Pictures synchronization timestamp not initialized yet, initialize it
@@ -167,5 +166,50 @@ public class CameraUploadsHandler {
 
             mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
         }
+    }
+
+    public void resetPicturesLastSync(){
+
+        // DB connection
+        CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
+                CameraUploadsSyncStorageManager(mContext.getContentResolver());
+
+        OCCameraUploadSync ocCameraUploadSync = mCameraUploadsSyncStorageManager.
+                getCameraUploadSync(null, null, null);
+
+        if (ocCameraUploadSync == null) {
+
+            return;
+
+        } else {
+
+            ocCameraUploadSync.setPicturesLastSync(0);
+
+            mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
+        }
+    }
+
+    public void resetVideosLastSync(){
+        // DB connection
+        CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
+                CameraUploadsSyncStorageManager(mContext.getContentResolver());
+
+        OCCameraUploadSync ocCameraUploadSync = mCameraUploadsSyncStorageManager.
+                getCameraUploadSync(null, null, null);
+
+        if (ocCameraUploadSync == null) {
+
+            return;
+
+        } else {
+
+            ocCameraUploadSync.setVideosLastSync(0);
+
+            mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
+        }
+    }
+
+    public void setCameraUploadsConfig(CameraUploadsConfiguration mCameraUploadsConfig) {
+        this.mCameraUploadsConfig = mCameraUploadsConfig;
     }
 }
