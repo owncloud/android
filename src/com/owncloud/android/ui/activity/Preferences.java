@@ -96,6 +96,8 @@ public class Preferences extends PreferenceActivity {
     private Preference mPrefCameraUploadsSourcePath;
     private Preference mPrefCameraUploadsBehaviour;
 
+    private CameraUploadsHandler mCameraUploadsHandler;
+
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -405,6 +407,11 @@ public class Preferences extends PreferenceActivity {
         loadCameraUploadsPicturePath();
         loadCameraUploadsVideoPath();
         loadCameraUploadsSourcePath();
+
+        CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
+                getCameraUploadsConfiguration(this);
+
+        mCameraUploadsHandler = new CameraUploadsHandler(this, configuration);
     }
 
     /**
@@ -433,9 +440,11 @@ public class Preferences extends PreferenceActivity {
                                     ((CheckBoxPreference) mPrefCameraPictureUploads).setChecked(true);
                                     mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
                                     mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
+
                                 } else if (which == DialogInterface.BUTTON_POSITIVE) {
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
+                                    mCameraUploadsHandler.resetPicturesLastSync();
                                 }
                                 dismissConfirmationDialog(builder);
                             }
@@ -475,6 +484,7 @@ public class Preferences extends PreferenceActivity {
                                 } else if (which == DialogInterface.BUTTON_POSITIVE) {
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
+                                    mCameraUploadsHandler.resetVideosLastSync();
                                 }
                                 dismissConfirmationDialog(builder);
                             }
@@ -657,9 +667,12 @@ public class Preferences extends PreferenceActivity {
         CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
                 getCameraUploadsConfiguration(this);
 
-        CameraUploadsHandler cameraUploadsHandler = new CameraUploadsHandler(configuration, this);
+        if (configuration.isEnabledForPictures() || configuration.isEnabledForVideos()) {
 
-        cameraUploadsHandler.scheduleCameraUploadsSyncJob();
+            mCameraUploadsHandler.setCameraUploadsConfig(configuration);
+
+            mCameraUploadsHandler.scheduleCameraUploadsSyncJob();
+        }
 
         super.onStop();
         getDelegate().onStop();
