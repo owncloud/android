@@ -55,8 +55,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
-import com.owncloud.android.files.services.CameraUploadsPicturesHandler;
-import com.owncloud.android.files.services.CameraUploadsVideosHandler;
+import com.owncloud.android.files.services.CameraUploadsHandler;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
 
@@ -96,11 +95,6 @@ public class Preferences extends PreferenceActivity {
     private Preference mPrefCameraVideoUploadsWiFi;
     private Preference mPrefCameraUploadsSourcePath;
     private Preference mPrefCameraUploadsBehaviour;
-
-    private boolean enablingCameraUploadsPictures = false;
-    private boolean enablingCameraUploadsVideos = false;
-    private boolean disablingCameraUploadsPictures = false;
-    private boolean disablingCameraUploadsVideos = false;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -251,6 +245,7 @@ public class Preferences extends PreferenceActivity {
                     public boolean onPreferenceClick(Preference preference) {
                         Intent privacyPolicyIntent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
                         startActivity(privacyPolicyIntent);
+
                         return true;
                     }
                 });
@@ -334,8 +329,6 @@ public class Preferences extends PreferenceActivity {
                         ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
                         enableCameraUploadsPicture
                 );
-                enablingCameraUploadsPictures = enableCameraUploadsPicture;
-                disablingCameraUploadsPictures = !enableCameraUploadsPicture;
                 return true;
             }
         });
@@ -417,8 +410,8 @@ public class Preferences extends PreferenceActivity {
     /**
      * Handle the toggles from the different camera uploads for pictures options
      *
-     * @param initializing to trigger different behavior depending on whether the preference is being initialized or
-     *                     updated
+     * @param initializing to avoid showing the dialog to confirm camera uploads disabling in the first load of the
+     *                     view and showing it when the user just unchecked the feature checkbox
      * @param isChecked    camera uploads for pictures is checked
      */
     private void toggleCameraUploadsPictureOptions(Boolean initializing, Boolean isChecked) {
@@ -431,29 +424,22 @@ public class Preferences extends PreferenceActivity {
             if (!initializing) {
 
                 final AlertDialog builder = new AlertDialog.Builder(this).create();
-                builder.setTitle(R.string.confirmation_disable_camera_uploads_title);
-                builder.setMessage(getString(R.string.confirmation_disable_pictures_upload_message));
-                builder.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ((CheckBoxPreference) mPrefCameraPictureUploads).setChecked(true);
-                                mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
-                                mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
-                                builder.dismiss();
-                            }
-                        });
-                builder.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
-                                mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
-                                builder.dismiss();
-                            }
-                        });
-                builder.show();
 
+                showConfirmationDialog(builder, getString(R.string.confirmation_disable_pictures_upload_message),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                    ((CheckBoxPreference) mPrefCameraPictureUploads).setChecked(true);
+                                    mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
+                                    mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
+                                } else if (which == DialogInterface.BUTTON_POSITIVE) {
+                                    mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
+                                    mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
+                                }
+                                dismissConfirmationDialog(builder);
+                            }
+                        });
             } else {
                 mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
                 mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
@@ -461,12 +447,11 @@ public class Preferences extends PreferenceActivity {
         }
     }
 
-
     /**
      * Handle the toggles from the different camera uploads for videos options
      *
-     * @param initializing to trigger different behavior depending on whether the preference is being initialized or
-     *                     updated
+     * @param initializing to avoid showing the dialog to confirm camera uploads disabling in the first load of the
+     *                     view and showing it when the user just unchecked the feature checkbox
      * @param isChecked    camera uploads for videos is checked
      */
     private void toggleCameraUploadsVideoOptions(Boolean initializing, Boolean isChecked) {
@@ -478,28 +463,22 @@ public class Preferences extends PreferenceActivity {
             if (!initializing) {
 
                 final AlertDialog builder = new AlertDialog.Builder(this).create();
-                builder.setTitle(R.string.confirmation_disable_camera_uploads_title);
-                builder.setMessage(getString(R.string.confirmation_disable_videos_upload_message));
-                builder.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no),
+
+                showConfirmationDialog(builder, getString(R.string.confirmation_disable_videos_upload_message),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ((CheckBoxPreference) mPrefCameraVideoUploads).setChecked(true);
-                                mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
-                                mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
-                                builder.dismiss();
+                                if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                    ((CheckBoxPreference) mPrefCameraVideoUploads).setChecked(true);
+                                    mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsWiFi);
+                                    mPrefCameraUploadsCategory.addPreference(mPrefCameraVideoUploadsPath);
+                                } else if (which == DialogInterface.BUTTON_POSITIVE) {
+                                    mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
+                                    mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
+                                }
+                                dismissConfirmationDialog(builder);
                             }
                         });
-                builder.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
-                                mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
-                                builder.dismiss();
-                            }
-                        });
-                builder.show();
 
             } else {
                 mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
@@ -674,63 +653,16 @@ public class Preferences extends PreferenceActivity {
 
     @Override
     protected void onStop() {
-        super.onStop();
-        getDelegate().onStop();
-
-        handleCameraUploads();
-    }
-
-    /**
-     * Schedule camera uploads jobs and update needed params
-     */
-    private void handleCameraUploads() {
 
         CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
                 getCameraUploadsConfiguration(this);
 
-        CameraUploadsPicturesHandler cameraUploadsPicturesHandler = new CameraUploadsPicturesHandler(configuration,
-                this);
+        CameraUploadsHandler cameraUploadsHandler = new CameraUploadsHandler(configuration, this);
 
-        // Schedule a job only if the camera uploads for pictures feature changes from disabled to enabled, not if
-        // was already enabled
-        if(enablingCameraUploadsPictures) {
+        cameraUploadsHandler.scheduleCameraUploadsSyncJob();
 
-            cameraUploadsPicturesHandler.scheduleCameraUploadsPicturesJob();
-
-            Log_OC.d(TAG, "Resetting finish sync timestamp for picture uploads in database");
-
-            cameraUploadsPicturesHandler.updateFinishPicturesSyncTimeStamps(0);
-        }
-
-        if (disablingCameraUploadsPictures) {
-
-            Log_OC.d(TAG, "Updating finish sync timestamp for camera uploads in database");
-
-            long unixTimeStamp = System.currentTimeMillis();
-
-            cameraUploadsPicturesHandler.updateFinishPicturesSyncTimeStamps(unixTimeStamp);
-        }
-
-        CameraUploadsVideosHandler cameraUploadsVideosHandler = new CameraUploadsVideosHandler(configuration,
-                this);
-
-        if(enablingCameraUploadsVideos) {
-
-            cameraUploadsVideosHandler.scheduleCameraUploadsVideosSyncJob();
-
-            Log_OC.d(TAG, "Resetting finish sync timestamp for picture uploads in database");
-
-            cameraUploadsVideosHandler.updateFinishVideosSyncTimeStamps(0);
-        }
-
-        if (disablingCameraUploadsVideos) {
-
-            Log_OC.d(TAG, "Updating finish sync timestamp for video uploads in database");
-
-            long unixTimeStamp = System.currentTimeMillis();
-
-            cameraUploadsVideosHandler.updateFinishVideosSyncTimeStamps(unixTimeStamp);
-        }
+        super.onStop();
+        getDelegate().onStop();
     }
 
     public void invalidateOptionsMenu() {
@@ -842,4 +774,26 @@ public class Preferences extends PreferenceActivity {
         snackbar.show();
     }
 
+    /**
+     * Show a confirmation dialog to disable camera uploads
+     * @param builder alert dialog to show
+     * @param message message to show in the dialog
+     * @param listener to handle button clicks
+     */
+    private void showConfirmationDialog(AlertDialog builder, String message, DialogInterface.OnClickListener listener) {
+
+        builder.setTitle(R.string.confirmation_disable_camera_uploads_title);
+        builder.setMessage(message);
+        builder.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.common_no), listener);
+        builder.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.common_yes), listener);
+        builder.show();
+    }
+
+    /**
+     * Dismiss a confirmation dialog
+     * @param builder alert dialog to dismiss
+     */
+    private void dismissConfirmationDialog(AlertDialog builder) {
+        builder.dismiss();
+    }
 }

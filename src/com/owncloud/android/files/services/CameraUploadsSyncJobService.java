@@ -29,8 +29,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.CameraUploadPicturesStorageManager;
-import com.owncloud.android.db.OCCameraUploadPicturesSync;
+import com.owncloud.android.datamodel.CameraUploadsSyncStorageManager;
+import com.owncloud.android.db.OCCameraUploadSync;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -43,14 +43,14 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class CameraUploadsPicturesJobService extends JobService {
+public class CameraUploadsSyncJobService extends JobService {
 
-    private static final String TAG = CameraUploadsPicturesJobService.class.getName();
+    private static final String TAG = CameraUploadsSyncJobService.class.getName();
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
 
-        Log_OC.d(TAG, "Starting job to sync pictures from camera folder");
+        Log_OC.d(TAG, "Starting job to sync camera folder");
 
         new CameraUploadsSyncJobTask(this).execute(jobParameters);
 
@@ -60,18 +60,19 @@ public class CameraUploadsPicturesJobService extends JobService {
     private static class CameraUploadsSyncJobTask extends AsyncTask<JobParameters, Void,
             JobParameters> {
 
-        private final JobService mCameraUploadsPicturesJobService;
+        private final JobService mCameraUploadsSyncJobService;
 
         private Account mAccount;
-        private CameraUploadPicturesStorageManager mCameraUploadPicturesStorageManager;
-        private OCCameraUploadPicturesSync mOCCameraUploadPicturesSync;
+        private CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager;
+        private OCCameraUploadSync mOCCameraUploadSync;
         private String mCameraUploadsPicturesPath;
+        private String mCameraUploadsVideosPath;
         private String mCameraUploadsSourcePath;
         private int mCameraUploadsBehaviorAfterUpload;
 
 
-        public CameraUploadsSyncJobTask(JobService mCameraUploadsPicturesJobService) {
-            this.mCameraUploadsPicturesJobService = mCameraUploadsPicturesJobService;
+        public CameraUploadsSyncJobTask(JobService mCameraUploadsSyncJobService) {
+            this.mCameraUploadsSyncJobService = mCameraUploadsSyncJobService;
         }
 
         @Override
@@ -79,21 +80,22 @@ public class CameraUploadsPicturesJobService extends JobService {
 
             // Cancel periodic job if feature is disabled
             CameraUploadsConfiguration mCameraUploadsConfiguration = PreferenceManager.
-                    getCameraUploadsConfiguration(mCameraUploadsPicturesJobService);
+                    getCameraUploadsConfiguration(mCameraUploadsSyncJobService);
 
             if (!mCameraUploadsConfiguration.isEnabledForPictures() &&
-                    !mCameraUploadsConfiguration.isEnabledForPictures()) {
+                    !mCameraUploadsConfiguration.isEnabledForVideos()) {
                 cancelPeriodicJob(jobParams[0].getJobId());
 
                 return jobParams[0];
             }
 
             String accountName = jobParams[0].getExtras().getString(Extras.EXTRA_ACCOUNT_NAME);
-            mAccount = AccountUtils.getOwnCloudAccountByName(mCameraUploadsPicturesJobService, accountName);
-            mCameraUploadPicturesStorageManager = new CameraUploadPicturesStorageManager(
-                    mCameraUploadsPicturesJobService.getContentResolver());
+            mAccount = AccountUtils.getOwnCloudAccountByName(mCameraUploadsSyncJobService, accountName);
+            mCameraUploadsSyncStorageManager = new CameraUploadsSyncStorageManager(
+                    mCameraUploadsSyncJobService.getContentResolver());
 
             mCameraUploadsPicturesPath = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_PICTURES_PATH);
+            mCameraUploadsVideosPath = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_VIDEOS_PATH);
             mCameraUploadsSourcePath = jobParams[0].getExtras().getString(Extras.EXTRA_CAMERA_UPLOADS_SOURCE_PATH);
             mCameraUploadsBehaviorAfterUpload = jobParams[0].getExtras().
                     getInt(Extras.EXTRA_CAMERA_UPLOADS_BEHAVIOR_AFTER_UPLOAD);
@@ -105,15 +107,15 @@ public class CameraUploadsPicturesJobService extends JobService {
 
         @Override
         protected void onPostExecute(JobParameters jobParameters) {
-            mCameraUploadsPicturesJobService.jobFinished(jobParameters, false);
+            mCameraUploadsSyncJobService.jobFinished(jobParameters, false);
         }
 
         /**
-         * Get local files and start handling them
+         * Get local images and videos and start handling them
          */
         private void syncFiles() {
 
-            //Get local files included in camera folder
+            //Get local images and videos
             String localCameraPath = mCameraUploadsSourcePath;
 
             File localFiles[] = new File[0];
@@ -152,7 +154,7 @@ public class CameraUploadsPicturesJobService extends JobService {
          * Request the upload of a file just created if matches the criteria of the current
          * configuration for camera uploads.
          *
-         * @param localFile file to upload to the server
+         * @param localFile image or video to upload to the server
          */
         private synchronized void handleFile(File localFile) {
 
@@ -160,47 +162,47 @@ public class CameraUploadsPicturesJobService extends JobService {
 
             String mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(fileName);
             boolean isImage = mimeType.startsWith("image/");
+            boolean isVideo = mimeType.startsWith("video/");
 
-            if (!isImage) {
+            if (!isImage && !isVideo) {
                 Log_OC.d(TAG, "Ignoring " + fileName);
                 return;
             }
 
-            if (mCameraUploadsPicturesPath == null) {
+            if (isImage && mCameraUploadsPicturesPath == null) {
                 Log_OC.d(TAG, "Camera uploads disabled for images, ignoring " + fileName);
                 return;
             }
 
-            String remotePath = mCameraUploadsPicturesPath + fileName;
-
-            int createdBy = UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE;
-
-            String localPath = mCameraUploadsSourcePath + File.separator + fileName;
-
-            mOCCameraUploadPicturesSync = mCameraUploadPicturesStorageManager.getCameraUploadPicturesSync(null, null,
-                    null);
-
-            if (mOCCameraUploadPicturesSync == null) {
-                Log_OC.d(TAG, "There's no timestamp to compare with in database yet, not continue");
-            }
-
-            // Check if the file was created before period to check
-            if (localFile.lastModified() <= mOCCameraUploadPicturesSync.getStartPicturesSyncMs()) {
-                Log_OC.i(TAG, "Picture " + localPath + " created before period to check, ignoring");
+            if (isVideo && mCameraUploadsVideosPath == null) {
+                Log_OC.d(TAG, "Camera uploads disabled for videos, ignoring " + fileName);
                 return;
             }
 
-            // Check if the file was created after period to check
-            if (mOCCameraUploadPicturesSync.getFinishPicturesSyncMs() > 0 && localFile.lastModified() >=
-                    mOCCameraUploadPicturesSync.getFinishPicturesSyncMs()) {
-                Log_OC.i(TAG, "Picture " + localPath + " created after period to check, ignoring");
-                updatePictureTimestamp(localFile.lastModified());
+            String remotePath = (isImage ? mCameraUploadsPicturesPath : mCameraUploadsVideosPath) + fileName;
+
+            int createdBy = isImage ? UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE :
+                    UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO;
+
+            String localPath = mCameraUploadsSourcePath + File.separator + fileName;
+
+            mOCCameraUploadSync = mCameraUploadsSyncStorageManager.getCameraUploadSync(null, null,
+                    null);
+
+            if (mOCCameraUploadSync == null) {
+                Log_OC.d(TAG, "There's no timestamp to compare with in database yet, not continue");
+            }
+
+            // Check file timestamp
+            if (isImage && localFile.lastModified() <= mOCCameraUploadSync.getPicturesLastSync() ||
+                    isVideo && localFile.lastModified() <= mOCCameraUploadSync.getVideosLastSync()) {
+                Log_OC.i(TAG, "File " + localPath + " created before period to check, ignoring");
                 return;
             }
 
             TransferRequester requester = new TransferRequester();
             requester.uploadNewFile(
-                    mCameraUploadsPicturesJobService,
+                    mCameraUploadsSyncJobService,
                     mAccount,
                     localPath,
                     remotePath,
@@ -210,8 +212,8 @@ public class CameraUploadsPicturesJobService extends JobService {
                     createdBy
             );
 
-            // Update start synchronization timestamps once the first picture has been enqueued
-            updatePictureTimestamp(localFile.lastModified());
+            // Update timestamps once the first picture/video has been enqueued
+            updateTimestamps(isImage, isVideo, localFile.lastModified());
 
             Log_OC.i(
                     TAG,
@@ -225,24 +227,36 @@ public class CameraUploadsPicturesJobService extends JobService {
         }
 
         /**
-         * Update pictures timestamps to upload only the pictures taken later than those timestamps
+         * Update pictures and videos timestamps to upload only the pictures and videos taken later
+         * than those timestamps
+         * @param isImage true if file is an image, false otherwise
+         * @param isVideo true if file is a video, false otherwise
          */
-        private void updatePictureTimestamp(long fileTimestamp) {
+        private void updateTimestamps(boolean isImage, boolean isVideo, long fileTimestamp) {
 
-            long startPicturesSyncMs = mOCCameraUploadPicturesSync.getStartPicturesSyncMs();
-            long finishPicturesSyncMs = mOCCameraUploadPicturesSync.getFinishPicturesSyncMs();
+            long picturesTimestamp = mOCCameraUploadSync.getPicturesLastSync();
+            long videosTimestamp = mOCCameraUploadSync.getVideosLastSync();
 
-            Log_OC.d(TAG, "Updating timestamp for pictures");
+            if (isImage) {
 
-            startPicturesSyncMs = fileTimestamp;
+                Log_OC.d(TAG, "Updating timestamp for pictures");
 
-            OCCameraUploadPicturesSync newOCCameraUploadPicturesSync = new OCCameraUploadPicturesSync(startPicturesSyncMs);
+                picturesTimestamp = fileTimestamp;
+            }
 
-            newOCCameraUploadPicturesSync.setId(mOCCameraUploadPicturesSync.getId());
+            if (isVideo) {
 
-            newOCCameraUploadPicturesSync.setFinishPicturesSyncMs(finishPicturesSyncMs);
+                Log_OC.d(TAG, "Updating timestamp for videos");
 
-            mCameraUploadPicturesStorageManager.updateCameraUploadPicturesSync(newOCCameraUploadPicturesSync);
+                videosTimestamp = fileTimestamp;
+            }
+
+            OCCameraUploadSync newOCCameraUploadSync = new OCCameraUploadSync(picturesTimestamp,
+                    videosTimestamp);
+
+            newOCCameraUploadSync.setId(mOCCameraUploadSync.getId());
+
+            mCameraUploadsSyncStorageManager.updateCameraUploadSync(newOCCameraUploadSync);
         }
 
         /**
@@ -251,12 +265,12 @@ public class CameraUploadsPicturesJobService extends JobService {
          */
         private void cancelPeriodicJob(int jobId) {
 
-            Log_OC.d(TAG, "Camera uploads for pictures disabled, cancelling the periodic job");
-
-            JobScheduler jobScheduler = (JobScheduler) mCameraUploadsPicturesJobService.getSystemService(
+            JobScheduler jobScheduler = (JobScheduler)mCameraUploadsSyncJobService.getSystemService(
                     Context.JOB_SCHEDULER_SERVICE);
 
             jobScheduler.cancel(jobId);
+
+            Log_OC.d(TAG, "Camera uploads disabled, cancelling the periodic job");
         };
     }
 

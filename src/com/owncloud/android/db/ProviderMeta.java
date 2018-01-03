@@ -45,8 +45,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
         public static final String UPLOADS_TABLE_NAME = "list_of_uploads";
         public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
-        public static final String CAMERA_UPLOADS_PICTURES_SYNC_TABLE_NAME = "camera_uploads_pictures_sync";
-        public static final String CAMERA_UPLOADS_VIDEOS_SYNC_TABLE_NAME = "camera_uploads_videos_sync";
+        public static final String CAMERA_UPLOADS_SYNC_TABLE_NAME = "camera_uploads_sync";
 
         public static final Uri CONTENT_URI = Uri.parse("content://"
                 + MainApp.getAuthority() + "/");
@@ -60,10 +59,8 @@ public class ProviderMeta {
                 + MainApp.getAuthority() + "/capabilities");
         public static final Uri CONTENT_URI_UPLOADS = Uri.parse("content://"
                 + MainApp.getAuthority() + "/uploads");
-        public static final Uri CONTENT_URI_CAMERA_UPLOADS_PICTURES_SYNC = Uri.parse("content://"
-                + MainApp.getAuthority() + "/cameraUploadsPicturesSync");
-        public static final Uri CONTENT_URI_CAMERA_UPLOADS_VIDEOS_SYNC = Uri.parse("content://"
-                + MainApp.getAuthority() + "/cameraUploadsVideosSync");
+        public static final Uri CONTENT_URI_CAMERA_UPLOADS_SYNC = Uri.parse("content://"
+                + MainApp.getAuthority() + "/cameraUploadsSync");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";
@@ -117,7 +114,7 @@ public class ProviderMeta {
         public static final String OCSHARES_NAME = "name";
         public static final String OCSHARES_URL = "url";
 
-        public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE 
+        public static final String OCSHARES_DEFAULT_SORT_ORDER = OCSHARES_FILE_SOURCE
                 + " collate nocase asc";
 
         // Columns of capabilities table
@@ -176,16 +173,10 @@ public class ProviderMeta {
         public static final String USER_AVATARS__ETAG = "etag";
         public static final String USER_AVATARS__MIME_TYPE = "mime_type";
 
-        // Columns of camera upload pictures table
-        public static final String START_PICTURES_SYNC_MS = "start_pictures_sync_ms";
-        public static final String FINISH_PICTURES_SYNC_MS = "finish_pictures_sync_ms";
-        public static final String CAMERA_UPLOADS_PICTURES_SYNC_DEFAULT_SORT_ORDER =
-                ProviderTableMeta._ID  + " collate nocase asc";
-
-        // Columns of camera upload videos table
-        public static final String START_VIDEOS_SYNC_MS = "start_videos_sync_ms";
-        public static final String FINISH_VIDEOS_SYNC_MS = "finish_videos_sync_ms";
-        public static final String CAMERA_UPLOADS_VIDEOS_SYNC_DEFAULT_SORT_ORDER =
+        // Columns of camera upload table
+        public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";
+        public static final String VIDEOS_LAST_SYNC_TIMESTAMP = "videos_last_sync_date";
+        public static final String CAMERA_UPLOADS_SYNC_DEFAULT_SORT_ORDER =
                 ProviderTableMeta._ID  + " collate nocase asc";
     }
 }
