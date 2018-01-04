@@ -98,6 +98,7 @@
   <string name="common_save_exit">Lưu &amp; thoát</string>
   <string name="common_error">Lỗi</string>
   <string name="common_loading">Đang tải...</string>
+  <string name="common_unknown"> Chưa biết</string>
   <string name="common_error_unknown">Lỗi chưa biết</string>
   <string name="common_pending">Đang chờ</string>
   <string name="about_title">Giới thiệu</string>
