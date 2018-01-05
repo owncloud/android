@@ -116,6 +116,7 @@
   <string name="uploader_upload_failed_content_single">Качването на %1$s не може да бъде завършено.</string>
   <string name="uploader_upload_failed_credentials_error">Неуспешно качване, нужно е да влезете отново</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Сертификатът на сървъра не е надежден</string>
+  <string name="uploader_upload_text_filename_hint">Име на файла</string>
   <string name="ssl_certificate_not_trusted">Сертификатът на сървъра не е надежден</string>
   <string name="uploads_view_title">Качено</string>
   <string name="uploads_view_group_current_uploads">Текущ</string>
@@ -421,6 +422,7 @@
   <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
   <string name="failed_upload_quota_exceeded_text">Няма достатъчно свободно място в този профил</string>
+  <string name="share_warning_about_forwarding_public_links">Всеки знаещ тази връзка ще има достъп до файл/папка</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d избран</item>
     <item quantity="other">%d избран</item>
