@@ -22,7 +22,6 @@ package com.owncloud.android.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +40,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.ExtendedListView;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
-import com.owncloud.android.ui.adapter.FileListListAdapter;
 
 import java.util.ArrayList;
 
@@ -74,7 +72,6 @@ public class ExtendedListFragment extends Fragment
     private FloatingActionButton mFabUpload;
     private FloatingActionButton mFabMkdir;
     private FloatingActionButton mFabUploadFromApp;
-    private FloatingActionButton mFabCameraUpload;
 
     // Save the state of the scroll in browsing
     private ArrayList<Integer> mIndexes;
@@ -116,10 +113,6 @@ public class ExtendedListFragment extends Fragment
 
     public FloatingActionsMenu getFabMain() {
         return mFabMain;
-    }
-
-    public FloatingActionButton getmFabCameraUpload(){
-        return mFabCameraUpload;
     }
 
     public void switchToGridView() {
@@ -183,7 +176,6 @@ public class ExtendedListFragment extends Fragment
         mFabUpload = (FloatingActionButton) v.findViewById(R.id.fab_upload);
         mFabMkdir = (FloatingActionButton) v.findViewById(R.id.fab_mkdir);
         mFabUploadFromApp = (FloatingActionButton) v.findViewById(R.id.fab_upload_from_app);
-        mFabCameraUpload = (FloatingActionButton) v.findViewById(R.id.fab_camera_upload);
 
         mCurrentListView = mListView;   // list by default
         if (savedInstanceState != null) {

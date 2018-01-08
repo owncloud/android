@@ -42,6 +42,7 @@
     <color name="dark_background_text_color">#EEEEEE</color>
     <color name="transparent">#00000000</color>
     <color name="secondaryTextColor">#a0a0a0</color>
+    <color name="grey"> #B0BEC5 </color>
 
     <!-- special transparent action bar colors for image preview -->
     <color name="owncloud_blue_transparent">#201D2D44</color>

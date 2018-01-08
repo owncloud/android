@@ -17,9 +17,15 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:filterTouchesWhenObscured="true"
@@ -120,16 +126,6 @@
             fab:fab_title=""/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_camera_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_icon="@drawable/camerawhite"
-            fab:fab_colorNormal="@color/primary_button_background_color"
-            fab:fab_colorPressed="@color/owncloud_blue"
-            fab:fab_title=""/>
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_upload_from_app"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -155,3 +151,5 @@
     <include layout="@layout/top_progress_bar"/>
 
 </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

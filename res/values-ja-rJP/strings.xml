@@ -357,6 +357,7 @@
   <string name="share_incompatible_version">他のユーザーと共有するには、サーバーバージョンが 8.2 以上である必要があります。</string>
     <string name="share_via_link_section_title">公開リンク</string>
   <string name="share_via_link_create_title">共有リンクを作成</string>
+  <string name="share_via_link_edit_title">共有リンクの編集</string>
   <string name="share_via_link_name_label">リンク名</string>
   <string name="share_cancel_public_link_button">キャンセル</string>
   <string name="share_confirm_public_link_button">保存</string>
