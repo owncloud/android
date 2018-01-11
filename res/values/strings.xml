@@ -32,6 +32,7 @@
     <string name="prefs_instant_upload_summary">Instantly upload pictures taken by camera</string>
     <string name="prefs_instant_video_upload">Instant video uploads</string>
     <string name="prefs_instant_video_upload_summary">Instantly upload videos recorded by camera</string>
+    <string name="prefs_log_title">Enable logging</string>
     <string name="prefs_log_delete_history_button">Delete history</string>
     <string name="prefs_help">Help</string>
     <string name="prefs_recommend">Recommend to a friend</string>
@@ -71,7 +72,7 @@
     <string name="upload_owncloud"> Upload to OwnCloud </string>
     <string name="upload_bottom_sheet_displayed"> Upload Bottom Sheet Displayed </string>
     <string name="upload_bottom_sheet_collapsed"> Upload Bottom Sheet Collapsed </string>
-    <string name="filesString"> Files </string>
+    <string name="upload_files_title"> Files </string>
     <string name="filedetails_size">Size:</string>
     <string name="filedetails_type">Type:</string>
     <string name="filedetails_created">Created:</string>
@@ -184,7 +185,7 @@
     <string name="media_play_pause_description">Play or pause button</string>
     <string name="media_forward_description">Fast forward button</string>
     <string name="button_text_camera"> Camera </string>
-    <string name="camera_upload_fab_title"> Upload From Camera </string>
+    <string name="upload_from_camera_title"> Upload From Camera </string>
     <string name="capture_button_text"> Capture </string>
 
     <string name="auth_getting_authorization">Getting authorization &#8230;</string>

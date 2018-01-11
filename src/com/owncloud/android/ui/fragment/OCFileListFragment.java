@@ -94,10 +94,6 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private static final String KEY_FILE = MY_PACKAGE + ".extra.FILE";
     private static final String KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED";
-    private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
-    private static final int CAMERA_REQUEST = 1888;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int CAPTURED_IMAGE_CHECK = 80;
 
     private static final String GRID_IS_PREFERED_PREFERENCE = "gridIsPrefered";
 
@@ -108,8 +104,8 @@ public class OCFileListFragment extends ExtendedListFragment {
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
 
-    private LinearLayout filesLinearLayout;
-    private LinearLayout cameraUploadLinearLayout;
+    private LinearLayout uploadFilesLinearLayout;
+    private LinearLayout uploadFromCameraLinearLayout;
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -273,9 +269,9 @@ public class OCFileListFragment extends ExtendedListFragment {
                 View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
                 dialog.setContentView(uploadBottomSheet);
-                filesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                cameraUploadLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
-                filesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+                uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
+                uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
@@ -284,7 +280,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                         return false;
                     }
                 });
-                cameraUploadLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+                uploadFromCameraLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         UploadFilesActivity.startUploadActivityForResult(getActivity(),((FileActivity) getActivity()).getAccount(),

@@ -45,6 +45,10 @@
     <color name="grey"> #B0BEC5 </color>
 
     <!-- special transparent action bar colors for image preview -->
+    <color name="listItemHighlighted">#f8f8f8</color>
+    <color name="highlightTextColor">#55739a</color>
+
+    <color name="dialog_list_item">#1F1F1F</color>
     <color name="owncloud_blue_transparent">#201D2D44</color>
     <color name="owncloud_blue_dark_transparent">#40162233</color>
 

@@ -82,9 +82,7 @@ public class UploadFilesActivity extends FileActivity implements
 
     private static final String WAIT_DIALOG_TAG = "WAIT";
     private static final String QUERY_TO_MOVE_DIALOG_TAG = "QUERY_TO_MOVE";
-    private static final int CAMERA_REQUEST = 1888;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int CAPTURED_IMAGE_CHECK = 80;
 
     private ArrayAdapter<String> mDirectories;
     private File mCurrentDir = null;
@@ -97,7 +95,6 @@ public class UploadFilesActivity extends FileActivity implements
     private RadioButton mRadioBtnCopyFiles;
     private RadioButton mRadioBtnMoveFiles;
     private int requestCode;
-    private String capturedImagePath;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,14 +165,14 @@ public class UploadFilesActivity extends FileActivity implements
             mCurrentDialog.dismiss();
             mCurrentDialog = null;
         }
-            
-        Log_OC.d(TAG, "onCreate() end");
+
         Intent callingIntent = getIntent();
         Bundle data = callingIntent.getExtras();
         requestCode = (int) data.get(REQUEST_CODE_KEY);
         if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
             uploadFromCamera();
         }
+        Log_OC.d(TAG, "onCreate() end");
     }
 
     /**
@@ -193,6 +190,9 @@ public class UploadFilesActivity extends FileActivity implements
         activity.startActivityForResult(action, requestCode);
     }
 
+    /**
+    * Function to send an intent to the device's camera to capture a picture
+    * */
     private void uploadFromCamera(){
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (pictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -206,8 +206,8 @@ public class UploadFilesActivity extends FileActivity implements
             Bundle capturedImageData = capturedData.getExtras();
             Bitmap capturedImage = (Bitmap) capturedImageData.get("data");
             Uri capturedImageUri = getImageUri(getApplicationContext(),capturedImage);
-            capturedImagePath = getRealPathFromUri(capturedImageUri);
-            new CheckAvailableSpaceTask().execute();
+            String capturedImagePath = getRealPathFromUri(capturedImageUri);
+            new CheckAvailableSpaceTask(capturedImagePath).execute();
         }
         else if(resultCode == RESULT_CANCELED){
             setResult(RESULT_CANCELED);
@@ -215,6 +215,12 @@ public class UploadFilesActivity extends FileActivity implements
         }
     }
 
+    /**
+     *Compressing the image to JPEG format and using the MediaStore to Uri of the Image
+     * @param context Context of current state of the application
+     * @param capturedImage Bitmap of the Image captured
+     * @return Uri of the image that has been captured using the device's camera
+     */
     private Uri getImageUri(Context context, Bitmap capturedImage){
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         capturedImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -222,6 +228,11 @@ public class UploadFilesActivity extends FileActivity implements
         return Uri.parse(path);
     }
 
+    /**
+     *Using the content provider to obtain the path of the image
+     * @param capturedPictureUri The Uri of the captured Image obtained from calling getImageUri() function.
+     * @return Actual Uri of the captured Image
+     */
     private String getRealPathFromUri(Uri capturedPictureUri){
         Cursor cursor = getContentResolver().query(capturedPictureUri,null,null,null,null);
         cursor.moveToFirst();
@@ -379,9 +390,8 @@ public class UploadFilesActivity extends FileActivity implements
             setResult(RESULT_CANCELED);
             finish();
             
-        }
-        else if (v.getId() == R.id.upload_files_btn_upload) {
-            new CheckAvailableSpaceTask().execute();
+        } else if (v.getId() == R.id.upload_files_btn_upload) {
+            new CheckAvailableSpaceTask(null).execute();
         }
     }
 
@@ -393,6 +403,12 @@ public class UploadFilesActivity extends FileActivity implements
      */
     private class CheckAvailableSpaceTask extends AsyncTask<Void, Void, Boolean> {
 
+        private String capturedImagePath;
+
+        public CheckAvailableSpaceTask(String imagePath){
+            super();
+            capturedImagePath = imagePath;
+        }
         /**
          * Updates the UI before trying the movement
          */
@@ -416,8 +432,7 @@ public class UploadFilesActivity extends FileActivity implements
             String[] checkedFilePaths;
             if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
                 checkedFilePaths = new String[]{capturedImagePath};
-            }
-            else {
+            } else {
                 checkedFilePaths = mFileListFragment.getCheckedFilePaths();
             }
             long total = 0;
@@ -449,8 +464,7 @@ public class UploadFilesActivity extends FileActivity implements
                 Intent data = new Intent();
                 if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
                  data.putExtra(EXTRA_CHOSEN_FILES,new String[]{ capturedImagePath});
-                }
-                else {
+                } else {
                     data.putExtra(EXTRA_CHOSEN_FILES, mFileListFragment.getCheckedFilePaths());
                 }
 
@@ -458,11 +472,10 @@ public class UploadFilesActivity extends FileActivity implements
                         .getDefaultSharedPreferences(getApplicationContext()).edit();
 
                 if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
-                    setResult(RESULT_OK, data);
+                    setResult(RESULT_OK_AND_MOVE, data);
                     appPreferencesEditor.putInt("prefs_uploader_behaviour",
                             FileUploader.LOCAL_BEHAVIOUR_MOVE);
-                }
-                else {
+                } else {
                     if (mRadioBtnMoveFiles.isChecked()) {
                         setResult(RESULT_OK_AND_MOVE, data);
                         appPreferencesEditor.putInt("prefs_uploader_behaviour",

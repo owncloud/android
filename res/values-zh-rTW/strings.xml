@@ -21,6 +21,7 @@
   <string name="drawer_item_all_files">所有檔案</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_item_settings">設定</string>
     <string name="drawer_item_uploads_list">上傳</string>
   <string name="drawer_close"> 關閉</string>
   <string name="drawer_open">開啟</string>

@@ -44,7 +44,7 @@
     <color name="drawer_header_color">@color/owncloud_blue_accent</color>
 
     <!-- Button -->
-
+    <color name="button_text_color">#000000</color>
     <!-- Multiselect backgrounds -->
     <color name="action_mode_background">@color/primary_button_background_color</color>
     <color name="action_mode_status_bar_background">@color/actionbar_start_color</color>
