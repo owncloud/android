@@ -169,6 +169,14 @@ android {
                 keyPassword System.env.OC_RELEASE_KEY_PASSWORD
             }
         }
+        beta {
+            if (System.env.OC_BETA_KEYSTORE) {
+                storeFile file(System.env.OC_BETA_KEYSTORE)  // use an absolute path
+                storePassword System.env.OC_BETA_KEYSTORE_PASSWORD
+                keyAlias System.env.OC_BETA_KEY_ALIAS
+                keyPassword System.env.OC_BETA_KEY_PASSWORD
+            }
+        }
     }
 
     buildTypes {
@@ -187,10 +195,12 @@ android {
 
             manifestPlaceholders.versionCode = "20400001"
             manifestPlaceholders.versionName = "2.5.0-beta.2"
-
             applicationIdSuffix ".beta"
-        }
 
+            if (System.env.OC_BETA_KEYSTORE) {
+                signingConfig signingConfigs.beta
+            }
+        }
     }
 
     applicationVariants.all { variant ->
