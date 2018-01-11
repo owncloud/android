@@ -645,7 +645,7 @@ public class FileDisplayActivity extends HookActivity
             requestUploadOfFilesFromFileSystem(data, resultCode);
 
         } else if(requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA &&
-                (resultCode == RESULT_OK || requestCode == UploadFilesActivity.RESULT_OK_AND_MOVE)){
+                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)){
 
             requestUploadOfFilesFromFileSystem(data,resultCode);
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == RESULT_OK) {
