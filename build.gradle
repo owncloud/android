@@ -208,7 +208,6 @@ android {
         def appName = System.env.OC_APP_NAME
         setOutputFileName(variant, appName, project)
     }
-
 }
 
 // Updates output file names of a given variant to format
