@@ -113,7 +113,7 @@ public class UploadsStorageManager extends Observable {
         cv.put(ProviderTableMeta.UPLOADS_FORCE_OVERWRITE, ocUpload.isForceOverwrite() ? 1 : 0);
         cv.put(ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER, ocUpload.isCreateRemoteFolder() ? 1 : 0);
         cv.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ocUpload.getLastResult().getValue());
-        cv.put(ProviderTableMeta.UPLOADS_CREATED_BY, ocUpload.getCreadtedBy());
+        cv.put(ProviderTableMeta.UPLOADS_CREATED_BY, ocUpload.getCreatedBy());
 
         Uri result = getDB().insert(ProviderTableMeta.CONTENT_URI_UPLOADS, cv);
 
@@ -152,7 +152,7 @@ public class UploadsStorageManager extends Observable {
             new String[]{String.valueOf(ocUpload.getUploadId())}
         );
 
-        Log_OC.d(TAG, "updateUpload returns with: " + result + " for file: " + ocUpload.getLocalPath());
+        Log_OC.d(TAG, "updateCameraUploadSync returns with: " + result + " for file: " + ocUpload.getLocalPath());
         if (result != 1) {
             Log_OC.e(TAG, "Failed to update item " + ocUpload.getLocalPath() + " into upload db.");
         } else {
@@ -334,7 +334,6 @@ public class UploadsStorageManager extends Observable {
                     list[c.getPosition()] = upload;
                 }
             } while (c.moveToNext());
-
         }
         c.close();
 
@@ -547,5 +546,4 @@ public class UploadsStorageManager extends Observable {
         }
         return result;
     }
-
 }

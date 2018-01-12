@@ -17,9 +17,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.owncloud.android"
-    android:versionCode="${versionCode}"
-    android:versionName="${versionName}">
+          package="com.owncloud.android"
+          android:versionCode="${versionCode}"
+          android:versionName="${versionName}">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -142,6 +142,12 @@
             android:exported="true">
         </service>
 
+        <service
+            android:name=".files.services.CameraUploadsSyncJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true">
+        </service>
+
         <provider
             android:name=".providers.FileContentProvider"
             android:authorities="@string/authority"
@@ -224,19 +230,6 @@
         <receiver android:name=".broadcastreceivers.BootupBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".broadcastreceivers.InstantUploadBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.hardware.action.NEW_PICTURE" />
-
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.hardware.action.NEW_VIDEO" />
-
-                <data android:mimeType="video/*" />
             </intent-filter>
         </receiver>
 
