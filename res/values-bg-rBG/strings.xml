@@ -30,10 +30,6 @@
   <string name="prefs_accounts">Профили</string>
   <string name="prefs_manage_accounts">Управление на профилите</string>
   <string name="prefs_passcode">Заключваща парола</string>
-  <string name="prefs_camera_picture_upload">Незабавно качване на снимки</string>
-  <string name="prefs_camera_picture_upload_summary">Незабвано качване на снимки направени с камерата</string>
-  <string name="prefs_camera_video_upload">Незабавно качване на видео</string>
-  <string name="prefs_camera_video_upload_summary">Незабавно качване на видеота записани от камерата.</string>
   <string name="prefs_log_title">Разреши влизане</string>
   <string name="prefs_log_summary">Използва се за докладване на проблеми</string>
   <string name="prefs_log_title_history">История на влизанията</string>
@@ -286,7 +282,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Качване на снимки само през WiFi</string>
   <string name="camera_video_upload_on_wifi">Качване на видео само през WiFi</string>
-  <string name="camera_upload_path">/InstantUpload</string>
   <string name="conflict_title">Файлов конфликт</string>
   <string name="conflict_message">Кои файлове искаш за да запазиш? Ако избереш и двете версии, локалния файл ще има цифри добавени към името си.</string>
   <string name="conflict_keep_both">Запазване и на двата</string>
@@ -295,7 +290,6 @@
   <string name="preview_image_description">Преглед на изображението</string>
   <string name="preview_image_error_unknown_format">Изображението не може да бъде показано</string>
   <string name="error__upload__local_file_not_copied">%1$s не може да бъде копиран в локалната папка %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Път за качване</string>
   <string name="share_link_no_support_share_api">За съжаление споделянето не е включено на сървъра ви. 
 Моля, свържете се с администратора.</string>
   <string name="share_link_file_no_exist">Неуспешен опит за споделяне. Моля, провери дали файла съществува.</string>
@@ -348,9 +342,7 @@
   <string name="copy_file_invalid_overwrite">Файлът вече съществува в отдалечената папка.</string>
   <string name="copy_file_error">Настъпи грешка при опита за копиране на този файл или папка.</string>
   <string name="forbidden_permissions_copy">да копира този файл</string>
-  <string name="prefs_category_camera_upload">Незабавно качване</string>
   <string name="prefs_category_details">Подробности</string>
-  <string name="prefs_camera_video_upload_path_title">Път за качване на видеа</string>
   <string name="sync_folder_failed_content">Синхронизацията на папка %1$s не може да бъде завършена.</string>
   <string name="shared_subject_header">споделен</string>
   <string name="with_you_subject_header">с теб</string>

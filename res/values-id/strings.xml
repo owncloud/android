@@ -30,10 +30,6 @@
   <string name="prefs_accounts">Akun</string>
   <string name="prefs_manage_accounts">Kelola akun</string>
   <string name="prefs_passcode">Kunci kode sandi</string>
-  <string name="prefs_camera_picture_upload">Unggah gambar cepat</string>
-  <string name="prefs_camera_picture_upload_summary">Unggah gambar yang diambil kamera dengan cepat</string>
-  <string name="prefs_camera_video_upload">Unggah video cepat</string>
-  <string name="prefs_camera_video_upload_summary">Unggah video yang direkam kamera dengan cepat</string>
   <string name="prefs_log_title">Aktifkan pencatatan</string>
   <string name="prefs_log_summary">Ini digunakan untuk mencatat masalah</string>
   <string name="prefs_log_title_history">History pencatatan</string>
@@ -287,7 +283,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">18/05/2012 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="camera_upload_path">/UnggahInstan</string>
   <string name="conflict_title">Berkas konflik</string>
   <string name="conflict_message">Berkas mana yang ingin Anda simpan? Jika Anda memilih kedua versi, berkas lokal akan memiliki angka yang ditambahkan pada namanya.</string>
   <string name="conflict_keep_both">Biarkan keduannya</string>
@@ -350,7 +345,6 @@
   <string name="copy_file_invalid_overwrite">Berkas sudah ada didalam folder tujuan</string>
   <string name="copy_file_error">Terjadi kesalahan ketika mencoba menyalin berkas atau folder ini</string>
   <string name="forbidden_permissions_copy">untuk menyalin berkas ini</string>
-  <string name="prefs_category_camera_upload">Unggah Cepat</string>
   <string name="prefs_category_details">Rincian</string>
   <string name="shared_subject_header">dibagikan</string>
   <string name="with_you_subject_header">kepada Anda</string>

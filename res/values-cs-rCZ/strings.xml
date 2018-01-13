@@ -30,10 +30,6 @@
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>
-  <string name="prefs_camera_picture_upload">Okamžité nahrávání obrázků</string>
-  <string name="prefs_camera_picture_upload_summary">Okamžitě nahrávat vytvořené fotografie</string>
-  <string name="prefs_camera_video_upload">Okamžité nahrávání videa</string>
-  <string name="prefs_camera_video_upload_summary">Okamžitě odesílat nahrané video</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
   <string name="prefs_log_title_history">Historie logování</string>
@@ -294,7 +290,6 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
   <string name="camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
-  <string name="camera_upload_path">/InstantUpload</string>
   <string name="conflict_title">Konflikt souboru</string>
   <string name="conflict_message">Které soubory chcete ponechat? Pokud zvolíte obě verze, zkopírovaný soubor bude mít název doplněný o číslo.</string>
   <string name="conflict_keep_both">Ponechat oba</string>
@@ -303,7 +298,6 @@
   <string name="preview_image_description">Náhled obrázku</string>
   <string name="preview_image_error_unknown_format">Obrázek nelze zobrazit</string>
   <string name="error__upload__local_file_not_copied">%1$s nelze zkopírovat do místního adresáře %2$s</string>
-  <string name="prefs_camera_picture_upload_path_title">Cesta pro nahrání</string>
   <string name="share_link_no_support_share_api">Je nám líto, ale sdílení není na vašem serveru povoleno. Kontaktujte svého
 správce systému.</string>
   <string name="share_link_file_no_exist">Nelze sdílet. Zkontrolujte prosím že soubor existuje</string>
@@ -359,9 +353,7 @@ správce systému.</string>
   <string name="copy_file_invalid_overwrite">Soubor již v cílovém adresáři existuje</string>
   <string name="copy_file_error">Při pokusu o zkopírování tohoto souboru či adresáře došlo k chybě</string>
   <string name="forbidden_permissions_copy">pro zkopírování tohoto souboru</string>
-  <string name="prefs_category_camera_upload">Okamžitá odesílání</string>
   <string name="prefs_category_details">Podrobnosti</string>
-  <string name="prefs_camera_video_upload_path_title">Cesta pro nahrání videí</string>
   <string name="sync_folder_failed_content">Synchronizaci adresáře %1$s nelze dokončit</string>
   <string name="shared_subject_header">sdílené</string>
   <string name="with_you_subject_header">s vámi</string>
