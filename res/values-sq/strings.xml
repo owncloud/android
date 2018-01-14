@@ -30,6 +30,10 @@
   <string name="prefs_accounts">Llogari</string>
   <string name="prefs_manage_accounts">Administroni llogari</string>
   <string name="prefs_passcode">Kyçje me kodkalim</string>
+  <string name="prefs_camera_picture_upload">Ngarkime fotosh</string>
+  <string name="prefs_camera_picture_upload_summary">Fotot e bëra nga kamera ngarkoji vetvetiu</string>
+  <string name="prefs_camera_video_upload">Ngarkime videosh</string>
+  <string name="prefs_camera_video_upload_summary">Videot e bëra nga kamera ngarkoji vetvetiu</string>
   <string name="prefs_log_title">Aktivizo regjistrimet</string>
   <string name="prefs_log_summary">Kjo përdoret për të regjistruar probleme</string>
   <string name="prefs_log_title_history">Historik regjistrimesh</string>
@@ -290,6 +294,10 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Fotot ngarkoji vetëm përmes wifi-it</string>
   <string name="camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
+  <string name="camera_upload_path">/NgarkimeNgaKamera</string>
+  <string name="confirmation_disable_camera_uploads_title">Ripohojeni</string>
+  <string name="confirmation_disable_pictures_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Fotot e mbetura nuk do të ngarkohen</string>
+  <string name="confirmation_disable_videos_upload_message">Jeni i sigurt se doni të çaktivizohet kjo veçori? Videot e mbetura nuk do të ngarkohen</string>
   <string name="conflict_title">Përplasje kartelash</string>
   <string name="conflict_message">Cilat kartela doni të mbani? Nëse përzgjidhni të dy versionet, kartelës vendore do t\’i shtohet një numër te emri.</string>
   <string name="conflict_keep_both">Mbaji të dyja</string>
@@ -298,6 +306,7 @@
   <string name="preview_image_description">Paraparje figure</string>
   <string name="preview_image_error_unknown_format">Kjo figurë nuk mund të shfaqet</string>
   <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s</string>
+  <string name="prefs_camera_picture_upload_path_title">Shteg ngarkimesh fotosh</string>
   <string name="share_link_no_support_share_api">Na ndjeni, ndarja me të tjerët s\’është e aktivizuar te shërbyesi juaj. Ju lutemi, lidhuni me përgjegjësin tuaj.</string>
   <string name="share_link_file_no_exist">S\’arrihet të ndahet me të tjerët. Ju lutemi, kontrolloni nëse ekziston apo jo kartela</string>
   <string name="share_link_file_error">Ndodhi një gabim teksa përpiqej të ndahej me të tjerët kjo kartelë apo dosje</string>
@@ -352,7 +361,9 @@
   <string name="copy_file_invalid_overwrite">Kartela gjendet tashmë te dosja vendmbërritje</string>
   <string name="copy_file_error">Ndodhi një gabim teksa përpiqej të kopjohej kjo kartelë apo dosje</string>
   <string name="forbidden_permissions_copy">për kopjim të kësaj kartele</string>
+  <string name="prefs_category_camera_upload">Ngarkime nga kamera</string>
   <string name="prefs_category_details">Hollësi</string>
+  <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="sync_folder_failed_content">Njëkohësimi i dosjes %1$s s\’u plotësua dot</string>
   <string name="shared_subject_header">ndarë</string>
   <string name="with_you_subject_header">me ju</string>
