@@ -1203,7 +1203,7 @@ public class FileContentProvider extends ContentProvider {
      * Version 10 of database does not modify its scheme. It coincides with the upgrade of the ownCloud account names
      * structure to include in it the path to the server instance. Updating the account names and path to local files
      * in the files table is a must to keep the existing account working and the database clean.
-     * <p>
+     *
      * See {@link com.owncloud.android.authentication.AccountUtils#updateAccountVersion(android.content.Context)}
      *
      * @param db Database where table of files is included.
@@ -1315,7 +1315,7 @@ public class FileContentProvider extends ContentProvider {
 
     /**
      * Grants that total count of successful uploads stored is not greater than MAX_SUCCESSFUL_UPLOADS.
-     * <p>
+     * 
      * Removes older uploads if needed.
      */
     private void trimSuccessfulUploads(SQLiteDatabase db) {
