@@ -154,7 +154,8 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/sync_string_files"
-            android:syncable="true" />
+            android:syncable="true"
+            />
         <provider
             android:name=".providers.UsersAndGroupsSearchProvider"
             android:authorities="@string/search_suggest_authority"

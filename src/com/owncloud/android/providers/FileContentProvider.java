@@ -55,6 +55,7 @@ import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The ContentProvider for the ownCloud App.
@@ -76,6 +77,140 @@ public class FileContentProvider extends ContentProvider {
     private static final String MAX_SUCCESSFUL_UPLOADS = "30";
 
     private UriMatcher mUriMatcher;
+
+    private static HashMap<String, String> mFileProjectionMap = new HashMap<>();
+
+    static {
+
+        mFileProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_PARENT, ProviderTableMeta.FILE_PARENT);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_NAME, ProviderTableMeta.FILE_NAME);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_CREATION, ProviderTableMeta.FILE_CREATION);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_MODIFIED, ProviderTableMeta.FILE_MODIFIED);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA,
+                ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_CONTENT_LENGTH, ProviderTableMeta.FILE_CONTENT_LENGTH);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_CONTENT_TYPE, ProviderTableMeta.FILE_CONTENT_TYPE);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_STORAGE_PATH, ProviderTableMeta.FILE_STORAGE_PATH);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_PATH, ProviderTableMeta.FILE_PATH);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_ACCOUNT_OWNER, ProviderTableMeta.FILE_ACCOUNT_OWNER);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_LAST_SYNC_DATE, ProviderTableMeta.FILE_LAST_SYNC_DATE);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA,
+                ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_KEEP_IN_SYNC, ProviderTableMeta.FILE_KEEP_IN_SYNC);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_ETAG, ProviderTableMeta.FILE_ETAG);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_TREE_ETAG, ProviderTableMeta.FILE_TREE_ETAG);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_SHARED_VIA_LINK, ProviderTableMeta.FILE_SHARED_VIA_LINK);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_SHARED_WITH_SHAREE, ProviderTableMeta.FILE_SHARED_WITH_SHAREE);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_PERMISSIONS, ProviderTableMeta.FILE_PERMISSIONS);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_REMOTE_ID, ProviderTableMeta.FILE_REMOTE_ID);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_UPDATE_THUMBNAIL, ProviderTableMeta.FILE_UPDATE_THUMBNAIL);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_IS_DOWNLOADING, ProviderTableMeta.FILE_IS_DOWNLOADING);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_ETAG_IN_CONFLICT, ProviderTableMeta.FILE_ETAG_IN_CONFLICT);
+        mFileProjectionMap.put(ProviderTableMeta.FILE_PRIVATE_LINK, ProviderTableMeta.FILE_PRIVATE_LINK);
+    }
+
+    private static HashMap<String, String> mShareProjectionMap = new HashMap<>();
+
+    static {
+
+        mShareProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_FILE_SOURCE, ProviderTableMeta.OCSHARES_FILE_SOURCE);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_ITEM_SOURCE, ProviderTableMeta.OCSHARES_ITEM_SOURCE);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_SHARE_TYPE, ProviderTableMeta.OCSHARES_SHARE_TYPE);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_SHARE_WITH, ProviderTableMeta.OCSHARES_SHARE_WITH);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_PATH, ProviderTableMeta.OCSHARES_PATH);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_PERMISSIONS, ProviderTableMeta.OCSHARES_PERMISSIONS);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_SHARED_DATE, ProviderTableMeta.OCSHARES_SHARED_DATE);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_EXPIRATION_DATE, ProviderTableMeta.OCSHARES_EXPIRATION_DATE);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_TOKEN, ProviderTableMeta.OCSHARES_TOKEN);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME,
+                ProviderTableMeta.OCSHARES_SHARE_WITH_DISPLAY_NAME);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_IS_DIRECTORY,
+                ProviderTableMeta.OCSHARES_IS_DIRECTORY);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_USER_ID, ProviderTableMeta.OCSHARES_USER_ID);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED, ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_ACCOUNT_OWNER, ProviderTableMeta.OCSHARES_ACCOUNT_OWNER);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_NAME, ProviderTableMeta.OCSHARES_NAME);
+        mShareProjectionMap.put(ProviderTableMeta.OCSHARES_URL, ProviderTableMeta.OCSHARES_URL);
+    }
+
+    private static HashMap<String, String> mCapabilityProjectionMap = new HashMap<>();
+
+    static {
+
+        mCapabilityProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME,
+                ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_VERSION_MAYOR,
+                ProviderTableMeta.CAPABILITIES_VERSION_MAYOR);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_VERSION_MINOR,
+                ProviderTableMeta.CAPABILITIES_VERSION_MINOR);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_VERSION_MICRO,
+                ProviderTableMeta.CAPABILITIES_VERSION_MICRO);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_VERSION_STRING,
+                ProviderTableMeta.CAPABILITIES_VERSION_STRING);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_VERSION_EDITION,
+                ProviderTableMeta.CAPABILITIES_VERSION_EDITION);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL,
+                ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED,
+                ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_ENABLED);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENABLED);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_ENFORCED);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SEND_MAIL);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY,
+                ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL,
+                ProviderTableMeta.CAPABILITIES_SHARING_USER_SEND_MAIL);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_RESHARING,
+                ProviderTableMeta.CAPABILITIES_SHARING_RESHARING);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING,
+                ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING,
+                ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING,
+                ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_FILES_UNDELETE,
+                ProviderTableMeta.CAPABILITIES_FILES_UNDELETE);
+        mCapabilityProjectionMap.put(ProviderTableMeta.CAPABILITIES_FILES_VERSIONING,
+                ProviderTableMeta.CAPABILITIES_FILES_VERSIONING);
+    }
+
+    private static HashMap<String, String> mUploadProjectionMap = new HashMap<>();
+
+    static {
+
+        mUploadProjectionMap.put(ProviderTableMeta._ID, ProviderTableMeta._ID);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_LOCAL_PATH, ProviderTableMeta.UPLOADS_LOCAL_PATH);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_REMOTE_PATH, ProviderTableMeta.UPLOADS_REMOTE_PATH);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_ACCOUNT_NAME, ProviderTableMeta.UPLOADS_ACCOUNT_NAME);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_FILE_SIZE, ProviderTableMeta.UPLOADS_FILE_SIZE);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_STATUS, ProviderTableMeta.UPLOADS_STATUS);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR,
+                ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_UPLOAD_TIME, ProviderTableMeta.UPLOADS_UPLOAD_TIME);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_FORCE_OVERWRITE, ProviderTableMeta.UPLOADS_FORCE_OVERWRITE);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER,
+                ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP,
+                ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ProviderTableMeta.UPLOADS_LAST_RESULT);
+        mUploadProjectionMap.put(ProviderTableMeta.UPLOADS_CREATED_BY, ProviderTableMeta.UPLOADS_CREATED_BY);
+    }
 
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
@@ -389,23 +524,30 @@ public class FileContentProvider extends ContentProvider {
             String sortOrder
     ) {
 
+        if (selection != null && selectionArgs == null) {
+            throw new IllegalArgumentException("Selection not allowed, use parameterized queries");
+        }
+
         SQLiteQueryBuilder sqlQuery = new SQLiteQueryBuilder();
 
         sqlQuery.setTables(ProviderTableMeta.FILE_TABLE_NAME);
 
         switch (mUriMatcher.match(uri)) {
             case ROOT_DIRECTORY:
+                sqlQuery.setProjectionMap(mFileProjectionMap);
                 break;
             case DIRECTORY:
                 String folderId = uri.getPathSegments().get(1);
                 sqlQuery.appendWhere(ProviderTableMeta.FILE_PARENT + "="
                         + folderId);
+                sqlQuery.setProjectionMap(mFileProjectionMap);
                 break;
             case SINGLE_FILE:
                 if (uri.getPathSegments().size() > 1) {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
                 }
+                sqlQuery.setProjectionMap(mFileProjectionMap);
                 break;
             case SHARES:
                 sqlQuery.setTables(ProviderTableMeta.OCSHARES_TABLE_NAME);
@@ -413,13 +555,15 @@ public class FileContentProvider extends ContentProvider {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
                 }
+                sqlQuery.setProjectionMap(mShareProjectionMap);
                 break;
             case CAPABILITIES:
                 sqlQuery.setTables(ProviderTableMeta.CAPABILITIES_TABLE_NAME);
                 if (uri.getPathSegments().size() > 1) {
-                    sqlQuery.appendWhere(ProviderTableMeta._ID + "="
+                    sqlQuery.appendWhereEscapeString(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
                 }
+                sqlQuery.setProjectionMap(mCapabilityProjectionMap);
                 break;
             case UPLOADS:
                 sqlQuery.setTables(ProviderTableMeta.UPLOADS_TABLE_NAME);
@@ -427,6 +571,7 @@ public class FileContentProvider extends ContentProvider {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
                 }
+                sqlQuery.setProjectionMap(mUploadProjectionMap);
                 break;
             case CAMERA_UPLOADS_SYNC:
                 sqlQuery.setTables(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME);
@@ -894,6 +1039,11 @@ public class FileContentProvider extends ContentProvider {
                     db.endTransaction();
                 }
             }
+            if (!upgraded) {
+                Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
+                        ", newVersion == " + newVersion);
+            }
+
             if (oldVersion < 21 && newVersion >= 21) {
                 Log_OC.i("SQL", "Entering in the #21 ADD in onUpgrade");
                 db.beginTransaction();
@@ -911,11 +1061,11 @@ public class FileContentProvider extends ContentProvider {
             if (!upgraded)
                 Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                         ", newVersion == " + newVersion);
+
             if (oldVersion < 22 && newVersion >= 22) {
                 Log_OC.i("SQL", "Entering in the #22 ADD in onUpgrade");
                 db.beginTransaction();
                 try {
-                    // Create camera uploads sync table
                     createCameraUploadsSyncTable(db);
                     upgraded = true;
                     db.setTransactionSuccessful();
@@ -1056,7 +1206,7 @@ public class FileContentProvider extends ContentProvider {
      *
      * See {@link com.owncloud.android.authentication.AccountUtils#updateAccountVersion(android.content.Context)}
      *
-     * @param db        Database where table of files is included.
+     * @param db Database where table of files is included.
      */
     private void updateAccountName(SQLiteDatabase db) {
         Log_OC.d("SQL", "THREAD:  " + Thread.currentThread().getName());
@@ -1109,9 +1259,9 @@ public class FileContentProvider extends ContentProvider {
      * Rename the local ownCloud folder of one account to match the a rename of the account itself. Updates the
      * table of files in database so that the paths to the local files keep being the same.
      *
-     * @param db                    Database where table of files is included.
-     * @param newAccountName        New name for the target OC account.
-     * @param oldAccountName        Old name of the target OC account.
+     * @param db             Database where table of files is included.
+     * @param newAccountName New name for the target OC account.
+     * @param oldAccountName Old name of the target OC account.
      */
     private void updateDownloadedFiles(SQLiteDatabase db, String newAccountName,
                                        String oldAccountName) {
@@ -1165,7 +1315,7 @@ public class FileContentProvider extends ContentProvider {
 
     /**
      * Grants that total count of successful uploads stored is not greater than MAX_SUCCESSFUL_UPLOADS.
-     *
+     * 
      * Removes older uploads if needed.
      */
     private void trimSuccessfulUploads(SQLiteDatabase db) {
