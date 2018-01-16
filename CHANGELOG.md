@@ -1,3 +1,10 @@
+## 2.6.0 (January 2018)
+- Camera uploads, replacing instant uploads (Android 6 or higher required)
+- Android O support
+- Notification channels (Android O required)
+- Private link (OC X required)
+- Fixed typos in some translations
+
 ## 2.5.1 beta v1 (November 2017)
 - Camera uploads (replacing instant uploads)
 - Android O support
