@@ -18,14 +18,15 @@
   <string name="drawer_item_all_files">Сите датотеки</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
-    <string name="drawer_open">Отвори</string>
-    <string name="prefs_category_more">Повеќе</string>
-    <string name="prefs_passcode">Заклучено со код</string>
-  <string name="prefs_instant_upload">Инстантно префрлање на слики</string>
-  <string name="prefs_instant_upload_summary">Инстантно префрли слики направени со камера</string>
-  <string name="prefs_instant_video_upload">Инстантно префрлање на видеа</string>
-  <string name="prefs_instant_video_upload_summary">Инстантно префрла видеа снимени со камерата</string>
-    <string name="prefs_help">Помош</string>
+  <string name="drawer_item_settings">Подесувања</string>
+  <string name="drawer_open">Отвори</string>
+  <string name="prefs_category_general">Општо</string>
+  <string name="prefs_category_more">Повеќе</string>
+  <string name="prefs_accounts">Сметки</string>
+  <string name="prefs_passcode">Заклучено со код</string>
+  <string name="prefs_log_summary">Ова е користено за логирање на проблеми</string>
+  <string name="prefs_log_summary_history">Ова ги прикажува снимените логови</string>
+  <string name="prefs_help">Помош</string>
   <string name="prefs_recommend">Препорачај на пријател</string>
   <string name="prefs_feedback">Повратен одговор</string>
   <string name="prefs_imprint">Печат</string>
@@ -183,7 +184,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_path">/InstantUpload</string>
   <string name="conflict_keep_both">Задржи ги и двете</string>
   <string name="preview_image_description">Преглед на сликата</string>
   <string name="preview_image_error_unknown_format">Сликата не може да се прикаже</string>

@@ -361,7 +361,6 @@ public class OperationsService extends Service {
                 mServiceHandler.mPendingOperations.add(itemToQueue);
                 startService(new Intent(OperationsService.this, OperationsService.class));
                 return itemToQueue.second.hashCode();
-                
             } else {
                 return Long.MAX_VALUE;
             }
@@ -526,9 +525,6 @@ public class OperationsService extends Service {
                 mService.dispatchResultToOperationListeners(mCurrentOperation, result);
             }
         }
-
-
-
     }
 
 
@@ -728,6 +724,7 @@ public class OperationsService extends Service {
                 } else if (action.equals(ACTION_CHECK_CURRENT_CREDENTIALS)) {
                     // Check validity of currently stored credentials for a given account
                     operation = new CheckCurrentCredentialsOperation(account);
+
                 }
             }
                 
@@ -823,5 +820,4 @@ public class OperationsService extends Service {
         }
         Log_OC.d(TAG, "Called " + count + " listeners");
     }
-
 }

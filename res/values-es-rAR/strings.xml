@@ -27,11 +27,11 @@
     <string name="prefs_category_more">Más</string>
     <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
-  <string name="prefs_instant_upload">Subir fotos instantáneamente. </string>
-  <string name="prefs_instant_upload_summary">Subir instantáneamente fotos tomadas por la cámara.</string>
-  <string name="prefs_instant_video_upload">Subir videos instantáneamente. </string>
-  <string name="prefs_instant_video_upload_summary">Subir instantáneamente videos tomados por la cámara.</string>
-    <string name="prefs_log_delete_history_button">Eliminar historial</string>
+  <string name="prefs_log_title">Activar bitacora</string>
+  <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
+  <string name="prefs_log_title_history">Historial de la bitacora</string>
+  <string name="prefs_log_summary_history">Esto muestra los registros grabados</string>
+  <string name="prefs_log_delete_history_button">Eliminar historial</string>
   <string name="prefs_help">Ayuda</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Sugerencias</string>
@@ -245,7 +245,6 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_path">/SubidasInstantáneas</string>
   <string name="conflict_keep_both">Mantener ambas</string>
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">Esta imagen no puede ser mostrada</string>

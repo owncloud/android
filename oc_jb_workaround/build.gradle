@@ -63,5 +63,4 @@ android {
         }
         setOutputFileName(variant, appName, project)
     }
-
 }

@@ -40,7 +40,7 @@ configurations.all {
 
 dependencies {
     /// dependencies for app building
-    compile name: 'touch-image-view'
+    compile project(':touchImageView')
     compile project(':owncloud-android-library')
     compile "com.android.support:support-v4:${supportLibraryVersion}"
     compile "com.android.support:design:${supportLibraryVersion}"
@@ -72,7 +72,7 @@ dependencies {
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 
     // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
-    androidTestCompile "com.android.support:support-annotations:" + "${supportLibraryVersion}"
+    androidTestCompile "com.android.support:support-annotations:${supportLibraryVersion}"
 }
 
 tasks.withType(Test) {
@@ -192,9 +192,8 @@ android {
         }
 
         beta {
-
-            manifestPlaceholders.versionCode = "20400001"
-            manifestPlaceholders.versionName = "2.5.0-beta.2"
+            manifestPlaceholders.versionCode = "20500001"
+            manifestPlaceholders.versionName = "2.5.1-beta.1"
             applicationIdSuffix ".beta"
 
             if (System.env.OC_BETA_KEYSTORE) {
@@ -207,7 +206,6 @@ android {
         def appName = System.env.OC_APP_NAME
         setOutputFileName(variant, appName, project)
     }
-
 }
 
 // Updates output file names of a given variant to format
