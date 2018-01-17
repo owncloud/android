@@ -22,10 +22,13 @@
     <string name="drawer_item_all_files">All files</string>
     <!-- TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+    <string name="drawer_item_settings">Settings</string>
     <string name="drawer_item_uploads_list">Uploads</string>
     <string name="drawer_close">Close</string>
     <string name="drawer_open">Open</string>
+    <string name="prefs_category_general">General</string>
     <string name="prefs_category_more">More</string>
+    <string name="prefs_accounts">Accounts</string>
     <string name="prefs_manage_accounts">Manage accounts</string>
     <string name="prefs_passcode">Passcode lock</string>
     <string name="prefs_camera_picture_upload">Picture uploads</string>
@@ -33,11 +36,16 @@
     <string name="prefs_camera_video_upload">Video uploads</string>
     <string name="prefs_camera_video_upload_summary">Automatically upload videos recorded by camera</string>
     <string name="prefs_log_title">Enable logging</string>
+    <string name="prefs_log_summary">This is used to log problems</string>
+    <string name="prefs_log_title_history">Logging history</string>
+    <string name="prefs_log_summary_history">This shows the recorded logs</string>
     <string name="prefs_log_delete_history_button">Delete history</string>
     <string name="prefs_help">Help</string>
     <string name="prefs_recommend">Recommend to a friend</string>
     <string name="prefs_feedback">Feedback</string>
     <string name="prefs_imprint">Imprint</string>
+    <string name="prefs_remember_last_share_location">Remember share location</string>
+    <string name="prefs_remember_last_upload_location_summary">Remember last share upload location</string>
 
     <string name="recommend_subject">"Try %1$s on your smartphone!"</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
@@ -56,6 +64,7 @@
     <string name="uploader_wrn_no_account_setup_btn_text">Setup</string>
     <string name="uploader_wrn_no_account_quit_btn_text">Quit</string>
     <string name="uploader_error_title_no_file_to_upload">No file to upload</string>
+    <string name="uploader_error_message_received_piece_of_text">%1$s cannot upload a piece of text as a file.</string>
     <string name="uploader_error_message_no_file_to_upload">Received data do not include any valid file.</string>
     <string name="uploader_error_title_file_cannot_be_uploaded">File cannot be uploaded</string>
     <string name="uploader_error_message_read_permission_not_granted">%1$s is not allowed to read a received file</string>
@@ -68,6 +77,10 @@
     <string name="local_file_list_empty">There are no files in this folder.</string>
     <string name="local_file_list_empty_just_folders">There are no folders in this folder.</string>
     <string name="upload_list_empty">No uploads available.</string>
+    <string name="file_list_folder">folder</string>
+    <string name="file_list_folders">folders</string>
+    <string name="file_list_file">file</string>
+    <string name="file_list_files">files</string>
     <string name="filedetails_select_file">Tap on a file to display additional information.</string>
     <string name="upload_owncloud"> Upload to OwnCloud </string>
     <string name="upload_bottom_sheet_displayed"> Upload Bottom Sheet Displayed </string>
@@ -85,14 +98,21 @@
     <string name="common_yes">Yes</string>
     <string name="common_no">No</string>
     <string name="common_ok">OK</string>
+    <string name="common_remove_upload">Remove upload</string>
+    <string name="common_retry_upload">Retry upload</string>
     <string name="common_cancel_sync">Cancel sync</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_back">Back</string>
+    <string name="common_save_exit">Save &amp; exit</string>
+    <string name="common_error">Error</string>
     <string name="common_loading">Loading &#8230;</string>
     <string name="common_unknown">unknown</string>
     <string name="common_error_unknown">Unknown error</string>
     <string name="common_pending">Pending</string>
     <string name="about_title">About</string>
+    <string name="change_password">Change password</string>
+    <string name="delete_account">Remove account</string>
+    <string name="create_account">Create account</string>
     <string name="upload_chooser_title">Upload from &#8230;</string>
     <string name="uploader_info_dirname">Folder name</string>
     <string name="uploader_upload_in_progress_ticker">Uploading &#8230;</string>
@@ -102,6 +122,7 @@
     <string name="uploader_upload_failed_ticker">Upload failed</string>
     <string name="uploader_upload_failed_content_single">Upload of %1$s could not be completed</string>
     <string name="uploader_upload_failed_credentials_error">Upload failed, you need to log in again</string>
+    <string name="uploader_upload_failed_ssl_certificate_not_trusted">Server certificate is not trusted</string>
     <string name="uploader_upload_text_dialog_title">Insert a name for the new file</string>
     <string name="uploader_upload_text_dialog_filename_error_empty">Filename must not be empty</string>
     <string name="uploader_upload_text_dialog_filename_error_length_max">Filename must not be more than %d characters</string>
@@ -115,12 +136,15 @@
     <string name="uploads_view_group_file_count_single">%d File</string>
     <string name="uploads_view_upload_status_succeeded">Completed</string>
     <string name="uploads_view_upload_status_cancelled">Cancelled</string>
+    <string name="uploads_view_upload_status_paused">Paused</string>
     <string name="uploads_view_upload_status_failed_connection_error">Connection error</string>
+    <string name="uploads_view_upload_status_failed_retry">Upload will be retried shortly</string>
     <string name="uploads_view_upload_status_failed_credentials_error">Credentials error</string>
     <string name="uploads_view_upload_status_failed_folder_error">Folder error</string>
     <string name="uploads_view_upload_status_failed_file_error">File error</string>
     <string name="uploads_view_upload_status_failed_localfile_error">Local file not found</string>
     <string name="uploads_view_upload_status_failed_permission_error">Permission error</string>
+    <string name="uploads_view_upload_status_failed_firewall_error">Forbidden due to a firewall rule</string>
     <string name="uploads_view_upload_status_conflict">Conflict</string>
     <string name="uploads_view_upload_status_service_interrupted">App was terminated</string>
     <string name="uploads_view_upload_status_unknown_fail">Unknown error</string>
@@ -142,6 +166,7 @@
     <string name="sync_fail_content">Sync of %1$s could not be completed</string>
     <string name="sync_fail_content_unauthorized">Invalid password for %1$s</string>
     <string name="sync_conflicts_in_favourites_ticker">Conflicts found</string>
+    <string name="sync_conflicts_in_favourites_content">%1$d kept-in-sync files could not be sync\'ed</string>
     <string name="sync_fail_in_favourites_ticker">Kept-in-sync files failed</string>
     <string name="sync_fail_in_favourites_content">Contents of %1$d files could not be sync\'ed (%2$d conflicts)</string>
     <string name="sync_foreign_files_forgotten_ticker">Some local files were forgotten</string>
@@ -171,6 +196,7 @@
     <string name="media_state_loading">"%1$s (loading)"</string>
     <string name="media_event_done">"%1$s playback finished"</string>
     <string name="media_err_nothing_to_play">No media file found</string>
+    <string name="media_err_no_account">No account provided</string>
     <string name="media_err_not_in_owncloud">File not in a valid account</string>
     <string name="media_err_unsupported">Unsupported media codec</string>
     <string name="media_err_io">Media file could not be read</string>
@@ -190,16 +216,19 @@
 
     <string name="auth_getting_authorization">Getting authorization &#8230;</string>
     <string name="auth_trying_to_login">Trying to log in &#8230;</string>
+    <string name="auth_no_net_conn_title">No network connection</string>
     <string name="auth_nossl_plain_ok_title">Secure connection unavailable.</string>
     <string name="auth_connection_established">Connection established</string>
     <string name="auth_testing_connection">Testing connection</string>
     <string name="auth_not_configured_title">Malformed server configuration</string>
     <string name="auth_account_not_new">An account for the same user and server already exists in the device</string>
     <string name="auth_account_not_the_same">The entered user does not match the user of this account</string>
+    <string name="auth_unknown_error_title">Unknown error occurred!</string>
     <string name="auth_incorrect_path_title">Server instance not found</string>
     <string name="auth_incorrect_address_title">Wrong server address format</string>
     <string name="auth_ssl_general_error_title">SSL initialization failed</string>
     <string name="auth_bad_oc_version_title">Unrecognized server version</string>
+    <string name="auth_wrong_connection_title">Couldn\'t establish connection</string>
     <string name="auth_secure_connection">Secure connection established</string>
     <string name="auth_unauthorized">Wrong username or password</string>
     <string name="auth_oauth_error">Unsuccessful authorization</string>
@@ -209,6 +238,7 @@
     <string name="auth_expired_basic_auth_toast">Please enter the current password</string>
     <string name="auth_expired_saml_sso_token_toast">Your session expired. Please connect again</string>
     <string name="auth_connecting_auth_server">Connecting to authentication server …</string>
+    <string name="auth_unsupported_auth_method">The server does not support this authentication method</string>
     <string name="auth_unsupported_multiaccount">%1$s does not support multiple accounts</string>
     <string name="auth_fail_get_user_name">Your server is not returning a correct user id, please contact an administrator
 	</string>
@@ -232,6 +262,7 @@
     <string name="available_offline_inherited_msg">A folder that containing this file is available offline</string>
     <string name="rename_local_fail_msg">"Local copy could not be renamed; try a different name"</string>
     <string name="rename_server_fail_msg">"Rename could not be completed"</string>
+    <string name="sync_file_fail_msg">Remote file could not be checked</string>
     <string name="sync_file_nothing_to_do_msg">File contents already synchronized</string>
     <string name="create_dir_fail_msg">Folder could not be created</string>
     <string name="filename_forbidden_characters">Forbidden characters: / \\ &lt; &gt; : " | ? *</string>
@@ -239,10 +270,12 @@
     <string name="filename_empty">File name cannot be empty</string>
     <string name="wait_a_moment">Wait a moment</string>
     <string name="wait_checking_credentials">Checking stored credentials</string>
+    <string name="filedisplay_unexpected_bad_get_content">"Unexpected problem ; please select the file from a different app"</string>
     <string name="filedisplay_no_file_selected">No file was selected</string>
     <string name="activity_chooser_title">Send link to &#8230;</string>
     <string name="wait_for_tmp_copy_from_private_storage">Copying file from private storage</string>
 
+    <string name="oauth_check_onoff">Login with oAuth2</string>
     <string name="oauth_login_connection">Connecting to OAuth2 server…</string>
 
     <string name="ssl_validator_header">The identity of the server could not be verified</string>
@@ -306,6 +339,8 @@
     <string name="unshare_link_file_error">An error occurred while trying to unshare this file or folder</string>
     <string name="update_link_file_no_exist">Unable to update. Please check whether the file exists </string>
     <string name="update_link_file_error">An error occurred while trying to update the share</string>
+    <string name="share_link_password_title">Enter a password</string>
+    <string name="share_link_empty_password">You must enter a password</string>
 
     <string name="activity_chooser_send_file_title">Send</string>
 
@@ -333,6 +368,7 @@
     <string name="uploader_upload_forbidden">Upload not allowed</string>
     <string name="downloader_download_file_not_found">The file is no longer available on the server</string>
 
+    <string name="prefs_category_accounts">Accounts</string>
     <string name="prefs_add_account">Add account</string>
     <string name="drawer_manage_accounts">Manage accounts</string>
     <string name="auth_redirect_non_secure_connection_title">Secure connection is redirected through an unsecured route.</string>
@@ -368,6 +404,9 @@
     <string name="prefs_camera_video_upload_path_title">Video upload path</string>
     <string name="sync_folder_failed_content">Synchronization of %1$s folder could not be completed</string>
 
+    <string name="shared_subject_header">shared</string>
+    <string name="with_you_subject_header">with you</string>
+
     <string name="subject_user_shared_with_you">%1$s shared \"%2$s\" with you</string>
     <string name="subject_shared_with_you">\"%1$s\" has been shared with you</string>
 
@@ -397,9 +436,11 @@
     <string name="pref_behaviour_entries_move">moved to app folder</string>
 
     <string name="share_dialog_title">Share</string>
+    <string name="share_file">Share %1$s</string>
     <string name="share_with_user_section_title">Users and Groups</string>
     <string name="share_no_users">No data shared with users yet</string>
     <string name="share_incompatible_version">To share with other users, your server needs to be at least version 8.2</string>
+    <string name="share_add_user_or_group">Add user or group</string>
     <string name="share_via_link_section_title">Public links</string>
     <string name="share_via_link_create_title">Create link share</string>
     <string name="share_via_link_edit_title">Edit link share</string>
@@ -408,8 +449,10 @@
     <string name="share_confirm_public_link_button">Save</string>
     <string name="share_via_link_expiration_date_label">Expiration</string>
     <string name="share_via_link_password_label">Password</string>
+    <string name="share_via_link_password_title">Secured</string>
     <string name="share_via_link_edit_permission_label">Allow editing</string>
     <string name="share_via_link_show_file_listing_label">Show file listing</string>
+    <string name="share_get_public_link_button">Get link</string>
     <string name="share_with_title">Share with &#8230;</string>
     <string name="share_with_edit_title">Share with %1$s</string>
 
@@ -427,6 +470,8 @@
     <string name="share_privilege_can_edit_create">create</string>
     <string name="share_privilege_can_edit_change">change</string>
     <string name="share_privilege_can_edit_delete">delete</string>
+    <string name="edit_share_unshare">Stop sharing</string>
+    <string name="edit_share_done">done</string>
 
     <string name="action_retry_uploads">Retry failed</string>
     <string name="action_clear_failed_uploads">Clear failed</string>
@@ -439,12 +484,14 @@
     <string name="manage_space_title">Manage space</string>
     <string name="manage_space_description">Settings, database and server certificates from %1$s\'s data will be deleted permanently. \n\nDownloaded files will be kept untouched.\n\nThis process can take some time.</string>
     <string name="manage_space_clear_data">Clear data</string>
+    <string name="manage_space_error">Some files could not be deleted.</string>
 
     <string name="permission_storage_access">Additional permissions required to upload &amp; download files.</string>
     <string name="local_file_not_found_toast">The file was not found in the local file system</string>
     <string name="confirmation_remove_files_alert">Do you really want to remove the selected items?</string>
     <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
     <string name="failed_upload_quota_exceeded_text">Not enough space in the account</string>
+    <string name="auth_forbidden">Forbidden authentication</string>
 
     <string name="actionbar_privacy_policy">Privacy policy</string>
     <string name="prefs_privacy_policy">Privacy policy</string>
