@@ -29,6 +29,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
@@ -106,6 +107,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private LinearLayout uploadFilesLinearLayout;
     private LinearLayout uploadFromCameraLinearLayout;
+    private BottomSheetBehavior uploadBottomSheetBehavior;
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -289,6 +291,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                         return false;
                     }
                 });
+                uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
+                uploadBottomSheetBehavior.setPeekHeight(400);
                 dialog.show();
                 recordMiniFabClick();
             }
