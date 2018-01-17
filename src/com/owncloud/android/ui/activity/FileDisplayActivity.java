@@ -127,6 +127,7 @@ public class FileDisplayActivity extends HookActivity
     public static final int REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM = REQUEST_CODE__LAST_SHARED + 2;
     public static final int REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 3;
     public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 4;
+    public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 5;
 
     private static final String TAG = FileDisplayActivity.class.getSimpleName();
 
@@ -646,6 +647,10 @@ public class FileDisplayActivity extends HookActivity
 
             requestUploadOfFilesFromFileSystem(data, resultCode);
 
+        } else if(requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA &&
+                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)){
+
+            requestUploadOfFilesFromFileSystem(data,resultCode);
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == RESULT_OK) {
             final Intent fData = data;
             getHandler().postDelayed(
