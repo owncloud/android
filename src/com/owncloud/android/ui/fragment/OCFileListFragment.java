@@ -25,12 +25,9 @@ package com.owncloud.android.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -40,13 +37,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -104,10 +99,6 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
-
-    private LinearLayout uploadFilesLinearLayout;
-    private LinearLayout uploadFromCameraLinearLayout;
-    private BottomSheetBehavior uploadBottomSheetBehavior;
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -187,7 +178,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         return v;
     }
 
-    
+
     @Override
     public void onDetach() {
         setOnRefreshListener(null);
@@ -256,7 +247,6 @@ public class OCFileListFragment extends ExtendedListFragment {
         registerFabUploadListeners();
         registerFabMkDirListeners();
         registerFabUploadFromAppListeners();
-
     }
 
     /**
@@ -267,33 +257,9 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUpload().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log_OC.e(TAG,"Clicked" + getContext().toString());
-                View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
-                final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
-                dialog.setContentView(uploadBottomSheet);
-                uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
-                uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
-                                .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
-                        dialog.hide();
-                        return false;
-                    }
-                });
-                uploadFromCameraLinearLayout.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        UploadFilesActivity.startUploadActivityForResult(getActivity(),((FileActivity) getActivity()).getAccount(),
-                                FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
-                        dialog.hide();
-                        return false;
-                    }
-                });
-                uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
-                uploadBottomSheetBehavior.setPeekHeight(400);
-                dialog.show();
+                UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
+                        .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
+                getFabMain().collapse();
                 recordMiniFabClick();
             }
         });
@@ -306,6 +272,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             }
         });
     }
+
     /**
      * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
      * on the 'Create Dir' mini FAB for the linked action and {@link Snackbar} showing the underlying action.
@@ -378,6 +345,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             miniFabClicked = true;
         }
     }
+
     /**
      * removes the labels on all known min FABs.
      */
@@ -1059,4 +1027,5 @@ public class OCFileListFragment extends ExtendedListFragment {
         );
         snackbar.show();
     }
+
 }

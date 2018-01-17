@@ -9,5 +9,6 @@
   <string name="common_yes">Так</string>
   <string name="common_no">Не</string>
   <string name="common_ok">Добра</string>
-    <string name="folder_picker_choose_button_text">Выбар</string>
+  <string name="common_error">Памылка</string>
+  <string name="folder_picker_choose_button_text">Выбар</string>
 </resources>

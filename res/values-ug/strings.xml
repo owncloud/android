@@ -10,8 +10,10 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">ئاچ</string>
-    <string name="prefs_category_more">تېخىمۇ كۆپ</string>
-    <string name="prefs_help">ياردەم</string>
+  <string name="prefs_category_general">ئادەتتىكى</string>
+  <string name="prefs_category_more">تېخىمۇ كۆپ</string>
+  <string name="prefs_accounts">ھېساباتلار</string>
+  <string name="prefs_help">ياردەم</string>
   <string name="prefs_feedback">قايتۇرما ئىنكاس</string>
   <string name="auth_username">ئىشلەتكۈچى ئاتى</string>
   <string name="auth_password">ئىم</string>
@@ -32,15 +34,18 @@
   <string name="common_no">ياق</string>
   <string name="common_ok">جەزملە</string>
   <string name="common_cancel">ۋاز كەچ</string>
-    <string name="common_error_unknown">يوچۇن خاتالىق</string>
+  <string name="common_error">خاتالىق</string>
+  <string name="common_error_unknown">يوچۇن خاتالىق</string>
   <string name="common_pending">كۈتۈۋاتىدۇ</string>
-    <string name="uploader_info_dirname">قىسقۇچ ئاتى</string>
+  <string name="change_password">ئىم ئۆزگەرت</string>
+  <string name="uploader_info_dirname">قىسقۇچ ئاتى</string>
   <string name="uploads_view_upload_status_unknown_fail">يوچۇن خاتالىق</string>
   <string name="common_choose_account">ھېسابات تاللاڭ</string>
   <string name="common_rename">ئات ئۆزگەرت</string>
   <string name="common_remove">چىقىرىۋەت</string>
   <string name="activity_chooser_send_file_title">يوللا</string>
-    <string name="auth_host_address">مۇلازىمېتىر ئادرىسى</string>
+  <string name="prefs_category_accounts">ھېساباتلار</string>
+  <string name="auth_host_address">مۇلازىمېتىر ئادرىسى</string>
   <string name="share_dialog_title">ھەمبەھىر</string>
   <string name="share_cancel_public_link_button">ۋاز كەچ</string>
   <string name="share_confirm_public_link_button">ساقلا</string>
