@@ -44,7 +44,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -89,6 +88,7 @@ public class Preferences extends PreferenceActivity {
     private String mUploadPath;
     private String mUploadVideoPath;
     private String mSourcePath;
+    private boolean patternSet;
     private boolean passcodeSet;
 
     private PreferenceCategory mPrefCameraUploadsCategory;
@@ -144,15 +144,20 @@ public class Preferences extends PreferenceActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
                     Boolean incoming = (Boolean) newValue;
+                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    patternSet = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+                    if(patternSet){
+                        showSnackMessage(R.string.pattern_already_set);
+                    }
+                    else {
+                        i.setAction(
+                                incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
+                                        PassCodeActivity.ACTION_CHECK_WITH_RESULT
+                        );
 
-                    i.setAction(
-                            incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
-                                    PassCodeActivity.ACTION_CHECK_WITH_RESULT
-                    );
-
-                    startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE :
-                            ACTION_CONFIRM_PASSCODE);
-
+                        startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE :
+                                ACTION_CONFIRM_PASSCODE);
+                    }
                     // Don't update just yet, we will decide on it in onActivityResult
                     return false;
                 }

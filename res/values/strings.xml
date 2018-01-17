@@ -28,6 +28,7 @@
     <string name="drawer_open">Open</string>
     <string name="prefs_category_general">General</string>
     <string name="prefs_category_more">More</string>
+    <string name="prefs_category_security"> Security </string>
     <string name="prefs_accounts">Accounts</string>
     <string name="prefs_manage_accounts">Manage accounts</string>
     <string name="prefs_passcode">Passcode lock</string>
@@ -46,7 +47,7 @@
     <string name="prefs_imprint">Imprint</string>
     <string name="prefs_remember_last_share_location">Remember share location</string>
     <string name="prefs_remember_last_upload_location_summary">Remember last share upload location</string>
-    <string name="prefs_pattern"> Pattern Lock </string>
+    <string name="prefs_pattern"> Pattern lock </string>
     <string name="pattern_enter_pattern"> Please enter your pattern </string>
     <string name="pattern_configure_pattern"> Enter your pattern </string>
     <string name="pattern_remove_pattern"> Remove your pattern </string>
@@ -56,6 +57,7 @@
     <string name="pattern_stored"> Pattern Stored </string>
     <string name="pattern_removed"> Pattern Removed </string>
     <string name="passcode_already_set"> Passcode Already Set </string>
+    <string name="pattern_already_set"> Pattern Already Set </string>
     <string name="pattern_configure_your_pattern_explanation"> The pattern will be requested every time the app is started</string>
     <string name="illegal_argument_exception_message"> A valid ACTION is needed in the Intent passed to </string>
 
