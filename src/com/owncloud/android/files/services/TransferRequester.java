@@ -355,8 +355,9 @@ public class TransferRequester {
         // Wifi by default
         int networkType = JobInfo.NETWORK_TYPE_UNMETERED;
 
-        if (ocUpload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_PICTURE && !mConfig.isWifiOnlyForPictures() ||
-                ocUpload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_VIDEO && !mConfig.isWifiOnlyForVideos()) {
+        if (ocUpload != null && (ocUpload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_PICTURE &&
+                !mConfig.isWifiOnlyForPictures() || ocUpload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_VIDEO &&
+                !mConfig.isWifiOnlyForVideos())) {
 
             // Wifi or cellular
             networkType = JobInfo.NETWORK_TYPE_ANY;
