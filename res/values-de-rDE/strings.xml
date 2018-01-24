@@ -291,6 +291,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Fotos nur über WLAN hochladen</string>
   <string name="camera_video_upload_on_wifi">Videos nur über WLAN hochladen</string>
+  <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="conflict_title">Dateikonflikt</string>
   <string name="conflict_message">Welche Datei möchten Sie behalten? Wenn Sie beide Versionen auswählen, wird der lokalen Datei eine Zahl ans Ende ihres Dateinamens angehängt.</string>
   <string name="conflict_keep_both">Beide behalten</string>

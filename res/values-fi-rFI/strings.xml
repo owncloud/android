@@ -405,6 +405,7 @@
   <string name="streaming_file_not_found_error">Tämä videotiedosto ei ole enää käytettävissä palvelimella</string>
   <string name="error_no_network_connection">Laite ei ole yhteydessä verkkoon</string>
   <string name="share_no_public_links">Julkisia linkkejä ei ole vielä luotu</string>
+  <string name="share_warning_about_forwarding_public_links">Kenellä tahansa linkin omaavalla on pääsy tiedostoon/kansioon</string>
   <string name="share_via_link_password_enforced_label">Salasana *</string>
   <string name="share_via_link_expiration_date_enforced_label">Vanheneminen *</string>
   <plurals name="items_selected_count">

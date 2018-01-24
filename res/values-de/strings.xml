@@ -295,6 +295,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Bilder nur über Wifi hochladen</string>
   <string name="camera_video_upload_on_wifi">Videos nur über Wifi hochladen</string>
+  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Bestätigen</string>
   <string name="confirmation_disable_pictures_upload_message">Sind Sie sicher, dass Sie dieses Feature deaktivieren möchten? Alle eingereihten Bilder werden nicht hochgeladen</string>
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher, dass Sie dieses Feature deaktivieren möchten? Alle eingereihten Videos werden nicht hochgeladen</string>
@@ -364,6 +365,7 @@
   <string name="forbidden_permissions_copy">diese Datei zu kopieren</string>
   <string name="prefs_category_camera_upload">Kamera Uploads</string>
   <string name="prefs_category_details">Details</string>
+  <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
   <string name="sync_folder_failed_content">Bei der Synchronisation konnte %1$s Ordner nicht fertig gestellt werden</string>
   <string name="shared_subject_header">geteilt</string>
   <string name="with_you_subject_header">Mit Dir</string>

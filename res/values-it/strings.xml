@@ -30,6 +30,7 @@
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
+  <string name="prefs_camera_picture_upload">Caricamento immagini</string>
   <string name="prefs_log_title">Abilita la registrazione</string>
   <string name="prefs_log_summary">Usato per registrare i problemi nei log</string>
   <string name="prefs_log_title_history">Cronologia di registrazione</string>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s na Android</string>
+  <string name="about_android">%1$s Aplikacja Android</string>
   <string name="about_version">wersja %1$s</string>
   <string name="actionbar_sync">Odśwież konto</string>
   <string name="actionbar_upload">Wyślij plik</string>
@@ -30,6 +30,10 @@
   <string name="prefs_accounts">Konta</string>
   <string name="prefs_manage_accounts">Zarządzaj kontami</string>
   <string name="prefs_passcode">Blokada hasłem</string>
+  <string name="prefs_camera_picture_upload">Wrzucanie obrazków</string>
+  <string name="prefs_camera_picture_upload_summary">Automatycznie wrzuć obrazki zrobione przez kamerę</string>
+  <string name="prefs_camera_video_upload">Wrzucanie filmów</string>
+  <string name="prefs_camera_video_upload_summary">Automatycznie wrzuć filmy zrobione przez kamerę</string>
   <string name="prefs_log_title">Włącz historię logowania</string>
   <string name="prefs_log_summary">To jest używane do logowania problemów</string>
   <string name="prefs_log_title_history">Historia logowania</string>
@@ -291,6 +295,10 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Wysyłaj zdjęcia tylko przez WiFi</string>
   <string name="camera_video_upload_on_wifi">Wysyłaj filmy tylko przez WiFi</string>
+  <string name="camera_upload_path">/WrzucanieKamery</string>
+  <string name="confirmation_disable_camera_uploads_title">Potwierdź</string>
+  <string name="confirmation_disable_pictures_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące obrazy nie zostaną wrzucone</string>
+  <string name="confirmation_disable_videos_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące filmy nie zostaną wrzucone</string>
   <string name="conflict_title">Konflikt pliku</string>
   <string name="conflict_message">Które pliki chcesz zachować? Jeśli wybierzesz obie wersje, do nazwy pliku lokalnego zostanie dodana liczba.</string>
   <string name="conflict_keep_both">Zatrzymaj oba</string>
@@ -299,6 +307,7 @@
   <string name="preview_image_description">Podgląd</string>
   <string name="preview_image_error_unknown_format">Ten obrazek nie może zostać wyświetlony</string>
   <string name="error__upload__local_file_not_copied">%1$s nie może zostać skopiowany do lokalnego folderu %2$s</string>
+  <string name="prefs_camera_picture_upload_path_title">Ścieżka wrzucania obrazu</string>
   <string name="share_link_no_support_share_api">Przepraszamy, ale współdzielenie nie jest włączone na Twoim serwerze. Proszę skontaktuj się z
 		administratorem.</string>
   <string name="share_link_file_no_exist">Nie można udostępnić. Proszę sprawdzić, czy plik istnieje</string>
@@ -354,7 +363,9 @@
   <string name="copy_file_invalid_overwrite">Plik istnieje już w folderze docelowym</string>
   <string name="copy_file_error">Wystąpił błąd podczas próby kopiowania tego pliku lub folderu</string>
   <string name="forbidden_permissions_copy">by skopiować ten plik</string>
+  <string name="prefs_category_camera_upload">Wrzucanie kamery</string>
   <string name="prefs_category_details">Szczegóły</string>
+  <string name="prefs_camera_video_upload_path_title">Ścieżka wrzucania filmu</string>
   <string name="sync_folder_failed_content">Synchronizacja folderu %1$s nie może zostać zakończona</string>
   <string name="shared_subject_header">udostępniony</string>
   <string name="with_you_subject_header">z tobą</string>
@@ -453,6 +464,13 @@
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="private_link_info">To jest link prywatny. Tylko użytkownicy, którzy mają przyznany dostęp do folderów lub plików mogą z niego skorzystać. Użyj go jako linka bezpośredniego dla siebie lub jako odnośnik dla użytkowników, którym udostępniasz.</string>
   <string name="file_private_link_error">Link prywatny nie jest dostępny dla tego pliku</string>
+  <string name="download_notification_channel_name">Pobrania</string>
+  <string name="download_notification_channel_description">Zobacz nazwę oraz postęp pobieranego pliku</string>
+  <string name="upload_notification_channel_name">Wrzucone</string>
+  <string name="upload_notification_channel_description">Zobacz nazwę oraz postęp wrzucanego pliku</string>
+  <string name="media_service_notification_channel_name">Odtwarzacz muzyki</string>
+  <string name="media_service_notification_channel_description">Zobacz odtwarzacz muzyki</string>
+  <string name="file_sync_notification_channel_name">Synchronizacja pliku</string>
   <string name="file_sync_notification_channel_description">Zobacz wynik synchronizacji plików</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d wybrany</item>
