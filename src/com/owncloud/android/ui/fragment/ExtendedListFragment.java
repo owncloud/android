@@ -22,7 +22,6 @@ package com.owncloud.android.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +40,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.ExtendedListView;
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener;
-import com.owncloud.android.ui.adapter.FileListListAdapter;
 
 import java.util.ArrayList;
 
@@ -52,7 +50,7 @@ public class ExtendedListFragment extends Fragment
 
     protected static final String TAG = ExtendedListFragment.class.getSimpleName();
 
-    protected static final String KEY_SAVED_LIST_POSITION = "SAVED_LIST_POSITION"; 
+    protected static final String KEY_SAVED_LIST_POSITION = "SAVED_LIST_POSITION";
 
     private static final String KEY_INDEXES = "INDEXES";
     private static final String KEY_FIRST_POSITIONS= "FIRST_POSITIONS";
@@ -140,8 +138,8 @@ public class ExtendedListFragment extends Fragment
     public boolean isGridEnabled(){
         return (mCurrentListView == mGridView);
     }
-    
-    
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -166,7 +164,7 @@ public class ExtendedListFragment extends Fragment
         mRefreshGridLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_containing_grid);
         mRefreshEmptyLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_containing_empty);
         mEmptyListMessage = (TextView) v.findViewById(R.id.empty_list_view);
-        
+
         onCreateSwipeToRefresh(mRefreshListLayout);
         onCreateSwipeToRefresh(mRefreshGridLayout);
         onCreateSwipeToRefresh(mRefreshEmptyLayout);
@@ -209,16 +207,16 @@ public class ExtendedListFragment extends Fragment
             mTops = savedInstanceState.getIntegerArrayList(KEY_TOPS);
             mHeightCell = savedInstanceState.getInt(KEY_HEIGHT_CELL);
             setMessageForEmptyList(savedInstanceState.getString(KEY_EMPTY_LIST_MESSAGE));
-            
+
         } else {
             mIndexes = new ArrayList<Integer>();
             mFirstPositions = new ArrayList<Integer>();
             mTops = new ArrayList<Integer>();
             mHeightCell = 0;
         }
-    }    
-    
-    
+    }
+
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -236,10 +234,10 @@ public class ExtendedListFragment extends Fragment
      * Calculates the position of the item that will be used as a reference to
      * reposition the visible items in the list when the device is turned to
      * other position.
-     * 
+     *
      * The current policy is take as a reference the visible item in the center
      * of the screen.
-     * 
+     *
      * @return The position in the list of the visible item in the center of the
      *         screen.
      */
@@ -257,9 +255,9 @@ public class ExtendedListFragment extends Fragment
      * Restore index and position
      */
     protected void restoreIndexAndTopPosition() {
-        if (mIndexes.size() > 0) {  
+        if (mIndexes.size() > 0) {
             // needs to be checked; not every browse-up had a browse-down before 
-            
+
             int index = mIndexes.remove(mIndexes.size() - 1);
             final int firstPosition = mFirstPositions.remove(mFirstPositions.size() -1);
             int top = mTops.remove(mTops.size() - 1);
@@ -286,27 +284,27 @@ public class ExtendedListFragment extends Fragment
 
         }
     }
-    
+
     /*
      * Save index and top position
      */
     protected void saveIndexAndTopPosition(int index) {
-        
+
         mIndexes.add(index);
-        
+
         int firstPosition = mCurrentListView.getFirstVisiblePosition();
         mFirstPositions.add(firstPosition);
-        
+
         View view = mCurrentListView.getChildAt(0);
         int top = (view == null) ? 0 : view.getTop() ;
 
         mTops.add(top);
-        
+
         // Save the height of a cell
         mHeightCell = (view == null || mHeightCell != 0) ? mHeightCell : view.getHeight();
     }
-    
-    
+
+
     @Override
     public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
         // to be @overriden
@@ -325,7 +323,7 @@ public class ExtendedListFragment extends Fragment
     public void setOnRefreshListener(OnEnforceableRefreshListener listener) {
         mOnRefreshListener = listener;
     }
-    
+
 
     /**
      * Disables swipe gesture.
@@ -368,7 +366,7 @@ public class ExtendedListFragment extends Fragment
 
     /**
      * Get the text of EmptyListMessage TextView
-     * 
+     *
      * @return String
      */
     public String getEmptyViewText() {
