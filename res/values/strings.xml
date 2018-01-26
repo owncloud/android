@@ -82,9 +82,7 @@
     <string name="file_list_file">file</string>
     <string name="file_list_files">files</string>
     <string name="filedetails_select_file">Tap on a file to display additional information.</string>
-    <string name="upload_owncloud"> Upload to OwnCloud </string>
-    <string name="upload_bottom_sheet_displayed"> Upload Bottom Sheet Displayed </string>
-    <string name="upload_bottom_sheet_collapsed"> Upload Bottom Sheet Collapsed </string>
+    <string name="upload_owncloud"> Upload to ownCloud </string>
     <string name="upload_files_title"> Files </string>
     <string name="filedetails_size">Size:</string>
     <string name="filedetails_type">Type:</string>
@@ -180,7 +178,6 @@
     <string name="foreign_files_remote_text">"Remote: %1$s"</string>
     <string name="upload_query_move_foreign_files">There is not enough space to copy the selected files into the %1$s folder. Would you like to move them instead? </string>
     <string name="pass_code_enter_pass_code">Please insert your passcode</string>
-    <string name="bottom_sheets_layout_behaviour"> android.support.design.widget.BottomSheetBehavior </string>
 
     <string name="pass_code_configure_your_pass_code">Enter your passcode</string>
     <string name="pass_code_configure_your_pass_code_explanation">The passcode will be requested every time the app is started</string>
@@ -210,9 +207,9 @@
     <string name="media_rewind_description">Rewind button</string>
     <string name="media_play_pause_description">Play or pause button</string>
     <string name="media_forward_description">Fast forward button</string>
-    <string name="button_text_camera"> Camera </string>
-    <string name="upload_from_camera_title"> Upload From Camera </string>
-    <string name="capture_button_text"> Capture </string>
+    <string name="button_text_camera">Camera</string>
+    <string name="upload_from_camera_title">Upload From Camera</string>
+    <string name="capture_button_text">Capture</string>
 
     <string name="auth_getting_authorization">Getting authorization &#8230;</string>
     <string name="auth_trying_to_login">Trying to log in &#8230;</string>

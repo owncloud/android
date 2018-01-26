@@ -461,20 +461,16 @@ public class UploadFilesActivity extends FileActivity implements
             if (result) {
                 // return the list of selected files (success)
                 Intent data = new Intent();
-                if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
-                    data.putExtra(EXTRA_CHOSEN_FILES,new String[]{ capturedImagePath});
-                } else {
-                    data.putExtra(EXTRA_CHOSEN_FILES, mFileListFragment.getCheckedFilePaths());
-                }
-
                 SharedPreferences.Editor appPreferencesEditor = PreferenceManager
                         .getDefaultSharedPreferences(getApplicationContext()).edit();
 
                 if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
+                    data.putExtra(EXTRA_CHOSEN_FILES,new String[]{ capturedImagePath});
                     setResult(RESULT_OK_AND_MOVE, data);
                     appPreferencesEditor.putInt("prefs_uploader_behaviour",
                             FileUploader.LOCAL_BEHAVIOUR_MOVE);
                 } else {
+                    data.putExtra(EXTRA_CHOSEN_FILES, mFileListFragment.getCheckedFilePaths());
                     if (mRadioBtnMoveFiles.isChecked()) {
                         setResult(RESULT_OK_AND_MOVE, data);
                         appPreferencesEditor.putInt("prefs_uploader_behaviour",

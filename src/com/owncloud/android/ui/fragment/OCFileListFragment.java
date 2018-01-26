@@ -292,6 +292,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
                 uploadBottomSheetBehavior.setPeekHeight(400);
                 dialog.show();
+                getFabMain().collapse();
                 recordMiniFabClick();
             }
         });
