@@ -30,6 +30,10 @@
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>
+  <string name="prefs_camera_picture_upload">Afbeeldingen uploaden</string>
+  <string name="prefs_camera_picture_upload_summary">Automatisch afbeeldingen uploaden die met de camera genomen zijn</string>
+  <string name="prefs_camera_video_upload">Video’s uploaden</string>
+  <string name="prefs_camera_video_upload_summary">Automatisch video’s uploaden die met de camera gemaakt zijn</string>
   <string name="prefs_log_title">Logging inschakelen</string>
   <string name="prefs_log_summary">Dit wordt gebruikt om problemen te loggen.</string>
   <string name="prefs_log_title_history">Logging geschiedenis</string>
@@ -294,6 +298,9 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
   <string name="camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
+  <string name="confirmation_disable_camera_uploads_title">Bevestigen</string>
+  <string name="confirmation_disable_pictures_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande afbeeldingen worden niet geuploade</string>
+  <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>
   <string name="conflict_title">Bestandsconflict</string>
   <string name="conflict_message">Welke bestanden wilt u bewaren? Als u beide versies selecteert zal het lokale bestand een nummer aan de naam toegevoegd krijgen.</string>
   <string name="conflict_keep_both">Beide bewaren</string>
@@ -455,6 +462,7 @@ Neem contact op met uw beheerder</string>
   <string name="share_via_link_expiration_date_explanation_label">De openbare link vervalt niet eerder dan %1$d dagen na het aanmaken</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="private_link_info">Dit is een privélink, alleen mensen met toegang tot het bestand/map kunnen hem gebruiken. Gebruik het als een permanente link voor uwzelf of om andere naar bestanden de wijzen in gedeelde mappen.</string>
+  <string name="file_private_link_error">Privelink naar dit bestand is niet beschikbaar</string>
   <string name="download_notification_channel_name">Downloads</string>
   <string name="upload_notification_channel_name">Uploads</string>
   <string name="media_service_notification_channel_name">Muziekspeler</string>
