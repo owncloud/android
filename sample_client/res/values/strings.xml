@@ -26,6 +26,7 @@
 <resources>
     <string name="app_name">ownCloud Sample Client</string>
     <string name="refresh">Refresh</string>
+    <string name="check_server">Check server</string>
     <string name="upload">Upload</string>
     <string name="delete_remote_file">Delete remote file</string>
     <string name="download">Download</string>

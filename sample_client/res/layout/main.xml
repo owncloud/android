@@ -31,11 +31,22 @@
     <Button
         android:id="@+id/button_refresh"
         style="@style/ButtonStyle"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="@string/refresh"
-        android:onClick="onClickHandler" 
-        />
+        android:onClick="onClickHandler"
+        android:text="@string/refresh"/>
+
+    <Button
+        android:id="@+id/button_check_server"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:onClick="onClickHandler"
+        android:text="@string/check_server"/>
 
     <ListView
         android:id="@+id/list_view"
