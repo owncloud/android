@@ -82,7 +82,7 @@
     <string name="file_list_file">file</string>
     <string name="file_list_files">files</string>
     <string name="filedetails_select_file">Tap on a file to display additional information.</string>
-    <string name="upload_owncloud"> Upload to ownCloud </string>
+    <string name="upload_owncloud">Upload to ownCloud</string>
     <string name="upload_files_title"> Files </string>
     <string name="filedetails_size">Size:</string>
     <string name="filedetails_type">Type:</string>
@@ -207,9 +207,7 @@
     <string name="media_rewind_description">Rewind button</string>
     <string name="media_play_pause_description">Play or pause button</string>
     <string name="media_forward_description">Fast forward button</string>
-    <string name="button_text_camera">Camera</string>
     <string name="upload_from_camera_title">Upload From Camera</string>
-    <string name="capture_button_text">Capture</string>
 
     <string name="auth_getting_authorization">Getting authorization &#8230;</string>
     <string name="auth_trying_to_login">Trying to log in &#8230;</string>
