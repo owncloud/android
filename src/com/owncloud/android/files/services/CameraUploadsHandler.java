@@ -42,6 +42,10 @@ public class CameraUploadsHandler {
     private static IndexedForest<CameraUploadsHandler> mPendingCameraUploads = new IndexedForest<>();
     private static final long MILLISECONDS_INTERVAL_CAMERA_UPLOAD = 900000;
 
+    // It needs to be always the same so that the previous job is removed and replaced with a new one with the recent
+    // configuration
+    private static final int JOB_ID_CAMERA_UPLOAD = 1;
+
     private CameraUploadsConfiguration mCameraUploadsConfig; // Camera uploads configuration, set by the user
     private Context mContext;
 
@@ -64,10 +68,7 @@ public class CameraUploadsHandler {
                     CameraUploadsSyncJobService.class);
             JobInfo.Builder builder;
 
-            int jobId = mPendingCameraUploads.buildKey(mCameraUploadsConfig.getUploadAccountName(),
-                    mCameraUploadsConfig.getSourcePath()).hashCode();
-
-            builder = new JobInfo.Builder(jobId, serviceComponent);
+            builder = new JobInfo.Builder(JOB_ID_CAMERA_UPLOAD, serviceComponent);
 
             builder.setPersisted(true);
 
@@ -77,7 +78,7 @@ public class CameraUploadsHandler {
             // Extra data
             PersistableBundle extras = new PersistableBundle();
 
-            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID, jobId);
+            extras.putInt(Extras.EXTRA_CAMERA_UPLOADS_SYNC_JOB_ID, JOB_ID_CAMERA_UPLOAD);
 
             extras.putString(Extras.EXTRA_ACCOUNT_NAME, mCameraUploadsConfig.getUploadAccountName());
 
