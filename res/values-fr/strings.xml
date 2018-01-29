@@ -30,6 +30,9 @@
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gérer les comptes utilisateurs</string>
   <string name="prefs_passcode">Code de sécurité</string>
+  <string name="prefs_camera_picture_upload">Téléversement d\'images</string>
+  <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les photos prises par la caméra</string>
+  <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
   <string name="prefs_log_title">Activer la journalisation</string>
   <string name="prefs_log_summary">Utilisé pour enregistrer les problèmes dans les logs</string>
   <string name="prefs_log_title_history">Historique de la journalisation</string>
@@ -296,6 +299,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
+  <string name="confirmation_disable_camera_uploads_title">Confirmer</string>
   <string name="conflict_title">Conflit de fichiers</string>
   <string name="conflict_message">Quel(s) fichier(s) voulez-vous conserver ? Si vous sélectionnez les deux, un chiffre sera ajouté au nom du fichier local.</string>
   <string name="conflict_keep_both">Conserver les deux versions</string>
