@@ -34,17 +34,20 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:enabled="false"
         android:onClick="onClickHandler"
-        android:text="@string/refresh"/>
+        android:text="@string/refresh"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/button_check_server"
         style="@style/ButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignBaseline="@+id/server_address"
+        android:layout_alignBottom="@+id/server_address"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:onClick="onClickHandler"
         android:text="@string/check_server"/>
 
@@ -52,42 +55,45 @@
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-		android:layout_below="@+id/button_refresh" 
         android:layout_above="@+id/button_upload"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        >
+        android:layout_below="@+id/button_refresh"
+        android:visibility="invisible">
     </ListView>
 
     <Button
         android:id="@+id/button_upload"
         style="@style/ButtonStyle"
-        android:layout_alignParentLeft="true"
         android:layout_above="@+id/frame"
+        android:layout_alignParentLeft="true"
+        android:enabled="false"
+        android:onClick="onClickHandler"
         android:text="@string/upload"
-        android:onClick="onClickHandler" 
-        />
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/upload_progress"
         style="@style/ProgressStyle"
-        android:layout_below="@id/list_view"
         android:layout_above="@id/frame"
-        android:layout_toRightOf="@id/button_upload"
+        android:layout_below="@id/list_view"
         android:layout_toLeftOf="@+id/button_delete_remote"
+        android:layout_toRightOf="@id/button_upload"
+        android:enabled="false"
         android:gravity="center"
-        android:textSize="14sp"
         android:text="0%"
-        />
+        android:textSize="14sp"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@id/button_delete_remote"
         style="@style/ButtonStyle"
-        android:layout_alignParentRight="true"
         android:layout_above="@id/frame"
-        android:text="@string/delete_remote_file" 
-        android:onClick="onClickHandler" 
-        />
+        android:layout_alignParentRight="true"
+        android:enabled="false"
+        android:onClick="onClickHandler"
+        android:text="@string/delete_remote_file"
+        android:visibility="invisible"/>
 
     <FrameLayout
         android:id="@id/frame"
@@ -104,30 +110,46 @@
         style="@style/ButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/download" 
-        android:onClick="onClickHandler" 
-        />
+        android:enabled="false"
+        android:onClick="onClickHandler"
+        android:text="@string/download"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/download_progress"
         style="@style/ProgressStyle"
-        android:layout_below="@id/frame"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/button_download"
+        android:layout_below="@id/frame"
         android:layout_toLeftOf="@+id/button_delete_local"
+        android:layout_toRightOf="@id/button_download"
+        android:enabled="false"
         android:gravity="center"
-        android:textSize="14sp"
         android:text="0%"
-        />
+        android:textSize="14sp"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@id/button_delete_local"
         style="@style/ButtonStyle"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/delete_local_file" 
-        android:onClick="onClickHandler" 
-        />
+        android:enabled="false"
+        android:onClick="onClickHandler"
+        android:text="@string/delete_local_file"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/server_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/list_view"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/button_check_server"
+        android:layout_toStartOf="@+id/button_check_server"
+        android:ems="10"
+        android:hint="Server address (with http or https)"
+        android:inputType="textPersonName"/>
 
 </RelativeLayout>
 

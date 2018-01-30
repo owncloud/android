@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,6 +50,9 @@ import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,6 +81,8 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	private FilesArrayAdapter mFilesAdapter;
 	
 	private View mFrame;
+
+	private static final String NODE_VERSION = "version";
 	
     /** Called when the activity is first created. */
     @Override
@@ -160,27 +166,93 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
     private void startCheck() {
 
+    	String serverAddress = ((TextView) findViewById(R.id.server_address)).getText().toString();
+
+    	if (serverAddress.equals("")) {
+			Toast toast = Toast.makeText(getApplicationContext(),
+					"Introduce a server address", Toast.LENGTH_LONG);
+
+			toast.setGravity(Gravity.CENTER,0,0);
+
+			toast.show();
+
+			return;
+		}
+
 		OkHttpClient client = new OkHttpClient();
 
 		Request request = new Request.Builder()
-				.url("")
+				.url(serverAddress + "/status.php")
 				.get()
 				.build();
 
 		client.newCall(request).enqueue(new Callback() {
-			@Override public void onFailure(Call call, IOException e) {
+
+			@Override public void onFailure(Call call, final IOException e) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+
+						Toast toast = Toast.makeText(getApplicationContext(),
+								"Request failed: " + e.toString(), Toast.LENGTH_LONG);
+
+						toast.setGravity(Gravity.CENTER,0,0);
+
+						toast.show();
+					}
+				});
 				e.printStackTrace();
 			}
 
-			@Override public void onResponse(Call call, Response response) throws IOException {
-				if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+			@Override public void onResponse(Call call, final Response response) throws IOException {
+
+				if (!response.isSuccessful()) {
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+
+							Toast toast = Toast.makeText(getApplicationContext(),
+									"Response not successful with code " + response.code(), Toast.LENGTH_LONG);
+
+							toast.setGravity(Gravity.CENTER,0,0);
+
+							toast.show();
+						}
+					});
+
+					throw new IOException("Unexpected code " + response);
+				}
+
+				try { // Response successful
+
+					String jsonData = response.body().string();
+
+					JSONObject Jobject = new JSONObject(jsonData);
+
+					final String serverVersion = Jobject.get("version").toString();
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+
+							Toast toast = Toast.makeText(getApplicationContext(),
+									"Server with version " + serverVersion + " detected", Toast.LENGTH_LONG);
+
+							toast.setGravity(Gravity.CENTER,0,0);
+
+							toast.show();
+						}
+					});
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 
 				Headers responseHeaders = response.headers();
 				for (int i = 0, size = responseHeaders.size(); i < size; i++) {
 					System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
 				}
-
-				System.out.println(response.body().string());
 			}
 		});
 	}
@@ -205,6 +277,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			}
 
 			@Override public void onResponse(Call call, Response response) throws IOException {
+
 				if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
 				Headers responseHeaders = response.headers();
