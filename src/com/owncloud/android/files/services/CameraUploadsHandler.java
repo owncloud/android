@@ -39,7 +39,6 @@ import com.owncloud.android.utils.Extras;
 public class CameraUploadsHandler {
 
     private static final String TAG = CameraUploadsHandler.class.getSimpleName();
-    private static IndexedForest<CameraUploadsHandler> mPendingCameraUploads = new IndexedForest<>();
     private static final long MILLISECONDS_INTERVAL_CAMERA_UPLOAD = 900000;
 
     // It needs to be always the same so that the previous job is removed and replaced with a new one with the recent
@@ -105,7 +104,6 @@ public class CameraUploadsHandler {
                     JOB_SCHEDULER_SERVICE);
 
             jobScheduler.schedule(builder.build());
-
         }
     }
 
@@ -169,7 +167,11 @@ public class CameraUploadsHandler {
         }
     }
 
-    public void resetPicturesLastSync(){
+    /**
+     * Update timestamp (in milliseconds) from which to start checking pictures to upload
+     * @param lastSyncTimestamp
+     */
+    public void updatePicturesLastSync(long lastSyncTimestamp){
 
         // DB connection
         CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
@@ -184,13 +186,17 @@ public class CameraUploadsHandler {
 
         } else {
 
-            ocCameraUploadSync.setPicturesLastSync(0);
+            ocCameraUploadSync.setPicturesLastSync(lastSyncTimestamp);
 
             mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
         }
     }
 
-    public void resetVideosLastSync(){
+    /**
+     * Update timestamp (in milliseconds) from which to start checking videos to upload
+     * @param lastSyncTimestamp
+     */
+    public void updateVideosLastSync(long lastSyncTimestamp){
         // DB connection
         CameraUploadsSyncStorageManager mCameraUploadsSyncStorageManager = new
                 CameraUploadsSyncStorageManager(mContext.getContentResolver());
@@ -204,7 +210,7 @@ public class CameraUploadsHandler {
 
         } else {
 
-            ocCameraUploadSync.setVideosLastSync(0);
+            ocCameraUploadSync.setVideosLastSync(lastSyncTimestamp);
 
             mCameraUploadsSyncStorageManager.updateCameraUploadSync(ocCameraUploadSync);
         }
