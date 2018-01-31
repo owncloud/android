@@ -444,7 +444,7 @@ public class Preferences extends PreferenceActivity {
                                 } else if (which == DialogInterface.BUTTON_POSITIVE) {
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsWiFi);
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraPictureUploadsPath);
-                                    mCameraUploadsHandler.resetPicturesLastSync();
+                                    mCameraUploadsHandler.updatePicturesLastSync(0);
                                 }
                                 dismissConfirmationDialog(builder);
                             }
@@ -484,7 +484,7 @@ public class Preferences extends PreferenceActivity {
                                 } else if (which == DialogInterface.BUTTON_POSITIVE) {
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsWiFi);
                                     mPrefCameraUploadsCategory.removePreference(mPrefCameraVideoUploadsPath);
-                                    mCameraUploadsHandler.resetVideosLastSync();
+                                    mCameraUploadsHandler.updateVideosLastSync(0);
                                 }
                                 dismissConfirmationDialog(builder);
                             }
@@ -563,6 +563,19 @@ public class Preferences extends PreferenceActivity {
             saveCameraUploadsVideoPathOnPreferences();
 
         } else if (requestCode == ACTION_SELECT_SOURCE_PATH && resultCode == RESULT_OK) {
+
+            // If the source path has changed, update camera uploads last sync
+            String previousSourcePath = mSourcePath;
+
+            if (previousSourcePath.endsWith(File.separator)) {
+                previousSourcePath = previousSourcePath.substring(0, previousSourcePath.length() - 1);
+            }
+
+            if (!previousSourcePath.equals(data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH))) {
+                long currentTimeStamp = System.currentTimeMillis();
+                mCameraUploadsHandler.updatePicturesLastSync(currentTimeStamp);
+                mCameraUploadsHandler.updateVideosLastSync(currentTimeStamp);
+            }
 
             mSourcePath = data.getStringExtra(LocalFolderPickerActivity.EXTRA_PATH);
             mPrefCameraUploadsSourcePath.setSummary(
