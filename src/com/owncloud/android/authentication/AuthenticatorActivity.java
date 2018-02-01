@@ -195,6 +195,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     private String mAuthStatusText = "";
 
+    private boolean backPressed = false;
+
     private int mAuthStatusIcon = 0;
     
     private String mAuthToken = "";
@@ -306,6 +308,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         initAuthorizationPreFragment(savedInstanceState);
 
         //Log_OC.e(TAG,  "onCreate end");
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(backPressed){
+            super.onBackPressed();
+            return;
+        }
+        backPressed = true;
+        super.onBackPressed();
     }
 
     private void initAuthTokenType() {
