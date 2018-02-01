@@ -71,6 +71,7 @@
   <string name="uploader_upload_succeeded_ticker">Augšupielāde ir veiksmīga</string>
   <string name="uploader_upload_failed_ticker">Neizdevās augšupielādēt</string>
   <string name="uploader_upload_failed_content_single">Nevarēja pabeigt %1$s augšupielādēšanu</string>
+  <string name="uploader_upload_text_filename_hint">Datnes nosaukums</string>
   <string name="uploads_view_group_current_uploads">Pašreizējais</string>
   <string name="uploads_view_upload_status_succeeded">Pabeigts</string>
   <string name="uploads_view_upload_status_cancelled">Atcelts</string>
@@ -98,6 +99,7 @@
   <string name="common_rename">Pārsaukt</string>
   <string name="common_remove">Izņemt</string>
   <string name="confirmation_remove_local">Tikai lokālos</string>
+  <string name="confirmation_remove_public_share_title">Noņemt saiti</string>
   <string name="remove_success_msg">Veiksmīgi izņemts</string>
   <string name="remove_fail_msg">Neizdevās izņemt</string>
   <string name="rename_dialog_title">Ievadīt jaunu nosaukumu</string>
@@ -161,10 +163,13 @@
   <string name="share_dialog_title">Dalīties</string>
   <string name="share_cancel_public_link_button">Atcelt</string>
   <string name="share_confirm_public_link_button">Saglabāt</string>
+  <string name="share_via_link_expiration_date_label">Termiņš</string>
   <string name="share_via_link_password_label">Parole</string>
   <string name="share_search">Meklēt</string>
   <string name="share_privilege_can_share">Var dalīties</string>
   <string name="share_privilege_can_edit">var rediģēt</string>
   <string name="share_privilege_can_edit_create">izveidot</string>
+  <string name="share_privilege_can_edit_change">veikt izmaiņas</string>
   <string name="share_privilege_can_edit_delete">dzēst</string>
+  <string name="share_warning_about_forwarding_public_links">Katram, kuram ir saite, ir pieeja datnei/mapei</string>
 </resources>
