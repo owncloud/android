@@ -1,5 +1,6 @@
 # [ownCloud](https://owncloud.org) Android app
-[![](https://owncloud.org/wp-content/themes/owncloudorgnew/assets/img/clients/buttons/googleplay.png)](https://play.google.com/store/apps/details?id=com.owncloud.android)
+
+<a href="https://play.google.com/store/apps/details?id=com.owncloud.android"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a><a href="https://f-droid.org/packages/com.owncloud.android/"><img src="https://f-droid.org/badge/get-it-on.png" height="75"></a>
 
 [![](https://lh3.googleusercontent.com/dJv5wNQ-_pm8QR25lbcwrSAJ_8TPDlk4z9B5CADN40A9KWWoDmGuchK3rMkKthBBTw=h500)](https://play.google.com/store/apps/details?id=com.owncloud.android) [![](https://lh3.googleusercontent.com/v8I1GBePMpg-68TTTcal2LrNLHK1dmKWULxpNgZyGPu0LpXkbUWZooKiLrw331z9Q-c=h500)](https://play.google.com/store/apps/details?id=com.owncloud.android) [![](https://lh3.googleusercontent.com/NsSPoFha6hqyukQKAKSZWPNo_vt6gshMBlHjnlpowUCHO8-ZLjeslPh82nAttoA-Au8=h500)](https://play.google.com/store/apps/details?id=com.owncloud.android)
 
@@ -12,6 +13,8 @@ Easy starting points are also reviewing [pull requests](https://github.com/owncl
 
 **IRC channel:** [#owncloud-android](https://webchat.freenode.net/?channels=owncloud-android) on freenode IRC
 
-**Beta version** [beta version](https://github.com/owncloud/android/raw/beta/apks/latest.apk)
+**Beta version:**
+
+<a href="https://play.google.com/store/apps/details?id=com.owncloud.android.beta"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="75"></a><a href="https://f-droid.org/packages/com.owncloud.android.beta/"><img src="https://f-droid.org/badge/get-it-on.png" height="75"></a>
 
 **License:** [GPLv2](https://github.com/owncloud/android/blob/master/LICENSE.txt)
