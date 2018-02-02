@@ -30,6 +30,9 @@
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="prefs_passcode">ล็อครหัสยืนยัน</string>
+  <string name="prefs_camera_picture_upload">อัพโหลดรูปภาพ</string>
+  <string name="prefs_camera_picture_upload_summary">อัพโหลดภาพที่ถ่ายด้วยกล้องโดยอัตโนมัติ</string>
+  <string name="prefs_camera_video_upload">อัพโหลดวิดีโอ</string>
   <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูล</string>
   <string name="prefs_log_summary">นี้จะใช้เพื่อบันทึกปัญหาที่เกิดขึ้น</string>
   <string name="prefs_log_title_history">ประวัติย้อนหลังการเข้าใช้งาน</string>
@@ -290,6 +293,8 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">อัพโหลดรูปภาพผ่านทาง wifi เท่านั้น</string>
   <string name="camera_video_upload_on_wifi">อัพโหลดวิดีโอผ่านทาง wifi เท่านั้น</string>
+  <string name="camera_upload_path">/CameraUpload</string>
+  <string name="confirmation_disable_camera_uploads_title">ยืนยัน</string>
   <string name="conflict_title">ไฟล์ที่มีปัญหา</string>
   <string name="conflict_message">ไฟล์ใดที่คุณต้องการที่จะเก็บ? เลือกวางทับไฟล์เดิมหรือ เขียนไฟล์ใหม่จะเพิ่มตัวเลขไปยังชื่อของมัน</string>
   <string name="conflict_keep_both">เก็บไว้ทั้งสองอย่าง</string>
@@ -298,6 +303,7 @@
   <string name="preview_image_description">แสดงรูปภาพตัวอย่าง</string>
   <string name="preview_image_error_unknown_format">ไม่สามารถแสดงรูปภาพนี้ได้</string>
   <string name="error__upload__local_file_not_copied">%1$s ไม่สามารถคัดลอกไปยังโฟลเดอร์ %2$s ในเครื่อง</string>
+  <string name="prefs_camera_picture_upload_path_title">เส้นทางการอัพโหลดรูปภาพ</string>
   <string name="share_link_no_support_share_api">ขออภัยการแชร์ไม่ได้เปิดใช้งานบนเซิร์ฟเวอร์ของคุณ กรุณาติดต่อผู้ดูแลระบบ</string>
   <string name="share_link_file_no_exist">ไม่สามารถแชร์ กรุณาตรวจสอบว่ายังมีไฟล์นั้นอยู่</string>
   <string name="share_link_file_error">เกิดข้อผิดพลาดในขณะที่พยายามจะแชร์ไฟล์หรือโฟลเดอร์นี้</string>
@@ -352,7 +358,9 @@
   <string name="copy_file_invalid_overwrite">มีไฟล์อยู่แล้วในโฟลเดอร์ปลายทาง</string>
   <string name="copy_file_error">เกิดข้อผิดพลาดขณะพยายามคัดลอกไฟล์หรือโฟลเดอร์นี้</string>
   <string name="forbidden_permissions_copy">เพื่อคัดลอกไฟล์นี้</string>
+  <string name="prefs_category_camera_upload">อัพโหลดจากกล้อง</string>
   <string name="prefs_category_details">รายละเอียด</string>
+  <string name="prefs_camera_video_upload_path_title">เส้นทางการอัพโหลดวิดีโอ</string>
   <string name="sync_folder_failed_content">ประสานข้อมูลโฟลเดอร์ %1$s ไม่สำเร็จ</string>
   <string name="shared_subject_header">ถูกแชร์</string>
   <string name="with_you_subject_header">กับคุณ</string>
