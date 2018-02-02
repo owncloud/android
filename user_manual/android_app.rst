@@ -157,7 +157,7 @@ The ones that don't fit in the top bar, appear in the list of options when press
 Sharing Files
 ~~~~~~~~~~~~~
 
-You can share with other ownCloud users and groups, and create public share links. 
+You can share with other ownCloud users and groups, and create public or private share links.
 
 .. note:: Multiple public links per/file is only available with ownCloud X.
 
@@ -172,11 +172,16 @@ The dialog which appears shows a list of users and groups with whom the file is 
    :alt: File Shares.
 
 From here you can:
-
+- Share one link to the file with users of the same ownCloud server
 - Share the file with one or more users and groups
 - Share one or more links to the file via a range of options
 - Enable password protection
 - Set a share expiration date
+
+To create a private link, click the link icon on the right of the file name.
+
+.. NOTE::
+   Private link is available from ownCloud X.
 
 To share the file with a new user or group, click the plus sign next to *"Users and Groups"*, where you will be able to find and add them to the share list.
 After a user or group has been added, you can adjust the editing and on-sharing options available for them.
