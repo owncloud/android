@@ -27,6 +27,7 @@ package com.owncloud.android.files.services;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -96,6 +97,7 @@ public class FileUploader extends Service
     private static final String UPLOADS_ADDED_MESSAGE = "UPLOADS_ADDED";
     private static final String UPLOAD_START_MESSAGE = "UPLOAD_START";
     private static final String UPLOAD_FINISH_MESSAGE = "UPLOAD_FINISH";
+    private static final String UPLOAD_NOTIFICATION_CHANNEL_ID = "UPLOAD_NOTIFICATION_CHANNEL";
 
     protected static final String KEY_FILE = "FILE";
     protected static final String KEY_LOCAL_FILE = "LOCAL_FILE";
@@ -144,7 +146,6 @@ public class FileUploader extends Service
     public static final int LOCAL_BEHAVIOUR_MOVE = 1;
     public static final int LOCAL_BEHAVIOUR_FORGET = 2;
 
-
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
     private IBinder mBinder;
@@ -185,11 +186,9 @@ public class FileUploader extends Service
         sendBroadcastUploadStarted(mCurrentUpload);
     }
 
-
     public static class UploadRequester {
 
     }
-
 
     /**
      * Service initialization
@@ -198,7 +197,34 @@ public class FileUploader extends Service
     public void onCreate() {
         super.onCreate();
         Log_OC.d(TAG, "Creating service");
+
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        mNotificationBuilder = NotificationUtils.newNotificationBuilder(this);
+
+        // Configure notification channel
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+            NotificationChannel mNotificationChannel;
+            // The user-visible name of the channel.
+            CharSequence name = getString(R.string.upload_notification_channel_name);
+            // The user-visible description of the channel.
+            String description = getString(R.string.upload_notification_channel_description);
+            // Set importance low: show the notification everywhere but with no sound
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            mNotificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID,
+                    name, importance);
+            // Configure the notification channel.
+            mNotificationChannel.setDescription(description);
+            mNotificationManager.createNotificationChannel(mNotificationChannel);
+
+            /**
+             * After calling startForegroundService method from {@link TransferRequester} we have
+             * to call this within five seconds after the service is created to avoid an error
+             */
+            startForeground(1, mNotificationBuilder.build());
+        }
+
         HandlerThread thread = new HandlerThread("FileUploaderThread",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
@@ -867,8 +893,6 @@ public class FileUploader extends Service
     private void notifyUploadStart(UploadFileOperation upload) {
         // / create status notification with a progress bar
         mLastPercent = 0;
-        mNotificationBuilder =
-                NotificationUtils.newNotificationBuilder(this);
         mNotificationBuilder
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.notification_icon)
@@ -876,8 +900,8 @@ public class FileUploader extends Service
                 .setContentTitle(getString(R.string.uploader_upload_in_progress_ticker))
                 .setProgress(100, 0, false)
                 .setContentText(
-                        String.format(getString(R.string.uploader_upload_in_progress_content), 0, upload.getFileName())
-                );
+                        String.format(getString(R.string.uploader_upload_in_progress_content), 0, upload.getFileName()))
+                .setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
 
         /// includes a pending intent in the notification showing the details
         Intent showUploadListIntent = new Intent(this, UploadListActivity.class);
@@ -887,12 +911,12 @@ public class FileUploader extends Service
         mNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, (int) System.currentTimeMillis(),
             showUploadListIntent, 0));
 
-        if (!upload.isInstantPicture() && !upload.isInstantVideo()) {
-            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
-        }   // else wait until the upload really start (onTransferProgress is called), so that if it's discarded
+        if (!upload.isCameraUploadsPicture() && !upload.isCameraUploadsVideo()) {
+            mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker,
+                    mNotificationBuilder.build());
+        }// else wait until the upload really start (onTransferProgress is called), so that if it's discarded
         // due to lack of Wifi, no notification is shown
         // TODO generalize for automated uploads
-
     }
 
     /**
@@ -907,6 +931,8 @@ public class FileUploader extends Service
             String fileName = filePath.substring(filePath.lastIndexOf(FileUtils.PATH_SEPARATOR) + 1);
             String text = String.format(getString(R.string.uploader_upload_in_progress_content), percent, fileName);
             mNotificationBuilder.setContentText(text);
+            mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
+
             mNotificationManager.notify(R.string.uploader_upload_in_progress_ticker, mNotificationBuilder.build());
         }
         mLastPercent = percent;
@@ -985,6 +1011,8 @@ public class FileUploader extends Service
             }
 
             mNotificationBuilder.setContentText(content);
+            mNotificationBuilder.setChannelId(UPLOAD_NOTIFICATION_CHANNEL_ID);
+
             mNotificationManager.notify(tickerId, mNotificationBuilder.build());
 
             if (uploadResult.isSuccess()) {
@@ -1074,5 +1102,4 @@ public class FileUploader extends Service
         mPendingUploads.remove(account.name);
         mUploadsStorageManager.removeUploads(account.name);
     }
-
 }

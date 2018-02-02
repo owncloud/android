@@ -71,8 +71,6 @@ public class FileObserverService extends Service {
         MY_NAME + ".action.ADD_OBSERVED_FILE";
     private final static String ACTION_DEL_OBSERVED_FILE =
         MY_NAME + ".action.DEL_OBSERVED_FILE";
-    private final static String ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS =
-        MY_NAME + ".action.UPDATE_AUTO_UPLOAD_OBSERVERS";
 
     private final static String ARG_FILE = "ARG_FILE";
     private final static String ARG_ACCOUNT = "ARG_ACCOUNT";
@@ -92,11 +90,6 @@ public class FileObserverService extends Service {
      * observance of available offline files when downloading
      */
     private DownloadCompletedReceiver mDownloadReceiver;
-
-    /**
-     * Observer for camera folder
-     */
-    private InstantUploadsObserver mInstantUploadsObserver;
 
     /**
      * Requests an ACTION_START_OBSERVE command to (re)initialize the observer service.
@@ -133,19 +126,6 @@ public class FileObserverService extends Service {
 
 
     /**
-     * Requests the update of the observers responsible to watch folders where new files
-     * should be automatically added to OC, according to changes in instant upload settings.
-     *
-     * @param context       Android context of the caller component.
-     */
-    public static void updateInstantUploadsObservers(Context context) {
-        Intent intent = new Intent(context, FileObserverService.class);
-        intent.setAction(FileObserverService.ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS);
-        context.startService(intent);
-    }
-
-
-    /**
      * Initialize the service. 
      */
     @Override
@@ -159,8 +139,6 @@ public class FileObserverService extends Service {
         filter.addAction(FileDownloader.getDownloadAddedMessage());
         filter.addAction(FileDownloader.getDownloadFinishMessage());
         mLocalBroadcastManager.registerReceiver(mDownloadReceiver, filter);
-
-        mInstantUploadsObserver = null;
 
         mAvailableOfflineObserversMap = new HashMap<>();
     }
@@ -180,11 +158,6 @@ public class FileObserverService extends Service {
         }
         mAvailableOfflineObserversMap.clear();
         mAvailableOfflineObserversMap = null;
-
-        if (mInstantUploadsObserver != null) {
-            mInstantUploadsObserver.stopObserving();
-            mInstantUploadsObserver = null;
-        }
 
         super.onDestroy();
     }
@@ -224,9 +197,6 @@ public class FileObserverService extends Service {
                 (Account) intent.getParcelableExtra(ARG_ACCOUNT)
             );
 
-        } else if (ACTION_UPDATE_AUTO_UPLOAD_OBSERVERS.equals(intent.getAction())) {
-            updateInstantUploadsObservers();
-
         } else {
             Log_OC.e(TAG, "Unknown action received; ignoring it: " + intent.getAction());
         }
@@ -260,9 +230,6 @@ public class FileObserverService extends Service {
             }
             addObservedFile(file, account);
         }
-
-        // watch for instant uploads
-        updateInstantUploadsObservers();
 
         // service does not stopSelf() ; that way it tries to be alive forever
     }
@@ -403,50 +370,6 @@ public class FileObserverService extends Service {
         }
     }
 
-
-    /**
-     * Requests the update of the observers responsible to watch folders where new files
-     * should be automatically added to OC, according to changes in instant upload settings.
-     */
-    private void updateInstantUploadsObservers() {
-        PreferenceManager.InstantUploadsConfiguration config =
-            PreferenceManager.getInstantUploadsConfiguration(this);
-
-        if ((config.isEnabledForPictures() || config.isEnabledForVideos()) &&
-                mInstantUploadsObserver == null
-            )  {
-            // no current observer -> create it
-            mInstantUploadsObserver = InstantUploadsObserverFactory.newObserver(
-                config,
-                getApplicationContext()
-            );
-            mInstantUploadsObserver.startObserving();
-
-        } else if (!config.isEnabledForPictures() && !config.isEnabledForVideos() &&
-                    mInstantUploadsObserver != null
-            ) {
-            // nothing ot observe -> stop current observer
-            mInstantUploadsObserver.stopObserving();
-            mInstantUploadsObserver = null;
-
-        } else if (mInstantUploadsObserver != null) {
-            // observer exists and can handle changes in configuration -> update observer
-            boolean configurationUpdated = mInstantUploadsObserver.updateConfiguration(config);
-            if (!configurationUpdated) {
-                // current observe cannot handle this configuration change -> replace with a new one
-                mInstantUploadsObserver.stopObserving();
-                mInstantUploadsObserver = InstantUploadsObserverFactory.newObserver(
-                    config,
-                    getApplicationContext()
-                );
-                mInstantUploadsObserver.startObserving();
-            }
-
-        } else {
-            Log_OC.i(TAG, "Instant uploads are disabled, no current observer -> nothing to do");
-        }
-    }
-
     /**
      * Private receiver listening to events broadcasted by the {@link FileDownloader} service.
      * 
@@ -484,7 +407,5 @@ public class FileObserverService extends Service {
                 parentPath = new File(parentPath).getParent();
             }
         }
-
     }
-
 }

@@ -2,7 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *
+ *   Copyright (C) 2017 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -20,27 +22,27 @@
 
 package com.owncloud.android.utils;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Vector;
-
-import third_parties.daveKoeller.AlphanumComparator;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.StatFs;
+import android.preference.PreferenceManager;
+import android.webkit.MimeTypeMap;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 
-import android.accounts.Account;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.StatFs;
-import android.webkit.MimeTypeMap;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
+
+import third_parties.daveKoeller.AlphanumComparator;
 
 
 /**
@@ -112,14 +114,6 @@ public class FileStorageUtils {
         return Environment.getExternalStorageDirectory() + File.separator + MainApp.getDataFolder() + File.separator + "log";
     }
 
-    public static String getInstantUploadFilePath(Context context, String fileName) {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String uploadPathdef = context.getString(R.string.instant_upload_path);
-        String uploadPath = pref.getString("instant_upload_path", uploadPathdef);
-        String value = uploadPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
-        return value;
-    }
-
     /**
      * Gets the composed path when video is or must be stored
      * @param context
@@ -128,7 +122,7 @@ public class FileStorageUtils {
      */
     public static String getInstantVideoUploadFilePath(Context context, String fileName) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String uploadVideoPathdef = context.getString(R.string.instant_upload_path);
+        String uploadVideoPathdef = context.getString(R.string.camera_upload_path);
         String uploadVideoPath = pref.getString("instant_video_upload_path", uploadVideoPathdef);
         String value = uploadVideoPath + OCFile.PATH_SEPARATOR +  (fileName == null ? "" : fileName);
         return value;
@@ -159,7 +153,43 @@ public class FileStorageUtils {
         file.setEtag(remote.getEtag());
         file.setPermissions(remote.getPermissions());
         file.setRemoteId(remote.getRemoteId());
+        file.setPrivateLink(remote.getPrivateLink());
         return file;
+    }
+
+    /**
+     * Creates and populates a list of new {@link OCFile} objects with the data read from the server.
+     *
+     * @param remoteFiles remote files read from the server (remote files or folders)
+     * @return New OCFile list instance representing the remote resource described by remote.
+     */
+    public static ArrayList<OCFile> createOCFilesFromRemoteFilesList(ArrayList<RemoteFile>
+                                                                             remoteFiles) {
+        ArrayList<OCFile> files = new ArrayList<>();
+
+        for (RemoteFile remoteFile : remoteFiles) {
+            files.add(createOCFileFrom(remoteFile));
+        }
+
+        return files;
+    }
+
+    /**
+     * Cast list of objects into a list of {@link RemoteFile}
+     *
+     * @param remoteObjects objects to cast into remote files
+     * @return New remote files list
+     */
+    public static ArrayList<RemoteFile> castObjectsIntoRemoteFiles (ArrayList<Object>
+                                                                         remoteObjects) {
+
+        ArrayList<RemoteFile> remoteFiles = new ArrayList<>(remoteObjects.size());
+
+        for (Object object : remoteObjects) {
+            remoteFiles.add((RemoteFile) object);
+        }
+
+        return  remoteFiles;
     }
     
     /**
@@ -177,6 +207,7 @@ public class FileStorageUtils {
         file.setEtag(ocFile.getEtag());
         file.setPermissions(ocFile.getPermissions());
         file.setRemoteId(ocFile.getRemoteId());
+        file.setPrivateLink(ocFile.getPrivateLink());
         return file;
     }
     

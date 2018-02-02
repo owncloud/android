@@ -206,6 +206,4 @@ class SyncFolderHandler extends Handler {
         finished.putExtra(Extras.EXTRA_DOWNLOAD_RESULT, success);
         mLocalBroadcastManager.sendBroadcast(finished);
     }
-
-
 }

@@ -26,12 +26,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,8 +151,10 @@ public class WebViewDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         
         setRetainInstance(true);
-        
-        CookieSyncManager.createInstance(getActivity().getApplicationContext());
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CookieSyncManager.createInstance(getActivity().getApplicationContext());
+        }
 
         mInitialUrl = getArguments().getString(ARG_INITIAL_URL);
         mTargetUrls = getArguments().getStringArrayList(ARG_TARGET_URLS);

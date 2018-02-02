@@ -30,10 +30,10 @@
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gérer les comptes utilisateurs</string>
   <string name="prefs_passcode">Code de sécurité</string>
-  <string name="prefs_instant_upload">Téléversement immédiat des photos</string>
-  <string name="prefs_instant_upload_summary">Téléverser immédiatement les photos prises par la caméra</string>
-  <string name="prefs_instant_video_upload">Téléversement immédiat des vidéos</string>
-  <string name="prefs_instant_video_upload_summary">Téléverser immédiatement les vidéos prises par la caméra</string>
+  <string name="prefs_camera_picture_upload">Téléversement d\'images</string>
+  <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les photos prises par la caméra</string>
+  <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
+  <string name="prefs_camera_video_upload_summary">Téléverser automatiquement les vidéos enregistrées par la caméra</string>
   <string name="prefs_log_title">Activer la journalisation</string>
   <string name="prefs_log_summary">Utilisé pour enregistrer les problèmes dans les logs</string>
   <string name="prefs_log_title_history">Historique de la journalisation</string>
@@ -144,6 +144,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploads_view_upload_status_unknown_fail">Erreur inconnue </string>
   <string name="uploads_view_upload_status_waiting_for_wifi">En attente d\'une connexion wifi</string>
   <string name="uploads_view_later_waiting_to_upload">En attente de chargement</string>
+  <string name="uploads_view_unsupported_media_type">Type de média non pris en charge</string>
   <string name="downloader_download_in_progress_ticker">Téléchargement en cours…</string>
   <string name="downloader_download_in_progress_content">Téléchargement en cours de %2$s, %1$d%% effectués</string>
   <string name="downloader_download_succeeded_ticker">Téléchargement réussi</string>
@@ -159,14 +160,14 @@ Téléchargez-le ici : %2$s</string>
   <string name="sync_fail_content">La synchronisation de %1$s ne peut être achevée</string>
   <string name="sync_fail_content_unauthorized">Mot de passe non valide pour %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Des conflits ont été trouvés</string>
-  <string name="sync_conflicts_in_favourites_content">%1$d fichiers à garder synchronisés n\'ont pu être synchronisés</string>
+  <string name="sync_conflicts_in_favourites_content">%1$d fichiers à synchroniser n\'ont pu être synchronisés</string>
   <string name="sync_fail_in_favourites_ticker">La synchronisation des fichiers a échoué</string>
   <string name="sync_fail_in_favourites_content">Le contenu de %1$d fichiers n\'a pu être synchronisé (%2$d conflits)</string>
   <string name="sync_foreign_files_forgotten_ticker">Certains fichiers locaux ont été oubliés</string>
   <string name="sync_foreign_files_forgotten_content">%1$d fichiers du dossier %2$s n\'ont pas pu être copiés dans</string>
   <string name="sync_foreign_files_forgotten_explanation">Depuis la version 1.3.16, les fichiers envoyés depuis cet appareil sont copiés dans le dossier local %1$s pour éviter une perte de données lorsqu\'un même fichier est synchronisé avec plusieurs comptes.
 
-En raison de cette modification, tous les fichiers envoyés avec des versions antérieures de cette application ont été copiés dans le dossier %2$s. Cependant, une erreur a empêché l\'achèvement de cette opération pendant la synchronisation du compte. Vous pouvez soit laisser les fichiers tels quels et supprimer le lien vers %3$s, soit déplacer les fichiers dans le dossier %1$s et garder le lien vers %4$s.
+En raison de cette modification, tous les fichiers envoyés avec des versions antérieures de cette application ont été copiés dans le dossier %2$s. Cependant, une erreur a empêché l\'achèvement de cette opération pendant la synchronisation du compte. Vous pouvez soit laisser les fichiers tels quels et supprimer le lien vers %3$s, soit déplacer les fichiers dans le dossier %1$s et conserver le lien vers %4$s.
 
 Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxquels ils étaient liés.</string>
   <string name="sync_current_folder_was_removed">Le dossier %1$s n\'existe plus</string>
@@ -263,6 +264,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="activity_chooser_title">Envoyer le lien vers…</string>
   <string name="wait_for_tmp_copy_from_private_storage">Copie du fichier depuis le stockage privé</string>
   <string name="oauth_check_onoff">Connexion avec oAuth2</string>
+  <string name="oauth_login_connection">Connexion au serveur OAuth2…</string>
   <string name="ssl_validator_header">L\'identité de ce serveur ne peut pas être vérifiée</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Le certificat du serveur n\'est pas sûr</string>
   <string name="ssl_validator_reason_cert_expired">- Le certificat du serveur a expiré</string>
@@ -296,18 +298,21 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="placeholder_filesize">389 Ko</string>
   <string name="placeholder_timestamp">18/05/2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
-  <string name="instant_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
-  <string name="instant_upload_path">/InstantUpload</string>
+  <string name="camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
+  <string name="camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
+  <string name="camera_upload_path">/TeleversementCamera</string>
+  <string name="confirmation_disable_camera_uploads_title">Confirmer</string>
+  <string name="confirmation_disable_pictures_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les images en suspens ne seront pas téléversées</string>
+  <string name="confirmation_disable_videos_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les vidéos en suspens ne seront pas téléversées</string>
   <string name="conflict_title">Conflit de fichiers</string>
-  <string name="conflict_message">Quel(s) fichier(s) voulez-vous garder ? Si vous sélectionnez les deux, un chiffre sera ajouté au nom du fichier local.</string>
-  <string name="conflict_keep_both">Garder les deux versions</string>
+  <string name="conflict_message">Quel(s) fichier(s) voulez-vous conserver ? Si vous sélectionnez les deux, un chiffre sera ajouté au nom du fichier local.</string>
+  <string name="conflict_keep_both">Conserver les deux versions</string>
   <string name="conflict_use_local_version">version locale</string>
   <string name="conflict_use_server_version">version serveur</string>
   <string name="preview_image_description">Prévisualisation de l\'image</string>
   <string name="preview_image_error_unknown_format">Cette image ne peut pas être affichée</string>
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>
-  <string name="prefs_instant_upload_path_title">Chemin du dossier de téléversement</string>
+  <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
   <string name="share_link_no_support_share_api">Désolé, le partage n\'est pas disponible sur votre serveur. Veuillez contacter votre administrateur.</string>
   <string name="share_link_file_no_exist">Impossible de partager. Vérifiez que le fichier est bien présent</string>
   <string name="share_link_file_error">Une erreur est survenue lors de la tentative de partage de ce fichier ou répertoire</string>
@@ -362,9 +367,9 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="copy_file_invalid_overwrite">Fichier déjà existant dans le dossier de destination</string>
   <string name="copy_file_error">Une erreur est survenue lors de la copie de ce fichier ou dossier</string>
   <string name="forbidden_permissions_copy">de copier ce fichier</string>
-  <string name="prefs_category_instant_uploading">Téléversement immédiat</string>
+  <string name="prefs_category_camera_upload">Téléversements de la caméra</string>
   <string name="prefs_category_details">Détails</string>
-  <string name="prefs_instant_video_upload_path_title">Dossier de téléversement des vidéos</string>
+  <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
   <string name="sync_folder_failed_content">La synchronisation du dossier %1$s n\'a pas pu être terminée</string>
   <string name="shared_subject_header">a partagé</string>
   <string name="with_you_subject_header">avec vous</string>
@@ -382,11 +387,11 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="file_list__footer__files">%1$d fichiers</string>
   <string name="file_list__footer__files_and_folder">%1$d fichiers, 1 dossier</string>
   <string name="file_list__footer__files_and_folders">%1$d fichiers, %2$d dossiers</string>
-  <string name="prefs_instant_upload_source_path_title">Dossier de l\'appareil photo (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">Requis</string>
-  <string name="prefs_instant_upload_source_path_title_optional">Optionnel</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Le fichier original sera...</string>
-  <string name="prefs_instant_behaviour_title">Le fichier original sera...</string>
+  <string name="prefs_camera_upload_source_path_title">Dossier de l\'appareil photo (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">Requis</string>
+  <string name="prefs_camera_upload_source_path_title_optional">Optionnel</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Le fichier original sera...</string>
+  <string name="prefs_camera_upload_behaviour_title">Le fichier original sera...</string>
   <string name="upload_copy_files">Copier le fichier</string>
   <string name="upload_move_files">Déplacer le fichier</string>
   <string name="pref_behaviour_entries_keep_file">gardé dans le dossier original</string>
@@ -462,7 +467,15 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="share_via_link_expiration_date_explanation_label">Ce lien public expirera au plus tard %1$d jours après sa création</string>
   <string name="share_via_link_default_name_template">lien %1$s</string>
   <string name="private_link_info">Ceci est un lien privé ; seules les personnes ayant accès à ce fichier/dossier peuvent l\'utiliser. Utilisez-le comme lien permanent pour vous-même ou pour pointer sur ce fichier/dossier dans le partage avec d\'autres utilisateur.</string>
-  <string name="file_private_link_error">Une erreur s\'est produite en essayant d\'obtenir le lien privé pour ce fichier.</string>
+  <string name="file_private_link_error">Le lien privé n\'est pas disponible pour ce fichier</string>
+  <string name="download_notification_channel_name">Téléchargements</string>
+  <string name="download_notification_channel_description">Voir le nom du fichier téléchargé et sa progression</string>
+  <string name="upload_notification_channel_name">Téléversements</string>
+  <string name="upload_notification_channel_description">Voir le nom du fichier téléverser et sa progression</string>
+  <string name="media_service_notification_channel_name">lecteur de musique</string>
+  <string name="media_service_notification_channel_description">Voir le lecteur de musique</string>
+  <string name="file_sync_notification_channel_name">synchronisation de fichier</string>
+  <string name="file_sync_notification_channel_description">Voir le résultat de la synchronisation de fichier</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>

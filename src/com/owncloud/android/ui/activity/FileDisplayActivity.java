@@ -3,6 +3,7 @@
  *
  *  @author Bartek Przybylski
  *  @author David A. Velasco
+ *  @author David González Verdugo
  *  Copyright (C) 2011  Bartek Przybylski
  *  Copyright (C) 2016 ownCloud GmbH.
  *
@@ -61,6 +62,7 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.files.services.IndexedForest;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -138,6 +140,8 @@ public class FileDisplayActivity extends HookActivity
     private OCFile mWaitingToSend;
 
     private LocalBroadcastManager mLocalBroadcastManager;
+
+    private IndexedForest<FileDisplayActivity> mPendingCameraUploads = new IndexedForest<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

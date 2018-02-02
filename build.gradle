@@ -17,7 +17,7 @@ buildscript {
 apply plugin: 'com.android.application'
 
 ext {
-    supportLibraryVersion = '25.4.0'
+    supportLibraryVersion = '26.1.0'
 }
 
 repositories {
@@ -40,7 +40,7 @@ configurations.all {
 
 dependencies {
     /// dependencies for app building
-    compile name: 'touch-image-view'
+    compile project(':touchImageView')
     compile project(':owncloud-android-library')
     compile "com.android.support:support-v4:${supportLibraryVersion}"
     compile "com.android.support:design:${supportLibraryVersion}"
@@ -73,7 +73,6 @@ dependencies {
 
     // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
     androidTestCompile "com.android.support:support-annotations:${supportLibraryVersion}"
-
 }
 
 tasks.withType(Test) {
@@ -84,13 +83,13 @@ tasks.withType(Test) {
 }
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
 
-        manifestPlaceholders.versionCode = "20500000"
-        manifestPlaceholders.versionName = "2.5.0"
+        manifestPlaceholders.versionCode = "20600000"
+        manifestPlaceholders.versionName = "2.6.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -109,7 +108,6 @@ android {
         jackOptions {
             enabled false
         }
-
     }
 
     // adapt structure from Eclipse to Gradle/Android Studio expectations;
@@ -173,6 +171,14 @@ android {
                 keyPassword System.env.OC_RELEASE_KEY_PASSWORD
             }
         }
+        beta {
+            if (System.env.OC_BETA_KEYSTORE) {
+                storeFile file(System.env.OC_BETA_KEYSTORE)  // use an absolute path
+                storePassword System.env.OC_BETA_KEYSTORE_PASSWORD
+                keyAlias System.env.OC_BETA_KEY_ALIAS
+                keyPassword System.env.OC_BETA_KEY_PASSWORD
+            }
+        }
     }
 
     buildTypes {
@@ -188,20 +194,20 @@ android {
         }
 
         beta {
-
-            manifestPlaceholders.versionCode = "20400001"
-            manifestPlaceholders.versionName = "2.5.0-beta.2"
-
+            manifestPlaceholders.versionCode = "20500001"
+            manifestPlaceholders.versionName = "2.5.1-beta.1"
             applicationIdSuffix ".beta"
-        }
 
+            if (System.env.OC_BETA_KEYSTORE) {
+                signingConfig signingConfigs.beta
+            }
+        }
     }
 
     applicationVariants.all { variant ->
         def appName = System.env.OC_APP_NAME
         setOutputFileName(variant, appName, project)
     }
-
 }
 
 // Updates output file names of a given variant to format

@@ -124,6 +124,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     private boolean mSharedByLink;
     private boolean mSharedWithSharee;
+    private String mPrivateLink;
 
     /**
      * URI to the local path of the file contents, if stored in the device; cached after first call
@@ -186,6 +187,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mIsDownloading = source.readInt() == 1;
         mEtagInConflict = source.readString();
         mSharedWithSharee = source.readInt() == 1;
+        mPrivateLink = source.readString();
 
     }
 
@@ -212,6 +214,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         dest.writeInt(mIsDownloading ? 1 : 0);
         dest.writeString(mEtagInConflict);
         dest.writeInt(mSharedWithSharee ? 1 : 0);
+        dest.writeString(mPrivateLink);
     }
 
     /**
@@ -456,6 +459,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mIsDownloading = false;
         mEtagInConflict = null;
         mSharedWithSharee = false;
+        mPrivateLink = "";
     }
 
     /**
@@ -735,6 +739,14 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         return (permissions != null && permissions.contains(PERMISSION_SHARED_WITH_ME));
     }
 
+    public String getPrivateLink() {
+        return mPrivateLink;
+    }
+
+    public void setPrivateLink(String privateLink) {
+        mPrivateLink = (privateLink == null) ? "" : privateLink;
+    }
+
     public void copyLocalPropertiesFrom(OCFile sourceFile) {
         setParentId(sourceFile.getParentId());
         setFileId(sourceFile.getFileId());
@@ -750,40 +762,4 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         setEtagInConflict(sourceFile.getEtagInConflict());
     }
 
-    /**
-     * Manipulate file remote id to get private link
-     *
-     * @param context
-     * @param account
-     * @return private link for the current file
-     */
-    public String getPrivateLink(Context context, Account account) {
-
-        /**
-         * File remote id looks like this: 00000003ocr2n5bhxjuy
-         * Only the FILE_ID_LENGTH first characters are needed, which correspond to fileId: 00000003
-         */
-        String parsedRemoteId = mRemoteId.substring(0, FILE_ID_LENGTH);
-
-        // Delete leading zeros to get the file id itself and build the private link properly
-        String fileId = Integer.valueOf(parsedRemoteId).toString();
-
-        String privateLink = null;
-
-        try {
-
-            String baseUrl = AccountUtils.getBaseUrlForAccount(context, account);
-
-            if (baseUrl == null)
-                throw new AccountUtils.AccountNotFoundException(account, "Account not found", null);
-
-            privateLink = baseUrl + PRIVATE_LINK_PATH + fileId;
-
-        } catch (AccountUtils.AccountNotFoundException e) {
-
-            Log_OC.d(TAG, e.toString());
-        }
-
-        return privateLink;
-    }
 }

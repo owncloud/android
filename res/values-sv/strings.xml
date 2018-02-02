@@ -30,10 +30,6 @@
   <string name="prefs_accounts">Konton</string>
   <string name="prefs_manage_accounts">Hantera konton</string>
   <string name="prefs_passcode">Lösenordslås</string>
-  <string name="prefs_instant_upload">Direktuppladdning av kamerabilder</string>
-  <string name="prefs_instant_upload_summary">Direktuppladning av bilder tagna med kameran</string>
-  <string name="prefs_instant_video_upload">Direktuppladning av video</string>
-  <string name="prefs_instant_video_upload_summary">Direktuppladdning av video inspelade med kameran</string>
   <string name="prefs_log_title">Aktivera Loggning</string>
   <string name="prefs_log_summary">Används för att logga problem</string>
   <string name="prefs_log_title_history">Logghistorik</string>
@@ -143,6 +139,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Okänt fel</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Väntar på anslutning till trådlöst nätverk</string>
   <string name="uploads_view_later_waiting_to_upload">Väntar på att ladda upp</string>
+  <string name="uploads_view_unsupported_media_type">Saknar stöd för denna mediatyp</string>
   <string name="downloader_download_in_progress_ticker">Laddar ner ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Laddar ner %2$s</string>
   <string name="downloader_download_succeeded_ticker">Nedladdning klar</string>
@@ -258,6 +255,7 @@
   <string name="activity_chooser_title">Sänd länk till ...</string>
   <string name="wait_for_tmp_copy_from_private_storage">Kopierar fil från privat lagring</string>
   <string name="oauth_check_onoff">Logga in med oAuth2.</string>
+  <string name="oauth_login_connection">Ansluter till OAuth2 autentiseringsservern...</string>
   <string name="ssl_validator_header">Identiteten av servern kunde inte verifieras</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Servercertifikatet är inte tillförlitligt</string>
   <string name="ssl_validator_reason_cert_expired">- Servercertifikatet har gått ut</string>
@@ -291,9 +289,8 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="instant_upload_on_wifi">Ladda upp bilder endast via wifi</string>
-  <string name="instant_video_upload_on_wifi">Ladda upp videor endast via wifi</string>
-  <string name="instant_upload_path">/DirektUppladdning</string>
+  <string name="camera_picture_upload_on_wifi">Ladda upp bilder endast via wifi</string>
+  <string name="camera_video_upload_on_wifi">Ladda upp videor endast via wifi</string>
   <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_message">Vilka filer vill du behålla? Om du markerar båda kommer den lokala filen få ett nummer tillagt i slutet på filnamnet.</string>
   <string name="conflict_keep_both">Behåll båda</string>
@@ -302,7 +299,6 @@
   <string name="preview_image_description">Förhandsvisa bild</string>
   <string name="preview_image_error_unknown_format">Denna bild kan inte visas</string>
   <string name="error__upload__local_file_not_copied">%1$s kunde inte kopieras till %2$s lokal mapp</string>
-  <string name="prefs_instant_upload_path_title">Uppladdningssökväg</string>
   <string name="share_link_no_support_share_api">Ledsen, delning är inte aktiverat på din server. Vänligen kontakta din
 		administratör.</string>
   <string name="share_link_file_no_exist">Lyckades ej dela. Vänligen kontrollera om filen eisterar</string>
@@ -358,9 +354,7 @@
   <string name="copy_file_invalid_overwrite">Filen existerar redan i destinationsmappen</string>
   <string name="copy_file_error">Ett fel uppstod, kunde inte kopiera filen eller mappen</string>
   <string name="forbidden_permissions_copy">att kopiera denna fil</string>
-  <string name="prefs_category_instant_uploading">Direktuppladdningar</string>
   <string name="prefs_category_details">Detaljer</string>
-  <string name="prefs_instant_video_upload_path_title">Sökväg för uppladdning av video</string>
   <string name="sync_folder_failed_content">Synkronisering av %1$s mapp kunde inte slutföras</string>
   <string name="shared_subject_header">delad</string>
   <string name="with_you_subject_header">med dig</string>
@@ -378,11 +372,11 @@
   <string name="file_list__footer__files">%1$d filer</string>
   <string name="file_list__footer__files_and_folder">%1$d filer, 1 mapp</string>
   <string name="file_list__footer__files_and_folders">%1$d filer, %2$d mappar</string>
-  <string name="prefs_instant_upload_source_path_title">Kameramapp (%1$s)</string>
-  <string name="prefs_instant_upload_source_path_title_required">krävs</string>
-  <string name="prefs_instant_upload_source_path_title_optional">valfritt</string>
-  <string name="prefs_instant_behaviour_dialogTitle">Originalfilen kommer att...</string>
-  <string name="prefs_instant_behaviour_title">Originalfilen kommer att...</string>
+  <string name="prefs_camera_upload_source_path_title">Kameramapp (%1$s)</string>
+  <string name="prefs_camera_upload_source_path_title_required">krävs</string>
+  <string name="prefs_camera_upload_source_path_title_optional">valfritt</string>
+  <string name="prefs_camera_upload_behaviour_dialogTitle">Originalfilen kommer att...</string>
+  <string name="prefs_camera_upload_behaviour_title">Originalfilen kommer att...</string>
   <string name="upload_copy_files">Kopiera fil</string>
   <string name="upload_move_files">Flytta fil</string>
   <string name="pref_behaviour_entries_keep_file">behållas i orginalmapp</string>
@@ -443,6 +437,7 @@
   <string name="streaming_unrecognized_input">Videoformatet stöds inte</string>
   <string name="streaming_file_not_found_error">Viden finns inte längre på servern</string>
   <string name="previewing_video_common_error">Videon kan inte återskapas</string>
+  <string name="previewing_video_not_supported">Videoförhandsvisning är inte tillgänglig för din Androidversion. Nedladdning av filen startar automatiskt.</string>
   <string name="streaming_position_not_available">\"Position ej tillgänglig\"</string>
   <string name="error_no_network_connection">Enheten är inte ansluten till ett nätverk</string>
   <string name="share_no_public_links">Inga publika länkar ännu</string>
@@ -450,7 +445,13 @@
   <string name="share_warning_about_forwarding_public_links">Vem som helst med länken kan komma åt filen eller mappen</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Lösenord *</string>
+  <string name="share_via_link_expiration_date_enforced_label">Upphör</string>
   <string name="share_via_link_default_name_template">%1$s länk</string>
+  <string name="download_notification_channel_name">Nedladdningar</string>
+  <string name="upload_notification_channel_name">Uppladdningar</string>
+  <string name="media_service_notification_channel_name">Musikspelare</string>
+  <string name="file_sync_notification_channel_name">Filsynkronisering</string>
+  <string name="file_sync_notification_channel_description">Se filsynkronseringsresultat </string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vald</item>
     <item quantity="other">%d valda</item>

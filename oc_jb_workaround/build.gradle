@@ -5,12 +5,12 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        versionCode = 100036
-        versionName = "1.0.36"
+        versionCode = 100037
+        versionName = "1.0.37"
     }
 
     sourceSets {
@@ -63,5 +63,4 @@ android {
         }
         setOutputFileName(variant, appName, project)
     }
-
 }
