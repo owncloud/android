@@ -8,7 +8,7 @@ However, the ownCloud Android app offers some advantages over the Web interface:
 * A simplified interface that fits nicely on a tablet or smartphone
 * Automatic synchronization of your files
 * Share files with other ownCloud users and groups, and create multiple public share links
-* Instant uploads of photos or videos recorded on your Android device
+* Upload of photos and videos recorded on your Android device
 * Easily add files from your device to ownCloud
 * Two-factor authentication
 
@@ -157,7 +157,7 @@ The ones that don't fit in the top bar, appear in the list of options when press
 Sharing Files
 ~~~~~~~~~~~~~
 
-You can share with other ownCloud users and groups, and create public share links. 
+You can share with other ownCloud users and groups, and create public or private share links.
 
 .. note:: Multiple public links per/file is only available with ownCloud X.
 
@@ -172,11 +172,16 @@ The dialog which appears shows a list of users and groups with whom the file is 
    :alt: File Shares.
 
 From here you can:
-
+- Share one link to the file with users of the same ownCloud server
 - Share the file with one or more users and groups
 - Share one or more links to the file via a range of options
 - Enable password protection
 - Set a share expiration date
+
+To create a private link, click the link icon on the right of the file name.
+
+.. NOTE::
+   Private link is available from ownCloud X.
 
 To share the file with a new user or group, click the plus sign next to *"Users and Groups"*, where you will be able to find and add them to the share list.
 After a user or group has been added, you can adjust the editing and on-sharing options available for them.
@@ -228,7 +233,7 @@ Uploading Files Taken From the Camera
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pictures and videos can be uploaded from your smartphone after choosing the folder where they are stored.
-To specify where they are located, in the *"Settings"* options, under `Instant Uploads`_, enable one of *"Instant picture uploads"* or *"Instant video uploads"*. 
+To specify where they are located, in the *"Settings"* options, under `Camera uploads`_, enable one of *"Picture uploads"* or *"Video uploads"*. 
 After that, a further option called *"Camera folder"* will become visible, as in the screenshot below. 
 
 .. figure:: images/specify-camera-folder.png
@@ -270,35 +275,34 @@ Use the *"Settings"* screen to control your ownCloud applications settings and f
 .. figure:: images/android-settings-page.jpg
    :alt: the Settings screen.
 
-Instant Uploads
-~~~~~~~~~~~~~~~
+Camera Uploads
+~~~~~~~~~~~~~~
 
-If you take photos or create videos with your Android device, they can be instantly uploaded to your ownCloud server. 
-To enable this, under *"Instant Uploads"* tap one or both of:
+If you take photos or create videos with your Android device, they can be automatically uploaded to your ownCloud server. 
+To enable this, under *"Camera uploads"* tap one or both of *Picture uploads* or *Video uploads*.
 
-- "Instant picture uploads" 
-- "Instant video uploads"
+.. figure:: images/android-settings-camera-upload.png
+   :alt: the Camera upload settings screen.
 
-.. figure:: images/android-settings-instant-upload.png
-   :alt: the Settings screen.
+By enabling these features any new photos or videos which you create will be automatically uploaded every 15 minutes.
+Photos and videos are not uploaded when they’re created, to focus on reliability, instead of immediacy, and to avoid battery draining caused by excessive checking of the camera folder.
 
-These start the process of uploading any new photos and/or videos which you create.
+.. note::
+   Please be aware that if you used the earlier *Instant Uploads* feature, you will lose the configuration and have to enable the "Camera uploads" feature if you want to use it, since it needs to be initialized and configured properly.
+
 If you’re concerned about mobile data usage, or have an account with limited data available, you can limit uploading to only when a WiFi is in use. 
 This option is visible once you've enabled the respective option.
-For photos tap **"Upload pictures via wifi only"**:sup:`1`. 
-For videos tap **"Upload videos via wifi only"**:sup:`2`
+For photos tap **"Upload pictures via wifi only"**. 
+For videos tap **"Upload videos via wifi only"**.
 
-.. figure:: images/android-settings-enable-instant-upload.png
-   :alt: Enabling instant upload picture and video 
+By default, photos and videos are uploaded to a directory called ``/CameraUpload``. 
+However, you also have the option to use an existing directory, or to create a new one. 
+To change the upload location, tap on *Picture upload path* under photos or *Video upload* path under videos, and choose one of the folders displayed. 
 
-By default, photos and videos are uploaded to a directory called file:`/InstantUpload`. 
-However, you also have the option to choose any other existing directory, or to create a new one. 
-To change the upload location, tap on *"Upload path"* under either photos or videos, and choose one of the folders which is displayed. 
-
-To create a new folder, click the More options menu, in the top right-hand corner. 
-This will display the menu option: *"New folder"*. 
-Tap it and enter the name of the new folder in the *"Folder name"* dialog.
-Then, tap the newly created folder and tap *"Choose"* in the bottom right-hand corner. 
+To create a new folder, click the *More options* menu, in the top right-hand corner. 
+This will display the menu option: *New folder*. 
+Tap it and enter the name of the new folder in the *Folder name* dialog.
+Then, tap the newly created folder and tap *Choose* in the bottom right-hand corner. 
 You'll see that the path has been updated.
 
 Passcode Locks & Pins
