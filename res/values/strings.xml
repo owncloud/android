@@ -544,6 +544,12 @@
     <string name="media_service_notification_channel_description">See music player</string>
     <string name="file_sync_notification_channel_name">File sync</string>
     <string name="file_sync_notification_channel_description">See file sync result</string>
+
+    <string name="rate_dialog_title">Rate ownCloud app!</string>
+    <string name="rate_dialog_description">If you enjoy using this app, could you take a moment to rate it? Your feedback is very important for us. </string>
+    <string name="button_no_thanks_name">NO, THANKS</string>
+    <string name="button_later_name">LATER</string>
+    <string name="button_rate_now_name">RATE NOW</string>
     <plurals name="items_selected_count">
         <item quantity="one">%d selected</item>
         <item quantity="other">%d selected</item>
