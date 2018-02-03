@@ -54,6 +54,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.owncloud.android.AppRater;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -200,6 +201,8 @@ public class FileDisplayActivity extends HookActivity
         }   // else, Fragment already created and retained across configuration change
 
         Log_OC.v(TAG, "onCreate() end");
+
+        AppRater.appLaunched(this, "com.owncloud.android");
     }
 
     @Override
