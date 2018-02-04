@@ -256,6 +256,8 @@ public class FileMenuFilter {
             toShow.add(R.id.action_unset_available_offline);
         }
 
+        // CLEAR SELECTION
+        toShow.add(R.id.action_clear_selection);
     }
 
     private boolean anyFileSynchronizing() {

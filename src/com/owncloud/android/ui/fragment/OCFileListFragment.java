@@ -361,6 +361,12 @@ public class OCFileListFragment extends ExtendedListFragment {
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 
+    public void selectAll() {
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            getListView().setItemChecked(i, true);
+        }
+    }
+
     /**
      * Handler for multiple selection mode.
      *
@@ -621,7 +627,7 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     @Override
-    public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+        public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         OCFile file = (OCFile) mAdapter.getItem(position);
         if (file != null) {
             if (file.isFolder()) {
@@ -737,6 +743,10 @@ public class OCFileListFragment extends ExtendedListFragment {
 
         /// actions possible on a batch of files
         switch (menuId) {
+            case R.id.action_clear_selection: {
+                deselectAll();
+                return true;
+            }
             case R.id.action_remove_file: {
                 RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstance(checkedFiles);
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
@@ -775,6 +785,12 @@ public class OCFileListFragment extends ExtendedListFragment {
                 return true;
             default:
                 return false;
+        }
+    }
+
+    private void deselectAll() {
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            getListView().setItemChecked(i, false);
         }
     }
 
