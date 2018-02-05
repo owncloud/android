@@ -204,12 +204,17 @@ public class UploadFilesActivity extends FileActivity implements
 
     private String getCapturedImageName(){
         Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        int second = calendar.get(Calendar.SECOND);
+        String year = "" + calendar.get(Calendar.YEAR);
+        String month = ("0" + (calendar.get(Calendar.MONTH) + 1));
+        String day = ("0" + calendar.get(Calendar.DAY_OF_MONTH));
+        String hour = ("0" + calendar.get(Calendar.HOUR_OF_DAY));
+        String minute = ("0" + calendar.get(Calendar.MINUTE));
+        String second = ("0" + calendar.get(Calendar.SECOND));
+        month = month.length() == 3 ? month.substring(1,month.length()) : month;
+        day = day.length() == 3 ? day.substring(1,day.length()) : day;
+        hour = hour.length() == 3 ? hour.substring(1,hour.length()) : hour;
+        minute = minute.length() == 3 ? minute.substring(1,minute.length()) : minute;
+        second = second.length() == 3 ? second.substring(1,second.length()) : second;
         String newImageName = "IMG_" + year + month + day + "_" + hour + minute + second + ".jpg";
         return newImageName;
     }
