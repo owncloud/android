@@ -35,6 +35,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,6 +45,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -55,6 +57,8 @@ import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
 
 
 /**
@@ -198,6 +202,18 @@ public class UploadFilesActivity extends FileActivity implements
         }
     }
 
+    private String getCapturedImageName(){
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+        String newImageName = "IMG_" + year + month + day + "_" + hour + minute + second + ".jpg";
+        return newImageName;
+    }
+
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent capturedData){
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
@@ -205,7 +221,12 @@ public class UploadFilesActivity extends FileActivity implements
             Bitmap capturedImage = (Bitmap) capturedImageData.get("data");
             Uri capturedImageUri = getImageUri(getApplicationContext(),capturedImage);
             String capturedImagePath = getRealPathFromUri(capturedImageUri);
-            new CheckAvailableSpaceTask(capturedImagePath).execute();
+            File capturedImageFile = new File(capturedImagePath);
+            File parent = capturedImageFile.getParentFile();
+            File newImage = new File(parent,getCapturedImageName());
+            capturedImageFile.renameTo(newImage);
+            capturedImageFile.delete();
+            new CheckAvailableSpaceTask(newImage.getAbsolutePath()).execute();
         }
         else if(resultCode == RESULT_CANCELED){
             setResult(RESULT_CANCELED);
@@ -467,8 +488,6 @@ public class UploadFilesActivity extends FileActivity implements
                 if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
                     data.putExtra(EXTRA_CHOSEN_FILES,new String[]{ capturedImagePath});
                     setResult(RESULT_OK_AND_MOVE, data);
-                    appPreferencesEditor.putInt("prefs_uploader_behaviour",
-                            FileUploader.LOCAL_BEHAVIOUR_MOVE);
                 } else {
                     data.putExtra(EXTRA_CHOSEN_FILES, mFileListFragment.getCheckedFilePaths());
                     if (mRadioBtnMoveFiles.isChecked()) {
