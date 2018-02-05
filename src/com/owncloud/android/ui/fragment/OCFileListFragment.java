@@ -106,6 +106,7 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private LinearLayout uploadFilesLinearLayout;
     private LinearLayout uploadFromCameraLinearLayout;
+    private TextView uploadToTextView;
     private BottomSheetBehavior uploadBottomSheetBehavior;
 
     private int mStatusBarColorActionMode;
@@ -271,6 +272,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 dialog.setContentView(uploadBottomSheet);
                 uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
                 uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                uploadToTextView = (TextView) uploadBottomSheet.findViewById(R.id.upload_to_text_view);
                 uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -289,6 +291,9 @@ public class OCFileListFragment extends ExtendedListFragment {
                         return false;
                     }
                 });
+                String appName = getResources().getString(R.string.app_name);
+                String uploadTo = getResources().getString(R.string.upload_to);
+                uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),getResources().getString(R.string.app_name)));
                 uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
                 uploadBottomSheetBehavior.setPeekHeight(400);
                 dialog.show();
