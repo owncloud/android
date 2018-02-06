@@ -291,8 +291,6 @@ public class OCFileListFragment extends ExtendedListFragment {
                         return false;
                     }
                 });
-                String appName = getResources().getString(R.string.app_name);
-                String uploadTo = getResources().getString(R.string.upload_to);
                 uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),getResources().getString(R.string.app_name)));
                 uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
                 uploadBottomSheetBehavior.setPeekHeight(400);

@@ -35,7 +35,6 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,7 +44,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.C;
 import com.owncloud.android.R;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -57,7 +55,6 @@ import com.owncloud.android.utils.FileStorageUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 
 
