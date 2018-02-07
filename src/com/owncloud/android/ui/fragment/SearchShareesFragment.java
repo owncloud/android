@@ -218,9 +218,27 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        hideSoftKeyboard();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void hideSoftKeyboard() {
+        if (getView() != null) {
+            View searchView = getView().findViewById(R.id.searchView);
+            if (searchView != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                }
+            }
+        }
     }
 
     @Override
