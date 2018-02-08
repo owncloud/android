@@ -1,7 +1,7 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 
+import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
 
 public class RateMeDialog extends DialogFragment {
@@ -43,6 +44,9 @@ public class RateMeDialog extends DialogFragment {
 
     private static final String ARG_CANCELABLE = RateMeDialog.class.getCanonicalName() + ".ARG_CANCELABLE";
     private static final String APP_PACKAGE_NAME = RateMeDialog.class.getCanonicalName() + ".APP_PACKAGE_NAME";
+
+    private static final String MARKET_DETAILS_URI = "market://details?id=";
+    private static final String PLAY_STORE_URI = "http://play.google.com/store/apps/details?id=";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,14 +84,14 @@ public class RateMeDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 String packageName = getArguments().getString(APP_PACKAGE_NAME);
-                Uri uri = Uri.parse("market://details?id=" + packageName);
+                Uri uri = Uri.parse(MARKET_DETAILS_URI + packageName);
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 
                 /// To count with Play market back stack, After pressing back button,
                 /// to taken back to our application, we need to add following flags to intent.
                 int flags = Intent.FLAG_ACTIVITY_NO_HISTORY |
                         Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
-                if (Build.VERSION.SDK_INT >= 21)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 {
                     flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
                 }
@@ -101,7 +105,7 @@ public class RateMeDialog extends DialogFragment {
                     startActivity(goToMarket);
                 } catch (ActivityNotFoundException e) {
                     getActivity().startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)));
+                            Uri.parse(PLAY_STORE_URI + packageName)));
                 }
                 dialog.dismiss();
             }
@@ -110,9 +114,10 @@ public class RateMeDialog extends DialogFragment {
         laterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences preferences = getActivity().getSharedPreferences("app_rater", 0);
+                SharedPreferences preferences = getActivity().getSharedPreferences
+                        (AppRater.APP_RATER_PREF_TITLE, 0);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong("date_neutral", System.currentTimeMillis());
+                editor.putLong(AppRater.APP_RATER_PREF_DATE_NEUTRAL, System.currentTimeMillis());
                 editor.apply();
                 dialog.dismiss();
             }
@@ -121,9 +126,10 @@ public class RateMeDialog extends DialogFragment {
         noThanksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences preferences = getActivity().getSharedPreferences("app_rater", 0);
+                SharedPreferences preferences = getActivity().getSharedPreferences
+                        (AppRater.APP_RATER_PREF_TITLE, 0);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("don't_show_again", true);
+                editor.putBoolean(AppRater.APP_RATER_PREF_DONT_SHOW, true);
                 editor.apply();
                 dialog.dismiss();
             }
