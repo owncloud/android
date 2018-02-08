@@ -202,7 +202,7 @@ public class FileDisplayActivity extends HookActivity
 
         Log_OC.v(TAG, "onCreate() end");
 
-        AppRater.appLaunched(this, "com.owncloud.android");
+        AppRater.appLaunched(this, getApplicationContext().getPackageName());
     }
 
     @Override
