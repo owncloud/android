@@ -33,6 +33,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
@@ -99,7 +100,11 @@ public class FileObserverService extends Service {
     public static void initialize(Context context) {
         Intent i = new Intent(context, FileObserverService.class);
         i.setAction(ACTION_START_OBSERVE);
-        context.startService(i);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+            context.startForegroundService(i);
+        } else {
+            context.startService(i);
+        }
     }
 
     /**
