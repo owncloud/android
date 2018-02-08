@@ -289,7 +289,6 @@ public class OCFileListFragment extends ExtendedListFragment {
                 });
                 uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),getResources().getString(R.string.app_name)));
                 final BottomSheetBehavior uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
-                uploadBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
