@@ -23,6 +23,7 @@
 package com.owncloud.android.ui.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -103,11 +104,6 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private OCFile mFile = null;
     private FileListListAdapter mAdapter;
-
-    private LinearLayout uploadFilesLinearLayout;
-    private LinearLayout uploadFromCameraLinearLayout;
-    private TextView uploadToTextView;
-    private BottomSheetBehavior uploadBottomSheetBehavior;
 
     private int mStatusBarColorActionMode;
     private int mStatusBarColor;
@@ -267,12 +263,12 @@ public class OCFileListFragment extends ExtendedListFragment {
             @Override
             public void onClick(View v) {
                 Log_OC.e(TAG,"Clicked" + getContext().toString());
-                View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
+                final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
                 dialog.setContentView(uploadBottomSheet);
-                uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
-                uploadToTextView = (TextView) uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+                LinearLayout uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
+                LinearLayout uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                TextView uploadToTextView = (TextView) uploadBottomSheet.findViewById(R.id.upload_to_text_view);
                 uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -292,8 +288,14 @@ public class OCFileListFragment extends ExtendedListFragment {
                     }
                 });
                 uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),getResources().getString(R.string.app_name)));
-                uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
-                uploadBottomSheetBehavior.setPeekHeight(-1);
+                final BottomSheetBehavior uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
+                uploadBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.getMeasuredHeight());
+                    }
+                });
                 dialog.show();
                 getFabMain().collapse();
                 recordMiniFabClick();
