@@ -23,10 +23,14 @@ package com.owncloud.android.ui.fragment;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.SwitchCompat;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -268,6 +272,12 @@ public class PublicShareDialogFragment extends DialogFragment {
         // Set listener for user actions on expiration date
         initExpirationListener(view);
 
+        // Set listener for focus change of password
+        initPasswordFocusChangeListener(view);
+
+        // Set listener for user actions on password hide/show button
+        initPasswordToggleListener(view);
+
         // Confirm add public link
         Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
 
@@ -347,6 +357,152 @@ public class PublicShareDialogFragment extends DialogFragment {
         });
 
         return view;
+    }
+
+    private void initPasswordFocusChangeListener(View view) {
+        view.findViewById(R.id.shareViaLinkPasswordValue).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (v.getId() == R.id.shareViaLinkPasswordValue){
+                    onPasswordFocusChanged(hasFocus);
+                }
+            }
+        });
+    }
+
+    private void initPasswordToggleListener(View view) {
+        EditText mPasswordInput = (EditText) view.findViewById(R.id.shareViaLinkPasswordValue);
+        mPasswordInput.setOnTouchListener(new RightDrawableOnTouchListener() {
+            @Override
+            public boolean onDrawableTouch(final MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    onViewPasswordClick();
+                }
+                return true;
+            }
+        });
+    }
+
+    private abstract static class RightDrawableOnTouchListener implements View.OnTouchListener {
+
+        private int fuzz = 75;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            Drawable rightDrawable = null;
+            if (view instanceof TextView) {
+                Drawable[] drawables = ((TextView)view).getCompoundDrawables();
+                if (drawables.length > 2) {
+                    rightDrawable = drawables[2];
+                }
+            }
+            if (rightDrawable != null) {
+                final int x = (int) event.getX();
+                final int y = (int) event.getY();
+                final Rect bounds = rightDrawable.getBounds();
+                if (    x >= (view.getRight() - bounds.width() - fuzz) &&
+                        x <= (view.getRight() - view.getPaddingRight() + fuzz) &&
+                        y >= (view.getPaddingTop() - fuzz) &&
+                        y <= (view.getHeight() - view.getPaddingBottom()) + fuzz) {
+
+                    return onDrawableTouch(event);
+                }
+            }
+            return false;
+        }
+
+        public abstract boolean onDrawableTouch(final MotionEvent event);
+    }
+
+    /**
+     * Handles changes in focus on the text input for the password (basic authorization).
+     *
+     * When (hasFocus), the button to toggle password visibility is shown.
+     *
+     * When (!hasFocus), the button is made invisible and the password is hidden.
+     *
+     * @param hasFocus          'True' if focus is received, 'false' if is lost
+     */
+    private void onPasswordFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            showViewPasswordButton();
+        } else {
+            hidePassword();
+            hidePasswordButton();
+        }
+    }
+
+    /**
+     * Called when the eye icon in the password field is clicked.
+     *
+     * Toggles the visibility of the password in the field.
+     */
+    public void onViewPasswordClick() {
+        if (getView() != null) {
+            EditText mPasswordInput = ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)));
+            int selectionStart = mPasswordInput.getSelectionStart();
+            int selectionEnd = mPasswordInput.getSelectionEnd();
+            if (isPasswordVisible()) {
+                hidePassword();
+            } else {
+                showPassword();
+            }
+            mPasswordInput.setSelection(selectionStart, selectionEnd);
+        }
+    }
+
+    private void showViewPasswordButton() {
+        int drawable = R.drawable.ic_view;
+        if (isPasswordVisible()) {
+            drawable = R.drawable.ic_hide;
+        }
+        if (getView() != null) {
+            ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)))
+                    .setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
+        }
+    }
+
+    private boolean isPasswordVisible() {
+        if (getView() != null) {
+            return ((((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue))).getInputType()
+                    & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) ==
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        }
+        return false;
+    }
+
+    private void hidePasswordButton() {
+        if (getView() != null) {
+            ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)))
+                    .setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        }
+    }
+
+    private void showPassword() {
+        if (getView() != null) {
+            ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)))
+                    .setInputType(
+                            InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD |
+                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                    );
+            showViewPasswordButton();
+        }
+    }
+
+    private void hidePassword() {
+        if (getView() != null) {
+            ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)))
+                    .setInputType(
+                            InputType.TYPE_CLASS_TEXT |
+                                    InputType.TYPE_TEXT_VARIATION_PASSWORD |
+                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                    );
+            showViewPasswordButton();
+        }
     }
 
     private long getExpirationDateValueInMillis() {
@@ -792,8 +948,8 @@ public class PublicShareDialogFragment extends DialogFragment {
         theSwitch.setOnCheckedChangeListener(mOnPasswordInteractionListener);
     }
 
-    private TextView getPasswordValue(View view) {
-        return (TextView) view.findViewById(R.id.shareViaLinkPasswordValue);
+    private EditText getPasswordValue(View view) {
+        return (EditText) view.findViewById(R.id.shareViaLinkPasswordValue);
     }
 
     private TextView getExpirationDateLabel(View view) {
