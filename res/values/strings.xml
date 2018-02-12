@@ -207,7 +207,7 @@
     <string name="media_rewind_description">Rewind button</string>
     <string name="media_play_pause_description">Play or pause button</string>
     <string name="media_forward_description">Fast forward button</string>
-    <string name="upload_from_camera_title">Upload from camera</string>
+    <string name="upload_from_camera_title">Picture from camera</string>
 
     <string name="auth_getting_authorization">Getting authorization &#8230;</string>
     <string name="auth_trying_to_login">Trying to log in &#8230;</string>
