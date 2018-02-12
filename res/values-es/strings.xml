@@ -79,6 +79,8 @@
   <string name="file_list_file">archivo</string>
   <string name="file_list_files">ficheros</string>
   <string name="filedetails_select_file">Pulsa sobre un archivo para mostrar información adicional.</string>
+  <string name="upload_to">Subir a %1$s</string>
+  <string name="upload_files_title">Archivos</string>
   <string name="filedetails_size">Tamaño:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creado:</string>
@@ -200,6 +202,7 @@
   <string name="media_rewind_description">Botón de rebobinado</string>
   <string name="media_play_pause_description">Botón de reproducción o pausa </string>
   <string name="media_forward_description">Botón avance rápido</string>
+  <string name="upload_from_camera_title">Subir de la cámara</string>
   <string name="auth_getting_authorization">Obteniendo autorización...</string>
   <string name="auth_trying_to_login">Intentando iniciar sesión ...</string>
   <string name="auth_no_net_conn_title">Sin conexión de red</string>
