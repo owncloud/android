@@ -1,8 +1,26 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Shashvat Kedia
+ * Copyright (C) 2018 ownCloud GmbH.
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.ui.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +48,7 @@ public class PatternLockActivity extends AppCompatActivity {
     public final static String ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT";
     public final static String ACTION_CHECK = "ACTION_CHECK_PATTERN";
 
-    public final static String KEY_PATTERN  = "KEY_PATTERN";
+    public final static String KEY_PATTERN = "KEY_PATTERN";
     public final static String KEY_CHECK_RESULT = "KEY_CHECK_PATTERN_RESULT";
 
     private static String KEY_CONFIRMING_PATTERN = "CONFIRMING_PATTERN";
@@ -57,44 +75,40 @@ public class PatternLockActivity extends AppCompatActivity {
         if (!BuildConfig.DEBUG) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
-            setContentView(R.layout.activity_pattern_lock);
+        setContentView(R.layout.activity_pattern_lock);
         patternHeaderView = (TextView) findViewById(R.id.header_pattern);
         patternExpView = (TextView) findViewById(R.id.explanation_pattern);
         cancelButton = (Button) findViewById(R.id.cancel_pattern);
         patternLockView = (PatternLockView) findViewById(R.id.pattern_lock_view);
         patternLockView.clearPattern();
-        if(ACTION_CHECK.equals(getIntent().getAction())){
+        if (ACTION_CHECK.equals(getIntent().getAction())) {
             patternHeaderView.setText(R.string.pattern_enter_pattern);
             patternExpView.setVisibility(View.INVISIBLE);
             setCancelButtonEnabled(false);
-        }
-        else if(ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())){
-            if(savedInstanceState != null){
+        } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
+            if (savedInstanceState != null) {
                 patternPresent = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN);
                 patternValue = savedInstanceState.getString(KEY_PATTERN_STRING);
                 patternHeaderViewText = savedInstanceState.getString(PATTERN_HEADER_VIEW_TEXT);
                 patternExpViewState = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE);
                 count = savedInstanceState.getInt(COUNT_VALUE);
             }
-            if(patternPresent){
+            if (patternPresent) {
                 patternHeaderView.setText(patternHeaderViewText);
-                if(!patternExpViewState){
+                if (!patternExpViewState) {
                     patternExpView.setVisibility(View.INVISIBLE);
                 }
                 checkPattern();
-            }
-            else{
+            } else {
                 patternHeaderView.setText(R.string.pattern_configure_pattern);
                 patternExpView.setVisibility(View.VISIBLE);
                 setCancelButtonEnabled(true);
             }
-        }
-        else if(ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())){
+        } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
             patternHeaderView.setText(R.string.pattern_remove_pattern);
             patternExpView.setVisibility(View.VISIBLE);
             setCancelButtonEnabled(true);
-        }
-        else{
+        } else {
             throw new IllegalArgumentException(R.string.illegal_argument_exception_message + " " +
                     TAG);
         }
@@ -104,77 +118,69 @@ public class PatternLockActivity extends AppCompatActivity {
     /**
      * Binds the appropiate listener to the pattern view.
      */
-    protected void setPatternListener(){
+    protected void setPatternListener() {
         patternLockView.addPatternLockListener(new PatternLockViewListener() {
             @Override
             public void onStarted() {
-                Log_OC.d(TAG,"Pattern Drawing Started");
+                Log_OC.d(TAG, "Pattern Drawing Started");
             }
 
             @Override
             public void onProgress(List<PatternLockView.Dot> list) {
-                Log_OC.d(TAG,"Pattern Progress " +
-                        PatternLockUtils.patternToString(patternLockView,list));
+                Log_OC.d(TAG, "Pattern Progress " +
+                        PatternLockUtils.patternToString(patternLockView, list));
             }
 
             @Override
             public void onComplete(List<PatternLockView.Dot> list) {
-                if(ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())){
-                    if(count == 0){
-                        patternValue = PatternLockUtils.patternToString(patternLockView,list);
+                if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
+                    if (count == 0) {
+                        patternValue = PatternLockUtils.patternToString(patternLockView, list);
                         count++;
-                    }
-                    else{
-                        newPatternValue = PatternLockUtils.patternToString(patternLockView,list);
+                    } else {
+                        newPatternValue = PatternLockUtils.patternToString(patternLockView, list);
                         count = 0;
                     }
-                }
-                else {
+                } else {
                     patternValue = PatternLockUtils.patternToString(patternLockView, list);
                 }
-                Log_OC.d(TAG,"Pattern " + PatternLockUtils.patternToString(patternLockView,list));
+                Log_OC.d(TAG, "Pattern " + PatternLockUtils.patternToString(patternLockView, list));
                 processPattern();
             }
 
             @Override
             public void onCleared() {
-                Log_OC.d(TAG,"Pattern has been cleared");
+                Log_OC.d(TAG, "Pattern has been cleared");
             }
         });
     }
 
     private void processPattern() {
         if (ACTION_CHECK.equals(getIntent().getAction())) {
-            if(checkPattern()){
+            if (checkPattern()) {
                 finish();
-            }
-            else {
+            } else {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,
                         R.string.pattern_enter_pattern, View.INVISIBLE);
             }
-        }
-        else if(ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())){
-            if(checkPattern()){
+        } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+            if (checkPattern()) {
                 Intent result = new Intent();
-                result.putExtra(KEY_CHECK_RESULT,true);
-                setResult(RESULT_OK,result);
+                result.putExtra(KEY_CHECK_RESULT, true);
+                setResult(RESULT_OK, result);
                 finish();
-            }
-            else{
+            } else {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,
-                        R.string.pattern_enter_pattern,View.INVISIBLE);
+                        R.string.pattern_enter_pattern, View.INVISIBLE);
             }
-        }
-        else if(ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())){
-            if(!patternPresent){
+        } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
+            if (!patternPresent) {
                 requestPatternConfirmation();
-            }
-            else if(confirmPattern()){
+            } else if (confirmPattern()) {
                 savePatternAndExit();
-            }
-            else{
+            } else {
                 showErrorAndRestart(R.string.pattern_not_same_pattern,
-                        R.string.pattern_enter_pattern,View.VISIBLE);
+                        R.string.pattern_enter_pattern, View.VISIBLE);
             }
         }
     }
@@ -182,22 +188,21 @@ public class PatternLockActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_CONFIRMING_PATTERN,patternPresent);
-        outState.putString(KEY_PATTERN_STRING,patternValue);
-        outState.putString(PATTERN_HEADER_VIEW_TEXT,patternHeaderView.getText().toString());
-        if(patternExpView.getVisibility() == View.VISIBLE){
-            outState.putBoolean(PATTERN_EXP_VIEW_STATE,true);
+        outState.putBoolean(KEY_CONFIRMING_PATTERN, patternPresent);
+        outState.putString(KEY_PATTERN_STRING, patternValue);
+        outState.putString(PATTERN_HEADER_VIEW_TEXT, patternHeaderView.getText().toString());
+        if (patternExpView.getVisibility() == View.VISIBLE) {
+            outState.putBoolean(PATTERN_EXP_VIEW_STATE, true);
+        } else {
+            outState.putBoolean(PATTERN_EXP_VIEW_STATE, false);
         }
-        else{
-            outState.putBoolean(PATTERN_EXP_VIEW_STATE,false);
-        }
-        outState.putInt(COUNT_VALUE,count);
+        outState.putInt(COUNT_VALUE, count);
     }
 
-    protected void savePatternAndExit(){
+    protected void savePatternAndExit() {
         Intent result = new Intent();
-        result.putExtra(KEY_PATTERN,patternValue);
-        setResult(RESULT_OK,result);
+        result.putExtra(KEY_PATTERN, patternValue);
+        setResult(RESULT_OK, result);
         finish();
     }
 
@@ -205,16 +210,16 @@ public class PatternLockActivity extends AppCompatActivity {
     /**
      * Ask to the user to re-enter the pattern just entered before saving it as the current pattern.
      */
-    protected void requestPatternConfirmation(){
+    protected void requestPatternConfirmation() {
         patternLockView.clearPattern();
         patternHeaderView.setText(R.string.pattern_reenter_pattern);
         patternExpView.setVisibility(View.INVISIBLE);
         patternPresent = true;
     }
 
-    protected boolean confirmPattern(){
+    protected boolean confirmPattern() {
         patternPresent = false;
-        if(newPatternValue != null && newPatternValue.equals(patternValue)){
+        if (newPatternValue != null && newPatternValue.equals(patternValue)) {
             return true;
         }
         return false;
@@ -234,11 +239,11 @@ public class PatternLockActivity extends AppCompatActivity {
         patternExpView.setVisibility(explanationVisibility); // TODO check if really needed
     }
 
-    protected boolean checkPattern(){
-        SharedPreferences appPrefs  = PreferenceManager
+    protected boolean checkPattern() {
+        SharedPreferences appPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
-        String savedPattern = appPrefs.getString(KEY_PATTERN,null);
-        if(savedPattern != null && savedPattern.equals(patternValue)){
+        String savedPattern = appPrefs.getString(KEY_PATTERN, null);
+        if (savedPattern != null && savedPattern.equals(patternValue)) {
             return true;
         }
         return false;
@@ -250,8 +255,8 @@ public class PatternLockActivity extends AppCompatActivity {
      *
      * @param enabled       'True' makes the cancel button available, 'false' hides it.
      */
-    protected void setCancelButtonEnabled(boolean enabled){
-        if(enabled){
+    protected void setCancelButtonEnabled(boolean enabled) {
+        if (enabled) {
             cancelButton.setVisibility(View.VISIBLE);
             cancelButton.setOnClickListener(new View.OnClickListener() {
                 @Override
