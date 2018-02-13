@@ -202,7 +202,6 @@
   <string name="media_rewind_description">Következő button</string>
   <string name="media_play_pause_description">Lejátszás vagy pillanat állj gomb</string>
   <string name="media_forward_description">Gyors előre gomb</string>
-  <string name="upload_from_camera_title">Feltöltés a fényképezőgépből</string>
   <string name="auth_getting_authorization">Engedély megszerzése ...</string>
   <string name="auth_trying_to_login">Megpróbál bejelentkezni ...</string>
   <string name="auth_no_net_conn_title">Nincs hálózati kapcsolat</string>

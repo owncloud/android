@@ -202,7 +202,6 @@
   <string name="media_rewind_description">后退按钮</string>
   <string name="media_play_pause_description">播放暂停按钮</string>
   <string name="media_forward_description">快进按钮</string>
-  <string name="upload_from_camera_title">拍摄并上传</string>
   <string name="auth_getting_authorization">认证中...</string>
   <string name="auth_trying_to_login">尝试登录中...</string>
   <string name="auth_no_net_conn_title">没有网络连接</string>

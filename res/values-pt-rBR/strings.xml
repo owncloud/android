@@ -202,7 +202,6 @@
   <string name="media_rewind_description">Botão rebobinar</string>
   <string name="media_play_pause_description">Botão reproduzir parar</string>
   <string name="media_forward_description">Botão de adiantamento rápido</string>
-  <string name="upload_from_camera_title">Enviar da câmera</string>
   <string name="auth_getting_authorization">Obtendo autorização ...</string>
   <string name="auth_trying_to_login">Tentando iniciar sessão ...</string>
   <string name="auth_no_net_conn_title">Sem conexão de rede</string>
