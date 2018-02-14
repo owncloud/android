@@ -67,7 +67,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mProgress = (ProgressIndicator) findViewById(R.id.progressIndicator);
         mPager = (ViewPager)findViewById(R.id.contentPanel);
         final boolean isBeta = getResources().getBoolean(R.bool.is_beta);
-        FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(), FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta));
+        FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
+                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta));
 
         mProgress.setNumberOfSteps(adapter.getCount());
         mPager.setAdapter(adapter);
@@ -97,9 +98,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             }
         });
 
-        TextView tv = (TextView)findViewById(R.id.welcomeText);
-        tv.setText(isFirstRun() ? R.string.welcome_to_oc_title : R.string.whats_new_title);
-
         updateNextButtonIfNeeded();
     }
 
@@ -119,7 +117,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                 mForwardFinishButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.round_button));
             }
         } else {
-            mForwardFinishButton.setImageResource(R.drawable.arrow_right);
+            mForwardFinishButton.setImageResource(R.drawable.ic_arrow_forward);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 mForwardFinishButton.setBackground(null);
             } else {

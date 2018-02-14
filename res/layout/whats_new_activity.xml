@@ -3,24 +3,14 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:weightSum="100">
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text=""
-        android:id="@+id/welcomeText"
-        android:layout_margin="5dp"
-        android:layout_weight="10"
-        android:gravity="center"/>
+              android:weightSum="100"
+              android:background="@color/owncloud_blue_accent">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/contentPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80">
+        android:layout_weight="90">
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
@@ -40,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Skip"
+            android:textColor="@color/white"
             android:layout_gravity="center_vertical|center_horizontal"/>
 
         <com.owncloud.android.ui.whatsnew.ProgressIndicator
@@ -58,11 +49,12 @@
             android:layout_gravity="center">
             <ImageButton
                 android:id="@+id/forward"
-                android:src="@drawable/arrow_right"
+                android:src="@drawable/ic_arrow_forward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:padding="@dimen/standard_padding"/>
+                android:padding="@dimen/standard_padding"
+                style="@style/Button.Borderless"/>
         </LinearLayout>
     </LinearLayout>
 
