@@ -80,6 +80,8 @@
   <string name="file_list_file">файл</string>
   <string name="file_list_files">файлы</string>
   <string name="filedetails_select_file">Нажмите на файл для отображения дополнительной информации.</string>
+  <string name="upload_to">Закачать в %1$s</string>
+  <string name="upload_files_title">Файлы</string>
   <string name="filedetails_size">Размер:</string>
   <string name="filedetails_type">Тип:</string>
   <string name="filedetails_created">Создан:</string>
@@ -201,6 +203,7 @@
   <string name="media_rewind_description">Перемотка назад</string>
   <string name="media_play_pause_description">Воспроизведение или пауза</string>
   <string name="media_forward_description">Перемотка вперед</string>
+  <string name="upload_from_camera_title">Изображение из камеры</string>
   <string name="auth_getting_authorization">Получение авторизации</string>
   <string name="auth_trying_to_login">Попытка входа ...</string>
   <string name="auth_no_net_conn_title">Нет подключения к сети</string>
