@@ -50,7 +50,7 @@ public class FeatureList {
                     R.string.welcome_feature_2_text, "1.0.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
                     R.string.welcome_feature_3_text, "1.0.0", "0" ,SHOW_ON_FIRST_RUN),
-            new FeatureItem(R.drawable.what_new_instant_upload, R.string.welcome_feature_4_title,
+            new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text, "1.0.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_oc_files, R.string.welcome_feature_5_title,  FeatureItem.DO_NOT_SHOW,
                     "1.0.0", "0", SHOW_ON_FIRST_RUN),
