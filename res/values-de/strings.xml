@@ -79,6 +79,8 @@
   <string name="file_list_file">Datei</string>
   <string name="file_list_files">Dateien</string>
   <string name="filedetails_select_file">Klicken Sie auf eine Datei für weitere Informationen.</string>
+  <string name="upload_to">Hochgeladen nach %1$s</string>
+  <string name="upload_files_title">Dateien</string>
   <string name="filedetails_size">Größe:</string>
   <string name="filedetails_type">Art:</string>
   <string name="filedetails_created">Erstellt:</string>
@@ -200,6 +202,7 @@
   <string name="media_rewind_description">Zurückspielen Knopf</string>
   <string name="media_play_pause_description">Play-/Pause Knopf</string>
   <string name="media_forward_description">Vorspulen Knopf</string>
+  <string name="upload_from_camera_title">Kamerabild</string>
   <string name="auth_getting_authorization">Genehmigung bekommen ...</string>
   <string name="auth_trying_to_login">Der Versuch, sich anzumelden ...</string>
   <string name="auth_no_net_conn_title">Keine Netzwerkverbindung</string>
