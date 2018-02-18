@@ -79,6 +79,8 @@
   <string name="file_list_file">kartelë</string>
   <string name="file_list_files">kartela</string>
   <string name="filedetails_select_file">Prekni mbi një kartelë që të shfaqen të dhëna shtesë.</string>
+  <string name="upload_to">Ngarkoje te %1$s</string>
+  <string name="upload_files_title">Kartela</string>
   <string name="filedetails_size">Madhësia:</string>
   <string name="filedetails_type">Lloji:</string>
   <string name="filedetails_created">Krijuar më:</string>
@@ -200,6 +202,7 @@
   <string name="media_rewind_description">Butoni Mbrapsht</string>
   <string name="media_play_pause_description">Butoni Luaje ose Pushoje</string>
   <string name="media_forward_description">Butoni Përpara</string>
+  <string name="upload_from_camera_title">Foto nga kamera</string>
   <string name="auth_getting_authorization">Po merret autorizim …</string>
   <string name="auth_trying_to_login">Po provohet hyrja …</string>
   <string name="auth_no_net_conn_title">Pa lidhje rrjeti</string>
