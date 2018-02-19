@@ -57,17 +57,14 @@ public class PatternLockActivity extends AppCompatActivity {
     private static String PATTERN_EXP_VIEW_STATE = "PATTERN_EXP_VIEW_STATE";
     private static String COUNT_VALUE = "COUNT_VALUE";
 
-    private boolean patternPresent = false;
-    private boolean patternExpViewState = false;
-    private String patternValue;
-    private String newPatternValue;
-    private String patternHeaderViewText;
-    private int count = 0;
+    private boolean mPatternPresent = false;
+    private String mPatternValue;
+    private String mNewPatternValue;
+    private int mCount = 0;
 
-    private TextView patternHeaderView;
-    private TextView patternExpView;
-    private Button cancelButton;
-    private PatternLockView patternLockView;
+    private TextView mPatternHeader;
+    private TextView mPatternExplanation;
+    private PatternLockView mPatternLockView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,37 +73,42 @@ public class PatternLockActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.activity_pattern_lock);
-        patternHeaderView = (TextView) findViewById(R.id.header_pattern);
-        patternExpView = (TextView) findViewById(R.id.explanation_pattern);
-        cancelButton = (Button) findViewById(R.id.cancel_pattern);
-        patternLockView = (PatternLockView) findViewById(R.id.pattern_lock_view);
-        patternLockView.clearPattern();
+        String mPatternHeaderViewText = "";
+        /**
+        * patternExpViewState holds the boolean value that signifies weather the patternExpView should be visible or not.
+        * it is set to true when the pattern is set and when the pattern is removed.
+         */
+        boolean mPatternExpViewState = false;
+        mPatternHeader = (TextView) findViewById(R.id.header_pattern);
+        mPatternExplanation = (TextView) findViewById(R.id.explanation_pattern);
+        mPatternLockView = (PatternLockView) findViewById(R.id.pattern_lock_view);
+        mPatternLockView.clearPattern();
         if (ACTION_CHECK.equals(getIntent().getAction())) {
-            patternHeaderView.setText(R.string.pattern_enter_pattern);
-            patternExpView.setVisibility(View.INVISIBLE);
+            mPatternHeader.setText(R.string.pattern_enter_pattern);
+            mPatternExplanation.setVisibility(View.INVISIBLE);
             setCancelButtonEnabled(false);
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
             if (savedInstanceState != null) {
-                patternPresent = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN);
-                patternValue = savedInstanceState.getString(KEY_PATTERN_STRING);
-                patternHeaderViewText = savedInstanceState.getString(PATTERN_HEADER_VIEW_TEXT);
-                patternExpViewState = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE);
-                count = savedInstanceState.getInt(COUNT_VALUE);
+                mPatternPresent = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN);
+                mPatternValue = savedInstanceState.getString(KEY_PATTERN_STRING);
+                mPatternHeaderViewText = savedInstanceState.getString(PATTERN_HEADER_VIEW_TEXT);
+                mPatternExpViewState = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE);
+                mCount = savedInstanceState.getInt(COUNT_VALUE);
             }
-            if (patternPresent) {
-                patternHeaderView.setText(patternHeaderViewText);
-                if (!patternExpViewState) {
-                    patternExpView.setVisibility(View.INVISIBLE);
+            if (mPatternPresent) {
+                mPatternHeader.setText(mPatternHeaderViewText);
+                if (!mPatternExpViewState) {
+                    mPatternExplanation.setVisibility(View.INVISIBLE);
                 }
                 checkPattern();
             } else {
-                patternHeaderView.setText(R.string.pattern_configure_pattern);
-                patternExpView.setVisibility(View.VISIBLE);
+                mPatternHeader.setText(R.string.pattern_configure_pattern);
+                mPatternExplanation.setVisibility(View.VISIBLE);
                 setCancelButtonEnabled(true);
             }
         } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
-            patternHeaderView.setText(R.string.pattern_remove_pattern);
-            patternExpView.setVisibility(View.VISIBLE);
+            mPatternHeader.setText(R.string.pattern_remove_pattern);
+            mPatternExplanation.setVisibility(View.VISIBLE);
             setCancelButtonEnabled(true);
         } else {
             throw new IllegalArgumentException(R.string.illegal_argument_exception_message + " " +
@@ -119,7 +121,7 @@ public class PatternLockActivity extends AppCompatActivity {
      * Binds the appropiate listener to the pattern view.
      */
     protected void setPatternListener() {
-        patternLockView.addPatternLockListener(new PatternLockViewListener() {
+        mPatternLockView.addPatternLockListener(new PatternLockViewListener() {
             @Override
             public void onStarted() {
                 Log_OC.d(TAG, "Pattern Drawing Started");
@@ -128,23 +130,33 @@ public class PatternLockActivity extends AppCompatActivity {
             @Override
             public void onProgress(List<PatternLockView.Dot> list) {
                 Log_OC.d(TAG, "Pattern Progress " +
-                        PatternLockUtils.patternToString(patternLockView, list));
+                        PatternLockUtils.patternToString(mPatternLockView, list));
             }
 
+            /**
+
+             */
             @Override
             public void onComplete(List<PatternLockView.Dot> list) {
                 if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
-                    if (count == 0) {
-                        patternValue = PatternLockUtils.patternToString(patternLockView, list);
-                        count++;
+                    /**
+                     * This block gets executed when the pattern has to be set.
+                     * count variable holds the number of time the pattern has been input.
+                     * if the value of count is two then the pattern input first (which is stored in patternValue variable) is compared with
+                     * the pattern value input the second time (which is stored in newPatternValue) if both the variables hold the same value
+                     * then the pattern is set.
+                     */
+                    if (mCount == 0) {
+                        mPatternValue = PatternLockUtils.patternToString(mPatternLockView, list);
+                        mCount++;
                     } else {
-                        newPatternValue = PatternLockUtils.patternToString(patternLockView, list);
-                        count = 0;
+                        mNewPatternValue = PatternLockUtils.patternToString(mPatternLockView, list);
+                        mCount = 0;
                     }
                 } else {
-                    patternValue = PatternLockUtils.patternToString(patternLockView, list);
+                    mPatternValue = PatternLockUtils.patternToString(mPatternLockView, list);
                 }
-                Log_OC.d(TAG, "Pattern " + PatternLockUtils.patternToString(patternLockView, list));
+                Log_OC.d(TAG, "Pattern " + PatternLockUtils.patternToString(mPatternLockView, list));
                 processPattern();
             }
 
@@ -157,13 +169,21 @@ public class PatternLockActivity extends AppCompatActivity {
 
     private void processPattern() {
         if (ACTION_CHECK.equals(getIntent().getAction())) {
+            /**
+             * This block is executed when the user opens the app after setting the pattern lock
+             * this block takes the pattern input by the user and check it with the pattern intially set by the user./
+             */
             if (checkPattern()) {
                 finish();
             } else {
                 showErrorAndRestart(R.string.pattern_incorrect_pattern,
                         R.string.pattern_enter_pattern, View.INVISIBLE);
             }
-        } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+        }
+        else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+            /**
+             *This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock_
+             */
             if (checkPattern()) {
                 Intent result = new Intent();
                 result.putExtra(KEY_CHECK_RESULT, true);
@@ -174,7 +194,10 @@ public class PatternLockActivity extends AppCompatActivity {
                         R.string.pattern_enter_pattern, View.INVISIBLE);
             }
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
-            if (!patternPresent) {
+            /**
+             * This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
+             */
+            if (!mPatternPresent) {
                 requestPatternConfirmation();
             } else if (confirmPattern()) {
                 savePatternAndExit();
@@ -188,20 +211,20 @@ public class PatternLockActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_CONFIRMING_PATTERN, patternPresent);
-        outState.putString(KEY_PATTERN_STRING, patternValue);
-        outState.putString(PATTERN_HEADER_VIEW_TEXT, patternHeaderView.getText().toString());
-        if (patternExpView.getVisibility() == View.VISIBLE) {
+        outState.putBoolean(KEY_CONFIRMING_PATTERN, mPatternPresent);
+        outState.putString(KEY_PATTERN_STRING, mPatternValue);
+        outState.putString(PATTERN_HEADER_VIEW_TEXT, mPatternHeader.getText().toString());
+        if (mPatternExplanation.getVisibility() == View.VISIBLE) {
             outState.putBoolean(PATTERN_EXP_VIEW_STATE, true);
         } else {
             outState.putBoolean(PATTERN_EXP_VIEW_STATE, false);
         }
-        outState.putInt(COUNT_VALUE, count);
+        outState.putInt(COUNT_VALUE, mCount);
     }
 
     protected void savePatternAndExit() {
         Intent result = new Intent();
-        result.putExtra(KEY_PATTERN, patternValue);
+        result.putExtra(KEY_PATTERN, mPatternValue);
         setResult(RESULT_OK, result);
         finish();
     }
@@ -211,15 +234,15 @@ public class PatternLockActivity extends AppCompatActivity {
      * Ask to the user to re-enter the pattern just entered before saving it as the current pattern.
      */
     protected void requestPatternConfirmation() {
-        patternLockView.clearPattern();
-        patternHeaderView.setText(R.string.pattern_reenter_pattern);
-        patternExpView.setVisibility(View.INVISIBLE);
-        patternPresent = true;
+        mPatternLockView.clearPattern();
+        mPatternHeader.setText(R.string.pattern_reenter_pattern);
+        mPatternExplanation.setVisibility(View.INVISIBLE);
+        mPatternPresent = true;
     }
 
     protected boolean confirmPattern() {
-        patternPresent = false;
-        if (newPatternValue != null && newPatternValue.equals(patternValue)) {
+        mPatternPresent = false;
+        if (mNewPatternValue != null && mNewPatternValue.equals(mPatternValue)) {
             return true;
         }
         return false;
@@ -227,7 +250,7 @@ public class PatternLockActivity extends AppCompatActivity {
 
     private void showErrorAndRestart(int errorMessage, int headerMessage,
                                      int explanationVisibility) {
-        patternValue = null;
+        mPatternValue = null;
         CharSequence errorSeq = getString(errorMessage);
         Snackbar snackbar = Snackbar.make(
                 findViewById(android.R.id.content),
@@ -235,15 +258,15 @@ public class PatternLockActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG
         );
         snackbar.show();
-        patternHeaderView.setText(headerMessage);             // TODO check if really needed
-        patternExpView.setVisibility(explanationVisibility); // TODO check if really needed
+        mPatternHeader.setText(headerMessage);             // TODO check if really needed
+        mPatternExplanation.setVisibility(explanationVisibility); // TODO check if really needed
     }
 
     protected boolean checkPattern() {
         SharedPreferences appPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
         String savedPattern = appPrefs.getString(KEY_PATTERN, null);
-        if (savedPattern != null && savedPattern.equals(patternValue)) {
+        if (savedPattern != null && savedPattern.equals(mPatternValue)) {
             return true;
         }
         return false;
@@ -256,6 +279,7 @@ public class PatternLockActivity extends AppCompatActivity {
      * @param enabled       'True' makes the cancel button available, 'false' hides it.
      */
     protected void setCancelButtonEnabled(boolean enabled) {
+        Button cancelButton = (Button) findViewById(R.id.cancel_pattern);
         if (enabled) {
             cancelButton.setVisibility(View.VISIBLE);
             cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -270,6 +294,4 @@ public class PatternLockActivity extends AppCompatActivity {
             cancelButton.setOnClickListener(null);
         }
     }
-
-
 }

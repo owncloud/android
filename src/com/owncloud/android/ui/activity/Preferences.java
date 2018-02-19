@@ -81,7 +81,7 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_CONFIRM_PATTERN = 8;
 
     private CheckBoxPreference pCode;
-    private CheckBoxPreference patternCode;
+    private CheckBoxPreference pPattern;
     private Preference pAboutApp;
     private AppCompatDelegate mDelegate;
 
@@ -164,9 +164,9 @@ public class Preferences extends PreferenceActivity {
             });
         }
 
-        patternCode = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
-        if (patternCode != null) {
-            patternCode.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        pPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
+        if (pPattern != null) {
+            pPattern.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     Intent intent = new Intent(getApplicationContext(), PatternLockActivity.class);
@@ -177,10 +177,8 @@ public class Preferences extends PreferenceActivity {
                         showSnackMessage(R.string.passcode_already_set);
                     }
                     else {
-                        intent.setAction(state ? PatternLockActivity.ACTION_REQUEST_WITH_RESULT :
-                                PatternLockActivity.ACTION_CHECK_WITH_RESULT);
-                        startActivityForResult(intent, state ? ACTION_REQUEST_PATTERN :
-                                ACTION_CONFIRM_PATTERN);
+                        intent.setAction(state ? PatternLockActivity.ACTION_REQUEST_WITH_RESULT : PatternLockActivity.ACTION_CHECK_WITH_RESULT);
+                        startActivityForResult(intent, state ? ACTION_REQUEST_PATTERN : ACTION_CONFIRM_PATTERN);
                     }
                     return false;
                 }
@@ -544,10 +542,10 @@ public class Preferences extends PreferenceActivity {
         super.onResume();
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean state = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-        pCode.setChecked(state);
+        boolean passCodeState = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+        pCode.setChecked(passCodeState);
         boolean patternState = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
-        patternCode.setChecked(patternState);
+        pPattern.setChecked(patternState);
     }
 
     @Override
@@ -644,11 +642,11 @@ public class Preferences extends PreferenceActivity {
             }
         }
         else if(requestCode == ACTION_REQUEST_PATTERN && resultCode == RESULT_OK){
-            String patterValue = data.getStringExtra(PatternLockActivity.KEY_PATTERN);
-            if(patterValue != null){
+            String patternValue = data.getStringExtra(PatternLockActivity.KEY_PATTERN);
+            if(patternValue != null){
                 SharedPreferences.Editor appPrefs = PreferenceManager.
                         getDefaultSharedPreferences(getApplicationContext()).edit();
-                appPrefs.putString(PatternLockActivity.KEY_PATTERN,patterValue);
+                appPrefs.putString(PatternLockActivity.KEY_PATTERN,patternValue);
                 appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,true);
                 appPrefs.commit();
                 showSnackMessage(R.string.pattern_stored);
