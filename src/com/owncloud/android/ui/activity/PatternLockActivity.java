@@ -171,7 +171,7 @@ public class PatternLockActivity extends AppCompatActivity {
         if (ACTION_CHECK.equals(getIntent().getAction())) {
             /**
              * This block is executed when the user opens the app after setting the pattern lock
-             * this block takes the pattern input by the user and check it with the pattern intially set by the user./
+             * this block takes the pattern input by the user and check it with the pattern intially set by the user.
              */
             if (checkPattern()) {
                 finish();
@@ -182,7 +182,7 @@ public class PatternLockActivity extends AppCompatActivity {
         }
         else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
             /**
-             *This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock_
+             *This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
              */
             if (checkPattern()) {
                 Intent result = new Intent();
@@ -276,7 +276,7 @@ public class PatternLockActivity extends AppCompatActivity {
      * Enables or disables the cancel button to allow the user interrupt the ACTION
      * requested to the activity.
      *
-     * @param enabled       'True' makes the cancel button available, 'false' hides it.
+     * @param enabled  'True' makes the cancel button available, 'false' hides it.
      */
     protected void setCancelButtonEnabled(boolean enabled) {
         Button cancelButton = (Button) findViewById(R.id.cancel_pattern);
