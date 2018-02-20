@@ -2,8 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author Bartosz Przybylski
- *   Copyright (C) 2015 Bartosz Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2018 Bartosz Przybylski
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -41,19 +41,18 @@ public class FeatureList {
     static final private boolean SHOW_ON_FIRST_RUN = true;
     static final private boolean SHOW_ON_UPGRADE = false;
 
-
     static final private FeatureItem featuresList[] = {
             // Basic features showed on first install
             new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
-                    R.string.welcome_feature_1_text, "1.0.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_1_text, "2.6.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_share, R.string.welcome_feature_2_title,
-                    R.string.welcome_feature_2_text, "1.0.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_2_text, "2.6.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-                    R.string.welcome_feature_3_text, "1.0.0", "0" ,SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_3_text, "2.6.0", "0" ,SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
-                    R.string.welcome_feature_4_text, "1.0.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_4_text, "2.6.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
-                    R.string.welcome_feature_5_text, "1.0.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_5_text, "2.6.0", "0", SHOW_ON_FIRST_RUN),
             // Features introduced in certain point in time
     };
 

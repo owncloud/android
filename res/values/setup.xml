@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Beta indicator -->
-    <bool name="is_beta">false</bool>
 
     <!-- App name  and other strings-->
     <string name="app_name" formatted="false">ownCloud</string>

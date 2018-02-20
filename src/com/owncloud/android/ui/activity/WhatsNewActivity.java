@@ -1,8 +1,8 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2015 Bartosz Przybylski
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2018 Bartosz Przybylski
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -40,6 +40,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountAuthenticatorActivity;
@@ -66,7 +67,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
         mProgress = (ProgressIndicator) findViewById(R.id.progressIndicator);
         mPager = (ViewPager)findViewById(R.id.contentPanel);
-        final boolean isBeta = getResources().getBoolean(R.bool.is_beta);
+        boolean isBeta = BuildConfig.BUILD_TYPE.equals(MainApp.BUILD_TYPE_BETA);
+
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
                 FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta));
 
@@ -154,7 +156,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        final boolean isBeta = context.getResources().getBoolean(R.bool.is_beta);
+        boolean isBeta = BuildConfig.BUILD_TYPE.equals(MainApp.BUILD_TYPE_BETA);
         return (isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
                 (
                         !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
@@ -235,5 +237,4 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             return v;
         }
     }
-
 }
