@@ -79,6 +79,8 @@
   <string name="file_list_file">ไฟล์</string>
   <string name="file_list_files">ไฟล์</string>
   <string name="filedetails_select_file">แตะที่ไฟล์ เพื่อแสดงข้อมูลเพิ่มเติม</string>
+  <string name="upload_to">อัพโหลดไปยัง %1$s</string>
+  <string name="upload_files_title">ไฟล์</string>
   <string name="filedetails_size">ขนาด:</string>
   <string name="filedetails_type">ชนิด:</string>
   <string name="filedetails_created">สร้างเมื่อ:</string>
@@ -200,6 +202,7 @@
   <string name="media_rewind_description">ปุ่มย้อนกลับ</string>
   <string name="media_play_pause_description">เล่นหรือกดปุ่มหยุดชั่วคราว</string>
   <string name="media_forward_description">ปุ่มเลื่อนไปข้างหน้า</string>
+  <string name="upload_from_camera_title">รูปภาพจากกล้อง</string>
   <string name="auth_getting_authorization">กำลังตรวจสอบสิทธิ์การเข้าใช้งาน ...</string>
   <string name="auth_trying_to_login">กำลังพยายามเข้าสู่ระบบ ...</string>
   <string name="auth_no_net_conn_title">ไม่มีการเชื่อมต่อเครือข่ายใดๆ</string>
