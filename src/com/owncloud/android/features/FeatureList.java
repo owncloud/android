@@ -52,8 +52,8 @@ public class FeatureList {
                     R.string.welcome_feature_3_text, "1.0.0", "0" ,SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text, "1.0.0", "0", SHOW_ON_FIRST_RUN),
-            new FeatureItem(R.drawable.whats_new_oc_files, R.string.welcome_feature_5_title,  FeatureItem.DO_NOT_SHOW,
-                    "1.0.0", "0", SHOW_ON_FIRST_RUN),
+            new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
+                    R.string.welcome_feature_5_text, "1.0.0", "0", SHOW_ON_FIRST_RUN),
             // Features introduced in certain point in time
     };
 
