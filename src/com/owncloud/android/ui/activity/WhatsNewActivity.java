@@ -157,12 +157,14 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
     static private boolean shouldShow(Context context) {
         boolean isBeta = BuildConfig.BUILD_TYPE.equals(MainApp.BUILD_TYPE_BETA);
-        return (isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
+        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
+        return showWizard &&
+                ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
                 (
                         !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
                         !(context instanceof PassCodeActivity) &&
                         (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta).length > 0)
-                );
+                ));
     }
 
     @Override
