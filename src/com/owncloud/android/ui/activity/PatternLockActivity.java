@@ -60,7 +60,6 @@ public class PatternLockActivity extends AppCompatActivity {
     private boolean mPatternPresent = false;
     private String mPatternValue;
     private String mNewPatternValue;
-    private int mCount = 0;
 
     private TextView mPatternHeader;
     private TextView mPatternExplanation;
@@ -75,29 +74,33 @@ public class PatternLockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pattern_lock);
         String mPatternHeaderViewText = "";
         /**
-        * patternExpViewState holds the boolean value that signifies weather the patternExpView should be visible or not.
+        * mPatternExpShouldVisible holds the boolean value that signifies weather the patternExpView should be visible or not.
         * it is set to true when the pattern is set and when the pattern is removed.
          */
-        boolean mPatternExpViewState = false;
+        boolean mPatternExpShouldVisible = false;
         mPatternHeader = (TextView) findViewById(R.id.header_pattern);
         mPatternExplanation = (TextView) findViewById(R.id.explanation_pattern);
         mPatternLockView = (PatternLockView) findViewById(R.id.pattern_lock_view);
         mPatternLockView.clearPattern();
         if (ACTION_CHECK.equals(getIntent().getAction())) {
+            /**
+             * This block is executed when the user opens the app after setting the pattern lock
+             * this block takes the pattern input by the user and check it with the pattern intially set by the user.
+             */
             mPatternHeader.setText(R.string.pattern_enter_pattern);
             mPatternExplanation.setVisibility(View.INVISIBLE);
             setCancelButtonEnabled(false);
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
+            //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
             if (savedInstanceState != null) {
                 mPatternPresent = savedInstanceState.getBoolean(KEY_CONFIRMING_PATTERN);
                 mPatternValue = savedInstanceState.getString(KEY_PATTERN_STRING);
                 mPatternHeaderViewText = savedInstanceState.getString(PATTERN_HEADER_VIEW_TEXT);
-                mPatternExpViewState = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE);
-                mCount = savedInstanceState.getInt(COUNT_VALUE);
+                mPatternExpShouldVisible = savedInstanceState.getBoolean(PATTERN_EXP_VIEW_STATE);
             }
             if (mPatternPresent) {
                 mPatternHeader.setText(mPatternHeaderViewText);
-                if (!mPatternExpViewState) {
+                if (!mPatternExpShouldVisible) {
                     mPatternExplanation.setVisibility(View.INVISIBLE);
                 }
                 checkPattern();
@@ -107,6 +110,7 @@ public class PatternLockActivity extends AppCompatActivity {
                 setCancelButtonEnabled(true);
             }
         } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+            //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
             mPatternHeader.setText(R.string.pattern_remove_pattern);
             mPatternExplanation.setVisibility(View.VISIBLE);
             setCancelButtonEnabled(true);
@@ -133,25 +137,21 @@ public class PatternLockActivity extends AppCompatActivity {
                         PatternLockUtils.patternToString(mPatternLockView, list));
             }
 
-            /**
-
-             */
             @Override
             public void onComplete(List<PatternLockView.Dot> list) {
                 if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
                     /**
                      * This block gets executed when the pattern has to be set.
                      * count variable holds the number of time the pattern has been input.
-                     * if the value of count is two then the pattern input first (which is stored in patternValue variable) is compared with
-                     * the pattern value input the second time (which is stored in newPatternValue) if both the variables hold the same value
+                     * if the value of count is two then the pattern input first (which is stored in patternValue variable)
+                     * is compared with the pattern value input the second time
+                     * (which is stored in newPatternValue) if both the variables hold the same value
                      * then the pattern is set.
                      */
-                    if (mCount == 0) {
+                    if (mPatternValue == null || mPatternValue.length() <= 0) {
                         mPatternValue = PatternLockUtils.patternToString(mPatternLockView, list);
-                        mCount++;
                     } else {
                         mNewPatternValue = PatternLockUtils.patternToString(mPatternLockView, list);
-                        mCount = 0;
                     }
                 } else {
                     mPatternValue = PatternLockUtils.patternToString(mPatternLockView, list);
@@ -181,9 +181,7 @@ public class PatternLockActivity extends AppCompatActivity {
             }
         }
         else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
-            /**
-             *This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
-             */
+            //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
             if (checkPattern()) {
                 Intent result = new Intent();
                 result.putExtra(KEY_CHECK_RESULT, true);
@@ -194,9 +192,7 @@ public class PatternLockActivity extends AppCompatActivity {
                         R.string.pattern_enter_pattern, View.INVISIBLE);
             }
         } else if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction())) {
-            /**
-             * This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
-             */
+              //This block is executed when the user is setting the pattern lock (i.e enabling the pattern lock)
             if (!mPatternPresent) {
                 requestPatternConfirmation();
             } else if (confirmPattern()) {
@@ -219,7 +215,6 @@ public class PatternLockActivity extends AppCompatActivity {
         } else {
             outState.putBoolean(PATTERN_EXP_VIEW_STATE, false);
         }
-        outState.putInt(COUNT_VALUE, mCount);
     }
 
     protected void savePatternAndExit() {
@@ -258,8 +253,8 @@ public class PatternLockActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG
         );
         snackbar.show();
-        mPatternHeader.setText(headerMessage);             // TODO check if really needed
-        mPatternExplanation.setVisibility(explanationVisibility); // TODO check if really needed
+        mPatternHeader.setText(headerMessage);
+        mPatternExplanation.setVisibility(explanationVisibility);
     }
 
     protected boolean checkPattern() {
