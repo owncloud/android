@@ -19,6 +19,7 @@
  */
 package com.owncloud.android.ui.preview;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 import android.accounts.Account;
@@ -41,6 +42,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -558,7 +560,12 @@ public class PreviewImageFragment extends FileFragment {
                     imageView.setBackground(backrepeat);
                 }
 
-                imageView.setImageBitmap(bitmap);
+                if (result.ocFile.getMimetype().equalsIgnoreCase("image/gif")) {
+                    Glide.with(getContext()).load(new File(getFile().getStoragePath())).into(imageView);
+                } else {
+                    imageView.setImageBitmap(bitmap);
+                }
+
                 imageView.setVisibility(View.VISIBLE);
                 mBitmap  = bitmap;  // needs to be kept for recycling when not useful
             }
@@ -589,7 +596,6 @@ public class PreviewImageFragment extends FileFragment {
                 progressWheel.setVisibility(View.GONE);
             }
         }
-
     }
 
     /**
