@@ -31,7 +31,9 @@
   <string name="prefs_manage_accounts">アカウント管理</string>
   <string name="prefs_passcode">パスコードロック</string>
   <string name="prefs_camera_picture_upload">ピクチャーアップロード</string>
+  <string name="prefs_camera_picture_upload_summary">カメラで撮影した画像を自動アップロード</string>
   <string name="prefs_camera_video_upload">動画アップロード</string>
+  <string name="prefs_camera_video_upload_summary">カメラで撮影した動画を自動アップロード</string>
   <string name="prefs_log_title">ログの有効化</string>
   <string name="prefs_log_summary">これは問題をログに記録するのに使用します。</string>
   <string name="prefs_log_title_history">ログの履歴</string>
@@ -297,6 +299,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">WiFi経由でのみ画像をアップロード</string>
   <string name="camera_video_upload_on_wifi">WiFi経由でのみ動画をアップロード</string>
+  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="conflict_title">ファイルが競合</string>
   <string name="conflict_message">どちらのファイルを保存したいですか？両方のバージョンを選択した場合は、ファイル名の後ろに数字を追加したファイルのコピーを作成します。</string>
@@ -456,6 +459,7 @@
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">パスワード *</string>
   <string name="share_via_link_expiration_date_enforced_label">有効期限*</string>
+  <string name="share_via_link_expiration_date_explanation_label">URLによる共有は、作成してから %1$d 日以内に有効期限切れになります</string>
   <string name="download_notification_channel_name">ダウンロード</string>
   <string name="upload_notification_channel_name">アップロード</string>
   <string name="media_service_notification_channel_name">ミュージックプレイヤー</string>
