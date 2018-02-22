@@ -413,8 +413,13 @@ public class PreviewImageFragment extends FileFragment {
     }
 
     private void loadAndShowImage() {
-        mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
-        mLoadBitmapTask.execute(getFile());
+        if (getFile().getMimetype().equalsIgnoreCase("image/gif")) {
+            Glide.with(getContext()).load(new File(getFile().getStoragePath())).into(mImageView);
+            mImageView.setVisibility(View.VISIBLE);
+        } else {
+            mLoadBitmapTask = new LoadBitmapTask(mImageView, mMessageView, mProgressWheel);
+            mLoadBitmapTask.execute(getFile());
+        }
     }
 
     private class LoadBitmapTask extends AsyncTask<OCFile, Void, LoadImage> {
@@ -560,11 +565,7 @@ public class PreviewImageFragment extends FileFragment {
                     imageView.setBackground(backrepeat);
                 }
 
-                if (result.ocFile.getMimetype().equalsIgnoreCase("image/gif")) {
-                    Glide.with(getContext()).load(new File(getFile().getStoragePath())).into(imageView);
-                } else {
-                    imageView.setImageBitmap(bitmap);
-                }
+                imageView.setImageBitmap(bitmap);
 
                 imageView.setVisibility(View.VISIBLE);
                 mBitmap  = bitmap;  // needs to be kept for recycling when not useful
