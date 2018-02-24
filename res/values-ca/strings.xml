@@ -14,6 +14,8 @@
   <string name="actionbar_sort">Ordena</string>
   <string name="actionbar_sort_title">Ordena per</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">El més nou - Eel més antic</string>
+  <string name="actionbar_sort_by_size">El més gran - El més petit</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tots els fitxers</string>
@@ -28,6 +30,7 @@
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gestió de comptes</string>
   <string name="prefs_passcode">Contrasenya</string>
+  <string name="prefs_camera_picture_upload">Imatges pujades</string>
   <string name="prefs_log_title">Habilita els registres</string>
   <string name="prefs_log_summary">Això s\'usa per registrar problemes</string>
   <string name="prefs_log_title_history">Historial dels registres</string>
