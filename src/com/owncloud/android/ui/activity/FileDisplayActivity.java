@@ -202,7 +202,9 @@ public class FileDisplayActivity extends HookActivity
 
         Log_OC.v(TAG, "onCreate() end");
 
-        AppRater.appLaunched(this, getPackageName());
+        if (getResources().getBoolean(R.bool.enable_rate_me_feature)) {
+            AppRater.appLaunched(this, getPackageName());
+        }
     }
 
     @Override

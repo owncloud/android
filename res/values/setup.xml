@@ -89,6 +89,8 @@
     <string name="oauth2_client_id">e4rAsNUSIUs0lF4nbv9FmCeUkTlV9GdgTLDH1b5uie7syb90SzEVrbN7HIpmWJeD</string>
     <string name="oauth2_client_secret">dInFYGV33xKzhbRmpqQltYNdfLdJIfJ9L5ISoKhNoT9qZftpdWSP71VrpGR9pmoD</string>
 
+    <!-- To enable/disable app rate feature -->
+    <bool name="enable_rate_me_feature">true</bool>
 </resources>
 
 
