@@ -131,7 +131,7 @@ public class CreateFolderDialogFragment
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
-            getActivity().findViewById(android.R.id.content),
+            getActivity().findViewById(R.id.coordinator_layout),
             messageResource,
             Snackbar.LENGTH_LONG
         );
