@@ -32,6 +32,7 @@
     <string name="prefs_accounts">Accounts</string>
     <string name="prefs_manage_accounts">Manage accounts</string>
     <string name="prefs_passcode">Passcode lock</string>
+    <string name="prefs_fingerprint">Fingerprint lock</string>
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
     <string name="prefs_camera_video_upload">Video uploads</string>
@@ -192,8 +193,8 @@
     <string name="foreign_files_local_text">"Local: %1$s"</string>
     <string name="foreign_files_remote_text">"Remote: %1$s"</string>
     <string name="upload_query_move_foreign_files">There is not enough space to copy the selected files into the %1$s folder. Would you like to move them instead? </string>
-    <string name="pass_code_enter_pass_code">Please insert your passcode</string>
 
+    <string name="pass_code_enter_pass_code">Please insert your passcode</string>
     <string name="pass_code_configure_your_pass_code">Enter your passcode</string>
     <string name="pass_code_configure_your_pass_code_explanation">The passcode will be requested every time the app is started</string>
     <string name="pass_code_reenter_your_pass_code">Please reenter your passcode</string>
@@ -202,6 +203,9 @@
     <string name="pass_code_wrong">Incorrect passcode</string>
     <string name="pass_code_removed">Passcode removed</string>
     <string name="pass_code_stored">Passcode stored</string>
+
+    <string name="fingerprint_confirm">Confirm your fingerprint to continue</string>
+    <string name="fingerprint_hint">Touch sensor</string>
 
     <string name="media_notif_ticker">"%1$s music player"</string>
     <string name="media_state_playing">"%1$s (playing)"</string>

@@ -28,6 +28,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 
+import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
@@ -123,6 +124,7 @@ public class MainApp extends Application {
                 WhatsNewActivity.runIfNeeded(activity);
                 PassCodeManager.getPassCodeManager().onActivityCreated(activity);
                 PatternManager.getPatternManager().onActivityCreated(activity);
+                FingerprintManager.getFingerprintManager().onActivityCreated(activity);
             }
 
             @Override
@@ -130,6 +132,7 @@ public class MainApp extends Application {
                 Log_OC.d(activity.getClass().getSimpleName(),  "onStart() starting" );
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity);
                 PatternManager.getPatternManager().onActivityStarted(activity);
+                FingerprintManager.getFingerprintManager().onActivityStarted(activity);
             }
 
             @Override

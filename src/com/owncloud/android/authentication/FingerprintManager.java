@@ -1,8 +1,8 @@
 /**
  *   ownCloud Android client application
  *
- *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -29,12 +29,13 @@ import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.BuildConfig;
+import com.owncloud.android.ui.activity.FingerprintActivity;
 import com.owncloud.android.ui.activity.PassCodeActivity;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class PassCodeManager {
+public class FingerprintManager {
 
     private static final Set<Class> sExemptOfPasscodeActivites;
 
@@ -47,23 +48,23 @@ public class PassCodeManager {
     private static int PASS_CODE_TIMEOUT = 1000;
         // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
 
-    public static PassCodeManager mPassCodeManagerInstance = null;
+    public static FingerprintManager mFingerprintManagerInstance = null;
 
-    public static PassCodeManager getPassCodeManager() {
-        if (mPassCodeManagerInstance == null) {
-            mPassCodeManagerInstance = new PassCodeManager();
+    public static FingerprintManager getFingerprintManager() {
+        if (mFingerprintManagerInstance == null) {
+            mFingerprintManagerInstance = new FingerprintManager();
         }
-        return mPassCodeManagerInstance;
+        return mFingerprintManagerInstance;
     }
 
     private Long mTimestamp = 0l;
     private int mVisibleActivitiesCounter = 0;
 
-    protected PassCodeManager() {};
+    protected FingerprintManager() {};
 
     public void onActivityCreated(Activity activity) {
         if (!BuildConfig.DEBUG) {
-            if (passCodeIsEnabled()) {
+            if (fingerprintIsEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -72,13 +73,12 @@ public class PassCodeManager {
     }
 
     public void onActivityStarted(Activity activity) {
+
         if (!sExemptOfPasscodeActivites.contains(activity.getClass()) &&
                 passCodeShouldBeRequested()
                 ){
 
-            Intent i = new Intent(MainApp.getAppContext(), PassCodeActivity.class);
-            i.setAction(PassCodeActivity.ACTION_CHECK);
-            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            Intent i = new Intent(MainApp.getAppContext(), FingerprintActivity.class);
             activity.startActivity(i);
         }
 
@@ -91,7 +91,7 @@ public class PassCodeManager {
         }
         setUnlockTimestamp();
         PowerManager powerMgr = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-        if (passCodeIsEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
+        if (fingerprintIsEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
             activity.moveTaskToBack(true);
         }
     }
@@ -104,14 +104,13 @@ public class PassCodeManager {
         if ((System.currentTimeMillis() - mTimestamp) > PASS_CODE_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
                 ){
-            return passCodeIsEnabled();
+            return fingerprintIsEnabled();
         }
         return false;
     }
 
-    private boolean passCodeIsEnabled() {
+    private boolean fingerprintIsEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
-        return (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false));
+        return (appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false));
     }
-
 }

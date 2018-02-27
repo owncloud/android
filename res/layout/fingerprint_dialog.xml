@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp"
+                android:paddingEnd="24dp"
+                android:paddingStart="24dp"
+                android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/fingerprintDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/fingerprint_confirm"
+        android:textColor="@color/black"/>
+
+    <ImageView
+        android:id="@+id/fingerprintIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/fingerprintDescription"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_fp_40px"/>
+
+    <TextView
+        android:id="@+id/fingerprintStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/fingerprintIcon"
+        android:layout_alignTop="@+id/fingerprintIcon"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/fingerprintIcon"
+        android:layout_toRightOf="@+id/fingerprintIcon"
+        android:gravity="center_vertical"
+        android:text="@string/fingerprint_hint"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/fingerprintCancelButton"
+        style="@style/Button.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/fingerprintStatus"
+        android:layout_marginTop="@dimen/standard_margin"
+        android:text="@string/common_cancel"
+        android:theme="@style/Button.Primary"/>
+
+</RelativeLayout>
