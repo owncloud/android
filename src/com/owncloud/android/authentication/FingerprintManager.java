@@ -30,22 +30,21 @@ import android.view.WindowManager;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.BuildConfig;
 import com.owncloud.android.ui.activity.FingerprintActivity;
-import com.owncloud.android.ui.activity.PassCodeActivity;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class FingerprintManager {
 
-    private static final Set<Class> sExemptOfPasscodeActivites;
+    private static final Set<Class> sExemptOfFingerprintActivites;
 
     static {
-        sExemptOfPasscodeActivites = new HashSet<Class>();
-        sExemptOfPasscodeActivites.add(PassCodeActivity.class);
+        sExemptOfFingerprintActivites = new HashSet<Class>();
+        sExemptOfFingerprintActivites.add(FingerprintActivity.class);
         // other activities may be exempted, if needed
     }
 
-    private static int PASS_CODE_TIMEOUT = 1000;
+    private static int FINGERPRINT_TIMEOUT = 1000;
         // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
 
     public static FingerprintManager mFingerprintManagerInstance = null;
@@ -74,15 +73,14 @@ public class FingerprintManager {
 
     public void onActivityStarted(Activity activity) {
 
-        if (!sExemptOfPasscodeActivites.contains(activity.getClass()) &&
-                passCodeShouldBeRequested()
-                ){
+        if (!sExemptOfFingerprintActivites.contains(activity.getClass()) &&
+                fingerprintShouldBeRequested()){
 
             Intent i = new Intent(MainApp.getAppContext(), FingerprintActivity.class);
             activity.startActivity(i);
         }
 
-        mVisibleActivitiesCounter++;    // keep it AFTER passCodeShouldBeRequested was checked
+        mVisibleActivitiesCounter++;    // keep it AFTER fingerprintShouldBeRequested was checked
     }
 
     public void onActivityStopped(Activity activity) {
@@ -100,8 +98,8 @@ public class FingerprintManager {
         mTimestamp = System.currentTimeMillis();
     }
 
-    private boolean passCodeShouldBeRequested(){
-        if ((System.currentTimeMillis() - mTimestamp) > PASS_CODE_TIMEOUT &&
+    private boolean fingerprintShouldBeRequested(){
+        if ((System.currentTimeMillis() - mTimestamp) > FINGERPRINT_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
                 ){
             return fingerprintIsEnabled();

@@ -22,37 +22,57 @@
  */
 package com.owncloud.android.ui.activity;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.app.KeyguardManager;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.owncloud.android.BuildConfig;
-import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.dialog.FingerprintAuthDialogFragment;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class FingerprintActivity extends AppCompatActivity {
 
     private static final String TAG = FingerprintActivity.class.getSimpleName();
 
     private static final String TAG_FINGERPRINT_FRAGMENT = "FINGERPRINT_LOCK";
 
+    private static final String ANDROID_KEY_STORE = "AndroidKeyStore";
+
     public final static String PREFERENCE_SET_FINGERPRINT = "set_fingerprint";
+
+    private static final String KEY_NAME = "default_key";
+
+    private KeyStore mKeyStore;
+    private KeyGenerator mKeyGenerator;
+    private Cipher mCipher;
+    private FingerprintManager.CryptoObject mCryptoObject;
+
+    private KeyguardManager mKeyguardManager;
+    private FingerprintManager mFingerprintManager;
+
+
 
     /**
      * Initializes the activity.
@@ -68,6 +88,98 @@ public class FingerprintActivity extends AppCompatActivity {
         FingerprintAuthDialogFragment fingerprintAuthDialogFragment = new FingerprintAuthDialogFragment();
 
         fingerprintAuthDialogFragment.show(getFragmentManager(), TAG_FINGERPRINT_FRAGMENT);
+
+        generateAndStoreKey();
+
+        if (initCipher()) {
+            mCryptoObject = new FingerprintManager.CryptoObject(mCipher);
+        }
+
+        mKeyguardManager = getSystemService(KeyguardManager.class);
+        mFingerprintManager = getSystemService(FingerprintManager.class);
+
+        if (!mFingerprintManager.hasEnrolledFingerprints()) {
+
+            // This happens when no fingerprints are registered.
+            Toast.makeText(this,
+                    "Register at least one fingerprint in Settings",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+    }
+
+    /**
+     * Generate encryption key involved in fingerprint authentication process and store it securely on the device using
+     * the Android Keystore system
+     */
+    private void generateAndStoreKey() {
+
+        try {
+            // Access Android Keystore container, used to safely store cryptographic keys on Android devices
+            mKeyStore = KeyStore.getInstance(ANDROID_KEY_STORE);
+
+        } catch (KeyStoreException e) {
+            Log_OC.e(TAG, "Failed while getting KeyStore instance", e);
+        }
+
+        try {
+            // Access Android KeyGenerator to create the encryption key involved in fingerprint authentication process
+            mKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE);
+
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            Log_OC.e(TAG, "Failed while getting KeyGenerator instance", e);
+        }
+
+        try {
+            // Generate and save the encryption key
+            mKeyStore.load(null);
+            mKeyGenerator.init(new
+                    KeyGenParameterSpec.Builder(KEY_NAME,
+                    KeyProperties.PURPOSE_ENCRYPT |
+                            KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    .setUserAuthenticationRequired(true)
+                    .setEncryptionPaddings(
+                            KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                    .build());
+            mKeyGenerator.generateKey();
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException | CertificateException | IOException e) {
+            Log_OC.e(TAG, "Failed while generating and saving the encryption key", e);
+        }
+    }
+
+    /**
+     * Init mCipher that will be used to create the encrypted FingerprintManager.CryptoObject instance. This
+     * CryptoObject will be used during the fingerprint authentication process
+     *
+     * @return true if mCipher is properly initialized, false otherwise
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean initCipher() {
+
+        try {
+            mCipher = Cipher.getInstance(
+                    KeyProperties.KEY_ALGORITHM_AES + "/"
+                            + KeyProperties.BLOCK_MODE_CBC + "/"
+                            + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            Log_OC.e(TAG, "Error while generating and saving the encryption key", e);
+        }
+
+        try {
+            mKeyStore.load(null);
+            // Initialize the mCipher with the key stored in the Keystore container
+            SecretKey key = (SecretKey) mKeyStore.getKey(KEY_NAME, null);
+            mCipher.init(Cipher.ENCRYPT_MODE, key);
+            return true;
+        } catch (KeyPermanentlyInvalidatedException e) {
+            Log_OC.e(TAG, "Key permanently invalidated while initializing the mCipher", e);
+            return false;
+        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException |
+                NoSuchAlgorithmException | InvalidKeyException e) {
+            Log_OC.e(TAG, "Failed while initializing Cipher", e);
+            return false;
+        }
     }
 
     @Override

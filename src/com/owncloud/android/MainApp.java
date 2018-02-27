@@ -116,7 +116,7 @@ public class MainApp extends Application {
         }
 
         // register global protection with pass code
-        registerActivityLifecycleCallbacks( new ActivityLifecycleCallbacks() {
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
