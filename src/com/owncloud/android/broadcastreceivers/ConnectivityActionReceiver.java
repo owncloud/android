@@ -89,7 +89,7 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
          * In the end maybe we need to keep in memory the current knowledge about connectivity
          * and update it taking into account several Intents received in a row
          *
-         * But first let's try something "simple" to keep a basic retry of instant uploads in
+         * But first let's try something "simple" to keep a basic retry of camera uploads in
          * version 1.9.2, similar to the existent until 1.9.1. To be improved.
          */
         if(intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
@@ -158,19 +158,19 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
     }
 
     private void wifiConnected(Context context) {
-        // for the moment, only recovery of instant uploads, similar to behaviour in release 1.9.1
+        // for the moment, only recovery of camera uploads, similar to behaviour in release 1.9.1
         if (
-                (PreferenceManager.instantPictureUploadEnabled(context) &&
-                        PreferenceManager.instantPictureUploadViaWiFiOnly(context)) ||
-                (PreferenceManager.instantVideoUploadEnabled(context) &&
-                        PreferenceManager.instantVideoUploadViaWiFiOnly(context))
+                (PreferenceManager.cameraPictureUploadEnabled(context) &&
+                        PreferenceManager.cameraPictureUploadViaWiFiOnly(context)) ||
+                (PreferenceManager.cameraVideoUploadEnabled(context) &&
+                        PreferenceManager.cameraVideoUploadViaWiFiOnly(context))
                 ) {
 
             Handler h = new Handler(Looper.getMainLooper());
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log_OC.d(TAG, "Requesting retry of instant uploads (& friends)");
+                    Log_OC.d(TAG, "Requesting retry of camera uploads (& friends)");
                     TransferRequester requester = new TransferRequester();
 
                     //Avoid duplicate uploads, because uploads retry is also managed in FileUploader
@@ -202,11 +202,11 @@ public class ConnectivityActionReceiver extends BroadcastReceiver {
     private void wifiDisconnected(Context context) {
         // TODO something smart
 
-        // NOTE: explicit cancellation of only-wifi instant uploads is not needed anymore, since currently:
+        // NOTE: explicit cancellation of only-wifi camera uploads is not needed anymore, since currently:
         //  - any upload in progress will be interrupted due to the lack of connectivity while the device
         //      reconnects through other network interface;
-        //  - FileUploader checks instant upload settings and connection state before executing each
-        //    upload operation, so other pending instant uploads after the current one will not be run
+        //  - FileUploader checks camera upload settings and connection state before executing each
+        //    upload operation, so other pending camera uploads after the current one will not be run
         //    (currently are silently moved to FAILED state)
     }
 

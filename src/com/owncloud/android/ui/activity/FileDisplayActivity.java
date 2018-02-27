@@ -3,6 +3,7 @@
  *
  *  @author Bartek Przybylski
  *  @author David A. Velasco
+ *  @author David González Verdugo
  *  Copyright (C) 2011  Bartek Przybylski
  *  Copyright (C) 2016 ownCloud GmbH.
  *
@@ -61,6 +62,7 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.files.services.IndexedForest;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -125,6 +127,7 @@ public class FileDisplayActivity extends HookActivity
     public static final int REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM = REQUEST_CODE__LAST_SHARED + 2;
     public static final int REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 3;
     public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 4;
+    public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 5;
 
     private static final String TAG = FileDisplayActivity.class.getSimpleName();
 
@@ -138,6 +141,8 @@ public class FileDisplayActivity extends HookActivity
     private OCFile mWaitingToSend;
 
     private LocalBroadcastManager mLocalBroadcastManager;
+
+    private IndexedForest<FileDisplayActivity> mPendingCameraUploads = new IndexedForest<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -642,6 +647,10 @@ public class FileDisplayActivity extends HookActivity
 
             requestUploadOfFilesFromFileSystem(data, resultCode);
 
+        } else if(requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA &&
+                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)){
+
+            requestUploadOfFilesFromFileSystem(data,resultCode);
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == RESULT_OK) {
             final Intent fData = data;
             getHandler().postDelayed(
