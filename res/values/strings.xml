@@ -206,6 +206,8 @@
 
     <string name="fingerprint_confirm">Confirm your fingerprint to continue</string>
     <string name="fingerprint_hint">Touch sensor</string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognized, try again</string>
+    <string name="fingerprint_success">Fingerprint recognized</string>
 
     <string name="media_notif_ticker">"%1$s music player"</string>
     <string name="media_state_playing">"%1$s (playing)"</string>

@@ -1,39 +1,52 @@
-/**
- * ownCloud Android client application
+/*
+ * Copyright (C) 2015 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License
+ *
+ * Modifications
  *
  * @author David González Verdugo
  * Copyright (C) 2018 ownCloud GmbH.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.ui.dialog;
 
 import android.app.DialogFragment;
-import android.content.DialogInterface;
+import android.content.Context;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.FingerprintUIHelper;
+import com.owncloud.android.ui.activity.FingerprintActivity;
 
 /**
  * Dialog to authenticate the user using fingerprint APIs, enabling the user to use pass code authentication as well
  */
-public class FingerprintAuthDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
+@RequiresApi(api = Build.VERSION_CODES.M)
+public class FingerprintAuthDialogFragment extends DialogFragment implements FingerprintUIHelper.Callback {
 
+    private FingerprintActivity mActivity;
+    private FingerprintManager.CryptoObject mCryptoObject;
+    private FingerprintUIHelper mFingerprintUiHelper;
     private Button mFingerprintCancelButton;
 
     /**
@@ -46,11 +59,21 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Dia
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
         View v = inflater.inflate(R.layout.fingerprint_dialog, container, false);
+
+        mFingerprintUiHelper = new FingerprintUIHelper(
+                mActivity.getSystemService(FingerprintManager.class),
+                (ImageView) v.findViewById(R.id.fingerprintIcon),
+                (TextView) v.findViewById(R.id.fingerprintStatus), this);
 
         mFingerprintCancelButton = (Button) v.findViewById(R.id.fingerprintCancelButton);
 
@@ -65,7 +88,37 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Dia
     }
 
     @Override
-    public void onClick(DialogInterface dialog, int which) {
+    public void onResume() {
+        super.onResume();
+        mFingerprintUiHelper.startListening(mCryptoObject);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mFingerprintUiHelper.stopListening();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (FingerprintActivity) getActivity();
+    }
+
+    /**
+     * Sets the crypto object to be passed in when authenticating with fingerprint.
+     */
+    public void setCryptoObject(FingerprintManager.CryptoObject cryptoObject) {
+        mCryptoObject = cryptoObject;
+    }
+
+    @Override
+    public void onAuthenticated() {
+        dismiss();
+    }
+
+    @Override
+    public void onError() {
 
     }
 }

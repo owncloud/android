@@ -1,11 +1,8 @@
 /**
  *   ownCloud Android client application
  *
- *   @author Bartek Przybylski
- *   @author masensio
- *   @author David A. Velasco
- *   Copyright (C) 2011 Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -20,6 +17,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package com.owncloud.android.ui.activity;
 
 import android.app.KeyguardManager;
@@ -72,8 +70,6 @@ public class FingerprintActivity extends AppCompatActivity {
     private KeyguardManager mKeyguardManager;
     private FingerprintManager mFingerprintManager;
 
-
-
     /**
      * Initializes the activity.
      *
@@ -85,15 +81,18 @@ public class FingerprintActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FingerprintAuthDialogFragment fingerprintAuthDialogFragment = new FingerprintAuthDialogFragment();
-
-        fingerprintAuthDialogFragment.show(getFragmentManager(), TAG_FINGERPRINT_FRAGMENT);
-
         generateAndStoreKey();
 
         if (initCipher()) {
             mCryptoObject = new FingerprintManager.CryptoObject(mCipher);
         }
+
+        FingerprintAuthDialogFragment fingerprintAuthDialogFragment = new FingerprintAuthDialogFragment();
+
+        // Attach crypto object used during the fingerprint authentication process
+        fingerprintAuthDialogFragment.setCryptoObject(mCryptoObject);
+
+        fingerprintAuthDialogFragment.show(getFragmentManager(), TAG_FINGERPRINT_FRAGMENT);
 
         mKeyguardManager = getSystemService(KeyguardManager.class);
         mFingerprintManager = getSystemService(FingerprintManager.class);
@@ -154,7 +153,6 @@ public class FingerprintActivity extends AppCompatActivity {
      *
      * @return true if mCipher is properly initialized, false otherwise
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean initCipher() {
 
         try {

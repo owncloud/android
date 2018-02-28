@@ -23,8 +23,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
@@ -34,6 +36,7 @@ import com.owncloud.android.ui.activity.FingerprintActivity;
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class FingerprintManager {
 
     private static final Set<Class> sExemptOfFingerprintActivites;
