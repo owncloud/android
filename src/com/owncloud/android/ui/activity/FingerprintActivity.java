@@ -166,22 +166,17 @@ public class FingerprintActivity extends AppCompatActivity {
 
         try {
             mKeyStore.load(null);
-            // Initialize the mCipher with the key stored in the Keystore container
+            // Initialize the cipher with the key stored in the Keystore container
             SecretKey key = (SecretKey) mKeyStore.getKey(KEY_NAME, null);
             mCipher.init(Cipher.ENCRYPT_MODE, key);
             return true;
         } catch (KeyPermanentlyInvalidatedException e) {
-            Log_OC.e(TAG, "Key permanently invalidated while initializing the mCipher", e);
+            Log_OC.e(TAG, "Key permanently invalidated while initializing the cipher", e);
             return false;
         } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException |
                 NoSuchAlgorithmException | InvalidKeyException e) {
-            Log_OC.e(TAG, "Failed while initializing Cipher", e);
+            Log_OC.e(TAG, "Failed while initializing the cipher", e);
             return false;
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 }

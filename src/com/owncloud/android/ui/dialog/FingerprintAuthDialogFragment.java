@@ -23,6 +23,7 @@ package com.owncloud.android.ui.dialog;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.FingerprintUIHelper;
+import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.ui.activity.FingerprintActivity;
 
 /**
@@ -67,7 +69,6 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         View v = inflater.inflate(R.layout.fingerprint_dialog, container, false);
 
         mFingerprintUiHelper = new FingerprintUIHelper(
@@ -81,6 +82,20 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
             @Override
             public void onClick(View view) {
                 dismiss();
+                PassCodeManager.getPassCodeManager().onFingerprintCancelled(mActivity);
+                mActivity.finish();
+            }
+        });
+
+        // Avoid pressing back button and skipping fingerprint lock
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
+
+                if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                    return true;
+                } else
+                    return false;
             }
         });
 
@@ -115,6 +130,7 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
     @Override
     public void onAuthenticated() {
         dismiss();
+        mActivity.finish();
     }
 
     @Override

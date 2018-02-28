@@ -23,12 +23,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.BuildConfig;
+import com.owncloud.android.ui.activity.FingerprintActivity;
 import com.owncloud.android.ui.activity.PassCodeActivity;
 
 import java.util.HashSet;
@@ -72,14 +75,15 @@ public class PassCodeManager {
     }
 
     public void onActivityStarted(Activity activity) {
-        if (!sExemptOfPasscodeActivites.contains(activity.getClass()) &&
-                passCodeShouldBeRequested()
-                ){
 
-            Intent i = new Intent(MainApp.getAppContext(), PassCodeActivity.class);
-            i.setAction(PassCodeActivity.ACTION_CHECK);
-            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            activity.startActivity(i);
+        if (!sExemptOfPasscodeActivites.contains(activity.getClass()) && passCodeShouldBeRequested()) {
+
+            // Do not ask for passcode if fingerprint is enabled
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && fingerprintIsEnabled()) {
+                return;
+            }
+
+            checkPasscode(activity);
         }
 
         mVisibleActivitiesCounter++;    // keep it AFTER passCodeShouldBeRequested was checked
@@ -94,6 +98,18 @@ public class PassCodeManager {
         if (passCodeIsEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
             activity.moveTaskToBack(true);
         }
+    }
+
+    public void onFingerprintCancelled(Activity activity){
+        // Ask user for passcode
+        checkPasscode(activity);
+    }
+
+    private void checkPasscode(Activity activity) {
+        Intent i = new Intent(MainApp.getAppContext(), PassCodeActivity.class);
+        i.setAction(PassCodeActivity.ACTION_CHECK);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        activity.startActivity(i);
     }
 
     private void setUnlockTimestamp() {
@@ -114,4 +130,9 @@ public class PassCodeManager {
         return (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean fingerprintIsEnabled() {
+        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
+        return (appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false));
+    }
 }

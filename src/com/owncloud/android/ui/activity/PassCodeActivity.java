@@ -22,10 +22,7 @@
  */
 package com.owncloud.android.ui.activity;
 
-import java.util.Arrays;
-
 import android.content.Intent;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -45,6 +42,8 @@ import android.widget.TextView;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import java.util.Arrays;
 
 public class PassCodeActivity extends AppCompatActivity {
 
@@ -77,7 +76,6 @@ public class PassCodeActivity extends AppCompatActivity {
     private static String KEY_CONFIRMING_PASSCODE = "CONFIRMING_PASSCODE";
 
     private boolean mBChange = true; // to control that only one blocks jump
-
 
     /**
      * Initializes the activity.
@@ -536,7 +534,5 @@ public class PassCodeActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             // nothing to do
         }
-
     }
-
 }
