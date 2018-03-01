@@ -54,7 +54,9 @@
             android:title="@string/prefs_camera_upload_behaviour_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/prefs_category_security">
+    <PreferenceCategory
+        android:key="security_category"
+        android:title="@string/prefs_category_security">
         <android.preference.CheckBoxPreference
             android:key="set_pincode"
             android:title="@string/prefs_passcode" />

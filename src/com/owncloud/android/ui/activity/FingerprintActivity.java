@@ -66,9 +66,6 @@ public class FingerprintActivity extends AppCompatActivity {
     private Cipher mCipher;
     private FingerprintManager.CryptoObject mCryptoObject;
 
-    private KeyguardManager mKeyguardManager;
-    private FingerprintManager mFingerprintManager;
-
     /**
      * Initializes the activity.
      *
@@ -93,18 +90,6 @@ public class FingerprintActivity extends AppCompatActivity {
         fingerprintAuthDialogFragment.setCryptoObject(mCryptoObject);
 
         fingerprintAuthDialogFragment.show(getFragmentManager(), TAG_FINGERPRINT_FRAGMENT);
-
-        mKeyguardManager = getSystemService(KeyguardManager.class);
-        mFingerprintManager = getSystemService(FingerprintManager.class);
-
-        if (!mFingerprintManager.hasEnrolledFingerprints()) {
-
-            // This happens when no fingerprints are registered.
-            Toast.makeText(this,
-                    "Register at least one fingerprint in Settings",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
     }
 
     /**

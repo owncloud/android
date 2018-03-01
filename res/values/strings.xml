@@ -209,6 +209,9 @@
     <string name="fingerprint_hint">Touch sensor</string>
     <string name="fingerprint_not_recognized">Fingerprint not recognized, try again</string>
     <string name="fingerprint_success">Fingerprint recognized</string>
+    <string name="fingerprint_not_hardware_detected">This device doesn\'t support fingerprint authentication</string>
+    <string name="fingerprint_not_enrolled_fingerprints">Register at least one fingerprint to use this feature</string>
+    <string name="fingerprint_not_granted_permissions">Fingerprint permissions not granted</string>
 
     <string name="media_notif_ticker">"%1$s music player"</string>
     <string name="media_state_playing">"%1$s (playing)"</string>
