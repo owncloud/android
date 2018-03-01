@@ -383,7 +383,6 @@
   <string name="copy_file_error">Произошла ошибка во время копирования этого файла или папки</string>
   <string name="forbidden_permissions_copy">для копирования этого файла</string>
   <string name="prefs_category_camera_upload">Загрузки камеры</string>
-  <string name="prefs_category_details">Подробно</string>
   <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
   <string name="sync_folder_failed_content">Синхронизация папки %1$s не может быть завершена</string>
   <string name="shared_subject_header">поделился</string>

@@ -355,7 +355,6 @@
   <string name="copy_file_error">嘗試複製檔案或資料夾時發生錯誤</string>
   <string name="forbidden_permissions_copy">複製這個檔案</string>
   <string name="prefs_category_camera_upload">相機上傳</string>
-  <string name="prefs_category_details">詳細資料</string>
   <string name="prefs_camera_video_upload_path_title">影片上傳路徑</string>
   <string name="sync_folder_failed_content">%1$s 資料夾的同步作業未完成</string>
   <string name="shared_subject_header">以分享的</string>

@@ -382,7 +382,6 @@
   <string name="copy_file_error">En feil oppstod ved kopiering av denne filen eller mappen</string>
   <string name="forbidden_permissions_copy">å kopiere denne filen</string>
   <string name="prefs_category_camera_upload">Kameraopplasting</string>
-  <string name="prefs_category_details">Detaljer</string>
   <string name="prefs_camera_video_upload_path_title">Video opplastings-sti</string>
   <string name="sync_folder_failed_content">Synkronisering av %1$s mappe kunne ikke fullføres</string>
   <string name="shared_subject_header">delte</string>

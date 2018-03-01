@@ -356,7 +356,6 @@
   <string name="copy_file_invalid_overwrite">Filen findes allerede i destinationsmappen</string>
   <string name="copy_file_error">Der opstod en fejl under forsøg på at kopiere denne fil eller mappe</string>
   <string name="forbidden_permissions_copy">til at kopiere denne fil</string>
-  <string name="prefs_category_details">Detaljer</string>
   <string name="sync_folder_failed_content">Synkronisering af mappe %1$s kunne ikke fuldføres</string>
   <string name="shared_subject_header">delt</string>
   <string name="with_you_subject_header">med dig</string>

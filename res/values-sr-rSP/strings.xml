@@ -86,7 +86,7 @@
   <string name="prefs_category_accounts">Nalozi</string>
   <string name="drawer_manage_accounts">Upravljaj nalozima</string>
   <string name="folder_picker_choose_button_text">Izaberi</string>
-  <string name="prefs_category_details">Detaljnije</string>
+  <string name="prefs_category_security">Detaljnije</string>
   <string name="share_dialog_title">Deljenje</string>
   <string name="share_cancel_public_link_button">Odustani</string>
   <string name="share_confirm_public_link_button">Sačuvaj</string>

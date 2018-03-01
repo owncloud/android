@@ -121,7 +121,6 @@
   <string name="network_error_socket_timeout_exception">სერვერმა გვიპასუხა ძალიან გვიან</string>
   <string name="prefs_category_accounts">ანგარიში</string>
   <string name="folder_picker_choose_button_text">არჩევა</string>
-  <string name="prefs_category_details">დეტალური ინფორმაცია</string>
   <string name="auth_host_address">სერვერის მისამართი</string>
   <string name="share_dialog_title">გაზიარება</string>
   <string name="share_cancel_public_link_button">უარყოფა</string>

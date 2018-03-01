@@ -130,7 +130,7 @@
   <string name="network_error_socket_timeout_exception">El servidor se demoro mucho en contestar</string>
   <string name="prefs_category_accounts">Cuentas</string>
   <string name="folder_picker_choose_button_text">Choose</string>
-  <string name="prefs_category_details">detalles</string>
+  <string name="prefs_category_security">detalles</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancelar</string>
   <string name="share_via_link_password_label">Clave</string>

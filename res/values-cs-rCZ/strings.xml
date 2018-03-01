@@ -368,7 +368,6 @@ správce systému.</string>
   <string name="copy_file_error">Při pokusu o zkopírování tohoto souboru či adresáře došlo k chybě</string>
   <string name="forbidden_permissions_copy">pro zkopírování tohoto souboru</string>
   <string name="prefs_category_camera_upload">Nahrávání fotoaparátu</string>
-  <string name="prefs_category_details">Podrobnosti</string>
   <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
   <string name="sync_folder_failed_content">Synchronizaci adresáře %1$s nelze dokončit</string>
   <string name="shared_subject_header">sdílené</string>

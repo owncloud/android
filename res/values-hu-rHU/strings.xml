@@ -368,7 +368,6 @@
   <string name="copy_file_error">H IBA történt egy Fájl Vagy mappa másolásakor</string>
   <string name="forbidden_permissions_copy">egy fájl másolásához</string>
   <string name="prefs_category_camera_upload">Kamerafeltöltések</string>
-  <string name="prefs_category_details">Részletek</string>
   <string name="prefs_camera_video_upload_path_title">Videó feltöltési útvonal</string>
   <string name="sync_folder_failed_content">Szinkronizálást a %1$s mappával nem sikerült befejezni</string>
   <string name="shared_subject_header">megosztva</string>

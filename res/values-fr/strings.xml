@@ -373,7 +373,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="copy_file_error">Une erreur est survenue lors de la copie de ce fichier ou dossier</string>
   <string name="forbidden_permissions_copy">de copier ce fichier</string>
   <string name="prefs_category_camera_upload">Téléversements de la caméra</string>
-  <string name="prefs_category_details">Détails</string>
   <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
   <string name="sync_folder_failed_content">La synchronisation du dossier %1$s n\'a pas pu être terminée</string>
   <string name="shared_subject_header">a partagé</string>

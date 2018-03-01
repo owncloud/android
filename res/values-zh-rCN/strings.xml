@@ -366,7 +366,6 @@
   <string name="copy_file_error">尝试复制这个文件或文件夹时发生了错误</string>
   <string name="forbidden_permissions_copy">复制这个文件</string>
   <string name="prefs_category_camera_upload">相机上传</string>
-  <string name="prefs_category_details">详细信息</string>
   <string name="prefs_camera_video_upload_path_title">视频上传路径</string>
   <string name="sync_folder_failed_content"> %1$s同步未完成。</string>
   <string name="shared_subject_header">已共享</string>

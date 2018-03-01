@@ -333,7 +333,6 @@
   <string name="copy_file_not_found">No es pot copiar. Assegureu-vos que el fitxer existeix</string>
   <string name="copy_file_invalid_overwrite">El fitxer ja existeix a la carpeta de destinació</string>
   <string name="forbidden_permissions_copy">per copiar aquest fitxer</string>
-  <string name="prefs_category_details">Detalls</string>
   <string name="shared_subject_header">compartit</string>
   <string name="with_you_subject_header">amb tú</string>
   <string name="auth_refresh_button">Actualitza la connexió</string>

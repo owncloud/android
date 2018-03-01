@@ -111,7 +111,7 @@
   <string name="network_error_socket_timeout_exception">Cymrodd y gweinydd rhy hir i ymateb</string>
   <string name="prefs_category_accounts">Cyfrifon</string>
   <string name="folder_picker_choose_button_text">Dewisiwch</string>
-  <string name="prefs_category_details">Manylion</string>
+  <string name="prefs_category_security">Manylion</string>
   <string name="share_dialog_title">Rhannu</string>
   <string name="share_cancel_public_link_button">Diddymu</string>
   <string name="share_confirm_public_link_button">Cadw</string>

@@ -39,7 +39,7 @@
   <string name="ssl_validator_btn_details_see">विवरण </string>
   <string name="activity_chooser_send_file_title">भेजें</string>
   <string name="prefs_category_accounts">खाते </string>
-  <string name="prefs_category_details">विवरण </string>
+  <string name="prefs_category_security">विवरण </string>
   <string name="share_dialog_title">साझा करें</string>
   <string name="share_cancel_public_link_button">रद्द करें </string>
   <string name="share_confirm_public_link_button">सहेजें</string>

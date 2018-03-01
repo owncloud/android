@@ -355,7 +355,6 @@
   <string name="copy_file_invalid_overwrite">Το αρχείο υπάρχει ήδη στον φάκελο προορισμού</string>
   <string name="copy_file_error">Ένα σφάλμα προέκυψε κατά την προσπάθεια αντιγραφής αυτού του αρχείου ή φακέλου</string>
   <string name="forbidden_permissions_copy">για αντιγραφή αυτού του αρχείου</string>
-  <string name="prefs_category_details">Λεπτομέρειες</string>
   <string name="sync_folder_failed_content">Ο συγχρονισμός του φακέλου %1$s δεν μπορεί να ολοκληρωθεί</string>
   <string name="shared_subject_header">διαμοιρασμένα</string>
   <string name="with_you_subject_header">με εσάς</string>

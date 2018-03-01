@@ -33,6 +33,7 @@
     <string name="prefs_manage_accounts">Manage accounts</string>
     <string name="prefs_passcode">Passcode lock</string>
     <string name="prefs_fingerprint">Fingerprint lock</string>
+    <string name="prefs_fingerprint_summary">Enable passcode lock to enable this option</string>
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
     <string name="prefs_camera_video_upload">Video uploads</string>
@@ -415,7 +416,6 @@
     <string name="forbidden_permissions_copy">to copy this file</string>
 
     <string name="prefs_category_camera_upload">Camera uploads</string>
-    <string name="prefs_category_details">Details</string>
 
     <string name="prefs_camera_video_upload_path_title">Video upload path</string>
     <string name="sync_folder_failed_content">Synchronization of %1$s folder could not be completed</string>

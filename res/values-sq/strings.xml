@@ -380,7 +380,6 @@
   <string name="copy_file_error">Ndodhi një gabim teksa përpiqej të kopjohej kjo kartelë apo dosje</string>
   <string name="forbidden_permissions_copy">për kopjim të kësaj kartele</string>
   <string name="prefs_category_camera_upload">Ngarkime nga kamera</string>
-  <string name="prefs_category_details">Hollësi</string>
   <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="sync_folder_failed_content">Njëkohësimi i dosjes %1$s s\’u plotësua dot</string>
   <string name="shared_subject_header">ndarë</string>

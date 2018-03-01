@@ -261,7 +261,6 @@
   <string name="folder_picker_choose_button_text">اختيار</string>
   <string name="move_file_invalid_overwrite">الملف موجود بالفعل في المجلد الوجهة</string>
   <string name="copy_file_invalid_overwrite">الملف موجود بالفعل في المجلد الوجهة</string>
-  <string name="prefs_category_details">تفاصيل</string>
   <string name="auth_host_address">عنوان الخادم</string>
   <string name="share_dialog_title">شارك</string>
   <string name="share_cancel_public_link_button">إلغاء</string>

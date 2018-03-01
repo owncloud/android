@@ -49,7 +49,6 @@
   <string name="prefs_category_accounts">Contos</string>
   <string name="saml_authentication_wrong_pass">Contrasigno errate</string>
   <string name="folder_picker_choose_button_text">Seliger</string>
-  <string name="prefs_category_details">Detalios</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancellar</string>
   <string name="share_confirm_public_link_button">Salveguardar</string>

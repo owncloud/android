@@ -49,7 +49,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
-@RequiresApi(api = Build.VERSION_CODES.M)
 public class FingerprintActivity extends AppCompatActivity {
 
     private static final String TAG = FingerprintActivity.class.getSimpleName();
@@ -78,6 +77,7 @@ public class FingerprintActivity extends AppCompatActivity {
      *
      * @param savedInstanceState    Previously saved state - irrelevant in this case
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -111,6 +111,7 @@ public class FingerprintActivity extends AppCompatActivity {
      * Generate encryption key involved in fingerprint authentication process and store it securely on the device using
      * the Android Keystore system
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void generateAndStoreKey() {
 
         try {
@@ -153,6 +154,7 @@ public class FingerprintActivity extends AppCompatActivity {
      *
      * @return true if mCipher is properly initialized, false otherwise
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean initCipher() {
 
         try {

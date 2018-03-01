@@ -365,7 +365,6 @@
   <string name="copy_file_error">Wystąpił błąd podczas próby kopiowania tego pliku lub folderu</string>
   <string name="forbidden_permissions_copy">by skopiować ten plik</string>
   <string name="prefs_category_camera_upload">Wrzucanie kamery</string>
-  <string name="prefs_category_details">Szczegóły</string>
   <string name="prefs_camera_video_upload_path_title">Ścieżka wrzucania filmu</string>
   <string name="sync_folder_failed_content">Synchronizacja folderu %1$s nie może zostać zakończona</string>
   <string name="shared_subject_header">udostępniony</string>
