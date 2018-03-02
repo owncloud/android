@@ -77,14 +77,19 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_SELECT_SOURCE_PATH = 3;
     private static final int ACTION_REQUEST_PASSCODE = 5;
     private static final int ACTION_CONFIRM_PASSCODE = 6;
+    private static final int ACTION_REQUEST_PATTERN = 7;
+    private static final int ACTION_CONFIRM_PATTERN = 8;
 
     private CheckBoxPreference pCode;
+    private CheckBoxPreference pPattern;
     private Preference pAboutApp;
     private AppCompatDelegate mDelegate;
 
     private String mUploadPath;
     private String mUploadVideoPath;
     private String mSourcePath;
+    private boolean patternSet;
+    private boolean passcodeSet;
 
     private PreferenceCategory mPrefCameraUploadsCategory;
     private Preference mPrefCameraPictureUploads;
@@ -139,16 +144,42 @@ public class Preferences extends PreferenceActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
                     Boolean incoming = (Boolean) newValue;
+                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    patternSet = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+                    if(patternSet){
+                        showSnackMessage(R.string.pattern_already_set);
+                    }
+                    else {
+                        i.setAction(
+                                incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
+                                        PassCodeActivity.ACTION_CHECK_WITH_RESULT
+                        );
 
-                    i.setAction(
-                            incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
-                                    PassCodeActivity.ACTION_CHECK_WITH_RESULT
-                    );
-
-                    startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE :
-                            ACTION_CONFIRM_PASSCODE);
-
+                        startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE :
+                                ACTION_CONFIRM_PASSCODE);
+                    }
                     // Don't update just yet, we will decide on it in onActivityResult
+                    return false;
+                }
+            });
+        }
+
+        pPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
+        if (pPattern != null) {
+            pPattern.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Intent intent = new Intent(getApplicationContext(), PatternLockActivity.class);
+                    Boolean state = (Boolean) newValue;
+                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    passcodeSet = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE,false);
+                    if(passcodeSet){
+                        showSnackMessage(R.string.passcode_already_set);
+                    }
+                    else {
+                        intent.setAction(state ? PatternLockActivity.ACTION_REQUEST_WITH_RESULT : PatternLockActivity.ACTION_CHECK_WITH_RESULT);
+                        startActivityForResult(intent, state ? ACTION_REQUEST_PATTERN : ACTION_CONFIRM_PATTERN);
+                    }
                     return false;
                 }
             });
@@ -298,7 +329,6 @@ public class Preferences extends PreferenceActivity {
 
         mPrefCameraPictureUploadsPath = findPreference("camera_picture_uploads_path");
         if (mPrefCameraPictureUploadsPath != null) {
-
             mPrefCameraPictureUploadsPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -403,7 +433,6 @@ public class Preferences extends PreferenceActivity {
             ));
             pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
         }
-
         loadCameraUploadsPicturePath();
         loadCameraUploadsVideoPath();
         loadCameraUploadsSourcePath();
@@ -425,6 +454,7 @@ public class Preferences extends PreferenceActivity {
         if (isChecked) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
+
 
         } else {
 
@@ -512,8 +542,10 @@ public class Preferences extends PreferenceActivity {
         super.onResume();
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean state = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-        pCode.setChecked(state);
+        boolean passCodeState = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+        pCode.setChecked(passCodeState);
+        boolean patternState = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+        pPattern.setChecked(patternState);
     }
 
     @Override
@@ -607,6 +639,26 @@ public class Preferences extends PreferenceActivity {
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
                 appPrefs.commit();
                 showSnackMessage(R.string.pass_code_removed);
+            }
+        }
+        else if(requestCode == ACTION_REQUEST_PATTERN && resultCode == RESULT_OK){
+            String patternValue = data.getStringExtra(PatternLockActivity.KEY_PATTERN);
+            if(patternValue != null){
+                SharedPreferences.Editor appPrefs = PreferenceManager.
+                        getDefaultSharedPreferences(getApplicationContext()).edit();
+                appPrefs.putString(PatternLockActivity.KEY_PATTERN,patternValue);
+                appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,true);
+                appPrefs.commit();
+                showSnackMessage(R.string.pattern_stored);
+            }
+        }
+        else if(requestCode == ACTION_CONFIRM_PATTERN && resultCode == RESULT_OK){
+            if(data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT,false)){
+                SharedPreferences.Editor appPrefs = PreferenceManager.
+                        getDefaultSharedPreferences(getApplicationContext()).edit();
+                appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+                appPrefs.commit();
+                showSnackMessage(R.string.pattern_removed);
             }
         }
     }

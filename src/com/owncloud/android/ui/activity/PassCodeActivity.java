@@ -140,7 +140,7 @@ public class PassCodeActivity extends AppCompatActivity {
             setCancelButtonEnabled(true);
 
         } else {
-            throw new IllegalArgumentException("A valid ACTION is needed in the Intent passed to "
+            throw new IllegalArgumentException(R.string.illegal_argument_exception_message + " "
                     + TAG);
         }
 
@@ -175,13 +175,13 @@ public class PassCodeActivity extends AppCompatActivity {
      * Binds the appropiate listeners to the input boxes receiving each digit of the pass code.
      */
     protected void setTextListeners() {
-    
-         ///  First input field
+
+        ///  First input field
         mPassCodeEditTexts[0].addTextChangedListener(new PassCodeDigitTextWatcher(0, false));
 
 
         /*------------------------------------------------
-         *  SECOND BOX 
+         *  SECOND BOX
          -------------------------------------------------*/
         mPassCodeEditTexts[1].addTextChangedListener(new PassCodeDigitTextWatcher(1, false));
 
@@ -190,7 +190,7 @@ public class PassCodeActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL && mBChange) {  // TODO WIP: event should be
-                // used to control what's exactly happening with DEL, not any custom field...
+                    // used to control what's exactly happening with DEL, not any custom field...
                     mPassCodeEditTexts[0].setText("");
                     mPassCodeEditTexts[0].requestFocus();
                     if (!mConfirmingPassCode)
@@ -210,14 +210,14 @@ public class PassCodeActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 /// TODO WIP: should take advantage of hasFocus to reduce processing
                 if (mPassCodeEditTexts[0].getText().toString().equals("")) {  // TODO WIP validation
-                // could be done in a global way, with a single OnFocusChangeListener for all the
-                // input fields
+                    // could be done in a global way, with a single OnFocusChangeListener for all the
+                    // input fields
                     mPassCodeEditTexts[0].requestFocus();
                 }
             }
         });
-        
-        
+
+
         /*------------------------------------------------
          *  THIRD BOX
          -------------------------------------------------*/
@@ -348,10 +348,10 @@ public class PassCodeActivity extends AppCompatActivity {
         View focusedView = getCurrentFocus();
         if (focusedView != null) {
             InputMethodManager inputMethodManager =
-                (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(
-                focusedView.getWindowToken(),
-                0
+                    focusedView.getWindowToken(),
+                    0
             );
         }
     }
@@ -361,9 +361,9 @@ public class PassCodeActivity extends AppCompatActivity {
         Arrays.fill(mPassCodeDigits, null);
         CharSequence errorSeq = getString(errorMessage);
         Snackbar snackbar = Snackbar.make(
-            findViewById(android.R.id.content),
-            errorSeq,
-            Snackbar.LENGTH_LONG
+                findViewById(android.R.id.content),
+                errorSeq,
+                Snackbar.LENGTH_LONG
         );
         snackbar.show();
         mPassCodeHdr.setText(headerMessage);                // TODO check if really needed
@@ -390,7 +390,7 @@ public class PassCodeActivity extends AppCompatActivity {
      */
     protected boolean checkPassCode(){
         SharedPreferences appPrefs = PreferenceManager
-            .getDefaultSharedPreferences(getApplicationContext());
+                .getDefaultSharedPreferences(getApplicationContext());
 
         String savedPassCodeDigits[] = new String[4];
         savedPassCodeDigits[0] = appPrefs.getString(PREFERENCE_PASSCODE_D1, null);
