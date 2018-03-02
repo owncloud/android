@@ -27,6 +27,10 @@ repositories {
         url "https://maven.google.com"
     }
 
+    maven {
+        url "https://jitpack.io"
+    }
+
     flatDir {
         dirs 'libs'
     }
@@ -40,7 +44,6 @@ configurations.all {
 
 dependencies {
     /// dependencies for app building
-    compile project(':touchImageView')
     compile project(':owncloud-android-library')
     compile "com.android.support:support-v4:${supportLibraryVersion}"
     compile "com.android.support:design:${supportLibraryVersion}"
@@ -74,6 +77,14 @@ dependencies {
 
     // fix conflict in dependencies; see http://g.co/androidstudio/app-test-app-conflict for details
     androidTestCompile "com.android.support:support-annotations:${supportLibraryVersion}"
+
+    // Image loading
+    compile ("com.github.bumptech.glide:glide:4.6.1") {
+        exclude group: "com.android.support"
+    }
+
+    //Zooming Android ImageView.
+    compile "com.github.chrisbanes:PhotoView:2.0.0"
 }
 
 tasks.withType(Test) {

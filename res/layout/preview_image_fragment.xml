@@ -45,14 +45,10 @@
         android:layout_centerInParent="true"
         />
 
-    <third_parties.michaelOrtiz.TouchImageViewCustom
-        android:id="@+id/image"
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photo_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="0dp"
-        android:layout_centerInParent="true"
-        android:contentDescription="@string/preview_image_description"
-        android:src="@drawable/image_fail" />
+        android:layout_height="match_parent"/>
     
     <TextView
         android:id="@+id/message"
