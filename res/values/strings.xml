@@ -56,8 +56,11 @@
     <string name="pattern_not_same_pattern">The patterns are not same</string>
     <string name="pattern_stored">Pattern Stored</string>
     <string name="pattern_removed">Pattern Removed</string>
-    <string name="passcode_already_set"> Passcode already set</string>
-    <string name="pattern_already_set">Pattern already set</string>
+    <string name="pattern_already_set">Pattern and passcode locks cannot be enabled at the same time, please disable pattern first</string>
+    <string name="passcode_already_set">Pattern and passcode locks cannot be enabled at the same time, please disable passcode first</string>
+    <string name="pattern">pattern</string>
+    <string name="passcode">passcode</string>
+    <string name="pattern_no_longer_required">The pattern will not be asked anymore</string>
     <string name="pattern_configure_your_pattern_explanation">The pattern will be requested every time the app is started</string>
     <string name="illegal_argument_exception_message">A valid ACTION is needed in the Intent passed to</string>
 

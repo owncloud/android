@@ -112,6 +112,7 @@ public class PatternLockActivity extends AppCompatActivity {
         } else if (ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
             //This block is executed when the user is removing the pattern lock (i.e disabling the pattern lock)
             mPatternHeader.setText(R.string.pattern_remove_pattern);
+            mPatternExplanation.setText(getResources().getString(R.string.pattern_no_longer_required));
             mPatternExplanation.setVisibility(View.VISIBLE);
             setCancelButtonEnabled(true);
         } else {
