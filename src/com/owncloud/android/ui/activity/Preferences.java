@@ -276,32 +276,35 @@ public class Preferences extends PreferenceActivity {
                 @Override
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
+
                     Boolean incoming = (Boolean) newValue;
 
-                    if (!incoming) {
+                    // Fingerprint not supported
+                    if (incoming && !fingerprintManager.isHardwareDetected()) {
+
+                        showSnackMessage(R.string.fingerprint_not_hardware_detected);
+
                         return false;
                     }
 
-                    // Fingerprint not supported
-                    if (!fingerprintManager.isHardwareDetected()) {
-
-                        showSnackMessage(R.string.fingerprint_not_hardware_detected);
-                    }
-
                     // No fingerprints enrolled yet
-                    if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    if (incoming && !fingerprintManager.hasEnrolledFingerprints()) {
 
                         showSnackMessage(R.string.fingerprint_not_enrolled_fingerprints);
+
+                        return false;
                     }
 
                     // Permissions not granted
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                    if (incoming && ActivityCompat.checkSelfPermission(getApplicationContext(),
                             Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
 
                         showSnackMessage(R.string.fingerprint_not_granted_permissions);
+
+                        return false;
                     }
 
-                    return false;
+                    return true;
                 }
             });
         }
