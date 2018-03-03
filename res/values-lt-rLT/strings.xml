@@ -27,6 +27,7 @@
   <string name="drawer_open">Atverti</string>
   <string name="prefs_category_general">Bendras</string>
   <string name="prefs_category_more">Daugiau</string>
+  <string name="prefs_category_security">Saugumas</string>
   <string name="prefs_accounts">Paskyros</string>
   <string name="prefs_manage_accounts">Tvarkyti paskyras</string>
   <string name="prefs_passcode">Užrakto kodas</string>

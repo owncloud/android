@@ -27,6 +27,7 @@
   <string name="drawer_open">Open</string>
   <string name="prefs_category_general">Algemeen</string>
   <string name="prefs_category_more">Meer</string>
+  <string name="prefs_category_security">Beveiliging</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>

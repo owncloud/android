@@ -17,6 +17,7 @@
   <string name="drawer_open">খোল</string>
   <string name="prefs_category_general">সাধারণ</string>
   <string name="prefs_category_more">বেশী</string>
+  <string name="prefs_category_security">নিরাপত্তা</string>
   <string name="prefs_accounts">একাউন্ট</string>
   <string name="prefs_log_summary">সমস্যা তালিকাভুক্ত করার জায়গা</string>
   <string name="prefs_log_summary_history">রেকর্ডেড লগ এখানে দেখেন</string>

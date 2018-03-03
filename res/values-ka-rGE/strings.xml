@@ -13,6 +13,7 @@
   <string name="drawer_open">გახსნა</string>
   <string name="prefs_category_general">ზოგადი</string>
   <string name="prefs_category_more">უფრო მეტი</string>
+  <string name="prefs_category_security">უსაფრთხოება</string>
   <string name="prefs_accounts">ანგარიში</string>
   <string name="prefs_help">დახმარება</string>
   <string name="prefs_feedback">უკუკავშირი</string>

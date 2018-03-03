@@ -8,6 +8,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">Ерөнхий</string>
+  <string name="prefs_category_security">Аюулгүй байдал</string>
   <string name="auth_username">Хэрэглэгчийн нэр</string>
   <string name="auth_password">Нууц үг</string>
   <string name="sync_string_files">Файлууд</string>

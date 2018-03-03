@@ -13,6 +13,7 @@
   <string name="drawer_open">Aperi</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Plus</string>
+  <string name="prefs_category_security">Securitate</string>
   <string name="prefs_accounts">Contos</string>
   <string name="prefs_help">Adjuta</string>
   <string name="auth_username">Nomine de usator</string>

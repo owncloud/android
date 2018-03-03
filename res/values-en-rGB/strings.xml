@@ -27,6 +27,7 @@
   <string name="drawer_open">Open</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">More</string>
+  <string name="prefs_category_security">Security</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Manage accounts</string>
   <string name="prefs_passcode">Passcode lock</string>

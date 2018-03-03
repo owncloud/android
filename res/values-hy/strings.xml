@@ -25,6 +25,7 @@
   <string name="drawer_open">Բացել</string>
   <string name="prefs_category_general">Ընդհանուր</string>
   <string name="prefs_category_more">Ավելի</string>
+  <string name="prefs_category_security">Անվտանգություն</string>
   <string name="prefs_accounts">Հաշիվներ</string>
   <string name="prefs_passcode">Անցաբառով կողպում</string>
   <string name="prefs_log_delete_history_button">Ջնջել պատմությունը</string>

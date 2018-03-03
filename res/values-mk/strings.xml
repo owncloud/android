@@ -27,6 +27,7 @@
   <string name="drawer_open">Отвори</string>
   <string name="prefs_category_general">Општо</string>
   <string name="prefs_category_more">Повеќе</string>
+  <string name="prefs_category_security">Безбедност</string>
   <string name="prefs_accounts">Сметки</string>
   <string name="prefs_manage_accounts">Менаџирај корисници</string>
   <string name="prefs_passcode">Заклучено со код</string>
@@ -168,6 +169,7 @@
   <string name="confirmation_remove_file_alert">Дали навистина сакаш да ја отстраниш %1$s?</string>
   <string name="confirmation_remove_folder_alert">Дали навистина сакаш да го отстранам %1$s и неговата содржина?</string>
   <string name="confirmation_remove_local">Само локално</string>
+  <string name="confirmation_remove_public_share_title">Избриши го линкот</string>
   <string name="confirmation_remove_public_share_message">Дали навистина сакаш да ја отстраниш %1$s?</string>
   <string name="remove_success_msg">Одстранувањето е успешно</string>
   <string name="remove_fail_msg">Одстранувањето е неуспешно</string>

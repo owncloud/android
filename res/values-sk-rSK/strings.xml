@@ -24,6 +24,7 @@
   <string name="drawer_open">Otvoriť</string>
   <string name="prefs_category_general">Všeobecné</string>
   <string name="prefs_category_more">Viac</string>
+  <string name="prefs_category_security">Zabezpečenie</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Správa účtov</string>
   <string name="prefs_passcode">Heslo</string>

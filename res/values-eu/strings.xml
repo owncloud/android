@@ -27,6 +27,7 @@
   <string name="drawer_open">Ireki</string>
   <string name="prefs_category_general">Orokorra</string>
   <string name="prefs_category_more">Gehiago</string>
+  <string name="prefs_category_security">Segurtasuna</string>
   <string name="prefs_accounts">Kontuak</string>
   <string name="prefs_manage_accounts">Kontuak kudeatu</string>
   <string name="prefs_log_title">Gaitu erregistroa</string>

@@ -27,6 +27,7 @@
   <string name="drawer_open">Otevřít</string>
   <string name="prefs_category_general">Obecné</string>
   <string name="prefs_category_more">Více</string>
+  <string name="prefs_category_security">Zabezpečení</string>
   <string name="prefs_accounts">Účty</string>
   <string name="prefs_manage_accounts">Spravovat účty</string>
   <string name="prefs_passcode">Zámek bezpečnostního kódu</string>

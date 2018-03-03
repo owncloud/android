@@ -19,6 +19,7 @@
   <string name="drawer_open">Aç</string>
   <string name="prefs_category_general">Ümumi</string>
   <string name="prefs_category_more">Daha da</string>
+  <string name="prefs_category_security">Təhlükəsizlik</string>
   <string name="prefs_accounts">Hesablar</string>
   <string name="prefs_log_summary">Bu problemlərin jurnal edilməsi üçün istifadə edilir</string>
   <string name="prefs_log_summary_history">Bu, yazılmış jurnalları göstərir</string>

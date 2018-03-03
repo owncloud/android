@@ -27,6 +27,7 @@
   <string name="drawer_open">Dobrir</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Mai</string>
+  <string name="prefs_category_security">Seguretat</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Maneja comptes</string>
   <string name="prefs_passcode">Còdi de seguretat</string>

@@ -24,6 +24,7 @@
   <string name="drawer_open">Malfermi</string>
   <string name="prefs_category_general">Ĝeneralo</string>
   <string name="prefs_category_more">Pli</string>
+  <string name="prefs_category_security">Sekuro</string>
   <string name="prefs_accounts">Kontoj</string>
   <string name="prefs_manage_accounts">Administri kontojn</string>
   <string name="prefs_log_delete_history_button">Forviŝi historion</string>

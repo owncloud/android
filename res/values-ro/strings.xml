@@ -27,6 +27,7 @@
   <string name="drawer_open">Deschide</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Mai mult</string>
+  <string name="prefs_category_security">Securitate</string>
   <string name="prefs_accounts">Conturi</string>
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>

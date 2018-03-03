@@ -25,6 +25,7 @@
   <string name="drawer_open">Ava</string>
   <string name="prefs_category_general">Üldine</string>
   <string name="prefs_category_more">Rohkem</string>
+  <string name="prefs_category_security">Turvalisus</string>
   <string name="prefs_accounts">Kontod</string>
   <string name="prefs_manage_accounts">Halda kontosid</string>
   <string name="prefs_passcode">Parooli lukk</string>
