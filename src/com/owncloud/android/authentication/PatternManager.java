@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
@@ -60,7 +61,7 @@ public class PatternManager {
 
     public void onActivityCreated(Activity activity) {
         if (!BuildConfig.DEBUG) {
-            if (patternIsEnabled()) {
+            if (isPatternEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -69,12 +70,15 @@ public class PatternManager {
     }
 
     public void onActivityStarted(Activity activity) {
-        if (!sExemptOfPatternActivites.contains(activity.getClass()) &&
-                patternShouldBeRequested()
-                ) {
-            Intent i = new Intent(MainApp.getAppContext(), PatternLockActivity.class);
-            i.setAction(PatternLockActivity.ACTION_CHECK);
-            activity.startActivity(i);
+        if (!sExemptOfPatternActivites.contains(activity.getClass()) && patternShouldBeRequested()) {
+
+            // Do not ask for pattern if fingerprint is enabled
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager().
+                    isFingerPrintEnabled()) {
+                return;
+            }
+
+            checkPattern(activity);
         }
         mVisibleActivitiesCounter++;
     }
@@ -89,23 +93,33 @@ public class PatternManager {
         }
         setUnlockTimestamp();
         PowerManager powerMgr = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-        if (patternIsEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
+        if (isPatternEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
             activity.moveTaskToBack(true);
         }
+    }
+
+    public void onFingerprintCancelled(Activity activity){
+        // Ask user for pattern
+        checkPattern(activity);
+    }
+
+    private void checkPattern(Activity activity) {
+        Intent i = new Intent(MainApp.getAppContext(), PatternLockActivity.class);
+        i.setAction(PatternLockActivity.ACTION_CHECK);
+        activity.startActivity(i);
     }
 
     private boolean patternShouldBeRequested() {
         if ((System.currentTimeMillis() - timeStamp) > PATTERN_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
                 ) {
-            return patternIsEnabled();
+            return isPatternEnabled();
         }
         return false;
     }
 
-    private boolean patternIsEnabled() {
+    public boolean isPatternEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
     }
-
 }

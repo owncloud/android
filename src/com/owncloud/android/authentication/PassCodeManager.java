@@ -26,12 +26,10 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.BuildConfig;
-import com.owncloud.android.ui.activity.FingerprintActivity;
 import com.owncloud.android.ui.activity.PassCodeActivity;
 
 import java.util.HashSet;
@@ -66,7 +64,7 @@ public class PassCodeManager {
 
     public void onActivityCreated(Activity activity) {
         if (!BuildConfig.DEBUG) {
-            if (passCodeIsEnabled()) {
+            if (isPassCodeEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -79,7 +77,8 @@ public class PassCodeManager {
         if (!sExemptOfPasscodeActivites.contains(activity.getClass()) && passCodeShouldBeRequested()) {
 
             // Do not ask for passcode if fingerprint is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && fingerprintIsEnabled()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager().
+                    isFingerPrintEnabled()) {
                 return;
             }
 
@@ -95,7 +94,7 @@ public class PassCodeManager {
         }
         setUnlockTimestamp();
         PowerManager powerMgr = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-        if (passCodeIsEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
+        if (isPassCodeEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
             activity.moveTaskToBack(true);
         }
     }
@@ -120,19 +119,13 @@ public class PassCodeManager {
         if ((System.currentTimeMillis() - mTimestamp) > PASS_CODE_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
                 ){
-            return passCodeIsEnabled();
+            return isPassCodeEnabled();
         }
         return false;
     }
 
-    private boolean passCodeIsEnabled() {
+    public boolean isPassCodeEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false));
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private boolean fingerprintIsEnabled() {
-        SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
-        return (appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false));
     }
 }

@@ -38,6 +38,7 @@ import android.widget.TextView;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.FingerprintUIHelper;
 import com.owncloud.android.authentication.PassCodeManager;
+import com.owncloud.android.authentication.PatternManager;
 import com.owncloud.android.ui.activity.FingerprintActivity;
 
 /**
@@ -82,7 +83,12 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
             @Override
             public void onClick(View view) {
                 dismiss();
-                PassCodeManager.getPassCodeManager().onFingerprintCancelled(mActivity);
+
+                if (PassCodeManager.getPassCodeManager().isPassCodeEnabled()) {
+                    PassCodeManager.getPassCodeManager().onFingerprintCancelled(mActivity);
+                } else if (PatternManager.getPatternManager().isPatternEnabled()) {
+                    PatternManager.getPatternManager().onFingerprintCancelled(mActivity);
+                }
                 mActivity.finish();
             }
         });

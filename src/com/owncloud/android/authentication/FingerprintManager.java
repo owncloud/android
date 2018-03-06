@@ -48,7 +48,7 @@ public class FingerprintManager {
     }
 
     private static int FINGERPRINT_TIMEOUT = 1000;
-        // keeping a "low" positive value is the easiest way to prevent the pass code is requested on rotations
+        // keeping a "low" positive value is the easiest way to prevent the fingerprint is requested on rotations
 
     public static FingerprintManager mFingerprintManagerInstance = null;
 
@@ -66,7 +66,7 @@ public class FingerprintManager {
 
     public void onActivityCreated(Activity activity) {
         if (!BuildConfig.DEBUG) {
-            if (fingerprintIsEnabled()) {
+            if (isFingerPrintEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -92,7 +92,7 @@ public class FingerprintManager {
         }
         setUnlockTimestamp();
         PowerManager powerMgr = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-        if (fingerprintIsEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
+        if (isFingerPrintEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
             activity.moveTaskToBack(true);
         }
     }
@@ -105,12 +105,12 @@ public class FingerprintManager {
         if ((System.currentTimeMillis() - mTimestamp) > FINGERPRINT_TIMEOUT &&
                 mVisibleActivitiesCounter <= 0
                 ){
-            return fingerprintIsEnabled();
+            return isFingerPrintEnabled();
         }
         return false;
     }
 
-    private boolean fingerprintIsEnabled() {
+    public boolean isFingerPrintEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return (appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false));
     }
