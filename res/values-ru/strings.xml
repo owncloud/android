@@ -46,6 +46,11 @@
   <string name="prefs_imprint">Штамп</string>
   <string name="prefs_remember_last_share_location">Запомнить расположение общего ресурса</string>
   <string name="prefs_remember_last_upload_location_summary">Запомнить расположение загрузки последней публикации</string>
+  <string name="prefs_pattern">Графический ключ</string>
+  <string name="pattern_enter_pattern">Введите графический ключ, пожалуйста</string>
+  <string name="pattern_configure_pattern">Введите графический ключ</string>
+  <string name="pattern_remove_pattern">Удалить графический ключ</string>
+  <string name="pattern_incorrect_pattern">Неверный графический ключ</string>
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>

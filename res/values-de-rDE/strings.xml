@@ -46,6 +46,9 @@
   <string name="prefs_imprint">Impressum</string>
   <string name="prefs_remember_last_share_location">Geteilten Speicherort merken</string>
   <string name="prefs_remember_last_upload_location_summary">Geteilten Upload-Speicherort merken</string>
+  <string name="pattern_configure_pattern">Muster eingeben</string>
+  <string name="pattern_remove_pattern">Muster entfernen</string>
+  <string name="pattern_stored">Muster gespeichert</string>
   <string name="recommend_subject">%1$s auf Ihrem Smartphone ausprobieren!</string>
   <string name="recommend_text">Ich möchte Sie einladen, %1$s auf Ihrem Smartphone zu verwenden!\nHier herunterladen: %2$s</string>
   <string name="auth_check_server">Server überprüfen</string>
@@ -80,6 +83,7 @@
   <string name="file_list_file">Datei</string>
   <string name="file_list_files">Dateien</string>
   <string name="filedetails_select_file">Klicken Sie auf eine Datei für weitere Informationen.</string>
+  <string name="upload_files_title">Dateien</string>
   <string name="filedetails_size">Größe:</string>
   <string name="filedetails_type">Art:</string>
   <string name="filedetails_created">Erstellt:</string>

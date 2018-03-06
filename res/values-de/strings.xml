@@ -46,6 +46,16 @@
   <string name="prefs_imprint">Impressum</string>
   <string name="prefs_remember_last_share_location">Geteilten Speicherort merken</string>
   <string name="prefs_remember_last_upload_location_summary">Geteilten Upload-Speicherort merken</string>
+  <string name="prefs_pattern">Mustersperre</string>
+  <string name="pattern_enter_pattern">Bitte gib dein Muster ein</string>
+  <string name="pattern_configure_pattern">Gib dein Muster ein</string>
+  <string name="pattern_remove_pattern">Entferne dein Muster
+</string>
+  <string name="pattern_incorrect_pattern">Falsches Muster</string>
+  <string name="pattern_reenter_pattern">Muster bitte erneut eingeben</string>
+  <string name="pattern_not_same_pattern">Die Muster stimmen nicht überein</string>
+  <string name="pattern_stored">Muster gespeichert</string>
+  <string name="pattern_removed">Muster entfernt</string>
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Ich möchte Dich zum Benutzen von %1$s auf Deinem Smartphone einladen!\nLade es hier herunter: %2$s</string>
   <string name="auth_check_server">überprüfe den Server</string>
