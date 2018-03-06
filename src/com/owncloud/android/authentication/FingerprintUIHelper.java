@@ -58,16 +58,7 @@ public class FingerprintUIHelper extends FingerprintManager.AuthenticationCallba
         mCallback = callback;
     }
 
-    public boolean isFingerprintAuthAvailable() {
-        // The line below prevents the false positive inspection from Android Studio
-        // noinspection ResourceType
-        return mFingerprintManager.isHardwareDetected() && mFingerprintManager.hasEnrolledFingerprints();
-    }
-
     public void startListening(FingerprintManager.CryptoObject cryptoObject) {
-        if (!isFingerprintAuthAvailable()) {
-            return;
-        }
         mCancellationSignal = new CancellationSignal();
         mSelfCancelled = false;
         mFingerprintManager.authenticate(cryptoObject, mCancellationSignal, 0 /* flags */, this,
