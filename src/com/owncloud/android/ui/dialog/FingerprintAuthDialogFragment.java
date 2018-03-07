@@ -39,6 +39,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.FingerprintUIHelper;
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FingerprintActivity;
 
 /**
@@ -51,6 +52,8 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
     private FingerprintManager.CryptoObject mCryptoObject;
     private FingerprintUIHelper mFingerprintUiHelper;
     private Button mFingerprintCancelButton;
+
+    private static final String TAG = FingerprintAuthDialogFragment.class.getSimpleName();
 
     /**
      * Public factory method to create new FingerprintAuthDialogFragment instances.
@@ -137,5 +140,10 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
     public void onAuthenticated() {
         dismiss();
         mActivity.finish();
+    }
+
+    @Override
+    public void onError() {
+        Log_OC.d(TAG, "Failed fingerprint authentication");
     }
 }
