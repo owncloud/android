@@ -51,6 +51,10 @@
   <string name="pattern_configure_pattern">Введите графический ключ</string>
   <string name="pattern_remove_pattern">Удалить графический ключ</string>
   <string name="pattern_incorrect_pattern">Неверный графический ключ</string>
+  <string name="pattern_reenter_pattern">Введите графический ключ снова</string>
+  <string name="pattern_not_same_pattern">Ключи не совпадают</string>
+  <string name="pattern_stored">Ключ сохранён</string>
+  <string name="pattern_removed">Ключ удалён</string>
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>

@@ -301,6 +301,8 @@ Automaticky nahrát video snímané kamerou
   <string name="camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
   <string name="camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
   <string name="confirmation_disable_camera_uploads_title">Potvrzení</string>
+  <string name="confirmation_disable_pictures_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízené obrázky nebudou nahrány</string>
+  <string name="confirmation_disable_videos_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízená videa nebudou nahrána</string>
   <string name="conflict_title">Konflikt souboru</string>
   <string name="conflict_message">Které soubory chcete ponechat? Pokud zvolíte obě verze, zkopírovaný soubor bude mít název doplněný o číslo.</string>
   <string name="conflict_keep_both">Ponechat oba</string>
@@ -309,6 +311,7 @@ Automaticky nahrát video snímané kamerou
   <string name="preview_image_description">Náhled obrázku</string>
   <string name="preview_image_error_unknown_format">Obrázek nelze zobrazit</string>
   <string name="error__upload__local_file_not_copied">%1$s nelze zkopírovat do místního adresáře %2$s</string>
+  <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
   <string name="share_link_no_support_share_api">Je nám líto, ale sdílení není na vašem serveru povoleno. Kontaktujte svého
 správce systému.</string>
   <string name="share_link_file_no_exist">Nelze sdílet. Zkontrolujte prosím že soubor existuje</string>
@@ -364,7 +367,9 @@ správce systému.</string>
   <string name="copy_file_invalid_overwrite">Soubor již v cílovém adresáři existuje</string>
   <string name="copy_file_error">Při pokusu o zkopírování tohoto souboru či adresáře došlo k chybě</string>
   <string name="forbidden_permissions_copy">pro zkopírování tohoto souboru</string>
+  <string name="prefs_category_camera_upload">Nahrávání fotoaparátu</string>
   <string name="prefs_category_details">Podrobnosti</string>
+  <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
   <string name="sync_folder_failed_content">Synchronizaci adresáře %1$s nelze dokončit</string>
   <string name="shared_subject_header">sdílené</string>
   <string name="with_you_subject_header">s vámi</string>
@@ -462,8 +467,15 @@ správce systému.</string>
   <string name="share_via_link_expiration_date_explanation_label">Platnost tohoto veřejného odkazu skončí nejpozději %1$d dní po jeho vytvoření</string>
   <string name="share_via_link_default_name_template">%1$s odkaz</string>
   <string name="private_link_info">Toto je soukromý odkaz, pouze osoby s přístupem k souboru/složce jej mohou použít. Použijte jej jako trvalý odkaz pro sebe nebo přejděte k souborům v rámci sdílených souborů</string>
+  <string name="file_private_link_error">Soukromý odkaz není pro tento soubor k dispozici</string>
   <string name="download_notification_channel_name">Stažení</string>
+  <string name="download_notification_channel_description">Ukázat název souboru a průběh stahování</string>
+  <string name="upload_notification_channel_name">Nahrání</string>
+  <string name="upload_notification_channel_description">Ukázat název souboru a průběh nahrávání</string>
   <string name="media_service_notification_channel_name">Hudební přehrávač</string>
+  <string name="media_service_notification_channel_description">Přehrát přehrávač hudby</string>
+  <string name="file_sync_notification_channel_name">Synchronizace souborů</string>
+  <string name="file_sync_notification_channel_description">Zobrazit výsledek synchronizace souborů</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
