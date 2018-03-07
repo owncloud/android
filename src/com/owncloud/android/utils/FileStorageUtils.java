@@ -49,9 +49,9 @@ import third_parties.daveKoeller.AlphanumComparator;
  * Static methods to help in access to local file system.
  */
 public class FileStorageUtils {
-    public static final Integer SORT_NAME = 0;
-    public static final Integer SORT_DATE = 1;
-    public static final Integer SORT_SIZE = 2;
+    public static final int SORT_NAME = 0;
+    public static final int SORT_DATE = 1;
+    public static final int SORT_SIZE = 2;
     public static Integer mSortOrder = SORT_NAME;
     public static Boolean mSortAscending = true;
 
