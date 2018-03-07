@@ -44,6 +44,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -645,7 +647,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             mFile = parentDir;
 
             // TODO Enable when "On Device" is recovered ?
-            listDirectory(mFile /*, MainApp.getOnlyOnDevice()*/);
+            listDirectoryWidthAnimationUp(mFile  /*, MainApp.getOnlyOnDevice()*/);
 
             onRefresh(false);
 
@@ -657,6 +659,62 @@ public class OCFileListFragment extends ExtendedListFragment {
         return moveCount;
     }
 
+    private void listDirectoryWithAnimationDown(final OCFile file) {
+        Animation fadeOutFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_front);
+        fadeOutFront.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                listDirectory(file/*, MainApp.getOnlyOnDevice()*/);
+                Animation fadeInBack =
+                        AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_back);
+                getListView().setAnimation(fadeInBack);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        getListView().startAnimation(fadeOutFront);
+    }
+
+    private void listDirectoryWidthAnimationUp(final OCFile file) {
+        if(getListView().getVisibility() == View.GONE) {
+            listDirectory(file);
+            Animation fadeInFront =
+                    AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
+            getListView().startAnimation(fadeInFront);
+            return;
+        }
+
+        Animation fadeOutBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_back);
+        fadeOutBack.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                listDirectory(file);
+                Animation fadeInFront =
+                        AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
+                getListView().startAnimation(fadeInFront);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        getListView().startAnimation(fadeOutBack);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         OCFile file = (OCFile) mAdapter.getItem(position);
@@ -664,7 +722,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             if (file.isFolder()) {
                 // update state and view of this fragment
                 // TODO Enable when "On Device" is recovered ?
-                listDirectory(file/*, MainApp.getOnlyOnDevice()*/);
+                listDirectoryWithAnimationDown(file  /*, MainApp.getOnlyOnDevice()*/);
                 // then, notify parent activity to let it update its state and view
                 mContainerActivity.onBrowsedDownTo(file);
                 // save index and top position
