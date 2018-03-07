@@ -533,6 +533,10 @@ public class FileDisplayActivity extends HookActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retval = true;
         switch (item.getItemId()) {
+            case R.id.action_select_all: {
+                getListOfFilesFragment().selectAll();
+                break;
+            }
             case R.id.action_sync_account: {
                 startSynchronization();
                 break;

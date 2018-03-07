@@ -21,6 +21,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_select_all"
+        android:orderInCategory="1"
+        app:showAsAction="never"
+        android:title="@string/select_all" />
+    <item
         android:id="@+id/action_create_dir"
         android:icon="@drawable/ic_action_create_dir"
         android:orderInCategory="1"
