@@ -138,9 +138,4 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
         dismiss();
         mActivity.finish();
     }
-
-    @Override
-    public void onError() {
-
-    }
 }
