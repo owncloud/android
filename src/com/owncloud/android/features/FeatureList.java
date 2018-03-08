@@ -25,6 +25,7 @@ package com.owncloud.android.features;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -48,7 +49,7 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_share, R.string.welcome_feature_2_title,
                     R.string.welcome_feature_2_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-                    R.string.welcome_feature_3_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_3_text, "2.7.0", "0" ,SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
                     R.string.welcome_feature_4_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
@@ -63,6 +64,7 @@ public class FeatureList {
                     R.string.welcome_feature_8_text, "2.7.0", "0", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_upload_camera_picture, R.string.welcome_feature_9_title,
                     R.string.welcome_feature_9_text, "2.7.0", "0", SHOW_ON_UPGRADE),
+
     };
 
 
