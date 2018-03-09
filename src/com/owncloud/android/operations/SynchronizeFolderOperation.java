@@ -316,7 +316,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         List<OCFile> localFiles = storageManager.getFolderContent(mLocalFolder);
         Map<String, OCFile> localFilesMap = new HashMap<>(localFiles.size());
         for (OCFile file : localFiles) {
-            localFilesMap.put(file.getRemotePath(), file);
+            localFilesMap.put(file.getRemoteId(), file);
         }
 
         // loop to synchronize every child
@@ -332,12 +332,13 @@ public class SynchronizeFolderOperation extends SyncOperation {
             updatedLocalFile = FileStorageUtils.createOCFileFrom(r);
 
             /// retrieve local data for the read file
-            localFile = localFilesMap.remove(remoteFile.getRemotePath());
+            localFile = localFilesMap.remove(remoteFile.getRemoteId());
 
             /// add to updatedFile data about LOCAL STATE (not existing in server)
             updatedLocalFile.setLastSyncDateForProperties(mCurrentSyncTime);
             if (localFile != null) {
                 updatedLocalFile.copyLocalPropertiesFrom(localFile);
+                updatedLocalFile.setFileName(remoteFile.getFileName());
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag(localFile.getEtag());
                 if (!updatedLocalFile.isFolder() &&
