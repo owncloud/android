@@ -562,4 +562,6 @@
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
     <string name="welcome_feature_6_title">Pattern lock</string>
     <string name="welcome_feature_6_text">Use a pattern to lock your ownCloud app</string>
+    <string name="welcome_feature_7_title">Fingerprint lock</string>
+    <string name="welcome_feature_7_text">Use your fingerprint to lock your ownCloud app</string>
 </resources>
