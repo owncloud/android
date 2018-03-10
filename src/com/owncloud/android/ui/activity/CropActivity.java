@@ -14,6 +14,7 @@ import android.widget.Button;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.owncloud.android.R;
 import com.owncloud.android.callbacks.OpenCVCallback;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -39,8 +40,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import uk.co.senab.photoview.PhotoView;
 
 public class CropActivity extends AppCompatActivity implements View.OnClickListener {
 
