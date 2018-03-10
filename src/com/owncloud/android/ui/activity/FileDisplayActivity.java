@@ -136,6 +136,7 @@ public class FileDisplayActivity extends FileActivity
     public static final int REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 3;
     public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 4;
     public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 5;
+    public static final int REQUEST_CODE__SCAN_DOCUMENT_UPLOAD = REQUEST_CODE__LAST_SHARED + 6;
 
     private static final String TAG = FileDisplayActivity.class.getSimpleName();
 
@@ -690,7 +691,6 @@ public class FileDisplayActivity extends FileActivity
                 mFilesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
                     @Override
                     public void onCheckAvailableSpaceStart() {
-
                     }
 
                     @Override

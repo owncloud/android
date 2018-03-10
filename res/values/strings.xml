@@ -243,6 +243,9 @@
     <string name="media_forward_description">Fast forward button</string>
     <string name="upload_from_camera_title">Picture from camera</string>
 
+    <string name="scanned_document_title">Scanned document</string>
+    <string name="crop_text">Crop</string>
+
     <string name="auth_getting_authorization">Getting authorization &#8230;</string>
     <string name="auth_trying_to_login">Trying to log in &#8230;</string>
     <string name="auth_no_net_conn_title">No network connection</string>

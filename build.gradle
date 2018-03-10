@@ -32,10 +32,6 @@ repositories {
     flatDir {
         dirs 'libs'
     }
-    maven {
-        url 'https://maven.google.com/'
-        name 'Google'
-    }
 }
 
 configurations.all {
@@ -53,6 +49,8 @@ dependencies {
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
     compile 'com.andrognito.patternlockview:patternlockview:1.0.0'
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    compile 'com.afollestad.material-dialogs:core:0.8.5.9'
     compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -61,9 +59,10 @@ dependencies {
 
     /// dependencies for local unit tests
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:1.10.19'
 
     /// dependencies for instrumented tests
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+
     // JUnit4 Rules
     androidTestImplementation 'com.android.support.test:rules:0.5'
 

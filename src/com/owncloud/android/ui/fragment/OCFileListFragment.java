@@ -272,9 +272,10 @@ public class OCFileListFragment extends ExtendedListFragment {
                 final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
                 dialog.setContentView(uploadBottomSheet);
-                final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                LinearLayout uploadFromCameraLinearLayout = uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
-                TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+                LinearLayout uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
+                LinearLayout uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                LinearLayout uploadScannedDocumentLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.scan_document_upload_linear_layout);
+                TextView uploadToTextView = (TextView) uploadBottomSheet.findViewById(R.id.upload_to_text_view);
                 uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -289,6 +290,15 @@ public class OCFileListFragment extends ExtendedListFragment {
                     public boolean onTouch(View v, MotionEvent event) {
 
                         ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                        dialog.hide();
+                        return false;
+                    }
+                });
+                uploadScannedDocumentLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        UploadFilesActivity.startUploadActivityForResult(getActivity(),((FileActivity) getActivity()).getAccount(),
+                                FileDisplayActivity.REQUEST_CODE__SCAN_DOCUMENT_UPLOAD);
                         dialog.hide();
                         return false;
                     }
