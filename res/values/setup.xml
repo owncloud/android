@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- App name  and other strings-->
     <string name="app_name" formatted="false">ownCloud</string>
     <string name="account_type" formatted="false">owncloud</string>	<!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
@@ -61,6 +62,7 @@
     <bool name="feedback_enabled">true</bool>
     <bool name="logger_enabled">false</bool>
     <bool name="privacy_policy_enabled">true</bool>
+    <bool name="wizard_enabled">true</bool>
     <string name="url_privacy_policy" formatted="false">https://owncloud.com/privacy-legal/</string>
     <string name="url_help" formatted="false">http://owncloud.com/mobile/help</string>
     <string name="url_imprint" formatted="false"></string>

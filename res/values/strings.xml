@@ -540,4 +540,19 @@
         <item quantity="other">%d selected</item>
     </plurals>
 
+    <!-- Welcome to oC intro features -->
+    <string name="welcome_feature_1_title">Manage all your synced files</string>
+    <string name="welcome_feature_1_text">You can copy, move, delete</string>
+
+    <string name="welcome_feature_2_title">Share files and folders</string>
+    <string name="welcome_feature_2_text">You can share privately or publicly</string>
+
+    <string name="welcome_feature_3_title">Multi account</string>
+    <string name="welcome_feature_3_text">Connect to all your ownCloud servers</string>
+
+    <string name="welcome_feature_4_title">Camera uploads</string>
+    <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
+
+    <string name="welcome_feature_5_title">Video streaming</string>
+    <string name="welcome_feature_5_text">Play your videos without downloading them</string>
 </resources>

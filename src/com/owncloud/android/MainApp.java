@@ -37,6 +37,7 @@ import com.owncloud.android.lib.common.authentication.oauth.OAuth2ClientConfigur
 import com.owncloud.android.lib.common.authentication.oauth.OAuth2ProvidersRegistry;
 import com.owncloud.android.lib.common.authentication.oauth.OwnCloudOAuth2Provider;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.ui.activity.WhatsNewActivity;
 
 
 /**
@@ -119,6 +120,7 @@ public class MainApp extends Application {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 Log_OC.d(activity.getClass().getSimpleName(),  "onCreate(Bundle) starting" );
+                WhatsNewActivity.runIfNeeded(activity);
                 PassCodeManager.getPassCodeManager().onActivityCreated(activity);
                 PatternManager.getPatternManager().onActivityCreated(activity);
             }
@@ -170,6 +172,15 @@ public class MainApp extends Application {
 
     public static String getAccountType() {
         return getAppContext().getResources().getString(R.string.account_type);
+    }
+    
+    public static int getVersionCode() {
+        try {
+            String thisPackageName = getAppContext().getPackageName();
+            return getAppContext().getPackageManager().getPackageInfo(thisPackageName, 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            return 0;
+        }
     }
 
     public static String getAuthority() {
