@@ -245,6 +245,7 @@
 
     <string name="scanned_document_title">Scanned document</string>
     <string name="crop_text">Crop</string>
+    <string name="no_contour_found">No rectangular contour found</string>
 
     <string name="auth_getting_authorization">Getting authorization &#8230;</string>
     <string name="auth_trying_to_login">Trying to log in &#8230;</string>

@@ -17,10 +17,6 @@ import com.owncloud.android.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by shashvatkedia on 09/03/18.
- */
-
 public class QuadrilateralSelectionImageView extends ImageView {
     private Paint mBackgroundPaint;
     private Paint mBorderPaint;

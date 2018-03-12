@@ -43,7 +43,7 @@ import java.util.List;
 
 public class CropActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final String TAG = CropActivity.class.getName();
+    private static final String TAG = CropActivity.class.getName();
 
     private static final int MAX_HEIGHT = 500;
     private QuadrilateralSelectionImageView mSelectionImageView;
@@ -87,8 +87,12 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         Bitmap scannedDocument = BitmapFactory.decodeByteArray(scannedDocumentInByteArray,0,scannedDocumentInByteArray.length);
         mBitmap = scannedDocument;
         mSelectionImageView.setImageBitmap(getResizedBitmap(scannedDocument,MAX_HEIGHT));
-       // List<PointF> points = findPoints();
-       // mSelectionImageView.setPoints(points);
+        List<PointF> points = findPoints();
+        if(points != null){
+            mSelectionImageView.setPoints(points);
+        } else{
+            Log_OC.d(TAG,getResources().getString(R.string.no_contour_found));
+        }
         mCropButton.setOnClickListener(this);
         mResultDialog = new MaterialDialog.Builder(this)
                 .title("Scan Result")

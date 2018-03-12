@@ -13,7 +13,7 @@ import org.opencv.android.LoaderCallbackInterface;
 
 public abstract class OpenCVCallback implements LoaderCallbackInterface {
 
-    private final String TAG = OpenCVCallback.class.getName();
+    private static final String TAG = OpenCVCallback.class.getName();
 
     private Activity mContext;
 
