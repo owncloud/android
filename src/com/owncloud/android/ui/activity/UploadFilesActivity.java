@@ -251,7 +251,7 @@ public class UploadFilesActivity extends FileActivity implements
         } else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_CANCELED){
             if(image != null){
                 image.delete();
-                Log_OC.d(TAG,getResources().getString(R.string.file_deleted));
+                Log_OC.d(TAG,"File deleted");
             }
             setResult(RESULT_CANCELED);
             finish();
