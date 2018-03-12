@@ -89,6 +89,7 @@ public class UploadFilesActivity extends FileActivity implements
     private Account mAccountOnCreation;
     private DialogFragment mCurrentDialog;
     private String capturedPhotoPath;
+    private File image = null;
 
     private RadioButton mRadioBtnCopyFiles;
     private RadioButton mRadioBtnMoveFiles;
@@ -206,7 +207,6 @@ public class UploadFilesActivity extends FileActivity implements
     }
 
     private File createImageFile(){
-        File image = null;
         try {
             File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             image = File.createTempFile(getCapturedImageName(), ".jpg", storageDir);
@@ -248,8 +248,14 @@ public class UploadFilesActivity extends FileActivity implements
     protected void onActivityResult(int requestCode,int resultCode,Intent capturedData){
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             new CheckAvailableSpaceTask(getCapturedImageFile().getAbsolutePath()).execute();
-        }
-        else if(resultCode == RESULT_CANCELED){
+        } else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_CANCELED){
+            if(image != null){
+                image.delete();
+                Log_OC.d(TAG,getResources().getString(R.string.file_deleted));
+            }
+            setResult(RESULT_CANCELED);
+            finish();
+        } else if(resultCode == RESULT_CANCELED){
             setResult(RESULT_CANCELED);
             finish();
         }
