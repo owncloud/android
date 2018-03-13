@@ -55,6 +55,10 @@
   <string name="pattern_not_same_pattern">התבניות שונות</string>
   <string name="pattern_stored">התבנית נשמרה</string>
   <string name="pattern_removed">התבנית הוסרה</string>
+  <string name="pattern_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את התבנית תחילה</string>
+  <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
+  <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
+  <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
   <string name="auth_check_server">בדיקת שרת</string>
@@ -489,4 +493,6 @@
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">העלאות מהמצלמה</string>
 </resources>

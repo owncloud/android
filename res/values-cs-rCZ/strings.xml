@@ -481,4 +481,6 @@ správce systému.</string>
     <item quantity="few">%d vybrány</item>
     <item quantity="other">%d vybráno</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Nahrávání fotoaparátu</string>
 </resources>

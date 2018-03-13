@@ -472,4 +472,5 @@ Neem contact op met uw beheerder</string>
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

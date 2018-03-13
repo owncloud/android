@@ -496,4 +496,6 @@
     <item quantity="many">Выбрано %d</item>
     <item quantity="other">Выбрано %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Загрузки камеры</string>
 </resources>

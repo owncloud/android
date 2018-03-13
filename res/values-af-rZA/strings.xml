@@ -117,4 +117,5 @@
   <string name="edit_share_unshare">Staak deling</string>
   <string name="failed_upload_quota_exceeded_text">Nie genoeg spasie in die rekening</string>
   <string name="share_warning_about_forwarding_public_links">Enigeen met die skakel het toegang tot die lêer/vouer</string>
+  <!--Welcome to oC intro features-->
 </resources>

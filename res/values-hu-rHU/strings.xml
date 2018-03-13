@@ -476,4 +476,6 @@
   <string name="media_service_notification_channel_description">Lásd a zenelejátszót</string>
   <string name="file_sync_notification_channel_name">Fájlszinkronizálás</string>
   <string name="file_sync_notification_channel_description">Lásd a fájlszinkronizálás eredményét</string>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Kamerafeltöltések</string>
 </resources>

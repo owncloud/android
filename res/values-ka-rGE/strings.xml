@@ -132,4 +132,5 @@
   <string name="share_privilege_can_edit">შეგიძლია შეცვლა</string>
   <string name="share_privilege_can_edit_create">შექმნა</string>
   <string name="share_privilege_can_edit_delete">წაშლა</string>
+  <!--Welcome to oC intro features-->
 </resources>

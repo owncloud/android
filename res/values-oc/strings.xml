@@ -383,4 +383,5 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
     <item quantity="one">%d seleccionat</item>
     <item quantity="other">%d seleccionats</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

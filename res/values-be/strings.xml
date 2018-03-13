@@ -11,4 +11,5 @@
   <string name="common_ok">Добра</string>
   <string name="common_error">Памылка</string>
   <string name="folder_picker_choose_button_text">Выбар</string>
+  <!--Welcome to oC intro features-->
 </resources>

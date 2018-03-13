@@ -493,4 +493,6 @@
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionado</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Subida Camara</string>
 </resources>

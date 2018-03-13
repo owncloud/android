@@ -371,4 +371,5 @@
     <item quantity="few">%d изабрана</item>
     <item quantity="other">%d изабрано</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

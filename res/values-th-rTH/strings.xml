@@ -477,4 +477,6 @@
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">อัพโหลดจากกล้อง</string>
 </resources>

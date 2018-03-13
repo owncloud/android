@@ -494,4 +494,6 @@
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Envios da câmera</string>
 </resources>

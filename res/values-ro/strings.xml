@@ -459,4 +459,5 @@ Te rog ia legătura cu administratorul</string>
   <string name="media_service_notification_channel_description">Vizualizează playerul de muzică</string>
   <string name="file_sync_notification_channel_name">Sincronizare fișiere</string>
   <string name="file_sync_notification_channel_description">Vizualizează rezultatul sincronizării</string>
+  <!--Welcome to oC intro features-->
 </resources>

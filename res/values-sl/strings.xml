@@ -482,4 +482,6 @@
     <item quantity="few">%d izbrane</item>
     <item quantity="other">%d izbranih</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Pošiljanje posnetkov s kamero</string>
 </resources>

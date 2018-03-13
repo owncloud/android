@@ -455,4 +455,6 @@
   <plurals name="items_selected_count">
     <item quantity="other">%d 已選取</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">相機上傳</string>
 </resources>

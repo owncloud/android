@@ -420,4 +420,5 @@
     <item quantity="one">%d избран</item>
     <item quantity="other">%d избран</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

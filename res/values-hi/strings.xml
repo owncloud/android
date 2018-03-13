@@ -44,4 +44,5 @@
   <string name="share_cancel_public_link_button">रद्द करें </string>
   <string name="share_confirm_public_link_button">सहेजें</string>
   <string name="share_via_link_password_label">पासवर्ड</string>
+  <!--Welcome to oC intro features-->
 </resources>

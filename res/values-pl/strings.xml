@@ -479,4 +479,6 @@
     <item quantity="many">wybrano: %d</item>
     <item quantity="other">wybrano: %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Wrzucanie kamery</string>
 </resources>

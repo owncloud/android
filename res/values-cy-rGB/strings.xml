@@ -120,4 +120,5 @@
   <string name="share_privilege_can_edit">yn gallu golygu</string>
   <string name="share_privilege_can_edit_create">creu</string>
   <string name="share_privilege_can_edit_delete">dileu</string>
+  <!--Welcome to oC intro features-->
 </resources>

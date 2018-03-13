@@ -410,4 +410,5 @@
     <item quantity="one">%d selected</item>
     <item quantity="other">%d selected</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

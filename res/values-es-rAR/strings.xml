@@ -355,4 +355,5 @@
   <string name="share_privilege_can_edit">podés editar</string>
   <string name="share_privilege_can_edit_create">crear</string>
   <string name="share_privilege_can_edit_delete">borrar</string>
+  <!--Welcome to oC intro features-->
 </resources>

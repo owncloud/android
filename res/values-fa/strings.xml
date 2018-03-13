@@ -400,4 +400,5 @@
   <plurals name="items_selected_count">
     <item quantity="other">‫%d گزیده</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -479,4 +479,6 @@ Il Download del file inizierà automaticamente</string>
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Caricamenti fotocamera</string>
 </resources>

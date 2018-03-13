@@ -460,4 +460,5 @@
   <string name="media_service_notification_channel_description">Žiūrėti muzikos grotuvą</string>
   <string name="file_sync_notification_channel_name">Bylų sinchronizacija</string>
   <string name="file_sync_notification_channel_description">Žiūrėti bylų sinchronizavimo rezultatus</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -475,4 +475,6 @@
   <plurals name="items_selected_count">
     <item quantity="other">%d개 선택됨</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">카메라 업로드</string>
 </resources>

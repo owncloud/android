@@ -35,4 +35,5 @@
   <string name="share_privilege_can_edit">تبدیل کر سکے ھیں</string>
   <string name="share_privilege_can_edit_create">نیا بنائیں</string>
   <string name="share_privilege_can_edit_delete">ختم کریں</string>
+  <!--Welcome to oC intro features-->
 </resources>

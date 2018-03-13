@@ -134,4 +134,5 @@
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancelar</string>
   <string name="share_via_link_password_label">Clave</string>
+  <!--Welcome to oC intro features-->
 </resources>

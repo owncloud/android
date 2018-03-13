@@ -366,4 +366,5 @@
   <string name="manage_space_clear_data">Donnéeë läschen</string>
   <string name="manage_space_error">Verschidde Fichiere konnten net geläscht ginn.</string>
   <string name="local_file_not_found_toast">De Fichier konnt net am lokale Fichier System fonnt ginn</string>
+  <!--Welcome to oC intro features-->
 </resources>

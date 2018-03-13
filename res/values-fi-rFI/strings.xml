@@ -413,4 +413,5 @@
     <item quantity="one">%d valittu</item>
     <item quantity="other">%d valittu</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -447,4 +447,5 @@
   <plurals name="items_selected_count">
     <item quantity="other">%d terpilih</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

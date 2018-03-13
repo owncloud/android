@@ -464,4 +464,5 @@
     <item quantity="one">%d επιλέχτηκε</item>
     <item quantity="other">%d επιλέχτηκαν</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -255,4 +255,5 @@
   <string name="share_privilege_can_edit">có thể chỉnh sửa</string>
   <string name="share_privilege_can_edit_create">tạo</string>
   <string name="share_privilege_can_edit_delete">xóa</string>
+  <!--Welcome to oC intro features-->
 </resources>

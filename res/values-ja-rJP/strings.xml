@@ -470,4 +470,6 @@
   <plurals name="items_selected_count">
     <item quantity="other">%d個選択中</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">カメラアップロード</string>
 </resources>

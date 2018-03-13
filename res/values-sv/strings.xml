@@ -457,4 +457,5 @@
     <item quantity="one">%d vald</item>
     <item quantity="other">%d valda</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -330,4 +330,5 @@ Descárgueo de aquí: %2$s</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Contrasinal *</string>
   <string name="share_via_link_expiration_date_enforced_label">Caducidade *</string>
+  <!--Welcome to oC intro features-->
 </resources>

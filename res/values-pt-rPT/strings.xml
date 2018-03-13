@@ -465,4 +465,5 @@
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

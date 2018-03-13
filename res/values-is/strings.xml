@@ -474,4 +474,6 @@
     <item quantity="one">%d valið</item>
     <item quantity="other">%d valið</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Innsendingar úr myndavél</string>
 </resources>

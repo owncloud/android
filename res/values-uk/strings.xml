@@ -458,4 +458,5 @@
     <item quantity="few">Вибрано %d</item>
     <item quantity="other">Вибрано %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

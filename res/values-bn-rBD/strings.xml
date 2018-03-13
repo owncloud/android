@@ -221,4 +221,5 @@
   <string name="share_privilege_can_edit">সম্পাদনা করতে পারবেন</string>
   <string name="share_privilege_can_edit_create">তৈরী করুন</string>
   <string name="share_privilege_can_edit_delete">মুছে ফেল</string>
+  <!--Welcome to oC intro features-->
 </resources>

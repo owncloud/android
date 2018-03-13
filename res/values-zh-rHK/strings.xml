@@ -87,4 +87,5 @@
   <string name="share_privilege_can_edit">可編輯</string>
   <string name="share_privilege_can_edit_create">新增</string>
   <string name="share_privilege_can_edit_delete">刪除</string>
+  <!--Welcome to oC intro features-->
 </resources>

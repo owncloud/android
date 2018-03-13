@@ -98,4 +98,5 @@
   <string name="share_privilege_can_edit">អាច​កែប្រែ</string>
   <string name="share_privilege_can_edit_create">បង្កើត</string>
   <string name="share_privilege_can_edit_delete">លុប</string>
+  <!--Welcome to oC intro features-->
 </resources>
