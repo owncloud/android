@@ -126,7 +126,7 @@ public class MainApp extends Application {
                 PassCodeManager.getPassCodeManager().onActivityCreated(activity);
                 PatternManager.getPatternManager().onActivityCreated(activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    FingerprintManager.getFingerprintManager().onActivityCreated(activity);
+                    FingerprintManager.getFingerprintManager(activity).onActivityCreated(activity);
                 }
             }
 
@@ -136,7 +136,7 @@ public class MainApp extends Application {
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity);
                 PatternManager.getPatternManager().onActivityStarted(activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    FingerprintManager.getFingerprintManager().onActivityStarted(activity);
+                    FingerprintManager.getFingerprintManager(activity).onActivityStarted(activity);
                 }
             }
 
@@ -156,7 +156,7 @@ public class MainApp extends Application {
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity);
                 PatternManager.getPatternManager().onActivityStopped(activity);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    FingerprintManager.getFingerprintManager().onActivityStopped(activity);
+                    FingerprintManager.getFingerprintManager(activity).onActivityStopped(activity);
                 }
             }
 

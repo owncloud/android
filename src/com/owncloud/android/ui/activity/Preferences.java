@@ -30,7 +30,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
-import android.hardware.fingerprint.FingerprintManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,6 +57,7 @@ import android.view.ViewGroup;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
@@ -327,9 +327,6 @@ public class Preferences extends PreferenceActivity {
                 return;
             }
 
-            final FingerprintManager fingerprintManager = getSystemService(android.hardware.fingerprint.
-                    FingerprintManager.class);
-
             pFingerprint.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 @Override
                 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -337,8 +334,12 @@ public class Preferences extends PreferenceActivity {
 
                     Boolean incoming = (Boolean) newValue;
 
+                    FingerprintManager fingerPrintManager = FingerprintManager.getFingerprintManager(
+                            getApplicationContext()
+                    );
+
                     // Fingerprint not supported
-                    if (incoming && !fingerprintManager.isHardwareDetected()) {
+                    if (incoming && !fingerPrintManager.isHardwareDetected()) {
 
                         showSnackMessage(R.string.fingerprint_not_hardware_detected);
 
@@ -346,7 +347,7 @@ public class Preferences extends PreferenceActivity {
                     }
 
                     // No fingerprints enrolled yet
-                    if (incoming && !fingerprintManager.hasEnrolledFingerprints()) {
+                    if (incoming && !fingerPrintManager.hasEnrolledFingerprints()) {
 
                         showSnackMessage(R.string.fingerprint_not_enrolled_fingerprints);
 

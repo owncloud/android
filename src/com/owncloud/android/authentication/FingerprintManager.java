@@ -37,9 +37,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
+/**
+ * Handle fingerprint requests. Besides, is a facade to access some
+ * {@link android.hardware.fingerprint.FingerprintManager} methods
+ */
 public class FingerprintManager {
 
     private static final Set<Class> sExemptOfFingerprintActivites;
+
+    private android.hardware.fingerprint.FingerprintManager mHwFingerPrintManager;
 
     static {
         sExemptOfFingerprintActivites = new HashSet<Class>();
@@ -52,9 +58,11 @@ public class FingerprintManager {
 
     public static FingerprintManager mFingerprintManagerInstance = null;
 
-    public static FingerprintManager getFingerprintManager() {
+    public static FingerprintManager getFingerprintManager(Context context) {
         if (mFingerprintManagerInstance == null) {
             mFingerprintManagerInstance = new FingerprintManager();
+            mFingerprintManagerInstance.mHwFingerPrintManager = context.getSystemService(android.hardware.fingerprint.
+                    FingerprintManager.class);
         }
         return mFingerprintManagerInstance;
     }
@@ -76,11 +84,29 @@ public class FingerprintManager {
 
     public void onActivityStarted(Activity activity) {
 
-        if (!sExemptOfFingerprintActivites.contains(activity.getClass()) &&
-                fingerprintShouldBeRequested()){
+        if (!sExemptOfFingerprintActivites.contains(activity.getClass())) {
 
-            Intent i = new Intent(MainApp.getAppContext(), FingerprintActivity.class);
-            activity.startActivity(i);
+            if (fingerprintShouldBeRequested()) {
+
+                // There's no fingerprints registered in the device
+                if (!hasEnrolledFingerprints() && PassCodeManager.getPassCodeManager().isPassCodeEnabled()) {
+
+                    // Cancel fingerprint lock and use passcode unlock method
+                    PassCodeManager.getPassCodeManager().onFingerprintCancelled(activity);
+                    mVisibleActivitiesCounter++;
+                    return;
+
+                } else if (!hasEnrolledFingerprints() && PatternManager.getPatternManager().isPatternEnabled()) {
+
+                    // Cancel fingerprint lock and use pattern unlock method
+                    PatternManager.getPatternManager().onFingerprintCancelled(activity);
+                    mVisibleActivitiesCounter++;
+                    return;
+                }
+
+                Intent i = new Intent(MainApp.getAppContext(), FingerprintActivity.class);
+                activity.startActivity(i);
+            }
         }
 
         mVisibleActivitiesCounter++;    // keep it AFTER fingerprintShouldBeRequested was checked
@@ -102,16 +128,25 @@ public class FingerprintManager {
     }
 
     private boolean fingerprintShouldBeRequested(){
+
         if ((System.currentTimeMillis() - mTimestamp) > FINGERPRINT_TIMEOUT &&
-                mVisibleActivitiesCounter <= 0
-                ){
+                mVisibleActivitiesCounter <= 0){
             return isFingerPrintEnabled();
         }
+
         return false;
     }
 
     public boolean isFingerPrintEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return (appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, false));
+    }
+
+    public boolean isHardwareDetected() {
+        return mHwFingerPrintManager.isHardwareDetected();
+    }
+
+    public boolean hasEnrolledFingerprints() {
+        return mHwFingerPrintManager.hasEnrolledFingerprints();
     }
 }

@@ -77,7 +77,7 @@ public class PassCodeManager {
         if (!sExemptOfPasscodeActivites.contains(activity.getClass()) && passCodeShouldBeRequested()) {
 
             // Do not ask for passcode if fingerprint is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager().
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager(activity).
                     isFingerPrintEnabled()) {
                 return;
             }
@@ -117,8 +117,7 @@ public class PassCodeManager {
 
     private boolean passCodeShouldBeRequested(){
         if ((System.currentTimeMillis() - mTimestamp) > PASS_CODE_TIMEOUT &&
-                mVisibleActivitiesCounter <= 0
-                ){
+                mVisibleActivitiesCounter <= 0){
             return isPassCodeEnabled();
         }
         return false;
