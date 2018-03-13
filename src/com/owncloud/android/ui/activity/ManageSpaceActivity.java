@@ -96,6 +96,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
 
             boolean passCodeEnable = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
             boolean patternEnabled = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+            boolean fingerprintEnabled = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT,false);
 
             String passCodeDigits[] = new String[4];
             if (passCodeEnable) {
@@ -126,9 +127,14 @@ public class ManageSpaceActivity extends AppCompatActivity {
                 appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D3, passCodeDigits[2]);
                 appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE_D4, passCodeDigits[3]);
             }
+
+            // Recover pattern
             if(patternEnabled){
                 appPrefsEditor.putString(PatternLockActivity.KEY_PATTERN,patternValue);
             }
+
+            // Reenable fingerprint
+            appPrefsEditor.putBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT, fingerprintEnabled);
 
             appPrefsEditor.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, passCodeEnable);
             appPrefsEditor.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,patternEnabled);
