@@ -324,14 +324,12 @@ public class Preferences extends PreferenceActivity {
             if (pPasscode != null && pPattern != null && !pPasscode.isChecked() && !pPattern.isChecked()) {
                 pFingerprint.setEnabled(false);
                 pFingerprint.setSummary(R.string.prefs_fingerprint_summary);
-                return;
             }
 
             pFingerprint.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 @Override
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-
                     Boolean incoming = (Boolean) newValue;
 
                     FingerprintManager fingerPrintManager = FingerprintManager.getFingerprintManager(
