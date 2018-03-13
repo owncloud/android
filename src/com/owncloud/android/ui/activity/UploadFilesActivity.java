@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Shashvat Kedia
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -22,11 +23,8 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +32,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,8 +52,8 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
 import com.owncloud.android.utils.FileStorageUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 
@@ -89,6 +88,8 @@ public class UploadFilesActivity extends FileActivity implements
     private Button mUploadBtn;
     private Account mAccountOnCreation;
     private DialogFragment mCurrentDialog;
+    private String capturedPhotoPath;
+    private File image = null;
 
     private RadioButton mRadioBtnCopyFiles;
     private RadioButton mRadioBtnMoveFiles;
@@ -194,9 +195,36 @@ public class UploadFilesActivity extends FileActivity implements
      * */
     private void uploadFromCamera(){
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photoFile = createImageFile();
+        if(photoFile != null){
+            Uri photoUri = FileProvider.getUriForFile(getApplicationContext(),
+                    getResources().getString(R.string.file_provider_authority),photoFile);
+            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
+        }
         if (pictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    private File createImageFile(){
+        try {
+            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            image = File.createTempFile(getCapturedImageName(), ".jpg", storageDir);
+            capturedPhotoPath = image.getAbsolutePath();
+        } catch(IOException exception){
+            Log_OC.d(TAG,exception.toString());
+        }
+        return image;
+    }
+
+    private File getCapturedImageFile(){
+        File capturedImage = new File(capturedPhotoPath);
+        File parent = capturedImage.getParentFile();
+        File newImage = new File(parent,getCapturedImageName() + ".jpg");
+        capturedImage.renameTo(newImage);
+        capturedImage.delete();
+        capturedPhotoPath = newImage.getAbsolutePath();
+        return newImage;
     }
 
     private String getCapturedImageName(){
@@ -212,53 +240,25 @@ public class UploadFilesActivity extends FileActivity implements
         hour = hour.length() == 3 ? hour.substring(1,hour.length()) : hour;
         minute = minute.length() == 3 ? minute.substring(1,minute.length()) : minute;
         second = second.length() == 3 ? second.substring(1,second.length()) : second;
-        String newImageName = "IMG_" + year + month + day + "_" + hour + minute + second + ".jpg";
+        String newImageName = "IMG_" + year + month + day + "_" + hour + minute + second;
         return newImageName;
     }
 
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent capturedData){
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            Bundle capturedImageData = capturedData.getExtras();
-            Bitmap capturedImage = (Bitmap) capturedImageData.get("data");
-            Uri capturedImageUri = getImageUri(getApplicationContext(),capturedImage);
-            String capturedImagePath = getRealPathFromUri(capturedImageUri);
-            File capturedImageFile = new File(capturedImagePath);
-            File parent = capturedImageFile.getParentFile();
-            File newImage = new File(parent,getCapturedImageName());
-            capturedImageFile.renameTo(newImage);
-            capturedImageFile.delete();
-            new CheckAvailableSpaceTask(newImage.getAbsolutePath()).execute();
-        }
-        else if(resultCode == RESULT_CANCELED){
+            new CheckAvailableSpaceTask(getCapturedImageFile().getAbsolutePath()).execute();
+        } else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_CANCELED){
+            if(image != null){
+                image.delete();
+                Log_OC.d(TAG,"File deleted");
+            }
+            setResult(RESULT_CANCELED);
+            finish();
+        } else if(resultCode == RESULT_CANCELED){
             setResult(RESULT_CANCELED);
             finish();
         }
-    }
-
-    /**
-     *Compressing the image to JPEG format and using the MediaStore to Uri of the Image
-     * @param context Context of current state of the application
-     * @param capturedImage Bitmap of the Image captured
-     * @return Uri of the image that has been captured using the device's camera
-     */
-    private Uri getImageUri(Context context, Bitmap capturedImage){
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        capturedImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(),capturedImage,"Captured Image",null);
-        return Uri.parse(path);
-    }
-
-    /**
-     *Using the content provider to obtain the path of the image
-     * @param capturedPictureUri The Uri of the captured Image obtained from calling getImageUri() function.
-     * @return Actual Uri of the captured Image
-     */
-    private String getRealPathFromUri(Uri capturedPictureUri){
-        Cursor cursor = getContentResolver().query(capturedPictureUri,null,null,null,null);
-        cursor.moveToFirst();
-        int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(index);
     }
 
     @Override
