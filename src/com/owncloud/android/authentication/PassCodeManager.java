@@ -79,6 +79,7 @@ public class PassCodeManager {
             // Do not ask for passcode if fingerprint is enabled
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager(activity).
                     isFingerPrintEnabled()) {
+                mVisibleActivitiesCounter++;
                 return;
             }
 

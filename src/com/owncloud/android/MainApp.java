@@ -116,7 +116,7 @@ public class MainApp extends Application {
             Log_OC.d("Debug", "start logging");
         }
 
-        // register global protection with pass code
+        // register global protection with pass code, pattern lock and fingerprint lock
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
             @Override
