@@ -40,6 +40,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.owncloud.android.R;
@@ -97,11 +99,6 @@ public class PublicShareDialogFragment extends DialogFragment {
     private OCCapability mCapabilities;
 
     /**
-     * Listener for changes in allow editing switch
-     */
-    private OnAllowEditingInteractionListener mOnAllowEditingInteractionListener;
-
-    /**
      * Listener for changes in password switch
      */
     private OnPasswordInteractionListener mOnPasswordInteractionListener;
@@ -117,10 +114,6 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     private LinearLayout mNameSelectionLayout;
     private EditText mNameValueEdit;
-    private View mEditPermissionSelectionView;
-    private View mShowFileListingSelectionView;
-    private SwitchCompat mEditPermissionSwitch;
-    private SwitchCompat mShowFileListingSwitch;
     private TextView mPasswordLabel;
     private SwitchCompat mPasswordSwitch;
     private EditText mPasswordValueEdit;
@@ -129,6 +122,10 @@ public class PublicShareDialogFragment extends DialogFragment {
     private TextView mExpirationDateExplanationLabel;
     private TextView mExpirationDateValueLabel;
     private TextView mErrorMessageLabel;
+    private RadioGroup mPermissionRadioGroup;
+    private RadioButton mReadOnlyButton;
+    private RadioButton mReadWriteButton;
+    private RadioButton mUploadOnlyButton;
 
 
     /**
@@ -216,10 +213,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         final TextView dialogTitleLabel = view.findViewById(R.id.publicShareDialogTitle);
         mNameSelectionLayout = view.findViewById(R.id.shareViaLinkNameSection);
         mNameValueEdit = view.findViewById(R.id.shareViaLinkNameValue);
-        mEditPermissionSelectionView = view.findViewById(R.id.shareViaLinkEditPermissionSection);
-        mShowFileListingSelectionView = view.findViewById(R.id.shareViaShowFileListingSection);
-        mEditPermissionSwitch = view.findViewById(R.id.shareViaLinkEditPermissionSwitch);
-        mShowFileListingSwitch = view.findViewById(R.id.shareViaShowFileListingSwitch);
         mPasswordLabel = view.findViewById(R.id.shareViaLinkPasswordLabel);
         mPasswordSwitch = view.findViewById(R.id.shareViaLinkPasswordSwitch);
         mPasswordValueEdit = view.findViewById(R.id.shareViaLinkPasswordValue);
@@ -228,6 +221,10 @@ public class PublicShareDialogFragment extends DialogFragment {
         mExpirationDateExplanationLabel = view.findViewById(R.id.shareViaLinkExpirationExplanationLabel);
         mErrorMessageLabel = view.findViewById(R.id.public_link_error_message);
         mExpirationDateValueLabel = view.findViewById(R.id.shareViaLinkExpirationValue);
+        mPermissionRadioGroup = view.findViewById(R.id.shareViaLinkEditPermissionGroup);
+        mReadOnlyButton = view.findViewById(R.id.shareViaLinkEditPermissionReadOnly);
+        mReadWriteButton = view.findViewById(R.id.shareViaLinkEditPermissionReadAndWrite);
+        mUploadOnlyButton = view.findViewById(R.id.shareViaLinkEditPermissionUploadFiles);
 
         // Get and set the values saved previous to the screen rotation, if any
         if (savedInstanceState != null) {
@@ -238,20 +235,19 @@ public class PublicShareDialogFragment extends DialogFragment {
             }
         }
 
-        mShowFileListingSwitch.setChecked(true);
-        mShowFileListingSwitch.setEnabled(false);
-
         if (updating()) {
             dialogTitleLabel.setText(R.string.share_via_link_edit_title);
             mNameValueEdit.setText(mPublicShare.getName());
 
-            if ((mPublicShare.getPermissions() & (UPDATE_PERMISSION | CREATE_PERMISSION)) > 0) {
-                mEditPermissionSwitch.setChecked(true);
-                mShowFileListingSwitch.setEnabled(true);
-            }
-
-            if (mPublicShare.getPermissions() == CREATE_PERMISSION) {
-                mShowFileListingSwitch.setChecked(false);
+            switch (mPublicShare.getPermissions()) {
+                case (UPDATE_PERMISSION | CREATE_PERMISSION):
+                    mReadWriteButton.setChecked(true);
+                    break;
+                case CREATE_PERMISSION:
+                    mUploadOnlyButton.setChecked(true);
+                    break;
+                default:
+                    mReadWriteButton.setChecked(true);
             }
 
             if (mPublicShare.isPasswordProtected()) {
@@ -279,73 +275,55 @@ public class PublicShareDialogFragment extends DialogFragment {
         initExpirationListener();
         initPasswordFocusChangeListener();
         initPasswordToggleListener();
-        Button confirmAddPublicLinkButton = view.findViewById(R.id.confirmAddPublicLinkButton);
 
+        view.findViewById(R.id.saveButton)
+                .setOnClickListener(v -> dismiss());
 
-        confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                // Get data filled by user
-                final String publicLinkName = mNameValueEdit.getText().toString();
-                String publicLinkPassword = mPasswordValueEdit.getText().toString();
-                final long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
-                boolean publicLinkEditPermissions = mEditPermissionSwitch.isChecked();
-                final boolean publicLinkSupportOnlyUpload = !mShowFileListingSwitch.isChecked();
-
-                int publicLinkPermissions = OCShare.DEFAULT_PERMISSION;
-
-                if (publicLinkEditPermissions && publicLinkSupportOnlyUpload) {
-
-                    // If edit permissions are checked, the server will set the read permission
-                    // but we need create permissions at this point
-                    publicLinkEditPermissions = false;
-
-                    publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
-                }
-
-                if (!updating()) { // Creating a new public share
-
-                    ((FileActivity) getActivity()).getFileOperationsHelper().
-                            shareFileViaLink(
-                                    mFile,
-                                    publicLinkName,
-                                    publicLinkPassword,
-                                    publicLinkExpirationDateInMillis,
-                                    publicLinkEditPermissions,
-                                    publicLinkPermissions
-                            );
-
-                } else { // Updating an existing public share
-                    if (!mPasswordSwitch.isChecked()) {
-                        publicLinkPassword = "";
-                    } else if (mPasswordValueEdit.length() == 0) {
-
-                        // User has not added a new password, so do not update it
-                        publicLinkPassword = null;
-                    }
-
-                    ((FileActivity) getActivity()).getFileOperationsHelper().
-                            updateShareViaLink(
-                                    mPublicShare,
-                                    publicLinkName,
-                                    publicLinkPassword,
-                                    publicLinkExpirationDateInMillis,
-                                    publicLinkEditPermissions,
-                                    publicLinkPermissions
-                            );
-                }
-            }
-        });
-
-        // Cancel add public link
-        Button cancelAddPublicLinkButton = view.findViewById(R.id.cancelAddPublicLinkButton);
-        cancelAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        view.findViewById(R.id.cancelButton)
+                .setOnClickListener(v -> onSaveShareSetting());
 
         return view;
+    }
+
+    private void onSaveShareSetting() {
+
+        // Get data filled by user
+        final String publicLinkName = mNameValueEdit.getText().toString();
+        String publicLinkPassword = mPasswordValueEdit.getText().toString();
+        final long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
+
+        int publicLinkPermissions = OCShare.DEFAULT_PERMISSION;
+
+        if(publicLinkUploadFilePermissionGranded()) {
+            publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
+        }
+
+        if (!updating()) { // Creating a new public share
+
+            ((FileActivity) getActivity()).getFileOperationsHelper().
+                    shareFileViaLink(mFile,
+                            publicLinkName,
+                            publicLinkPassword,
+                            publicLinkExpirationDateInMillis,
+                            publicLinkEditPermissionGranded(),
+                            publicLinkPermissions);
+
+        } else { // Updating an existing public share
+            if (!mPasswordSwitch.isChecked()) {
+                publicLinkPassword = "";
+            } else if (mPasswordValueEdit.length() == 0) {
+                // User has not added a new password, so do not update it
+                publicLinkPassword = null;
+            }
+
+            ((FileActivity) getActivity()).getFileOperationsHelper().
+                    updateShareViaLink(mPublicShare,
+                            publicLinkName,
+                            publicLinkPassword,
+                            publicLinkExpirationDateInMillis,
+                            publicLinkEditPermissionGranded(),
+                            publicLinkPermissions);
+        }
     }
 
     private void initPasswordFocusChangeListener() {
@@ -529,11 +507,12 @@ public class PublicShareDialogFragment extends DialogFragment {
     }
 
     /**
+<<<<<<< HEAD
      * Binds listener for user actions related to allow editing.
      *
      */
     private void initAllowEditingListener() {
-        mEditPermissionSwitch.setOnCheckedChangeListener(new OnAllowEditingInteractionListener());
+        //mEditPermissionSwitch.setOnCheckedChangeListener(new OnAllowEditingInteractionListener());
     }
 
     /**
@@ -553,6 +532,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
 
             // If allow editing is checked, enable show file listing switch
+            /*
             if (isChecked) {
                 mShowFileListingSwitch.setEnabled(true);
             } else {
@@ -561,10 +541,13 @@ public class PublicShareDialogFragment extends DialogFragment {
                     mShowFileListingSwitch.setChecked(true);
                 }
             }
+            */
         }
     }
 
     /**
+=======
+>>>>>>> make permission selection for link sharing a radio group
      * Binds listener for user actions that start any update on a password for the public link
      * to the views receiving the user events.
      *
@@ -740,7 +723,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
 
         if (mCapabilities.getFilesSharingPublicUpload().isTrue() && isSharedFolder()) {
-            mEditPermissionSelectionView.setVisibility(View.VISIBLE);
+            mPermissionRadioGroup.setVisibility(View.VISIBLE);
         }
 
         // Show file listing option if all the following is true:
@@ -748,12 +731,11 @@ public class PublicShareDialogFragment extends DialogFragment {
         //  - Upload only is supported by the server version
         //  - Upload only capability is set
         //  - Allow editing capability is set
-        if (isSharedFolder() &&
+        if (!(isSharedFolder() &&
                 serverVersion.isPublicSharingWriteOnlySupported() &&
                 mCapabilities.getFilesSharingPublicSupportsUploadOnly().isTrue() &&
-                mCapabilities.getFilesSharingPublicUpload().isTrue()) {
-
-            mShowFileListingSelectionView.setVisibility(View.VISIBLE);
+                mCapabilities.getFilesSharingPublicUpload().isTrue())) {
+            mPermissionRadioGroup.setVisibility(View.GONE);
         }
 
         // Show default date enforced by the server, if any
@@ -813,7 +795,6 @@ public class PublicShareDialogFragment extends DialogFragment {
      * @param errorMessage
      */
     public void showError(String errorMessage) {
-
         mErrorMessageLabel.setVisibility(View.VISIBLE);
         mErrorMessageLabel.setText(errorMessage);
     }
@@ -828,5 +809,15 @@ public class PublicShareDialogFragment extends DialogFragment {
         mExpirationDateSwitch.setOnCheckedChangeListener(null);
         mExpirationDateSwitch.setChecked(checked);
         mExpirationDateSwitch.setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
+    }
+
+    private boolean publicLinkEditPermissionGranded() {
+        return mPermissionRadioGroup.getCheckedRadioButtonId()
+                == R.id.shareViaLinkEditPermissionReadAndWrite;
+    }
+
+    public boolean publicLinkUploadFilePermissionGranded() {
+        return mPermissionRadioGroup.getCheckedRadioButtonId()
+                == R.id.shareViaLinkEditPermissionUploadFiles;
     }
 }

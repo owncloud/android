@@ -48,67 +48,31 @@
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/shareViaLinkEditPermissionSection"
+            <RadioGroup
+                android:id="@+id/shareViaLinkEditPermissionGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_margin"
-                android:visibility="gone">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/shareViaLinkEditPermissionSwitch"
-                    android:layout_width="wrap_content"
+                android:orientation="vertical">
+                <RadioButton
+                    android:id="@+id/shareViaLinkEditPermissionReadOnly"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:padding="@dimen/standard_half_padding" />
+                    android:checked="true"
+                    android:text="@string/share_via_link_edit_permission_read_only_label"/>
 
-                <TextView
-                    android:id="@+id/shareViaLinkEditPermissionLabel"
-                    android:layout_width="wrap_content"
+                <RadioButton
+                    android:id="@+id/shareViaLinkEditPermissionReadAndWrite"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toLeftOf="@id/shareViaLinkEditPermissionSwitch"
-                    android:layout_toStartOf="@id/shareViaLinkEditPermissionSwitch"
-                    android:padding="@dimen/standard_half_padding"
-                    android:text="@string/share_via_link_edit_permission_label"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:text="@string/share_via_link_edit_permission_read_and_write_label"/>
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/shareViaShowFileListingSection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_margin"
-                android:visibility="gone">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/shareViaShowFileListingSwitch"
-                    android:layout_width="wrap_content"
+                <RadioButton
+                    android:id="@+id/shareViaLinkEditPermissionUploadFiles"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:padding="@dimen/standard_half_padding" />
+                    android:text="@string/share_via_link_edit_permission_upload_only_label"/>
 
-                <TextView
-                    android:id="@+id/shareViaShowFileListingLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toLeftOf="@id/shareViaShowFileListingSwitch"
-                    android:layout_toStartOf="@id/shareViaShowFileListingSwitch"
-                    android:padding="@dimen/standard_half_padding"
-                    android:text="@string/share_via_link_show_file_listing_label"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
+            </RadioGroup>
 
             <RelativeLayout
                 android:id="@+id/shareViaLinkPasswordSection"
@@ -241,7 +205,7 @@
                     android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/cancelAddPublicLinkButton"
+                        android:id="@+id/saveButton"
                         style="@style/Button.Primary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -251,7 +215,7 @@
                         android:theme="@style/Button.Primary" />
 
                     <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/confirmAddPublicLinkButton"
+                        android:id="@+id/cancelButton"
                         style="@style/Button.Primary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
