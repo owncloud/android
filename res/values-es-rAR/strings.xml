@@ -343,7 +343,6 @@
   <string name="move_file_error">Un error ocurrió intentando mover el archivo o carpeta</string>
   <string name="forbidden_permissions_move">para mover este archivo</string>
   <string name="copy_file_invalid_overwrite">El archivo ya existe en la carpeta destino</string>
-  <string name="prefs_category_details">Detalles</string>
   <string name="auth_host_address">Dirección del servidor</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancelar</string>

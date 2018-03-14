@@ -25,9 +25,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 
+import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.authentication.PassCodeManager;
 import com.owncloud.android.authentication.PatternManager;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
@@ -114,8 +116,8 @@ public class MainApp extends Application {
             Log_OC.d("Debug", "start logging");
         }
 
-        // register global protection with pass code
-        registerActivityLifecycleCallbacks( new ActivityLifecycleCallbacks() {
+        // register global protection with pass code, pattern lock and fingerprint lock
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -123,6 +125,9 @@ public class MainApp extends Application {
                 WhatsNewActivity.runIfNeeded(activity);
                 PassCodeManager.getPassCodeManager().onActivityCreated(activity);
                 PatternManager.getPatternManager().onActivityCreated(activity);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    FingerprintManager.getFingerprintManager(activity).onActivityCreated(activity);
+                }
             }
 
             @Override
@@ -130,6 +135,9 @@ public class MainApp extends Application {
                 Log_OC.d(activity.getClass().getSimpleName(),  "onStart() starting" );
                 PassCodeManager.getPassCodeManager().onActivityStarted(activity);
                 PatternManager.getPatternManager().onActivityStarted(activity);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    FingerprintManager.getFingerprintManager(activity).onActivityStarted(activity);
+                }
             }
 
             @Override
@@ -147,6 +155,9 @@ public class MainApp extends Application {
                 Log_OC.d(activity.getClass().getSimpleName(), "onStop() ending" );
                 PassCodeManager.getPassCodeManager().onActivityStopped(activity);
                 PatternManager.getPatternManager().onActivityStopped(activity);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    FingerprintManager.getFingerprintManager(activity).onActivityStopped(activity);
+                }
             }
 
             @Override

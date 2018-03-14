@@ -366,7 +366,6 @@
   <string name="copy_file_error">เกิดข้อผิดพลาดขณะพยายามคัดลอกไฟล์หรือโฟลเดอร์นี้</string>
   <string name="forbidden_permissions_copy">เพื่อคัดลอกไฟล์นี้</string>
   <string name="prefs_category_camera_upload">อัพโหลดจากกล้อง</string>
-  <string name="prefs_category_details">รายละเอียด</string>
   <string name="prefs_camera_video_upload_path_title">เส้นทางการอัพโหลดวิดีโอ</string>
   <string name="sync_folder_failed_content">ประสานข้อมูลโฟลเดอร์ %1$s ไม่สำเร็จ</string>
   <string name="shared_subject_header">ถูกแชร์</string>

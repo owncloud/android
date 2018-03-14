@@ -169,7 +169,6 @@
   <string name="folder_picker_choose_button_text">Ընտրել</string>
   <string name="forbidden_permissions_move">այս ֆայլը տեղափոխելու համար</string>
   <string name="forbidden_permissions_copy">այս ֆայլը պատճենելու համար</string>
-  <string name="prefs_category_details">Մանրամասներ</string>
   <string name="shared_subject_header">կիսված</string>
   <string name="with_you_subject_header">քո հետ</string>
   <string name="subject_user_shared_with_you">%1$s կիսվեց \"%2$s\"ով քո հետ</string>

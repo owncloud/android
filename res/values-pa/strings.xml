@@ -162,7 +162,7 @@
   <string name="prefs_category_accounts">ਅਕਾਊਂਟ</string>
   <string name="drawer_manage_accounts">ਅਕਾਊਂਟ ਪ੍ਰਬੰਧਨ</string>
   <string name="folder_picker_choose_button_text">ਚੁਣੋ</string>
-  <string name="prefs_category_details">ਵੇਰਵ</string>
+  <string name="prefs_category_security">ਵੇਰਵ</string>
   <string name="auth_host_address">ਸਰਵਰ ਐਡਰੈਸ</string>
   <string name="username">ਯੂਜ਼ਰ-ਨਾਂ</string>
   <string name="file_list__footer__folder">1 ਫੋਲਡਰ</string>

@@ -75,7 +75,6 @@
   <string name="prefs_category_accounts">帳號</string>
   <string name="saml_authentication_wrong_pass">密碼錯誤</string>
   <string name="folder_picker_choose_button_text">選擇</string>
-  <string name="prefs_category_details">詳述</string>
   <string name="auth_host_address">伺服器地址</string>
   <string name="share_dialog_title">分享</string>
   <string name="share_cancel_public_link_button">取消</string>

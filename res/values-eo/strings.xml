@@ -230,7 +230,6 @@
   <string name="copy_file_invalid_overwrite">La dosiero jam ekzistas en la cela dosierujo</string>
   <string name="copy_file_error">Eraro okazis, dum provo kopii ĉi tiun dosieron aŭ dosierujon</string>
   <string name="forbidden_permissions_copy">por kopii ĉi tiun dosieron</string>
-  <string name="prefs_category_details">Detaloj</string>
   <string name="sync_folder_failed_content">Sinkronigo de dosierujo %1$s ne povis plenumiĝi</string>
   <string name="shared_subject_header">kunhavata</string>
   <string name="with_you_subject_header">kun vi</string>

@@ -382,7 +382,6 @@
   <string name="copy_file_error">Ocorreu um erro ao tentar copiar este arquivo ou pasta</string>
   <string name="forbidden_permissions_copy">para copiar este arquivo</string>
   <string name="prefs_category_camera_upload">Envios da câmera</string>
-  <string name="prefs_category_details">Detalhes</string>
   <string name="prefs_camera_video_upload_path_title">Caminho para vídeos enviados</string>
   <string name="sync_folder_failed_content">A sincronização da pasta %1$s não pode ser finalizada</string>
   <string name="shared_subject_header">compartilhado</string>

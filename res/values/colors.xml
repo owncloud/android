@@ -62,4 +62,7 @@
     <!-- Warning message background -->
     <color name="warning_background_color">#E0E0E0</color>
 
+    <color name="warning">#f4511e</color>
+    <color name="success">#009688</color>
+
 </resources>

@@ -365,7 +365,6 @@
   <string name="copy_file_error">Villa kom upp við að reyna að afrita þessa skrá eða möppu</string>
   <string name="forbidden_permissions_copy">til að afrita þessa skrá</string>
   <string name="prefs_category_camera_upload">Innsendingar úr myndavél</string>
-  <string name="prefs_category_details">Nánar</string>
   <string name="prefs_camera_video_upload_path_title">Innsendingarslóð fyrir myndskeið</string>
   <string name="sync_folder_failed_content">Ekki var hægt að ljúka samstillingu á %1$s möppunni</string>
   <string name="shared_subject_header">deildi</string>

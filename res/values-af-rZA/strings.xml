@@ -94,7 +94,6 @@
   <string name="folder_picker_choose_button_text">Kies</string>
   <string name="move_file_invalid_overwrite">Die lêer bestaan reeds in die bestemmingsvouer</string>
   <string name="copy_file_invalid_overwrite">Die lêer bestaan reeds in die bestemmingsvouer</string>
-  <string name="prefs_category_details">Details</string>
   <string name="shared_subject_header">gedeel</string>
   <string name="auth_host_address">Bedieneradres</string>
   <string name="share_dialog_title">Deel</string>

@@ -61,6 +61,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
         android:name=".MainApp"
@@ -263,6 +264,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
+        <activity android:name=".ui.activity.FingerprintActivity"/>
     </application>
-
 </manifest>
