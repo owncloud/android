@@ -21,13 +21,11 @@
  */
 package com.owncloud.android.ui.activity;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -44,7 +42,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
@@ -111,6 +108,8 @@ public class Preferences extends PreferenceActivity {
 
     private CameraUploadsHandler mCameraUploadsHandler;
 
+    private FingerprintManager mFingerprintManager;
+
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,6 +143,10 @@ public class Preferences extends PreferenceActivity {
 
         // Register context menu for list of preferences.
         registerForContextMenu(getListView());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mFingerprintManager = FingerprintManager.getFingerprintManager(this);
+        }
 
         /**
          * Camera uploads
@@ -327,17 +330,13 @@ public class Preferences extends PreferenceActivity {
             }
 
             pFingerprint.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                @Override
                 @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     Boolean incoming = (Boolean) newValue;
 
-                    FingerprintManager fingerPrintManager = FingerprintManager.getFingerprintManager(
-                            getApplicationContext()
-                    );
-
                     // Fingerprint not supported
-                    if (incoming && !fingerPrintManager.isHardwareDetected()) {
+                    if (incoming && mFingerprintManager != null && !mFingerprintManager.isHardwareDetected()) {
 
                         showSnackMessage(R.string.fingerprint_not_hardware_detected);
 
@@ -345,18 +344,9 @@ public class Preferences extends PreferenceActivity {
                     }
 
                     // No fingerprints enrolled yet
-                    if (incoming && !fingerPrintManager.hasEnrolledFingerprints()) {
+                    if (incoming && mFingerprintManager != null && !mFingerprintManager.hasEnrolledFingerprints()) {
 
                         showSnackMessage(R.string.fingerprint_not_enrolled_fingerprints);
-
-                        return false;
-                    }
-
-                    // Permissions not granted
-                    if (incoming && ActivityCompat.checkSelfPermission(getApplicationContext(),
-                            Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-
-                        showSnackMessage(R.string.fingerprint_not_granted_permissions);
 
                         return false;
                     }
@@ -627,6 +617,14 @@ public class Preferences extends PreferenceActivity {
         pPasscode.setChecked(passCodeState);
         boolean patternState = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
         pPattern.setChecked(patternState);
+        boolean fingerprintState = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT,false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mFingerprintManager!= null &&
+                !mFingerprintManager.hasEnrolledFingerprints()) {
+            fingerprintState = false;
+        }
+
+        pFingerprint.setChecked(fingerprintState);
     }
 
     @Override
@@ -726,7 +724,7 @@ public class Preferences extends PreferenceActivity {
                 showSnackMessage(R.string.pass_code_removed);
 
                 // Do not allow to use Fingerprint lock since Passcode lock has been disabled
-                disableFingerprint();
+                disableFingerprint(getString(R.string.prefs_fingerprint_summary));
             }
         }
         else if(requestCode == ACTION_REQUEST_PATTERN && resultCode == RESULT_OK){ // Enable pattern
@@ -752,7 +750,7 @@ public class Preferences extends PreferenceActivity {
                 showSnackMessage(R.string.pattern_removed);
 
                 // Do not allow to use Fingerprint lock since Pattern lock has been disabled
-                disableFingerprint();
+                disableFingerprint(getString(R.string.prefs_fingerprint_summary));
             }
         }
     }
@@ -936,12 +934,12 @@ public class Preferences extends PreferenceActivity {
         pFingerprint.setSummary(null);
     }
 
-    private void disableFingerprint() {
+    private void disableFingerprint(String summary) {
         if (pFingerprint.isChecked()) {
             pFingerprint.setChecked(false);
         }
         pFingerprint.setEnabled(false);
-        pFingerprint.setSummary(R.string.prefs_fingerprint_summary);
+        pFingerprint.setSummary(summary);
     }
 
     /**
