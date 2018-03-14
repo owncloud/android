@@ -493,5 +493,14 @@
     <item quantity="other">%d të përzgjedhur</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Administroni krejt kartelat tuaja të njëkohësuara</string>
+  <string name="welcome_feature_1_text">Mund të kopjoni, lëvizni, fshini</string>
+  <string name="welcome_feature_2_title">Ndani me të tjerët kartela dhe dosje</string>
+  <string name="welcome_feature_2_text">Mund t’i ndani privatisht ose publikisht</string>
+  <string name="welcome_feature_3_title">Llogari multi</string>
+  <string name="welcome_feature_3_text">Lidhuni te krejt shërbyesit tuaj ownCloud</string>
   <string name="welcome_feature_4_title">Ngarkime nga kamera</string>
+  <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
+  <string name="welcome_feature_5_title">Transmetim videosh</string>
+  <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
 </resources>

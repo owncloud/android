@@ -90,6 +90,7 @@
   <string name="uploader_upload_succeeded_ticker">Прикачувањето беше успешно</string>
   <string name="uploader_upload_failed_ticker">Прикачувањето не успеа</string>
   <string name="uploader_upload_failed_content_single">Прикачувањето на %1$s не може да се заврши</string>
+  <string name="uploader_upload_text_filename_hint">Име на датотека</string>
   <string name="uploads_view_title">Прикачувања</string>
   <string name="uploads_view_upload_status_succeeded">Завршено</string>
   <string name="uploads_view_upload_status_cancelled">Откажано</string>

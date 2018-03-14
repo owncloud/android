@@ -495,5 +495,14 @@
     <item quantity="other">%d selecionados</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Gerencie todos os seus arquivos sincronizados</string>
+  <string name="welcome_feature_1_text">Você pode copiar, mover, excluir</string>
+  <string name="welcome_feature_2_title">Compartilhe arquivos e pastas</string>
+  <string name="welcome_feature_2_text">Você pode compartilhar de forma privada ou pública</string>
+  <string name="welcome_feature_3_title">Multi conta</string>
+  <string name="welcome_feature_3_text">Conecte-se a todos os seus próprios servidores ownCloud</string>
   <string name="welcome_feature_4_title">Envios da câmera</string>
+  <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
+  <string name="welcome_feature_5_title">Transmissão de vídeo</string>
+  <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
 </resources>
