@@ -25,7 +25,6 @@ package com.owncloud.android.features;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -55,16 +54,15 @@ public class FeatureList {
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
                     R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
 
-            // Features introduced in certain point in 2.7.0
+            // Features introduced in 2.7.0
             new FeatureItem(R.drawable.whats_new_pattern_lock, R.string.welcome_feature_6_title,
-                    R.string.welcome_feature_6_text, "2.7.0", "0", SHOW_ON_UPGRADE),
+                    R.string.welcome_feature_6_text, "0", "2.6.1", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_fingerprint_lock, R.string.welcome_feature_7_title,
-                    R.string.welcome_feature_7_text, "2.7.0", "0", SHOW_ON_UPGRADE),
+                    R.string.welcome_feature_7_text, "0", "2.6.1", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_gif_support, R.string.welcome_feature_8_title,
-                    R.string.welcome_feature_8_text, "2.7.0", "0", SHOW_ON_UPGRADE),
+                    R.string.welcome_feature_8_text, "0", "2.6.1", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_upload_camera_picture, R.string.welcome_feature_9_title,
-                    R.string.welcome_feature_9_text, "2.7.0", "0", SHOW_ON_UPGRADE),
-
+                    R.string.welcome_feature_9_text, "0", "2.6.1", SHOW_ON_UPGRADE),
     };
 
 
@@ -107,7 +105,7 @@ public class FeatureList {
             this.titleText = titleText;
             this.contentText = contentText;
             this.versionNumber = versionCodeFromString(version);
-            this.betaVersion = Integer.parseInt(betaVersion);
+            this.betaVersion = versionCodeFromString(betaVersion);
             this.showOnInitialRun = showOnInitialRun;
         }
 
