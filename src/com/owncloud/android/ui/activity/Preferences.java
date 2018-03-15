@@ -462,7 +462,7 @@ public class Preferences extends PreferenceActivity {
         }
 
         boolean loggerEnabled = getResources().getBoolean(R.bool.logger_enabled) ||
-                BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals(MainApp.BUILD_TYPE_BETA);
+                BuildConfig.DEBUG || MainApp.isBeta();
         Preference pLogger = findPreference("logger");
         if (pLogger != null) {
             if (loggerEnabled) {

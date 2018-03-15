@@ -100,8 +100,8 @@ android {
 
     defaultConfig {
 
-        manifestPlaceholders.versionCode = "20600000"
-        manifestPlaceholders.versionName = "2.6.0"
+        manifestPlaceholders.versionCode = "20600001"
+        manifestPlaceholders.versionName = "2.7.0-beta.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -133,10 +133,6 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
-        }
-
-        beta {
-            res.srcDirs = ['beta/res']
         }
 
         // move whole local unit tests structure as a whole from src/test/* to test/*
@@ -181,14 +177,6 @@ android {
                 keyPassword System.env.OC_RELEASE_KEY_PASSWORD
             }
         }
-        beta {
-            if (System.env.OC_BETA_KEYSTORE) {
-                storeFile file(System.env.OC_BETA_KEYSTORE)  // use an absolute path
-                storePassword System.env.OC_BETA_KEYSTORE_PASSWORD
-                keyAlias System.env.OC_BETA_KEY_ALIAS
-                keyPassword System.env.OC_BETA_KEY_PASSWORD
-            }
-        }
     }
 
     buildTypes {
@@ -201,16 +189,6 @@ android {
 
         debug {
             applicationIdSuffix ".debug"
-        }
-
-        beta {
-            manifestPlaceholders.versionCode = "20500001"
-            manifestPlaceholders.versionName = "2.5.1-beta.1"
-            applicationIdSuffix ".beta"
-
-            if (System.env.OC_BETA_KEYSTORE) {
-                signingConfig signingConfigs.beta
-            }
         }
     }
 
