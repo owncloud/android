@@ -236,30 +236,34 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                             opsBinder != null &&
                                     opsBinder.isSynchronizing(mAccount, file)
                             ) {
-                        localStateView.setImageResource(R.drawable.ic_synchronizing);
+                        localStateView.setImageResource(R.drawable.sync_pin);
                         localStateView.setVisibility(View.VISIBLE);
 
                     } else if ( // downloading
                             downloaderBinder != null &&
                                     downloaderBinder.isDownloading(mAccount, file)
                             ) {
-                        localStateView.setImageResource(R.drawable.ic_synchronizing);
+                        localStateView.setImageResource(R.drawable.sync_pin);
                         localStateView.setVisibility(View.VISIBLE);
 
                     } else if ( //uploading
                             uploaderBinder != null &&
                                     uploaderBinder.isUploading(mAccount, file)
                             ) {
-                        localStateView.setImageResource(R.drawable.ic_synchronizing);
+                        localStateView.setImageResource(R.drawable.sync_pin);
                         localStateView.setVisibility(View.VISIBLE);
 
                     } else if (file.getEtagInConflict() != null) {   // conflict
-                        localStateView.setImageResource(R.drawable.ic_synchronizing_error);
+                        localStateView.setImageResource(R.drawable.error_pin);
                         localStateView.setVisibility(View.VISIBLE);
 
                     } else if (file.isDown()) {
-                        localStateView.setImageResource(R.drawable.ic_synced);
                         localStateView.setVisibility(View.VISIBLE);
+                        if(file.isAvailableOffline()) {
+                            localStateView.setImageResource(R.drawable.offline_available_pin);
+                        } else {
+                            localStateView.setImageResource(R.drawable.downloaded_pin);
+                        }
                     }
 
                     break;
@@ -288,13 +292,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 checkBoxV.setVisibility(View.VISIBLE);
             }
 
-            // this if-else is needed even though favorite icon is visible by default
-            // because android reuses views in listview
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
-                view.findViewById(R.id.favoriteIcon).setVisibility(View.GONE);
-            } else {
-                view.findViewById(R.id.favoriteIcon).setVisibility(View.VISIBLE);
-            }
 
             // No Folder
             if (!file.isFolder()) {

@@ -47,7 +47,7 @@
                 android:layout_height="@dimen/file_icon_size"
                 android:layout_gravity="top|right"
                 android:layout_marginRight="4dp"
-                android:src="@drawable/ic_synced" />
+                android:src="@drawable/sync_pin" />
 
             <ImageView
                 android:id="@+id/thumbnail"
@@ -56,13 +56,6 @@
                 android:layout_gravity="left|center_vertical"
                 android:src="@drawable/ic_menu_archive" />
 
-            <ImageView
-                android:id="@+id/favoriteIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:layout_marginRight="4dp"
-                android:src="@drawable/ic_available_offline" />
         </FrameLayout>
 
         <LinearLayout
