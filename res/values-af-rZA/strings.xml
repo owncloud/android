@@ -94,7 +94,6 @@
   <string name="folder_picker_choose_button_text">Kies</string>
   <string name="move_file_invalid_overwrite">Die lêer bestaan reeds in die bestemmingsvouer</string>
   <string name="copy_file_invalid_overwrite">Die lêer bestaan reeds in die bestemmingsvouer</string>
-  <string name="prefs_category_details">Details</string>
   <string name="shared_subject_header">gedeel</string>
   <string name="auth_host_address">Bedieneradres</string>
   <string name="share_dialog_title">Deel</string>
@@ -117,4 +116,5 @@
   <string name="edit_share_unshare">Staak deling</string>
   <string name="failed_upload_quota_exceeded_text">Nie genoeg spasie in die rekening</string>
   <string name="share_warning_about_forwarding_public_links">Enigeen met die skakel het toegang tot die lêer/vouer</string>
+  <!--Welcome to oC intro features-->
 </resources>

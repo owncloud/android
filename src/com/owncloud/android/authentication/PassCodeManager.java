@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
@@ -63,7 +64,7 @@ public class PassCodeManager {
 
     public void onActivityCreated(Activity activity) {
         if (!BuildConfig.DEBUG) {
-            if (passCodeIsEnabled()) {
+            if (isPassCodeEnabled()) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
             } else {
                 activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -72,15 +73,17 @@ public class PassCodeManager {
     }
 
     public void onActivityStarted(Activity activity) {
-        if (!sExemptOfPasscodeActivites.contains(activity.getClass()) &&
-                passCodeShouldBeRequested()
-                ){
 
-            Intent i = new Intent(MainApp.getAppContext(), PassCodeActivity.class);
-            i.setAction(PassCodeActivity.ACTION_CHECK);
-            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            activity.startActivity(i);
+        if (!sExemptOfPasscodeActivites.contains(activity.getClass()) && passCodeShouldBeRequested()) {
 
+            // Do not ask for passcode if fingerprint is enabled
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && FingerprintManager.getFingerprintManager(activity).
+                    isFingerPrintEnabled()) {
+                mVisibleActivitiesCounter++;
+                return;
+            }
+
+            checkPasscode(activity);
         }
 
         mVisibleActivitiesCounter++;    // keep it AFTER passCodeShouldBeRequested was checked
@@ -92,9 +95,21 @@ public class PassCodeManager {
         }
         setUnlockTimestamp();
         PowerManager powerMgr = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-        if (passCodeIsEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
+        if (isPassCodeEnabled() && powerMgr != null && !powerMgr.isScreenOn()) {
             activity.moveTaskToBack(true);
         }
+    }
+
+    public void onFingerprintCancelled(Activity activity){
+        // Ask user for passcode
+        checkPasscode(activity);
+    }
+
+    private void checkPasscode(Activity activity) {
+        Intent i = new Intent(MainApp.getAppContext(), PassCodeActivity.class);
+        i.setAction(PassCodeActivity.ACTION_CHECK);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        activity.startActivity(i);
     }
 
     private void setUnlockTimestamp() {
@@ -103,16 +118,14 @@ public class PassCodeManager {
 
     private boolean passCodeShouldBeRequested(){
         if ((System.currentTimeMillis() - mTimestamp) > PASS_CODE_TIMEOUT &&
-                mVisibleActivitiesCounter <= 0
-                ){
-            return passCodeIsEnabled();
+                mVisibleActivitiesCounter <= 0){
+            return isPassCodeEnabled();
         }
         return false;
     }
 
-    private boolean passCodeIsEnabled() {
+    public boolean isPassCodeEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false));
     }
-
 }

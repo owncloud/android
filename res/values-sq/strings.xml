@@ -31,6 +31,8 @@
   <string name="prefs_accounts">Llogari</string>
   <string name="prefs_manage_accounts">Administroni llogari</string>
   <string name="prefs_passcode">Kyçje me kodkalim</string>
+  <string name="prefs_fingerprint">Kyçje me shenja gishtash</string>
+  <string name="prefs_fingerprint_summary">Që të aktivizohet kjo mundësi, aktivizoni kyçje përmes kodkalimesh ose përmes rregullsish</string>
   <string name="prefs_camera_picture_upload">Ngarkime fotosh</string>
   <string name="prefs_camera_picture_upload_summary">Fotot e bëra nga kamera ngarkoji vetvetiu</string>
   <string name="prefs_camera_video_upload">Ngarkime videosh</string>
@@ -198,6 +200,13 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_removed">Kodkalimi u hoq</string>
   <string name="pass_code_stored">Kodkalimi u depozitua</string>
+  <string name="fingerprint_confirm">Që të vazhdohet, ripohoni shenjat tuaja të gishtave</string>
+  <string name="fingerprint_hint">Ndijues prekjesh</string>
+  <string name="fingerprint_not_recognized">Shenja gishtash jo të pranuara, riprovoni</string>
+  <string name="fingerprint_success">Shenjat e gishtave u njohën</string>
+  <string name="fingerprint_not_hardware_detected">Kjo pajisje nuk mbulon mirëfilltësim përmes shenja gishtash</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Që të përdorni këtë veçori, regjistroni të paktën një palë shenja gishtash</string>
+  <string name="fingerprint_not_granted_permissions">S’janë akorduar leje shenjash gishtash</string>
   <string name="media_notif_ticker">Lojtësi %1$s i muzikës</string>
   <string name="media_state_playing">%1$s (po luhet)</string>
   <string name="media_state_loading">%1$s (po ngarkohet)</string>
@@ -380,7 +389,6 @@
   <string name="copy_file_error">Ndodhi një gabim teksa përpiqej të kopjohej kjo kartelë apo dosje</string>
   <string name="forbidden_permissions_copy">për kopjim të kësaj kartele</string>
   <string name="prefs_category_camera_upload">Ngarkime nga kamera</string>
-  <string name="prefs_category_details">Hollësi</string>
   <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="sync_folder_failed_content">Njëkohësimi i dosjes %1$s s\’u plotësua dot</string>
   <string name="shared_subject_header">ndarë</string>
@@ -492,4 +500,15 @@
     <item quantity="one">%d i përzgjedhur</item>
     <item quantity="other">%d të përzgjedhur</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Administroni krejt kartelat tuaja të njëkohësuara</string>
+  <string name="welcome_feature_1_text">Mund të kopjoni, lëvizni, fshini</string>
+  <string name="welcome_feature_2_title">Ndani me të tjerët kartela dhe dosje</string>
+  <string name="welcome_feature_2_text">Mund t’i ndani privatisht ose publikisht</string>
+  <string name="welcome_feature_3_title">Llogari multi</string>
+  <string name="welcome_feature_3_text">Lidhuni te krejt shërbyesit tuaj ownCloud</string>
+  <string name="welcome_feature_4_title">Ngarkime nga kamera</string>
+  <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
+  <string name="welcome_feature_5_title">Transmetim videosh</string>
+  <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
 </resources>

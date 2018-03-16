@@ -31,6 +31,8 @@
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerenciar contas</string>
   <string name="prefs_passcode">Bloqueio de senha</string>
+  <string name="prefs_fingerprint">Bloqueio Impressão Digital</string>
+  <string name="prefs_fingerprint_summary">Ativar senha ou bloqueio padrão para habilitar esta opção</string>
   <string name="prefs_camera_picture_upload">Enviar fotos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotos tiradas pela câmera</string>
   <string name="prefs_camera_video_upload">Enviar vídeos</string>
@@ -46,6 +48,20 @@
   <string name="prefs_imprint">Imprint</string>
   <string name="prefs_remember_last_share_location">Lembre-se do local de compartilhamento</string>
   <string name="prefs_remember_last_upload_location_summary">Lembrar do último local de envio de compartilhamento</string>
+  <string name="prefs_pattern">Padrão de Bloqueio</string>
+  <string name="pattern_enter_pattern">Por favor digite seu padrão</string>
+  <string name="pattern_configure_pattern">Digite seu padrão</string>
+  <string name="pattern_remove_pattern">Remover seu padrão</string>
+  <string name="pattern_incorrect_pattern">Padrão incorreto</string>
+  <string name="pattern_reenter_pattern">Por favor re-digite seu padrão</string>
+  <string name="pattern_not_same_pattern">Os padrões não são os mesmos</string>
+  <string name="pattern_stored">Padrão Armazenado</string>
+  <string name="pattern_removed">Padrão Removido</string>
+  <string name="pattern_already_set">Os bloqueios de código e senha não podem ser ativados ao mesmo tempo, desative o padrão primeiro</string>
+  <string name="passcode_already_set">Os bloqueios de padrão e senha não podem ser ativados ao mesmo tempo, desative primeiro o código de acesso</string>
+  <string name="pattern_no_longer_required">O padrão não será mais solicitado</string>
+  <string name="pattern_configure_your_pattern_explanation">O padrão será solicitado sempre que o aplicativo for iniciado</string>
+  <string name="illegal_argument_exception_message">Uma AÇÃO válida é necessária no intento passado para</string>
   <string name="recommend_subject">Tentar %1$s em seu smartfone!</string>
   <string name="recommend_text">Gostaria de convida-lo a usar %1$s em seu smartphone!\nBaixe aqui: %2$s</string>
   <string name="auth_check_server">Verificar servidor</string>
@@ -184,6 +200,13 @@
   <string name="pass_code_wrong">Código de acesso incorreto</string>
   <string name="pass_code_removed">Código de acesso removido</string>
   <string name="pass_code_stored">Código de acesso armazenado</string>
+  <string name="fingerprint_confirm">Confirme sua impressão digital para continuar</string>
+  <string name="fingerprint_hint">Sensor de toque</string>
+  <string name="fingerprint_not_recognized">Impressão digital não reconhecida, tente novamente</string>
+  <string name="fingerprint_success">Impressão digital reconhecida</string>
+  <string name="fingerprint_not_hardware_detected">Este dispositivo não suporta a autenticação com impressão digital</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Registre pelo menos uma impressão digital para usar esse recurso</string>
+  <string name="fingerprint_not_granted_permissions">Permissões de impressão digital não concedidas</string>
   <string name="media_notif_ticker">%1$s reprodutor de música</string>
   <string name="media_state_playing">%1$s (reproduzindo)</string>
   <string name="media_state_loading">%1$s (carregando)</string>
@@ -368,7 +391,6 @@
   <string name="copy_file_error">Ocorreu um erro ao tentar copiar este arquivo ou pasta</string>
   <string name="forbidden_permissions_copy">para copiar este arquivo</string>
   <string name="prefs_category_camera_upload">Envios da câmera</string>
-  <string name="prefs_category_details">Detalhes</string>
   <string name="prefs_camera_video_upload_path_title">Caminho para vídeos enviados</string>
   <string name="sync_folder_failed_content">A sincronização da pasta %1$s não pode ser finalizada</string>
   <string name="shared_subject_header">compartilhado</string>
@@ -480,4 +502,15 @@
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Gerencie todos os seus arquivos sincronizados</string>
+  <string name="welcome_feature_1_text">Você pode copiar, mover, excluir</string>
+  <string name="welcome_feature_2_title">Compartilhe arquivos e pastas</string>
+  <string name="welcome_feature_2_text">Você pode compartilhar de forma privada ou pública</string>
+  <string name="welcome_feature_3_title">Multi conta</string>
+  <string name="welcome_feature_3_text">Conecte-se a todos os seus próprios servidores ownCloud</string>
+  <string name="welcome_feature_4_title">Envios da câmera</string>
+  <string name="welcome_feature_4_text">Suas fotos/vídeos carregados automaticamente</string>
+  <string name="welcome_feature_5_title">Transmissão de vídeo</string>
+  <string name="welcome_feature_5_text">Assista seus vídeos sem baixá-los</string>
 </resources>

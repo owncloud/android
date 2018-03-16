@@ -61,6 +61,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
         android:name=".MainApp"
@@ -212,6 +213,7 @@
         <activity
             android:name=".ui.activity.UploadListActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer" />
+        <activity android:name=".ui.activity.WhatsNewActivity" />
 
         <receiver
             android:name=".broadcastreceivers.ConnectivityActionReceiver"
@@ -262,6 +264,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
+        <activity android:name=".ui.activity.FingerprintActivity"/>
     </application>
-
 </manifest>

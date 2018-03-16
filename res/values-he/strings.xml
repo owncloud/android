@@ -46,6 +46,19 @@
   <string name="prefs_imprint">חותמת</string>
   <string name="prefs_remember_last_share_location">לזכור מקום שיתוף</string>
   <string name="prefs_remember_last_upload_location_summary">לזכור מיקום שיתוף העלאה אחרון</string>
+  <string name="prefs_pattern">נעילה בתבנית</string>
+  <string name="pattern_enter_pattern">נא להזין את התבנית שלך</string>
+  <string name="pattern_configure_pattern">נא להזין את התבנית שלך</string>
+  <string name="pattern_remove_pattern">הסרת התבנית שלך</string>
+  <string name="pattern_incorrect_pattern">תבנית שגויה</string>
+  <string name="pattern_reenter_pattern">נא להזין את התבנית שלך מחדש</string>
+  <string name="pattern_not_same_pattern">התבניות שונות</string>
+  <string name="pattern_stored">התבנית נשמרה</string>
+  <string name="pattern_removed">התבנית הוסרה</string>
+  <string name="pattern_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את התבנית תחילה</string>
+  <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
+  <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
+  <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
   <string name="auth_check_server">בדיקת שרת</string>
@@ -368,7 +381,6 @@
   <string name="copy_file_error">אירעה שגיאה בזמן ניסיון להעתיק את הקובץ או התיקייה</string>
   <string name="forbidden_permissions_copy">להעתיק את הקובץ הזה</string>
   <string name="prefs_category_camera_upload">העלאות מהמצלמה</string>
-  <string name="prefs_category_details">פרטים</string>
   <string name="prefs_camera_video_upload_path_title">נתיב להעלאת סרטונים</string>
   <string name="sync_folder_failed_content">לא ניתן להשלים סנכרון של %1$s תיקיות</string>
   <string name="shared_subject_header">משותף</string>
@@ -480,4 +492,6 @@
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">העלאות מהמצלמה</string>
 </resources>

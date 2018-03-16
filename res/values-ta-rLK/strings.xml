@@ -108,7 +108,6 @@
   <string name="prefs_category_accounts">கணக்குகள்</string>
   <string name="drawer_manage_accounts">கணக்குகளை நிர்வகிக்க</string>
   <string name="folder_picker_choose_button_text">தெரிவுசெய்க </string>
-  <string name="prefs_category_details">விவரங்கள்</string>
   <string name="auth_host_address">சேவையக முகவரி</string>
   <string name="share_dialog_title">பகிர்வு</string>
   <string name="share_cancel_public_link_button">இரத்து செய்க</string>
@@ -118,4 +117,5 @@
   <string name="share_privilege_can_edit">தொகுக்க முடியும்</string>
   <string name="share_privilege_can_edit_create">உருவவாக்கல்</string>
   <string name="share_privilege_can_edit_delete">நீக்குக</string>
+  <!--Welcome to oC intro features-->
 </resources>

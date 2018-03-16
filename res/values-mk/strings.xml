@@ -90,6 +90,7 @@
   <string name="uploader_upload_succeeded_ticker">Прикачувањето беше успешно</string>
   <string name="uploader_upload_failed_ticker">Прикачувањето не успеа</string>
   <string name="uploader_upload_failed_content_single">Прикачувањето на %1$s не може да се заврши</string>
+  <string name="uploader_upload_text_filename_hint">Име на датотека</string>
   <string name="uploads_view_title">Прикачувања</string>
   <string name="uploads_view_upload_status_succeeded">Завршено</string>
   <string name="uploads_view_upload_status_cancelled">Откажано</string>
@@ -258,7 +259,6 @@
   <string name="move_file_error">Се случи грешка кога пробував да ја преместам оваа датотека или папка</string>
   <string name="forbidden_permissions_move">да ја преместам оваа датотека</string>
   <string name="copy_file_invalid_overwrite">Датотеката веќе постои во целната папка</string>
-  <string name="prefs_category_details">Детали:</string>
   <string name="subject_user_shared_with_you">%1$s сподели \"%2$s\" со тебе</string>
   <string name="auth_refresh_button">Освежи ја конекцијата</string>
   <string name="auth_host_address">Адреса на сервер</string>
@@ -276,4 +276,5 @@
   <string name="share_privilege_can_edit_delete">избриши</string>
   <string name="share_warning_about_forwarding_public_links">Било кој што го знае овој линк ќе има пристап до датотеката/директориумот</string>
   <string name="upload_notification_channel_name">Прикачувања</string>
+  <!--Welcome to oC intro features-->
 </resources>

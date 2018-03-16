@@ -56,10 +56,11 @@
   <string name="pattern_not_same_pattern">Die Muster stimmen nicht überein</string>
   <string name="pattern_stored">Muster gespeichert</string>
   <string name="pattern_removed">Muster entfernt</string>
-  <string name="pattern_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte deaktiviere Muster</string>
-  <string name="passcode_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte deaktiviere PIN</string>
+  <string name="pattern_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte Muster deaktivieren</string>
+  <string name="passcode_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte PIN deaktivieren</string>
   <string name="pattern_no_longer_required">Muster wird nicht mehr verlangt</string>
   <string name="pattern_configure_your_pattern_explanation">Das Muster wird bei jedem Start der Anwendung verlangt</string>
+  <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Ich möchte Dich zum Benutzen von %1$s auf Deinem Smartphone einladen!\nLade es hier herunter: %2$s</string>
   <string name="auth_check_server">überprüfe den Server</string>
@@ -382,7 +383,6 @@
   <string name="copy_file_error">Es ist ein Fehler beim Kopieren der Datei oder des Ordners aufgetreten.</string>
   <string name="forbidden_permissions_copy">diese Datei zu kopieren</string>
   <string name="prefs_category_camera_upload">Kamera Uploads</string>
-  <string name="prefs_category_details">Details</string>
   <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
   <string name="sync_folder_failed_content">Bei der Synchronisation konnte %1$s Ordner nicht fertig gestellt werden</string>
   <string name="shared_subject_header">geteilt</string>
@@ -494,4 +494,6 @@
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Kamera Uploads</string>
 </resources>
