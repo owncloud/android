@@ -31,6 +31,8 @@
   <string name="prefs_accounts">Llogari</string>
   <string name="prefs_manage_accounts">Administroni llogari</string>
   <string name="prefs_passcode">Kyçje me kodkalim</string>
+  <string name="prefs_fingerprint">Kyçje me shenja gishtash</string>
+  <string name="prefs_fingerprint_summary">Që të aktivizohet kjo mundësi, aktivizoni kyçje përmes kodkalimesh ose përmes rregullsish</string>
   <string name="prefs_camera_picture_upload">Ngarkime fotosh</string>
   <string name="prefs_camera_picture_upload_summary">Fotot e bëra nga kamera ngarkoji vetvetiu</string>
   <string name="prefs_camera_video_upload">Ngarkime videosh</string>
@@ -198,6 +200,13 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_removed">Kodkalimi u hoq</string>
   <string name="pass_code_stored">Kodkalimi u depozitua</string>
+  <string name="fingerprint_confirm">Që të vazhdohet, ripohoni shenjat tuaja të gishtave</string>
+  <string name="fingerprint_hint">Ndijues prekjesh</string>
+  <string name="fingerprint_not_recognized">Shenja gishtash jo të pranuara, riprovoni</string>
+  <string name="fingerprint_success">Shenjat e gishtave u njohën</string>
+  <string name="fingerprint_not_hardware_detected">Kjo pajisje nuk mbulon mirëfilltësim përmes shenja gishtash</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Që të përdorni këtë veçori, regjistroni të paktën një palë shenja gishtash</string>
+  <string name="fingerprint_not_granted_permissions">S’janë akorduar leje shenjash gishtash</string>
   <string name="media_notif_ticker">Lojtësi %1$s i muzikës</string>
   <string name="media_state_playing">%1$s (po luhet)</string>
   <string name="media_state_loading">%1$s (po ngarkohet)</string>
