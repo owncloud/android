@@ -3,7 +3,8 @@
  *
  *   @author masensio
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -65,7 +66,7 @@ public class MainApp extends Application {
     // TODO better place
     // private static boolean mOnlyOnDevice = false;
 
-    public static String BUILD_TYPE_BETA = "beta";
+    public static String BETA_VERSION = "beta";
 
     public void onCreate(){
         super.onCreate();
@@ -105,7 +106,7 @@ public class MainApp extends Application {
         // initialise thumbnails cache on background thread
         new ThumbnailsCacheManager.InitDiskCacheTask().execute();
 
-        if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals(BUILD_TYPE_BETA)) {
+        if (BuildConfig.DEBUG || isBeta()) {
 
             String dataFolder = getDataFolder();
 
@@ -245,5 +246,20 @@ public class MainApp extends Application {
 
         // Mozilla/5.0 (Android) ownCloud-android/1.7.0
         return String.format(appString, version);
+    }
+
+    public static boolean isBeta() {
+        boolean isBeta = false;
+        try {
+            String packageName = getAppContext().getPackageName();
+            PackageInfo packageInfo = getAppContext().getPackageManager().getPackageInfo(packageName, 0);
+            String versionName = packageInfo.versionName;
+            if (versionName.contains(BETA_VERSION)){
+                isBeta = true;
+            };
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return isBeta;
     }
 }

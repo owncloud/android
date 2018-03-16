@@ -552,16 +552,20 @@
     <!-- Welcome to oC intro features -->
     <string name="welcome_feature_1_title">Manage all your synced files</string>
     <string name="welcome_feature_1_text">You can copy, move, delete</string>
-
     <string name="welcome_feature_2_title">Share files and folders</string>
     <string name="welcome_feature_2_text">You can share privately or publicly</string>
-
     <string name="welcome_feature_3_title">Multi account</string>
     <string name="welcome_feature_3_text">Connect to all your ownCloud servers</string>
-
     <string name="welcome_feature_4_title">Camera uploads</string>
     <string name="welcome_feature_4_text">Your pictures/videos automatically uploaded</string>
-
     <string name="welcome_feature_5_title">Video streaming</string>
     <string name="welcome_feature_5_text">Play your videos without downloading them</string>
+    <string name="welcome_feature_6_title">Pattern lock</string>
+    <string name="welcome_feature_6_text">Use a pattern to lock your ownCloud app</string>
+    <string name="welcome_feature_7_title">Fingerprint lock</string>
+    <string name="welcome_feature_7_text">Use your fingerprint to lock your ownCloud app</string>
+    <string name="welcome_feature_8_title">GIF support</string>
+    <string name="welcome_feature_8_text">Play your animated GIF images</string>
+    <string name="welcome_feature_9_title">Upload picture from camera</string>
+    <string name="welcome_feature_9_text">Take a picture and upload it directly to your server</string>
 </resources>

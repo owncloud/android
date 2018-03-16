@@ -1,3 +1,4 @@
+
 /**
  *   ownCloud Android client application
  *
@@ -24,7 +25,6 @@ package com.owncloud.android.features;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -44,16 +44,25 @@ public class FeatureList {
     static final private FeatureItem featuresList[] = {
             // Basic features showed on first install
             new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
-                    R.string.welcome_feature_1_text, "2.6.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_1_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_share, R.string.welcome_feature_2_title,
-                    R.string.welcome_feature_2_text, "2.6.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_2_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_accounts, R.string.welcome_feature_3_title,
-                    R.string.welcome_feature_3_text, "2.6.0", "0" ,SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_3_text, "2.7.0", "0" ,SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_camera_uploads, R.string.welcome_feature_4_title,
-                    R.string.welcome_feature_4_text, "2.6.0", "0", SHOW_ON_FIRST_RUN),
+                    R.string.welcome_feature_4_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
             new FeatureItem(R.drawable.whats_new_video_streaming, R.string.welcome_feature_5_title,
-                    R.string.welcome_feature_5_text, "2.6.0", "0", SHOW_ON_FIRST_RUN),
-            // Features introduced in certain point in time
+                    R.string.welcome_feature_5_text, "2.7.0", "0", SHOW_ON_FIRST_RUN),
+
+            // Features introduced in 2.7.0
+            new FeatureItem(R.drawable.whats_new_pattern_lock, R.string.welcome_feature_6_title,
+                    R.string.welcome_feature_6_text, "0", "2.6.1", SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_fingerprint_lock, R.string.welcome_feature_7_title,
+                    R.string.welcome_feature_7_text, "0", "2.6.1", SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_gif_support, R.string.welcome_feature_8_title,
+                    R.string.welcome_feature_8_text, "0", "2.6.1", SHOW_ON_UPGRADE),
+            new FeatureItem(R.drawable.whats_new_upload_camera_picture, R.string.welcome_feature_9_title,
+                    R.string.welcome_feature_9_text, "0", "2.6.1", SHOW_ON_UPGRADE),
     };
 
 
@@ -96,7 +105,7 @@ public class FeatureList {
             this.titleText = titleText;
             this.contentText = contentText;
             this.versionNumber = versionCodeFromString(version);
-            this.betaVersion = Integer.parseInt(betaVersion);
+            this.betaVersion = versionCodeFromString(betaVersion);
             this.showOnInitialRun = showOnInitialRun;
         }
 

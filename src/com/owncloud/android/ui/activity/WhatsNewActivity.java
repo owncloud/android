@@ -67,7 +67,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
         mProgress = (ProgressIndicator) findViewById(R.id.progressIndicator);
         mPager = (ViewPager)findViewById(R.id.contentPanel);
-        boolean isBeta = BuildConfig.BUILD_TYPE.equals(MainApp.BUILD_TYPE_BETA);
+        boolean isBeta = MainApp.isBeta();
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
                 FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta));
@@ -156,7 +156,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        boolean isBeta = BuildConfig.BUILD_TYPE.equals(MainApp.BUILD_TYPE_BETA);
+        boolean isBeta = MainApp.isBeta();
         boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);
         return showWizard &&
                 ((isFirstRun() && context instanceof AccountAuthenticatorActivity) ||
