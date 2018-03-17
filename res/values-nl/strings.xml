@@ -81,6 +81,8 @@ Download hier: %2$s</string>
   <string name="file_list_file">bestand</string>
   <string name="file_list_files">bestanden</string>
   <string name="filedetails_select_file">Druk op een bestand om extra informatie weer te geven</string>
+  <string name="upload_to">Uploaden naar %1$s</string>
+  <string name="upload_files_title">Bestanden</string>
   <string name="filedetails_size">Grootte:</string>
   <string name="filedetails_type">Type:</string>
   <string name="filedetails_created">Aangemaakt:</string>
@@ -185,6 +187,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_wrong">Onjuiste pincode</string>
   <string name="pass_code_removed">Pincode verwijderd</string>
   <string name="pass_code_stored">Pincode opgeslagen</string>
+  <string name="fingerprint_hint">Touch sensor</string>
   <string name="media_notif_ticker">%1$s muziekspeler</string>
   <string name="media_state_playing">%1$s (speelt)</string>
   <string name="media_state_loading">%1$s (laden)</string>
@@ -299,6 +302,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
   <string name="camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
+  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Bevestigen</string>
   <string name="confirmation_disable_pictures_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande afbeeldingen worden niet geuploade</string>
   <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>
@@ -472,4 +476,6 @@ Neem contact op met uw beheerder</string>
     <item quantity="other">%d geselecteerd</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_3_title">Multi account</string>
+  <string name="welcome_feature_5_title">Video streaming</string>
 </resources>

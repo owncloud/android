@@ -31,6 +31,7 @@
   <string name="prefs_accounts">Kontoer</string>
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
+  <string name="prefs_fingerprint">Fingeravtrykkslås</string>
   <string name="prefs_camera_picture_upload">Bilde opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>
   <string name="prefs_camera_video_upload">Video opplastninger</string>
@@ -495,4 +496,5 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">Kameraopplasting</string>
+  <string name="welcome_feature_7_title">Fingeravtrykkslås</string>
 </resources>

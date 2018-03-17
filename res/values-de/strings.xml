@@ -31,6 +31,7 @@
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
+  <string name="prefs_fingerprint">Fingerabdrucksperre</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Lade Fotos von der Kamera automatisch hoch</string>
   <string name="prefs_camera_video_upload">Videos</string>
@@ -199,6 +200,10 @@
   <string name="pass_code_wrong">PIN nicht korrekt</string>
   <string name="pass_code_removed">PIN entfernt</string>
   <string name="pass_code_stored">PIN gespeichert</string>
+  <string name="fingerprint_not_recognized">Fingerabdruck nicht erkannt, bitte versuche es erneut</string>
+  <string name="fingerprint_success">Fingerabdruck erkannt</string>
+  <string name="fingerprint_not_hardware_detected">Dieses Gerät unterstützt keine Authentifizierung mittels Fingerabdruck</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Registriere mindestens einen Fingerabruck, um dieses Feature zu benutzen</string>
   <string name="media_notif_ticker">%1$s Musik Player</string>
   <string name="media_state_playing">%1$s (playing)</string>
   <string name="media_state_loading">%1$s (loading)</string>
@@ -495,5 +500,13 @@
     <item quantity="other">%d ausgewählt</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Verwalte alle deine synchronisierten Dateien</string>
+  <string name="welcome_feature_1_text">Du kannst kopieren, verschieben, löschen</string>
+  <string name="welcome_feature_2_title">Teile Dateien und Ordner</string>
+  <string name="welcome_feature_2_text">Du kannst privat oder öffentlich teilen</string>
+  <string name="welcome_feature_3_text">Mit all deinen ownCloud-Servern verbinden</string>
   <string name="welcome_feature_4_title">Kamera Uploads</string>
+  <string name="welcome_feature_5_title">Videostreaming</string>
+  <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
+  <string name="welcome_feature_7_title">Fingerabdrucksperre</string>
 </resources>
