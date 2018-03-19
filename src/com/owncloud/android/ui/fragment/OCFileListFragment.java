@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -661,24 +662,18 @@ public class OCFileListFragment extends ExtendedListFragment {
 
     private void listDirectoryWithAnimationDown(final OCFile file) {
         Animation fadeOutFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_front);
-        fadeOutFront.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+        Handler eventHandler = new Handler();
 
-            }
-
+        // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
+        // call listDirectory() from the Animation callback
+        eventHandler.postDelayed(new Runnable() {
             @Override
-            public void onAnimationEnd(Animation animation) {
+            public void run() {
                 listDirectory(file/*, MainApp.getOnlyOnDevice()*/);
                 Animation fadeInBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_back);
                 getListView().setAnimation(fadeInBack);
             }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
+        }, 200);
         getListView().startAnimation(fadeOutFront);
     }
 
