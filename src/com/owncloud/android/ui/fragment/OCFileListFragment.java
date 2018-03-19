@@ -669,11 +669,11 @@ public class OCFileListFragment extends ExtendedListFragment {
         eventHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                listDirectory(file/*, MainApp.getOnlyOnDevice()*/);
+                listDirectory(file);
                 Animation fadeInBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_back);
                 getListView().setAnimation(fadeInBack);
             }
-        }, 200);
+        }, getResources().getInteger(R.integer.folder_animation_duration));
         getListView().startAnimation(fadeOutFront);
     }
 
@@ -685,25 +685,19 @@ public class OCFileListFragment extends ExtendedListFragment {
             return;
         }
 
+        Handler eventHandler = new Handler();
         Animation fadeOutBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_back);
-        fadeOutBack.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
 
-            }
-
+        // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
+        // call listDirectory() from the Animation callback
+        eventHandler.postDelayed(new Runnable() {
             @Override
-            public void onAnimationEnd(Animation animation) {
+            public void run() {
                 listDirectory(file);
                 Animation fadeInFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
                 getListView().startAnimation(fadeInFront);
             }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
+        }, getResources().getInteger(R.integer.folder_animation_duration));
         getListView().startAnimation(fadeOutBack);
     }
 
