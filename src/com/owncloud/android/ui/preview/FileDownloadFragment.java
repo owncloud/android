@@ -200,7 +200,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
 
     /**
-     * Enables or disables buttons for a file being downloaded
+     * Enables buttons for a file being downloaded
      */
     private void setButtonsForTransferring(View rootView) {
         if (rootView != null) {
