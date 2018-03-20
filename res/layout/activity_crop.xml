@@ -11,14 +11,34 @@
         android:id="@+id/polygon_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
-    <android.support.v7.widget.AppCompatButton
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Button.Primary"
-        android:text="@string/crop_text"
-        android:id="@+id/crop_button"
-        />
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/crop_button"
+            android:theme="@style/Button.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/crop_text" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancel_button"
+            android:theme="@style/Button.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/common_cancel" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

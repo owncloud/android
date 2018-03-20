@@ -48,6 +48,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     private static final int MAX_HEIGHT = 500;
     private QuadrilateralSelectionImageView mSelectionImageView;
     private Button mCropButton;
+    private Button mCancelButton;
     MaterialDialog mResultDialog;
     OpenCVCallback mOpenCVLoaderCallback;
     private Bitmap mBitmap = null;
@@ -76,6 +77,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         initOpenCV();
         mSelectionImageView = (QuadrilateralSelectionImageView) findViewById(R.id.polygon_view);
         mCropButton = (Button) findViewById(R.id.crop_button);
+        mCancelButton = (Button) findViewById(R.id.cancel_button);
         Intent callingIntent = getIntent();
         Bundle scannedDocumentData = callingIntent.getExtras();
         final String scannedDocumentPath = (String) scannedDocumentData.get(UploadFilesActivity.SCANNED_DOCUMENT_IMAGE);
@@ -94,6 +96,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
             Log_OC.d(TAG,getResources().getString(R.string.no_contour_found));
         }
         mCropButton.setOnClickListener(this);
+        mCancelButton.setOnClickListener(this);
         mResultDialog = new MaterialDialog.Builder(this)
                 .title("Scan Result")
                 .positiveText("Save")
@@ -395,6 +398,9 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
                 orig.release();
                 transformed.release();
             }
+        }
+        else if(v.getId() == R.id.cancel_button){
+            setResult(RESULT_CANCELED);
         }
     }
 }
