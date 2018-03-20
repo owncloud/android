@@ -545,7 +545,7 @@
     <string name="file_sync_notification_channel_name">File sync</string>
     <string name="file_sync_notification_channel_description">See file sync result</string>
 
-    <string name="rate_dialog_title">Rate ownCloud app!</string>
+    <string name="rate_dialog_title">Rate %1$s app!</string>
     <string name="rate_dialog_description">If you enjoy using this app, could you take a moment to rate it? Your feedback is very important for us. </string>
     <string name="button_no_thanks_name">NO, THANKS</string>
     <string name="button_later_name">LATER</string>

@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
@@ -76,9 +77,12 @@ public class RateMeDialog extends DialogFragment {
         // Create a view by inflating desired layout
         View v = inflater.inflate(R.layout.rate_me_dialog, container,  false);
 
-        Button rateNowButton = (Button) v.findViewById(R.id.button_rate_now);
-        Button laterButton = (Button) v.findViewById(R.id.button_later);
-        Button noThanksButton = (Button) v.findViewById(R.id.button_no_thanks);
+        Button rateNowButton = v.findViewById(R.id.button_rate_now);
+        Button laterButton = v.findViewById(R.id.button_later);
+        Button noThanksButton = v.findViewById(R.id.button_no_thanks);
+        TextView titleView = v.findViewById(R.id.rate_me_dialog_title_view);
+
+        titleView.setText(String.format(getString(R.string.rate_dialog_title), getString(R.string.app_name)));
 
         rateNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
