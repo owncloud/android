@@ -32,6 +32,7 @@
   <string name="prefs_manage_accounts">Håndter kontoer</string>
   <string name="prefs_passcode">Passordlås</string>
   <string name="prefs_fingerprint">Fingeravtrykkslås</string>
+  <string name="prefs_fingerprint_summary">Aktiver passord eller mønsterlås for å aktivere dette alternativet</string>
   <string name="prefs_camera_picture_upload">Bilde opplastninger</string>
   <string name="prefs_camera_picture_upload_summary">Last opp bilder tatt med kamera automatisk</string>
   <string name="prefs_camera_video_upload">Video opplastninger</string>
@@ -199,6 +200,12 @@
   <string name="pass_code_wrong">Feil passord</string>
   <string name="pass_code_removed">Passord fjernet</string>
   <string name="pass_code_stored">Passord lagret</string>
+  <string name="fingerprint_confirm">Bekreft ditt fingeravtrykk for å fortsette</string>
+  <string name="fingerprint_not_recognized">Fingeravtrykk ikke gjenkjent, prøv igjen</string>
+  <string name="fingerprint_success">Fingeravtrykk gjenkjent</string>
+  <string name="fingerprint_not_hardware_detected">Denne enheten støtter ikke fingeravtrykksautentisering</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Registrer minst ett fingeravtrykk for å bruke denne funksjonen</string>
+  <string name="fingerprint_not_granted_permissions">Fingeravtrykkstillatelser ikke gitt</string>
   <string name="media_notif_ticker">%1$s musikkspiller</string>
   <string name="media_state_playing">%1$s (spiller)</string>
   <string name="media_state_loading">%1$s (laster)</string>
@@ -495,6 +502,15 @@
     <item quantity="other">%d valgte</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Administrer alle dine synkroniserte filer</string>
+  <string name="welcome_feature_1_text">Du kan kopiere, flytte, slette</string>
+  <string name="welcome_feature_2_title">Del filer og mapper</string>
+  <string name="welcome_feature_2_text">Du kan dele privat eller offentlig</string>
+  <string name="welcome_feature_3_text">Koble til alle dine ownCloud-servere</string>
   <string name="welcome_feature_4_title">Kameraopplasting</string>
+  <string name="welcome_feature_5_text">Spill av videoene dine uten å laste dem ned</string>
+  <string name="welcome_feature_6_text">Bruk et mønster for å låse din ownCloud-app</string>
   <string name="welcome_feature_7_title">Fingeravtrykkslås</string>
+  <string name="welcome_feature_9_title">Last opp bilde fra kamera</string>
+  <string name="welcome_feature_9_text">Ta et bilde og last det opp direkte på serveren</string>
 </resources>
