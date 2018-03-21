@@ -17,13 +17,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.owncloud.android"
-          android:versionCode="${versionCode}"
-          android:versionName="${versionName}">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.owncloud.android"
+    android:versionCode="${versionCode}"
+    android:versionName="${versionName}">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="26" />
+        android:targetSdkVersion="26"
+        tools:overrideLibrary="android.support.customtabs"/>
 
     <!--
          GET_ACCOUNTS is needed for API < 23.

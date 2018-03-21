@@ -100,7 +100,7 @@ import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.CredentialsDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
-import com.owncloud.android.ui.dialog.WebViewDialog;
+import com.owncloud.android.ui.dialog.LoginWebViewDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog;
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog.OnSslUntrustedCertListener;
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter;
@@ -999,7 +999,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         targetUrls.add(getString(R.string.oauth2_redirect_uri));    // target URI for successful authorization
         targetUrls.add(mServerInfo.mBaseUrl + OwnCloudClient.FILES_WEB_PATH);
 
-        WebViewDialog oAuthWebViewDialog = WebViewDialog.newInstance(
+        LoginWebViewDialog oAuthWebViewDialog = LoginWebViewDialog.newInstance(
             authorizationCodeUri,
             targetUrls,
             AuthenticationMethod.BEARER_TOKEN
@@ -1033,7 +1033,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerInfo.mBaseUrl
                 + AccountUtils.getWebdavPath(mServerInfo.mVersion, mAuthTokenType)
         );
-        WebViewDialog dialog = WebViewDialog.newInstance(
+        LoginWebViewDialog dialog = LoginWebViewDialog.newInstance(
             targetUrls.get(0),
             targetUrls,
             AuthenticationMethod.SAML_WEB_SSO

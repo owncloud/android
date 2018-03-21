@@ -60,9 +60,9 @@ import java.util.List;
 /**
  * Dialog to show the WebView for SAML or OAuth authentication
  */
-public class WebViewDialog extends DialogFragment {
+public class LoginWebViewDialog extends DialogFragment {
 
-    private final static String TAG =  WebViewDialog.class.getSimpleName();
+    private final static String TAG =  LoginWebViewDialog.class.getSimpleName();
 
     private static final String ARG_INITIAL_URL = "INITIAL_URL";
     private static final String ARG_TARGET_URLS = "TARGET_URLS";
@@ -84,7 +84,7 @@ public class WebViewDialog extends DialogFragment {
      * @param targetUrls     Url signaling the success of the authentication, when loaded.
      * @return              New dialog instance, ready to show.
      */
-    public static WebViewDialog newInstance(
+    public static LoginWebViewDialog newInstance(
         String url,
         ArrayList<String> targetUrls,
         AuthenticationMethod authenticationMethod
@@ -95,7 +95,7 @@ public class WebViewDialog extends DialogFragment {
                 "Only SAML_WEB_SSO and BEARER_TOKEN authentication methods are supported"
             );
         }
-        WebViewDialog fragment = new WebViewDialog();
+        LoginWebViewDialog fragment = new LoginWebViewDialog();
         Bundle args = new Bundle();
         args.putString(ARG_INITIAL_URL, url);
         args.putStringArrayList(ARG_TARGET_URLS, targetUrls);
@@ -105,7 +105,7 @@ public class WebViewDialog extends DialogFragment {
     }
     
     
-    public WebViewDialog() {
+    public LoginWebViewDialog() {
         super();
     }
     
