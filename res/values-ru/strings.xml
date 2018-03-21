@@ -31,6 +31,8 @@
   <string name="prefs_accounts">Учётные записи</string>
   <string name="prefs_manage_accounts">Управление аккаунтами</string>
   <string name="prefs_passcode">Блокировка кодом</string>
+  <string name="prefs_fingerprint">Блокировка по отпечатку пальца</string>
+  <string name="prefs_fingerprint_summary">Чтобы использовать эту настройку, включите блокировку по коду или графическому ключу</string>
   <string name="prefs_camera_picture_upload">Загрузки изображений</string>
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
   <string name="prefs_camera_video_upload">Загрузки видео</string>
@@ -199,6 +201,13 @@
   <string name="pass_code_wrong">Некоррентный код</string>
   <string name="pass_code_removed">Код удален</string>
   <string name="pass_code_stored">Код сохранен</string>
+  <string name="fingerprint_confirm">Для продолжения подтвердите свой отпечаток пальца</string>
+  <string name="fingerprint_hint">Датчик прикосновения</string>
+  <string name="fingerprint_not_recognized">Отпечаток пальца не распознан, попробуйте ещё раз</string>
+  <string name="fingerprint_success">Отпечаток пальца распознан</string>
+  <string name="fingerprint_not_hardware_detected">Это устройство не поддерживает аутентификацию по отпечатку пальца</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Чтобы использовать эту возможность, зарегистрируйте хотя-бы один отпечаток пальца</string>
+  <string name="fingerprint_not_granted_permissions">Разрешения по отпечатку пальца не предоставлены</string>
   <string name="media_notif_ticker">%1$s аудиоплеер</string>
   <string name="media_state_playing">%1$s (проигрывается)</string>
   <string name="media_state_loading">%1$s (загружается)</string>
@@ -496,5 +505,22 @@
     <item quantity="other">Выбрано %d</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Управляйте всеми вашими засинхронизированными файлами</string>
+  <string name="welcome_feature_1_text">Вы можете копировать, перемещать, удалять</string>
+  <string name="welcome_feature_2_title">Делитесь файлами и папками</string>
+  <string name="welcome_feature_2_text">Вы можете делиться лично или со всеми</string>
+  <string name="welcome_feature_3_title">Много учётных записей</string>
+  <string name="welcome_feature_3_text">Подключайтесь ко всем вашим серверам ownCloud</string>
   <string name="welcome_feature_4_title">Загрузки камеры</string>
+  <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
+  <string name="welcome_feature_5_title"> Потоковое видео</string>
+  <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
+  <string name="welcome_feature_6_title">Блокировка графическим ключом</string>
+  <string name="welcome_feature_6_text">Используйте графический ключ для блокировки вашего приложения ownCloud</string>
+  <string name="welcome_feature_7_title">Блокировка по отпечатку пальца</string>
+  <string name="welcome_feature_7_text">Используйте ваш отпечаток пальца для блокировки приложения ownCloud</string>
+  <string name="welcome_feature_8_title">Поддержка GIF</string>
+  <string name="welcome_feature_8_text">Проигрывайте ваши анимированные изображения GIF</string>
+  <string name="welcome_feature_9_title">Закачивайте изображение из камеры</string>
+  <string name="welcome_feature_9_text">Сделайте снимок и отправьте его прямо на ваш сервер</string>
 </resources>
