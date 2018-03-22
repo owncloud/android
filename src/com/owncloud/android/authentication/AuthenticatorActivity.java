@@ -28,11 +28,14 @@ package com.owncloud.android.authentication;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -41,6 +44,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.customtabs.CustomTabsCallback;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -49,6 +56,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -108,7 +117,10 @@ import com.owncloud.android.utils.DisplayUtils;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import static android.content.Intent.ACTION_VIEW;
 
 /**
  * This Activity is used to add an ownCloud account to the App
@@ -155,6 +167,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private static final String KEY_USERNAME = "USERNAME";
     private static final String KEY_PASSWORD = "PASSWORD";
     private static final String KEY_ASYNC_TASK_IN_PROGRESS = "AUTH_IN_PROGRESS";
+
+
+    private static final String ACTION_CUSTOM_TABS_CONNECTION =
+            "android.support.customtabs.action.CustomTabsService";
+
+    // ChromeCustomTab
+    String mCustomTabPackageName;
     
     /// parameters from EXTRAs in starter Intent
     private byte mAction;
@@ -214,6 +233,20 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private final String SAML_TOKEN_TYPE =
             AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(MainApp.getAccountType());
 
+    private CustomTabsClient mCustomTabsClient;
+    private CustomTabsServiceConnection mCustomTabServiceConnection = new CustomTabsServiceConnection() {
+        @Override
+        public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
+            mCustomTabsClient = client;
+            mCustomTabsClient.warmup(0);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mCustomTabsClient = null;
+        }
+    };
+
     /**
      * {@inheritDoc}
      * 
@@ -221,7 +254,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Log_OC.e(TAG,  "onCreate init");
         super.onCreate(savedInstanceState);
 
         /// protection against screen recording
@@ -306,7 +338,56 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         /// initialize block to be moved to single Fragment to retrieve and validate credentials 
         initAuthorizationPreFragment(savedInstanceState);
 
-        //Log_OC.e(TAG,  "onCreate end");
+        mCustomTabPackageName = getCustomTabPackageName();
+
+        if(mCustomTabPackageName != null) {
+            CustomTabsClient.bindCustomTabsService(this, mCustomTabPackageName, mCustomTabServiceConnection);
+        }
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // check if its a oauth SALS callback intent
+        if(intent.getAction().equals(ACTION_VIEW) &&
+                intent.getData().getHost().equals("android.owncloud.com")) {
+            getOAuth2AccessTokenFromCapturedRedirection(intent.getData());
+        }
+    }
+
+    private String getCustomTabPackageName() {
+
+        PackageManager pm = getPackageManager();
+        // Get default VIEW intent handler.
+        Intent activityIntent = new Intent(ACTION_VIEW, Uri.parse("https://owncloud.org"));
+        ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
+
+
+        // Get all apps that can handle VIEW intents.
+        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
+        List<String> packagesSupportingCustomTabs = new ArrayList<>();
+        for (ResolveInfo info : resolvedActivityList) {
+            Intent serviceIntent = new Intent();
+            serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
+            serviceIntent.setPackage(info.activityInfo.packageName);
+            if (pm.resolveService(serviceIntent, 0) != null) {
+                packagesSupportingCustomTabs.add(info.activityInfo.packageName);
+            }
+        }
+
+        // Now packagesSupportingCustomTabs contains all apps that can handle both VIEW intents
+        // and service calls.
+        if (defaultViewHandlerInfo != null
+                && packagesSupportingCustomTabs.contains(defaultViewHandlerInfo.activityInfo.packageName)) {
+            // try getting the ChromeCustomTab of the default browser
+            return defaultViewHandlerInfo.activityInfo.packageName;
+        } else if (packagesSupportingCustomTabs.size() >= 1) {
+            // try getting the ChromeCustomTab of the first browser that support its
+            return packagesSupportingCustomTabs.get(0);
+        } else {
+            // return null if we don't have a browser installed that can handle ChromeCustomTabs
+            return null;
+        }
     }
 
     private void initAuthTokenType() {
@@ -709,6 +790,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             unbindService(mOperationsServiceConnection);
             mOperationsServiceBinder = null;
         }
+
+        if (mCustomTabServiceConnection != null) {
+            unbindService(mCustomTabServiceConnection);
+        }
+
         super.onDestroy();
     }
 
@@ -999,14 +1085,40 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         targetUrls.add(getString(R.string.oauth2_redirect_uri));    // target URI for successful authorization
         targetUrls.add(mServerInfo.mBaseUrl + OwnCloudClient.FILES_WEB_PATH);
 
+
+        /*
         LoginWebViewDialog oAuthWebViewDialog = LoginWebViewDialog.newInstance(
             authorizationCodeUri,
             targetUrls,
             AuthenticationMethod.BEARER_TOKEN
         );
 
+
+
         oAuthWebViewDialog.show(getSupportFragmentManager(), OAUTH_DIALOG_TAG);
+        */
+
+        openUriWithCustomTab(authorizationCodeUri);
     }
+
+    private void openUriWithCustomTab(String url) {
+        TypedValue tvBackground = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimary, tvBackground, true);
+
+        CustomTabsIntent intent = new CustomTabsIntent.Builder()
+                .setToolbarColor(tvBackground.data)
+                .setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
+                .setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right)
+                .build();
+
+        try {
+            intent.launchUrl(this, Uri.parse(url));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public void onOAuthWebViewDialogFragmentDetached() {
@@ -1669,7 +1781,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      */
     public void onRegisterClick(View view) {
         Intent register = new Intent(
-                Intent.ACTION_VIEW, Uri.parse(getString(R.string.welcome_link_url))
+                ACTION_VIEW, Uri.parse(getString(R.string.welcome_link_url))
         );
         setResult(RESULT_CANCELED);
         startActivity(register);
