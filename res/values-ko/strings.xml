@@ -31,6 +31,8 @@
   <string name="prefs_accounts">계정</string>
   <string name="prefs_manage_accounts">계정 관리</string>
   <string name="prefs_passcode">암호 잠금</string>
+  <string name="prefs_fingerprint">지문 잠금</string>
+  <string name="prefs_fingerprint_summary">이 옵션을 활성화하려면 비밀번호나 패턴 잠금을 활성화하십시오</string>
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_video_upload">동영상 업로드</string>
@@ -46,6 +48,17 @@
   <string name="prefs_imprint">법적 고지</string>
   <string name="prefs_remember_last_share_location">공유 위치 기억하기</string>
   <string name="prefs_remember_last_upload_location_summary">마지막 공유 업로드 위치 기억하기</string>
+  <string name="prefs_pattern">패턴 잠금</string>
+  <string name="pattern_enter_pattern">패턴을 입력해 주세요</string>
+  <string name="pattern_configure_pattern">패턴 입력</string>
+  <string name="pattern_remove_pattern">패턴 제거</string>
+  <string name="pattern_incorrect_pattern">잘못된 패턴</string>
+  <string name="pattern_reenter_pattern">패턴을 다시 입력해 주세요</string>
+  <string name="pattern_not_same_pattern">패턴이 일치하지 않습니다</string>
+  <string name="pattern_stored">패턴 저장됨</string>
+  <string name="pattern_removed">패턴 제거됨</string>
+  <string name="pattern_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 패턴을 비활성화하시오</string>
+  <string name="passcode_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 비밀번호를 비활성화하시오</string>
   <string name="recommend_subject">%1$s을(를) 스마트폰에서 사용해 보세요!</string>
   <string name="recommend_text">%1$s을(를) 스마트폰에서 사용해 보는 것을 추천합니다!\n다운로드 링크: %2$s</string>
   <string name="auth_check_server">서버 확인</string>
@@ -476,4 +489,5 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">카메라 업로드</string>
+  <string name="welcome_feature_7_title">지문 잠금</string>
 </resources>
