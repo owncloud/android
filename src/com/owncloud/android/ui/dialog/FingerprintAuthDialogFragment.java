@@ -16,6 +16,7 @@
  * Modifications
  *
  * @author David González Verdugo
+ * @author Christian Schabesberger
  * Copyright (C) 2018 ownCloud GmbH.
  */
 
@@ -67,6 +68,7 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCancelable(false);
     }
 
     @Override
