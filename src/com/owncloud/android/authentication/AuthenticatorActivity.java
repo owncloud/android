@@ -28,7 +28,6 @@ package com.owncloud.android.authentication;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -44,7 +43,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.customtabs.CustomTabsCallback;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
@@ -56,7 +54,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -77,10 +74,8 @@ import android.widget.Toast;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.OAuthWebViewClient.OAuthWebViewClientListener;
 import com.owncloud.android.authentication.SAMLWebViewClient.SsoWebViewClientListener;
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
@@ -127,7 +122,7 @@ import static android.content.Intent.ACTION_VIEW;
  */
 public class AuthenticatorActivity extends AccountAuthenticatorActivity
         implements  OnRemoteOperationListener, OnFocusChangeListener, OnEditorActionListener,
-        SsoWebViewClientListener, OAuthWebViewClientListener, OnSslUntrustedCertListener,
+        SsoWebViewClientListener, OnSslUntrustedCertListener,
         AuthenticatorAsyncTask.OnAuthenticatorTaskListener {
 
     private static final String TAG = AuthenticatorActivity.class.getSimpleName();
@@ -1113,15 +1108,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
 
-    @Override
-    public void onOAuthWebViewDialogFragmentDetached() {
-        if (mAuthStatusIcon == R.drawable.progress_small) {
-            mAuthStatusIcon = 0;
-            mAuthStatusText = "";
-            showAuthStatus();
-        }
-    }
-
     /**
      * Starts the Web Single Sign On flow to get access to the root folder
      * in the server.
@@ -1931,12 +1917,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             // TODO - show fail
             Log_OC.d(TAG, "SSO failed");
         }
-    }
-
-    @Override
-    public void onGetCapturedUriFromOAuth2Redirection(Uri capturedUriFromOAuth2Redirection) {
-        dismissDialog(OAUTH_DIALOG_TAG);
-        getOAuth2AccessTokenFromCapturedRedirection(capturedUriFromOAuth2Redirection);
     }
 
     @Override
