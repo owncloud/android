@@ -58,6 +58,9 @@ import android.view.View;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.FingerprintManager;
+import com.owncloud.android.authentication.PassCodeManager;
+import com.owncloud.android.authentication.PatternManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
@@ -649,6 +652,12 @@ public class FileDisplayActivity extends HookActivity
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            FingerprintManager.getFingerprintManager(this).bayPassUnlockOnce();
+        }
+        PassCodeManager.getPassCodeManager().bayPassUnlockOnce();
+        PatternManager.getPatternManager().bayPassUnlockOnce();
 
         // Hanndle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS &&
