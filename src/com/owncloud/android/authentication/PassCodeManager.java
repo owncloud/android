@@ -128,4 +128,14 @@ public class PassCodeManager {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false));
     }
+
+    /**
+     * This can be used for example for onAcitivtyResult, where you don't want to re authenticate
+     * again.
+     *
+     * USE WITH CARE
+     */
+    public void bayPassUnlockOnce() {
+        setUnlockTimestamp();
+    }
 }

@@ -122,4 +122,14 @@ public class PatternManager {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
     }
+
+    /**
+     * This can be used for example for onAcitivtyResult, where you don't want to re authenticate
+     * again.
+     *
+     * USE WITH CARE
+     */
+    public void bayPassUnlockOnce() {
+        setUnlockTimestamp();
+    }
 }
