@@ -496,6 +496,11 @@
   <string name="media_service_notification_channel_description">Shihni lojtësin e muzikës</string>
   <string name="file_sync_notification_channel_name">Njëkohësim kartelash</string>
   <string name="file_sync_notification_channel_description">Shihni përfundim njëkohësimi kartelash</string>
+  <string name="rate_dialog_title">Vlerësojeni aplikacionin %1$s!</string>
+  <string name="rate_dialog_description">Nëse ju pëlqen ta përdorni këtë aplikacion, do të harxhonit një çast për ta vlerësuar atë? Përshtypjet tuaja janë shumë të rëndësishme për ne. </string>
+  <string name="button_no_thanks_name">JO, FALEMINDERIT</string>
+  <string name="button_later_name">MË VONË</string>
+  <string name="button_rate_now_name">VLERËSOJENI TANI</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d i përzgjedhur</item>
     <item quantity="other">%d të përzgjedhur</item>
