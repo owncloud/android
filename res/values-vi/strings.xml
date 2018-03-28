@@ -243,6 +243,7 @@
   <string name="network_error_socket_timeout_exception">Máy chủ đã quá dài để đáp ứng</string>
   <string name="prefs_category_accounts">Tài khoản</string>
   <string name="drawer_manage_accounts">Quản lý tài khoản</string>
+  <string name="saml_authentication_wrong_pass">Sai mật khẩu</string>
   <string name="folder_picker_choose_button_text">Chọn</string>
   <string name="auth_host_address">Địa chỉ máy chủ</string>
   <string name="share_dialog_title">Chia sẻ</string>
