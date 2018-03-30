@@ -31,6 +31,8 @@
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
+  <string name="prefs_fingerprint">Fingerabdrucksperre</string>
+  <string name="prefs_fingerprint_summary">Passwort oder Wisch-Muster eingeben um diese Option zu aktivieren</string>
   <string name="prefs_camera_picture_upload">Bild-Upload</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch von der Kamera aufgenommene Bilder hochladen</string>
   <string name="prefs_camera_video_upload">Video-Upload</string>
@@ -198,6 +200,13 @@
   <string name="pass_code_wrong">PIN nicht korrekt</string>
   <string name="pass_code_removed">PIN entfernt</string>
   <string name="pass_code_stored">PIN gespeichert</string>
+  <string name="fingerprint_confirm">Bitte Fingerabdruck zum Fortsetzen bestätigen</string>
+  <string name="fingerprint_hint">Bitte Sensor berühren</string>
+  <string name="fingerprint_not_recognized">Fingerabdruck nicht erkannt, bitte erneut versuchen</string>
+  <string name="fingerprint_success">Fingerabdruck erkannt</string>
+  <string name="fingerprint_not_hardware_detected">Dieses Gerät unterstützt keine Authentifizierung mittels Fingerabdruck</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Registrieren Sie mindestens einen Fingerabruck, um dieses Feature zu benutzen</string>
+  <string name="fingerprint_not_granted_permissions">Fingerabdruck nicht erkannt, nochmal versuchen</string>
   <string name="media_notif_ticker">%1$s Musikplayer</string>
   <string name="media_state_playing">%1$s (abspielend)</string>
   <string name="media_state_loading">%1$s (lädt)</string>
@@ -489,10 +498,32 @@
   <string name="media_service_notification_channel_description">Musik-Player anzeigen</string>
   <string name="file_sync_notification_channel_name">Datei - Synchronisation</string>
   <string name="file_sync_notification_channel_description">Ergebnis der Datei - Synchronisation anzeigen</string>
+  <string name="rate_dialog_title">Bitte %1$s bewerten</string>
+  <string name="rate_dialog_description">Wenn Ihnen diese App gefällt, nehmen Sie sich bitte etwas Zeit, um diese zu bewerten. Ihr Feedback ist für uns wichtig.</string>
+  <string name="button_no_thanks_name">Nein, Danke</string>
+  <string name="button_later_name">Später</string>
+  <string name="button_rate_now_name">Jetzt bewerten</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Verwalten Sie all Ihre synchronisierten Dateien</string>
+  <string name="welcome_feature_1_text">Sie können kopieren, verschieben, löschen</string>
+  <string name="welcome_feature_2_title">Dateien und Ordner teilen</string>
+  <string name="welcome_feature_2_text">Sie können privat oder öffentlich teilen</string>
+  <string name="welcome_feature_3_title">Mehrere Konten</string>
+  <string name="welcome_feature_3_text">Mit all Ihren ownCloud-Servern verbinden</string>
   <string name="welcome_feature_4_title">Kamera-Uploads</string>
+  <string name="welcome_feature_4_text">Ihre Bilder/Videos werden automatisch hochgeladen</string>
+  <string name="welcome_feature_5_title">Videostreaming</string>
+  <string name="welcome_feature_5_text">Geben Sie Ihre Videos wieder, ohne sie herunterzuladen</string>
+  <string name="welcome_feature_6_title">Mustersperre</string>
+  <string name="welcome_feature_6_text">Bitte die Mustersperre zum Sperren Ihrer Owncloud nutzen</string>
+  <string name="welcome_feature_7_title">Fingerabdrucksperre</string>
+  <string name="welcome_feature_7_text">Bitte Fingerabdruck zum Sperren Ihrer Owncloud nutzen</string>
+  <string name="welcome_feature_8_title">GIF-Unterstützung</string>
+  <string name="welcome_feature_8_text">Ihre animierten GIF-Grafiken abspielen</string>
+  <string name="welcome_feature_9_title">Bild von der Kamera hochladen</string>
+  <string name="welcome_feature_9_text">Foto aufnehmen und direkt auf Ihren Owncloud-Server hochladen</string>
 </resources>
