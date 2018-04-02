@@ -85,6 +85,7 @@ import com.owncloud.android.ui.fragment.FileDetailFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
+import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
@@ -146,6 +147,8 @@ public class FileDisplayActivity extends HookActivity
 
     private IndexedForest<FileDisplayActivity> mPendingCameraUploads = new IndexedForest<>();
 
+    FilesUploadHelper filesUploadHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -162,10 +165,10 @@ public class FileDisplayActivity extends HookActivity
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
-            mFileWaitingToPreview = (OCFile) savedInstanceState.getParcelable(
+            mFileWaitingToPreview = savedInstanceState.getParcelable(
                     FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
-            mWaitingToSend = (OCFile) savedInstanceState.getParcelable(
+            mWaitingToSend = savedInstanceState.getParcelable(
                     FileDisplayActivity.KEY_WAITING_TO_SEND);
         } else {
             mFileWaitingToPreview = null;
@@ -206,6 +209,8 @@ public class FileDisplayActivity extends HookActivity
         if (getResources().getBoolean(R.bool.enable_rate_me_feature) && !isBeta()) {
             AppRater.appLaunched(this, getPackageName());
         }
+
+        filesUploadHelper = new FilesUploadHelper(this, getAccount().name);
     }
 
     @Override
@@ -641,8 +646,9 @@ public class FileDisplayActivity extends HookActivity
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 
+        // Hanndle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS &&
             (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
 
@@ -653,10 +659,26 @@ public class FileDisplayActivity extends HookActivity
 
             requestUploadOfFilesFromFileSystem(data, resultCode);
 
-        } else if(requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA &&
-                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)){
+        } else if(requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
+            if(resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) {
+                filesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
+                    @Override
+                    public void onCheckAvailableSpaceStart() {
 
-            requestUploadOfFilesFromFileSystem(data,resultCode);
+                    }
+
+                    @Override
+                    public void onCheckAvailableSpaceFinished(boolean hasEnoughSpace, String[] capturedFilePaths) {
+                        if(hasEnoughSpace) {
+                            requestUploadOfFilesFromFileSystem(capturedFilePaths,FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                        }
+                    }
+                });
+            } else if(requestCode == RESULT_CANCELED) {
+                filesUploadHelper.deleteImageFile();
+            }
+
+           // requestUploadOfFilesFromFileSystem(data,resultCode);
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == RESULT_OK) {
             final Intent fData = data;
             getHandler().postDelayed(
@@ -686,11 +708,16 @@ public class FileDisplayActivity extends HookActivity
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-
     }
 
     private void requestUploadOfFilesFromFileSystem(Intent data, int resultCode) {
         String[] filePaths = data.getStringArrayExtra(UploadFilesActivity.EXTRA_CHOSEN_FILES);
+        int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
+                ? FileUploader.LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
+        requestUploadOfFilesFromFileSystem(filePaths, behaviour);
+    }
+
+    private void requestUploadOfFilesFromFileSystem(String[] filePaths, int behaviour) {
         if (filePaths != null) {
             String[] remotePaths = new String[filePaths.length];
             String remotePathBase = getCurrentDir().getRemotePath();
@@ -698,8 +725,7 @@ public class FileDisplayActivity extends HookActivity
                 remotePaths[j] = remotePathBase + (new File(filePaths[j])).getName();
             }
 
-            int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) ? FileUploader
-                    .LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
+
             TransferRequester requester = new TransferRequester();
             requester.uploadNewFiles(
                     this,
@@ -717,7 +743,6 @@ public class FileDisplayActivity extends HookActivity
             showSnackMessage(getString(R.string.filedisplay_no_file_selected));
         }
     }
-
 
     private void requestUploadOfContentFromApps(Intent contentIntent, int resultCode) {
 
@@ -753,8 +778,8 @@ public class FileDisplayActivity extends HookActivity
         );
 
         uploader.uploadUris();
-
     }
+
 
     /**
      * Request the operation for moving the file/folder from one path to another
@@ -1856,5 +1881,9 @@ public class FileDisplayActivity extends HookActivity
 
     public void allFilesOption() {
         browseToRoot();
+    }
+
+    public FilesUploadHelper getFilesUploadHelper() {
+        return filesUploadHelper;
     }
 }
