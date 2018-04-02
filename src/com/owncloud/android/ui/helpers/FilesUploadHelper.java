@@ -32,19 +32,27 @@ import static android.app.Activity.RESULT_OK;
 import static com.owncloud.android.ui.activity.UploadFilesActivity.EXTRA_CHOSEN_FILES;
 import static com.owncloud.android.ui.activity.UploadFilesActivity.RESULT_OK_AND_MOVE;
 
-public class FilesUploadHelper {
+public class FilesUploadHelper implements Parcelable {
 
     private static final String TAG = FilesUploadHelper.class.toString();
-
-    public static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private String capturedPhotoPath;
     private File image = null;
 
-    private final Activity activity;
-    private final String accountName;
+    private Activity activity;
+    private String accountName;
 
     public FilesUploadHelper(Activity activity, String accountName) {
+        this.activity = activity;
+        this.accountName = accountName;
+    }
+
+    protected FilesUploadHelper(Parcel in) {
+        this.capturedPhotoPath = in.readString();
+        this.image = (File) in.readSerializable();
+    }
+
+    public void init(Activity activity, String accountName) {
         this.activity = activity;
         this.accountName = accountName;
     }
@@ -183,4 +191,27 @@ public class FilesUploadHelper {
             Log_OC.d(TAG, "File deleted");
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.capturedPhotoPath);
+        dest.writeSerializable(this.image);
+    }
+
+    public static final Parcelable.Creator<FilesUploadHelper> CREATOR = new Parcelable.Creator<FilesUploadHelper>() {
+        @Override
+        public FilesUploadHelper createFromParcel(Parcel source) {
+            return new FilesUploadHelper(source);
+        }
+
+        @Override
+        public FilesUploadHelper[] newArray(int size) {
+            return new FilesUploadHelper[size];
+        }
+    };
 }
