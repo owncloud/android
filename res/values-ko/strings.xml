@@ -93,6 +93,7 @@
   <string name="file_list_file">파일</string>
   <string name="file_list_files">파일</string>
   <string name="filedetails_select_file">파일을 누르면 추가 정보가 표시됩니다.</string>
+  <string name="upload_to">%1$s로 업로드</string>
   <string name="filedetails_size">크기:</string>
   <string name="filedetails_type">종류:</string>
   <string name="filedetails_created">만든 날짜:</string>
@@ -195,6 +196,11 @@
   <string name="pass_code_wrong">암호가 잘못됨</string>
   <string name="pass_code_removed">암호 삭제됨</string>
   <string name="pass_code_stored">암호 저장됨</string>
+  <string name="fingerprint_hint">터치센서</string>
+  <string name="fingerprint_not_recognized">지문이 인식되지 않았습니다. 다시시도해주세요</string>
+  <string name="fingerprint_success">지문확인됨</string>
+  <string name="fingerprint_not_hardware_detected">이 기기는 지문 인식이 지원이 되지 않습니다</string>
+  <string name="fingerprint_not_granted_permissions">지문인식 권한이 부여되지 않았습니다</string>
   <string name="media_notif_ticker">%1$s 음악 재생기</string>
   <string name="media_state_playing">%1$s (재생 중)</string>
   <string name="media_state_loading">%1$s (불러오는 중)</string>
@@ -484,10 +490,17 @@
   <string name="media_service_notification_channel_description">음악 재생기 보기</string>
   <string name="file_sync_notification_channel_name">파일 동기화</string>
   <string name="file_sync_notification_channel_description">파일 동기화 결과 보기</string>
+  <string name="rate_dialog_description">이 앱을 잘 쓰고있으신가요? 잠시 시간을 내서 우리의 앱을 평가해주실수 있으신가요?
+당신의 피드백이 매우 우리에겐 중요합니다!</string>
+  <string name="button_no_thanks_name">괜찮습니다</string>
+  <string name="button_later_name">나중에 할께요</string>
+  <string name="button_rate_now_name">당장 리뷰를 남깁시다</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d개 선택됨</item>
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">카메라 업로드</string>
+  <string name="welcome_feature_5_title">비디오 스트리밍</string>
+  <string name="welcome_feature_6_title">패턴 잠금</string>
   <string name="welcome_feature_7_title">지문 잠금</string>
 </resources>
