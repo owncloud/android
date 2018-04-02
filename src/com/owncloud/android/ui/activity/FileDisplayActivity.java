@@ -123,6 +123,7 @@ public class FileDisplayActivity extends HookActivity
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
     private static final String KEY_WAITING_TO_SEND = "WAITING_TO_SEND";
+    private static final String KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER";
 
     public static final String ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS";
 
@@ -156,10 +157,6 @@ public class FileDisplayActivity extends HookActivity
         super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account
         // is valid
 
-        /// grant that FileObserverService is watching favorite files
-        if (savedInstanceState == null) {
-            FileObserverService.initialize(this);
-        }
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -170,10 +167,15 @@ public class FileDisplayActivity extends HookActivity
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
             mWaitingToSend = savedInstanceState.getParcelable(
                     FileDisplayActivity.KEY_WAITING_TO_SEND);
+            filesUploadHelper = savedInstanceState.getParcelable(KEY_UPLOAD_HELPER);
+            filesUploadHelper.init(this, getAccount().name);
         } else {
             mFileWaitingToPreview = null;
             mSyncInProgress = false;
             mWaitingToSend = null;
+
+            FileObserverService.initialize(this);
+            filesUploadHelper = new FilesUploadHelper(this, getAccount().name);
         }
 
         /// USER INTERFACE
@@ -209,8 +211,6 @@ public class FileDisplayActivity extends HookActivity
         if (getResources().getBoolean(R.bool.enable_rate_me_feature) && !isBeta()) {
             AppRater.appLaunched(this, getPackageName());
         }
-
-        filesUploadHelper = new FilesUploadHelper(this, getAccount().name);
     }
 
     @Override
@@ -855,6 +855,7 @@ public class FileDisplayActivity extends HookActivity
         //outState.putBoolean(FileDisplayActivity.KEY_REFRESH_SHARES_IN_PROGRESS,
         // mRefreshSharesInProgress);
         outState.putParcelable(FileDisplayActivity.KEY_WAITING_TO_SEND, mWaitingToSend);
+        outState.putParcelable(KEY_UPLOAD_HELPER, filesUploadHelper);
 
         Log_OC.v(TAG, "onSaveInstanceState() end");
     }
