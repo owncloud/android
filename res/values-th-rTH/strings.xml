@@ -31,6 +31,8 @@
   <string name="prefs_accounts">บัญชี</string>
   <string name="prefs_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="prefs_passcode">ล็อครหัสยืนยัน</string>
+  <string name="prefs_fingerprint">ล็อคด้วยลายนิ้วมือ</string>
+  <string name="prefs_fingerprint_summary">เปิดใช้งานรหัสผ่านหรือรูปแบบล็อคเพื่อเปิดใช้งานตัวเลือกนี้</string>
   <string name="prefs_camera_picture_upload">อัพโหลดรูปภาพ</string>
   <string name="prefs_camera_picture_upload_summary">อัพโหลดภาพที่ถ่ายด้วยกล้องโดยอัตโนมัติ</string>
   <string name="prefs_camera_video_upload">อัพโหลดวิดีโอ</string>
@@ -46,6 +48,20 @@
   <string name="prefs_imprint">ประทับ</string>
   <string name="prefs_remember_last_share_location">จดจำตำแหน่งที่ใช้ร่วมกัน</string>
   <string name="prefs_remember_last_upload_location_summary">จดจำตำแหน่งล่าสุดที่ใช้ร่วมกัน</string>
+  <string name="prefs_pattern">รูปแบบการล็อค</string>
+  <string name="pattern_enter_pattern">โปรดใส่รูปแบบของคุณ</string>
+  <string name="pattern_configure_pattern">รูปแบบของคุณ</string>
+  <string name="pattern_remove_pattern">ลบรูปแบบของคุณ</string>
+  <string name="pattern_incorrect_pattern">รูปแบบไม่ถูกต้อง</string>
+  <string name="pattern_reenter_pattern">โปรดใส่รูปแบบของคุณอีกครั้ง</string>
+  <string name="pattern_not_same_pattern">รูปแบบไม่เหมือนกัน</string>
+  <string name="pattern_stored">รูปแบบที่เก็บไว้</string>
+  <string name="pattern_removed">ลบรูปแบบแล้ว</string>
+  <string name="pattern_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดการใช้รูปแบบก่อน</string>
+  <string name="passcode_already_set">คุณไม่สามารถเปิดใช้งานการเข้ารหัสรูปแบบและรหัสผ่านได้ในเวลาเดียวกัน โปรดปิดใช้งานรหัสผ่านก่อน</string>
+  <string name="pattern_no_longer_required">จะไม่ถามเรื่องรูปแบบอีกต่อไป</string>
+  <string name="pattern_configure_your_pattern_explanation">ร้องขอรูปแบบทุกครั้งที่มีการเริ่มต้นแอพ</string>
+  <string name="illegal_argument_exception_message">ต้องใช้การกระทำที่ถูกต้องเพื่อ</string>
   <string name="recommend_subject">ลองใช้ %1$s บนสมาร์ทโฟนของคุณ!</string>
   <string name="recommend_text">ฉันอยากจะขอเชิญให้คุณใช้ %1$s บนสมาร์ทโฟนของคุณ!\nดาวน์โหลดที่นี่: %2$s</string>
   <string name="auth_check_server">ตรวจสอบเซิร์ฟเวอร์</string>
@@ -184,6 +200,13 @@
   <string name="pass_code_wrong">รหัสยืนยันไม่ถูกต้อง</string>
   <string name="pass_code_removed">ลบรหัสยืนยัน</string>
   <string name="pass_code_stored">รหัสยืนยันที่เก็บไว้</string>
+  <string name="fingerprint_confirm">ยืนยันลายนิ้วมือของคุณเพื่อดำเนินการต่อ</string>
+  <string name="fingerprint_hint">เซ็นเซอร์ระบบสัมผัส</string>
+  <string name="fingerprint_not_recognized">ไม่รู้จักลายนิ้วมือนี้ โปรดลองอีกครั้ง</string>
+  <string name="fingerprint_success">ตรวจสอบลายนิ้วมือแล้ว</string>
+  <string name="fingerprint_not_hardware_detected">อุปกรณ์นี้ไม่สนับสนุนการตรวจสอบด้วยลายนิ้วมือ</string>
+  <string name="fingerprint_not_enrolled_fingerprints">เปิดใช้งานอย่างน้อยหนึ่งลายนิ้วมือเพื่อใช้คุณลักษณะนี้</string>
+  <string name="fingerprint_not_granted_permissions">ลายนิ้วมือนี้ยังไม่ได้รับอนุญาต</string>
   <string name="media_notif_ticker">เล่นเพลง %1$s</string>
   <string name="media_state_playing">%1$s (กำลังเล่น)</string>
   <string name="media_state_loading">%1$s (กำลังโหลด)</string>
@@ -473,9 +496,31 @@
   <string name="media_service_notification_channel_description">ดูเครื่องเล่นเพลง</string>
   <string name="file_sync_notification_channel_name">ประสานข้อมูลไฟล์</string>
   <string name="file_sync_notification_channel_description">ดูผลลัพธ์การประสานข้อมูลไฟล์</string>
+  <string name="rate_dialog_title">ให้คะแนนแอพฯ %1$s</string>
+  <string name="rate_dialog_description">ช่วยสละเวลาซักนิดเพื่อให้คะแนนแอพฯ ของเราหน่อยนะ</string>
+  <string name="button_no_thanks_name">ไม่เป็นไรขอบคุณ</string>
+  <string name="button_later_name">ไว้คราวหน้า</string>
+  <string name="button_rate_now_name">ให้คะแนนตอนนี้</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d รายการที่ถูกเลือก</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">จัดการไฟล์ประสานข้อมูลทั้งหมดของคุณ</string>
+  <string name="welcome_feature_1_text">คุณสามารถคัดลอก ย้าย หรือลบได้</string>
+  <string name="welcome_feature_2_title">แชร์ไฟล์และโฟลเดอร์</string>
+  <string name="welcome_feature_2_text">คุณสามารถแชร์แบบส่วนตัวหรือแบบสาธารณะ</string>
+  <string name="welcome_feature_3_title">หลายบัญชี</string>
+  <string name="welcome_feature_3_text">เชื่อมต่อกับเซิร์ฟเวอร์ ownCloud ทั้งหมดของคุณ</string>
   <string name="welcome_feature_4_title">อัพโหลดจากกล้อง</string>
+  <string name="welcome_feature_4_text">รูปภาพ/วิดีโอ ของคุณถูกอัพโหลดโดยอัตโนมัติแล้ว</string>
+  <string name="welcome_feature_5_title">กำลังสตรีมวิดีโอ</string>
+  <string name="welcome_feature_5_text">เล่นวิดีโอของคุณโดยไม่ต้องดาวน์โหลด</string>
+  <string name="welcome_feature_6_title">รูปแบบการล็อค</string>
+  <string name="welcome_feature_6_text">ใช้รูปแบบเพื่อล็อกแอพพลิเคชันของคุณ</string>
+  <string name="welcome_feature_7_title">ล็อคด้วยลายนิ้วมือ</string>
+  <string name="welcome_feature_7_text">ใช้ลายนิ้วมือเพื่อล็อคแอพพลิเคชัน ownCloud ของคุณ</string>
+  <string name="welcome_feature_8_title">สนับสนุนรูปภาพ GIF</string>
+  <string name="welcome_feature_8_text">เล่นภาพ GIF ที่เป็นภาพเคลื่อนไหว</string>
+  <string name="welcome_feature_9_title">อัพโหลดรูปภาพจากกล้อง</string>
+  <string name="welcome_feature_9_text">ถ่ายภาพและอัพโหลดภาพโดยตรงไปยังเซิร์ฟเวอร์ของคุณ</string>
 </resources>
