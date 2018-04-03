@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Shashvat Kedia
+ * @author Christian Schabesberger
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -25,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -289,5 +291,25 @@ public class PatternLockActivity extends AppCompatActivity {
             cancelButton.setVisibility(View.INVISIBLE);
             cancelButton.setOnClickListener(null);
         }
+    }
+
+    /**
+     * Overrides click on the BACK arrow to correctly cancel ACTION_ENABLE or ACTION_DISABLE, while
+     * preventing than ACTION_CHECK may be worked around.
+     *
+     * @param keyCode       Key code of the key that triggered the down event.
+     * @param event         Event triggered.
+     * @return              'True' when the key event was processed by this method.
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount()== 0){
+            if (ACTION_REQUEST_WITH_RESULT.equals(getIntent().getAction()) ||
+                    ACTION_CHECK_WITH_RESULT.equals(getIntent().getAction())) {
+                finish();
+            }   // else, do nothing, but report that the key was consumed to stay alive
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
