@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author Shashvat Kedia
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -25,14 +26,10 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,11 +47,9 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.LocalFileListFragment;
-import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.ui.helpers.FilesUploadHelper;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Calendar;
 
 
 /**
@@ -63,7 +58,7 @@ import java.util.Calendar;
  */
 public class UploadFilesActivity extends FileActivity implements
     LocalFileListFragment.ContainerActivity, ActionBar.OnNavigationListener,
-        OnClickListener, ConfirmationDialogFragmentListener {
+        OnClickListener, ConfirmationDialogFragmentListener, FilesUploadHelper.OnCheckAvailableSpaceListener {
 
     private static final String TAG = UploadFilesActivity.class.getName();
 
@@ -95,6 +90,7 @@ public class UploadFilesActivity extends FileActivity implements
     private RadioButton mRadioBtnMoveFiles;
     private int requestCode;
 
+    FilesUploadHelper filesUploadHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,6 +105,8 @@ public class UploadFilesActivity extends FileActivity implements
         }
         
         mAccountOnCreation = getAccount();
+
+        filesUploadHelper = new FilesUploadHelper(this, mAccountOnCreation.name);
                 
         /// USER INTERFACE
             
@@ -130,9 +128,9 @@ public class UploadFilesActivity extends FileActivity implements
         
         
         // Set input controllers
-        mCancelBtn = (Button) findViewById(R.id.upload_files_btn_cancel);
+        mCancelBtn = findViewById(R.id.upload_files_btn_cancel);
         mCancelBtn.setOnClickListener(this);
-        mUploadBtn = (Button) findViewById(R.id.upload_files_btn_upload);
+        mUploadBtn = findViewById(R.id.upload_files_btn_upload);
         mUploadBtn.setOnClickListener(this);
 
         SharedPreferences appPreferences = PreferenceManager
@@ -140,12 +138,12 @@ public class UploadFilesActivity extends FileActivity implements
 
         Integer localBehaviour = appPreferences.getInt("prefs_uploader_behaviour", FileUploader.LOCAL_BEHAVIOUR_COPY);
 
-        mRadioBtnMoveFiles = (RadioButton) findViewById(R.id.upload_radio_move);
+        mRadioBtnMoveFiles = findViewById(R.id.upload_radio_move);
         if (localBehaviour == FileUploader.LOCAL_BEHAVIOUR_MOVE){
             mRadioBtnMoveFiles.setChecked(true);
         }
 
-        mRadioBtnCopyFiles = (RadioButton) findViewById(R.id.upload_radio_copy);
+        mRadioBtnCopyFiles = findViewById(R.id.upload_radio_copy);
         if (localBehaviour == FileUploader.LOCAL_BEHAVIOUR_COPY){
             mRadioBtnCopyFiles.setChecked(true);
         }
@@ -170,9 +168,7 @@ public class UploadFilesActivity extends FileActivity implements
         Intent callingIntent = getIntent();
         Bundle data = callingIntent.getExtras();
         requestCode = (int) data.get(REQUEST_CODE_KEY);
-        if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
-            uploadFromCamera();
-        }
+
         Log_OC.d(TAG, "onCreate() end");
     }
 
@@ -190,74 +186,13 @@ public class UploadFilesActivity extends FileActivity implements
         action.putExtra(REQUEST_CODE_KEY,requestCode);
         activity.startActivityForResult(action, requestCode);
     }
-    /**
-     * Function to send an intent to the device's camera to capture a picture
-     * */
-    private void uploadFromCamera(){
-        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photoFile = createImageFile();
-        if(photoFile != null){
-            Uri photoUri = FileProvider.getUriForFile(getApplicationContext(),
-                    getResources().getString(R.string.file_provider_authority),photoFile);
-            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
-        }
-        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    private File createImageFile(){
-        try {
-            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            image = File.createTempFile(getCapturedImageName(), ".jpg", storageDir);
-            capturedPhotoPath = image.getAbsolutePath();
-        } catch(IOException exception){
-            Log_OC.d(TAG,exception.toString());
-        }
-        return image;
-    }
-
-    private File getCapturedImageFile(){
-        File capturedImage = new File(capturedPhotoPath);
-        File parent = capturedImage.getParentFile();
-        File newImage = new File(parent,getCapturedImageName() + ".jpg");
-        capturedImage.renameTo(newImage);
-        capturedImage.delete();
-        capturedPhotoPath = newImage.getAbsolutePath();
-        return newImage;
-    }
-
-    private String getCapturedImageName(){
-        Calendar calendar = Calendar.getInstance();
-        String year = "" + calendar.get(Calendar.YEAR);
-        String month = ("0" + (calendar.get(Calendar.MONTH) + 1));
-        String day = ("0" + calendar.get(Calendar.DAY_OF_MONTH));
-        String hour = ("0" + calendar.get(Calendar.HOUR_OF_DAY));
-        String minute = ("0" + calendar.get(Calendar.MINUTE));
-        String second = ("0" + calendar.get(Calendar.SECOND));
-        month = month.length() == 3 ? month.substring(1,month.length()) : month;
-        day = day.length() == 3 ? day.substring(1,day.length()) : day;
-        hour = hour.length() == 3 ? hour.substring(1,hour.length()) : hour;
-        minute = minute.length() == 3 ? minute.substring(1,minute.length()) : minute;
-        second = second.length() == 3 ? second.substring(1,second.length()) : second;
-        String newImageName = "IMG_" + year + month + day + "_" + hour + minute + second;
-        return newImageName;
-    }
 
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent capturedData){
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            new CheckAvailableSpaceTask(getCapturedImageFile().getAbsolutePath()).execute();
-        } else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_CANCELED){
-            if(image != null){
-                image.delete();
-                Log_OC.d(TAG,"File deleted");
-            }
+        if(resultCode != RESULT_CANCELED) {
+            filesUploadHelper.onActivityResult(this);
+        } else {
             setResult(RESULT_CANCELED);
-            finish();
-        } else if(resultCode == RESULT_CANCELED){
-            setResult(RESULT_CANCELED);
-            finish();
         }
     }
 
@@ -412,109 +347,59 @@ public class UploadFilesActivity extends FileActivity implements
             finish();
             
         } else if (v.getId() == R.id.upload_files_btn_upload) {
-            new CheckAvailableSpaceTask(null).execute();
+            filesUploadHelper.checkIfAvailableSpace(mFileListFragment.getCheckedFilePaths(), this);
         }
     }
 
 
-    /**
-     * Asynchronous task checking if there is space enough to copy all the files chosen
-     * to upload into the ownCloud local folder.
-     * 
-     * Maybe an AsyncTask is not strictly necessary, but who really knows.
-     */
-    private class CheckAvailableSpaceTask extends AsyncTask<Void, Void, Boolean> {
-
-        private String capturedImagePath;
-
-        public CheckAvailableSpaceTask(String imagePath){
-            super();
-            capturedImagePath = imagePath;
-        }
-
-        /**
-         * Updates the UI before trying the movement
-         */
-        @Override
-        protected void onPreExecute () {
+    @Override
+    public void onCheckAvailableSpaceStart() {
             /// progress dialog and disable 'Move' button
-            if(requestCode == FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM) {
+            if (requestCode == FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM) {
                 mCurrentDialog = LoadingDialog.newInstance(R.string.wait_a_moment, false);
                 mCurrentDialog.show(getSupportFragmentManager(), WAIT_DIALOG_TAG);
             }
+    }
+
+    @Override
+    public void onCheckAvailableSpaceFinished(final boolean hasEnoughSpace, final String[] capturedFilePaths) {
+        if(requestCode == FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM) {
+            mCurrentDialog.dismiss();
+            mCurrentDialog = null;
         }
-        
-        
-        /**
-         * Checks the available space
-         * 
-         * @return     'True' if there is space enough.
-         */
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            String[] checkedFilePaths;
+        if (hasEnoughSpace) {
+            // return the list of selected files (success)
+            Intent data = new Intent();
+            SharedPreferences.Editor appPreferencesEditor = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext()).edit();
+
             if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
-                checkedFilePaths = new String[]{capturedImagePath};
+                data.putExtra(EXTRA_CHOSEN_FILES, capturedFilePaths);
+                setResult(RESULT_OK_AND_MOVE, data);
             } else {
-                checkedFilePaths = mFileListFragment.getCheckedFilePaths();
-            }
-            long total = 0;
-            for (int i=0; checkedFilePaths != null && i < checkedFilePaths.length ; i++) {
-                String localPath = checkedFilePaths[i];
-                File localFile = new File(localPath);
-                total += localFile.length();
-            }
-            return (new Boolean(FileStorageUtils.getUsableSpace(mAccountOnCreation.name) >= total));
-        }
-
-        /**
-         * Updates the activity UI after the check of space is done.
-         * 
-         * If there is not space enough. shows a new dialog to query the user if wants to move the
-         * files instead of copy them.
-         * 
-         * @param result        'True' when there is space enough to copy all the selected files.
-         */
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if(requestCode == FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM) {
-                mCurrentDialog.dismiss();
-                mCurrentDialog = null;
-            }
-            if (result) {
-                // return the list of selected files (success)
-                Intent data = new Intent();
-                SharedPreferences.Editor appPreferencesEditor = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext()).edit();
-
-                if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA){
-                    data.putExtra(EXTRA_CHOSEN_FILES,new String[]{ capturedImagePath});
+                data.putExtra(EXTRA_CHOSEN_FILES, mFileListFragment.getCheckedFilePaths());
+                if (mRadioBtnMoveFiles.isChecked()) {
                     setResult(RESULT_OK_AND_MOVE, data);
+                    appPreferencesEditor.putInt("prefs_uploader_behaviour",
+                            FileUploader.LOCAL_BEHAVIOUR_MOVE);
                 } else {
-                    data.putExtra(EXTRA_CHOSEN_FILES, mFileListFragment.getCheckedFilePaths());
-                    if (mRadioBtnMoveFiles.isChecked()) {
-                        setResult(RESULT_OK_AND_MOVE, data);
-                        appPreferencesEditor.putInt("prefs_uploader_behaviour",
-                                FileUploader.LOCAL_BEHAVIOUR_MOVE);
-                    } else {
-                        setResult(RESULT_OK, data);
-                        appPreferencesEditor.putInt("prefs_uploader_behaviour",
-                                FileUploader.LOCAL_BEHAVIOUR_COPY);
-                    }
+                    setResult(RESULT_OK, data);
+                    appPreferencesEditor.putInt("prefs_uploader_behaviour",
+                            FileUploader.LOCAL_BEHAVIOUR_COPY);
                 }
-                appPreferencesEditor.apply();
-                finish();
-            } else {
-                // show a dialog to query the user if wants to move the selected files
-                // to the ownCloud folder instead of copying
-                String[] args = {getString(R.string.app_name)};
-                ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
-                        R.string.upload_query_move_foreign_files, args, 0, R.string.common_yes, -1,
-                        R.string.common_no
-                );
-                dialog.setOnConfirmationListener(UploadFilesActivity.this);
-                dialog.show(getSupportFragmentManager(), QUERY_TO_MOVE_DIALOG_TAG);
             }
+            appPreferencesEditor.apply();
+            finish();
+        } else {
+            // show a dialog to query the user if wants to move the selected files
+            // to the ownCloud folder instead of copying
+            String[] args = {getString(R.string.app_name)};
+            ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(
+                    R.string.upload_query_move_foreign_files, args, 0, R.string.common_yes, -1,
+                    R.string.common_no
+            );
+            dialog.setOnConfirmationListener(UploadFilesActivity.this);
+            dialog.show(getSupportFragmentManager(), QUERY_TO_MOVE_DIALOG_TAG);
         }
     }
 
@@ -558,7 +443,6 @@ public class UploadFilesActivity extends FileActivity implements
             setResult(RESULT_CANCELED);
             finish();
         }
-    }    
-
+    }
     
 }

@@ -4,8 +4,9 @@
  *  @author Bartek Przybylski
  *  @author David A. Velasco
  *  @author David González Verdugo
+ *  @author Christian Schabesberger
  *  Copyright (C) 2011  Bartek Przybylski
- *  Copyright (C) 2016 ownCloud GmbH.
+ *  Copyright (C) 2018 ownCloud GmbH.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License version 2,
@@ -85,6 +86,7 @@ import com.owncloud.android.ui.fragment.FileDetailFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.ui.fragment.OCFileListFragment;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
+import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageActivity;
@@ -122,6 +124,7 @@ public class FileDisplayActivity extends HookActivity
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
     private static final String KEY_WAITING_TO_SEND = "WAITING_TO_SEND";
+    private static final String KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER";
 
     public static final String ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS";
 
@@ -146,6 +149,8 @@ public class FileDisplayActivity extends HookActivity
 
     private IndexedForest<FileDisplayActivity> mPendingCameraUploads = new IndexedForest<>();
 
+    FilesUploadHelper filesUploadHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -153,24 +158,26 @@ public class FileDisplayActivity extends HookActivity
         super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account
         // is valid
 
-        /// grant that FileObserverService is watching favorite files
-        if (savedInstanceState == null) {
-            FileObserverService.initialize(this);
-        }
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
-            mFileWaitingToPreview = (OCFile) savedInstanceState.getParcelable(
+            mFileWaitingToPreview = savedInstanceState.getParcelable(
                     FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
-            mWaitingToSend = (OCFile) savedInstanceState.getParcelable(
+            mWaitingToSend = savedInstanceState.getParcelable(
                     FileDisplayActivity.KEY_WAITING_TO_SEND);
+            filesUploadHelper = savedInstanceState.getParcelable(KEY_UPLOAD_HELPER);
+            filesUploadHelper.init(this, getAccount().name);
         } else {
             mFileWaitingToPreview = null;
             mSyncInProgress = false;
             mWaitingToSend = null;
+
+            FileObserverService.initialize(this);
+            filesUploadHelper = new FilesUploadHelper(this,
+                    getAccount() == null ? "" : getAccount().name);
         }
 
         /// USER INTERFACE
@@ -641,8 +648,9 @@ public class FileDisplayActivity extends HookActivity
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 
+        // Hanndle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS &&
             (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
 
@@ -653,10 +661,26 @@ public class FileDisplayActivity extends HookActivity
 
             requestUploadOfFilesFromFileSystem(data, resultCode);
 
-        } else if(requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA &&
-                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)){
+        } else if(requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
+            if(resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) {
+                filesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
+                    @Override
+                    public void onCheckAvailableSpaceStart() {
 
-            requestUploadOfFilesFromFileSystem(data,resultCode);
+                    }
+
+                    @Override
+                    public void onCheckAvailableSpaceFinished(boolean hasEnoughSpace, String[] capturedFilePaths) {
+                        if(hasEnoughSpace) {
+                            requestUploadOfFilesFromFileSystem(capturedFilePaths,FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                        }
+                    }
+                });
+            } else if(requestCode == RESULT_CANCELED) {
+                filesUploadHelper.deleteImageFile();
+            }
+
+           // requestUploadOfFilesFromFileSystem(data,resultCode);
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == RESULT_OK) {
             final Intent fData = data;
             getHandler().postDelayed(
@@ -686,11 +710,16 @@ public class FileDisplayActivity extends HookActivity
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-
     }
 
     private void requestUploadOfFilesFromFileSystem(Intent data, int resultCode) {
         String[] filePaths = data.getStringArrayExtra(UploadFilesActivity.EXTRA_CHOSEN_FILES);
+        int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)
+                ? FileUploader.LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
+        requestUploadOfFilesFromFileSystem(filePaths, behaviour);
+    }
+
+    private void requestUploadOfFilesFromFileSystem(String[] filePaths, int behaviour) {
         if (filePaths != null) {
             String[] remotePaths = new String[filePaths.length];
             String remotePathBase = getCurrentDir().getRemotePath();
@@ -698,8 +727,7 @@ public class FileDisplayActivity extends HookActivity
                 remotePaths[j] = remotePathBase + (new File(filePaths[j])).getName();
             }
 
-            int behaviour = (resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) ? FileUploader
-                    .LOCAL_BEHAVIOUR_MOVE : FileUploader.LOCAL_BEHAVIOUR_COPY;
+
             TransferRequester requester = new TransferRequester();
             requester.uploadNewFiles(
                     this,
@@ -717,7 +745,6 @@ public class FileDisplayActivity extends HookActivity
             showSnackMessage(getString(R.string.filedisplay_no_file_selected));
         }
     }
-
 
     private void requestUploadOfContentFromApps(Intent contentIntent, int resultCode) {
 
@@ -753,8 +780,8 @@ public class FileDisplayActivity extends HookActivity
         );
 
         uploader.uploadUris();
-
     }
+
 
     /**
      * Request the operation for moving the file/folder from one path to another
@@ -830,6 +857,7 @@ public class FileDisplayActivity extends HookActivity
         //outState.putBoolean(FileDisplayActivity.KEY_REFRESH_SHARES_IN_PROGRESS,
         // mRefreshSharesInProgress);
         outState.putParcelable(FileDisplayActivity.KEY_WAITING_TO_SEND, mWaitingToSend);
+        outState.putParcelable(KEY_UPLOAD_HELPER, filesUploadHelper);
 
         Log_OC.v(TAG, "onSaveInstanceState() end");
     }
@@ -1856,5 +1884,9 @@ public class FileDisplayActivity extends HookActivity
 
     public void allFilesOption() {
         browseToRoot();
+    }
+
+    public FilesUploadHelper getFilesUploadHelper() {
+        return filesUploadHelper;
     }
 }

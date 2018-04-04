@@ -135,11 +135,6 @@ public class AuthenticatorActivityTest {
             }
         }
 
-        //Check that credentials fields are initially hidden
-        onView(withId(R.id.account_username)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.account_password)).check(matches(not(isDisplayed())));
-
-
     }
 
     /**
@@ -150,6 +145,13 @@ public class AuthenticatorActivityTest {
     //@SdkSuppress(minSdkVersion = Build.VERSION_CODES.M)
     public void test1_check_certif_not_secure_no_accept()
             throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+
+        //Skipping the Welcome Wizard
+        onView(withId(R.id.skip)).perform(click());
+
+        //Check that credentials fields are initially hidden
+        onView(withId(R.id.account_username)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.account_password)).check(matches(not(isDisplayed())));
 
 
         Log_OC.i(LOG_TAG, "Test not accept not secure start");
