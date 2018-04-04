@@ -176,7 +176,8 @@ public class FileDisplayActivity extends HookActivity
             mWaitingToSend = null;
 
             FileObserverService.initialize(this);
-            filesUploadHelper = new FilesUploadHelper(this, getAccount().name);
+            filesUploadHelper = new FilesUploadHelper(this,
+                    getAccount() == null ? "" : getAccount().name);
         }
 
         /// USER INTERFACE
