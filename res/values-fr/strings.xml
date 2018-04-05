@@ -190,6 +190,12 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="pass_code_wrong">Code de sécurité incorrect</string>
   <string name="pass_code_removed">Code de sécurité supprimé</string>
   <string name="pass_code_stored">Code de sécurité enregistré</string>
+  <string name="fingerprint_confirm">Confirmez votre empreinte pour continuer</string>
+  <string name="fingerprint_not_recognized">Empreinte non reconnue, essayez à nouveau</string>
+  <string name="fingerprint_success">Empreinte reconnue</string>
+  <string name="fingerprint_not_hardware_detected">L’appareil ne supporte pas l’authentification par empreinte</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Enregistrez au moins une empreinte pour accéder à cette fonctionnalité</string>
+  <string name="fingerprint_not_granted_permissions">L’utilisation d’empreinte n’est pas permise</string>
   <string name="media_notif_ticker">%1$s lecteur de musique</string>
   <string name="media_state_playing">%1$s (lecture)</string>
   <string name="media_state_loading">%1$s (chargement)</string>
@@ -480,10 +486,22 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_service_notification_channel_description">Voir le lecteur de musique</string>
   <string name="file_sync_notification_channel_name">synchronisation de fichier</string>
   <string name="file_sync_notification_channel_description">Voir le résultat de la synchronisation de fichier</string>
+  <string name="button_no_thanks_name">NON MERCI</string>
+  <string name="button_later_name">PLUS TARD</string>
+  <string name="button_rate_now_name">NOTER MAINTENANT</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Gérez vos fichiers synchronisés</string>
+  <string name="welcome_feature_1_text">Vous pouvez les copier, les déplacer, les supprimer</string>
+  <string name="welcome_feature_2_title">Partager fichiers et dossiers</string>
+  <string name="welcome_feature_2_text">Vous pouvez partager de façon privée ou publique</string>
+  <string name="welcome_feature_3_title">Multi-compte</string>
+  <string name="welcome_feature_3_text">Connectez-vous à tous vos serveurs ownCloud</string>
   <string name="welcome_feature_4_title">Téléversements de la caméra</string>
+  <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
+  <string name="welcome_feature_9_title">Téléverser une photo depuis la caméra</string>
+  <string name="welcome_feature_9_text">Prendre une photo et la téléverser directement sur votre serveur</string>
 </resources>
