@@ -935,8 +935,6 @@ public class OCFileListFragment extends ExtendedListFragment {
                     }
                 }
             }
-            // set footer text
-            setFooterText(generateFooterText(filesCount, foldersCount));
 
             // decide grid vs list view
             OwnCloudVersion version = AccountUtils.getServerVersion(
@@ -947,6 +945,9 @@ public class OCFileListFragment extends ExtendedListFragment {
             } else {
                 switchToListView();
             }
+
+            // set footer text
+            setFooterText(generateFooterText(filesCount, foldersCount));
         }
         invalidateActionMode();
     }
