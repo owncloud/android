@@ -53,6 +53,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -246,12 +247,14 @@ public class OCFileListFragment extends ExtendedListFragment {
     private void setFabLabels() {
         getFabUpload().setTitle(getResources().getString(R.string.actionbar_upload));
         getFabMkdir().setTitle(getResources().getString(R.string.actionbar_mkdir));
+        getFabNew().setTitle(getResources().getString(R.string.actionbar_mkfile));
     }
 
     /**
      * registers all listeners on all mini FABs.
      */
     private void registerFabListeners() {
+        registerFabNewListeners();
         registerFabUploadListeners();
         registerFabMkDirListeners();
     }
@@ -355,6 +358,25 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     /**
+     * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
+     * on the 'Create Dir' mini FAB for the linked action and {@link Snackbar} showing the underlying action.
+     */
+    private void registerFabNewListeners() {
+        getFabNew().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        getFabNew().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+    }
+
+    /**
      * records a click on a mini FAB and thus:
      * <ol>
      *     <li>persists the click fact</li>
@@ -376,9 +398,12 @@ public class OCFileListFragment extends ExtendedListFragment {
     private void removeFabLabels() {
         getFabUpload().setTitle(null);
         getFabMkdir().setTitle(null);
+        getFabNew().setTitle(null);
         ((TextView) getFabUpload().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
         ((TextView) getFabMkdir().getTag(
+                com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
+        ((TextView) getFabNew().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 

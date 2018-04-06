@@ -115,6 +115,16 @@
             android:visibility="gone">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_new_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_icon="@drawable/ic_file_plus"
+                fab:fab_colorNormal="@color/primary_button_background_color"
+                fab:fab_colorPressed="@color/owncloud_blue"
+                fab:fab_title=""/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
