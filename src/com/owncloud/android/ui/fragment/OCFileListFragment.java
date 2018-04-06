@@ -246,7 +246,6 @@ public class OCFileListFragment extends ExtendedListFragment {
     private void setFabLabels() {
         getFabUpload().setTitle(getResources().getString(R.string.actionbar_upload));
         getFabMkdir().setTitle(getResources().getString(R.string.actionbar_mkdir));
-        getFabUploadFromApp().setTitle(getResources().getString(R.string.actionbar_upload_from_apps));
     }
 
     /**
@@ -255,7 +254,6 @@ public class OCFileListFragment extends ExtendedListFragment {
     private void registerFabListeners() {
         registerFabUploadListeners();
         registerFabMkDirListeners();
-        registerFabUploadFromAppListeners();
     }
 
     /**
@@ -270,9 +268,26 @@ public class OCFileListFragment extends ExtendedListFragment {
                 final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
                 dialog.setContentView(uploadBottomSheet);
-                LinearLayout uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                LinearLayout uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
-                TextView uploadToTextView = (TextView) uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+                LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
+                LinearLayout uploadFromCameraLinearLayout = uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                LinearLayout importFromApps = uploadBottomSheet.findViewById(R.id.import_linear_layout);
+                TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+                importFromApps.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        Intent action = new Intent(Intent.ACTION_GET_CONTENT);
+                        action = action.setType("*/*").addCategory(Intent.CATEGORY_OPENABLE);
+                        //Intent.EXTRA_ALLOW_MULTIPLE is only supported on api level 18+, Jelly Bean
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                            action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                        }
+                        getActivity().startActivityForResult(
+                                Intent.createChooser(action, getString(R.string.upload_chooser_title)),
+                                FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
+                        );
+                        return false;
+                    }
+                });
                 uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -340,38 +355,6 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     /**
-     * registers {@link android.view.View.OnClickListener} and {@link android.view.View.OnLongClickListener}
-     * on the Upload from App mini FAB for the linked action and {@link Snackbar} showing the underlying action.
-     */
-    private void registerFabUploadFromAppListeners() {
-        getFabUploadFromApp().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent action = new Intent(Intent.ACTION_GET_CONTENT);
-                action = action.setType("*/*").addCategory(Intent.CATEGORY_OPENABLE);
-                //Intent.EXTRA_ALLOW_MULTIPLE is only supported on api level 18+, Jelly Bean
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                }
-                getActivity().startActivityForResult(
-                        Intent.createChooser(action, getString(R.string.upload_chooser_title)),
-                        FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
-                );
-                getFabMain().collapse();
-                recordMiniFabClick();
-            }
-        });
-
-        getFabUploadFromApp().setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showSnackMessage(R.string.actionbar_upload_from_apps);
-                return true;
-            }
-        });
-    }
-
-    /**
      * records a click on a mini FAB and thus:
      * <ol>
      *     <li>persists the click fact</li>
@@ -393,12 +376,9 @@ public class OCFileListFragment extends ExtendedListFragment {
     private void removeFabLabels() {
         getFabUpload().setTitle(null);
         getFabMkdir().setTitle(null);
-        getFabUploadFromApp().setTitle(null);
         ((TextView) getFabUpload().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
         ((TextView) getFabMkdir().getTag(
-                com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
-        ((TextView) getFabUploadFromApp().getTag(
                 com.getbase.floatingactionbutton.R.id.fab_label)).setVisibility(View.GONE);
     }
 

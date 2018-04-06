@@ -41,6 +41,27 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/import_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_import" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="@string/actionbar_upload_from_apps" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/upload_from_camera_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
