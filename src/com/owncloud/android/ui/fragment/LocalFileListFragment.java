@@ -235,7 +235,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
         }
         mDirectory = directory;
     }
-    
+
 
     /**
      * Returns the fule paths to the files checked by the user

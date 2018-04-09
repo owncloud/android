@@ -2,6 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author Christian Schabesberger
  *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -28,10 +29,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -55,6 +56,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
 
     protected Button mCancelBtn;
     protected Button mChooseBtn;
+    protected ImageButton mHomeBtn;
 
 
     /**
@@ -102,7 +104,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
        }
 
         // set input controllers
-        mCancelBtn = (Button) findViewById(R.id.folder_picker_btn_cancel);
+        mCancelBtn = findViewById(R.id.folder_picker_btn_cancel);
         mCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,7 +112,7 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
                 finish();
             }
         });
-        mChooseBtn = (Button) findViewById(R.id.folder_picker_btn_choose);
+        mChooseBtn = findViewById(R.id.folder_picker_btn_choose);
         mChooseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,6 +123,17 @@ public class LocalFolderPickerActivity extends ToolbarActivity implements LocalF
                 finish();
             }
         });
+        mHomeBtn = findViewById(R.id.folder_picker_btn_home);
+        mHomeBtn.setVisibility(View.VISIBLE);
+        mHomeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentFolder = Environment.getExternalStorageDirectory();
+                getListFragment().listFolder(mCurrentFolder);
+                updateActionBar();
+            }
+        });
+
 
         // init toolbar
         setupToolbar();
