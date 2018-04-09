@@ -342,6 +342,23 @@ public class FileActivity extends DrawerActivity
         }
     }
 
+    protected void requestAccountChange() {
+        requestAccountChange(null);
+    }
+
+    protected void requestAccountChange(Account account) {
+        /// request credentials to user
+/*        Intent updateAccountCredentials = new Intent(this, AuthenticatorActivity.class);
+        updateAccountCredentials.putExtra(AuthenticatorActivity.EXTRA_ACCOUNT, account);
+        updateAccountCredentials.putExtra(
+                AuthenticatorActivity.EXTRA_ACTION,
+                AuthenticatorActivity.ACTION_UPDATE_EXPIRED_TOKEN);
+        updateAccountCredentials.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS); */
+        Intent selectAccount = new Intent(this, ManageAccountsActivity.class);
+        startActivity(selectAccount);
+    }
+
     /**
      * Invalidates the credentials stored for the current OC account and requests new credentials to the user,
      * navigating to {@link AuthenticatorActivity}
