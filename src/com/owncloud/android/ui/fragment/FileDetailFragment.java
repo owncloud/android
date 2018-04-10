@@ -107,7 +107,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mProgressController = new TransferProgressController((ComponentsGetter) getActivity());
-        ProgressBar progressBar = (ProgressBar)mView.findViewById(R.id.fdProgressBar);
+        ProgressBar progressBar = mView.findViewById(R.id.fdProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(progressBar);
         mProgressController.setProgressBar(progressBar);
     }
@@ -248,22 +248,20 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             item.setEnabled(false);
         }
 
-        Boolean dualPane = getResources().getBoolean(R.bool.large_land_layout);
-
         item = menu.findItem(R.id.action_switch_view);
-        if (item != null && !dualPane){
+        if (item != null){
             item.setVisible(false);
             item.setEnabled(false);
         }
 
         item = menu.findItem(R.id.action_sync_account);
-        if (item != null && !dualPane) {
+        if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
 
         item = menu.findItem(R.id.action_sort);
-        if (item != null && !dualPane) {
+        if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
         }
