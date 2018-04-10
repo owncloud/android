@@ -498,6 +498,11 @@
   <string name="media_service_notification_channel_description">Просмотр проигрывателя музыки</string>
   <string name="file_sync_notification_channel_name">Синхронизация файлов</string>
   <string name="file_sync_notification_channel_description">Просмотр результатов синхронизации файлов</string>
+  <string name="rate_dialog_title">Оцените приложение %1$s!</string>
+  <string name="rate_dialog_description">Если вам нравится пользоваться этим приложением, не уделите ли вы минутку, чтобы оценить его? Ваш отзыв очень важен для нас.</string>
+  <string name="button_no_thanks_name">НЕТ, СПАСИБО</string>
+  <string name="button_later_name">ПОЗЖЕ</string>
+  <string name="button_rate_now_name">ОЦЕНИТЬ СЕЙЧАС</string>
   <plurals name="items_selected_count">
     <item quantity="one">Выбран %d</item>
     <item quantity="few">Выбрано %d</item>
