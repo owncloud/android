@@ -4,6 +4,7 @@
  * @author Bartek Przybylski
  * @author David A. Velasco
  * @author David González Verdugo
+ * @author Christian Schabesberger
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2018 ownCloud GmbH.
  *
@@ -757,10 +758,6 @@ public class Preferences extends PreferenceActivity {
 
     public ActionBar getSupportActionBar() {
         return getDelegate().getSupportActionBar();
-    }
-
-    public void setSupportActionBar(@Nullable Toolbar toolbar) {
-        getDelegate().setSupportActionBar(toolbar);
     }
 
     @Override

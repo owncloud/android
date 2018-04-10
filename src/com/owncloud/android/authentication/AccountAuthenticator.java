@@ -2,8 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author Christian Schabesberger
  *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -317,25 +318,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
                     "Unsupported auth token type");
         }
-    }
-
-    public static class UnsupportedFeaturesException extends
-            AuthenticatorException {
-        public static final long serialVersionUID = 1L;
-
-        public UnsupportedFeaturesException() {
-            super(AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION,
-                    "Unsupported features");
-        }
-    }
-
-    public static class AccessDeniedException extends AuthenticatorException {
-        public AccessDeniedException(int code, String errorMsg) {
-            super(AccountManager.ERROR_CODE_INVALID_RESPONSE, "Access Denied");
-        }
-
-        private static final long serialVersionUID = 1L;
-
     }
 
     private boolean canBeRefreshed(String authTokenType) {

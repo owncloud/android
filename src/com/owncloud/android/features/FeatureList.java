@@ -3,6 +3,7 @@
  *   ownCloud Android client application
  *
  *   @author Bartosz Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 Bartosz Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -99,10 +100,6 @@ public class FeatureList {
         private int versionNumber;
         private int betaVersion;
         private boolean showOnInitialRun;
-
-        public FeatureItem(int image, int titleText, int contentText, String version, String betaVersion) {
-            this(image, titleText, contentText, version, betaVersion, false);
-        }
 
         public FeatureItem(int image, int titleText, int contentText, String version, String betaVersion,
                            boolean showOnInitialRun) {
