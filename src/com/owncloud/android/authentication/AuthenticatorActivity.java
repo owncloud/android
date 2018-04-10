@@ -5,8 +5,9 @@
  *   @author David A. Velasco
  *   @author masensio
  *   @author David González Verdugo
+ *   @author Christian Schabesberger
  *   Copyright (C) 2012  Bartek Przybylski
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -1879,9 +1880,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
     }
 
-    /**
-     * Called from SslValidatorDialog when a new server certificate was correctly saved.
-     */
     public void onSavedCertificate() {
         Fragment fd = getSupportFragmentManager().findFragmentByTag(SAML_DIALOG_TAG);
         if (fd == null) {
@@ -1891,10 +1889,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
     }
 
-    /**
-     * Called from SslValidatorDialog when a new server certificate could not be saved 
-     * when the user requested it.
-     */
     @Override
     public void onFailedSavingCertificate() {
         dismissDialog(SAML_DIALOG_TAG);
