@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author David González Verdugo
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -231,8 +232,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
                 }
             }
             FileFragment fragment = mCachedFragments.get(position);
-            if (fragment instanceof FileDownloadFragment
-                    && success) {
+            if (fragment instanceof FileDownloadFragment && success) {
                 // trigger the creation of new PreviewImageFragment to replace current FileDownloadFragment
                 // only if the download succeded. If not trigger an error
                 notifyDataSetChanged();
