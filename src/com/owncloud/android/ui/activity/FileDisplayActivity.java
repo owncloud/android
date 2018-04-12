@@ -1055,7 +1055,6 @@ public class FileDisplayActivity extends FileActivity
                         RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED)) {
                     mLastSslUntrustedServerResult = synchResult;
                 } else if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE)) {
-                    //requestCredentialsUpdate();
                     requestAccountChange();
                 }
             }
