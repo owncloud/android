@@ -1,4 +1,4 @@
-## 2.7.0 (Abril 2018)
+## 2.7.0 (April 2018)
 - Fingerprint lock
 - Pattern lock (contribution)
 - Upload picture directly from camera (contribution)
