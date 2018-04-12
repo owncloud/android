@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/whatsNewImage"
         android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
         android:layout_marginBottom="10dp"
         android:layout_weight="80"/>
 
@@ -20,7 +21,8 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:id="@+id/whatsNewTitle"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,5 +31,6 @@
         android:id="@+id/whatsNewText"
         android:layout_margin="@dimen/standard_margin"
         android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
         android:textColor="@color/white"/>
 </LinearLayout>
