@@ -36,7 +36,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -247,7 +246,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                     mUploadOnlyButton.setChecked(true);
                     break;
                 default:
-                    mReadWriteButton.setChecked(true);
+                    mReadOnlyButton.setChecked(true);
             }
 
             if (mPublicShare.isPasswordProtected()) {
@@ -270,7 +269,6 @@ public class PublicShareDialogFragment extends DialogFragment {
             mNameValueEdit.setText(getArguments().getString(ARG_DEFAULT_LINK_NAME, ""));
         }
 
-        initAllowEditingListener();
         initPasswordListener();
         initExpirationListener();
         initPasswordFocusChangeListener();
@@ -299,7 +297,6 @@ public class PublicShareDialogFragment extends DialogFragment {
         }
 
         if (!updating()) { // Creating a new public share
-
             ((FileActivity) getActivity()).getFileOperationsHelper().
                     shareFileViaLink(mFile,
                             publicLinkName,
@@ -507,47 +504,6 @@ public class PublicShareDialogFragment extends DialogFragment {
     }
 
     /**
-<<<<<<< HEAD
-     * Binds listener for user actions related to allow editing.
-     *
-     */
-    private void initAllowEditingListener() {
-        //mEditPermissionSwitch.setOnCheckedChangeListener(new OnAllowEditingInteractionListener());
-    }
-
-    /**
-     * Listener for user actions related to allow editing.
-     */
-    private class OnAllowEditingInteractionListener
-            implements CompoundButton.OnCheckedChangeListener {
-
-        /**
-         * Called by R.id.shareViaLinkEditPermissionSwitch
-         *
-         * @param switchView {@link SwitchCompat} toggled by the user,
-         *                                       R.id.shareViaLinkEditPermissionSwitch
-         * @param isChecked  New switch state.
-         */
-        @Override
-        public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
-
-            // If allow editing is checked, enable show file listing switch
-            /*
-            if (isChecked) {
-                mShowFileListingSwitch.setEnabled(true);
-            } else {
-                mShowFileListingSwitch.setEnabled(false);
-                if (!mShowFileListingSwitch.isChecked()) {
-                    mShowFileListingSwitch.setChecked(true);
-                }
-            }
-            */
-        }
-    }
-
-    /**
-=======
->>>>>>> make permission selection for link sharing a radio group
      * Binds listener for user actions that start any update on a password for the public link
      * to the views receiving the user events.
      *
