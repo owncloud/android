@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
@@ -71,6 +72,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
+import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
@@ -270,9 +272,9 @@ public class OCFileListFragment extends ExtendedListFragment {
                 final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
                 dialog.setContentView(uploadBottomSheet);
-                LinearLayout uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                LinearLayout uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
-                TextView uploadToTextView = (TextView) uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+                final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
+                LinearLayout uploadFromCameraLinearLayout = uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
                 uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -285,8 +287,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                 uploadFromCameraLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        UploadFilesActivity.startUploadActivityForResult(getActivity(),((FileActivity) getActivity()).getAccount(),
-                                FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+
+                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
                         dialog.hide();
                         return false;
                     }
@@ -933,8 +935,6 @@ public class OCFileListFragment extends ExtendedListFragment {
                     }
                 }
             }
-            // set footer text
-            setFooterText(generateFooterText(filesCount, foldersCount));
 
             // decide grid vs list view
             OwnCloudVersion version = AccountUtils.getServerVersion(
@@ -945,6 +945,9 @@ public class OCFileListFragment extends ExtendedListFragment {
             } else {
                 switchToListView();
             }
+
+            // set footer text
+            setFooterText(generateFooterText(filesCount, foldersCount));
         }
         invalidateActionMode();
     }

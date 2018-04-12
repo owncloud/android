@@ -5,6 +5,7 @@
 - GIF support
 - New features wizard
 - UI improvements, including:
+  + Animations when switching folders
   + Display file size during upload (contribution)
 - Bug fixes, including:
   + Hide always visible notification in Android 8

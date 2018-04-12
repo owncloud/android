@@ -3,6 +3,7 @@
  *
  *   @author David A. Velasco
  *   @author David González Verdugo
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -164,7 +165,9 @@ public class PreviewImageFragment extends FileFragment {
         mImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((PreviewImageActivity) getActivity()).toggleFullScreen();
+                if(getActivity() != null) {
+                    ((PreviewImageActivity) getActivity()).toggleFullScreen();
+                }
             }
 
         });

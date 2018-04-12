@@ -2,6 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David González Verdugo
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -31,6 +32,7 @@ import android.view.WindowManager;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.lib.BuildConfig;
+import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.ui.activity.FingerprintActivity;
 
 import java.util.HashSet;
@@ -147,6 +149,22 @@ public class FingerprintManager {
     }
 
     public boolean hasEnrolledFingerprints() {
-        return mHwFingerPrintManager.hasEnrolledFingerprints();
+        try {
+            return mHwFingerPrintManager.hasEnrolledFingerprints();
+        } catch (RuntimeException re) {
+            Log_OC.e(FingerprintManager.class.toString(),
+                    "Could find out if finger prints are enroded due to lack of android.permission.INTERACT_ACROSS_USERS");
+            return false;
+        }
+    }
+
+    /**
+     * This can be used for example for onActivityResult, where you don't want to re authenticate
+     * again.
+     *
+     * USE WITH CARE
+     */
+    public void bayPassUnlockOnce() {
+        setUnlockTimestamp();
     }
 }

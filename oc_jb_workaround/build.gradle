@@ -9,8 +9,8 @@ android {
     buildToolsVersion '26.0.2'
 
     defaultConfig {
-        versionCode = 100037
-        versionName = "1.0.37"
+        versionCode = 100038
+        versionName = "1.0.38"
     }
 
     sourceSets {

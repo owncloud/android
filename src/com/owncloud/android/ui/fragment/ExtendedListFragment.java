@@ -1,8 +1,9 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Christian Schabesberger
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -22,8 +23,8 @@ package com.owncloud.android.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -416,7 +417,11 @@ public class ExtendedListFragment extends Fragment
                 if (mGridFooterView.getParent() != null ) {
                     ((ViewGroup) mGridFooterView.getParent()).removeView(mGridFooterView);
                 }
-                mGridView.addFooterView(mGridFooterView, null, false);
+                try {
+                    mGridView.addFooterView(mGridFooterView, null, false);
+                } catch (IllegalStateException ie) {
+                    Log.w(TAG, "Could not add footer to grid view, because it exists");
+                }
             }
             mGridFooterView.invalidate();
 

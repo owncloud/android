@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -127,5 +128,15 @@ public class PassCodeManager {
     public boolean isPassCodeEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return (appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false));
+    }
+
+    /**
+     * This can be used for example for onActivityResult, where you don't want to re authenticate
+     * again.
+     *
+     * USE WITH CARE
+     */
+    public void bayPassUnlockOnce() {
+        setUnlockTimestamp();
     }
 }

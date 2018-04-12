@@ -41,6 +41,8 @@ public class FeatureList {
     static final private boolean SHOW_ON_FIRST_RUN = true;
     static final private boolean SHOW_ON_UPGRADE = false;
 
+    private static final String TAG = FeatureList.class.getSimpleName();
+
     static final private FeatureItem featuresList[] = {
             // Basic features showed on first install
             new FeatureItem(R.drawable.whats_new_files, R.string.welcome_feature_1_title,
@@ -56,13 +58,13 @@ public class FeatureList {
 
             // Features introduced in 2.7.0
             new FeatureItem(R.drawable.whats_new_pattern_lock, R.string.welcome_feature_6_title,
-                    R.string.welcome_feature_6_text, "0", "2.6.1", SHOW_ON_UPGRADE),
+                    R.string.welcome_feature_6_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_fingerprint_lock, R.string.welcome_feature_7_title,
-                    R.string.welcome_feature_7_text, "0", "2.6.1", SHOW_ON_UPGRADE),
+                    R.string.welcome_feature_7_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_gif_support, R.string.welcome_feature_8_title,
-                    R.string.welcome_feature_8_text, "0", "2.6.1", SHOW_ON_UPGRADE),
+                    R.string.welcome_feature_8_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
             new FeatureItem(R.drawable.whats_new_upload_camera_picture, R.string.welcome_feature_9_title,
-                    R.string.welcome_feature_9_text, "0", "2.6.1", SHOW_ON_UPGRADE),
+                    R.string.welcome_feature_9_text, "2.7.0", "2.6.1", SHOW_ON_UPGRADE),
     };
 
 
@@ -73,7 +75,10 @@ public class FeatureList {
     static public FeatureItem[] getFiltered(final int lastSeenVersionCode, final boolean isFirstRun, boolean isBeta) {
         List<FeatureItem> features = new LinkedList<>();
 
+        Log_OC.d(TAG, "Getting filtered features");
+
         for (FeatureItem item : get()) {
+
             final int itemVersionCode = isBeta ? item.getBetaVersionNumber() : item.getVersionNumber();
             if (isFirstRun && item.shouldShowOnFirstRun()) {
                 features.add(item);
@@ -163,7 +168,7 @@ public class FeatureList {
     static int versionCodeFromString(String version) {
         String v[] = version.split(Pattern.quote("."));
         if (v.length != 3) {
-            Log_OC.wtf("FeatureList", "Version string is incorrect " + version);
+            Log_OC.d(TAG, "Version string is incorrect " + version);
             return 0;
         }
         int result = Integer.parseInt(v[0])*(int)(10e6) +

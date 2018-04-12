@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Shashvat Kedia
+ * @author Christian Schabesberger
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -121,5 +122,15 @@ public class PatternManager {
     public boolean isPatternEnabled() {
         SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(MainApp.getAppContext());
         return appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN, false);
+    }
+
+    /**
+     * This can be used for example for onActivityResult, where you don't want to re authenticate
+     * again.
+     *
+     * USE WITH CARE
+     */
+    public void bayPassUnlockOnce() {
+        setUnlockTimestamp();
     }
 }
