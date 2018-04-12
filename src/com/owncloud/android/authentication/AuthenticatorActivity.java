@@ -343,9 +343,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        // check if its a oauth SALS callback intent
-        if(intent.getAction().equals(ACTION_VIEW) &&
-                intent.getData().getHost().equals("android.owncloud.com")) {
+        if(intent.getAction().equals(ACTION_VIEW)) {
             getOAuth2AccessTokenFromCapturedRedirection(intent.getData());
         }
     }
@@ -356,7 +354,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         // Get default VIEW intent handler.
         Intent activityIntent = new Intent(ACTION_VIEW, Uri.parse("https://owncloud.org"));
         ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
-
 
         // Get all apps that can handle VIEW intents.
         List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
@@ -1071,8 +1068,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         OAuth2Provider oAuth2Provider = OAuth2ProvidersRegistry.getInstance().getProvider();
         oAuth2Provider.setAuthorizationServerUri(mServerInfo.mBaseUrl);
 
-        OAuth2RequestBuilder builder =
-                oAuth2Provider.getOperationBuilder();
+        OAuth2RequestBuilder builder = oAuth2Provider.getOperationBuilder();
         builder.setGrantType(OAuth2GrantType.AUTHORIZATION_CODE);
         builder.setRequest(OAuth2RequestBuilder.OAuthRequest.GET_AUTHORIZATION_CODE);
 
@@ -1084,11 +1080,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     private void openUrlWithCustomTab(String url) {
-        TypedValue tvBackground = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, tvBackground, true);
+        TypedValue backgroundCollor = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimary, backgroundCollor, true);
 
         CustomTabsIntent intent = new CustomTabsIntent.Builder()
-                .setToolbarColor(tvBackground.data)
+                .setToolbarColor(backgroundCollor.data)
                 .setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right)
                 .setShowTitle(true)
