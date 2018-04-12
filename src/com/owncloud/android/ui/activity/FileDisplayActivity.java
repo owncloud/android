@@ -152,7 +152,7 @@ public class FileDisplayActivity extends HookActivity
 
     private IndexedForest<FileDisplayActivity> mPendingCameraUploads = new IndexedForest<>();
 
-    FilesUploadHelper filesUploadHelper;
+    FilesUploadHelper mFilesUploadHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,20 +166,20 @@ public class FileDisplayActivity extends HookActivity
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
-            mFileWaitingToPreview = savedInstanceState.getParcelable(
-                    FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
+            mFileWaitingToPreview = savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_PREVIEW);
             mSyncInProgress = savedInstanceState.getBoolean(KEY_SYNC_IN_PROGRESS);
-            mWaitingToSend = savedInstanceState.getParcelable(
-                    FileDisplayActivity.KEY_WAITING_TO_SEND);
-            filesUploadHelper = savedInstanceState.getParcelable(KEY_UPLOAD_HELPER);
-            filesUploadHelper.init(this, getAccount().name);
+            mWaitingToSend = savedInstanceState.getParcelable(FileDisplayActivity.KEY_WAITING_TO_SEND);
+            mFilesUploadHelper = savedInstanceState.getParcelable(KEY_UPLOAD_HELPER);
+            mFilesUploadHelper.init(this, getAccount().name);
         } else {
             mFileWaitingToPreview = null;
             mSyncInProgress = false;
             mWaitingToSend = null;
 
+            /// grant that FileObserverService is watching favorite files
             FileObserverService.initialize(this);
-            filesUploadHelper = new FilesUploadHelper(this,
+
+            mFilesUploadHelper = new FilesUploadHelper(this,
                     getAccount() == null ? "" : getAccount().name);
         }
 
@@ -672,7 +672,7 @@ public class FileDisplayActivity extends HookActivity
 
         } else if(requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
             if(resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE) {
-                filesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
+                mFilesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
                     @Override
                     public void onCheckAvailableSpaceStart() {
 
@@ -686,7 +686,7 @@ public class FileDisplayActivity extends HookActivity
                     }
                 });
             } else if(requestCode == RESULT_CANCELED) {
-                filesUploadHelper.deleteImageFile();
+                mFilesUploadHelper.deleteImageFile();
             }
 
            // requestUploadOfFilesFromFileSystem(data,resultCode);
@@ -866,7 +866,7 @@ public class FileDisplayActivity extends HookActivity
         //outState.putBoolean(FileDisplayActivity.KEY_REFRESH_SHARES_IN_PROGRESS,
         // mRefreshSharesInProgress);
         outState.putParcelable(FileDisplayActivity.KEY_WAITING_TO_SEND, mWaitingToSend);
-        outState.putParcelable(KEY_UPLOAD_HELPER, filesUploadHelper);
+        outState.putParcelable(KEY_UPLOAD_HELPER, mFilesUploadHelper);
 
         Log_OC.v(TAG, "onSaveInstanceState() end");
     }
@@ -1896,6 +1896,6 @@ public class FileDisplayActivity extends HookActivity
     }
 
     public FilesUploadHelper getFilesUploadHelper() {
-        return filesUploadHelper;
+        return mFilesUploadHelper;
     }
 }

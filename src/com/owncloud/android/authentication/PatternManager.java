@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Shashvat Kedia
+ * @author Christian Schabesberger
  * Copyright (C) 2018 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -124,7 +125,7 @@ public class PatternManager {
     }
 
     /**
-     * This can be used for example for onAcitivtyResult, where you don't want to re authenticate
+     * This can be used for example for onActivityResult, where you don't want to re authenticate
      * again.
      *
      * USE WITH CARE

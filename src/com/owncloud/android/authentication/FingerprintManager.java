@@ -159,7 +159,7 @@ public class FingerprintManager {
     }
 
     /**
-     * This can be used for example for onAcitivtyResult, where you don't want to re authenticate
+     * This can be used for example for onActivityResult, where you don't want to re authenticate
      * again.
      *
      * USE WITH CARE

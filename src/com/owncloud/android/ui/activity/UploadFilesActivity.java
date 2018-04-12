@@ -90,7 +90,7 @@ public class UploadFilesActivity extends FileActivity implements
     private RadioButton mRadioBtnMoveFiles;
     private int requestCode;
 
-    FilesUploadHelper filesUploadHelper;
+    FilesUploadHelper mFilesUploadHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +106,7 @@ public class UploadFilesActivity extends FileActivity implements
         
         mAccountOnCreation = getAccount();
 
-        filesUploadHelper = new FilesUploadHelper(this, mAccountOnCreation.name);
+        mFilesUploadHelper = new FilesUploadHelper(this, mAccountOnCreation.name);
                 
         /// USER INTERFACE
             
@@ -190,7 +190,7 @@ public class UploadFilesActivity extends FileActivity implements
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent capturedData){
         if(resultCode != RESULT_CANCELED) {
-            filesUploadHelper.onActivityResult(this);
+            mFilesUploadHelper.onActivityResult(this);
         } else {
             setResult(RESULT_CANCELED);
         }
@@ -347,7 +347,7 @@ public class UploadFilesActivity extends FileActivity implements
             finish();
             
         } else if (v.getId() == R.id.upload_files_btn_upload) {
-            filesUploadHelper.checkIfAvailableSpace(mFileListFragment.getCheckedFilePaths(), this);
+            mFilesUploadHelper.checkIfAvailableSpace(mFileListFragment.getCheckedFilePaths(), this);
         }
     }
 
