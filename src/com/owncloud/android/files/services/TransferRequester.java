@@ -86,8 +86,8 @@ public class TransferRequester {
         intent.putExtra(FileUploader.KEY_CREATE_REMOTE_FOLDER, createRemoteFolder);
         intent.putExtra(FileUploader.KEY_CREATED_BY, createdBy);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE ||
-                createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO)) {
+        if ((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Since in Android O the apps in background are not allowed to start background
             // services and camera uploads feature may try to do it, this is the way to proceed
             context.startForegroundService(intent);

@@ -24,6 +24,7 @@
   <string name="drawer_open">Malfermi</string>
   <string name="prefs_category_general">Ĝeneralo</string>
   <string name="prefs_category_more">Pli</string>
+  <string name="prefs_category_security">Sekuro</string>
   <string name="prefs_accounts">Kontoj</string>
   <string name="prefs_manage_accounts">Administri kontojn</string>
   <string name="prefs_log_delete_history_button">Forviŝi historion</string>
@@ -229,7 +230,6 @@
   <string name="copy_file_invalid_overwrite">La dosiero jam ekzistas en la cela dosierujo</string>
   <string name="copy_file_error">Eraro okazis, dum provo kopii ĉi tiun dosieron aŭ dosierujon</string>
   <string name="forbidden_permissions_copy">por kopii ĉi tiun dosieron</string>
-  <string name="prefs_category_details">Detaloj</string>
   <string name="sync_folder_failed_content">Sinkronigo de dosierujo %1$s ne povis plenumiĝi</string>
   <string name="shared_subject_header">kunhavata</string>
   <string name="with_you_subject_header">kun vi</string>
@@ -278,4 +278,5 @@
   <string name="manage_space_title">Administri spacon</string>
   <string name="manage_space_clear_data">Forviŝi datumojn</string>
   <string name="manage_space_error">Kelkaj dosieroj ne povis foriĝi.</string>
+  <!--Welcome to oC intro features-->
 </resources>

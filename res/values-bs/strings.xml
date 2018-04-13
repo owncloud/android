@@ -11,6 +11,7 @@
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Otvori</string>
   <string name="prefs_category_more">Više</string>
+  <string name="prefs_category_security">Sigurnost</string>
   <string name="prefs_help">Pomoć</string>
   <string name="auth_username">Korisničko ime</string>
   <string name="auth_password">Lozinka</string>
@@ -48,4 +49,5 @@
   <string name="share_privilege_can_edit_create">kreiraj</string>
   <string name="share_privilege_can_edit_change">izmjeni</string>
   <string name="share_privilege_can_edit_delete">izbriši</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -180,7 +180,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         Log_OC.d(TAG, "Synchronization of ownCloud account " + account.name + " starting");
         sendLocalBroadcast(EVENT_FULL_SYNC_START, null, null);  // message to signal the start
                                                                 // of the synchronization to the UI
-        
         try {
             updateCapabilities();
             mCurrentSyncTime = System.currentTimeMillis();
@@ -191,8 +190,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                 Log_OC.d(TAG, "Leaving synchronization before synchronizing the root folder " +
                         "because cancelation request");
             }
-            
-            
+
         } finally {
             // it's important making this although very unexpected errors occur;
             // that's the reason for the finally

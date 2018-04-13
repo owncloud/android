@@ -33,6 +33,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -75,6 +76,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
+
+import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE;
+import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO;
 
 /**
  * Service for uploading files. Invoke using context.startService(...).
@@ -204,7 +208,6 @@ public class FileUploader extends Service
 
         // Configure notification channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
             NotificationChannel mNotificationChannel;
             // The user-visible name of the channel.
             CharSequence name = getString(R.string.upload_notification_channel_name);
@@ -217,12 +220,6 @@ public class FileUploader extends Service
             // Configure the notification channel.
             mNotificationChannel.setDescription(description);
             mNotificationManager.createNotificationChannel(mNotificationChannel);
-
-            /**
-             * After calling startForegroundService method from {@link TransferRequester} we have
-             * to call this within five seconds after the service is created to avoid an error
-             */
-            startForeground(1, mNotificationBuilder.build());
         }
 
         HandlerThread thread = new HandlerThread("FileUploaderThread",
@@ -290,6 +287,19 @@ public class FileUploader extends Service
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log_OC.d(TAG, "Starting command with id " + startId);
 
+        int createdBy = intent.getIntExtra(KEY_CREATED_BY, UploadFileOperation.CREATED_BY_USER);
+
+        if ((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            /**
+             * After calling startForegroundService method from {@link TransferRequester} for camera uploads, we have
+             * to call this within five seconds after the service is created to avoid an error
+             */
+            Log_OC.d(TAG, "Starting service in foreground");
+            startForeground(1, mNotificationBuilder.build());
+        }
+
         boolean retry = intent.getBooleanExtra(KEY_RETRY, false);
         AbstractList<String> requestedUploads = new Vector<String>();
 
@@ -331,7 +341,6 @@ public class FileUploader extends Service
             int localAction = intent.getIntExtra(KEY_LOCAL_BEHAVIOUR, LOCAL_BEHAVIOUR_FORGET);
 
             boolean isCreateRemoteFolder = intent.getBooleanExtra(KEY_CREATE_REMOTE_FOLDER, false);
-            int createdBy = intent.getIntExtra(KEY_CREATED_BY, UploadFileOperation.CREATED_BY_USER);
 
             if (intent.hasExtra(KEY_FILE) && files == null) {
                 Log_OC.e(TAG, "Incorrect array for OCFiles provided in upload intent");
@@ -756,6 +765,7 @@ public class FileUploader extends Service
                 }
             }
             Log_OC.d(TAG, "Stopping command after id " + msg.arg1);
+            mService.stopForeground(true);
             mService.stopSelf(msg.arg1);
         }
     }
@@ -1025,7 +1035,6 @@ public class FileUploader extends Service
             }
         }
     }
-
 
     /**
      * Sends a broadcast in order to the interested activities can update their

@@ -11,6 +11,7 @@
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">ತೆರೆ</string>
   <string name="prefs_category_more">﻿ಇನ್ನಷ್ಟು</string>
+  <string name="prefs_category_security">﻿ಭದ್ರತೆ</string>
   <string name="prefs_help">﻿ಸಹಾಯ</string>
   <string name="prefs_imprint">ಮುದ್ರೆ</string>
   <string name="auth_username">﻿ಬಳಕೆಯ ಹೆಸರು</string>
@@ -47,4 +48,5 @@
   <string name="share_privilege_can_edit_create">ಸೃಷ್ಟಿಸು</string>
   <string name="share_privilege_can_edit_change">﻿ಬದಲಾವಣೆ</string>
   <string name="share_privilege_can_edit_delete">﻿ಅಳಿಸಿ</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -27,9 +27,14 @@
   <string name="drawer_open">Abrir</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
+  <string name="prefs_category_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
+  <string name="prefs_camera_picture_upload">Carga de imágenes</string>
+  <string name="prefs_camera_picture_upload_summary">Cargar imágenes automáticamente tomadas desde la cámara</string>
+  <string name="prefs_camera_video_upload">Carga de videos</string>
+  <string name="prefs_camera_video_upload_summary">Cargar videos automáticamente tomados desde la cámara</string>
   <string name="prefs_log_title">Activar bitacora</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial de la bitacora</string>
@@ -41,6 +46,19 @@
   <string name="prefs_imprint">Imprint</string>
   <string name="prefs_remember_last_share_location">Recordar compartir ubicación </string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ultima ubicación compartida de subida</string>
+  <string name="prefs_pattern">Patrón de bloqueo</string>
+  <string name="pattern_enter_pattern">Por favor ingrese su patrón</string>
+  <string name="pattern_configure_pattern">Ingrese su patrón</string>
+  <string name="pattern_remove_pattern">Eliminar su patrón</string>
+  <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
+  <string name="pattern_reenter_pattern">Por favor ingresa nuevamente tu patrón</string>
+  <string name="pattern_not_same_pattern">Los patrones difieren entre sí</string>
+  <string name="pattern_stored">Patrón almacenado</string>
+  <string name="pattern_removed">Patrón eliminado</string>
+  <string name="pattern_already_set">El patrón y la clave de desbloqueo no pueden estar activos al mismo tiempo, por favor desactiva primero el patrón</string>
+  <string name="passcode_already_set">El patrón y la clave de desbloqueo no pueden estar activos al mismo tiempo, por favor desactiva primero la clave</string>
+  <string name="pattern_no_longer_required">El patrón no se volverá a solicitar</string>
+  <string name="pattern_configure_your_pattern_explanation">Se solicitará el patrón cada vez que se inicie una aplicación</string>
   <string name="recommend_subject">¡Intento %1$s en tu teléfono inteligente!</string>
   <string name="recommend_text">Quiero invitarte a usar %1$s en tu teléfono inteligente!\nDescárgalo aquí: %2$s</string>
   <string name="auth_check_server">Verificar servidor</string>
@@ -75,6 +93,8 @@
   <string name="file_list_file">archivo</string>
   <string name="file_list_files">archivo</string>
   <string name="filedetails_select_file">Pulsá sobre un archivo para mostrar información adicional.</string>
+  <string name="upload_to">Cargar en %1$s</string>
+  <string name="upload_files_title">Archivos</string>
   <string name="filedetails_size">Tamaño:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creado:</string>
@@ -165,6 +185,7 @@
   <string name="foreign_files_fail">Algunos archivos no pudieron ser movidos</string>
   <string name="foreign_files_local_text">Local: %1$s</string>
   <string name="foreign_files_remote_text">Remote: %1$s</string>
+  <string name="upload_query_move_foreign_files">No hay suficiente espacio para copiar los archivos seleccionados en la carpeta %1$s. ¿Quieres moverlos de todos modos?</string>
   <string name="pass_code_enter_pass_code">Por favor ingresa tu contraseña</string>
   <string name="pass_code_configure_your_pass_code">Ingresa tu contraseña</string>
   <string name="pass_code_configure_your_pass_code_explanation">La contraseña será requerida cada vez que se inicie la aplicación</string>
@@ -193,6 +214,7 @@
   <string name="media_rewind_description">Botón rebobinado</string>
   <string name="media_play_pause_description">Botón de reproducción o pausa </string>
   <string name="media_forward_description">Botón avance rápido</string>
+  <string name="upload_from_camera_title">Imagen desde la cámara</string>
   <string name="auth_getting_authorization">Buscando autorización ...</string>
   <string name="auth_trying_to_login">Intentando ingresar ...</string>
   <string name="auth_no_net_conn_title">Sin conexión de red</string>
@@ -245,6 +267,7 @@
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, intentá con otra aplicación para abrir el archivo</string>
   <string name="filedisplay_no_file_selected">No se seleccionó ningún archivo</string>
   <string name="activity_chooser_title">Enviar enlace a...</string>
+  <string name="wait_for_tmp_copy_from_private_storage">Copiando el archivo desde una ubicación privada</string>
   <string name="oauth_check_onoff">Iniciando sesión con oAuth2</string>
   <string name="ssl_validator_reason_cert_not_trusted">- El certificado del servidor no es confiable</string>
   <string name="ssl_validator_reason_cert_expired">- El certificado del servidor caducó</string>
@@ -267,6 +290,8 @@
   <string name="ssl_validator_label_validity_to">Para:</string>
   <string name="ssl_validator_label_signature">Firma:</string>
   <string name="ssl_validator_label_signature_algorithm">Algoritmo:</string>
+  <string name="ssl_validator_label_certificate_fingerprint">Huella digital:</string>
+  <string name="certificate_load_problem">Hubo un problema al cargar el certificado.</string>
   <string name="ssl_validator_null_cert">El certificado no puede ser mostrado</string>
   <string name="ssl_validator_no_info_about_error">- No existe información sobre el error</string>
   <string name="placeholder_sentence">Este es un texto temporario</string>
@@ -275,6 +300,10 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
+  <string name="camera_picture_upload_on_wifi">Cargar imágenes solamente con WiFi</string>
+  <string name="camera_video_upload_on_wifi">Cargar videos solamente con WiFi</string>
+  <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
+  <string name="conflict_title">Conflicto con el archivo</string>
   <string name="conflict_keep_both">Mantener ambas</string>
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">Esta imagen no puede ser mostrada</string>
@@ -314,7 +343,6 @@
   <string name="move_file_error">Un error ocurrió intentando mover el archivo o carpeta</string>
   <string name="forbidden_permissions_move">para mover este archivo</string>
   <string name="copy_file_invalid_overwrite">El archivo ya existe en la carpeta destino</string>
-  <string name="prefs_category_details">Detalles</string>
   <string name="auth_host_address">Dirección del servidor</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_cancel_public_link_button">Cancelar</string>
@@ -326,4 +354,5 @@
   <string name="share_privilege_can_edit">podés editar</string>
   <string name="share_privilege_can_edit_create">crear</string>
   <string name="share_privilege_can_edit_delete">borrar</string>
+  <!--Welcome to oC intro features-->
 </resources>

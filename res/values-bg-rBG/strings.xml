@@ -27,6 +27,7 @@
   <string name="drawer_open">Отвори</string>
   <string name="prefs_category_general">Общи</string>
   <string name="prefs_category_more">Още</string>
+  <string name="prefs_category_security">Сигурност</string>
   <string name="prefs_accounts">Профили</string>
   <string name="prefs_manage_accounts">Управление на профилите</string>
   <string name="prefs_passcode">Заключваща парола</string>
@@ -342,7 +343,6 @@
   <string name="copy_file_invalid_overwrite">Файлът вече съществува в отдалечената папка.</string>
   <string name="copy_file_error">Настъпи грешка при опита за копиране на този файл или папка.</string>
   <string name="forbidden_permissions_copy">да копира този файл</string>
-  <string name="prefs_category_details">Подробности</string>
   <string name="sync_folder_failed_content">Синхронизацията на папка %1$s не може да бъде завършена.</string>
   <string name="shared_subject_header">споделен</string>
   <string name="with_you_subject_header">с теб</string>
@@ -419,4 +419,5 @@
     <item quantity="one">%d избран</item>
     <item quantity="other">%d избран</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

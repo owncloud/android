@@ -27,9 +27,12 @@
   <string name="drawer_open">Open</string>
   <string name="prefs_category_general">Algemeen</string>
   <string name="prefs_category_more">Meer</string>
+  <string name="prefs_category_security">Beveiliging</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Accounts beheren</string>
   <string name="prefs_passcode">Pincode slot</string>
+  <string name="prefs_fingerprint">Vingerafdrukvergrendeling</string>
+  <string name="prefs_fingerprint_summary">Zet de toegangscode of de patroonvergrendeling aan om deze optie te activeren </string>
   <string name="prefs_camera_picture_upload">Afbeeldingen uploaden</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch afbeeldingen uploaden die met de camera genomen zijn</string>
   <string name="prefs_camera_video_upload">Video’s uploaden</string>
@@ -45,6 +48,19 @@
   <string name="prefs_imprint">afdruk</string>
   <string name="prefs_remember_last_share_location">Onthoud de share locatie</string>
   <string name="prefs_remember_last_upload_location_summary">Onthoud de laatste upload locatie</string>
+  <string name="prefs_pattern">Patroonvergrendeling</string>
+  <string name="pattern_enter_pattern">Voer aub de vergrendelingspatroon in</string>
+  <string name="pattern_configure_pattern">Voer de vergrendelingspatroon in</string>
+  <string name="pattern_remove_pattern">Verwijder uw vergrendelingspatroon</string>
+  <string name="pattern_incorrect_pattern">Onjuiste vergrendelingspatroon</string>
+  <string name="pattern_reenter_pattern">Voer aub opnieuw uw vergrendelingspatroon in</string>
+  <string name="pattern_not_same_pattern">De vergrendelingspatronen komen niet overeen</string>
+  <string name="pattern_stored">Vergrendelingspatroon opgeslagen</string>
+  <string name="pattern_removed">Vergrendelingspatroon opgeslagen</string>
+  <string name="pattern_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de patroonbeveiliging</string>
+  <string name="passcode_already_set">Patroon- en toegangscodes kunnen niet tegelijkertijd actief zijn, deactiveer eerst de toegangscode</string>
+  <string name="pattern_no_longer_required">Het patroon zal niet meer worden gevraagd</string>
+  <string name="pattern_configure_your_pattern_explanation">Telkens wanneer de app is gestart zal er om een patroon worden gevraagd</string>
   <string name="recommend_subject">Probeer %1$s op uw smartphone!</string>
   <string name="recommend_text">Uitnodiging om %1$s op uw smartphone uit te proberen!
 Download hier: %2$s</string>
@@ -80,6 +96,8 @@ Download hier: %2$s</string>
   <string name="file_list_file">bestand</string>
   <string name="file_list_files">bestanden</string>
   <string name="filedetails_select_file">Druk op een bestand om extra informatie weer te geven</string>
+  <string name="upload_to">Uploaden naar %1$s</string>
+  <string name="upload_files_title">Bestanden</string>
   <string name="filedetails_size">Grootte:</string>
   <string name="filedetails_type">Type:</string>
   <string name="filedetails_created">Aangemaakt:</string>
@@ -184,6 +202,13 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="pass_code_wrong">Onjuiste pincode</string>
   <string name="pass_code_removed">Pincode verwijderd</string>
   <string name="pass_code_stored">Pincode opgeslagen</string>
+  <string name="fingerprint_confirm">Bevestig uw vingerafdruk om door te gaan</string>
+  <string name="fingerprint_hint">Touch sensor</string>
+  <string name="fingerprint_not_recognized">Vingerafdruk niet herkend, probeer opnieuw</string>
+  <string name="fingerprint_success">Vingerafdruk herkend</string>
+  <string name="fingerprint_not_hardware_detected">Dit apparaat ondersteunt geen vingerafdruk-authenticatie</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Registreer ten minste één vingerafdruk om deze functie te gebruiken</string>
+  <string name="fingerprint_not_granted_permissions">Vingerafdruk-autorisatie is niet toegestaan</string>
   <string name="media_notif_ticker">%1$s muziekspeler</string>
   <string name="media_state_playing">%1$s (speelt)</string>
   <string name="media_state_loading">%1$s (laden)</string>
@@ -203,6 +228,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="media_rewind_description">terugpoel knop</string>
   <string name="media_play_pause_description">Speel of pauze knop</string>
   <string name="media_forward_description">Doorspoel knop</string>
+  <string name="upload_from_camera_title">Afbeelding vanaf de camera</string>
   <string name="auth_getting_authorization">Autoririseren...</string>
   <string name="auth_trying_to_login">Proberen om in the loggen...</string>
   <string name="auth_no_net_conn_title">Geen netwerkverbinding</string>
@@ -298,6 +324,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Upload afbeeldingen alleen via WiFi</string>
   <string name="camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
+  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Bevestigen</string>
   <string name="confirmation_disable_pictures_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande afbeeldingen worden niet geuploade</string>
   <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>
@@ -309,6 +336,7 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="preview_image_description">Afbeelding voorbeeld</string>
   <string name="preview_image_error_unknown_format">Deze afbeelding kan niet worden getoond</string>
   <string name="error__upload__local_file_not_copied">%1$s kon niet worden gekopieerd naar de %2$s lokale map</string>
+  <string name="prefs_camera_picture_upload_path_title">Afbeelding upload bestemming</string>
   <string name="share_link_no_support_share_api">Sorry, delen is niet mogelijk op uw server. Neem contact op met uw
 		beheerder.</string>
   <string name="share_link_file_no_exist">Kan dit niet delen. Controleer of dit bestand wel bestaat.</string>
@@ -364,7 +392,8 @@ Hieronder staan de lokale bestanden en de externe bestanden in %5$s waar ze naar
   <string name="copy_file_invalid_overwrite">Het bestand bestaat al in de doelmap</string>
   <string name="copy_file_error">Er trad een fout op bij uw poging dit bestand of deze map te kopiëren</string>
   <string name="forbidden_permissions_copy">om dit bestand te kopiëren</string>
-  <string name="prefs_category_details">Details</string>
+  <string name="prefs_category_camera_upload">Camera uploads</string>
+  <string name="prefs_camera_video_upload_path_title">Video upload bestemming</string>
   <string name="sync_folder_failed_content">Synchronisatie van map %1$s kon niet worden voltooid</string>
   <string name="shared_subject_header">gedeeld</string>
   <string name="with_you_subject_header">met u</string>
@@ -464,11 +493,34 @@ Neem contact op met uw beheerder</string>
   <string name="private_link_info">Dit is een privélink, alleen mensen met toegang tot het bestand/map kunnen hem gebruiken. Gebruik het als een permanente link voor uwzelf of om andere naar bestanden de wijzen in gedeelde mappen.</string>
   <string name="file_private_link_error">Privelink naar dit bestand is niet beschikbaar</string>
   <string name="download_notification_channel_name">Downloads</string>
+  <string name="download_notification_channel_description">Zie de bestandsnaam en de voortgang van het bestand dat wordt gedownload</string>
   <string name="upload_notification_channel_name">Uploads</string>
+  <string name="upload_notification_channel_description">Zie de bestandsnaam en de voortgang van het bestand dat wordt geupload</string>
   <string name="media_service_notification_channel_name">Muziekspeler</string>
   <string name="media_service_notification_channel_description">Zie muziekspeler</string>
+  <string name="file_sync_notification_channel_name">Bestand-synchronisatie</string>
+  <string name="file_sync_notification_channel_description">Zie het resultaat van de bestand-synchronisatie</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d geselecteerd</item>
     <item quantity="other">%d geselecteerd</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Beheer al uw gesynchroniseerde bestanden</string>
+  <string name="welcome_feature_1_text">U kunt kopiëren, verplaatsen, verwijderen</string>
+  <string name="welcome_feature_2_title">Deel bestanden en mappen</string>
+  <string name="welcome_feature_2_text">U kunt persoonlijk of publiekelijk delen</string>
+  <string name="welcome_feature_3_title">Multi account</string>
+  <string name="welcome_feature_3_text">Verbind met al uw ownCloud servers</string>
+  <string name="welcome_feature_4_title">Camera uploads</string>
+  <string name="welcome_feature_4_text">Uw afbeeldingen/video\'s automatisch uploaden</string>
+  <string name="welcome_feature_5_title">Video streaming</string>
+  <string name="welcome_feature_5_text">Speel uw video\'s af zonder te downloaden</string>
+  <string name="welcome_feature_6_title">Patroonontgrendeling</string>
+  <string name="welcome_feature_6_text">Gebruik een patroon om uw ownCloud app te vergrendelen</string>
+  <string name="welcome_feature_7_title">Vingerafdrukvergrendeling</string>
+  <string name="welcome_feature_7_text">Gebruik uw vingerafdruk om uw ownCloud app te vergrendelen</string>
+  <string name="welcome_feature_8_title">GIF ondersteuning</string>
+  <string name="welcome_feature_8_text">Speel uw geanimeerde GIF-afbeeldingen af</string>
+  <string name="welcome_feature_9_title">Upload foto vanaf de camera</string>
+  <string name="welcome_feature_9_text">Neem een foto en upload het direct naar uw server</string>
 </resources>

@@ -4,8 +4,9 @@
  *   @author Bartek Przybylski
  *   @author masensio
  *   @author David A. Velasco
+ *   @author Christian Schabesberger
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -23,11 +24,16 @@
 package com.owncloud.android.ui.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,11 +43,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -62,6 +72,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
+import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
@@ -257,8 +268,40 @@ public class OCFileListFragment extends ExtendedListFragment {
         getFabUpload().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
-                        .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
+                Log_OC.e(TAG,"Clicked" + getContext().toString());
+                final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
+                final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
+                dialog.setContentView(uploadBottomSheet);
+                final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
+                LinearLayout uploadFromCameraLinearLayout = uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+                uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
+                                .getAccount(), FileDisplayActivity.REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM);
+                        dialog.hide();
+                        return false;
+                    }
+                });
+                uploadFromCameraLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+
+                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                        dialog.hide();
+                        return false;
+                    }
+                });
+                uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),getResources().getString(R.string.app_name)));
+                final BottomSheetBehavior uploadBottomSheetBehavior = BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.getMeasuredHeight());
+                    }
+                });
+                dialog.show();
                 getFabMain().collapse();
                 recordMiniFabClick();
             }
@@ -607,8 +650,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             }   // exit is granted because storageManager.getFileByPath("/") never returns null
             mFile = parentDir;
 
-            // TODO Enable when "On Device" is recovered ?
-            listDirectory(mFile /*, MainApp.getOnlyOnDevice()*/);
+            listDirectoryWidthAnimationUp(mFile);
 
             onRefresh(false);
 
@@ -620,14 +662,53 @@ public class OCFileListFragment extends ExtendedListFragment {
         return moveCount;
     }
 
+    private void listDirectoryWithAnimationDown(final OCFile file) {
+        Animation fadeOutFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_front);
+        Handler eventHandler = new Handler();
+
+        // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
+        // call listDirectory() from the Animation callback
+        eventHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                listDirectory(file);
+                Animation fadeInBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_back);
+                getListView().setAnimation(fadeInBack);
+            }
+        }, getResources().getInteger(R.integer.folder_animation_duration));
+        getListView().startAnimation(fadeOutFront);
+    }
+
+    private void listDirectoryWidthAnimationUp(final OCFile file) {
+        if(getListView().getVisibility() == View.GONE) {
+            listDirectory(file);
+            Animation fadeInFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
+            getListView().startAnimation(fadeInFront);
+            return;
+        }
+
+        Handler eventHandler = new Handler();
+        Animation fadeOutBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_back);
+
+        // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
+        // call listDirectory() from the Animation callback
+        eventHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                listDirectory(file);
+                Animation fadeInFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
+                getListView().startAnimation(fadeInFront);
+            }
+        }, getResources().getInteger(R.integer.folder_animation_duration));
+        getListView().startAnimation(fadeOutBack);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         OCFile file = (OCFile) mAdapter.getItem(position);
         if (file != null) {
             if (file.isFolder()) {
-                // update state and view of this fragment
-                // TODO Enable when "On Device" is recovered ?
-                listDirectory(file/*, MainApp.getOnlyOnDevice()*/);
+                listDirectoryWithAnimationDown(file);
                 // then, notify parent activity to let it update its state and view
                 mContainerActivity.onBrowsedDownTo(file);
                 // save index and top position
@@ -854,8 +935,6 @@ public class OCFileListFragment extends ExtendedListFragment {
                     }
                 }
             }
-            // set footer text
-            setFooterText(generateFooterText(filesCount, foldersCount));
 
             // decide grid vs list view
             OwnCloudVersion version = AccountUtils.getServerVersion(
@@ -866,6 +945,9 @@ public class OCFileListFragment extends ExtendedListFragment {
             } else {
                 switchToListView();
             }
+
+            // set footer text
+            setFooterText(generateFooterText(filesCount, foldersCount));
         }
         invalidateActionMode();
     }

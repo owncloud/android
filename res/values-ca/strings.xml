@@ -14,6 +14,8 @@
   <string name="actionbar_sort">Ordena</string>
   <string name="actionbar_sort_title">Ordena per</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">El més nou - Eel més antic</string>
+  <string name="actionbar_sort_by_size">El més gran - El més petit</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tots els fitxers</string>
@@ -25,9 +27,14 @@
   <string name="drawer_open">Obre</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Més</string>
+  <string name="prefs_category_security">Seguretat</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gestió de comptes</string>
   <string name="prefs_passcode">Contrasenya</string>
+  <string name="prefs_camera_picture_upload">Imatges pujades</string>
+  <string name="prefs_camera_picture_upload_summary">Pujeu automàticament les fotografies fetes amb la càmera</string>
+  <string name="prefs_camera_video_upload">Pujades de vídeos</string>
+  <string name="prefs_camera_video_upload_summary">Pujeu automàticament els vídeos fets amb la càmera</string>
   <string name="prefs_log_title">Habilita els registres</string>
   <string name="prefs_log_summary">Això s\'usa per registrar problemes</string>
   <string name="prefs_log_title_history">Historial dels registres</string>
@@ -49,6 +56,7 @@
   <string name="sync_string_files">Fitxers</string>
   <string name="setup_btn_connect">Connecta</string>
   <string name="uploader_btn_upload_text">Puja</string>
+  <string name="uploader_top_message">Seleccioneu la carpeta de pujada</string>
   <string name="uploader_wrn_no_account_title">No s\'ha trobat el compte</string>
   <string name="uploader_wrn_no_account_text">No hi ha comptes %1$s al dispositiu. Primer configureu un compte.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Configura</string>
@@ -63,6 +71,7 @@
   <string name="file_list_seconds_ago">segons enrere</string>
   <string name="file_list_empty">Res per aquí. Pugeu alguna cosa!</string>
   <string name="file_list_loading">Carregant...</string>
+  <string name="file_list_no_app_for_file_type">No s\'ha trobat cap aplicació per a aquest tipus d\'arxiu!</string>
   <string name="local_file_list_empty">No hi ha arxius a aquesta carpeta</string>
   <string name="local_file_list_empty_just_folders">No hi ha cap carpeta en aquesta carpeta.</string>
   <string name="upload_list_empty">No hi ha fitxers carregats disponibles.</string>
@@ -71,6 +80,8 @@
   <string name="file_list_file">fitxer</string>
   <string name="file_list_files">fitxers</string>
   <string name="filedetails_select_file">Feu clic en un fitxer per mostrar informació addicional.</string>
+  <string name="upload_to">Pujeu cap a %1$s</string>
+  <string name="upload_files_title">Arxius</string>
   <string name="filedetails_size">Mida:</string>
   <string name="filedetails_type">Tipus:</string>
   <string name="filedetails_created">Creat:</string>
@@ -112,6 +123,8 @@
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Error (toca per tornar a intentar)</string>
   <string name="uploads_view_group_finished_uploads">Carregat</string>
+  <string name="uploads_view_group_file_count">%d Arxius</string>
+  <string name="uploads_view_group_file_count_single">%d Arxiu</string>
   <string name="uploads_view_upload_status_succeeded">Completat</string>
   <string name="uploads_view_upload_status_cancelled">S\'ha cancel·lat</string>
   <string name="uploads_view_upload_status_paused">Pausat</string>
@@ -214,6 +227,7 @@
   <string name="confirmation_remove_file_alert">Esteu segur que voleu eliminar %1$s?</string>
   <string name="confirmation_remove_folder_alert">Estàs segur que vols esborrar %1$s i els seus continguts?</string>
   <string name="confirmation_remove_local">Només local</string>
+  <string name="confirmation_remove_public_share_title">Borrar l\'enllaç</string>
   <string name="confirmation_remove_public_share_message">Esteu segur que voleu eliminar %1$s?</string>
   <string name="remove_success_msg">L\'eliminació ha tingut èxit</string>
   <string name="remove_fail_msg">No s\'ha pogut completar l\'eliminació</string>
@@ -319,7 +333,6 @@
   <string name="copy_file_not_found">No es pot copiar. Assegureu-vos que el fitxer existeix</string>
   <string name="copy_file_invalid_overwrite">El fitxer ja existeix a la carpeta de destinació</string>
   <string name="forbidden_permissions_copy">per copiar aquest fitxer</string>
-  <string name="prefs_category_details">Detalls</string>
   <string name="shared_subject_header">compartit</string>
   <string name="with_you_subject_header">amb tú</string>
   <string name="auth_refresh_button">Actualitza la connexió</string>
@@ -343,6 +356,7 @@
   <string name="pref_behaviour_entries_move">mogut a la carpeta de l\'aplicació</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Comparteix %1$s</string>
+  <string name="share_with_user_section_title">Usuaris i Grups</string>
   <string name="share_no_users">No s\'han compartit dades amb usuaris encara</string>
   <string name="share_add_user_or_group">Afegeix usuari o group</string>
   <string name="share_cancel_public_link_button">Cancel·lar</string>
@@ -351,6 +365,7 @@
   <string name="share_via_link_password_label">Contrasenya</string>
   <string name="share_via_link_password_title">Assegurat</string>
   <string name="share_via_link_edit_permission_label">Permetre edició</string>
+  <string name="share_via_link_show_file_listing_label">Mostra el llistat d\'arxius</string>
   <string name="share_get_public_link_button">Obtén l\'enllaç</string>
   <string name="share_with_title">Comparteix amb ...</string>
   <string name="share_with_edit_title">Comparteix amb %1$s</string>
@@ -374,8 +389,10 @@
   <string name="manage_space_error">Alguns fitxers no s\'han pogut esborrar</string>
   <string name="permission_storage_access">Es requereixen permisos addicionals per a pujar i baixar fitxers.</string>
   <string name="failed_upload_quota_exceeded_text">No hi ha prou espai en el compte</string>
+  <string name="share_warning_about_forwarding_public_links">Qualsevol podrà accedir a l\'arxiu o carpeta amb aquest link</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionat</item>
     <item quantity="other">%d seleccionats</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

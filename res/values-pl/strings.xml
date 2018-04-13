@@ -27,9 +27,12 @@
   <string name="drawer_open">Otwórz</string>
   <string name="prefs_category_general">Ogólne</string>
   <string name="prefs_category_more">Więcej</string>
+  <string name="prefs_category_security">Bezpieczeństwo</string>
   <string name="prefs_accounts">Konta</string>
   <string name="prefs_manage_accounts">Zarządzaj kontami</string>
   <string name="prefs_passcode">Blokada hasłem</string>
+  <string name="prefs_fingerprint">Blokada odciskiem palca</string>
+  <string name="prefs_fingerprint_summary">Wprowadź kod PIN lub wzór odblokowania aby odblokować tę opcję</string>
   <string name="prefs_camera_picture_upload">Wrzucanie obrazków</string>
   <string name="prefs_camera_picture_upload_summary">Automatycznie wrzuć obrazki zrobione przez kamerę</string>
   <string name="prefs_camera_video_upload">Wrzucanie filmów</string>
@@ -45,6 +48,14 @@
   <string name="prefs_imprint">Stopka</string>
   <string name="prefs_remember_last_share_location">Zapamiętaj położenie udostępnienia</string>
   <string name="prefs_remember_last_upload_location_summary">Zapamiętaj ostatnią lokalizację wgrywania</string>
+  <string name="prefs_pattern">Wzór odblokowania</string>
+  <string name="pattern_enter_pattern">Proszę wpisz swój wzór odblokowania</string>
+  <string name="pattern_configure_pattern">Wpisz swój wzór odblokowania</string>
+  <string name="pattern_remove_pattern">Usuń wzór odblokowania</string>
+  <string name="pattern_incorrect_pattern">Niepoprawny wzór odblokowania</string>
+  <string name="pattern_reenter_pattern">Proszę wpisz ponownie swój wzór odblokowania</string>
+  <string name="pattern_not_same_pattern">Wprowadzone wzory odblokowania różnią się</string>
+  <string name="pattern_stored">Wzór odblokowania zapisany</string>
   <string name="recommend_subject">Wypróbuj %1$s na swoim smartphonie!</string>
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
   <string name="auth_check_server">Sprawdź serwer</string>
@@ -79,6 +90,8 @@
   <string name="file_list_file">plik</string>
   <string name="file_list_files">pliki</string>
   <string name="filedetails_select_file">Dotknij plik aby wyświetlić dodatkowe informacje</string>
+  <string name="upload_to">Wyślij do %1$s</string>
+  <string name="upload_files_title">Pliki</string>
   <string name="filedetails_size">Rozmiar:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Utworzono:</string>
@@ -364,7 +377,6 @@
   <string name="copy_file_error">Wystąpił błąd podczas próby kopiowania tego pliku lub folderu</string>
   <string name="forbidden_permissions_copy">by skopiować ten plik</string>
   <string name="prefs_category_camera_upload">Wrzucanie kamery</string>
-  <string name="prefs_category_details">Szczegóły</string>
   <string name="prefs_camera_video_upload_path_title">Ścieżka wrzucania filmu</string>
   <string name="sync_folder_failed_content">Synchronizacja folderu %1$s nie może zostać zakończona</string>
   <string name="shared_subject_header">udostępniony</string>
@@ -478,4 +490,7 @@
     <item quantity="many">wybrano: %d</item>
     <item quantity="other">wybrano: %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Wrzucanie kamery</string>
+  <string name="welcome_feature_7_title">Blokada odciskiem palca</string>
 </resources>

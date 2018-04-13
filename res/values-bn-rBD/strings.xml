@@ -17,6 +17,7 @@
   <string name="drawer_open">খোল</string>
   <string name="prefs_category_general">সাধারণ</string>
   <string name="prefs_category_more">বেশী</string>
+  <string name="prefs_category_security">নিরাপত্তা</string>
   <string name="prefs_accounts">একাউন্ট</string>
   <string name="prefs_log_summary">সমস্যা তালিকাভুক্ত করার জায়গা</string>
   <string name="prefs_log_summary_history">রেকর্ডেড লগ এখানে দেখেন</string>
@@ -209,7 +210,6 @@
   <string name="file_list_empty_moving">এখানে কিছু নেই। একটি ফোল্ডার যোগ করতে পারেন!</string>
   <string name="folder_picker_choose_button_text">বেছে নিন</string>
   <string name="move_file_not_found">সরাতে ব্যার্থ হলো। ফাইলটি রয়েছে কিনা দেখুন।</string>
-  <string name="prefs_category_details">বিস্তারিত</string>
   <string name="auth_host_address">সার্ভার ঠিকানা</string>
   <string name="share_dialog_title">ভাগাভাগি কর</string>
   <string name="share_cancel_public_link_button">বাতিল</string>
@@ -220,4 +220,5 @@
   <string name="share_privilege_can_edit">সম্পাদনা করতে পারবেন</string>
   <string name="share_privilege_can_edit_create">তৈরী করুন</string>
   <string name="share_privilege_can_edit_delete">মুছে ফেল</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -27,6 +27,7 @@
   <string name="drawer_open">打开</string>
   <string name="prefs_category_general">常规</string>
   <string name="prefs_category_more">更多</string>
+  <string name="prefs_category_security">安全</string>
   <string name="prefs_accounts">账号</string>
   <string name="prefs_manage_accounts">管理账号</string>
   <string name="prefs_passcode">密码锁</string>
@@ -79,6 +80,8 @@
   <string name="file_list_file">文件</string>
   <string name="file_list_files">文件</string>
   <string name="filedetails_select_file">点击一个文件可以显示额外的信息。</string>
+  <string name="upload_to">上传到 %1$s</string>
+  <string name="upload_files_title">文件</string>
   <string name="filedetails_size">大小：</string>
   <string name="filedetails_type">类型：</string>
   <string name="filedetails_created">创建于：</string>
@@ -295,6 +298,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">仅通过 WIFI 上传照片</string>
   <string name="camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
+  <string name="camera_upload_path">/相机目录</string>
   <string name="confirmation_disable_camera_uploads_title">确认</string>
   <string name="confirmation_disable_pictures_upload_message">你确定要禁用这项功能吗？未上传的图片将不会被上传</string>
   <string name="confirmation_disable_videos_upload_message">你确定要禁用这项功能吗？未上传的视频将不会被上传</string>
@@ -362,7 +366,6 @@
   <string name="copy_file_error">尝试复制这个文件或文件夹时发生了错误</string>
   <string name="forbidden_permissions_copy">复制这个文件</string>
   <string name="prefs_category_camera_upload">相机上传</string>
-  <string name="prefs_category_details">详细信息</string>
   <string name="prefs_camera_video_upload_path_title">视频上传路径</string>
   <string name="sync_folder_failed_content"> %1$s同步未完成。</string>
   <string name="shared_subject_header">已共享</string>
@@ -473,4 +476,6 @@
   <plurals name="items_selected_count">
     <item quantity="other">%d 已选择</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">相机上传</string>
 </resources>

@@ -8,6 +8,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="prefs_category_general">Ерөнхий</string>
+  <string name="prefs_category_security">Аюулгүй байдал</string>
   <string name="auth_username">Хэрэглэгчийн нэр</string>
   <string name="auth_password">Нууц үг</string>
   <string name="sync_string_files">Файлууд</string>
@@ -23,4 +24,5 @@
   <string name="share_cancel_public_link_button">Цуцлах</string>
   <string name="share_confirm_public_link_button">Хадгалах</string>
   <string name="share_via_link_password_label">Нууц үг</string>
+  <!--Welcome to oC intro features-->
 </resources>

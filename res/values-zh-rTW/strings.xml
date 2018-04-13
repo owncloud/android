@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s 安卓軟體</string>
+  <string name="about_android">%1$s Android 應用程式</string>
   <string name="about_version">版本 %1$s</string>
   <string name="actionbar_sync">更新檔案列表</string>
   <string name="actionbar_upload">上傳檔案</string>
@@ -27,9 +27,14 @@
   <string name="drawer_open">開啟</string>
   <string name="prefs_category_general">一般</string>
   <string name="prefs_category_more">更多</string>
+  <string name="prefs_category_security">安全性</string>
   <string name="prefs_accounts">帳號</string>
   <string name="prefs_manage_accounts">管理帳號</string>
   <string name="prefs_passcode">密碼鎖</string>
+  <string name="prefs_camera_picture_upload">圖片上傳</string>
+  <string name="prefs_camera_picture_upload_summary">自動地上傳相機照片</string>
+  <string name="prefs_camera_video_upload">影片上傳</string>
+  <string name="prefs_camera_video_upload_summary">將照相機所拍攝完成的影像自動地上傳</string>
   <string name="prefs_log_title">啓用記錄</string>
   <string name="prefs_log_summary">這個用來記錄執行的動作以找出問題點</string>
   <string name="prefs_log_title_history">歷史記錄</string>
@@ -42,6 +47,7 @@
   <string name="prefs_remember_last_share_location">記住分享位置</string>
   <string name="prefs_remember_last_upload_location_summary">記住上次分享上傳位置</string>
   <string name="recommend_subject">在您的手機中試用%1$s!</string>
+  <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="auth_check_server">檢查伺服器</string>
   <string name="auth_host_url">伺服器位址 https://...</string>
   <string name="auth_username">使用者名稱</string>
@@ -65,6 +71,7 @@
   <string name="file_list_seconds_ago">幾秒前</string>
   <string name="file_list_empty">這裡還沒有東西，上傳一些吧！</string>
   <string name="file_list_loading">載入中…</string>
+  <string name="local_file_list_empty">沒有檔案在這個目錄。</string>
   <string name="local_file_list_empty_just_folders">這個資料夾中沒有任何資料夾.</string>
   <string name="upload_list_empty">無上傳</string>
   <string name="file_list_folder">資料夾</string>
@@ -72,6 +79,8 @@
   <string name="file_list_file">檔案</string>
   <string name="file_list_files">檔案</string>
   <string name="filedetails_select_file">在檔案上輕觸來顯示更多資訊。</string>
+  <string name="upload_to">上傳到%1$s</string>
+  <string name="upload_files_title">檔案</string>
   <string name="filedetails_size">容量:</string>
   <string name="filedetails_type">類型:</string>
   <string name="filedetails_created">建立:</string>
@@ -108,12 +117,15 @@
   <string name="uploader_upload_failed_ticker">上傳失敗</string>
   <string name="uploader_upload_failed_content_single">上傳 %1$s 未完成</string>
   <string name="uploader_upload_failed_credentials_error">上傳失敗，請重新登入。</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">檔名不能為空</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">檔名不能超過%d個字元</string>
   <string name="uploader_upload_text_filename_hint">檔案名稱</string>
   <string name="uploads_view_title">上傳</string>
   <string name="uploads_view_group_current_uploads">目前</string>
   <string name="uploads_view_group_failed_uploads">失敗 (輕觸可重試)</string>
   <string name="uploads_view_group_finished_uploads">已上傳</string>
   <string name="uploads_view_group_file_count">%d 個檔案</string>
+  <string name="uploads_view_group_file_count_single">%d 個檔案</string>
   <string name="uploads_view_upload_status_succeeded">完成</string>
   <string name="uploads_view_upload_status_cancelled">已取消</string>
   <string name="uploads_view_upload_status_paused">已暫停</string>
@@ -129,6 +141,7 @@
   <string name="uploads_view_upload_status_unknown_fail">未知的錯誤</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">等待無線網路連線</string>
   <string name="uploads_view_later_waiting_to_upload">上傳等候中</string>
+  <string name="uploads_view_unsupported_media_type">不支援的媒體類型</string>
   <string name="downloader_download_in_progress_ticker">下載中 ...</string>
   <string name="downloader_download_in_progress_content">%1$d%% 下載中 %2$s</string>
   <string name="downloader_download_succeeded_ticker">下載成功</string>
@@ -137,6 +150,7 @@
   <string name="downloader_download_failed_content">下載 %1$s 未完成</string>
   <string name="downloader_not_downloaded_yet">尚未下載</string>
   <string name="downloader_download_failed_credentials_error">下載失敗，請重新登入。</string>
+  <string name="downloader_download_forbidden_permissions">下載檔案</string>
   <string name="common_choose_account">選擇帳號</string>
   <string name="sync_fail_ticker">同步失敗</string>
   <string name="sync_fail_ticker_unauthorized">同步失敗，請重新登入。</string>
@@ -183,6 +197,7 @@
   <string name="media_rewind_description">重新播放按鍵</string>
   <string name="media_play_pause_description">播放或暫停按鍵</string>
   <string name="media_forward_description">快轉按鍵</string>
+  <string name="upload_from_camera_title">相片</string>
   <string name="auth_getting_authorization">授權中... ...</string>
   <string name="auth_trying_to_login">登入中... ...</string>
   <string name="auth_no_net_conn_title">沒有網際網路連線</string>
@@ -275,6 +290,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">經由 wifi 上傳圖片</string>
   <string name="camera_video_upload_on_wifi">經由 wifi 上傳視訊</string>
+  <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="conflict_title">檔案衝突</string>
   <string name="conflict_message">您要保留那個檔案? 如果您同時選擇兩個版本, 本地的檔案將在檔案名稱後面會加上編號</string>
   <string name="conflict_keep_both">都保留</string>
@@ -283,9 +299,12 @@
   <string name="preview_image_description">圖片預覽</string>
   <string name="preview_image_error_unknown_format">無法顯示圖片</string>
   <string name="error__upload__local_file_not_copied">%1$s 無法被複製到本地資料夾 %2$s</string>
+  <string name="prefs_camera_picture_upload_path_title">圖片上傳路徑</string>
   <string name="share_link_no_support_share_api">很抱歉, 您的伺服器並未開啟分享的功能. 請聯絡您的
 		伺服器管理員.</string>
+  <string name="share_link_file_no_exist">無法分享。請檢查檔案是否存在</string>
   <string name="share_link_file_error">在分享檔案或資料夾時發生了錯誤</string>
+  <string name="unshare_link_file_no_exist">無法取消分享. 請檢查檔案是否存在</string>
   <string name="unshare_link_file_error">在取消分享檔案或資料夾時發生了錯誤</string>
   <string name="update_link_file_no_exist">無法更新, 請檢查檔案是否存在</string>
   <string name="update_link_file_error">當嘗試更新分享時發生錯誤</string>
@@ -300,24 +319,43 @@
   <string name="error_cant_bind_to_operations_service">嚴重錯誤: 無法執行運算</string>
   <string name="network_error_socket_exception">在與伺服器連線時發生了錯誤.</string>
   <string name="network_error_socket_timeout_exception">伺服器回應逾時</string>
+  <string name="network_error_connect_timeout_exception">伺服器連接逾時</string>
+  <string name="forbidden_permissions">您沒有權限 %s</string>
+  <string name="forbidden_permissions_rename">重新命名檔案</string>
+  <string name="forbidden_permissions_delete">刪除檔案</string>
+  <string name="share_link_forbidden_permissions">分享檔案</string>
+  <string name="unshare_link_forbidden_permissions">取消分享檔案</string>
   <string name="update_link_forbidden_permissions">更新這個分享</string>
+  <string name="forbidden_permissions_create">建立檔案</string>
+  <string name="uploader_upload_forbidden_permissions">上傳這個目錄</string>
   <string name="uploader_upload_forbidden">您沒有權限上傳</string>
+  <string name="downloader_download_file_not_found">這個檔案已經不存在於伺服器中</string>
   <string name="prefs_category_accounts">帳號</string>
+  <string name="prefs_add_account">增加帳號</string>
   <string name="drawer_manage_accounts">管理帳號</string>
   <string name="auth_redirect_non_secure_connection_title">加密的連線是由一個未加密的連線轉向過來的.</string>
+  <string name="actionbar_logger">記錄</string>
   <string name="log_send_history_button">傳送歷史</string>
   <string name="log_send_no_mail_app">沒有傳送紀錄的軟體. 請安裝郵件軟體</string>
   <string name="log_send_mail_subject">%1$s Android 應用程式記錄</string>
   <string name="log_progress_dialog_text">裝載資料中...</string>
   <string name="saml_authentication_required_text">必須驗證</string>
   <string name="saml_authentication_wrong_pass">密碼錯誤</string>
+  <string name="actionbar_move">移動</string>
+  <string name="file_list_empty_moving">這裡什麼也沒有，您可以增加目錄！</string>
   <string name="folder_picker_choose_button_text">選擇</string>
+  <string name="move_file_not_found">無法移動。請檢查檔案是否存在</string>
+  <string name="move_file_invalid_into_descendent">無法將目錄移動到其子目錄內</string>
+  <string name="move_file_invalid_overwrite">這個檔案已經存在於目錄中</string>
+  <string name="move_file_error">在移動檔案或目錄時發生了錯誤</string>
+  <string name="forbidden_permissions_move">移動這個檔案</string>
   <string name="copy_file_not_found">無法複製, 請檢查檔案是否存在</string>
   <string name="copy_file_invalid_into_descendent">無法複製資料夾到子資料夾</string>
   <string name="copy_file_invalid_overwrite">這個檔案已經存在於目的資料夾中</string>
   <string name="copy_file_error">嘗試複製檔案或資料夾時發生錯誤</string>
   <string name="forbidden_permissions_copy">複製這個檔案</string>
-  <string name="prefs_category_details">詳細資料</string>
+  <string name="prefs_category_camera_upload">相機上傳</string>
+  <string name="prefs_camera_video_upload_path_title">影片上傳路徑</string>
   <string name="sync_folder_failed_content">%1$s 資料夾的同步作業未完成</string>
   <string name="shared_subject_header">以分享的</string>
   <string name="with_you_subject_header">與你</string>
@@ -348,16 +386,19 @@
   <string name="share_file">分享 %1$s</string>
   <string name="share_with_user_section_title">使用者及群組</string>
   <string name="share_no_users">目前沒有任何您分享的內容</string>
+  <string name="share_incompatible_version">您的伺服器最低需要 8.2 版本，才能分享與其他使用者</string>
   <string name="share_add_user_or_group">加入使用者或群組</string>
   <string name="share_via_link_section_title">公共連結</string>
   <string name="share_via_link_create_title">建立連結分享</string>
   <string name="share_via_link_edit_title">編輯連結分享</string>
+  <string name="share_via_link_name_label">連結名稱</string>
   <string name="share_cancel_public_link_button">取消</string>
   <string name="share_confirm_public_link_button">儲存</string>
   <string name="share_via_link_expiration_date_label">過期</string>
   <string name="share_via_link_password_label">密碼</string>
   <string name="share_via_link_password_title">安全</string>
   <string name="share_via_link_edit_permission_label">允許編輯</string>
+  <string name="share_via_link_show_file_listing_label">顯示檔案列表</string>
   <string name="share_get_public_link_button">取得連結</string>
   <string name="share_with_title">分享...</string>
   <string name="share_with_edit_title">與 %1$s 分享</string>
@@ -390,8 +431,29 @@
   <string name="confirmation_remove_files_alert">您真的要移除所選取的項目?</string>
   <string name="confirmation_remove_folders_alert">您真的要移除所選取的項目與裡面的文件?</string>
   <string name="failed_upload_quota_exceeded_text">此帳戶無足夠儲存空間</string>
+  <string name="auth_forbidden">禁用的驗證</string>
+  <string name="actionbar_privacy_policy">隱私權聲明</string>
+  <string name="prefs_privacy_policy">隱私權聲明</string>
+  <string name="privacy_policy_error">發生錯誤:</string>
+  <string name="service_unavailable">伺服器無法使用</string>
   <string name="streaming_certificate_error">串流不能被初始化，因為您的伺服器的憑證不被信任。檔案下載會自動開始。</string>
+  <string name="streaming_unrecognized_input">不支援這種影片格式</string>
+  <string name="share_no_link_in_this_share">沒有連結的分享</string>
+  <string name="share_via_link_default_password">*****</string>
+  <string name="share_via_link_password_enforced_label">密碼 *</string>
+  <string name="share_via_link_expiration_date_enforced_label">過期 *</string>
+  <string name="share_via_link_expiration_date_explanation_label">這個公開的連結會在 %1$d 天後失效</string>
+  <string name="share_via_link_default_name_template">%1$s 連結</string>
+  <string name="download_notification_channel_name">下載</string>
+  <string name="upload_notification_channel_name">上傳</string>
+  <string name="upload_notification_channel_description">檢視上傳檔案名稱和進度</string>
+  <string name="media_service_notification_channel_name">音樂播放器</string>
+  <string name="media_service_notification_channel_description">查看音樂播放器</string>
+  <string name="file_sync_notification_channel_name">檔案同步</string>
+  <string name="file_sync_notification_channel_description">檢視檔案同步結果</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d 已選取</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">相機上傳</string>
 </resources>

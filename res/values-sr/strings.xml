@@ -26,6 +26,7 @@
   <string name="drawer_open">Отвори</string>
   <string name="prefs_category_general">Опште</string>
   <string name="prefs_category_more">Остало</string>
+  <string name="prefs_category_security">Безбедност</string>
   <string name="prefs_accounts">Налози</string>
   <string name="prefs_manage_accounts">Управљање налозима</string>
   <string name="prefs_passcode">Закључавање кодом</string>
@@ -313,7 +314,6 @@
   <string name="copy_file_invalid_into_descendent">Није могуће копирати фасциклу у њену потфасциклу</string>
   <string name="copy_file_invalid_overwrite">Фајл већ постоји у одредишној фасцикли</string>
   <string name="forbidden_permissions_copy">да копирате овај фајл</string>
-  <string name="prefs_category_details">Подаци</string>
   <string name="sync_folder_failed_content">Не могу да довршим синхронизацију фасцикле %1$s</string>
   <string name="shared_subject_header">дељено</string>
   <string name="with_you_subject_header">са вама</string>
@@ -370,4 +370,5 @@
     <item quantity="few">%d изабрана</item>
     <item quantity="other">%d изабрано</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

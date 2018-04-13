@@ -27,9 +27,11 @@
   <string name="drawer_open">Abrir</string>
   <string name="prefs_category_general">Geral</string>
   <string name="prefs_category_more">Mais</string>
+  <string name="prefs_category_security">Segurança</string>
   <string name="prefs_accounts">Contas</string>
   <string name="prefs_manage_accounts">Gerir contas</string>
   <string name="prefs_passcode">Proteção por código</string>
+  <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotografias tiradas pela camera</string>
   <string name="prefs_log_title">Ativar registo de alterações</string>
   <string name="prefs_log_summary">É utilizado para registar problemas</string>
   <string name="prefs_log_title_history">Histórico de registos de alterações</string>
@@ -75,6 +77,8 @@
   <string name="file_list_file">ficheiro</string>
   <string name="file_list_files">ficheiros</string>
   <string name="filedetails_select_file">Toque num ficheiro para visualizar a informação adicional.</string>
+  <string name="upload_to">Carregar para %1$s</string>
+  <string name="upload_files_title">Ficheiros</string>
   <string name="filedetails_size">Tamanho:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Criado:</string>
@@ -196,6 +200,7 @@
   <string name="media_rewind_description">Botão de Retroceder</string>
   <string name="media_play_pause_description">Botão de Reproduzir/Pausar</string>
   <string name="media_forward_description">Botão de avanço rápido</string>
+  <string name="upload_from_camera_title">Fotografia da camera</string>
   <string name="auth_getting_authorization">A obter autorização...</string>
   <string name="auth_trying_to_login">A tentar iniciar a sessão...</string>
   <string name="auth_no_net_conn_title">Nenhuma ligação de rede</string>
@@ -290,6 +295,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Enviar as imagens apenas via wi-fi</string>
   <string name="camera_video_upload_on_wifi">Enviar vídeos apenas via wi-fi</string>
+  <string name="confirmation_disable_camera_uploads_title">Confirme</string>
   <string name="conflict_title">Conflito de ficheiro</string>
   <string name="conflict_message">Quais os ficheiros que pretende manter? Se selecionar ambas as versões, o ficheiro local irá ter um número adicionado ao seu nome.</string>
   <string name="conflict_keep_both">Manter ambos</string>
@@ -352,7 +358,6 @@
   <string name="copy_file_invalid_overwrite">O ficheiro já existe na pasta de destino</string>
   <string name="copy_file_error">Ocorreu um ocorreu quando tentava copiar este ficheiro ou pasta</string>
   <string name="forbidden_permissions_copy">para copiar este ficheiro</string>
-  <string name="prefs_category_details">Detalhes</string>
   <string name="sync_folder_failed_content">Não foi possível completar a sincronização da pasta %1$s</string>
   <string name="shared_subject_header">partilhado</string>
   <string name="with_you_subject_header">consigo</string>
@@ -450,6 +455,7 @@
   <string name="share_via_link_expiration_date_explanation_label">A hiperligação pública irá expirar, o mais tardar %1$d dias após a sua criação </string>
   <string name="share_via_link_default_name_template">%1$s hiperligação</string>
   <string name="download_notification_channel_name">Transferências</string>
+  <string name="upload_notification_channel_name">Carregamentos</string>
   <string name="media_service_notification_channel_name">Reprodutor de música</string>
   <string name="media_service_notification_channel_description">Ver reprodutor de música</string>
   <string name="file_sync_notification_channel_name">Sincronização do(s) ficheiro(s)</string>
@@ -458,4 +464,5 @@
     <item quantity="one">%d selecionado</item>
     <item quantity="other">%d selecionados</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

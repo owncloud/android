@@ -19,6 +19,7 @@
   <string name="drawer_open">បើក</string>
   <string name="prefs_category_general">ទូទៅ</string>
   <string name="prefs_category_more">ច្រើន​ទៀត</string>
+  <string name="prefs_category_security">សុវត្ថិភាព</string>
   <string name="prefs_accounts">គណនី</string>
   <string name="prefs_log_summary">នេះជាបញ្ហា​សម្រាប់​អ្នក​ដែល​បាន​ចូលទៅកាន់</string>
   <string name="prefs_log_summary_history">នៅទីនេះ​គឺបង្ហាញការដែលបាន​ចូលទៅកាន់</string>
@@ -86,7 +87,6 @@
   <string name="prefs_category_accounts">គណនី</string>
   <string name="saml_authentication_wrong_pass">ខុស​ពាក្យ​សម្ងាត់</string>
   <string name="folder_picker_choose_button_text">ជ្រើស</string>
-  <string name="prefs_category_details">ព័ត៌មាន​លម្អិត</string>
   <string name="auth_host_address">អាសយដ្ឋាន​ម៉ាស៊ីន​បម្រើ</string>
   <string name="share_dialog_title">ចែក​រំលែក</string>
   <string name="share_cancel_public_link_button">បោះបង់</string>
@@ -97,4 +97,5 @@
   <string name="share_privilege_can_edit">អាច​កែប្រែ</string>
   <string name="share_privilege_can_edit_create">បង្កើត</string>
   <string name="share_privilege_can_edit_delete">លុប</string>
+  <!--Welcome to oC intro features-->
 </resources>

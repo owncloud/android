@@ -27,9 +27,14 @@
   <string name="drawer_open">Dobrir</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Mai</string>
+  <string name="prefs_category_security">Seguretat</string>
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Maneja comptes</string>
   <string name="prefs_passcode">Còdi de seguretat</string>
+  <string name="prefs_camera_picture_upload">Televersament d\'imatges</string>
+  <string name="prefs_camera_picture_upload_summary">Mandar immediatament las fòtos presas per la camèra</string>
+  <string name="prefs_camera_video_upload">Mandadís immediat de las vidèos</string>
+  <string name="prefs_camera_video_upload_summary">Mandar immediatament las vidèos presas per la camèra</string>
   <string name="prefs_log_title">Activar la jornalizacion</string>
   <string name="prefs_log_summary">Utilizat per enregistrar los problèmas dins los logs</string>
   <string name="prefs_log_title_history">Istoric de la jornalizacion</string>
@@ -54,10 +59,16 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="uploader_btn_upload_text">Mandar</string>
   <string name="uploader_top_message">Causir lo dorsièr de mandadís</string>
   <string name="uploader_wrn_no_account_title">Cap de compte es pas estat trobat</string>
+  <string name="uploader_wrn_no_account_text">Cap de compte %1$s es pas estat trobat. Començatz per ne configurar un.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Configuracion</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Quitar</string>
   <string name="uploader_error_title_no_file_to_upload">Pas cap de fichièr de mandar</string>
+  <string name="uploader_error_message_received_piece_of_text"> %1$s impossible de televersar un chic de texte com fiquièr.</string>
+  <string name="uploader_error_message_no_file_to_upload">Las donadas recebudas includèn pas un fiquièr valid</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Lo fichièr pòt pas èsser mandat</string>
+  <string name="uploader_error_message_read_permission_not_granted">%1$s es pas acceptat de lire un fiquièr recebut</string>
+  <string name="uploader_error_message_source_file_not_found">Lo fiquièr que televersar es pas trobat dens aquesta plaça. Perfavor verificatz se lo fiquièr exista.</string>
+  <string name="uploader_error_message_source_file_not_copied">Una error s\'es produita al moment de la còpia d\'aqueste fichièr dens un dorsièr temporari. Perfavor assajatz un aut cop.</string>
   <string name="file_list_seconds_ago">i a qualques segondas</string>
   <string name="file_list_empty">I a pas res aicí ! Mandatz doncas quicòm :)</string>
   <string name="file_list_loading">Cargament...</string>
@@ -308,7 +319,6 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
   <string name="copy_file_invalid_overwrite">Fichièr ja existent dins lo dorsièr de destinacion</string>
   <string name="copy_file_error">Una error s\'es produita al moment de la còpia d\'aqueste fichièr o dorsièr</string>
   <string name="forbidden_permissions_copy">de copiar aqueste fichièr</string>
-  <string name="prefs_category_details">Detalhs</string>
   <string name="sync_folder_failed_content">La sincronizacion del dorsièr %1$s a pas pogut èsser acabad</string>
   <string name="shared_subject_header">a partejat</string>
   <string name="with_you_subject_header">amb vos</string>
@@ -372,4 +382,5 @@ En rason d\'aquesta modificacion, totes los fichièrs mandats amb de versions an
     <item quantity="one">%d seleccionat</item>
     <item quantity="other">%d seleccionats</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -27,6 +27,7 @@
   <string name="drawer_open">گشودن</string>
   <string name="prefs_category_general">عمومی</string>
   <string name="prefs_category_more">بیش‌تر</string>
+  <string name="prefs_category_security">امنیت</string>
   <string name="prefs_accounts">حساب‌ها</string>
   <string name="prefs_manage_accounts">مدیریت حساب‌ها</string>
   <string name="prefs_passcode">قفل رمزعبور</string>
@@ -333,7 +334,6 @@
   <string name="copy_file_invalid_overwrite">این فایل هم‌اکنون در پوشه‌‎ی مقصد وجود دارد</string>
   <string name="copy_file_error">یک خطا در زمان تلاش برای کپی این فایل یا شاخه رخ داد</string>
   <string name="forbidden_permissions_copy">کپی این فایل</string>
-  <string name="prefs_category_details">جزئیات</string>
   <string name="shared_subject_header">به اشتراک گذاشته شد</string>
   <string name="with_you_subject_header">با تو</string>
   <string name="subject_user_shared_with_you">\"%2$s\" توسط %1$s با شما به اشتراک گذاشته شد</string>
@@ -399,4 +399,5 @@
   <plurals name="items_selected_count">
     <item quantity="other">‫%d گزیده</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

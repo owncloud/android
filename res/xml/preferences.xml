@@ -54,10 +54,18 @@
             android:title="@string/prefs_camera_upload_behaviour_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/prefs_category_details">
+    <PreferenceCategory
+        android:key="security_category"
+        android:title="@string/prefs_category_security">
         <android.preference.CheckBoxPreference
             android:key="set_pincode"
             android:title="@string/prefs_passcode" />
+        <android.preference.CheckBoxPreference
+            android:title="@string/prefs_pattern"
+            android:key="set_pattern" />
+        <android.preference.CheckBoxPreference
+            android:key="set_fingerprint"
+            android:title="@string/prefs_fingerprint" />
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -321,7 +321,6 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     }
                     uploadDateTextView.setVisibility(View.GONE);
                     pathTextView.setVisibility(View.GONE);
-                    fileSizeTextView.setVisibility(View.GONE);
                     progressBar.invalidate();
                     break;
 

@@ -27,6 +27,7 @@
   <string name="drawer_open">Відкрити</string>
   <string name="prefs_category_general">Основне</string>
   <string name="prefs_category_more">Більше</string>
+  <string name="prefs_category_security">Безпека</string>
   <string name="prefs_accounts">Облікові записи</string>
   <string name="prefs_manage_accounts">Управління обліковими записами</string>
   <string name="prefs_passcode">Захистити паролем</string>
@@ -352,7 +353,6 @@
   <string name="copy_file_invalid_overwrite">Файл вже існує в теці призначення</string>
   <string name="copy_file_error">Виникла помилка під час спроби скопіювати даний файл чи папку</string>
   <string name="forbidden_permissions_copy">скопіювати даний файл</string>
-  <string name="prefs_category_details">Деталі</string>
   <string name="sync_folder_failed_content">Синхронізація теки %1$s неможливо завершити</string>
   <string name="shared_subject_header">поширений</string>
   <string name="with_you_subject_header">з Вами</string>
@@ -457,4 +457,5 @@
     <item quantity="few">Вибрано %d</item>
     <item quantity="other">Вибрано %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

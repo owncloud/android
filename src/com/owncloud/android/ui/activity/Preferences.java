@@ -5,7 +5,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2017 ownCloud GmbH.
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -40,6 +40,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
@@ -53,6 +54,7 @@ import android.view.ViewGroup;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.FingerprintManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.PreferenceManager.CameraUploadsConfiguration;
 import com.owncloud.android.files.services.CameraUploadsHandler;
@@ -77,14 +79,20 @@ public class Preferences extends PreferenceActivity {
     private static final int ACTION_SELECT_SOURCE_PATH = 3;
     private static final int ACTION_REQUEST_PASSCODE = 5;
     private static final int ACTION_CONFIRM_PASSCODE = 6;
+    private static final int ACTION_REQUEST_PATTERN = 7;
+    private static final int ACTION_CONFIRM_PATTERN = 8;
 
-    private CheckBoxPreference pCode;
+    private CheckBoxPreference pPasscode;
+    private CheckBoxPreference pPattern;
+    private CheckBoxPreference pFingerprint;
     private Preference pAboutApp;
     private AppCompatDelegate mDelegate;
 
     private String mUploadPath;
     private String mUploadVideoPath;
     private String mSourcePath;
+    private boolean patternSet;
+    private boolean passcodeSet;
 
     private PreferenceCategory mPrefCameraUploadsCategory;
     private Preference mPrefCameraPictureUploads;
@@ -96,7 +104,11 @@ public class Preferences extends PreferenceActivity {
     private Preference mPrefCameraUploadsSourcePath;
     private Preference mPrefCameraUploadsBehaviour;
 
+    private PreferenceCategory mPrefSecurityCategory;
+
     private CameraUploadsHandler mCameraUploadsHandler;
+
+    private FingerprintManager mFingerprintManager;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -132,28 +144,221 @@ public class Preferences extends PreferenceActivity {
         // Register context menu for list of preferences.
         registerForContextMenu(getListView());
 
-        pCode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
-        if (pCode != null) {
-            pCode.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mFingerprintManager = FingerprintManager.getFingerprintManager(this);
+        }
+
+        /**
+         * Camera uploads
+         */
+
+        // Pictures
+        mPrefCameraPictureUploadsPath = findPreference("camera_picture_uploads_path");
+        if (mPrefCameraPictureUploadsPath != null) {
+
+            mPrefCameraPictureUploadsPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (!mUploadPath.endsWith(OCFile.PATH_SEPARATOR)) {
+                        mUploadPath += OCFile.PATH_SEPARATOR;
+                    }
+                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
+                    intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadPath);
+                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_PATH);
+                    return true;
+                }
+            });
+        }
+
+        mPrefCameraUploadsCategory = (PreferenceCategory) findPreference("camera_uploads_category");
+
+        mPrefCameraPictureUploadsWiFi = findPreference("camera_picture_uploads_on_wifi");
+        mPrefCameraPictureUploads = findPreference("camera_picture_uploads");
+
+        toggleCameraUploadsPictureOptions(true, ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+
+        mPrefCameraPictureUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean enableCameraUploadsPicture = (Boolean) newValue;
+                toggleCameraUploadsPictureOptions(false, enableCameraUploadsPicture);
+                toggleCameraUploadsCommonOptions(
+                        ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
+                        enableCameraUploadsPicture
+                );
+                return true;
+            }
+        });
+
+        // Videos
+        mPrefCameraVideoUploadsPath = findPreference("camera_video_uploads_path");
+        if (mPrefCameraVideoUploadsPath != null) {
+
+            mPrefCameraVideoUploadsPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (!mUploadVideoPath.endsWith(OCFile.PATH_SEPARATOR)) {
+                        mUploadVideoPath += OCFile.PATH_SEPARATOR;
+                    }
+                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
+                    intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadVideoPath);
+                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_VIDEO_PATH);
+                    return true;
+                }
+            });
+        }
+
+        mPrefCameraVideoUploadsWiFi = findPreference("camera_video_uploads_on_wifi");
+        mPrefCameraVideoUploads = findPreference("camera_video_uploads");
+        toggleCameraUploadsVideoOptions(true, ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked());
+
+        mPrefCameraVideoUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                toggleCameraUploadsVideoOptions(false, (Boolean) newValue);
+                toggleCameraUploadsCommonOptions(
+                        (Boolean) newValue,
+                        ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+                return true;
+            }
+        });
+
+        mPrefCameraUploadsSourcePath = findPreference("camera_uploads_source_path");
+        if (mPrefCameraUploadsSourcePath != null) {
+            mPrefCameraUploadsSourcePath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (!mSourcePath.endsWith(File.separator)) {
+                        mSourcePath += File.separator;
+                    }
+                    LocalFolderPickerActivity.startLocalFolderPickerActivityForResult(
+                            Preferences.this,
+                            mSourcePath,
+                            ACTION_SELECT_SOURCE_PATH
+                    );
+                    return true;
+                }
+            });
+        } else {
+            Log_OC.e(TAG, "Lost preference camera_uploads_source_path");
+        }
+
+        mPrefCameraUploadsBehaviour = findPreference("camera_uploads_behaviour");
+        toggleCameraUploadsCommonOptions(
+                ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
+                ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
+
+        loadCameraUploadsPicturePath();
+        loadCameraUploadsVideoPath();
+        loadCameraUploadsSourcePath();
+
+        CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
+                getCameraUploadsConfiguration(this);
+
+        mCameraUploadsHandler = new CameraUploadsHandler(this, configuration);
+
+        /**
+         * Security
+         */
+
+        mPrefSecurityCategory = (PreferenceCategory) findPreference("security_category");
+        pPasscode = (CheckBoxPreference) findPreference(PassCodeActivity.PREFERENCE_SET_PASSCODE);
+        pFingerprint = (CheckBoxPreference) findPreference(FingerprintActivity.PREFERENCE_SET_FINGERPRINT);
+
+        // Passcode lock
+        if (pPasscode != null) {
+
+            pPasscode.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     Intent i = new Intent(getApplicationContext(), PassCodeActivity.class);
                     Boolean incoming = (Boolean) newValue;
+                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    patternSet = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+                    if(patternSet){
+                        showSnackMessage(R.string.pattern_already_set);
+                    }
+                    else {
+                        i.setAction(incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
+                                        PassCodeActivity.ACTION_CHECK_WITH_RESULT);
 
-                    i.setAction(
-                            incoming ? PassCodeActivity.ACTION_REQUEST_WITH_RESULT :
-                                    PassCodeActivity.ACTION_CHECK_WITH_RESULT
-                    );
-
-                    startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE :
-                            ACTION_CONFIRM_PASSCODE);
-
+                        startActivityForResult(i, incoming ? ACTION_REQUEST_PASSCODE : ACTION_CONFIRM_PASSCODE);
+                    }
                     // Don't update just yet, we will decide on it in onActivityResult
                     return false;
                 }
             });
         }
 
+        // Pattern lock
+        pPattern = (CheckBoxPreference) findPreference(PatternLockActivity.PREFERENCE_SET_PATTERN);
+        if (pPattern != null) {
+
+            pPattern.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Intent intent = new Intent(getApplicationContext(), PatternLockActivity.class);
+                    Boolean state = (Boolean) newValue;
+                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    passcodeSet = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE,false);
+                    if(passcodeSet){
+                        showSnackMessage(R.string.passcode_already_set);
+                    }
+                    else {
+                        intent.setAction(state ? PatternLockActivity.ACTION_REQUEST_WITH_RESULT :
+                                PatternLockActivity.ACTION_CHECK_WITH_RESULT);
+                        startActivityForResult(intent, state ? ACTION_REQUEST_PATTERN : ACTION_CONFIRM_PATTERN);
+                    }
+                    return false;
+                }
+            });
+        }
+
+        // Fingerprint lock
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+
+            mPrefSecurityCategory.removePreference(pFingerprint);
+
+        } else if (pFingerprint != null) {
+
+            // Disable Fingerprint lock if Passcode or Pattern locks are disabled
+            if (pPasscode != null && pPattern != null && !pPasscode.isChecked() && !pPattern.isChecked()) {
+                pFingerprint.setEnabled(false);
+                pFingerprint.setSummary(R.string.prefs_fingerprint_summary);
+            }
+
+            pFingerprint.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Boolean incoming = (Boolean) newValue;
+
+                    // Fingerprint not supported
+                    if (incoming && mFingerprintManager != null && !mFingerprintManager.isHardwareDetected()) {
+
+                        showSnackMessage(R.string.fingerprint_not_hardware_detected);
+
+                        return false;
+                    }
+
+                    // No fingerprints enrolled yet
+                    if (incoming && mFingerprintManager != null && !mFingerprintManager.hasEnrolledFingerprints()) {
+
+                        showSnackMessage(R.string.fingerprint_not_enrolled_fingerprints);
+
+                        return false;
+                    }
+
+                    return true;
+                }
+            });
+        }
+
+        /**
+         * More
+         */
         PreferenceCategory preferenceCategory = (PreferenceCategory) findPreference("more");
 
         boolean helpEnabled = getResources().getBoolean(R.bool.help_enabled);
@@ -257,7 +462,7 @@ public class Preferences extends PreferenceActivity {
         }
 
         boolean loggerEnabled = getResources().getBoolean(R.bool.logger_enabled) ||
-                BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals(MainApp.BUILD_TYPE_BETA);
+                BuildConfig.DEBUG || MainApp.isBeta();
         Preference pLogger = findPreference("logger");
         if (pLogger != null) {
             if (loggerEnabled) {
@@ -296,105 +501,9 @@ public class Preferences extends PreferenceActivity {
             }
         }
 
-        mPrefCameraPictureUploadsPath = findPreference("camera_picture_uploads_path");
-        if (mPrefCameraPictureUploadsPath != null) {
-
-            mPrefCameraPictureUploadsPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (!mUploadPath.endsWith(OCFile.PATH_SEPARATOR)) {
-                        mUploadPath += OCFile.PATH_SEPARATOR;
-                    }
-                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
-                    intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, mUploadPath);
-                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_PATH);
-                    return true;
-                }
-            });
-        }
-
-        mPrefCameraUploadsCategory =
-                (PreferenceCategory) findPreference("camera_uploads_category");
-
-        mPrefCameraPictureUploadsWiFi = findPreference("camera_picture_uploads_on_wifi");
-        mPrefCameraPictureUploads = findPreference("camera_picture_uploads");
-
-        toggleCameraUploadsPictureOptions(true, ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
-
-        mPrefCameraPictureUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                boolean enableCameraUploadsPicture = (Boolean) newValue;
-                toggleCameraUploadsPictureOptions(false, enableCameraUploadsPicture);
-                toggleCameraUploadsCommonOptions(
-                        ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
-                        enableCameraUploadsPicture
-                );
-                return true;
-            }
-        });
-
-        mPrefCameraVideoUploadsPath = findPreference("camera_video_uploads_path");
-        if (mPrefCameraVideoUploadsPath != null) {
-
-            mPrefCameraVideoUploadsPath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (!mUploadVideoPath.endsWith(OCFile.PATH_SEPARATOR)) {
-                        mUploadVideoPath += OCFile.PATH_SEPARATOR;
-                    }
-                    Intent intent = new Intent(Preferences.this, UploadPathActivity.class);
-                    intent.putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH,
-                            mUploadVideoPath);
-                    startActivityForResult(intent, ACTION_SELECT_UPLOAD_VIDEO_PATH);
-                    return true;
-                }
-            });
-        }
-
-        mPrefCameraVideoUploadsWiFi = findPreference("camera_video_uploads_on_wifi");
-        mPrefCameraVideoUploads = findPreference("camera_video_uploads");
-        toggleCameraUploadsVideoOptions(true, ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked());
-
-        mPrefCameraVideoUploads.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                toggleCameraUploadsVideoOptions(false, (Boolean) newValue);
-                toggleCameraUploadsCommonOptions(
-                        (Boolean) newValue,
-                        ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
-                return true;
-            }
-        });
-
-        mPrefCameraUploadsSourcePath = findPreference("camera_uploads_source_path");
-        if (mPrefCameraUploadsSourcePath != null) {
-            mPrefCameraUploadsSourcePath.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (!mSourcePath.endsWith(File.separator)) {
-                        mSourcePath += File.separator;
-                    }
-                    LocalFolderPickerActivity.startLocalFolderPickerActivityForResult(
-                            Preferences.this,
-                            mSourcePath,
-                            ACTION_SELECT_SOURCE_PATH
-                    );
-                    return true;
-                }
-            });
-        } else {
-            Log_OC.e(TAG, "Lost preference camera_uploads_source_path");
-        }
-
-        mPrefCameraUploadsBehaviour = findPreference("camera_uploads_behaviour");
-        toggleCameraUploadsCommonOptions(
-                ((CheckBoxPreference) mPrefCameraVideoUploads).isChecked(),
-                ((CheckBoxPreference) mPrefCameraPictureUploads).isChecked());
-
-        /* About App */
+        /**
+         * About App
+         */
         pAboutApp = (Preference) findPreference("about_app");
         if (pAboutApp != null) {
             pAboutApp.setTitle(String.format(
@@ -403,15 +512,6 @@ public class Preferences extends PreferenceActivity {
             ));
             pAboutApp.setSummary(String.format(getString(R.string.about_version), appVersion));
         }
-
-        loadCameraUploadsPicturePath();
-        loadCameraUploadsVideoPath();
-        loadCameraUploadsSourcePath();
-
-        CameraUploadsConfiguration configuration = com.owncloud.android.db.PreferenceManager.
-                getCameraUploadsConfiguration(this);
-
-        mCameraUploadsHandler = new CameraUploadsHandler(this, configuration);
     }
 
     /**
@@ -425,6 +525,7 @@ public class Preferences extends PreferenceActivity {
         if (isChecked) {
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsWiFi);
             mPrefCameraUploadsCategory.addPreference(mPrefCameraPictureUploadsPath);
+
 
         } else {
 
@@ -512,8 +613,18 @@ public class Preferences extends PreferenceActivity {
         super.onResume();
         SharedPreferences appPrefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean state = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
-        pCode.setChecked(state);
+        boolean passCodeState = appPrefs.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
+        pPasscode.setChecked(passCodeState);
+        boolean patternState = appPrefs.getBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+        pPattern.setChecked(patternState);
+        boolean fingerprintState = appPrefs.getBoolean(FingerprintActivity.PREFERENCE_SET_FINGERPRINT,false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mFingerprintManager!= null &&
+                !mFingerprintManager.hasEnrolledFingerprints()) {
+            fingerprintState = false;
+        }
+
+        pFingerprint.setChecked(fingerprintState);
     }
 
     @Override
@@ -583,7 +694,7 @@ public class Preferences extends PreferenceActivity {
             );
             saveCameraUploadsSourcePathOnPreferences();
 
-        } else if (requestCode == ACTION_REQUEST_PASSCODE && resultCode == RESULT_OK) {
+        } else if (requestCode == ACTION_REQUEST_PASSCODE && resultCode == RESULT_OK) { // Enable passcode
 
             String passcode = data.getStringExtra(PassCodeActivity.KEY_PASSCODE);
             if (passcode != null && passcode.length() == 4) {
@@ -596,10 +707,14 @@ public class Preferences extends PreferenceActivity {
                 }
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true);
                 appPrefs.commit();
+
                 showSnackMessage(R.string.pass_code_stored);
+
+                // Allow to use Fingerprint lock since Passcode lock has been enabled
+                enableFingerprint();
             }
 
-        } else if (requestCode == ACTION_CONFIRM_PASSCODE && resultCode == RESULT_OK) {
+        } else if (requestCode == ACTION_CONFIRM_PASSCODE && resultCode == RESULT_OK) { // Disable passcode
 
             if (data.getBooleanExtra(PassCodeActivity.KEY_CHECK_RESULT, false)) {
                 SharedPreferences.Editor appPrefs = PreferenceManager
@@ -607,6 +722,35 @@ public class Preferences extends PreferenceActivity {
                 appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false);
                 appPrefs.commit();
                 showSnackMessage(R.string.pass_code_removed);
+
+                // Do not allow to use Fingerprint lock since Passcode lock has been disabled
+                disableFingerprint(getString(R.string.prefs_fingerprint_summary));
+            }
+        }
+        else if(requestCode == ACTION_REQUEST_PATTERN && resultCode == RESULT_OK){ // Enable pattern
+            String patternValue = data.getStringExtra(PatternLockActivity.KEY_PATTERN);
+            if(patternValue != null){
+                SharedPreferences.Editor appPrefs = PreferenceManager.
+                        getDefaultSharedPreferences(getApplicationContext()).edit();
+                appPrefs.putString(PatternLockActivity.KEY_PATTERN,patternValue);
+                appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,true);
+                appPrefs.commit();
+                showSnackMessage(R.string.pattern_stored);
+
+                // Allow to use Fingerprint lock since Pattern lock has been enabled
+                enableFingerprint();
+            }
+        }
+        else if(requestCode == ACTION_CONFIRM_PATTERN && resultCode == RESULT_OK){ // Disable pattern
+            if(data.getBooleanExtra(PatternLockActivity.KEY_CHECK_RESULT,false)){
+                SharedPreferences.Editor appPrefs = PreferenceManager.
+                        getDefaultSharedPreferences(getApplicationContext()).edit();
+                appPrefs.putBoolean(PatternLockActivity.PREFERENCE_SET_PATTERN,false);
+                appPrefs.commit();
+                showSnackMessage(R.string.pattern_removed);
+
+                // Do not allow to use Fingerprint lock since Pattern lock has been disabled
+                disableFingerprint(getString(R.string.prefs_fingerprint_summary));
             }
         }
     }
@@ -785,6 +929,18 @@ public class Preferences extends PreferenceActivity {
         editor.commit();
     }
 
+    private void enableFingerprint() {
+        pFingerprint.setEnabled(true);
+        pFingerprint.setSummary(null);
+    }
+
+    private void disableFingerprint(String summary) {
+        if (pFingerprint.isChecked()) {
+            pFingerprint.setChecked(false);
+        }
+        pFingerprint.setEnabled(false);
+        pFingerprint.setSummary(summary);
+    }
 
     /**
      * Show a temporary message in a Snackbar bound to the content view

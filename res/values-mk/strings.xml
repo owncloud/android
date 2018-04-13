@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="about_android">%1$s Андроид апп</string>
+  <string name="about_android">%1$s Андроид апликација</string>
   <string name="about_version">верзија %1$s</string>
   <string name="actionbar_sync">Освежи сметка</string>
   <string name="actionbar_upload">Подигни</string>
@@ -13,19 +13,31 @@
   <string name="actionbar_send_file">Прати</string>
   <string name="actionbar_sort">Сортирај</string>
   <string name="actionbar_sort_title">Сортирај по</string>
+  <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Најнови - Постари</string>
+  <string name="actionbar_sort_by_size">Поголеми - Помали</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Сите датотеки</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_item_settings">Подесувања</string>
+  <string name="drawer_item_uploads_list">Прикачувања</string>
+  <string name="drawer_close">Затвори</string>
   <string name="drawer_open">Отвори</string>
   <string name="prefs_category_general">Општо</string>
   <string name="prefs_category_more">Повеќе</string>
+  <string name="prefs_category_security">Безбедност</string>
   <string name="prefs_accounts">Сметки</string>
+  <string name="prefs_manage_accounts">Менаџирај корисници</string>
   <string name="prefs_passcode">Заклучено со код</string>
+  <string name="prefs_camera_picture_upload">Прикачување на фотографии</string>
+  <string name="prefs_camera_picture_upload_summary">Автоматски прикачи ги фотографиите направени со уредот</string>
+  <string name="prefs_camera_video_upload">Прикачување на видеа</string>
+  <string name="prefs_camera_video_upload_summary">Автоматски прикачи ги видеата направени со уредот</string>
   <string name="prefs_log_summary">Ова е користено за логирање на проблеми</string>
   <string name="prefs_log_summary_history">Ова ги прикажува снимените логови</string>
+  <string name="prefs_log_delete_history_button">Избриши историја</string>
   <string name="prefs_help">Помош</string>
   <string name="prefs_recommend">Препорачај на пријател</string>
   <string name="prefs_feedback">Повратен одговор</string>
@@ -47,8 +59,8 @@
   <string name="file_list_seconds_ago">пред секунди</string>
   <string name="file_list_empty">Тука нема ништо. Префрлете нешто!</string>
   <string name="local_file_list_empty">Нема датотеки во оваа папка.</string>
-  <string name="file_list_folder">папка</string>
-  <string name="file_list_folders">папки</string>
+  <string name="file_list_folder">директориум</string>
+  <string name="file_list_folders">директориуми</string>
   <string name="file_list_file">датотека</string>
   <string name="file_list_files">датотека</string>
   <string name="filedetails_select_file">Кликнете на датотеката за дополнителни информации.</string>
@@ -78,6 +90,8 @@
   <string name="uploader_upload_succeeded_ticker">Прикачувањето беше успешно</string>
   <string name="uploader_upload_failed_ticker">Прикачувањето не успеа</string>
   <string name="uploader_upload_failed_content_single">Прикачувањето на %1$s не може да се заврши</string>
+  <string name="uploader_upload_text_filename_hint">Име на датотека</string>
+  <string name="uploads_view_title">Прикачувања</string>
   <string name="uploads_view_upload_status_succeeded">Завршено</string>
   <string name="uploads_view_upload_status_cancelled">Откажано</string>
   <string name="uploads_view_upload_status_unknown_fail">Непозната грешка</string>
@@ -156,6 +170,7 @@
   <string name="confirmation_remove_file_alert">Дали навистина сакаш да ја отстраниш %1$s?</string>
   <string name="confirmation_remove_folder_alert">Дали навистина сакаш да го отстранам %1$s и неговата содржина?</string>
   <string name="confirmation_remove_local">Само локално</string>
+  <string name="confirmation_remove_public_share_title">Избриши го линкот</string>
   <string name="confirmation_remove_public_share_message">Дали навистина сакаш да ја отстраниш %1$s?</string>
   <string name="remove_success_msg">Одстранувањето е успешно</string>
   <string name="remove_fail_msg">Одстранувањето е неуспешно</string>
@@ -230,6 +245,7 @@
   <string name="downloader_download_file_not_found">Датотеката веќе не е достапна на серверот</string>
   <string name="prefs_category_accounts">Сметки</string>
   <string name="prefs_add_account">Додади сметка</string>
+  <string name="drawer_manage_accounts">Менаџирај корисници</string>
   <string name="actionbar_logger">Логови</string>
   <string name="log_send_mail_subject">%1$s Апликација на Андроид за логови</string>
   <string name="saml_authentication_required_text">Потребна е автентификација</string>
@@ -243,7 +259,6 @@
   <string name="move_file_error">Се случи грешка кога пробував да ја преместам оваа датотека или папка</string>
   <string name="forbidden_permissions_move">да ја преместам оваа датотека</string>
   <string name="copy_file_invalid_overwrite">Датотеката веќе постои во целната папка</string>
-  <string name="prefs_category_details">Детали:</string>
   <string name="subject_user_shared_with_you">%1$s сподели \"%2$s\" со тебе</string>
   <string name="auth_refresh_button">Освежи ја конекцијата</string>
   <string name="auth_host_address">Адреса на сервер</string>
@@ -259,4 +274,7 @@
   <string name="share_privilege_can_edit_create">креирај</string>
   <string name="share_privilege_can_edit_change">промени</string>
   <string name="share_privilege_can_edit_delete">избриши</string>
+  <string name="share_warning_about_forwarding_public_links">Било кој што го знае овој линк ќе има пристап до датотеката/директориумот</string>
+  <string name="upload_notification_channel_name">Прикачувања</string>
+  <!--Welcome to oC intro features-->
 </resources>

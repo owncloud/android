@@ -27,9 +27,12 @@
   <string name="drawer_open">Öffnen</string>
   <string name="prefs_category_general">Allgemein</string>
   <string name="prefs_category_more">Mehr</string>
+  <string name="prefs_category_security">Sicherheit</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
+  <string name="prefs_fingerprint">Fingerabdrucksperre</string>
+  <string name="prefs_fingerprint_summary">Passwort oder Wisch-Muster eingeben um diese Option zu  aktivieren</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Lade Fotos von der Kamera automatisch hoch</string>
   <string name="prefs_camera_video_upload">Videos</string>
@@ -45,6 +48,21 @@
   <string name="prefs_imprint">Impressum</string>
   <string name="prefs_remember_last_share_location">Geteilten Speicherort merken</string>
   <string name="prefs_remember_last_upload_location_summary">Geteilten Upload-Speicherort merken</string>
+  <string name="prefs_pattern">Mustersperre</string>
+  <string name="pattern_enter_pattern">Bitte gib dein Muster ein</string>
+  <string name="pattern_configure_pattern">Gib dein Muster ein</string>
+  <string name="pattern_remove_pattern">Entferne dein Muster
+</string>
+  <string name="pattern_incorrect_pattern">Falsches Muster</string>
+  <string name="pattern_reenter_pattern">Muster bitte erneut eingeben</string>
+  <string name="pattern_not_same_pattern">Die Muster stimmen nicht überein</string>
+  <string name="pattern_stored">Muster gespeichert</string>
+  <string name="pattern_removed">Muster entfernt</string>
+  <string name="pattern_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte Muster deaktivieren</string>
+  <string name="passcode_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte PIN deaktivieren</string>
+  <string name="pattern_no_longer_required">Muster wird nicht mehr verlangt</string>
+  <string name="pattern_configure_your_pattern_explanation">Das Muster wird bei jedem Start der Anwendung verlangt</string>
+  <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Ich möchte Dich zum Benutzen von %1$s auf Deinem Smartphone einladen!\nLade es hier herunter: %2$s</string>
   <string name="auth_check_server">überprüfe den Server</string>
@@ -79,6 +97,8 @@
   <string name="file_list_file">Datei</string>
   <string name="file_list_files">Dateien</string>
   <string name="filedetails_select_file">Klicken Sie auf eine Datei für weitere Informationen.</string>
+  <string name="upload_to">Hochgeladen nach %1$s</string>
+  <string name="upload_files_title">Dateien</string>
   <string name="filedetails_size">Größe:</string>
   <string name="filedetails_type">Art:</string>
   <string name="filedetails_created">Erstellt:</string>
@@ -181,6 +201,13 @@
   <string name="pass_code_wrong">PIN nicht korrekt</string>
   <string name="pass_code_removed">PIN entfernt</string>
   <string name="pass_code_stored">PIN gespeichert</string>
+  <string name="fingerprint_confirm">Bitte Fingerabdruck zum Fortsetzen bestätigen</string>
+  <string name="fingerprint_hint">Bitte Sensor berühren</string>
+  <string name="fingerprint_not_recognized">Fingerabdruck nicht erkannt, bitte erneut versuchen</string>
+  <string name="fingerprint_success">Fingerabdruck erkannt</string>
+  <string name="fingerprint_not_hardware_detected">Dieses Gerät unterstützt keine Authentifizierung mittels Fingerabdruck</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Registriere mindestens einen Fingerabruck, um dieses Feature zu benutzen</string>
+  <string name="fingerprint_not_granted_permissions">Fingerabdruck nicht erkannt, nochmal versuchen</string>
   <string name="media_notif_ticker">%1$s Musik Player</string>
   <string name="media_state_playing">%1$s (playing)</string>
   <string name="media_state_loading">%1$s (loading)</string>
@@ -200,6 +227,7 @@
   <string name="media_rewind_description">Zurückspielen Knopf</string>
   <string name="media_play_pause_description">Play-/Pause Knopf</string>
   <string name="media_forward_description">Vorspulen Knopf</string>
+  <string name="upload_from_camera_title">Kamerabild</string>
   <string name="auth_getting_authorization">Genehmigung bekommen ...</string>
   <string name="auth_trying_to_login">Der Versuch, sich anzumelden ...</string>
   <string name="auth_no_net_conn_title">Keine Netzwerkverbindung</string>
@@ -364,7 +392,6 @@
   <string name="copy_file_error">Es ist ein Fehler beim Kopieren der Datei oder des Ordners aufgetreten.</string>
   <string name="forbidden_permissions_copy">diese Datei zu kopieren</string>
   <string name="prefs_category_camera_upload">Kamera Uploads</string>
-  <string name="prefs_category_details">Details</string>
   <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
   <string name="sync_folder_failed_content">Bei der Synchronisation konnte %1$s Ordner nicht fertig gestellt werden</string>
   <string name="shared_subject_header">geteilt</string>
@@ -472,8 +499,32 @@
   <string name="media_service_notification_channel_description">Musik-Player anzeigen</string>
   <string name="file_sync_notification_channel_name">Datei - Synchronisation</string>
   <string name="file_sync_notification_channel_description">Ergebnis der Datei - Synchronisation anzeigen</string>
+  <string name="rate_dialog_title">Bitte %1$s bewerten</string>
+  <string name="rate_dialog_description">Wenn dir diese App gefällt, nimm dir bitte etwas Zeit, um diese zu bewerten. Dein Feedback ist für uns wichtig.</string>
+  <string name="button_no_thanks_name">Nein, Danke</string>
+  <string name="button_later_name">Später</string>
+  <string name="button_rate_now_name">Jetzt bewerten</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d ausgewählt</item>
     <item quantity="other">%d ausgewählt</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Verwalte alle deine synchronisierten Dateien</string>
+  <string name="welcome_feature_1_text">Du kannst kopieren, verschieben, löschen</string>
+  <string name="welcome_feature_2_title">Dateien und Ordner teilen</string>
+  <string name="welcome_feature_2_text">Du kannst privat oder öffentlich teilen</string>
+  <string name="welcome_feature_3_title">Mehrere Konten</string>
+  <string name="welcome_feature_3_text">Mit all deinen ownCloud-Servern verbinden</string>
+  <string name="welcome_feature_4_title">Kamera Uploads</string>
+  <string name="welcome_feature_4_text">Deine Bilder/Videos werden automatisch hochgeladen</string>
+  <string name="welcome_feature_5_title">Videostreaming</string>
+  <string name="welcome_feature_5_text">Gib deine Videos wieder, ohne sie herunterzuladen</string>
+  <string name="welcome_feature_6_title">Mustersperre</string>
+  <string name="welcome_feature_6_text">Bitte die Mustersperre zum Sperren deiner Owncloud nutzen</string>
+  <string name="welcome_feature_7_title">Fingerabdrucksperre</string>
+  <string name="welcome_feature_7_text">Bitte Fingerabdruck zum Sperren deiner Owncloud nutzen</string>
+  <string name="welcome_feature_8_title">GIF-Unterstützung</string>
+  <string name="welcome_feature_8_text">Deine animierten GIF-Grafiken abspielen</string>
+  <string name="welcome_feature_9_title">Bild von der Kamera hochladen</string>
+  <string name="welcome_feature_9_text">Foto aufnehmen und direkt auf deinen Owncloud-Server hochladen</string>
 </resources>

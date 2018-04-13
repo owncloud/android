@@ -27,6 +27,7 @@
   <string name="drawer_open">Buka</string>
   <string name="prefs_category_general">Umum</string>
   <string name="prefs_category_more">Lainnya</string>
+  <string name="prefs_category_security">Keamanan</string>
   <string name="prefs_accounts">Akun</string>
   <string name="prefs_manage_accounts">Kelola akun</string>
   <string name="prefs_passcode">Kunci kode sandi</string>
@@ -347,7 +348,6 @@
   <string name="copy_file_invalid_overwrite">Berkas sudah ada didalam folder tujuan</string>
   <string name="copy_file_error">Terjadi kesalahan ketika mencoba menyalin berkas atau folder ini</string>
   <string name="forbidden_permissions_copy">untuk menyalin berkas ini</string>
-  <string name="prefs_category_details">Rincian</string>
   <string name="shared_subject_header">dibagikan</string>
   <string name="with_you_subject_header">kepada Anda</string>
   <string name="subject_user_shared_with_you">%1$s dibagikan \"%2$s\" kepada Anda</string>
@@ -446,4 +446,5 @@
   <plurals name="items_selected_count">
     <item quantity="other">%d terpilih</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

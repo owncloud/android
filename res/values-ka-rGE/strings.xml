@@ -13,6 +13,7 @@
   <string name="drawer_open">გახსნა</string>
   <string name="prefs_category_general">ზოგადი</string>
   <string name="prefs_category_more">უფრო მეტი</string>
+  <string name="prefs_category_security">უსაფრთხოება</string>
   <string name="prefs_accounts">ანგარიში</string>
   <string name="prefs_help">დახმარება</string>
   <string name="prefs_feedback">უკუკავშირი</string>
@@ -120,7 +121,6 @@
   <string name="network_error_socket_timeout_exception">სერვერმა გვიპასუხა ძალიან გვიან</string>
   <string name="prefs_category_accounts">ანგარიში</string>
   <string name="folder_picker_choose_button_text">არჩევა</string>
-  <string name="prefs_category_details">დეტალური ინფორმაცია</string>
   <string name="auth_host_address">სერვერის მისამართი</string>
   <string name="share_dialog_title">გაზიარება</string>
   <string name="share_cancel_public_link_button">უარყოფა</string>
@@ -131,4 +131,5 @@
   <string name="share_privilege_can_edit">შეგიძლია შეცვლა</string>
   <string name="share_privilege_can_edit_create">შექმნა</string>
   <string name="share_privilege_can_edit_delete">წაშლა</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -27,6 +27,7 @@
   <string name="drawer_open">Ireki</string>
   <string name="prefs_category_general">Orokorra</string>
   <string name="prefs_category_more">Gehiago</string>
+  <string name="prefs_category_security">Segurtasuna</string>
   <string name="prefs_accounts">Kontuak</string>
   <string name="prefs_manage_accounts">Kontuak kudeatu</string>
   <string name="prefs_log_title">Gaitu erregistroa</string>
@@ -305,7 +306,6 @@ Mesedez, baimendu berriz</string>
   <string name="move_file_error">Errore bat gertatu da fitxategi edo karpeta hau mugitzen saiatzerakoan</string>
   <string name="forbidden_permissions_move">fitxategi hau mugitzeko</string>
   <string name="copy_file_invalid_overwrite">Fitxategia dagoeneko existitzen da helburuko karpetan</string>
-  <string name="prefs_category_details">Xehetasunak</string>
   <string name="auth_host_address">Zerbitzariaren helbidea</string>
   <string name="share_dialog_title">Partekatu</string>
   <string name="share_cancel_public_link_button">Ezeztatu</string>
@@ -320,4 +320,5 @@ Mesedez, baimendu berriz</string>
   <string name="share_privilege_can_edit_change">aldatu</string>
   <string name="share_privilege_can_edit_delete">ezabatu</string>
   <string name="share_warning_about_forwarding_public_links">Esteka duen edonork atzitu dezake fitxategi/karpeta</string>
+  <!--Welcome to oC intro features-->
 </resources>

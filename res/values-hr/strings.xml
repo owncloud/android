@@ -27,6 +27,7 @@
   <string name="drawer_open">Otvorite</string>
   <string name="prefs_category_general">Općenito</string>
   <string name="prefs_category_more">više</string>
+  <string name="prefs_category_security">Sigurnost</string>
   <string name="prefs_accounts">Korisnički računi</string>
   <string name="prefs_manage_accounts">Upravljaj računima</string>
   <string name="prefs_passcode">Zaključavanje zaporkom</string>
@@ -154,7 +155,6 @@
   <string name="saml_authentication_required_text">Potrebna autentikacija</string>
   <string name="saml_authentication_wrong_pass">Pogrešna lozinka</string>
   <string name="folder_picker_choose_button_text">Odaberite</string>
-  <string name="prefs_category_details">Detalji</string>
   <string name="auth_host_address">Adresa poslužitelja</string>
   <string name="share_dialog_title">Dijeljenje</string>
   <string name="share_cancel_public_link_button">Odustanite</string>
@@ -168,4 +168,5 @@
   <string name="share_privilege_can_edit_create">Kreirajte</string>
   <string name="share_privilege_can_edit_change">promijeni</string>
   <string name="share_privilege_can_edit_delete">Izbrišite</string>
+  <!--Welcome to oC intro features-->
 </resources>

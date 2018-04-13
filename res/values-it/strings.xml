@@ -27,6 +27,7 @@
   <string name="drawer_open">Apri</string>
   <string name="prefs_category_general">Generale</string>
   <string name="prefs_category_more">Altro</string>
+  <string name="prefs_category_security">Protezione</string>
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
@@ -79,6 +80,7 @@
   <string name="file_list_file">file</string>
   <string name="file_list_files">file</string>
   <string name="filedetails_select_file">Tocca un file per visualizzare informazioni aggiuntive.</string>
+  <string name="upload_files_title"> File</string>
   <string name="filedetails_size">Dimensione:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creato:</string>
@@ -295,6 +297,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">Carica le immagini solo tramite wifi</string>
   <string name="camera_video_upload_on_wifi">Carica i video solo tramite wifi</string>
+  <string name="camera_upload_path">/CameraUpload</string>
   <string name="confirmation_disable_camera_uploads_title">Conferma</string>
   <string name="confirmation_disable_pictures_upload_message">Sei sicuro di voler disabilitare questa funzionalità? Le immagini rimanenti non saranno caricate</string>
   <string name="confirmation_disable_videos_upload_message">Sei sicuro di voler disabilitare questa funzionalità? I video immagini rimanenti non saranno caricati</string>
@@ -363,7 +366,6 @@
   <string name="copy_file_error">Si è verificato un errore durante il tentativo di copiare il file o la cartella</string>
   <string name="forbidden_permissions_copy">per copiare questo file</string>
   <string name="prefs_category_camera_upload">Caricamenti fotocamera</string>
-  <string name="prefs_category_details">Dettagli</string>
   <string name="prefs_camera_video_upload_path_title">Percorso caricamento video</string>
   <string name="sync_folder_failed_content">La sincronizzazione della cartella %1$s non può essere completata</string>
   <string name="shared_subject_header">condiviso</string>
@@ -476,4 +478,6 @@ Il Download del file inizierà automaticamente</string>
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">Caricamenti fotocamera</string>
 </resources>

@@ -27,9 +27,12 @@
   <string name="drawer_open">Abrir</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
+  <string name="prefs_category_security">Seguridad</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Código de bloqueo</string>
+  <string name="prefs_fingerprint">Desbloqueo por huella</string>
+  <string name="prefs_fingerprint_summary">Configura una contraseña o establece un patrón de desbloqueo para habilitar esta opción</string>
   <string name="prefs_camera_picture_upload">Subir Imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Sube automaticamente las fotos tomadas con la cámara</string>
   <string name="prefs_camera_video_upload">Subir videos</string>
@@ -45,6 +48,20 @@
   <string name="prefs_imprint">Imprimir</string>
   <string name="prefs_remember_last_share_location">Recordar ubicación de compartidos</string>
   <string name="prefs_remember_last_upload_location_summary">Recordar la ubicación de los últimos archivos compartidos subidos</string>
+  <string name="prefs_pattern">Patrón de bloqueo</string>
+  <string name="pattern_enter_pattern"> Por favor, ingrese el patrón</string>
+  <string name="pattern_configure_pattern">Ingrese el patrón</string>
+  <string name="pattern_remove_pattern">Borrar el patrón</string>
+  <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
+  <string name="pattern_reenter_pattern">Por favor, reingrese el patrón</string>
+  <string name="pattern_not_same_pattern">Los patrones no son iguales</string>
+  <string name="pattern_stored">Patrón almacenado</string>
+  <string name="pattern_removed">Patrón borrado</string>
+  <string name="pattern_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el patrón</string>
+  <string name="passcode_already_set">El patrón y el código de bloqueo no pueden ser habilitados al mismo tiempo, por favor deshabilite primero el código de bloqueo</string>
+  <string name="pattern_no_longer_required">El patrón no será requerido nuevamente</string>
+  <string name="pattern_configure_your_pattern_explanation">El patrón será requerido cada vez que se inicie la aplicación</string>
+  <string name="illegal_argument_exception_message">Se necesita una acción valida</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="auth_check_server">Verificar servidor</string>
@@ -79,6 +96,8 @@
   <string name="file_list_file">archivo</string>
   <string name="file_list_files">ficheros</string>
   <string name="filedetails_select_file">Pulsa sobre un archivo para mostrar información adicional.</string>
+  <string name="upload_to">Subir a %1$s</string>
+  <string name="upload_files_title">Archivos</string>
   <string name="filedetails_size">Tamaño:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creado:</string>
@@ -181,6 +200,13 @@
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
   <string name="pass_code_removed">Código de acceso borrado</string>
   <string name="pass_code_stored">Contraseña almacenada</string>
+  <string name="fingerprint_confirm">Confirma tu huella para continuar</string>
+  <string name="fingerprint_hint">Toca el sensor</string>
+  <string name="fingerprint_not_recognized">Huella no reconocida, prueba otra vez</string>
+  <string name="fingerprint_success">Huella reconocida</string>
+  <string name="fingerprint_not_hardware_detected">Este dispositivo no soporta autenticación por huella</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Registra al menos una huella para usar este complemento</string>
+  <string name="fingerprint_not_granted_permissions">No se han concedido permisos de acceso a huella</string>
   <string name="media_notif_ticker">Reproductor de música %1$s</string>
   <string name="media_state_playing">%1$s (reproduciendo)</string>
   <string name="media_state_loading">%1$s (cargando)</string>
@@ -200,6 +226,7 @@
   <string name="media_rewind_description">Botón de rebobinado</string>
   <string name="media_play_pause_description">Botón de reproducción o pausa </string>
   <string name="media_forward_description">Botón avance rápido</string>
+  <string name="upload_from_camera_title">Imagen de la cámara</string>
   <string name="auth_getting_authorization">Obteniendo autorización...</string>
   <string name="auth_trying_to_login">Intentando iniciar sesión ...</string>
   <string name="auth_no_net_conn_title">Sin conexión de red</string>
@@ -364,7 +391,6 @@
   <string name="copy_file_error">Hubo un error al tratar de copiar este archivo o carpeta</string>
   <string name="forbidden_permissions_copy">para copiar este archivo</string>
   <string name="prefs_category_camera_upload">Subida Camara</string>
-  <string name="prefs_category_details">Detalles</string>
   <string name="prefs_camera_video_upload_path_title">Ruta de subida de videos</string>
   <string name="sync_folder_failed_content">La sincronización de la carpeta %1$s no se pudo completar</string>
   <string name="shared_subject_header">compartido</string>
@@ -471,8 +497,32 @@
   <string name="media_service_notification_channel_description">Ver reproductor de música</string>
   <string name="file_sync_notification_channel_name">Sincronizado de archivo</string>
   <string name="file_sync_notification_channel_description">Ver el resultado de sincronizado de archivo</string>
+  <string name="rate_dialog_title">Puntúa %1$s la aplicación!</string>
+  <string name="rate_dialog_description">Si disfrutas usando esta aplicación, ¿puedes dedicar un momento a valorarla?. Tus comentarios son muy importantes para nosotros.</string>
+  <string name="button_no_thanks_name">No, Gracias</string>
+  <string name="button_later_name">Mas tarde</string>
+  <string name="button_rate_now_name">Valorar ahora</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="other">%d seleccionado</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Administra todos tus archivos sincronizados</string>
+  <string name="welcome_feature_1_text">Puedes copiar, mover y eliminar</string>
+  <string name="welcome_feature_2_title">Compartir archivos y carpetas</string>
+  <string name="welcome_feature_2_text">Puedes compartir de forma privada o públicamente</string>
+  <string name="welcome_feature_3_title">Multi cuenta</string>
+  <string name="welcome_feature_3_text">Conectar todos tus Servidores ownCloud</string>
+  <string name="welcome_feature_4_title">Subida Camara</string>
+  <string name="welcome_feature_4_text">Tus fotografías/vídeos automáticamente se subirán</string>
+  <string name="welcome_feature_5_title">Retransmitir video</string>
+  <string name="welcome_feature_5_text">Reproduce tus videos sin descargarlos</string>
+  <string name="welcome_feature_6_title">Patrón de desbloqueo</string>
+  <string name="welcome_feature_6_text">Usa un patrón de desbloqueo para tu aplicación de ownCloud</string>
+  <string name="welcome_feature_7_title">Bloqueo por huella</string>
+  <string name="welcome_feature_7_text">Usa tu huella para desbloquear tu aplicación de ownCloud</string>
+  <string name="welcome_feature_8_title">Soporta GIF</string>
+  <string name="welcome_feature_8_text">Reproduce tus imágenes GIF animadas</string>
+  <string name="welcome_feature_9_title">Subir imágen desde la cámara</string>
+  <string name="welcome_feature_9_text">Hacer fotografía y subirla directamente a tu Servidor</string>
 </resources>

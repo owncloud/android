@@ -27,9 +27,12 @@
   <string name="drawer_open">Открыть</string>
   <string name="prefs_category_general">Основные</string>
   <string name="prefs_category_more">Больше</string>
+  <string name="prefs_category_security">Безопасность</string>
   <string name="prefs_accounts">Учётные записи</string>
   <string name="prefs_manage_accounts">Управление аккаунтами</string>
   <string name="prefs_passcode">Блокировка кодом</string>
+  <string name="prefs_fingerprint">Блокировка по отпечатку пальца</string>
+  <string name="prefs_fingerprint_summary">Чтобы использовать эту настройку, включите блокировку по коду или графическому ключу</string>
   <string name="prefs_camera_picture_upload">Загрузки изображений</string>
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
   <string name="prefs_camera_video_upload">Загрузки видео</string>
@@ -45,6 +48,20 @@
   <string name="prefs_imprint">Штамп</string>
   <string name="prefs_remember_last_share_location">Запомнить расположение общего ресурса</string>
   <string name="prefs_remember_last_upload_location_summary">Запомнить расположение загрузки последней публикации</string>
+  <string name="prefs_pattern">Графический ключ</string>
+  <string name="pattern_enter_pattern">Введите графический ключ, пожалуйста</string>
+  <string name="pattern_configure_pattern">Введите графический ключ</string>
+  <string name="pattern_remove_pattern">Удалить графический ключ</string>
+  <string name="pattern_incorrect_pattern">Неверный графический ключ</string>
+  <string name="pattern_reenter_pattern">Введите графический ключ снова</string>
+  <string name="pattern_not_same_pattern">Ключи не совпадают</string>
+  <string name="pattern_stored">Ключ сохранён</string>
+  <string name="pattern_removed">Ключ удалён</string>
+  <string name="pattern_already_set">Графический ключ и код не могут быть включены одновременно, пожалуйста, отключите сперва графический ключ</string>
+  <string name="passcode_already_set">Графический ключ и код не могут быть включены одновременно, пожалуйста, отключите сперва код</string>
+  <string name="pattern_no_longer_required">Графический ключ не будет больше запрашиваться</string>
+  <string name="pattern_configure_your_pattern_explanation">Графический ключ будет запрашиваться каждый раз при запуске приложения</string>
+  <string name="illegal_argument_exception_message">Допустимое ДЕЙСТВИЕ требуется для передачи в намерениях</string>
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>
@@ -80,6 +97,8 @@
   <string name="file_list_file">файл</string>
   <string name="file_list_files">файлы</string>
   <string name="filedetails_select_file">Нажмите на файл для отображения дополнительной информации.</string>
+  <string name="upload_to">Закачать в %1$s</string>
+  <string name="upload_files_title">Файлы</string>
   <string name="filedetails_size">Размер:</string>
   <string name="filedetails_type">Тип:</string>
   <string name="filedetails_created">Создан:</string>
@@ -182,6 +201,13 @@
   <string name="pass_code_wrong">Некоррентный код</string>
   <string name="pass_code_removed">Код удален</string>
   <string name="pass_code_stored">Код сохранен</string>
+  <string name="fingerprint_confirm">Для продолжения подтвердите свой отпечаток пальца</string>
+  <string name="fingerprint_hint">Датчик прикосновения</string>
+  <string name="fingerprint_not_recognized">Отпечаток пальца не распознан, попробуйте ещё раз</string>
+  <string name="fingerprint_success">Отпечаток пальца распознан</string>
+  <string name="fingerprint_not_hardware_detected">Это устройство не поддерживает аутентификацию по отпечатку пальца</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Чтобы использовать эту возможность, зарегистрируйте хотя-бы один отпечаток пальца</string>
+  <string name="fingerprint_not_granted_permissions">Разрешения по отпечатку пальца не предоставлены</string>
   <string name="media_notif_ticker">%1$s аудиоплеер</string>
   <string name="media_state_playing">%1$s (проигрывается)</string>
   <string name="media_state_loading">%1$s (загружается)</string>
@@ -201,6 +227,7 @@
   <string name="media_rewind_description">Перемотка назад</string>
   <string name="media_play_pause_description">Воспроизведение или пауза</string>
   <string name="media_forward_description">Перемотка вперед</string>
+  <string name="upload_from_camera_title">Изображение из камеры</string>
   <string name="auth_getting_authorization">Получение авторизации</string>
   <string name="auth_trying_to_login">Попытка входа ...</string>
   <string name="auth_no_net_conn_title">Нет подключения к сети</string>
@@ -365,7 +392,6 @@
   <string name="copy_file_error">Произошла ошибка во время копирования этого файла или папки</string>
   <string name="forbidden_permissions_copy">для копирования этого файла</string>
   <string name="prefs_category_camera_upload">Загрузки камеры</string>
-  <string name="prefs_category_details">Подробно</string>
   <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
   <string name="sync_folder_failed_content">Синхронизация папки %1$s не может быть завершена</string>
   <string name="shared_subject_header">поделился</string>
@@ -472,10 +498,34 @@
   <string name="media_service_notification_channel_description">Просмотр проигрывателя музыки</string>
   <string name="file_sync_notification_channel_name">Синхронизация файлов</string>
   <string name="file_sync_notification_channel_description">Просмотр результатов синхронизации файлов</string>
+  <string name="rate_dialog_title">Оцените приложение %1$s!</string>
+  <string name="rate_dialog_description">Если вам нравится пользоваться этим приложением, не уделите ли вы минутку, чтобы оценить его? Ваш отзыв очень важен для нас.</string>
+  <string name="button_no_thanks_name">НЕТ, СПАСИБО</string>
+  <string name="button_later_name">ПОЗЖЕ</string>
+  <string name="button_rate_now_name">ОЦЕНИТЬ СЕЙЧАС</string>
   <plurals name="items_selected_count">
     <item quantity="one">Выбран %d</item>
     <item quantity="few">Выбрано %d</item>
     <item quantity="many">Выбрано %d</item>
     <item quantity="other">Выбрано %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Управляйте всеми вашими засинхронизированными файлами</string>
+  <string name="welcome_feature_1_text">Вы можете копировать, перемещать, удалять</string>
+  <string name="welcome_feature_2_title">Делитесь файлами и папками</string>
+  <string name="welcome_feature_2_text">Вы можете делиться лично или со всеми</string>
+  <string name="welcome_feature_3_title">Много учётных записей</string>
+  <string name="welcome_feature_3_text">Подключайтесь ко всем вашим серверам ownCloud</string>
+  <string name="welcome_feature_4_title">Загрузки камеры</string>
+  <string name="welcome_feature_4_text">Ваши снимки и видео загружаются автоматически</string>
+  <string name="welcome_feature_5_title"> Потоковое видео</string>
+  <string name="welcome_feature_5_text">Проигрывайте ваши ролики, не скачивая их</string>
+  <string name="welcome_feature_6_title">Блокировка графическим ключом</string>
+  <string name="welcome_feature_6_text">Используйте графический ключ для блокировки вашего приложения ownCloud</string>
+  <string name="welcome_feature_7_title">Блокировка по отпечатку пальца</string>
+  <string name="welcome_feature_7_text">Используйте ваш отпечаток пальца для блокировки приложения ownCloud</string>
+  <string name="welcome_feature_8_title">Поддержка GIF</string>
+  <string name="welcome_feature_8_text">Проигрывайте ваши анимированные изображения GIF</string>
+  <string name="welcome_feature_9_title">Закачивайте изображение из камеры</string>
+  <string name="welcome_feature_9_text">Сделайте снимок и отправьте его прямо на ваш сервер</string>
 </resources>

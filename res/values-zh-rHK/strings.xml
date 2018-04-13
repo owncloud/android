@@ -15,6 +15,7 @@
   <string name="drawer_open">開啟</string>
   <string name="prefs_category_general">一般</string>
   <string name="prefs_category_more">更多</string>
+  <string name="prefs_category_security">安全</string>
   <string name="prefs_accounts">帳號</string>
   <string name="prefs_help">幫助</string>
   <string name="prefs_recommend">推薦給朋友</string>
@@ -74,7 +75,6 @@
   <string name="prefs_category_accounts">帳號</string>
   <string name="saml_authentication_wrong_pass">密碼錯誤</string>
   <string name="folder_picker_choose_button_text">選擇</string>
-  <string name="prefs_category_details">詳述</string>
   <string name="auth_host_address">伺服器地址</string>
   <string name="share_dialog_title">分享</string>
   <string name="share_cancel_public_link_button">取消</string>
@@ -86,4 +86,5 @@
   <string name="share_privilege_can_edit">可編輯</string>
   <string name="share_privilege_can_edit_create">新增</string>
   <string name="share_privilege_can_edit_delete">刪除</string>
+  <!--Welcome to oC intro features-->
 </resources>

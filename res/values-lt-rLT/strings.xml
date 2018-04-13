@@ -27,6 +27,7 @@
   <string name="drawer_open">Atverti</string>
   <string name="prefs_category_general">Bendras</string>
   <string name="prefs_category_more">Daugiau</string>
+  <string name="prefs_category_security">Saugumas</string>
   <string name="prefs_accounts">Paskyros</string>
   <string name="prefs_manage_accounts">Tvarkyti paskyras</string>
   <string name="prefs_passcode">Užrakto kodas</string>
@@ -352,7 +353,6 @@
   <string name="copy_file_invalid_overwrite">Failas aplanke jau egzistuoja</string>
   <string name="copy_file_error">Klaida kopijuojant failą ar aplanką</string>
   <string name="forbidden_permissions_copy">kopijuoti failo</string>
-  <string name="prefs_category_details">Informacija</string>
   <string name="sync_folder_failed_content">%1$s sinchronizavimas negali būti užbaigtas.</string>
   <string name="shared_subject_header">Dalinamasi</string>
   <string name="with_you_subject_header">su jumis</string>
@@ -459,4 +459,5 @@
   <string name="media_service_notification_channel_description">Žiūrėti muzikos grotuvą</string>
   <string name="file_sync_notification_channel_name">Bylų sinchronizacija</string>
   <string name="file_sync_notification_channel_description">Žiūrėti bylų sinchronizavimo rezultatus</string>
+  <!--Welcome to oC intro features-->
 </resources>

@@ -27,9 +27,12 @@
   <string name="drawer_open">Hape</string>
   <string name="prefs_category_general">Të përgjithshme</string>
   <string name="prefs_category_more">Më tepër</string>
+  <string name="prefs_category_security">Siguri</string>
   <string name="prefs_accounts">Llogari</string>
   <string name="prefs_manage_accounts">Administroni llogari</string>
   <string name="prefs_passcode">Kyçje me kodkalim</string>
+  <string name="prefs_fingerprint">Kyçje me shenja gishtash</string>
+  <string name="prefs_fingerprint_summary">Që të aktivizohet kjo mundësi, aktivizoni kyçje përmes kodkalimesh ose përmes rregullsish</string>
   <string name="prefs_camera_picture_upload">Ngarkime fotosh</string>
   <string name="prefs_camera_picture_upload_summary">Fotot e bëra nga kamera ngarkoji vetvetiu</string>
   <string name="prefs_camera_video_upload">Ngarkime videosh</string>
@@ -45,6 +48,20 @@
   <string name="prefs_imprint">Imprint</string>
   <string name="prefs_remember_last_share_location">Mba mend vend ndarjeje me të tjerët</string>
   <string name="prefs_remember_last_upload_location_summary">Mba mend vendin e fundit të ngarkimit për ndarje me të tjerët</string>
+  <string name="prefs_pattern">Kyçje rregullsie</string>
+  <string name="pattern_enter_pattern">Ju lutemi, jepni rregullsinë tuaj</string>
+  <string name="pattern_configure_pattern">Jepni rregullsinë tuaj</string>
+  <string name="pattern_remove_pattern">Hiqeni rregullsinë tuaj</string>
+  <string name="pattern_incorrect_pattern">Rregullsi e pasaktë</string>
+  <string name="pattern_reenter_pattern">Ju lutemi, rijepeni rregullsinë tuaj</string>
+  <string name="pattern_not_same_pattern">Rregullsitë s’janë të njëjta</string>
+  <string name="pattern_stored">Rregullsia u Depozitua</string>
+  <string name="pattern_removed">Rregullsia u Hoq</string>
+  <string name="pattern_already_set">Kyçjet e rregullsive dhe kodkalimeve s’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni rregullsinë</string>
+  <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
+  <string name="pattern_no_longer_required">S’do të pyetet më për rregullsinë</string>
+  <string name="pattern_configure_your_pattern_explanation">Rregullsia do të kërkohet sa herë që niset aplikacioni</string>
+  <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
   <string name="auth_check_server">Kontrollo shërbyesin</string>
@@ -79,6 +96,8 @@
   <string name="file_list_file">kartelë</string>
   <string name="file_list_files">kartela</string>
   <string name="filedetails_select_file">Prekni mbi një kartelë që të shfaqen të dhëna shtesë.</string>
+  <string name="upload_to">Ngarkoje te %1$s</string>
+  <string name="upload_files_title">Kartela</string>
   <string name="filedetails_size">Madhësia:</string>
   <string name="filedetails_type">Lloji:</string>
   <string name="filedetails_created">Krijuar më:</string>
@@ -181,6 +200,13 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_removed">Kodkalimi u hoq</string>
   <string name="pass_code_stored">Kodkalimi u depozitua</string>
+  <string name="fingerprint_confirm">Që të vazhdohet, ripohoni shenjat tuaja të gishtave</string>
+  <string name="fingerprint_hint">Ndijues prekjesh</string>
+  <string name="fingerprint_not_recognized">Shenja gishtash jo të pranuara, riprovoni</string>
+  <string name="fingerprint_success">Shenjat e gishtave u njohën</string>
+  <string name="fingerprint_not_hardware_detected">Kjo pajisje nuk mbulon mirëfilltësim përmes shenja gishtash</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Që të përdorni këtë veçori, regjistroni të paktën një palë shenja gishtash</string>
+  <string name="fingerprint_not_granted_permissions">S’janë akorduar leje shenjash gishtash</string>
   <string name="media_notif_ticker">Lojtësi %1$s i muzikës</string>
   <string name="media_state_playing">%1$s (po luhet)</string>
   <string name="media_state_loading">%1$s (po ngarkohet)</string>
@@ -200,6 +226,7 @@
   <string name="media_rewind_description">Butoni Mbrapsht</string>
   <string name="media_play_pause_description">Butoni Luaje ose Pushoje</string>
   <string name="media_forward_description">Butoni Përpara</string>
+  <string name="upload_from_camera_title">Foto nga kamera</string>
   <string name="auth_getting_authorization">Po merret autorizim …</string>
   <string name="auth_trying_to_login">Po provohet hyrja …</string>
   <string name="auth_no_net_conn_title">Pa lidhje rrjeti</string>
@@ -362,7 +389,6 @@
   <string name="copy_file_error">Ndodhi një gabim teksa përpiqej të kopjohej kjo kartelë apo dosje</string>
   <string name="forbidden_permissions_copy">për kopjim të kësaj kartele</string>
   <string name="prefs_category_camera_upload">Ngarkime nga kamera</string>
-  <string name="prefs_category_details">Hollësi</string>
   <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="sync_folder_failed_content">Njëkohësimi i dosjes %1$s s\’u plotësua dot</string>
   <string name="shared_subject_header">ndarë</string>
@@ -470,8 +496,32 @@
   <string name="media_service_notification_channel_description">Shihni lojtësin e muzikës</string>
   <string name="file_sync_notification_channel_name">Njëkohësim kartelash</string>
   <string name="file_sync_notification_channel_description">Shihni përfundim njëkohësimi kartelash</string>
+  <string name="rate_dialog_title">Vlerësojeni aplikacionin %1$s!</string>
+  <string name="rate_dialog_description">Nëse ju pëlqen ta përdorni këtë aplikacion, do të harxhonit një çast për ta vlerësuar atë? Përshtypjet tuaja janë shumë të rëndësishme për ne. </string>
+  <string name="button_no_thanks_name">JO, FALEMINDERIT</string>
+  <string name="button_later_name">MË VONË</string>
+  <string name="button_rate_now_name">VLERËSOJENI TANI</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d i përzgjedhur</item>
     <item quantity="other">%d të përzgjedhur</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Administroni krejt kartelat tuaja të njëkohësuara</string>
+  <string name="welcome_feature_1_text">Mund të kopjoni, lëvizni, fshini</string>
+  <string name="welcome_feature_2_title">Ndani me të tjerët kartela dhe dosje</string>
+  <string name="welcome_feature_2_text">Mund t’i ndani privatisht ose publikisht</string>
+  <string name="welcome_feature_3_title">Llogari multi</string>
+  <string name="welcome_feature_3_text">Lidhuni te krejt shërbyesit tuaj ownCloud</string>
+  <string name="welcome_feature_4_title">Ngarkime nga kamera</string>
+  <string name="welcome_feature_4_text">Fotot/videot tuaja të ngarkuara automatikisht</string>
+  <string name="welcome_feature_5_title">Transmetim videosh</string>
+  <string name="welcome_feature_5_text">Luajini videot tuaja pa i shkarkuar</string>
+  <string name="welcome_feature_6_title">Kyçje me rregullsi</string>
+  <string name="welcome_feature_6_text">Përdorni një rregullsi për të kyçur aplikacionin tuaj ownCloud</string>
+  <string name="welcome_feature_7_title">Kyçje me shenja gishtash</string>
+  <string name="welcome_feature_7_text">Përdorni shenja gishtash tuaja për të kyçur aplikacionin tuaj ownCloud</string>
+  <string name="welcome_feature_8_title">Mbulim GIF-esh</string>
+  <string name="welcome_feature_8_text">Luani figurat tuaja të animuara GIF</string>
+  <string name="welcome_feature_9_title">Ngarko foto nga kamerë</string>
+  <string name="welcome_feature_9_text">Bëni një foto dhe ngarkojeni drejt e te shërbyesi juaj</string>
 </resources>

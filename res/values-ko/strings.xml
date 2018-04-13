@@ -27,9 +27,12 @@
   <string name="drawer_open">열기</string>
   <string name="prefs_category_general">일반</string>
   <string name="prefs_category_more">더 보기</string>
+  <string name="prefs_category_security">보안</string>
   <string name="prefs_accounts">계정</string>
   <string name="prefs_manage_accounts">계정 관리</string>
   <string name="prefs_passcode">암호 잠금</string>
+  <string name="prefs_fingerprint">지문 잠금</string>
+  <string name="prefs_fingerprint_summary">이 옵션을 활성화하려면 비밀번호나 패턴 잠금을 활성화하십시오</string>
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_video_upload">동영상 업로드</string>
@@ -45,6 +48,17 @@
   <string name="prefs_imprint">법적 고지</string>
   <string name="prefs_remember_last_share_location">공유 위치 기억하기</string>
   <string name="prefs_remember_last_upload_location_summary">마지막 공유 업로드 위치 기억하기</string>
+  <string name="prefs_pattern">패턴 잠금</string>
+  <string name="pattern_enter_pattern">패턴을 입력해 주세요</string>
+  <string name="pattern_configure_pattern">패턴 입력</string>
+  <string name="pattern_remove_pattern">패턴 제거</string>
+  <string name="pattern_incorrect_pattern">잘못된 패턴</string>
+  <string name="pattern_reenter_pattern">패턴을 다시 입력해 주세요</string>
+  <string name="pattern_not_same_pattern">패턴이 일치하지 않습니다</string>
+  <string name="pattern_stored">패턴 저장됨</string>
+  <string name="pattern_removed">패턴 제거됨</string>
+  <string name="pattern_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 패턴을 비활성화하시오</string>
+  <string name="passcode_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 비밀번호를 비활성화하시오</string>
   <string name="recommend_subject">%1$s을(를) 스마트폰에서 사용해 보세요!</string>
   <string name="recommend_text">%1$s을(를) 스마트폰에서 사용해 보는 것을 추천합니다!\n다운로드 링크: %2$s</string>
   <string name="auth_check_server">서버 확인</string>
@@ -79,6 +93,7 @@
   <string name="file_list_file">파일</string>
   <string name="file_list_files">파일</string>
   <string name="filedetails_select_file">파일을 누르면 추가 정보가 표시됩니다.</string>
+  <string name="upload_to">%1$s로 업로드</string>
   <string name="filedetails_size">크기:</string>
   <string name="filedetails_type">종류:</string>
   <string name="filedetails_created">만든 날짜:</string>
@@ -181,6 +196,11 @@
   <string name="pass_code_wrong">암호가 잘못됨</string>
   <string name="pass_code_removed">암호 삭제됨</string>
   <string name="pass_code_stored">암호 저장됨</string>
+  <string name="fingerprint_hint">터치센서</string>
+  <string name="fingerprint_not_recognized">지문이 인식되지 않았습니다. 다시시도해주세요</string>
+  <string name="fingerprint_success">지문확인됨</string>
+  <string name="fingerprint_not_hardware_detected">이 기기는 지문 인식이 지원이 되지 않습니다</string>
+  <string name="fingerprint_not_granted_permissions">지문인식 권한이 부여되지 않았습니다</string>
   <string name="media_notif_ticker">%1$s 음악 재생기</string>
   <string name="media_state_playing">%1$s (재생 중)</string>
   <string name="media_state_loading">%1$s (불러오는 중)</string>
@@ -363,7 +383,6 @@
   <string name="copy_file_error">이 파일이나 폴더를 복사할 수 없음</string>
   <string name="forbidden_permissions_copy">이 파일을 복사할</string>
   <string name="prefs_category_camera_upload">카메라 업로드</string>
-  <string name="prefs_category_details">자세한 정보</string>
   <string name="prefs_camera_video_upload_path_title">동영상 업로드 경로</string>
   <string name="sync_folder_failed_content">%1$s 폴더의 동기화를 완료할 수 없습니다</string>
   <string name="shared_subject_header">공유됨</string>
@@ -471,7 +490,17 @@
   <string name="media_service_notification_channel_description">음악 재생기 보기</string>
   <string name="file_sync_notification_channel_name">파일 동기화</string>
   <string name="file_sync_notification_channel_description">파일 동기화 결과 보기</string>
+  <string name="rate_dialog_description">이 앱을 잘 쓰고있으신가요? 잠시 시간을 내서 우리의 앱을 평가해주실수 있으신가요?
+당신의 피드백이 매우 우리에겐 중요합니다!</string>
+  <string name="button_no_thanks_name">괜찮습니다</string>
+  <string name="button_later_name">나중에 할께요</string>
+  <string name="button_rate_now_name">당장 리뷰를 남깁시다</string>
   <plurals name="items_selected_count">
     <item quantity="other">%d개 선택됨</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">카메라 업로드</string>
+  <string name="welcome_feature_5_title">비디오 스트리밍</string>
+  <string name="welcome_feature_6_title">패턴 잠금</string>
+  <string name="welcome_feature_7_title">지문 잠금</string>
 </resources>

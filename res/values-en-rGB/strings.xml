@@ -27,6 +27,7 @@
   <string name="drawer_open">Open</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">More</string>
+  <string name="prefs_category_security">Security</string>
   <string name="prefs_accounts">Accounts</string>
   <string name="prefs_manage_accounts">Manage accounts</string>
   <string name="prefs_passcode">Passcode lock</string>
@@ -337,7 +338,6 @@
   <string name="copy_file_invalid_overwrite">The file exists already in the destination folder</string>
   <string name="copy_file_error">An error occurred while trying to copy this file or folder</string>
   <string name="forbidden_permissions_copy">to copy this file</string>
-  <string name="prefs_category_details">Details</string>
   <string name="sync_folder_failed_content">Synchronisation of %1$s folder could not be completed</string>
   <string name="shared_subject_header">shared</string>
   <string name="with_you_subject_header">with you</string>
@@ -409,4 +409,5 @@
     <item quantity="one">%d selected</item>
     <item quantity="other">%d selected</item>
   </plurals>
+  <!--Welcome to oC intro features-->
 </resources>

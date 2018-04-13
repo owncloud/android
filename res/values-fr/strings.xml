@@ -15,7 +15,7 @@
   <string name="actionbar_sort_title">Trier</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Plus récent - Plus ancien</string>
-  <string name="actionbar_sort_by_size">Plus grande taille - Plus petite taille</string>
+  <string name="actionbar_sort_by_size">Plus grand - Plus petit</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tous les fichiers</string>
@@ -27,11 +27,12 @@
   <string name="drawer_open">Ouvrir</string>
   <string name="prefs_category_general">Général</string>
   <string name="prefs_category_more">Plus</string>
+  <string name="prefs_category_security">Sécurité</string>
   <string name="prefs_accounts">Comptes</string>
-  <string name="prefs_manage_accounts">Gérer les comptes utilisateurs</string>
+  <string name="prefs_manage_accounts">Gérer les comptes</string>
   <string name="prefs_passcode">Code de sécurité</string>
-  <string name="prefs_camera_picture_upload">Téléversement d\'images</string>
-  <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les photos prises par la caméra</string>
+  <string name="prefs_camera_picture_upload">Envoi d\'images</string>
+  <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
   <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
   <string name="prefs_camera_video_upload_summary">Téléverser automatiquement les vidéos enregistrées par la caméra</string>
   <string name="prefs_log_title">Activer la journalisation</string>
@@ -45,6 +46,8 @@
   <string name="prefs_imprint">Mentions</string>
   <string name="prefs_remember_last_share_location">Mémoriser l\'emplacement de partage</string>
   <string name="prefs_remember_last_upload_location_summary">Mémoriser le dernier emplacement de téléversement</string>
+  <string name="pattern_stored">Modèles entreposés</string>
+  <string name="pattern_removed">Modèles supprimés</string>
   <string name="recommend_subject">Essayez %1$s sur votre smartphone !</string>
   <string name="recommend_text">J\'aimerais vous inviter à utiliser %1$s sur votre smartphone !
 Téléchargez-le ici : %2$s</string>
@@ -80,6 +83,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="file_list_file">fichier</string>
   <string name="file_list_files">fichiers</string>
   <string name="filedetails_select_file">Sélectionnez un fichier pour afficher des informations supplémentaires</string>
+  <string name="upload_files_title">Fichiers</string>
   <string name="filedetails_size">Taille :</string>
   <string name="filedetails_type">Type :</string>
   <string name="filedetails_created">Créé le :</string>
@@ -186,6 +190,12 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="pass_code_wrong">Code de sécurité incorrect</string>
   <string name="pass_code_removed">Code de sécurité supprimé</string>
   <string name="pass_code_stored">Code de sécurité enregistré</string>
+  <string name="fingerprint_confirm">Confirmez votre empreinte pour continuer</string>
+  <string name="fingerprint_not_recognized">Empreinte non reconnue, essayez à nouveau</string>
+  <string name="fingerprint_success">Empreinte reconnue</string>
+  <string name="fingerprint_not_hardware_detected">L’appareil ne supporte pas l’authentification par empreinte</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Enregistrez au moins une empreinte pour accéder à cette fonctionnalité</string>
+  <string name="fingerprint_not_granted_permissions">L’utilisation d’empreinte n’est pas permise</string>
   <string name="media_notif_ticker">%1$s lecteur de musique</string>
   <string name="media_state_playing">%1$s (lecture)</string>
   <string name="media_state_loading">%1$s (chargement)</string>
@@ -205,6 +215,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_rewind_description">Bouton de rembobinage</string>
   <string name="media_play_pause_description">Bouton de lecture ou de pause</string>
   <string name="media_forward_description">Bouton d\'avance rapide</string>
+  <string name="upload_from_camera_title">Image de la caméra</string>
   <string name="auth_getting_authorization">Contrôle d\'autorisation ...</string>
   <string name="auth_trying_to_login">Tentative de connexion ...</string>
   <string name="auth_no_net_conn_title">Pas de connexion réseau</string>
@@ -368,7 +379,6 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="copy_file_error">Une erreur est survenue lors de la copie de ce fichier ou dossier</string>
   <string name="forbidden_permissions_copy">de copier ce fichier</string>
   <string name="prefs_category_camera_upload">Téléversements de la caméra</string>
-  <string name="prefs_category_details">Détails</string>
   <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
   <string name="sync_folder_failed_content">La synchronisation du dossier %1$s n\'a pas pu être terminée</string>
   <string name="shared_subject_header">a partagé</string>
@@ -476,8 +486,22 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="media_service_notification_channel_description">Voir le lecteur de musique</string>
   <string name="file_sync_notification_channel_name">synchronisation de fichier</string>
   <string name="file_sync_notification_channel_description">Voir le résultat de la synchronisation de fichier</string>
+  <string name="button_no_thanks_name">NON MERCI</string>
+  <string name="button_later_name">PLUS TARD</string>
+  <string name="button_rate_now_name">NOTER MAINTENANT</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Gérez vos fichiers synchronisés</string>
+  <string name="welcome_feature_1_text">Vous pouvez les copier, les déplacer, les supprimer</string>
+  <string name="welcome_feature_2_title">Partager fichiers et dossiers</string>
+  <string name="welcome_feature_2_text">Vous pouvez partager de façon privée ou publique</string>
+  <string name="welcome_feature_3_title">Multi-compte</string>
+  <string name="welcome_feature_3_text">Connectez-vous à tous vos serveurs ownCloud</string>
+  <string name="welcome_feature_4_title">Téléversements de la caméra</string>
+  <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
+  <string name="welcome_feature_9_title">Téléverser une photo depuis la caméra</string>
+  <string name="welcome_feature_9_text">Prendre une photo et la téléverser directement sur votre serveur</string>
 </resources>

@@ -27,6 +27,7 @@
   <string name="drawer_open">افتح</string>
   <string name="prefs_category_general">عام</string>
   <string name="prefs_category_more">المزيد</string>
+  <string name="prefs_category_security">الأمان</string>
   <string name="prefs_accounts">حسابات</string>
   <string name="prefs_manage_accounts">إدارة الحسابات</string>
   <string name="prefs_passcode">الرقم السري</string>
@@ -260,7 +261,6 @@
   <string name="folder_picker_choose_button_text">اختيار</string>
   <string name="move_file_invalid_overwrite">الملف موجود بالفعل في المجلد الوجهة</string>
   <string name="copy_file_invalid_overwrite">الملف موجود بالفعل في المجلد الوجهة</string>
-  <string name="prefs_category_details">تفاصيل</string>
   <string name="auth_host_address">عنوان الخادم</string>
   <string name="share_dialog_title">شارك</string>
   <string name="share_cancel_public_link_button">إلغاء</string>
@@ -274,4 +274,5 @@
   <string name="share_privilege_can_edit_create">إنشاء</string>
   <string name="share_privilege_can_edit_change">تغيير</string>
   <string name="share_privilege_can_edit_delete">حذف</string>
+  <!--Welcome to oC intro features-->
 </resources>

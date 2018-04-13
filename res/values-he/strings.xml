@@ -27,9 +27,14 @@
   <string name="drawer_open">פתיחה</string>
   <string name="prefs_category_general">כללי</string>
   <string name="prefs_category_more">יותר</string>
+  <string name="prefs_category_security">אבטחה</string>
   <string name="prefs_accounts">חשבונות</string>
   <string name="prefs_manage_accounts">ניהול חשבונות</string>
   <string name="prefs_passcode">נעילת סיסמא</string>
+  <string name="prefs_camera_picture_upload">העלאת תמונות</string>
+  <string name="prefs_camera_picture_upload_summary">העלאת תמונות שצולמו במצלמה באופן אוטומטי</string>
+  <string name="prefs_camera_video_upload">העלאת סרטונים</string>
+  <string name="prefs_camera_video_upload_summary">העלאת סרטונים שהוקלטו במצלמה</string>
   <string name="prefs_log_title">מאפשר התחברות</string>
   <string name="prefs_log_summary">משמש לתיעוד בעיות</string>
   <string name="prefs_log_title_history">הסטורית התחברות</string>
@@ -41,6 +46,19 @@
   <string name="prefs_imprint">חותמת</string>
   <string name="prefs_remember_last_share_location">לזכור מקום שיתוף</string>
   <string name="prefs_remember_last_upload_location_summary">לזכור מיקום שיתוף העלאה אחרון</string>
+  <string name="prefs_pattern">נעילה בתבנית</string>
+  <string name="pattern_enter_pattern">נא להזין את התבנית שלך</string>
+  <string name="pattern_configure_pattern">נא להזין את התבנית שלך</string>
+  <string name="pattern_remove_pattern">הסרת התבנית שלך</string>
+  <string name="pattern_incorrect_pattern">תבנית שגויה</string>
+  <string name="pattern_reenter_pattern">נא להזין את התבנית שלך מחדש</string>
+  <string name="pattern_not_same_pattern">התבניות שונות</string>
+  <string name="pattern_stored">התבנית נשמרה</string>
+  <string name="pattern_removed">התבנית הוסרה</string>
+  <string name="pattern_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את התבנית תחילה</string>
+  <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
+  <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
+  <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
   <string name="recommend_subject">לבדיקה %1$s בטלפון החכם שלך!</string>
   <string name="recommend_text">הנך מוזמן להשתמש ב- %1$s בטלפון החכם שלך!\nניתן להוריד מכאן: %2$s</string>
   <string name="auth_check_server">בדיקת שרת</string>
@@ -75,6 +93,8 @@
   <string name="file_list_file">קובץ</string>
   <string name="file_list_files">קובץ</string>
   <string name="filedetails_select_file">יש לגעת בקובץ כדי להציג פרטים נוספים.</string>
+  <string name="upload_to">העלאה אל %1$s</string>
+  <string name="upload_files_title">קבצים</string>
   <string name="filedetails_size">גודל:</string>
   <string name="filedetails_type">סוג:</string>
   <string name="filedetails_created">מועד היצירה:</string>
@@ -196,6 +216,7 @@
   <string name="media_rewind_description">לחצן החזרה אחורה</string>
   <string name="media_play_pause_description">לחצן ניגון או השהייה</string>
   <string name="media_forward_description">לחצן הרצה קדימה</string>
+  <string name="upload_from_camera_title">תמונה ממצלמה</string>
   <string name="auth_getting_authorization">מקבל אימות...</string>
   <string name="auth_trying_to_login">מנסה להתחבר...</string>
   <string name="auth_no_net_conn_title">אין חיבור לאינטרנט</string>
@@ -291,6 +312,10 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="camera_picture_upload_on_wifi">העלאת תמונות על בסיס חיבור wifi בלבד</string>
   <string name="camera_video_upload_on_wifi">העלאת סרטים על בסיס חיבור wifi בלבד</string>
+  <string name="camera_upload_path">/CameraUpload</string>
+  <string name="confirmation_disable_camera_uploads_title">אישור</string>
+  <string name="confirmation_disable_pictures_upload_message">להשבית את התכונה הזאת? התמונות שממתינות לא יועלו</string>
+  <string name="confirmation_disable_videos_upload_message">להשבית את התכונה הזאת? הסרטונים שממתינים לא יועלו</string>
   <string name="conflict_title">התנגשות בין קבצים</string>
   <string name="conflict_message">איזה קבצים לשמור? אם יבחרו שתי הגרסאות, הקובץ המקומי יקבל מספר שיצורף לשמו.</string>
   <string name="conflict_keep_both">להשאיר את שניהם</string>
@@ -299,6 +324,7 @@
   <string name="preview_image_description">תצוגה מקדימה לתמונה</string>
   <string name="preview_image_error_unknown_format">תמונה זו לא ניתנת לצפייה</string>
   <string name="error__upload__local_file_not_copied">%1$s לא ניתן להעתקה לתיקייה מקומית %2$s</string>
+  <string name="prefs_camera_picture_upload_path_title">נתיב העלאת תמונות</string>
   <string name="share_link_no_support_share_api">מצטערים, שיתוף אינו מורשה על השרת שלך. יש ליצור קשר עם
 ⇥⇥מנהל.</string>
   <string name="share_link_file_no_exist">לא ניתן לשתף. יש לבדוק אם הקובץ קיים</string>
@@ -354,7 +380,8 @@
   <string name="copy_file_invalid_overwrite">הקובץ כבר קיים בתיקיית היעד</string>
   <string name="copy_file_error">אירעה שגיאה בזמן ניסיון להעתיק את הקובץ או התיקייה</string>
   <string name="forbidden_permissions_copy">להעתיק את הקובץ הזה</string>
-  <string name="prefs_category_details">פרטים</string>
+  <string name="prefs_category_camera_upload">העלאות מהמצלמה</string>
+  <string name="prefs_camera_video_upload_path_title">נתיב להעלאת סרטונים</string>
   <string name="sync_folder_failed_content">לא ניתן להשלים סנכרון של %1$s תיקיות</string>
   <string name="shared_subject_header">משותף</string>
   <string name="with_you_subject_header">אתך</string>
@@ -452,8 +479,19 @@
   <string name="share_via_link_expiration_date_explanation_label">הקישור הציבורי יפוג לא יותר מ- %1$d ימים לאחר שנוצר</string>
   <string name="share_via_link_default_name_template">קישור %1$s</string>
   <string name="private_link_info">זה קישור פרטי, רק אנשים שיש להם גישה לקובץ/תיקייה יכולים להשתמש בו. ניתן להשתמש בו כקישור קבוע לעצמך או לצורך הפניית אחרים לקבצים מתוך שיתופים.</string>
+  <string name="file_private_link_error">אין קישור פרטי זמין לקובץ זה</string>
+  <string name="download_notification_channel_name">הורדות</string>
+  <string name="download_notification_channel_description">הצגת שם הקובץ והתקדמות ההורדה</string>
+  <string name="upload_notification_channel_name">העלאות</string>
+  <string name="upload_notification_channel_description">הצגת שם הקובץ והתקדמות ההעלאה</string>
+  <string name="media_service_notification_channel_name">נגן מוזיקה</string>
+  <string name="media_service_notification_channel_description">הצגת נגן מוזיקה</string>
+  <string name="file_sync_notification_channel_name">סנכרון קבצים</string>
+  <string name="file_sync_notification_channel_description">הצגת תוצאות סנכרון קבצים</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
     <item quantity="other">נבחרו %d</item>
   </plurals>
+  <!--Welcome to oC intro features-->
+  <string name="welcome_feature_4_title">העלאות מהמצלמה</string>
 </resources>

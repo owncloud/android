@@ -1,3 +1,26 @@
+## 2.7.0 (April 2018)
+- Fingerprint lock
+- Pattern lock (contribution)
+- Upload picture directly from camera (contribution)
+- GIF support
+- New features wizard
+- UI improvements, including:
+  + Display file size during upload (contribution)
+  + Animations when switching folders
+- Bug fixes, including:
+  + Hide always visible notification in Android 8
+
+## 2.7.0 beta v1 (March 2018)
+- Fingerprint lock
+- Pattern lock (contribution)
+- Upload picture directly from camera (contribution)
+- GIF support
+- New features wizard
+- UI improvements, including:
+  + Display file size during upload (contribution)
+- Bug fixes, including:
+  + Hide always visible notification in Android 8
+
 ## 2.6.0 (February 2018)
 - Camera uploads, replacing instant uploads (Android 5 or higher required)
 - Android 8 support
