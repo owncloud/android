@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -200,7 +201,7 @@ public class FileDownloadFragment extends FileFragment implements OnClickListene
 
 
     /**
-     * Enables or disables buttons for a file being downloaded
+     * Enables buttons for a file being downloaded
      */
     private void setButtonsForTransferring(View rootView) {
         if (rootView != null) {
