@@ -173,13 +173,13 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         View view = inflater.inflate(R.layout.video_preview, container, false);
 
-        mProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
+        mProgressBar = view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mProgressBar.setVisibility(View.GONE);
 
-        simpleExoPlayerView = (SimpleExoPlayerView) view.findViewById(R.id.video_player);
+        simpleExoPlayerView = view.findViewById(R.id.video_player);
 
-        fullScreenButton = (ImageButton) view.findViewById(R.id.fullscreen_button);
+        fullScreenButton = view.findViewById(R.id.fullscreen_button);
 
         fullScreenButton.setOnClickListener(this);
 

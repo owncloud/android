@@ -149,9 +149,9 @@ public class PreviewAudioFragment extends FileFragment {
         Log_OC.v(TAG, "onCreateView");
 
         View view = inflater.inflate(R.layout.preview_audio_fragment, container, false);
-        mImagePreview = (ImageView) view.findViewById(R.id.image_preview);
-        mMediaController = (MediaControlView) view.findViewById(R.id.media_controller);
-        mProgressBar = (ProgressBar)view.findViewById(R.id.syncProgressBar);
+        mImagePreview = view.findViewById(R.id.image_preview);
+        mMediaController = view.findViewById(R.id.media_controller);
+        mProgressBar = view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
         return view;

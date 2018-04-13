@@ -76,7 +76,7 @@ public class CreateFolderDialogFragment
         View v = inflater.inflate(R.layout.edit_box_dialog, null);
         
         // Setup layout 
-        EditText inputText = ((EditText)v.findViewById(R.id.user_input));
+        EditText inputText = v.findViewById(R.id.user_input);
         inputText.setText("");
         inputText.requestFocus();
         

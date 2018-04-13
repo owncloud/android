@@ -144,9 +144,9 @@ public class ConfirmationDialogFragment extends DialogFragment {
     
     
     public interface ConfirmationDialogFragmentListener {
-        public void onConfirmation(String callerTag);
-        public void onNeutral(String callerTag);
-        public void onCancel(String callerTag);
+        void onConfirmation(String callerTag);
+        void onNeutral(String callerTag);
+        void onCancel(String callerTag);
     }
     
 }

@@ -80,7 +80,7 @@ public class FileMenuFilter {
      */
     public FileMenuFilter(OCFile targetFile, Account account, ComponentsGetter cg,
                           Context context) {
-        this(Arrays.asList(new OCFile[]{targetFile}), account, cg, context);
+        this(Arrays.asList(targetFile), account, cg, context);
     }
 
     /**
@@ -313,7 +313,7 @@ public class FileMenuFilter {
                 videoPreviewing = ((PreviewVideoFragment) secondFragment).
                         getFile().equals(mFiles.get(i));
             }
-        };
+        }
         return videoPreviewing;
     }
 

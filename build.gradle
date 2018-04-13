@@ -212,8 +212,8 @@ android {
 def setOutputFileName(variant, appName, callerProject) {
     logger.info("Setting new name for output of variant $variant.name")
 
-    def originalFile = variant.outputs[0].outputFile;
-    def originalName = originalFile.name;
+    def originalFile = variant.outputs[0].outputFile
+    def originalName = originalFile.name
     logger.info("$variant.name: originalName is $originalName")
 
     def newName = ""

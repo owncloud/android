@@ -53,7 +53,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
     private static Map<Long, FileDataStorageManager> mRootIdToStorageManager;
 
     @Override
-    public Cursor queryRoots(String[] projection) throws FileNotFoundException {
+    public Cursor queryRoots(String[] projection) {
         initiateStorageMap();
 
         final RootCursor result = new RootCursor(projection);
@@ -65,7 +65,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
     }
 
     @Override
-    public Cursor queryDocument(String documentId, String[] projection) throws FileNotFoundException {
+    public Cursor queryDocument(String documentId, String[] projection) {
         final long docId = Long.parseLong(documentId);
         updateCurrentStorageManagerIfNeeded(docId);
 
@@ -77,8 +77,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
     }
 
     @Override
-    public Cursor queryChildDocuments(String parentDocumentId, String[] projection, String sortOrder)
-            throws FileNotFoundException {
+    public Cursor queryChildDocuments(String parentDocumentId, String[] projection, String sortOrder) {
 
         final long folderId = Long.parseLong(parentDocumentId);
         updateCurrentStorageManagerIfNeeded(folderId);
@@ -140,7 +139,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
     }
 
     @Override
-    public Cursor querySearchDocuments(String rootId, String query, String[] projection) throws FileNotFoundException {
+    public Cursor querySearchDocuments(String rootId, String query, String[] projection) {
         updateCurrentStorageManagerIfNeeded(rootId);
 
         OCFile root = mCurrentStorageManager.getFileByPath("/");
@@ -188,10 +187,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
             return false;
         }
 
-        if (cancellationSignal != null && cancellationSignal.isCanceled())
-            return false;
-
-        return true;
+        return cancellationSignal == null || !cancellationSignal.isCanceled();
     }
 
     Vector<OCFile> findFiles(OCFile root, String query) {

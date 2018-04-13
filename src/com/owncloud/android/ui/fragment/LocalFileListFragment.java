@@ -147,7 +147,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
                 saveIndexAndTopPosition(position);
             
             } else {    /// Click on a file
-                ImageView checkBoxV = (ImageView) v.findViewById(R.id.custom_checkbox);
+                ImageView checkBoxV = v.findViewById(R.id.custom_checkbox);
                 if (checkBoxV != null) {
                     if (getListView().isItemChecked(position)) {
                         checkBoxV.setImageResource(R.drawable.ic_checkbox_marked);

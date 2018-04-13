@@ -94,17 +94,17 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
 
         OCFile file = mFiles.get(position);
 
-        TextView filename = (TextView) vi.findViewById(R.id.filename);
+        TextView filename = vi.findViewById(R.id.filename);
         filename.setText(file.getFileName());
         
-        ImageView fileIcon = (ImageView) vi.findViewById(R.id.thumbnail);
+        ImageView fileIcon = vi.findViewById(R.id.thumbnail);
         fileIcon.setTag(file.getFileId());
 
-        TextView lastModV = (TextView) vi.findViewById(R.id.last_mod);
+        TextView lastModV = vi.findViewById(R.id.last_mod);
         lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.getModificationTimestamp()));
 
-        TextView fileSizeV = (TextView) vi.findViewById(R.id.file_size);
-        TextView fileSizeSeparatorV = (TextView) vi.findViewById(R.id.file_separator);
+        TextView fileSizeV = vi.findViewById(R.id.file_size);
+        TextView fileSizeSeparatorV = vi.findViewById(R.id.file_separator);
 
         fileSizeV.setVisibility(View.VISIBLE);
         fileSizeSeparatorV.setVisibility(View.VISIBLE);

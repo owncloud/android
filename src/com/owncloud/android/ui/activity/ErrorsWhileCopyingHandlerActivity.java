@@ -164,14 +164,14 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
             if (view != null)  {
                 String localPath = getItem(position);
                 if (localPath != null) {
-                    TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                    TextView text1 = view.findViewById(android.R.id.text1);
                     if (text1 != null) {
                         text1.setText(String.format(getString(R.string.foreign_files_local_text), localPath));
                     }
                 }
                 if (mRemotePaths != null && mRemotePaths.size() > 0 && position >= 0 &&
                         position < mRemotePaths.size()) {
-                    TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                    TextView text2 = view.findViewById(android.R.id.text2);
                     String remotePath = mRemotePaths.get(position);
                     if (text2 != null && remotePath != null) {
                         text2.setText(String.format(getString(R.string.foreign_files_remote_text), remotePath));

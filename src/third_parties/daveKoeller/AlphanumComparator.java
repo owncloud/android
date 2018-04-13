@@ -77,8 +77,8 @@ public class AlphanumComparator implements Comparator<OCFile>
     }
 
     public int compare(OCFile o1, OCFile o2){
-        String s1 = (String)o1.getRemotePath().toLowerCase();
-        String s2 = (String)o2.getRemotePath().toLowerCase();
+        String s1 = o1.getRemotePath().toLowerCase();
+        String s2 = o2.getRemotePath().toLowerCase();
 
         int thisMarker = 0;
         int thatMarker = 0;

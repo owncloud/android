@@ -166,9 +166,9 @@ public class ShareLinkToDialog  extends DialogFragment {
         }
         
         private void bindView(int position, View row) {
-            TextView label = (TextView) row.findViewById(R.id.title);
+            TextView label = row.findViewById(R.id.title);
             label.setText(getItem(position).loadLabel(mPackageManager));
-            ImageView icon = (ImageView) row.findViewById(R.id.icon);
+            ImageView icon = row.findViewById(R.id.icon);
             icon.setImageDrawable(getItem(position).loadIcon(mPackageManager));
         }
     }

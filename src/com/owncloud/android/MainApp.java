@@ -256,7 +256,7 @@ public class MainApp extends Application {
             String versionName = packageInfo.versionName;
             if (versionName.contains(BETA_VERSION)){
                 isBeta = true;
-            };
+            }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

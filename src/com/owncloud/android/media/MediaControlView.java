@@ -201,23 +201,23 @@ public class MediaControlView extends FrameLayout /* implements OnLayoutChangeLi
 
     
     private void initControllerView(View v) {
-        mPauseButton = (ImageButton) v.findViewById(R.id.playBtn);
+        mPauseButton = v.findViewById(R.id.playBtn);
         if (mPauseButton != null) {
             mPauseButton.requestFocus();
             mPauseButton.setOnClickListener(this);
         }
 
-        mFfwdButton = (ImageButton) v.findViewById(R.id.forwardBtn);
+        mFfwdButton = v.findViewById(R.id.forwardBtn);
         if (mFfwdButton != null) {
             mFfwdButton.setOnClickListener(this);
         }
 
-        mRewButton = (ImageButton) v.findViewById(R.id.rewindBtn);
+        mRewButton = v.findViewById(R.id.rewindBtn);
         if (mRewButton != null) {
             mRewButton.setOnClickListener(this);
         }
 
-        mProgress = (ProgressBar) v.findViewById(R.id.progressBar);
+        mProgress = v.findViewById(R.id.progressBar);
         if (mProgress != null) {
             if (mProgress instanceof SeekBar) {
                 SeekBar seeker = (SeekBar) mProgress;
@@ -229,8 +229,8 @@ public class MediaControlView extends FrameLayout /* implements OnLayoutChangeLi
             mProgress.setMax(1000);
         }
 
-        mEndTime = (TextView) v.findViewById(R.id.totalTimeText);
-        mCurrentTime = (TextView) v.findViewById(R.id.currentTimeText);
+        mEndTime = v.findViewById(R.id.totalTimeText);
+        mCurrentTime = v.findViewById(R.id.currentTimeText);
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
 

@@ -80,7 +80,7 @@ public class RenameFileDialogFragment
         
         // Setup layout 
         String currentName = mTargetFile.getFileName();
-        EditText inputText = ((EditText)v.findViewById(R.id.user_input));
+        EditText inputText = v.findViewById(R.id.user_input);
         inputText.setText(currentName);
         int selectionStart = 0;
         int extensionStart = mTargetFile.isFolder() ? -1 : currentName.lastIndexOf(".");

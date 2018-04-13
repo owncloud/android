@@ -426,7 +426,7 @@ public class Preferences extends PreferenceActivity {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         String feedbackMail = (String) getText(R.string.mail_feedback);
-                        String feedback = (String) getText(R.string.prefs_feedback) +
+                        String feedback = getText(R.string.prefs_feedback) +
                                 " - android v" + appVersion;
                         Intent intent = new Intent(Intent.ACTION_SENDTO);
                         intent.setType("text/plain");
@@ -505,7 +505,7 @@ public class Preferences extends PreferenceActivity {
         /**
          * About App
          */
-        pAboutApp = (Preference) findPreference("about_app");
+        pAboutApp = findPreference("about_app");
         if (pAboutApp != null) {
             pAboutApp.setTitle(String.format(
                     getString(R.string.about_android),

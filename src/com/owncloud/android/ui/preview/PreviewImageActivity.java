@@ -263,9 +263,9 @@ public class PreviewImageActivity extends FileActivity implements
                 mUploaderBinder = null;
             }
         }
-    };    
-    
-    
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean returnValue;
@@ -354,7 +354,7 @@ public class PreviewImageActivity extends FileActivity implements
             getHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    onPageSelected(fPosition);;
+                    onPageSelected(fPosition);
                 }
             });
         }

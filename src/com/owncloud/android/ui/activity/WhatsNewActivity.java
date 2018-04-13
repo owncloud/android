@@ -224,15 +224,15 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.whats_new_element, container, false);
 
-            ImageView iv = (ImageView)v.findViewById(R.id.whatsNewImage);
+            ImageView iv = v.findViewById(R.id.whatsNewImage);
             if (mItem.shouldShowImage())
                 iv.setImageResource(mItem.getImage());
 
-            TextView tv2 = (TextView)v.findViewById(R.id.whatsNewTitle);
+            TextView tv2 = v.findViewById(R.id.whatsNewTitle);
             if (mItem.shouldShowTitleText())
                 tv2.setText(mItem.getTitleText());
 
-            tv2 = (TextView)v.findViewById(R.id.whatsNewText);
+            tv2 = v.findViewById(R.id.whatsNewText);
             if (mItem.shouldShowContentText())
                 tv2.setText(mItem.getContentText());
 

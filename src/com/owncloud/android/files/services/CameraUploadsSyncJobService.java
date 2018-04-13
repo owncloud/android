@@ -148,7 +148,7 @@ public class CameraUploadsSyncJobService extends JobService {
             });
 
             return localFiles;
-        };
+        }
 
         /**
          * Request the upload of a file just created if matches the criteria of the current
@@ -271,7 +271,7 @@ public class CameraUploadsSyncJobService extends JobService {
             jobScheduler.cancel(jobId);
 
             Log_OC.d(TAG, "Camera uploads disabled, cancelling the periodic job");
-        };
+        }
     }
 
     @Override

@@ -42,7 +42,7 @@ public class PreferenceWithLongSummary extends Preference{
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
-        TextView titleView = (TextView) view.findViewById(android.R.id.summary);
+        TextView titleView = view.findViewById(android.R.id.summary);
         titleView.setSingleLine(true);
         titleView.setMaxLines(1);
         titleView.setEllipsize(TextUtils.TruncateAt.MIDDLE);

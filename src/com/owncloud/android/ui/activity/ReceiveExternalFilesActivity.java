@@ -792,8 +792,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
         builder.setPositiveButton(R.string.uploader_btn_upload_text, null);
         builder.setNegativeButton(R.string.common_cancel, null);
 
-        final TextInputEditText input = (TextInputEditText) dialogView.findViewById(R.id.inputFileName);
-        final TextInputLayout inputLayout = (TextInputLayout) dialogView.findViewById(R.id.inputTextLayout);
+        final TextInputEditText input = dialogView.findViewById(R.id.inputFileName);
+        final TextInputLayout inputLayout = dialogView.findViewById(R.id.inputTextLayout);
 
         input.addTextChangedListener(new TextWatcher() {
             @Override

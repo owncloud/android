@@ -171,20 +171,20 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         if (file != null) {
 
-            ImageView fileIcon = (ImageView) view.findViewById(R.id.thumbnail);
+            ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
             fileIcon.setTag(file.getFileId());
             TextView fileName;
             String name = file.getFileName();
 
-            LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.ListItemLayout);
+            LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             linearLayout.setContentDescription("LinearLayout-" + name);
 
             switch (viewType) {
                 case LIST_ITEM:
-                    TextView fileSizeV = (TextView) view.findViewById(R.id.file_size);
-                    TextView fileSizeSeparatorV = (TextView) view.findViewById(R.id.file_separator);
-                    TextView lastModV = (TextView) view.findViewById(R.id.last_mod);
+                    TextView fileSizeV = view.findViewById(R.id.file_size);
+                    TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
+                    TextView lastModV = view.findViewById(R.id.last_mod);
 
 
                     lastModV.setVisibility(View.VISIBLE);
@@ -200,13 +200,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
                 case GRID_ITEM:
                     // filename
-                    fileName = (TextView) view.findViewById(R.id.Filename);
+                    fileName = view.findViewById(R.id.Filename);
                     name = file.getFileName();
                     fileName.setText(name);
 
                 case GRID_IMAGE:
                     // sharedIcon
-                    ImageView sharedIconV = (ImageView) view.findViewById(R.id.sharedIcon);
+                    ImageView sharedIconV = view.findViewById(R.id.sharedIcon);
                     if (file.isSharedViaLink()) {
                         sharedIconV.setImageResource(R.drawable.shared_via_link);
                         sharedIconV.setVisibility(View.VISIBLE);
@@ -220,7 +220,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                     }
 
                     // local state
-                    ImageView localStateView = (ImageView) view.findViewById(R.id.localFileIndicator);
+                    ImageView localStateView = view.findViewById(R.id.localFileIndicator);
                     localStateView.bringToFront();
                     FileDownloaderBinder downloaderBinder =
                             mTransferServiceGetter.getFileDownloaderBinder();
@@ -266,7 +266,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
             // For all Views
 
-            ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
+            ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
             checkBoxV.setVisibility(View.GONE);
             view.setBackgroundColor(Color.WHITE);
 

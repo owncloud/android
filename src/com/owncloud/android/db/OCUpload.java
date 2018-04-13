@@ -391,6 +391,6 @@ public class OCUpload implements Parcelable {
         dest.writeInt(mCreatedBy);
     }
 
-    enum CanUploadFileNowStatus {NOW, LATER, FILE_GONE, ERROR};
+    enum CanUploadFileNowStatus {NOW, LATER, FILE_GONE, ERROR}
 
 }

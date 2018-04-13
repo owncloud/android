@@ -139,13 +139,13 @@ public class SslUntrustedCertDialog extends DialogFragment {
             ((ViewGroup)mView.getParent()).removeView(mView);
         }
         
-        Button ok = (Button) mView.findViewById(R.id.ok);
+        Button ok = mView.findViewById(R.id.ok);
         ok.setOnClickListener(new OnCertificateTrusted());
         
-        Button cancel = (Button) mView.findViewById(R.id.cancel);
+        Button cancel = mView.findViewById(R.id.cancel);
         cancel.setOnClickListener(new OnCertificateNotTrusted());
         
-        Button details = (Button) mView.findViewById(R.id.details_btn);
+        Button details = mView.findViewById(R.id.details_btn);
         details.setOnClickListener(new OnClickListener() {
 
             @Override

@@ -107,11 +107,11 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
         if (mFiles != null && mFiles.length > position) {
             File file = mFiles[position];
             
-            TextView fileName = (TextView) view.findViewById(R.id.Filename);
+            TextView fileName = view.findViewById(R.id.Filename);
             String name = file.getName();
             fileName.setText(name);
             
-            ImageView fileIcon = (ImageView) view.findViewById(R.id.thumbnail);
+            ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
             /** Cancellation needs do be checked and done before changing the drawable in fileIcon, or
              * {@link ThumbnailsCacheManager#cancelPotentialThumbnailWork} will NEVER cancel any task.
@@ -125,10 +125,10 @@ public class LocalFileListAdapter extends BaseAdapter implements ListAdapter {
             }
             fileIcon.setTag(file.hashCode());
 
-            TextView fileSizeV = (TextView) view.findViewById(R.id.file_size);
-            TextView fileSizeSeparatorV = (TextView) view.findViewById(R.id.file_separator);
-            TextView lastModV = (TextView) view.findViewById(R.id.last_mod);
-            ImageView checkBoxV = (ImageView) view.findViewById(R.id.custom_checkbox);
+            TextView fileSizeV = view.findViewById(R.id.file_size);
+            TextView fileSizeSeparatorV = view.findViewById(R.id.file_separator);
+            TextView lastModV = view.findViewById(R.id.last_mod);
+            ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
             lastModV.setVisibility(View.VISIBLE);
             lastModV.setText(DisplayUtils.getRelativeTimestamp(mContext, file.lastModified()));
 

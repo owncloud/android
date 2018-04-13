@@ -158,7 +158,7 @@ public class PreviewImageFragment extends FileFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.preview_image_fragment, container, false);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.syncProgressBar);
+        mProgressBar = view.findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
         mImageView = view.findViewById(R.id.photo_view);
         mImageView.setVisibility(View.GONE);
@@ -171,9 +171,9 @@ public class PreviewImageFragment extends FileFragment {
             }
 
         });
-        mMessageView = (TextView)view.findViewById(R.id.message);
+        mMessageView = view.findViewById(R.id.message);
         mMessageView.setVisibility(View.GONE);
-        mProgressWheel = (ProgressBar)view.findViewById(R.id.progressWheel);
+        mProgressWheel = view.findViewById(R.id.progressWheel);
         mProgressWheel.setVisibility(View.VISIBLE);
         return view;
     }

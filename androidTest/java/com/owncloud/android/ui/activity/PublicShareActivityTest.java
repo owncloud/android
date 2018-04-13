@@ -193,7 +193,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_01_create_public_link_folder_defaults()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Share Public Defaults Start");
         SystemClock.sleep(WAIT_INITIAL_MS);
@@ -233,7 +233,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_02_create_public_link_folder_all_enabled()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Share Public All Enabled Start");
         SystemClock.sleep(WAIT_INITIAL_MS);
@@ -289,7 +289,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_03_get_link()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Get Link Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -364,7 +364,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_05_enable_allow_edit()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Allow Edit Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -420,7 +420,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_06_file_listing_disabled()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test File Listing Disable Start");
 
@@ -476,7 +476,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_07_file_listing_enabled()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test File Listing Enabled Start");
 
@@ -514,7 +514,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_08_enable_password()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Password Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -561,7 +561,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_09_enable_expiration()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Expiration Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -604,7 +604,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_10_unshare_public()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -634,7 +634,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_11_share_multiple_links()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Share Multiple Public Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -660,7 +660,7 @@ public class PublicShareActivityTest {
 
     @Test
     public void test_12_remove_multiple_links()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Remove Multiple Public Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -689,7 +689,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_13_permalink()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Permalink Start");
 
@@ -726,7 +726,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_14_capability_allow_public_links()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Capability Public Links Start");
 
@@ -754,7 +754,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_15_capability_allow_public_uploads()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Capability Public Uploads Start");
 
@@ -788,7 +788,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_16_create_public_link_file()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Share Public File Start");
         SystemClock.sleep(WAIT_INITIAL_MS);
@@ -827,7 +827,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_17_edit_options_file()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Enable Edit Options File Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -881,7 +881,7 @@ public class PublicShareActivityTest {
      */
     @Test
     public void test_18_unshare_public_file()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Unshare Public File Start");
         SystemClock.sleep(WAIT_CONNECTION_MS);
@@ -986,13 +986,13 @@ public class PublicShareActivityTest {
 
     //True if server supports File Listing option
     private boolean isSupportedFileListing (){
-            return capabilities.getFilesSharingPublicSupportsUploadOnly() == CapabilityBooleanType.TRUE ? true : false;
+            return capabilities.getFilesSharingPublicSupportsUploadOnly() == CapabilityBooleanType.TRUE;
     }
 
 
     //True if server supports multiple public links
     private boolean isSupportedMultipleLinks (){
-        return capabilities.getFilesSharingPublicMultiple()  == CapabilityBooleanType.TRUE ? true : false;
+        return capabilities.getFilesSharingPublicMultiple() == CapabilityBooleanType.TRUE;
     }
 
     //Delete a link. For non multiple servers.
@@ -1041,7 +1041,7 @@ public class PublicShareActivityTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         AccountsManager.deleteAllAccounts(targetContext);
     }
 

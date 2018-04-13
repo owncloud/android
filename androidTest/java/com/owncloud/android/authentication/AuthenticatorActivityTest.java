@@ -144,7 +144,7 @@ public class AuthenticatorActivityTest {
     @Test
     //@SdkSuppress(minSdkVersion = Build.VERSION_CODES.M)
     public void test1_check_certif_not_secure_no_accept()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         //Skipping the Welcome Wizard
         onView(withId(R.id.skip)).perform(click());
@@ -194,7 +194,7 @@ public class AuthenticatorActivityTest {
     @Test
     //@SdkSuppress(minSdkVersion = Build.VERSION_CODES.M)
     public void test2_check_certif_not_secure()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
 
         Log_OC.i(LOG_TAG, "Test accept not secure start");
@@ -262,7 +262,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test3_check_login()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Correct Start");
 
@@ -295,7 +295,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test4_login_orientation_changes()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Orientation Changes Start");
 
@@ -338,7 +338,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test5_check_login_special_characters()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Special Characters Start");
 
@@ -368,7 +368,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test6_check_login_incorrect()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check Login Incorrect Start");
 
@@ -390,7 +390,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test7_check_existing_account()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check Existing Account Start");
 
@@ -418,7 +418,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test8_check_login_blanks()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check Blanks Login Start");
 
@@ -439,7 +439,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test9_check_login_trimmed_blanks()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Trimmed Blanks Start");
 
@@ -470,7 +470,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test_10_check_url_from_browser()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check URL Browser Start");
 
@@ -501,7 +501,7 @@ public class AuthenticatorActivityTest {
      */
     @Test
     public void test_11_check_url_uppercase()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws IllegalArgumentException {
 
         Log_OC.i(LOG_TAG, "Test Check URL Uppercase Start");
 
@@ -567,7 +567,7 @@ public class AuthenticatorActivityTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         AccountsManager.deleteAllAccounts(targetContext);
     }
 }

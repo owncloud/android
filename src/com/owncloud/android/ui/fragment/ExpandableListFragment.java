@@ -56,8 +56,8 @@ public class ExpandableListFragment extends ExtendedListFragment implements OnCh
         Log_OC.e(TAG, "onCreateView");
         
         View v = inflater.inflate(R.layout.list_fragment_expandable, null);
-        mEmptyListMessage = (TextView) v.findViewById(R.id.empty_list_view);
-        mList = (ExpandableListView)(v.findViewById(R.id.list_root));
+        mEmptyListMessage = v.findViewById(R.id.empty_list_view);
+        mList = v.findViewById(R.id.list_root);
         mList.setOnChildClickListener(this);
 
         mList.setDivider(getResources().getDrawable(R.drawable.uploader_list_separator));
@@ -69,8 +69,8 @@ public class ExpandableListFragment extends ExtendedListFragment implements OnCh
 //        }
         
         // Pull down refresh
-        mRefreshListLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_files);
-        mRefreshEmptyLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_files_emptyView);
+        mRefreshListLayout = v.findViewById(R.id.swipe_refresh_files);
+        mRefreshEmptyLayout = v.findViewById(R.id.swipe_refresh_files_emptyView);
         
         onCreateSwipeToRefresh(mRefreshListLayout);
         onCreateSwipeToRefresh(mRefreshEmptyLayout);

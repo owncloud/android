@@ -240,10 +240,7 @@ public class PatternLockActivity extends AppCompatActivity {
 
     protected boolean confirmPattern() {
         mPatternPresent = false;
-        if (mNewPatternValue != null && mNewPatternValue.equals(mPatternValue)) {
-            return true;
-        }
-        return false;
+        return mNewPatternValue != null && mNewPatternValue.equals(mPatternValue);
     }
 
     private void showErrorAndRestart(int errorMessage, int headerMessage,
@@ -264,10 +261,7 @@ public class PatternLockActivity extends AppCompatActivity {
         SharedPreferences appPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());
         String savedPattern = appPrefs.getString(KEY_PATTERN, null);
-        if (savedPattern != null && savedPattern.equals(mPatternValue)) {
-            return true;
-        }
-        return false;
+        return savedPattern != null && savedPattern.equals(mPatternValue);
     }
 
     /**

@@ -115,7 +115,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         View view = inflater.inflate(R.layout.search_users_groups_layout, container, false);
 
         // Get the SearchView and set the searchable configuration
-        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
+        SearchView searchView = view.findViewById(R.id.searchView);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(
                 getActivity().getComponentName())   // assumes parent activity is the searchable activity
@@ -181,7 +181,7 @@ public class SearchShareesFragment extends Fragment implements ShareUserListAdap
         );
 
         // Show data
-        ListView usersList = (ListView) getView().findViewById(R.id.searchUsersListView);
+        ListView usersList = getView().findViewById(R.id.searchUsersListView);
 
         if (mShares.size() > 0) {
             usersList.setVisibility(View.VISIBLE);

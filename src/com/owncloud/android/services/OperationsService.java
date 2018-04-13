@@ -814,7 +814,7 @@ public class OperationsService extends Service {
         if (count == 0) {
             Pair<RemoteOperation, RemoteOperationResult> undispatched =
                     new Pair<>(operation, result);
-            mUndispatchedFinishedOperations.put(((Runnable) operation).hashCode(), undispatched);
+            mUndispatchedFinishedOperations.put(operation.hashCode(), undispatched);
         }
         Log_OC.d(TAG, "Called " + count + " listeners");
     }

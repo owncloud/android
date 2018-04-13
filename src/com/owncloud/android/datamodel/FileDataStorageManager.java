@@ -1108,15 +1108,15 @@ public class FileDataStorageManager {
             file.setEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG)));
             file.setTreeEtag(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_TREE_ETAG)));
             file.setSharedViaLink(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_LINK)) == 1 ? true : false);
+                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_VIA_LINK)) == 1);
             file.setSharedWithSharee(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_WITH_SHAREE)) == 1 ? true : false);
+                    c.getColumnIndex(ProviderTableMeta.FILE_SHARED_WITH_SHAREE)) == 1);
             file.setPermissions(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PERMISSIONS)));
             file.setRemoteId(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_REMOTE_ID)));
             file.setNeedsUpdateThumbnail(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_UPDATE_THUMBNAIL)) == 1 ? true : false);
+                    c.getColumnIndex(ProviderTableMeta.FILE_UPDATE_THUMBNAIL)) == 1);
             file.setDownloading(c.getInt(
-                    c.getColumnIndex(ProviderTableMeta.FILE_IS_DOWNLOADING)) == 1 ? true : false);
+                    c.getColumnIndex(ProviderTableMeta.FILE_IS_DOWNLOADING)) == 1);
             file.setEtagInConflict(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_ETAG_IN_CONFLICT)));
             file.setPrivateLink(c.getString(c.getColumnIndex(ProviderTableMeta.FILE_PRIVATE_LINK)));
 

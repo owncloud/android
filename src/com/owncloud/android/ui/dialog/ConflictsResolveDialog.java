@@ -39,7 +39,7 @@ import com.owncloud.android.utils.DisplayUtils;
  */
 public class ConflictsResolveDialog extends DialogFragment {
 
-    public static enum Decision { 
+    public enum Decision {
         CANCEL,
         KEEP_BOTH,
         OVERWRITE,

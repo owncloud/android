@@ -178,7 +178,7 @@ public class SAMLAuthenticatorActivityTest {
      */
     @Test
     public void test1_check_login_saml()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Start");
 
@@ -231,7 +231,7 @@ public class SAMLAuthenticatorActivityTest {
 
     @Test
     public void test2_check_login_saml_orientation_changes()
-            throws InterruptedException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+            throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Log_OC.i(LOG_TAG, "Test Check Login SAML Orientation Changes Start");
 
@@ -283,7 +283,7 @@ public class SAMLAuthenticatorActivityTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         AccountsManager.deleteAllAccounts(targetContext);
     }
 }

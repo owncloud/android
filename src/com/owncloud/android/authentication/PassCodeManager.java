@@ -61,7 +61,7 @@ public class PassCodeManager {
     private Long mTimestamp = 0l;
     private int mVisibleActivitiesCounter = 0;
 
-    protected PassCodeManager() {};
+    protected PassCodeManager() {}
 
     public void onActivityCreated(Activity activity) {
         if (!BuildConfig.DEBUG) {

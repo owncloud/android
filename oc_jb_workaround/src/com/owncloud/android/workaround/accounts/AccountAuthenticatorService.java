@@ -60,8 +60,7 @@ public class AccountAuthenticatorService extends Service {
         @Override
         public Bundle addAccount(AccountAuthenticatorResponse response,
                 String accountType, String authTokenType,
-                String[] requiredFeatures, Bundle options)
-                throws NetworkErrorException {
+                String[] requiredFeatures, Bundle options) {
         	//Log.e("WORKAROUND", "Yes, WORKAROUND takes the control here");
             final Intent intent = new Intent("com.owncloud.android.workaround.accounts.CREATE");
             intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
@@ -85,7 +84,7 @@ public class AccountAuthenticatorService extends Service {
         
 		@Override
         public Bundle confirmCredentials(AccountAuthenticatorResponse response,
-                Account account, Bundle options) throws NetworkErrorException {
+                Account account, Bundle options) {
             return getCommonResultBundle();
         }
 
@@ -97,8 +96,7 @@ public class AccountAuthenticatorService extends Service {
 
         @Override
         public Bundle getAuthToken(AccountAuthenticatorResponse response,
-                Account account, String authTokenType, Bundle options)
-                throws NetworkErrorException {
+                Account account, String authTokenType, Bundle options) {
             return getCommonResultBundle();
         }
 
@@ -109,14 +107,13 @@ public class AccountAuthenticatorService extends Service {
 
         @Override
         public Bundle hasFeatures(AccountAuthenticatorResponse response,
-                Account account, String[] features) throws NetworkErrorException {
+                Account account, String[] features) {
             return getCommonResultBundle();
         }
 
         @Override
         public Bundle updateCredentials(AccountAuthenticatorResponse response,
-                Account account, String authTokenType, Bundle options)
-                throws NetworkErrorException {
+                Account account, String authTokenType, Bundle options) {
             return getCommonResultBundle();
         }
 

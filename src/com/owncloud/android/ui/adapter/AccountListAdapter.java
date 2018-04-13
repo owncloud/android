@@ -66,13 +66,13 @@ public class AccountListAdapter extends ArrayAdapter<AccountListItem> {
             convertView = inflater.inflate(R.layout.account_item, parent, false);
 
             viewHolder = new AccountViewHolderItem();
-            viewHolder.imageViewItem = (ImageView) convertView.findViewById(R.id.icon);
-            viewHolder.checkViewItem = (ImageView) convertView.findViewById(R.id.ticker);
+            viewHolder.imageViewItem = convertView.findViewById(R.id.icon);
+            viewHolder.checkViewItem = convertView.findViewById(R.id.ticker);
             viewHolder.checkViewItem.setImageDrawable(mTintedCheck);
-            viewHolder.nameViewItem = (TextView) convertView.findViewById(R.id.name);
-            viewHolder.accountViewItem = (TextView) convertView.findViewById(R.id.account);
-            viewHolder.passwordButtonItem = (ImageView) convertView.findViewById(R.id.passwordButton);
-            viewHolder.removeButtonItem = (ImageView) convertView.findViewById(R.id.removeButton);
+            viewHolder.nameViewItem = convertView.findViewById(R.id.name);
+            viewHolder.accountViewItem = convertView.findViewById(R.id.account);
+            viewHolder.passwordButtonItem = convertView.findViewById(R.id.passwordButton);
+            viewHolder.removeButtonItem = convertView.findViewById(R.id.removeButton);
 
             convertView.setTag(viewHolder);
         } else {
