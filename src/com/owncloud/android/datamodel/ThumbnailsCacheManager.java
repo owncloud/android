@@ -609,26 +609,14 @@ public class ThumbnailsCacheManager {
     }
 
     public static boolean cancelPotentialAvatarWork(Object file, ImageView imageView) {
-        final GetAvatarTask avatarWorkerTask = getAvatarWorkerTask(imageView);
-
-        if (avatarWorkerTask != null) {
-            final Object usernameData = avatarWorkerTask.mUsername;
-            // If usernameData is not yet set or it differs from the new data
-            if (usernameData == null || usernameData != file) {
-                // Cancel previous task
-                avatarWorkerTask.cancel(true);
-                Log_OC.v(TAG, "Cancelled generation of avatar for a reused imageView");
-            } else {
-                // The same work is already in progress
-                return false;
-            }
-        }
-        // No task associated with the ImageView, or an existing task was cancelled
-        return true;
+        return cancelPotentialAvatarWork(file, getAvatarWorkerTask(imageView));
     }
 
     public static boolean cancelPotentialAvatarWork(Object file, MenuItem menuItem) {
-        final GetAvatarTask avatarWorkerTask = getAvatarWorkerTask(menuItem);
+        return cancelPotentialAvatarWork(file, getAvatarWorkerTask(menuItem));
+    }
+
+    public static boolean cancelPotentialAvatarWork(Object file, final GetAvatarTask avatarWorkerTask) {
 
         if (avatarWorkerTask != null) {
             final Object usernameData = avatarWorkerTask.mUsername;
