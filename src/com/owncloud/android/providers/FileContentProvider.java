@@ -250,14 +250,7 @@ public class FileContentProvider extends ContentProvider {
                 break;
             case DIRECTORY:
                 // deletion of folder is recursive
-            /*
-            Uri folderUri = ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_FILE, Long.parseLong(uri.getPathSegments().get(1)));
-            Cursor folder = query(db, folderUri, null, null, null, null);
-            String folderName = "(unknown)";
-            if (folder != null && folder.moveToFirst()) {
-                folderName = folder.getString(folder.getColumnIndex(ProviderTableMeta.FILE_PATH));
-            }
-            */
+
                 Cursor children = query(uri, null, null, null, null);
                 if (children != null && children.moveToFirst()) {
                     long childId;
@@ -267,7 +260,6 @@ public class FileContentProvider extends ContentProvider {
                         isDir = "DIR".equals(children.getString(
                                 children.getColumnIndex(ProviderTableMeta.FILE_CONTENT_TYPE)
                         ));
-                        //remotePath = children.getString(children.getColumnIndex(ProviderTableMeta.FILE_PATH));
                         if (isDir) {
                             count += delete(
                                     db,
@@ -286,21 +278,14 @@ public class FileContentProvider extends ContentProvider {
                         children.moveToNext();
                     }
                     children.close();
-                } /*else {
-                Log_OC.d(TAG, "No child to remove in DIRECTORY " + folderName);
-            }
-            Log_OC.d(TAG, "Removing DIRECTORY " + folderName + " (or maybe not) ");
-            */
+                }
                 count += db.delete(ProviderTableMeta.FILE_TABLE_NAME,
                         ProviderTableMeta._ID
                                 + "="
                                 + uri.getPathSegments().get(1)
                                 + (!TextUtils.isEmpty(where) ? " AND (" + where
                                 + ")" : ""), whereArgs);
-            /* Just for log
-             if (folder != null) {
-                folder.close();
-            }*/
+
                 break;
             case ROOT_DIRECTORY:
                 //Log_OC.d(TAG, "Removing ROOT!");
@@ -319,7 +304,6 @@ public class FileContentProvider extends ContentProvider {
                 count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs);
                 break;
             default:
-                //Log_OC.e(TAG, "Unknown uri " + uri);
                 throw new IllegalArgumentException("Unknown uri: " + uri.toString());
         }
         return count;
