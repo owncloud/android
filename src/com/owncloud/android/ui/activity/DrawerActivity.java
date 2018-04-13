@@ -134,9 +134,9 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * This method needs to be called after the content view has been set.
      */
     protected void setupDrawer() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView = findViewById(R.id.nav_view);
         if (mNavigationView != null) {
             mAccountChooserToggle = (ImageView) findNavigationViewChildById(R.id.drawer_account_chooser_toogle);
             mAccountChooserToggle.setImageResource(R.drawable.ic_down);

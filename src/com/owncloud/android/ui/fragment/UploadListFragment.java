@@ -131,7 +131,7 @@ public class UploadListFragment extends ExpandableListFragment {
          * @param file
          * @return return true if click was handled.
          */
-        public boolean onUploadItemClick(OCUpload file);
+        boolean onUploadItemClick(OCUpload file);
 
     }
 

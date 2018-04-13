@@ -226,9 +226,9 @@ public class SslUntrustedCertDialog extends DialogFragment {
     
     
     public interface OnSslUntrustedCertListener {
-        public void onSavedCertificate();
-        public void onFailedSavingCertificate();
-        public void onCancelCertificate();
+        void onSavedCertificate();
+        void onFailedSavingCertificate();
+        void onCancelCertificate();
     }
     
     public interface ErrorViewAdapter {

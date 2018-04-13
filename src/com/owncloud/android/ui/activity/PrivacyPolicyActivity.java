@@ -53,10 +53,10 @@ public class PrivacyPolicyActivity extends ToolbarActivity  {
         setTitle(getText(R.string.actionbar_privacy_policy));
 
         // Display the progress in a progress bar, like the browser app does.
-        final ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.syncProgressBar);
+        final ProgressBar mProgressBar = findViewById(R.id.syncProgressBar);
         DisplayUtils.colorPreLollipopHorizontalProgressBar(mProgressBar);
 
-        WebView webview = (WebView) findViewById(R.id.privacyPolicyWebview);
+        WebView webview = findViewById(R.id.privacyPolicyWebview);
         webview.getSettings().setJavaScriptEnabled(true);
 
         // next two settings grant that non-responsive webs are zoomed out when loaded

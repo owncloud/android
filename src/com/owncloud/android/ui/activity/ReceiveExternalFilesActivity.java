@@ -404,7 +404,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         setupToolbar();
         ActionBar actionBar = getSupportActionBar();
 
-        ListView mListView = (ListView) findViewById(android.R.id.list);
+        ListView mListView = findViewById(android.R.id.list);
 
         String current_dir = mParents.peek();
         if (current_dir.equals("")) {
@@ -433,10 +433,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
             );
             mListView.setAdapter(sa);
 
-            Button btnChooseFolder = (Button) findViewById(R.id.uploader_choose_folder);
+            Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
             btnChooseFolder.setOnClickListener(this);
 
-            Button btnNewFolder = (Button) findViewById(R.id.uploader_cancel);
+            Button btnNewFolder = findViewById(R.id.uploader_cancel);
             btnNewFolder.setOnClickListener(this);
 
             mListView.setOnItemClickListener(this);

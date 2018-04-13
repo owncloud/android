@@ -66,12 +66,12 @@ public class GenericExplanationActivity  extends AppCompatActivity {
         setContentView(R.layout.generic_explanation);
         
         if (message != null) {
-            TextView textView = (TextView) findViewById(R.id.message);
+            TextView textView = findViewById(R.id.message);
             textView.setText(message);
             textView.setMovementMethod(new ScrollingMovementMethod());
         }
         
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = findViewById(R.id.list);
         if (list != null && list.size() > 0) {
             //ListAdapter adapter = new ArrayAdapter<String>(this,
             // android.R.layout.simple_list_item_1, list);

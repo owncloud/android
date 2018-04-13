@@ -65,8 +65,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.whats_new_activity);
 
-        mProgress = (ProgressIndicator) findViewById(R.id.progressIndicator);
-        mPager = (ViewPager)findViewById(R.id.contentPanel);
+        mProgress = findViewById(R.id.progressIndicator);
+        mPager = findViewById(R.id.contentPanel);
         boolean isBeta = MainApp.isBeta();
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
@@ -77,7 +77,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager.addOnPageChangeListener(this);
 
 
-        mForwardFinishButton = (ImageButton) findViewById(R.id.forward);
+        mForwardFinishButton = findViewById(R.id.forward);
         mForwardFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +91,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                 updateNextButtonIfNeeded();
             }
         });
-        Button skipButton = (Button) findViewById(R.id.skip);
+        Button skipButton = findViewById(R.id.skip);
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

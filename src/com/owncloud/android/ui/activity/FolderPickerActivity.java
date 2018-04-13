@@ -346,9 +346,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
      * Set per-view controllers
      */
     private void initControls(){
-        mCancelBtn = (Button) findViewById(R.id.folder_picker_btn_cancel);
+        mCancelBtn = findViewById(R.id.folder_picker_btn_cancel);
         mCancelBtn.setOnClickListener(this);
-        mChooseBtn = (Button) findViewById(R.id.folder_picker_btn_choose);
+        mChooseBtn = findViewById(R.id.folder_picker_btn_choose);
         mChooseBtn.setOnClickListener(this);
     }
     

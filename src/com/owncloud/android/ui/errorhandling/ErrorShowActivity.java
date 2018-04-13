@@ -38,7 +38,7 @@ public class ErrorShowActivity extends Activity {
 		Log.e(TAG, "ErrorShowActivity was called. See above for StackTrace.");
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		setContentView(R.layout.errorhandling_showerror);
-		mError = (TextView) findViewById(R.id.errorTextView);
+		mError = findViewById(R.id.errorTextView);
 		mError.setText(getIntent().getStringExtra("error"));
 
 	}

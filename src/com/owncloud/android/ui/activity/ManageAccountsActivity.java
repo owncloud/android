@@ -92,7 +92,7 @@ public class ManageAccountsActivity extends FileActivity
 
         setContentView(R.layout.accounts_layout);
 
-        mListView = (ListView) findViewById(R.id.account_list);
+        mListView = findViewById(R.id.account_list);
         mListView.setFilterTouchesWhenObscured(true);
 
         setupToolbar();

@@ -107,7 +107,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
         setContentView(R.layout.generic_explanation);
         
         /// customize text message
-        TextView textView = (TextView) findViewById(R.id.message);
+        TextView textView = findViewById(R.id.message);
         String appName = getString(R.string.app_name);
         String message = String.format(getString(R.string.sync_foreign_files_forgotten_explanation),
                 appName, appName, appName, appName, mAccount.name);
@@ -115,7 +115,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
         textView.setMovementMethod(new ScrollingMovementMethod());
         
         /// load the list of local and remote files that failed
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = findViewById(R.id.list);
         if (mLocalPaths != null && mLocalPaths.size() > 0) {
             mAdapter = new ErrorsWhileCopyingListAdapter();
             listView.setAdapter(mAdapter);
@@ -125,8 +125,8 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
         }
         
         /// customize buttons
-        Button cancelBtn = (Button) findViewById(R.id.cancel);
-        Button okBtn = (Button) findViewById(R.id.ok);
+        Button cancelBtn = findViewById(R.id.cancel);
+        Button okBtn = findViewById(R.id.ok);
         
         okBtn.setText(R.string.foreign_files_move);
         cancelBtn.setOnClickListener(this);

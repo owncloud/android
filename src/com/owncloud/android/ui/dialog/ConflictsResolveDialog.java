@@ -118,6 +118,6 @@ public class ConflictsResolveDialog extends DialogFragment {
     }
     
     public interface OnConflictDecisionMadeListener {
-        public void conflictDecisionMade(Decision decision);
+        void conflictDecisionMade(Decision decision);
     }
 }

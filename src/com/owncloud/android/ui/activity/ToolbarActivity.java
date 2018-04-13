@@ -43,7 +43,7 @@ public abstract class ToolbarActivity extends BaseActivity {
      * want to use the toolbar.
      */
     protected void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
