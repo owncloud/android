@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -56,7 +57,8 @@ import com.owncloud.android.utils.DisplayUtils;
  * {@link MediaPlayer}.
  */
 
-public class MediaControlView extends FrameLayout /* implements OnLayoutChangeListener, OnTouchListener */ implements OnClickListener, OnSeekBarChangeListener {
+public class MediaControlView extends FrameLayout
+        implements OnClickListener, OnSeekBarChangeListener {
 
     private MediaPlayerControl  mPlayer;
     private Context             mContext;
@@ -90,115 +92,11 @@ public class MediaControlView extends FrameLayout /* implements OnLayoutChangeLi
         requestFocus();
     }
 
-    @Override
-    public void onFinishInflate() {
-        /*
-        if (mRoot != null)
-            initControllerView(mRoot);
-         */
-    }
-
-    /* TODO REMOVE
-    public MediaControlView(Context context, boolean useFastForward) {
-        super(context);
-        mContext = context;
-        mUseFastForward = useFastForward;
-        initFloatingWindowLayout();
-        //initFloatingWindow();
-    }
-    */
-
-    /* TODO REMOVE
-    public MediaControlView(Context context) {
-        this(context, true);
-    }
-    */
-    
-    /* T
-    private void initFloatingWindow() {
-        mWindowManager = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
-        mWindow = PolicyManager.makeNewWindow(mContext);
-        mWindow.setWindowManager(mWindowManager, null, null);
-        mWindow.requestFeature(Window.FEATURE_NO_TITLE);
-        mDecor = mWindow.getDecorView();
-        mDecor.setOnTouchListener(mTouchListener);
-        mWindow.setContentView(this);
-        mWindow.setBackgroundDrawableResource(android.R.color.transparent);
-        
-        // While the media controller is up, the volume control keys should
-        // affect the media stream type
-        mWindow.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-        setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-        requestFocus();
-    }
-    */
-
-    /*
-    // Allocate and initialize the static parts of mDecorLayoutParams. Must
-    // also call updateFloatingWindowLayout() to fill in the dynamic parts
-    // (y and width) before mDecorLayoutParams can be used.
-    private void initFloatingWindowLayout() {
-        mDecorLayoutParams = new WindowManager.LayoutParams();
-        WindowManager.LayoutParams p = mDecorLayoutParams;
-        p.gravity = Gravity.TOP;
-        p.height = LayoutParams.WRAP_CONTENT;
-        p.x = 0;
-        p.format = PixelFormat.TRANSLUCENT;
-        p.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
-        p.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH;
-        p.token = null;
-        p.windowAnimations = 0; // android.R.style.DropDownAnimationDown;
-    }
-    */
-
-    // Update the dynamic parts of mDecorLayoutParams
-    // Must be called with mAnchor != NULL.
-    /*
-    private void updateFloatingWindowLayout() {
-        int [] anchorPos = new int[2];
-        mAnchor.getLocationOnScreen(anchorPos);
-
-        WindowManager.LayoutParams p = mDecorLayoutParams;
-        p.width = mAnchor.getWidth();
-        p.y = anchorPos[1] + mAnchor.getHeight();
-    }
-    */
-
-    /*
-    // This is called whenever mAnchor's layout bound changes
-    public void onLayoutChange(View v, int left, int top, int right,
-            int bottom, int oldLeft, int oldTop, int oldRight,
-            int oldBottom) {
-        //updateFloatingWindowLayout();
-        if (mShowing) {
-            mWindowManager.updateViewLayout(mDecor, mDecorLayoutParams);
-        }
-    }
-    */
-    
-    /*
-    public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (mShowing) {
-                hide();
-            }
-        }
-            return false;
-    }
-    */
-    
-    
     public void setMediaPlayer(MediaPlayerControl player) {
         mPlayer = player;
         mHandler.sendEmptyMessage(SHOW_PROGRESS);
         updatePausePlay();
     }
-
     
     private void initControllerView(View v) {
         mPauseButton = v.findViewById(R.id.playBtn);
@@ -337,7 +235,6 @@ public class MediaControlView extends FrameLayout /* implements OnLayoutChangeLi
             if (uniqueDown && !mPlayer.isPlaying()) {
                 mPlayer.start();
                 updatePausePlay();
-                //show(sDefaultTimeout);
             }
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_MEDIA_STOP
@@ -345,12 +242,10 @@ public class MediaControlView extends FrameLayout /* implements OnLayoutChangeLi
             if (uniqueDown && mPlayer.isPlaying()) {
                 mPlayer.pause();
                 updatePausePlay();
-                //show(sDefaultTimeout);
             }
             return true;
         }
 
-        //show(sDefaultTimeout);
         return super.dispatchKeyEvent(event);
     }
 
