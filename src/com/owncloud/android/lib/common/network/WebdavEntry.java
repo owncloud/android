@@ -1,5 +1,7 @@
-/* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+/** ownCloud Android Library is available under MIT license
+ *
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -164,7 +166,7 @@ public class WebdavEntry {
             prop = propSet.get(
                 EXTENDED_PROPERTY_NAME_PERMISSIONS, Namespace.getNamespace(NAMESPACE_OC)
             );
-            if (prop != null) {
+            if (prop != null && prop.getValue() != null) {
                 mPermissions = prop.getValue().toString();
             }
 
