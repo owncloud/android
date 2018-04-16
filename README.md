@@ -13,9 +13,11 @@ Easy starting points are also reviewing [pull requests](https://github.com/owncl
 
 **IRC channel:** [#owncloud-android](https://webchat.freenode.net/?channels=owncloud-android) on freenode IRC
 
+**License:** [GPLv2](https://github.com/owncloud/android/blob/master/LICENSE.txt)
+
 ## Join testing!
 
-**Beta version:**
+**Beta version:
 
 If you are interested in testing the new features before being released and give us your feedback, please try out our beta channels:
 
@@ -30,5 +32,3 @@ If you are interested in testing the new features before being released and give
 1. Go to ownCloud tab in F-Droid.
 2. Open versions section.
 3. Download the latest version that contains beta in the name.
-
-## License: [GPLv2](https://github.com/owncloud/android/blob/master/LICENSE.txt)
