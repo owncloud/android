@@ -19,13 +19,13 @@ Easy starting points are also reviewing [pull requests](https://github.com/owncl
 
 If you are interested in testing the new features before being released and give us your feedback, please try out our beta channels:
 
-**PlayStore**
+**Play Store**
 
 1. Download ownCloud app from Play Store.
 2. Go to ownCloud tab in Play Store and scroll down to the end of the view.
 3. Press the **I'M IN** button to join the beta program and your final app will be replaced with the beta one.
 
-Note: If you want use the production version of an app you have to leave the beta program, uninstall the app, and reinstall the production version.
+Note: If you want to leave use the ownCloud production version you have to leave the beta program, uninstall the app, and reinstall the production version.
 
 **F-Droid**
 
