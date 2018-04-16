@@ -1,6 +1,8 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Brtosz Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 Bartosz Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *

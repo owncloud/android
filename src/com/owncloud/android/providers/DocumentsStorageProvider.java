@@ -2,8 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author Bartosz Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2015  Bartosz Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
