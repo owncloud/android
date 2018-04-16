@@ -31,6 +31,8 @@
   <string name="prefs_accounts">Account</string>
   <string name="prefs_manage_accounts">Gestisci account</string>
   <string name="prefs_passcode">Blocco con codice di sicurezza</string>
+  <string name="prefs_fingerprint">Blocco con impronta digitale</string>
+  <string name="prefs_fingerprint_summary">Abilita il blocco con pasword o la sequenza di blocco per attivare questa opzione.</string>
   <string name="prefs_camera_picture_upload">Caricamento immagini</string>
   <string name="prefs_camera_picture_upload_summary">Carica automaticamente le immagini scattate dalla fotocamera</string>
   <string name="prefs_camera_video_upload">Caricamento video</string>
@@ -46,6 +48,20 @@
   <string name="prefs_imprint">Imprint</string>
   <string name="prefs_remember_last_share_location">Ricorda la posizione della condivisione</string>
   <string name="prefs_remember_last_upload_location_summary">Ricorda l\'ultima posizione di caricamento della condivisione</string>
+  <string name="prefs_pattern">Blocco con sequenza</string>
+  <string name="pattern_enter_pattern">Per favore inserisci la tua sequenza</string>
+  <string name="pattern_configure_pattern">Inserisci la tua sequenza</string>
+  <string name="pattern_remove_pattern">Rimuovere la sequenza</string>
+  <string name="pattern_incorrect_pattern">Sequenza non corretta</string>
+  <string name="pattern_reenter_pattern">Reinserire la sequenza</string>
+  <string name="pattern_not_same_pattern">Le sequenze non sono le stesse</string>
+  <string name="pattern_stored">Sequenza memorizzata</string>
+  <string name="pattern_removed">Sequenza rimossa</string>
+  <string name="pattern_already_set">I blocchi con sequenza e password non possono essere abilitati allo stesso tempo, disabilita la sequenza prima</string>
+  <string name="passcode_already_set">I blocchi con sequenza e password non possono essere abilitati allo stesso tempo, disabilita la password prima</string>
+  <string name="pattern_no_longer_required">La sequenza non sarà più richiesta</string>
+  <string name="pattern_configure_your_pattern_explanation">La sequenza sarà richiesta ogni volta che la app sarà avviata</string>
+  <string name="illegal_argument_exception_message">Una AZIONE valida è necessaria per l\'intenzione di passare a</string>
   <string name="recommend_subject">Prova %1$s sul tuo smartphone!</string>
   <string name="recommend_text">Vorrei invitarti a usare %1$s sul tuo smartphone!\nScarica qui: %2$s</string>
   <string name="auth_check_server">Controlla il server</string>
@@ -80,6 +96,7 @@
   <string name="file_list_file">file</string>
   <string name="file_list_files">file</string>
   <string name="filedetails_select_file">Tocca un file per visualizzare informazioni aggiuntive.</string>
+  <string name="upload_to">Aggiorna a %1$s</string>
   <string name="upload_files_title"> File</string>
   <string name="filedetails_size">Dimensione:</string>
   <string name="filedetails_type">Tipo:</string>
@@ -183,6 +200,13 @@
   <string name="pass_code_wrong">Codice segreto non corretto</string>
   <string name="pass_code_removed">Codice segreto rimosso</string>
   <string name="pass_code_stored">Codice segreto memorizzato</string>
+  <string name="fingerprint_confirm">Conferma la tua impronta digitale per continuare</string>
+  <string name="fingerprint_hint">Tocca il sensore</string>
+  <string name="fingerprint_not_recognized">Impronta non riconosciuta, prova di nuovo</string>
+  <string name="fingerprint_success">Impronta riconosciuta</string>
+  <string name="fingerprint_not_hardware_detected">Questo dispositivo non supporta l\'autenticazione a mezzo impronta digitale</string>
+  <string name="fingerprint_not_enrolled_fingerprints">Registra almeno una impronta per usare questa funzionalità</string>
+  <string name="fingerprint_not_granted_permissions">Permesso per impronta digitale non garantito</string>
   <string name="media_notif_ticker">Lettore musicale %1$s</string>
   <string name="media_state_playing">%1$s (in riproduzione)</string>
   <string name="media_state_loading">%1$s (in caricamento)</string>
@@ -202,6 +226,7 @@
   <string name="media_rewind_description">Pulsante Riavvolgi</string>
   <string name="media_play_pause_description">Pulsante Riproduci o pausa</string>
   <string name="media_forward_description">Pulsante Avanti veloce</string>
+  <string name="upload_from_camera_title">Immagine dalla fotocamera</string>
   <string name="auth_getting_authorization">Recupero delle autorizzazioni in corso...</string>
   <string name="auth_trying_to_login">Tentativo di accesso in corso...</string>
   <string name="auth_no_net_conn_title">Nessuna connessione di rete</string>
@@ -474,10 +499,32 @@ Il Download del file inizierà automaticamente</string>
   <string name="media_service_notification_channel_description">Visualizza il lettore musicale</string>
   <string name="file_sync_notification_channel_name">Sincronizzazione dei file</string>
   <string name="file_sync_notification_channel_description">Visualizza i risultati della sincronizzazione</string>
+  <string name="rate_dialog_title">Vota %1$s questa app!</string>
+  <string name="rate_dialog_description">Se questa app ti soddisfa, puoi spendere quale istante per votarla ? Il tuo voto è molto importante per noi.</string>
+  <string name="button_no_thanks_name">NO, GRAZIE</string>
+  <string name="button_later_name">PIU\' TARDI</string>
+  <string name="button_rate_now_name">VOTO ADESSO</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selezionato</item>
     <item quantity="other">%d selezionati</item>
   </plurals>
   <!--Welcome to oC intro features-->
+  <string name="welcome_feature_1_title">Gestisci tutti i fuoi file sincronizzati</string>
+  <string name="welcome_feature_1_text">Puoi copiare, muovere, cancellare</string>
+  <string name="welcome_feature_2_title">Condividi files e cartelle</string>
+  <string name="welcome_feature_2_text">Puoi condividere privatamente o pubblicamente</string>
+  <string name="welcome_feature_3_title">Diversi account</string>
+  <string name="welcome_feature_3_text">Connetti a tutti o tuoi server ownCloud</string>
   <string name="welcome_feature_4_title">Caricamenti fotocamera</string>
+  <string name="welcome_feature_4_text">Le tue foto e video saranno automaticamente inviati al server</string>
+  <string name="welcome_feature_5_title">Flusso video</string>
+  <string name="welcome_feature_5_text">Guarda i tuoi filmati senza doverli scaricare</string>
+  <string name="welcome_feature_6_title">Sequenza di blocco</string>
+  <string name="welcome_feature_6_text">Usa una sequenza di blocco per bloccare la tua app ownCloud</string>
+  <string name="welcome_feature_7_title">Blocco con impronta digitale</string>
+  <string name="welcome_feature_7_text">Usa tua impronta digitale per bloccare la app ownCloud</string>
+  <string name="welcome_feature_8_title">Supporto GIF</string>
+  <string name="welcome_feature_8_text">Visualizza le tue GIF animate</string>
+  <string name="welcome_feature_9_title">Carica le foto dalla camera</string>
+  <string name="welcome_feature_9_text">Scatta una foto e mandala direttamente al tuo server</string>
 </resources>
