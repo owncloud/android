@@ -1080,11 +1080,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     private void openUrlWithCustomTab(String url) {
-        TypedValue backgroundCollor = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, backgroundCollor, true);
+        TypedValue backgroundColor = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimary, backgroundColor, true);
 
         CustomTabsIntent intent = new CustomTabsIntent.Builder()
-                .setToolbarColor(backgroundCollor.data)
+                .setToolbarColor(backgroundColor.data)
                 .setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left)
                 .setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right)
                 .setShowTitle(true)
