@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -83,6 +83,16 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	private View mFrame;
 
 	private static final String NODE_VERSION = "version";
+
+	private static final String URL = "TO COMPLETE";
+
+	private static final String WEBDAV_PATH_4_0 = "/remote.php/webdav/";
+
+	private static final String NEW_WEBDAV_PATH = "/remote.php/dav/files/";
+
+	private static final String USERNAME = "TO COMPLETE";
+
+	private static final String PASSWORD = "TO COMPLETE";
 	
     /** Called when the activity is first created. */
     @Override
@@ -125,7 +135,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			Log.e(LOG_TAG, getString(R.string.error_copying_sample_file), e);
 		}
 		
-		mFrame = findViewById(R.id.frame);
+//		mFrame = findViewById(R.id.frame);
     }
     
     
@@ -147,18 +157,18 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	    	case R.id.button_refresh:
 	    		startRefresh();
 	    		break;
-	    	case R.id.button_upload:
-	    		startUpload();
-	    		break;
-	    	case R.id.button_delete_remote:
-	    		startRemoteDeletion();
-	    		break;
-	    	case R.id.button_download:
-	    		startDownload();
-	    		break;
-	    	case R.id.button_delete_local:
-	    		startLocalDeletion();
-	    		break;
+//	    	case R.id.button_upload:
+//	    		startUpload();
+//	    		break;
+//	    	case R.id.button_delete_remote:
+//	    		startRemoteDeletion();
+//	    		break;
+//	    	case R.id.button_download:
+//	    		startDownload();
+//	    		break;
+//	    	case R.id.button_delete_local:
+//	    		startLocalDeletion();
+//	    		break;
 			default:
 	    		Toast.makeText(this, R.string.youre_doing_it_wrong, Toast.LENGTH_SHORT).show();
     	}
@@ -168,16 +178,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
     	String serverAddress = ((TextView) findViewById(R.id.server_address)).getText().toString();
 
-    	if (serverAddress.equals("")) {
-			Toast toast = Toast.makeText(getApplicationContext(),
-					"Introduce a server address", Toast.LENGTH_LONG);
-
-			toast.setGravity(Gravity.CENTER,0,0);
-
-			toast.show();
-
-			return;
-		}
+		if (!validServerAddress(serverAddress)) return;
 
 		OkHttpClient client = new OkHttpClient();
 
@@ -187,6 +188,47 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 				.build();
 
 		client.newCall(request).enqueue(new Callback() {
+
+			@Override public void onResponse(Call call, final Response response) throws IOException {
+
+				if (!response.isSuccessful()) {
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+
+							showToastMessage("Response not successful with code " + response.code());
+						}
+					});
+
+					throw new IOException("Unexpected code " + response);
+				}
+
+				try { // Successful response
+
+					String jsonData = response.body().string();
+
+					JSONObject Jobject = new JSONObject(jsonData);
+
+					final String serverVersion = Jobject.get("version").toString();
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+
+							showToastMessage("Server with version " + serverVersion + " detected");
+						}
+					});
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				Headers responseHeaders = response.headers();
+				for (int i = 0, size = responseHeaders.size(); i < size; i++) {
+					System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+				}
+			}
 
 			@Override public void onFailure(Call call, final IOException e) {
 				runOnUiThread(new Runnable() {
@@ -203,6 +245,31 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 				});
 				e.printStackTrace();
 			}
+		});
+	}
+
+	private void startRefresh() {
+
+//		Let's first use OKHttp with the new endpoint without depending on our library operations
+
+//    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
+//    	refreshOperation.execute(mClient, this, mHandler);
+
+		String serverAddress = ((TextView) findViewById(R.id.server_address)).getText().toString();
+
+		if (!validServerAddress(serverAddress)) return;
+
+		OkHttpClient client = new OkHttpClient();
+
+		String credentials = Credentials.basic(USERNAME, PASSWORD);
+
+		final Request request = new Request.Builder()
+				.url(URL + NEW_WEBDAV_PATH + USERNAME)
+				.addHeader("Authorization", credentials)
+				.method("PROPFIND", null)
+				.build();
+
+		client.newCall(request).enqueue(new Callback() {
 
 			@Override public void onResponse(Call call, final Response response) throws IOException {
 
@@ -212,80 +279,32 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 						@Override
 						public void run() {
 
-							Toast toast = Toast.makeText(getApplicationContext(),
-									"Response not successful with code " + response.code(), Toast.LENGTH_LONG);
-
-							toast.setGravity(Gravity.CENTER,0,0);
-
-							toast.show();
+							showToastMessage("Response not successful with code " + response.code());
 						}
 					});
 
 					throw new IOException("Unexpected code " + response);
-				}
 
-				try { // Response successful
+				} else { // Successful response
 
-					String jsonData = response.body().string();
-
-					JSONObject Jobject = new JSONObject(jsonData);
-
-					final String serverVersion = Jobject.get("version").toString();
+					final String propFindResult = response.body().string();
 
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-
-							Toast toast = Toast.makeText(getApplicationContext(),
-									"Server with version " + serverVersion + " detected", Toast.LENGTH_LONG);
-
-							toast.setGravity(Gravity.CENTER,0,0);
-
-							toast.show();
+							showToastMessage(propFindResult);
 						}
 					});
 
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-				Headers responseHeaders = response.headers();
-				for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-					System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+					Headers responseHeaders = response.headers();
+					for (int i = 0, size = responseHeaders.size(); i < size; i++) {
+						System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+					}
 				}
 			}
-		});
-	}
-    
-    private void startRefresh() {
-//    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
-//    	refreshOperation.execute(mClient, this, mHandler);
 
-		OkHttpClient client = new OkHttpClient();
-
-		String credentials = Credentials.basic("", "");
-
-		Request request = new Request.Builder()
-				.url("")
-				.addHeader("Authorization", credentials)
-				.method("PROPFIND", null)
-				.build();
-
-		client.newCall(request).enqueue(new Callback() {
 			@Override public void onFailure(Call call, IOException e) {
 				e.printStackTrace();
-			}
-
-			@Override public void onResponse(Call call, Response response) throws IOException {
-
-				if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-				Headers responseHeaders = response.headers();
-				for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-					System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-				}
-
-				System.out.println(response.body().string());
 			}
 		});
 	}
@@ -331,8 +350,8 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     	if (!downloadedFile.delete() && downloadedFile.exists()) {
     		Toast.makeText(this, R.string.error_deleting_local_file, Toast.LENGTH_SHORT).show();
     	} else {
-    		((TextView) findViewById(R.id.download_progress)).setText("0%");
-    		findViewById(R.id.frame).setBackgroundDrawable(null);
+//    		((TextView) findViewById(R.id.download_progress)).setText("0%");
+//    		findViewById(R.id.frame).setBackgroundDrawable(null);
     	}
     }
 
@@ -381,10 +400,10 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 	private void onSuccessfulRemoteDeletion(RemoveRemoteFileOperation operation, RemoteOperationResult result) {
 		startRefresh();
-		TextView progressView = (TextView) findViewById(R.id.upload_progress);
-		if (progressView != null) {
-			progressView.setText("0%");
-		}
+//		TextView progressView = (TextView) findViewById(R.id.upload_progress);
+//		if (progressView != null) {
+//			progressView.setText("0%");
+//		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -404,11 +423,11 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
             @Override
             public void run() {
 				TextView progressView = null;
-				if (upload) {
-					progressView = (TextView) findViewById(R.id.upload_progress);
-				} else {
-					progressView = (TextView) findViewById(R.id.download_progress);
-				}
+//				if (upload) {
+//					progressView = (TextView) findViewById(R.id.upload_progress);
+//				} else {
+//					progressView = (TextView) findViewById(R.id.download_progress);
+//				}
 				if (progressView != null) {
 	    			progressView.setText(Long.toString(percentage) + "%");
 				}
@@ -416,4 +435,19 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         });
 	}
 
+	private boolean validServerAddress(String serverAddress) {
+		if (serverAddress.equals("") || (!serverAddress.contains("http://") && !serverAddress.contains("https://"))) {
+			showToastMessage("Introduce a proper server address with http/https");
+			return false;
+		}
+		return true;
+	}
+
+	private void showToastMessage(String message) {
+		Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+
+		toast.setGravity(Gravity.CENTER, 0, 0);
+
+		toast.show();
+	}
 }
