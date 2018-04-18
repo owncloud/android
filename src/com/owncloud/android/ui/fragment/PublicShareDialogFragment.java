@@ -3,6 +3,7 @@
  *
  * @author David A. Velasco
  * @author David González Verdugo
+ * @author Christian Schabesberger
  * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -63,17 +64,11 @@ public class PublicShareDialogFragment extends DialogFragment {
      * The fragment initialization parameters
      */
     private static final String ARG_FILE = "FILE";
-
     private static final String ARG_SHARE = "SHARE";
-
     private static final String ARG_ACCOUNT = "ACCOUNT";
-
     private static final String ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME";
-
     private static final int CREATE_PERMISSION = OCShare.CREATE_PERMISSION_FLAG;
-
     private static final int UPDATE_PERMISSION = OCShare.UPDATE_PERMISSION_FLAG;
-
     private static final String KEY_EXPIRATION_DATE = "EXPIRATION_DATE";
 
     /**
@@ -104,17 +99,37 @@ public class PublicShareDialogFragment extends DialogFragment {
     /**
      * Listener for changes in allow editing switch
      */
-    OnAllowEditingInteractionListener mOnAllowEditingInteractionListener;
+    private OnAllowEditingInteractionListener mOnAllowEditingInteractionListener;
 
     /**
      * Listener for changes in password switch
      */
-    OnPasswordInteractionListener mOnPasswordInteractionListener;
+    private OnPasswordInteractionListener mOnPasswordInteractionListener;
 
     /**
      * Listener for changes in expiration date switch
      */
-    OnExpirationDateInteractionListener mOnExpirationDateInteractionListener;
+    private OnExpirationDateInteractionListener mOnExpirationDateInteractionListener;
+
+    /**
+     * UI elements
+     */
+
+    private LinearLayout mNameSelectionLayout;
+    private EditText mNameValueEdit;
+    private View mEditPermissionSelectionView;
+    private View mShowFileListingSelectionView;
+    private SwitchCompat mEditPermissionSwitch;
+    private SwitchCompat mShowFileListingSwitch;
+    private TextView mPasswordLabel;
+    private SwitchCompat mPasswordSwitch;
+    private EditText mPasswordValueEdit;
+    private TextView mExpirationDateLabel;
+    private SwitchCompat mExpirationDateSwitch;
+    private TextView mExpirationDateExplenationLabel;
+    private TextView mExpirationDateValueLabel;
+    private TextView mErrorMessageLabel;
+
 
     /**
      * Create a new instance of PublicShareDialogFragment, providing fileToShare and account
@@ -161,6 +176,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         return publicShareDialogFragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,105 +213,83 @@ public class PublicShareDialogFragment extends DialogFragment {
 
         Log_OC.d(TAG, "onCreateView");
 
+        final TextView dialogTitleLabel = view.findViewById(R.id.publicShareDialogTitle);
+        mNameSelectionLayout = view.findViewById(R.id.shareViaLinkNameSection);
+        mNameValueEdit = view.findViewById(R.id.shareViaLinkNameValue);
+        mEditPermissionSelectionView = view.findViewById(R.id.shareViaLinkEditPermissionSection);
+        mShowFileListingSelectionView = view.findViewById(R.id.shareViaShowFileListingSection);
+        mEditPermissionSwitch = view.findViewById(R.id.shareViaLinkEditPermissionSwitch);
+        mShowFileListingSwitch = view.findViewById(R.id.shareViaShowFileListingSwitch);
+        mPasswordLabel = view.findViewById(R.id.shareViaLinkPasswordLabel);
+        mPasswordSwitch = view.findViewById(R.id.shareViaLinkPasswordSwitch);
+        mPasswordValueEdit = view.findViewById(R.id.shareViaLinkPasswordValue);
+        mExpirationDateLabel = view.findViewById(R.id.shareViaLinkExpirationLabel);
+        mExpirationDateSwitch = view.findViewById(R.id.shareViaLinkExpirationSwitch);
+        mExpirationDateExplenationLabel = view.findViewById(R.id.shareViaLinkExpirationExplanationLabel);
+        mErrorMessageLabel = view.findViewById(R.id.public_link_error_message);
+        mExpirationDateValueLabel = view.findViewById(R.id.shareViaLinkExpirationValue);
+
         // Get and set the values saved previous to the screen rotation, if any
         if (savedInstanceState != null) {
             String expirationDate = savedInstanceState.getString(KEY_EXPIRATION_DATE);
             if (expirationDate.length() > 0) {
-                getExpirationDateValue(view).setVisibility(View.VISIBLE);
-                getExpirationDateValue(view).setText(expirationDate);
+                mExpirationDateValueLabel.setVisibility(View.VISIBLE);
+                mExpirationDateValueLabel.setText(expirationDate);
             }
         }
 
-        // Check share file listing by default
-        getShowFileListingSwitch(view).setChecked(true);
+        mShowFileListingSwitch.setChecked(true);
+        mShowFileListingSwitch.setEnabled(false);
 
-        //Disable show file listing by default
-        getShowFileListingSwitch(view).setEnabled(false);
+        if (updating()) {
+            dialogTitleLabel.setText(R.string.share_via_link_edit_title);
+            mNameValueEdit.setText(mPublicShare.getName());
 
-        if (updating()) { // Fill in the different fields if the share is being updated
-
-            // Set dialog title to edit
-            getDialogTitle(view).setText(R.string.share_via_link_edit_title);
-
-            // Set existing share name
-            getNameValue(view).setText(mPublicShare.getName());
-
-            // Set the edit permission, if any
             if ((mPublicShare.getPermissions() & (UPDATE_PERMISSION | CREATE_PERMISSION)) > 0) {
-                getEditPermissionSwitch(view).setChecked(true);
-                // If allow editing switch is checked, show file listing switch should be enabled
-                getShowFileListingSwitch(view).setEnabled(true);
+                mEditPermissionSwitch.setChecked(true);
+                mShowFileListingSwitch.setEnabled(true);
             }
 
-            // Set the write only permission, if any
             if (mPublicShare.getPermissions() == CREATE_PERMISSION) {
-                getShowFileListingSwitch(view).setChecked(false);
+                mShowFileListingSwitch.setChecked(false);
             }
 
-            // Set password, if any
             if (mPublicShare.isPasswordProtected()) {
 
-                // Switch on the password toggle
-                setPasswordSwitchChecked(true, view);
-
-                getPasswordValue(view).setVisibility(View.VISIBLE);
-
-                // Set an example password
-                getPasswordValue(view).setHint(R.string.share_via_link_default_password);
+                setPasswordSwitchChecked(true);
+                mPasswordValueEdit.setVisibility(View.VISIBLE);
+                mPasswordValueEdit.setHint(R.string.share_via_link_default_password);
             }
 
-            //Set expiration date, if any
             if (mPublicShare.getExpirationDate() != 0) {
-
-                // Switch on the expiration date toggle
-                setExpirationDateSwitchChecked(true, view);
-
-                // Set the existing share expiration date, with format defined by date picker
+                setExpirationDateSwitchChecked(true);
                 String formattedDate = ExpirationDatePickerDialogFragment.getDateFormat().format(
                         new Date(mPublicShare.getExpirationDate())
                 );
-                getExpirationDateValue(view).setVisibility(View.VISIBLE);
-                getExpirationDateValue(view).setText(formattedDate);
+                mExpirationDateValueLabel.setVisibility(View.VISIBLE);
+                mExpirationDateValueLabel.setText(formattedDate);
             }
 
         } else {
-            // Set existing share name
-            getNameValue(view).setText(getArguments().getString(ARG_DEFAULT_LINK_NAME, ""));
+            mNameValueEdit.setText(getArguments().getString(ARG_DEFAULT_LINK_NAME, ""));
         }
 
-        // Set listener for user actions on allow editing
-        initAllowEditingListener(view);
-
-        // Set listener for user actions on password
-        initPasswordListener(view);
-
-        // Set listener for user actions on expiration date
-        initExpirationListener(view);
-
-        // Set listener for focus change of password
-        initPasswordFocusChangeListener(view);
-
-        // Set listener for user actions on password hide/show button
-        initPasswordToggleListener(view);
-
-        // Confirm add public link
+        initAllowEditingListener();
+        initPasswordListener();
+        initExpirationListener();
+        initPasswordFocusChangeListener();
+        initPasswordToggleListener();
         Button confirmAddPublicLinkButton = (Button) view.findViewById(R.id.confirmAddPublicLinkButton);
 
         confirmAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 // Get data filled by user
-                String publicLinkName = getNameValue(getView()).getText().toString();
-
-                String publicLinkPassword = getPasswordValue(getView()).getText().toString();
-
-                long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
-
-                // Allow editing option
-                boolean publicLinkEditPermissions = getEditPermissionSwitch(getView()).isChecked();
-
-                // Show file listing option
-                boolean publicLinkSupportOnlyUpload = !getShowFileListingSwitch(getView()).
+                final String publicLinkName = mNameValueEdit.getText().toString();
+                String publicLinkPassword = mPasswordValueEdit.getText().toString();
+                final long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
+                boolean publicLinkEditPermissions = mEditPermissionSwitch.isChecked();
+                final boolean publicLinkSupportOnlyUpload = !mShowFileListingSwitch.
                         isChecked();
 
                 int publicLinkPermissions = OCShare.DEFAULT_PERMISSION;
@@ -322,13 +316,9 @@ public class PublicShareDialogFragment extends DialogFragment {
                             );
 
                 } else { // Updating an existing public share
-
-                    // User has deleted the password
-                    if (!getPasswordSwitch(getView()).isChecked()) {
-
+                    if (!mPasswordSwitch.isChecked()) {
                         publicLinkPassword = "";
-
-                    } else if (getPasswordValue(getView()).length() == 0) {
+                    } else if (mPasswordValueEdit.length() == 0) {
 
                         // User has not added a new password, so do not update it
                         publicLinkPassword = null;
@@ -347,7 +337,6 @@ public class PublicShareDialogFragment extends DialogFragment {
             }
         });
 
-        // Cancel add public link
         Button cancelAddPublicLinkButton = (Button) view.findViewById(R.id.cancelAddPublicLinkButton);
 
         cancelAddPublicLinkButton.setOnClickListener(new View.OnClickListener() {
@@ -359,8 +348,8 @@ public class PublicShareDialogFragment extends DialogFragment {
         return view;
     }
 
-    private void initPasswordFocusChangeListener(View view) {
-        view.findViewById(R.id.shareViaLinkPasswordValue).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+    private void initPasswordFocusChangeListener() {
+        mPasswordValueEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (v.getId() == R.id.shareViaLinkPasswordValue){
@@ -370,9 +359,8 @@ public class PublicShareDialogFragment extends DialogFragment {
         });
     }
 
-    private void initPasswordToggleListener(View view) {
-        EditText mPasswordInput = (EditText) view.findViewById(R.id.shareViaLinkPasswordValue);
-        mPasswordInput.setOnTouchListener(new RightDrawableOnTouchListener() {
+    private void initPasswordToggleListener() {
+        mPasswordValueEdit.setOnTouchListener(new RightDrawableOnTouchListener() {
             @Override
             public boolean onDrawableTouch(final MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -419,9 +407,7 @@ public class PublicShareDialogFragment extends DialogFragment {
 
     /**
      * Handles changes in focus on the text input for the password (basic authorization).
-     *
      * When (hasFocus), the button to toggle password visibility is shown.
-     *
      * When (!hasFocus), the button is made invisible and the password is hidden.
      *
      * @param hasFocus          'True' if focus is received, 'false' if is lost
@@ -442,80 +428,67 @@ public class PublicShareDialogFragment extends DialogFragment {
      */
     public void onViewPasswordClick() {
         if (getView() != null) {
-            EditText mPasswordInput = ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)));
-            int selectionStart = mPasswordInput.getSelectionStart();
-            int selectionEnd = mPasswordInput.getSelectionEnd();
             if (isPasswordVisible()) {
                 hidePassword();
             } else {
                 showPassword();
             }
-            mPasswordInput.setSelection(selectionStart, selectionEnd);
+            mPasswordValueEdit.setSelection(mPasswordValueEdit.getSelectionStart(),
+                    mPasswordValueEdit.getSelectionEnd());
         }
     }
 
     private void showViewPasswordButton() {
-        int drawable = R.drawable.ic_view;
-        if (isPasswordVisible()) {
-            drawable = R.drawable.ic_hide;
-        }
+        int drawable = isPasswordVisible()
+                ? R.drawable.ic_view
+                : R.drawable.ic_hide;
         if (getView() != null) {
-            ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)))
-                    .setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
+            mPasswordValueEdit.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
         }
     }
 
     private boolean isPasswordVisible() {
-        if (getView() != null) {
-            return ((((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue))).getInputType()
-                    & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) ==
-                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-        }
-        return false;
+        return (getView() != null) &&
+                ((mPasswordValueEdit.getInputType() & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+                    == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
     }
 
     private void hidePasswordButton() {
         if (getView() != null) {
-            ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)))
-                    .setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            mPasswordValueEdit.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
     }
 
     private void showPassword() {
         if (getView() != null) {
-            ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)))
-                    .setInputType(
+            mPasswordValueEdit.setInputType(
                             InputType.TYPE_CLASS_TEXT |
                                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD |
-                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    );
+                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             showViewPasswordButton();
         }
     }
 
     private void hidePassword() {
         if (getView() != null) {
-            ((EditText) (getView().findViewById(R.id.shareViaLinkPasswordValue)))
-                    .setInputType(
+            mPasswordValueEdit.setInputType(
                             InputType.TYPE_CLASS_TEXT |
                                     InputType.TYPE_TEXT_VARIATION_PASSWORD |
-                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    );
+                                    InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             showViewPasswordButton();
         }
     }
 
     private long getExpirationDateValueInMillis() {
         long publicLinkExpirationDateInMillis = -1;
-        String expirationDate = getExpirationDateValue(getView()).getText().toString();
+        String expirationDate = mExpirationDateValueLabel.getText().toString();
         if (expirationDate.length() > 0) {
             // Parse expiration date and convert it to milliseconds
             try {
+                // remember: format is defined by date picker
                 publicLinkExpirationDateInMillis =
-                        // remember: format is defined by date picker
                         ExpirationDatePickerDialogFragment.getDateFormat().
-                                parse(expirationDate).getTime()
-                ;
+                                parse(expirationDate).getTime();
             } catch (ParseException e) {
                 Log_OC.e(TAG, "Error reading expiration date from input field", e);
             }
@@ -535,9 +508,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        outState.putString(KEY_EXPIRATION_DATE, getExpirationDateValue(getView()).getText().
-                toString());
+        outState.putString(KEY_EXPIRATION_DATE, mExpirationDateValueLabel.getText().toString());
     }
 
     @Override
@@ -560,13 +531,10 @@ public class PublicShareDialogFragment extends DialogFragment {
     /**
      * Binds listener for user actions related to allow editing.
      *
-     * @param shareView Root view in the fragment.
      */
-    private void initAllowEditingListener(View shareView) {
-        mOnAllowEditingInteractionListener = new OnAllowEditingInteractionListener();
-
-        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkEditPermissionSwitch)).
-                setOnCheckedChangeListener(mOnAllowEditingInteractionListener);
+    private void initAllowEditingListener() {
+        mEditPermissionSwitch.setOnCheckedChangeListener(
+                new OnAllowEditingInteractionListener());
     }
 
     /**
@@ -587,19 +555,11 @@ public class PublicShareDialogFragment extends DialogFragment {
 
             // If allow editing is checked, enable show file listing switch
             if (isChecked) {
-
-                getShowFileListingSwitch(getView()).setEnabled(true);
-
+                mShowFileListingSwitch.setEnabled(true);
             } else {
-
-                // If not, disable show file listing switch
-                getShowFileListingSwitch(getView()).setEnabled(false);
-
-                // If show listing file option has been unchecked and allow editing is unchecked
-                // after that, check show listing file option by default
-                if (!getShowFileListingSwitch(getView()).isChecked()) {
-
-                    getShowFileListingSwitch(getView()).setChecked(true);
+                mShowFileListingSwitch.setEnabled(false);
+                if (!mShowFileListingSwitch.isChecked()) {
+                    mShowFileListingSwitch.setChecked(true);
                 }
             }
         }
@@ -609,13 +569,10 @@ public class PublicShareDialogFragment extends DialogFragment {
      * Binds listener for user actions that start any update on a password for the public link
      * to the views receiving the user events.
      *
-     * @param shareView Root view in the fragment.
      */
-    private void initPasswordListener(View shareView) {
+    private void initPasswordListener() {
         mOnPasswordInteractionListener = new OnPasswordInteractionListener();
-
-        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkPasswordSwitch)).
-                setOnCheckedChangeListener(mOnPasswordInteractionListener);
+        mPasswordSwitch.setOnCheckedChangeListener(mOnPasswordInteractionListener);
     }
 
     /**
@@ -632,27 +589,18 @@ public class PublicShareDialogFragment extends DialogFragment {
          */
         @Override
         public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
-
-            EditText shareViaLinkPasswordValue = (EditText) getView().
-                    findViewById(R.id.shareViaLinkPasswordValue);
-
             if (isChecked) {
-
-                // Show input to set the password
-                shareViaLinkPasswordValue.setVisibility(View.VISIBLE);
-
-                shareViaLinkPasswordValue.requestFocus();
+                mPasswordValueEdit.setVisibility(View.VISIBLE);
+                mPasswordValueEdit.requestFocus();
 
                 // Show keyboard to fill in the password
-                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.
-                        INPUT_METHOD_SERVICE);
-                mgr.showSoftInput(shareViaLinkPasswordValue, InputMethodManager.SHOW_IMPLICIT);
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                mgr.showSoftInput(mPasswordValueEdit, InputMethodManager.SHOW_IMPLICIT);
 
             } else {
-
-                shareViaLinkPasswordValue.setVisibility(View.GONE);
-
-                shareViaLinkPasswordValue.getText().clear();
+                mPasswordValueEdit.setVisibility(View.GONE);
+                mPasswordValueEdit.getText().clear();
             }
         }
     }
@@ -661,19 +609,12 @@ public class PublicShareDialogFragment extends DialogFragment {
      * Binds listener for user actions that start any update on a expiration date
      * for the public link to the views receiving the user events.
      *
-     * @param shareView Root view in the fragment.
      */
-    private void initExpirationListener(View shareView) {
+    private void initExpirationListener() {
         mOnExpirationDateInteractionListener = new OnExpirationDateInteractionListener();
-
-        ((SwitchCompat) shareView.findViewById(R.id.shareViaLinkExpirationSwitch)).
-                setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
-
-        shareView.findViewById(R.id.shareViaLinkExpirationLabel).
-                setOnClickListener(mOnExpirationDateInteractionListener);
-
-        shareView.findViewById(R.id.shareViaLinkExpirationValue).
-                setOnClickListener(mOnExpirationDateInteractionListener);
+        mExpirationDateSwitch.setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
+        mExpirationDateLabel. setOnClickListener(mOnExpirationDateInteractionListener);
+        mExpirationDateValueLabel.setOnClickListener(mOnExpirationDateInteractionListener);
     }
 
     /**
@@ -698,24 +639,18 @@ public class PublicShareDialogFragment extends DialogFragment {
             }
 
             if (isChecked) {
-
                 // Show calendar to set the expiration date
                 ExpirationDatePickerDialogFragment dialog = ExpirationDatePickerDialogFragment.
                         newInstance(
                                 getExpirationDateValueInMillis(),
-                                getImposedExpirationDate()
-                        );
+                                getImposedExpirationDate());
                 dialog.setDatePickerListener(this);
                 dialog.show(
                         getActivity().getSupportFragmentManager(),
-                        ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG
-                );
-
+                        ExpirationDatePickerDialogFragment.DATE_PICKER_DIALOG);
             } else {
-
-                getExpirationDateValue(getView()).setVisibility(View.INVISIBLE);
-
-                getExpirationDateValue(getView()).setText("");
+                mExpirationDateValueLabel.setVisibility(View.INVISIBLE);
+                mExpirationDateValueLabel.setText("");
             }
         }
 
@@ -748,12 +683,8 @@ public class PublicShareDialogFragment extends DialogFragment {
          */
         @Override
         public void onDateSet(String date) {
-
-            TextView expirationDate = getExpirationDateValue(getView());
-
-            expirationDate.setVisibility(View.VISIBLE);
-
-            expirationDate.setText(date);
+            mExpirationDateValueLabel.setVisibility(View.VISIBLE);
+            mExpirationDateValueLabel.setText(date);
         }
 
         @Override
@@ -763,7 +694,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                     findViewById(R.id.shareViaLinkExpirationSwitch));
 
             // If the date has not been set yet, uncheck the toggle
-            if (expirationToggle.isChecked() && getExpirationDateValue(getView()).getText() == "") {
+            if (expirationToggle.isChecked() && mExpirationDateValueLabel.getText() == "") {
                 expirationToggle.setChecked(false);
             }
         }
@@ -797,30 +728,20 @@ public class PublicShareDialogFragment extends DialogFragment {
      *  - set the default value for expiration date if defined (only if creating a new share).
      */
     private void updateInputFormAccordingToServerCapabilities() {
-
-        View rootView = getView();
-
-        OwnCloudVersion serverVersion;
-
-        serverVersion = new OwnCloudVersion(mCapabilities.getVersionString());
+        final OwnCloudVersion serverVersion = new OwnCloudVersion(mCapabilities.getVersionString());
 
         // Server version <= 9.x, multiple public sharing not supported
         if (!serverVersion.isMultiplePublicSharingSupported()) {
-
-            getNameSection(rootView).setVisibility(View.GONE);
-
+            mNameSelectionLayout.setVisibility(View.GONE);
         } else {
-
-            // Show keyboard to fill the public share name
             getDialog().getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE |
                             WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
             );
         }
 
-        // Show allow editing option if corresponding capability is set
         if (mCapabilities.getFilesSharingPublicUpload().isTrue() && isSharedFolder()) {
-            getEditPermissionSection(rootView).setVisibility(View.VISIBLE);
+            mEditPermissionSelectionView.setVisibility(View.VISIBLE);
         }
 
         // Show file listing option if all the following is true:
@@ -833,13 +754,13 @@ public class PublicShareDialogFragment extends DialogFragment {
                 mCapabilities.getFilesSharingPublicSupportsUploadOnly().isTrue() &&
                 mCapabilities.getFilesSharingPublicUpload().isTrue()) {
 
-            getShowFileListingSection(rootView).setVisibility(View.VISIBLE);
+            mShowFileListingSelectionView.setVisibility(View.VISIBLE);
         }
 
         // Show default date enforced by the server, if any
         if (!updating() && mCapabilities.getFilesSharingPublicExpireDateDays() > 0) {
 
-            setExpirationDateSwitchChecked(true, rootView);
+            setExpirationDateSwitchChecked(true);
 
             String formattedDate = SimpleDateFormat.getDateInstance().format(
                     DateUtils.addDaysToDate(
@@ -848,31 +769,26 @@ public class PublicShareDialogFragment extends DialogFragment {
                     )
             );
 
-            getExpirationDateValue(rootView).setVisibility(View.VISIBLE);
+            mExpirationDateValueLabel.setVisibility(View.VISIBLE);
 
-            getExpirationDateValue(rootView).setText(formattedDate);
+            mExpirationDateValueLabel.setText(formattedDate);
         }
 
         // Hide expiration date switch if date is enforced to prevent it is removed
         if (mCapabilities.getFilesSharingPublicExpireDateEnforced().isTrue()) {
-            getExpirationDateLabel(rootView).setText(
-                    R.string.share_via_link_expiration_date_enforced_label
-            );
-            getExpirationDateSwitch(rootView).setVisibility(View.GONE);
-            getExpirationDateExplanation(rootView).setVisibility(View.VISIBLE);
-            getExpirationDateExplanation(rootView).setText(
-                    getString(
-                            R.string.share_via_link_expiration_date_explanation_label,
-                            mCapabilities.getFilesSharingPublicExpireDateDays()
-                    )
-            );
+            mExpirationDateLabel.setText(R.string.share_via_link_expiration_date_enforced_label);
+            mExpirationDateSwitch.setVisibility(View.GONE);
+            mExpirationDateExplenationLabel.setVisibility(View.VISIBLE);
+            mExpirationDateExplenationLabel.setText(
+                    getString(R.string.share_via_link_expiration_date_explanation_label,
+                            mCapabilities.getFilesSharingPublicExpireDateDays()));
         }
 
         // hide password switch if password is enforced to prevent it is removed
         if (mCapabilities.getFilesSharingPublicPasswordEnforced().isTrue()) {
-            getPasswordLabel(rootView).setText(R.string.share_via_link_password_enforced_label);
-            getPasswordSwitch(rootView).setVisibility(View.GONE);
-            getPasswordValue(rootView).setVisibility(View.VISIBLE);
+            mPasswordLabel.setText(R.string.share_via_link_password_enforced_label);
+            mPasswordSwitch.setVisibility(View.GONE);
+            mPasswordValueEdit.setVisibility(View.VISIBLE);
         }
     }
 
@@ -881,18 +797,16 @@ public class PublicShareDialogFragment extends DialogFragment {
      */
     private long getImposedExpirationDate() {
 
-        long imposedExpirationDate = -1;
-
         if (mCapabilities != null && mCapabilities.
                 getFilesSharingPublicExpireDateEnforced().isTrue()) {
 
-            imposedExpirationDate = DateUtils.addDaysToDate(
+            return DateUtils.addDaysToDate(
                     new Date(),
-                    mCapabilities.getFilesSharingPublicExpireDateDays()
-            ).getTime();
+                    mCapabilities.getFilesSharingPublicExpireDateDays())
+                    .getTime();
         }
 
-        return imposedExpirationDate;
+        return -1;
     }
 
     /**
@@ -901,81 +815,19 @@ public class PublicShareDialogFragment extends DialogFragment {
      */
     public void showError(String errorMessage) {
 
-        getErrorMessage().setVisibility(View.VISIBLE);
-        getErrorMessage().setText(errorMessage);
+        mErrorMessageLabel.setVisibility(View.VISIBLE);
+        mErrorMessageLabel.setText(errorMessage);
     }
 
-    private TextView getDialogTitle(View view) {
-        return (TextView) view.findViewById(R.id.publicShareDialogTitle);
+    private void setPasswordSwitchChecked(boolean checked) {
+        mPasswordSwitch.setOnCheckedChangeListener(null);
+        mPasswordSwitch.setChecked(checked);
+        mPasswordSwitch.setOnCheckedChangeListener(mOnPasswordInteractionListener);
     }
 
-    private LinearLayout getNameSection(View view) {
-        return (LinearLayout) view.findViewById(R.id.shareViaLinkNameSection);
-    }
-
-    private EditText getNameValue(View view) {
-        return (EditText) view.findViewById(R.id.shareViaLinkNameValue);
-    }
-
-    private View getEditPermissionSection(View view) {
-        return view.findViewById(R.id.shareViaLinkEditPermissionSection);
-    }
-
-    private View getShowFileListingSection(View view) {
-        return view.findViewById(R.id.shareViaShowFileListingSection);
-    }
-
-    private SwitchCompat getEditPermissionSwitch(View view) {
-        return (SwitchCompat) view.findViewById(R.id.shareViaLinkEditPermissionSwitch);
-    }
-
-    private SwitchCompat getShowFileListingSwitch(View view) {
-        return (SwitchCompat) view.findViewById(R.id.shareViaShowFileListingSwitch);
-    }
-
-    private TextView getPasswordLabel(View view) {
-        return (TextView) view.findViewById(R.id.shareViaLinkPasswordLabel);
-    }
-
-    private SwitchCompat getPasswordSwitch(View view) {
-        return (SwitchCompat) view.findViewById(R.id.shareViaLinkPasswordSwitch);
-    }
-
-    private void setPasswordSwitchChecked(boolean checked, View view) {
-        SwitchCompat theSwitch = getPasswordSwitch(view);
-        theSwitch.setOnCheckedChangeListener(null);
-        theSwitch.setChecked(checked);
-        theSwitch.setOnCheckedChangeListener(mOnPasswordInteractionListener);
-    }
-
-    private EditText getPasswordValue(View view) {
-        return (EditText) view.findViewById(R.id.shareViaLinkPasswordValue);
-    }
-
-    private TextView getExpirationDateLabel(View view) {
-        return (TextView) view.findViewById(R.id.shareViaLinkExpirationLabel);
-    }
-
-    private SwitchCompat getExpirationDateSwitch(View view) {
-        return (SwitchCompat) view.findViewById(R.id.shareViaLinkExpirationSwitch);
-    }
-
-    private void setExpirationDateSwitchChecked(boolean checked, View view) {
-        SwitchCompat theSwitch = getExpirationDateSwitch(view);
-        theSwitch.setOnCheckedChangeListener(null);
-        theSwitch.setChecked(checked);
-        theSwitch.setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
-    }
-
-    private TextView getExpirationDateValue(View view) {
-        return (TextView) view.findViewById(R.id.shareViaLinkExpirationValue);
-    }
-
-    private TextView getExpirationDateExplanation(View view) {
-        return (TextView) view.findViewById(R.id.shareViaLinkExpirationExplanationLabel);
-    }
-
-    private TextView getErrorMessage() {
-        return (TextView) getView().findViewById(R.id.public_link_error_message);
+    private void setExpirationDateSwitchChecked(boolean checked) {
+        mExpirationDateSwitch.setOnCheckedChangeListener(null);
+        mExpirationDateSwitch.setChecked(checked);
+        mExpirationDateSwitch.setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
     }
 }
