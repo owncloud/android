@@ -38,3 +38,6 @@ tests/proguard-project.txt
 .idea
 *.iml
 build
+
+# android sdk captures folder
+captures
