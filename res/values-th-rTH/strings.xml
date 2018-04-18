@@ -40,7 +40,7 @@
   <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูล</string>
   <string name="prefs_log_summary">นี้จะใช้เพื่อบันทึกปัญหาที่เกิดขึ้น</string>
   <string name="prefs_log_title_history">ประวัติย้อนหลังการเข้าใช้งาน</string>
-  <string name="prefs_log_summary_history">สิ่งนี้จะแสดงบันทึกที่ถูกบันทึกไว้</string>
+  <string name="prefs_log_summary_history">สิ่งนี้จะแสดง log ที่ถูกบันทึกไว้</string>
   <string name="prefs_log_delete_history_button">ลบประวัติย้อนหลัง</string>
   <string name="prefs_help">ช่วยเหลือ</string>
   <string name="prefs_recommend">แนะนำให้เพื่อน</string>
@@ -368,7 +368,7 @@
   <string name="prefs_add_account">เพิ่มบัญชี</string>
   <string name="drawer_manage_accounts">บริหารจัดการบัญชี</string>
   <string name="auth_redirect_non_secure_connection_title">เชื่อมต่อที่ปลอดภัยถูกเปลี่ยนเส้นทางผ่านเราเตอร์ที่ไม่ปลอดภัย</string>
-  <string name="actionbar_logger">ไฟล์ Logs</string>
+  <string name="actionbar_logger">ไฟล์ log</string>
   <string name="log_send_history_button">ส่งประวัติการใช้งานย้อนหลัง</string>
   <string name="log_send_no_mail_app">ไม่พบแอพสำหรับส่งข้อมูล log กรุณาติดตั้งแอพสำหรับส่งเมล</string>
   <string name="log_send_mail_subject">%1$s ข้อมูล log สำหรับแอพแอนดรอยด์</string>
