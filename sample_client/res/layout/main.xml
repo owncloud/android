@@ -64,25 +64,25 @@
         android:text="@string/refresh"
         android:visibility="visible"/>
 
-    <ListView
-        android:id="@+id/list_view"
+    <Button
+        android:id="@+id/button_upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/button_refresh"
-        android:visibility="invisible">
-    </ListView>
+        android:layout_below="@id/button_refresh"
+        android:layout_marginTop="10dp"
+        android:onClick="onClickHandler"
+        android:text="@string/upload"/>
 
-    <!--<Button-->
-    <!--android:id="@+id/button_upload"-->
-    <!--style="@style/ButtonStyle"-->
-    <!--android:layout_above="@+id/frame"-->
+    <!--<ListView-->
+    <!--android:id="@+id/list_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
     <!--android:layout_alignParentLeft="true"-->
-    <!--android:enabled="false"-->
-    <!--android:onClick="onClickHandler"-->
-    <!--android:text="@string/upload"-->
-    <!--android:visibility="invisible"/>-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_below="@+id/button_refresh"-->
+    <!--android:visibility="invisible">-->
+    <!--</ListView>-->
 
     <!--<TextView-->
     <!--android:id="@+id/upload_progress"-->

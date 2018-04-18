@@ -1,5 +1,7 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2018 ownCloud GmbH.
+ *
+ *   @author David González Verdugo
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -33,13 +35,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.common.network.FileRequestEntity;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -51,6 +53,7 @@ import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 
+import org.apache.commons.httpclient.methods.RequestEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,8 +69,11 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Credentials;
 import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends Activity implements OnRemoteOperationListener, OnDatatransferProgressListener {
@@ -93,6 +99,14 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	private static final String USERNAME = "TO COMPLETE";
 
 	private static final String PASSWORD = "TO COMPLETE";
+
+	private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
+	private static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
+	private static final String IF_MATCH_HEADER = "If-Match";
+
+	private OkHttpClient mOkHttpClient;
+
+	private String mCredentials;
 	
     /** Called when the activity is first created. */
     @Override
@@ -112,7 +126,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		);
     	
     	mFilesAdapter = new FilesArrayAdapter(this, R.layout.file_in_list);
-    	((ListView)findViewById(R.id.list_view)).setAdapter(mFilesAdapter);
+//    	((ListView)findViewById(R.id.list_view)).setAdapter(mFilesAdapter);
     	
     	// TODO move to background thread or task
     	AssetManager assets = getAssets();
@@ -134,6 +148,12 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			Toast.makeText(this, R.string.error_copying_sample_file, Toast.LENGTH_SHORT).show();
 			Log.e(LOG_TAG, getString(R.string.error_copying_sample_file), e);
 		}
+
+		((TextView) findViewById(R.id.server_address)).setText(URL);
+
+		mOkHttpClient = new OkHttpClient();
+
+		mCredentials = Credentials.basic(USERNAME, PASSWORD);
 		
 //		mFrame = findViewById(R.id.frame);
     }
@@ -157,9 +177,9 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	    	case R.id.button_refresh:
 	    		startRefresh();
 	    		break;
-//	    	case R.id.button_upload:
-//	    		startUpload();
-//	    		break;
+	    	case R.id.button_upload:
+	    		startUpload();
+	    		break;
 //	    	case R.id.button_delete_remote:
 //	    		startRemoteDeletion();
 //	    		break;
@@ -176,30 +196,20 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
     private void startCheck() {
 
-    	String serverAddress = ((TextView) findViewById(R.id.server_address)).getText().toString();
-
-		if (!validServerAddress(serverAddress)) return;
-
-		OkHttpClient client = new OkHttpClient();
+		if (!validServerAddress()) return;
 
 		Request request = new Request.Builder()
-				.url(serverAddress + "/status.php")
+				.url(URL + "/status.php")
 				.get()
 				.build();
 
-		client.newCall(request).enqueue(new Callback() {
+		mOkHttpClient.newCall(request).enqueue(new Callback() {
 
 			@Override public void onResponse(Call call, final Response response) throws IOException {
 
 				if (!response.isSuccessful()) {
 
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-
-							showToastMessage("Response not successful with code " + response.code());
-						}
-					});
+					showUnsuccessfulMessage(response.code());
 
 					throw new IOException("Unexpected code " + response);
 				}
@@ -212,13 +222,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 					final String serverVersion = Jobject.get("version").toString();
 
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-
-							showToastMessage("Server with version " + serverVersion + " detected");
-						}
-					});
+					showSuccessfulMessage("Server with version " + serverVersion + " detected");
 
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -255,33 +259,21 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 //    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
 //    	refreshOperation.execute(mClient, this, mHandler);
 
-		String serverAddress = ((TextView) findViewById(R.id.server_address)).getText().toString();
-
-		if (!validServerAddress(serverAddress)) return;
-
-		OkHttpClient client = new OkHttpClient();
-
-		String credentials = Credentials.basic(USERNAME, PASSWORD);
+		if (!validServerAddress()) return;
 
 		final Request request = new Request.Builder()
 				.url(URL + NEW_WEBDAV_PATH + USERNAME)
-				.addHeader("Authorization", credentials)
+				.addHeader("Authorization", mCredentials)
 				.method("PROPFIND", null)
 				.build();
 
-		client.newCall(request).enqueue(new Callback() {
+		mOkHttpClient.newCall(request).enqueue(new Callback() {
 
 			@Override public void onResponse(Call call, final Response response) throws IOException {
 
 				if (!response.isSuccessful()) {
 
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-
-							showToastMessage("Response not successful with code " + response.code());
-						}
-					});
+					showUnsuccessfulMessage(response.code());
 
 					throw new IOException("Unexpected code " + response);
 
@@ -289,12 +281,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 					final String propFindResult = response.body().string();
 
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							showToastMessage(propFindResult);
-						}
-					});
+					showSuccessfulMessage(propFindResult);
 
 					Headers responseHeaders = response.headers();
 					for (int i = 0, size = responseHeaders.size(); i < size; i++) {
@@ -310,21 +297,67 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	}
     
     private void startUpload() {
+
     	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
     	File fileToUpload = upFolder.listFiles()[0];
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName(); 
     	String mimeType = getString(R.string.sample_file_mimetype);
 
+		MediaType mediaType = MediaType.parse(mimeType);
+
 		// Get the last modification date of the file from the file system
 		Long timeStampLong = fileToUpload.lastModified()/1000;
 		String timeStamp = timeStampLong.toString();
 
-    	UploadRemoteFileOperation uploadOperation = new UploadRemoteFileOperation(fileToUpload.getAbsolutePath(), remotePath, mimeType, timeStamp);
-    	uploadOperation.addDatatransferProgressListener(this);
-    	uploadOperation.execute(mClient, this, mHandler);
+		RequestEntity entity  = new FileRequestEntity(fileToUpload, mimeType);
+
+//		Let's first use OKHttp with the new endpoint without depending on our library operations
+
+//    	UploadRemoteFileOperation uploadOperation = new UploadRemoteFileOperation(fileToUpload.getAbsolutePath(), remotePath, mimeType, timeStamp);
+//    	uploadOperation.addDatatransferProgressListener(this);
+//    	uploadOperation.execute(mClient, this, mHandler);
+
+		if (!validServerAddress()) return;
+
+		RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+				.addFormDataPart("testImage", fileToUpload.getName(), RequestBody.create(mediaType, fileToUpload))
+				.build();
+
+		final Request request = new Request.Builder()
+				.url(URL + NEW_WEBDAV_PATH + USERNAME + remotePath)
+				.addHeader("Authorization", mCredentials)
+				.addHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(fileToUpload.length()))
+				.addHeader(OC_X_OC_MTIME_HEADER, timeStamp)
+				.put(requestBody)
+				.build();
+
+
+		mOkHttpClient.newCall(request).enqueue(new Callback() {
+
+			@Override public void onResponse(Call call, final Response response) throws IOException {
+
+				if (!response.isSuccessful()) {
+
+					showUnsuccessfulMessage(response.code());
+
+					throw new IOException("Unexpected code " + response);
+
+				} else { // Successful response
+
+					final String putResult = response.body().string();
+
+					showSuccessfulMessage(putResult);
+				}
+			}
+
+			@Override public void onFailure(Call call, IOException e) {
+				e.printStackTrace();
+			}
+		});
+
     }
-    
-    private void startRemoteDeletion() {
+
+	private void startRemoteDeletion() {
     	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
     	File fileToUpload = upFolder.listFiles()[0]; 
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
@@ -435,12 +468,35 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         });
 	}
 
-	private boolean validServerAddress(String serverAddress) {
+	private boolean validServerAddress() {
+
+    	String serverAddress = ((TextView) findViewById(R.id.server_address)).getText().toString();
+
 		if (serverAddress.equals("") || (!serverAddress.contains("http://") && !serverAddress.contains("https://"))) {
 			showToastMessage("Introduce a proper server address with http/https");
 			return false;
 		}
 		return true;
+	}
+
+	private void showUnsuccessfulMessage (final int errorCode) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+
+				showToastMessage("Response not successful with code " + String.valueOf(errorCode));
+			}
+		});
+	}
+
+	private void showSuccessfulMessage (final String message) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+
+				showToastMessage(message);
+			}
+		});
 	}
 
 	private void showToastMessage(String message) {
