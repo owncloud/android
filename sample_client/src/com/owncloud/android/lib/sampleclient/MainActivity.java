@@ -41,7 +41,6 @@ import android.widget.Toast;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.network.FileRequestEntity;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -53,7 +52,6 @@ import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 
-import org.apache.commons.httpclient.methods.RequestEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -102,7 +100,12 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 	private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
 	private static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
-	private static final String IF_MATCH_HEADER = "If-Match";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String USER_AGENT_HEADER = "User-Agent";
+    private static final String CONTENT_TYPE_HEADER = "Content-Type";
+
+	private static final String USER_AGENT_VALUE = "Mozilla/5.0 (Android) ownCloud-android/2.7.0";
+	private static final String CONTENT_TYPE_VALUE = "multipart/form-data";
 
 	private OkHttpClient mOkHttpClient;
 
@@ -263,7 +266,8 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 		final Request request = new Request.Builder()
 				.url(URL + NEW_WEBDAV_PATH + USERNAME)
-				.addHeader("Authorization", mCredentials)
+				.addHeader(AUTHORIZATION_HEADER, mCredentials)
+				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
 				.method("PROPFIND", null)
 				.build();
 
@@ -309,8 +313,6 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		Long timeStampLong = fileToUpload.lastModified()/1000;
 		String timeStamp = timeStampLong.toString();
 
-		RequestEntity entity  = new FileRequestEntity(fileToUpload, mimeType);
-
 //		Let's first use OKHttp with the new endpoint without depending on our library operations
 
 //    	UploadRemoteFileOperation uploadOperation = new UploadRemoteFileOperation(fileToUpload.getAbsolutePath(), remotePath, mimeType, timeStamp);
@@ -319,18 +321,21 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 		if (!validServerAddress()) return;
 
-		RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-				.addFormDataPart("testImage", fileToUpload.getName(), RequestBody.create(mediaType, fileToUpload))
+		RequestBody requestBody = new MultipartBody.Builder()
+				.setType(MultipartBody.FORM)
+				.addFormDataPart("data", fileToUpload.getName(), RequestBody.create(mediaType, fileToUpload))
+                .addFormDataPart("name", fileToUpload.getName())
 				.build();
 
 		final Request request = new Request.Builder()
 				.url(URL + NEW_WEBDAV_PATH + USERNAME + remotePath)
-				.addHeader("Authorization", mCredentials)
+				.addHeader(AUTHORIZATION_HEADER, mCredentials)
+				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
+                .addHeader(CONTENT_TYPE_HEADER, CONTENT_TYPE_VALUE)
 				.addHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(fileToUpload.length()))
 				.addHeader(OC_X_OC_MTIME_HEADER, timeStamp)
 				.put(requestBody)
 				.build();
-
 
 		mOkHttpClient.newCall(request).enqueue(new Callback() {
 
@@ -346,7 +351,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 					final String putResult = response.body().string();
 
-					showSuccessfulMessage(putResult);
+					showSuccessfulMessage("Successful upload");
 				}
 			}
 
