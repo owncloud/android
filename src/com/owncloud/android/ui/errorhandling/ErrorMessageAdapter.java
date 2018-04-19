@@ -102,9 +102,12 @@ public class ErrorMessageAdapter {
                                            final Resources resources) {
         Formatter f = new Formatter(resources);
         if(result.isSuccess()) {
-            if(operation instanceof UploadFileOperation) return f.format(R.string.uploader_upload_succeeded_content_single, ((UploadFileOperation) operation).getFileName());
-            if(operation instanceof DownloadFileOperation) return f.format(R.string.downloader_download_succeeded_content);
-            if(operation instanceof RemoveFileOperation) return f.format(R.string.remove_success_msg);
+            if(operation instanceof UploadFileOperation)
+                return f.format(R.string.uploader_upload_succeeded_content_single, ((UploadFileOperation) operation).getFileName());
+            if(operation instanceof DownloadFileOperation)
+                return f.format(R.string.downloader_download_succeeded_content);
+            if(operation instanceof RemoveFileOperation)
+                return f.format(R.string.remove_success_msg);
         }
 
         if(operation instanceof SynchronizeFileOperation &&
@@ -122,38 +125,57 @@ public class ErrorMessageAdapter {
         }
 
         switch (result.getCode()) {
-            case LOCAL_STORAGE_FULL: return f.format(R.string.error__upload__local_file_not_copied, ((UploadFileOperation) operation).getFileName(),R.string.app_name);
-            case LOCAL_STORAGE_NOT_COPIED: return f.format(R.string.error__upload__local_file_not_copied, ((UploadFileOperation) operation).getFileName(),R.string.app_name);
+            case LOCAL_STORAGE_FULL:
+                return f.format(R.string.error__upload__local_file_not_copied,
+                        ((UploadFileOperation) operation).getFileName(),R.string.app_name);
+            case LOCAL_STORAGE_NOT_COPIED:
+                return f.format(R.string.error__upload__local_file_not_copied,
+                        ((UploadFileOperation) operation).getFileName(),R.string.app_name);
             case FORBIDDEN:
-                if(operation instanceof UploadFileOperation) return f.format(R.string.forbidden_permissions, R.string.uploader_upload_forbidden_permissions);
-                if(operation instanceof DownloadFileOperation) return f.forbidden(R.string.downloader_download_forbidden_permissions);
-                if(operation instanceof RemoveFileOperation) return f.forbidden(R.string.forbidden_permissions_delete);
-                if(operation instanceof RenameFileOperation) return f.forbidden(R.string.forbidden_permissions_rename);
-                if(operation instanceof CreateFolderOperation) return f.forbidden(R.string.forbidden_permissions_create);
+                if(operation instanceof UploadFileOperation)
+                    return f.format(R.string.forbidden_permissions, R.string.uploader_upload_forbidden_permissions);
+                if(operation instanceof DownloadFileOperation)
+                    return f.forbidden(R.string.downloader_download_forbidden_permissions);
+                if(operation instanceof RemoveFileOperation)
+                    return f.forbidden(R.string.forbidden_permissions_delete);
+                if(operation instanceof RenameFileOperation)
+                    return f.forbidden(R.string.forbidden_permissions_rename);
+                if(operation instanceof CreateFolderOperation)
+                    return f.forbidden(R.string.forbidden_permissions_create);
                 if(operation instanceof MoveFileOperation) return f.forbidden(R.string.forbidden_permissions_move);
-                if(operation instanceof CopyFileOperation) return f.forbidden(R.string.forbidden_permissions_copy);
-            case INVALID_CHARACTER_DETECT_IN_SERVER: return f.format(R.string.filename_forbidden_charaters_from_server);
+                if(operation instanceof CopyFileOperation)return f.forbidden(R.string.forbidden_permissions_copy);
+            case INVALID_CHARACTER_DETECT_IN_SERVER:
+                return f.format(R.string.filename_forbidden_charaters_from_server);
             case QUOTA_EXCEEDED: return f.format(R.string.failed_upload_quota_exceeded_text);
             case FILE_NOT_FOUND:
-                if(operation instanceof UploadFileOperation) return f.format(R.string.uploads_view_upload_status_failed_folder_error);
-                if(operation instanceof DownloadFileOperation) return f.format(R.string.downloader_download_forbidden_permissions);
+                if(operation instanceof UploadFileOperation)
+                    return f.format(R.string.uploads_view_upload_status_failed_folder_error);
+                if(operation instanceof DownloadFileOperation)
+                    return f.format(R.string.downloader_download_forbidden_permissions);
                 if(operation instanceof RenameFileOperation) return f.format(R.string.rename_server_fail_msg);
                 if(operation instanceof MoveFileOperation) return f.format(R.string.move_file_not_found);
-                if(operation instanceof SynchronizeFolderOperation) return f.format(R.string.sync_current_folder_was_removed,
+                if(operation instanceof SynchronizeFolderOperation)
+                    return f.format(R.string.sync_current_folder_was_removed,
                         new File(((SynchronizeFolderOperation) operation).getFolderPath()).getName());
                 if(operation instanceof CopyFileOperation) return f.format(R.string.copy_file_not_found);
             case INVALID_LOCAL_FILE_NAME: return f.format(R.string.rename_local_fail_msg);
             case INVALID_CHARACTER_IN_NAME: return f.format(R.string.filename_forbidden_characters);
             case SHARE_NOT_FOUND:
-                    if(operation instanceof CreateShareViaLinkOperation) return f.format(R.string.share_link_file_no_exist);
-                    if(operation instanceof RemoveShareOperation) return f.format(R.string.unshare_link_file_no_exist);
+                    if(operation instanceof CreateShareViaLinkOperation)
+                        return f.format(R.string.share_link_file_no_exist);
+                    if(operation instanceof RemoveShareOperation)
+                        return f.format(R.string.unshare_link_file_no_exist);
                     if(operation instanceof UpdateSharePermissionsOperation
-                            || operation instanceof UpdateShareViaLinkOperation) return f.format(R.string.update_link_file_no_exist);
+                            || operation instanceof UpdateShareViaLinkOperation)
+                        return f.format(R.string.update_link_file_no_exist);
             case SHARE_FORBIDDEN:
-                if(operation instanceof CreateShareViaLinkOperation) return f.forbidden(R.string.share_link_forbidden_permissions);
-                if(operation instanceof RemoveShareOperation) return f.forbidden(R.string.unshare_link_forbidden_permissions);
+                if(operation instanceof CreateShareViaLinkOperation)
+                    return f.forbidden(R.string.share_link_forbidden_permissions);
+                if(operation instanceof RemoveShareOperation)
+                    return f.forbidden(R.string.unshare_link_forbidden_permissions);
                 if(operation instanceof UpdateSharePermissionsOperation
-                        || operation instanceof UpdateShareViaLinkOperation) return f.forbidden(R.string.update_link_forbidden_permissions);
+                        || operation instanceof UpdateShareViaLinkOperation)
+                    return f.forbidden(R.string.update_link_forbidden_permissions);
             case INVALID_MOVE_INTO_DESCENDANT:return f.format(R.string.move_file_invalid_into_descendent);
             case INVALID_OVERWRITE:
                 if(operation instanceof MoveFileOperation) return f.format(R.string.move_file_invalid_overwrite);
@@ -174,7 +196,9 @@ public class ErrorMessageAdapter {
      * @return User message corresponding to 'result'.
      */
     @Nullable
-    private static String getCommonMessageForResult(RemoteOperation operation, RemoteOperationResult result, Resources res) {
+    private static String getCommonMessageForResult(RemoteOperation operation,
+                                                    RemoteOperationResult result,
+                                                    Resources res) {
 
         final Formatter f = new Formatter(res);
 
@@ -198,7 +222,8 @@ public class ErrorMessageAdapter {
             case OAUTH2_ERROR_ACCESS_DENIED: return f.format(R.string.auth_oauth_error_access_denied);
             case ACCOUNT_NOT_NEW: return f.format(R.string.auth_account_not_new);
             case ACCOUNT_NOT_THE_SAME: return f.format(R.string.auth_account_not_the_same);
-            case OK_REDIRECT_TO_NON_SECURE_CONNECTION: return f.format(R.string.auth_redirect_non_secure_connection_title);
+            case OK_REDIRECT_TO_NON_SECURE_CONNECTION:
+                return f.format(R.string.auth_redirect_non_secure_connection_title);
             default:
                 if(result.getHttpPhrase() != null
                         && result.getHttpPhrase().length() > 0)
@@ -216,10 +241,14 @@ public class ErrorMessageAdapter {
      * @return User message corresponding to a generic error of 'operation'.
      */
     @Nullable
-    private static String getGenericErrorMessageForOperation(RemoteOperation operation, RemoteOperationResult result, Resources res) {
+    private static String getGenericErrorMessageForOperation(RemoteOperation operation,
+                                                             RemoteOperationResult result,
+                                                             Resources res) {
         final Formatter f = new Formatter(res);
 
-        if (operation instanceof UploadFileOperation) return f.format(R.string.uploader_upload_failed_content_single, ((UploadFileOperation) operation).getFileName());
+        if (operation instanceof UploadFileOperation)
+            return f.format(R.string.uploader_upload_failed_content_single,
+                    ((UploadFileOperation) operation).getFileName());
         if (operation instanceof DownloadFileOperation) return f.format(R.string.downloader_download_failed_content,
                     new File(((DownloadFileOperation) operation).getSavePath()).getName());
         if (operation instanceof RemoveFileOperation) return f.format(R.string.remove_fail_msg);
@@ -234,7 +263,8 @@ public class ErrorMessageAdapter {
             return f.format((R.string.update_link_file_error));
         if (operation instanceof MoveFileOperation) return f.format(R.string.move_file_error);
         if (operation instanceof SynchronizeFolderOperation)
-            return f.format(R.string.sync_folder_failed_content, new File(((SynchronizeFolderOperation) operation).getFolderPath()).getName());
+            return f.format(R.string.sync_folder_failed_content,
+                    new File(((SynchronizeFolderOperation) operation).getFolderPath()).getName());
         if (operation instanceof CopyFileOperation) return f.format(R.string.copy_file_error);
 
         // if everything else failes
