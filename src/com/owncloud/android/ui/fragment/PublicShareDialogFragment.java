@@ -126,7 +126,7 @@ public class PublicShareDialogFragment extends DialogFragment {
     private EditText mPasswordValueEdit;
     private TextView mExpirationDateLabel;
     private SwitchCompat mExpirationDateSwitch;
-    private TextView mExpirationDateExplenationLabel;
+    private TextView mExpirationDateExplanationLabel;
     private TextView mExpirationDateValueLabel;
     private TextView mErrorMessageLabel;
 
@@ -225,7 +225,7 @@ public class PublicShareDialogFragment extends DialogFragment {
         mPasswordValueEdit = view.findViewById(R.id.shareViaLinkPasswordValue);
         mExpirationDateLabel = view.findViewById(R.id.shareViaLinkExpirationLabel);
         mExpirationDateSwitch = view.findViewById(R.id.shareViaLinkExpirationSwitch);
-        mExpirationDateExplenationLabel = view.findViewById(R.id.shareViaLinkExpirationExplanationLabel);
+        mExpirationDateExplanationLabel = view.findViewById(R.id.shareViaLinkExpirationExplanationLabel);
         mErrorMessageLabel = view.findViewById(R.id.public_link_error_message);
         mExpirationDateValueLabel = view.findViewById(R.id.shareViaLinkExpirationValue);
 
@@ -289,8 +289,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                 String publicLinkPassword = mPasswordValueEdit.getText().toString();
                 final long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
                 boolean publicLinkEditPermissions = mEditPermissionSwitch.isChecked();
-                final boolean publicLinkSupportOnlyUpload = !mShowFileListingSwitch.
-                        isChecked();
+                final boolean publicLinkSupportOnlyUpload = !mShowFileListingSwitch.isChecked();
 
                 int publicLinkPermissions = OCShare.DEFAULT_PERMISSION;
 
@@ -533,8 +532,7 @@ public class PublicShareDialogFragment extends DialogFragment {
      *
      */
     private void initAllowEditingListener() {
-        mEditPermissionSwitch.setOnCheckedChangeListener(
-                new OnAllowEditingInteractionListener());
+        mEditPermissionSwitch.setOnCheckedChangeListener(new OnAllowEditingInteractionListener());
     }
 
     /**
@@ -778,8 +776,8 @@ public class PublicShareDialogFragment extends DialogFragment {
         if (mCapabilities.getFilesSharingPublicExpireDateEnforced().isTrue()) {
             mExpirationDateLabel.setText(R.string.share_via_link_expiration_date_enforced_label);
             mExpirationDateSwitch.setVisibility(View.GONE);
-            mExpirationDateExplenationLabel.setVisibility(View.VISIBLE);
-            mExpirationDateExplenationLabel.setText(
+            mExpirationDateExplanationLabel.setVisibility(View.VISIBLE);
+            mExpirationDateExplanationLabel.setText(
                     getString(R.string.share_via_link_expiration_date_explanation_label,
                             mCapabilities.getFilesSharingPublicExpireDateDays()));
         }
