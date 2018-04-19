@@ -57,8 +57,7 @@ import com.owncloud.android.utils.DisplayUtils;
  * {@link MediaPlayer}.
  */
 
-public class MediaControlView extends FrameLayout
-        implements OnClickListener, OnSeekBarChangeListener {
+public class MediaControlView extends FrameLayout implements OnClickListener, OnSeekBarChangeListener {
 
     private MediaPlayerControl  mPlayer;
     private Context             mContext;
