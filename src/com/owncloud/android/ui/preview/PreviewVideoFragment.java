@@ -603,6 +603,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         Log_OC.v(TAG, "onConfigurationChanged " + this);
     }
 

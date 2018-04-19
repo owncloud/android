@@ -113,7 +113,7 @@ import static com.owncloud.android.db.PreferenceManager.getSortOrder;
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
 
-public class FileDisplayActivity extends HookActivity
+public class FileDisplayActivity extends FileActivity
         implements FileFragment.ContainerActivity, OnEnforceableRefreshListener {
 
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
