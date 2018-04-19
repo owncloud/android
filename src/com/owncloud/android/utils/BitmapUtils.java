@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -40,12 +41,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
+
 /**
  * Utility class with methods for decoding Bitmaps.
  */
 public class BitmapUtils {
     
-    
+    private static final String TAG = BitmapUtils.class.toString();
+
     /**
      * Decodes a bitmap from a file containing it minimizing the memory use, known that the bitmap
      * will be drawn in a surface of reqWidth x reqHeight
@@ -114,75 +117,68 @@ public class BitmapUtils {
         
         return inSampleSize;
     }
-    
+
     /**
      * Rotate bitmap according to EXIF orientation. 
      * Cf. http://www.daveperrett.com/articles/2012/07/28/exif-orientation-handling-is-a-ghetto/ 
      * @param bitmap Bitmap to be rotated
-     * @param storagePath Path to source file of bitmap. Needed for EXIF information. 
+     * @param storagePath Path to source file of bitmap. Needed for EXIF information.
      * @return correctly EXIF-rotated bitmap
      */
-    public static Bitmap rotateImage(Bitmap bitmap, String storagePath){
-        Bitmap resultBitmap = bitmap;
-
+    public static Bitmap rotateImage(final Bitmap bitmap, final String storagePath){
         try
         {
             ExifInterface exifInterface = new ExifInterface(storagePath);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+            final int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
 
             Matrix matrix = new Matrix();
-
             // 1: nothing to do
-            
-            // 2
-            if (orientation == ExifInterface.ORIENTATION_FLIP_HORIZONTAL)
-            {
-                matrix.postScale(-1.0f, 1.0f);
+
+            switch(orientation) {
+                case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                    matrix.postScale(-1.0f, 1.0f);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    matrix.postRotate(180);
+                    break;
+                case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                    matrix.postRotate(-90);
+                    matrix.postScale(1.0f, -1.0f);
+                    break;
+                case ExifInterface.ORIENTATION_TRANSPOSE:
+                    matrix.postRotate(-90);
+                    matrix.postScale(1.0f, -1.0f);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.postRotate(90);
+                    break;
+                case ExifInterface.ORIENTATION_TRANSVERSE:
+                    matrix.postRotate(90);
+                    matrix.postScale(1.0f, -1.0f);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    matrix.postRotate(270);
+                    break;
             }
-            // 3
-            else if (orientation == ExifInterface.ORIENTATION_ROTATE_180)
-            {
-                matrix.postRotate(180);
-            }
-            // 4
-            else if (orientation == ExifInterface.ORIENTATION_FLIP_VERTICAL)
-            {
-                matrix.postScale(1.0f, -1.0f);
-            }
-            // 5
-            else if (orientation == ExifInterface.ORIENTATION_TRANSPOSE)
-            {
-                matrix.postRotate(-90);
-                matrix.postScale(1.0f, -1.0f);
-            }
-            // 6
-            else if (orientation == ExifInterface.ORIENTATION_ROTATE_90)
-            {
-                matrix.postRotate(90);
-            }
-            // 7
-            else if (orientation == ExifInterface.ORIENTATION_TRANSVERSE)
-            {
-                matrix.postRotate(90);
-                matrix.postScale(1.0f, -1.0f);
-            }
-            // 8
-            else if (orientation == ExifInterface.ORIENTATION_ROTATE_270)
-            {
-                matrix.postRotate(270);
-            } 
-            
+
             // Rotate the bitmap
-            resultBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            final Bitmap resultBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             if (resultBitmap != bitmap) {
                 bitmap.recycle();
             }
+            return resultBitmap;
         }
         catch (Exception exception)
         {
             Log_OC.e("BitmapUtil", "Could not rotate the image: " + storagePath);
+            return bitmap;
         }
-        return resultBitmap;
+    }
+
+    private static float fixRawHSLValue(final float value, final float upperBound, final float scale) {
+        return   (value > upperBound)   ? upperBound
+                :(value < 0f)           ? 0f
+                                        : value * scale;
     }
 
     /**
@@ -195,70 +191,45 @@ public class BitmapUtils {
      *  adapted from https://svn.codehaus.org/griffon/builders/gfxbuilder/tags/GFXBUILDER_0.2/
      *  gfxbuilder-core/src/main/com/camick/awt/HSLColor.java
      */
-    public static int[] HSLtoRGB(float h, float s, float l, float alpha)
+    public static int[] HSLtoRGB(final float h, final float s, final float l, final float alpha)
     {
-        if (s <0.0f || s > 100.0f)
-        {
-            String message = "Color parameter outside of expected range - Saturation";
-            throw new IllegalArgumentException( message );
+        if (s < 0.0f || s > 100.0f) {
+            Log_OC.w(TAG, "Color parameter outside of expected range - Saturation");
         }
 
-        if (l <0.0f || l > 100.0f)
-        {
-            String message = "Color parameter outside of expected range - Luminance";
-            throw new IllegalArgumentException( message );
+        if (l < 0.0f || l > 100.0f) {
+            Log_OC.w(TAG, "Color parameter outside of expected range - Luminance");
         }
 
-        if (alpha <0.0f || alpha > 1.0f)
-        {
-            String message = "Color parameter outside of expected range - Alpha";
-            throw new IllegalArgumentException( message );
+        if (alpha <0.0f || alpha > 1.0f) {
+            Log_OC.w(TAG, "Color parameter outside of expected range - Alpha");
         }
 
         //  Formula needs all values between 0 - 1.
 
-        h = h % 360.0f;
-        h /= 360f;
-        s /= 100f;
-        l /= 100f;
+        final float hr = (h % 360.0f) / 360f;
+        final float sr = fixRawHSLValue(s, 100f, 100f);
+        final float lr = fixRawHSLValue(s, 100f, 100f);
 
-        float q = 0;
+        final float q = (lr < 0.5)
+                ? lr * (1 + sr)
+                : (lr + sr) - (lr * sr);
+        final float p = 2 * lr - q;
+        final int r = Math.round(Math.max(0, HueToRGB(p, q, hr + (1.0f / 3.0f)) * 256));
+        final int g = Math.round(Math.max(0, HueToRGB(p, q, hr) * 256));
+        final int b = Math.round(Math.max(0, HueToRGB(p, q, hr - (1.0f / 3.0f)) * 256));
 
-        if (l < 0.5)
-            q = l * (1 + s);
-        else
-            q = (l + s) - (s * l);
-
-        float p = 2 * l - q;
-
-        int r = Math.round(Math.max(0, HueToRGB(p, q, h + (1.0f / 3.0f)) * 256));
-        int g = Math.round(Math.max(0, HueToRGB(p, q, h) * 256));
-        int b = Math.round(Math.max(0, HueToRGB(p, q, h - (1.0f / 3.0f)) * 256));
-
-        int[] array = {r, g, b};
-        return array;
+        return new int[]{r, g, b};
     }
 
-    private static float HueToRGB(float p, float q, float h){
-		if (h < 0) h += 1;
+    private static float HueToRGB(final float p, final float q, final float h){
+        final float  hr = (h < 0)    ? h + 1
+                         :(h > 1)    ? h - 1
+                                     : h;
 
-		if (h > 1 ) h -= 1;
-
-		if (6 * h < 1)
-		{
-			return p + ((q - p) * 6 * h);
-		}
-
-		if (2 * h < 1 )
-		{
-			return  q;
-		}
-
-		if (3 * h < 2)
-		{
-			return p + ( (q - p) * 6 * ((2.0f / 3.0f) - h) );
-		}
-
+		if (6 * hr < 1) return p + ((q - p) * 6 * h);
+		if (2 * hr < 1 ) return  q;
+		if (3 * hr < 2) return p + ( (q - p) * 6 * ((2.0f / 3.0f) - h) );
    		return p;
 	}
 
@@ -268,9 +239,9 @@ public class BitmapUtils {
      * @return true/false
      */
     public static boolean isImage(File file) {
-        Uri selectedUri = Uri.fromFile(file);
-        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(selectedUri.toString().toLowerCase());
-        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+        final Uri selectedUri = Uri.fromFile(file);
+        final String fileExtension = MimeTypeMap.getFileExtensionFromUrl(selectedUri.toString().toLowerCase());
+        final String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
 
         return (mimeType != null && mimeType.startsWith("image/"));
     }
@@ -284,17 +255,17 @@ public class BitmapUtils {
      * @throws NoSuchAlgorithmException if the specified algorithm is not available
      */
     public static int[] calculateAvatarBackgroundRGB(String accountName)
-        throws UnsupportedEncodingException, NoSuchAlgorithmException {
+            throws UnsupportedEncodingException, NoSuchAlgorithmException {
         // using adapted algorithm from /core/js/placeholder.js:50
-        String username = AccountUtils.getUsernameOfAccount(accountName);
-        byte[] seed = username.getBytes("UTF-8");
-        MessageDigest md = MessageDigest.getInstance("MD5");
-//      Integer seedMd5Int = Math.abs(new String(Hex.encodeHex(seedMd5)).hashCode());
-        Integer seedMd5Int = String.format(Locale.ROOT, "%032x",
+        final String username = AccountUtils.getUsernameOfAccount(accountName);
+        final byte[] seed = username.getBytes("UTF-8");
+        final MessageDigest md = MessageDigest.getInstance("MD5");
+        // Integer seedMd5Int = Math.abs(new String(Hex.encodeHex(seedMd5)).hashCode());
+        final Integer seedMd5Int = String.format(Locale.ROOT, "%032x",
                 new BigInteger(1, md.digest(seed))).hashCode();
 
-        double maxRange = Integer.MAX_VALUE;
-        float hue = (float) (seedMd5Int / maxRange * 360);
+        final double maxRange = Integer.MAX_VALUE;
+        final float hue = (float) (seedMd5Int / maxRange * 360);
 
         return BitmapUtils.HSLtoRGB(hue, 90.0f, 65.0f, 1.0f);
     }
