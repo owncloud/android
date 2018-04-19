@@ -61,8 +61,7 @@
         android:layout_below="@id/server_address"
         android:layout_marginTop="10dp"
         android:onClick="onClickHandler"
-        android:text="@string/refresh"
-        android:visibility="visible"/>
+        android:text="@string/refresh"/>
 
     <Button
         android:id="@+id/button_upload"
@@ -73,6 +72,24 @@
         android:layout_marginTop="10dp"
         android:onClick="onClickHandler"
         android:text="@string/upload"/>
+
+    <Button
+        android:id="@+id/button_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/button_upload"
+        android:layout_marginTop="10dp"
+        android:onClick="onClickHandler"
+        android:text="@string/download"/>
+
+    <!--<Button-->
+    <!--android:id="@+id/button_delete_remote"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:onClick="onClickHandler"-->
+    <!--android:text="@string/delete_remote_file"/>-->
 
     <!--<ListView-->
     <!--android:id="@+id/list_view"-->

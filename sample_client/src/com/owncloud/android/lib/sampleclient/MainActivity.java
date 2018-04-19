@@ -183,6 +183,9 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	    	case R.id.button_upload:
 	    		startUpload();
 	    		break;
+			case R.id.button_download:
+	    		startDownload();
+	    		break;
 //	    	case R.id.button_delete_remote:
 //	    		startRemoteDeletion();
 //	    		break;
@@ -303,7 +306,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     private void startUpload() {
 
     	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
-    	File fileToUpload = upFolder.listFiles()[0];
+    	final File fileToUpload = upFolder.listFiles()[0];
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName(); 
     	String mimeType = getString(R.string.sample_file_mimetype);
 
@@ -349,9 +352,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 				} else { // Successful response
 
-					final String putResult = response.body().string();
-
-					showSuccessfulMessage("Successful upload");
+					showSuccessfulMessage("Successful upload of " + fileToUpload.getName());
 				}
 			}
 
@@ -359,8 +360,53 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 				e.printStackTrace();
 			}
 		});
-
     }
+
+	private void startDownload() {
+		File downFolder = new File(getCacheDir(), getString(R.string.download_folder_path));
+		downFolder.mkdir();
+		File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
+		final File fileToUpload = upFolder.listFiles()[0];
+		String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
+
+		if (!validServerAddress()) return;
+
+//		Let's first use OKHttp with the new endpoint without depending on our library operations
+
+//		DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remotePath, downFolder.getAbsolutePath());
+//		downloadOperation.addDatatransferProgressListener(this);
+//		downloadOperation.execute(mClient, this, mHandler);
+
+		final Request request = new Request.Builder()
+				.url(URL + NEW_WEBDAV_PATH + USERNAME + remotePath)
+				.addHeader(AUTHORIZATION_HEADER, mCredentials)
+				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
+				.get()
+				.build();
+
+
+		mOkHttpClient.newCall(request).enqueue(new Callback() {
+
+			@Override public void onResponse(Call call, final Response response) throws IOException {
+
+				if (!response.isSuccessful()) {
+
+					showUnsuccessfulMessage(response.code());
+
+					throw new IOException("Unexpected code " + response);
+
+				} else { // Successful response
+
+					showSuccessfulMessage("Successful download of " + fileToUpload.getName() + " although local file " +
+							"won't be created in this stage");
+				}
+			}
+
+			@Override public void onFailure(Call call, IOException e) {
+				e.printStackTrace();
+			}
+		});
+	}
 
 	private void startRemoteDeletion() {
     	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
@@ -368,17 +414,6 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
     	RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
     	removeOperation.execute(mClient, this, mHandler);
-    }
-    
-    private void startDownload() {
-    	File downFolder = new File(getCacheDir(), getString(R.string.download_folder_path));
-    	downFolder.mkdir();
-    	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
-    	File fileToUpload = upFolder.listFiles()[0];
-    	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
-    	DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remotePath, downFolder.getAbsolutePath());
-    	downloadOperation.addDatatransferProgressListener(this);
-    	downloadOperation.execute(mClient, this, mHandler);
     }
     
     @SuppressWarnings("deprecation")
