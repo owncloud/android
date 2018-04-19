@@ -88,7 +88,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 	private static final String NODE_VERSION = "version";
 
-	private static final String URL = "TO COMPLETE";
+	private static final String SERVER_ADDRESS = "TO COMPLETE";
 
 	private static final String WEBDAV_PATH_4_0 = "/remote.php/webdav/";
 
@@ -152,7 +152,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			Log.e(LOG_TAG, getString(R.string.error_copying_sample_file), e);
 		}
 
-		((TextView) findViewById(R.id.server_address)).setText(URL);
+		((TextView) findViewById(R.id.server_address)).setText(SERVER_ADDRESS);
 
 		mOkHttpClient = new OkHttpClient();
 
@@ -186,12 +186,9 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			case R.id.button_download:
 	    		startDownload();
 	    		break;
-//	    	case R.id.button_delete_remote:
-//	    		startRemoteDeletion();
-//	    		break;
-//	    	case R.id.button_download:
-//	    		startDownload();
-//	    		break;
+	    	case R.id.button_delete_remote:
+	    		startRemoteDeletion();
+	    		break;
 //	    	case R.id.button_delete_local:
 //	    		startLocalDeletion();
 //	    		break;
@@ -205,7 +202,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		if (!validServerAddress()) return;
 
 		Request request = new Request.Builder()
-				.url(URL + "/status.php")
+				.url(SERVER_ADDRESS + "/status.php")
 				.get()
 				.build();
 
@@ -215,7 +212,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 				if (!response.isSuccessful()) {
 
-					showUnsuccessfulMessage(response.code());
+					showMessage("Response not successful with code: " + response.code());
 
 					throw new IOException("Unexpected code " + response);
 				}
@@ -228,7 +225,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 					final String serverVersion = Jobject.get("version").toString();
 
-					showSuccessfulMessage("Server with version " + serverVersion + " detected");
+					showMessage("Server with version " + serverVersion + " detected");
 
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -241,19 +238,8 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			}
 
 			@Override public void onFailure(Call call, final IOException e) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-
-						Toast toast = Toast.makeText(getApplicationContext(),
-								"Request failed: " + e.toString(), Toast.LENGTH_LONG);
-
-						toast.setGravity(Gravity.CENTER,0,0);
-
-						toast.show();
-					}
-				});
 				e.printStackTrace();
+				showMessage("Something was wrong: " + e.toString());
 			}
 		});
 	}
@@ -268,7 +254,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		if (!validServerAddress()) return;
 
 		final Request request = new Request.Builder()
-				.url(URL + NEW_WEBDAV_PATH + USERNAME)
+				.url(SERVER_ADDRESS + NEW_WEBDAV_PATH + USERNAME)
 				.addHeader(AUTHORIZATION_HEADER, mCredentials)
 				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
 				.method("PROPFIND", null)
@@ -280,7 +266,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 				if (!response.isSuccessful()) {
 
-					showUnsuccessfulMessage(response.code());
+					showMessage("Response not successful with code: " + response.code());
 
 					throw new IOException("Unexpected code " + response);
 
@@ -288,7 +274,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 					final String propFindResult = response.body().string();
 
-					showSuccessfulMessage(propFindResult);
+					showMessage(propFindResult);
 
 					Headers responseHeaders = response.headers();
 					for (int i = 0, size = responseHeaders.size(); i < size; i++) {
@@ -298,6 +284,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			}
 
 			@Override public void onFailure(Call call, IOException e) {
+				showMessage("Something was wrong: " + e.toString());
 				e.printStackTrace();
 			}
 		});
@@ -331,7 +318,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 				.build();
 
 		final Request request = new Request.Builder()
-				.url(URL + NEW_WEBDAV_PATH + USERNAME + remotePath)
+				.url(SERVER_ADDRESS + NEW_WEBDAV_PATH + USERNAME + remotePath)
 				.addHeader(AUTHORIZATION_HEADER, mCredentials)
 				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
                 .addHeader(CONTENT_TYPE_HEADER, CONTENT_TYPE_VALUE)
@@ -346,18 +333,19 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 				if (!response.isSuccessful()) {
 
-					showUnsuccessfulMessage(response.code());
+					showMessage("Response not successful with code: " + response.code());
 
 					throw new IOException("Unexpected code " + response);
 
 				} else { // Successful response
 
-					showSuccessfulMessage("Successful upload of " + fileToUpload.getName());
+					showMessage("Successful upload of " + fileToUpload.getName());
 				}
 			}
 
 			@Override public void onFailure(Call call, IOException e) {
 				e.printStackTrace();
+				showMessage("Something was wrong: " + e.toString());
 			}
 		});
     }
@@ -369,16 +357,16 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		final File fileToUpload = upFolder.listFiles()[0];
 		String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
 
-		if (!validServerAddress()) return;
-
 //		Let's first use OKHttp with the new endpoint without depending on our library operations
 
 //		DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remotePath, downFolder.getAbsolutePath());
 //		downloadOperation.addDatatransferProgressListener(this);
 //		downloadOperation.execute(mClient, this, mHandler);
 
+		if (!validServerAddress()) return;
+
 		final Request request = new Request.Builder()
-				.url(URL + NEW_WEBDAV_PATH + USERNAME + remotePath)
+				.url(SERVER_ADDRESS + NEW_WEBDAV_PATH + USERNAME + remotePath)
 				.addHeader(AUTHORIZATION_HEADER, mCredentials)
 				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
 				.get()
@@ -391,29 +379,63 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 				if (!response.isSuccessful()) {
 
-					showUnsuccessfulMessage(response.code());
+					showMessage("Response not successful with code: " + response.code());
 
 					throw new IOException("Unexpected code " + response);
 
 				} else { // Successful response
 
-					showSuccessfulMessage("Successful download of " + fileToUpload.getName() + " although local file " +
+					showMessage("Successful download of " + fileToUpload.getName() + " although local file " +
 							"won't be created in this stage");
 				}
 			}
 
 			@Override public void onFailure(Call call, IOException e) {
 				e.printStackTrace();
+				showMessage("Something was wrong: " + e.toString());
 			}
 		});
 	}
 
 	private void startRemoteDeletion() {
     	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
-    	File fileToUpload = upFolder.listFiles()[0]; 
+    	final File fileToUpload = upFolder.listFiles()[0];
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
-    	RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
-    	removeOperation.execute(mClient, this, mHandler);
+
+//		Let's first use OKHttp with the new endpoint without depending on our library operations
+//    	RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
+//    	removeOperation.execute(mClient, this, mHandler);
+
+		if (!validServerAddress()) return;
+
+		final Request request = new Request.Builder()
+				.url(SERVER_ADDRESS + NEW_WEBDAV_PATH + USERNAME + remotePath)
+				.addHeader(AUTHORIZATION_HEADER, mCredentials)
+				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
+				.delete()
+				.build();
+
+		mOkHttpClient.newCall(request).enqueue(new Callback() {
+
+			@Override public void onResponse(Call call, final Response response) throws IOException {
+
+				if (!response.isSuccessful()) {
+
+					showMessage("Response not successful with code: " + response.code());
+
+					throw new IOException("Unexpected code " + response);
+
+				} else { // Successful response
+
+					showMessage("Successful deletion of " + fileToUpload.getName());
+				}
+			}
+
+			@Override public void onFailure(Call call, IOException e) {
+				e.printStackTrace();
+				showMessage("Something was wrong: " + e.toString());
+			}
+		});
     }
     
     @SuppressWarnings("deprecation")
@@ -519,17 +541,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		return true;
 	}
 
-	private void showUnsuccessfulMessage (final int errorCode) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-
-				showToastMessage("Response not successful with code " + String.valueOf(errorCode));
-			}
-		});
-	}
-
-	private void showSuccessfulMessage (final String message) {
+	private void showMessage(final String message) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
