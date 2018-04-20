@@ -75,7 +75,18 @@ import okhttp3.Response;
 
 public class MainActivity extends Activity implements OnRemoteOperationListener, OnDatatransferProgressListener {
 	
-	private static String LOG_TAG = MainActivity.class.getCanonicalName();  
+	private static String LOG_TAG = MainActivity.class.getCanonicalName();
+
+	private static final String NODE_VERSION = "version";
+	private static final String WEBDAV_PATH_4_0 = "/remote.php/webdav/";
+	private static final String NEW_WEBDAV_PATH = "/remote.php/dav/files/";
+	private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
+	private static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
+	private static final String AUTHORIZATION_HEADER = "Authorization";
+	private static final String USER_AGENT_HEADER = "User-Agent";
+	private static final String CONTENT_TYPE_HEADER = "Content-Type";
+	private static final String USER_AGENT_VALUE = "Mozilla/5.0 (Android) ownCloud-android/2.7.0";
+	private static final String CONTENT_TYPE_VALUE = "multipart/form-data";
 	
 	private Handler mHandler;
 	
@@ -84,21 +95,6 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	private FilesArrayAdapter mFilesAdapter;
 	
 	private View mFrame;
-
-	private static final String NODE_VERSION = "version";
-
-	private static final String WEBDAV_PATH_4_0 = "/remote.php/webdav/";
-
-	private static final String NEW_WEBDAV_PATH = "/remote.php/dav/files/";
-
-	private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
-	private static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String USER_AGENT_HEADER = "User-Agent";
-    private static final String CONTENT_TYPE_HEADER = "Content-Type";
-
-	private static final String USER_AGENT_VALUE = "Mozilla/5.0 (Android) ownCloud-android/2.7.0";
-	private static final String CONTENT_TYPE_VALUE = "multipart/form-data";
 
 	private OkHttpClient mOkHttpClient;
 
