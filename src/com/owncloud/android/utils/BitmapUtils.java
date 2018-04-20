@@ -208,8 +208,8 @@ public class BitmapUtils {
         //  Formula needs all values between 0 - 1.
 
         final float hr = (h % 360.0f) / 360f;
-        final float sr = fixRawHSLValue(s, 100f, 100f);
-        final float lr = fixRawHSLValue(s, 100f, 100f);
+        final float sr = fixRawHSLValue(s, 100f, 1/100f);
+        final float lr = fixRawHSLValue(s, 100f, 1/100f);
 
         final float q = (lr < 0.5)
                 ? lr * (1 + sr)
