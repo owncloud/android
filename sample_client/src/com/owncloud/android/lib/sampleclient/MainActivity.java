@@ -68,7 +68,6 @@ import okhttp3.Callback;
 import okhttp3.Credentials;
 import okhttp3.Headers;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -88,15 +87,9 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 	private static final String NODE_VERSION = "version";
 
-	private static final String SERVER_ADDRESS = "TO COMPLETE";
-
 	private static final String WEBDAV_PATH_4_0 = "/remote.php/webdav/";
 
 	private static final String NEW_WEBDAV_PATH = "/remote.php/dav/files/";
-
-	private static final String USERNAME = "TO COMPLETE";
-
-	private static final String PASSWORD = "TO COMPLETE";
 
 	private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
 	private static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
@@ -152,11 +145,11 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			Log.e(LOG_TAG, getString(R.string.error_copying_sample_file), e);
 		}
 
-		((TextView) findViewById(R.id.server_address)).setText(SERVER_ADDRESS);
+		((TextView) findViewById(R.id.server_address)).setText(getString(R.string.server_base_url));
 
 		mOkHttpClient = new OkHttpClient();
 
-		mCredentials = Credentials.basic(USERNAME, PASSWORD);
+		mCredentials = Credentials.basic(getString(R.string.username), getString(R.string.password));
 		
 //		mFrame = findViewById(R.id.frame);
     }
@@ -202,7 +195,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		if (!validServerAddress()) return;
 
 		Request request = new Request.Builder()
-				.url(SERVER_ADDRESS + "/status.php")
+				.url(getString(R.string.server_base_url) + "/status.php")
 				.get()
 				.build();
 
@@ -254,7 +247,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		if (!validServerAddress()) return;
 
 		final Request request = new Request.Builder()
-				.url(SERVER_ADDRESS + NEW_WEBDAV_PATH + USERNAME)
+				.url(getString(R.string.server_base_url) + NEW_WEBDAV_PATH + getString(R.string.username))
 				.addHeader(AUTHORIZATION_HEADER, mCredentials)
 				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
 				.method("PROPFIND", null)
@@ -311,14 +304,10 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
 		if (!validServerAddress()) return;
 
-		RequestBody requestBody = new MultipartBody.Builder()
-				.setType(MultipartBody.FORM)
-				.addFormDataPart("data", fileToUpload.getName(), RequestBody.create(mediaType, fileToUpload))
-                .addFormDataPart("name", fileToUpload.getName())
-				.build();
+		RequestBody requestBody = RequestBody.create(mediaType, fileToUpload);
 
 		final Request request = new Request.Builder()
-				.url(SERVER_ADDRESS + NEW_WEBDAV_PATH + USERNAME + remotePath)
+				.url(getString(R.string.server_base_url) + NEW_WEBDAV_PATH + getString(R.string.username) + remotePath)
 				.addHeader(AUTHORIZATION_HEADER, mCredentials)
 				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
                 .addHeader(CONTENT_TYPE_HEADER, CONTENT_TYPE_VALUE)
@@ -366,7 +355,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		if (!validServerAddress()) return;
 
 		final Request request = new Request.Builder()
-				.url(SERVER_ADDRESS + NEW_WEBDAV_PATH + USERNAME + remotePath)
+				.url(getString(R.string.server_base_url) + NEW_WEBDAV_PATH + getString(R.string.username) + remotePath)
 				.addHeader(AUTHORIZATION_HEADER, mCredentials)
 				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
 				.get()
@@ -409,7 +398,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		if (!validServerAddress()) return;
 
 		final Request request = new Request.Builder()
-				.url(SERVER_ADDRESS + NEW_WEBDAV_PATH + USERNAME + remotePath)
+				.url(getString(R.string.server_base_url) + NEW_WEBDAV_PATH + getString(R.string.username) + remotePath)
 				.addHeader(AUTHORIZATION_HEADER, mCredentials)
 				.addHeader(USER_AGENT_HEADER, USER_AGENT_VALUE)
 				.delete()
