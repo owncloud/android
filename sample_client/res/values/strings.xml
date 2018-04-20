@@ -26,6 +26,7 @@
 <resources>
     <string name="app_name">ownCloud Sample Client</string>
     <string name="refresh">Refresh</string>
+    <string name="check_server">Check server</string>
     <string name="upload">Upload</string>
     <string name="delete_remote_file">Delete remote file</string>
     <string name="download">Download</string>
@@ -41,7 +42,7 @@
     <string name="upload_folder_path">to_upload</string>
     <string name="download_folder_path">downloaded</string>
     <string name="error_copying_sample_file">Sample file could not be saved in temporal folder; upload will not work</string>
-    <string name="sample_file_name">oc_sample.png</string>    
+    <string name="sample_file_name">oc_sample.png</string>
     <string name="sample_file_mimetype">image/png</string>
     <string name="error_deleting_local_file">Downloaded file could not be deleted</string>   
 </resources>
