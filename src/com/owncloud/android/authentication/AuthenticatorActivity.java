@@ -27,9 +27,12 @@ package com.owncloud.android.authentication;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -42,6 +45,7 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
@@ -1098,9 +1102,26 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     }
 
     private void openUrlInBrowser(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        } catch(ActivityNotFoundException ae) {
+            onNoBrowserInstalled();
+        }
+    }
+
+    private void onNoBrowserInstalled() {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.no_borwser_installed_alert)
+                .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
     }
 
 
