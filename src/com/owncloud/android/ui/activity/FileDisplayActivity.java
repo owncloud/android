@@ -124,6 +124,7 @@ public class FileDisplayActivity extends HookActivity
     private boolean mDualPane;
     private View mLeftFragmentContainer;
     private View mRightFragmentContainer;
+    private MenuItem descendingMenuItem;
 
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
@@ -542,6 +543,9 @@ public class FileDisplayActivity extends HookActivity
 
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_create_dir).setVisible(false);
+
+        descendingMenuItem = menu.findItem(R.id.action_sort_descending);
+        descendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this));
         return true;
     }
 
@@ -919,6 +923,12 @@ public class FileDisplayActivity extends HookActivity
         downloadIntentFilter.addAction(FileDownloader.getDownloadFinishMessage());
         mDownloadBroadcastReceiver = new DownloadBroadcastReceiver();
         mLocalBroadcastManager.registerReceiver(mDownloadBroadcastReceiver, downloadIntentFilter);
+
+        //set descending/ascending sort
+        if(descendingMenuItem != null) {
+            final boolean isAscending = PreferenceManager.getSortAscending(this);
+            descendingMenuItem.setChecked(!isAscending);
+        }
 
         Log_OC.v(TAG, "onResume() end");
 

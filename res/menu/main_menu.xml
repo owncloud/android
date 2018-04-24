@@ -46,7 +46,7 @@
         android:orderInCategory="1"
         android:title="@string/actionbar_descending"
         android:checkable="true"
-        android:checked="true"/>
+        android:checked="false"/>
     <item
         android:id="@+id/action_switch_view"
         android:icon="@drawable/ic_view_module"
