@@ -498,6 +498,8 @@
   <string name="media_service_notification_channel_description">Se musikk spiller</string>
   <string name="file_sync_notification_channel_name">Fil synkronisering</string>
   <string name="file_sync_notification_channel_description">Se resultat av fil synkronisering</string>
+  <string name="button_no_thanks_name">NEI TAKK</string>
+  <string name="button_later_name">SENERE</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d valgt</item>
     <item quantity="other">%d valgte</item>
