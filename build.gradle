@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     compile 'org.apache.jackrabbit:jackrabbit-webdav:2.12.4'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    compile 'com.squareup.okhttp3:okhttp:3.10.0'
 }
 
 android {
