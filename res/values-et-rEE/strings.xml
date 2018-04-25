@@ -12,6 +12,7 @@
   <string name="actionbar_see_details">Üksikasjad</string>
   <string name="actionbar_send_file">Saada</string>
   <string name="actionbar_sort">Sorteeri</string>
+  <string name="actionbar_descending">Kahanevalt</string>
   <string name="actionbar_sort_title">Sorteeri</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->

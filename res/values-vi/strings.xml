@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Chi tiết</string>
   <string name="actionbar_send_file">Gởi</string>
   <string name="actionbar_sort">Sắp xếp</string>
+  <string name="actionbar_descending">Giảm dần</string>
   <string name="actionbar_sort_title">Sắp xếp theo</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Mới nhất - Cũ nhất</string>
-  <string name="actionbar_sort_by_size">Lớn nhất - Nhỏ nhất</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tất cả tệp tin</string>

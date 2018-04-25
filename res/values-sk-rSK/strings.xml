@@ -11,6 +11,7 @@
   <string name="actionbar_see_details">Podrobnosti</string>
   <string name="actionbar_send_file">Odoslať</string>
   <string name="actionbar_sort">Zoradiť</string>
+  <string name="actionbar_descending">Zostupne</string>
   <string name="actionbar_sort_title">Zoradiť podľa</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->

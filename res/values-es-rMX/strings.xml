@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Ordenar</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Mas nuevo - Mas antiguo</string>
-  <string name="actionbar_sort_by_size">Mas grande - Mas pequeño</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>

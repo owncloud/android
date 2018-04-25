@@ -14,8 +14,6 @@
   <string name="actionbar_sort">Сортиране</string>
   <string name="actionbar_sort_title">Сортирай по</string>
   <string name="actionbar_sort_by_name">А - Я</string>
-  <string name="actionbar_sort_by_date">Нови - Стари</string>
-  <string name="actionbar_sort_by_size">Големи - Малки</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Всички файлове</string>

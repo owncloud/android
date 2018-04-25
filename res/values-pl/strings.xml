@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Szczegóły</string>
   <string name="actionbar_send_file">Wyślij</string>
   <string name="actionbar_sort">Sortuj</string>
+  <string name="actionbar_descending">Malejąco</string>
   <string name="actionbar_sort_title">Sortuj według</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Najnowsze - Najstarsze</string>
-  <string name="actionbar_sort_by_size">Największe - Najmniejsze</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Wszystkie pliki</string>

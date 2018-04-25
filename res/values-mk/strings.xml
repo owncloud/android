@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Детали:</string>
   <string name="actionbar_send_file">Прати</string>
   <string name="actionbar_sort">Сортирај</string>
+  <string name="actionbar_descending">Опаѓачки</string>
   <string name="actionbar_sort_title">Сортирај по</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Најнови - Постари</string>
-  <string name="actionbar_sort_by_size">Поголеми - Помали</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Сите датотеки</string>

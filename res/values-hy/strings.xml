@@ -12,8 +12,6 @@
   <string name="actionbar_sort">Դասակարգել</string>
   <string name="actionbar_sort_title">Դասակարգել ըստ</string>
   <string name="actionbar_sort_by_name">Ա-Ֆ</string>
-  <string name="actionbar_sort_by_date">Նորից հին</string>
-  <string name="actionbar_sort_by_size">Մեծից փոքր</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Բոլոր ֆայլերը</string>

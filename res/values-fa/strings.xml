@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">جزییات</string>
   <string name="actionbar_send_file">فرستادن</string>
   <string name="actionbar_sort">چینش</string>
+  <string name="actionbar_descending">نزولی</string>
   <string name="actionbar_sort_title">چینش بر اساس</string>
   <string name="actionbar_sort_by_name">حروف الفبا</string>
-  <string name="actionbar_sort_by_date">جدیدترین - قدیمی ترین</string>
-  <string name="actionbar_sort_by_size">بزرگترین - کوچکترین</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">تمام پرونده‌ها</string>

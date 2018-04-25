@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Részletek</string>
   <string name="actionbar_send_file">Küldés</string>
   <string name="actionbar_sort">Rendezés</string>
+  <string name="actionbar_descending">Csökkenő</string>
   <string name="actionbar_sort_title">Rendezés elve</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Újabb – régebbi</string>
-  <string name="actionbar_sort_by_size">Nagyobb – kisebb</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Összes fájl</string>

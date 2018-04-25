@@ -12,8 +12,6 @@
   <string name="actionbar_see_details">विवरण </string>
   <string name="actionbar_send_file">भेजें</string>
   <string name="actionbar_sort">सॉर्ट करें</string>
-  <string name="actionbar_sort_by_date">नवीनतम - सबसे पुराना</string>
-  <string name="actionbar_sort_by_size">सबसे बड़ा - सबसे  छोटा</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available

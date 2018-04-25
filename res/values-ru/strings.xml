@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Подробно</string>
   <string name="actionbar_send_file">Отправить</string>
   <string name="actionbar_sort">Упорядочить</string>
+  <string name="actionbar_descending">Убывающий </string>
   <string name="actionbar_sort_title">Упорядочить по</string>
   <string name="actionbar_sort_by_name">А-Я</string>
-  <string name="actionbar_sort_by_date">Новые - старые</string>
-  <string name="actionbar_sort_by_size">Большие - маленькие</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Все файлы</string>

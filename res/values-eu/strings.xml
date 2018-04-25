@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Xehetasunak</string>
   <string name="actionbar_send_file">Bidali</string>
   <string name="actionbar_sort">Ordenatu</string>
+  <string name="actionbar_descending">Beherantz</string>
   <string name="actionbar_sort_title">Ordenatu honen arabera</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">Berrienea - Zaharrena</string>
-  <string name="actionbar_sort_by_size">Handiena - Txikiena</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Fitxategi guztiak</string>

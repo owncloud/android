@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">Detaljer</string>
   <string name="actionbar_send_file">Send</string>
   <string name="actionbar_sort">Sortér</string>
+  <string name="actionbar_descending">Oppefra</string>
   <string name="actionbar_sort_title">Sortér efter</string>
   <string name="actionbar_sort_by_name">A-Å</string>
-  <string name="actionbar_sort_by_date">Nyeste - Ældste</string>
-  <string name="actionbar_sort_by_size">Største - Mindste</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle filer</string>

@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">详细信息</string>
   <string name="actionbar_send_file">发送</string>
   <string name="actionbar_sort">排序</string>
+  <string name="actionbar_descending">逆序</string>
   <string name="actionbar_sort_title">排序方式</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">最新 - 最早</string>
-  <string name="actionbar_sort_by_size">最大 - 最小</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">全部文件</string>

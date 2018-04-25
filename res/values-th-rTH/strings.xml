@@ -12,10 +12,9 @@
   <string name="actionbar_see_details">รายละเอียด</string>
   <string name="actionbar_send_file">ส่ง</string>
   <string name="actionbar_sort">จัดเรียง</string>
+  <string name="actionbar_descending">กำลังมากไปน้อย</string>
   <string name="actionbar_sort_title">เรียงตาม</string>
   <string name="actionbar_sort_by_name">A-Z</string>
-  <string name="actionbar_sort_by_date">ใหม่ที่สุด - เก่าที่สุด</string>
-  <string name="actionbar_sort_by_size">ใหญ่ที่สุด - เล็กที่สุด</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>

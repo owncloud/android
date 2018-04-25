@@ -13,8 +13,6 @@
   <string name="actionbar_send_file">Пошаљи</string>
   <string name="actionbar_sort">Разврставање</string>
   <string name="actionbar_sort_title">Разврставање</string>
-  <string name="actionbar_sort_by_date">новији - старији</string>
-  <string name="actionbar_sort_by_size">већи - мањи</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Сви фајлови</string>
