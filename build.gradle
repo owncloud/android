@@ -8,9 +8,10 @@
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 }
 
@@ -34,6 +35,7 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    google()
 }
 
 configurations.all {
@@ -117,10 +119,6 @@ android {
         testInstrumentationRunnerArgument "TEST_PASSWORD_ID", "\"$System.env.OCTEST_WEB_PASSFIELD\""
         testInstrumentationRunnerArgument "TEST_SUBMIT_XPATH", "\"$System.env.OCTEST_WEB_SUBMITXPATH\""
         testInstrumentationRunnerArgument "TEST_LOOKUP", "\"$System.env.OCTEST_SERVER_LOOKUP\""
-
-        jackOptions {
-            enabled false
-        }
     }
 
     // adapt structure from Eclipse to Gradle/Android Studio expectations;
@@ -159,6 +157,7 @@ android {
 
     lintOptions {
         abortOnError false
+        disable 'MissingTranslation'
     }
 
     packagingOptions {
@@ -241,6 +240,8 @@ def setOutputFileName(variant, appName, callerProject) {
     newName += originalName.substring(callerProject.archivesBaseName.length())
 
     logger.info("$variant.name: newName is $newName")
-    variant.outputs[0].outputFile = new File(originalFile.parent, newName)
-}
 
+    variant.outputs.all {
+        outputFileName = new File(".", newName)
+    }
+}
