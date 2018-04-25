@@ -13,10 +13,11 @@
     <string name="actionbar_see_details">Details</string>
     <string name="actionbar_send_file">Send</string>
     <string name="actionbar_sort">Sort</string>
+    <string name="actionbar_descending">Descending</string>
     <string name="actionbar_sort_title">Sort by</string>
     <string name="actionbar_sort_by_name">A-Z</string>
-    <string name="actionbar_sort_by_date">Newest - Oldest</string>
-    <string name="actionbar_sort_by_size">Biggest - Smallest</string>
+    <string name="actionbar_sort_by_date">Oldest - Newest</string>
+    <string name="actionbar_sort_by_size">Smallest - Biggest</string>
     <!-- TODO re-enable when "Accounts" is available in Navigation Drawer -->
     <!--<string name="drawer_item_accounts">Accounts</string>-->
     <string name="drawer_item_all_files">All files</string>
