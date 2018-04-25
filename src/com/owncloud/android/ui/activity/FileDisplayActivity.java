@@ -152,7 +152,6 @@ public class FileDisplayActivity extends HookActivity
 
     private LocalBroadcastManager mLocalBroadcastManager;
 
-    // private IndexedForest<FileDisplayActivity> mPendingCameraUploads = new IndexedForest<>();
 
     FilesUploadHelper mFilesUploadHelper;
 
@@ -160,9 +159,7 @@ public class FileDisplayActivity extends HookActivity
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
 
-        super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account
-        // is valid
-
+        super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account is valid
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
