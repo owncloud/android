@@ -6,13 +6,12 @@ repositories {
 }
 
 dependencies {
-    compile 'commons-httpclient:commons-httpclient:3.1'
-    compile project(':')
+    implementation 'commons-httpclient:commons-httpclient:3.1'
+    implementation project(':')
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
 
     sourceSets {
         main {
