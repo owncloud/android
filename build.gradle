@@ -10,9 +10,11 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-repositories {
-    jcenter()
-    google()
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
 }
 
 dependencies {
