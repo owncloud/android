@@ -42,9 +42,4 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
     }
-    android {
-        lintOptions {
-            abortOnError false
-        }
-    }
 }
