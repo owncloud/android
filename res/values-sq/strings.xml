@@ -5,7 +5,7 @@
   <string name="actionbar_sync">Freskoni llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
   <string name="actionbar_upload_from_apps">Lëndë nga aplikacione të tjera</string>
-  <string name="actionbar_upload_files">Kartelat</string>
+  <string name="actionbar_upload_files">Kartela</string>
   <string name="actionbar_open_with">Hape me</string>
   <string name="actionbar_mkdir">Dosje e re</string>
   <string name="actionbar_settings">Rregullime</string>
@@ -22,7 +22,7 @@
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
-  <string name="drawer_item_settings">Parametra</string>
+  <string name="drawer_item_settings">Rregullime</string>
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>
   <string name="drawer_open">Hape</string>
@@ -99,8 +99,8 @@
   <string name="filedetails_select_file">Prekni mbi një kartelë që të shfaqen të dhëna shtesë.</string>
   <string name="upload_to">Ngarkoje te %1$s</string>
   <string name="upload_files_title">Kartela</string>
-  <string name="filedetails_size">Madhësia:</string>
-  <string name="filedetails_type">Lloji:</string>
+  <string name="filedetails_size">Madhësi:</string>
+  <string name="filedetails_type">Lloj:</string>
   <string name="filedetails_created">Krijuar më:</string>
   <string name="filedetails_modified">Ndryshuar më:</string>
   <string name="filedetails_download">Shkarkoje</string>
@@ -135,7 +135,7 @@
   <string name="uploader_upload_failed_ticker">Ngarkimi dështoi</string>
   <string name="uploader_upload_failed_content_single">Ngarkimi i %1$s s\’u plotësua dot</string>
   <string name="uploader_upload_failed_credentials_error">Ngarkimi dështoi, lypset të bëni hyrjen sërish</string>
-  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certifikata e shërbyesit s\’është e besueshme</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="uploader_upload_text_dialog_title">Jepni një emër për kartelën e re</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Emri i kartelës s\’duhet të jetë i zbrazët</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s\’duhet të jetë më shumë se %d shenja</string>
@@ -180,7 +180,7 @@
   <string name="sync_fail_content_unauthorized">Fjalëkalim i pavlefshëm për %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">U hasën përplasje</string>
   <string name="sync_conflicts_in_favourites_content">%1$d kartela kept-in-sync s\’u njëkohësuan dot</string>
-  <string name="sync_fail_in_favourites_ticker">Kartelat e mbajtura në njëkohësim dështuan</string>
+  <string name="sync_fail_in_favourites_ticker">Kartelat kept-in-sync dështuan</string>
   <string name="sync_fail_in_favourites_content">Lënda e %1$d kartelave s\’u njëkohësua dot (%2$d përplasje)</string>
   <string name="sync_foreign_files_forgotten_ticker">Disa kartela vendore u harruan</string>
   <string name="sync_foreign_files_forgotten_content">%1$d kartela nga dosja %2$s s\’u kopjuan dot</string>
