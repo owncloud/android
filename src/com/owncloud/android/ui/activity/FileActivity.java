@@ -549,7 +549,7 @@ public class FileActivity extends DrawerActivity
      */
     public void showSnackMessage(String message) {
         Snackbar snackbar = Snackbar.make(
-            findViewById(android.R.id.content),
+            findViewById(R.id.coordinator_layout),
             message,
             Snackbar.LENGTH_LONG
         );
