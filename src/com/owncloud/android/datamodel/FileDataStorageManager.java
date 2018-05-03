@@ -126,6 +126,29 @@ public class FileDataStorageManager {
         return file;
     }
 
+
+    /**
+     * This will return a OCFile by its given FileId here refered as the remoteId.
+     * Its the fileId ownCloud Core uses to identify a file even if its name has changed.
+     *
+     * An Explenation about how to use ETags an those FileIds can be found here:
+     * <a href="https://github.com/owncloud/client/wiki/Etags-and-file-ids" />
+     *
+     * @param remoteID
+     * @return
+     */
+    public OCFile getFileByRemoteId(String remoteID) {
+        Cursor c = getFileCursorForValue(ProviderTableMeta.FILE_REMOTE_ID, remoteID);
+        OCFile file = null;
+        if(c != null) {
+            if(c.moveToFirst()) {
+                file = createFileInstance(c);
+            }
+            c.close();
+        }
+        return file;
+    }
+
     public OCFile getFileByLocalPath(String path) {
         Cursor c = getFileCursorForValue(ProviderTableMeta.FILE_STORAGE_PATH, path);
         OCFile file = null;
