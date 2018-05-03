@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -35,6 +36,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public class GetUserProfileOperation extends SyncOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
 
-        UserProfile userProfile = null;
+        UserProfile userProfile;
         RemoteOperationResult result = null;
 
         try {
@@ -89,49 +91,71 @@ public class GetUserProfileOperation extends SyncOperation {
                     userInfo.mEmail
                 );
 
-                /// get avatar (optional for success)
-                int dimension = getAvatarDimension();
-                UserProfile.UserAvatar currentUserAvatar =
-                    getUserProfilesRepository().getAvatar(storedAccount.name);
-                GetRemoteUserAvatarOperation getAvatarOperation = new GetRemoteUserAvatarOperation(
-                    dimension,
-                    (currentUserAvatar == null) ? "" : currentUserAvatar.getEtag()
-                );
-                remoteResult = getAvatarOperation.execute(client);
+                ///get quota
+                GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation();
+
+                remoteResult = getRemoteUserQuotaOperation.execute(client);
+
                 if (remoteResult.isSuccess()) {
-                    GetRemoteUserAvatarOperation.ResultData avatar =
-                        (GetRemoteUserAvatarOperation.ResultData) remoteResult.getData().get(0);
 
-                    //
-                    byte[] avatarData = avatar.getAvatarData();
-                    String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
-                        storedAccount.name,
-                        avatarData,
-                        dimension
+                    GetRemoteUserQuotaOperation.Quota remoteQuota = (GetRemoteUserQuotaOperation.Quota)
+                            remoteResult.getData().get(0);
+
+                    UserProfile.UserQuota userQuota = new UserProfile.UserQuota(
+                            remoteQuota.getFree(),
+                            remoteQuota.getRelative(),
+                            remoteQuota.getTotal(),
+                            remoteQuota.getUsed()
                     );
 
-                    UserProfile.UserAvatar userAvatar = new UserProfile.UserAvatar(
-                        avatarKey, avatar.getMimeType(), avatar.getEtag()
+                    userProfile.setQuota(userQuota);
+
+                    /// get avatar (optional for success)
+                    int dimension = getAvatarDimension();
+                    UserProfile.UserAvatar currentUserAvatar =
+                            getUserProfilesRepository().getAvatar(storedAccount.name);
+
+                    GetRemoteUserAvatarOperation getAvatarOperation = new GetRemoteUserAvatarOperation(
+                            dimension,
+                            (currentUserAvatar == null) ? "" : currentUserAvatar.getEtag()
                     );
-                    userProfile.setAvatar(userAvatar);
+                    remoteResult = getAvatarOperation.execute(client);
 
-                } else if (remoteResult.getCode().equals(
-                    RemoteOperationResult.ResultCode.FILE_NOT_FOUND
-                )) {
-                    Log_OC.i(TAG, "No avatar available, removing cached copy");
-                    getUserProfilesRepository().deleteAvatar(storedAccount.name);
-                    ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
+                    if (remoteResult.isSuccess()) {
+                        GetRemoteUserAvatarOperation.ResultData avatar =
+                                (GetRemoteUserAvatarOperation.ResultData) remoteResult.getData().get(0);
 
-                }   // others are ignored, including 304 (not modified), so the avatar is only stored
+                        //
+                        byte[] avatarData = avatar.getAvatarData();
+                        String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
+                                storedAccount.name,
+                                avatarData,
+                                dimension
+                        );
+
+                        UserProfile.UserAvatar userAvatar = new UserProfile.UserAvatar(
+                                avatarKey, avatar.getMimeType(), avatar.getEtag()
+                        );
+                        userProfile.setAvatar(userAvatar);
+
+                    } else if (remoteResult.getCode().equals(
+                            RemoteOperationResult.ResultCode.FILE_NOT_FOUND
+                    )) {
+                        Log_OC.i(TAG, "No avatar available, removing cached copy");
+                        getUserProfilesRepository().deleteAvatar(storedAccount.name);
+                        ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
+
+                    }   // others are ignored, including 304 (not modified), so the avatar is only stored
                     // if changed in the server :D
 
-                /// store userProfile
-                getUserProfilesRepository().update(userProfile);
+                    /// store userProfile
+                    getUserProfilesRepository().update(userProfile);
 
-                result = new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
-                ArrayList<Object> data = new ArrayList<>();
-                data.add(userProfile);
-                result.setData(data);
+                    result = new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
+                    ArrayList<Object> data = new ArrayList<>();
+                    data.add(userProfile);
+                    result.setData(data);
+                }
 
             } else {
                 result = remoteResult;

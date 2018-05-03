@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author David González Verdugo
  *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -31,13 +32,13 @@ public class UserProfile {
     private String mEmail = "";
 
     private UserAvatar mAvatar;
+    private UserQuota mQuota;
 
     public UserProfile(String accountName, String userId, String displayName, String email) {
         mAccountName = accountName;
         mUserId = userId;
         mDisplayName = displayName;
         mEmail = email;
-
         mAvatar = null;
     }
 
@@ -66,6 +67,15 @@ public class UserProfile {
         mAvatar = avatar;
     }
 
+    @Nullable
+    public UserQuota getQuota() {
+        return mQuota;
+    }
+
+    public void setQuota(UserQuota quota) {
+        this.mQuota = quota;
+    }
+
     public static class UserAvatar {
 
         private String mCacheKey;
@@ -88,6 +98,38 @@ public class UserProfile {
 
         public String getEtag() {
             return mEtag;
+        }
+    }
+
+    public static class UserQuota {
+
+        private long mFree;
+        private double mRelative;
+        private long mTotal;
+
+        public UserQuota(long mFree, double mRelative, long mTotal, long mUsed) {
+            this.mFree = mFree;
+            this.mRelative = mRelative;
+            this.mTotal = mTotal;
+            this.mUsed = mUsed;
+        }
+
+        private long mUsed;
+
+        public long getFree() {
+            return mFree;
+        }
+
+        public double getRelative() {
+            return mRelative;
+        }
+
+        public long getTotal() {
+            return mTotal;
+        }
+
+        public long getUsed() {
+            return mUsed;
         }
     }
 }
