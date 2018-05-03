@@ -305,6 +305,20 @@ Tap it and enter the name of the new folder in the *Folder name* dialog.
 Then, tap the newly created folder and tap *Choose* in the bottom right-hand corner. 
 You'll see that the path has been updated.
 
+Upload Pictures Directly From The Camera
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 2.7.0
+
+.. figure:: images/camera/share-from-camera-owncloud-android-app.jpg
+   :alt: Uploading pictures directly from the camera in the ownCloud Android app, steps 1 - 3.
+
+   Uploading pictures directly from the camera in the ownCloud Android app, steps 1 - 3.
+
+Images can be uploaded directly from the camera.
+To do so, similar to uploading a file or creating a new folder, when viewing all files, click the *"Plus icon"*, then the *"Upload icon"* in the popup list (which is the first icon).
+From there, under *"Upload to ownCloud"*, click *"Picture from camera"*.
+The camera app will then start, and the picture that you take can be directly uploaded to your ownCloud server.
 Passcode Locks & Pins
 ~~~~~~~~~~~~~~~~~~~~~
 
