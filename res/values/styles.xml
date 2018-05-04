@@ -150,7 +150,7 @@
 
     <style name="NavigationView_ItemTextAppearance">
         <item name="android:ellipsize">end</item>
-        <item name="android:listDivider">@color/transparent</item>
+        <item name="android:listDivider">@color/grey</item>
     </style>
 
     <!-- Button Bar hack due to Lollipop bug:

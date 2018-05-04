@@ -410,10 +410,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
         // re-add add-account and manage-accounts
         mNavigationView.getMenu().add(R.id.drawer_menu_accounts, R.id.drawer_menu_account_add,
                 MENU_ORDER_ACCOUNT_FUNCTION,
-                getResources().getString(R.string.prefs_add_account)).setIcon(R.drawable.ic_account_plus);
+                getResources().getString(R.string.prefs_add_account)).setIcon(R.drawable.ic_plus_grey);
         mNavigationView.getMenu().add(R.id.drawer_menu_accounts, R.id.drawer_menu_account_manage,
                 MENU_ORDER_ACCOUNT_FUNCTION,
-                getResources().getString(R.string.drawer_manage_accounts)).setIcon(R.drawable.ic_settings);
+                getResources().getString(R.string.drawer_manage_accounts)).setIcon(R.drawable.ic_group);
 
         // adding sets menu group back to visible, so safety check and setting invisible
         showMenu();
