@@ -53,6 +53,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "com.android.support:customtabs:${supportLibraryVersion}"
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
 
     /// dependencies for local unit tests
