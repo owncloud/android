@@ -6,7 +6,7 @@
  *   @author masensio
  *   @author David González Verdugo
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -45,6 +45,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
         public static final String UPLOADS_TABLE_NAME = "list_of_uploads";
         public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
+        public static final String USER_QUOTAS__TABLE_NAME = "user_quotas";
         public static final String CAMERA_UPLOADS_SYNC_TABLE_NAME = "camera_uploads_sync";
 
         public static final Uri CONTENT_URI = Uri.parse("content://"
@@ -166,12 +167,18 @@ public class ProviderMeta {
         public static final String UPLOADS_DEFAULT_SORT_ORDER =
                 ProviderTableMeta._ID  + " collate nocase desc";
 
-
         // Columns of user_avatars table
         public static final String USER_AVATARS__ACCOUNT_NAME = "account_name";
         public static final String USER_AVATARS__CACHE_KEY = "cache_key";
         public static final String USER_AVATARS__ETAG = "etag";
         public static final String USER_AVATARS__MIME_TYPE = "mime_type";
+
+        // Columns of user_quotas table
+        public static final String USER_QUOTAS__ACCOUNT_NAME = "account_name";
+        public static final String USER_QUOTAS__FREE = "free";
+        public static final String USER_QUOTAS__RELATIVE = "relative";
+        public static final String USER_QUOTAS__TOTAL = "total";
+        public static final String USER_QUOTAS__USED = "used";
 
         // Columns of camera upload table
         public static final String PICTURES_LAST_SYNC_TIMESTAMP = "pictures_last_sync_date";

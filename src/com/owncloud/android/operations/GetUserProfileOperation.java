@@ -66,12 +66,12 @@ public class GetUserProfileOperation extends SyncOperation {
     protected RemoteOperationResult run(OwnCloudClient client) {
 
         UserProfile userProfile;
-        RemoteOperationResult result = null;
 
         try {
             /// get display name
             GetRemoteUserInfoOperation getDisplayName = new GetRemoteUserInfoOperation();
             RemoteOperationResult remoteResult = getDisplayName.execute(client);
+
             if (remoteResult.isSuccess()) {
                 // store display name with account data
                 AccountManager accountManager = AccountManager.get(MainApp.getAppContext());
@@ -91,7 +91,7 @@ public class GetUserProfileOperation extends SyncOperation {
                     userInfo.mEmail
                 );
 
-                ///get quota
+                /// get quota
                 GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation();
 
                 remoteResult = getRemoteUserQuotaOperation.execute(client);
@@ -125,7 +125,6 @@ public class GetUserProfileOperation extends SyncOperation {
                         GetRemoteUserAvatarOperation.ResultData avatar =
                                 (GetRemoteUserAvatarOperation.ResultData) remoteResult.getData().get(0);
 
-                        //
                         byte[] avatarData = avatar.getAvatarData();
                         String avatarKey = ThumbnailsCacheManager.addAvatarToCache(
                                 storedAccount.name,
@@ -138,9 +137,7 @@ public class GetUserProfileOperation extends SyncOperation {
                         );
                         userProfile.setAvatar(userAvatar);
 
-                    } else if (remoteResult.getCode().equals(
-                            RemoteOperationResult.ResultCode.FILE_NOT_FOUND
-                    )) {
+                    } else if (remoteResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
                         Log_OC.i(TAG, "No avatar available, removing cached copy");
                         getUserProfilesRepository().deleteAvatar(storedAccount.name);
                         ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
@@ -151,21 +148,23 @@ public class GetUserProfileOperation extends SyncOperation {
                     /// store userProfile
                     getUserProfilesRepository().update(userProfile);
 
-                    result = new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
+                    RemoteOperationResult result =  new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
                     ArrayList<Object> data = new ArrayList<>();
                     data.add(userProfile);
                     result.setData(data);
-                }
 
+                    return result;
+
+                } else {
+                    return remoteResult;
+                }
             } else {
-                result = remoteResult;
+                return remoteResult;
             }
         } catch (Exception e) {
             Log_OC.e(TAG, "Exception while getting user profile: ", e);
-            result = new RemoteOperationResult(e);
+            return new RemoteOperationResult(e);
         }
-
-        return result;
     }
 
     /**
@@ -177,7 +176,6 @@ public class GetUserProfileOperation extends SyncOperation {
         Resources r = MainApp.getAppContext().getResources();
         return Math.round(r.getDimension(R.dimen.file_avatar_size));
     }
-
 
     /**
      * Really bad place to have this. Only here to prevent go further with refactoring.
@@ -192,5 +190,4 @@ public class GetUserProfileOperation extends SyncOperation {
     }
 
     private static UserProfilesRepository sUserProfilesRepository;
-
 }

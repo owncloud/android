@@ -13,7 +13,8 @@ import java.io.File;
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -88,7 +89,7 @@ public class UserProfilesRepository {
             try {
                 if (avatarExists(userProfile)) {
                     // not new, UPDATE
-                    int count = mDb.update(
+                    mDb.update(
                         ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
                         avatarValues,
                         ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
@@ -104,6 +105,58 @@ public class UserProfilesRepository {
                         avatarValues
                     );
                     Log_OC.d(TAG, "Avatar inserted");
+                }
+                mDb.setTransactionSuccessful();
+
+            } finally {
+                mDb.endTransaction();
+            }
+        }
+
+        if (userProfile.getQuota() != null) {
+            // map quota properties to columns
+            ContentValues quotaValues = new ContentValues();
+            quotaValues.put(
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME,
+                    userProfile.getAccountName()
+            );
+            quotaValues.put(
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__FREE,
+                    userProfile.getQuota().getFree()
+            );
+            quotaValues.put(
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__RELATIVE,
+                    userProfile.getQuota().getRelative()
+            );
+            quotaValues.put(
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__TOTAL,
+                    userProfile.getQuota().getTotal()
+            );
+            quotaValues.put(
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__USED,
+                    userProfile.getQuota().getUsed()
+            );
+
+            mDb.beginTransaction();
+            try {
+                if (quotaExists(userProfile)) {
+                    // not new, UPDATE
+                    mDb.update(
+                            ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
+                            quotaValues,
+                            ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
+                            new String[]{String.valueOf(userProfile.getAccountName())}
+                    );
+                    Log_OC.d(TAG, "Quota updated");
+
+                } else {
+                    // new, CREATE
+                    mDb.insert(
+                            ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
+                            null,
+                            quotaValues
+                    );
+                    Log_OC.d(TAG, "Quota inserted");
                 }
                 mDb.setTransactionSuccessful();
 
@@ -172,7 +225,7 @@ public class UserProfilesRepository {
     }
 
     private boolean avatarExists(UserProfile userProfile) {
-        boolean exists = false;
+        boolean exists;
         Cursor c = null;
         try {
             c = mDb.query(
@@ -191,4 +244,23 @@ public class UserProfilesRepository {
         return exists;
     }
 
+    private boolean quotaExists(UserProfile userProfile) {
+        boolean exists;
+        Cursor c = null;
+        try {
+            c = mDb.query(
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
+                    null,
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
+                    new String[]{userProfile.getAccountName()},
+                    null, null, null
+            );
+            exists = (c != null && c.moveToFirst());
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return exists;
+    }
 }
