@@ -5,6 +5,10 @@ ownCloud Android App Manual
 
 .. toctree::
    :maxdepth: 2
- 
+
    release_notes
-   android_app
+   about
+   install
+   upgrade
+   functionality
+   security
