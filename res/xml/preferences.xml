@@ -79,7 +79,7 @@
             android:title="@string/prefs_recommend" />
         <Preference
             android:key="feedback"
-            android:title="@string/prefs_feedback" />
+            android:title="@string/drawer_feedback" />
         <Preference
             android:key="logger"
             android:title="@string/actionbar_logger" />

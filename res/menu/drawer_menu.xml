@@ -32,11 +32,24 @@
             android:id="@+id/nav_uploads"
             android:icon="@drawable/ic_uploads"
             android:title="@string/drawer_item_uploads_list"/>
+    </group>
+
+    <group android:id="@+id/drawer_menu_settings_etc">
         <item
-            android:orderInCategory="0"
+            android:orderInCategory="3"
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings"
             android:title="@string/actionbar_settings"/>
+        <item
+            android:orderInCategory="3"
+            android:id="@+id/drawer_menu_feedback"
+            android:icon="@drawable/ic_email_grey"
+            android:title="@string/drawer_feedback"/>
+        <item
+            android:orderInCategory="3"
+            android:id="@+id/drawer_menu_help"
+            android:icon="@drawable/ic_help_circle_grey"
+            android:title="@string/drawer_help"/>
     </group>
 
     <!--
