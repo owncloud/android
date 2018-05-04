@@ -33,6 +33,26 @@ When you download your ownCloud Android App from the Google Play store, it will 
 
 It will either update automatically or give you a notification that an upgrade is available. If you are using an ownCloud Android app from a custom repository, e.g., your employer, then it will update in accordance with their policies.
 
+New Features Wizard
+-------------------
+
+.. versionadded:: 2.7.0
+
+The first time that you use the Android app, you will see the New Features Wizard.
+The wizard, similar to wizards in other applications and operating systems, gives you a quick overview of the new features in the Android App, so that you’re familiar with them as quickly as possible.
+
+The new features covered in the wizard are:
+
+- :ref:`Pattern Lock <pattern_and_fingerprint_lock_label>`
+- :ref:`Fingerprint Lock <pattern_and_fingerprint_lock_label>`
+- :ref:`GIF Support <gif_support_label>`
+- :ref:`Upload picture from camera <upload_pictures_directly_from_the_camera_label>`
+
+.. figure:: images/new-features-wizard/new-features-wizard-step-owncloud-android-app.png
+   :alt: New features wizard in the ownCloud Android app.
+
+   The New Features Wizard in the ownCloud Android app.
+
 Connecting to Your ownCloud Server
 ----------------------------------
 
