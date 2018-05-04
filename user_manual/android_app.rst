@@ -202,6 +202,16 @@ This will display the options available for that link, including *"Allow editing
 After the options have been suitably configured, click *"Save"* to create the link.
 If you do not want to create the public link, click *"Cancel"*.
 
+GIF Support
+~~~~~~~~~~~
+
+If you upload animated GIFs, when viewing them they will be animated and not render as a still image, as in the example GIF below.
+
+.. figure:: images/gif-support-owncloud-android-app.gif
+   :alt: View animated GIFs in the ownCloud Android app.
+
+   View animated GIFs in the ownCloud Android app.
+
 Creating New Content
 ~~~~~~~~~~~~~~~~~~~~
 
