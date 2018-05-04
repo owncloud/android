@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/editShareButton"
-            android:src="@drawable/ic_navigate_next"
+            android:src="@drawable/ic_lead_pencil_grey"
             android:padding="@dimen/standard_half_padding"
             android:layout_gravity="center_vertical"/>
 
