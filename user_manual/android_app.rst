@@ -306,8 +306,10 @@ Application Settings
 
 Use the *"Settings"* screen to control your ownCloud applications settings and functionality. 
 
-.. figure:: images/android-settings-page.jpg
-   :alt: the Settings screen.
+.. figure:: images/android-settings-page.png
+   :alt: The Settings Screen in the ownCloud Android App.
+
+   The Settings Screen in the ownCloud Android App.
 
 Camera Uploads
 ~~~~~~~~~~~~~~
