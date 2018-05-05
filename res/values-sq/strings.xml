@@ -525,4 +525,5 @@
   <string name="welcome_feature_8_text">Luani figurat tuaja të animuara GIF</string>
   <string name="welcome_feature_9_title">Ngarko foto nga kamerë</string>
   <string name="welcome_feature_9_text">Bëni një foto dhe ngarkojeni drejt e te shërbyesi juaj</string>
+  <string name="no_borwser_installed_alert">S’ka shfletues të instaluar. Ju lutemi, instaloni një Shfletues, që të mund të lejohet hyrje e sigurt.</string>
 </resources>
