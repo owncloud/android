@@ -528,4 +528,5 @@
   <string name="welcome_feature_8_text">Deine animierten GIF-Grafiken abspielen</string>
   <string name="welcome_feature_9_title">Bild von der Kamera hochladen</string>
   <string name="welcome_feature_9_text">Foto aufnehmen und direkt auf deinen Owncloud-Server hochladen</string>
+  <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>
