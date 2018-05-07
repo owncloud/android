@@ -3,6 +3,7 @@
  *
  *   @author Andy Scherzinger
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -331,7 +332,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     /**
      * updates the account list in the drawer.
      */
-    public void updateAccountList() {
+    private void updateAccountList() {
         Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
         if (mNavigationView != null && mDrawerLayout != null) {
             if (accounts.length > 0) {
