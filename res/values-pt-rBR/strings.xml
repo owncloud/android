@@ -527,4 +527,5 @@
   <string name="welcome_feature_8_text">Visualize suas imagens GIF animadas</string>
   <string name="welcome_feature_9_title">Enviar imagem da câmera</string>
   <string name="welcome_feature_9_text">Tire uma foto e envie diretamente para o seu servidor</string>
+  <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
 </resources>
