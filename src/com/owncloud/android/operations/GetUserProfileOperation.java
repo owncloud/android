@@ -72,6 +72,8 @@ public class GetUserProfileOperation extends SyncOperation {
             GetRemoteUserInfoOperation getDisplayName = new GetRemoteUserInfoOperation();
             RemoteOperationResult remoteResult = getDisplayName.execute(client);
 
+            UserProfilesRepository userProfilesRepository = UserProfilesRepository.getUserProfilesRepository();
+
             if (remoteResult.isSuccess()) {
                 // store display name with account data
                 AccountManager accountManager = AccountManager.get(MainApp.getAppContext());
@@ -112,8 +114,7 @@ public class GetUserProfileOperation extends SyncOperation {
 
                     /// get avatar (optional for success)
                     int dimension = getAvatarDimension();
-                    UserProfile.UserAvatar currentUserAvatar =
-                            getUserProfilesRepository().getAvatar(storedAccount.name);
+                    UserProfile.UserAvatar currentUserAvatar = userProfilesRepository.getAvatar(storedAccount.name);
 
                     GetRemoteUserAvatarOperation getAvatarOperation = new GetRemoteUserAvatarOperation(
                             dimension,
@@ -139,14 +140,14 @@ public class GetUserProfileOperation extends SyncOperation {
 
                     } else if (remoteResult.getCode().equals(RemoteOperationResult.ResultCode.FILE_NOT_FOUND)) {
                         Log_OC.i(TAG, "No avatar available, removing cached copy");
-                        getUserProfilesRepository().deleteAvatar(storedAccount.name);
+                        userProfilesRepository.deleteAvatar(storedAccount.name);
                         ThumbnailsCacheManager.removeAvatarFromCache(storedAccount.name);
 
                     }   // others are ignored, including 304 (not modified), so the avatar is only stored
                     // if changed in the server :D
 
                     /// store userProfile
-                    getUserProfilesRepository().update(userProfile);
+                    userProfilesRepository.update(userProfile);
 
                     RemoteOperationResult result =  new RemoteOperationResult(RemoteOperationResult.ResultCode.OK);
                     ArrayList<Object> data = new ArrayList<>();
@@ -176,18 +177,4 @@ public class GetUserProfileOperation extends SyncOperation {
         Resources r = MainApp.getAppContext().getResources();
         return Math.round(r.getDimension(R.dimen.file_avatar_size));
     }
-
-    /**
-     * Really bad place to have this. Only here to prevent go further with refactoring.
-     *
-     * @return  Reference to a {@link UserProfilesRepository}.
-     */
-    private static UserProfilesRepository getUserProfilesRepository() {
-        if (sUserProfilesRepository == null) {
-            sUserProfilesRepository = new UserProfilesRepository();
-        }
-        return sUserProfilesRepository;
-    }
-
-    private static UserProfilesRepository sUserProfilesRepository;
 }

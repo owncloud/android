@@ -39,15 +39,18 @@ public class UserProfilesRepository {
 
     private static final String TAG = UserProfilesRepository.class.getName();
 
-    private SQLiteDatabase mDb;
+    private static UserProfilesRepository sUserProfilesSingleton;
 
-    public UserProfilesRepository() {
-        File dbFile = MainApp.getAppContext().getDatabasePath(ProviderMeta.DB_NAME);
-        mDb = SQLiteDatabase.openDatabase(
-            dbFile.getAbsolutePath(),
-            null,
-            SQLiteDatabase.OPEN_READWRITE
-        );
+    private static SQLiteDatabase database;
+
+    private UserProfilesRepository() {
+    }
+
+    public static UserProfilesRepository getUserProfilesRepository() {
+        if (sUserProfilesSingleton == null) {
+            sUserProfilesSingleton = new UserProfilesRepository();
+        }
+        return sUserProfilesSingleton;
     }
 
     /**
@@ -60,6 +63,8 @@ public class UserProfilesRepository {
      * @param userProfile           User profile.
      */
     public void update(UserProfile userProfile) {
+
+        SQLiteDatabase database = getSqLiteDatabase();
 
         if (userProfile == null) {
             throw new IllegalArgumentException("Received userProfile with NULL value");
@@ -85,11 +90,11 @@ public class UserProfilesRepository {
                 userProfile.getAvatar().getMimeType()
             );
 
-            mDb.beginTransaction();
+            database.beginTransaction();
             try {
                 if (avatarExists(userProfile)) {
                     // not new, UPDATE
-                    mDb.update(
+                    database.update(
                         ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
                         avatarValues,
                         ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
@@ -99,17 +104,17 @@ public class UserProfilesRepository {
 
                 } else {
                     // new, CREATE
-                    mDb.insert(
+                    database.insert(
                         ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
                         null,
                         avatarValues
                     );
                     Log_OC.d(TAG, "Avatar inserted");
                 }
-                mDb.setTransactionSuccessful();
+                database.setTransactionSuccessful();
 
             } finally {
-                mDb.endTransaction();
+                database.endTransaction();
             }
         }
 
@@ -137,11 +142,11 @@ public class UserProfilesRepository {
                     userProfile.getQuota().getUsed()
             );
 
-            mDb.beginTransaction();
+            database.beginTransaction();
             try {
                 if (quotaExists(userProfile)) {
                     // not new, UPDATE
-                    mDb.update(
+                    database.update(
                             ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
                             quotaValues,
                             ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
@@ -151,17 +156,17 @@ public class UserProfilesRepository {
 
                 } else {
                     // new, CREATE
-                    mDb.insert(
+                    database.insert(
                             ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
                             null,
                             quotaValues
                     );
                     Log_OC.d(TAG, "Quota inserted");
                 }
-                mDb.setTransactionSuccessful();
+                database.setTransactionSuccessful();
 
             } finally {
-                mDb.endTransaction();
+                database.endTransaction();
             }
         }
     }
@@ -179,8 +184,9 @@ public class UserProfilesRepository {
     public UserProfile.UserAvatar getAvatar(String accountName) {
         UserProfile.UserAvatar avatar = null;
         Cursor c = null;
+
         try {
-             c = mDb.query(
+             c = getSqLiteDatabase().query(
                 ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
                 null,
                 ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
@@ -210,9 +216,46 @@ public class UserProfilesRepository {
         return avatar;
     }
 
+    public UserProfile.UserQuota getQuota(String accountName) {
+        UserProfile.UserQuota userQuota = null;
+        Cursor c = null;
+        try {
+            c = getSqLiteDatabase().query(
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
+                    null,
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
+                    new String[]{accountName},
+                    null, null, null
+            );
+            if (c != null && c.moveToFirst()) {
+                userQuota = new UserProfile.UserQuota(
+                        c.getLong(c.getColumnIndex(
+                                ProviderMeta.ProviderTableMeta.USER_QUOTAS__FREE
+                        )),
+                        c.getDouble(c.getColumnIndex(
+                                ProviderMeta.ProviderTableMeta.USER_QUOTAS__RELATIVE
+                        )),
+                        c.getLong(c.getColumnIndex(
+                                ProviderMeta.ProviderTableMeta.USER_QUOTAS__TOTAL
+                        )),
+                        c.getLong(c.getColumnIndex(
+                                ProviderMeta.ProviderTableMeta.USER_QUOTAS__USED
+                        ))
+                );
+            }
+        } catch (Exception e) {
+            Log_OC.e(TAG, "Exception while querying quota", e);
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return userQuota;
+    }
+
     public void deleteAvatar(String accountName) {
         try {
-            mDb.delete(
+            getSqLiteDatabase().delete(
                 ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
                 ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
                 new String[]{String.valueOf(accountName)}
@@ -228,7 +271,7 @@ public class UserProfilesRepository {
         boolean exists;
         Cursor c = null;
         try {
-            c = mDb.query(
+            c = getSqLiteDatabase().query(
                 ProviderMeta.ProviderTableMeta.USER_AVATARS__TABLE_NAME,
                 null,
                 ProviderMeta.ProviderTableMeta.USER_AVATARS__ACCOUNT_NAME + "=?",
@@ -248,7 +291,7 @@ public class UserProfilesRepository {
         boolean exists;
         Cursor c = null;
         try {
-            c = mDb.query(
+            c = getSqLiteDatabase().query(
                     ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
                     null,
                     ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
@@ -262,5 +305,26 @@ public class UserProfilesRepository {
             }
         }
         return exists;
+    }
+
+    /**
+     * Open and retrieve a SQL Lite database
+     *
+     * @return SQL Lite database
+     */
+    private SQLiteDatabase getSqLiteDatabase() {
+
+        File dbFile = MainApp.getAppContext().getDatabasePath(ProviderMeta.DB_NAME);
+
+        if (database == null) {
+
+            database = SQLiteDatabase.openDatabase(
+                    dbFile.getAbsolutePath(),
+                    null,
+                    SQLiteDatabase.OPEN_READWRITE
+            );
+        }
+
+        return database;
     }
 }
