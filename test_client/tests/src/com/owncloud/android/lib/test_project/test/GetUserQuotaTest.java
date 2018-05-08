@@ -1,6 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2018 ownCloud Inc.
  *   Copyright (C) 2015 Bartosz Przybylski
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -38,6 +38,7 @@ import com.owncloud.android.lib.test_project.TestActivity;
  *
  * @author Bartosz Przybylski
  * @author David A. Velasco
+ * @author David González Verdugo
  */
 public class GetUserQuotaTest extends RemoteTest {
 
@@ -45,6 +46,8 @@ public class GetUserQuotaTest extends RemoteTest {
     private static final String LOG_TAG = GetUserQuotaTest.class.getCanonicalName();
 
     private TestActivity mActivity;
+    private String mFullPath2Root;
+    private String ROOT_PATH = "/";
 
 
     @Override
@@ -52,13 +55,14 @@ public class GetUserQuotaTest extends RemoteTest {
         super.setUp();
         setActivityInitialTouchMode(false);
         mActivity = getActivity();
+        mFullPath2Root = mBaseFolderPath + ROOT_PATH;
     }
 
     /**
      * Test GetUserQuota
      */
     public void testGetUserQuota() {
-        RemoteOperationResult result = mActivity.getQuota();
+        RemoteOperationResult result = mActivity.getQuota(mFullPath2Root);
         assertTrue(result.isSuccess());
         Quota quota = (Quota)((ArrayList<Object>)result.getData()).get(0);
         assertTrue(quota.getFree() >= 0);

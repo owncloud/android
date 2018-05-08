@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -65,6 +65,7 @@ import com.owncloud.android.lib.resources.users.GetRemoteUserAvatarOperation;
  * Activity to test OC framework
  * @author masensio
  * @author David A. Velasco
+ * @author David González Verdugo
  */
 
 public class TestActivity extends Activity {
@@ -338,8 +339,8 @@ public class TestActivity extends Activity {
 		
 	}
 
-    public RemoteOperationResult getQuota() {
-        GetRemoteUserQuotaOperation getUserQuotaOperation = new GetRemoteUserQuotaOperation();
+    public RemoteOperationResult getQuota(String remotePath) {
+        GetRemoteUserQuotaOperation getUserQuotaOperation = new GetRemoteUserQuotaOperation(remotePath);
         return getUserQuotaOperation.execute(mClient);
     }
 
