@@ -50,6 +50,16 @@ public class GetUserProfileOperation extends SyncOperation {
 
     private static final String TAG = GetUserProfileOperation.class.getName();
 
+    private String mRemotePath;
+
+    /**
+     * Constructor
+     *
+     * @param remotePath Remote path of the file.
+     */
+    public GetUserProfileOperation (String remotePath) {
+        mRemotePath = remotePath;
+    }
 
     /**
      * Performs the operation.
@@ -94,7 +104,7 @@ public class GetUserProfileOperation extends SyncOperation {
                 );
 
                 /// get quota
-                GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation();
+                GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation(mRemotePath);
 
                 remoteResult = getRemoteUserQuotaOperation.execute(client);
 
