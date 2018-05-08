@@ -121,7 +121,6 @@ public class FileDisplayActivity extends HookActivity
     private DownloadBroadcastReceiver mDownloadBroadcastReceiver;
     private RemoteOperationResult mLastSslUntrustedServerResult = null;
 
-    private boolean mDualPane;
     private View mLeftFragmentContainer;
     private View mRightFragmentContainer;
     private MenuItem descendingMenuItem;
@@ -193,7 +192,6 @@ public class FileDisplayActivity extends HookActivity
         // setup drawer
         setupDrawer(R.id.nav_all_files);
 
-        mDualPane = getResources().getBoolean(R.bool.large_land_layout);
         mLeftFragmentContainer = findViewById(R.id.left_fragment_container);
         mRightFragmentContainer = findViewById(R.id.right_fragment_container);
 
@@ -452,15 +450,7 @@ public class FileDisplayActivity extends HookActivity
 
 
     private void updateFragmentsVisibility(boolean existsSecondFragment) {
-        if (mDualPane) {
-            if (mLeftFragmentContainer.getVisibility() != View.VISIBLE) {
-                mLeftFragmentContainer.setVisibility(View.VISIBLE);
-            }
-            if (mRightFragmentContainer.getVisibility() != View.VISIBLE) {
-                mRightFragmentContainer.setVisibility(View.VISIBLE);
-            }
-
-        } else if (existsSecondFragment) {
+        if (existsSecondFragment) {
             if (mLeftFragmentContainer.getVisibility() != View.GONE) {
                 mLeftFragmentContainer.setVisibility(View.GONE);
             }
@@ -563,7 +553,7 @@ public class FileDisplayActivity extends HookActivity
                 boolean inRootFolder = currentDir != null && currentDir.getParentId() == 0;
                 boolean fileFragmentVisible = second != null && second.getFile() != null;
 
-                if (!inRootFolder || (fileFragmentVisible && !mDualPane)) {
+                if (!inRootFolder || (fileFragmentVisible)) {
                     onBackPressed();
                 } else if (isDrawerOpen()) {
                     closeDrawer();
@@ -857,7 +847,7 @@ public class FileDisplayActivity extends HookActivity
         } else {
             // all closed
             OCFileListFragment listOfFiles = getListOfFilesFragment();
-            if (mDualPane || getSecondFragment() == null) {
+            if (getSecondFragment() == null) {
                 OCFile currentDir = getCurrentDir();
                 if (currentDir == null || currentDir.getParentId() == FileDataStorageManager.ROOT_PARENT_ID) {
                     finish();
@@ -1352,14 +1342,7 @@ public class FileDisplayActivity extends HookActivity
         if (chosenFile == null) {
             chosenFile = getFile();     // if no file is passed, current file decides
         }
-        if (mDualPane) {
-            // in dual pane mode, keep the focus of title an action bar in the current folder
-            super.updateActionBarTitleAndHomeButton(getCurrentDir());
-
-        } else {
-            super.updateActionBarTitleAndHomeButton(chosenFile);
-        }
-
+        super.updateActionBarTitleAndHomeButton(chosenFile);
     }
 
     @Override
