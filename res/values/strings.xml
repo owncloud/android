@@ -28,6 +28,9 @@
     <string name="drawer_close">Close</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_quota">%1$s of %2$s used</string>
+    <string name="drawer_quota_pending">Pending</string>
+    <string name="drawer_quota_unknown">Unknown</string>
+    <string name="drawer_quota_unlimited">Unlimited</string>
     <string name="prefs_category_general">General</string>
     <string name="prefs_category_more">More</string>
     <string name="prefs_category_security">Security</string>

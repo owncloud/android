@@ -48,6 +48,7 @@ import com.owncloud.android.datamodel.UserProfile;
 import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation.Quota;
 import com.owncloud.android.utils.DisplayUtils;
 
 /**
@@ -434,20 +435,60 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         ProgressBar accountQuotaBar = findViewById(R.id.account_quota_bar);
 
-        // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
-        if (accountQuotaBar != null) {
-            accountQuotaBar.setProgress((int) Math.ceil(userQuota.getRelative()));
-        }
-
         TextView accountQuotaText = findViewById(R.id.account_quota_text);
 
-        if (accountQuotaText != null) {
-            accountQuotaText.setText(
-                    String.format(getString(R.string.drawer_quota),
-                            DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
-                            DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this)
-                    )
-            );
+        if (accountQuotaBar!= null && accountQuotaText != null) {
+
+            if(userQuota.getFree() >= 0) {
+
+                // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
+                accountQuotaBar.setProgress((int) Math.ceil(userQuota.getRelative()));
+
+                accountQuotaText.setText(
+                        String.format(getString(R.string.drawer_quota),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this)
+                        )
+                );
+
+            } else {
+
+                accountQuotaBar.setProgress(0);
+
+                accountQuotaText.setText(
+                        String.format(getString(R.string.drawer_quota),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
+                                getQuotaTotalMsg((int) userQuota.getFree())
+                        )
+                );
+            }
+        }
+    }
+
+    /**
+     * Retrieve free quota message for specific cases
+     * @param freeQuotaCode code to represent the free quota in specific cases, more details in {@link Quota}
+     * @return message to show depending on the specific case of quota storage
+     */
+    private String getQuotaTotalMsg(int freeQuotaCode) {
+
+        switch (freeQuotaCode) {
+
+            case Quota.PENDING_FREE_QUOTA:
+
+                return getString(R.string.drawer_quota_pending);
+
+            case Quota.UNKNOWN_FREE_QUOTA:
+
+                return getString(R.string.drawer_quota_unknown);
+
+            case Quota.UNLIMITED_FREE_QUOTA:
+
+                return getString(R.string.drawer_quota_unlimited);
+
+            default:
+
+                return null;
         }
     }
 

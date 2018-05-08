@@ -228,6 +228,7 @@ public class UserProfilesRepository {
                     null, null, null
             );
             if (c != null && c.moveToFirst()) {
+
                 userQuota = new UserProfile.UserQuota(
                         c.getLong(c.getColumnIndex(
                                 ProviderMeta.ProviderTableMeta.USER_QUOTAS__FREE

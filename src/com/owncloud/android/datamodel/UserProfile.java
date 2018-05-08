@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
  *
  *   @author David A. Velasco
  *   @author David González Verdugo
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -106,15 +106,14 @@ public class UserProfile {
         private long mFree;
         private double mRelative;
         private long mTotal;
-
-        public UserQuota(long mFree, double mRelative, long mTotal, long mUsed) {
-            this.mFree = mFree;
-            this.mRelative = mRelative;
-            this.mTotal = mTotal;
-            this.mUsed = mUsed;
-        }
-
         private long mUsed;
+
+        public UserQuota(long free, double relative, long total, long used) {
+            mFree = free;
+            mRelative = relative;
+            mTotal = total;
+            mUsed = used;
+        }
 
         public long getFree() {
             return mFree;
