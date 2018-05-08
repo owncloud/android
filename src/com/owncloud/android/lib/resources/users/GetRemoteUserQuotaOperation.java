@@ -49,6 +49,16 @@ import java.util.ArrayList;
 public class GetRemoteUserQuotaOperation extends RemoteOperation {
 
     static public class Quota {
+
+        // Not computed yet, e.g. external storage mounted but folder sizes need scanning
+        public static final int PENDING_FREE_QUOTA = -1;
+
+        // Storage not accessible, e.g. external storage with no API to ask for the free space
+        public static final int UNKNOWN_FREE_QUOTA = -2;
+
+        // Quota using all the storage
+        public static final int UNLIMITED_FREE_QUOTA = -3;
+
         long mFree, mUsed, mTotal;
         double mRelative;
 
@@ -149,17 +159,30 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
         // parse data from remote folder
         WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0], client.getWebdavUri().getPath());
 
-        BigDecimal totalQuota = we.quotaAvailableBytes().add(we.quotaUsedBytes());
+        // If there's a special case, available bytes will contain a negative code
+        if (we.quotaAvailableBytes().compareTo(new BigDecimal(0)) == -1) {
 
-        BigDecimal relativeQuota = we.quotaUsedBytes().multiply(new BigDecimal(100)).divide(totalQuota);
+            return new Quota(
+                    we.quotaAvailableBytes().longValue(),
+                    we.quotaUsedBytes().longValue(),
+                    0,
+                    0
+            );
 
-        Quota quota = new Quota(
-                we.quotaAvailableBytes().longValue(),
-                we.quotaUsedBytes().longValue(),
-                totalQuota.longValue(),
-                relativeQuota.doubleValue()
-        );
+        } else {
 
-        return quota;
+            BigDecimal totalQuota = we.quotaAvailableBytes().add(we.quotaUsedBytes());
+
+            BigDecimal relativeQuota = we.quotaUsedBytes()
+                    .multiply(new BigDecimal(100))
+                    .divide(totalQuota);
+
+            return new Quota(
+                    we.quotaAvailableBytes().longValue(),
+                    we.quotaUsedBytes().longValue(),
+                    totalQuota.longValue(),
+                    relativeQuota.doubleValue()
+            );
+        }
     }
 }
