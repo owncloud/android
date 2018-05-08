@@ -205,7 +205,7 @@
                     android:orientation="horizontal">
 
                     <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/saveButton"
+                        android:id="@+id/cancelButton"
                         style="@style/Button.Primary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
                         android:theme="@style/Button.Primary" />
 
                     <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/cancelButton"
+                        android:id="@+id/saveButton"
                         style="@style/Button.Primary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

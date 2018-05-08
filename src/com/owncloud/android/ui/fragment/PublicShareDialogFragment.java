@@ -49,6 +49,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
+import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 import com.owncloud.android.utils.DateUtils;
@@ -239,7 +240,10 @@ public class PublicShareDialogFragment extends DialogFragment {
             mNameValueEdit.setText(mPublicShare.getName());
 
             switch (mPublicShare.getPermissions()) {
-                case (UPDATE_PERMISSION | CREATE_PERMISSION):
+                case (OCShare.CREATE_PERMISSION_FLAG
+                        | OCShare.DELETE_PERMISSION_FLAG
+                        | OCShare.UPDATE_PERMISSION_FLAG
+                        | OCShare.READ_PERMISSION_FLAG):
                     mReadWriteButton.setChecked(true);
                     break;
                 case CREATE_PERMISSION:
@@ -290,10 +294,26 @@ public class PublicShareDialogFragment extends DialogFragment {
         String publicLinkPassword = mPasswordValueEdit.getText().toString();
         final long publicLinkExpirationDateInMillis = getExpirationDateValueInMillis();
 
-        int publicLinkPermissions = OCShare.DEFAULT_PERMISSION;
+        final int publicLinkPermissions;
+        final boolean publicUploadPermission;
 
-        if(publicLinkUploadFilePermissionGranded()) {
-            publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
+        switch (mPermissionRadioGroup.getCheckedRadioButtonId()) {
+            case R.id.shareViaLinkEditPermissionUploadFiles:
+                publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG;
+                publicUploadPermission = true;
+                break;
+            case R.id.shareViaLinkEditPermissionReadAndWrite:
+                publicLinkPermissions = OCShare.CREATE_PERMISSION_FLAG
+                        | OCShare.DELETE_PERMISSION_FLAG
+                        | OCShare.UPDATE_PERMISSION_FLAG
+                        | OCShare.READ_PERMISSION_FLAG;
+                publicUploadPermission = true;
+                break;
+            case R.id.shareViaLinkEditPermissionReadOnly:
+            default:
+                publicLinkPermissions = OCShare.READ_PERMISSION_FLAG;
+                publicUploadPermission = false;
+                break;
         }
 
         if (!updating()) { // Creating a new public share
@@ -302,7 +322,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                             publicLinkName,
                             publicLinkPassword,
                             publicLinkExpirationDateInMillis,
-                            publicLinkEditPermissionGranded(),
+                            publicUploadPermission,
                             publicLinkPermissions);
 
         } else { // Updating an existing public share
@@ -318,7 +338,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                             publicLinkName,
                             publicLinkPassword,
                             publicLinkExpirationDateInMillis,
-                            publicLinkEditPermissionGranded(),
+                            publicUploadPermission,
                             publicLinkPermissions);
         }
     }
@@ -767,13 +787,4 @@ public class PublicShareDialogFragment extends DialogFragment {
         mExpirationDateSwitch.setOnCheckedChangeListener(mOnExpirationDateInteractionListener);
     }
 
-    private boolean publicLinkEditPermissionGranded() {
-        return mPermissionRadioGroup.getCheckedRadioButtonId()
-                == R.id.shareViaLinkEditPermissionReadAndWrite;
-    }
-
-    public boolean publicLinkUploadFilePermissionGranded() {
-        return mPermissionRadioGroup.getCheckedRadioButtonId()
-                == R.id.shareViaLinkEditPermissionUploadFiles;
-    }
 }

@@ -478,8 +478,8 @@
     <string name="share_via_link_expiration_date_label">Expiration</string>
     <string name="share_via_link_password_label">Password</string>
     <string name="share_via_link_password_title">Secured</string>
-    <string name="share_via_link_edit_permission_read_only_label">Read Only</string>
-    <string name="share_via_link_edit_permission_read_and_write_label">Read &amp; Write</string>
+    <string name="share_via_link_edit_permission_read_only_label">Download / View</string>
+    <string name="share_via_link_edit_permission_read_and_write_label">Download / View / Upload</string>
     <string name="share_via_link_edit_permission_upload_only_label">Upload Only (File Drop)</string>
     <string name="share_get_public_link_button">Get link</string>
     <string name="share_with_title">Share with &#8230;</string>
