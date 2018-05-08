@@ -80,7 +80,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         mCancelButton = (Button) findViewById(R.id.cancel_button);
         Intent callingIntent = getIntent();
         Bundle scannedDocumentData = callingIntent.getExtras();
-        final String scannedDocumentPath = (String) scannedDocumentData.get(UploadFilesActivity.SCANNED_DOCUMENT_IMAGE);
+        final String scannedDocumentPath = (String) scannedDocumentData.get(FileDisplayActivity.SCANNED_DOCUMENT_IMAGE);
         if(scannedDocumentPath != null) {
             scannedDocumentFile = new File(scannedDocumentPath);
             mSelectionImageView.setImageURI(Uri.fromFile(scannedDocumentFile));
@@ -114,7 +114,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
                             Log_OC.d(TAG,exception.toString());
                         }
                         mResult.compress(Bitmap.CompressFormat.JPEG,100,outputScannedDocument);
-                        croppedDocumentIntent.putExtra(UploadFilesActivity.CROPPED_SCANNED_DOCUMENT_IMAGE_PATH,scannedDocumentFile.getAbsolutePath());
+                        croppedDocumentIntent.putExtra(FileDisplayActivity.CROPPED_SCANNED_DOCUMENT_IMAGE_PATH,scannedDocumentFile.getAbsolutePath());
                         setResult(RESULT_OK,croppedDocumentIntent);
                         finish();
                     }
@@ -247,7 +247,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
             contour.convertTo(c, CvType.CV_32FC2);
             Imgproc.approxPolyDP(c, approx, Imgproc.arcLength(c, true) * 0.02, true);
 
-            if (approx.total() == 4 && Imgproc.contourArea(contour) > 150) {
+            if (approx.total() >= 4 && Imgproc.contourArea(contour) > 150) {
                 // the contour has 4 points, it's valid
                 largest = approx;
                 break;
@@ -401,6 +401,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v.getId() == R.id.cancel_button){
             setResult(RESULT_CANCELED);
+            finish();
         }
     }
 }

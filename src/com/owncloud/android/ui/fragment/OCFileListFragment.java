@@ -289,7 +289,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
 
-                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().takePicture(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
                         dialog.hide();
                         return false;
                     }
@@ -297,8 +297,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 uploadScannedDocumentLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        UploadFilesActivity.startUploadActivityForResult(getActivity(),((FileActivity) getActivity()).getAccount(),
-                                FileDisplayActivity.REQUEST_CODE__SCAN_DOCUMENT_UPLOAD);
+                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().takePicture(FileDisplayActivity.REQUEST_CODE__SCAN_DOCUMENT_UPLOAD);
                         dialog.hide();
                         return false;
                     }

@@ -66,11 +66,6 @@ public class UploadFilesActivity extends FileActivity implements
             UploadFilesActivity.class.getCanonicalName() + ".EXTRA_CHOSEN_FILES";
 
     public static final String REQUEST_CODE_KEY = "requestCode";
-    public static final String SCANNED_DOCUMENT_IMAGE = "scannedDocumentImage";
-    public static final String CROPPED_SCANNED_DOCUMENT_IMAGE_PATH = "croppedScannedDocumentImagePath";
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int REQUEST_DOCUMENT_SCAN =  REQUEST_IMAGE_CAPTURE + 1;
-    private static final int REQUEST_SCANNED_DOCUMENT_CROP = REQUEST_IMAGE_CAPTURE + 2;
     public static final int RESULT_OK_AND_MOVE = RESULT_FIRST_USER;
 
     private static final String KEY_DIRECTORY_PATH =

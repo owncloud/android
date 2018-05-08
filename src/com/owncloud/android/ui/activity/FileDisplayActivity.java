@@ -137,6 +137,10 @@ public class FileDisplayActivity extends FileActivity
     public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 4;
     public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 5;
     public static final int REQUEST_CODE__SCAN_DOCUMENT_UPLOAD = REQUEST_CODE__LAST_SHARED + 6;
+    public static final int REQUEST_CODE__CROP_SCANNED_IMAGE = REQUEST_CODE__LAST_SHARED + 7;
+
+    public static final String SCANNED_DOCUMENT_IMAGE = "scannedDocumentImage";
+    public static final String CROPPED_SCANNED_DOCUMENT_IMAGE_PATH = "croppedScannedDocumentImagePath";
 
     private static final String TAG = FileDisplayActivity.class.getSimpleName();
 
@@ -700,11 +704,39 @@ public class FileDisplayActivity extends FileActivity
                         }
                     }
                 });
-            } else if(requestCode == RESULT_CANCELED) {
+            } else if(resultCode == RESULT_CANCELED) {
                 mFilesUploadHelper.deleteImageFile();
             }
 
            // requestUploadOfFilesFromFileSystem(data,resultCode);
+        } else if(requestCode == REQUEST_CODE__SCAN_DOCUMENT_UPLOAD){
+            if(resultCode == RESULT_OK){
+                Intent cropScannedImageIntent = new Intent(this,CropActivity.class);
+                cropScannedImageIntent.putExtra(SCANNED_DOCUMENT_IMAGE,mFilesUploadHelper.getCapturedImageFile().getAbsolutePath());
+                startActivityForResult(cropScannedImageIntent,REQUEST_CODE__CROP_SCANNED_IMAGE);
+            } else if(resultCode == RESULT_CANCELED){
+                mFilesUploadHelper.deleteImageFile();
+            }
+        } else if(requestCode == REQUEST_CODE__CROP_SCANNED_IMAGE){
+            if(resultCode == RESULT_OK){
+                String croppedImagePath = (String) data.getExtras().getString(CROPPED_SCANNED_DOCUMENT_IMAGE_PATH);
+                mFilesUploadHelper.deleteImageFile();
+                mFilesUploadHelper.setCapturedPhotoPath(croppedImagePath);
+                mFilesUploadHelper.onActivityResult(new FilesUploadHelper.OnCheckAvailableSpaceListener() {
+                    @Override
+                    public void onCheckAvailableSpaceStart() {
+                    }
+
+                    @Override
+                    public void onCheckAvailableSpaceFinished(boolean hasEnoughSpace, String[] capturedFilePaths) {
+                        if(hasEnoughSpace){
+                            requestUploadOfFilesFromFileSystem(capturedFilePaths,FileUploader.LOCAL_BEHAVIOUR_MOVE);
+                        }
+                    }
+                });
+            } else if(resultCode == RESULT_CANCELED){
+                mFilesUploadHelper.deleteImageFile();
+            }
         } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == RESULT_OK) {
             final Intent fData = data;
             getHandler().postDelayed(
