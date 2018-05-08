@@ -5,6 +5,7 @@
  *   @author masensio
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author Shashvat Kedia
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -297,7 +298,7 @@ public class OCFileListFragment extends ExtendedListFragment {
                 uploadScannedDocumentLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().takePicture(FileDisplayActivity.REQUEST_CODE__SCAN_DOCUMENT_UPLOAD);
+                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().takePicture(FileDisplayActivity.REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT);
                         dialog.hide();
                         return false;
                     }

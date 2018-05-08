@@ -1,3 +1,22 @@
+/**
+ *   ownCloud Android client application
+ *
+ *   @author Shashvat Kedia
+ *   Copyright (C) 2018 ownCloud GmbH.
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License version 2,
+ *   as published by the Free Software Foundation.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package com.owncloud.android.ui.activity;
 
 import android.content.ContentResolver;
@@ -47,14 +66,11 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int MAX_HEIGHT = 500;
     private QuadrilateralSelectionImageView mSelectionImageView;
-    private Button mCropButton;
-    private Button mCancelButton;
     MaterialDialog mResultDialog;
     OpenCVCallback mOpenCVLoaderCallback;
     private Bitmap mBitmap = null;
     private Bitmap mResult = null;
-    private byte[] scannedDocumentInByteArray = null;
-    private File scannedDocumentFile;
+    private File scannedDocumentFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +92,10 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         };
         initOpenCV();
         mSelectionImageView = (QuadrilateralSelectionImageView) findViewById(R.id.polygon_view);
-        mCropButton = (Button) findViewById(R.id.crop_button);
-        mCancelButton = (Button) findViewById(R.id.cancel_button);
-        Intent callingIntent = getIntent();
-        Bundle scannedDocumentData = callingIntent.getExtras();
-        final String scannedDocumentPath = (String) scannedDocumentData.get(FileDisplayActivity.SCANNED_DOCUMENT_IMAGE);
+        Button mCropButton = (Button) findViewById(R.id.crop_button);
+        Button mCancelButton = (Button) findViewById(R.id.cancel_button);
+        final String scannedDocumentPath = (String) getIntent().getExtras().get(FileDisplayActivity.SCANNED_DOCUMENT_IMAGE);
+        byte[] scannedDocumentInByteArray = null;
         if(scannedDocumentPath != null) {
             scannedDocumentFile = new File(scannedDocumentPath);
             mSelectionImageView.setImageURI(Uri.fromFile(scannedDocumentFile));
@@ -98,14 +113,13 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         mCropButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
         mResultDialog = new MaterialDialog.Builder(this)
-                .title("Scan Result")
-                .positiveText("Save")
-                .negativeText("Cancel")
+                .title(getResources().getString(R.string.scan_result))
+                .positiveText(getResources().getString(R.string.share_confirm_public_link_button))
+                .negativeText(getResources().getString(R.string.common_cancel))
                 .customView(R.layout.dialog_document_scan_result, false)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        // TODO Saving
                         Intent croppedDocumentIntent = new Intent();
                         FileOutputStream outputScannedDocument = null;
                         try {

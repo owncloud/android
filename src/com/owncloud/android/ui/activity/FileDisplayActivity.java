@@ -5,6 +5,7 @@
  *  @author David A. Velasco
  *  @author David González Verdugo
  *  @author Christian Schabesberger
+ *  @author Shashvat Kedia
  *  Copyright (C) 2011  Bartek Przybylski
  *  Copyright (C) 2018 ownCloud GmbH.
  *
@@ -136,7 +137,7 @@ public class FileDisplayActivity extends FileActivity
     public static final int REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 3;
     public static final int REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 4;
     public static final int REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 5;
-    public static final int REQUEST_CODE__SCAN_DOCUMENT_UPLOAD = REQUEST_CODE__LAST_SHARED + 6;
+    public static final int REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT = REQUEST_CODE__LAST_SHARED + 6;
     public static final int REQUEST_CODE__CROP_SCANNED_IMAGE = REQUEST_CODE__LAST_SHARED + 7;
 
     public static final String SCANNED_DOCUMENT_IMAGE = "scannedDocumentImage";
@@ -709,7 +710,7 @@ public class FileDisplayActivity extends FileActivity
             }
 
            // requestUploadOfFilesFromFileSystem(data,resultCode);
-        } else if(requestCode == REQUEST_CODE__SCAN_DOCUMENT_UPLOAD){
+        } else if(requestCode == REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT){
             if(resultCode == RESULT_OK){
                 Intent cropScannedImageIntent = new Intent(this,CropActivity.class);
                 cropScannedImageIntent.putExtra(SCANNED_DOCUMENT_IMAGE,mFilesUploadHelper.getCapturedImageFile().getAbsolutePath());
