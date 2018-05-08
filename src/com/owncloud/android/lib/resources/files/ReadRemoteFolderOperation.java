@@ -150,7 +150,6 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             remoteFile = fillOCFile(we);
             mFolderAndFiles.add(remoteFile);
         }
-
     }
 
     /**
