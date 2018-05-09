@@ -531,12 +531,15 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     private void showMenu() {
         if (mNavigationView != null) {
+            final int accountCount = AccountManager.get(this)
+                    .getAccountsByType(MainApp.getAccountType()).length;
+
             if (mIsAccountChooserActive) {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_up);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, false);
-                if(mDrawerCloud != null) mDrawerCloud.setVisibility(View.GONE);
+                if(mDrawerCloud != null && accountCount > 4) mDrawerCloud.setVisibility(View.GONE);
             } else {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_down);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
