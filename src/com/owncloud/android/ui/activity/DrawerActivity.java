@@ -77,6 +77,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private ImageView mAccountChooserToggle;
     private ImageView mAccountMiddleAccountAvatar;
     private ImageView mAccountEndAccountAvatar;
+    private ImageView mDrawerCloud;
 
     private boolean mIsAccountChooserActive;
     private int mCheckedMenuItem = Menu.NONE;
@@ -114,6 +115,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
             mAccountMiddleAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_middle);
             mAccountEndAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_end);
+
+            mDrawerCloud = findViewById(R.id.drawer_cloud);
 
             // on pre lollipop the light theme adds a black tint to icons with white coloring
             // ruining the generic avatars, so tinting for icons is deactivated pre lollipop
@@ -533,11 +536,13 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, false);
+                if(mDrawerCloud != null) mDrawerCloud.setVisibility(View.GONE);
             } else {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_down);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, true);
+                if(mDrawerCloud != null) mDrawerCloud.setVisibility(View.VISIBLE);
             }
         }
     }
