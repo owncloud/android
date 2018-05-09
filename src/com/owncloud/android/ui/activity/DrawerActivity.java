@@ -424,7 +424,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * Updates the quota in the drawer
      */
     private void updateQuota() {
-
         Account account = AccountUtils.getCurrentOwnCloudAccount(this);
 
         if (account == null) return;
