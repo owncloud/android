@@ -34,8 +34,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_margin="@dimen/standard_margin"
-            android:orientation="vertical">
+            android:padding="@dimen/standard_padding"
+            android:orientation="vertical"
+            android:background="@color/white">
 
             <ProgressBar
                 android:id="@+id/account_quota_bar"
