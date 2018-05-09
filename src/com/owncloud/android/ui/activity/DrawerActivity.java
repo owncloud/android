@@ -456,39 +456,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 accountQuotaBar.setProgress(0);
 
                 accountQuotaText.setText(
-                        String.format(getString(R.string.drawer_quota),
-                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
-                                getQuotaTotalMsg((int) userQuota.getFree())
-                        )
+                        String.format(getString(R.string.drawer_unavailable_quota_bytes),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(),this))
                 );
             }
-        }
-    }
-
-    /**
-     * Retrieve free quota message for specific cases
-     * @param freeQuotaCode code to represent the free quota in specific cases, more details in {@link Quota}
-     * @return message to show depending on the specific case of quota storage
-     */
-    private String getQuotaTotalMsg(int freeQuotaCode) {
-
-        switch (freeQuotaCode) {
-
-            case Quota.PENDING_FREE_QUOTA:
-
-                return getString(R.string.drawer_quota_pending);
-
-            case Quota.UNKNOWN_FREE_QUOTA:
-
-                return getString(R.string.drawer_quota_unknown);
-
-            case Quota.UNLIMITED_FREE_QUOTA:
-
-                return getString(R.string.drawer_quota_unlimited);
-
-            default:
-
-                return null;
         }
     }
 
