@@ -61,12 +61,9 @@ public class ImageViewCustom extends ImageView {
     @SuppressLint("NewApi")
 	private boolean checkIfMaximumBitmapExceed(Canvas canvas) {
         Log_OC.v(TAG, "Canvas maximum: " + canvas.getMaximumBitmapWidth() + " - " + canvas.getMaximumBitmapHeight());
-        if (mBitmapWidth > canvas.getMaximumBitmapWidth()
-                || mBitmapHeight > canvas.getMaximumBitmapHeight()) {
-            return true;
-        }
-        
-        return false;
+        return mBitmapWidth > canvas.getMaximumBitmapWidth()
+                || mBitmapHeight > canvas.getMaximumBitmapHeight();
+
     }
     
     @Override

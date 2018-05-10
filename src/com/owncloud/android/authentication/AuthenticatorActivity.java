@@ -449,12 +449,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         
         /// step 2 - set properties of UI elements (text, visibility, enabled...)
-        Button welcomeLink = (Button) findViewById(R.id.welcome_link);
+        Button welcomeLink = findViewById(R.id.welcome_link);
         welcomeLink.setVisibility(isWelcomeLinkVisible ? View.VISIBLE : View.GONE);
         welcomeLink.setText(
                 String.format(getString(R.string.auth_register), getString(R.string.app_name)));
         
-        TextView instructionsView = (TextView) findViewById(R.id.instructions_message);
+        TextView instructionsView = findViewById(R.id.instructions_message);
         if (instructionsMessageText != null) {
             instructionsView.setVisibility(View.VISIBLE);
             instructionsView.setText(instructionsMessageText);
@@ -507,7 +507,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         
         /// step 2 - set properties of UI elements (text, visibility, enabled...)
-        mHostUrlInput = (EditText) findViewById(R.id.hostUrlInput);
+        mHostUrlInput = findViewById(R.id.hostUrlInput);
         // Convert IDN to Unicode
         mHostUrlInput.setText(DisplayUtils.convertIdn(mServerInfo.mBaseUrl, false));
         if (mAction != ACTION_CREATE) {
@@ -526,7 +526,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         }
         showRefreshButton(mServerIsChecked && !mServerIsValid &&
                 mWaitingForOpId > Integer.MAX_VALUE);
-        mServerStatusView = (TextView) findViewById(R.id.server_status_text);
+        mServerStatusView = findViewById(R.id.server_status_text);
         showServerStatus();
         
         /// step 3 - bind some listeners and options
@@ -588,9 +588,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
     private void initAuthorizationPreFragment(Bundle savedInstanceState) {
         
         /// step 0 - get UI elements in layout
-        mUsernameInput = (EditText) findViewById(R.id.account_username);
-        mPasswordInput = (EditText) findViewById(R.id.account_password);
-        mAuthStatusView = (TextView) findViewById(R.id.auth_status_text); 
+        mUsernameInput = findViewById(R.id.account_username);
+        mPasswordInput = findViewById(R.id.account_password);
+        mAuthStatusView = findViewById(R.id.auth_status_text);
         
         /// step 1 - load and process relevant inputs (resources, intent, savedInstanceState)
         String presetUserName = null;

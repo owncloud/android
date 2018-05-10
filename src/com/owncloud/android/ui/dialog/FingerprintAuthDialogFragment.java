@@ -82,7 +82,7 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
                 (ImageView) v.findViewById(R.id.fingerprintIcon),
                 (TextView) v.findViewById(R.id.fingerprintStatus), this);
 
-        mFingerprintCancelButton = (Button) v.findViewById(R.id.fingerprintCancelButton);
+        mFingerprintCancelButton = v.findViewById(R.id.fingerprintCancelButton);
 
         mFingerprintCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,10 +103,7 @@ public class FingerprintAuthDialogFragment extends DialogFragment implements Fin
             @Override
             public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
 
-                if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
-                    return true;
-                } else
-                    return false;
+                return keyCode == android.view.KeyEvent.KEYCODE_BACK;
             }
         });
 

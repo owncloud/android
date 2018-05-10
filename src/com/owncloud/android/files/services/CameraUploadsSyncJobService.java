@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -148,7 +149,7 @@ public class CameraUploadsSyncJobService extends JobService {
             });
 
             return localFiles;
-        };
+        }
 
         /**
          * Request the upload of a file just created if matches the criteria of the current
@@ -271,7 +272,7 @@ public class CameraUploadsSyncJobService extends JobService {
             jobScheduler.cancel(jobId);
 
             Log_OC.d(TAG, "Camera uploads disabled, cancelling the periodic job");
-        };
+        }
     }
 
     @Override

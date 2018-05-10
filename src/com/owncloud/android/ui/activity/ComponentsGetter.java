@@ -1,8 +1,10 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Bartek Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -32,26 +34,26 @@ public interface ComponentsGetter {
      * To be invoked when the parent activity is fully created to get a reference
      * to the FileDownloader service API.
      */
-    public FileDownloaderBinder getFileDownloaderBinder();
+     FileDownloaderBinder getFileDownloaderBinder();
 
     
     /**
      * To be invoked when the parent activity is fully created to get a reference
      * to the FileUploader service API.
      */
-    public FileUploaderBinder getFileUploaderBinder();
+     FileUploaderBinder getFileUploaderBinder();
 
     
     /**
      * To be invoked when the parent activity is fully created to get a reference
      * to the OperationsSerivce service API.
      */
-    public OperationsServiceBinder getOperationsServiceBinder();
+     OperationsServiceBinder getOperationsServiceBinder();
 
     
-    public FileDataStorageManager getStorageManager();
+     FileDataStorageManager getStorageManager();
     
-    public FileOperationsHelper getFileOperationsHelper();
+     FileOperationsHelper getFileOperationsHelper();
 
 
 }

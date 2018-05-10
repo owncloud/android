@@ -2,8 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
+ *   @author Christian Schabesberger
  *   Copyright (C) 2011  Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -147,7 +148,7 @@ public class LocalFileListFragment extends ExtendedListFragment {
                 saveIndexAndTopPosition(position);
             
             } else {    /// Click on a file
-                ImageView checkBoxV = (ImageView) v.findViewById(R.id.custom_checkbox);
+                ImageView checkBoxV = v.findViewById(R.id.custom_checkbox);
                 if (checkBoxV != null) {
                     if (getListView().isItemChecked(position)) {
                         checkBoxV.setImageResource(R.drawable.ic_checkbox_marked);

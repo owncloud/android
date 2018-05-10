@@ -1,7 +1,7 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -73,9 +73,9 @@ public class LogHistoryActivity extends ToolbarActivity {
 
         setTitle(getText(R.string.actionbar_logger));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Button deleteHistoryButton = (Button) findViewById(R.id.deleteLogHistoryButton);
-        Button sendHistoryButton = (Button) findViewById(R.id.sendLogHistoryButton);
-        TextView logTV = (TextView) findViewById(R.id.logTV);
+        Button deleteHistoryButton = findViewById(R.id.deleteLogHistoryButton);
+        Button sendHistoryButton = findViewById(R.id.sendLogHistoryButton);
+        TextView logTV = findViewById(R.id.logTV);
 
         deleteHistoryButton.setOnClickListener(new OnClickListener() {
             

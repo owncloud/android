@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @authro Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.owncloud.android.MainApp;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;

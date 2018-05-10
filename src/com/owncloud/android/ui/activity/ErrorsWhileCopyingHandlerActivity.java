@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -107,7 +108,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
         setContentView(R.layout.generic_explanation);
         
         /// customize text message
-        TextView textView = (TextView) findViewById(R.id.message);
+        TextView textView = findViewById(R.id.message);
         String appName = getString(R.string.app_name);
         String message = String.format(getString(R.string.sync_foreign_files_forgotten_explanation),
                 appName, appName, appName, appName, mAccount.name);
@@ -115,7 +116,7 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
         textView.setMovementMethod(new ScrollingMovementMethod());
         
         /// load the list of local and remote files that failed
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = findViewById(R.id.list);
         if (mLocalPaths != null && mLocalPaths.size() > 0) {
             mAdapter = new ErrorsWhileCopyingListAdapter();
             listView.setAdapter(mAdapter);
@@ -125,8 +126,8 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
         }
         
         /// customize buttons
-        Button cancelBtn = (Button) findViewById(R.id.cancel);
-        Button okBtn = (Button) findViewById(R.id.ok);
+        Button cancelBtn = findViewById(R.id.cancel);
+        Button okBtn = findViewById(R.id.ok);
         
         okBtn.setText(R.string.foreign_files_move);
         cancelBtn.setOnClickListener(this);
@@ -164,14 +165,14 @@ public class ErrorsWhileCopyingHandlerActivity  extends AppCompatActivity
             if (view != null)  {
                 String localPath = getItem(position);
                 if (localPath != null) {
-                    TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                    TextView text1 = view.findViewById(android.R.id.text1);
                     if (text1 != null) {
                         text1.setText(String.format(getString(R.string.foreign_files_local_text), localPath));
                     }
                 }
                 if (mRemotePaths != null && mRemotePaths.size() > 0 && position >= 0 &&
                         position < mRemotePaths.size()) {
-                    TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                    TextView text2 = view.findViewById(android.R.id.text2);
                     String remotePath = mRemotePaths.get(position);
                     if (text2 != null && remotePath != null) {
                         text2.setText(String.format(getString(R.string.foreign_files_remote_text), remotePath));
