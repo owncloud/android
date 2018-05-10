@@ -27,7 +27,10 @@ public class Log {
     private Date mLogTimestamp;
     private String mLogContent;
 
-    public Log() { }
+    public Log(Date logTimestamp, String logContent) {
+        mLogTimestamp = logTimestamp;
+        mLogContent = logContent;
+    }
 
     public void setLogDate(Date logTimestamp) {
         mLogTimestamp = logTimestamp;

@@ -31,6 +31,7 @@ import com.owncloud.android.R;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -84,7 +85,12 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.LogViewH
      */
     @Override
     public void onBindViewHolder(LogViewHolder holder, int position) {
-        holder.mLogTimeStamp.setText(String.valueOf(mLogs.get(position).getLogTimestamp()));
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+        String logTimestamp = simpleDateFormat.format(mLogs.get(position).getLogTimestamp());
+
+        holder.mLogTimeStamp.setText(logTimestamp);
         holder.mLogContent.setText(String.valueOf(mLogs.get(position).getLogContent()));
     }
 
