@@ -21,8 +21,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_drawer_header_height"
     android:gravity="bottom"
-    android:background="@color/drawer_header_color"
-    >
+    android:background="@color/drawer_header_color">
 
     <ImageView
         android:layout_width="match_parent"
@@ -34,9 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/standard_padding">
-
-
-
 
         <ImageView
             android:id="@+id/drawer_current_account"
@@ -123,8 +119,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:contentDescription="@string/drawer_manage_accounts"
-            android:src="@drawable/ic_down"
-            />
+            android:src="@drawable/ic_down" />
 
     </RelativeLayout>
 

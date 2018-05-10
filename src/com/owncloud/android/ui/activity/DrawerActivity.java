@@ -24,13 +24,11 @@ package com.owncloud.android.ui.activity;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -66,6 +64,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
     private static final int MENU_ORDER_ACCOUNT = 1;
     private static final int MENU_ORDER_ACCOUNT_FUNCTION = 2;
+    private static final int USER_ITEMS_ALLOWD_BEFORE_REMOVING_CLOUD = 4;
 
     private float mMenuAccountAvatarRadiusDimension;
     private float mCurrentAccountAvatarRadiusDimension;
@@ -167,6 +166,16 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * @param navigationView the drawers navigation view
      */
     protected void setupDrawerContent(NavigationView navigationView) {
+        //disable help or feedback on cusomisation
+
+        if(!getResources().getBoolean(R.bool.help_enabled)) {
+            navigationView.getMenu().removeItem(R.id.drawer_menu_help);
+        }
+
+        if(!getResources().getBoolean(R.bool.feedback_enabled)) {
+            navigationView.getMenu().removeItem(R.id.drawer_menu_feedback);
+        }
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -228,19 +237,17 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         // handle correct state
         if (mIsAccountChooserActive) {
-            mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
+            navigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
 
         } else {
-            mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
+            navigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
         }
     }
 
     private void openHelp() {
         final String helpWeb = (String) getText(R.string.url_help);
-        if (helpWeb != null && helpWeb.length() > 0) {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(helpWeb));
-            startActivity(intent);
-        }
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(helpWeb));
+        startActivity(intent);
     }
 
     private void openFeedback() {
@@ -539,7 +546,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, false);
-                if(mDrawerCloud != null && accountCount > 4) mDrawerCloud.setVisibility(View.GONE);
+                if(mDrawerCloud != null && accountCount > USER_ITEMS_ALLOWD_BEFORE_REMOVING_CLOUD)
+                    mDrawerCloud.setVisibility(View.GONE);
             } else {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_down);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);

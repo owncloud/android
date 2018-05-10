@@ -2,7 +2,7 @@
 <!--
   ownCloud Android client application
 
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2018 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -29,21 +29,14 @@
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer_menu">
 
-        <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_margin="@dimen/standard_margin"
-                    android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/drawer_cloud"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:src="@drawable/transparent_cloud"
-                android:scaleType="centerInside"/>
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/drawer_cloud"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/transparent_cloud"
+            android:scaleType="centerInside"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/standard_margin"/>
 
     </android.support.design.widget.NavigationView>
 
