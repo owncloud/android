@@ -17,20 +17,23 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:filterTouchesWhenObscured="true">
-    
-     <TextView android:id="@+id/log_item_single"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:textStyle="bold"
-        android:textSize="22dp"
-        android:textColor="#000000"
-        android:layout_marginBottom="@dimen/standard_margin" />
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:filterTouchesWhenObscured="true"
+              android:orientation="vertical">
+
+     <TextView
+         android:id="@+id/logTimestamp"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_margin="@dimen/standard_half_margin"
+         android:text="adios"/>
+
+     <TextView
+         android:id="@+id/logContent"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="@dimen/standard_half_margin"
+         android:text="hola"/>
 
 </LinearLayout>
