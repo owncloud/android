@@ -2,25 +2,25 @@
 <resources>
 
     <!-- App name  and other strings-->
-    <string name="app_name" formatted="false">ownCloud</string>
-    <string name="account_type" formatted="false">owncloud</string>	<!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
-    <string name="authority" formatted="false">org.owncloud</string>
+    <string name="app_name" formatted="false">Kovan</string>
+    <string name="account_type" formatted="false">ITU</string>	<!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
+    <string name="authority" formatted="false">tr.edu.itu</string>
     <string name="document_provider_authority" formatted="false">org.owncloud.documents</string>
     <string name="file_provider_authority" formatted="false">org.owncloud.files</string>
     <string name="search_suggest_authority" formatted="false">org.owncloud.search.users_and_groups</string>
     <string name="search_suggest_intent_action" formatted="false">org.owncloud.search.users_and_groups.action.SHARE_WITH</string>
-    <string name ="db_file" formatted="false">owncloud.db</string>
-    <string name ="db_name" formatted="false">ownCloud</string>
-    <string name ="data_folder" formatted="false">owncloud</string>
-    <string name ="log_name" formatted="false">Owncloud_</string>
-    <string name ="default_display_name_for_root_folder" formatted="false">ownCloud</string>
-    <string name ="user_agent">Mozilla/5.0 (Android) ownCloud-android/%1$s</string>
+    <string name ="db_file" formatted="false">kovan.db</string>
+    <string name ="db_name" formatted="false">Kovan</string>
+    <string name ="data_folder" formatted="false">kovan</string>
+    <string name ="log_name" formatted="false">kovan_</string>
+    <string name ="default_display_name_for_root_folder" formatted="false">Kovan</string>
+    <string name ="user_agent">Mozilla/5.0 (Android) kovan-android/%1$s</string>
     
     <!-- URLs and flags related -->
-    <string name="server_url" formatted="false"></string>
-    <bool name="show_server_url_input">true</bool>
+    <string name="server_url" formatted="false">https://kovan.itu.edu.tr</string>
+    <bool name="show_server_url_input">false</bool>
     <bool name="show_welcome_link">true</bool>
-    <string name="welcome_link_url" formatted="false">"https://owncloud.com/mobile/new"</string>
+    <string name="welcome_link_url" formatted="false">"http://bidb.itu.edu.tr"</string>
     <string name="share_api_link" formatted="false"></string>
     
     <!-- Flags to setup the authentication methods available in the app -->
@@ -53,7 +53,7 @@
     <color name="action_mode_status_bar_background">@color/actionbar_start_color</color>
 
     <!-- Multiaccount support -->
-    <bool name="multiaccount_support">true</bool>
+    <bool name="multiaccount_support">false</bool>
     
     <!-- Help, imprint and feedback -->
     <bool name="help_enabled">true</bool>
