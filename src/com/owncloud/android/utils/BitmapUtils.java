@@ -142,7 +142,6 @@ public class BitmapUtils {
                     matrix.postRotate(180);
                     break;
                 case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-                    matrix.postRotate(-90);
                     matrix.postScale(1.0f, -1.0f);
                     break;
                 case ExifInterface.ORIENTATION_TRANSPOSE:
@@ -162,7 +161,8 @@ public class BitmapUtils {
             }
 
             // Rotate the bitmap
-            final Bitmap resultBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            final Bitmap resultBitmap =Bitmap.createBitmap(bitmap, 0, 0,
+                    bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             if (resultBitmap != bitmap) {
                 bitmap.recycle();
             }
