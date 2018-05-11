@@ -202,6 +202,7 @@
   <string name="sync_file_fail_msg">Tập tin từ xa không được kiểm tra</string>
   <string name="sync_file_nothing_to_do_msg">Nội dung tập tin đã đồng bộ</string>
   <string name="filename_forbidden_characters">Những kí tự không được dùng: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_forbidden_charaters_from_server">Tên tệp tin chứa ít nhất một ký tự không hợp lệ</string>
   <string name="wait_a_moment">Chờ một lúc</string>
   <string name="filedisplay_unexpected_bad_get_content">Vấn đề bất ngờ ; hãy thử ứng dụng khác để chọn tập tin</string>
   <string name="filedisplay_no_file_selected">Không có tập tin nào được chọn</string>
@@ -239,6 +240,7 @@
   <string name="share_link_file_error">Một lỗi đã xảy ra khi thử chia sẻ file hoặc thư mục này</string>
   <string name="unshare_link_file_error">Một lỗi đã xảy ra khi thử gỡ chia sẻ file hoặc thư mục này</string>
   <string name="activity_chooser_send_file_title">Gởi</string>
+  <string name="clipboard_text_copied">Đã sao chép vào bộ đệm</string>
   <string name="network_error_socket_timeout_exception">Máy chủ đã quá dài để đáp ứng</string>
   <string name="prefs_category_accounts">Tài khoản</string>
   <string name="drawer_manage_accounts">Quản lý tài khoản</string>
@@ -246,6 +248,7 @@
   <string name="folder_picker_choose_button_text">Chọn</string>
   <string name="auth_host_address">Địa chỉ máy chủ</string>
   <string name="share_dialog_title">Chia sẻ</string>
+  <string name="share_with_user_section_title">Người dùng và Nhóm</string>
   <string name="share_cancel_public_link_button">Hủy</string>
   <string name="share_confirm_public_link_button">Lưu</string>
   <string name="share_via_link_password_label">Mật khẩu</string>
@@ -253,6 +256,8 @@
   <string name="share_privilege_can_share">có thể chia sẽ</string>
   <string name="share_privilege_can_edit">có thể chỉnh sửa</string>
   <string name="share_privilege_can_edit_create">tạo</string>
+  <string name="share_privilege_can_edit_change">thay đôi</string>
   <string name="share_privilege_can_edit_delete">xóa</string>
+  <string name="share_warning_about_forwarding_public_links">Bất cứ ai liên kết đều có quyền truy cập tệp tin/thư mục</string>
   <!--Welcome to oC intro features-->
 </resources>
