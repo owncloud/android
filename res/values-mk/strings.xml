@@ -262,6 +262,7 @@
   <string name="auth_refresh_button">Освежи ја конекцијата</string>
   <string name="auth_host_address">Адреса на сервер</string>
   <string name="share_dialog_title">Сподели</string>
+  <string name="share_via_link_name_label">Име на линкот</string>
   <string name="share_cancel_public_link_button">Откажи</string>
   <string name="share_confirm_public_link_button">Сними</string>
   <string name="share_via_link_expiration_date_label">Истекување</string>

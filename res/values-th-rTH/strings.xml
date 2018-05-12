@@ -524,4 +524,5 @@
   <string name="welcome_feature_8_text">เล่นภาพ GIF ที่เป็นภาพเคลื่อนไหว</string>
   <string name="welcome_feature_9_title">อัพโหลดรูปภาพจากกล้อง</string>
   <string name="welcome_feature_9_text">ถ่ายภาพและอัพโหลดภาพโดยตรงไปยังเซิร์ฟเวอร์ของคุณ</string>
+  <string name="no_borwser_installed_alert">โปรดติดตั้งเบราเซอร์ก่อนเพื่อให้สามารถล็อกอินได้อย่างปลอดภัย</string>
 </resources>
