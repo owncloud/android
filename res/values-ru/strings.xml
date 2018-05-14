@@ -529,4 +529,5 @@
   <string name="welcome_feature_8_text">Проигрывайте ваши анимированные изображения GIF</string>
   <string name="welcome_feature_9_title">Закачивайте изображение из камеры</string>
   <string name="welcome_feature_9_text">Сделайте снимок и отправьте его прямо на ваш сервер</string>
+  <string name="no_borwser_installed_alert">Не установлен никакой браузер. Пожалуйста, установите браузер для поддержки безопасного входа.</string>
 </resources>
