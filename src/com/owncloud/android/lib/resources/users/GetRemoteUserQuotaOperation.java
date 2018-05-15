@@ -160,8 +160,10 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
         WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0], client.getWebdavUri().getPath());
 
         // If there's a special case, available bytes will contain a negative code
-        if (we.quotaAvailableBytes().compareTo(new BigDecimal(0)) == -1) {
-
+        // -1, PENDING: Not computed yet, e.g. external storage mounted but folder sizes need scanning
+        // -2, UNKNOWN: Storage not accessible, e.g. external storage with no API to ask for the free space
+        // -3, UNLIMITED: Quota using all the storage
+        if (we.quotaAvailableBytes().compareTo(new BigDecimal(1)) == -1) {
             return new Quota(
                     we.quotaAvailableBytes().longValue(),
                     we.quotaUsedBytes().longValue(),
@@ -171,18 +173,18 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
 
         } else {
 
-            BigDecimal totalQuota = we.quotaAvailableBytes().add(we.quotaUsedBytes());
+                BigDecimal totalQuota = we.quotaAvailableBytes().add(we.quotaUsedBytes());
 
-            BigDecimal relativeQuota = we.quotaUsedBytes()
-                    .multiply(new BigDecimal(100))
-                    .divide(totalQuota);
+                BigDecimal relativeQuota = we.quotaUsedBytes()
+                        .multiply(new BigDecimal(100))
+                        .divide(totalQuota);
 
-            return new Quota(
-                    we.quotaAvailableBytes().longValue(),
-                    we.quotaUsedBytes().longValue(),
-                    totalQuota.longValue(),
-                    relativeQuota.doubleValue()
-            );
+                return new Quota(
+                        we.quotaAvailableBytes().longValue(),
+                        we.quotaUsedBytes().longValue(),
+                        totalQuota.longValue(),
+                        relativeQuota.doubleValue()
+                );
         }
     }
 }
