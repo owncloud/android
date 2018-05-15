@@ -48,7 +48,6 @@ import com.owncloud.android.datamodel.UserProfile;
 import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.users.GetRemoteUserQuotaOperation.Quota;
 import com.owncloud.android.utils.DisplayUtils;
 
 /**
@@ -438,7 +437,22 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         if (accountQuotaBar!= null && accountQuotaText != null) {
 
-            if(userQuota.getFree() >= 0) {
+            if (userQuota.getFree() < 0) { // Pending, unknown or unlimited free storage
+
+                accountQuotaBar.setProgress(0);
+
+                accountQuotaText.setText(
+                        String.format(getString(R.string.drawer_unavailable_free_storage),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(),this))
+                );
+
+            } else if (userQuota.getFree() == 0) { // Quota 0, guest users
+
+                accountQuotaBar.setVisibility(View.GONE);
+
+                accountQuotaText.setText(getString(R.string.drawer_unavailable_used_storage));
+
+            } else {
 
                 // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
                 accountQuotaBar.setProgress((int) Math.ceil(userQuota.getRelative()));
@@ -450,14 +464,6 @@ public abstract class DrawerActivity extends ToolbarActivity {
                         )
                 );
 
-            } else {
-
-                accountQuotaBar.setProgress(0);
-
-                accountQuotaText.setText(
-                        String.format(getString(R.string.drawer_unavailable_quota_bytes),
-                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(),this))
-                );
             }
         }
     }
