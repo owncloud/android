@@ -99,14 +99,14 @@ public class DisplayUtils {
         } else {
             double result = bytes;
             int attachedSuff = 0;
-            while (result > 1024 && attachedSuff < sizeSuffixes.length) {
+            while (result >= 1024 && attachedSuff < sizeSuffixes.length) {
                 result /= 1024.;
                 attachedSuff++;
             }
 
             return new BigDecimal(result).setScale(
                 sizeScales[attachedSuff], BigDecimal.ROUND_HALF_UP
-            ) + " " + sizeSuffixes[attachedSuff];
+            ).stripTrailingZeros() + " " + sizeSuffixes[attachedSuff];
         }
     }
 
