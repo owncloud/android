@@ -40,6 +40,7 @@ import org.apache.jackrabbit.webdav.MultiStatus;
 import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 /**
@@ -173,18 +174,18 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
 
         } else {
 
-                BigDecimal totalQuota = we.quotaAvailableBytes().add(we.quotaUsedBytes());
+            BigDecimal totalQuota = we.quotaAvailableBytes().add(we.quotaUsedBytes());
 
-                BigDecimal relativeQuota = we.quotaUsedBytes()
-                        .multiply(new BigDecimal(100))
-                        .divide(totalQuota);
+            BigDecimal relativeQuota = we.quotaUsedBytes()
+                    .multiply(new BigDecimal(100))
+                    .divide(totalQuota, 2, RoundingMode.HALF_UP);
 
-                return new Quota(
-                        we.quotaAvailableBytes().longValue(),
-                        we.quotaUsedBytes().longValue(),
-                        totalQuota.longValue(),
-                        relativeQuota.doubleValue()
-                );
+            return new Quota(
+                    we.quotaAvailableBytes().longValue(),
+                    we.quotaUsedBytes().longValue(),
+                    totalQuota.longValue(),
+                    relativeQuota.doubleValue()
+            );
         }
     }
 }
