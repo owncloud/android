@@ -27,8 +27,6 @@ import android.accounts.Account;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -44,8 +42,6 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
-import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.ui.DefaultAvatarTextDrawable;
 
 import java.math.BigDecimal;
 import java.net.IDN;
@@ -105,9 +101,16 @@ public class DisplayUtils {
                 attachedSuff++;
             }
 
-            return new BigDecimal(result).setScale(
-                sizeScales[attachedSuff], BigDecimal.ROUND_HALF_UP
-            ).stripTrailingZeros() + " " + sizeSuffixes[attachedSuff];
+            BigDecimal readableResult = new BigDecimal(result).setScale(
+                    sizeScales[attachedSuff],
+                    BigDecimal.ROUND_HALF_UP
+            ).stripTrailingZeros();
+
+            // Unscale only values with ten exponent
+            return (readableResult.scale() < 0 ?
+                    readableResult.setScale(0) :
+                    readableResult
+            ) + " " + sizeSuffixes[attachedSuff];
         }
     }
 
