@@ -396,6 +396,7 @@
   <string name="share_via_link_password_enforced_label">رمز عبور *</string>
   <string name="share_via_link_expiration_date_enforced_label">تاریخ انقضا *</string>
   <plurals name="items_selected_count">
+    <item quantity="one">‫%d گزیده</item>
     <item quantity="other">‫%d گزیده</item>
   </plurals>
   <!--Welcome to oC intro features-->

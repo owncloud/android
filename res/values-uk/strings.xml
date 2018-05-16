@@ -453,6 +453,7 @@
   <plurals name="items_selected_count">
     <item quantity="one">Вибрано %d</item>
     <item quantity="few">Вибрано %d</item>
+    <item quantity="many">Вибрано %d</item>
     <item quantity="other">Вибрано %d</item>
   </plurals>
   <!--Welcome to oC intro features-->

@@ -477,6 +477,7 @@ správce systému.</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
+    <item quantity="many">%d vybráno</item>
     <item quantity="other">%d vybráno</item>
   </plurals>
   <!--Welcome to oC intro features-->

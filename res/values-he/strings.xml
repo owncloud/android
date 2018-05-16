@@ -489,6 +489,8 @@
   <string name="file_sync_notification_channel_description">הצגת תוצאות סנכרון קבצים</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
+    <item quantity="two">נבחרו %d</item>
+    <item quantity="many"></item>
     <item quantity="other">נבחרו %d</item>
   </plurals>
   <!--Welcome to oC intro features-->
