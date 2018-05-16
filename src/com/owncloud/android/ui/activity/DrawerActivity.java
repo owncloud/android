@@ -460,7 +460,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 accountQuotaText.setText(
                         String.format(getString(R.string.drawer_quota),
                                 DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
-                                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this)
+                                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
+                                userQuota.getRelative()
                         )
                 );
 
