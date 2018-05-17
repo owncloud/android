@@ -21,12 +21,12 @@
 
 package com.owncloud.android.lib.refactor.authentication.oauth.operations;
 
-import com.owncloud.android.lib.refactor.OwnCloudContext;
+import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.RemoteOperationResult;
 import com.owncloud.android.lib.refactor.Log_OC;
 import com.owncloud.android.lib.refactor.RemoteOperation;
-import com.owncloud.android.lib.refactor.authentication.credentials.OwnCloudBasicCredentials;
-import com.owncloud.android.lib.refactor.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.refactor.authentication.credentials.OCBasicCredentials;
+import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2GrantType;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2ResponseParser;
@@ -55,7 +55,7 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
     private final OAuth2ResponseParser mResponseParser;
 
     public OAuth2RefreshAccessTokenOperation(
-            OwnCloudContext ocContext,
+            OCContext ocContext,
             String clientId,
             String secretId,
             String refreshToken,
@@ -98,7 +98,7 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
                     .build();
 
 
-            OwnCloudCredentials oauthCredentials = new OwnCloudBasicCredentials(
+            OCCredentials oauthCredentials = new OCBasicCredentials(
                     mClientId,
                     mClientSecret
             );

@@ -23,52 +23,29 @@
  */
 package com.owncloud.android.lib.refactor.authentication.credentials;
 
-import android.net.Uri;
 
-import com.owncloud.android.lib.refactor.authentication.OwnCloudCredentials;
 
-import org.apache.commons.httpclient.Cookie;
+import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
+public class OCBearerCredentials implements OCCredentials {
 
-    private final String mUsername;
-    private final String mSessionCookie;
-    private final Uri mBaseUrl;
+    private String mUsername;
 
-    public OwnCloudSamlSsoCredentials(String username, String sessionCookie, Uri baseUrl) {
+    private String mAccessToken;
+
+    public OCBearerCredentials(String username, String accessToken) {
         mUsername = username != null ? username : "";
-        mSessionCookie = sessionCookie != null ? sessionCookie : "";
-        mBaseUrl = baseUrl;
-    }
-
-    @Override
-    public String getCredentialCookie() {
-
-        String[] rawCookies = mSessionCookie.split(";");
-        StringBuilder processedCookies = new StringBuilder();
-        Cookie cookie = null;
-        for (final String rawCookie : rawCookies) {
-            int equalPos = rawCookie.indexOf('=');
-            if (equalPos >= 0) {
-                cookie = new Cookie();
-                cookie.setName(rawCookie.substring(0, equalPos));
-                cookie.setValue(rawCookie.substring(equalPos + 1));
-                cookie.setDomain(mBaseUrl.getHost());    // VERY IMPORTANT
-                cookie.setPath(mBaseUrl.getPath());    // VERY IMPORTANT
-                processedCookies.append(cookie.toExternalForm() + ";");
-            }
-        }
-        return processedCookies.toString();
+        mAccessToken = accessToken != null ? accessToken : "";
     }
 
     @Override
     public Map<String, String> getCredentialHeaders() {
-        return new HashMap<>(0);
+        HashMap<String, String> header = new HashMap<>(1);
+        header.put("Authorization", "Bearer " + mAccessToken);
+        return header;
     }
 
     @Override
@@ -79,12 +56,12 @@ public class OwnCloudSamlSsoCredentials implements OwnCloudCredentials {
 
     @Override
     public String getAuthToken() {
-        return mSessionCookie;
+        return mAccessToken;
     }
 
     @Override
     public boolean authTokenCanBeRefreshed() {
-        return false;
+        return true;
     }
 
 }

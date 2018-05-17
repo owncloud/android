@@ -28,14 +28,14 @@ package com.owncloud.android.lib.refactor.authentication.oauth;
 
 import android.net.Uri;
 
-import com.owncloud.android.lib.refactor.OwnCloudContext;
+import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.RemoteOperation;
 import com.owncloud.android.lib.refactor.authentication.oauth.operations.OAuth2GetAccessTokenOperation;
 import com.owncloud.android.lib.refactor.authentication.oauth.operations.OAuth2RefreshAccessTokenOperation;
 
 public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
 
-    private OwnCloudContext ocContext;
+    private OCContext ocContext;
     private OwnCloudOAuth2Provider mOAuth2Provider;
 
     private OAuthRequest mRequest;
@@ -67,7 +67,7 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
         mRefreshToken = refreshToken;
     }
 
-    public void setOcContext(OwnCloudContext ocContext) {
+    public void setOcContext(OCContext ocContext) {
         this.ocContext = ocContext;
     }
 

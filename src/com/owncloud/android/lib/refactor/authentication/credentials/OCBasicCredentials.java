@@ -21,24 +21,45 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.refactor.authentication.credentials;
 
-package com.owncloud.android.lib.refactor.authentication;
-
+import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.Credentials;
 
-public interface OwnCloudCredentials {
+public class OCBasicCredentials implements OCCredentials {
 
-    Map<String, String> getCredentialHeaders();
+    private String mUsername;
+    private String mPassword;
 
-    //TODO: Remove this once SAML is obsolet
-    default String getCredentialCookie() {
-        return null;
+    public OCBasicCredentials(String username, String password) {
+        mUsername = username != null ? username : "";
+        mPassword = password != null ? password : "";
     }
 
-    String getUsername();
-    String getAuthToken();
-    boolean authTokenCanBeRefreshed();
+    @Override
+    public Map<String, String> getCredentialHeaders() {
+        HashMap<String, String> header = new HashMap<>(1);
+        header.put("Authorization", Credentials.basic(mUsername, mPassword));
+        return header;
+    }
+
+    @Override
+    public String getUsername() {
+        return mUsername;
+    }
+
+    @Override
+    public String getAuthToken() {
+        return mPassword;
+    }
+
+    @Override
+    public boolean authTokenCanBeRefreshed() {
+        return false;
+    }
+
 }

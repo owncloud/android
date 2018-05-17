@@ -1,17 +1,15 @@
 package com.owncloud.android.lib.refactor;
 
-import com.owncloud.android.lib.refactor.RemoteOperation;
-
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 public abstract class RemoteOperation {
-    private final OwnCloudContext mContext;
+    private final OCContext mContext;
     private static OkHttpClient httpClient = null;
 
-    protected RemoteOperation(OwnCloudContext context) {
+    protected RemoteOperation(OCContext context) {
         mContext = context;
 
         if(httpClient == null) {
@@ -23,7 +21,7 @@ public abstract class RemoteOperation {
 
     public abstract RemoteOperationResult exec();
 
-    public OwnCloudContext getOCContext() {
+    public OCContext getOCContext() {
         return mContext;
     }
 

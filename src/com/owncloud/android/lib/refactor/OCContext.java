@@ -2,11 +2,11 @@ package com.owncloud.android.lib.refactor;
 
 import android.net.Uri;
 
-import com.owncloud.android.lib.refactor.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 
 
-public class OwnCloudContext {
-    private static final String TAG = OwnCloudContext.class.toString();
+public class OCContext {
+    private static final String TAG = OCContext.class.toString();
 
     public static final String WEBDAV_PATH_4_0 = "/remote.php/dav";
     public static final String STATUS_PATH = "/status.php";
@@ -18,13 +18,13 @@ public class OwnCloudContext {
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
     private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
 
-    private OwnCloudCredentials mCredentials = null;
+    private OCCredentials mCredentials = null;
     private Uri mBaseUri;
 
     public class Builder {
-        OwnCloudContext ocContext = new OwnCloudContext();
+        OCContext ocContext = new OCContext();
 
-        public Builder setCredentials(OwnCloudCredentials credentials) {
+        public Builder setCredentials(OCCredentials credentials) {
             ocContext.mCredentials = credentials;
             return this;
         }
@@ -34,13 +34,13 @@ public class OwnCloudContext {
             return this;
         }
 
-        public OwnCloudContext build() {
+        public OCContext build() {
             return ocContext;
         }
     }
 
 
-    public OwnCloudCredentials getCredentials() {
+    public OCCredentials getCredentials() {
         return mCredentials;
     }
 

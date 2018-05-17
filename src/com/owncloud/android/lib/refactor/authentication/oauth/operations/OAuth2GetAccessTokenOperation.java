@@ -28,7 +28,7 @@ package com.owncloud.android.lib.refactor.authentication.oauth.operations;
 
 import android.net.Uri;
 
-import com.owncloud.android.lib.refactor.OwnCloudContext;
+import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.RemoteOperationResult;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2ResponseParser;
@@ -59,7 +59,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
 
 
     public OAuth2GetAccessTokenOperation(
-            OwnCloudContext context,
+            OCContext context,
             String grantType,
             String code,
             String clientId,

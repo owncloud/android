@@ -1,11 +1,11 @@
 package com.owncloud.android.lib.refactor.authentication.credentials;
 
 
-import com.owncloud.android.lib.refactor.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 
 import java.util.HashMap;
 import java.util.Map;
-public class OwnCloudAnonymousCredentials implements OwnCloudCredentials {
+public class OCAnonymousCredentials implements OCCredentials {
 
     @Override
     public Map<String, String> getCredentialHeaders() {
