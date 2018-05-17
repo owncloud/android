@@ -439,6 +439,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
             if (userQuota.getFree() < 0) { // Pending, unknown or unlimited free storage
 
+                accountQuotaBar.setVisibility(View.VISIBLE);
+
                 accountQuotaBar.setProgress(0);
 
                 accountQuotaText.setText(
@@ -452,7 +454,9 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
                 accountQuotaText.setText(getString(R.string.drawer_unavailable_used_storage));
 
-            } else {
+            } else { // Limited quota
+
+                accountQuotaBar.setVisibility(View.VISIBLE);
 
                 // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
                 accountQuotaBar.setProgress((int) Math.ceil(userQuota.getRelative()));
