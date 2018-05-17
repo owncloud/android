@@ -62,6 +62,7 @@
   <string name="passcode_already_set">图案锁和密码锁无法同时启用，请先禁用密码锁</string>
   <string name="pattern_no_longer_required">不再询问输入图案锁</string>
   <string name="pattern_configure_your_pattern_explanation">每次启动app时均需要输入图案解锁</string>
+  <string name="illegal_argument_exception_message">需要一个有效的 ACTION 传递意图</string>
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
   <string name="auth_check_server">检查服务器</string>
@@ -497,6 +498,7 @@
   <string name="media_service_notification_channel_description">查看音乐播放器</string>
   <string name="file_sync_notification_channel_name">文件同步</string>
   <string name="file_sync_notification_channel_description">查看文件同步结果</string>
+  <string name="rate_dialog_title">评价 %1$s 应用！</string>
   <string name="rate_dialog_description">如果你喜欢此app，能否占用你一些时间投票？您的反馈对我们非常重要。</string>
   <string name="button_no_thanks_name">不，谢谢</string>
   <string name="button_later_name">稍晚时候</string>
