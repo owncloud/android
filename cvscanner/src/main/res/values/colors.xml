@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dark_gray">@android:color/darker_gray</color>
+    <color name="torch_yellow">#f9c724</color>
+    <color name="box_border">#a4fb73</color>
+    <color name="box_body">#12a4fb73</color>
+    <color name="colorPrimary">#48cdb2</color>
+    <color name="colorPrimaryDark">#299881</color>
+    <color name="colorAccent">#2be378</color>
+</resources>

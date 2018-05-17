@@ -85,6 +85,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import devliving.online.cvscanner.CVScanner;
+
 /**
  * A Fragment that lists all files and folders in a given path.
  *
@@ -298,7 +300,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                 uploadScannedDocumentLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().takePicture(FileDisplayActivity.REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT);
+                        UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
+                                .getAccount(), FileDisplayActivity.REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT);
                         dialog.hide();
                         return false;
                     }

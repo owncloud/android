@@ -25,7 +25,7 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="26"
-        tools:overrideLibrary="android.support.customtabs"/>
+        tools:overrideLibrary="android.support.customtabs,devliving.online.cvscanner,online.devliving.mobilevisionpipeline"/>
 
     <!--
          GET_ACCOUNTS is needed for API < 23.
@@ -273,6 +273,5 @@
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity android:name=".ui.activity.PatternLockActivity" />
         <activity android:name=".ui.activity.FingerprintActivity"/>
-        <activity android:name=".ui.activity.CropActivity"></activity>
     </application>
 </manifest>

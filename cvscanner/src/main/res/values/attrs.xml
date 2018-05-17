@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DocumentScannerFragment">
+        <attr name="torchTint" format="color" />
+        <attr name="torchTintLight" format="color" />
+        <attr name="documentBorderColor" format="color" />
+        <attr name="documentBodyColor" format="color" />
+    </declare-styleable>
+</resources>

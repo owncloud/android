@@ -43,7 +43,7 @@ configurations.all {
 dependencies {
     /// dependencies for app building
     compile project(':owncloud-android-library')
-    compile project(':openCVLibrary340')
+    compile project(':cvscanner')
     compile "com.android.support:support-v4:${supportLibraryVersion}"
     compile "com.android.support:design:${supportLibraryVersion}"
     compile 'com.jakewharton:disklrucache:2.0.2'
@@ -107,6 +107,10 @@ android {
             include 'x86', 'x86_64', 'arm64-v8a', 'armeabi'
             universalApk true
         }
+    }
+
+    dexOptions {
+        jumboMode true
     }
 
     defaultConfig {

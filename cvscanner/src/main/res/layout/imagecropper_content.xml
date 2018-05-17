@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <devliving.online.cvscanner.crop.CropImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <ImageButton
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:id="@+id/item_save"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_check_circle"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:id="@+id/item_rotate_right"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_rotate_right"
+        android:scaleType="fitXY"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/item_save"
+        android:layout_margin="16dp"
+        android:visibility="gone"/>
+    <ImageButton
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:id="@+id/item_rotate_left"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_rotate_left"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/item_save"
+        android:layout_margin="16dp"
+        android:visibility="gone"/>
+</RelativeLayout>

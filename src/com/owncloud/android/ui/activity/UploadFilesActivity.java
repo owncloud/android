@@ -51,6 +51,8 @@ import com.owncloud.android.ui.helpers.FilesUploadHelper;
 
 import java.io.File;
 
+import devliving.online.cvscanner.CVScanner;
+
 
 /**
  * Displays local files and let the user choose what of them wants to upload
@@ -179,10 +181,14 @@ public class UploadFilesActivity extends FileActivity implements
      * @param requestCode If >= 0, this code will be returned in onActivityResult()
      */
     public static void startUploadActivityForResult(Activity activity, Account account, int requestCode) {
-        Intent action = new Intent(activity, UploadFilesActivity.class);
-        action.putExtra(EXTRA_ACCOUNT, (account));
-        action.putExtra(REQUEST_CODE_KEY,requestCode);
-        activity.startActivityForResult(action, requestCode);
+        if(requestCode == FileDisplayActivity.REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT){
+            CVScanner.startScanner(activity,false,FileDisplayActivity.REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT);
+        } else {
+            Intent action = new Intent(activity, UploadFilesActivity.class);
+            action.putExtra(EXTRA_ACCOUNT, (account));
+            action.putExtra(REQUEST_CODE_KEY, requestCode);
+            activity.startActivityForResult(action, requestCode);
+        }
     }
 
     @Override
