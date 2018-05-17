@@ -39,6 +39,8 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 
 import java.io.IOException;
 
+import okhttp3.OkHttpClient;
+
 
 /**
  * Operation which execution involves one or several interactions with an ownCloud server.
@@ -76,6 +78,11 @@ public abstract class RemoteOperation implements Runnable {
      * Object to interact with the remote server
      */
     private OwnCloudClient mClient = null;
+
+    /**
+     * Object to interact with the remote server
+     */
+    private OkHttpClient mHttpClient = null;
 
     /**
      * Callback object to notify about the execution of the remote operation
@@ -138,6 +145,25 @@ public abstract class RemoteOperation implements Runnable {
             mAccount = client.getAccount().getSavedAccount();
         }
         mContext = client.getContext();
+
+        return runOperation();
+    }
+
+    /**
+     * Synchronously executes the remote operation
+     *
+     * Do not call this method from the main thread.
+     *
+     * @param client Client object to reach an ownCloud server during the execution of
+     *               the operation.
+     * @return Result of the operation.
+     */
+    public RemoteOperationResult execute(OkHttpClient client, Context context) {
+        if (client == null)
+            throw new IllegalArgumentException("Trying to execute a remote operation with a NULL " +
+                    "OwnCloudClient");
+        mHttpClient = client;
+        mContext = context;
 
         return runOperation();
     }

@@ -31,3 +31,6 @@ proguard-project.txt
 sample_client/proguard-project.txt
 tests/proguard-project.txt
 tests/test_cases/proguard-project.txt
+
+# setup.xml login credentials
+sample_client/res/values/setup.xml

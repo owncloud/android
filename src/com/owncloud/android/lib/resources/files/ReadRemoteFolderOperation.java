@@ -38,6 +38,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
+import at.bitfire.dav4android.DavResource;
+
 /**
  * Remote operation performing the read of remote file or folder in the ownCloud server.
  *
@@ -72,6 +74,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
         PropFindMethod query = null;
 
         try {
+
             // remote request
             query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
                 WebdavUtils.getAllPropSet(),    // PropFind Properties
