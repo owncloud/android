@@ -3,6 +3,7 @@
  *
  *   @author Andy Scherzinger
  *   @author Christian Schabesberger
+ *   @author David González Verdugo
  *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -35,6 +36,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.owncloud.android.MainApp;
@@ -42,6 +44,8 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.datamodel.UserProfile;
+import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
@@ -119,6 +123,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     private Account[] mAccountsWithAvatars = new Account[3];
 
+    private TextView mAccountQuotaText;
+
     /**
      * Initializes the drawer, its content and highlights the menu item with the given id.
      * This method needs to be called after the content view has been set.
@@ -136,8 +142,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     protected void setupDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
-
         mNavigationView = findViewById(R.id.nav_view);
+
         if (mNavigationView != null) {
             mAccountChooserToggle = (ImageView) findNavigationViewChildById(R.id.drawer_account_chooser_toogle);
             mAccountChooserToggle.setImageResource(R.drawable.ic_down);
@@ -331,7 +337,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     /**
      * updates the account list in the drawer.
      */
-    public void updateAccountList() {
+    private void updateAccountList() {
         Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
         if (mNavigationView != null && mDrawerLayout != null) {
             if (accounts.length > 0) {
@@ -414,6 +420,60 @@ public abstract class DrawerActivity extends ToolbarActivity {
     }
 
     /**
+     * Updates the quota in the drawer
+     */
+    private void updateQuota() {
+        Account account = AccountUtils.getCurrentOwnCloudAccount(this);
+
+        if (account == null) return;
+
+        UserProfile.UserQuota userQuota = UserProfilesRepository.getUserProfilesRepository().getQuota(account.name);
+
+        if (userQuota == null) return;
+
+        ProgressBar accountQuotaBar = findViewById(R.id.account_quota_bar);
+
+        TextView accountQuotaText = findViewById(R.id.account_quota_text);
+
+        if (accountQuotaBar!= null && accountQuotaText != null) {
+
+            if (userQuota.getFree() < 0) { // Pending, unknown or unlimited free storage
+
+                accountQuotaBar.setVisibility(View.VISIBLE);
+
+                accountQuotaBar.setProgress(0);
+
+                accountQuotaText.setText(
+                        String.format(getString(R.string.drawer_unavailable_free_storage),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(),this))
+                );
+
+            } else if (userQuota.getFree() == 0) { // Quota 0, guest users
+
+                accountQuotaBar.setVisibility(View.GONE);
+
+                accountQuotaText.setText(getString(R.string.drawer_unavailable_used_storage));
+
+            } else { // Limited quota
+
+                accountQuotaBar.setVisibility(View.VISIBLE);
+
+                // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
+                accountQuotaBar.setProgress((int) Math.ceil(userQuota.getRelative()));
+
+                accountQuotaText.setText(
+                        String.format(getString(R.string.drawer_quota),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
+                                userQuota.getRelative()
+                        )
+                );
+
+            }
+        }
+    }
+
+    /**
      * Method that gets called on drawer menu click for 'All Files'.
      */
     public abstract void allFilesOption();
@@ -433,7 +493,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     }
 
     /**
-     * sets the given account name in the drawer in case the drawer is available. The account name is shortened
+     * Sets the given account data in the drawer in case the drawer is available. The account name is shortened
      * beginning from the @-sign in the username.
      *
      * @param account the account to be set in the drawer
@@ -459,6 +519,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 mCurrentAccountAvatarRadiusDimension,
                 false
             );
+
+            updateQuota();
         }
     }
 
@@ -554,6 +616,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             }
         }
         updateAccountList();
+        updateQuota();
     }
 
     @Override
@@ -596,6 +659,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 restart();
             } else {
                 updateAccountList();
+                updateQuota();
             }
         }
     }
@@ -619,6 +683,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     protected void onAccountCreationSuccessful(AccountManagerFuture<Bundle> future) {
         super.onAccountCreationSuccessful(future);
         updateAccountList();
+        updateQuota();
         restart();
     }
 

@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -160,7 +161,7 @@ public class RefreshFolderOperation extends SyncOperation {
     }
 
     private void syncUserProfile() {
-        GetUserProfileOperation update = new GetUserProfileOperation();
+        GetUserProfileOperation update = new GetUserProfileOperation(mLocalFolder.getRemotePath());
         RemoteOperationResult result = update.execute(getStorageManager(), mContext);
         if (!result.isSuccess()) {
             Log_OC.w(TAG, "Couldn't update user profile from server");
