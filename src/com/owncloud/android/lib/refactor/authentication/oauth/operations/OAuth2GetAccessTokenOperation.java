@@ -54,9 +54,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
     private final String mClientSecret;
     private final String mRedirectUri;
     private final String mAccessTokenEndpointPath;
-
     private final OAuth2ResponseParser mResponseParser;
-
 
     public OAuth2GetAccessTokenOperation(
             OCContext context,

@@ -26,7 +26,7 @@ public class PropfindOperation extends RemoteOperation {
     public RemoteOperationResult exec() {
         DavResource davResource = new DavResource(
                 getClient(),
-                HttpUrl.parse(getOCContext().getWebdavUri() + WebdavUtils.encodePath(mRemotePath)),
+                HttpUrl.parse(getWebDAVUriBuilder() + WebdavUtils.encodePath(mRemotePath)),
                 null);
 
         try {

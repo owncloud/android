@@ -2,7 +2,6 @@ package com.owncloud.android.lib.refactor;
 
 import com.owncloud.android.lib.refactor.account.OCAccount;
 
-
 public class OCContext {
     private static final String TAG = OCContext.class.toString();
 

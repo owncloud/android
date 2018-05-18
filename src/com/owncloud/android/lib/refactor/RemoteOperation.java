@@ -9,6 +9,7 @@ import okhttp3.Request;
 public abstract class RemoteOperation {
     private final OCContext mContext;
     private static OkHttpClient httpClient = null;
+    private static final String WEBDAV_PATH_4_0 = "/remote.php/dav";
 
     protected RemoteOperation(OCContext context) {
         mContext = context;
@@ -22,19 +23,23 @@ public abstract class RemoteOperation {
 
     public abstract RemoteOperationResult exec();
 
-    public OCContext getOCContext() {
+    protected OCContext getOCContext() {
         return mContext;
     }
 
-    public OkHttpClient getClient() {
+    protected OkHttpClient getClient() {
         return httpClient;
     }
 
-    public Uri.Builder getBaseUriBuilder() {
+    protected Uri.Builder getBaseUriBuilder() {
         return mContext.getOCAccount().getBaseUri().buildUpon();
     }
 
-    public Request.Builder getRequestBuilder() {
+    protected Uri.Builder getWebDAVUriBuilder() {
+        return getBaseUriBuilder().appendEncodedPath(WEBDAV_PATH_4_0);
+    }
+
+    protected Request.Builder getRequestBuilder() {
         Request.Builder builder = new Request.Builder();
 
         for(Map.Entry<String, String> header

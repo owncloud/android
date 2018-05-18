@@ -35,6 +35,8 @@ import java.util.List;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.refactor.OCContext;
+import com.owncloud.android.lib.refactor.account.OCAccount;
 import com.owncloud.android.lib.refactor.authentication.credentials.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.refactor.OwnCloudContext;
@@ -68,7 +70,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	
 	private OwnCloudClient mClient;
 
-	private OwnCloudContext mOCContext;
+	private OCContext mOCContext;
 	
 	private FilesArrayAdapter mFilesAdapter;
 	
@@ -83,7 +85,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         mHandler = new Handler();
         
     	Uri serverUri = Uri.parse(getString(R.string.server_base_url));
-//    	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
+    	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
 //    	mClient.setCredentials(
 //    			OwnCloudCredentialsFactory.newBasicCredentials(
 //    					getString(R.string.username),
@@ -91,13 +93,14 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 //				)
 //		);
 
-    	mOCContext = new OwnCloudContext.Builder()
-                .setBaseUri(serverUri)
-                .setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(
-                        getString(R.string.username),
-                        getString(R.string.password)
-                ))
-                .build();
+		OCAccount ocAccount = new OCAccount(serverUri,
+				OwnCloudCredentialsFactory.newBasicCredentials(
+    					getString(R.string.username),
+    					getString(R.string.password)
+				)
+		);
+
+    	mOCContext = new OCContext(ocAccount);
     	
     	mFilesAdapter = new FilesArrayAdapter(this, R.layout.file_in_list);
     	((ListView)findViewById(R.id.list_view)).setAdapter(mFilesAdapter);
@@ -293,5 +296,4 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
             }
         });
 	}
-
 }
