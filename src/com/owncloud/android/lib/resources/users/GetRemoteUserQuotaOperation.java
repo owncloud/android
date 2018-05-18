@@ -1,6 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *
- *   Copyright (C) 2015 ownCloud Inc.
+ *   Copyright (C) 2018 ownCloud Inc.
  *   Copyright (C) 2015 Bartosz Przybylski
  *   Copyright (C) 2014 Marcello Steiner
  *
@@ -28,24 +28,38 @@
 package com.owncloud.android.lib.resources.users;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.network.WebdavEntry;
+import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.json.JSONObject;
+import org.apache.jackrabbit.webdav.DavConstants;
+import org.apache.jackrabbit.webdav.MultiStatus;
+import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 /**
  * @author marcello
+ * @author David González Verdugo
  */
 public class GetRemoteUserQuotaOperation extends RemoteOperation {
 
     static public class Quota {
+
+        // Not computed yet, e.g. external storage mounted but folder sizes need scanning
+        public static final int PENDING_FREE_QUOTA = -1;
+
+        // Storage not accessible, e.g. external storage with no API to ask for the free space
+        public static final int UNKNOWN_FREE_QUOTA = -2;
+
+        // Quota using all the storage
+        public static final int UNLIMITED_FREE_QUOTA = -3;
+
         long mFree, mUsed, mTotal;
         double mRelative;
 
@@ -64,72 +78,66 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
 
     private static final String TAG = GetRemoteUserQuotaOperation.class.getSimpleName();
 
-    private static final String NODE_OCS = "ocs";
-    private static final String NODE_DATA = "data";
-    private static final String NODE_QUOTA = "quota";
-    private static final String NODE_QUOTA_FREE = "free";
-    private static final String NODE_QUOTA_USED = "used";
-    private static final String NODE_QUOTA_TOTAL = "total";
-    private static final String NODE_QUOTA_RELATIVE = "relative";
+    private String mRemotePath;
 
-    // OCS Route
-    private static final String OCS_ROUTE ="/ocs/v1.php/cloud/users/";
+    /**
+     * Constructor
+     *
+     * @param remotePath Remote path of the file.
+     */
+    public GetRemoteUserQuotaOperation(String remotePath) {
+        mRemotePath = remotePath;
+    }
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        int status;
-        GetMethod get = null;
+        PropFindMethod query = null;
 
-
-        //Get the user
         try {
-            OwnCloudCredentials credentials = client.getCredentials();
-            String url = client.getBaseUri() + OCS_ROUTE + credentials.getUsername();
+            // remote request
+            query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
+                    WebdavUtils.getQuotaPropSet(),
+                    DavConstants.DEPTH_0);
 
-            get = new GetMethod(url);
-            get.setQueryString(new NameValuePair[]{new NameValuePair("format","json")});
-            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
-            status = client.executeMethod(get);
+            int status = client.executeMethod(query);
 
-            if(isSuccess(status)) {
-                String response = get.getResponseBodyAsString();
+            if (isSuccess(status)) {
+                // get data from remote folder
+                MultiStatus dataInServer = query.getResponseBodyAsMultiStatus();
+                Quota quota = readData(dataInServer, client);
 
-                // Parse the response
-                JSONObject respJSON = new JSONObject(response);
-                JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
-                JSONObject respData = respOCS.getJSONObject(NODE_DATA);
-                JSONObject quota    = respData.getJSONObject(NODE_QUOTA);
-                final Long quotaFree = quota.getLong(NODE_QUOTA_FREE);
-                final Long quotaUsed = quota.getLong(NODE_QUOTA_USED);
-                final Long quotaTotal = quota.getLong(NODE_QUOTA_TOTAL);
-                final Double quotaRelative = quota.getDouble(NODE_QUOTA_RELATIVE);
+                // Result of the operation
+                result = new RemoteOperationResult(true, query);
 
+                ArrayList<Object> data = new ArrayList<>();
+                data.add(quota);
 
-                // Result
-                result = new RemoteOperationResult(true, get);
-                //Quota data in data collection
-                ArrayList<Object> data = new ArrayList<Object>();
-                data.add(new Quota(quotaFree, quotaUsed, quotaTotal, quotaRelative));
-                result.setData(data);
-
-            } else {
-                result = new RemoteOperationResult(false, get);
-                String response = get.getResponseBodyAsString();
-                Log_OC.e(TAG, "Failed response while getting user quota information ");
-                if (response != null) {
-                    Log_OC.e(TAG, "*** status code: " + status + " ; response message: " + response);
-                } else {
-                    Log_OC.e(TAG, "*** status code: " + status);
+                // Add data to the result
+                if (result.isSuccess()) {
+                    result.setData(data);
                 }
+            } else {
+                // synchronization failed
+                result = new RemoteOperationResult(false, query);
             }
+
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
-            Log_OC.e(TAG, "Exception while getting OC user information", e);
+
 
         } finally {
-            if (get != null) {
-                get.releaseConnection();
+            if (query != null)
+                query.releaseConnection();  // let the connection available for other methods
+            if (result.isSuccess()) {
+                Log_OC.i(TAG, "Get quota from " + mRemotePath + ": " + result.getLogMessage());
+            } else {
+                if (result.isException()) {
+                    Log_OC.e(TAG, "Get quota from " + mRemotePath + ": " + result.getLogMessage(),
+                            result.getException());
+                } else {
+                    Log_OC.e(TAG, "Get quota from " + mRemotePath + ": " + result.getLogMessage());
+                }
             }
         }
 
@@ -137,8 +145,47 @@ public class GetRemoteUserQuotaOperation extends RemoteOperation {
     }
 
     private boolean isSuccess(int status) {
-        return (status == HttpStatus.SC_OK);
+        return status == HttpStatus.SC_MULTI_STATUS || status == HttpStatus.SC_OK;
     }
 
+    /**
+     * Read the data retrieved from the server about the quota
+     *
+     * @param remoteData Full response got from the server with the data of the quota
+     * @param client     Client instance to the remote server where the data were retrieved
+     * @return new Quota instance representing the data read from the server
+     */
+    private Quota readData(MultiStatus remoteData, OwnCloudClient client) {
 
+        // parse data from remote folder
+        WebdavEntry we = new WebdavEntry(remoteData.getResponses()[0], client.getWebdavUri().getPath());
+
+        // If there's a special case, available bytes will contain a negative code
+        // -1, PENDING: Not computed yet, e.g. external storage mounted but folder sizes need scanning
+        // -2, UNKNOWN: Storage not accessible, e.g. external storage with no API to ask for the free space
+        // -3, UNLIMITED: Quota using all the storage
+        if (we.quotaAvailableBytes().compareTo(new BigDecimal(1)) == -1) {
+            return new Quota(
+                    we.quotaAvailableBytes().longValue(),
+                    we.quotaUsedBytes().longValue(),
+                    0,
+                    0
+            );
+
+        } else {
+
+            BigDecimal totalQuota = we.quotaAvailableBytes().add(we.quotaUsedBytes());
+
+            BigDecimal relativeQuota = we.quotaUsedBytes()
+                    .multiply(new BigDecimal(100))
+                    .divide(totalQuota, 2, RoundingMode.HALF_UP);
+
+            return new Quota(
+                    we.quotaAvailableBytes().longValue(),
+                    we.quotaUsedBytes().longValue(),
+                    totalQuota.longValue(),
+                    relativeQuota.doubleValue()
+            );
+        }
+    }
 }

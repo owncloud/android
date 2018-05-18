@@ -141,6 +141,17 @@ public class WebdavUtils {
     }
 
     /**
+     * Builds a DavPropertyNameSet with properties for user quotas
+     * @return set of quota properties
+     */
+    public static DavPropertyNameSet getQuotaPropSet() {
+        DavPropertyNameSet propSet = new DavPropertyNameSet();
+        propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_AVAILABLE_BYTES));
+        propSet.add(DavPropertyName.create(WebdavEntry.PROPERTY_QUOTA_USED_BYTES));
+        return propSet;
+    }
+
+    /**
      *
      * @param rawEtag
      * @return

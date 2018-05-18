@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -55,11 +55,12 @@ import javax.net.ssl.SSLException;
 
 /**
  * The result of a remote operation required to an ownCloud server.
- * <p/>
+ *
  * Provides a common classification of remote operation results for all the
  * application.
  *
  * @author David A. Velasco
+ * @author David González Verdugo
  */
 public class RemoteOperationResult implements Serializable {
 
@@ -378,8 +379,8 @@ public class RemoteOperationResult implements Serializable {
         }
     }
 
-    public void setData(ArrayList<Object> files) {
-        mData = files;
+    public void setData(ArrayList<Object> items) {
+        mData = items;
     }
 
     public ArrayList<Object> getData() {
