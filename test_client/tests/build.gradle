@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':')
+    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation project(':')
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
 
     sourceSets {
         main {
@@ -21,7 +20,7 @@ android {
         }
 
         // Move the tests to tests/java, tests/res, etc...
-        instrumentTest.setRoot('tests')
+        androidTest.setRoot('tests')
 
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
