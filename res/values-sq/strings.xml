@@ -26,6 +26,9 @@
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>
   <string name="drawer_open">Hape</string>
+  <string name="drawer_quota">%1$s nga %2$s e përdorur (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s në përdorim</string>
+  <string name="drawer_unavailable_used_storage">S’ka të dhëna mbi përdorim depozitimi</string>
   <string name="prefs_category_general">Të përgjithshme</string>
   <string name="prefs_category_more">Më tepër</string>
   <string name="prefs_category_security">Siguri</string>
