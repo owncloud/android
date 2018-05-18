@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.refactor.utils;
+package com.owncloud.android.lib.refactor.account;
 
 /**
  * @author masensio

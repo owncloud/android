@@ -79,8 +79,6 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
     @Override
     public RemoteOperationResult exec() {
         try {
-
-
             final RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart(OAuth2Constants.KEY_GRANT_TYPE,
@@ -90,20 +88,15 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
                     .build();
 
             final Request request = getRequestBuilder()
-                    .url(getOCContext().getBaseUri().buildUpon()
+                    .url(getBaseUriBuilder()
                             .appendEncodedPath(mAccessTokenEndpointPath)
                             .build()
                             .toString())
                     .method("POST", requestBody)
                     .build();
 
-
-            OCCredentials oauthCredentials = new OCBasicCredentials(
-                    mClientId,
-                    mClientSecret
-            );
-
             final Response response = getClient().newCall(request).execute();
+
             final String responseData = response.body().string();
             Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + responseData);
 

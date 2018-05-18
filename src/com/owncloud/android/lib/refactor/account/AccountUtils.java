@@ -23,7 +23,7 @@
  *
  */
 
-package com.owncloud.android.lib.refactor.utils;
+package com.owncloud.android.lib.refactor.account;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -33,16 +33,23 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.refactor.Log_OC;
+import com.owncloud.android.lib.refactor.OCContext;
+import com.owncloud.android.lib.refactor.authentication.OCCredentials;
+import com.owncloud.android.lib.refactor.authentication.credentials.OCBasicCredentials;
+import com.owncloud.android.lib.refactor.authentication.credentials.OCBearerCredentials;
+import com.owncloud.android.lib.refactor.authentication.credentials.OCSamlSsoCredentials;
+import com.owncloud.android.lib.refactor.exceptions.AccountNotFoundException;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
-import org.apache.commons.httpclient.Cookie;
+import org.apache.commons.httpclient.auth.AuthenticationException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Cookie;
 
 public class AccountUtils {
 
@@ -59,7 +66,7 @@ public class AccountUtils {
     public static String getWebDavUrlForAccount(Context context, Account account)
         throws AccountNotFoundException {
 
-        return getBaseUrlForAccount(context, account) + OwnCloudClient.WEBDAV_PATH_4_0;
+        return getBaseUrlForAccount(context, account) + OCContext.WEBDAV_PATH_4_0;
     }
 
 
@@ -121,72 +128,64 @@ public class AccountUtils {
     }
 
     /**
-     * @return
+     * @return OCCredentials
      * @throws IOException
      * @throws AuthenticatorException
      * @throws OperationCanceledException
      */
-    public static OwnCloudCredentials getCredentialsForAccount(Context context, Account account)
+
+    /**
+     *
+     * @param context an Android context
+     * @param account the coresponding Android account
+     * @return
+     * @throws OperationCanceledException
+     * @throws AuthenticatorException
+     * @throws IOException
+     */
+    public static OCCredentials getCredentialsForAccount(Context context, Account account)
         throws OperationCanceledException, AuthenticatorException, IOException {
 
-        OwnCloudCredentials credentials = null;
-        AccountManager am = AccountManager.get(context);
-
-        String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
-        boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals("TRUE");
-
+        final AccountManager am = AccountManager.get(context);
+        final String supportsOAuth2 = am.getUserData(account, AccountUtils.Constants.KEY_SUPPORTS_OAUTH2);
+        final boolean isOauth2 = supportsOAuth2 != null && supportsOAuth2.equals("TRUE");
         String supportsSamlSSo = am.getUserData(account,
                 AccountUtils.Constants.KEY_SUPPORTS_SAML_WEB_SSO);
-
-        boolean isSamlSso = supportsSamlSSo != null && supportsSamlSSo.equals("TRUE");
-
-        String username = AccountUtils.getUsernameForAccount(account);
-        OwnCloudVersion version = new OwnCloudVersion(am.getUserData(account, Constants.KEY_OC_VERSION));
+        final boolean isSamlSso = supportsSamlSSo != null && supportsSamlSSo.equals("TRUE");
+        final String username = AccountUtils.getUsernameForAccount(account);
 
         if (isOauth2) {
-            String accessToken = am.blockingGetAuthToken(
+            final String accessToken = am.blockingGetAuthToken(
                 account,
                 AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
                 false);
 
-            credentials = OwnCloudCredentialsFactory.newBearerCredentials(username, accessToken);
+            return new OCBearerCredentials(username, accessToken);
 
         } else if (isSamlSso) {
-            String accessToken = am.blockingGetAuthToken(
-                account,
-                AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type),
-                false);
 
-            credentials = OwnCloudCredentialsFactory.newSamlSsoCredentials(username, accessToken);
+            try {
+                final String accessToken = am.blockingGetAuthToken(
+                        account,
+                        AccountTypeUtils.getAuthTokenTypeSamlSessionCookie(account.type),
+                        false);
+
+                return new OCSamlSsoCredentials(username, accessToken,
+                        Uri.parse(getBaseUrlForAccount(context, account)));
+            } catch (AccountNotFoundException e) {
+                throw new AuthenticationException("Account not found", e);
+            }
 
         } else {
-            String password = am.blockingGetAuthToken(
+            final String password = am.blockingGetAuthToken(
                 account,
                 AccountTypeUtils.getAuthTokenTypePass(account.type),
                 false);
 
-            credentials = OwnCloudCredentialsFactory.newBasicCredentials(
-                username,
-                password,
-                version.isPreemptiveAuthenticationPreferred()
-            );
+            return new OCBasicCredentials(username, password);
         }
-
-        return credentials;
-
     }
 
-
-    public static String buildAccountNameOld(Uri serverBaseUrl, String username) {
-        if (serverBaseUrl.getScheme() == null) {
-            serverBaseUrl = Uri.parse("https://" + serverBaseUrl.toString());
-        }
-        String accountName = username + "@" + serverBaseUrl.getHost();
-        if (serverBaseUrl.getPort() >= 0) {
-            accountName += ":" + serverBaseUrl.getPort();
-        }
-        return accountName;
-    }
 
     public static String buildAccountName(Uri serverBaseUrl, String username) {
         if (serverBaseUrl.getScheme() == null) {
@@ -203,79 +202,59 @@ public class AccountUtils {
         return accountName;
     }
 
-    public static void saveClient(OwnCloudClient client, Account savedAccount, Context context) {
+    public static void saveCookies(List<Cookie> cookies, Account savedAccount, Context context) {
 
         // Account Manager
         AccountManager ac = AccountManager.get(context.getApplicationContext());
 
-        if (client != null) {
-            String cookiesString = client.getCookiesString();
-            if (!"".equals(cookiesString)) {
-                ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString);
-                // Log_OC.d(TAG, "Saving Cookies: "+ cookiesString );
+        if (cookies != null && cookies.size() != 0) {
+            StringBuilder cookiesString = new StringBuilder();
+            for (Cookie cookie : cookies) {
+                cookiesString.append(cookiesString + cookie.toString() + ";");
             }
+
+            ac.setUserData(savedAccount, Constants.KEY_COOKIES, cookiesString.toString());
         }
 
     }
 
 
     /**
-     * Restore the client cookies persisted in an account stored in the system AccountManager.
+     *  Restore the client cookies persisted in an account stored in the system AccountManager.
      *
-     * @param account           Stored account.
-     * @param client            Client to restore cookies in.
-     * @param context           Android context used to access the system AccountManager.
+     * @param account
+     * @param context
+     * @return
+     * @throws AccountsException
      */
-    public static void restoreCookies(Account account, OwnCloudClient client, Context context) {
+    public static List<Cookie> getCookiesFromAccount(Account account, Context context) throws AccountsException {
         if (account == null) {
             Log_OC.d(TAG, "Cannot restore cookie for null account");
+            return new ArrayList<>();
+        }
 
-        } else {
-            Log_OC.d(TAG, "Restoring cookies for " + account.name);
+        Log_OC.d(TAG, "Restoring cookies for " + account.name);
 
-            // Account Manager
-            AccountManager am = AccountManager.get(context.getApplicationContext());
+        final AccountManager am = AccountManager.get(context.getApplicationContext());
+        final Uri serverUri = Uri.parse(getBaseUrlForAccount(context, account));
+        final String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
+        final List<Cookie> cookies = new ArrayList<>();
 
-            Uri serverUri = (client.getBaseUri() != null) ? client.getBaseUri() : client.getWebdavUri();
+        if (cookiesString != null) {
+            String[] rawCookies = cookiesString.split(";");
+            for (String rawCookie : rawCookies) {
+                final int equalPos = rawCookie.indexOf('=');
 
-            String cookiesString = am.getUserData(account, Constants.KEY_COOKIES);
-            if (cookiesString != null) {
-                String[] cookies = cookiesString.split(";");
-                if (cookies.length > 0) {
-                    for (int i = 0; i < cookies.length; i++) {
-                        Cookie cookie = new Cookie();
-                        int equalPos = cookies[i].indexOf('=');
-                        cookie.setName(cookies[i].substring(0, equalPos));
-                        cookie.setValue(cookies[i].substring(equalPos + 1));
-                        cookie.setDomain(serverUri.getHost());    // VERY IMPORTANT
-                        cookie.setPath(serverUri.getPath());    // VERY IMPORTANT
-
-                        client.getState().addCookie(cookie);
-                    }
-                }
+                cookies.add(new Cookie.Builder()
+                        .name(rawCookie.substring(0, equalPos))
+                        .value(rawCookie.substring(equalPos + 1))
+                        .domain(serverUri.getHost())
+                        .path(serverUri.getPath())
+                        .build());
             }
         }
+        return cookies;
     }
-
-    public static class AccountNotFoundException extends AccountsException {
-
-        /**
-         * Generated - should be refreshed every time the class changes!!
-         */
-        private static final long serialVersionUID = -1684392454798508693L;
-
-        private Account mFailedAccount;
-
-        public AccountNotFoundException(Account failedAccount, String message, Throwable cause) {
-            super(message, cause);
-            mFailedAccount = failedAccount;
-        }
-
-        public Account getFailedAccount() {
-            return mFailedAccount;
-        }
-    }
-
 
     public static class Constants {
         /**

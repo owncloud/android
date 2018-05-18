@@ -27,7 +27,7 @@ package com.owncloud.android.lib.refactor;
 import android.accounts.Account;
 import android.accounts.AccountsException;
 
-import com.owncloud.android.lib.refactor.utils.AccountUtils;
+import com.owncloud.android.lib.refactor.exceptions.AccountNotFoundException;
 import com.owncloud.android.lib.refactor.exceptions.CertificateCombinedException;
 import com.owncloud.android.lib.refactor.exceptions.OperationCancelledException;
 import com.owncloud.android.lib.refactor.utils.ErrorMessageParser;
@@ -71,7 +71,7 @@ public class RemoteOperationResult implements Serializable {
     /**
      * Generated - should be refreshed every time the class changes!!
      */
-    private static final long serialVersionUID = 4968939884332372230L;
+    private static final long serialVersionUID = 4968939884332652230L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
 
@@ -184,7 +184,7 @@ public class RemoteOperationResult implements Serializable {
         } else if (e instanceof UnknownHostException) {
             mCode = ResultCode.HOST_NOT_AVAILABLE;
 
-        } else if (e instanceof AccountUtils.AccountNotFoundException) {
+        } else if (e instanceof AccountNotFoundException) {
             mCode = ResultCode.ACCOUNT_NOT_FOUND;
 
         } else if (e instanceof AccountsException) {
@@ -444,9 +444,9 @@ public class RemoteOperationResult implements Serializable {
             if(mException instanceof DavException) return "Unexpected WebDAV exception";
             if(mException instanceof HttpException) return "HTTP violation";
             if(mException instanceof IOException) return "Unrecovered transport exception";
-            if(mException instanceof AccountUtils.AccountNotFoundException) {
+            if(mException instanceof AccountNotFoundException) {
                 Account failedAccount =
-                        ((AccountUtils.AccountNotFoundException) mException).getFailedAccount();
+                        ((AccountNotFoundException) mException).getFailedAccount();
                 return mException.getMessage() + " (" +
                         (failedAccount != null ? failedAccount.name : "NULL") + ")";
 

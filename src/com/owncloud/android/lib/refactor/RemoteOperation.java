@@ -1,5 +1,7 @@
 package com.owncloud.android.lib.refactor;
 
+import android.net.Uri;
+
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
@@ -29,16 +31,26 @@ public abstract class RemoteOperation {
         return httpClient;
     }
 
+    public Uri.Builder getBaseUriBuilder() {
+        return mContext.getOCAccount().getBaseUri().buildUpon();
+    }
+
     public Request.Builder getRequestBuilder() {
         Request.Builder builder = new Request.Builder();
 
         for(Map.Entry<String, String> header
-                : mContext.getCredentials().getCredentialHeaders().entrySet()) {
+                : mContext.getOCAccount()
+                .getCredentials()
+                .getCredentialHeaders()
+                .entrySet()) {
             builder.addHeader(header.getKey(), header.getValue());
         }
 
         //TODO: Remove this part once SAML is obsolet
-        final String credentialCookie = mContext.getCredentials().getCredentialCookie();
+        final String credentialCookie = mContext
+                .getOCAccount()
+                .getCredentials()
+                .getCredentialCookie();
         if(credentialCookie == null) {
             builder.addHeader("Cookie", credentialCookie);
         }

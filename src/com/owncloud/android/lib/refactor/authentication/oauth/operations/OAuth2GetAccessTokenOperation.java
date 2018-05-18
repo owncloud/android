@@ -84,13 +84,6 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
     @Override
     public RemoteOperationResult exec() {
         try {
-
-            final Uri uri = getOCContext()
-                    .getBaseUri()
-                    .buildUpon()
-                    .appendEncodedPath(mAccessTokenEndpointPath)
-                    .build();
-
             final RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart(OAuth2Constants.KEY_GRANT_TYPE, mGrantType)
@@ -100,7 +93,10 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
                     .build();
 
             final Request request = getRequestBuilder()
-                    .url(uri.toString())
+                    .url(getBaseUriBuilder()
+                            .appendEncodedPath(mAccessTokenEndpointPath)
+                            .build()
+                            .toString())
                     .method("POST", requestBody)
                     .build();
 
@@ -109,6 +105,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
                     .execute();
 
             final String responseData = response.body().string();
+            
             if (responseData != null && responseData.length() > 0) {
                 JSONObject tokenJson = new JSONObject(responseData);
                 Map<String, String> accessTokenResult =

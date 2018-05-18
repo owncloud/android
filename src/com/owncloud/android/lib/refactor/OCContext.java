@@ -2,6 +2,7 @@ package com.owncloud.android.lib.refactor;
 
 import android.net.Uri;
 
+import com.owncloud.android.lib.refactor.account.OCAccount;
 import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 
 
@@ -18,33 +19,13 @@ public class OCContext {
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
     private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
 
-    private OCCredentials mCredentials = null;
-    private Uri mBaseUri;
+    private OCAccount mOCAccount;
 
-    public class Builder {
-        OCContext ocContext = new OCContext();
-
-        public Builder setCredentials(OCCredentials credentials) {
-            ocContext.mCredentials = credentials;
-            return this;
-        }
-
-        public Builder setBaseUri(Uri baseUri) {
-            ocContext.mBaseUri = baseUri;
-            return this;
-        }
-
-        public OCContext build() {
-            return ocContext;
-        }
+    public OCContext(OCAccount account) {
+        mOCAccount = account;
     }
 
-
-    public OCCredentials getCredentials() {
-        return mCredentials;
-    }
-
-    public Uri getBaseUri() {
-        return mBaseUri;
+    public OCAccount getOCAccount() {
+        return mOCAccount;
     }
 }
