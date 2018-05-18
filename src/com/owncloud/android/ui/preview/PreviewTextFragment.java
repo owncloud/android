@@ -346,11 +346,6 @@ public class PreviewTextFragment extends FileFragment {
             item.setEnabled(false);
         }
 
-        item = menu.findItem(R.id.action_sort);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
     }
 
     /**
