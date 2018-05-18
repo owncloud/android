@@ -25,10 +25,7 @@ package com.owncloud.android.lib.refactor.authentication.credentials;
 
 import android.net.Uri;
 
-import com.owncloud.android.lib.refactor.authentication.OCCredentials;
-
 import org.apache.commons.httpclient.Cookie;
-
 import java.util.HashMap;
 import java.util.Map;
 

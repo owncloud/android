@@ -23,17 +23,12 @@
  */
 package com.owncloud.android.lib.refactor.authentication.credentials;
 
-
-
-import com.owncloud.android.lib.refactor.authentication.OCCredentials;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class OCBearerCredentials implements OCCredentials {
 
     private String mUsername;
-
     private String mAccessToken;
 
     public OCBearerCredentials(String username, String accessToken) {
@@ -46,6 +41,11 @@ public class OCBearerCredentials implements OCCredentials {
         HashMap<String, String> header = new HashMap<>(1);
         header.put("Authorization", "Bearer " + mAccessToken);
         return header;
+    }
+
+    @Override
+    public String getCredentialCookie() {
+        return null;
     }
 
     @Override

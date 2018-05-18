@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.refactor.account;
 
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -32,8 +31,8 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCAnonymousCredentials;
+import com.owncloud.android.lib.refactor.authentication.credentials.OCCredentials;
 import com.owncloud.android.lib.refactor.exceptions.AccountNotFoundException;
 
 import java.io.IOException;

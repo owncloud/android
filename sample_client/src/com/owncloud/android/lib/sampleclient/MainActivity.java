@@ -35,8 +35,10 @@ import java.util.List;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.refactor.authentication.credentials.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
+import com.owncloud.android.lib.refactor.OwnCloudContext;
+import com.owncloud.android.lib.refactor.operations.PropfindOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -64,7 +66,9 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 	
 	private Handler mHandler;
 	
-	private OwnCloudClient mClient; 
+	private OwnCloudClient mClient;
+
+	private OwnCloudContext mOCContext;
 	
 	private FilesArrayAdapter mFilesAdapter;
 	
@@ -79,13 +83,21 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         mHandler = new Handler();
         
     	Uri serverUri = Uri.parse(getString(R.string.server_base_url));
-    	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
-    	mClient.setCredentials(
-    			OwnCloudCredentialsFactory.newBasicCredentials(
-    					getString(R.string.username), 
-    					getString(R.string.password)
-				)
-		);
+//    	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
+//    	mClient.setCredentials(
+//    			OwnCloudCredentialsFactory.newBasicCredentials(
+//    					getString(R.string.username),
+//    					getString(R.string.password)
+//				)
+//		);
+
+    	mOCContext = new OwnCloudContext.Builder()
+                .setBaseUri(serverUri)
+                .setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(
+                        getString(R.string.username),
+                        getString(R.string.password)
+                ))
+                .build();
     	
     	mFilesAdapter = new FilesArrayAdapter(this, R.layout.file_in_list);
     	((ListView)findViewById(R.id.list_view)).setAdapter(mFilesAdapter);
@@ -148,8 +160,12 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     }
 
     private void startRefresh() {
-    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
-    	refreshOperation.execute(mClient, this, mHandler);
+
+		PropfindOperation propfindOperation = new PropfindOperation(mOCContext, FileUtils.PATH_SEPARATOR);
+
+		propfindOperation.exec();
+//    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
+//    	refreshOperation.execute(mClient, this, mHandler);
     }
     
     private void startUpload() {

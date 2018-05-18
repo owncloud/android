@@ -23,8 +23,6 @@
  */
 package com.owncloud.android.lib.refactor.authentication.credentials;
 
-import com.owncloud.android.lib.refactor.authentication.OCCredentials;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +46,11 @@ public class OCBasicCredentials implements OCCredentials {
     }
 
     @Override
+    public String getCredentialCookie() {
+        return null;
+    }
+
+    @Override
     public String getUsername() {
         return mUsername;
     }
@@ -61,5 +64,4 @@ public class OCBasicCredentials implements OCCredentials {
     public boolean authTokenCanBeRefreshed() {
         return false;
     }
-
 }

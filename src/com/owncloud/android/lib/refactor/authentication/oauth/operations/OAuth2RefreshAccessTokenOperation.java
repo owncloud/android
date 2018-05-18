@@ -25,8 +25,6 @@ import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.RemoteOperationResult;
 import com.owncloud.android.lib.refactor.Log_OC;
 import com.owncloud.android.lib.refactor.RemoteOperation;
-import com.owncloud.android.lib.refactor.authentication.credentials.OCBasicCredentials;
-import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2GrantType;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2ResponseParser;

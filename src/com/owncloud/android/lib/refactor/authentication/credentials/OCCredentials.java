@@ -22,23 +22,20 @@
  *
  */
 
-package com.owncloud.android.lib.refactor.authentication;
+package com.owncloud.android.lib.refactor.authentication.credentials;
 
-
-import java.util.HashMap;
 import java.util.Map;
-
 
 public interface OCCredentials {
 
     Map<String, String> getCredentialHeaders();
 
     //TODO: Remove this once SAML is obsolet
-    default String getCredentialCookie() {
-        return null;
-    }
+    String getCredentialCookie();
 
     String getUsername();
+
     String getAuthToken();
+
     boolean authTokenCanBeRefreshed();
 }

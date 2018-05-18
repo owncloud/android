@@ -1,7 +1,6 @@
 package com.owncloud.android.lib.refactor;
 
 import android.net.Uri;
-
 import java.util.Map;
 
 import okhttp3.OkHttpClient;

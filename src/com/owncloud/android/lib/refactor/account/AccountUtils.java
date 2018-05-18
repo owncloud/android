@@ -33,12 +33,11 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.refactor.Log_OC;
 import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCBasicCredentials;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCBearerCredentials;
+import com.owncloud.android.lib.refactor.authentication.credentials.OCCredentials;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCSamlSsoCredentials;
 import com.owncloud.android.lib.refactor.exceptions.AccountNotFoundException;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;

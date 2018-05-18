@@ -1,9 +1,6 @@
 package com.owncloud.android.lib.refactor;
 
-import android.net.Uri;
-
 import com.owncloud.android.lib.refactor.account.OCAccount;
-import com.owncloud.android.lib.refactor.authentication.OCCredentials;
 
 
 public class OCContext {
