@@ -100,15 +100,6 @@ tasks.withType(Test) {
 android {
     compileSdkVersion 26
 
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'x86', 'x86_64', 'arm64-v8a', 'armeabi'
-            universalApk true
-        }
-    }
-
     dexOptions {
         jumboMode true
     }
