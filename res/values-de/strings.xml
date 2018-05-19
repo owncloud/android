@@ -26,6 +26,9 @@
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>
   <string name="drawer_open">Öffnen</string>
+  <string name="drawer_quota">%1$s von %2$s verwendet (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s verwendet</string>
+  <string name="drawer_unavailable_used_storage">Keine Speichernutzungsinformationen verfügbar</string>
   <string name="prefs_category_general">Allgemein</string>
   <string name="prefs_category_more">Mehr</string>
   <string name="prefs_category_security">Sicherheit</string>

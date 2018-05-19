@@ -26,6 +26,9 @@
   <string name="drawer_item_uploads_list">Загрузки</string>
   <string name="drawer_close">Закрыть</string>
   <string name="drawer_open">Открыть</string>
+  <string name="drawer_quota">Использовано %1$s из %2$s (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">Использовано %1$s</string>
+  <string name="drawer_unavailable_used_storage">Нет данных о занятом объёме</string>
   <string name="prefs_category_general">Основные</string>
   <string name="prefs_category_more">Больше</string>
   <string name="prefs_category_security">Безопасность</string>

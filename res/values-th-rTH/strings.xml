@@ -26,6 +26,9 @@
   <string name="drawer_item_uploads_list">อัพโหลด</string>
   <string name="drawer_close">ปิด</string>
   <string name="drawer_open">เปิด</string>
+  <string name="drawer_quota">ใช้ไปแล้ว %1$sจากทั้งหมด %2$s (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">ใช้ไป%1$s</string>
+  <string name="drawer_unavailable_used_storage">ไม่มีข้อมูลการใช้พื้นที่เก็บข้อมูล</string>
   <string name="prefs_category_general">ทั่วไป</string>
   <string name="prefs_category_more">เพิ่มเติม</string>
   <string name="prefs_category_security">ความปลอดภัย</string>
