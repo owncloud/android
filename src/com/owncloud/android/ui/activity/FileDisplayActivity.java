@@ -613,7 +613,6 @@ public class FileDisplayActivity extends FileActivity
     private void recoverSortMenuFormPreferences(Menu menu) {
         // setup sort menu
         if(menu != null && mDescendingMenuItem != null) {
-            mDescendingMenuItem = menu.findItem(R.id.action_sort_descending);
             mDescendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this));
 
             switch (getSortOrder(this)) {
