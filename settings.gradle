@@ -1,3 +1,4 @@
 include ':'
 include ':sample_client'
 include ':test_client'
+include ':dav4android'
