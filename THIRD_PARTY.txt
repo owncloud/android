@@ -81,3 +81,9 @@ The third party software included and used by this project is:
   Licensed under MIT
   Included in the ownCloud client APK.
   See https://github.com/afollestad/material-dialogs
+
+* CVScanner version 1.0.0
+   Copyright (C) 2017 Credntia
+   Licensed under GNU General Public License, Version 3.0
+   Included in the ownCloud client APK.
+   See https://github.com/Credntia/CVScanner
