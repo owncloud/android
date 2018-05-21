@@ -612,7 +612,7 @@ public class FileDisplayActivity extends FileActivity
 
     private void recoverSortMenuFormPreferences(Menu menu) {
         // setup sort menu
-        if(menu != null && mDescendingMenuItem != null) {
+        if(menu != null) {
             mDescendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this));
 
             switch (getSortOrder(this)) {
@@ -915,12 +915,6 @@ public class FileDisplayActivity extends FileActivity
         downloadIntentFilter.addAction(FileDownloader.getDownloadFinishMessage());
         mDownloadBroadcastReceiver = new DownloadBroadcastReceiver();
         mLocalBroadcastManager.registerReceiver(mDownloadBroadcastReceiver, downloadIntentFilter);
-
-        //set descending/ascending sort
-        if(mDescendingMenuItem != null) {
-            final boolean isAscending = PreferenceManager.getSortAscending(this);
-            mDescendingMenuItem.setChecked(!isAscending);
-        }
 
         recoverSortMenuFormPreferences(mMainMenu);
 
