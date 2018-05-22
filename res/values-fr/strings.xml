@@ -30,6 +30,7 @@
   <string name="prefs_accounts">Comptes</string>
   <string name="prefs_manage_accounts">Gérer les comptes</string>
   <string name="prefs_passcode">Code de sécurité</string>
+  <string name="prefs_fingerprint">Verrouillage par empreinte</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
   <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
@@ -501,6 +502,7 @@ Ci-dessous la liste des fichiers locaux, et les fichiers distants dans %5$s auxq
   <string name="welcome_feature_3_text">Connectez-vous à tous vos serveurs ownCloud</string>
   <string name="welcome_feature_4_title">Téléversements de la caméra</string>
   <string name="welcome_feature_4_text">Vos images/vidéos ont été téléversées automatiquement</string>
+  <string name="welcome_feature_7_title">Verrouillage par empreinte</string>
   <string name="welcome_feature_9_title">Téléverser une photo depuis la caméra</string>
   <string name="welcome_feature_9_text">Prendre une photo et la téléverser directement sur votre serveur</string>
 </resources>
