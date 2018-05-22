@@ -84,21 +84,14 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         
         mHandler = new Handler();
         
-    	Uri serverUri = Uri.parse(getString(R.string.server_base_url));
+    	final Uri serverUri = Uri.parse(getString(R.string.server_base_url));
     	mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
-//    	mClient.setCredentials(
-//    			OwnCloudCredentialsFactory.newBasicCredentials(
-//    					getString(R.string.username),
-//    					getString(R.string.password)
-//				)
-//		);
+
 
 		OCAccount ocAccount = new OCAccount(serverUri,
 				OwnCloudCredentialsFactory.newBasicCredentials(
     					getString(R.string.username),
-    					getString(R.string.password)
-				)
-		);
+    					getString(R.string.password)));
 
     	mOCContext = new OCContext(ocAccount);
     	
@@ -164,9 +157,9 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 
     private void startRefresh() {
 
-		PropfindOperation propfindOperation = new PropfindOperation(mOCContext, FileUtils.PATH_SEPARATOR);
+		final PropfindOperation propfindOperation = new PropfindOperation(mOCContext, FileUtils.PATH_SEPARATOR);
 
-		propfindOperation.exec();
+		Thread tread = new Thread(() -> propfindOperation.exec());
 //    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
 //    	refreshOperation.execute(mClient, this, mHandler);
     }

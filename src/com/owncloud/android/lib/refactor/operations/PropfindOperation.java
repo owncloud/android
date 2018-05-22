@@ -5,12 +5,15 @@ import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.refactor.RemoteOperation;
 import com.owncloud.android.lib.refactor.RemoteOperationResult;
 import java.io.IOException;
+import java.util.logging.Logger;
 
+import at.bitfire.dav4android.Constants;
 import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.exception.DavException;
 import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.dav4android.property.DisplayName;
 import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 
 public class PropfindOperation extends RemoteOperation {
 
@@ -24,22 +27,16 @@ public class PropfindOperation extends RemoteOperation {
 
     @Override
     public RemoteOperationResult exec() {
-        DavResource davResource = new DavResource(
-                getClient(),
-                HttpUrl.parse(getWebDAVUriBuilder() + WebdavUtils.encodePath(mRemotePath)),
-                null);
 
         try {
-            davResource.propfind(1, DisplayName.NAME);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (HttpException e) {
-            e.printStackTrace();
-        } catch (DavException e) {
+            HttpUrl location = HttpUrl.parse(getBaseUriBuilder().build().toString());
+
+            DavResource davResource = new DavResource(getClient(), getWebDavHttpUrl("/"));
+            davResource.propfind(0, DisplayName.NAME);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-        davResource.getProperties();
 
         return null;
     }

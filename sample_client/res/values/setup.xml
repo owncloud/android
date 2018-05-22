@@ -24,8 +24,8 @@
  -->
  
 <resources>
-    <string name="server_base_url"></string>
-    <string name="username"></string>
-    <string name="password"></string>
+    <string name="server_base_url">http://docker.oc.solidgear.es:11917/</string>
+    <string name="username">admin</string>
+    <string name="password">Password</string>
     <string name ="user_agent">Mozilla/5.0 (Android) ownCloud sample </string>
 </resources>

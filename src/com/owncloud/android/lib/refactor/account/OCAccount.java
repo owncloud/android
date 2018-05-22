@@ -91,7 +91,11 @@ public class OCAccount {
         }
         mSavedAccount = null;
         mSavedAccountName = null;
-        mBaseUri = baseUri;
+        if(baseUri != null && !baseUri.equals("")) {
+            mBaseUri = baseUri;
+        } else {
+            throw new IllegalArgumentException("baseUri can not be null or empty");
+        }
         mCredentials = credentials != null
                 ? credentials
                 : new OCAnonymousCredentials();
