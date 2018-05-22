@@ -13,7 +13,7 @@ import okhttp3.Request;
 
 public abstract class RemoteOperation {
     private final OCContext mContext;
-    private static final String WEBDAV_PATH_4_0 = "remote.php/dav";
+    private static final String WEBDAV_PATH_4_0 = "remote.php/dav/files";
     private static OkHttpClient mClient = null;
 
     protected RemoteOperation(OCContext context) {
@@ -50,6 +50,7 @@ public abstract class RemoteOperation {
         return UrlUtils.INSTANCE.omitTrailingSlash(HttpUrl.parse(
                 getBaseUriBuilder()
                         .appendEncodedPath(WEBDAV_PATH_4_0)
+                        .appendEncodedPath(mContext.getOCAccount().getDisplayName())
                         .appendEncodedPath(resourcePath)
                         .build()
                         .toString()));

@@ -5,7 +5,7 @@ import com.owncloud.android.lib.refactor.RemoteOperation;
 import com.owncloud.android.lib.refactor.RemoteOperationResult;
 
 import at.bitfire.dav4android.DavResource;
-import at.bitfire.dav4android.property.DisplayName;
+import at.bitfire.dav4android.PropertyUtils;
 
 public class PropfindOperation extends RemoteOperation {
 
@@ -21,9 +21,8 @@ public class PropfindOperation extends RemoteOperation {
     public RemoteOperationResult exec() {
 
         try {
-
             DavResource davResource = new DavResource(getClient(), getWebDavHttpUrl("/"));
-            davResource.propfind(0, DisplayName.NAME);
+            davResource.propfind(1, PropertyUtils.INSTANCE.getAllPropSet());
 
         } catch (Exception e) {
             e.printStackTrace();
