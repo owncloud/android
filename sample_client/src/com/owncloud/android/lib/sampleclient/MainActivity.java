@@ -158,8 +158,8 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     private void startRefresh() {
 
 		final PropfindOperation propfindOperation = new PropfindOperation(mOCContext, FileUtils.PATH_SEPARATOR);
+		new Thread(() -> propfindOperation.exec()).start();
 
-		Thread tread = new Thread(() -> propfindOperation.exec());
 //    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
 //    	refreshOperation.execute(mClient, this, mHandler);
     }
