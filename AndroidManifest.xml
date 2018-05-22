@@ -219,7 +219,7 @@
         <activity
             android:name=".ui.activity.ErrorsWhileCopyingHandlerActivity"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".ui.activity.LogHistoryActivity" />
+        <activity android:name=".ui.activity.LogHistoryActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
         <activity
             android:name=".ui.activity.UploadListActivity"
