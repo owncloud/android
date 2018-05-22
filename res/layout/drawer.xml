@@ -59,7 +59,7 @@
                 android:id="@+id/account_quota_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/drawer_quota"/>
+                android:text="@string/drawer_loading_quota"/>
 
         </LinearLayout>
 
