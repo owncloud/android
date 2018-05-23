@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">بارگذاری‌ها</string>
   <string name="drawer_close">بستن</string>
   <string name="drawer_open">گشودن</string>
+  <string name="drawer_feedback">بازخورد</string>
+  <string name="drawer_help">راهنما</string>
   <string name="prefs_category_general">عمومی</string>
   <string name="prefs_category_more">بیش‌تر</string>
   <string name="prefs_category_security">امنیت</string>

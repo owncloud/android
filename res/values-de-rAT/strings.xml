@@ -13,6 +13,8 @@
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
+  <string name="drawer_feedback">Rückmeldung</string>
+  <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_log_summary">Dies wird verwendet um Probleme aufzuzeichnen</string>

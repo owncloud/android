@@ -11,6 +11,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Aperi</string>
+  <string name="drawer_help">Adjuta</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Plus</string>
   <string name="prefs_category_security">Securitate</string>

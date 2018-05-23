@@ -22,6 +22,8 @@
   <string name="drawer_item_uploads_list">ਅੱਪਲੋਡਜ਼</string>
   <string name="drawer_close">ਬੰਦ</string>
   <string name="drawer_open">ਖੋਲੋ</string>
+  <string name="drawer_feedback">ਸੁਝਾਅ</string>
+  <string name="drawer_help">ਮਦਦ</string>
   <string name="prefs_category_general">ਆਮ</string>
   <string name="prefs_category_more">ਹੋਰ</string>
   <string name="prefs_accounts">ਅਕਾਊਂਟ</string>

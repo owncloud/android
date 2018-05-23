@@ -16,7 +16,6 @@
   <string name="actionbar_sort_title">Упорядочить по</string>
   <string name="actionbar_sort_by_name">А-Я</string>
   <string name="actionbar_sort_by_date">От старых к новым</string>
-  <string name="actionbar_sort_by_size">От малых к большим</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Все файлы</string>
@@ -29,6 +28,8 @@
   <string name="drawer_quota">Использовано %1$s из %2$s (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">Использовано %1$s</string>
   <string name="drawer_unavailable_used_storage">Нет данных о занятом объёме</string>
+  <string name="drawer_feedback">Обратная связь</string>
+  <string name="drawer_help">Помощь</string>
   <string name="prefs_category_general">Основные</string>
   <string name="prefs_category_more">Больше</string>
   <string name="prefs_category_security">Безопасность</string>

@@ -15,7 +15,6 @@
   <string name="actionbar_descending">降順</string>
   <string name="actionbar_sort_title">ソート: </string>
   <string name="actionbar_sort_by_name">名前順</string>
-  <string name="actionbar_sort_by_size">最小 - 最大</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">すべてのファイル</string>
@@ -25,6 +24,8 @@
   <string name="drawer_item_uploads_list">アップロード</string>
   <string name="drawer_close">閉じる</string>
   <string name="drawer_open">開く</string>
+  <string name="drawer_feedback">フィードバック</string>
+  <string name="drawer_help">ヘルプ</string>
   <string name="prefs_category_general">一般</string>
   <string name="prefs_category_more">もっと見る</string>
   <string name="prefs_category_security">セキュリティ</string>

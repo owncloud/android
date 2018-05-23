@@ -16,7 +16,6 @@
   <string name="actionbar_sort_title">Sortieren nach</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Älteste - Neueste</string>
-  <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle Dateien</string>
@@ -29,6 +28,8 @@
   <string name="drawer_quota">%1$s von %2$s verwendet (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">%1$s verwendet</string>
   <string name="drawer_unavailable_used_storage">Keine Speichernutzungsinformationen verfügbar</string>
+  <string name="drawer_feedback">Rückmeldungen</string>
+  <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
   <string name="prefs_category_more">Mehr</string>
   <string name="prefs_category_security">Sicherheit</string>

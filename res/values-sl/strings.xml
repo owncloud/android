@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Poslano</string>
   <string name="drawer_close">Zapri</string>
   <string name="drawer_open">Odpri</string>
+  <string name="drawer_feedback">Pošlji sporočilo razvijalcem programa</string>
+  <string name="drawer_help">Pomoč</string>
   <string name="prefs_category_general">Splošno</string>
   <string name="prefs_category_more">Več</string>
   <string name="prefs_category_security">Varnost</string>

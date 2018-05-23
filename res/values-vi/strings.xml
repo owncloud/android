@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Tải lên</string>
   <string name="drawer_close">Đóng</string>
   <string name="drawer_open">Mở</string>
+  <string name="drawer_feedback">Phản hồi</string>
+  <string name="drawer_help">Giúp đỡ</string>
   <string name="prefs_category_general">Tổng hợp</string>
   <string name="prefs_category_more">Nhiều hơn</string>
   <string name="prefs_accounts">Tài khoản</string>

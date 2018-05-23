@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Üleslaadimised</string>
   <string name="drawer_close">Sulge</string>
   <string name="drawer_open">Ava</string>
+  <string name="drawer_feedback">Tagasiside</string>
+  <string name="drawer_help">Abiinfo</string>
   <string name="prefs_category_general">Üldine</string>
   <string name="prefs_category_more">Rohkem</string>
   <string name="prefs_category_security">Turvalisus</string>

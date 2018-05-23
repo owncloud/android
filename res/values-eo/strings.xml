@@ -23,6 +23,7 @@
   <string name="drawer_item_uploads_list">Alŝutoj</string>
   <string name="drawer_close">Fermi</string>
   <string name="drawer_open">Malfermi</string>
+  <string name="drawer_help">Helpo</string>
   <string name="prefs_category_general">Ĝeneralo</string>
   <string name="prefs_category_more">Pli</string>
   <string name="prefs_category_security">Sekuro</string>

@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">التحميلات</string>
   <string name="drawer_close">إغلاق</string>
   <string name="drawer_open">افتح</string>
+  <string name="drawer_feedback">ملاحظات</string>
+  <string name="drawer_help">المساعدة</string>
   <string name="prefs_category_general">عام</string>
   <string name="prefs_category_more">المزيد</string>
   <string name="prefs_category_security">الأمان</string>

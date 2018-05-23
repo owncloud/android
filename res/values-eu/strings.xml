@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Kargatutakoak</string>
   <string name="drawer_close">Itxi</string>
   <string name="drawer_open">Ireki</string>
+  <string name="drawer_feedback">Oharrak</string>
+  <string name="drawer_help">Laguntza</string>
   <string name="prefs_category_general">Orokorra</string>
   <string name="prefs_category_more">Gehiago</string>
   <string name="prefs_category_security">Segurtasuna</string>

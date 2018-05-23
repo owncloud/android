@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Oplaaie</string>
   <string name="drawer_close">Sluit</string>
   <string name="drawer_open">Open</string>
+  <string name="drawer_feedback">Terugvoer</string>
+  <string name="drawer_help">Hulp</string>
   <string name="prefs_category_general">Algemeen</string>
   <string name="prefs_category_more">Nog</string>
   <string name="prefs_category_security">Sekuriteit</string>

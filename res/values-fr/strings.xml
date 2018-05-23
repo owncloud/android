@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Envois</string>
   <string name="drawer_close">Fermer</string>
   <string name="drawer_open">Ouvrir</string>
+  <string name="drawer_feedback">Notifications</string>
+  <string name="drawer_help">Aide...</string>
   <string name="prefs_category_general">Général</string>
   <string name="prefs_category_more">Plus</string>
   <string name="prefs_category_security">Sécurité</string>

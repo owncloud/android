@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Įkėlimai</string>
   <string name="drawer_close">Užverti</string>
   <string name="drawer_open">Atverti</string>
+  <string name="drawer_feedback">Atsiliepimai</string>
+  <string name="drawer_help">Pagalba</string>
   <string name="prefs_category_general">Bendras</string>
   <string name="prefs_category_more">Daugiau</string>
   <string name="prefs_category_security">Saugumas</string>

@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Lataukset</string>
   <string name="drawer_close">Sulje</string>
   <string name="drawer_open">Avaa</string>
+  <string name="drawer_feedback">Palaute</string>
+  <string name="drawer_help">Ohje</string>
   <string name="prefs_category_general">Yleiset</string>
   <string name="prefs_category_more">Enemmän</string>
   <string name="prefs_category_security">Tietoturva</string>

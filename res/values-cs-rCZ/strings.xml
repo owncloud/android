@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Nahrání</string>
   <string name="drawer_close">Zavřít</string>
   <string name="drawer_open">Otevřít</string>
+  <string name="drawer_feedback">Odezva</string>
+  <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
   <string name="prefs_category_more">Více</string>
   <string name="prefs_category_security">Zabezpečení</string>
