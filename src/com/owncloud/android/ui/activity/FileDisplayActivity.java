@@ -32,7 +32,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -49,7 +48,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -123,7 +121,8 @@ public class FileDisplayActivity extends FileActivity
 
     private View mLeftFragmentContainer;
     private View mRightFragmentContainer;
-    private MenuItem descendingMenuItem;
+    private MenuItem mDescendingMenuItem;
+    private Menu mMainMenu;
 
     private static final String KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW";
     private static final String KEY_SYNC_IN_PROGRESS = "SYNC_IN_PROGRESS";
@@ -511,7 +510,6 @@ public class FileDisplayActivity extends FileActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean drawerOpen = isDrawerOpen();
-        menu.findItem(R.id.action_sort).setVisible(!drawerOpen);
         menu.findItem(R.id.action_sync_account).setVisible(!drawerOpen);
         menu.findItem(R.id.action_switch_view).setVisible(!drawerOpen);
 
@@ -531,15 +529,17 @@ public class FileDisplayActivity extends FileActivity
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_create_dir).setVisible(false);
 
-        descendingMenuItem = menu.findItem(R.id.action_sort_descending);
-        descendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this));
+        mDescendingMenuItem = menu.findItem(R.id.action_sort_descending);
+        mMainMenu = menu;
+
+        recoverSortMenuFormPreferences(menu);
+
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean retval = true;
+
 
         switch (item.getItemId()) {
             case R.id.action_sync_account: {
@@ -560,32 +560,6 @@ public class FileDisplayActivity extends FileActivity
                 } else {
                     openDrawer();
                 }
-                break;
-            }
-            case R.id.action_sort: {
-                final int sortOrder = getSortOrder(this);
-                final boolean sortAscending = PreferenceManager.getSortAscending(this);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.actionbar_sort_title)
-                        .setSingleChoiceItems(R.array.actionbar_sort_by_options, sortOrder,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        switch (which) {
-                                            case FileStorageUtils.SORT_NAME:
-                                                sortByName(sortAscending);
-                                                break;
-                                            case FileStorageUtils.SORT_DATE:
-                                                sortByDate(sortAscending);
-                                                break;
-                                            case FileStorageUtils.SORT_SIZE:
-                                                sortBySize(sortAscending);
-                                        }
-
-                                        dialog.dismiss();
-                                    }
-                                });
-                builder.create().show();
                 break;
             }
             case R.id.action_sort_descending: {
@@ -618,10 +592,41 @@ public class FileDisplayActivity extends FileActivity
                 }
                 return true;
             }
+            case R.id.action_sort_by_date:
+                item.setChecked(true);
+                sortByDate(PreferenceManager.getSortAscending(this));
+                return true;
+            case R.id.action_sort_by_name:
+                item.setChecked(true);
+                sortByName(PreferenceManager.getSortAscending(this));
+                return true;
+            case R.id.action_sort_by_size:
+                item.setChecked(true);
+                sortBySize(PreferenceManager.getSortAscending(this));
+                return true;
             default:
-                retval = super.onOptionsItemSelected(item);
         }
-        return retval;
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void recoverSortMenuFormPreferences(Menu menu) {
+        // setup sort menu
+        if(menu != null) {
+            mDescendingMenuItem.setChecked(!PreferenceManager.getSortAscending(this));
+
+            switch (getSortOrder(this)) {
+                case FileStorageUtils.SORT_NAME:
+                    menu.findItem(R.id.action_sort_by_name).setChecked(true);
+                    break;
+                case FileStorageUtils.SORT_DATE:
+                    menu.findItem(R.id.action_sort_by_date).setChecked(true);
+                    break;
+                case FileStorageUtils.SORT_SIZE:
+                    menu.findItem(R.id.action_sort_by_size).setChecked(true);
+                default:
+            }
+        }
     }
 
     private void startSynchronization() {
@@ -911,11 +916,8 @@ public class FileDisplayActivity extends FileActivity
         mDownloadBroadcastReceiver = new DownloadBroadcastReceiver();
         mLocalBroadcastManager.registerReceiver(mDownloadBroadcastReceiver, downloadIntentFilter);
 
-        //set descending/ascending sort
-        if(descendingMenuItem != null) {
-            final boolean isAscending = PreferenceManager.getSortAscending(this);
-            descendingMenuItem.setChecked(!isAscending);
-        }
+        recoverSortMenuFormPreferences(mMainMenu);
+
 
         Log_OC.v(TAG, "onResume() end");
 
