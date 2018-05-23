@@ -28,24 +28,49 @@ import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.RemoteOperation;
 import com.owncloud.android.lib.refactor.RemoteOperationResult;
 
-import at.bitfire.dav4android.DavResource;
-import at.bitfire.dav4android.PropertyUtils;
+import java.io.File;
 
-public class PropfindOperation extends RemoteOperation {
+import at.bitfire.dav4android.DavOCResource;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
+public class UploadRemoteFileOperation extends RemoteOperation {
+
+    private String mLocalPath;
     private String mRemotePath;
+    private String mMimeType;
+    private String mFileLastModifTimestamp;
 
-    public PropfindOperation(OCContext context, String remotePath) {
+    public UploadRemoteFileOperation(OCContext context, String localPath, String remotePath, String mimetype,
+                                     String fileLastModifTimestamp) {
         super(context);
+
+        mLocalPath = localPath;
         mRemotePath = remotePath;
+        mMimeType = mimetype;
+        mFileLastModifTimestamp = fileLastModifTimestamp;
     }
 
     @Override
     public RemoteOperationResult exec() {
 
         try {
-            DavResource davResource = new DavResource(getClient(), getWebDavHttpUrl("/"));
-            davResource.propfind(1, PropertyUtils.INSTANCE.getAllPropSet());
+
+            File fileToUpload = new File(mLocalPath);
+            MediaType mediaType = MediaType.parse(mMimeType);
+            RequestBody requestBody = RequestBody.create(mediaType, fileToUpload);
+
+            DavOCResource davOCResource = new DavOCResource(
+                    getClient(),
+                    getWebDavHttpUrl(mRemotePath),
+                    null);
+
+            davOCResource.put(requestBody,
+                    null,
+                    false,
+                    "multipart/form-data",
+                    String.valueOf(fileToUpload.length()),
+                    mFileLastModifTimestamp);
 
         } catch (Exception e) {
             e.printStackTrace();
