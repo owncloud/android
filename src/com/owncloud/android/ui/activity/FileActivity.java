@@ -37,6 +37,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -340,6 +341,17 @@ public class FileActivity extends DrawerActivity
             result.getData();
 
         }
+    }
+
+    protected void showRequestAccountChangeNotice() {
+        Snackbar.make(findViewById(android.R.id.content), R.string.auth_failure_snackbar, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.auth_failure_snackbar_action, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent selectAccount = new Intent(FileActivity.this, ManageAccountsActivity.class);
+                                startActivity(selectAccount);
+                            }
+                        }).show();
     }
 
     /**

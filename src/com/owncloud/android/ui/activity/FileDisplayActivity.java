@@ -1023,7 +1023,7 @@ public class FileDisplayActivity extends FileActivity
                                 (synchResult.isException() && synchResult.getException()
                                     instanceof AuthenticatorException)) {
 
-                                requestCredentialsUpdate();
+                                showRequestAccountChangeNotice();
 
                             } else if (RemoteOperationResult.ResultCode.
                                     SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
@@ -1055,9 +1055,7 @@ public class FileDisplayActivity extends FileActivity
                         RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED)) {
                     mLastSslUntrustedServerResult = synchResult;
                 } else if (synchResult.getCode().equals(RemoteOperationResult.ResultCode.SPECIFIC_SERVICE_UNAVAILABLE)) {
-                    showSnackMessage(
-                            ErrorMessageAdapter.getErrorCauseMessage(synchResult, null, getResources())
-                    );
+                    showRequestAccountChangeNotice();
                 }
             }
         }
