@@ -15,7 +15,7 @@ public abstract class RemoteOperation {
     private final OCContext mContext;
     // TODO Move to a constants file
     private static final String USER_AGENT_HEADER = "User-Agent";
-    private static final String WEBDAV_PATH_4_0 = "remote.php/dav/files";
+    public static final String WEBDAV_PATH_4_0 = "remote.php/dav/files";
     private static OkHttpClient mClient = null;
 
     protected RemoteOperation(OCContext context) {
@@ -45,8 +45,16 @@ public abstract class RemoteOperation {
                 .build();
     }
 
-    protected Uri.Builder getBaseUriBuilder() {
+    private Uri.Builder getBaseUriBuilder() {
         return mContext.getOCAccount().getBaseUri().buildUpon();
+    }
+
+    protected HttpUrl getHttpUrl(String endpointPath) {
+        return UrlUtils.INSTANCE.omitTrailingSlash(HttpUrl.parse(
+                getBaseUriBuilder()
+                        .appendEncodedPath(endpointPath)
+                        .build()
+                        .toString()));
     }
 
     protected HttpUrl getWebDavHttpUrl(String resourcePath) {

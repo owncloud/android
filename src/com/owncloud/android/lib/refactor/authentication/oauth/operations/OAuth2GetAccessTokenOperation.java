@@ -91,10 +91,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
                     .build();
 
             final Request request = getRequestBuilder()
-                    .url(getBaseUriBuilder()
-                            .appendEncodedPath(mAccessTokenEndpointPath)
-                            .build()
-                            .toString())
+                    .url(getHttpUrl(mAccessTokenEndpointPath))
                     .method("POST", requestBody)
                     .build();
 

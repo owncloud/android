@@ -35,6 +35,7 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.refactor.Log_OC;
 import com.owncloud.android.lib.refactor.OCContext;
+import com.owncloud.android.lib.refactor.RemoteOperation;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCBasicCredentials;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCBearerCredentials;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCCredentials;
@@ -65,7 +66,7 @@ public class AccountUtils {
     public static String getWebDavUrlForAccount(Context context, Account account)
         throws AccountNotFoundException {
 
-        return getBaseUrlForAccount(context, account) + OCContext.WEBDAV_PATH_4_0;
+        return getBaseUrlForAccount(context, account) + RemoteOperation.WEBDAV_PATH_4_0;
     }
 
 
