@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     					getString(R.string.username),
     					getString(R.string.password)));
 
-    	mOCContext = new OCContext(ocAccount);
+    	mOCContext = new OCContext(ocAccount, getString(R.string.user_agent));
     	
     	mFilesAdapter = new FilesArrayAdapter(this, R.layout.file_in_list);
     	((ListView)findViewById(R.id.list_view)).setAdapter(mFilesAdapter);

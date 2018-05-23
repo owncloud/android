@@ -13,6 +13,8 @@ import okhttp3.Request;
 
 public abstract class RemoteOperation {
     private final OCContext mContext;
+    // TODO Move to a constants file
+    private static final String USER_AGENT_HEADER = "User-Agent";
     private static final String WEBDAV_PATH_4_0 = "remote.php/dav/files";
     private static OkHttpClient mClient = null;
 
@@ -37,6 +39,7 @@ public abstract class RemoteOperation {
                         chain.proceed(
                                 addRequestCredentials(
                                         chain.request())
+                                        .addHeader(USER_AGENT_HEADER, mContext.getUserAgent())
                                         .build()))
                 .followRedirects(false)
                 .build();
