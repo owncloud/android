@@ -3,7 +3,7 @@
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2018 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -150,7 +150,7 @@
 
     <style name="NavigationView_ItemTextAppearance">
         <item name="android:ellipsize">end</item>
-        <item name="android:listDivider">@color/transparent</item>
+        <item name="android:listDivider">@color/grey</item>
     </style>
 
     <!-- Button Bar hack due to Lollipop bug:

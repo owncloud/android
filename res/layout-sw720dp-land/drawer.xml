@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:filterTouchesWhenObscured="true"
         android:fitsSystemWindows="true"
+        android:filterTouchesWhenObscured="true"
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer_menu">
 
@@ -59,7 +59,7 @@
                 android:id="@+id/account_quota_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/drawer_loading_quota"/>
+                android:text="@string/drawer_quota"/>
 
         </LinearLayout>
 
