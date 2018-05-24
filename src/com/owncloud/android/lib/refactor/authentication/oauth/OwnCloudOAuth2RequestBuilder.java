@@ -89,7 +89,6 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
                         mGrantType.getValue(),
                         mCode,
                         clientConfiguration.getClientId(),
-                        clientConfiguration.getClientSecret(),
                         clientConfiguration.getRedirectUri(),
                         mOAuth2Provider.getAccessTokenEndpointPath());
 
@@ -97,7 +96,6 @@ public class OwnCloudOAuth2RequestBuilder implements OAuth2RequestBuilder {
                 return new OAuth2RefreshAccessTokenOperation(
                         ocContext,
                         clientConfiguration.getClientId(),
-                        clientConfiguration.getClientSecret(),
                         mRefreshToken,
                         mOAuth2Provider.getAccessTokenEndpointPath());
             default:

@@ -40,42 +40,36 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
+public class OAuth2RefreshAccessTokenOperation extends RemoteOperation<Map<String, String>> {
 
     private static final String TAG = OAuth2RefreshAccessTokenOperation.class.getSimpleName();
 
-    private String mClientId;
-    private String mClientSecret;
-    private String mRefreshToken;
-
+    private final String mClientId;
+    private final String mRefreshToken;
     private final String mAccessTokenEndpointPath;
-
     private final OAuth2ResponseParser mResponseParser;
 
     public OAuth2RefreshAccessTokenOperation(
             OCContext ocContext,
             String clientId,
-            String secretId,
             String refreshToken,
             String accessTokenEndpointPath
     ) {
         super(ocContext);
 
         mClientId = clientId;
-        mClientSecret = secretId;
         mRefreshToken = refreshToken;
 
         mAccessTokenEndpointPath =
                 accessTokenEndpointPath != null ?
                         accessTokenEndpointPath :
-                        OwnCloudOAuth2Provider.ACCESS_TOKEN_ENDPOINT_PATH
-        ;
+                        OwnCloudOAuth2Provider.ACCESS_TOKEN_ENDPOINT_PATH;
 
         mResponseParser = new OAuth2ResponseParser();
     }
 
     @Override
-    public RemoteOperationResult exec() {
+    public Result exec() {
         try {
             final RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
@@ -96,27 +90,20 @@ public class OAuth2RefreshAccessTokenOperation extends RemoteOperation {
             Log_OC.d(TAG, "OAUTH2: raw response from POST TOKEN: " + responseData);
 
             if (responseData != null && responseData.length() > 0) {
-                JSONObject tokenJson = new JSONObject(responseData);
-                Map<String, String> accessTokenResult =
+                final JSONObject tokenJson = new JSONObject(responseData);
+                final Map<String, String> accessTokenResult =
                     mResponseParser.parseAccessTokenResult(tokenJson);
-                if (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
-                        accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null) {
-                    return new RemoteOperationResult(RemoteOperationResult.ResultCode.OAUTH2_ERROR);
-
-                } else {
-                    final RemoteOperationResult result = new RemoteOperationResult(true, request, response);
-                    ArrayList<Object> data = new ArrayList<>();
-                    data.add(accessTokenResult);
-                    result.setData(data);
-                    return result;
-                }
+                return (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
+                        accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null)
+                    ? new Result(RemoteOperationResult.ResultCode.OAUTH2_ERROR)
+                    : new Result(true, request, response, accessTokenResult);
 
             } else {
-                return new RemoteOperationResult(false, request, response);
+                return new Result(false, request, response);
             }
 
         } catch (Exception e) {
-            return new RemoteOperationResult(e);
+            return new Result(e);
         }
     }
 }

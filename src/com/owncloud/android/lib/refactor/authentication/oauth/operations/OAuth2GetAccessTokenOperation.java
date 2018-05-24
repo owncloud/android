@@ -46,12 +46,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-public class OAuth2GetAccessTokenOperation extends RemoteOperation {
+public class OAuth2GetAccessTokenOperation extends RemoteOperation<Map<String, String>> {
     
     private final String mGrantType;
     private final String mCode;
     private final String mClientId;
-    private final String mClientSecret;
     private final String mRedirectUri;
     private final String mAccessTokenEndpointPath;
     private final OAuth2ResponseParser mResponseParser;
@@ -61,12 +60,10 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
             String grantType,
             String code,
             String clientId,
-            String secretId,
             String redirectUri,
             String accessTokenEndpointPath) {
         super(context);
         mClientId = clientId;
-        mClientSecret = secretId;
         mRedirectUri = redirectUri;
         mGrantType = grantType;
         mCode = code;
@@ -80,7 +77,7 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
     }
 
     @Override
-    public RemoteOperationResult exec() {
+    public Result exec() {
         try {
             final RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
@@ -102,27 +99,20 @@ public class OAuth2GetAccessTokenOperation extends RemoteOperation {
             final String responseData = response.body().string();
             
             if (responseData != null && responseData.length() > 0) {
-                JSONObject tokenJson = new JSONObject(responseData);
-                Map<String, String> accessTokenResult =
+                final JSONObject tokenJson = new JSONObject(responseData);
+                final Map<String, String> accessTokenResult =
                     mResponseParser.parseAccessTokenResult(tokenJson);
-                if (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
-                        accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null) {
-                    return new RemoteOperationResult(RemoteOperationResult.ResultCode.OAUTH2_ERROR);
 
-                } else {
-                    final RemoteOperationResult result = new RemoteOperationResult(true, request, response);
-                    ArrayList<Object> data = new ArrayList<>();
-                    data.add(accessTokenResult);
-                    result.setData(data);
-                    return result;
-                }
-
+                return (accessTokenResult.get(OAuth2Constants.KEY_ERROR) != null ||
+                        accessTokenResult.get(OAuth2Constants.KEY_ACCESS_TOKEN) == null)
+                        ? new Result(RemoteOperationResult.ResultCode.OAUTH2_ERROR)
+                        : new Result(true, request, response, accessTokenResult);
             } else {
-                return new RemoteOperationResult(false, request, response);
+                return new Result(false, request, response);
             }
 
         } catch (Exception e) {
-            return new RemoteOperationResult(e);
+            return new Result(e);
         }
     }
 }

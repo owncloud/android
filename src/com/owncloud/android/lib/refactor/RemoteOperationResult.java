@@ -37,7 +37,6 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.json.JSONException;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -51,8 +50,16 @@ import java.util.Map;
 
 import javax.net.ssl.SSLException;
 
+import at.bitfire.dav4android.DavResource;
+import at.bitfire.dav4android.exception.ConflictException;
 import at.bitfire.dav4android.exception.DavException;
 import at.bitfire.dav4android.exception.HttpException;
+import at.bitfire.dav4android.exception.InvalidDavResponseException;
+import at.bitfire.dav4android.exception.NotFoundException;
+import at.bitfire.dav4android.exception.PreconditionFailedException;
+import at.bitfire.dav4android.exception.ServiceUnavailableException;
+import at.bitfire.dav4android.exception.UnauthorizedException;
+import at.bitfire.dav4android.exception.UnsupportedDavException;
 import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -66,7 +73,7 @@ import okhttp3.Response;
  *
  * @author David A. Velasco
  */
-public class RemoteOperationResult implements Serializable {
+public abstract class RemoteOperationResult implements Serializable {
 
     /**
      * Generated - should be refreshed every time the class changes!!
@@ -74,6 +81,7 @@ public class RemoteOperationResult implements Serializable {
     private static final long serialVersionUID = 4968939884332652230L;
 
     private static final String TAG = RemoteOperationResult.class.getSimpleName();
+
 
     public enum ResultCode {
         OK,
@@ -137,8 +145,6 @@ public class RemoteOperationResult implements Serializable {
     private ArrayList<String> mAuthenticate = new ArrayList<>();
     private String mLastPermanentLocation = null;
 
-    private ArrayList<Object> mData;
-
     /**
      * Public constructor from result code.
      *
@@ -151,7 +157,6 @@ public class RemoteOperationResult implements Serializable {
         mSuccess = (code == ResultCode.OK || code == ResultCode.OK_SSL ||
                 code == ResultCode.OK_NO_SSL ||
                 code == ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION);
-        mData = null;
     }
 
     /**
@@ -164,53 +169,39 @@ public class RemoteOperationResult implements Serializable {
      * @param e Exception that interrupted the {@link RemoteOperation}
      */
     public RemoteOperationResult(Exception e) {
-        mException = e;
-
-        if (e instanceof OperationCancelledException) {
-            mCode = ResultCode.CANCELLED;
-
-        } else if (e instanceof SocketException) {
-            mCode = ResultCode.WRONG_CONNECTION;
-
-        } else if (e instanceof SocketTimeoutException) {
-            mCode = ResultCode.TIMEOUT;
-
-        } else if (e instanceof SocketTimeoutException) {
-            mCode = ResultCode.TIMEOUT;
-
-        } else if (e instanceof MalformedURLException) {
-            mCode = ResultCode.INCORRECT_ADDRESS;
-
-        } else if (e instanceof UnknownHostException) {
-            mCode = ResultCode.HOST_NOT_AVAILABLE;
-
-        } else if (e instanceof AccountNotFoundException) {
-            mCode = ResultCode.ACCOUNT_NOT_FOUND;
-
-        } else if (e instanceof AccountsException) {
-            mCode = ResultCode.ACCOUNT_EXCEPTION;
-
-        } else if (e instanceof SSLException || e instanceof RuntimeException) {
+        if (e instanceof SSLException || e instanceof RuntimeException) {
             CertificateCombinedException se = getCertificateCombinedException(e);
-            if (se != null) {
-                mException = se;
-                if (se.isRecoverable()) {
-                    mCode = ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED;
-                }
-            } else if (e instanceof RuntimeException) {
-                mCode = ResultCode.HOST_NOT_AVAILABLE;
-
-            } else {
-                mCode = ResultCode.SSL_ERROR;
-            }
-
-        } else if (e instanceof FileNotFoundException) {
-            mCode = ResultCode.LOCAL_FILE_NOT_FOUND;
-
+            mException = se;
         } else {
-            mCode = ResultCode.UNKNOWN_ERROR;
+            mException = e;
         }
 
+        mCode = getResultCodeByException(e);
+    }
+
+    private ResultCode getResultCodeByException(Exception e) {
+        return (e instanceof UnauthorizedException) ? ResultCode.UNAUTHORIZED
+                : (e instanceof NotFoundException) ? ResultCode.FILE_NOT_FOUND
+                : (e instanceof ConflictException) ? ResultCode.CONFLICT
+                : (e instanceof PreconditionFailedException) ? ResultCode.UNKNOWN_ERROR
+                : (e instanceof ServiceUnavailableException) ? ResultCode.SERVICE_UNAVAILABLE
+                : (e instanceof HttpException) ? ResultCode.UNHANDLED_HTTP_CODE
+                : (e instanceof InvalidDavResponseException) ? ResultCode.UNKNOWN_ERROR
+                : (e instanceof UnsupportedDavException) ? ResultCode.UNKNOWN_ERROR
+                : (e instanceof DavException) ? ResultCode.UNKNOWN_ERROR
+                : (e instanceof SSLException || e instanceof RuntimeException) ? handleSSLException(e)
+                : (e instanceof SocketException) ? ResultCode.WRONG_CONNECTION
+                : (e instanceof SocketTimeoutException) ? ResultCode.TIMEOUT
+                : (e instanceof MalformedURLException) ? ResultCode.INCORRECT_ADDRESS
+                : (e instanceof UnknownHostException) ? ResultCode.HOST_NOT_AVAILABLE
+                : ResultCode.UNKNOWN_ERROR;
+    }
+
+    private ResultCode handleSSLException(Exception e) {
+        final CertificateCombinedException se = getCertificateCombinedException(e);
+        return (se != null && se.isRecoverable()) ? ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED
+                : (e instanceof RuntimeException) ? ResultCode.HOST_NOT_AVAILABLE
+                : ResultCode.SSL_ERROR;
     }
 
     /**
@@ -366,14 +357,6 @@ public class RemoteOperationResult implements Serializable {
         }
     }
 
-    public void setData(ArrayList<Object> files) {
-        mData = files;
-    }
-
-    public ArrayList<Object> getData() {
-        return mData;
-    }
-
     public boolean isSuccess() {
         return mSuccess;
     }
@@ -418,63 +401,57 @@ public class RemoteOperationResult implements Serializable {
             previousCause = cause;
             cause = cause.getCause();
         }
-        if (cause != null && cause instanceof CertificateCombinedException) {
-            result = (CertificateCombinedException) cause;
-        }
-        return result;
+        return (cause != null && cause instanceof CertificateCombinedException)
+                ? (CertificateCombinedException) cause
+                : result;
     }
 
     public String getLogMessage() {
 
         if (mException != null) {
-            if(mException instanceof OperationCancelledException)
-                return "Operation cancelled by the caller";
-            if(mException instanceof SocketException) return "Socket exception";
-            if(mException instanceof SocketTimeoutException) return "Socket timeout exception";
-            if(mException instanceof MalformedURLException) return "Malformed URL exception";
-            if(mException instanceof UnknownHostException) return "Unknown host exception";
-            if(mException instanceof CertificateCombinedException) {
-                if (((CertificateCombinedException) mException).isRecoverable())
-                    return "SSL recoverable exception";
-                else
-                    return "SSL exception";
-
-            }
-            if(mException instanceof SSLException) return "SSL exception";
-            if(mException instanceof DavException) return "Unexpected WebDAV exception";
-            if(mException instanceof HttpException) return "HTTP violation";
-            if(mException instanceof IOException) return "Unrecovered transport exception";
-            if(mException instanceof AccountNotFoundException) {
-                Account failedAccount =
-                        ((AccountNotFoundException) mException).getFailedAccount();
-                return mException.getMessage() + " (" +
-                        (failedAccount != null ? failedAccount.name : "NULL") + ")";
-
-            }
-            if (mException instanceof AccountsException) return "Exception while using account";
-            if (mException instanceof JSONException) return "JSON exception";
-
-            return "Unexpected exception";
+            return (mException instanceof OperationCancelledException)
+                    ? "Operation cancelled by the caller"
+                    : (mException instanceof SocketException) ? "Socket exception"
+                    : (mException instanceof SocketTimeoutException) ? "Socket timeout exception"
+                    : (mException instanceof MalformedURLException) ? "Malformed URL exception"
+                    : (mException instanceof UnknownHostException) ? "Unknown host exception"
+                    : (mException instanceof CertificateCombinedException) ?
+                        (((CertificateCombinedException) mException).isRecoverable()
+                                ? "SSL recoverable exception"
+                                : "SSL exception")
+                    : (mException instanceof SSLException) ? "SSL exception"
+                    : (mException instanceof DavException) ? "Unexpected WebDAV exception"
+                    : (mException instanceof HttpException) ? "HTTP violation"
+                    : (mException instanceof IOException) ? "Unrecovered transport exception"
+                    : (mException instanceof AccountNotFoundException)
+                        ? handleFailedAccountException((AccountNotFoundException)mException)
+                    : (mException instanceof AccountsException) ? "Exception while using account"
+                    : (mException instanceof JSONException) ? "JSON exception"
+                    : "Unexpected exception";
         }
 
-        if(mCode == ResultCode.INSTANCE_NOT_CONFIGURED)
-            return "The ownCloud server is not configured!";
-        if(mCode == ResultCode.NO_NETWORK_CONNECTION) return "No network connection";
-        if(mCode == ResultCode.BAD_OC_VERSION)
-            return "No valid ownCloud version was found at the server";
-        if(mCode == ResultCode.LOCAL_STORAGE_FULL) return "Local storage full";
-        if(mCode == ResultCode.LOCAL_STORAGE_NOT_MOVED)
-            return "Error while moving file to final directory";
-        if(mCode == ResultCode.ACCOUNT_NOT_NEW)
-            return "Account already existing when creating a new one";
-        if(mCode == ResultCode.INVALID_CHARACTER_IN_NAME)
-            return "The file name contains an forbidden character";
-        if(mCode == ResultCode.FILE_NOT_FOUND) return "Local file does not exist";
-        if(mCode == ResultCode.SYNC_CONFLICT) return "Synchronization conflict";
+        switch (mCode) {
+            case INSTANCE_NOT_CONFIGURED: return "The ownCloud server is not configured!";
+            case NO_NETWORK_CONNECTION: return "No network connection";
+            case BAD_OC_VERSION: return "No valid ownCloud version was found at the server";
+            case LOCAL_STORAGE_FULL: return "Local storage full";
+            case LOCAL_STORAGE_NOT_MOVED: return "Error while moving file to final directory";
+            case ACCOUNT_NOT_NEW: return "Account already existing when creating a new one";
+            case INVALID_CHARACTER_IN_NAME: return "The file name contains an forbidden character";
+            case FILE_NOT_FOUND: return "Local file does not exist";
+            case SYNC_CONFLICT: return "Synchronization conflict";
+            default: return "Operation finished with HTTP status code "
+                    + mHttpCode
+                    + " ("
+                    + (isSuccess() ? "success" : "fail")
+                    + ")";
+        }
+    }
 
-        return "Operation finished with HTTP status code " + mHttpCode + " (" +
-                (isSuccess() ? "success" : "fail") + ")";
-
+    private String handleFailedAccountException(AccountNotFoundException e) {
+        final Account failedAccount = e.getFailedAccount();
+        return e.getMessage() + " (" +
+                (failedAccount != null ? failedAccount.name : "NULL") + ")";
     }
 
     public boolean isServerFail() {
@@ -499,11 +476,11 @@ public class RemoteOperationResult implements Serializable {
                         mRedirectedLocation.toLowerCase().contains("wayf")));
     }
 
-    /**
+    /** TODO: make this set via constructor
      * Checks if is a non https connection
      *
      * @return boolean true/false
-     */
+
     public boolean isNonSecureRedirection() {
         return (mRedirectedLocation != null && !(mRedirectedLocation.toLowerCase().startsWith("https://")));
     }
@@ -519,5 +496,5 @@ public class RemoteOperationResult implements Serializable {
     public void setLastPermanentLocation(String lastPermanentLocation) {
         mLastPermanentLocation = lastPermanentLocation;
     }
-
+    */
 }

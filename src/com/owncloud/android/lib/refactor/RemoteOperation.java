@@ -1,22 +1,54 @@
 package com.owncloud.android.lib.refactor;
-
-import android.annotation.TargetApi;
 import android.net.Uri;
-import android.os.Build;
 
+import java.io.IOException;
 import java.util.Map;
 
 import at.bitfire.dav4android.UrlUtils;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
-public abstract class RemoteOperation {
+public abstract class RemoteOperation<I extends Object> {
     private final OCContext mContext;
     // TODO Move to a constants file
     private static final String USER_AGENT_HEADER = "User-Agent";
     public static final String WEBDAV_PATH_4_0 = "remote.php/dav/files";
     private static OkHttpClient mClient = null;
+
+
+    public class Result extends RemoteOperationResult {
+        public Result(ResultCode code) {
+            this(code, null);
+        }
+
+        public Result(ResultCode code, I data) {
+            super(code);
+            mData = data;
+        }
+
+        public Result(Exception e) {
+            super(e);
+            mData = null;
+        }
+
+        public Result(boolean success, Request request, Response response) throws IOException {
+            this(success, request, response, null);;
+        }
+
+        public Result(boolean success, Request request, Response response, I data) throws IOException {
+            super(success, request, response);
+            mData = data;
+        }
+
+        private final I mData;
+
+        public I getData() {
+            return mData;
+        }
+    }
+
 
     protected RemoteOperation(OCContext context) {
         mContext = context;
@@ -27,7 +59,7 @@ public abstract class RemoteOperation {
         }
     }
 
-    public abstract RemoteOperationResult exec();
+    public abstract Result exec();
 
     protected OCContext getOCContext() {
         return mContext;

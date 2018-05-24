@@ -35,10 +35,12 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+import static com.owncloud.android.lib.refactor.RemoteOperationResult.ResultCode.OK;
+
 /**
  * @author David González Verdugo
  */
-public class UploadRemoteFileOperation extends RemoteOperation {
+public class UploadRemoteFileOperation extends RemoteOperation<Void> {
 
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
@@ -62,7 +64,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
     }
 
     @Override
-    public RemoteOperationResult exec() {
+    public Result exec() {
 
         try {
 
@@ -75,9 +77,7 @@ public class UploadRemoteFileOperation extends RemoteOperation {
                             .addInterceptor(chain ->
                                     chain.proceed(
                                             addUploadHeaders(chain.request())
-                                            .build()
-                                    )
-                            )
+                                            .build()))
                             .followRedirects(false)
                             .build(),
                     getWebDavHttpUrl(mRemotePath));
@@ -87,10 +87,10 @@ public class UploadRemoteFileOperation extends RemoteOperation {
                     false);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return new Result(e);
         }
 
-        return null;
+        return new Result(OK);
     }
 
     /**

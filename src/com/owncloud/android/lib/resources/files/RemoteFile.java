@@ -27,10 +27,24 @@ package com.owncloud.android.lib.resources.files;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.owncloud.android.lib.common.network.WebdavEntry;
+
+import at.bitfire.dav4android.DavResource;
+import at.bitfire.dav4android.PropertyCollection;
+import at.bitfire.dav4android.property.CreationDate;
+import at.bitfire.dav4android.property.GetContentType;
+import at.bitfire.dav4android.property.GetETag;
+import at.bitfire.dav4android.property.GetLastModified;
+import at.bitfire.dav4android.property.QuotaAvailableBytes;
+import at.bitfire.dav4android.property.QuotaUsedBytes;
+import at.bitfire.dav4android.property.owncloud.OCId;
+import at.bitfire.dav4android.property.owncloud.OCPermissions;
+import at.bitfire.dav4android.property.owncloud.OCPrivatelink;
+import at.bitfire.dav4android.property.owncloud.OCSize;
 
 /**
  * Contains the data of a Remote File from a WebDavEntry
@@ -182,6 +196,31 @@ public class RemoteFile implements Parcelable, Serializable {
         this.setQuotaUsedBytes(webdavEntry.quotaUsedBytes());
         this.setQuotaAvailableBytes(webdavEntry.quotaAvailableBytes());
         this.setPrivateLink(webdavEntry.privateLink());
+    }
+
+    public RemoteFile(final DavResource davResource) {
+        this(Uri.decode(davResource.getLocation().encodedPath()));
+        final PropertyCollection properties = davResource.getProperties();
+        this.setCreationTimestamp(properties.get(CreationDate.class) != null
+                ? Long.parseLong(properties.get(CreationDate.class).getCreationDate())
+                : 0);
+        this.setMimeType(properties.get(GetContentType.class) != null
+                ? properties.get(GetContentType.class).getType()
+                : "");
+        this.setModifiedTimestamp(properties.get(GetLastModified.class).getLastModified());
+        this.setEtag(properties.get(GetETag.class).getETag());
+        this.setPermissions(properties.get(OCPermissions.class).getPermission());
+        this.setRemoteId(properties.get(OCId.class).getId());
+        this.setSize(properties.get(OCSize.class).getSize());
+        this.setQuotaUsedBytes(properties.get(QuotaUsedBytes.class) != null
+                ? BigDecimal.valueOf(
+                    properties.get(QuotaUsedBytes.class).getQuotaUsedBytes())
+                : BigDecimal.ZERO);
+        this.setQuotaAvailableBytes(properties.get(QuotaAvailableBytes.class) != null
+                ? BigDecimal.valueOf(
+                        properties.get(QuotaAvailableBytes.class).getQuotaAvailableBytes())
+                : BigDecimal.ZERO);
+        this.setPrivateLink(properties.get(OCPrivatelink.class).getLink());
     }
 
     /**

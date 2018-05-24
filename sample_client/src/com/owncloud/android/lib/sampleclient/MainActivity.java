@@ -24,6 +24,31 @@
 
 package com.owncloud.android.lib.sampleclient;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.refactor.OCContext;
+import com.owncloud.android.lib.refactor.account.OCAccount;
+import com.owncloud.android.lib.refactor.authentication.credentials.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
+import com.owncloud.android.lib.refactor.operations.PropfindOperation;
+import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
+import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
+import com.owncloud.android.lib.refactor.operations.UploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.FileUtils;
+
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.drawable.BitmapDrawable;
@@ -36,43 +61,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientFactory;
-import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.account.OCAccount;
-import com.owncloud.android.lib.refactor.authentication.credentials.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.refactor.operations.PropfindOperation;
-import com.owncloud.android.lib.refactor.operations.UploadRemoteFileOperation;
-import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
-import com.owncloud.android.lib.resources.files.FileUtils;
-import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
-import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import at.bitfire.dav4android.DavResource;
 
 public class MainActivity extends Activity implements OnRemoteOperationListener, OnDatatransferProgressListener {
 	
 	private static String LOG_TAG = MainActivity.class.getCanonicalName();
 	
 	private Handler mHandler;
-	
 	private OwnCloudClient mClient;
-
 	private OCContext mOCContext;
-	
 	private FilesArrayAdapter mFilesAdapter;
-	
 	private View mFrame;
 	
     /** Called when the activity is first created. */
@@ -157,8 +155,20 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     private void startRefresh() {
 
 		final PropfindOperation propfindOperation = new PropfindOperation(mOCContext, FileUtils.PATH_SEPARATOR);
-		new Thread(() -> propfindOperation.exec()).start();
-
+		final Handler handler = new Handler();
+		new Thread(() -> {
+			final PropfindOperation.Result result = propfindOperation.exec();
+			final List<RemoteFile> remoteFiles = new ArrayList<>();
+			if(!result.isSuccess()) {
+				handler.post(() ->
+						Toast.makeText(this, result.getLogMessage(), Toast.LENGTH_LONG).show());
+				return;
+			}
+			for(DavResource el : result.getData().getMembers()) {
+				remoteFiles.add(new RemoteFile(el));
+			}
+			handler.post(() -> mFilesAdapter.addAll(remoteFiles));
+		}).start();
 //    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
 //    	refreshOperation.execute(mClient, this, mHandler);
     }
