@@ -10,6 +10,7 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">ತೆರೆ</string>
+  <string name="drawer_help">﻿ಸಹಾಯ</string>
   <string name="prefs_category_more">﻿ಇನ್ನಷ್ಟು</string>
   <string name="prefs_category_security">﻿ಭದ್ರತೆ</string>
   <string name="prefs_help">﻿ಸಹಾಯ</string>

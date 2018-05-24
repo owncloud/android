@@ -22,6 +22,8 @@
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Zoumaachen</string>
   <string name="drawer_open">Opmaachen</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Hëllef</string>
   <string name="prefs_category_general">Allgemeng</string>
   <string name="prefs_category_more">Méi</string>
   <string name="prefs_category_security">Sécherheet</string>

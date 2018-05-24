@@ -16,6 +16,7 @@
   <string name="actionbar_sort_title">Renditi sipas</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Më e vjetra - Më e reja</string>
+  <string name="actionbar_sort_by_size">Më e vogla - Më e madhja</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Krejt kartelat</string>
@@ -25,6 +26,7 @@
   <string name="drawer_item_uploads_list">Ngarkime</string>
   <string name="drawer_close">Mbylle</string>
   <string name="drawer_open">Hape</string>
+  <string name="drawer_loading_quota">Kuotë ngarkimesh</string>
   <string name="drawer_quota">%1$s nga %2$s e përdorur (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">%1$s në përdorim</string>
   <string name="drawer_unavailable_used_storage">S’ka të dhëna mbi përdorim depozitimi</string>
@@ -69,6 +71,8 @@
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
+  <string name="auth_failure_snackbar">Mirëfilltësimi dështoi</string>
+  <string name="auth_failure_snackbar_action">Ndryshoni llogari</string>
   <string name="auth_check_server">Kontrollo shërbyesin</string>
   <string name="auth_host_url">Adresë https://… e shërbyesit</string>
   <string name="auth_username">Emër përdoruesi</string>

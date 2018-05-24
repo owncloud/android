@@ -16,6 +16,7 @@
   <string name="actionbar_sort_title">Упорядочить по</string>
   <string name="actionbar_sort_by_name">А-Я</string>
   <string name="actionbar_sort_by_date">От старых к новым</string>
+  <string name="actionbar_sort_by_size">От маленьких к большим</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Все файлы</string>
@@ -25,6 +26,7 @@
   <string name="drawer_item_uploads_list">Загрузки</string>
   <string name="drawer_close">Закрыть</string>
   <string name="drawer_open">Открыть</string>
+  <string name="drawer_loading_quota">Загрузка квоты</string>
   <string name="drawer_quota">Использовано %1$s из %2$s (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">Использовано %1$s</string>
   <string name="drawer_unavailable_used_storage">Нет данных о занятом объёме</string>
@@ -70,6 +72,8 @@
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>
+  <string name="auth_failure_snackbar">Аутентификация не удалась</string>
+  <string name="auth_failure_snackbar_action">Измените учётную запись</string>
   <string name="auth_check_server">Проверить сервер</string>
   <string name="auth_host_url">Адрес сервера https://...</string>
   <string name="auth_username">Имя пользователя</string>

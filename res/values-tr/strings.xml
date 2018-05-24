@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Yüklemeler</string>
   <string name="drawer_close">Kapat</string>
   <string name="drawer_open">Aç</string>
+  <string name="drawer_feedback">Geribildirim</string>
+  <string name="drawer_help">Yardım</string>
   <string name="prefs_category_general">Genel</string>
   <string name="prefs_category_more">Daha fazla</string>
   <string name="prefs_category_security">Güvenlik</string>
