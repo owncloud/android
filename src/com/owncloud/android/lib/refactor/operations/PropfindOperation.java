@@ -27,6 +27,7 @@ package com.owncloud.android.lib.refactor.operations;
 import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.RemoteOperation;
 
+import at.bitfire.dav4android.DavOCResource;
 import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.PropertyUtils;
 import okhttp3.HttpUrl;
@@ -45,12 +46,13 @@ public class PropfindOperation extends RemoteOperation<DavResource> {
     @Override
     public Result exec() {
         try {
-            final HttpUrl location = HttpUrl.parse(getWebDavHttpUrl("/").toString());
+            final HttpUrl location = HttpUrl.parse(getWebDavHttpUrl(mRemotePath).toString());
 
-            DavResource davResource = new DavResource(getClient(), location);
-            davResource.propfind(1, PropertyUtils.INSTANCE.getAllPropSet());
+            DavOCResource davOCResource = new DavOCResource(getClient(), location);
+            davOCResource.propfind(1, PropertyUtils.INSTANCE.getAllPropSet());
 
-            return new Result(OK, davResource);
+            return new Result(OK, davOCResource);
+
         } catch (Exception e) {
             return new Result(e);
         }

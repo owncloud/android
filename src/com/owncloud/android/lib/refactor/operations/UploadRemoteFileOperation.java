@@ -26,13 +26,11 @@ package com.owncloud.android.lib.refactor.operations;
 
 import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.RemoteOperation;
-import com.owncloud.android.lib.refactor.RemoteOperationResult;
 
 import java.io.File;
 
-import at.bitfire.dav4android.DavResource;
+import at.bitfire.dav4android.DavOCResource;
 import okhttp3.MediaType;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 
 import static com.owncloud.android.lib.refactor.RemoteOperationResult.ResultCode.OK;
@@ -41,11 +39,6 @@ import static com.owncloud.android.lib.refactor.RemoteOperationResult.ResultCode
  * @author David González Verdugo
  */
 public class UploadRemoteFileOperation extends RemoteOperation<Void> {
-
-    private static final String CONTENT_TYPE_HEADER = "Content-Type";
-    private static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
-    private static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
-    private static final String IF_MATCH_HEADER = "If-Match";
 
     private File mFileToUpload;
     private String mRemotePath;
@@ -71,40 +64,24 @@ public class UploadRemoteFileOperation extends RemoteOperation<Void> {
             MediaType mediaType = MediaType.parse(mMimeType);
             RequestBody requestBody = RequestBody.create(mediaType, mFileToUpload);
 
-            DavResource davResource = new DavResource(
-                    getClient()
-                            .newBuilder()
-                            .addInterceptor(chain ->
-                                    chain.proceed(
-                                            addUploadHeaders(chain.request())
-                                            .build()))
-                            .followRedirects(false)
-                            .build(),
-                    getWebDavHttpUrl(mRemotePath));
+            DavOCResource davOCResource = new DavOCResource(
+                    getClient(),
+                    getWebDavHttpUrl(mRemotePath)
+            );
 
-            davResource.put(requestBody,
+            davOCResource.put(
+                    requestBody,
                     null,
-                    false);
+                    false,
+                    "multipart/form-data",
+                    String.valueOf(mFileToUpload.length()),
+                    mFileLastModifTimestamp
+            );
 
         } catch (Exception e) {
             return new Result(e);
         }
 
         return new Result(OK);
-    }
-
-    /**
-     * Add headers needed to upload a file
-     * @param request request in which include the headers
-     * @return request with upload headers
-     */
-    private Request.Builder addUploadHeaders (Request request) {
-
-        Request.Builder builder =  request.newBuilder();
-        builder.addHeader(CONTENT_TYPE_HEADER, "multipart/form-data");
-        builder.addHeader(OC_TOTAL_LENGTH_HEADER, String.valueOf(mFileToUpload.length()));
-        builder.addHeader(OC_X_OC_MTIME_HEADER, mFileLastModifTimestamp);
-
-        return builder;
     }
 }
