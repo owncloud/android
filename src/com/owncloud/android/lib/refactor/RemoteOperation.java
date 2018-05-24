@@ -37,10 +37,11 @@ public abstract class RemoteOperation {
         return mClient.newBuilder()
                 .addInterceptor(chain ->
                         chain.proceed(
-                                addRequestCredentials(
-                                        chain.request())
+                                addRequestCredentials(chain.request())
                                         .addHeader(USER_AGENT_HEADER, mContext.getUserAgent())
-                                        .build()))
+                                        .build()
+                        )
+                )
                 .followRedirects(false)
                 .build();
     }
