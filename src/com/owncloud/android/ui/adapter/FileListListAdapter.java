@@ -142,7 +142,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         }
 
         // Find out which layout should be displayed
-        ViewType viewType;
+        final ViewType viewType;
         if (parent instanceof GridView) {
             if (file != null && file.isImage()) {
                 viewType = ViewType.GRID_IMAGE;
@@ -222,57 +222,16 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         sharedIconV.setVisibility(View.GONE);
                     }
 
-                    // local state
-                    localStateView.bringToFront();
-                    FileDownloaderBinder downloaderBinder =
-                            mTransferServiceGetter.getFileDownloaderBinder();
-                    FileUploaderBinder uploaderBinder =
-                            mTransferServiceGetter.getFileUploaderBinder();
-                    OperationsServiceBinder opsBinder =
-                            mTransferServiceGetter.getOperationsServiceBinder();
-
-                    localStateView.setVisibility(View.INVISIBLE);   // default first
-
-                    if ( //synchronizing
-                            opsBinder != null &&
-                                    opsBinder.isSynchronizing(mAccount, file)
-                            ) {
-                        localStateView.setImageResource(R.drawable.sync_pin);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if ( // downloading
-                            downloaderBinder != null &&
-                                    downloaderBinder.isDownloading(mAccount, file)
-                            ) {
-                        localStateView.setImageResource(R.drawable.sync_pin);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if ( //uploading
-                            uploaderBinder != null &&
-                                    uploaderBinder.isUploading(mAccount, file)
-                            ) {
-                        localStateView.setImageResource(R.drawable.sync_pin);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if (file.getEtagInConflict() != null) {   // conflict
-                        localStateView.setImageResource(R.drawable.error_pin);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if (file.isDown()) {
-                        localStateView.setVisibility(View.VISIBLE);
-                        if(file.isAvailableOffline()) {
-                            localStateView.setImageResource(R.drawable.offline_available_pin);
-                        } else {
-                            localStateView.setImageResource(R.drawable.downloaded_pin);
-                        }
-                    }
 
                     break;
             }
 
             // For all Views
 
-            ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
+
+            setIconPinAcordingToFilesLocalState(localStateView, file);
+
+            final ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
             checkBoxV.setVisibility(View.GONE);
             view.setBackgroundColor(Color.WHITE);
 
@@ -294,12 +253,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             }
 
             if(file.isFolder()) {
-
-                if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
-                    localStateView.setImageResource(R.drawable.offline_available_pin);
-                    localStateView.setVisibility(View.VISIBLE);
-                }
-
                 // Folder
                 fileIcon.setImageResource(
                         MimetypeIconUtil.getFolderTypeIconId(
@@ -351,6 +304,46 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         return view;
     }
 
+    private void setIconPinAcordingToFilesLocalState(ImageView localStateView, OCFile file) {
+        // local state
+        localStateView.bringToFront();
+        final FileDownloaderBinder downloaderBinder =
+                mTransferServiceGetter.getFileDownloaderBinder();
+        final FileUploaderBinder uploaderBinder =
+                mTransferServiceGetter.getFileUploaderBinder();
+        final OperationsServiceBinder opsBinder =
+                mTransferServiceGetter.getOperationsServiceBinder();
+
+        localStateView.setVisibility(View.INVISIBLE);   // default first
+
+        if (opsBinder != null && opsBinder.isSynchronizing(mAccount, file)) {
+            //syncing
+            localStateView.setImageResource(R.drawable.sync_pin);
+            localStateView.setVisibility(View.VISIBLE);
+        } else if (downloaderBinder != null && downloaderBinder.isDownloading(mAccount, file)) {
+            // downloading
+            localStateView.setImageResource(R.drawable.sync_pin);
+            localStateView.setVisibility(View.VISIBLE);
+        } else if (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)) {
+            // uploading
+            localStateView.setImageResource(R.drawable.sync_pin);
+            localStateView.setVisibility(View.VISIBLE);
+        } else if (file.getEtagInConflict() != null) {
+            // conflict
+            localStateView.setImageResource(R.drawable.error_pin);
+            localStateView.setVisibility(View.VISIBLE);
+        }
+
+        if (file.isDown()) {
+            localStateView.setVisibility(View.VISIBLE);
+            localStateView.setImageResource(R.drawable.downloaded_pin);
+        }
+
+        if(file.isAvailableOffline()) {
+            localStateView.setVisibility(View.VISIBLE);
+            localStateView.setImageResource(R.drawable.offline_available_pin);
+        }
+    }
     @Override
     public int getViewTypeCount() {
         return 1;
