@@ -175,7 +175,6 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     
     private void startUpload() {
 
-
     	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
     	File fileToUpload = upFolder.listFiles()[0];
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName(); 
@@ -192,8 +191,18 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 				mimeType,
 				timeStamp
 		);
+		final Handler handler = new Handler();
 
-		new Thread(() -> uploadRemoteFileOperation.exec()).start();
+		new Thread(() -> {
+			final UploadRemoteFileOperation.Result result = uploadRemoteFileOperation.exec();
+			if (!result.isSuccess()) {
+				handler.post(() ->
+						Toast.makeText(this, result.getLogMessage(), Toast.LENGTH_LONG).show());
+				return;
+			}
+			handler.post(() ->
+					Toast.makeText(this, "Upload successful", Toast.LENGTH_LONG).show());
+		}).start();
 
 //    	UploadRemoteFileOperation uploadOperation = new UploadRemoteFileOperation(fileToUpload.getAbsolutePath(), remotePath, mimeType, timeStamp);
 //    	uploadOperation.addDatatransferProgressListener(this);
