@@ -52,8 +52,8 @@ public abstract class RemoteOperation<I extends Object> {
     }
 
 
-    protected RemoteOperation(OCContext context) {
-        mContext = context;
+    protected RemoteOperation(OCContext ocContext) {
+        mContext = ocContext;
         if(mClient == null) {
             mClient = new OkHttpClient.Builder()
                     .followRedirects(false)

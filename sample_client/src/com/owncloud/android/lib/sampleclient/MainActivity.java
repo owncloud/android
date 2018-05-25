@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -47,11 +47,11 @@ import com.owncloud.android.lib.refactor.account.OCAccount;
 import com.owncloud.android.lib.refactor.authentication.credentials.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.refactor.resources.files.DownloadRemoteFileOperation;
 import com.owncloud.android.lib.refactor.resources.files.PropfindOperation;
+import com.owncloud.android.lib.refactor.resources.files.RemoveRemoteFileOperation;
 import com.owncloud.android.lib.refactor.resources.files.UploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -167,7 +167,10 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 			for(DavResource el : result.getData().getMembers()) {
 				remoteFiles.add(new RemoteFile(el));
 			}
-			handler.post(() -> mFilesAdapter.addAll(remoteFiles));
+			handler.post(() -> {
+				mFilesAdapter.clear();
+				mFilesAdapter.addAll(remoteFiles);
+			});
 		}).start();
 //    	ReadRemoteFolderOperation refreshOperation = new ReadRemoteFolderOperation(FileUtils.PATH_SEPARATOR);
 //    	refreshOperation.execute(mClient, this, mHandler);
@@ -210,11 +213,30 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     }
 
     private void startRemoteDeletion() {
-    	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
-    	File fileToUpload = upFolder.listFiles()[0];
-    	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
-    	RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
-    	removeOperation.execute(mClient, this, mHandler);
+		File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
+		File fileToUpload = upFolder.listFiles()[0];
+		String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
+
+		final RemoveRemoteFileOperation removeRemoteFileOperation = new RemoveRemoteFileOperation(
+				mOCContext,
+				remotePath
+		);
+		final Handler handler = new Handler();
+
+		new Thread(() -> {
+			final RemoveRemoteFileOperation.Result result = removeRemoteFileOperation.exec();
+			if (!result.isSuccess()) {
+				handler.post(() ->
+						Toast.makeText(this, result.getLogMessage(), Toast.LENGTH_LONG).show());
+				return;
+			}
+			handler.post(() ->
+					Toast.makeText(this, "Delete successful", Toast.LENGTH_LONG).show());
+		}).start();
+
+
+//    	RemoveRemoteFileOperation removeOperation = new RemoveRemoteFileOperation(remotePath);
+//    	removeOperation.execute(mClient, this, mHandler);
     }
 
     private void startDownload() {
@@ -272,9 +294,9 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		} else if (operation instanceof com.owncloud.android.lib.resources.files.UploadRemoteFileOperation) {
 			onSuccessfulUpload((com.owncloud.android.lib.resources.files.UploadRemoteFileOperation)operation, result);
 			
-		} else if (operation instanceof RemoveRemoteFileOperation ) {
-			onSuccessfulRemoteDeletion((RemoveRemoteFileOperation)operation, result);
-			
+//		} else if (operation instanceof RemoveRemoteFileOperation ) {
+//			onSuccessfulRemoteDeletion((RemoveRemoteFileOperation)operation, result);
+//
 //		} else if (operation instanceof DownloadRemoteFileOperation ) {
 //			onSuccessfulDownload((DownloadRemoteFileOperation)operation, result);
 			

@@ -38,6 +38,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
  *
  * @author David A. Velasco
  * @author masensio
+ * @author David González Verdugo
  */
 public class RemoveRemoteFileOperation extends RemoteOperation {
     private static final String TAG = RemoveRemoteFileOperation.class.getSimpleName();
@@ -88,5 +89,4 @@ public class RemoveRemoteFileOperation extends RemoteOperation {
 
         return result;
     }
-
 }

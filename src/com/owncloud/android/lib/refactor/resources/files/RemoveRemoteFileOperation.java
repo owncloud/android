@@ -19,6 +19,7 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
+ *
  */
 
 package com.owncloud.android.lib.refactor.resources.files;
@@ -26,37 +27,34 @@ package com.owncloud.android.lib.refactor.resources.files;
 import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.operations.RemoteOperation;
 import at.bitfire.dav4android.DavOCResource;
+
 import static com.owncloud.android.lib.refactor.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
- * Remote operation performing the download of a remote file in the ownCloud server.
+ * Remote operation performing the removal of a remote file or folder in the ownCloud server.
  *
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
  */
-public class DownloadRemoteFileOperation extends RemoteOperation<Void> {
+public class RemoveRemoteFileOperation extends RemoteOperation<Void> {
 
     private String mRemotePath;
-    private String mLocalFolderPath;
 
-    public DownloadRemoteFileOperation(OCContext ocContext, String remotePath, String localFolderPath) {
+    public RemoveRemoteFileOperation(OCContext ocContext, String remotePath) {
         super(ocContext);
-        mRemotePath = remotePath.replaceAll("^/+", "");
-        mLocalFolderPath = localFolderPath;
+
+        mRemotePath = remotePath;
     }
 
     @Override
     public Result exec() {
-
         try {
             DavOCResource davOCResource = new DavOCResource(
                     getClient(),
                     getWebDavHttpUrl(mRemotePath)
             );
-            davOCResource.get("*/*");
-
-            //TODO Create local file from the downloaded one and implement progress listener
+            davOCResource.delete(null);
 
             return new Result(OK);
 
