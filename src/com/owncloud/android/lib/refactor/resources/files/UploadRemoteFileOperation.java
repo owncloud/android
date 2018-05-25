@@ -19,21 +19,18 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
 
-package com.owncloud.android.lib.refactor.operations;
+package com.owncloud.android.lib.refactor.resources.files;
 
 import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.RemoteOperation;
-
+import com.owncloud.android.lib.refactor.operations.RemoteOperation;
 import java.io.File;
-
 import at.bitfire.dav4android.DavOCResource;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-import static com.owncloud.android.lib.refactor.RemoteOperationResult.ResultCode.OK;
+import static com.owncloud.android.lib.refactor.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * @author David González Verdugo
@@ -46,9 +43,9 @@ public class UploadRemoteFileOperation extends RemoteOperation<Void> {
     private String mFileLastModifTimestamp;
 
 
-    public UploadRemoteFileOperation(OCContext context, String localPath, String remotePath, String mimetype,
+    public UploadRemoteFileOperation(OCContext ocContext, String localPath, String remotePath, String mimetype,
                                      String fileLastModifTimestamp) {
-        super(context);
+        super(ocContext);
 
         mFileToUpload = new File(localPath);
         mRemotePath = remotePath.replaceAll("^/+", ""); //Delete leading slashes
@@ -78,10 +75,10 @@ public class UploadRemoteFileOperation extends RemoteOperation<Void> {
                     mFileLastModifTimestamp
             );
 
+            return new Result(OK);
+
         } catch (Exception e) {
             return new Result(e);
         }
-
-        return new Result(OK);
     }
 }

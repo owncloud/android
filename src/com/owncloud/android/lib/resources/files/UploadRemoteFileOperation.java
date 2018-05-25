@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,14 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.network.FileRequestEntity;
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
+import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
+import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.OperationCancelledException;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpStatus;
@@ -38,22 +39,18 @@ import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.network.FileRequestEntity;
-import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.network.ProgressiveDataTransferer;
-import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.operations.InvalidCharacterExceptionParser;
-import com.owncloud.android.lib.common.operations.OperationCancelledException;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Remote operation performing the upload of a remote file to the ownCloud server.
  * 
  * @author David A. Velasco
  * @author masensio
+ * @author David González Verdugo
  */
 
 public class UploadRemoteFileOperation extends RemoteOperation {

@@ -19,39 +19,42 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
 
-package com.owncloud.android.lib.refactor.operations;
+package com.owncloud.android.lib.refactor.resources.files;
 
 import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.RemoteOperation;
-
+import com.owncloud.android.lib.refactor.operations.RemoteOperation;
 import at.bitfire.dav4android.DavOCResource;
-import at.bitfire.dav4android.DavResource;
-import at.bitfire.dav4android.PropertyUtils;
-import okhttp3.HttpUrl;
+import static com.owncloud.android.lib.refactor.operations.RemoteOperationResult.ResultCode.OK;
 
-import static com.owncloud.android.lib.refactor.RemoteOperationResult.ResultCode.OK;
-
-public class PropfindOperation extends RemoteOperation<DavResource> {
+/**
+ * @author David González Verdugo
+ */
+public class DownloadRemoteFileOperation extends RemoteOperation<Void> {
 
     private String mRemotePath;
+    private String mLocalFolderPath;
 
-    public PropfindOperation(OCContext context, String remotePath) {
-        super(context);
-        mRemotePath = remotePath;
+    public DownloadRemoteFileOperation(OCContext ocContext, String remotePath, String localFolderPath) {
+        super(ocContext);
+        mRemotePath = remotePath.replaceAll("^/+", "");
+        mLocalFolderPath = localFolderPath;
     }
 
     @Override
     public Result exec() {
+
         try {
-            final HttpUrl location = HttpUrl.parse(getWebDavHttpUrl(mRemotePath).toString());
+            DavOCResource davOCResource = new DavOCResource(
+                    getClient(),
+                    getWebDavHttpUrl(mRemotePath)
+            );
+            davOCResource.get("*/*");
 
-            DavOCResource davOCResource = new DavOCResource(getClient(), location);
-            davOCResource.propfind(1, PropertyUtils.INSTANCE.getAllPropSet());
+            //TODO Create local file from the downloaded one
 
-            return new Result(OK, davOCResource);
+            return new Result(OK);
 
         } catch (Exception e) {
             return new Result(e);

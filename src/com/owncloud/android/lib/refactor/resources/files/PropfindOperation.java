@@ -1,7 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *
- *   @author David A. Velasco
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +22,39 @@
  *
  */
 
-package com.owncloud.android.lib.refactor.authentication.oauth;
+package com.owncloud.android.lib.refactor.resources.files;
 
+import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.operations.RemoteOperation;
 
-public interface OAuth2RequestBuilder {
+import at.bitfire.dav4android.DavOCResource;
+import at.bitfire.dav4android.DavResource;
+import at.bitfire.dav4android.PropertyUtils;
+import okhttp3.HttpUrl;
 
-    enum OAuthRequest {
-        GET_AUTHORIZATION_CODE, CREATE_ACCESS_TOKEN, REFRESH_ACCESS_TOKEN
+import static com.owncloud.android.lib.refactor.operations.RemoteOperationResult.ResultCode.OK;
+
+public class PropfindOperation extends RemoteOperation<DavResource> {
+
+    private String mRemotePath;
+
+    public PropfindOperation(OCContext ocContext, String remotePath) {
+        super(ocContext);
+        mRemotePath = remotePath;
     }
 
-    void setRequest(OAuthRequest operation);
+    @Override
+    public Result exec() {
+        try {
+            final HttpUrl location = HttpUrl.parse(getWebDavHttpUrl(mRemotePath).toString());
 
-    void setGrantType(OAuth2GrantType grantType);
+            DavOCResource davOCResource = new DavOCResource(getClient(), location);
+            davOCResource.propfind(1, PropertyUtils.INSTANCE.getAllPropSet());
 
-    void setAuthorizationCode(String code);
+            return new Result(OK, davOCResource);
 
-    void setRefreshToken(String refreshToken);
-
-    RemoteOperation buildOperation();
-
-    String buildUri();
+        } catch (Exception e) {
+            return new Result(e);
+        }
+    }
 }

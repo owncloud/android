@@ -22,11 +22,12 @@
  *
  */
 
-package com.owncloud.android.lib.refactor;
+package com.owncloud.android.lib.refactor.operations;
 
 import android.accounts.Account;
 import android.accounts.AccountsException;
 
+import com.owncloud.android.lib.refactor.Log_OC;
 import com.owncloud.android.lib.refactor.exceptions.AccountNotFoundException;
 import com.owncloud.android.lib.refactor.exceptions.CertificateCombinedException;
 import com.owncloud.android.lib.refactor.exceptions.OperationCancelledException;
@@ -50,7 +51,6 @@ import java.util.Map;
 
 import javax.net.ssl.SSLException;
 
-import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.exception.ConflictException;
 import at.bitfire.dav4android.exception.DavException;
 import at.bitfire.dav4android.exception.HttpException;

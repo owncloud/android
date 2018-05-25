@@ -24,31 +24,6 @@
 
 package com.owncloud.android.lib.sampleclient;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
-import com.owncloud.android.lib.common.OwnCloudClientFactory;
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.account.OCAccount;
-import com.owncloud.android.lib.refactor.authentication.credentials.OwnCloudCredentialsFactory;
-import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
-import com.owncloud.android.lib.refactor.operations.PropfindOperation;
-import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
-import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
-import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
-import com.owncloud.android.lib.refactor.operations.UploadRemoteFileOperation;
-import com.owncloud.android.lib.resources.files.FileUtils;
-
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.drawable.BitmapDrawable;
@@ -60,6 +35,31 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
+import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.refactor.OCContext;
+import com.owncloud.android.lib.refactor.account.OCAccount;
+import com.owncloud.android.lib.refactor.authentication.credentials.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.refactor.resources.files.DownloadRemoteFileOperation;
+import com.owncloud.android.lib.refactor.resources.files.PropfindOperation;
+import com.owncloud.android.lib.refactor.resources.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.FileUtils;
+import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
+import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import at.bitfire.dav4android.DavResource;
 
@@ -223,9 +223,29 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
     	File upFolder = new File(getCacheDir(), getString(R.string.upload_folder_path));
     	File fileToUpload = upFolder.listFiles()[0];
     	String remotePath = FileUtils.PATH_SEPARATOR + fileToUpload.getName();
-    	DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remotePath, downFolder.getAbsolutePath());
-    	downloadOperation.addDatatransferProgressListener(this);
-    	downloadOperation.execute(mClient, this, mHandler);
+
+		final DownloadRemoteFileOperation downloadRemoteFileOperation = new DownloadRemoteFileOperation(
+				mOCContext,
+				remotePath,
+				downFolder.getAbsolutePath()
+		);
+		final Handler handler = new Handler();
+
+		new Thread(() -> {
+			final DownloadRemoteFileOperation.Result result = downloadRemoteFileOperation.exec();
+			if (!result.isSuccess()) {
+				handler.post(() ->
+						Toast.makeText(this, result.getLogMessage(), Toast.LENGTH_LONG).show());
+				return;
+			}
+			handler.post(() ->
+					Toast.makeText(this, "Download successful, pending file creation",
+							Toast.LENGTH_LONG).show());
+		}).start();
+
+//    	DownloadRemoteFileOperation downloadOperation = new DownloadRemoteFileOperation(remotePath, downFolder.getAbsolutePath());
+//    	downloadOperation.addDatatransferProgressListener(this);
+//    	downloadOperation.execute(mClient, this, mHandler);
     }
     
     @SuppressWarnings("deprecation")
@@ -255,8 +275,8 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 		} else if (operation instanceof RemoveRemoteFileOperation ) {
 			onSuccessfulRemoteDeletion((RemoveRemoteFileOperation)operation, result);
 			
-		} else if (operation instanceof DownloadRemoteFileOperation ) {
-			onSuccessfulDownload((DownloadRemoteFileOperation)operation, result);
+//		} else if (operation instanceof DownloadRemoteFileOperation ) {
+//			onSuccessfulDownload((DownloadRemoteFileOperation)operation, result);
 			
 		} else {
 			Toast.makeText(this, R.string.todo_operation_finished_in_success, Toast.LENGTH_SHORT).show();

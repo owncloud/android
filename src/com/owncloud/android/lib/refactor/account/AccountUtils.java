@@ -34,8 +34,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.owncloud.android.lib.refactor.Log_OC;
-import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.RemoteOperation;
+import com.owncloud.android.lib.refactor.operations.RemoteOperation;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCBasicCredentials;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCBearerCredentials;
 import com.owncloud.android.lib.refactor.authentication.credentials.OCCredentials;

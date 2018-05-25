@@ -1,5 +1,7 @@
-package com.owncloud.android.lib.refactor;
+package com.owncloud.android.lib.refactor.operations;
 import android.net.Uri;
+
+import com.owncloud.android.lib.refactor.OCContext;
 
 import java.io.IOException;
 import java.util.Map;

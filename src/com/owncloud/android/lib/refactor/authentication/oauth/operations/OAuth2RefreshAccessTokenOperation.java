@@ -22,9 +22,9 @@
 package com.owncloud.android.lib.refactor.authentication.oauth.operations;
 
 import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.RemoteOperationResult;
+import com.owncloud.android.lib.refactor.operations.RemoteOperationResult;
 import com.owncloud.android.lib.refactor.Log_OC;
-import com.owncloud.android.lib.refactor.RemoteOperation;
+import com.owncloud.android.lib.refactor.operations.RemoteOperation;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2Constants;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2GrantType;
 import com.owncloud.android.lib.refactor.authentication.oauth.OAuth2ResponseParser;
@@ -32,7 +32,6 @@ import com.owncloud.android.lib.refactor.authentication.oauth.OwnCloudOAuth2Prov
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
