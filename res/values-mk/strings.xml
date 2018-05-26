@@ -15,6 +15,8 @@
   <string name="actionbar_descending">Опаѓачки</string>
   <string name="actionbar_sort_title">Сортирај по</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Постари - Најнови</string>
+  <string name="actionbar_sort_by_size">Помали - Поголеми</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Сите датотеки</string>
@@ -24,6 +26,8 @@
   <string name="drawer_item_uploads_list">Прикачувања</string>
   <string name="drawer_close">Затвори</string>
   <string name="drawer_open">Отвори</string>
+  <string name="drawer_loading_quota">Вчитувам квота</string>
+  <string name="drawer_quota">%1$s од %2$s користи (%3$s %%)</string>
   <string name="drawer_feedback">Повратен одговор</string>
   <string name="drawer_help">Помош</string>
   <string name="prefs_category_general">Општо</string>
@@ -47,6 +51,7 @@
   <string name="prefs_remember_last_upload_location_summary">Запомни ја последната локација на споделување на префрлање</string>
   <string name="recommend_subject">Пробајте %1$s на вашиот паметен телефон!</string>
   <string name="recommend_text">Сакам да ве поканам да го користите %1$s на вашиот телефон.\nСимнете го овде: %2$s</string>
+  <string name="auth_check_server">Проверка на серверот</string>
   <string name="auth_host_url">Адреса на серверот https://…</string>
   <string name="auth_username">Корисничко име</string>
   <string name="auth_password">Лозинка</string>
@@ -54,6 +59,7 @@
   <string name="sync_string_files">Датотеки</string>
   <string name="setup_btn_connect">Поврзи се</string>
   <string name="uploader_btn_upload_text">Подигни</string>
+  <string name="uploader_top_message">Избери папка за качување:</string>
   <string name="uploader_wrn_no_account_title">Не е пронајдена сметка</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Нагодување</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Прекини</string>
