@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -75,7 +76,7 @@ import com.owncloud.android.utils.DisplayUtils;
  *
  */
 public class PreviewVideoFragment extends FileFragment implements View.OnClickListener,
-        ExoPlayer.EventListener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
+        ExoPlayer.EventListener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener  {
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
@@ -255,7 +256,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public void onPause() {
         super.onPause();
         Log_OC.v(TAG, "onPause");
-
         releasePlayer();
     }
 
@@ -265,7 +265,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         super.onStop();
     }
-
     /**
      * {@inheritDoc}
      */

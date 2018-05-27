@@ -37,6 +37,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SyncRequest;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources.NotFoundException;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,7 +49,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -151,7 +152,6 @@ public class FileDisplayActivity extends FileActivity
     private OCFile mWaitingToSend;
 
     private LocalBroadcastManager mLocalBroadcastManager;
-
 
     FilesUploadHelper mFilesUploadHelper;
 
@@ -1818,6 +1818,7 @@ public class FileDisplayActivity extends FileActivity
             startPlaybackPosition,
             true
         );
+
         setSecondFragment(mediaFragment);
         updateFragmentsVisibility(true);
         updateActionBarTitleAndHomeButton(file);
