@@ -16,6 +16,7 @@
   <string name="actionbar_sort_title">Sortieren nach</string>
   <string name="actionbar_sort_by_name">A-Z</string>
   <string name="actionbar_sort_by_date">Älteste - Neueste</string>
+  <string name="actionbar_sort_by_size">Kleinste - Größte</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Alle Dateien</string>
@@ -25,6 +26,7 @@
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>
   <string name="drawer_open">Öffnen</string>
+  <string name="drawer_loading_quota">Upload-Kontingent</string>
   <string name="drawer_quota">%1$s von %2$s verwendet (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">%1$s verwendet</string>
   <string name="drawer_unavailable_used_storage">Keine Speichernutzungsinformationen verfügbar</string>
@@ -70,6 +72,8 @@
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Ich möchte Dich zum Benutzen von %1$s auf Deinem Smartphone einladen!\nLade es hier herunter: %2$s</string>
+  <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen</string>
+  <string name="auth_failure_snackbar_action">Konto ändern</string>
   <string name="auth_check_server">überprüfe den Server</string>
   <string name="auth_host_url">Serveradresse https://…</string>
   <string name="auth_username">Benutzername</string>
