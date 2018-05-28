@@ -19,60 +19,42 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
+ *
  */
 
-package com.owncloud.android.lib.refactor.resources.files;
+package com.owncloud.android.lib.refactor.operations.files;
 
 import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.operations.RemoteOperation;
-import java.io.File;
 import at.bitfire.dav4android.DavOCResource;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 import static com.owncloud.android.lib.refactor.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
+ * Remote operation performing the removal of a remote file or folder in the ownCloud server.
+ *
+ * @author David A. Velasco
+ * @author masensio
  * @author David González Verdugo
  */
-public class UploadRemoteFileOperation extends RemoteOperation<Void> {
+public class RemoveRemoteFileOperation extends RemoteOperation<Void> {
 
-    private File mFileToUpload;
     private String mRemotePath;
-    private String mMimeType;
-    private String mFileLastModifTimestamp;
 
-
-    public UploadRemoteFileOperation(OCContext ocContext, String localPath, String remotePath, String mimetype,
-                                     String fileLastModifTimestamp) {
+    public RemoveRemoteFileOperation(OCContext ocContext, String remotePath) {
         super(ocContext);
 
-        mFileToUpload = new File(localPath);
-        mRemotePath = remotePath.replaceAll("^/+", ""); //Delete leading slashes
-        mMimeType = mimetype;
-        mFileLastModifTimestamp = fileLastModifTimestamp;
+        mRemotePath = remotePath;
     }
 
     @Override
     public Result exec() {
-
         try {
-
-            MediaType mediaType = MediaType.parse(mMimeType);
-            RequestBody requestBody = RequestBody.create(mediaType, mFileToUpload);
-
             DavOCResource davOCResource = new DavOCResource(
                     getClient(),
-                    getWebDavHttpUrl(mRemotePath));
-
-            davOCResource.put(
-                    requestBody,
-                    null,
-                    false,
-                    "multipart/form-data",
-                    String.valueOf(mFileToUpload.length()),
-                    mFileLastModifTimestamp
+                    getWebDavHttpUrl(mRemotePath)
             );
+            davOCResource.delete(null);
 
             return new Result(OK);
 

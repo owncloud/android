@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.refactor.resources.files;
+package com.owncloud.android.lib.refactor.operations.files;
 
 import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.operations.RemoteOperation;

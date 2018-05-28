@@ -33,7 +33,7 @@ import android.os.Parcelable;
 
 import com.owncloud.android.lib.common.network.WebdavEntry;
 import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.RemoteOperation;
+import com.owncloud.android.lib.refactor.operations.RemoteOperation;
 
 import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.PropertyCollection;
