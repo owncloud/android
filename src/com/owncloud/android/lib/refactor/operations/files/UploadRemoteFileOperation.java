@@ -26,6 +26,8 @@ package com.owncloud.android.lib.refactor.operations.files;
 import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.operations.RemoteOperation;
 import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import at.bitfire.dav4android.DavOCResource;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -41,16 +43,25 @@ public class UploadRemoteFileOperation extends RemoteOperation<Void> {
     private String mRemotePath;
     private String mMimeType;
     private String mFileLastModifTimestamp;
+    private String mRequiredEtag;
+
+    protected final AtomicBoolean mCancellationRequested = new AtomicBoolean(false);
 
 
-    public UploadRemoteFileOperation(OCContext ocContext, String localPath, String remotePath, String mimetype,
+    public UploadRemoteFileOperation(OCContext ocContext, String localPath, String remotePath, String mimeType,
                                      String fileLastModifTimestamp) {
         super(ocContext);
 
         mFileToUpload = new File(localPath);
         mRemotePath = remotePath.replaceAll("^/+", ""); //Delete leading slashes
-        mMimeType = mimetype;
+        mMimeType = mimeType;
         mFileLastModifTimestamp = fileLastModifTimestamp;
+    }
+
+    public UploadRemoteFileOperation(OCContext ocContext, String localPath, String remotePath, String mimeType,
+                                     String requiredEtag, String fileLastModifTimestamp) {
+        this(ocContext, localPath, remotePath, mimeType, fileLastModifTimestamp);
+        mRequiredEtag = requiredEtag;
     }
 
     @Override
@@ -78,6 +89,14 @@ public class UploadRemoteFileOperation extends RemoteOperation<Void> {
 
         } catch (Exception e) {
             return new Result(e);
+        }
+    }
+
+    public void cancel() {
+        synchronized (mCancellationRequested) {
+            mCancellationRequested.set(true);
+            if (mPutMethod != null)
+                mPutMethod.abort();
         }
     }
 }

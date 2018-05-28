@@ -194,5 +194,4 @@ public class UploadRemoteFileOperation extends RemoteOperation {
                 mPutMethod.abort();
         }
     }
-
 }
