@@ -243,11 +243,6 @@
     <string name="media_forward_description">Fast forward button</string>
     <string name="upload_from_camera_title">Picture from camera</string>
 
-    <string name="scanned_document_title">Scanned document</string>
-    <string name="crop_text">Crop</string>
-    <string name="no_contour_found">No rectangular contour found</string>
-    <string name="scan_result">Scan result</string>
-
     <string name="auth_getting_authorization">Getting authorization &#8230;</string>
     <string name="auth_trying_to_login">Trying to log in &#8230;</string>
     <string name="auth_no_net_conn_title">No network connection</string>
@@ -490,6 +485,8 @@
     <string name="share_with_edit_title">Share with %1$s</string>
 
     <string name="share_search">Search</string>
+
+    <string name="scanned_document_title">Scanned document</string>
 
     <string name="search_users_and_groups_hint">Search users and groups</string>
     <string name="share_group_clarification">%1$s (group)</string>

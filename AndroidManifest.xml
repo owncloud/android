@@ -140,10 +140,12 @@
             android:name=".files.services.RetryDownloadJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".files.services.CameraUploadsSyncJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true">
+        </service>
 
         <provider
             android:name=".providers.FileContentProvider"
@@ -151,7 +153,8 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/sync_string_files"
-            android:syncable="true" />
+            android:syncable="true"
+            />
         <provider
             android:name=".providers.UsersAndGroupsSearchProvider"
             android:authorities="@string/search_suggest_authority"

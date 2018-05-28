@@ -32,7 +32,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
@@ -73,7 +72,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
-import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
@@ -84,8 +82,6 @@ import com.owncloud.android.utils.FileStorageUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import devliving.online.cvscanner.CVScanner;
 
 /**
  * A Fragment that lists all files and folders in a given path.
@@ -132,9 +128,9 @@ public class OCFileListFragment extends ExtendedListFragment {
      * @return                          New fragment with arguments set.
      */
     public static OCFileListFragment newInstance(
-        boolean justFolders,
-        boolean hideFAB,
-        boolean allowContextualMode
+            boolean justFolders,
+            boolean hideFAB,
+            boolean allowContextualMode
     ) {
         OCFileListFragment frag = new OCFileListFragment();
         Bundle args = new Bundle();
@@ -192,7 +188,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         return v;
     }
 
-    
+
     @Override
     public void onDetach() {
         setOnRefreshListener(null);
@@ -426,7 +422,7 @@ public class OCFileListFragment extends ExtendedListFragment {
      * and closed.
      */
     private class MultiChoiceModeListener
-        implements AbsListView.MultiChoiceModeListener, DrawerLayout.DrawerListener {
+            implements AbsListView.MultiChoiceModeListener, DrawerLayout.DrawerListener {
 
         private static final String KEY_ACTION_MODE_CLOSED_BY_DRAWER = "KILLED_ACTION_MODE";
         private static final String KEY_SELECTION_WHEN_CLOSED_BY_DRAWER = "CHECKED_ITEMS";
@@ -463,8 +459,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                 for (int i = 0; i< mSelectionWhenActionModeClosedByDrawer.size(); i++) {
                     if (mSelectionWhenActionModeClosedByDrawer.valueAt(i)) {
                         getListView().setItemChecked(
-                            mSelectionWhenActionModeClosedByDrawer.keyAt(i),
-                            true
+                                mSelectionWhenActionModeClosedByDrawer.keyAt(i),
+                                true
                         );
                     }
                 }
@@ -529,16 +525,16 @@ public class OCFileListFragment extends ExtendedListFragment {
             List<OCFile> checkedFiles = mAdapter.getCheckedItems(getListView());
             final int checkedCount = checkedFiles.size();
             String title = getResources().getQuantityString(
-                R.plurals.items_selected_count,
-                checkedCount,
-                checkedCount
+                    R.plurals.items_selected_count,
+                    checkedCount,
+                    checkedCount
             );
             mode.setTitle(title);
             FileMenuFilter mf = new FileMenuFilter(
-                checkedFiles,
-                ((FileActivity) getActivity()).getAccount(),
-                mContainerActivity,
-                getActivity()
+                    checkedFiles,
+                    ((FileActivity) getActivity()).getAccount(),
+                    mContainerActivity,
+                    getActivity()
             );
             mf.filter(menu);
 
@@ -576,7 +572,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             outState.putBoolean(KEY_ACTION_MODE_CLOSED_BY_DRAWER, mActionModeClosedByDrawer);
             if (mSelectionWhenActionModeClosedByDrawer != null) {
                 SparseBooleanArrayParcelable sbap = new SparseBooleanArrayParcelable(
-                    mSelectionWhenActionModeClosedByDrawer
+                        mSelectionWhenActionModeClosedByDrawer
                 );
                 outState.putParcelable(KEY_SELECTION_WHEN_CLOSED_BY_DRAWER, sbap);
             }
@@ -584,11 +580,11 @@ public class OCFileListFragment extends ExtendedListFragment {
 
         public void loadStateFrom(Bundle savedInstanceState) {
             mActionModeClosedByDrawer = savedInstanceState.getBoolean(
-                KEY_ACTION_MODE_CLOSED_BY_DRAWER,
-                mActionModeClosedByDrawer
+                    KEY_ACTION_MODE_CLOSED_BY_DRAWER,
+                    mActionModeClosedByDrawer
             );
             SparseBooleanArrayParcelable sbap = savedInstanceState.getParcelable(
-                KEY_SELECTION_WHEN_CLOSED_BY_DRAWER
+                    KEY_SELECTION_WHEN_CLOSED_BY_DRAWER
             );
             if (sbap != null) {
                 mSelectionWhenActionModeClosedByDrawer = sbap.getSparseBooleanArray();
@@ -1116,9 +1112,9 @@ public class OCFileListFragment extends ExtendedListFragment {
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
-            getActivity().findViewById(R.id.coordinator_layout),
-            messageResource,
-            Snackbar.LENGTH_LONG
+                getActivity().findViewById(R.id.coordinator_layout),
+                messageResource,
+                Snackbar.LENGTH_LONG
         );
         snackbar.show();
     }

@@ -39,7 +39,6 @@ import android.content.ServiceConnection;
 import android.content.SyncRequest;
 import android.content.pm.PackageManager;
 import android.content.res.Resources.NotFoundException;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -681,12 +680,12 @@ public class FileDisplayActivity extends FileActivity
 
         // Hanndle calls form internal activities.
         if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS &&
-            (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
+                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
 
             requestUploadOfContentFromApps(data, resultCode);
 
         } else if (requestCode == REQUEST_CODE__SELECT_FILES_FROM_FILE_SYSTEM &&
-            (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
+                (resultCode == RESULT_OK || resultCode == UploadFilesActivity.RESULT_OK_AND_MOVE)) {
 
             requestUploadOfFilesFromFileSystem(data, resultCode);
 
@@ -708,7 +707,7 @@ public class FileDisplayActivity extends FileActivity
                 mFilesUploadHelper.deleteImageFile();
             }
 
-           // requestUploadOfFilesFromFileSystem(data,resultCode);
+            // requestUploadOfFilesFromFileSystem(data,resultCode);
         } else if(requestCode == REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT){
             if(resultCode == RESULT_OK) {
                 String scannedDocumentPath = data.getStringExtra(CVScanner.RESULT_IMAGE_PATH);
@@ -796,8 +795,8 @@ public class FileDisplayActivity extends FileActivity
 
         //getClipData is only supported on api level 16+, Jelly Bean
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN &&
-            contentIntent.getClipData() != null &&
-            contentIntent.getClipData().getItemCount() > 0) {
+                contentIntent.getClipData() != null &&
+                contentIntent.getClipData().getItemCount() > 0) {
 
             for (int i = 0; i < contentIntent.getClipData().getItemCount(); i++) {
                 streamsToUpload.add(contentIntent.getClipData().getItemAt(i).getUri());
@@ -1003,10 +1002,10 @@ public class FileDisplayActivity extends FileActivity
                     if (currentDir == null) {
                         // current folder was removed from the server
                         showSnackMessage(
-                            String.format(
-                                getString(R.string.sync_current_folder_was_removed),
-                                synchFolderRemotePath
-                            )
+                                String.format(
+                                        getString(R.string.sync_current_folder_was_removed),
+                                        synchFolderRemotePath
+                                )
                         );
                         browseToRoot();
 
@@ -1036,20 +1035,20 @@ public class FileDisplayActivity extends FileActivity
                                     .equals(event));
 
                     if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
-                        equals(event)) {
+                            equals(event)) {
 
                         if (synchResult != null && !synchResult.isSuccess()) {
                             /// TODO refactor and make common
 
                             if (ResultCode.UNAUTHORIZED.equals(synchResult.getCode()) ||
-                                (synchResult.isException() && synchResult.getException()
-                                    instanceof AuthenticatorException)) {
+                                    (synchResult.isException() && synchResult.getException()
+                                            instanceof AuthenticatorException)) {
 
                                 showRequestAccountChangeNotice();
 
                             } else if (RemoteOperationResult.ResultCode.
                                     SSL_RECOVERABLE_PEER_UNVERIFIED.equals(
-                                synchResult.getCode())) {
+                                    synchResult.getCode())) {
 
                                 showUntrustedCertDialog(synchResult);
                             }
@@ -1119,14 +1118,14 @@ public class FileDisplayActivity extends FileActivity
             boolean sameAccount = getAccount() != null && accountName.equals(getAccount().name);
             OCFile currentDir = getCurrentDir();
             boolean isDescendant =
-                (currentDir != null) &&
-                (uploadedRemotePath != null) &&
-                (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
+                    (currentDir != null) &&
+                            (uploadedRemotePath != null) &&
+                            (uploadedRemotePath.startsWith(currentDir.getRemotePath()));
             boolean renamedInUpload = getFile().getRemotePath().equals(
-                intent.getStringExtra(Extras.EXTRA_OLD_REMOTE_PATH)
+                    intent.getStringExtra(Extras.EXTRA_OLD_REMOTE_PATH)
             );
             boolean sameFile = renamedInUpload ||
-                getFile().getRemotePath().equals(uploadedRemotePath);
+                    getFile().getRemotePath().equals(uploadedRemotePath);
             boolean success = intent.getBooleanExtra(Extras.EXTRA_UPLOAD_RESULT, false);
 
             if (sameAccount && isDescendant) {
@@ -1142,16 +1141,16 @@ public class FileDisplayActivity extends FileActivity
                     setFile(getStorageManager().getFileByPath(uploadedRemotePath));
                 }
                 refreshSecondFragment(
-                    intent.getAction(),
-                    success
+                        intent.getAction(),
+                        success
                 );
                 if (renamedInUpload) {
                     String newName = (new File(uploadedRemotePath)).getName();
                     showSnackMessage(
-                        String.format(
-                            getString(R.string.filedetails_renamed_in_upload_msg),
-                            newName
-                        )
+                            String.format(
+                                    getString(R.string.filedetails_renamed_in_upload_msg),
+                                    newName
+                            )
                     );
                     updateActionBarTitleAndHomeButton(getFile());
                 }
@@ -1273,21 +1272,21 @@ public class FileDisplayActivity extends FileActivity
                     FileDetailFragment detailsFragment = (FileDetailFragment) secondFragment;
                     OCFile fileInFragment = detailsFragment.getFile();
                     if (fileInFragment != null &&
-                        !downloadedRemotePath.equals(fileInFragment.getRemotePath())) {
+                            !downloadedRemotePath.equals(fileInFragment.getRemotePath())) {
                         // the user browsed to other file ; forget the automatic preview
                         mFileWaitingToPreview = null;
 
                     } else if (downloadEvent.equals(FileDownloader.getDownloadFinishMessage())) {
                         //  replace the right panel if waiting for preview
                         boolean waitedPreview = (
-                            mFileWaitingToPreview != null &&
-                                mFileWaitingToPreview.getRemotePath().equals(downloadedRemotePath)
+                                mFileWaitingToPreview != null &&
+                                        mFileWaitingToPreview.getRemotePath().equals(downloadedRemotePath)
                         );
                         if (waitedPreview) {
                             if (success) {
                                 // update the file from database, to get the local storage path
                                 mFileWaitingToPreview = getStorageManager().getFileById(
-                                    mFileWaitingToPreview.getFileId()
+                                        mFileWaitingToPreview.getFileId()
                                 );
                                 fragmentReplaced = true;
                                 if (PreviewAudioFragment.canBePreviewed(mFileWaitingToPreview)) {
@@ -1384,9 +1383,9 @@ public class FileDisplayActivity extends FileActivity
                         mFileWaitingToPreview =
                                 getStorageManager().getFileById(mFileWaitingToPreview.getFileId());
                         if (!mFileWaitingToPreview.isDown()) {
-                             // If the file to preview isn't downloaded yet, check if it is being
-                             // downloaded in this moment or not
-                             requestForDownload();
+                            // If the file to preview isn't downloaded yet, check if it is being
+                            // downloaded in this moment or not
+                            requestForDownload();
                         }
                     }
 
@@ -1611,9 +1610,9 @@ public class FileDisplayActivity extends FileActivity
 
         /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
         boolean waitedForPreview = (
-            mFileWaitingToPreview != null &&
-            mFileWaitingToPreview.equals(operation.getLocalFile())
-            && mFileWaitingToPreview.isDown()
+                mFileWaitingToPreview != null &&
+                        mFileWaitingToPreview.equals(operation.getLocalFile())
+                        && mFileWaitingToPreview.isDown()
         );
         if (!operation.transferWasRequested() & waitedForPreview) {
             getFileOperationsHelper().openFile(mFileWaitingToPreview);
@@ -1681,38 +1680,38 @@ public class FileDisplayActivity extends FileActivity
         // the execution is slightly delayed to allow the activity get the window focus if it's being started
         // or if the method is called from a dialog that is being dismissed
         getHandler().postDelayed(
-            new Runnable() {
-                @Override
-                public void run() {
-                    if (hasWindowFocus()) {
-                        mSyncInProgress = true;
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if (hasWindowFocus()) {
+                            mSyncInProgress = true;
 
-                        // perform folder synchronization
-                        SyncOperation synchFolderOp = new RefreshFolderOperation(
-                            folder,
-                            getFileOperationsHelper().isSharedSupported(),
-                            ignoreETag,
-                            getAccount(),
-                            getApplicationContext()
-                        );
-                        synchFolderOp.execute(
-                            getStorageManager(),
-                            MainApp.getAppContext(),
-                            null,   // unneeded, handling via SyncBroadcastReceiver
-                            null
-                        );
+                            // perform folder synchronization
+                            SyncOperation synchFolderOp = new RefreshFolderOperation(
+                                    folder,
+                                    getFileOperationsHelper().isSharedSupported(),
+                                    ignoreETag,
+                                    getAccount(),
+                                    getApplicationContext()
+                            );
+                            synchFolderOp.execute(
+                                    getStorageManager(),
+                                    MainApp.getAppContext(),
+                                    null,   // unneeded, handling via SyncBroadcastReceiver
+                                    null
+                            );
 
-                        OCFileListFragment fileListFragment = getListOfFilesFragment();
-                        if (fileListFragment != null) {
-                            fileListFragment.setProgressBarAsIndeterminate(true);
-                        }
+                            OCFileListFragment fileListFragment = getListOfFilesFragment();
+                            if (fileListFragment != null) {
+                                fileListFragment.setProgressBarAsIndeterminate(true);
+                            }
 
-                        setBackgroundText();
-                    }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
+                            setBackgroundText();
+                        }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
                         // another window floating over
-                }
-            },
-            DELAY_TO_REQUEST_OPERATIONS_LATER + 350
+                    }
+                },
+                DELAY_TO_REQUEST_OPERATIONS_LATER + 350
         );
 
     }
@@ -1769,10 +1768,10 @@ public class FileDisplayActivity extends FileActivity
      */
     public void startAudioPreview(OCFile file, int startPlaybackPosition) {
         Fragment mediaFragment = PreviewAudioFragment.newInstance(
-            file,
-            getAccount(),
-            startPlaybackPosition,
-            true
+                file,
+                getAccount(),
+                startPlaybackPosition,
+                true
         );
         setSecondFragment(mediaFragment);
         updateFragmentsVisibility(true);
@@ -1789,10 +1788,10 @@ public class FileDisplayActivity extends FileActivity
      */
     public void startVideoPreview(OCFile file, int startPlaybackPosition) {
         Fragment mediaFragment = PreviewVideoFragment.newInstance(
-            file,
-            getAccount(),
-            startPlaybackPosition,
-            true
+                file,
+                getAccount(),
+                startPlaybackPosition,
+                true
         );
         setSecondFragment(mediaFragment);
         updateFragmentsVisibility(true);
@@ -1807,8 +1806,8 @@ public class FileDisplayActivity extends FileActivity
      */
     public void startTextPreview(OCFile file) {
         Fragment textPreviewFragment = PreviewTextFragment.newInstance(
-            file,
-            getAccount()
+                file,
+                getAccount()
         );
         setSecondFragment(textPreviewFragment);
         updateFragmentsVisibility(true);
@@ -1857,9 +1856,9 @@ public class FileDisplayActivity extends FileActivity
                 cleanSecondFragment();
             } else {
                 secondFragment.onSyncEvent(
-                    FileDownloader.getDownloadFinishMessage(),
-                    false,
-                    null
+                        FileDownloader.getDownloadFinishMessage(),
+                        false,
+                        null
                 );
             }
         }
