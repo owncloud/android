@@ -42,19 +42,20 @@
             android:focusableInTouchMode="false">
 
             <ImageView
-                android:id="@+id/localFileIndicator"
-                android:layout_width="@dimen/file_icon_size"
-                android:layout_height="@dimen/file_icon_size"
-                android:layout_gravity="top|right"
-                android:layout_marginRight="4dp"
-                android:src="@drawable/sync_pin" />
-
-            <ImageView
                 android:id="@+id/thumbnail"
                 android:layout_width="@dimen/file_icon_size"
                 android:layout_height="@dimen/file_icon_size"
                 android:layout_gravity="left|center_vertical"
                 android:src="@drawable/ic_menu_archive" />
+
+            <ImageView
+                android:id="@+id/localFileIndicator"
+                android:layout_width="@dimen/file_indicator_pin_size"
+                android:layout_height="@dimen/file_indicator_pin_size"
+                android:layout_gravity="bottom|right"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/sync_pin" />
 
         </FrameLayout>
 

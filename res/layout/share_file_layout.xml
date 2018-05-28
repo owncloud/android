@@ -35,8 +35,8 @@
 
             <ImageView
                 android:id="@+id/shareFileIcon"
-                android:layout_width="@dimen/file_icon_size"
-                android:layout_height="@dimen/file_icon_size"
+                android:layout_width="@dimen/file_indicator_pin_size"
+                android:layout_height="@dimen/file_indicator_pin_size"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/standard_half_margin"
                 android:src="@drawable/file" />

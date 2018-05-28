@@ -49,12 +49,10 @@
 
         <ImageView
             android:id="@+id/localFileIndicator"
-            android:layout_width="@dimen/file_icon_size"
-            android:layout_height="@dimen/file_icon_size"
+            android:layout_width="@dimen/file_indicator_pin_size_grid"
+            android:layout_height="@dimen/file_indicator_pin_size_grid"
             android:layout_gravity="bottom|right"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginRight="4dp"
+            android:layout_margin="4dp"
             android:src="@drawable/sync_pin" />
 
         <ImageView
