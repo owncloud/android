@@ -21,19 +21,13 @@
 
 package com.owncloud.android.operations;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
+import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.UploadsStorageManager;
@@ -44,15 +38,19 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.RemoteOperation;
 import com.owncloud.android.lib.refactor.account.OCAccount;
-import com.owncloud.android.lib.refactor.operations.PropfindOperation;
-import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
+import com.owncloud.android.lib.refactor.resources.files.PropfindOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import at.bitfire.dav4android.DavResource;
@@ -258,7 +256,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
         try {
             OCAccount account = new OCAccount(client.getAccount().getSavedAccount(), mContext);
-            OCContext ocContext = new OCContext(account, "Okhttp");
+            OCContext ocContext = new OCContext(account, MainApp.getUserAgent());
 
             PropfindOperation propfindOperation = new PropfindOperation(ocContext, mRemotePath);
 
