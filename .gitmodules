@@ -6,3 +6,6 @@
 	path = user_manual/ocdoc
 	url = https://github.com/owncloud/documentation
 	branch = master
+[submodule "dav4android"]
+	path = dav4android
+	url = https://gitlab.com/derSchabi/dav4android.git
