@@ -136,12 +136,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         LayoutInflater inflator = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+
         if (mFiles != null && mFiles.size() > position) {
             file = mFiles.get(position);
         }
 
         // Find out which layout should be displayed
-        ViewType viewType;
+        final ViewType viewType;
         if (parent instanceof GridView) {
             if (file != null && file.isImage()) {
                 viewType = ViewType.GRID_IMAGE;
@@ -172,13 +173,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         if (file != null) {
 
-            ImageView fileIcon = view.findViewById(R.id.thumbnail);
+            final ImageView localStateView = view.findViewById(R.id.localFileIndicator);
+            final ImageView fileIcon = view.findViewById(R.id.thumbnail);
 
             fileIcon.setTag(file.getFileId());
             TextView fileName;
             String name = file.getFileName();
 
-            LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
+            final LinearLayout linearLayout = view.findViewById(R.id.ListItemLayout);
             linearLayout.setContentDescription("LinearLayout-" + name);
 
             switch (viewType) {
@@ -220,54 +222,16 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         sharedIconV.setVisibility(View.GONE);
                     }
 
-                    // local state
-                    ImageView localStateView = view.findViewById(R.id.localFileIndicator);
-                    localStateView.bringToFront();
-                    FileDownloaderBinder downloaderBinder =
-                            mTransferServiceGetter.getFileDownloaderBinder();
-                    FileUploaderBinder uploaderBinder =
-                            mTransferServiceGetter.getFileUploaderBinder();
-                    OperationsServiceBinder opsBinder =
-                            mTransferServiceGetter.getOperationsServiceBinder();
-
-                    localStateView.setVisibility(View.INVISIBLE);   // default first
-
-                    if ( //synchronizing
-                            opsBinder != null &&
-                                    opsBinder.isSynchronizing(mAccount, file)
-                            ) {
-                        localStateView.setImageResource(R.drawable.ic_synchronizing);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if ( // downloading
-                            downloaderBinder != null &&
-                                    downloaderBinder.isDownloading(mAccount, file)
-                            ) {
-                        localStateView.setImageResource(R.drawable.ic_synchronizing);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if ( //uploading
-                            uploaderBinder != null &&
-                                    uploaderBinder.isUploading(mAccount, file)
-                            ) {
-                        localStateView.setImageResource(R.drawable.ic_synchronizing);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if (file.getEtagInConflict() != null) {   // conflict
-                        localStateView.setImageResource(R.drawable.ic_synchronizing_error);
-                        localStateView.setVisibility(View.VISIBLE);
-
-                    } else if (file.isDown()) {
-                        localStateView.setImageResource(R.drawable.ic_synced);
-                        localStateView.setVisibility(View.VISIBLE);
-                    }
 
                     break;
             }
 
             // For all Views
 
-            ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
+
+            setIconPinAcordingToFilesLocalState(localStateView, file);
+
+            final ImageView checkBoxV = view.findViewById(R.id.custom_checkbox);
             checkBoxV.setVisibility(View.GONE);
             view.setBackgroundColor(Color.WHITE);
 
@@ -288,16 +252,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 checkBoxV.setVisibility(View.VISIBLE);
             }
 
-            // this if-else is needed even though favorite icon is visible by default
-            // because android reuses views in listview
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
-                view.findViewById(R.id.favoriteIcon).setVisibility(View.GONE);
+            if(file.isFolder()) {
+                // Folder
+                fileIcon.setImageResource(
+                        MimetypeIconUtil.getFolderTypeIconId(
+                                file.isSharedWithMe() || file.isSharedWithSharee(),
+                                file.isSharedViaLink()));
             } else {
-                view.findViewById(R.id.favoriteIcon).setVisibility(View.VISIBLE);
-            }
-
-            // No Folder
-            if (!file.isFolder()) {
                 if (file.isImage() && file.getRemoteId() != null) {
                     // Thumbnail in Cache?
                     Bitmap thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(
@@ -338,17 +299,50 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 }
 
 
-            } else {
-                // Folder
-                fileIcon.setImageResource(
-                        MimetypeIconUtil.getFolderTypeIconId(
-                                file.isSharedWithMe() || file.isSharedWithSharee(),
-                                file.isSharedViaLink()
-                        )
-                );
             }
         }
         return view;
+    }
+
+    private void setIconPinAcordingToFilesLocalState(ImageView localStateView, OCFile file) {
+        // local state
+        localStateView.bringToFront();
+        final FileDownloaderBinder downloaderBinder =
+                mTransferServiceGetter.getFileDownloaderBinder();
+        final FileUploaderBinder uploaderBinder =
+                mTransferServiceGetter.getFileUploaderBinder();
+        final OperationsServiceBinder opsBinder =
+                mTransferServiceGetter.getOperationsServiceBinder();
+
+        localStateView.setVisibility(View.INVISIBLE);   // default first
+
+        if (opsBinder != null && opsBinder.isSynchronizing(mAccount, file)) {
+            //syncing
+            localStateView.setImageResource(R.drawable.sync_pin);
+            localStateView.setVisibility(View.VISIBLE);
+        } else if (downloaderBinder != null && downloaderBinder.isDownloading(mAccount, file)) {
+            // downloading
+            localStateView.setImageResource(R.drawable.sync_pin);
+            localStateView.setVisibility(View.VISIBLE);
+        } else if (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)) {
+            // uploading
+            localStateView.setImageResource(R.drawable.sync_pin);
+            localStateView.setVisibility(View.VISIBLE);
+        } else if (file.getEtagInConflict() != null) {
+            // conflict
+            localStateView.setImageResource(R.drawable.error_pin);
+            localStateView.setVisibility(View.VISIBLE);
+        } else {
+            if (file.isDown()) {
+                localStateView.setVisibility(View.VISIBLE);
+                localStateView.setImageResource(R.drawable.downloaded_pin);
+            }
+
+            if(file.isAvailableOffline()) {
+                localStateView.setVisibility(View.VISIBLE);
+                localStateView.setImageResource(R.drawable.offline_available_pin);
+            }
+        }
     }
 
     @Override
