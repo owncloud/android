@@ -54,6 +54,7 @@ public class PropfindOperation extends RemoteOperation<DavResource> {
             return new Result(OK, davOCResource);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return new Result(e);
         }
     }

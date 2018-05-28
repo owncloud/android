@@ -35,6 +35,8 @@ import com.owncloud.android.lib.refactor.authentication.credentials.OCAnonymousC
 import com.owncloud.android.lib.refactor.authentication.credentials.OCCredentials;
 import com.owncloud.android.lib.refactor.exceptions.AccountNotFoundException;
 
+import org.apache.commons.httpclient.auth.AuthenticationException;
+
 import java.io.IOException;
 
 /**
@@ -56,7 +58,7 @@ public class OCAccount {
      *
      * Do not use for anonymous credentials.
      */
-    public OCAccount(Account savedAccount, Context context) throws AccountNotFoundException {
+    public OCAccount(Account savedAccount, Context context) throws AccountNotFoundException, IOException, OperationCanceledException, AuthenticatorException {
         if (savedAccount == null) {
             throw new IllegalArgumentException("Parameter 'savedAccount' cannot be null");
         }
@@ -67,7 +69,7 @@ public class OCAccount {
 
         mSavedAccount = savedAccount;
         mSavedAccountName = savedAccount.name;
-        mCredentials = null;    // load of credentials is delayed
+        mCredentials = AccountUtils.getCredentialsForAccount(context, savedAccount);
 
         AccountManager ama = AccountManager.get(context.getApplicationContext());
         String baseUrl = ama.getUserData(mSavedAccount, AccountUtils.Constants.KEY_OC_BASE_URL);

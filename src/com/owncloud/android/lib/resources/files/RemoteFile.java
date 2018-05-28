@@ -32,6 +32,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.owncloud.android.lib.common.network.WebdavEntry;
+import com.owncloud.android.lib.refactor.OCContext;
+import com.owncloud.android.lib.refactor.RemoteOperation;
 
 import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.PropertyCollection;
@@ -45,6 +47,7 @@ import at.bitfire.dav4android.property.owncloud.OCId;
 import at.bitfire.dav4android.property.owncloud.OCPermissions;
 import at.bitfire.dav4android.property.owncloud.OCPrivatelink;
 import at.bitfire.dav4android.property.owncloud.OCSize;
+import okhttp3.HttpUrl;
 
 /**
  * Contains the data of a Remote File from a WebDavEntry
@@ -198,15 +201,15 @@ public class RemoteFile implements Parcelable, Serializable {
         this.setPrivateLink(webdavEntry.privateLink());
     }
 
-    public RemoteFile(final DavResource davResource) {
-        this(Uri.decode(davResource.getLocation().encodedPath()));
+    public RemoteFile(final DavResource davResource, OCContext context) {
+        this(getRemotePathFromUrl(davResource.getLocation(), context));
         final PropertyCollection properties = davResource.getProperties();
         this.setCreationTimestamp(properties.get(CreationDate.class) != null
                 ? Long.parseLong(properties.get(CreationDate.class).getCreationDate())
                 : 0);
         this.setMimeType(properties.get(GetContentType.class) != null
                 ? properties.get(GetContentType.class).getType()
-                : "");
+                : "DIR");
         this.setModifiedTimestamp(properties.get(GetLastModified.class).getLastModified());
         this.setEtag(properties.get(GetETag.class).getETag());
         this.setPermissions(properties.get(OCPermissions.class).getPermission());
@@ -221,6 +224,13 @@ public class RemoteFile implements Parcelable, Serializable {
                         properties.get(QuotaAvailableBytes.class).getQuotaAvailableBytes())
                 : BigDecimal.ZERO);
         this.setPrivateLink(properties.get(OCPrivatelink.class).getLink());
+    }
+
+
+    private static String getRemotePathFromUrl(HttpUrl url, OCContext context) {
+        final String pathToRemove =
+                "/" + RemoteOperation.WEBDAV_PATH_4_0 + "/" + context.getOCAccount().getDisplayName();
+        return Uri.decode(url.encodedPath()).replace(pathToRemove, "");
     }
 
     /**

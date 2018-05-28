@@ -63,8 +63,7 @@ public class UploadRemoteFileOperation extends RemoteOperation<Void> {
 
             DavOCResource davOCResource = new DavOCResource(
                     getClient(),
-                    getWebDavHttpUrl(mRemotePath)
-            );
+                    getWebDavHttpUrl(mRemotePath));
 
             davOCResource.put(
                     requestBody,
