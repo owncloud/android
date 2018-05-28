@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -24,7 +25,7 @@ import android.accounts.Account;
 import android.content.Context;
 import android.net.Uri;
 
-import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
@@ -37,11 +38,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.refactor.OCContext;
+import com.owncloud.android.lib.refactor.account.OCAccount;
 import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.refactor.resources.files.UploadRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -263,7 +266,8 @@ public class UploadFileOperation extends SyncOperation {
             ((ProgressiveDataTransferer)mEntity).addDatatransferProgressListener(listener);
         }
         if(mUploadOperation != null){
-            mUploadOperation.addDatatransferProgressListener(listener);
+            // TODO Progress
+//            mUploadOperation.addDatatransferProgressListener(listener);
         }
     }
 
@@ -275,7 +279,8 @@ public class UploadFileOperation extends SyncOperation {
             ((ProgressiveDataTransferer)mEntity).removeDatatransferProgressListener(listener);
         }
         if(mUploadOperation != null){
-            mUploadOperation.removeDatatransferProgressListener(listener);
+            // TODO Progress
+//            mUploadOperation.removeDatatransferProgressListener(listener);
         }
     }
 
@@ -291,6 +296,9 @@ public class UploadFileOperation extends SyncOperation {
         File temporalFile = null, originalFile = new File(mOriginalStoragePath), expectedFile = null;
 
         try {
+
+            OCAccount account = new OCAccount(client.getAccount().getSavedAccount(), mContext);
+            OCContext ocContext = new OCContext(account, MainApp.getUserAgent());
 
             /// Check that connectivity conditions are met and delays the upload otherwise
             if (delayForWifi()) {
@@ -311,7 +319,6 @@ public class UploadFileOperation extends SyncOperation {
             result = grantFolderExistence(remoteParentPath, client);
 
             if (!result.isSuccess()) {
-
                 return result;
             }
 
@@ -362,29 +369,32 @@ public class UploadFileOperation extends SyncOperation {
             String timeStamp = timeStampLong.toString();
 
             /// perform the upload
-            if ( mChunked &&
+            if (mChunked &&
                     (new File(mFile.getStoragePath())).length() >
                             ChunkedUploadRemoteFileOperation.CHUNK_SIZE ) {
-                mUploadOperation = new ChunkedUploadRemoteFileOperation(mFile.getStoragePath(),
-                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+                // TODO Chunked upload
+//                mUploadOperation = new ChunkedUploadRemoteFileOperation(mFile.getStoragePath(),
+//                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
             } else {
-                mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(),
+                mUploadOperation = new UploadRemoteFileOperation(ocContext, mFile.getStoragePath(),
                         mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
             }
             Iterator <OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
-            while (listener.hasNext()) {
-                mUploadOperation.addDatatransferProgressListener(listener.next());
-            }
+
+            // TODO Progress
+//            while (listener.hasNext()) {
+//                mUploadOperation.addDatatransferProgressListener(listener.next());
+//            }
 
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
             }
 
-            result = mUploadOperation.execute(client);
+            UploadRemoteFileOperation.Result uploadFileResult = mUploadOperation.exec();
 
             /// move local temporal file or original file to its corresponding
             // location in the ownCloud local folder
-            if (result.isSuccess()) {
+            if (uploadFileResult.isSuccess()) {
                 if (mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_FORGET) {
                     String temporalPath = FileStorageUtils.getTemporalPath(mAccount.name) + mFile.getRemotePath();
                     if (mOriginalStoragePath.equals(temporalPath)) {
