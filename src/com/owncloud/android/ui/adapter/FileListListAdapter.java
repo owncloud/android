@@ -332,18 +332,19 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             // conflict
             localStateView.setImageResource(R.drawable.error_pin);
             localStateView.setVisibility(View.VISIBLE);
-        }
+        } else {
+            if (file.isDown()) {
+                localStateView.setVisibility(View.VISIBLE);
+                localStateView.setImageResource(R.drawable.downloaded_pin);
+            }
 
-        if (file.isDown()) {
-            localStateView.setVisibility(View.VISIBLE);
-            localStateView.setImageResource(R.drawable.downloaded_pin);
-        }
-
-        if(file.isAvailableOffline()) {
-            localStateView.setVisibility(View.VISIBLE);
-            localStateView.setImageResource(R.drawable.offline_available_pin);
+            if(file.isAvailableOffline()) {
+                localStateView.setVisibility(View.VISIBLE);
+                localStateView.setImageResource(R.drawable.offline_available_pin);
+            }
         }
     }
+
     @Override
     public int getViewTypeCount() {
         return 1;
