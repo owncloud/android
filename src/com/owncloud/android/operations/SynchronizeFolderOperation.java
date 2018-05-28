@@ -43,6 +43,10 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.refactor.OCContext;
+import com.owncloud.android.lib.refactor.RemoteOperation;
+import com.owncloud.android.lib.refactor.account.OCAccount;
+import com.owncloud.android.lib.refactor.operations.PropfindOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -50,6 +54,8 @@ import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import at.bitfire.dav4android.DavResource;
 
 
 /**
@@ -250,8 +256,34 @@ public class SynchronizeFolderOperation extends SyncOperation {
             throw new OperationCancelledException();
         }
 
-        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
-        return readFolderOperation.execute(client);
+        try {
+            OCAccount account = new OCAccount(client.getAccount().getSavedAccount(), mContext);
+            OCContext ocContext = new OCContext(account, "Okhttp");
+
+            PropfindOperation propfindOperation = new PropfindOperation(ocContext, mRemotePath);
+
+            PropfindOperation.Result propResult = propfindOperation.exec();
+
+            ArrayList<Object> data = new ArrayList<>();
+
+            data.add(new RemoteFile(propResult.getData(), ocContext));
+            for(DavResource resource : propResult.getData().getMembers()) {
+                RemoteFile file = new RemoteFile(resource, ocContext);
+                data.add(file);
+            }
+
+            RemoteOperationResult result = new RemoteOperationResult(ResultCode.OK);
+            result.setData(data);
+
+            return result;
+        } catch (Exception e) {
+            return new RemoteOperationResult(e);
+        }
+
+
+        // prviouce implementation
+//        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
+//        return readFolderOperation.execute(client);
     }
 
 
