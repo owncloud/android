@@ -1,3 +1,22 @@
+## 2.8.0 beta v1 (May 2018)
+- Side menu redesign
+- User quota in side menu
+- Descending option when sorting
+- New downloaded/offline icons and pins
+- One panel design for tablets
+- Custom tabs for OAuth
+- UI improvements, including:
+  + Fab button above snackbar
+  + Toggle to control password visibility when sharing via link
+- Bug fixes, including:
+  + Fix block for deleted basic/oauth accounts
+  + Fix available offline when renaming files
+  + Fix camera directory not selectable in root
+  + Fix guest account showing an empty file list
+  + Hide keyboard when going back from select user view
+  + Fix black "downloading screen" message when downloading an image offline.
+  
+
 ## 2.7.0 (April 2018)
 - Fingerprint lock
 - Pattern lock (contribution)
