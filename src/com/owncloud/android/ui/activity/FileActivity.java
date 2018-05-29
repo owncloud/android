@@ -558,12 +558,16 @@ public class FileActivity extends DrawerActivity
      * @param message       Message to show.
      */
     public void showSnackMessage(String message) {
+
+        View view = findViewById(R.id.coordinator_layout) != null
+                ? findViewById(R.id.coordinator_layout)
+                : findViewById(android.R.id.content);
+
         Snackbar snackbar = Snackbar.make(
-            findViewById(R.id.coordinator_layout),
-            message,
-            Snackbar.LENGTH_LONG
+                view,
+                message,
+                Snackbar.LENGTH_LONG
         );
         snackbar.show();
     }
-
 }
