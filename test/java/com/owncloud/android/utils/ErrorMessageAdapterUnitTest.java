@@ -67,7 +67,7 @@ public class ErrorMessageAdapterUnitTest {
             .thenReturn(MOCK_TO_DELETE);
 
         // ... when method under test is called ...
-        String errorMessage = ErrorMessageAdapter.getErrorCauseMessage(
+        String errorMessage = ErrorMessageAdapter.getResultMessage(
             new RemoteOperationResult(RemoteOperationResult.ResultCode.FORBIDDEN),
             new RemoveFileOperation(PATH_TO_DELETE, false),
             mMockResources

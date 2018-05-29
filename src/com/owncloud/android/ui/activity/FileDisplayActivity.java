@@ -1460,7 +1460,7 @@ public class FileDisplayActivity extends FileActivity
                                              RemoteOperationResult result) {
 
         showSnackMessage(
-            ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+            ErrorMessageAdapter.getResultMessage(result, operation, getResources())
         );
 
         if (result.isSuccess()) {
@@ -1502,7 +1502,7 @@ public class FileDisplayActivity extends FileActivity
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {
@@ -1524,7 +1524,7 @@ public class FileDisplayActivity extends FileActivity
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {
@@ -1558,7 +1558,7 @@ public class FileDisplayActivity extends FileActivity
 
         } else {
             showSnackMessage(
-                ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                ErrorMessageAdapter.getResultMessage(result, operation, getResources())
             );
 
             if (result.isSslRecoverableException()) {
@@ -1584,7 +1584,7 @@ public class FileDisplayActivity extends FileActivity
 
             } else if (getSecondFragment() == null) {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
         }
@@ -1616,7 +1616,7 @@ public class FileDisplayActivity extends FileActivity
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {
