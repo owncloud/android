@@ -72,6 +72,7 @@ public class FileContentProvider extends ContentProvider {
     private static final int CAPABILITIES = 5;
     private static final int UPLOADS = 6;
     private static final int CAMERA_UPLOADS_SYNC = 7;
+    private static final int QUOTAS = 8;
 
     private static final String TAG = FileContentProvider.class.getSimpleName();
 
@@ -304,6 +305,9 @@ public class FileContentProvider extends ContentProvider {
             case CAMERA_UPLOADS_SYNC:
                 count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs);
                 break;
+            case QUOTAS:
+                count = db.delete(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, where, whereArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown uri: " + uri.toString());
         }
@@ -426,6 +430,18 @@ public class FileContentProvider extends ContentProvider {
                 }
                 return insertedCameraUploadUri;
 
+            case QUOTAS:
+                Uri insertedQuotaUri;
+                long quotaId = db.insert(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, null,
+                        values);
+                if (quotaId > 0) {
+                    insertedQuotaUri =
+                            ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_QUOTAS,
+                                    quotaId);
+                } else {
+                    throw new SQLException("ERROR " + uri);
+                }
+                return insertedQuotaUri;
             default:
                 throw new IllegalArgumentException("Unknown uri id: " + uri);
         }
@@ -474,6 +490,8 @@ public class FileContentProvider extends ContentProvider {
         mUriMatcher.addURI(authority, "uploads/#", UPLOADS);
         mUriMatcher.addURI(authority, "cameraUploadsSync/", CAMERA_UPLOADS_SYNC);
         mUriMatcher.addURI(authority, "cameraUploadsSync/#", CAMERA_UPLOADS_SYNC);
+        mUriMatcher.addURI(authority, "quotas/", QUOTAS);
+        mUriMatcher.addURI(authority, "quotas/#", QUOTAS);
 
         return true;
     }
@@ -564,6 +582,12 @@ public class FileContentProvider extends ContentProvider {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
                 }
+            case QUOTAS:
+                sqlQuery.setTables(ProviderTableMeta.USER_QUOTAS_TABLE_NAME);
+                if (uri.getPathSegments().size() > 1) {
+                    sqlQuery.appendWhere(ProviderTableMeta._ID + "="
+                            + uri.getPathSegments().get(1));
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Unknown uri id: " + uri);
@@ -643,6 +667,8 @@ public class FileContentProvider extends ContentProvider {
                 return db.update(
                         ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, values, selection,
                         selectionArgs);
+            case QUOTAS:
+                return db.update(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, values, selection, selectionArgs);
             default:
                 return db.update(
                         ProviderTableMeta.FILE_TABLE_NAME, values, selection, selectionArgs
@@ -716,7 +742,7 @@ public class FileContentProvider extends ContentProvider {
                 db.execSQL("ALTER TABLE " + ProviderTableMeta.FILE_TABLE_NAME +
                         " ADD COLUMN " + ProviderTableMeta.FILE_KEEP_IN_SYNC + " INTEGER " +
                         " DEFAULT 0");
-                return;
+                upgraded = true;
             }
             if (oldVersion < 3 && newVersion >= 3) {
                 Log_OC.i("SQL", "Entering in the #2 ADD in onUpgrade");
@@ -732,7 +758,7 @@ public class FileContentProvider extends ContentProvider {
                             + System.currentTimeMillis() +
                             " WHERE " + ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -750,7 +776,7 @@ public class FileContentProvider extends ContentProvider {
                             ProviderTableMeta.FILE_MODIFIED +
                             " WHERE " + ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -764,7 +790,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.FILE_ETAG + " TEXT " +
                             " DEFAULT NULL");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -785,7 +811,7 @@ public class FileContentProvider extends ContentProvider {
                     // Create table ocshares
                     createOCSharesTable(db);
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -803,7 +829,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.FILE_REMOTE_ID + " TEXT " +
                             " DEFAULT NULL");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -817,7 +843,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.FILE_UPDATE_THUMBNAIL + " INTEGER " +
                             " DEFAULT 0");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -831,7 +857,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.FILE_IS_DOWNLOADING + " INTEGER " +
                             " DEFAULT 0");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -851,7 +877,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.FILE_ETAG_IN_CONFLICT + " TEXT " +
                             " DEFAULT NULL");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -865,7 +891,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.FILE_SHARED_WITH_SHAREE + " INTEGER " +
                             " DEFAULT 0");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -878,7 +904,7 @@ public class FileContentProvider extends ContentProvider {
                     // Create capabilities table
                     createCapabilitiesTable(db);
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -893,7 +919,7 @@ public class FileContentProvider extends ContentProvider {
                     // Create uploads table
                     createUploadsTable(db);
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -906,7 +932,7 @@ public class FileContentProvider extends ContentProvider {
                     // Create user profiles table
                     createUserAvatarsTable(db);
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -920,7 +946,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.FILE_TREE_ETAG + " TEXT " +
                             " DEFAULT NULL");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -933,11 +959,9 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.OCSHARES_NAME + " TEXT " +
                             " DEFAULT NULL");
                     db.setTransactionSuccessful();
-                    return;
-
+                    upgraded = true;
                     // SQLite does not allow to drop a columns; ftm, we'll not recreate
                     // the files table without the column FILE_PUBLIC_LINK, just forget about
-
                 } finally {
                     db.endTransaction();
                 }
@@ -950,8 +974,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.OCSHARES_URL + " TEXT " +
                             " DEFAULT NULL");
                     db.setTransactionSuccessful();
-                    return;
-
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -965,8 +988,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_MULTIPLE
                             + " INTEGER " + " DEFAULT -1");
                     db.setTransactionSuccessful();
-                    return;
-
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -981,8 +1003,7 @@ public class FileContentProvider extends ContentProvider {
                             CAPABILITIES_SHARING_PUBLIC_SUPPORTS_UPLOAD_ONLY + " INTEGER " +
                             " DEFAULT -1");
                     db.setTransactionSuccessful();
-                    return;
-
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -996,7 +1017,7 @@ public class FileContentProvider extends ContentProvider {
                             " ADD COLUMN " + ProviderTableMeta.FILE_PRIVATE_LINK + " TEXT " +
                             " DEFAULT NULL");
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -1008,7 +1029,7 @@ public class FileContentProvider extends ContentProvider {
                 try {
                     createCameraUploadsSyncTable(db);
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
@@ -1020,14 +1041,16 @@ public class FileContentProvider extends ContentProvider {
                 try {
                     createUserQuotaTable(db);
                     db.setTransactionSuccessful();
-                    return;
+                    upgraded = true;
                 } finally {
                     db.endTransaction();
                 }
             }
 
-            Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
+            if (!upgraded) {
+                Log_OC.i("SQL", "OUT of the ADD in onUpgrade; oldVersion == " + oldVersion +
                         ", newVersion == " + newVersion);
+            }
         }
     }
 
@@ -1143,7 +1166,7 @@ public class FileContentProvider extends ContentProvider {
     }
 
     private void createUserQuotaTable (SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + ProviderTableMeta.USER_QUOTAS__TABLE_NAME + "("
+        db.execSQL("CREATE TABLE " + ProviderTableMeta.USER_QUOTAS_TABLE_NAME + "("
                 + ProviderTableMeta._ID + " INTEGER PRIMARY KEY, "
                 + ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + " TEXT, "
                 + ProviderTableMeta.USER_QUOTAS__FREE + " LONG, "

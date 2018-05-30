@@ -45,7 +45,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
         public static final String UPLOADS_TABLE_NAME = "list_of_uploads";
         public static final String USER_AVATARS__TABLE_NAME = "user_avatars";
-        public static final String USER_QUOTAS__TABLE_NAME = "user_quotas";
+        public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
         public static final String CAMERA_UPLOADS_SYNC_TABLE_NAME = "camera_uploads_sync";
 
         public static final Uri CONTENT_URI = Uri.parse("content://"
@@ -62,6 +62,8 @@ public class ProviderMeta {
                 + MainApp.getAuthority() + "/uploads");
         public static final Uri CONTENT_URI_CAMERA_UPLOADS_SYNC = Uri.parse("content://"
                 + MainApp.getAuthority() + "/cameraUploadsSync");
+        public static final Uri CONTENT_URI_QUOTAS = Uri.parse("content://"
+                + MainApp.getAuthority() + "/quotas");
 
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.owncloud.file";
         public static final String CONTENT_TYPE_ITEM = "vnd.android.cursor.item/vnd.owncloud.file";
