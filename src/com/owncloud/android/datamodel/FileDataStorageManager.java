@@ -55,9 +55,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -180,6 +182,14 @@ public class FileDataStorageManager {
         } else {
             return new Vector<>();
         }
+    }
+
+    public Map<String, OCFile> getFolderContentAsRemoteIdMap(OCFile f/*, boolean onlyOnDevice*/) {
+        final Map<String, OCFile> filesMap = new HashMap<>();
+        for(OCFile file : getFolderContent(f)) {
+            filesMap.put(file.getRemoteId(), file);
+        }
+        return filesMap;
     }
 
 
