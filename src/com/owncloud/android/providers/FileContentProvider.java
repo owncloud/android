@@ -429,7 +429,6 @@ public class FileContentProvider extends ContentProvider {
                     throw new SQLException("ERROR " + uri);
                 }
                 return insertedCameraUploadUri;
-
             case QUOTAS:
                 Uri insertedQuotaUri;
                 long quotaId = db.insert(ProviderTableMeta.USER_QUOTAS_TABLE_NAME, null,
@@ -582,6 +581,7 @@ public class FileContentProvider extends ContentProvider {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "="
                             + uri.getPathSegments().get(1));
                 }
+                break;
             case QUOTAS:
                 sqlQuery.setTables(ProviderTableMeta.USER_QUOTAS_TABLE_NAME);
                 if (uri.getPathSegments().size() > 1) {
