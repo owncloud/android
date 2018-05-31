@@ -25,24 +25,6 @@
 
 package com.owncloud.android.lib.common;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.HttpVersion;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.httpclient.params.HttpParams;
-
 import android.accounts.AccountManager;
 import android.accounts.AccountsException;
 import android.content.Context;
@@ -51,12 +33,30 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
-public class OwnCloudClient extends HttpClient {
+import org.apache.commons.httpclient.Cookie;
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HostConfiguration;
+import org.apache.commons.httpclient.HttpConnectionManager;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.params.HttpParams;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+
+public class OwnCloudClient {
 
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
     public static final String STATUS_PATH = "/status.php";
@@ -68,6 +68,7 @@ public class OwnCloudClient extends HttpClient {
     private static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
     private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
+    private static final String USER_AGENT_HEADER = "User-Agent";
 
     private static byte[] sExhaustBuffer = new byte[1024];
 
@@ -99,11 +100,29 @@ public class OwnCloudClient extends HttpClient {
 
     private String mRedirectedLocation;
 
+    private static OkHttpClient mClient = null;
+
     /**
      * Constructor
      */
     public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr) {
-        super(connectionMgr);
+
+        String userAgent = OwnCloudClientManagerFactory.getUserAgent();
+
+        if (mClient == null) {
+            new OkHttpClient.Builder()
+                    .addInterceptor(chain ->
+                            chain.proceed(
+                                    chain.request()
+                                    .newBuilder()
+                                    .addHeader(USER_AGENT_HEADER, userAgent)
+                                    .build()
+                            )
+                    )
+                    .protocols(Arrays.asList(Protocol.HTTP_1_1))
+                    .followRedirects(false)
+                    .build();
+        }
 
         if (baseUri == null) {
             throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
@@ -113,20 +132,14 @@ public class OwnCloudClient extends HttpClient {
         mInstanceNumber = sIntanceCounter++;
         Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
 
-        String userAgent = OwnCloudClientManagerFactory.getUserAgent();
-        getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
-        getParams().setParameter(
-            PARAM_PROTOCOL_VERSION,
-            HttpVersion.HTTP_1_1
-        );
+        //TODO
+//        getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+//        getParams().setParameter(
+//            PARAM_SINGLE_COOKIE_HEADER,             // to avoid problems with some web servers
+//            PARAM_SINGLE_COOKIE_HEADER_VALUE
+//        );
 
-        getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
-        getParams().setParameter(
-            PARAM_SINGLE_COOKIE_HEADER,             // to avoid problems with some web servers
-            PARAM_SINGLE_COOKIE_HEADER_VALUE
-        );
-
-        applyProxySettings();
+//        applyProxySettings();
 
         clearCredentials();
     }
