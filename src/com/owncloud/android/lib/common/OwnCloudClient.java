@@ -40,12 +40,15 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 
@@ -56,7 +59,7 @@ import java.util.Arrays;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
-public class OwnCloudClient {
+public class OwnCloudClient extends HttpClient {
 
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
     public static final String STATUS_PATH = "/status.php";
@@ -107,6 +110,36 @@ public class OwnCloudClient {
      */
     public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr) {
 
+        super(connectionMgr);
+
+        if (baseUri == null) {
+            throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
+        }
+        mBaseUri = baseUri;
+
+        mInstanceNumber = sIntanceCounter++;
+        Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
+
+        String userAgent = OwnCloudClientManagerFactory.getUserAgent();
+        getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
+        getParams().setParameter(
+                PARAM_PROTOCOL_VERSION,
+                HttpVersion.HTTP_1_1
+        );
+
+        getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+        getParams().setParameter(
+                PARAM_SINGLE_COOKIE_HEADER,             // to avoid problems with some web servers
+                PARAM_SINGLE_COOKIE_HEADER_VALUE
+        );
+
+        applyProxySettings();
+
+        clearCredentials();
+    }
+
+    public OwnCloudClient(Uri baseUri) {
+
         String userAgent = OwnCloudClientManagerFactory.getUserAgent();
 
         if (mClient == null) {
@@ -114,9 +147,9 @@ public class OwnCloudClient {
                     .addInterceptor(chain ->
                             chain.proceed(
                                     chain.request()
-                                    .newBuilder()
-                                    .addHeader(USER_AGENT_HEADER, userAgent)
-                                    .build()
+                                            .newBuilder()
+                                            .addHeader(USER_AGENT_HEADER, userAgent)
+                                            .build()
                             )
                     )
                     .protocols(Arrays.asList(Protocol.HTTP_1_1))
@@ -142,6 +175,7 @@ public class OwnCloudClient {
 //        applyProxySettings();
 
         clearCredentials();
+
     }
 
 

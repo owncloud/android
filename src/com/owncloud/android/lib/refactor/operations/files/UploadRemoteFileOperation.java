@@ -92,11 +92,11 @@ public class UploadRemoteFileOperation extends RemoteOperation<Void> {
         }
     }
 
-    public void cancel() {
-        synchronized (mCancellationRequested) {
-            mCancellationRequested.set(true);
-            if (mPutMethod != null)
-                mPutMethod.abort();
-        }
-    }
+//    public void cancel() {
+//        synchronized (mCancellationRequested) {
+//            mCancellationRequested.set(true);
+//            if (mPutMethod != null)
+//                mPutMethod.abort();
+//        }
+//    }
 }

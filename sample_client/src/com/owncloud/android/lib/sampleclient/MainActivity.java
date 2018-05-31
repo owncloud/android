@@ -53,6 +53,8 @@ import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 
+import at.bitfire.dav4android.DavResource;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,8 +62,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import at.bitfire.dav4android.DavResource;
 
 public class MainActivity extends Activity implements OnRemoteOperationListener, OnDatatransferProgressListener {
 	
@@ -164,10 +164,11 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
 						Toast.makeText(this, result.getLogMessage(), Toast.LENGTH_LONG).show());
 				return;
 			}
-			for(DavResource el : result.getData().getMembers()) {
-				remoteFiles.add(new RemoteFile(el));
-			}
+//			for(DavResource el : result.getData().getMembers()) {
+//				remoteFiles.add(new RemoteFile(el));
+//			}
 			handler.post(() -> {
+				Toast.makeText(this, result.getData().getMembers().toString(), Toast.LENGTH_LONG).show();
 				mFilesAdapter.clear();
 				mFilesAdapter.addAll(remoteFiles);
 			});
