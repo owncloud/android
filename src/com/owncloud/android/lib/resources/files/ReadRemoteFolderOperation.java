@@ -24,21 +24,22 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import java.util.ArrayList;
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.DavConstants;
-import org.apache.jackrabbit.webdav.MultiStatus;
-import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.methods.PropfindMethod;
 import com.owncloud.android.lib.common.network.WebdavEntry;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import at.bitfire.dav4android.DavResource;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.jackrabbit.webdav.MultiStatus;
+import org.apache.jackrabbit.webdav.client.methods.PropFindMethod;
+
+import java.util.ArrayList;
+
+import at.bitfire.dav4android.DavOCResource;
+import okhttp3.HttpUrl;
 
 /**
  * Remote operation performing the read of remote file or folder in the ownCloud server.
@@ -75,32 +76,40 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
 
         try {
 
+            final HttpUrl location = HttpUrl.parse(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath));
+            DavOCResource davOCResource = new DavOCResource(client.getOkHttpClient(), location);
+            PropfindMethod propfindMethod = new PropfindMethod(davOCResource, 1);
+
+            int status = client.executeHttpMethod(propfindMethod);
+
+            // TODO Refactor from here down
+
             // remote request
-            query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
-                WebdavUtils.getAllPropSet(),    // PropFind Properties
-                DavConstants.DEPTH_1);
-            int status = client.executeMethod(query);
-
-            // check and process response
-            boolean isSuccess = (
-                status == HttpStatus.SC_MULTI_STATUS ||
-                    status == HttpStatus.SC_OK
-            );
-            if (isSuccess) {
-                // get data from remote folder
-                MultiStatus dataInServer = query.getResponseBodyAsMultiStatus();
-                readData(dataInServer, client);
-
-                // Result of the operation
-                result = new RemoteOperationResult(true, query);
-                // Add data to the result
-                if (result.isSuccess()) {
-                    result.setData(mFolderAndFiles);
-                }
-            } else {
-                // synchronization failed
-                result = new RemoteOperationResult(false, query);
-            }
+//            query = new PropFindMethod(client.getWebdavUri() + WebdavUtils.encodePath(mRemotePath),
+//                WebdavUtils.getAllPropSet(),    // PropFind Properties
+//                DavConstants.DEPTH_1);
+//            int status = client.executeMethod(query);
+//
+//            // check and process response
+//            boolean isSuccess = (
+//                status == HttpStatus.SC_MULTI_STATUS ||
+//                    status == HttpStatus.SC_OK
+//            );
+//            if (isSuccess) {
+//                // get data from remote folder
+//                MultiStatus dataInServer = query.getResponseBodyAsMultiStatus();
+//                readData(dataInServer, client);
+//
+//                // Result of the operation
+//                result = new RemoteOperationResult(true, query);
+//                // Add data to the result
+//                if (result.isSuccess()) {
+//                    result.setData(mFolderAndFiles);
+//                }
+//            } else {
+//                // synchronization failed
+//                result = new RemoteOperationResult(false, query);
+//            }
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
@@ -119,7 +128,6 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                     Log_OC.e(TAG, "Synchronized " + mRemotePath + ": " + result.getLogMessage());
                 }
             }
-
         }
         return result;
     }

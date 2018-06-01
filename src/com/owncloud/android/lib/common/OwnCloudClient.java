@@ -45,12 +45,11 @@ import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
+import com.owncloud.android.lib.common.methods.HttpBaseMethod;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,47 +102,50 @@ public class OwnCloudClient extends HttpClient {
 
     private String mRedirectedLocation;
 
-    private static OkHttpClient mClient = null;
+    private static OkHttpClient mOkHttpClient = null;
 
     /**
      * Constructor
      */
+
+//    public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr) {
+//
+//        super(connectionMgr);
+//
+//        if (baseUri == null) {
+//            throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
+//        }
+//        mBaseUri = baseUri;
+//
+//        mInstanceNumber = sIntanceCounter++;
+//        Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
+//
+//        String userAgent = OwnCloudClientManagerFactory.getUserAgent();
+//        getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
+//        getParams().setParameter(
+//                PARAM_PROTOCOL_VERSION,
+//                HttpVersion.HTTP_1_1
+//        );
+//
+//        getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
+//        getParams().setParameter(
+//                PARAM_SINGLE_COOKIE_HEADER,             // to avoid problems with some web servers
+//                PARAM_SINGLE_COOKIE_HEADER_VALUE
+//        );
+//
+//        applyProxySettings();
+//
+//        clearCredentials();
+//    }
+
     public OwnCloudClient(Uri baseUri, HttpConnectionManager connectionMgr) {
 
         super(connectionMgr);
 
-        if (baseUri == null) {
-            throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
-        }
-        mBaseUri = baseUri;
-
-        mInstanceNumber = sIntanceCounter++;
-        Log_OC.d(TAG + " #" + mInstanceNumber, "Creating OwnCloudClient");
-
-        String userAgent = OwnCloudClientManagerFactory.getUserAgent();
-        getParams().setParameter(HttpMethodParams.USER_AGENT, userAgent);
-        getParams().setParameter(
-                PARAM_PROTOCOL_VERSION,
-                HttpVersion.HTTP_1_1
-        );
-
-        getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
-        getParams().setParameter(
-                PARAM_SINGLE_COOKIE_HEADER,             // to avoid problems with some web servers
-                PARAM_SINGLE_COOKIE_HEADER_VALUE
-        );
-
-        applyProxySettings();
-
-        clearCredentials();
-    }
-
-    public OwnCloudClient(Uri baseUri) {
-
         String userAgent = OwnCloudClientManagerFactory.getUserAgent();
 
-        if (mClient == null) {
-            new OkHttpClient.Builder()
+        if (mOkHttpClient == null) {
+            mOkHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(chain ->
                             chain.proceed(
                                     chain.request()
@@ -175,9 +177,7 @@ public class OwnCloudClient extends HttpClient {
 //        applyProxySettings();
 
         clearCredentials();
-
     }
-
 
     private void applyProxySettings() {
         String proxyHost = System.getProperty("http.proxyHost");
@@ -197,7 +197,6 @@ public class OwnCloudClient extends HttpClient {
             Log_OC.d(TAG, "Proxy settings: " + proxyHost + ":" + proxyPort);
         }
     }
-
 
     public void setCredentials(OwnCloudCredentials credentials) {
         if (credentials != null) {
@@ -247,7 +246,6 @@ public class OwnCloudClient extends HttpClient {
             getHttpConnectionManager().getParams().setConnectionTimeout(oldConnectionTimeout);
         }
     }
-
 
     /**
      * Requests the received method.
@@ -300,6 +298,11 @@ public class OwnCloudClient extends HttpClient {
         return status;
     }
 
+    public int executeHttpMethod (HttpBaseMethod method) throws Exception {
+        int status = method.execute();
+        return status;
+    }
+
     private void checkFirstRedirection(HttpMethod method) {
         Header[] httpHeaders = method.getResponseHeaders();
 
@@ -337,7 +340,6 @@ public class OwnCloudClient extends HttpClient {
             throw new IllegalArgumentException("Invalid port number " + port);
         }
     }
-
 
     public RedirectionPath followRedirection(HttpMethod method) throws IOException {
         int redirectionsCount = 0;
@@ -560,6 +562,10 @@ public class OwnCloudClient extends HttpClient {
 
     public OwnCloudAccount getAccount() {
         return mAccount;
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return mOkHttpClient;
     }
 
     /**

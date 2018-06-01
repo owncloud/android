@@ -25,14 +25,16 @@ package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.auth.AuthState;
 import org.apache.commons.httpclient.auth.BasicScheme;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Credentials;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
@@ -58,14 +60,22 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
 
         List<String> authPrefs = new ArrayList<String>(1);
         authPrefs.add(AuthPolicy.BASIC);
-        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
 
+        client.getOkHttpClient().newBuilder()
+                .addInterceptor(chain ->
+                        chain.proceed(
+                                chain.request()
+                                        .newBuilder()
+                                        .addHeader("Authorization", Credentials.basic(mUsername, mPassword))
+                                        .build()
+                        )
+                ).build();
+
+        //TODO
+        client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
         client.getParams().setAuthenticationPreemptive(mAuthenticationPreemptive);
         client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);
-        client.getState().setCredentials(
-            AuthScope.ANY,
-            new UsernamePasswordCredentials(mUsername, mPassword)
-        );
+        client.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(mUsername, mPassword));
     }
 
     @Override
