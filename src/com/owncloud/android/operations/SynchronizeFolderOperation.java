@@ -39,7 +39,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.account.OCAccount;
-import com.owncloud.android.lib.refactor.resources.files.PropfindOperation;
+import com.owncloud.android.lib.refactor.operations.files.PropfindOperation;
+import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.services.OperationsService;
@@ -254,29 +255,33 @@ public class SynchronizeFolderOperation extends SyncOperation {
             throw new OperationCancelledException();
         }
 
-        try {
-            OCAccount account = new OCAccount(client.getAccount().getSavedAccount(), mContext);
-            OCContext ocContext = new OCContext(account, MainApp.getUserAgent());
+        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
+        return readFolderOperation.execute(client);
 
-            PropfindOperation propfindOperation = new PropfindOperation(ocContext, mRemotePath);
+//        try {
+//            OCAccount account = new OCAccount(client.getAccount().getSavedAccount(), mContext);
 
-            PropfindOperation.Result propResult = propfindOperation.exec();
+//            OCContext ocContext = new OCContext(account, MainApp.getUserAgent());
+//
+//            PropfindOperation propfindOperation = new PropfindOperation(ocContext, mRemotePath);
+//
+//            PropfindOperation.Result propResult = propfindOperation.exec();
+//
+//            ArrayList<Object> data = new ArrayList<>();
+//
+//            data.add(new RemoteFile(propResult.getData(), ocContext));
+//            for(DavResource resource : propResult.getData().getMembers()) {
+//                RemoteFile file = new RemoteFile(resource, ocContext);
+//                data.add(file);
+//            }
 
-            ArrayList<Object> data = new ArrayList<>();
+//            RemoteOperationResult result = new RemoteOperationResult(ResultCode.OK);
+//            result.setData(data);
 
-            data.add(new RemoteFile(propResult.getData(), ocContext));
-            for(DavResource resource : propResult.getData().getMembers()) {
-                RemoteFile file = new RemoteFile(resource, ocContext);
-                data.add(file);
-            }
-
-            RemoteOperationResult result = new RemoteOperationResult(ResultCode.OK);
-            result.setData(data);
-
-            return result;
-        } catch (Exception e) {
-            return new RemoteOperationResult(e);
-        }
+//            return result;
+//        } catch (Exception e) {
+//            return new RemoteOperationResult(e);
+//        }
 
 
         // prviouce implementation
