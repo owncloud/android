@@ -44,7 +44,7 @@ import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.refactor.resources.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.refactor.operations.files.UploadRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
