@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,8 @@
 package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.interceptors.BasicAuthInterceptor;
+import com.owncloud.android.lib.common.interceptors.HttpInterceptor;
 
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
@@ -37,6 +39,8 @@ import java.util.List;
 import okhttp3.Credentials;
 
 public class OwnCloudBasicCredentials implements OwnCloudCredentials {
+
+    private static final String TAG = OwnCloudCredentials.class.getSimpleName();
 
     private String mUsername;
     private String mPassword;
@@ -61,15 +65,17 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         List<String> authPrefs = new ArrayList<>(1);
         authPrefs.add(AuthPolicy.BASIC);
 
-        client.getOkHttpClient().newBuilder()
-                .addInterceptor(chain ->
-                        chain.proceed(
-                                chain.request()
-                                        .newBuilder()
-                                        .addHeader("Authorization", Credentials.basic(mUsername, mPassword))
-                                        .build()
-                        )
-                ).build();
+        for (HttpInterceptor.RequestInterceptor requestInterceptor :
+                client.getBaseOkHttpInterceptor().getRequestInterceptors()) {
+            if (requestInterceptor instanceof BasicAuthInterceptor) {
+                return;
+            }
+        }
+
+        client.getBaseOkHttpInterceptor()
+                .addRequestInterceptor(
+                        new BasicAuthInterceptor(Credentials.basic(mUsername, mPassword))
+                );
 
         //TODO
         client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);

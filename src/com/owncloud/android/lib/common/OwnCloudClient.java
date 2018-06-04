@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2017 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *   Copyright (C) 2012  Bartek Przybylski
  *   
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,6 +33,8 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
+import com.owncloud.android.lib.common.interceptors.HttpInterceptor;
+import com.owncloud.android.lib.common.interceptors.UserAgentInterceptor;
 import com.owncloud.android.lib.common.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -71,7 +73,6 @@ public class OwnCloudClient extends HttpClient {
     private static final String PARAM_SINGLE_COOKIE_HEADER = "http.protocol.single-cookie-header";
     private static final boolean PARAM_SINGLE_COOKIE_HEADER_VALUE = true;
     private static final String PARAM_PROTOCOL_VERSION = "http.protocol.version";
-    private static final String USER_AGENT_HEADER = "User-Agent";
 
     private static byte[] sExhaustBuffer = new byte[1024];
 
@@ -104,6 +105,7 @@ public class OwnCloudClient extends HttpClient {
     private String mRedirectedLocation;
 
     private static OkHttpClient mOkHttpClient = null;
+    private static HttpInterceptor mOkHttpInterceptor = null;
 
     /**
      * Constructor
@@ -143,18 +145,9 @@ public class OwnCloudClient extends HttpClient {
 
         super(connectionMgr);
 
-        String userAgent = OwnCloudClientManagerFactory.getUserAgent();
-
         if (mOkHttpClient == null) {
             mOkHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(chain ->
-                            chain.proceed(
-                                    chain.request()
-                                            .newBuilder()
-                                            .addHeader(USER_AGENT_HEADER, userAgent)
-                                            .build()
-                            )
-                    )
+                    .addInterceptor(getBaseOkHttpInterceptor())
                     .protocols(Arrays.asList(Protocol.HTTP_1_1))
                     .followRedirects(false)
                     .build();
@@ -178,6 +171,24 @@ public class OwnCloudClient extends HttpClient {
 //        applyProxySettings();
 
         clearCredentials();
+    }
+
+    /**
+     * {@link HttpInterceptor} singleton
+     * @return {@link HttpInterceptor} instance with user agent
+     */
+    public HttpInterceptor getBaseOkHttpInterceptor() {
+
+        if (mOkHttpInterceptor == null) {
+            mOkHttpInterceptor = new HttpInterceptor().
+                    addRequestInterceptor(
+                            new UserAgentInterceptor(
+                                    OwnCloudClientManagerFactory.getUserAgent()
+                            )
+                    );
+        }
+
+        return mOkHttpInterceptor;
     }
 
     private void applyProxySettings() {
