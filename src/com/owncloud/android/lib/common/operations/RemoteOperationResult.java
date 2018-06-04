@@ -206,7 +206,6 @@ public class RemoteOperationResult implements Serializable {
         } else {
             mCode = ResultCode.UNKNOWN_ERROR;
         }
-
     }
 
     /**

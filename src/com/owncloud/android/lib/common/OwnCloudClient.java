@@ -33,6 +33,7 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
+import com.owncloud.android.lib.common.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -49,7 +50,6 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
-import com.owncloud.android.lib.common.methods.HttpBaseMethod;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,6 +61,7 @@ import okhttp3.Protocol;
 public class OwnCloudClient extends HttpClient {
 
     public static final String WEBDAV_PATH_4_0 = "/remote.php/webdav";
+    public static final String NEW_WEBDAV_PATH_4_0 = "/remote.php/dav/files/";
     public static final String STATUS_PATH = "/status.php";
     public static final String FILES_WEB_PATH = "/index.php/apps/files";
 
@@ -299,7 +300,19 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public int executeHttpMethod (HttpBaseMethod method) throws Exception {
-        int status = method.execute();
+
+        boolean repeatWithFreshCredentials = false;
+        int repeatCounter = 0;
+        int status;
+
+        do {
+            status = method.execute();
+            repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
+            if (repeatWithFreshCredentials) {
+                repeatCounter++;
+            }
+        } while (repeatWithFreshCredentials);
+
         return status;
     }
 
@@ -430,6 +443,10 @@ public class OwnCloudClient extends HttpClient {
 
     public Uri getWebdavUri() {
         return Uri.parse(mBaseUri + WEBDAV_PATH_4_0);
+    }
+
+    public Uri getNewWebDavUri() {
+        return Uri.parse(mBaseUri + NEW_WEBDAV_PATH_4_0 + mCredentials.getUsername());
     }
 
     /**

@@ -58,7 +58,7 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
     public void applyTo(OwnCloudClient client) {
         AuthPolicy.registerAuthScheme(AuthState.PREEMPTIVE_AUTH_SCHEME, BasicScheme.class);
 
-        List<String> authPrefs = new ArrayList<String>(1);
+        List<String> authPrefs = new ArrayList<>(1);
         authPrefs.add(AuthPolicy.BASIC);
 
         client.getOkHttpClient().newBuilder()

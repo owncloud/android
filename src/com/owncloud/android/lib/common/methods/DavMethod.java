@@ -1,7 +1,5 @@
 package com.owncloud.android.lib.common.methods;
 
-import java.io.IOException;
-
 import at.bitfire.dav4android.DavResource;
 
 public abstract class DavMethod implements HttpBaseMethod {
