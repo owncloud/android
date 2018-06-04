@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
@@ -663,44 +664,54 @@ public class OCFileListFragment extends ExtendedListFragment {
     }
 
     private void listDirectoryWithAnimationDown(final OCFile file) {
-        Animation fadeOutFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_front);
-        Handler eventHandler = new Handler();
+        if(isInPowerSaveMode()) {
+            listDirectory(file);
+        } else {
 
-        // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
-        // call listDirectory() from the Animation callback
-        eventHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            Animation fadeOutFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_front);
+            Handler eventHandler = new Handler();
+
+            // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
+            // call listDirectory() from the Animation callback
+            eventHandler.postDelayed(() -> {
                 listDirectory(file);
                 Animation fadeInBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_back);
                 getListView().setAnimation(fadeInBack);
-            }
-        }, getResources().getInteger(R.integer.folder_animation_duration));
-        getListView().startAnimation(fadeOutFront);
+            }, getResources().getInteger(R.integer.folder_animation_duration));
+            getListView().startAnimation(fadeOutFront);
+        }
+    }
+
+    private boolean isInPowerSaveMode() {
+        PowerManager powerManager = (PowerManager)
+                getActivity().getSystemService(Context.POWER_SERVICE);
+        return android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && powerManager.isPowerSaveMode();
     }
 
     private void listDirectoryWidthAnimationUp(final OCFile file) {
-        if(getListView().getVisibility() == View.GONE) {
+        if(isInPowerSaveMode()) {
             listDirectory(file);
-            Animation fadeInFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
-            getListView().startAnimation(fadeInFront);
-            return;
-        }
-
-        Handler eventHandler = new Handler();
-        Animation fadeOutBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_back);
-
-        // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
-        // call listDirectory() from the Animation callback
-        eventHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        } else {
+            if (getListView().getVisibility() == View.GONE) {
                 listDirectory(file);
                 Animation fadeInFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
                 getListView().startAnimation(fadeInFront);
+                return;
             }
-        }, getResources().getInteger(R.integer.folder_animation_duration));
-        getListView().startAnimation(fadeOutBack);
+
+            Handler eventHandler = new Handler();
+            Animation fadeOutBack = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadeout_back);
+
+            // This is a ugly hack for getting rid of the "ArrayOutOfBound" exception we get when we
+            // call listDirectory() from the Animation callback
+            eventHandler.postDelayed(() -> {
+                listDirectory(file);
+                Animation fadeInFront = AnimationUtils.loadAnimation(getContext(), R.anim.dir_fadein_front);
+                getListView().startAnimation(fadeInFront);
+            }, getResources().getInteger(R.integer.folder_animation_duration));
+            getListView().startAnimation(fadeOutBack);
+        }
     }
 
     @Override
