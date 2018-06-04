@@ -45,7 +45,6 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
@@ -1372,12 +1371,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
             case OK_REDIRECT_TO_NON_SECURE_CONNECTION:
                 mServerStatusIcon = R.drawable.ic_lock_open;
-                mServerStatusText = ErrorMessageAdapter.getErrorCauseMessage(result, null, getResources());
+                mServerStatusText = ErrorMessageAdapter.getResultMessage(result, null, getResources());
                 break;
             case NO_NETWORK_CONNECTION:
                 mServerStatusIcon = R.drawable.no_network;
             default:
-                mServerStatusText = ErrorMessageAdapter.getErrorCauseMessage(result, null, getResources());
+                mServerStatusText = ErrorMessageAdapter.getResultMessage(result, null, getResources());
         }
     }
 
@@ -1409,7 +1408,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             case NO_NETWORK_CONNECTION:
                 mAuthStatusIcon = R.drawable.no_network;
             default:
-                mAuthStatusText = ErrorMessageAdapter.getErrorCauseMessage(result, null, getResources());
+                mAuthStatusText = ErrorMessageAdapter.getResultMessage(result, null, getResources());
         }
     }
 

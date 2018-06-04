@@ -97,15 +97,16 @@ public class ErrorMessageAdapter {
      * @param resources             Reference to app resources, for i18n.
      * @return User message corresponding to 'result' and 'operation'
      */
-    public static String getErrorCauseMessage(final RemoteOperationResult result,
-                                           final RemoteOperation operation,
-                                           final Resources resources) {
+    public static String getResultMessage(final RemoteOperationResult result,
+                                          final RemoteOperation operation,
+                                          final Resources resources) {
         Formatter f = new Formatter(resources);
         if(result.isSuccess()) {
             if(operation instanceof UploadFileOperation)
                 return f.format(R.string.uploader_upload_succeeded_content_single, ((UploadFileOperation) operation).getFileName());
             if(operation instanceof DownloadFileOperation)
-                return f.format(R.string.downloader_download_succeeded_content);
+                return f.format(R.string.downloader_download_succeeded_content,
+                        new File(((DownloadFileOperation) operation).getSavePath()).getName());
             if(operation instanceof RemoveFileOperation)
                 return f.format(R.string.remove_success_msg);
         }

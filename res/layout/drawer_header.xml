@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/drawer_background"/>
+        android:src="@drawable/drawer_header_background"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

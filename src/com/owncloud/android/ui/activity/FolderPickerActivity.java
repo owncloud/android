@@ -396,7 +396,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {

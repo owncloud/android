@@ -29,16 +29,6 @@
         app:headerLayout="@layout/drawer_header"
         app:menu="@menu/drawer_menu">
 
-        <ImageView
-            android:id="@+id/drawer_cloud"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:src="@drawable/transparent_cloud"
-            android:scaleType="centerInside"
-            android:layout_gravity="bottom"
-            android:layout_margin="@dimen/standard_margin"
-            android:paddingBottom="70dp"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

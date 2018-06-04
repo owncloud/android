@@ -147,7 +147,7 @@ public class UserProfilesRepository {
                 if (quotaExists(userProfile)) {
                     // not new, UPDATE
                     database.update(
-                            ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
+                            ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME,
                             quotaValues,
                             ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
                             new String[]{String.valueOf(userProfile.getAccountName())}
@@ -157,7 +157,7 @@ public class UserProfilesRepository {
                 } else {
                     // new, CREATE
                     database.insert(
-                            ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
+                            ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME,
                             null,
                             quotaValues
                     );
@@ -221,7 +221,7 @@ public class UserProfilesRepository {
         Cursor c = null;
         try {
             c = getSqLiteDatabase().query(
-                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME,
                     null,
                     ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
                     new String[]{accountName},
@@ -293,7 +293,7 @@ public class UserProfilesRepository {
         Cursor c = null;
         try {
             c = getSqLiteDatabase().query(
-                    ProviderMeta.ProviderTableMeta.USER_QUOTAS__TABLE_NAME,
+                    ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME,
                     null,
                     ProviderMeta.ProviderTableMeta.USER_QUOTAS__ACCOUNT_NAME + "=?",
                     new String[]{userProfile.getAccountName()},
