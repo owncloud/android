@@ -25,7 +25,7 @@ package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.interceptors.BasicAuthInterceptor;
-import com.owncloud.android.lib.common.interceptors.HttpInterceptor;
+import com.owncloud.android.lib.common.interceptors.HttpInterceptor.RequestInterceptor;
 
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
@@ -65,10 +65,12 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
         List<String> authPrefs = new ArrayList<>(1);
         authPrefs.add(AuthPolicy.BASIC);
 
-        for (HttpInterceptor.RequestInterceptor requestInterceptor :
-                client.getBaseOkHttpInterceptor().getRequestInterceptors()) {
+        ArrayList<RequestInterceptor> requestInterceptors = client.getBaseOkHttpInterceptor().getRequestInterceptors();
+
+        // Clear previous basic credentials
+        for (RequestInterceptor requestInterceptor : requestInterceptors) {
             if (requestInterceptor instanceof BasicAuthInterceptor) {
-                return;
+                requestInterceptors.remove(requestInterceptor);
             }
         }
 
@@ -77,7 +79,7 @@ public class OwnCloudBasicCredentials implements OwnCloudCredentials {
                         new BasicAuthInterceptor(Credentials.basic(mUsername, mPassword))
                 );
 
-        //TODO
+        //TODO Update from here down
         client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
         client.getParams().setAuthenticationPreemptive(mAuthenticationPreemptive);
         client.getParams().setCredentialCharset(OwnCloudCredentialsFactory.CREDENTIAL_CHARSET);

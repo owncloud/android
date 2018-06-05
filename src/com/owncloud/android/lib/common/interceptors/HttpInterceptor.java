@@ -82,13 +82,4 @@ public class HttpInterceptor implements Interceptor {
     public ArrayList<ResponseInterceptor> getResponseInterceptors() {
         return mResponseInterceptors;
     }
-
-    public boolean requestWithCredentials () {
-        for (RequestInterceptor requestInterceptor : mRequestInterceptors) {
-            if (requestInterceptor instanceof BasicAuthInterceptor) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
