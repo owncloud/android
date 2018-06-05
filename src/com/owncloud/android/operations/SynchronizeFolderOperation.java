@@ -257,36 +257,6 @@ public class SynchronizeFolderOperation extends SyncOperation {
 
         ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
         return readFolderOperation.execute(client);
-
-//        try {
-//            OCAccount account = new OCAccount(client.getAccount().getSavedAccount(), mContext);
-
-//            OCContext ocContext = new OCContext(account, MainApp.getUserAgent());
-//
-//            PropfindOperation propfindOperation = new PropfindOperation(ocContext, mRemotePath);
-//
-//            PropfindOperation.Result propResult = propfindOperation.exec();
-//
-//            ArrayList<Object> data = new ArrayList<>();
-//
-//            data.add(new RemoteFile(propResult.getData(), ocContext));
-//            for(DavResource resource : propResult.getData().getMembers()) {
-//                RemoteFile file = new RemoteFile(resource, ocContext);
-//                data.add(file);
-//            }
-
-//            RemoteOperationResult result = new RemoteOperationResult(ResultCode.OK);
-//            result.setData(data);
-
-//            return result;
-//        } catch (Exception e) {
-//            return new RemoteOperationResult(e);
-//        }
-
-
-        // prviouce implementation
-//        ReadRemoteFolderOperation readFolderOperation = new ReadRemoteFolderOperation(mRemotePath);
-//        return readFolderOperation.execute(client);
     }
 
 
@@ -596,9 +566,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
         return false;
     }
 
-
     public String getRemotePath() {
         return mRemotePath;
     }
-
 }
