@@ -33,10 +33,9 @@
     <bool name = "warning_sharing_public_link" >true</bool>
     
     <!-- Colors -->
-    <color name="login_text_color">#000000</color>
-    <color name="login_text_hint_color">#757575</color>
+    <color name="login_text_color">#ffffffff</color>
+    <color name="login_text_hint_color">#dddddd</color>
     <color name="login_background_color">#FFFFFF</color>
-    <color name="login_logo_background_color">#FFFFFF</color>
     <color name="background_color">#FFFFFF</color>
     <color name="actionbar_start_color">@color/primary</color>
     <color name="primary_button_background_color">@color/color_accent</color>

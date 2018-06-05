@@ -246,4 +246,27 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <!-- Authenticator Activitu -->
+    <style name="Theme.ownCloud.Authenticator"
+        parent="Theme.ownCloud">
+
+        <!-- properties for action mode -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/action_mode_background</item>
+
+    </style>
+
+    <style name="Button.Authenticator" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@android:color/white</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColor">@color/primary_button_background_color</item>
+    </style>
+
+    <style name="EditText.Authenticator" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/login_text_color</item>
+        <item name="colorControlNormal">@color/login_text_color</item>
+        <item name="colorControlActivated">@color/login_text_color</item>
+        <item name="android:textColorHint">@color/login_text_hint_color</item>
+    </style>
+
 </resources>

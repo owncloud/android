@@ -955,9 +955,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     private void showViewPasswordButton() {
-        int drawable = R.drawable.ic_view;
+        int drawable = R.drawable.ic_view_white;
         if (isPasswordVisible()) {
-            drawable = R.drawable.ic_hide;
+            drawable = R.drawable.ic_hide_white;
         }
         mPasswordInput.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
     }
@@ -1006,7 +1006,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
         if (mServerInfo.mVersion == null || 
                 mServerInfo.mBaseUrl == null ||
                 mServerInfo.mBaseUrl.length() == 0) {
-            mServerStatusIcon = R.drawable.common_error;
+            mServerStatusIcon = R.drawable.common_error_white;
             mServerStatusText = getResources().getString(R.string.auth_wtf_reenter_URL);
             showServerStatus();
             mOkButton.setEnabled(false);
@@ -1253,9 +1253,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             mServerIsValid = false;
         }
 
+
+
+
         if (mServerIsValid) {
             updateAuthenticationPreFragmentVisibility();
         }
+
+
 
         // refresh UI
         showRefreshButton(!mServerIsValid);
@@ -1350,7 +1355,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      *
      */
     private void updateServerStatusIconAndText(RemoteOperationResult result) {
-        mServerStatusIcon = R.drawable.common_error;    // the most common case in the switch below
+        mServerStatusIcon = R.drawable.common_error_white;    // the most common case in the switch below
 
         switch (result.getCode()) {
             case OK_SSL:
@@ -1387,7 +1392,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
      * @param result    Result of a remote operation performed in this activity
      */
     private void updateAuthStatusIconAndText(RemoteOperationResult result) {
-        mAuthStatusIcon = R.drawable.common_error; // the most common case in the switch below
+        mAuthStatusIcon = R.drawable.common_error_white; // the most common case in the switch below
 
         switch (result.getCode()) {
             case OK_SSL:
@@ -1414,12 +1419,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
 
 
     private void updateFailedAuthStatusIconAndText(int failedStatusText){
-        mAuthStatusIcon = R.drawable.common_error;
+        mAuthStatusIcon = R.drawable.common_error_white;
         mAuthStatusText = getResources().getString(failedStatusText);
     }
 
     private void updateServerStatusIconNoRegularAuth(){
-        mServerStatusIcon = R.drawable.common_error;
+        mServerStatusIcon = R.drawable.common_error_white;
         mServerStatusText = getResources().getString(R.string.auth_can_not_auth_against_server);
     }
 
