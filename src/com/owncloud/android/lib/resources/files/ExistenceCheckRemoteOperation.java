@@ -24,8 +24,6 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import org.apache.commons.httpclient.HttpStatus;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.methods.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
@@ -34,7 +32,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import at.bitfire.dav4android.DavOCResource;
+import org.apache.commons.httpclient.HttpStatus;
+
 import okhttp3.HttpUrl;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
@@ -80,14 +79,13 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
 
         try {
 
-            DavOCResource davOCResource = new DavOCResource(
-                    client.getOkHttpClient(),
-                    HttpUrl.parse(client.getNewWebDavUri() + WebdavUtils.encodePath(mPath))
-            );
-
 //            client.setFollowRedirects(false);
 
-            PropfindMethod propfindMethod = new PropfindMethod(davOCResource, 0);
+            PropfindMethod propfindMethod = new PropfindMethod(
+                    client.getOkHttpClient(),
+                    HttpUrl.parse(client.getNewWebDavUri() + WebdavUtils.encodePath(mPath)),
+                    0);
+
             int status = client.executeHttpMethod(propfindMethod);
 
 //            if (previousFollowRedirects) {
@@ -110,8 +108,9 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
 
             result = isSuccess
                     ? new RemoteOperationResult(OK)
-                    : new RemoteOperationResult(false, davOCResource.getRequest(), davOCResource.getResponse());
-
+                    : new RemoteOperationResult(
+                            false, propfindMethod.getRequest(), propfindMethod.getResponse()
+            );
 
             Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +

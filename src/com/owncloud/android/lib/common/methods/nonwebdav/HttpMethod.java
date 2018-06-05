@@ -3,14 +3,15 @@ package com.owncloud.android.lib.common.methods.nonwebdav;
 import com.owncloud.android.lib.common.methods.HttpBaseMethod;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
-public abstract class HttpMethod implements HttpBaseMethod {
+public abstract class HttpMethod extends HttpBaseMethod {
 
     protected OkHttpClient mOkHttpClient;
-    protected String mUrl;
+    protected Request mBaseRequest;
 
-    public HttpMethod (OkHttpClient okHttpClient, String url) {
+    public HttpMethod (OkHttpClient okHttpClient, Request baseRequest) {
         mOkHttpClient = okHttpClient;
-        mUrl = url;
+        mBaseRequest = baseRequest;
     }
 }

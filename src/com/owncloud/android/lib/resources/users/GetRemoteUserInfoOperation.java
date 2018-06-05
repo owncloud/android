@@ -27,13 +27,15 @@ package com.owncloud.android.lib.resources.users;
 import java.util.ArrayList;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.JSONObject;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.common.methods.nonwebdav.GetMethod;
+
+import okhttp3.Request;
 
 
 /**
@@ -63,53 +65,61 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result = null;
-        int status = -1;
-        GetMethod get = null;
 
         //Get the user
         try {
-            get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
-            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
-            status = client.executeMethod(get);
-            if (isSuccess(status)) {
-                String response = get.getResponseBodyAsString();
-                Log_OC.d(TAG, "Successful response");
 
-                // Parse the response
-                JSONObject respJSON = new JSONObject(response);
-                JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
-                JSONObject respData = respOCS.getJSONObject(NODE_DATA);
+            final Request request = new Request.Builder()
+                    .url(client.getBaseUri() + OCS_ROUTE)
+                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
+                    .build();
 
-                UserInfo userInfo = new UserInfo();
-                userInfo.mId = respData.getString(NODE_ID);
-                userInfo.mDisplayName = respData.getString(NODE_DISPLAY_NAME);
-                userInfo.mEmail = respData.getString(NODE_EMAIL);
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
 
-                // Result
-                result = new RemoteOperationResult(true, get);
-                // Username in result.data
-                ArrayList<Object> data = new ArrayList<Object>();
-                data.add(userInfo);
-                result.setData(data);
-
-            } else {
-                result = new RemoteOperationResult(false, get);
-                String response = get.getResponseBodyAsString();
-                Log_OC.e(TAG, "Failed response while getting user information ");
-                if (response != null) {
-                    Log_OC.e(TAG, "*** status code: " + status + " ; response message: " + response);
-                } else {
-                    Log_OC.e(TAG, "*** status code: " + status);
-                }
-            }
+//            client.executeHttpMethod(getMethod);
+//
+//            get = new GetMethod(client.getBaseUri() + OCS_ROUTE);
+//            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+//            status = client.executeMethod(get);
+//            if (isSuccess(status)) {
+//                String response = get.getResponseBodyAsString();
+//                Log_OC.d(TAG, "Successful response");
+//
+//                // Parse the response
+//                JSONObject respJSON = new JSONObject(response);
+//                JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
+//                JSONObject respData = respOCS.getJSONObject(NODE_DATA);
+//
+//                UserInfo userInfo = new UserInfo();
+//                userInfo.mId = respData.getString(NODE_ID);
+//                userInfo.mDisplayName = respData.getString(NODE_DISPLAY_NAME);
+//                userInfo.mEmail = respData.getString(NODE_EMAIL);
+//
+//                // Result
+//                result = new RemoteOperationResult(true, get);
+//                // Username in result.data
+//                ArrayList<Object> data = new ArrayList<Object>();
+//                data.add(userInfo);
+//                result.setData(data);
+//
+//            } else {
+//                result = new RemoteOperationResult(false, get);
+//                String response = get.getResponseBodyAsString();
+//                Log_OC.e(TAG, "Failed response while getting user information ");
+//                if (response != null) {
+//                    Log_OC.e(TAG, "*** status code: " + status + " ; response message: " + response);
+//                } else {
+//                    Log_OC.e(TAG, "*** status code: " + status);
+//                }
+//            }
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
             Log_OC.e(TAG, "Exception while getting OC user information", e);
 
         } finally {
-            if (get != null) {
-                get.releaseConnection();
-            }
+//            if (get != null) {
+//                get.releaseConnection();
+//            }
         }
 
         return result;
