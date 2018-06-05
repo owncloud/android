@@ -8,18 +8,18 @@ import okhttp3.Response;
 
 public class GetMethod extends HttpMethod {
 
-    public GetMethod(OkHttpClient okHttpClient, Request requestBase) {
-        super(okHttpClient, requestBase);
+    public GetMethod(OkHttpClient okHttpClient, Request baseRequest) {
+        super(okHttpClient, baseRequest);
     }
 
     @Override
     public int execute() throws IOException {
-        final Request request = mBaseRequest
+        mRequest = mBaseRequest
                 .newBuilder()
                 .get()
                 .build();
 
-        mResponse = mOkHttpClient.newCall(request).execute();
+        mResponse = mOkHttpClient.newCall(mRequest).execute();
         return mResponse.code();
     }
 }
