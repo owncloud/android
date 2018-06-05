@@ -456,7 +456,7 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public Uri getNewWebDavUri() {
-        return !(mCredentials instanceof OwnCloudAnonymousCredentials)
+        return mCredentials instanceof OwnCloudAnonymousCredentials
                 ? Uri.parse(mBaseUri + NEW_WEBDAV_PATH_4_0)
                 : Uri.parse(mBaseUri + NEW_WEBDAV_PATH_4_0 + mCredentials.getUsername());
     }
