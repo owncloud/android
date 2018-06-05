@@ -24,6 +24,20 @@
 
 package com.owncloud.android.lib.common.operations;
 
+import android.accounts.Account;
+import android.accounts.AccountsException;
+
+import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
+import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.apache.commons.httpclient.ConnectTimeoutException;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.jackrabbit.webdav.DavException;
+import org.json.JSONException;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,23 +48,14 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import android.accounts.Account;
-import android.accounts.AccountsException;
-
-import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundException;
-import com.owncloud.android.lib.common.network.CertificateCombinedException;
-import com.owncloud.android.lib.common.utils.Log_OC;
-
-import org.apache.commons.httpclient.ConnectTimeoutException;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.jackrabbit.webdav.DavException;
-import org.json.JSONException;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.SSLException;
+
+import okhttp3.Headers;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 /**
@@ -222,12 +227,12 @@ public class RemoteOperationResult implements Serializable {
      *                   result.
      */
     public RemoteOperationResult(boolean success, HttpMethod httpMethod) throws IOException {
-        this(
-                success,
-                httpMethod.getStatusCode(),
-                httpMethod.getStatusText(),
-                httpMethod.getResponseHeaders()
-        );
+//        this(
+//                success,
+//                httpMethod.getStatusCode(),
+//                httpMethod.getStatusText(),
+//                httpMethod.getResponseHeaders()
+//        );
 
         if (mHttpCode == HttpStatus.SC_BAD_REQUEST) {   // 400
 
@@ -262,6 +267,63 @@ public class RemoteOperationResult implements Serializable {
         if (mHttpCode == HttpStatus.SC_SERVICE_UNAVAILABLE) {   // 503
 
             parseErrorMessageAndSetCode(httpMethod, ResultCode.SPECIFIC_SERVICE_UNAVAILABLE);
+        }
+    }
+
+    /**
+     * Public constructor from separate elements of an HTTP or DAV response.
+     *
+     * To be used when the result needs to be interpreted from the response of an HTTP/DAV method.
+     *
+     * Determines a {@link ResultCode} from the already executed method received as a parameter. Generally,
+     * will depend on the HTTP code and HTTP response headers received. In some cases will inspect also the
+     * response body
+     *
+     * @param success
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    public RemoteOperationResult(boolean success, Request request, Response response) throws IOException {
+        this(success, response.code(), HttpStatus.getStatusText(response.code()), response.headers());
+
+        // TODO success parameter might not be needed
+        if (mHttpCode == HttpStatus.SC_BAD_REQUEST) {   // 400
+
+            String bodyResponse = response.body().string();
+            // do not get for other HTTP codes!; could not be available
+
+            if (bodyResponse != null && bodyResponse.length() > 0) {
+                InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
+                InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
+                try {
+                    if (xmlParser.parseXMLResponse(is)) {
+                        mCode = ResultCode.INVALID_CHARACTER_DETECT_IN_SERVER;
+                    }
+
+                } catch (Exception e) {
+                    Log_OC.w(TAG, "Error reading exception from server: " + e.getMessage());
+                    // mCode stays as set in this(success, httpCode, headers)
+                }
+            }
+        }
+
+        // before
+        switch (mHttpCode) {
+            case HttpStatus.SC_FORBIDDEN:
+                // TODO
+//                parseErrorMessageAndSetCode(request, response, ResultCode.SPECIFIC_FORBIDDEN);
+                break;
+            case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
+                // TODO
+//                parseErrorMessageAndSetCode(request, response, ResultCode.SPECIFIC_UNSUPPORTED_MEDIA_TYPE);
+                break;
+            case HttpStatus.SC_SERVICE_UNAVAILABLE:
+                // TODO
+//                parseErrorMessageAndSetCode(request, response, ResultCode.SPECIFIC_SERVICE_UNAVAILABLE);
+                break;
+            default:
+                break;
         }
     }
 
@@ -308,25 +370,61 @@ public class RemoteOperationResult implements Serializable {
      * @param success     The operation was considered successful or not.
      * @param httpCode    HTTP status code returned by an HTTP/DAV method.
      * @param httpPhrase  HTTP status line phrase returned by an HTTP/DAV method
-     * @param httpHeaders HTTP response header returned by an HTTP/DAV method
+     * @param headers HTTP response header returned by an HTTP/DAV method
      */
-    public RemoteOperationResult(boolean success, int httpCode, String httpPhrase, Header[] httpHeaders) {
+    public RemoteOperationResult(boolean success, int httpCode, String httpPhrase, Headers headers) {
         this(success, httpCode, httpPhrase);
-        if (httpHeaders != null) {
-            for (Header httpHeader : httpHeaders) {
-                if ("location".equals(httpHeader.getName().toLowerCase())) {
-                    mRedirectedLocation = httpHeader.getValue();
+        if (headers != null) {
+            for (Map.Entry<String, List<String>> header : headers.toMultimap().entrySet()) {
+                if ("location".equals(header.getKey().toLowerCase())) {
+                    mRedirectedLocation = header.getValue().get(0);
                     continue;
                 }
-                if ("www-authenticate".equals(httpHeader.getName().toLowerCase())) {
-                    mAuthenticate.add(httpHeader.getValue().toLowerCase());
+                if ("www-authenticate".equals(header.getKey().toLowerCase())) {
+                    mAuthenticate.add(header.getValue().get(0).toLowerCase());
                 }
             }
         }
         if (isIdPRedirection()) {
-            mCode = ResultCode.UNAUTHORIZED;    // overrides default ResultCode.UNKNOWN
+            // overrides default ResultCode.UNKNOWN
+            mCode = com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.UNAUTHORIZED;
         }
     }
+//
+//    /**
+//     * Public constructor from separate elements of an HTTP or DAV response.
+//     *
+//     * To be used when the result needs to be interpreted from HTTP response elements that could come from
+//     * different requests (WARNING: black magic, try to avoid).
+//     *
+//     * If all the fields come from the same HTTP/DAV response, {@link #RemoteOperationResult(boolean, HttpMethod)}
+//     * should be used instead.
+//     *
+//     * Determines a {@link ResultCode} depending on the HTTP code and HTTP response headers received.
+//     *
+//     * @param success     The operation was considered successful or not.
+//     * @param httpCode    HTTP status code returned by an HTTP/DAV method.
+//     * @param httpPhrase  HTTP status line phrase returned by an HTTP/DAV method
+//     * @param httpHeaders HTTP response header returned by an HTTP/DAV method
+//     */
+//    public RemoteOperationResult(boolean success, int httpCode, String httpPhrase, Header[] httpHeaders) {
+//        this(success, httpCode, httpPhrase);
+//        if (httpHeaders != null) {
+//            for (Header httpHeader : httpHeaders) {
+//                if ("location".equals(httpHeader.getName().toLowerCase())) {
+//                    mRedirectedLocation = httpHeader.getValue();
+//                    continue;
+//                }
+//                if ("www-authenticate".equals(httpHeader.getName().toLowerCase())) {
+//                    mAuthenticate.add(httpHeader.getValue().toLowerCase());
+//                }
+//            }
+//        }
+//        if (isIdPRedirection()) {
+//            // overrides default ResultCode.UNKNOWN
+//            mCode = ResultCode.UNAUTHORIZED;    // overrides default ResultCode.UNKNOWN
+//        }
+//    }
 
     /**
      * Private constructor for results built interpreting a HTTP or DAV response.

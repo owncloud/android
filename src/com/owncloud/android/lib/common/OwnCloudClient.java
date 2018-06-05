@@ -77,7 +77,6 @@ public class OwnCloudClient extends HttpClient {
     private static byte[] sExhaustBuffer = new byte[1024];
 
     private static int sIntanceCounter = 0;
-    private boolean mFollowRedirects = true;
     private OwnCloudCredentials mCredentials = null;
     private int mInstanceNumber = 0;
 
@@ -292,7 +291,7 @@ public class OwnCloudClient extends HttpClient {
 
             checkFirstRedirection(method);
 
-            if (mFollowRedirects) {
+            if (mOkHttpClient.followRedirects()) {
                 status = followRedirection(method).getLastStatus();
             }
 
@@ -312,7 +311,7 @@ public class OwnCloudClient extends HttpClient {
 
     public int executeHttpMethod (HttpBaseMethod method) throws Exception {
 
-        boolean repeatWithFreshCredentials = false;
+        boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
         int status;
 
@@ -457,7 +456,9 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public Uri getNewWebDavUri() {
-        return Uri.parse(mBaseUri + NEW_WEBDAV_PATH_4_0 + mCredentials.getUsername());
+        return !(mCredentials instanceof OwnCloudAnonymousCredentials)
+                ? Uri.parse(mBaseUri + NEW_WEBDAV_PATH_4_0)
+                : Uri.parse(mBaseUri + NEW_WEBDAV_PATH_4_0 + mCredentials.getUsername());
     }
 
     /**
@@ -483,11 +484,15 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public void setFollowRedirects(boolean followRedirects) {
-        mFollowRedirects = followRedirects;
+        mOkHttpClient
+                .newBuilder()
+                .followRedirects(followRedirects)
+                .followSslRedirects(followRedirects)
+                .build();
     }
 
     public boolean getFollowRedirects() {
-        return mFollowRedirects;
+        return mOkHttpClient.followRedirects();
     }
 
     private void logCookiesAtRequest(Header[] headers, String when) {

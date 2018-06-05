@@ -1,4 +1,4 @@
-package com.owncloud.android.lib.common.methods;
+package com.owncloud.android.lib.common.methods.webdav;
 
 import java.io.IOException;
 

@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.WebdavEntry;
 import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.operations.RemoteOperation;
@@ -173,7 +174,7 @@ public class RemoteFile implements Parcelable, Serializable {
 
     /**
      * Create new {@link RemoteFile} with given path.
-     * <p>
+     *
      * The path received must be URL-decoded. Path separator must be OCFile.PATH_SEPARATOR, and it must be the first character in 'path'.
      *
      * @param path The remote path of the file.
@@ -201,8 +202,8 @@ public class RemoteFile implements Parcelable, Serializable {
         this.setPrivateLink(webdavEntry.privateLink());
     }
 
-    public RemoteFile(final DavResource davResource, OCContext context) {
-        this(getRemotePathFromUrl(davResource.getLocation(), context));
+    public RemoteFile(final DavResource davResource, String displayName) {
+        this(getRemotePathFromUrl(davResource.getLocation(), displayName));
         final PropertyCollection properties = davResource.getProperties();
         this.setCreationTimestamp(properties.get(CreationDate.class) != null
                 ? Long.parseLong(properties.get(CreationDate.class).getCreationDate())
@@ -227,9 +228,9 @@ public class RemoteFile implements Parcelable, Serializable {
     }
 
 
-    private static String getRemotePathFromUrl(HttpUrl url, OCContext context) {
+    private static String getRemotePathFromUrl(HttpUrl url, String displayName) {
         final String pathToRemove =
-                "/" + RemoteOperation.WEBDAV_PATH_4_0 + "/" + context.getOCAccount().getDisplayName();
+                "/" + RemoteOperation.WEBDAV_PATH_4_0 + "/" + displayName;
         return Uri.decode(url.encodedPath()).replace(pathToRemove, "");
     }
 

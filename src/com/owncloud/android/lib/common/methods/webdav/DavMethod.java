@@ -1,4 +1,6 @@
-package com.owncloud.android.lib.common.methods;
+package com.owncloud.android.lib.common.methods.webdav;
+
+import com.owncloud.android.lib.common.methods.HttpBaseMethod;
 
 import at.bitfire.dav4android.DavResource;
 
