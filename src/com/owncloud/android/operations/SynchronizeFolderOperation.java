@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.UploadsStorageManager;
@@ -37,9 +36,6 @@ import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.account.OCAccount;
-import com.owncloud.android.lib.refactor.operations.files.PropfindOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -53,8 +49,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import at.bitfire.dav4android.DavResource;
 
 
 /**
