@@ -49,7 +49,6 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.operations.UpdateSharePermissionsOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment;
 import com.owncloud.android.utils.DateUtils;
@@ -69,8 +68,6 @@ public class PublicShareDialogFragment extends DialogFragment {
     private static final String ARG_SHARE = "SHARE";
     private static final String ARG_ACCOUNT = "ACCOUNT";
     private static final String ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME";
-    private static final int CREATE_PERMISSION = OCShare.CREATE_PERMISSION_FLAG;
-    private static final int UPDATE_PERMISSION = OCShare.UPDATE_PERMISSION_FLAG;
     private static final String KEY_EXPIRATION_DATE = "EXPIRATION_DATE";
 
     /**
@@ -246,7 +243,7 @@ public class PublicShareDialogFragment extends DialogFragment {
                         | OCShare.READ_PERMISSION_FLAG):
                     mReadWriteButton.setChecked(true);
                     break;
-                case CREATE_PERMISSION:
+                case OCShare.CREATE_PERMISSION_FLAG:
                     mUploadOnlyButton.setChecked(true);
                     break;
                 default:
@@ -279,10 +276,10 @@ public class PublicShareDialogFragment extends DialogFragment {
         initPasswordToggleListener();
 
         view.findViewById(R.id.saveButton)
-                .setOnClickListener(v -> dismiss());
+                .setOnClickListener(v -> onSaveShareSetting());
 
         view.findViewById(R.id.cancelButton)
-                .setOnClickListener(v -> onSaveShareSetting());
+                .setOnClickListener(v -> dismiss());
 
         return view;
     }
