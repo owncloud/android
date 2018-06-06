@@ -24,27 +24,21 @@
 
 package com.owncloud.android.lib.resources.status;
 
-import java.util.ArrayList;
-
-import org.apache.commons.httpclient.HttpStatus;
-
-import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.httpclient.params.HttpParams;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.OwnCloudClientManagerFactory;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -121,7 +115,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
 //                redirectedLocation = mLatestResult.getRedirectedLocation();
 //            }
 
-            if (response.code() == HttpStatus.SC_OK) {
+            if (response.code() == HttpConstants.HTTP_OK) {
 
                 JSONObject respJSON = new JSONObject(response.body().string());
                 if (!respJSON.getBoolean(NODE_INSTALLED)) {
