@@ -35,6 +35,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import org.apache.commons.httpclient.HttpStatus;
 
 import okhttp3.HttpUrl;
+import okhttp3.Response;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -86,7 +87,7 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
                     HttpUrl.parse(client.getNewWebDavUri() + WebdavUtils.encodePath(mPath)),
                     0);
 
-            int status = client.executeHttpMethod(propfindMethod);
+            Response response = client.executeHttpMethod(propfindMethod);
 
 //            if (previousFollowRedirects) {
 //                mRedirectionPath = client.followRedirection(propfind);
@@ -101,21 +102,22 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
              *  404 NOT FOUND: path doesn't exist,
              *  207 MULTI_STATUS: path exists.
              */
-            boolean isSuccess = ((status == HttpStatus.SC_OK || status == HttpStatus.SC_MULTI_STATUS) &&
-                    !mSuccessIfAbsent) ||
-                    (status == HttpStatus.SC_MULTI_STATUS && !mSuccessIfAbsent) ||
-                    (status == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
+            boolean isSuccess = ((response.code() == HttpStatus.SC_OK
+                    || response.code() == HttpStatus.SC_MULTI_STATUS)
+                    && !mSuccessIfAbsent)
+                    || (response.code() == HttpStatus.SC_MULTI_STATUS && !mSuccessIfAbsent)
+                    || (response.code() == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
 
             result = isSuccess
                     ? new RemoteOperationResult(OK)
                     : new RemoteOperationResult(
-                            false, propfindMethod.getRequest(), propfindMethod.getResponse()
+                            false, propfindMethod.getRequest(), response
             );
 
             Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") +
-                    "finished with HTTP status " + status + (!isSuccess?"(FAIL)":""));
+                    "finished with HTTP status " + response.code() + (!isSuccess?"(FAIL)":""));
             
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
@@ -129,7 +131,6 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         }
         return result;
 	}
-
 
     /**
      * Gets the sequence of redirections followed during the execution of the operation.

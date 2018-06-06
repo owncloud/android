@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class GetMethod extends HttpMethod {
 
@@ -12,13 +13,12 @@ public class GetMethod extends HttpMethod {
     }
 
     @Override
-    public int execute() throws IOException {
+    public Response execute() throws IOException {
         mRequest = mBaseRequest
                 .newBuilder()
                 .get()
                 .build();
 
-        mResponse = mOkHttpClient.newCall(mRequest).execute();
-        return mResponse.code();
+        return mOkHttpClient.newCall(mRequest).execute();
     }
 }

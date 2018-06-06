@@ -10,6 +10,7 @@ import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.dav4android.exception.UnauthorizedException;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 public class PropfindMethod extends DavMethod {
 
@@ -22,8 +23,7 @@ public class PropfindMethod extends DavMethod {
     };
 
     @Override
-    public int execute() throws IOException, HttpException, DavException {
-
+    public Response execute() throws IOException, HttpException, DavException {
         try {
             mDavResource.propfind(mDepth, PropertyUtils.INSTANCE.getAllPropSet());
             mMembers = mDavResource.getMembers();
@@ -32,9 +32,7 @@ public class PropfindMethod extends DavMethod {
         }
 
         mRequest = mDavResource.getRequest();
-        mResponse = mDavResource.getResponse();
-
-        return mResponse.code();
+        return mDavResource.getResponse();
     }
 
     public int getDepth() {

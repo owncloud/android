@@ -34,6 +34,7 @@ import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
 
 import okhttp3.Request;
+import okhttp3.Response;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -75,13 +76,12 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
                     .build();
 
             GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
-            int status = client.executeHttpMethod(getMethod);
-            String response = getMethod.getResponse().body().string();
+            Response response = client.executeHttpMethod(getMethod);
 
-            if (isSuccess(status)) {
+            if (isSuccess(response.code())) {
                 Log_OC.d(TAG, "Successful response");
 
-                JSONObject respJSON = new JSONObject(response);
+                JSONObject respJSON = new JSONObject(response.body().string());
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
                 JSONObject respData = respOCS.getJSONObject(NODE_DATA);
 
@@ -97,12 +97,12 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
                 result.setData(data);
 
             } else {
-                result = new RemoteOperationResult(false, getMethod.getRequest(), getMethod.getResponse());
+                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
                 Log_OC.e(TAG, "Failed response while getting user information ");
                 if (response != null) {
-                    Log_OC.e(TAG, "*** status code: " + status + " ; response message: " + response);
+                    Log_OC.e(TAG, "*** status code: " + response.code() + " ; response message: " + response);
                 } else {
-                    Log_OC.e(TAG, "*** status code: " + status);
+                    Log_OC.e(TAG, "*** status code: " + response.code());
                 }
             }
         } catch (Exception e) {

@@ -59,6 +59,7 @@ import java.util.Arrays;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
+import okhttp3.Response;
 
 public class OwnCloudClient extends HttpClient {
 
@@ -309,21 +310,21 @@ public class OwnCloudClient extends HttpClient {
         return status;
     }
 
-    public int executeHttpMethod (HttpBaseMethod method) throws Exception {
+    public Response executeHttpMethod (HttpBaseMethod method) throws Exception {
 
         boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
-        int status;
+        Response response;
 
         do {
-            status = method.execute();
-            repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
+            response = method.execute();
+            repeatWithFreshCredentials = checkUnauthorizedAccess(response.code(), repeatCounter);
             if (repeatWithFreshCredentials) {
                 repeatCounter++;
             }
         } while (repeatWithFreshCredentials);
 
-        return status;
+        return response;
     }
 
     private void checkFirstRedirection(HttpMethod method) {
