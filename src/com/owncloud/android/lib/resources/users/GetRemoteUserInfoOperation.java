@@ -25,15 +25,13 @@
 package com.owncloud.android.lib.resources.users;
 
 import java.util.ArrayList;
-
-import org.apache.commons.httpclient.HttpStatus;
 import org.json.JSONObject;
-
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.common.methods.nonwebdav.GetMethod;
+import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
 
 import okhttp3.Request;
 
@@ -116,7 +114,7 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
     }
 
     private boolean isSuccess(int status) {
-        return (status == HttpStatus.SC_OK);
+        return (status == HttpConstants.HTTP_OK);
     }
 
     public static class UserInfo {

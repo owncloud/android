@@ -1,12 +1,8 @@
-package com.owncloud.android.lib.common.methods.webdav;
-
-import com.owncloud.android.lib.common.network.WebdavUtils;
+package com.owncloud.android.lib.common.http.webdav;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Set;
 
-import at.bitfire.dav4android.DavOCResource;
 import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.PropertyUtils;
 import at.bitfire.dav4android.exception.DavException;

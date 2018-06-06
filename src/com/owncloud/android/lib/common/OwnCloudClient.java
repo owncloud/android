@@ -35,7 +35,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
 import com.owncloud.android.lib.common.interceptors.HttpInterceptor;
 import com.owncloud.android.lib.common.interceptors.UserAgentInterceptor;
-import com.owncloud.android.lib.common.methods.HttpBaseMethod;
+import com.owncloud.android.lib.common.http.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;

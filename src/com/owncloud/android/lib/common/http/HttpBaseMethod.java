@@ -1,4 +1,4 @@
-package com.owncloud.android.lib.common.methods;
+package com.owncloud.android.lib.common.http;
 
 import okhttp3.Request;
 import okhttp3.Response;
