@@ -24,21 +24,20 @@
 
 package com.owncloud.android.lib.resources.files;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.network.WebdavEntry;
-import com.owncloud.android.lib.refactor.OCContext;
 import com.owncloud.android.lib.refactor.operations.RemoteOperation;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 import at.bitfire.dav4android.DavResource;
 import at.bitfire.dav4android.PropertyCollection;
 import at.bitfire.dav4android.property.CreationDate;
+import at.bitfire.dav4android.property.GetContentLength;
 import at.bitfire.dav4android.property.GetContentType;
 import at.bitfire.dav4android.property.GetETag;
 import at.bitfire.dav4android.property.GetLastModified;
@@ -207,6 +206,9 @@ public class RemoteFile implements Parcelable, Serializable {
         final PropertyCollection properties = davResource.getProperties();
         this.setCreationTimestamp(properties.get(CreationDate.class) != null
                 ? Long.parseLong(properties.get(CreationDate.class).getCreationDate())
+                : 0);
+        this.setLength(properties.get(GetContentLength.class) != null
+                ? properties.get(GetContentLength.class).getContentLength()
                 : 0);
         this.setMimeType(properties.get(GetContentType.class) != null
                 ? properties.get(GetContentType.class).getType()
