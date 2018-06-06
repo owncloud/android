@@ -8,4 +8,4 @@
 	branch = master
 [submodule "dav4android"]
 	path = dav4android
-	url = https://gitlab.com/derSchabi/dav4android.git
+	url = https://gitlab.com/ownclouders/dav4android.git
