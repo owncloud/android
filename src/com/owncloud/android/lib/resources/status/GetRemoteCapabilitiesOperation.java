@@ -24,6 +24,7 @@
  *
  */
 
+
 package com.owncloud.android.lib.resources.status;
 
 import android.net.Uri;

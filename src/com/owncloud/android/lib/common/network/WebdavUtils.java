@@ -38,6 +38,8 @@ import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.xml.Namespace;
 
+import okhttp3.Response;
+
 public class WebdavUtils {
     public static final SimpleDateFormat DISPLAY_DATE_FORMAT = new SimpleDateFormat(
             "dd.MM.yyyy hh:mm");
@@ -169,28 +171,26 @@ public class WebdavUtils {
         return rawEtag;
     }
 
-
     /**
      *
-     * @param method
-     * @return
+     * @param response from which to get the etag
+     * @return etag from response
      */
-    public static String getEtagFromResponse(HttpMethod method) {
-        Header eTag = method.getResponseHeader("OC-ETag");
+    public static String getEtagFromResponse(Response response) {
+        String eTag = response.header("OC-ETag");
         if (eTag == null) {
-            eTag = method.getResponseHeader("oc-etag");
+            eTag = response.header("oc-etag");
         }
         if (eTag == null) {
-            eTag = method.getResponseHeader("ETag");
+            eTag = response.header("ETag");
         }
         if (eTag == null) {
-            eTag = method.getResponseHeader("etag");
+            eTag = response.header("etag");
         }
         String result = "";
         if (eTag != null) {
-            result = parseEtag(eTag.getValue());
+            result = eTag;
         }
         return result;
     }
-
 }

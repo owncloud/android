@@ -1,7 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *
- *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,25 +25,31 @@
 
 package com.owncloud.android.lib.resources.users;
 
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
+import com.owncloud.android.lib.common.network.WebdavUtils;
+import com.owncloud.android.lib.common.operations.RemoteOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.utils.Log_OC;
+
+import org.apache.commons.httpclient.HttpStatus;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
+import okhttp3.Request;
+import okhttp3.Response;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.utils.Log_OC;
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 
 /**
  * Gets avatar about the user logged in, if available
+ * @author David A. Velasco
+ * @author David González Verdugo
  */
 
 public class GetRemoteUserAvatarOperation extends RemoteOperation {
@@ -71,47 +76,40 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result = null;
-        GetMethod get = null;
+        RemoteOperationResult result;
         InputStream inputStream = null;
         BufferedInputStream bis = null;
         ByteArrayOutputStream bos = null;
+        Response response = null;
 
         try {
-            String uri =
-                client.getBaseUri() + NON_OFFICIAL_AVATAR_PATH +
-                client.getCredentials().getUsername() + "/" + mDimension;
+            String url =
+                    client.getBaseUri() + NON_OFFICIAL_AVATAR_PATH +
+                    client.getCredentials().getUsername() + "/" + mDimension;
             ;
-            Log_OC.d(TAG, "avatar URI: " + uri);
-            get = new GetMethod(uri);
-            /*  Conditioned call is corrupting the input stream of the connection.
-                Seems that response with 304 is also including the avatar in the response body,
-                though it's forbidden by HTTPS specification. Besides, HTTPClient library
-                assumes there is nothing in the response body, but the bytes are read
-                by the next request, resulting in an exception due to a corrupt status line
+            Log_OC.d(TAG, "avatar URI: " + url);
 
-                Maybe when we have a real API we can enable this again.
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .build();
 
-            if (mCurrentEtag != null && mCurrentEtag.length() > 0) {
-                get.addRequestHeader(IF_NONE_MATCH_HEADER, "\"" + mCurrentEtag + "\"");
-            }
-            */
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
+            response = client.executeHttpMethod(getMethod);
 
-            //get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
-            int status = client.executeMethod(get);
-            if (isSuccess(status)) {
-
+            if (isSuccess(response.code())) {
                 // find out size of file to read
                 int totalToTransfer = 0;
-                Header contentLength = get.getResponseHeader("Content-Length");
-                if (contentLength != null && contentLength.getValue().length() > 0) {
-                    totalToTransfer = Integer.parseInt(contentLength.getValue());
+                String contentLength = response.header("Content-Length");
+
+                if (contentLength != null && contentLength.length() > 0) {
+                    totalToTransfer = Integer.parseInt(contentLength);
                 }
 
                 // find out MIME-type!
                 String mimeType;
-                Header contentType = get.getResponseHeader("Content-Type");
-                if (contentType == null || !contentType.getValue().startsWith("image")) {
+                String contentType =response.header("Content-Type");
+
+                if (contentType == null || !contentType.startsWith("image")) {
                     Log_OC.e(
                         TAG, "Not an image, failing with no avatar"
                     );
@@ -120,10 +118,11 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                     );
                     return result;
                 }
-                mimeType = contentType.getValue();
+
+                mimeType = contentType;
 
                 /// download will be performed to a buffer
-                inputStream = get.getResponseBodyAsStream();
+                inputStream = response.body().byteStream();
                 bis = new BufferedInputStream(inputStream);
                 bos = new ByteArrayOutputStream(totalToTransfer);
 
@@ -137,21 +136,21 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 // TODO check total bytes transferred?
 
                 // find out etag
-                String etag = WebdavUtils.getEtagFromResponse(get);
+                String etag = WebdavUtils.getEtagFromResponse(response);
                 if (etag.length() == 0) {
                     Log_OC.w(TAG, "Could not read Etag from avatar");
                 }
 
                 // Result
-                result = new RemoteOperationResult(true, get);
+                result = new RemoteOperationResult(OK);
                 ResultData resultData = new ResultData(bos.toByteArray(), mimeType, etag);
                 ArrayList<Object> data = new ArrayList<Object>();
                 data.add(resultData);
                 result.setData(data);
 
             } else {
-                result = new RemoteOperationResult(false, get);
-                client.exhaustResponse(get.getResponseBodyAsStream());
+                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
+                client.exhaustResponse(response.body().byteStream());
             }
 
         } catch (Exception e) {
@@ -159,7 +158,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
             Log_OC.e(TAG, "Exception while getting OC user avatar", e);
 
         } finally {
-            if (get != null) {
+            if (response != null) {
                 try {
                     if (inputStream != null) {
                         client.exhaustResponse(inputStream);
@@ -179,7 +178,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 } catch (IOException o) {
                     Log_OC.e(TAG, "Unexpected exception closing output stream ", o);
                 }
-                get.releaseConnection();
+                response.body().close();
             }
         }
 
@@ -213,5 +212,4 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
             return mAvatarData;
         }
     }
-
 }
