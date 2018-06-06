@@ -14,4 +14,8 @@ public abstract class DavMethod extends HttpBaseMethod {
     public DavMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
         mDavResource = new DavOCResource(okHttpClient, httpUrl);
     }
+
+    public DavResource getDavResource() {
+        return mDavResource;
+    }
 }
