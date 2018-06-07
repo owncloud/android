@@ -5,6 +5,7 @@
  *   @author masensio
  *   @author David A. Velasco
  *   @author Christian Schabesberger
+ *   @author Shashvat Kedia
  *   Copyright (C) 2011  Bartek Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -31,7 +32,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
@@ -72,7 +72,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.CreateFolderDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
-import com.owncloud.android.ui.helpers.FilesUploadHelper;
 import com.owncloud.android.ui.helpers.SparseBooleanArrayParcelable;
 import com.owncloud.android.ui.preview.PreviewAudioFragment;
 import com.owncloud.android.ui.preview.PreviewImageFragment;
@@ -129,9 +128,9 @@ public class OCFileListFragment extends ExtendedListFragment {
      * @return                          New fragment with arguments set.
      */
     public static OCFileListFragment newInstance(
-        boolean justFolders,
-        boolean hideFAB,
-        boolean allowContextualMode
+            boolean justFolders,
+            boolean hideFAB,
+            boolean allowContextualMode
     ) {
         OCFileListFragment frag = new OCFileListFragment();
         Bundle args = new Bundle();
@@ -189,7 +188,7 @@ public class OCFileListFragment extends ExtendedListFragment {
         return v;
     }
 
-    
+
     @Override
     public void onDetach() {
         setOnRefreshListener(null);
@@ -272,9 +271,10 @@ public class OCFileListFragment extends ExtendedListFragment {
                 final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment,null);
                 final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
                 dialog.setContentView(uploadBottomSheet);
-                final LinearLayout uploadFilesLinearLayout = uploadBottomSheet.findViewById(R.id.files_linear_layout);
-                LinearLayout uploadFromCameraLinearLayout = uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
-                TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+                LinearLayout uploadFilesLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.files_linear_layout);
+                LinearLayout uploadFromCameraLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.upload_from_camera_linear_layout);
+                LinearLayout uploadScannedDocumentLinearLayout = (LinearLayout) uploadBottomSheet.findViewById(R.id.scan_document_upload_linear_layout);
+                TextView uploadToTextView = (TextView) uploadBottomSheet.findViewById(R.id.upload_to_text_view);
                 uploadFilesLinearLayout.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -288,7 +288,16 @@ public class OCFileListFragment extends ExtendedListFragment {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
 
-                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                        ((FileDisplayActivity) getActivity()).getFilesUploadHelper().takePicture(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                        dialog.hide();
+                        return false;
+                    }
+                });
+                uploadScannedDocumentLinearLayout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        UploadFilesActivity.startUploadActivityForResult(getActivity(), ((FileActivity) getActivity())
+                                .getAccount(), FileDisplayActivity.REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT);
                         dialog.hide();
                         return false;
                     }
@@ -413,7 +422,7 @@ public class OCFileListFragment extends ExtendedListFragment {
      * and closed.
      */
     private class MultiChoiceModeListener
-        implements AbsListView.MultiChoiceModeListener, DrawerLayout.DrawerListener {
+            implements AbsListView.MultiChoiceModeListener, DrawerLayout.DrawerListener {
 
         private static final String KEY_ACTION_MODE_CLOSED_BY_DRAWER = "KILLED_ACTION_MODE";
         private static final String KEY_SELECTION_WHEN_CLOSED_BY_DRAWER = "CHECKED_ITEMS";
@@ -450,8 +459,8 @@ public class OCFileListFragment extends ExtendedListFragment {
                 for (int i = 0; i< mSelectionWhenActionModeClosedByDrawer.size(); i++) {
                     if (mSelectionWhenActionModeClosedByDrawer.valueAt(i)) {
                         getListView().setItemChecked(
-                            mSelectionWhenActionModeClosedByDrawer.keyAt(i),
-                            true
+                                mSelectionWhenActionModeClosedByDrawer.keyAt(i),
+                                true
                         );
                     }
                 }
@@ -516,16 +525,16 @@ public class OCFileListFragment extends ExtendedListFragment {
             List<OCFile> checkedFiles = mAdapter.getCheckedItems(getListView());
             final int checkedCount = checkedFiles.size();
             String title = getResources().getQuantityString(
-                R.plurals.items_selected_count,
-                checkedCount,
-                checkedCount
+                    R.plurals.items_selected_count,
+                    checkedCount,
+                    checkedCount
             );
             mode.setTitle(title);
             FileMenuFilter mf = new FileMenuFilter(
-                checkedFiles,
-                ((FileActivity) getActivity()).getAccount(),
-                mContainerActivity,
-                getActivity()
+                    checkedFiles,
+                    ((FileActivity) getActivity()).getAccount(),
+                    mContainerActivity,
+                    getActivity()
             );
             mf.filter(menu);
 
@@ -563,7 +572,7 @@ public class OCFileListFragment extends ExtendedListFragment {
             outState.putBoolean(KEY_ACTION_MODE_CLOSED_BY_DRAWER, mActionModeClosedByDrawer);
             if (mSelectionWhenActionModeClosedByDrawer != null) {
                 SparseBooleanArrayParcelable sbap = new SparseBooleanArrayParcelable(
-                    mSelectionWhenActionModeClosedByDrawer
+                        mSelectionWhenActionModeClosedByDrawer
                 );
                 outState.putParcelable(KEY_SELECTION_WHEN_CLOSED_BY_DRAWER, sbap);
             }
@@ -571,11 +580,11 @@ public class OCFileListFragment extends ExtendedListFragment {
 
         public void loadStateFrom(Bundle savedInstanceState) {
             mActionModeClosedByDrawer = savedInstanceState.getBoolean(
-                KEY_ACTION_MODE_CLOSED_BY_DRAWER,
-                mActionModeClosedByDrawer
+                    KEY_ACTION_MODE_CLOSED_BY_DRAWER,
+                    mActionModeClosedByDrawer
             );
             SparseBooleanArrayParcelable sbap = savedInstanceState.getParcelable(
-                KEY_SELECTION_WHEN_CLOSED_BY_DRAWER
+                    KEY_SELECTION_WHEN_CLOSED_BY_DRAWER
             );
             if (sbap != null) {
                 mSelectionWhenActionModeClosedByDrawer = sbap.getSparseBooleanArray();
@@ -1103,9 +1112,9 @@ public class OCFileListFragment extends ExtendedListFragment {
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(
-            getActivity().findViewById(R.id.coordinator_layout),
-            messageResource,
-            Snackbar.LENGTH_LONG
+                getActivity().findViewById(R.id.coordinator_layout),
+                messageResource,
+                Snackbar.LENGTH_LONG
         );
         snackbar.show();
     }

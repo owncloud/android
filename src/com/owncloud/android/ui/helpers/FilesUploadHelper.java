@@ -172,10 +172,15 @@ public class FilesUploadHelper implements Parcelable {
         return image;
     }
 
+    public void setCapturedPhotoPath(String capturedPhotoPath){
+        this.capturedPhotoPath = capturedPhotoPath;
+    }
+
+
     /**
      * Function to send an intent to the device's camera to capture a picture
      * */
-    public void uploadFromCamera(final int requestCode){
+    public void takePicture(final int requestCode){
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photoFile = createImageFile();
         if(photoFile != null){
@@ -190,7 +195,10 @@ public class FilesUploadHelper implements Parcelable {
 
     public void onActivityResult(final OnCheckAvailableSpaceListener callback) {
         checkIfAvailableSpace(new String[]{getCapturedImageFile().getAbsolutePath()}, callback);
+    }
 
+    public void onActivityResult(String imagePath,final OnCheckAvailableSpaceListener callback){
+        checkIfAvailableSpace(new String[]{imagePath},callback);
     }
 
     public void deleteImageFile() {

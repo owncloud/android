@@ -25,7 +25,7 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="26"
-        tools:overrideLibrary="android.support.customtabs"/>
+        tools:overrideLibrary="android.support.customtabs,devliving.online.cvscanner,online.devliving.mobilevisionpipeline"/>
 
     <!--
          GET_ACCOUNTS is needed for API < 23.

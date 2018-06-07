@@ -50,6 +50,7 @@ dependencies {
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
     implementation 'com.getbase:floatingactionbutton:1.10.1'
+    implementation 'com.github.sd1998:CVScanner:0dba783069'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.android.support:customtabs:${supportLibraryVersion}"
     implementation group: 'commons-io', name: 'commons-io', version: '2.5'
