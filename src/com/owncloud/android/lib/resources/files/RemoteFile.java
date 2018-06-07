@@ -314,5 +314,4 @@ public class RemoteFile implements Parcelable, Serializable {
         dest.writeSerializable(mQuotaAvailableBytes);
         dest.writeString(mPrivateLink);
     }
-
 }

@@ -1,25 +1,31 @@
 /* ownCloud Android Library is available under MIT license
+<<<<<<< HEAD
  *   @author masensio
  *   @author David A. Velasco
  *   @author David González Verdugo
  *   Copyright (C) 2018 ownCloud GmbH.
  *   
+=======
+ *
+ *   Copyright (C) 2018 ownCloud GmbH.
+ *
+>>>>>>> Use the new wrapper methods with CreateRemoteShareOperation and GetRemoteShareOperation
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- *   
+ *
  *   The above copyright notice and this permission notice shall be included in
  *   all copies or substantial portions of the Software.
- *   
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  *
@@ -30,20 +36,27 @@ package com.owncloud.android.lib.resources.shares;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.nonwebdav.PostMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import okhttp3.FormBody;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /**
  * Creates a new share.  This allows sharing with a user or group or as a link.
+ *
+ * @author masensio
+ * @author David A. Velasco
+ * @author David González Verdugo
  */
 public class CreateRemoteShareOperation extends RemoteOperation {
 
@@ -190,28 +203,26 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
-        RemoteOperationResult result;
-        int status;
 
-        PostMethod post = null;
-
+        RemoteOperationResult result = null;
         try {
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
-            // Post Method
-            post = new PostMethod(uriBuilder.build().toString());
+            final Request request = new Request.Builder()
+                    .url(uriBuilder.build().toString())
+                    .header("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
+                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
+                    .build();
 
-            post.setRequestHeader("Content-Type",
-                    "application/x-www-form-urlencoded; charset=utf-8"); // necessary for special characters
-
-            post.addParameter(PARAM_PATH, mRemoteFilePath);
-            post.addParameter(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()));
-            post.addParameter(PARAM_SHARE_WITH, mShareWith);
+            FormBody.Builder formBodyBuilder = new FormBody.Builder()
+                    .add(PARAM_PATH, mRemoteFilePath)
+                    .add(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()))
+                    .add(PARAM_SHARE_WITH, mShareWith);
 
             if (mName.length() > 0) {
-                post.addParameter(PARAM_NAME, mName);
+                formBodyBuilder.add(PARAM_NAME, mName);
             }
 
             if (mExpirationDateInMillis > 0) {
@@ -219,25 +230,26 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 Calendar expirationDate = Calendar.getInstance();
                 expirationDate.setTimeInMillis(mExpirationDateInMillis);
                 String formattedExpirationDate = dateFormat.format(expirationDate.getTime());
-                post.addParameter(PARAM_EXPIRATION_DATE, formattedExpirationDate);
+                formBodyBuilder.add(PARAM_EXPIRATION_DATE, formattedExpirationDate);
             }
 
             if (mPublicUpload) {
-                post.addParameter(PARAM_PUBLIC_UPLOAD, Boolean.toString(true));
+                formBodyBuilder.add(PARAM_PUBLIC_UPLOAD, Boolean.toString(true));
             }
             if (mPassword != null && mPassword.length() > 0) {
-                post.addParameter(PARAM_PASSWORD, mPassword);
+                formBodyBuilder.add(PARAM_PASSWORD, mPassword);
             }
             if (OCShare.DEFAULT_PERMISSION != mPermissions) {
-                post.addParameter(PARAM_PERMISSIONS, Integer.toString(mPermissions));
+                formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(mPermissions));
             }
 
-            post.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            FormBody formBody = formBodyBuilder.build();
 
-            status = client.executeMethod(post);
+            PostMethod postMethod = new PostMethod(client.getOkHttpClient(), request, formBody);
 
-            if (isSuccess(status)) {
-                String response = post.getResponseBodyAsString();
+            Response response = client.executeHttpMethod(postMethod);
+
+            if (isSuccess(response.code())) {
 
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
                         new ShareXMLParser()
@@ -245,9 +257,11 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 parser.setOneOrMoreSharesRequired(true);
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
                 parser.setServerBaseUri(client.getBaseUri());
-                result = parser.parse(response);
+                result = parser.parse(response.body().string());
 
                 if (result.isSuccess() && mGetShareDetails) {
+
+                    // TODO Use executeHttpMethod
                     // retrieve more info - POST only returns the index of the new share
                     OCShare emptyShare = (OCShare) result.getData().get(0);
                     GetRemoteShareOperation getInfo = new GetRemoteShareOperation(
@@ -257,23 +271,17 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 }
 
             } else {
-                result = new RemoteOperationResult(false, post);
+                result = new RemoteOperationResult(false, postMethod.getRequest(), response);
             }
 
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
             Log_OC.e(TAG, "Exception while Creating New Share", e);
-
-        } finally {
-            if (post != null) {
-                post.releaseConnection();
-            }
         }
         return result;
     }
 
     private boolean isSuccess(int status) {
-        return (status == HttpStatus.SC_OK);
+        return (status == HttpConstants.HTTP_OK);
     }
-
 }
