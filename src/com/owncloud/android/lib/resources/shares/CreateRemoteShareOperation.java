@@ -204,10 +204,10 @@ public class CreateRemoteShareOperation extends RemoteOperation {
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
-            final Request request = new Request.Builder()
+            Request request = new Request.Builder()
                     .url(uriBuilder.build().toString())
-                    .header("Content-Type", "application/x-www-form-urlencoded; " +
-                            "charset=utf-8")
+                    .header("Content-Type", 
+                            "application/x-www-form-urlencoded; charset=utf-8")
                     .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
                     .build();
 

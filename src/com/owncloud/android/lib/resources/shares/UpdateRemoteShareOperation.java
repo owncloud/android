@@ -172,7 +172,7 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         if (mName != null) {
             parametersToUpdate.add(new Pair<>(PARAM_NAME, mName));
         }
-        
+
         if (mPassword != null) {
             parametersToUpdate.add(new Pair<>(PARAM_PASSWORD, mPassword));
         }
