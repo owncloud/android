@@ -17,6 +17,8 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">Aç</string>
+  <string name="drawer_feedback">Geriyə cavab</string>
+  <string name="drawer_help">Kömək</string>
   <string name="prefs_category_general">Ümumi</string>
   <string name="prefs_category_more">Daha da</string>
   <string name="prefs_category_security">Təhlükəsizlik</string>

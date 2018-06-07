@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -380,7 +381,7 @@ public class SynchronizeFolderOperation extends SyncOperation {
     }
 
 
-    private void preparePushOfLocalChanges() throws OperationCancelledException {
+    private void preparePushOfLocalChanges() {
         List<OCFile> children = getStorageManager().getFolderContent(mLocalFolder);
         mFoldersToVisit = new Vector<>(children.size());
         for (OCFile child : children) {

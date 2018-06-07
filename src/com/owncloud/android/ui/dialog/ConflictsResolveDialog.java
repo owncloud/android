@@ -2,8 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author Bartek Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2012 Bartek Przybylski
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -39,7 +40,7 @@ import com.owncloud.android.utils.DisplayUtils;
  */
 public class ConflictsResolveDialog extends DialogFragment {
 
-    public static enum Decision { 
+    public enum Decision {
         CANCEL,
         KEEP_BOTH,
         OVERWRITE,
@@ -118,6 +119,6 @@ public class ConflictsResolveDialog extends DialogFragment {
     }
     
     public interface OnConflictDecisionMadeListener {
-        public void conflictDecisionMade(Decision decision);
+        void conflictDecisionMade(Decision decision);
     }
 }

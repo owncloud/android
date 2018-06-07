@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Uploade filer</string>
   <string name="drawer_close">Luk</string>
   <string name="drawer_open">Åbn</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Hjælp</string>
   <string name="prefs_category_general">Generel</string>
   <string name="prefs_category_more">Mere</string>
   <string name="prefs_category_security">Sikkerhed</string>

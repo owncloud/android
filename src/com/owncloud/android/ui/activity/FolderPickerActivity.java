@@ -1,7 +1,7 @@
 /**
  *   ownCloud Android client application
  *
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -250,7 +250,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_switch_view).setVisible(false);
         menu.findItem(R.id.action_sync_account).setVisible(false);
-        menu.findItem(R.id.action_sort).setVisible(false);
         return true;
     }
 
@@ -346,9 +345,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
      * Set per-view controllers
      */
     private void initControls(){
-        mCancelBtn = (Button) findViewById(R.id.folder_picker_btn_cancel);
+        mCancelBtn = findViewById(R.id.folder_picker_btn_cancel);
         mCancelBtn.setOnClickListener(this);
-        mChooseBtn = (Button) findViewById(R.id.folder_picker_btn_choose);
+        mChooseBtn = findViewById(R.id.folder_picker_btn_choose);
         mChooseBtn.setOnClickListener(this);
     }
     
@@ -397,7 +396,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else {
             try {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
 
             } catch (NotFoundException e) {

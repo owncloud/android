@@ -3,7 +3,8 @@
  *
  *   @author David A. Velasco
  *   @author David González Verdugo
- *   Copyright (C) 2018  ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -263,9 +264,9 @@ public class PreviewImageActivity extends FileActivity implements
                 mUploaderBinder = null;
             }
         }
-    };    
-    
-    
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean returnValue;
@@ -354,7 +355,7 @@ public class PreviewImageActivity extends FileActivity implements
             getHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    onPageSelected(fPosition);;
+                    onPageSelected(fPosition);
                 }
             });
         }

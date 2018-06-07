@@ -26,6 +26,12 @@
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Schließen</string>
   <string name="drawer_open">Öffnen</string>
+  <string name="drawer_loading_quota">Upload-Kontingent</string>
+  <string name="drawer_quota">%1$s von %2$s verwendet (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s verwendet</string>
+  <string name="drawer_unavailable_used_storage">Keine Speichernutzungsinformationen verfügbar</string>
+  <string name="drawer_feedback">Rückmeldungen</string>
+  <string name="drawer_help">Hilfe</string>
   <string name="prefs_category_general">Allgemein</string>
   <string name="prefs_category_more">Mehr</string>
   <string name="prefs_category_security">Sicherheit</string>
@@ -66,6 +72,8 @@
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Ich möchte Dich zum Benutzen von %1$s auf Deinem Smartphone einladen!\nLade es hier herunter: %2$s</string>
+  <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen</string>
+  <string name="auth_failure_snackbar_action">Konto ändern</string>
   <string name="auth_check_server">überprüfe den Server</string>
   <string name="auth_host_url">Serveradresse https://…</string>
   <string name="auth_username">Benutzername</string>
@@ -528,4 +536,5 @@
   <string name="welcome_feature_8_text">Deine animierten GIF-Grafiken abspielen</string>
   <string name="welcome_feature_9_title">Bild von der Kamera hochladen</string>
   <string name="welcome_feature_9_text">Foto aufnehmen und direkt auf deinen Owncloud-Server hochladen</string>
+  <string name="no_borwser_installed_alert">Es ist kein Browser installiert. Bitte installieren Sie zur sicheren Anmeldung einen Browser.</string>
 </resources>

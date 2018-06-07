@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -60,7 +61,7 @@ public class IndexedForest<V> {
 
         public Node<V> getParent() {
             return mParent;
-        };
+        }
 
         public Set<Node<V>> getChildren() {
             return mChildren;
@@ -140,7 +141,7 @@ public class IndexedForest<V> {
 
             return new Pair<String, String>(targetKey, linkedTo);
         }
-    };
+    }
 
 
     public Pair<V, String> removePayload(String accountName, String remotePath) {

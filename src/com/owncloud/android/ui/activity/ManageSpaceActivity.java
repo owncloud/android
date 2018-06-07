@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author masensio
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -52,10 +53,10 @@ public class ManageSpaceActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.manage_space_title);
 
-        TextView descriptionTextView = (TextView) findViewById(R.id.general_description);
+        TextView descriptionTextView = findViewById(R.id.general_description);
         descriptionTextView.setText(getString(R.string.manage_space_description, getString(R.string.app_name)));
 
-        Button clearDataButton = (Button) findViewById(R.id.clearDataButton);
+        Button clearDataButton = findViewById(R.id.clearDataButton);
         clearDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

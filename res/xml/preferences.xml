@@ -2,7 +2,7 @@
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2018 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -79,7 +79,7 @@
             android:title="@string/prefs_recommend" />
         <Preference
             android:key="feedback"
-            android:title="@string/prefs_feedback" />
+            android:title="@string/drawer_feedback" />
         <Preference
             android:key="logger"
             android:title="@string/actionbar_logger" />

@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Upload-i</string>
   <string name="drawer_close">Zatvori</string>
   <string name="drawer_open">Otvorite</string>
+  <string name="drawer_feedback">Povratna informacija</string>
+  <string name="drawer_help">Pomoć</string>
   <string name="prefs_category_general">Općenito</string>
   <string name="prefs_category_more">više</string>
   <string name="prefs_category_security">Sigurnost</string>

@@ -26,6 +26,12 @@
   <string name="drawer_item_uploads_list">Envios</string>
   <string name="drawer_close">Fechar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_loading_quota">Cota de carregamento</string>
+  <string name="drawer_quota">%1$s de %2$s usado (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s em uso</string>
+  <string name="drawer_unavailable_used_storage">Nenhuma informação de uso de armazenamento disponível</string>
+  <string name="drawer_feedback">Comentários</string>
+  <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">Geral</string>
   <string name="prefs_category_more">Mais</string>
   <string name="prefs_category_security">Segurança</string>
@@ -65,6 +71,8 @@
   <string name="illegal_argument_exception_message">Uma AÇÃO válida é necessária no intento passado para</string>
   <string name="recommend_subject">Tentar %1$s em seu smartfone!</string>
   <string name="recommend_text">Gostaria de convida-lo a usar %1$s em seu smartphone!\nBaixe aqui: %2$s</string>
+  <string name="auth_failure_snackbar">Falha na autenticação</string>
+  <string name="auth_failure_snackbar_action">Mudar de conta</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Endereço do servidor https://...</string>
   <string name="auth_username">Nome de usuário</string>
@@ -527,4 +535,5 @@
   <string name="welcome_feature_8_text">Visualize suas imagens GIF animadas</string>
   <string name="welcome_feature_9_title">Enviar imagem da câmera</string>
   <string name="welcome_feature_9_text">Tire uma foto e envie diretamente para o seu servidor</string>
+  <string name="no_borwser_installed_alert">Nenhum navegador instalado. Por favor, instale um navegador para permitir um login seguro.</string>
 </resources>

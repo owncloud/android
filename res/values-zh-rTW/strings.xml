@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">上傳</string>
   <string name="drawer_close"> 關閉</string>
   <string name="drawer_open">開啟</string>
+  <string name="drawer_feedback">反饋</string>
+  <string name="drawer_help">說明</string>
   <string name="prefs_category_general">一般</string>
   <string name="prefs_category_more">更多</string>
   <string name="prefs_category_security">安全性</string>

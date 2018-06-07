@@ -1,6 +1,8 @@
 /**
  *   ownCloud Android client application
  *
+ *   @author Brtosz Przybylski
+ *   @author Christian Schabesberger
  *   Copyright (C) 2018 Bartosz Przybylski
  *   Copyright (C) 2018 ownCloud GmbH.
  *
@@ -65,8 +67,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.whats_new_activity);
 
-        mProgress = (ProgressIndicator) findViewById(R.id.progressIndicator);
-        mPager = (ViewPager)findViewById(R.id.contentPanel);
+        mProgress = findViewById(R.id.progressIndicator);
+        mPager = findViewById(R.id.contentPanel);
         boolean isBeta = MainApp.isBeta();
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
@@ -77,7 +79,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager.addOnPageChangeListener(this);
 
 
-        mForwardFinishButton = (ImageButton) findViewById(R.id.forward);
+        mForwardFinishButton = findViewById(R.id.forward);
         mForwardFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +93,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                 updateNextButtonIfNeeded();
             }
         });
-        Button skipButton = (Button) findViewById(R.id.skip);
+        Button skipButton = findViewById(R.id.skip);
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -224,15 +226,15 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.whats_new_element, container, false);
 
-            ImageView iv = (ImageView)v.findViewById(R.id.whatsNewImage);
+            ImageView iv = v.findViewById(R.id.whatsNewImage);
             if (mItem.shouldShowImage())
                 iv.setImageResource(mItem.getImage());
 
-            TextView tv2 = (TextView)v.findViewById(R.id.whatsNewTitle);
+            TextView tv2 = v.findViewById(R.id.whatsNewTitle);
             if (mItem.shouldShowTitleText())
                 tv2.setText(mItem.getTitleText());
 
-            tv2 = (TextView)v.findViewById(R.id.whatsNewText);
+            tv2 = v.findViewById(R.id.whatsNewText);
             if (mItem.shouldShowContentText())
                 tv2.setText(mItem.getContentText());
 

@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Feltöltések</string>
   <string name="drawer_close">Bezárás</string>
   <string name="drawer_open">Megnyitás</string>
+  <string name="drawer_feedback">Visszajelzés</string>
+  <string name="drawer_help">Súgó</string>
   <string name="prefs_category_general">Általános</string>
   <string name="prefs_category_more">Több</string>
   <string name="prefs_category_security">Biztonság</string>

@@ -2,7 +2,9 @@
  *   ownCloud Android client application
  *
  *   @author Andy Scherzinger
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   @author David González Verdugo
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -24,6 +26,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -34,13 +37,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.datamodel.UserProfile;
+import com.owncloud.android.datamodel.UserProfilesRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.utils.DisplayUtils;
@@ -57,66 +64,29 @@ public abstract class DrawerActivity extends ToolbarActivity {
     private static final int ACTION_MANAGE_ACCOUNTS = 101;
     private static final int MENU_ORDER_ACCOUNT = 1;
     private static final int MENU_ORDER_ACCOUNT_FUNCTION = 2;
+    private static final int USER_ITEMS_ALLOWD_BEFORE_REMOVING_CLOUD = 4;
 
-    /**
-     * menu account avatar radius.
-     */
     private float mMenuAccountAvatarRadiusDimension;
-
-    /**
-     * current account avatar radius.
-     */
     private float mCurrentAccountAvatarRadiusDimension;
-
-    /**
-     * other accounts avatar radius.
-     */
     private float mOtherAccountAvatarRadiusDimension;
 
-    /**
-     * Reference to the drawer layout.
-     */
     private DrawerLayout mDrawerLayout;
-
-    /**
-     * Reference to the drawer toggle.
-     */
     private ActionBarDrawerToggle mDrawerToggle;
-
-    /**
-     * Reference to the navigation view.
-     */
     private NavigationView mNavigationView;
-
-    /**
-     * Reference to the account chooser toggle.
-     */
     private ImageView mAccountChooserToggle;
-
-    /**
-     * Reference to the middle account avatar.
-     */
     private ImageView mAccountMiddleAccountAvatar;
-
-    /**
-     * Reference to the end account avatar.
-     */
     private ImageView mAccountEndAccountAvatar;
+    private ImageView mDrawerCloud;
 
-    /**
-     * Flag to signal if the account chooser is active.
-     */
     private boolean mIsAccountChooserActive;
-
-    /**
-     * Id of the checked menu item.
-     */
     private int mCheckedMenuItem = Menu.NONE;
 
     /**
      * accounts for the (max) three displayed accounts in the drawer header.
      */
     private Account[] mAccountsWithAvatars = new Account[3];
+
+    private TextView mAccountQuotaText;
 
     /**
      * Initializes the drawer, its content and highlights the menu item with the given id.
@@ -134,9 +104,9 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * This method needs to be called after the content view has been set.
      */
     protected void setupDrawer() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.nav_view);
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         if (mNavigationView != null) {
             mAccountChooserToggle = (ImageView) findNavigationViewChildById(R.id.drawer_account_chooser_toogle);
             mAccountChooserToggle.setImageResource(R.drawable.ic_down);
@@ -144,6 +114,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
             mAccountMiddleAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_middle);
             mAccountEndAccountAvatar = (ImageView) findNavigationViewChildById(R.id.drawer_account_end);
+
+            mDrawerCloud = findViewById(R.id.drawer_cloud);
 
             // on pre lollipop the light theme adds a black tint to icons with white coloring
             // ruining the generic avatars, so tinting for icons is deactivated pre lollipop
@@ -194,6 +166,16 @@ public abstract class DrawerActivity extends ToolbarActivity {
      * @param navigationView the drawers navigation view
      */
     protected void setupDrawerContent(NavigationView navigationView) {
+        //disable help or feedback on cusomisation
+
+        if(!getResources().getBoolean(R.bool.help_enabled)) {
+            navigationView.getMenu().removeItem(R.id.drawer_menu_help);
+        }
+
+        if(!getResources().getBoolean(R.bool.feedback_enabled)) {
+            navigationView.getMenu().removeItem(R.id.drawer_menu_feedback);
+        }
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -236,6 +218,12 @@ public abstract class DrawerActivity extends ToolbarActivity {
                                         ManageAccountsActivity.class);
                                 startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS);
                                 break;
+                            case R.id.drawer_menu_feedback:
+                                openFeedback();
+                                break;
+                            case R.id.drawer_menu_help:
+                                openHelp();
+                                break;
                             case Menu.NONE:
                                 // account clicked
                                 accountClicked(menuItem.getTitle().toString());
@@ -249,10 +237,30 @@ public abstract class DrawerActivity extends ToolbarActivity {
 
         // handle correct state
         if (mIsAccountChooserActive) {
-            mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
+            navigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
+
         } else {
-            mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
+            navigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
         }
+    }
+
+    private void openHelp() {
+        final String helpWeb = (String) getText(R.string.url_help);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(helpWeb));
+        startActivity(intent);
+    }
+
+    private void openFeedback() {
+        String feedbackMail = (String) getText(R.string.mail_feedback);
+        String feedback = getText(R.string.drawer_feedback) +
+                " - android v" + BuildConfig.VERSION_NAME;
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, feedback);
+
+        intent.setData(Uri.parse(feedbackMail));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     /**
@@ -330,7 +338,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     /**
      * updates the account list in the drawer.
      */
-    public void updateAccountList() {
+    private void updateAccountList() {
         Account[] accounts = AccountManager.get(this).getAccountsByType(MainApp.getAccountType());
         if (mNavigationView != null && mDrawerLayout != null) {
             if (accounts.length > 0) {
@@ -403,13 +411,67 @@ public abstract class DrawerActivity extends ToolbarActivity {
         // re-add add-account and manage-accounts
         mNavigationView.getMenu().add(R.id.drawer_menu_accounts, R.id.drawer_menu_account_add,
                 MENU_ORDER_ACCOUNT_FUNCTION,
-                getResources().getString(R.string.prefs_add_account)).setIcon(R.drawable.ic_account_plus);
+                getResources().getString(R.string.prefs_add_account)).setIcon(R.drawable.ic_plus_grey);
         mNavigationView.getMenu().add(R.id.drawer_menu_accounts, R.id.drawer_menu_account_manage,
                 MENU_ORDER_ACCOUNT_FUNCTION,
-                getResources().getString(R.string.drawer_manage_accounts)).setIcon(R.drawable.ic_settings);
+                getResources().getString(R.string.drawer_manage_accounts)).setIcon(R.drawable.ic_group);
 
         // adding sets menu group back to visible, so safety check and setting invisible
         showMenu();
+    }
+
+    /**
+     * Updates the quota in the drawer
+     */
+    private void updateQuota() {
+        Account account = AccountUtils.getCurrentOwnCloudAccount(this);
+
+        if (account == null) return;
+
+        UserProfile.UserQuota userQuota = UserProfilesRepository.getUserProfilesRepository().getQuota(account.name);
+
+        if (userQuota == null) return;
+
+        ProgressBar accountQuotaBar = findViewById(R.id.account_quota_bar);
+
+        TextView accountQuotaText = findViewById(R.id.account_quota_text);
+
+        if (accountQuotaBar!= null && accountQuotaText != null) {
+
+            if (userQuota.getFree() < 0) { // Pending, unknown or unlimited free storage
+
+                accountQuotaBar.setVisibility(View.VISIBLE);
+
+                accountQuotaBar.setProgress(0);
+
+                accountQuotaText.setText(
+                        String.format(getString(R.string.drawer_unavailable_free_storage),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(),this))
+                );
+
+            } else if (userQuota.getFree() == 0) { // Quota 0, guest users
+
+                accountQuotaBar.setVisibility(View.GONE);
+
+                accountQuotaText.setText(getString(R.string.drawer_unavailable_used_storage));
+
+            } else { // Limited quota
+
+                accountQuotaBar.setVisibility(View.VISIBLE);
+
+                // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
+                accountQuotaBar.setProgress((int) Math.ceil(userQuota.getRelative()));
+
+                accountQuotaText.setText(
+                        String.format(getString(R.string.drawer_quota),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getUsed(), this),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
+                                userQuota.getRelative()
+                        )
+                );
+
+            }
+        }
     }
 
     /**
@@ -432,7 +494,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     }
 
     /**
-     * sets the given account name in the drawer in case the drawer is available. The account name is shortened
+     * Sets the given account data in the drawer in case the drawer is available. The account name is shortened
      * beginning from the @-sign in the username.
      *
      * @param account the account to be set in the drawer
@@ -458,6 +520,8 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 mCurrentAccountAvatarRadiusDimension,
                 false
             );
+
+            updateQuota();
         }
     }
 
@@ -474,14 +538,22 @@ public abstract class DrawerActivity extends ToolbarActivity {
      */
     private void showMenu() {
         if (mNavigationView != null) {
+            final int accountCount = AccountManager.get(this)
+                    .getAccountsByType(MainApp.getAccountType()).length;
+
             if (mIsAccountChooserActive) {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_up);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, true);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, false);
+                mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, false);
+                if(mDrawerCloud != null && accountCount > USER_ITEMS_ALLOWD_BEFORE_REMOVING_CLOUD)
+                    mDrawerCloud.setVisibility(View.GONE);
             } else {
                 mAccountChooserToggle.setImageResource(R.drawable.ic_down);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_accounts, false);
                 mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_standard, true);
+                mNavigationView.getMenu().setGroupVisible(R.id.drawer_menu_settings_etc, true);
+                if(mDrawerCloud != null) mDrawerCloud.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -553,6 +625,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
             }
         }
         updateAccountList();
+        updateQuota();
     }
 
     @Override
@@ -595,6 +668,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
                 restart();
             } else {
                 updateAccountList();
+                updateQuota();
             }
         }
     }
@@ -618,6 +692,7 @@ public abstract class DrawerActivity extends ToolbarActivity {
     protected void onAccountCreationSuccessful(AccountManagerFuture<Bundle> future) {
         super.onAccountCreationSuccessful(future);
         updateAccountList();
+        updateQuota();
         restart();
     }
 

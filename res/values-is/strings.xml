@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Uploads</string>
   <string name="drawer_close">Loka</string>
   <string name="drawer_open">Opna</string>
+  <string name="drawer_feedback">Umsögn</string>
+  <string name="drawer_help">Hjálp</string>
   <string name="prefs_category_general">Almennt</string>
   <string name="prefs_category_more">Meira</string>
   <string name="prefs_category_security">Öryggi</string>

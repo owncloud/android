@@ -17,6 +17,7 @@
   <string name="drawer_item_settings">Podešavanja</string>
   <string name="drawer_close">Zatvori</string>
   <string name="drawer_open">Otvori</string>
+  <string name="drawer_help">Pomoć</string>
   <string name="prefs_category_general">Opšte</string>
   <string name="prefs_category_more">Vise</string>
   <string name="prefs_accounts">Nalozi</string>

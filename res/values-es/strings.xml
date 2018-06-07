@@ -12,9 +12,11 @@
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_sort">Ordenar</string>
-  <string name="actionbar_descending">Descente</string>
+  <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Viejo - Nuevo</string>
+  <string name="actionbar_sort_by_size">Mas pequeño - Mas grande</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Todos los archivos</string>
@@ -24,6 +26,12 @@
   <string name="drawer_item_uploads_list">Subidas</string>
   <string name="drawer_close">Cerrar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_loading_quota">Cargando cuota</string>
+  <string name="drawer_quota">%1$s de %2$s usado (%3$s %%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s en uso</string>
+  <string name="drawer_unavailable_used_storage">No hay información disponible sobre el uso de almacenamiento.</string>
+  <string name="drawer_feedback">Sugerencias</string>
+  <string name="drawer_help">Ayuda</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Más</string>
   <string name="prefs_category_security">Seguridad</string>
@@ -63,6 +71,8 @@
   <string name="illegal_argument_exception_message">Se necesita una acción valida</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
+  <string name="auth_failure_snackbar">Fallo en la autenticación</string>
+  <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Dirección del servidor https://…</string>
   <string name="auth_username">Nombre de usuario</string>
@@ -161,7 +171,7 @@
   <string name="uploads_view_upload_status_unknown_fail">Error desconocido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Esperando a la conexión wifi</string>
   <string name="uploads_view_later_waiting_to_upload">Esperando para subir</string>
-  <string name="uploads_view_unsupported_media_type">Tipo de medio no soportado</string>
+  <string name="uploads_view_unsupported_media_type">Tipo de archivo no soportado</string>
   <string name="downloader_download_in_progress_ticker">Descargando...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Descargado de %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descarga completa</string>
@@ -524,4 +534,5 @@
   <string name="welcome_feature_8_text">Reproduce tus imágenes GIF animadas</string>
   <string name="welcome_feature_9_title">Subir imágen desde la cámara</string>
   <string name="welcome_feature_9_text">Hacer fotografía y subirla directamente a tu Servidor</string>
+  <string name="no_borwser_installed_alert">No hay navegador instalado, Por favor, instale uno para poder realizar un login seguro</string>
 </resources>

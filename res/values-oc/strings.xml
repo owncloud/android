@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Cargaments</string>
   <string name="drawer_close">Tampar</string>
   <string name="drawer_open">Dobrir</string>
+  <string name="drawer_feedback">Comentaris</string>
+  <string name="drawer_help">Ajuda</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Mai</string>
   <string name="prefs_category_security">Seguretat</string>

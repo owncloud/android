@@ -22,6 +22,8 @@
   <string name="drawer_item_uploads_list">Отпремања</string>
   <string name="drawer_close">Затвори</string>
   <string name="drawer_open">Отвори</string>
+  <string name="drawer_feedback">Ваше мишљење</string>
+  <string name="drawer_help">Помоћ</string>
   <string name="prefs_category_general">Опште</string>
   <string name="prefs_category_more">Остало</string>
   <string name="prefs_category_security">Безбедност</string>

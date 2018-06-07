@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">Nahrání</string>
   <string name="drawer_close">Zavřít</string>
   <string name="drawer_open">Otevřít</string>
+  <string name="drawer_feedback">Odezva</string>
+  <string name="drawer_help">Nápověda</string>
   <string name="prefs_category_general">Obecné</string>
   <string name="prefs_category_more">Více</string>
   <string name="prefs_category_security">Zabezpečení</string>
@@ -477,6 +479,7 @@ správce systému.</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d vybrán</item>
     <item quantity="few">%d vybrány</item>
+    <item quantity="many">%d vybráno</item>
     <item quantity="other">%d vybráno</item>
   </plurals>
   <!--Welcome to oC intro features-->

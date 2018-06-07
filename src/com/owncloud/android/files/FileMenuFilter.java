@@ -2,7 +2,8 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   @author Christian Schabesberger
+ *   Copyright (C) 2018 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -80,7 +81,7 @@ public class FileMenuFilter {
      */
     public FileMenuFilter(OCFile targetFile, Account account, ComponentsGetter cg,
                           Context context) {
-        this(Arrays.asList(new OCFile[]{targetFile}), account, cg, context);
+        this(Arrays.asList(targetFile), account, cg, context);
     }
 
     /**
@@ -313,7 +314,7 @@ public class FileMenuFilter {
                 videoPreviewing = ((PreviewVideoFragment) secondFragment).
                         getFile().equals(mFiles.get(i));
             }
-        };
+        }
         return videoPreviewing;
     }
 

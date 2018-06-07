@@ -24,7 +24,6 @@
 package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,6 +36,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
@@ -46,7 +46,6 @@ import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -298,7 +297,7 @@ public class FileActivity extends DrawerActivity
 
             if (result.getCode() == ResultCode.UNAUTHORIZED) {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -318,7 +317,7 @@ public class FileActivity extends DrawerActivity
 
             } else if (result.getCode() != ResultCode.CANCELLED) {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -331,7 +330,7 @@ public class FileActivity extends DrawerActivity
 
             } else {
                 showSnackMessage(
-                    ErrorMessageAdapter.getErrorCauseMessage(result, operation, getResources())
+                    ErrorMessageAdapter.getResultMessage(result, operation, getResources())
                 );
             }
 
@@ -340,6 +339,17 @@ public class FileActivity extends DrawerActivity
             result.getData();
 
         }
+    }
+
+    protected void showRequestAccountChangeNotice() {
+        Snackbar.make(findViewById(android.R.id.content), R.string.auth_failure_snackbar, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.auth_failure_snackbar_action, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent selectAccount = new Intent(FileActivity.this, ManageAccountsActivity.class);
+                                startActivity(selectAccount);
+                            }
+                        }).show();
     }
 
     /**
@@ -548,12 +558,16 @@ public class FileActivity extends DrawerActivity
      * @param message       Message to show.
      */
     public void showSnackMessage(String message) {
+
+        View view = findViewById(R.id.coordinator_layout) != null
+                ? findViewById(R.id.coordinator_layout)
+                : findViewById(android.R.id.content);
+
         Snackbar snackbar = Snackbar.make(
-            findViewById(R.id.coordinator_layout),
-            message,
-            Snackbar.LENGTH_LONG
+                view,
+                message,
+                Snackbar.LENGTH_LONG
         );
         snackbar.show();
     }
-
 }

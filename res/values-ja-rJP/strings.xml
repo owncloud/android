@@ -24,12 +24,16 @@
   <string name="drawer_item_uploads_list">アップロード</string>
   <string name="drawer_close">閉じる</string>
   <string name="drawer_open">開く</string>
+  <string name="drawer_feedback">フィードバック</string>
+  <string name="drawer_help">ヘルプ</string>
   <string name="prefs_category_general">一般</string>
   <string name="prefs_category_more">もっと見る</string>
   <string name="prefs_category_security">セキュリティ</string>
   <string name="prefs_accounts">アカウント</string>
   <string name="prefs_manage_accounts">アカウント管理</string>
   <string name="prefs_passcode">パスコードロック</string>
+  <string name="prefs_fingerprint">指紋認証</string>
+  <string name="prefs_fingerprint_summary">パスコードまたはパターンロックを有効にする</string>
   <string name="prefs_camera_picture_upload">ピクチャーアップロード</string>
   <string name="prefs_camera_picture_upload_summary">カメラで撮影した画像を自動アップロード</string>
   <string name="prefs_camera_video_upload">動画アップロード</string>
@@ -45,6 +49,17 @@
   <string name="prefs_imprint">インプリント</string>
   <string name="prefs_remember_last_share_location">共有場所を記憶する</string>
   <string name="prefs_remember_last_upload_location_summary">最後に共有アップロードした場所を記憶する</string>
+  <string name="prefs_pattern">パターンロック</string>
+  <string name="pattern_enter_pattern">パターンを入力してください</string>
+  <string name="pattern_configure_pattern">パターンを入力</string>
+  <string name="pattern_remove_pattern">パターンを削除</string>
+  <string name="pattern_incorrect_pattern">まターンが間違っています</string>
+  <string name="pattern_reenter_pattern">再度パターンを入力してください</string>
+  <string name="pattern_not_same_pattern">パターンが一致しません</string>
+  <string name="pattern_stored">パターンを保存しました</string>
+  <string name="pattern_removed">パターンを削除しました</string>
+  <string name="pattern_already_set">同じタイミングでパターンとパスコードを有効化することはできません。最初に無効化してください。</string>
+  <string name="passcode_already_set">同じタイミングでパターンとパスコードを有効化することはできません。最初に無効化してください。</string>
   <string name="recommend_subject">スマートフォンで %1$s を試してください！</string>
   <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！
 ここからダウンロードしてください: %2$s</string>
@@ -184,6 +199,10 @@
   <string name="pass_code_wrong">パスコードが正しくありません</string>
   <string name="pass_code_removed">パスコードを削除しました</string>
   <string name="pass_code_stored">パスコードを保存しました</string>
+  <string name="fingerprint_hint">タッチセンサー</string>
+  <string name="fingerprint_not_recognized">指紋認証に失敗しました。再度やり直してください。</string>
+  <string name="fingerprint_success">指紋認証に成功しました</string>
+  <string name="fingerprint_not_hardware_detected">このデバイスでは指紋認証はサポートされていません。</string>
   <string name="media_notif_ticker">%1$s ミュージックプレーヤー</string>
   <string name="media_state_playing">%1$s (プレイ中)</string>
   <string name="media_state_loading">%1$s (読込中)</string>
@@ -470,4 +489,5 @@
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_4_title">カメラアップロード</string>
+  <string name="welcome_feature_7_title">指紋認証</string>
 </resources>

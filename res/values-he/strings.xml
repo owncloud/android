@@ -24,6 +24,8 @@
   <string name="drawer_item_uploads_list">העלאות</string>
   <string name="drawer_close">סגירה</string>
   <string name="drawer_open">פתיחה</string>
+  <string name="drawer_feedback">משוב</string>
+  <string name="drawer_help">עזרה</string>
   <string name="prefs_category_general">כללי</string>
   <string name="prefs_category_more">יותר</string>
   <string name="prefs_category_security">אבטחה</string>
@@ -489,6 +491,8 @@
   <string name="file_sync_notification_channel_description">הצגת תוצאות סנכרון קבצים</string>
   <plurals name="items_selected_count">
     <item quantity="one">נבחר %d</item>
+    <item quantity="two">נבחרו %d</item>
+    <item quantity="many">נבחרו %d</item>
     <item quantity="other">נבחרו %d</item>
   </plurals>
   <!--Welcome to oC intro features-->

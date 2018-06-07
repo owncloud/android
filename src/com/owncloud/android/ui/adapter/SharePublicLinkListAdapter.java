@@ -4,7 +4,8 @@ package com.owncloud.android.ui.adapter;
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * Copyright (C) 2018 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -76,13 +77,13 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
 
             OCShare share = mPublicLinks.get(position);
 
-            TextView shareName = (TextView) view.findViewById(R.id.publicLinkName);
+            TextView shareName = view.findViewById(R.id.publicLinkName);
 
             // If there's no name, set the token as name
             shareName.setText(share.getName().equals("") ? share.getToken() : share.getName());
 
             // bind listener to get link
-            final ImageView getPublicLinkButton = (ImageView) view.findViewById(R.id.getPublicLinkButton);
+            final ImageView getPublicLinkButton = view.findViewById(R.id.getPublicLinkButton);
             getPublicLinkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -91,7 +92,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
             });
 
             // bind listener to delete
-            final ImageView deletePublicLinkButton = (ImageView) view.findViewById(R.id.deletePublicLinkButton);
+            final ImageView deletePublicLinkButton = view.findViewById(R.id.deletePublicLinkButton);
             deletePublicLinkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -100,7 +101,7 @@ public class SharePublicLinkListAdapter extends ArrayAdapter{
             });
 
             // bind listener to edit
-            final ImageView editPublicLinkButton = (ImageView) view.findViewById(R.id.editPublicLinkButton);
+            final ImageView editPublicLinkButton = view.findViewById(R.id.editPublicLinkButton);
             editPublicLinkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

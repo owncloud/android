@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Uppladdningar</string>
   <string name="drawer_close">Stäng</string>
   <string name="drawer_open">Öppna</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Hjälp</string>
   <string name="prefs_category_general">Allmänt</string>
   <string name="prefs_category_more">Mer</string>
   <string name="prefs_category_security">Säkerhet</string>

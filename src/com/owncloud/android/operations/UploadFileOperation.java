@@ -403,7 +403,7 @@ public class UploadFileOperation extends SyncOperation {
                         move(originalFile, expectedFile);
                         getStorageManager().deleteFileInMediaScan(originalFile.getAbsolutePath());
                     }
-                    FileDataStorageManager.triggerMediaScan(expectedFile.getAbsolutePath());
+                    getStorageManager().triggerMediaScan(expectedFile.getAbsolutePath());
                 }
 
             } else if (result.getHttpCode() == HttpStatus.SC_PRECONDITION_FAILED ) {
@@ -796,7 +796,7 @@ public class UploadFileOperation extends SyncOperation {
         getStorageManager().saveFile(file);
         getStorageManager().saveConflict(file, null);
 
-        FileDataStorageManager.triggerMediaScan(file.getStoragePath());
+        getStorageManager().triggerMediaScan(file.getStoragePath());
     }
 
     private void updateOCFile(OCFile file, RemoteFile remoteFile) {

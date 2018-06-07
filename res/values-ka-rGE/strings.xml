@@ -11,6 +11,8 @@
   <!--TODO re-enable when "On Device" is available
     <string name="drawer_item_on_device">On device</string>-->
   <string name="drawer_open">გახსნა</string>
+  <string name="drawer_feedback">უკუკავშირი</string>
+  <string name="drawer_help">დახმარება</string>
   <string name="prefs_category_general">ზოგადი</string>
   <string name="prefs_category_more">უფრო მეტი</string>
   <string name="prefs_category_security">უსაფრთხოება</string>

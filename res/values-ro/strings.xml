@@ -23,6 +23,8 @@
   <string name="drawer_item_uploads_list">Încărcări</string>
   <string name="drawer_close">Închide</string>
   <string name="drawer_open">Deschide</string>
+  <string name="drawer_feedback">Feedback</string>
+  <string name="drawer_help">Ajutor</string>
   <string name="prefs_category_general">General</string>
   <string name="prefs_category_more">Mai mult</string>
   <string name="prefs_category_security">Securitate</string>

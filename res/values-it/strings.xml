@@ -15,6 +15,7 @@
   <string name="actionbar_descending">Decrescente</string>
   <string name="actionbar_sort_title">Ordina per</string>
   <string name="actionbar_sort_by_name">A-Z</string>
+  <string name="actionbar_sort_by_date">Più vecchio - Più Recente</string>
   <!--TODO re-enable when "Accounts" is available in Navigation Drawer-->
   <!--<string name="drawer_item_accounts">Accounts</string>-->
   <string name="drawer_item_all_files">Tutti i file</string>
@@ -24,6 +25,10 @@
   <string name="drawer_item_uploads_list">Caricamenti</string>
   <string name="drawer_close">Chiudi</string>
   <string name="drawer_open">Apri</string>
+  <string name="drawer_unavailable_free_storage">%1$s in uso</string>
+  <string name="drawer_unavailable_used_storage">Nessuna informazione sullo spazio disponibile</string>
+  <string name="drawer_feedback">Segnalazioni</string>
+  <string name="drawer_help">Aiuto</string>
   <string name="prefs_category_general">Generale</string>
   <string name="prefs_category_more">Altro</string>
   <string name="prefs_category_security">Protezione</string>
@@ -526,4 +531,5 @@ Il Download del file inizierà automaticamente</string>
   <string name="welcome_feature_8_text">Visualizza le tue GIF animate</string>
   <string name="welcome_feature_9_title">Carica le foto dalla camera</string>
   <string name="welcome_feature_9_text">Scatta una foto e mandala direttamente al tuo server</string>
+  <string name="no_borwser_installed_alert">Nessun browser installato. Si prega di installarne uno in modo da consentire un accesso sicuro.</string>
 </resources>

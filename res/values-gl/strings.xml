@@ -22,6 +22,8 @@
   <string name="drawer_item_uploads_list">Envíos</string>
   <string name="drawer_close">Pechar</string>
   <string name="drawer_open">Abrir</string>
+  <string name="drawer_feedback">Comentarios</string>
+  <string name="drawer_help">Axuda</string>
   <string name="prefs_category_general">Xeral</string>
   <string name="prefs_category_more">Máis</string>
   <string name="prefs_category_security">Seguridade</string>
