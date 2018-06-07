@@ -1,15 +1,9 @@
 /* ownCloud Android Library is available under MIT license
-<<<<<<< HEAD
  *   @author masensio
  *   @author David A. Velasco
  *   @author David González Verdugo
- *   Copyright (C) 2018 ownCloud GmbH.
- *   
-=======
+ *   Copyright (C) 2018 ownCloud GmbH
  *
- *   Copyright (C) 2018 ownCloud GmbH.
- *
->>>>>>> Use the new wrapper methods with CreateRemoteShareOperation and GetRemoteShareOperation
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
@@ -203,8 +197,8 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
+        RemoteOperationResult result;
 
-        RemoteOperationResult result = null;
         try {
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
@@ -212,7 +206,8 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
             final Request request = new Request.Builder()
                     .url(uriBuilder.build().toString())
-                    .header("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
+                    .header("Content-Type", "application/x-www-form-urlencoded; " +
+                            "charset=utf-8")
                     .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
                     .build();
 

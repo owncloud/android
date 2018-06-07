@@ -1,14 +1,8 @@
 /* ownCloud Android Library is available under MIT license
-<<<<<<< HEAD
  *   @author David A. Velasco
  *   @author David González Verdugo
  *   Copyright (C) 2018 ownCloud GmbH.
- *   
-=======
  *
- *   Copyright (C) 2018 ownCloud GmbH.
- *
->>>>>>> Use the new wrapper methods with CreateRemoteShareOperation and GetRemoteShareOperation
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
@@ -81,7 +75,6 @@ public class GetRemoteShareOperation extends RemoteOperation {
             Response response = client.executeHttpMethod(getMethod);
 
             if (isSuccess(response.code())) {
-
                 // Parse xml response and obtain the list of shares
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
                     new ShareXMLParser()

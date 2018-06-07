@@ -31,16 +31,21 @@ package com.owncloud.android.lib.resources.shares;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
+import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
  * Created by masensio on 08/10/2015.
@@ -62,6 +67,10 @@ import java.util.ArrayList;
  *
  * Status codes:
  *    100 - successful
+ *
+ * @author masensio
+ * @author David A. Velasco
+ * @author David González Verdugo
  */
 public class GetRemoteShareesOperation extends RemoteOperation{
 
@@ -80,7 +89,6 @@ public class GetRemoteShareesOperation extends RemoteOperation{
     // Arguments - constant values
     private static final String VALUE_FORMAT = "json";
     private static final String VALUE_ITEM_TYPE = "file";         //  to get the server search for users / groups
-
 
     // JSON Node names
     private static final String NODE_OCS = "ocs";
@@ -114,8 +122,6 @@ public class GetRemoteShareesOperation extends RemoteOperation{
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
         RemoteOperationResult result;
-        int status;
-        GetMethod get = null;
 
         try{
             Uri requestUri = client.getBaseUri();
@@ -127,18 +133,19 @@ public class GetRemoteShareesOperation extends RemoteOperation{
             uriBuilder.appendQueryParameter(PARAM_PAGE, String.valueOf(mPage));
             uriBuilder.appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
 
-            // Get Method
-            get = new GetMethod(uriBuilder.build().toString());
-            get.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            Request request = new Request.Builder()
+                    .url(uriBuilder.build().toString())
+                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
+                    .build();
 
-            status = client.executeMethod(get);
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
+            Response response = client.executeHttpMethod(getMethod);
 
-            if(isSuccess(status)) {
-                String response = get.getResponseBodyAsString();
+            if(isSuccess(response.code())) {
                 Log_OC.d(TAG, "Successful response: " + response);
 
                 // Parse the response
-                JSONObject respJSON = new JSONObject(response);
+                JSONObject respJSON = new JSONObject(response.body().string());
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
                 JSONObject respData = respOCS.getJSONObject(NODE_DATA);
                 JSONObject respExact = respData.getJSONObject(NODE_EXACT);
@@ -166,36 +173,29 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                     }
                 }
 
-                // Result
-                result = new RemoteOperationResult(true, get);
+                result = new RemoteOperationResult(OK);
                 result.setData(data);
 
                 Log_OC.d(TAG, "*** Get Users or groups completed " );
 
             } else {
-                result = new RemoteOperationResult(false, get);
-                String response = get.getResponseBodyAsString();
+                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
                 Log_OC.e(TAG, "Failed response while getting users/groups from the server ");
                 if (response != null) {
-                    Log_OC.e(TAG, "*** status code: " + status + "; response message: " + response);
+                    Log_OC.e(TAG, "*** status code: " + response.code() + "; response message: " + response);
                 } else {
-                    Log_OC.e(TAG, "*** status code: " + status);
+                    Log_OC.e(TAG, "*** status code: " + response.code());
                 }
             }
-
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
             Log_OC.e(TAG, "Exception while getting users/groups", e);
-
-        } finally {
-            if (get != null) {
-                get.releaseConnection();
-            }
         }
+
         return result;
     }
 
     private boolean isSuccess(int status) {
-        return (status == HttpStatus.SC_OK);
+        return (status == HttpConstants.HTTP_OK);
     }
 }
