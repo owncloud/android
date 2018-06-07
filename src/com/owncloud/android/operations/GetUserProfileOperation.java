@@ -104,7 +104,7 @@ public class GetUserProfileOperation extends SyncOperation {
                 );
 
                 /// get quota
-                GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation();
+                GetRemoteUserQuotaOperation getRemoteUserQuotaOperation = new GetRemoteUserQuotaOperation(mRemotePath);
 
                 remoteResult = getRemoteUserQuotaOperation.execute(client);
 
