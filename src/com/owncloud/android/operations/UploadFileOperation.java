@@ -2,8 +2,7 @@
  *   ownCloud Android client application
  *
  *   @author David A. Velasco
- *   @author David González Verdugo
- *   Copyright (C) 2018 ownCloud GmbH.
+ *   Copyright (C) 2016 ownCloud GmbH.
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License version 2,
@@ -24,8 +23,6 @@ package com.owncloud.android.operations;
 import android.accounts.Account;
 import android.content.Context;
 import android.net.Uri;
-
-import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.db.OCUpload;
 import com.owncloud.android.db.PreferenceManager;
@@ -38,13 +35,11 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.refactor.OCContext;
-import com.owncloud.android.lib.refactor.account.OCAccount;
 import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.refactor.operations.files.UploadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -266,8 +261,7 @@ public class UploadFileOperation extends SyncOperation {
             ((ProgressiveDataTransferer)mEntity).addDatatransferProgressListener(listener);
         }
         if(mUploadOperation != null){
-            // TODO Progress
-//            mUploadOperation.addDatatransferProgressListener(listener);
+            mUploadOperation.addDatatransferProgressListener(listener);
         }
     }
 
@@ -279,8 +273,7 @@ public class UploadFileOperation extends SyncOperation {
             ((ProgressiveDataTransferer)mEntity).removeDatatransferProgressListener(listener);
         }
         if(mUploadOperation != null){
-            // TODO Progress
-//            mUploadOperation.removeDatatransferProgressListener(listener);
+            mUploadOperation.removeDatatransferProgressListener(listener);
         }
     }
 
@@ -296,9 +289,6 @@ public class UploadFileOperation extends SyncOperation {
         File temporalFile = null, originalFile = new File(mOriginalStoragePath), expectedFile = null;
 
         try {
-
-            OCAccount account = new OCAccount(client.getAccount().getSavedAccount(), mContext);
-            OCContext ocContext = new OCContext(account, MainApp.getUserAgent());
 
             /// Check that connectivity conditions are met and delays the upload otherwise
             if (delayForWifi()) {
@@ -319,6 +309,7 @@ public class UploadFileOperation extends SyncOperation {
             result = grantFolderExistence(remoteParentPath, client);
 
             if (!result.isSuccess()) {
+
                 return result;
             }
 
@@ -369,32 +360,29 @@ public class UploadFileOperation extends SyncOperation {
             String timeStamp = timeStampLong.toString();
 
             /// perform the upload
-            if (mChunked &&
+            if ( mChunked &&
                     (new File(mFile.getStoragePath())).length() >
                             ChunkedUploadRemoteFileOperation.CHUNK_SIZE ) {
-                // TODO Chunked upload
-//                mUploadOperation = new ChunkedUploadRemoteFileOperation(mFile.getStoragePath(),
-//                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
+                mUploadOperation = new ChunkedUploadRemoteFileOperation(mFile.getStoragePath(),
+                        mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
             } else {
-                mUploadOperation = new UploadRemoteFileOperation(ocContext, mFile.getStoragePath(),
+                mUploadOperation = new UploadRemoteFileOperation(mFile.getStoragePath(),
                         mFile.getRemotePath(), mFile.getMimetype(), mFile.getEtagInConflict(), timeStamp);
             }
             Iterator <OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
-
-            // TODO Progress
-//            while (listener.hasNext()) {
-//                mUploadOperation.addDatatransferProgressListener(listener.next());
-//            }
+            while (listener.hasNext()) {
+                mUploadOperation.addDatatransferProgressListener(listener.next());
+            }
 
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
             }
 
-            UploadRemoteFileOperation.Result uploadFileResult = mUploadOperation.exec();
+            result = mUploadOperation.execute(client);
 
             /// move local temporal file or original file to its corresponding
             // location in the ownCloud local folder
-            if (uploadFileResult.isSuccess()) {
+            if (result.isSuccess()) {
                 if (mLocalBehaviour == FileUploader.LOCAL_BEHAVIOUR_FORGET) {
                     String temporalPath = FileStorageUtils.getTemporalPath(mAccount.name) + mFile.getRemotePath();
                     if (mOriginalStoragePath.equals(temporalPath)) {
@@ -470,14 +458,14 @@ public class UploadFileOperation extends SyncOperation {
      */
     private boolean delayForWifi() {
         boolean delayCameraUploadsPicture = (
-            isCameraUploadsPicture() &&  PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext)
+                isCameraUploadsPicture() &&  PreferenceManager.cameraPictureUploadViaWiFiOnly(mContext)
         );
         boolean delayCameraUploadsVideo = (
-            isCameraUploadsVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext)
+                isCameraUploadsVideo() && PreferenceManager.cameraVideoUploadViaWiFiOnly(mContext)
         );
         return (
-            (delayCameraUploadsPicture || delayCameraUploadsVideo) &&
-            !ConnectivityUtils.isAppConnectedViaWiFi(mContext)
+                (delayCameraUploadsPicture || delayCameraUploadsVideo) &&
+                        !ConnectivityUtils.isAppConnectedViaWiFi(mContext)
         );
     }
 
@@ -535,7 +523,7 @@ public class UploadFileOperation extends SyncOperation {
 
     /**
      * Create a new OCFile mFile with new remote path. This is required if forceOverwrite==false.
-     * New file is stored as mFile, original as mOldFile. 
+     * New file is stored as mFile, original as mOldFile.
      * @param newRemotePath new remote path
      */
     private void createNewOCFile(String newRemotePath) {
@@ -823,5 +811,4 @@ public class UploadFileOperation extends SyncOperation {
 
         void onRenameUpload();
     }
-
 }
