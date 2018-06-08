@@ -140,8 +140,9 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
         }
 
         if (allAvailableAuthMethods.indexOf(authenticationMethodToString(AuthenticationMethod.UNKNOWN)) == -1) {
-
             result = new RemoteOperationResult(result.getHttpCode(), result.getHttpPhrase(),null);
+            // Force the result to be successful and continue with login
+            result.setSuccess(true);
         }
 
         ArrayList<Object> data = new ArrayList<>();
