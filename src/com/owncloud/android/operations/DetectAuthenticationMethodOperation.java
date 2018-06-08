@@ -139,11 +139,9 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
             }
         }
 
-        if (allAvailableAuthMethods.indexOf(
-                authenticationMethodToString(AuthenticationMethod.UNKNOWN)) == -1) {
+        if (allAvailableAuthMethods.indexOf(authenticationMethodToString(AuthenticationMethod.UNKNOWN)) == -1) {
 
-            result = new RemoteOperationResult(true, result.getHttpCode(), result.getHttpPhrase(),
-                    null);
+            result = new RemoteOperationResult(result.getHttpCode(), result.getHttpPhrase(),null);
         }
 
         ArrayList<Object> data = new ArrayList<>();
@@ -152,7 +150,6 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
         return result;  // same result instance, so that other errors
         // can be handled by the caller transparently
     }
-
 
     private String authenticationMethodToString(AuthenticationMethod value) {
         switch (value) {
@@ -168,5 +165,4 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
                 return "UNKNOWN";
         }
     }
-
 }
