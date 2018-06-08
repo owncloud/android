@@ -33,18 +33,20 @@ public class PutMethod extends HttpMethod{
 
     private RequestBody mRequestBody;
 
-    public PutMethod(OkHttpClient okHttpClient, Request baseRequest, RequestBody requestBody){
-        super(okHttpClient, baseRequest);
+    public PutMethod(OkHttpClient okHttpClient, String httpUrl, RequestBody requestBody){
+        super(okHttpClient, httpUrl);
         mRequestBody = requestBody;
     }
 
     @Override
-    public Response execute() throws Exception {
-        mRequest = mBaseRequest
+    public int execute() throws Exception {
+        Request request = mRequest
                 .newBuilder()
                 .put(mRequestBody)
                 .build();
 
-        return mOkHttpClient.newCall(mRequest).execute();
+        mResponse = mOkHttpClient.newCall(request).execute();
+
+        return mResponse.code();
     }
 }

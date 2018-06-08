@@ -41,7 +41,6 @@ import java.util.Locale;
 
 import okhttp3.FormBody;
 import okhttp3.Request;
-import okhttp3.Response;
 
 
 /**
@@ -169,18 +168,6 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
         RemoteOperationResult result;
 
         try {
-            Uri requestUri = client.getBaseUri();
-            Uri.Builder uriBuilder = requestUri.buildUpon();
-            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH.substring(1));
-            uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
-
-            Request request = new Request.Builder()
-                    .url(uriBuilder.build().toString())
-                    .header("Content-Type",
-                            "application/x-www-form-urlencoded; charset=utf-8")
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
-
             FormBody.Builder formBodyBuilder = new FormBody.Builder();
 
             // Parameters to update
@@ -212,23 +199,32 @@ public class UpdateRemoteShareOperation extends RemoteOperation {
                 formBodyBuilder.add(PARAM_PERMISSIONS, Integer.toString(mPermissions));
             }
 
+            Uri requestUri = client.getBaseUri();
+            Uri.Builder uriBuilder = requestUri.buildUpon();
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH.substring(1));
+            uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
+
             FormBody formBody = formBodyBuilder.build();
 
-            PutMethod putMethod = new PutMethod(client.getOkHttpClient(), request, formBody);
+            PutMethod putMethod = new PutMethod(client.getOkHttpClient(),
+                    uriBuilder.build().toString(), formBody);
+            putMethod.setRequestHeader("Content-Type",
+                    "application/x-www-form-urlencoded; charset=utf-8");
+            putMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-            Response response = client.executeHttpMethod(putMethod);
+            int status = client.executeHttpMethod(putMethod);
 
-            if (isSuccess(response.code())) {
+            if (isSuccess(status)) {
                 // Parse xml response
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
                         new ShareXMLParser()
                 );
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
                 parser.setServerBaseUri(client.getBaseUri());
-                result = parser.parse(response.body().string());
+                result = parser.parse(putMethod.getResponseBodyAsString());
 
             } else {
-                result = new RemoteOperationResult(false, putMethod.getRequest(), response);
+                result = new RemoteOperationResult(putMethod);
             }
 
         } catch (Exception e) {

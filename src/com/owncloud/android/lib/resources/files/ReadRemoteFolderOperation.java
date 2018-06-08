@@ -36,7 +36,6 @@ import java.util.ArrayList;
 
 import at.bitfire.dav4android.DavResource;
 import okhttp3.HttpUrl;
-import okhttp3.Response;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -79,12 +78,9 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                     HttpUrl.parse(client.getNewWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     1);
 
-            Response response = client.executeHttpMethod(propfindMethod);
+            int status = client.executeHttpMethod(propfindMethod);
 
-            boolean isSuccess = (response.code() == HttpConstants.HTTP_MULTI_STATUS
-                    || response.code() == HttpConstants.HTTP_OK);
-
-            if (isSuccess) {
+            if (isSuccess(status)) {
 
                 ArrayList<Object> mFolderAndFiles = new ArrayList<>();
 
@@ -104,13 +100,8 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
                 result.setData(mFolderAndFiles);
 
             } else {
-
                 // synchronization failed
-                result = new RemoteOperationResult(
-                        false,
-                        propfindMethod.getRequest(),
-                        response
-                );
+                result = new RemoteOperationResult(propfindMethod);
             }
 
         } catch (Exception e) {
@@ -128,5 +119,10 @@ public class ReadRemoteFolderOperation extends RemoteOperation {
             }
         }
         return result;
+    }
+
+    private boolean isSuccess(int status) {
+        return status == HttpConstants.HTTP_MULTI_STATUS ||
+                status == HttpConstants.HTTP_OK;
     }
 }

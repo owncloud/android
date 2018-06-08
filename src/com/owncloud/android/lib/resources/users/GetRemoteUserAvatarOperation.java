@@ -40,9 +40,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import okhttp3.Request;
-import okhttp3.Response;
-
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 
@@ -76,11 +73,11 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
 
     @Override
     protected RemoteOperationResult run(OwnCloudClient client) {
+        GetMethod getMethod = null;
         RemoteOperationResult result;
         InputStream inputStream = null;
         BufferedInputStream bis = null;
         ByteArrayOutputStream bos = null;
-        Response response = null;
 
         try {
             String url =
@@ -89,17 +86,13 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
             ;
             Log_OC.d(TAG, "avatar URI: " + url);
 
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .build();
+            getMethod = new GetMethod(client.getOkHttpClient(), url);
+            int status = client.executeHttpMethod(getMethod);
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
-            response = client.executeHttpMethod(getMethod);
-
-            if (isSuccess(response.code())) {
+            if (isSuccess(status)) {
                 // find out size of file to read
                 int totalToTransfer = 0;
-                String contentLength = response.header("Content-Length");
+                String contentLength = getMethod.getResponseHeader("Content-Length");
 
                 if (contentLength != null && contentLength.length() > 0) {
                     totalToTransfer = Integer.parseInt(contentLength);
@@ -107,7 +100,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
 
                 // find out MIME-type!
                 String mimeType;
-                String contentType =response.header("Content-Type");
+                String contentType = getMethod.getResponseHeader("Content-Type");
 
                 if (contentType == null || !contentType.startsWith("image")) {
                     Log_OC.e(
@@ -122,7 +115,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 mimeType = contentType;
 
                 /// download will be performed to a buffer
-                inputStream = response.body().byteStream();
+                inputStream = getMethod.getResponseAsStream();
                 bis = new BufferedInputStream(inputStream);
                 bos = new ByteArrayOutputStream(totalToTransfer);
 
@@ -136,7 +129,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 // TODO check total bytes transferred?
 
                 // find out etag
-                String etag = WebdavUtils.getEtagFromResponse(response);
+                String etag = WebdavUtils.getEtagFromResponse(getMethod);
                 if (etag.length() == 0) {
                     Log_OC.w(TAG, "Could not read Etag from avatar");
                 }
@@ -149,8 +142,8 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 result.setData(data);
 
             } else {
-                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
-                client.exhaustResponse(response.body().byteStream());
+                result = new RemoteOperationResult(getMethod);
+                client.exhaustResponse(getMethod.getResponseAsStream());
             }
 
         } catch (Exception e) {
@@ -158,7 +151,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
             Log_OC.e(TAG, "Exception while getting OC user avatar", e);
 
         } finally {
-            if (response != null) {
+            if (getMethod != null) {
                 try {
                     if (inputStream != null) {
                         client.exhaustResponse(inputStream);
@@ -178,7 +171,7 @@ public class GetRemoteUserAvatarOperation extends RemoteOperation {
                 } catch (IOException o) {
                     Log_OC.e(TAG, "Unexpected exception closing output stream ", o);
                 }
-                response.body().close();
+                client.exhaustResponse(getMethod.getResponseAsStream());
             }
         }
 

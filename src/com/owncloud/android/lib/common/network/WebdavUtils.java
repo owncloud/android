@@ -32,6 +32,8 @@ import java.util.Locale;
 
 import android.net.Uri;
 
+import com.owncloud.android.lib.common.http.HttpBaseMethod;
+
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
@@ -173,19 +175,19 @@ public class WebdavUtils {
 
     /**
      *
-     * @param response from which to get the etag
+     * @param httpBaseMethod from which to get the etag
      * @return etag from response
      */
-    public static String getEtagFromResponse(Response response) {
-        String eTag = response.header("OC-ETag");
+    public static String getEtagFromResponse(HttpBaseMethod httpBaseMethod) {
+        String eTag = httpBaseMethod.getResponseHeader("OC-ETag");
         if (eTag == null) {
-            eTag = response.header("oc-etag");
+            eTag = httpBaseMethod.getResponseHeader("oc-etag");
         }
         if (eTag == null) {
-            eTag = response.header("ETag");
+            eTag = httpBaseMethod.getResponseHeader("ETag");
         }
         if (eTag == null) {
-            eTag = response.header("etag");
+            eTag = httpBaseMethod.getResponseHeader("etag");
         }
         String result = "";
         if (eTag != null) {

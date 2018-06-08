@@ -42,9 +42,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import okhttp3.Request;
-import okhttp3.Response;
-
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
@@ -133,19 +130,17 @@ public class GetRemoteShareesOperation extends RemoteOperation{
             uriBuilder.appendQueryParameter(PARAM_PAGE, String.valueOf(mPage));
             uriBuilder.appendQueryParameter(PARAM_PER_PAGE, String.valueOf(mPerPage));
 
-            Request request = new Request.Builder()
-                    .url(uriBuilder.build().toString())
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), uriBuilder.build().toString());
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
-            Response response = client.executeHttpMethod(getMethod);
+            int status = client.executeHttpMethod(getMethod);
+            String response = getMethod.getResponseBodyAsString();
 
-            if(isSuccess(response.code())) {
+            if(isSuccess(status)) {
                 Log_OC.d(TAG, "Successful response: " + response);
 
                 // Parse the response
-                JSONObject respJSON = new JSONObject(response.body().string());
+                JSONObject respJSON = new JSONObject(response);
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
                 JSONObject respData = respOCS.getJSONObject(NODE_DATA);
                 JSONObject respExact = respData.getJSONObject(NODE_EXACT);
@@ -179,12 +174,12 @@ public class GetRemoteShareesOperation extends RemoteOperation{
                 Log_OC.d(TAG, "*** Get Users or groups completed " );
 
             } else {
-                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
+                result = new RemoteOperationResult(getMethod);
                 Log_OC.e(TAG, "Failed response while getting users/groups from the server ");
                 if (response != null) {
-                    Log_OC.e(TAG, "*** status code: " + response.code() + "; response message: " + response);
+                    Log_OC.e(TAG, "*** status code: " + status + "; response message: " + response);
                 } else {
-                    Log_OC.e(TAG, "*** status code: " + response.code());
+                    Log_OC.e(TAG, "*** status code: " + status);
                 }
             }
         } catch (Exception e) {

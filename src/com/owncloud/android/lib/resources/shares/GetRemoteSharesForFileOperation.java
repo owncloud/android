@@ -29,16 +29,14 @@ package com.owncloud.android.lib.resources.shares;
 
 import android.net.Uri;
 
+import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
-import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import okhttp3.HttpUrl;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Provide a list shares for a specific file.
@@ -95,29 +93,25 @@ public class GetRemoteSharesForFileOperation extends RemoteOperation {
             httpBuilder.addQueryParameter(PARAM_RESHARES, String.valueOf(mReshares));
             httpBuilder.addQueryParameter(PARAM_SUBFILES, String.valueOf(mSubfiles));
 
-            Request request = new Request.Builder()
-                    .url(httpBuilder.build())
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), httpBuilder.build());
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
+            int status = client.executeHttpMethod(getMethod);
 
-            Response response = client.executeHttpMethod(getMethod);
-
-            if (isSuccess(response.code())) {
+            if (isSuccess(status)) {
                 // Parse xml response and obtain the list of shares
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
                     new ShareXMLParser()
                 );
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
                 parser.setServerBaseUri(client.getBaseUri());
-                result = parser.parse(response.body().string());
+                result = parser.parse(getMethod.getResponseBodyAsString());
 
                 if (result.isSuccess()) {
                     Log_OC.d(TAG, "Got " + result.getData().size() + " shares");
                 }
             } else {
-                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
+                result = new RemoteOperationResult(getMethod);
             }
         } catch (Exception e) {
             result = new RemoteOperationResult(e);

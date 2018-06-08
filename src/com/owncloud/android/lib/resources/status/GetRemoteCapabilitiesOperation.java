@@ -40,9 +40,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import okhttp3.Request;
-import okhttp3.Response;
-
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
@@ -133,20 +130,17 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
 
             String url = uriBuilder.build().toString();
 
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), url);
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
+            int status = client.executeHttpMethod(getMethod);
 
-            final Response response = client.executeHttpMethod(getMethod);
-
-            if(isSuccess(response.code())) {
+            String response = getMethod.getResponseBodyAsString();
+            if(isSuccess(status)) {
                 Log_OC.d(TAG, "Successful response: " + response);
 
                 // Parse the response
-                JSONObject respJSON = new JSONObject(response.body().string());
+                JSONObject respJSON = new JSONObject(response);
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
                 JSONObject respMeta = respOCS.getJSONObject(NODE_META);
                 JSONObject respData = respOCS.getJSONObject(NODE_DATA);
@@ -269,19 +263,18 @@ public class GetRemoteCapabilitiesOperation extends RemoteOperation {
 
                     Log_OC.d(TAG, "*** Get Capabilities completed ");
                 } else {
-                    result = new RemoteOperationResult(statusProp, statuscode, null, null);
+                    result = new RemoteOperationResult(statuscode, message, null);
                     Log_OC.e(TAG, "Failed response while getting capabilities from the server ");
                     Log_OC.e(TAG, "*** status: " + statusProp + "; message: " + message);
                 }
 
             } else {
-                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
+                result = new RemoteOperationResult(getMethod);
                 Log_OC.e(TAG, "Failed response while getting capabilities from the server ");
-                if (response.body().string() != null) {
-                    Log_OC.e(TAG, "*** status code: " + response.code() + "; response message: " +
-                            response.body().string());
+                if (response != null) {
+                    Log_OC.e(TAG, "*** status code: " + status + "; response message: " + response);
                 } else {
-                    Log_OC.e(TAG, "*** status code: " + response.code());
+                    Log_OC.e(TAG, "*** status code: " + status);
                 }
             }
 

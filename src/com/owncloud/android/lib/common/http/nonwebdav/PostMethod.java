@@ -37,18 +37,20 @@ public class PostMethod extends HttpMethod {
 
     private RequestBody mRequestBody;
 
-    public PostMethod(OkHttpClient okHttpClient, Request baseRequest, RequestBody requestBody){
-        super(okHttpClient, baseRequest);
+    public PostMethod(OkHttpClient okHttpClient, String httpUrl, RequestBody requestBody){
+        super(okHttpClient, httpUrl);
         mRequestBody = requestBody;
     }
 
     @Override
-    public Response execute() throws Exception {
-        mRequest = mBaseRequest
+    public int execute() throws Exception {
+        Request request = mRequest
                 .newBuilder()
                 .post(mRequestBody)
                 .build();
 
-        return mOkHttpClient.newCall(mRequest).execute();
+        mResponse = mOkHttpClient.newCall(request).execute();
+
+        return mResponse.code();
     }
 }

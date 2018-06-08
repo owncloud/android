@@ -75,13 +75,15 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
                     .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
                     .build();
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
-            Response response = client.executeHttpMethod(getMethod);
+            String url = client.getBaseUri() + OCS_ROUTE;
 
-            if (isSuccess(response.code())) {
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), url);
+            int status = client.executeHttpMethod(getMethod);
+
+            if (isSuccess(status)) {
                 Log_OC.d(TAG, "Successful response");
 
-                JSONObject respJSON = new JSONObject(response.body().string());
+                JSONObject respJSON = new JSONObject(getMethod.getResponseBodyAsString());
                 JSONObject respOCS = respJSON.getJSONObject(NODE_OCS);
                 JSONObject respData = respOCS.getJSONObject(NODE_DATA);
 
@@ -97,12 +99,13 @@ public class GetRemoteUserInfoOperation extends RemoteOperation {
                 result.setData(data);
 
             } else {
-                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
+                result = new RemoteOperationResult(getMethod);
+                String response = getMethod.getResponseBodyAsString();
                 Log_OC.e(TAG, "Failed response while getting user information ");
-                if (response != null) {
-                    Log_OC.e(TAG, "*** status code: " + response.code() + " ; response message: " + response);
+                if (getMethod != null) {
+                    Log_OC.e(TAG, "*** status code: " + status + " ; response message: " + response);
                 } else {
-                    Log_OC.e(TAG, "*** status code: " + response.code());
+                    Log_OC.e(TAG, "*** status code: " + status);
                 }
             }
         } catch (Exception e) {

@@ -40,9 +40,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import okhttp3.Request;
-import okhttp3.Response;
-
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
 /**
@@ -79,17 +76,12 @@ public class GetRemoteStatusOperation extends RemoteOperation {
         boolean retval = false;
         String baseUrlSt = client.getBaseUri().toString();
         try {
-
             String url = baseUrlSt + OwnCloudClient.STATUS_PATH;
 
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
             client.setFollowRedirects(false);
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), url);
 
-            Response response = client.executeHttpMethod(getMethod);
+            int status = client.executeHttpMethod(getMethod);
 
             mLatestResult = new RemoteOperationResult(OK);
 
@@ -115,9 +107,9 @@ public class GetRemoteStatusOperation extends RemoteOperation {
 //                redirectedLocation = mLatestResult.getRedirectedLocation();
 //            }
 
-            if (response.code() == HttpConstants.HTTP_OK) {
+            if (isSuccess(status)) {
 
-                JSONObject respJSON = new JSONObject(response.body().string());
+                JSONObject respJSON = new JSONObject(getMethod.getResponseBodyAsString());
                 if (!respJSON.getBoolean(NODE_INSTALLED)) {
                     mLatestResult = new RemoteOperationResult(
                         RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED);
@@ -147,7 +139,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
                 }
 
             } else {
-                mLatestResult = new RemoteOperationResult(false, getMethod.getRequest(), response);
+                mLatestResult = new RemoteOperationResult(getMethod);
             }
 
         } catch (JSONException e) {
@@ -198,5 +190,9 @@ public class GetRemoteStatusOperation extends RemoteOperation {
             }
         }
         return mLatestResult;
+    }
+
+    private boolean isSuccess(int status) {
+        return (status == HttpConstants.HTTP_OK);
     }
 }

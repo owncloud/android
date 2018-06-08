@@ -42,8 +42,6 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import okhttp3.FormBody;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Creates a new share.  This allows sharing with a user or group or as a link.
@@ -200,17 +198,6 @@ public class CreateRemoteShareOperation extends RemoteOperation {
         RemoteOperationResult result;
 
         try {
-            Uri requestUri = client.getBaseUri();
-            Uri.Builder uriBuilder = requestUri.buildUpon();
-            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
-
-            Request request = new Request.Builder()
-                    .url(uriBuilder.build().toString())
-                    .header("Content-Type", 
-                            "application/x-www-form-urlencoded; charset=utf-8")
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
-
             FormBody.Builder formBodyBuilder = new FormBody.Builder()
                     .add(PARAM_PATH, mRemoteFilePath)
                     .add(PARAM_SHARE_TYPE, Integer.toString(mShareType.getValue()))
@@ -240,11 +227,18 @@ public class CreateRemoteShareOperation extends RemoteOperation {
 
             FormBody formBody = formBodyBuilder.build();
 
-            PostMethod postMethod = new PostMethod(client.getOkHttpClient(), request, formBody);
+            Uri requestUri = client.getBaseUri();
+            Uri.Builder uriBuilder = requestUri.buildUpon();
+            uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
-            Response response = client.executeHttpMethod(postMethod);
+            PostMethod postMethod = new PostMethod(client.getOkHttpClient(),
+                    uriBuilder.build().toString(), formBody);
+            postMethod.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+            postMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-            if (isSuccess(response.code())) {
+            int status = client.executeHttpMethod(postMethod);
+
+            if (isSuccess(status)) {
 
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
                         new ShareXMLParser()
@@ -252,7 +246,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 parser.setOneOrMoreSharesRequired(true);
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
                 parser.setServerBaseUri(client.getBaseUri());
-                result = parser.parse(response.body().string());
+                result = parser.parse(postMethod.getResponseBodyAsString());
 
                 if (result.isSuccess() && mGetShareDetails) {
 
@@ -266,7 +260,7 @@ public class CreateRemoteShareOperation extends RemoteOperation {
                 }
 
             } else {
-                result = new RemoteOperationResult(false, postMethod.getRequest(), response);
+                result = new RemoteOperationResult(postMethod);
             }
 
         } catch (Exception e) {

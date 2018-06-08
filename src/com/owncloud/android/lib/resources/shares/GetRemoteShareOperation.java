@@ -35,9 +35,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import okhttp3.Request;
-import okhttp3.Response;
-
 /**
  * Get the data about a Share resource, known its remote ID.
  *
@@ -66,15 +63,12 @@ public class GetRemoteShareOperation extends RemoteOperation {
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
             uriBuilder.appendEncodedPath(Long.toString(mRemoteId));
 
-            final Request request = new Request.Builder()
-                    .url(uriBuilder.build().toString())
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(),
+                    uriBuilder.build().toString());
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
+            int status = client.executeHttpMethod(getMethod);
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
-            Response response = client.executeHttpMethod(getMethod);
-
-            if (isSuccess(response.code())) {
+            if (isSuccess(status)) {
                 // Parse xml response and obtain the list of shares
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
                         new ShareXMLParser()
@@ -82,10 +76,10 @@ public class GetRemoteShareOperation extends RemoteOperation {
                 parser.setOneOrMoreSharesRequired(true);
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
                 parser.setServerBaseUri(client.getBaseUri());
-                result = parser.parse(response.body().string());
+                result = parser.parse(getMethod.getResponseBodyAsString());
 
             } else {
-                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
+                result = new RemoteOperationResult(getMethod);
             }
 
         } catch (Exception e) {

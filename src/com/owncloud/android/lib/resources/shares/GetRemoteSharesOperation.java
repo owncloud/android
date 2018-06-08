@@ -35,7 +35,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Get the data from the server about ALL the known shares owned by the requester.
@@ -58,16 +57,13 @@ public class GetRemoteSharesOperation extends RemoteOperation {
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
 
-            Request request = new Request.Builder()
-                    .url(uriBuilder.build().toString())
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
+            GetMethod getMethod = new GetMethod(client.getOkHttpClient(),
+                    uriBuilder.build().toString());
+            getMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-            GetMethod getMethod = new GetMethod(client.getOkHttpClient(), request);
+            int status = client.executeHttpMethod(getMethod);
 
-            Response response = client.executeHttpMethod(getMethod);
-
-            if (isSuccess(response.code())) {
+            if (isSuccess(status)) {
 
                 // Parse xml response and obtain the list of shares
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
@@ -75,9 +71,9 @@ public class GetRemoteSharesOperation extends RemoteOperation {
                 );
                 parser.setOwnCloudVersion(client.getOwnCloudVersion());
                 parser.setServerBaseUri(client.getBaseUri());
-                result = parser.parse(response.body().string());
+                result = parser.parse(getMethod.getResponseBodyAsString());
             } else {
-                result = new RemoteOperationResult(false, getMethod.getRequest(), response);
+                result = new RemoteOperationResult(getMethod);
             }
 
         } catch (Exception e) {

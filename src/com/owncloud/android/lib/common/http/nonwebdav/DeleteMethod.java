@@ -34,17 +34,19 @@ import okhttp3.Response;
  */
 public class DeleteMethod extends HttpMethod{
 
-    public DeleteMethod(OkHttpClient okHttpClient, Request baseRequest) {
-        super(okHttpClient, baseRequest);
+    public DeleteMethod(OkHttpClient okHttpClient, String httpUrl) {
+        super(okHttpClient, httpUrl);
     }
 
     @Override
-    public Response execute() throws Exception {
-        mRequest = mBaseRequest
+    public int execute() throws Exception {
+        Request request = mRequest
                 .newBuilder()
                 .delete()
                 .build();
 
-        return mOkHttpClient.newCall(mRequest).execute();
+        mResponse = mOkHttpClient.newCall(request).execute();
+
+        return mResponse.code();
     }
 }

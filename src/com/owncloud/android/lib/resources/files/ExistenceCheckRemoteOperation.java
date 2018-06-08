@@ -25,6 +25,7 @@
 package com.owncloud.android.lib.resources.files;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.webdav.PropfindMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.network.WebdavUtils;
@@ -32,10 +33,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
-import org.apache.commons.httpclient.HttpStatus;
-
 import okhttp3.HttpUrl;
-import okhttp3.Response;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 
@@ -43,6 +41,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * Operation to check the existence or absence of a path in a remote server.
  * 
  * @author David A. Velasco
+ * @author David GonzálezVerdugo
  */
 public class ExistenceCheckRemoteOperation extends RemoteOperation {
     
@@ -81,13 +80,12 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
         try {
 
 //            client.setFollowRedirects(false);
-
             PropfindMethod propfindMethod = new PropfindMethod(
                     client.getOkHttpClient(),
                     HttpUrl.parse(client.getNewWebDavUri() + WebdavUtils.encodePath(mPath)),
                     0);
 
-            Response response = client.executeHttpMethod(propfindMethod);
+            int status = client.executeHttpMethod(propfindMethod);
 
 //            if (previousFollowRedirects) {
 //                mRedirectionPath = client.followRedirection(propfind);
@@ -102,22 +100,15 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
              *  404 NOT FOUND: path doesn't exist,
              *  207 MULTI_STATUS: path exists.
              */
-            boolean isSuccess = ((response.code() == HttpStatus.SC_OK
-                    || response.code() == HttpStatus.SC_MULTI_STATUS)
-                    && !mSuccessIfAbsent)
-                    || (response.code() == HttpStatus.SC_MULTI_STATUS && !mSuccessIfAbsent)
-                    || (response.code() == HttpStatus.SC_NOT_FOUND && mSuccessIfAbsent);
 
-            result = isSuccess
-                    ? new RemoteOperationResult(OK)
-                    : new RemoteOperationResult(
-                            false, propfindMethod.getRequest(), response
-            );
+            result = isSuccess(status) ?
+                    new RemoteOperationResult(OK) :
+                    new RemoteOperationResult(propfindMethod);
 
             Log_OC.d(TAG, "Existence check for " + client.getWebdavUri() +
                     WebdavUtils.encodePath(mPath) + " targeting for " +
                     (mSuccessIfAbsent ? " absence " : " existence ") +
-                    "finished with HTTP status " + response.code() + (!isSuccess?"(FAIL)":""));
+                    "finished with HTTP status " + status + (!isSuccess(status)?"(FAIL)":""));
             
         } catch (Exception e) {
             result = new RemoteOperationResult(e);
@@ -146,5 +137,11 @@ public class ExistenceCheckRemoteOperation extends RemoteOperation {
      */
     public boolean wasRedirected() {
         return (mRedirectionPath != null && mRedirectionPath.getRedirectionsCount() > 0);
+    }
+
+    private boolean isSuccess(int status) {
+        return ((status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS) && !mSuccessIfAbsent)
+                || (status == HttpConstants.HTTP_MULTI_STATUS && !mSuccessIfAbsent)
+                || (status == HttpConstants.HTTP_NOT_FOUND && mSuccessIfAbsent);
     }
 }

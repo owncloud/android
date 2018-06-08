@@ -310,21 +310,21 @@ public class OwnCloudClient extends HttpClient {
         return status;
     }
 
-    public Response executeHttpMethod (HttpBaseMethod method) throws Exception {
+    public int executeHttpMethod (HttpBaseMethod method) throws Exception {
 
         boolean repeatWithFreshCredentials;
         int repeatCounter = 0;
-        Response response;
+        int status;
 
         do {
-            response = method.execute();
-            repeatWithFreshCredentials = checkUnauthorizedAccess(response.code(), repeatCounter);
+            status = method.execute();
+            repeatWithFreshCredentials = checkUnauthorizedAccess(status, repeatCounter);
             if (repeatWithFreshCredentials) {
                 repeatCounter++;
             }
         } while (repeatWithFreshCredentials);
 
-        return response;
+        return status;
     }
 
     private void checkFirstRedirection(HttpMethod method) {

@@ -26,20 +26,42 @@ package com.owncloud.android.lib.common.http.nonwebdav;
 
 import com.owncloud.android.lib.common.http.HttpBaseMethod;
 
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
  * Wrapper to perform OkHttp calls
+ *
  * @author David González Verdugo
  */
 public abstract class HttpMethod extends HttpBaseMethod {
-
     protected OkHttpClient mOkHttpClient;
-    protected Request mBaseRequest;
+    protected Request mRequest;
 
-    public HttpMethod (OkHttpClient okHttpClient, Request baseRequest) {
+    public HttpMethod(OkHttpClient okHttpClient, String httpUrl) {
         mOkHttpClient = okHttpClient;
-        mBaseRequest = baseRequest;
+        mRequest = new Request.Builder()
+                .url(httpUrl)
+                .build();
+    }
+
+    public HttpMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
+        mOkHttpClient = okHttpClient;
+        mRequest = new Request.Builder()
+                .url(httpUrl)
+                .build();
+    }
+
+    // Request headers
+    public void addRequestHeader(String name, String value) {
+        mRequest.newBuilder()
+                .addHeader(name, value)
+                .build();
+    }
+
+    public void setRequestHeader(String name, String value){
+        mRequest.newBuilder()
+                .header(name, value);
     }
 }

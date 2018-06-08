@@ -51,7 +51,7 @@ public class PropfindMethod extends DavMethod {
     };
 
     @Override
-    public Response execute() throws IOException, HttpException, DavException {
+    public int execute() throws IOException, HttpException, DavException {
         try {
             mDavResource.propfind(mDepth, PropertyUtils.INSTANCE.getAllPropSet());
             mMembers = mDavResource.getMembers();
@@ -59,8 +59,9 @@ public class PropfindMethod extends DavMethod {
             // Do nothing, we will use the 401 code to handle the situation
         }
 
-        mRequest = mDavResource.getRequest();
-        return mDavResource.getResponse();
+        mResponse = mDavResource.getResponse();
+
+        return mResponse.code();
     }
 
     public int getDepth() {

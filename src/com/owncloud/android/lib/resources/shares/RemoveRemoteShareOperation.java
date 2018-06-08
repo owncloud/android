@@ -37,7 +37,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Remove a share
@@ -68,34 +67,29 @@ public class RemoveRemoteShareOperation extends RemoteOperation {
         RemoteOperationResult result;
 
         try {
-            String id = "/" + String.valueOf(mRemoteShareId);
-
             Uri requestUri = client.getBaseUri();
             Uri.Builder uriBuilder = requestUri.buildUpon();
             uriBuilder.appendEncodedPath(ShareUtils.SHARING_API_PATH);
-            uriBuilder.appendEncodedPath(String.valueOf(id));
+            uriBuilder.appendEncodedPath(String.valueOf(mRemoteShareId));
 
-            Request request = new Request.Builder()
-                    .url(uriBuilder.build().toString())
-                    .addHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
-                    .build();
+            DeleteMethod deleteMethod = new DeleteMethod(client.getOkHttpClient(),
+                    uriBuilder.build().toString());
+            deleteMethod.addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE);
 
-            DeleteMethod deleteMethod = new DeleteMethod(client.getOkHttpClient(), request);
+            int status = client.executeHttpMethod(deleteMethod);
 
-            Response response = client.executeHttpMethod(deleteMethod);
-
-            if (isSuccess(response.code())) {
+            if (isSuccess(status)) {
 
                 // Parse xml response and obtain the list of shares
                 ShareToRemoteOperationResultParser parser = new ShareToRemoteOperationResultParser(
                         new ShareXMLParser()
                 );
-                result = parser.parse(response.body().string());
+                result = parser.parse(deleteMethod.getResponseBodyAsString());
 
                 Log_OC.d(TAG, "Unshare " + mRemoteShareId + ": " + result.getLogMessage());
 
             } else {
-                result = new RemoteOperationResult(false, deleteMethod.getRequest(), response);
+                result = new RemoteOperationResult(deleteMethod);
             }
 
         } catch (Exception e) {
