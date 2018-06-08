@@ -461,6 +461,7 @@ public class RemoteOperationResult implements Serializable {
                     mCode = ResultCode.UNHANDLED_HTTP_CODE;         // UNKNOWN ERROR
                     Log_OC.d(TAG,
                             "RemoteOperationResult has processed UNHANDLED_HTTP_CODE: " +
+
                                     mHttpCode + " " + mHttpPhrase
                     );
             }
@@ -658,5 +659,9 @@ public class RemoteOperationResult implements Serializable {
 
     public void setLastPermanentLocation(String lastPermanentLocation) {
         mLastPermanentLocation = lastPermanentLocation;
+    }
+
+    public void setSuccess(boolean success) {
+        this.mSuccess = success;
     }
 }
