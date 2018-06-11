@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.webdav;
+package com.owncloud.android.lib.common.http.methods.webdav;
 
 import com.owncloud.android.lib.common.http.HttpBaseMethod;
 

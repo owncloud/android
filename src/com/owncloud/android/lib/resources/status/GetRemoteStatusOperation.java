@@ -30,7 +30,7 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -99,7 +99,7 @@ public class GetRemoteStatusOperation extends RemoteOperation {
 //                );
 //                get.releaseConnection();
 //                get = new GetMethod(redirectedLocation);
-//                status = client.executeMethod(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
+//                status = client.executeRequest(get, TRY_CONNECTION_TIMEOUT, TRY_CONNECTION_TIMEOUT);
 //                mLatestResult = new RemoteOperationResult(
 //                    (status == HttpStatus.SC_OK),
 //                    get

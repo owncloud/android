@@ -22,46 +22,21 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.nonwebdav;
+package com.owncloud.android.lib.common.http.interceptors;
 
-import com.owncloud.android.lib.common.http.HttpBaseMethod;
-
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-/**
- * Wrapper to perform OkHttp calls
- *
- * @author David González Verdugo
- */
-public abstract class HttpMethod extends HttpBaseMethod {
-    protected OkHttpClient mOkHttpClient;
-    protected Request mRequest;
+public class BasicAuthInterceptor implements HttpInterceptor.RequestInterceptor {
 
-    public HttpMethod(OkHttpClient okHttpClient, String httpUrl) {
-        mOkHttpClient = okHttpClient;
-        mRequest = new Request.Builder()
-                .url(httpUrl)
-                .build();
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private String mCredentials;
+
+    public BasicAuthInterceptor(String credentials) {
+        mCredentials = credentials;
     }
 
-    public HttpMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
-        mOkHttpClient = okHttpClient;
-        mRequest = new Request.Builder()
-                .url(httpUrl)
-                .build();
-    }
-
-    // Request headers
-    public void addRequestHeader(String name, String value) {
-        mRequest.newBuilder()
-                .addHeader(name, value)
-                .build();
-    }
-
-    public void setRequestHeader(String name, String value){
-        mRequest.newBuilder()
-                .header(name, value);
+    @Override
+    public Request intercept(Request request) {
+        return request.newBuilder().addHeader(AUTHORIZATION_HEADER, mCredentials).build();
     }
 }

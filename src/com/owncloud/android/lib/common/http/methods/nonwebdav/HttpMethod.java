@@ -22,35 +22,52 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.nonwebdav;
+package com.owncloud.android.lib.common.http.methods.nonwebdav;
 
+import com.owncloud.android.lib.common.http.HttpBaseMethod;
+
+import java.io.IOException;
+
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
- * OkHttp post calls wrapper
+ * Wrapper to perform OkHttp calls
+ *
  * @author David González Verdugo
  */
-public class PostMethod extends HttpMethod {
+public abstract class HttpMethod extends HttpBaseMethod {
+    protected OkHttpClient mOkHttpClient;
 
-    private RequestBody mRequestBody;
-
-    public PostMethod(OkHttpClient okHttpClient, String httpUrl, RequestBody requestBody){
-        super(okHttpClient, httpUrl);
-        mRequestBody = requestBody;
+    public HttpMethod(OkHttpClient okHttpClient, String httpUrl) {
+        mOkHttpClient = okHttpClient;
+        mRequest = new Request.Builder()
+                .url(httpUrl)
+                .build();
     }
 
-    @Override
-    public int execute() throws Exception {
-        Request request = mRequest
-                .newBuilder()
-                .post(mRequestBody)
+    public HttpMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
+        mOkHttpClient = okHttpClient;
+        mRequest = new Request.Builder()
+                .url(httpUrl)
                 .build();
+    }
 
-        mResponse = mOkHttpClient.newCall(request).execute();
+    // Request headers
+    public void addRequestHeader(String name, String value) {
+        mRequest.newBuilder()
+                .addHeader(name, value)
+                .build();
+    }
 
-        return mResponse.code();
+    public void setRequestHeader(String name, String value){
+        mRequest.newBuilder()
+                .header(name, value);
+    }
+
+    public int executeRequest() throws IOException {
+        mResponse = mOkHttpClient.newCall(mRequest).execute();
+        return super.getStatusCode();
     }
 }

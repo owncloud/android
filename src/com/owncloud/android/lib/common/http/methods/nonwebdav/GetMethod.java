@@ -22,21 +22,33 @@
  *
  */
 
-package com.owncloud.android.lib.common.interceptors;
+package com.owncloud.android.lib.common.http.methods.nonwebdav;
 
-import okhttp3.Request;
+import java.io.IOException;
 
-public class BasicAuthInterceptor implements HttpInterceptor.RequestInterceptor {
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private String mCredentials;
+/**
+ * OkHttp get calls wrapper
+ * @author David González Verdugo
+ */
+public class GetMethod extends HttpMethod {
 
-    public BasicAuthInterceptor(String credentials) {
-        mCredentials = credentials;
+    public GetMethod(OkHttpClient okHttpClient, String httpUrl) {
+        super(okHttpClient, httpUrl);
+    }
+
+    public GetMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
+        super(okHttpClient, httpUrl);
     }
 
     @Override
-    public Request intercept(Request request) {
-        return request.newBuilder().addHeader(AUTHORIZATION_HEADER, mCredentials).build();
+    public int execute() throws IOException {
+        mRequest.newBuilder()
+                .get()
+                .build();
+
+        return super.executeRequest();
     }
 }

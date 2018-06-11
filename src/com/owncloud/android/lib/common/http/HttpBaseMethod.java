@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import okhttp3.Headers;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.internal.http2.Header;
@@ -43,10 +44,15 @@ import okhttp3.internal.http2.Header;
  */
 public abstract class HttpBaseMethod {
     public abstract int execute() throws Exception;
+    protected Request mRequest;
     protected Response mResponse;
-    private static final String TAG = HttpBaseMethod.class.getSimpleName();
 
-    // Status
+    // Request
+    public Headers getRequestHeaders() {
+        return mRequest.headers();
+    }
+
+    // Response
     public int getStatusCode() {
         return mResponse.code();
     }
@@ -55,7 +61,6 @@ public abstract class HttpBaseMethod {
         return mResponse.message();
     }
 
-    // Response
     public String getResponseBodyAsString() throws IOException {
         return mResponse.body().string();
     }

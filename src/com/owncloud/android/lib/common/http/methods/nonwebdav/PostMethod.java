@@ -22,21 +22,31 @@
  *
  */
 
-package com.owncloud.android.lib.common.interceptors;
+package com.owncloud.android.lib.common.http.methods.nonwebdav;
 
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
-public class UserAgentInterceptor implements HttpInterceptor.RequestInterceptor {
+/**
+ * OkHttp post calls wrapper
+ * @author David González Verdugo
+ */
+public class PostMethod extends HttpMethod {
 
-    private static final String USER_AGENT_HEADER = "User-Agent";
-    private String mUserAgent;
+    private RequestBody mRequestBody;
 
-    public UserAgentInterceptor(String userAgent) {
-        mUserAgent = userAgent;
+    public PostMethod(OkHttpClient okHttpClient, String httpUrl, RequestBody requestBody){
+        super(okHttpClient, httpUrl);
+        mRequestBody = requestBody;
     }
 
     @Override
-    public Request intercept(Request request) {
-        return request.newBuilder().addHeader(USER_AGENT_HEADER, mUserAgent).build();
+    public int execute() throws Exception {
+        mRequest.newBuilder()
+                .post(mRequestBody)
+                .build();
+
+        return super.executeRequest();
     }
 }

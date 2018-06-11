@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.webdav;
+package com.owncloud.android.lib.common.http.methods.webdav;
 
 import java.io.IOException;
 import java.util.Set;
@@ -34,7 +34,6 @@ import at.bitfire.dav4android.exception.HttpException;
 import at.bitfire.dav4android.exception.UnauthorizedException;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 
 /**
  * Propfind calls wrapper
@@ -59,9 +58,10 @@ public class PropfindMethod extends DavMethod {
             // Do nothing, we will use the 401 code to handle the situation
         }
 
+        mRequest = mDavResource.getRequest();
         mResponse = mDavResource.getResponse();
 
-        return mResponse.code();
+        return super.getStatusCode();
     }
 
     public int getDepth() {

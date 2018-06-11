@@ -22,7 +22,7 @@
  *
  */
 
-package com.owncloud.android.lib.common.interceptors;
+package com.owncloud.android.lib.common.http.interceptors;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -22,31 +22,27 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.nonwebdav;
+package com.owncloud.android.lib.common.http.methods.nonwebdav;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
-public class PutMethod extends HttpMethod{
+/**
+ * OkHttp delete calls wrapper
+ * @author David González Verdugo
+ */
+public class DeleteMethod extends HttpMethod{
 
-    private RequestBody mRequestBody;
-
-    public PutMethod(OkHttpClient okHttpClient, String httpUrl, RequestBody requestBody){
+    public DeleteMethod(OkHttpClient okHttpClient, String httpUrl) {
         super(okHttpClient, httpUrl);
-        mRequestBody = requestBody;
     }
 
     @Override
     public int execute() throws Exception {
-        Request request = mRequest
-                .newBuilder()
-                .put(mRequestBody)
+        mRequest.newBuilder()
+                .delete()
                 .build();
 
-        mResponse = mOkHttpClient.newCall(request).execute();
-
-        return mResponse.code();
+        return super.executeRequest();
     }
 }

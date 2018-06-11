@@ -31,10 +31,9 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.common.http.nonwebdav.GetMethod;
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 
 import okhttp3.Request;
-import okhttp3.Response;
 
 import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
 

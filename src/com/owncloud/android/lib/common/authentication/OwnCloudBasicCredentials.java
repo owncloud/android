@@ -24,8 +24,8 @@
 package com.owncloud.android.lib.common.authentication;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.interceptors.BasicAuthInterceptor;
-import com.owncloud.android.lib.common.interceptors.HttpInterceptor.RequestInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.BasicAuthInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor.RequestInterceptor;
 
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;

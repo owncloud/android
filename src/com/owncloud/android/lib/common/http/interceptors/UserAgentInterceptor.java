@@ -22,31 +22,21 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.nonwebdav;
+package com.owncloud.android.lib.common.http.interceptors;
 
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
-/**
- * OkHttp delete calls wrapper
- * @author David González Verdugo
- */
-public class DeleteMethod extends HttpMethod{
+public class UserAgentInterceptor implements HttpInterceptor.RequestInterceptor {
 
-    public DeleteMethod(OkHttpClient okHttpClient, String httpUrl) {
-        super(okHttpClient, httpUrl);
+    private static final String USER_AGENT_HEADER = "User-Agent";
+    private String mUserAgent;
+
+    public UserAgentInterceptor(String userAgent) {
+        mUserAgent = userAgent;
     }
 
     @Override
-    public int execute() throws Exception {
-        Request request = mRequest
-                .newBuilder()
-                .delete()
-                .build();
-
-        mResponse = mOkHttpClient.newCall(request).execute();
-
-        return mResponse.code();
+    public Request intercept(Request request) {
+        return request.newBuilder().addHeader(USER_AGENT_HEADER, mUserAgent).build();
     }
 }

@@ -33,8 +33,8 @@ import android.net.Uri;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.OwnCloudAnonymousCredentials;
-import com.owncloud.android.lib.common.interceptors.HttpInterceptor;
-import com.owncloud.android.lib.common.interceptors.UserAgentInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.HttpInterceptor;
+import com.owncloud.android.lib.common.http.interceptors.UserAgentInterceptor;
 import com.owncloud.android.lib.common.http.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.RedirectionPath;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -59,7 +59,6 @@ import java.util.Arrays;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
-import okhttp3.Response;
 
 public class OwnCloudClient extends HttpClient {
 

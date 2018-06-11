@@ -22,37 +22,27 @@
  *
  */
 
-package com.owncloud.android.lib.common.http.nonwebdav;
+package com.owncloud.android.lib.common.http.methods.nonwebdav;
 
-import java.io.IOException;
-
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
-/**
- * OkHttp get calls wrapper
- * @author David González Verdugo
- */
-public class GetMethod extends HttpMethod {
+public class PutMethod extends HttpMethod{
 
-    public GetMethod(OkHttpClient okHttpClient, String httpUrl) {
+    private RequestBody mRequestBody;
+
+    public PutMethod(OkHttpClient okHttpClient, String httpUrl, RequestBody requestBody){
         super(okHttpClient, httpUrl);
-    }
-
-    public GetMethod(OkHttpClient okHttpClient, HttpUrl httpUrl) {
-        super(okHttpClient, httpUrl);
+        mRequestBody = requestBody;
     }
 
     @Override
-    public int execute() throws IOException {
-        Request request = mRequest
-                .newBuilder()
-                .get()
+    public int execute() throws Exception {
+        mRequest.newBuilder()
+                .put(mRequestBody)
                 .build();
 
-        mResponse = mOkHttpClient.newCall(request).execute();
-
-        return mResponse.code();
+        return super.executeRequest();
     }
 }
