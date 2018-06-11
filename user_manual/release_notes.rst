@@ -2,12 +2,48 @@
 Release Notes
 =============
 
+- `Changes in 2.7.0`_
+- `Changes in 2.6.0`_
 - `Changes in 2.5.0`_
 - `Changes in 2.4.0`_
 - `Changes in 2.2.0`_
 - `Changes in 2.1.1`_
 - `Changes in 2.1.0`_
 
+Changes in 2.7.0
+----------------
+
+Additions
+~~~~~~~~~
+
+- Fingerprint lock
+- Pattern lock
+- Upload picture directly from camera
+- GIF support
+- New features wizard
+
+Fixes
+~~~~~
+
+- Display file size during upload
+- Hide always visible notification in Android 8
+- Animations when switching folders
+
+Changes in 2.6.0
+----------------
+
+Additions
+~~~~~~~~~
+
+- Camera uploads, replacing instant uploads (Android 5 or higher required)
+- Android 8 support
+- Notification channels (Android 8 required)
+- Private link (OC X required)
+
+Fixes
+~~~~~
+
+- Typos in some translations
 
 Changes in 2.5.0
 ----------------
