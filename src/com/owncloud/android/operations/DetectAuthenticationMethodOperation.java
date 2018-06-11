@@ -21,7 +21,6 @@ package com.owncloud.android.operations;
 
 import android.net.Uri;
 
-import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -29,6 +28,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.files.ExistenceCheckRemoteOperation;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 
 import java.util.ArrayList;
@@ -86,7 +86,9 @@ public class DetectAuthenticationMethodOperation extends RemoteOperation {
 
         RemoteOperation operation = new ExistenceCheckRemoteOperation("", false);
         client.clearCredentials();
-        client.setFollowRedirects(false);
+
+        // TODO
+//        client.setFollowRedirects(false);
 
         // try to access the root folder, following redirections but not SAML SSO redirections
         result = operation.execute(client);
